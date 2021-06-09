@@ -10,9 +10,58 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Backend
 
+- Fixed:
+
+  - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
+  - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+
+- Added:
+
+  - Added "closed" to ListingStatus enum
+  - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
+  - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
+  - `/assets` endpoints (create and createPresignedUploadMetadata)
+
+- Changed:
+
+  - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
+
 ### Frontend
 
+- Added:
+
+  - Listings Management pieces added to Parnter's app, including add and detail pages
+    - add accessible at `/listings/add`
+    - detail page accessible at `/listings/[id]`
+  - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
+  - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
+  - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
+
+- Fixed:
+
+  - Save application language in the choose-language step ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) (Dominik Barcikowski)
+  - Fixed broken Cypress tests on the CircleCI ([#1262](https://github.com/bloom-housing/bloom/pull/1262)) (Dominik Barcikowski)
+  - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
+  - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
+  - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
+  - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
+  - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
+
+- Changed:
+
+  - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
+
 ### UI Components
+
+- Added:
+
+  - Tabs component based on React Tabs ([#1305]https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
+    - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
+  - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+
+- Fixed:
+
+  - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
 
 ## 1.0.0 / 2021-05-21
 

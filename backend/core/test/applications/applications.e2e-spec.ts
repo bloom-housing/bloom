@@ -117,7 +117,7 @@ describe("Applications", () => {
     await applicationsRepository.createQueryBuilder().delete().execute()
   })
 
-  it(`should allow a user to create and read his own application `, async () => {
+  it(`should allow a user to create and read their own application `, async () => {
     const body = getTestAppBody(listing1Id)
     body.preferences = [
       {
@@ -127,10 +127,12 @@ describe("Applications", () => {
           {
             key: "live",
             checked: true,
+            extraData: [],
           },
           {
             key: "work",
             checked: false,
+            extraData: [],
           },
         ],
       },
@@ -166,6 +168,7 @@ describe("Applications", () => {
           {
             key: "missionCorridor",
             checked: false,
+            extraData: [],
           },
         ],
       },
@@ -301,7 +304,7 @@ describe("Applications", () => {
     expect(res.body.items.length).toBe(2)
   })
 
-  it(`should allow a user to create and retrieve by ID his own application`, async () => {
+  it(`should allow a user to create and retrieve by ID their own application`, async () => {
     const body = getTestAppBody(listing1Id)
     const createRes = await supertest(app.getHttpServer())
       .post(`/applications/submit`)

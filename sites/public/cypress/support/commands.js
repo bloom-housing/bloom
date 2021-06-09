@@ -27,9 +27,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import * as routes from "../fixtures/routes.json"
 import * as listingConfig from "../fixtures/listingConfig.json"
-import { setProperty } from "./helpers"
-
-const listingsUrl = "http://localhost:3100/listings"
+import { setProperty, listingsUrl } from "./helpers"
 
 Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
@@ -62,7 +60,7 @@ Cypress.Commands.add(
 
     // find listing with 2 preferences (to test all existing steps) and merge with custom configuration (not required)
     cy.request("GET", listingsUrl).then((res) => {
-      const listing = res.body.find((item) => item.preferences.length > 1)
+      const listing = res.body.find((item) => item.name === "Test: Triton")
 
       if (listingOverrides && listing) {
         Object.keys(listingOverrides).forEach((item) => {

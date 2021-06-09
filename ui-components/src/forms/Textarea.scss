@@ -1,0 +1,39 @@
+@import "../global/mixins.scss";
+
+.textarea {
+  @apply border;
+  @apply border-gray-500;
+  @apply p-2;
+  @apply text-tiny;
+  @apply text-gray-750;
+}
+
+.textarea-resize-off {
+  resize: none;
+}
+
+.textarea-disabled {
+  @apply bg-gray-400;
+}
+
+.textarea-error {
+  @apply border;
+  @apply border-alert;
+}
+
+.textarea-error-message {
+  @apply text-xs;
+  @apply text-alert;
+  @apply block;
+}
+
+.textarea-label {
+  @apply block;
+  @apply pb-2;
+  @apply text-tiny;
+  @apply text-gray-800;
+}
+
+.textarea-label-error {
+  @apply text-alert;
+}

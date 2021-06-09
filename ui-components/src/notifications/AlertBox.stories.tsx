@@ -41,3 +41,15 @@ export const AlertBoxSuccessInvert = () => (
     Some warning
   </AlertBox>
 )
+
+export const AlertBoxBoundToLayoutWidth = () => (
+  <AlertBox onClose={() => {}} type="success" boundToLayoutWidth>
+    Some warning
+  </AlertBox>
+)
+
+export const AlertBoxNarrow = () => (
+  <AlertBox onClose={() => {}} type="success" narrow>
+    Some warning
+  </AlertBox>
+)

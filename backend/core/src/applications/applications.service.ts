@@ -1,6 +1,6 @@
 import { Inject, Injectable, Scope } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
-import { ApplicationUpdateDto } from "./dto/application.dto"
+import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
@@ -48,14 +48,14 @@ export class ApplicationsService {
     return result
   }
 
-  async submit(applicationCreateDto: ApplicationUpdateDto) {
+  async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
     const application = await this._create(applicationCreateDto)
     return application
   }
 
-  async create(applicationCreateDto: ApplicationUpdateDto) {
+  async create(applicationCreateDto: ApplicationCreateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
     return this._create(applicationCreateDto)
   }
@@ -65,7 +65,6 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
-      relations: ["listing", "user"],
     })
     await this.authorizeUserAction(this.req.user, application, authzActions.read)
     return application
@@ -76,7 +75,6 @@ export class ApplicationsService {
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
-        relations: ["listing", "user"],
       }))
     await this.authorizeUserAction(this.req.user, application, authzActions.update)
     assignDefined(application, {
@@ -103,8 +101,9 @@ export class ApplicationsService {
         qb.andWhere("application.markedAsDuplicate = :markedAsDuplicate", {
           markedAsDuplicate: markedAsDuplicate,
         }),
-      userId: (qb, { userId }) => qb.andWhere("user.id = :id", { id: userId }),
-      listingId: (qb, { listingId }) => qb.andWhere("listing.id = :id", { id: listingId }),
+      userId: (qb, { userId }) => qb.andWhere("application.user_id = :uid", { uid: userId }),
+      listingId: (qb, { listingId }) =>
+        qb.andWhere("application.listing_id = :lid", { lid: listingId }),
       orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
       search: (qb, { search }) =>
         qb.andWhere(
@@ -117,8 +116,6 @@ export class ApplicationsService {
 
     // --> Build main query
     const qb = this.repository.createQueryBuilder("application")
-    qb.leftJoinAndSelect("application.user", "user")
-    qb.leftJoinAndSelect("application.listing", "listing")
     qb.leftJoinAndSelect("application.applicant", "applicant")
     qb.leftJoinAndSelect("applicant.address", "applicant_address")
     qb.leftJoinAndSelect("applicant.workAddress", "applicant_workAddress")
@@ -155,11 +152,25 @@ export class ApplicationsService {
     return application
   }
 
-  private async authorizeUserAction(user, app, action) {
-    return this.authzService.canOrThrow(user, "application", action, {
-      ...app,
-      user_id: app.user?.id,
-      listing_id: app.listing?.id,
-    })
+  private async authorizeUserAction<T extends Application | ApplicationCreateDto>(
+    user,
+    app: T,
+    action
+  ) {
+    let resource: T = app
+
+    if (app instanceof Application) {
+      resource = {
+        ...app,
+        user_id: app.userId,
+        listing_id: app.listingId,
+      }
+    } else if (app instanceof ApplicationCreateDto) {
+      resource = {
+        ...app,
+        listing_id: app.listing.id,
+      }
+    }
+    return this.authzService.canOrThrow(user, "application", action, resource)
   }
 }

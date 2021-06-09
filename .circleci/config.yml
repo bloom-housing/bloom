@@ -27,6 +27,8 @@ executors:
       REDIS_TLS_URL: "rediss://localhost:6379/0"
       REDIS_URL: "redis://localhost:6379/0"
       REDIS_USE_TLS: "0"
+      CLOUDINARY_SECRET: "fake_secret"
+      CLOUDINARY_KEY: "fake_key"
 
 jobs:
   setup:
@@ -76,6 +78,8 @@ jobs:
             REDIS_TLS_URL: "rediss://localhost:6379/0"
             REDIS_URL: "redis://localhost:6379/0"
             REDIS_USE_TLS: "0"
+            CLOUDINARY_SECRET: "fake_secret"
+            CLOUDINARY_KEY: "fake_key"
   build-public:
     executor: standard-node
     steps:
@@ -117,7 +121,6 @@ workflows:
           yarn: true
           build: |
             yarn test:backend:core:dbsetup
-            yarn build:app:public
           start: yarn dev:all-cypress
-          wait-on: "http://localhost:3000"
+          wait-on: "http://0.0.0.0:3000"
           store_artifacts: true

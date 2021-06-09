@@ -126,7 +126,7 @@ export class UserService {
       body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<UserBasic> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user/resend-confirmation';
 
@@ -1278,6 +1278,51 @@ export class ApplicationFlaggedSetsService {
   }
 }
 
+export class AssetsService {
+  /**
+   * Create asset
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AssetCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create presigned upload metadata
+   */
+  createPresignedUploadMetadata(
+    params: {
+      /** requestBody */
+      body?: CreatePresignedUploadMetadata;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<CreatePresignedUploadMetadataResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets/presigned-upload-metadata';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface Id {
   /**  */
   id: string;
@@ -1364,6 +1409,35 @@ export interface Email {
 
   /**  */
   appUrl?: string;
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface Confirm {
@@ -1468,6 +1542,12 @@ export interface FormMetadataOptions {
 
   /**  */
   extraData?: FormMetadataExtraData[];
+
+  /**  */
+  description: boolean;
+
+  /**  */
+  exclusive: boolean;
 }
 
 export interface FormMetadata {
@@ -1476,6 +1556,15 @@ export interface FormMetadata {
 
   /**  */
   options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline: boolean;
+
+  /**  */
+  customSelectText: string;
+
+  /**  */
+  hideFromListing: boolean;
 }
 
 export interface Preference {
@@ -1505,6 +1594,9 @@ export interface Preference {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /**  */
+  page: number;
 }
 
 export interface MinMaxCurrency {
@@ -1554,7 +1646,7 @@ export interface UnitSummaryByReservedType {
   reservedType: string;
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[];
 }
 
 export interface UnitSummaryByAMI {
@@ -1588,6 +1680,9 @@ export interface UnitsSummarized {
 
   /**  */
   amiPercentages: string[];
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[];
 
   /**  */
   byUnitType: UnitSummary[];
@@ -1753,7 +1848,7 @@ export interface Property {
   id: string;
 
   /**  */
-  createdAt: Date;
+  createdAt?: Date;
 
   /**  */
   updatedAt: Date;
@@ -1798,38 +1893,6 @@ export interface Property {
   yearBuilt: number;
 }
 
-export interface UserBasic {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  resetToken: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
 export interface ApplicationMethod {
   /**  */
   type: ApplicationMethodType;
@@ -1846,10 +1909,19 @@ export interface ApplicationMethod {
 
 export interface Asset {
   /**  */
-  label: string;
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface ListingEvent {
@@ -1898,6 +1970,9 @@ export interface Listing {
 
   /**  */
   countyCode: CountyCode;
+
+  /**  */
+  showWaitlist: boolean;
 
   /**  */
   preferences: Preference[];
@@ -2005,7 +2080,7 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
-  specialNotes?: string;
+  specialNotes?: string
 
   /**  */
   waitlistCurrentSize: number;
@@ -2018,9 +2093,6 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object;
-
-  /** */
-  showWaitlist?: boolean;
 }
 
 export interface PreferenceCreate {
@@ -2041,6 +2113,9 @@ export interface PreferenceCreate {
 
   /**  */
   formMetadata?: FormMetadata;
+
+  /**  */
+  page: number;
 }
 
 export interface AddressCreate {
@@ -2086,7 +2161,7 @@ export interface ListingCreate {
   countyCode: CountyCode;
 
   /**  */
-  preferences: PreferenceCreate[];
+  preferences?: PreferenceCreate[];
 
   /**  */
   property: Id;
@@ -2217,6 +2292,9 @@ export interface PreferenceUpdate {
   formMetadata?: FormMetadata;
 
   /**  */
+  page: number;
+
+  /**  */
   id: string;
 }
 
@@ -2281,7 +2359,7 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  preferences: PreferenceUpdate[];
+  preferences?: PreferenceUpdate[];
 
   /**  */
   property: Id;
@@ -2657,10 +2735,13 @@ export interface Application {
   submissionType: ApplicationSubmissionType;
 
   /**  */
+  applicant: Applicant;
+
+  /**  */
   listing: Id;
 
   /**  */
-  applicant: Applicant;
+  user?: Id;
 
   /**  */
   mailingAddress: Address;
@@ -3686,6 +3767,24 @@ export interface ApplicationFlaggedSetResolve {
   applications: Id[];
 }
 
+export interface AssetCreate {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface CreatePresignedUploadMetadata {
+  /**  */
+  parametersToSign: object;
+}
+
+export interface CreatePresignedUploadMetadataResponse {
+  /**  */
+  signature: string;
+}
+
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
@@ -3700,12 +3799,14 @@ export enum Language {
 
 export enum ListingStatus {
   'active' = 'active',
-  'pending' = 'pending'
+  'pending' = 'pending',
+  'closed' = 'closed'
 }
 
 export enum CSVFormattingType {
   'basic' = 'basic',
-  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress',
+  'ohaFormat' = 'ohaFormat'
 }
 
 export enum CountyCode {

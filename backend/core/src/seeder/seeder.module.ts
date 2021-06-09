@@ -10,7 +10,6 @@ import { User } from "../user/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
-import { ConfigModule } from "@nestjs/config"
 import { CsvBuilder } from "../csv/csv-builder.service"
 import { CsvEncoder } from "../csv/csv-encoder.service"
 import { PropertyGroup } from "../property-groups/entities/property-group.entity"
@@ -22,6 +21,7 @@ import { AuthzService } from "../auth/authz.service"
 import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
 import { ApplicationsModule } from "../applications/applications.module"
 import { ThrottlerModule } from "@nestjs/throttler"
+import { SharedModule } from "../shared/shared.module"
 
 @Module({})
 export class SeederModule {
@@ -32,7 +32,7 @@ export class SeederModule {
       imports: [
         ApplicationsModule,
         UserModule,
-        ConfigModule.forRoot({ isGlobal: true }),
+        SharedModule,
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),
