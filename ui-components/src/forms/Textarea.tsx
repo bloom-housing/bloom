@@ -46,6 +46,7 @@ export const Textarea = (props: TextareaProps) => {
         ref={props.register}
         rows={props.rows ?? 4}
         wrap={props.wrap ?? "soft"}
+        title={props.label}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
     </div>
