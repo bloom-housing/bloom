@@ -25,7 +25,6 @@ describe("Applications", () => {
   let app: INestApplication
   let user1AccessToken: string
   let user2AccessToken: string
-  let user1Profile: UserDto
   let user2Profile: UserDto
 
   beforeAll(async () => {
@@ -48,11 +47,6 @@ describe("Applications", () => {
     user1AccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
     user2AccessToken = await getUserAccessToken(app, "test2@example.com", "ghijkl")
 
-    user1Profile = (
-      await supertest(app.getHttpServer())
-        .get("/user")
-        .set(...setAuthorization(user1AccessToken))
-    ).body
     user2Profile = (
       await supertest(app.getHttpServer())
         .get("/user")
@@ -132,10 +126,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     const res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto)
-    delete userCreateDto.passwordConfirmation
-    delete userCreateDto.emailConfirmation
-    delete userCreateDto.password
-    expect(res.body).toHaveProperty("status")
+    expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
   })
 
@@ -151,7 +142,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
-    expect(res.body).toMatchObject({ status: "ok" })
+    expect(res.body).toHaveProperty("id")
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
   })
 
