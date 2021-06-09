@@ -118,10 +118,12 @@ const AgPagination = ({
           </Button>
         </div>
 
+        {console.log("total pages", totalPages)}
+
         <Button
           className="data-pager__next data-pager__control"
           onClick={onNextClick}
-          disabled={totalPages === currentPage}
+          disabled={totalPages === currentPage || totalPages === 0}
         >
           {t("t.next")}
         </Button>
