@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 import { GridApi, RowNode, GridOptions } from "ag-grid-community"
 
-import Layout from "../../../../../layouts/application"
+import Layout from "../../../../../layouts/"
 import {
   t,
   Button,
