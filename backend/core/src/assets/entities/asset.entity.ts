@@ -4,7 +4,7 @@ import { IsString, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Column, Entity } from "typeorm"
 
-@Entity()
+@Entity({ name: "assets" })
 export class Asset extends AbstractEntity {
   @Column({ type: "text" })
   @Expose()
