@@ -1,5 +1,6 @@
-import React from "react"
-import { PageHeader, t } from "@bloom-housing/ui-components"
+import React, { useMemo } from "react"
+import { PageHeader, t, TabNav, TabNavItem, AppearanceSizeType } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
 
 type ApplicationSecondaryNavProps = {
   title: string
@@ -14,20 +15,44 @@ const ApplicationSecondaryNav = ({
   flagsQty,
   children,
 }: ApplicationSecondaryNavProps) => {
-  const elements = [
-    {
-      label: t("nav.applications"),
-      path: `/listings/${listingId}/applications`,
-    },
-    {
-      label: t("nav.flags"),
-      path: `/listings/${listingId}/flags`,
-      content: <>{flagsQty}</>,
-    },
-  ]
+  const router = useRouter()
+  const currentPath = router?.asPath
+
+  const tabNavElements = useMemo(
+    () => [
+      {
+        label: t("nav.applications"),
+        path: `/listings/${listingId}/applications`,
+      },
+      {
+        label: t("nav.flags"),
+        path: `/listings/${listingId}/flags`,
+        content: <>{flagsQty}</>,
+      },
+    ],
+    [flagsQty, listingId]
+  )
+
+  const tabs = useMemo(() => {
+    return (
+      <TabNav className="page-header__secondary-nav">
+        {tabNavElements.map((tab) => (
+          <TabNavItem
+            key={tab.path}
+            tagContent={tab?.content}
+            current={tab.path === currentPath}
+            href={tab.path}
+            tagSize={AppearanceSizeType.small}
+          >
+            {tab.label}
+          </TabNavItem>
+        ))}
+      </TabNav>
+    )
+  }, [currentPath, tabNavElements])
 
   return (
-    <PageHeader title={title} tabNav={process.env.showDuplicates ? elements : []}>
+    <PageHeader title={title} tabNav={process.env.showDuplicates ? tabs : null}>
       {children}
     </PageHeader>
   )

@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
-import Layout from "../../../../layouts/application"
+import Layout from "../../../../layouts"
 import {
   t,
   ApplicationSecondaryNav,

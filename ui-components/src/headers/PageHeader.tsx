@@ -1,27 +1,16 @@
 import * as React from "react"
-import { useRouter } from "next/router"
 import "./PageHeader.scss"
-import { Tab, TabNav } from "../navigation/TabNav"
-import { AppearanceSizeType } from "../global/AppearanceTypes"
 
-type TabNavItem = {
-  label: string
-  path: string
-  content?: React.ReactNode
-}
 export interface PageHeaderProps {
   className?: string
   inverse?: boolean
   title: React.ReactNode
   subtitle?: string
   children?: React.ReactNode
-  tabNav?: TabNavItem[]
+  tabNav?: React.ReactNode
 }
 
 const PageHeader = (props: PageHeaderProps) => {
-  const router = useRouter()
-  const currentPath = router?.asPath
-
   const classNames = ["page-header"]
   if (props.className) {
     classNames.push(...props.className.split(" "))
@@ -41,21 +30,7 @@ const PageHeader = (props: PageHeaderProps) => {
         {props.subtitle && <p className="page-header__lead"> {props.subtitle}</p>}
         {props.children}
 
-        {!!props?.tabNav?.length && (
-          <TabNav className="page-header__secondary-nav">
-            {props.tabNav?.map((tab) => (
-              <Tab
-                key={tab.path}
-                tagContent={tab?.content}
-                current={tab.path === currentPath}
-                href={tab.path}
-                tagSize={AppearanceSizeType.small}
-              >
-                {tab.label}
-              </Tab>
-            ))}
-          </TabNav>
-        )}
+        {props.tabNav ? props.tabNav : null}
       </hgroup>
     </header>
   )
