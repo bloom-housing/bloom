@@ -35,7 +35,7 @@ const ApplicationSecondaryNav = ({
 
   const tabs = useMemo(() => {
     return (
-      <TabNav className="page-header__secondary-nav">
+      <TabNav className="relative -bottom-10">
         {tabNavElements.map((tab) => (
           <TabNavItem
             key={tab.path}
