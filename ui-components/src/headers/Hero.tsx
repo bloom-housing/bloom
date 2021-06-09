@@ -22,8 +22,8 @@ const listingOpen = (listing: Listing) => {
   return moment() < moment(listing.applicationDueDate)
 }
 
-const HeroButton = (props: { title: string; href: string }) => (
-  <span className="hero__button">
+const HeroButton = (props: { title: string; href: string; className?: string }) => (
+  <span className={props.className + " hero__button"}>
     <LinkButton href={props.href}>{props.title}</LinkButton>
   </span>
 )
@@ -48,9 +48,22 @@ const Hero = (props: HeroProps) => {
     <div className={`hero ${classNames}`} style={styles}>
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
-      <HeroButton href={props.buttonLink} title={props.buttonTitle} />
-      {props.secondaryButtonTitle && props.secondaryButtonLink && (
-        <HeroButton href={props.secondaryButtonLink} title={props.secondaryButtonTitle} />
+
+      {props.secondaryButtonTitle && props.secondaryButtonLink ? (
+        <div className="grid md:grid-cols-6 gap-5 ">
+          <HeroButton
+            className={"md:col-start-3 with_secondary"}
+            href={props.buttonLink}
+            title={props.buttonTitle}
+          />
+          <HeroButton
+            className={"with_secondary"}
+            href={props.secondaryButtonLink}
+            title={props.secondaryButtonTitle}
+          />
+        </div>
+      ) : (
+        <HeroButton className={"px-5"} href={props.buttonLink} title={props.buttonTitle} />
       )}
     </div>
   )
