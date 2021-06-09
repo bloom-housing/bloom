@@ -11,13 +11,8 @@ import {
   ValidationPipe,
   Query,
 } from "@nestjs/common"
-<<<<<<< HEAD
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { EmailDto, UserBasicDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
-=======
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
-import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
->>>>>>> 60fa4305... Add noConfirmationEmail query param to POST /users
+import { EmailDto, UserBasicDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email/email.service"
