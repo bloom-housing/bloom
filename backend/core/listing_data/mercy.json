@@ -1,7 +1,7 @@
 {
   "id": "HOLNx_F7fUCeax5GCoIr9g",
   "events": [],
-  "postmarkedApplicationsReceivedByDate": "2021-06-30T17:00:00.000-07:00",
+  "postmarkedApplicationsReceivedByDate": "2021-07-06T17:00:00.000-07:00",
   "applicationAddress": {
     "city": "San Leandro (Ashland)",
     "street": "1475 167th Avenue",
@@ -10,7 +10,7 @@
     "latitude": null,
     "longitude": null
   },
-  "applicationDueDate": "2021-06-30T17:00:00.000-07:00",
+  "applicationDueDate": "2021-07-06T17:00:00.000-07:00",
   "applicationOrganization": "Mercy Housing",
   "applicationPhone": "510-962-8120",
   "buildingSelectionCriteria": "https://drive.google.com/file/d/19X_AN0lN_jMeD0kSHr_im_8XXVpUiiPt/view?usp=sharing",
@@ -24,7 +24,7 @@
   "externalId": null,
   "waitlistMaxSize": 100,
   "name": "1475 167th Avenue",
-  "waitlistCurrentSize": 100,
+  "waitlistCurrentSize": 27,
   "prioritiesDescriptor": null,
   "requiredDocuments": "Current government issued photo ID, social security cards, birth certificates for minors, proof of income (tax return, paystubs, SS Award letter or Assistance Award letter, pension statement) and proof of assets (bank statements). Housing Preference: Applicants who either live and/or work within the County of Alameda: paystubs / tax returns or another form of independent verification to verify employment; and or a lease or a copy of a utility bill to verify residency.",
   "reservedCommunityMaximumAge": null,
