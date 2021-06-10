@@ -87,7 +87,7 @@ describe("Applications", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto)
     expect(mockWelcome.mock.calls.length).toBe(1)
-    expect(res.body).toHaveProperty("status")
+    expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
   })
 
@@ -135,22 +135,6 @@ describe("Applications", () => {
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.emailConfirmation = "a2@b.com"
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
-  })
-
-  it("should allow anonymous user to create an account", async () => {
-    const userCreateDto: UserCreateDto = {
-      password: "Abcdef1!",
-      passwordConfirmation: "Abcdef1!",
-      email: "a@b.com",
-      emailConfirmation: "a@b.com",
-      firstName: "First",
-      middleName: "Mid",
-      lastName: "Last",
-      dob: new Date(),
-    }
-    const res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto)
-    expect(res.body).toHaveProperty("id")
-    expect(res.body).not.toHaveProperty("passwordHash")
   })
 
   it("should not allow to create a new account with duplicate email", async () => {
