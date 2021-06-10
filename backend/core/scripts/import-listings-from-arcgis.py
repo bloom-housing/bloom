@@ -4,11 +4,6 @@ response = requests.get("https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/re
 
 housingProperty = response.json()
 
-#for _features in housingProperty['features']:
-#    print (_features['attributes']['Project_Name'])
-
 for _features in housingProperty['features']:
     print (_features['attributes']['Project_Name'] + ": Located at " + _features['attributes']['Project_Address'])
     
-
-#print(housingProperty['features'][0]['attributes']['Project_Name'])
