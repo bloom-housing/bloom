@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
   - `/assets` endpoints (create and createPresignedUploadMetadata)
+  - "noEmailConfirmation" query param to `POST /users` endpoint
 
 - Changed:
 
