@@ -5,13 +5,9 @@ import { AgGridReact } from "ag-grid-react"
 
 import { useFlaggedApplicationsList, useSingleListingData } from "../../../../lib/hooks"
 import Layout from "../../../../layouts"
-import {
-  t,
-  ApplicationSecondaryNav,
-  AgPagination,
-  AG_PER_PAGE_OPTIONS,
-} from "@bloom-housing/ui-components"
+import { t, AgPagination, AG_PER_PAGE_OPTIONS } from "@bloom-housing/ui-components"
 import { getFlagSetCols } from "../../../../src/flags/flagSetCols"
+import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 
 const FlagsPage = () => {
   const router = useRouter()

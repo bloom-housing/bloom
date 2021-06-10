@@ -12,7 +12,6 @@ import {
   ApiClientContext,
   SiteAlert,
   setSiteAlertMessage,
-  ApplicationSecondaryNav,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
@@ -21,6 +20,7 @@ import {
   useSingleListingData,
   useFlaggedApplicationsList,
 } from "../../../../lib/hooks"
+import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 import Layout from "../../../../layouts"
 import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
