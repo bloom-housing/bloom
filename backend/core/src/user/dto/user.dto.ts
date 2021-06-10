@@ -43,6 +43,7 @@ export class UserBasicDto extends OmitType(User, [
   "passwordHash",
   "roles",
   "confirmationToken",
+  "resetToken",
 ] as const) {}
 
 export class UserDtoWithAccessToken extends UserDto {

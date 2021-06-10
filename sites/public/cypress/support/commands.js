@@ -60,7 +60,7 @@ Cypress.Commands.add(
 
     // find listing with 2 preferences (to test all existing steps) and merge with custom configuration (not required)
     cy.request("GET", listingsUrl).then((res) => {
-      const listing = res.body.find((item) => item.preferences.length > 1)
+      const listing = res.body.find((item) => item.name === "Test: Triton")
 
       if (listingOverrides && listing) {
         Object.keys(listingOverrides).forEach((item) => {

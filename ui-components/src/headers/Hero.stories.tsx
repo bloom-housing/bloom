@@ -44,9 +44,9 @@ export const withBackground = () => (
 export const withSecondaryButton = () => (
   <Hero
     title={<>Say Hello to Your Hero</>}
-    buttonTitle="Rental Listings"
+    buttonTitle="Rent"
     buttonLink="/listings"
-    secondaryButtonTitle="Sale Listings"
+    secondaryButtonTitle="Buy"
     secondaryButtonLink="/listings/for-sale"
     backgroundImage="/images/banner.png"
   />

@@ -11,7 +11,6 @@ import { SharedModule } from "../shared/shared.module"
 import { AuthzService } from "./authz.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { UserModule } from "../user/user.module"
-import Joi from "joi"
 
 @Module({
   imports: [
@@ -29,11 +28,6 @@ import Joi from "joi"
     TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
     forwardRef(() => UserModule),
-    ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        APP_SECRET: Joi.string().required().min(16),
-      }),
-    }),
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
   exports: [AuthzService, AuthService],

@@ -126,7 +126,7 @@ export class UserService {
       body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<UserBasic> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user/resend-confirmation';
 
@@ -1278,6 +1278,51 @@ export class ApplicationFlaggedSetsService {
   }
 }
 
+export class AssetsService {
+  /**
+   * Create asset
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: AssetCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create presigned upload metadata
+   */
+  createPresignedUploadMetadata(
+    params: {
+      /** requestBody */
+      body?: CreatePresignedUploadMetadata;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<CreatePresignedUploadMetadataResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets/presigned-upload-metadata';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface Id {
   /**  */
   id: string;
@@ -1364,6 +1409,35 @@ export interface Email {
 
   /**  */
   appUrl?: string;
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface Confirm {
@@ -1467,13 +1541,13 @@ export interface FormMetadataOptions {
   key: string;
 
   /**  */
-  description?: boolean;
-
-  /**  */
-  exclusive?: boolean;
-
-  /**  */
   extraData?: FormMetadataExtraData[];
+
+  /**  */
+  description: boolean;
+
+  /**  */
+  exclusive: boolean;
 }
 
 export interface FormMetadata {
@@ -1484,13 +1558,13 @@ export interface FormMetadata {
   options: FormMetadataOptions[];
 
   /**  */
-  hideGenericDecline?: boolean;
+  hideGenericDecline: boolean;
 
-  /** */
-  customSelectText?: string
+  /**  */
+  customSelectText: string;
 
-  /** */
-  hideFromListing?: boolean
+  /**  */
+  hideFromListing: boolean;
 }
 
 export interface Preference {
@@ -1521,8 +1595,8 @@ export interface Preference {
   /**  */
   formMetadata?: FormMetadata;
 
-  /** */
-  page: number
+  /**  */
+  page: number;
 }
 
 export interface MinMaxCurrency {
@@ -1608,10 +1682,10 @@ export interface UnitsSummarized {
   amiPercentages: string[];
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[];
 
   /**  */
-  byUnitTypeAndRent: UnitSummary[];
+  byUnitType: UnitSummary[];
 
   /**  */
   byNonReservedUnitType: UnitSummary[];
@@ -1819,38 +1893,6 @@ export interface Property {
   yearBuilt: number;
 }
 
-export interface UserBasic {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  resetToken: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
 export interface ApplicationMethod {
   /**  */
   type: ApplicationMethodType;
@@ -1867,10 +1909,19 @@ export interface ApplicationMethod {
 
 export interface Asset {
   /**  */
-  label: string;
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface ListingEvent {
@@ -2063,8 +2114,8 @@ export interface PreferenceCreate {
   /**  */
   formMetadata?: FormMetadata;
 
-  /** */
-  page: number
+  /**  */
+  page: number;
 }
 
 export interface AddressCreate {
@@ -2241,10 +2292,10 @@ export interface PreferenceUpdate {
   formMetadata?: FormMetadata;
 
   /**  */
-  id: string;
+  page: number;
 
-  /** */
-  page: number
+  /**  */
+  id: string;
 }
 
 export interface AddressUpdate {
@@ -3716,6 +3767,24 @@ export interface ApplicationFlaggedSetResolve {
   applications: Id[];
 }
 
+export interface AssetCreate {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface CreatePresignedUploadMetadata {
+  /**  */
+  parametersToSign: object;
+}
+
+export interface CreatePresignedUploadMetadataResponse {
+  /**  */
+  signature: string;
+}
+
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
@@ -3736,7 +3805,8 @@ export enum ListingStatus {
 
 export enum CSVFormattingType {
   'basic' = 'basic',
-  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress'
+  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress',
+  'ohaFormat' = 'ohaFormat'
 }
 
 export enum CountyCode {

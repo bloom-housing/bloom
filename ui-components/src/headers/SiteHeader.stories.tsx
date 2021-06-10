@@ -7,13 +7,100 @@ import { AppearanceSizeType } from "../global/AppearanceTypes"
 export default {
   title: "Headers/Site Header",
 }
- 
+
 export const standard = () => (
   <SiteHeader
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-    title="Site Title Here"
+    title="Alameda County Housing Portal"
     skip="Skip to content"
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const standardSlim = () => (
+  <SiteHeader
+    logoSrc="/images/logo_glyph.svg"
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    title="Housing Portal"
+    skip="Skip to content"
+    logoWidth={"slim"}
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const standardMedium = () => (
+  <SiteHeader
+    logoSrc="/images/logo_glyph.svg"
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    title="Alameda County Housing Portal"
+    skip="Skip to content"
+    logoWidth={"medium"}
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const standardWide = () => (
+  <SiteHeader
+    logoSrc="/images/logo_glyph.svg"
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    title="Dahlia San Francisco Housing Portal"
+    skip="Skip to content"
+    logoWidth={"wide"}
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const imageOnlySlim = () => (
+  <SiteHeader
+    logoSrc="/images/listing.jpg"
+    imageOnly={true}
+    title={"Image Alt Text"}
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    skip="Skip to content"
+    logoWidth={"slim"}
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const imageOnlyMedium = () => (
+  <SiteHeader
+    logoSrc="/images/listing.jpg"
+    imageOnly={true}
+    title={"Image Alt Text"}
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    skip="Skip to content"
+    logoWidth={"medium"}
+  >
+    <a href="#" className="navbar-item">
+      Hello World
+    </a>
+  </SiteHeader>
+)
+
+export const imageOnlyWide = () => (
+  <SiteHeader
+    logoSrc="/images/listing.jpg"
+    imageOnly={true}
+    title={"Image Alt Text"}
+    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+    skip="Skip to content"
+    logoWidth={"wide"}
   >
     <a href="#" className="navbar-item">
       Hello World
@@ -25,7 +112,7 @@ export const withDropdownAndButton = () => (
   <SiteHeader
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-    title="Site Title Here"
+    title="Alameda County Housing Portal"
     skip="Skip to content"
   >
     <a href="#" className="navbar-item">
@@ -61,20 +148,21 @@ export const withLanguageNavigation = () => (
   <SiteHeader
     logoSrc="/images/logo_glyph.svg"
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-    title="Site Title Here"
+    title="Alameda County Housing Portal"
     skip="Skip to content"
-    languages={
-      [
+    language={{
+      list: [
         {
           prefix: "",
-          label: "English"
+          label: "English",
         },
         {
           prefix: "es",
-          label: "Spanish"
-        }
-      ]
-    }
+          label: "Spanish",
+        },
+      ],
+      codes: [],
+    }}
   >
     <a href="#" className="navbar-item">
       Hello World

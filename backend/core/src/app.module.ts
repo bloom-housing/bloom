@@ -23,6 +23,7 @@ import { SharedModule } from "./shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
 import { Reflector } from "@nestjs/core"
+import { AssetsModule } from "./assets/assets.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -36,9 +37,7 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({
-  imports: [ApplicationFlaggedSetsModule],
-})
+@Module({})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     /**
@@ -88,6 +87,8 @@ export class AppModule {
         AmiChartsModule,
         SharedModule,
         TranslationsModule,
+        ApplicationFlaggedSetsModule,
+        AssetsModule,
       ],
     }
   }
