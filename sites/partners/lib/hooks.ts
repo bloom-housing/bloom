@@ -1,7 +1,13 @@
 import { useContext } from "react"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
+
+type UseSingleApplicationDataProps = {
+  listingId: string
+  page: number
+  limit: number
+}
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(ApiClientContext)
@@ -79,5 +85,54 @@ export function useSingleApplicationData(applicationId: string) {
     application: data,
     applicationLoading: !error && !data,
     applicationError: error,
+  }
+}
+
+export function useFlaggedApplicationsList({
+  listingId,
+  page,
+  limit,
+}: UseSingleApplicationDataProps) {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", page.toString())
+  searchParams.append("limit", limit.toString())
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${searchParams.toString()}`
+
+  const fetcher = () =>
+    applicationFlaggedSetsService.list({
+      listingId,
+      page,
+      limit,
+    })
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}
+
+export function useSingleFlaggedApplication(afsId: string) {
+  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
+  const fetcher = () =>
+    applicationFlaggedSetsService.retrieve({
+      afsId,
+    })
+
+  const { data, error } = useSWR(endpoint, fetcher)
+
+  const revalidate = () => mutate(endpoint)
+
+  return {
+    revalidate,
+    data,
+    error,
   }
 }

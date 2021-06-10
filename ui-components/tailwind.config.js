@@ -121,6 +121,7 @@ module.exports = {
       }),
       inset: {
         4: "1rem",
+        "-10": "-2.5rem",
       },
     },
   },
