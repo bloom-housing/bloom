@@ -1,6 +1,7 @@
 import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
+import { TableThumbnail } from "./StandardTable"
 
 export default {
   title: "Tables/MinimalTable",
@@ -34,3 +35,25 @@ while (i > 0) {
 }
 
 export const Default = () => <MinimalTable headers={headers} data={data} />
+
+const headersWithImage = { image: "Image", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = (
+  <TableThumbnail>
+    <img src="/images/listing.jpg" />
+  </TableThumbnail>
+)
+dataWithImage[1].image = (
+  <TableThumbnail>
+    <img src="/images/logo_glyph.svg" />
+  </TableThumbnail>
+)
+
+export const ImageCells = () => (
+  <MinimalTable
+    headers={headersWithImage}
+    data={dataWithImage}
+    flushLeft={true}
+    flushRight={true}
+  />
+)
