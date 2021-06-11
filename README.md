@@ -34,15 +34,17 @@ Bloom uses a monorepo-style repository, containing multiple user-facing applicat
 
 If this is your first time working with Bloom, please be sure to check out the app and service README files as well for important configuration information specific to those pieces.
 
-### Installing Dependencies
-
-```
-yarn install
-```
-
 ### Setting up your local environment variables
 
 Operational configuration of each app and service is read from environment variables. There is a `.env.template` file in each app or service directory that must be copied to `.env` (or equivalent), and the settings modified specific to your development environment.
+
+### Installing Dependencies and Seeding the Database
+
+This alias does a `yarn:install` in the root of the repo and `yarn install` and `yarn db:reseed` in the `backend/core` dir.
+
+```
+yarn setup
+```
 
 ### Setting up a test Database
 
