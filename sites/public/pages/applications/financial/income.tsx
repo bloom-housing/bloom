@@ -165,6 +165,8 @@ const ApplicationIncome = () => {
               error={errors.income}
               register={register}
               errorMessage={t("errors.numberError")}
+              setValue={setValue}
+              getValues={getValues}
             />
 
             <fieldset>

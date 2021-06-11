@@ -55,9 +55,12 @@
       background: transparent;
     }
 
-    // & input:not(:first-child)
-    .prepend + input {
+    .prepend + input[aria-invalid="false"] {
       @apply pl-8;
+    }
+
+    .prepend + input[aria-invalid="true"] {
+      @apply pl-12;
     }
 
     &.control-narrower {

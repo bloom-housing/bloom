@@ -3,13 +3,14 @@ import { Listing } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { AlertBox, AlertNotice } from "../notifications"
+import { UseFormMethods, FieldError } from "react-hook-form"
 
 export interface HouseholdSizeFieldProps {
   listing: Listing
   householdSize: number
   validate: boolean
-  register: any
-  error: any
+  register: UseFormMethods["register"]
+  error: FieldError
   clearErrors: () => void
   assistanceUrl: string
 }
@@ -40,7 +41,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               })}
             />
           </span>
-          <ErrorMessage id={"householdsize-error"} error={error}>
+          <ErrorMessage id={"householdsize-error"} error={error !== undefined}>
             <AlertBox type="alert" inverted onClose={() => clearErrors()}>
               {t("application.household.dontQualifyHeader")}
             </AlertBox>

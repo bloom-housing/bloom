@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
+import { UseFormMethods } from "react-hook-form"
 
 export interface FieldProps {
   error?: boolean
@@ -18,11 +19,13 @@ export interface FieldProps {
   onDrop?: (e: any) => boolean
   onPaste?: (e: any) => boolean
   placeholder?: string
-  register: any // comes from React Hook Form
+  register: UseFormMethods["register"]
   validation?: Record<string, any>
   disabled?: boolean
   inputProps?: Record<string, unknown>
   describedBy?: string
+  getValues?: UseFormMethods["getValues"]
+  setValue?: UseFormMethods["setValue"]
 }
 
 const Field = (props: FieldProps) => {
@@ -39,6 +42,19 @@ const Field = (props: FieldProps) => {
   if (props.controlClassName) {
     controlClasses.push(props.controlClassName)
   }
+
+  const formatValue = () => {
+    if (props.getValues && props.setValue) {
+      const currencyValue = props.getValues()[props.name]
+      const numericIncome = parseFloat(currencyValue)
+      if (!isNaN(numericIncome)) {
+        props.setValue(props.name, numericIncome.toFixed(2))
+      }
+    }
+  }
+
+  let inputProps = { ...props.inputProps }
+  if (props.type === "currency") inputProps = { ...inputProps, step: 0.01, onBlur: formatValue }
 
   const type = (props.type === "currency" && "number") || props.type || "text"
   const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
@@ -62,17 +78,6 @@ const Field = (props: FieldProps) => {
   if (props.note) {
     note = <p className="field-note mb-4">{props.note}</p>
   }
-
-  const formatValue = () => {
-    const { income } = getValues()
-    const numericIncome = parseFloat(income)
-    if (!isNaN(numericIncome)) {
-      setValue("income", numericIncome.toFixed(2))
-    }
-  }
-
-  let inputProps = { ...props.inputProps }
-  if (type === "currency") inputProps = { ...inputProps, step: 0.01, onBlur: formatValue }
 
   return (
     <div className={classes.join(" ")}>
