@@ -3,7 +3,7 @@ import React from "react"
 import { LanguageNav } from "./LanguageNav"
 
 export default {
-  title: "LanguageNav",
+  title: "Navigation/LanguageNav",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 

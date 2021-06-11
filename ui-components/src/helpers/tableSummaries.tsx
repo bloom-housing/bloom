@@ -25,8 +25,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
         </>
       ) : (
         <>
-          <strong>{rentMin}</strong>
-          {unit} {t("t.to")} <strong>{rentMax}</strong>
+          <strong>{rentMin}</strong> {t("t.to")} <strong>{rentMax}</strong>
           {unit}
         </>
       )
@@ -39,7 +38,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
           unitSummary.rentAsPercentIncomeRange.max.toString(),
           true
         )
-      : getRent(unitSummary.rentRange.min, unitSummary.rentRange.min)
+      : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     return {
       unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,

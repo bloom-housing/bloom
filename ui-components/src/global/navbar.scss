@@ -41,15 +41,42 @@ nav.navbar {
 
 .navbar-brand {
   @apply relative;
-  @apply justify-center;
-
-  @screen md {
-    @apply justify-start;
-  }
+  @apply justify-start;
 
   @screen print {
     @apply justify-center;
   }
+}
+
+.navbar-image-only {
+  max-height: 80% !important; // Unfortunately we need this to overrwrite Bulma, reccomend removing Bulma #1345
+  max-width: 100%;
+}
+
+.navbar-custom-width {
+  @apply flex;
+  @apply items-center;
+  @apply justify-center;
+  @apply flex-col;
+}
+
+.navbar-image-only-container {
+  height: 50px;
+  @screen md {
+    height: 120px;
+  }
+}
+
+.navbar-width-slim {
+  width: 200px;
+}
+
+.navbar-width-med {
+  width: 450px;
+}
+
+.navbar-width-wide {
+  width: 600px;
 }
 
 .navbar-brand .logo {
@@ -59,6 +86,8 @@ nav.navbar {
   @apply z-10;
   @apply items-center;
   @apply justify-center;
+  max-width: 60%;
+  max-height: 120px;
 
   @screen md {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
@@ -73,14 +102,6 @@ nav.navbar {
 
   @screen print {
     margin-top: 0;
-  }
-
-  &.slim {
-    @apply w-40;
-  }
-
-  &.normal {
-    @apply w-56;
   }
 
   &.navbar-item,

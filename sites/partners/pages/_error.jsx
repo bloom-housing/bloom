@@ -1,4 +1,4 @@
-import Layout from "../layouts/application"
+import Layout from "../layouts"
 import Head from "next/head"
 import { Hero, MarkdownSection, t } from "@bloom-housing/ui-components"
 

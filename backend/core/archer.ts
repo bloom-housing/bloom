@@ -301,6 +301,9 @@ export const ArcherListing: Listing = {
       // referenceType: "Listing",
       // TODO confirm not used anywhere
       // referenceId: "Uvbk5qurpB2WI9V6WnNdH",
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
       label: "building",
       fileId:
         "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",

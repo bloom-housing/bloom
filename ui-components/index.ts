@@ -36,6 +36,7 @@ export * from "./src/forms/Form"
 export * from "./src/forms/TimeField"
 /* Global */
 export * from "./src/global/AppearanceTypes"
+export * from "./src/global/vendor/AgPagination"
 
 /* Headers */
 export * from "./src/headers/Hero"
@@ -64,6 +65,7 @@ export * from "./src/helpers/formatYesNoLabel"
 export * from "./src/helpers/getTranslationWithArguments"
 export * from "./src/helpers/preferences"
 export * from "./src/helpers/resolveObject"
+export * from "./src/helpers/useMutate"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"
@@ -76,6 +78,8 @@ export * from "./src/lists/PreferencesList"
 export * from "./src/navigation/FooterNav"
 export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
+export * from "./src/navigation/TabNav"
+export * from "./src/navigation/Tabs"
 export * from "./src/navigation/UserNav"
 
 /* Notifications */

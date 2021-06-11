@@ -26,7 +26,20 @@ export interface NavigationContextProps {
 }
 
 export const NavigationContext = createContext<NavigationContextProps>({
-  LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
+  // Replace with an official app solution
+  LinkComponent: (props) => (
+    <a
+      className={props.className}
+      href={props.href}
+      onClick={(e) => {
+        e.preventDefault()
+        alert(`You clicked: ${props.href}`)
+      }}
+      {...props.aria}
+    >
+      {props.children}
+    </a>
+  ),
   router: {
     push: () => {
       // no-op

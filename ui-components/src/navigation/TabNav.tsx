@@ -1,16 +1,18 @@
 import React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { Tag } from "../text/Tag"
 import "./TabNav.scss"
 
-export interface TabProps {
+export interface TabNavItemProps {
   href: string
   current?: boolean
   tagContent?: React.ReactNode
+  tagSize?: AppearanceSizeType
   children: React.ReactNode
 }
 
-const Tab = (props: TabProps) => {
+const TabNavItem = (props: TabNavItemProps) => {
   const tabRef = React.useRef<HTMLLIElement>(null)
 
   const handleKeyboard = (event: React.KeyboardEvent) => {
@@ -38,15 +40,25 @@ const Tab = (props: TabProps) => {
         tabIndex={props.current ? 0 : -1}
       >
         {props.children}
-        {props.tagContent && <Tag pillStyle={true}>{props.tagContent}</Tag>}
+        {props.tagContent && (
+          <Tag pillStyle={true} size={props.tagSize ? props.tagSize : AppearanceSizeType.normal}>
+            {props.tagContent}
+          </Tag>
+        )}
       </LocalizedLink>
     </li>
   )
 }
 
-const TabNav = (props: { children: React.ReactNode }) => {
+const TabNav = (props: { children: React.ReactNode; className?: string }) => {
+  const classes = ["tab-nav"]
+
+  if (props.className) {
+    classes.push(props.className)
+  }
+
   return (
-    <nav className="tab-nav">
+    <nav className={classes.join(" ")}>
       <ul role="tablist" aria-label="Secondary navigation">
         {props.children}
       </ul>
@@ -54,4 +66,4 @@ const TabNav = (props: { children: React.ReactNode }) => {
   )
 }
 
-export { TabNav as default, TabNav, Tab }
+export { TabNav as default, TabNav, TabNavItem }

@@ -76,7 +76,7 @@ const UnitTables = (props: UnitTablesProps) => {
           })
         })
 
-        if (unitSummary.floorRange) {
+        if (unitSummary.floorRange && unitSummary.floorRange.min) {
           floorSection = (
             <>
               ,&nbsp;{formatRange(unitSummary.floorRange, true)}{" "}
