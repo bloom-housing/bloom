@@ -72,6 +72,20 @@ const Layout = (props) => {
       </div>
 
       <SiteFooter>
+        <FooterSection>
+          <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
+        </FooterSection>
+        <FooterSection>
+          <p>
+            {t("footer.header")}
+            <br />
+            <a href={t("footer.headerUrl")} target="_blank">
+              {t("footer.headerLink")}
+            </a>
+          </p>
+          <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
+          <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
+        </FooterSection>
         <FooterNav copyright={t("footer.copyright")}>
           <Link href="/privacy">
             <a>{t("pageTitle.privacy")}</a>
