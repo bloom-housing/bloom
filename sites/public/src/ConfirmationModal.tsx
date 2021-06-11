@@ -9,7 +9,7 @@ import {
   AlertBox,
 } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { emailRegex } from "../lib/helpers"
 

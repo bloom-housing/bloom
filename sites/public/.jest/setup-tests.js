@@ -2,8 +2,23 @@ import "@testing-library/jest-dom/extend-expect"
 
 import { configure } from "enzyme"
 import Adapter from "enzyme-adapter-react-16"
-import { addTranslation } from "@bloom-housing/ui-components"
-import general from "../src/locales/general.json"
+import general from "../../../ui-components/src/locales/general.json"
+import Polyglot from "node-polyglot"
+
+const translatorConfig = {}
+global.Translator = translatorConfig
+
+export const addTranslation = (translationPhrases, resetPolyglot = false) => {
+  if (!translatorConfig.polyglot || resetPolyglot) {
+    // Set up the initial Polyglot instance and phrases
+    translatorConfig.polyglot = new Polyglot({
+      phrases: translationPhrases,
+    })
+  } else {
+    // Extend the Polyglot instance with new phrases
+    translatorConfig.polyglot.extend(translationPhrases)
+  }
+}
 
 configure({ adapter: new Adapter() })
 
@@ -22,3 +37,9 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
 })
 
 addTranslation(general)
+
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {}
+  },
+}))

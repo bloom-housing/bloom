@@ -51,5 +51,9 @@ module.exports = {
     "**/*.stories.tsx",
     "**/.eslintrc.js",
     "**/*.test.*",
+    "*.config.*",
   ],
+  env: {
+    jest: true,
+  },
 }
