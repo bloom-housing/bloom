@@ -32,7 +32,7 @@ const Layout = (props) => {
         </Head>
         <SiteHeader
           skip={t("nav.skip")}
-          logoSrc="/images/logo_glyph.svg"
+          logoSrc="/images/detroit-logo.png"
           notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
           title={t("nav.siteTitle")}
           language={{

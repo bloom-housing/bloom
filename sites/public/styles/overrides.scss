@@ -1,0 +1,15 @@
+/* Overrides the default ui-components styles with Detroit-specific styles. */
+
+// All svg icons should be green.
+.ui-icon svg {
+  fill: $tailwind-primary-darker;
+}
+
+// The header logo should allow for a larger maximum height than the default
+// logo.
+.navbar-brand .logo .logo__image {
+  max-height: 4rem;
+  @screen md {
+    max-height: 4rem;
+  }
+}
