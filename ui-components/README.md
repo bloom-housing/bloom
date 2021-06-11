@@ -24,14 +24,14 @@ To spin up Storybook locally, run:
 yarn start
 ```
 
-To run the test suite which is a combination of storyshots and tests via Jest and Enzyme, run:
+To run the unit test suite which is written with Jest and RTL, run
 
 ```
-yarn test
+yarn test:unit
 
 # or
 
-yarn test -u  # updates storyshots based on latest code
+yarn test:unit:coverage # generates local coverage reports, useful while writing tests
 ```
 
 ## Style Organization and Best Practices

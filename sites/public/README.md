@@ -14,5 +14,5 @@ This is the beginning of a reference implementation of the public-facing web app
 
 ## Running end-to-end tests locally
 
-- Start the Next.js server: `yarn test`
-- In the Cypress app, click on the test called "our_first_test.spec.js". This will open the Cypress test runner in a Chrome browser and run the test.
+- Start the Next.js server: `yarn test:cypress`
+- In the Cypress app, click on any test suite. This will open the Cypress test runner in a Chrome browser and run the suite.

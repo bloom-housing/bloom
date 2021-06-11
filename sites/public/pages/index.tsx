@@ -18,7 +18,7 @@ interface IndexProps {
   listings: Listing[]
 }
 
-export default function Home(props: IndexProps) {
+const Home = (props: IndexProps) => {
   const blankAlertInfo = {
     alertMessage: null,
     alertType: null,
@@ -88,3 +88,5 @@ export async function getStaticProps() {
 
   return { props: { listings } }
 }
+
+export default Home

@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
-    "test": "concurrently \"yarn dev\" \"cypress open\"",
+    "test:cypress": "concurrently \"yarn dev\" \"cypress open\"",
+    "test:unit": "jest -w 1",
+    "test:unit:coverage": "jest -w 1 --coverage --watchAll=false",
     "export": "next export",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "dev:listings": "cd ../../backend/core && yarn dev",
