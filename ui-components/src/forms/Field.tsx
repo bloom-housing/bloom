@@ -21,7 +21,6 @@ export interface FieldProps {
   register: any // comes from React Hook Form
   validation?: Record<string, any>
   disabled?: boolean
-  prepend?: string
   inputProps?: Record<string, unknown>
   describedBy?: string
 }
@@ -41,7 +40,7 @@ const Field = (props: FieldProps) => {
     controlClasses.push(props.controlClassName)
   }
 
-  const type = props.type || "text"
+  const type = (props.type === "currency" && "number") || props.type || "text"
   const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
 
   const label = useMemo(() => {
@@ -64,12 +63,23 @@ const Field = (props: FieldProps) => {
     note = <p className="field-note mb-4">{props.note}</p>
   }
 
+  const formatValue = () => {
+    const { income } = getValues()
+    const numericIncome = parseFloat(income)
+    if (!isNaN(numericIncome)) {
+      setValue("income", numericIncome.toFixed(2))
+    }
+  }
+
+  let inputProps = { ...props.inputProps }
+  if (type === "currency") inputProps = { ...inputProps, step: 0.01, onBlur: formatValue }
+
   return (
     <div className={classes.join(" ")}>
       {!isRadioOrCheckbox && label}
       {note}
       <div className={controlClasses.join(" ")}>
-        {props.prepend && <span className="prepend">{props.prepend}</span>}
+        {props.type === "currency" && <span className="prepend">{`$`}</span>}
         <input
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}-error`}
           aria-invalid={!!props.error || false}
@@ -83,7 +93,7 @@ const Field = (props: FieldProps) => {
           disabled={props.disabled}
           onPaste={props.onPaste}
           onDrop={props.onDrop}
-          {...props.inputProps}
+          {...inputProps}
         />
         {isRadioOrCheckbox && label}
       </div>
