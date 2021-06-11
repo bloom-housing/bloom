@@ -8,7 +8,6 @@ import { CountyCodeResolverService } from "../services/county-code-resolver.serv
 
 @Module({
   imports: [
-    ConfigModule,
     SharedModule,
     TranslationsModule,
     SendGridModule.forRootAsync({

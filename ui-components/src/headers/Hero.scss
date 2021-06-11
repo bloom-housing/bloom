@@ -15,8 +15,8 @@
   }
 }
 
-.hero__button {
-  @apply px-5;
+.hero__button, .with_secondary a {
+  width: 100%;
 }
 
 .hero__title {
