@@ -32,5 +32,4 @@ module.exports = {
   moduleNameMapper: {
     "\\.(scss|css|less)$": "identity-obj-proxy",
   },
-  //   transformIgnorePatterns: ["ui-components/*"],
 }
