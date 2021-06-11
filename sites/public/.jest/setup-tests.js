@@ -3,22 +3,7 @@ import "@testing-library/jest-dom/extend-expect"
 import { configure } from "enzyme"
 import Adapter from "enzyme-adapter-react-16"
 import general from "../../../ui-components/src/locales/general.json"
-import Polyglot from "node-polyglot"
-
-const translatorConfig = {}
-global.Translator = translatorConfig
-
-export const addTranslation = (translationPhrases, resetPolyglot = false) => {
-  if (!translatorConfig.polyglot || resetPolyglot) {
-    // Set up the initial Polyglot instance and phrases
-    translatorConfig.polyglot = new Polyglot({
-      phrases: translationPhrases,
-    })
-  } else {
-    // Extend the Polyglot instance with new phrases
-    translatorConfig.polyglot.extend(translationPhrases)
-  }
-}
+import { addTranslation } from "../../../ui-components/src/helpers/translator"
 
 configure({ adapter: new Adapter() })
 
