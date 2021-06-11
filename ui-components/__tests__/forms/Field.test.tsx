@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, fireEvent } from "@testing-library/react"
+import { render, cleanup, fireEvent, getByPlaceholderText } from "@testing-library/react"
 import { Field } from "../../src/forms/Field"
 import { useForm } from "react-hook-form"
 
@@ -58,6 +58,7 @@ const FieldCurrency = () => {
       type={"currency"}
       getValues={getValues}
       setValue={setValue}
+      placeholder={"Enter Income"}
     />
   )
 }
@@ -76,10 +77,10 @@ describe("<Field>", () => {
     const { getByLabelText } = render(<FieldCustomProps />)
     expect(getByLabelText("Test Input Custom")).toBeTruthy()
   })
-  // it("can render currency field", async () => {
-  //   const { getByText, getByLabelText } = render(<FieldCurrency />)
-  //   expect(getByLabelText("Test Input Custom")).toBeTruthy()
-  //   expect(getByText("$")).toBeTruthy()
-  //   fireEvent.change()
-  // })
+  it("can render currency field", async () => {
+    const { getByText, getByLabelText, getByPlaceholderText } = render(<FieldCurrency />)
+    expect(getByLabelText("Test Input Custom")).toBeTruthy()
+    expect(getByText("$")).toBeTruthy()
+    expect(getByPlaceholderText("Enter Income")).toBeTruthy()
+  })
 })
