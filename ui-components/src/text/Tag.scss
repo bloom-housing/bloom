@@ -81,6 +81,11 @@
     @apply bg-gray-750;
   }
 
+  &.is-info {
+    @apply text-gray-800;
+    @apply bg-warn-light;
+  }
+
   &.is-small {
     @apply text-sm;
     @apply py-2;

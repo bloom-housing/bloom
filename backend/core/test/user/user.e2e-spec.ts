@@ -27,13 +27,18 @@ describe("Applications", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
 
-  beforeAll(async () => {
+  const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = {
-      confirmation: async () => {},
-      welcome: async () => {},
-    }
+    confirmation: async () => {},
+    welcome: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, UserModule],
     })
@@ -66,6 +71,24 @@ describe("Applications", () => {
       dob: new Date(),
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+  })
+
+  it("should allow anonymous user to create an account", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "a@b.com",
+      emailConfirmation: "a@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const mockWelcome = jest.spyOn(testEmailService, "welcome")
+    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto)
+    expect(mockWelcome.mock.calls.length).toBe(1)
+    expect(res.body).toHaveProperty("id")
+    expect(res.body).not.toHaveProperty("passwordHash")
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
@@ -112,22 +135,6 @@ describe("Applications", () => {
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.emailConfirmation = "a2@b.com"
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
-  })
-
-  it("should allow anonymous user to create an account", async () => {
-    const userCreateDto: UserCreateDto = {
-      password: "Abcdef1!",
-      passwordConfirmation: "Abcdef1!",
-      email: "a@b.com",
-      emailConfirmation: "a@b.com",
-      firstName: "First",
-      middleName: "Mid",
-      lastName: "Last",
-      dob: new Date(),
-    }
-    const res = await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto)
-    expect(res.body).toHaveProperty("id")
-    expect(res.body).not.toHaveProperty("passwordHash")
   })
 
   it("should not allow to create a new account with duplicate email", async () => {
@@ -213,5 +220,24 @@ describe("Applications", () => {
       .post("/user/resend-confirmation")
       .send({ email: "unknown@email.com" })
       .expect(404)
+  })
+
+  it("should not send confirmation email when noConfirmationEmail query param is specified", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "b3@b.com",
+      emailConfirmation: "b3@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const mockWelcome = jest.spyOn(testEmailService, "welcome")
+    await supertest(app.getHttpServer())
+      .post(`/user?noWelcomeEmail=true`)
+      .send(userCreateDto)
+      .expect(201)
+    expect(mockWelcome.mock.calls.length).toBe(0)
   })
 })

@@ -47,6 +47,7 @@
       "vi": "Bắt đầu"
     },
     "totalApplications": "Total Applications",
+    "totalSets": "Total Sets",
     "addApplication": "Add Application",
     "newApplication": "New Application",
     "editApplication": "Edit Application",
@@ -570,6 +571,14 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "flags": {
+    "flaggedSet": "Flagged Set",
+    "ruleName": "Rule Name",
+    "pendingReview": "Pending Review",
+    "totalSets": "Total Sets",
+    "resolveFlag": "Resolve Flag",
+    "markedAsDuplicate": "%{quantity} applications marked as duplicate"
+  },
   "authentication": {
     "forgotPassword": {
       "changePassword": "Change Password",
@@ -904,7 +913,8 @@
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal",
-    "skip": "Skip to main content"
+    "skip": "Skip to main content",
+    "flags": "Flags"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
