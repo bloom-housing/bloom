@@ -22,21 +22,14 @@ const AdditionalDetails = () => {
             register={register}
           />
           <Textarea
-            label={t("listings.selectionCriteria")}
-            name={"selectionCriteria"}
-            id={"selectionCriteria"}
-            fullWidth={true}
-            register={register}
-          />
-        </GridSection>
-        <GridSection columns={2}>
-          <Textarea
             label={t("listings.importantProgramRules")}
             name={"programRules"}
             id={"programRules"}
             fullWidth={true}
             register={register}
           />
+        </GridSection>
+        <GridSection columns={2}>
           <Textarea
             label={t("listings.specialNotes")}
             name={"specialNotes"}
