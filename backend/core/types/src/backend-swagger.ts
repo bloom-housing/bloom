@@ -128,7 +128,7 @@ export class UserService {
       body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<UserBasic> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user/resend-confirmation';
 
@@ -1439,9 +1439,33 @@ export interface Email {
   appUrl?: string;
 }
 
-export interface Status {
+export interface UserBasic {
   /**  */
-  status: string;
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 }
 
 export interface Confirm {
