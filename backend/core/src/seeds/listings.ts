@@ -3,7 +3,7 @@ import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
 import { PropertyCreateDto } from "../property/dto/property.dto"
 import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
-import { BaseEntity, Repository } from "typeorm"
+import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { ApplicationMethodType, AssetDto, Unit } from "../.."
@@ -19,7 +19,6 @@ import { CountyCode } from "../shared/types/county-code"
 import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { IdDto } from "../shared/dto/id.dto"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
@@ -87,7 +86,7 @@ export interface ListingSeed {
 export async function seedListing(
   app: INestApplicationContext,
   seed: ListingSeed,
-  leasingAgents: IdDto[]
+  leasingAgents: User[]
 ) {
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
   const propertyRepo = app.get<Repository<Property>>(getRepositoryToken(Property))
@@ -113,9 +112,12 @@ export async function seedListing(
   })
   await unitsRepo.save(unitsToBeCreated)
 
-  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug" | "showWaitlist"> = {
+  const listingCreateDto: Omit<
+    DeepPartial<Listing>,
+    keyof BaseEntity | "urlSlug" | "showWaitlist"
+  > = {
     ...seed.listing,
-    ...property,
+    property: property,
     leasingAgents: leasingAgents,
     assets: seed.assets,
     preferences: seed.preferences,
