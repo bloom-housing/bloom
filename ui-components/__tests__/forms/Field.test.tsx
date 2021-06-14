@@ -59,6 +59,7 @@ const FieldCurrency = () => {
       getValues={getValues}
       setValue={setValue}
       placeholder={"Enter Income"}
+      prepend={"$"}
     />
   )
 }
