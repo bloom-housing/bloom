@@ -44,6 +44,22 @@ table {
       background: transparent;
     }
   }
+  &.is-flush-left {
+    thead tr th:first-of-type {
+      padding-left: 0 !important;
+    }
+    tr td:first-of-type {
+      padding-left: 0 !important;
+    }
+  }
+  &.is-flush-right {
+    thead tr th:last-of-type {
+      padding-right: 0 !important;
+    }
+    tr td:last-of-type {
+      padding-right: 0 !important;
+    }
+  }
 }
 
 table tr:nth-of-type(even) {
@@ -84,7 +100,6 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
 @media screen and (max-width: 639px) {
   table.responsive-collapse {
-    
     thead {
       @apply hidden;
     }
@@ -94,11 +109,10 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
       @apply mb-6;
     }
 
-    
     tr:nth-of-type(even) {
       background: inherit;
     }
-    
+
     td:nth-of-type(even) {
       @apply bg-primary-lighter;
     }
@@ -124,5 +138,18 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     @apply border-l-8;
     @apply border-solid;
     @apply border-accent-warm;
+  }
+}
+
+.table__thumbnail img {
+  max-height: 80px;
+  max-width: 142px;
+  @apply -my-3;
+  @apply inline-block;
+}
+
+table.td-plain {
+  .table__thumbnail img {
+    @apply -my-1;
   }
 }

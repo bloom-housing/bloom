@@ -12,8 +12,5 @@ NEXT_TELEMETRY_DISABLED = "1"
 # reminder: URLs and fragments should *not* have a trailing /
 LISTINGS_QUERY = "/listings"
 
-[context.production.environment]
-GTM_KEY = "GTM-W8LH9F9"
-
 [context.branch-deploy.environment]
 GTM_KEY = "GTM-KF22FJP"

@@ -13,11 +13,19 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
+  - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
 
 - Added:
+
   - Added "closed" to ListingStatus enum
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
+  - `/assets` endpoints (create and createPresignedUploadMetadata)
+  - "noEmailConfirmation" query param to `POST /users` endpoint
+
+- Changed:
+
+  - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
 
 ### Frontend
 
@@ -29,6 +37,9 @@ All notable changes to this project will be documented in this file. The format 
   - New unit summary breaks down units by both type and rent ([#1253](https://github.com/bloom-housing/bloom/pull/1253)) (Emily Jablonski)
   - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
   - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
+  - Add ability for site header logo to have custom widths, image only ([#1346](https://github.com/bloom-housing/bloom/pull/1346)) (Emily Jablonski)
+  - Created duplicates pages ([#1132](https://github.com/bloom-housing/bloom/pull/1132)) (Dominik Barcikowski)
+  - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
 
 - Fixed:
 
@@ -38,6 +49,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
+  - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
 
 - Changed:
 
@@ -47,7 +59,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
-  - Tabs component based on React Tabs ([#1305]https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
+  - Table image thumbnails component along with minimal left/right flush table styles ([#1339](https://github.com/bloom-housing/bloom/pull/1339)) (Jared White)
+  - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
 

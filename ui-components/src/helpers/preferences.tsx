@@ -238,7 +238,10 @@ export const FormAddress = ({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapPreferencesToApi = (data: Record<string, any>) => {
+  if (!data.application?.preferences) return []
+
   const CLAIMED_KEY = "claimed"
+
   const preferencesFormData = data.application.preferences.options
 
   const keys = Object.keys(preferencesFormData)

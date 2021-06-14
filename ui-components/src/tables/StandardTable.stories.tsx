@@ -1,6 +1,6 @@
 import React from "react"
 
-import { StandardTable } from "./StandardTable"
+import { StandardTable, TableThumbnail } from "./StandardTable"
 
 export default {
   title: "Tables/StandardTable",
@@ -34,3 +34,22 @@ while (i > 0) {
 }
 
 export const Default = () => <StandardTable headers={headers} data={data} />
+
+const headersWithImage = { image: "Image", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = (
+  <TableThumbnail>
+    <a href="#">
+      <img src="/images/listing.jpg" />
+    </a>
+  </TableThumbnail>
+)
+dataWithImage[1].image = (
+  <TableThumbnail>
+    <img src="/images/logo_glyph.svg" />
+  </TableThumbnail>
+)
+
+export const ImageCells = () => (
+  <StandardTable headers={headersWithImage} data={dataWithImage} responsiveCollapse />
+)

@@ -1,7 +1,7 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { ListingSeed, listingSeed1, seedListing } from "./seeds/listings"
+import { ListingSeed, seedListing, defaultListingSeed, allSeeds } from "./seeds/listings"
 import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
 import { UserCreateDto } from "./user/dto/user.dto"
@@ -15,73 +15,43 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
-const newListingSeed = (): ListingSeed => {
-  return JSON.parse(JSON.stringify(listingSeed1)) as ListingSeed
+const parseSeed = (seedData: ListingSeed): ListingSeed => {
+  return JSON.parse(JSON.stringify(seedData)) as ListingSeed
+}
+
+export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
+  const usersService = app.get<UserService>(UserService)
+  const leasingAgents = await Promise.all(
+    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+  )
+  await Promise.all([
+    leasingAgents.map(async (agent: User) => {
+      await usersService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
+  return leasingAgents
+}
+
+const getListing = async (
+  app: INestApplicationContext,
+  leasingAgents: User[],
+  seed: ListingSeed
+) => {
+  const thisSeed = parseSeed(seed)
+  const thisListing = await seedListing(app, thisSeed, leasingAgents)
+  return thisListing
 }
 
 const seedListings = async (app: INestApplicationContext) => {
-  let listingSeed = newListingSeed()
-  listingSeed.listing.name = "Triton (2pref)"
-  const listing1 = await seedListing(app, listingSeed)
-  const userService = app.get<UserService>(UserService)
-  await Promise.all([
-    listing1.leasingAgents.map(async (agent: User) => {
-      await userService.confirm({ token: agent.confirmationToken })
-    }),
-  ])
+  const seeds = []
+  const leasingAgents = await getDefaultLeasingAgents(app, parseSeed(defaultListingSeed))
 
-  // Listing 2
-  listingSeed = newListingSeed()
-  listingSeed.listing.name = "Test listing (1pref)"
-  listingSeed.preferences = [
-    {
-      ordinal: 1,
-      title: "Yet another preference for live or work",
-      subtitle: "",
-      description: "Description",
-      links: [],
-      formMetadata: {
-        key: "liveWork",
-        options: [
-          {
-            key: "live",
-            extraData: [],
-          },
-          {
-            key: "work",
-            extraData: [],
-          },
-        ],
-      },
-      page: 1,
-    },
-  ]
-  listingSeed.leasingAgents = [
-    {
-      ...listingSeed.leasingAgents[0],
-      email: "leasing-agent-2@example.com",
-    },
-  ]
-  const listing2 = await seedListing(app, listingSeed)
+  allSeeds.forEach((seed, index) => {
+    const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
+    seeds.push(getListing(app, [everyOtherAgent], seed))
+  })
 
-  listingSeed = newListingSeed()
-  listingSeed.listing.name = "Test listing (0pref)"
-  listingSeed.leasingAgents = [
-    {
-      ...listingSeed.leasingAgents[0],
-      email: "leasing-agent-3@example.com",
-    },
-  ]
-  listingSeed.preferences = []
-  const listing3 = await seedListing(app, listingSeed)
-
-  await Promise.all([
-    listing2.leasingAgents.map(async (agent: User) => {
-      await userService.confirm({ token: agent.confirmationToken })
-    }),
-  ])
-
-  return [listing1, listing2, listing3]
+  return seeds
 }
 
 async function seed() {

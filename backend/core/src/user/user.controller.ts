@@ -9,9 +9,10 @@ import {
   NotFoundException,
   UsePipes,
   ValidationPipe,
+  Query,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { EmailDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { EmailDto, UserBasicDto, UserCreateDto, UserDto, UserUpdateDto } from "./dto/user.dto"
 import { UserService } from "./user.service"
 import { AuthService } from "../auth/auth.service"
 import { EmailService } from "../shared/email/email.service"
@@ -27,6 +28,22 @@ import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { LoginResponseDto } from "../auth/dto/login.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
 import { StatusDto } from "../shared/dto/status.dto"
+import { Expose, Transform } from "class-transformer"
+import { IsBoolean, IsOptional } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
+
+export class UserCreateQueryParams {
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  noWelcomeEmail?: boolean
+}
 
 @Controller("user")
 @ApiBearerAuth()
@@ -50,10 +67,15 @@ export class UserController {
   @Post()
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
-  async create(@Body() dto: UserCreateDto): Promise<StatusDto> {
+  async create(
+    @Body() dto: UserCreateDto,
+    @Query() queryParams: UserCreateQueryParams
+  ): Promise<UserBasicDto> {
     const user = await this.userService.createUser(dto)
-    await this.emailService.welcome(user, dto.appUrl)
-    return mapTo(StatusDto, { status: "ok" })
+    if (!queryParams.noWelcomeEmail) {
+      await this.emailService.welcome(user, dto.appUrl)
+    }
+    return mapTo(UserBasicDto, user)
   }
 
   @Post("resend-confirmation")

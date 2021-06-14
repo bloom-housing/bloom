@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { StandardTable } from "../../src/tables/StandardTable"
+import { StandardTable, TableThumbnail } from "../../src/tables/StandardTable"
 import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
@@ -24,6 +24,19 @@ const data = [
   },
 ]
 
+const headersWithImage = { image: "t.text", ...headers }
+const dataWithImage = [...data] as any
+dataWithImage[0].image = (
+  <TableThumbnail>
+    <img src="/images/listing.jpg" />
+  </TableThumbnail>
+)
+dataWithImage[1].image = (
+  <TableThumbnail>
+    <img src="/images/logo_glyph.svg" />
+  </TableThumbnail>
+)
+
 describe("<StandardTable>", () => {
   it("renders default state", () => {
     const { getByText } = render(<StandardTable headers={headers} data={data} />)
@@ -34,6 +47,12 @@ describe("<StandardTable>", () => {
     expect(getByText(data[1].sqFeet))
     expect(getByText(data[1].numBathrooms))
   })
+
+  it("renders with image thumbnails", () => {
+    const { container } = render(<StandardTable headers={headersWithImage} data={dataWithImage} />)
+    expect(container.getElementsByClassName("table__thumbnail").length).toBe(2)
+  })
+
   it("renders with custom props", () => {
     const { getByText, container } = render(
       <StandardTable
