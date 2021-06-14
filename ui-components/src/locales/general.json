@@ -718,7 +718,6 @@
     "addListing": "Add Listing",
     "additionalDetails": "Additional Details",
     "additionalDetailsSubtext": "Are there any other required documents and selection criteria?",
-    "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
@@ -758,6 +757,8 @@
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
     "deleteListingDescription": "Deleting this listing means you will lose all the information you've entered.",
+    "depositMax": "Deposit Max",
+    "depositMin": "Deposit Min",
     "depositOrMonthsRent": "or one month's rent",
     "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
     "details": {
@@ -830,6 +831,9 @@
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
     "sections": {
+      "additionalFees": "Additional Fees",
+      "additionalFeesSubtitle": "Tell us about any other fees required by the applicant.",
+      "costsNotIncluded": "Costs Not Included",
       "eligibilityTitle": "Eligibility",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "rentalAssistanceTitle": "Rental Assistance",

@@ -20,6 +20,7 @@ import DetailListingData from "../../../src/listings/PaperListingDetails/section
 import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
 import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
+import DetailAdditionalFees from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalFees"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -101,6 +102,7 @@ export default function ApplicationsList() {
                 <DetailListingData />
                 <DetailProperty />
                 <DetailApplication />
+                <DetailAdditionalFees />
                 <DetailAdditionalDetails />
               </div>
 

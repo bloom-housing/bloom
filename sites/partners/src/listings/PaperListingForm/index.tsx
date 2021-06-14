@@ -23,6 +23,7 @@ import {
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
 import AdditionalDetails from "./sections/AdditionalDetails"
+import AdditionalFees from "./sections/AdditionalFees"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -200,6 +201,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormListingData />
+                    <AdditionalFees />
                     <AdditionalDetails />
                   </div>
 
