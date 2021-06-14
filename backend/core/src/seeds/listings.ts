@@ -49,6 +49,23 @@ export interface ListingSeed {
     | "preferences"
     | "leasingAgents"
     | "showWaitlist"
+    | "units"
+    | "propertyGroups"
+    | "accessibility"
+    | "amenities"
+    | "buildingAddress"
+    | "buildingTotalUnits"
+    | "developer"
+    | "householdSizeMax"
+    | "householdSizeMin"
+    | "neighborhood"
+    | "petPolicy"
+    | "smokingPolicy"
+    | "unitsAvailable"
+    | "unitAmenities"
+    | "servicesOffered"
+    | "yearBuilt"
+    | "unitsSummarized"
   >
   leasingAgents: UserCreateDto[]
 }
@@ -84,7 +101,7 @@ export async function seedListing(
 
   const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug" | "showWaitlist"> = {
     ...seed.listing,
-    property,
+    ...property,
     leasingAgents: leasingAgents,
     assets: seed.assets,
     preferences: seed.preferences,
@@ -2421,6 +2438,23 @@ const defaultListing: Omit<
   | "preferences"
   | "leasingAgents"
   | "showWaitlist"
+  | "units"
+  | "propertyGroups"
+  | "accessibility"
+  | "amenities"
+  | "buildingAddress"
+  | "buildingTotalUnits"
+  | "developer"
+  | "householdSizeMax"
+  | "householdSizeMin"
+  | "neighborhood"
+  | "petPolicy"
+  | "smokingPolicy"
+  | "unitsAvailable"
+  | "unitAmenities"
+  | "servicesOffered"
+  | "yearBuilt"
+  | "unitsSummarized"
 > = {
   applicationAddress: {
     city: "San Francisco",
@@ -2497,6 +2531,23 @@ const tritonListing: Omit<
   | "preferences"
   | "leasingAgents"
   | "showWaitlist"
+  | "units"
+  | "propertyGroups"
+  | "accessibility"
+  | "amenities"
+  | "buildingAddress"
+  | "buildingTotalUnits"
+  | "developer"
+  | "householdSizeMax"
+  | "householdSizeMin"
+  | "neighborhood"
+  | "petPolicy"
+  | "smokingPolicy"
+  | "unitsAvailable"
+  | "unitAmenities"
+  | "servicesOffered"
+  | "yearBuilt"
+  | "unitsSummarized"
 > = {
   applicationAddress: {
     city: "Foster City",
@@ -2570,6 +2621,23 @@ const coliseumListing: Omit<
   | "preferences"
   | "leasingAgents"
   | "showWaitlist"
+  | "units"
+  | "propertyGroups"
+  | "accessibility"
+  | "amenities"
+  | "buildingAddress"
+  | "buildingTotalUnits"
+  | "developer"
+  | "householdSizeMax"
+  | "householdSizeMin"
+  | "neighborhood"
+  | "petPolicy"
+  | "smokingPolicy"
+  | "unitsAvailable"
+  | "unitAmenities"
+  | "servicesOffered"
+  | "yearBuilt"
+  | "unitsSummarized"
 > = {
   applicationAddress: {
     county: "Alameda",

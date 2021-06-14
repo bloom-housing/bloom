@@ -36,7 +36,7 @@ export = {
   ...connectionInfo,
   synchronize: false,
   migrationsRun: false,
-  logging: false,
+  logging: true,
   namingStrategy: new SnakeNamingStrategy(),
   entities: [
     // Needed to get a TS context on entity imports.
