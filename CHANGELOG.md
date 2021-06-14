@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Frontend
 
 - Added:
-
+  - Adds filtering capability to listings list and implements on public site
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
     - detail page accessible at `/listings/[id]`
