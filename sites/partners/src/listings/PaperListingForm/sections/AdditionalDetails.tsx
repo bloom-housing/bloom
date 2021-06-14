@@ -11,8 +11,10 @@ const AdditionalDetails = () => {
   return (
     <div>
       <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.additionalDetails")}</span>
-        <span className="form-section__description">{t("listings.additionalDetailsSubtext")} </span>
+        <span className="form-section__title">{t("listings.sections.additionalDetails")}</span>
+        <span className="form-section__description">
+          {t("listings.sections.additionalDetailsSubtext")}
+        </span>
         <GridSection columns={2}>
           <Textarea
             label={t("listings.requiredDocuments")}
