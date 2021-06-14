@@ -5,6 +5,7 @@ import { Listing } from "./entities/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import addFilter from "../shared/filter"
 
 @Injectable()
 export class ListingsService {
@@ -20,14 +21,20 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
   }
 
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await this.getQueryBuilder()
-      .orderBy({
-        "listings.id": "DESC",
-        "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
-      })
-      .getMany()
+  public async list(jsonpath, filter): Promise<Listing[]> {
+    const qb = this.getQueryBuilder()
+
+    if (filter) {
+      addFilter(filter, "listings", qb)
+    }
+
+    qb.orderBy({
+      "listings.id": "DESC",
+      "units.max_occupancy": "ASC",
+      "preferences.ordinal": "ASC",
+    })
+
+    let listings = await qb.getMany()
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)

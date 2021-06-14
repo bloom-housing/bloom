@@ -81,9 +81,11 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
 
     elements.push(
       <GridCell key="btn-preview">
-        <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-          {t("listings.actions.preview")}
-        </Button>
+        <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${lisitngId}`}>
+          <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+            {t("listings.actions.preview")}
+          </Button>
+        </a>
       </GridCell>,
       cancel
     )

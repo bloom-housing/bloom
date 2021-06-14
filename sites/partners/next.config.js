@@ -41,6 +41,7 @@ module.exports = withCSS(
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
             idleTimeout: process.env.IDLE_TIMEOUT,
             showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
+            publicBaseUrl: process.env.PUBLIC_BASE_URL,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

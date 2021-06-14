@@ -14,7 +14,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -22,6 +22,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { FilterInterceptor } from "../shared/filter/filter.interceptor"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -39,9 +40,14 @@ export class ListingsController {
     required: false,
     type: String,
   })
+  @ApiProperty({ name: "filter", required: false })
   @UseInterceptors(CacheInterceptor)
-  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(jsonpath))
+  @UseInterceptors(FilterInterceptor)
+  public async getAll(
+    @Query("jsonpath") jsonpath?: string,
+    @Query("filter") filter?: string
+  ): Promise<ListingDto[]> {
+    return mapTo(ListingDto, await this.listingsService.list(jsonpath, filter))
   }
 
   @Post()

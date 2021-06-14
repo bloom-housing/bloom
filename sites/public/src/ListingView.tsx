@@ -38,6 +38,7 @@ import moment from "moment"
 
 interface ListingProps {
   listing: Listing
+  preview?: boolean
 }
 
 export const ListingView = (props: ListingProps) => {

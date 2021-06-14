@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import axios from "axios"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import { imageUrlFromListing, t } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
@@ -35,7 +35,13 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
   let response
 
   try {
-    response = await axios.get(process.env.listingServiceUrl)
+    response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        filter: {
+          status: { "<>": ListingStatus.pending },
+        },
+      },
+    })
   } catch (e) {
     return {
       paths: [],
@@ -55,7 +61,13 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 }
 
 export async function getStaticProps(context: { params: Record<string, string> }) {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+    params: {
+      filter: {
+        status: { "<>": ListingStatus.pending },
+      },
+    },
+  })
 
   return {
     props: {

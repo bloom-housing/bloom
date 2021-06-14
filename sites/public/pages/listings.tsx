@@ -8,7 +8,7 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 
@@ -65,7 +65,13 @@ export async function getStaticProps() {
   let closedListings = []
 
   try {
-    const response = await axios.get(process.env.listingServiceUrl)
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        filter: {
+          status: { "<>": ListingStatus.pending },
+        },
+      },
+    })
     const nowTime = moment()
     openListings = response.data.filter((listing: Listing) => {
       return (
