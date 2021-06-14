@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
+  - Refactored currency field logic to be generic & reusable ([#1356](https://github.com/bloom-housing/bloom/pull/1356)) Emily Jablonski
 
 ### UI Components
 
