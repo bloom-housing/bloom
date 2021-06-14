@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
   - `/assets` endpoints (create and createPresignedUploadMetadata)
+  - "noEmailConfirmation" query param to `POST /users` endpoint
 
 - Changed:
 
@@ -37,6 +38,8 @@ All notable changes to this project will be documented in this file. The format 
   - Custom exclusive preference options ([#1272](https://github.com/bloom-housing/bloom/pull/1272)) (Emily Jablonski)
   - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
   - Add ability for site header logo to have custom widths, image only ([#1346](https://github.com/bloom-housing/bloom/pull/1346)) (Emily Jablonski)
+  - Created duplicates pages ([#1132](https://github.com/bloom-housing/bloom/pull/1132)) (Dominik Barcikowski)
+  - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
 
 - Fixed:
 
@@ -56,7 +59,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
-  - Tabs component based on React Tabs ([#1305]https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
+  - Table image thumbnails component along with minimal left/right flush table styles ([#1339](https://github.com/bloom-housing/bloom/pull/1339)) (Jared White)
+  - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
 

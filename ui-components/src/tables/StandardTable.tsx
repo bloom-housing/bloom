@@ -25,6 +25,10 @@ export const Cell = (props: {
   </td>
 )
 
+export const TableThumbnail = (props: { children: React.ReactNode }) => {
+  return <span className="table__thumbnail">{props.children}</span>
+}
+
 export interface StandardTableProps {
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]

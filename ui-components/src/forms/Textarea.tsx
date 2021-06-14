@@ -9,6 +9,7 @@ export interface TextareaProps {
   cols?: number
   disabled?: boolean
   errorMessage?: string
+  fullWidth?: boolean
   id?: string
   label: string
   maxLength?: number
@@ -25,11 +26,12 @@ export const Textarea = (props: TextareaProps) => {
   if (props.disabled) textareaClassnames.push("textarea-disabled")
   if (props.errorMessage) textareaClassnames.push("textarea-error")
   if (props.resize === false) textareaClassnames.push("textarea-resize-off")
+  if (props.fullWidth) textareaClassnames.push("w-full")
   const labelClassnames = ["textarea-label"]
   if (props.errorMessage) labelClassnames.push("textarea-label-error")
 
   return (
-    <>
+    <div>
       <label className={labelClassnames.join(" ")} htmlFor={props.id ?? props.name}>
         {props.label}
       </label>
@@ -44,8 +46,9 @@ export const Textarea = (props: TextareaProps) => {
         ref={props.register}
         rows={props.rows ?? 4}
         wrap={props.wrap ?? "soft"}
+        title={props.label}
       />
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
-    </>
+    </div>
   )
 }
