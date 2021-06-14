@@ -8,7 +8,7 @@ export interface AdditionalFeesProps {
 
 const AdditionalFees = (props: AdditionalFeesProps) => (
   <div className="info-card bg-gray-100 border-0">
-    <p className="info-card__title">{t("listings.additionalFees")}</p>
+    <p className="info-card__title">{t("listings.sections.additionalFees")}</p>
     <div className="info-card__columns text-sm">
       <div className="info-card__column">
         <div className="text-base">{t("listings.applicationFee")}</div>
