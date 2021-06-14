@@ -23,14 +23,9 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { UserBasicDto } from "../../user/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
-import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { transformUnits } from "../../shared/units-transformations"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { Unit } from "../../units/entities/unit.entity"
-import {
-  PropertyGroupCreateDto,
-  PropertyGroupUpdateDto,
-} from "../../property-groups/dto/property-group.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "preferences",
@@ -92,17 +87,6 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   units: UnitDto[]
-
-  // TODO: Do we use that?
-  @Expose()
-  @Type(() => PropertyGroup)
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property.propertyGroups
-    },
-    { toClassOnly: true }
-  )
-  propertyGroups: PropertyGroup[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -280,7 +264,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "urlSlug",
   "showWaitlist",
   "units",
-  "propertyGroups",
   "accessibility",
   "amenities",
   "buildingAddress",
@@ -334,14 +317,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitCreateDto)
   units: UnitCreateDto[]
-
-  // TODO: Do we use that?
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
-  @Type(() => PropertyGroupCreateDto)
-  propertyGroups: PropertyGroupCreateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -427,7 +402,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "leasingAgents",
   "showWaitlist",
   "units",
-  "propertyGroups",
   "accessibility",
   "amenities",
   "buildingAddress",
@@ -498,14 +472,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitUpdateDto)
   units: UnitUpdateDto[]
-
-  // TODO: Do we use that?
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
-  @Type(() => PropertyGroupUpdateDto)
-  propertyGroups: PropertyGroupUpdateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
