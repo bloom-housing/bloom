@@ -101,16 +101,18 @@ export class UserService {
    */
   create(
     params: {
+      /**  */
+      noWelcomeEmail?: boolean;
       /** requestBody */
       body?: UserCreate;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<UserBasic> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user';
 
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
+      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
       let data = params.body;
 
       configs.data = data;
@@ -126,7 +128,7 @@ export class UserService {
       body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<UserBasic> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user/resend-confirmation';
 
@@ -271,6 +273,8 @@ export class ListingsService {
     params: {
       /**  */
       jsonpath?: string;
+      /**  */
+      filter: string;
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing[]> {
@@ -278,7 +282,7 @@ export class ListingsService {
       let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { jsonpath: params['jsonpath'] };
+      configs.params = { jsonpath: params['jsonpath'], filter: params['filter'] };
       let data = null;
 
       configs.data = data;
@@ -1398,19 +1402,6 @@ export interface UserCreate {
   dob: Date;
 }
 
-export interface Status {
-  /**  */
-  status: string;
-}
-
-export interface Email {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
-}
-
 export interface UserBasic {
   /**  */
   language?: Language;
@@ -1438,6 +1429,19 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date;
+}
+
+export interface Email {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface Status {
+  /**  */
+  status: string;
 }
 
 export interface Confirm {
@@ -1848,7 +1852,7 @@ export interface Property {
   id: string;
 
   /**  */
-  createdAt?: Date;
+  createdAt: Date;
 
   /**  */
   updatedAt: Date;
@@ -2080,7 +2084,7 @@ export interface Listing {
   requiredDocuments: string;
 
   /**  */
-  specialNotes?: string
+  specialNotes?: string;
 
   /**  */
   waitlistCurrentSize: number;
@@ -2161,7 +2165,7 @@ export interface ListingCreate {
   countyCode: CountyCode;
 
   /**  */
-  preferences?: PreferenceCreate[];
+  preferences: PreferenceCreate[];
 
   /**  */
   property: Id;
@@ -2359,7 +2363,7 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
-  preferences?: PreferenceUpdate[];
+  preferences: PreferenceUpdate[];
 
   /**  */
   property: Id;
