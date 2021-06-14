@@ -167,6 +167,7 @@ const ApplicationIncome = () => {
               errorMessage={t("errors.numberError")}
               setValue={setValue}
               getValues={getValues}
+              prepend={"$"}
             />
 
             <fieldset>

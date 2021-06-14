@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form"
 import { Field } from "./Field"
 
 export default {
-  title: "Forms/Text Field",
+  title: "Forms/Field",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
 }
 
-export const TextFieldDefault = () => {
+export const FieldDefault = () => {
   const { register } = useForm({ mode: "onChange" })
-  return <Field register={register} name={"Test Input"} label={"Custom label"} type={"text"} />
+  return <Field register={register} name={"Test Input"} label={"Custom label"} />
 }
 
 export const TextFieldError = () => {
@@ -39,6 +39,7 @@ export const CurrencyField = () => {
       type={"currency"}
       getValues={getValues}
       setValue={setValue}
+      prepend={"$"}
     />
   )
 }
@@ -58,6 +59,7 @@ export const CurrencyFieldError = () => {
       type={"currency"}
       getValues={getValues}
       setValue={setValue}
+      prepend={"$"}
     />
   )
 }

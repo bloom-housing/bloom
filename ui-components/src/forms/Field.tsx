@@ -22,6 +22,7 @@ export interface FieldProps {
   register: UseFormMethods["register"]
   validation?: Record<string, any>
   disabled?: boolean
+  prepend?: string
   inputProps?: Record<string, unknown>
   describedBy?: string
   getValues?: UseFormMethods["getValues"]
@@ -45,7 +46,7 @@ const Field = (props: FieldProps) => {
 
   const formatValue = () => {
     if (props.getValues && props.setValue) {
-      const currencyValue = props.getValues()[props.name]
+      const currencyValue = props.getValues(props.name)
       const numericIncome = parseFloat(currencyValue)
       if (!isNaN(numericIncome)) {
         props.setValue(props.name, numericIncome.toFixed(2))
@@ -84,7 +85,7 @@ const Field = (props: FieldProps) => {
       {!isRadioOrCheckbox && label}
       {note}
       <div className={controlClasses.join(" ")}>
-        {props.type === "currency" && <span className="prepend">{`$`}</span>}
+        {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}-error`}
           aria-invalid={!!props.error || false}
