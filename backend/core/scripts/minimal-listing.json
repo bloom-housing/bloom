@@ -1,0 +1,18 @@
+{
+  "status": "active",
+  "CSVFormattingType": "basic",
+  "countyCode": "Alameda",
+  "preferences": [],
+  "property": {
+      "buildingAddress": {
+          "city": "Detroit",
+          "state": "MI",
+          "street": "Main St",
+          "zipCode": "48127"
+      },
+      "units": []
+  },
+  "assets": [],
+  "applicationMethods": [],
+  "events": []
+}

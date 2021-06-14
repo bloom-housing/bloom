@@ -18,6 +18,9 @@ p, admin, translation, true, .*
 
 p, admin, listing, true, .*
 p, anonymous, listing, true, read
+p, user, listing, true, create
+
+p, user, property, true, create
 
 g, admin, user
 g, user, anonymous

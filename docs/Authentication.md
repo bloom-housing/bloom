@@ -29,7 +29,7 @@ export class MyController {
 ```
 
 Using the `DefaultAuthGuard` in this way requires the client to provide a valid JWT token as an
-`Authentication` header using the standard `Bearer <TOKEN>` format. Tokens are checked for a valid signature and
+`Authorization` header using the standard `Bearer <TOKEN>` format. Tokens are checked for a valid signature and
 valid expiry time (currently 10 minutes). Tokens may also be revoked by adding an entry to `revoked_tokens` table, or
 using the auth route `revoke_token`.
 
@@ -37,7 +37,7 @@ using the auth route `revoke_token`.
 ## Obtain a token
 
 To obtain a token, a user must first login. Currently, an email/password strategy is the only way to do this. A
-client can `POST /auth/login` with body `{ username, password }`. This request will either return 401 or 200 with an
+client can `POST /auth/login` with body `{ email, password }`. This request will either return 401 or 200 with an
 object containing `accessToken`.
 
 To renew a token, `POST /auth/token` with an existing valid token.
