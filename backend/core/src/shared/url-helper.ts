@@ -6,8 +6,7 @@
  * - snake_case
  * @param input
  */
-import { ListingDto } from "../listings/dto/listing.dto"
-import { Address } from "./entities/address.entity"
+import { Listing } from "../listings/entities/listing.entity"
 
 export const formatUrlSlug = (input: string): string => {
   return (
@@ -21,8 +20,8 @@ export const formatUrlSlug = (input: string): string => {
   )
 }
 
-export const listingUrlSlug = (listing: ListingDto): string => {
+export const listingUrlSlug = (listing: Listing): string => {
   const { name } = listing
-  const { city, street, state } = listing.buildingAddress as Address
+  const { city, street, state } = listing.property.buildingAddress
   return formatUrlSlug([name, street, city, state].join(" "))
 }
