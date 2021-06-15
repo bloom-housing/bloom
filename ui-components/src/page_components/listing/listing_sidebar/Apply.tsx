@@ -152,7 +152,7 @@ const Apply = (props: ApplyProps) => {
                       postmarkReceivedByDate: moment(
                         listing.postmarkedApplicationsReceivedByDate
                       ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
-                      developer: listing.property.developer,
+                      developer: listing.developer,
                     })
                   : t("listings.apply.applicationsMustBeReceivedByDeadline")}
               </p>
