@@ -5,6 +5,14 @@
   "application": {
     "details": {
       "countyName": "Alameda County"
+    },
+    "preferences": {
+      "PBV": {
+        "title": "Oakland Housing Authority",
+        "doNotConsider": {
+          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
+        }
+      }
     }
   }
 }
