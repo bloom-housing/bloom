@@ -1,0 +1,73 @@
+{
+  "application": {
+    "contact": {
+      "doYouWorkIn": "Quý vị có làm việc tại %{county} không?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "Họ có làm việc tại %{county} không?",
+        "workInRegionNote": ""
+      }
+    },
+    "preferences": {
+      "dontWant": "Tôi không muốn chọn bất kỳ ưu tiên nào trong số này",
+      "liveWork": {
+        "live": {
+          "label": "Sống tại %{county} Ưu tiên",
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi sống tại Thành phố %{county}"
+        },
+        "work": {
+          "label": "Làm việc tại %{county} Ưu tiên",
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi đã làm việc hoặc được đề nghị làm việc tại Thành phố %{county}"
+        }
+      },
+      "displacedTenant": {
+        "general": {
+          "label": "Lựa chọn Ưu tiên Nhà ở dành cho Người Thuê Nhà phải Chuyển chỗ",
+          "description": "Ít nhất một thành viên trong hộ gia đình tôi phải chuyển chỗ ở khỏi một bất động sản gia cư do hoạt động xây dựng lại bởi Cơ quan Quản lý Nhà Ở Hayward (Hayward Housing Authority), Cơ quan Tái Phát triển hay Thành phố Hayward."
+        },
+        "missionCorridor": {
+          "label": "Mission Boulevard Corridor (SR 238) Lựa chọn Ưu tiên Nhà ở dành cho Người Thuê Nhà phải Chuyển chỗ",
+          "description": "Ít nhất một thành viên trong gia đình tôi là Người Tham gia Chương trình SR 238 theo yêu cầu của các điều khoản của Dự án Triển khai Tái Định cư SR 238. Những Người Tham gia Chương trình là người thuê nhà của các bất động sản Caltrans trước đây đã bán dọc theo Hành lang SR 238 Mission Boulevard và đang được ưu tiên cho cư ngụ khi có nhà ở mới thấp hơn giá thị trường được xây dựng trong Hành lang."
+        }
+      }
+    }
+  },
+  "footer": {
+    "copyRight": "Alameda County © 2020 • Giữ Mọi Bản quyền",
+    "disclaimer": "Tuyên bố miễn trách nhiệm",
+    "getAssistance": "Nhận Hỗ trợ",
+    "giveFeedback": "Đưa ra Phản hồi",
+    "header": "Cổng thông tin về Gia cư của Quận Alameda là một dự án của",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "Quận Alameda - Sở Gia cư và Phát triển Cộng đồng (HCD)",
+    "forAdditionalOpportunities": "Để có thêm các cơ hội tại Bay Area, vui lòng truy cập:",
+    "forGeneralInquiries": "Đối với các thắc mắc chung về chương trình, hoặc để tiếp cận các dịch vụ thông dịch cho nội dung trên trang web này qua điện thoại, quý vị có thể gọi cho HCD của Quận Alameda theo số 510-670-5404.",
+    "forListingQuestions": "Đối với các thắc mắc về danh sách nhà và đơn ghi danh, vui lòng liên hệ với Nhân viên Đại diện Bất động sản có trên mỗi danh sách nhà.",
+    "privacyPolicy": "Chính sách Quyền Riêng tư",
+    "SFHousingPortal": "Cổng thông tin về Gia cư của San Francisco",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "Cổng thông tin về Gia cư của Quận Alameda",
+    "getFeedback": "Chúng tôi rất mong nhận được ",
+    "yourFeedback": "ý kiến phản hồi của quý vị",
+    "bonusFeedback": ""
+  },
+  "pageTitle": {
+    "additionalResources": "Các Cơ hội Nhà ở Bổ sung"
+  },
+  "pageDescription": {
+    "additionalResources": "Chúng tôi khuyến khích quý vị xem các nguồn thông tin trợ giúp về nhà ở giá phải chăng khác."
+  },
+  "region": {
+    "name": "Quận Alameda"
+  },
+  "listings": {
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "XỔ SỐ"
+    }
+  }
+}

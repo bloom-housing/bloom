@@ -1,0 +1,242 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Actions/Button Alert 1`] = `
+<Button
+  onClick={[Function]}
+  type="is-alert"
+>
+  <button
+    className="button is-alert"
+    onClick={[Function]}
+  >
+    Alert Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Alert Outlined 1`] = `
+<Button
+  border="is-outlined"
+  onClick={[Function]}
+  type="is-alert"
+>
+  <button
+    className="button is-alert is-outlined"
+    onClick={[Function]}
+  >
+    Outlined Alert Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Big 1`] = `
+<Button
+  onClick={[Function]}
+  size="is-big"
+>
+  <button
+    className="button is-big"
+    onClick={[Function]}
+  >
+    Big Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Borderless 1`] = `
+<Button
+  border="is-borderless"
+  onClick={[Function]}
+>
+  <button
+    className="button is-borderless"
+    onClick={[Function]}
+  >
+    Borderless Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Inaccessible 1`] = `
+<button
+  style={
+    Object {
+      "backgroundColor": "red",
+      "color": "darkRed",
+    }
+  }
+>
+  Inaccessible button
+</button>
+`;
+
+exports[`Storyshots Actions/Button Normal Case 1`] = `
+<Button
+  normalCase={true}
+  onClick={[Function]}
+>
+  <button
+    className="button is-normal-case"
+    onClick={[Function]}
+  >
+    Button (Normal Case)
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Normal Case And Success 1`] = `
+<Button
+  normalCase={true}
+  onClick={[Function]}
+  type="is-success"
+>
+  <button
+    className="button is-success is-normal-case"
+    onClick={[Function]}
+  >
+    Button (Normal Case)
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Primary 1`] = `
+<Button
+  onClick={[Function]}
+  type="is-primary"
+>
+  <button
+    className="button is-primary"
+    onClick={[Function]}
+  >
+    Primary Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Secondary 1`] = `
+<Button
+  onClick={[Function]}
+  type="is-secondary"
+>
+  <button
+    className="button is-secondary"
+    onClick={[Function]}
+  >
+    Secondary Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Small 1`] = `
+<Button
+  onClick={[Function]}
+  size="is-small"
+>
+  <button
+    className="button is-small"
+    onClick={[Function]}
+  >
+    Small Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Small And Primary 1`] = `
+<Button
+  onClick={[Function]}
+  size="is-small"
+  type="is-primary"
+>
+  <button
+    className="button is-primary is-small"
+    onClick={[Function]}
+  >
+    Small and Primary Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Standard 1`] = `
+<Button
+  onClick={[Function]}
+>
+  <button
+    className="button"
+    onClick={[Function]}
+  >
+    Button Component
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Success 1`] = `
+<Button
+  onClick={[Function]}
+  type="is-success"
+>
+  <button
+    className="button is-success"
+    onClick={[Function]}
+  >
+    Success Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Success Outline 1`] = `
+<Button
+  border="is-outlined"
+  onClick={[Function]}
+  type="is-success"
+>
+  <button
+    className="button is-success is-outlined"
+    onClick={[Function]}
+  >
+    Outlined Success Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Unstyled 1`] = `
+<Button
+  onClick={[Function]}
+  unstyled={true}
+>
+  <button
+    className="button is-unstyled"
+    onClick={[Function]}
+  >
+    Unstyled Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Warning 1`] = `
+<Button
+  onClick={[Function]}
+  type="is-warning"
+>
+  <button
+    className="button is-warning"
+    onClick={[Function]}
+  >
+    Warning Button
+  </button>
+</Button>
+`;
+
+exports[`Storyshots Actions/Button Warning Outline 1`] = `
+<Button
+  border="is-outlined"
+  onClick={[Function]}
+  type="is-warning"
+>
+  <button
+    className="button is-warning is-outlined"
+    onClick={[Function]}
+  >
+    Outlined Warning Button
+  </button>
+</Button>
+`;

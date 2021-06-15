@@ -88,3 +88,23 @@ We are using [lerna](https://lerna.js.org/) as a package versioning tool. It hel
 ## Contributing
 
 Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to these guidelines.
+
+## Pulling changes from core repository
+
+Add a new remote origin:
+
+```
+git remote add upstream https://github.com/bloom-housing/bloom.git
+```
+
+Fetch newest indices from it:
+
+```
+git fetch upstream
+```
+
+Merge remote into your local branch:
+
+```
+git merge upstream/master
+``

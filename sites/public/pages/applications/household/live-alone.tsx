@@ -2,7 +2,7 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import React, { useState } from "react"
+import React from "react"
 import {
   AppearanceSizeType,
   Button,
@@ -19,7 +19,9 @@ import { useFormConductor } from "../../../lib/hooks"
 
 const ApplicationLiveAlone = () => {
   const { conductor, application, listing } = useFormConductor("liveAlone")
-  const [validateHousehold, setValidateHousehold] = useState(true)
+  // TODO: toggle this verification off at the jurisdiction level with a feature flag
+  // const [validateHousehold, setValidateHousehold] = useState(true)
+  const validateHousehold = false
   const currentPageSection = 2
 
   /* Form Handler */
@@ -74,7 +76,7 @@ const ApplicationLiveAlone = () => {
                 onClick={() => {
                   application.householdSize = 1
                   application.householdMembers = []
-                  setValidateHousehold(true)
+                  // setValidateHousehold(true)
                 }}
               >
                 {t("application.household.liveAlone.willLiveAlone")}
@@ -87,7 +89,7 @@ const ApplicationLiveAlone = () => {
                 className="w-full md:w-3/4"
                 onClick={() => {
                   if (application.householdSize === 1) application.householdSize = 0
-                  setValidateHousehold(false)
+                  // setValidateHousehold(false)
                 }}
               >
                 {t("application.household.liveAlone.liveWithOtherPeople")}

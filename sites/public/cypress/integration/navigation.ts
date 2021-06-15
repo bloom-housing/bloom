@@ -30,13 +30,6 @@ describe("Navigating around the site", () => {
   it("Can navigate to all page types after initial site load", () => {
     cy.visit("/")
 
-    // Click on the Disclaimer page link in the footer
-    cy.get("footer a").contains("Disclaimer").click()
-
-    // Should be on the disclaimer page
-    cy.location("pathname").should("equal", "/disclaimer")
-    cy.contains("Endorsement Disclaimers")
-
     // Click on the listings page link in the header nav
     cy.get(".navbar").contains("Listings").click()
 
