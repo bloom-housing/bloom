@@ -165,7 +165,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
       },
     })
-  }, [router, apiUrl, state.accessToken])
+  }, [router, apiUrl, state.accessToken, router.locale])
 
   // On initial load/reload, check localStorage to see if we have a token available
   useEffect(() => {
