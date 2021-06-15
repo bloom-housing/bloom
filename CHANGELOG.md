@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
   - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
+  - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
 
 - Added:
 
