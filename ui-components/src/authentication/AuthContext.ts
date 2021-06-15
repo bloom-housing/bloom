@@ -1,11 +1,14 @@
 import {
   ApplicationsService,
+  ApplicationFlaggedSetsService,
   AuthService,
   ListingsService,
   User,
+  UserBasic,
   UserCreate,
   UserService,
   serviceOptions,
+  Status,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -18,12 +21,13 @@ import {
 } from "react"
 import axiosStatic from "axios"
 import { ConfigContext } from "../config/ConfigContext"
-import { useRouter } from "next/router"
 import { createAction, createReducer } from "typesafe-actions"
 import { clearToken, getToken, getTokenTtl, setToken } from "./token"
+import { NavigationContext } from "../config/NavigationContext"
 
 type ContextProps = {
   applicationsService: ApplicationsService
+  applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
   userService: UserService
   authService: AuthService
@@ -36,8 +40,8 @@ type ContextProps = {
   signOut: () => void
   confirmAccount: (token: string) => Promise<User | undefined>
   forgotPassword: (email: string) => Promise<string | undefined>
-  createUser: (user: UserCreate) => Promise<string | undefined>
-  resendConfirmation: (email: string) => Promise<string | undefined>
+  createUser: (user: UserCreate) => Promise<UserBasic | undefined>
+  resendConfirmation: (email: string) => Promise<Status | undefined>
   accessToken?: string
   initialStateLoaded: boolean
   loading: boolean
@@ -140,7 +144,7 @@ const reducer = createReducer(
 export const AuthContext = createContext<Partial<ContextProps>>({})
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const { apiUrl, storageType } = useContext(ConfigContext)
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     initialStateLoaded: false,
@@ -199,6 +203,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
 
   const contextValues: ContextProps = {
     applicationsService: new ApplicationsService(),
+    applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),
     userService: new UserService(),
     authService: new AuthService(),
@@ -271,7 +276,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         const response = await userService?.create({
           body: { ...user, appUrl: window.location.origin },
         })
-        return response?.status
+        return response
       } finally {
         dispatch(stopLoading())
       }
@@ -282,7 +287,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         const response = await userService?.resendConfirmation({
           body: { email, appUrl: window.location.origin },
         })
-        return response?.status
+        return response
       } finally {
         dispatch(stopLoading())
       }

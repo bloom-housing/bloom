@@ -12,7 +12,7 @@ import {
   AlertBox,
   AppearanceStyleType,
   useMutate,
-  ApiClientContext,
+  AuthContext,
   StatusBar,
 } from "@bloom-housing/ui-components"
 import { useSingleFlaggedApplication } from "../../../../../lib/hooks"
@@ -23,7 +23,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 const Flag = () => {
-  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const router = useRouter()
   const flagsetId = router.query.flagId as string

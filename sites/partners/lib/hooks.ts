@@ -93,7 +93,7 @@ export function useFlaggedApplicationsList({
   page,
   limit,
 }: UseSingleApplicationDataProps) {
-  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const searchParams = new URLSearchParams()
   searchParams.append("listingId", listingId)
@@ -118,7 +118,7 @@ export function useFlaggedApplicationsList({
 }
 
 export function useSingleFlaggedApplication(afsId: string) {
-  const { applicationFlaggedSetsService } = useContext(ApiClientContext)
+  const { applicationFlaggedSetsService } = useContext(AuthContext)
 
   const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets/${afsId}`
   const fetcher = () =>
