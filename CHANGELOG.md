@@ -54,7 +54,6 @@ All notable changes to this project will be documented in this file. The format 
     =======
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
-    > > > > > > > upstream/master
 
 - Changed:
 
