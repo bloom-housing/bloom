@@ -35,7 +35,10 @@ export class ApplicationFlaggedSetsService {
       }
     )
     const countTotalFlagged = await this.afsRepository.count({
-      where: { status: FlaggedSetStatus.flagged },
+      where: {
+        status: FlaggedSetStatus.flagged,
+        ...(queryParams.listingId && { listingId: queryParams.listingId }),
+      },
     })
     return {
       ...results,
