@@ -40,7 +40,7 @@ export const getListingIncome = (): getIncomeReturn => {
 
   const listingObj: Listing = JSON.parse(listing)
 
-  const { units } = listingObj.property
+  const { units } = listingObj
 
   const [annualMin, annualMax, monthlyMin] =
     units &&
