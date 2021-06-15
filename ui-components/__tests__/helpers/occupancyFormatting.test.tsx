@@ -3,11 +3,11 @@ import { cleanup } from "@testing-library/react"
 import { occupancyTable, getOccupancyDescription } from "../../src/helpers/occupancyFormatting"
 import Archer from "../../__tests__/fixtures/archer.json"
 import { t } from "../../src/helpers/translator"
+import { Listing } from "@bloom-housing/backend-core/types"
 
-let ArcherListing = Object.assign({}, Archer) as any
-ArcherListing.property = {}
-ArcherListing.property.unitsSummarized = {}
-ArcherListing.property.unitsSummarized = {
+let ArcherListing: Listing = Object.assign({}, Archer) as any
+// @ts-ignore
+ArcherListing.unitsSummarized = {
   unitTypes: ["threeBdrm", "twoBdrm", "SRO"],
   byUnitType: [
     {
@@ -42,6 +42,8 @@ ArcherListing.property.unitsSummarized = {
       },
       occupancyRange: {
         min: 1,
+        // TODO null is allowed on frontend but not in backend defined types
+        // @ts-ignore
         max: null,
       },
       rentAsPercentIncomeRange: {
@@ -109,12 +111,12 @@ describe("occupancy formatting helper", () => {
   })
   it("properly creates occupany description for no SRO", () => {
     const NewListing = ArcherListing
-    NewListing.property.unitsSummarized.unitTypes = ["threeBdrm", "twoBdrm"]
+    NewListing.unitsSummarized.unitTypes = ["threeBdrm", "twoBdrm"]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionNoSro"))
   })
   it("properly creates occupany description for all SRO", () => {
     const NewListing = ArcherListing
-    NewListing.property.unitsSummarized.unitTypes = ["SRO"]
+    NewListing.unitsSummarized.unitTypes = ["SRO"]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })

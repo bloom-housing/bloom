@@ -29,7 +29,10 @@ describe("<Waitlist>", () => {
     expect(getByText("Final Waitlist Size"))
     expect(getAllByText("300").length).toBe(2)
   })
-  it("renders with and open waitlist", () => {
+  it("renders with an open waitlist", () => {
+    triton.unitsAvailable = 0
+    triton.waitlistCurrentSize = 40
+    triton.waitlistMaxSize = 100
     const { getByText } = render(<Waitlist listing={triton} />)
     expect(getByText("Waitlist is open")).toBeTruthy()
     expect(getByText("Current Waitlist Size"))
