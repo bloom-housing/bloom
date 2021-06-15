@@ -47,7 +47,10 @@ const ApplicationsList = () => {
 
   const listingId = router.query.id as string
   const { appsData } = useApplicationsData(currentPage, itemsPerPage, listingId, delayedFilterValue)
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto } = useSingleListingData(
+    listingId,
+    "partners-listings-applications-application-list"
+  )
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
 
@@ -171,7 +174,7 @@ const ApplicationsList = () => {
   const maxHouseholdSize = useMemo(() => {
     let max = 1
 
-    appsData?.items.forEach((item) => {
+    appsData?.items?.forEach((item) => {
       if (item.householdSize > max) {
         max = item.householdSize
       }

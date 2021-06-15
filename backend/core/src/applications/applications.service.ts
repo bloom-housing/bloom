@@ -133,7 +133,7 @@ export class ApplicationsService {
     // --> Build additional query builder parts
     Object.keys(paramsMap).forEach((paramKey) => {
       // e.g. markedAsDuplicate can be false and wouldn't be applied here
-      if (params[paramKey] !== undefined) {
+      if (params[paramKey] !== undefined && params[paramKey] !== "undefined") {
         paramsMap[paramKey](qb, params)
       }
     })

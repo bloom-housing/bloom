@@ -35,7 +35,9 @@ export async function getServerSideProps(context: { params: Record<string, strin
   let response
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+    response = await axios.get(
+      `${process.env.backendApiBase}/listings/${context.params.id}?route=public-listing-preview-server-props`
+    )
   } catch (e) {
     return { notFound: true }
   }

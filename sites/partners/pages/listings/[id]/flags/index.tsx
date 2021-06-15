@@ -22,7 +22,7 @@ const FlagsPage = () => {
     setCurrentPage(1)
   }, [itemsPerPage])
 
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto } = useSingleListingData(listingId, "partners-listings-flags")
 
   const { data } = useFlaggedApplicationsList({
     listingId,

@@ -176,6 +176,9 @@ export class ApplicationsController {
   async list(
     @Query() queryParams: PaginatedApplicationListQueryParams
   ): Promise<PaginatedApplicationDto> {
+    if (queryParams.listingId === undefined || queryParams.listingId === "undefined") {
+      return mapTo(PaginatedApplicationDto, {})
+    }
     return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
   }
 
@@ -183,6 +186,10 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
+    if (queryParams.listingId === undefined || queryParams.listingId === "undefined") {
+      console.log("List applications as CSV - listingId undefined")
+      return ""
+    }
     const applications = await this.applicationsService.list(queryParams)
     const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(

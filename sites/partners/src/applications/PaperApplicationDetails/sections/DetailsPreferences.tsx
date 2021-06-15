@@ -10,7 +10,7 @@ type DetailsPreferencesProps = {
 }
 
 const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto } = useSingleListingData(listingId, "partners-applications-detail-preferences")
 
   const application = useContext(ApplicationContext)
 

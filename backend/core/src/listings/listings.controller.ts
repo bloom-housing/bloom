@@ -53,7 +53,14 @@ export class ListingsController {
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   @UseInterceptors(CacheInterceptor)
-  async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
+  async retrieve(
+    @Param("listingId") listingId: string,
+    @Query("route") route?: string
+  ): Promise<ListingDto> {
+    if (listingId === undefined || listingId === "undefined") {
+      console.log("Listing ID undefined at", route)
+      return mapTo(ListingDto, {})
+    }
     return mapTo(ListingDto, await this.listingsService.findOne(listingId))
   }
 
@@ -63,6 +70,7 @@ export class ListingsController {
     @Param("listingId") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
+    console.log("update")
     return mapTo(ListingDto, await this.listingsService.update(listingUpdateDto))
   }
 

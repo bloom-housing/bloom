@@ -38,7 +38,7 @@ type AlertErrorType = "api" | "form"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto } = useSingleListingData(listingId, "partners-applications-application-form")
 
   const preferences = listingDto?.preferences
   const countyCode = listingDto?.countyCode

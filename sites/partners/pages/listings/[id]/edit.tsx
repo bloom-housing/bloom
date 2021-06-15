@@ -15,7 +15,7 @@ const NewListing = () => {
   const router = useRouter()
   const listingId = router.query.id as string
 
-  const { listingDto } = useSingleListingData(listingId)
+  const { listingDto } = useSingleListingData(listingId, "partners-listing-new")
 
   if (!listingDto) return false
 

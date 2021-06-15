@@ -9,11 +9,14 @@ type UseSingleApplicationDataProps = {
   limit: number
 }
 
-export function useSingleListingData(listingId: string) {
+export function useSingleListingData(listingId: string, route?: string) {
   const { listingsService } = useContext(ApiClientContext)
-  const fetcher = () => listingsService.retrieve({ listingId })
+  const fetcher = () => listingsService.retrieve({ listingId, route })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/listings/${listingId}?route=${route}`,
+    fetcher
+  )
 
   return {
     listingDto: data,
