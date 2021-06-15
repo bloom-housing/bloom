@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 
@@ -6,15 +6,18 @@ export interface SiteHeaderLanguage {
   list: LangItem[]
   codes: string[]
 }
+type LogoWidth = "slim" | "medium" | "wide"
 
 export interface SiteHeaderProps {
   logoSrc: string
   title: string
+  imageOnly?: boolean
   skip: string
   notice: string | React.ReactNode
   children: React.ReactNode
   language?: SiteHeaderLanguage
   logoClass?: string
+  logoWidth?: LogoWidth
 }
 
 export interface SiteHeaderState {
@@ -30,61 +33,73 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
   return (
     <div className="navbar-item has-dropdown is-hoverable" tabIndex={0}>
       <a className="navbar-link">{props.menuTitle}</a>
-
       <div className="navbar-dropdown">{props.children}</div>
     </div>
   )
 }
 
-class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
-  constructor(props: SiteHeaderProps) {
-    super(props)
-    this.state = {
-      active: false,
-    }
-    this.handleMenuToggle = this.handleMenuToggle.bind(this)
-  }
+const SiteHeader = (props: SiteHeaderProps) => {
+  const [active, setActive] = useState(false)
 
-  skipLink() {
+  const skipLink = () => {
     return (
       <a href="#main-content" className="navbar__skip-link">
-        {this.props.skip}
+        {props.skip}
       </a>
     )
   }
 
-  noticeBar() {
+  const noticeBar = () => {
     return (
       <div className="navbar-notice">
-        <div className="navbar-notice__text">{this.props.notice}</div>
+        <div className="navbar-notice__text">{props.notice}</div>
       </div>
     )
   }
 
-  logo(logoClass = "") {
+  const getLogoWidthClass = () => {
+    if (props.logoWidth === "slim") return "navbar-width-slim"
+    if (props.logoWidth === "medium") return "navbar-width-med"
+    if (props.logoWidth === "wide") return "navbar-width-wide"
+    return ""
+  }
+
+  const logo = (logoClass = "") => {
     return (
-      <LocalizedLink className={`navbar-item logo ${logoClass}`} href="/">
-        <div className="logo__lockup">
-          <img className="logo__image" src={this.props.logoSrc} alt={this.props.title} />
-          <div className="logo__title">{this.props.title}</div>
+      <LocalizedLink
+        className={`navbar-item logo ${logoClass} ${getLogoWidthClass()}`}
+        href="/"
+        aria={{ "aria-label": "homepage" }}
+      >
+        <div
+          className={`logo__lockup ${getLogoWidthClass()} ${
+            props.logoWidth && "navbar-custom-width"
+          } ${props.imageOnly && "navbar-image-only-container"}`}
+        >
+          <img
+            className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
+            src={props.logoSrc}
+            alt={props.title}
+          />
+          {!props.imageOnly && <div className="logo__title">{props.title}</div>}
         </div>
       </LocalizedLink>
     )
   }
 
-  handleMenuToggle = () => {
-    this.setState({ active: !this.state.active })
+  const handleMenuToggle = () => {
+    setActive(!active)
   }
 
-  hamburgerMenu() {
+  const hamburgerMenu = () => {
     return (
       <a
         role="button"
-        className={"navbar-burger burger" + (this.state.active ? " is-active" : "")}
+        className={"navbar-burger burger" + (active ? " is-active" : "")}
         aria-label="menu"
-        aria-expanded={this.state.active ? "true" : "false"}
+        aria-expanded={active ? "true" : "false"}
         data-target="navbarMenuLinks"
-        onClick={this.handleMenuToggle}
+        onClick={handleMenuToggle}
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -93,31 +108,29 @@ class SiteHeader extends React.Component<SiteHeaderProps, SiteHeaderState> {
     )
   }
 
-  render() {
-    return (
-      <>
-        {this.props.language && <LanguageNav language={this.props.language} />}
+  return (
+    <>
+      {props.language && <LanguageNav language={props.language} />}
 
-        {this.skipLink()}
-        {this.noticeBar()}
-        <div className="navbar__wrapper">
-          <nav className="navbar" role="navigation" aria-label="main navigation">
-            <div className="navbar-brand">
-              {this.logo(this.props.logoClass)}
-              {this.hamburgerMenu()}
-            </div>
+      {skipLink()}
+      {noticeBar()}
+      <div className="navbar__wrapper">
+        <nav className="navbar" role="navigation" aria-label="main navigation">
+          <div className="navbar-brand">
+            {logo(props.logoClass)}
+            {hamburgerMenu()}
+          </div>
 
-            <div
-              id="navbarMenuLinks"
-              className={"navbar-menu md:mt-0" + (this.state.active ? " is-active" : "")}
-            >
-              <div className="navbar-end">{this.props.children}</div>
-            </div>
-          </nav>
-        </div>
-      </>
-    )
-  }
+          <div
+            id="navbarMenuLinks"
+            className={"navbar-menu md:mt-0" + (active ? " is-active" : "")}
+          >
+            <div className="navbar-end">{props.children}</div>
+          </div>
+        </nav>
+      </div>
+    </>
+  )
 }
 
 export { SiteHeader as default, SiteHeader }
