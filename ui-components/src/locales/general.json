@@ -716,6 +716,8 @@
       "clone": "Clone"
     },
     "addListing": "Add Listing",
+    "additionalDetails": "Additional Details",
+    "additionalDetailsSubtext": "Are there any other required documents and selection criteria?",
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
@@ -848,6 +850,7 @@
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
     "seeUnitInformation": "See Unit Information",
+    "selectionCriteria": "Selection Criteria",
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",

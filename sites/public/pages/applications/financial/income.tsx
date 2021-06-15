@@ -63,6 +63,7 @@ const ApplicationIncome = () => {
     },
     shouldFocusError: false,
   })
+
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
     // Skip validation of total income if the applicant has income vouchers.
@@ -81,14 +82,6 @@ const ApplicationIncome = () => {
   }
   const onError = () => {
     window.scrollTo(0, 0)
-  }
-
-  const formatValue = () => {
-    const { income } = getValues()
-    const numericIncome = parseFloat(income)
-    if (!isNaN(numericIncome)) {
-      setValue("income", numericIncome.toFixed(2))
-    }
   }
 
   const incomePeriodValues = [
@@ -164,16 +157,17 @@ const ApplicationIncome = () => {
             <Field
               id="income"
               name="income"
-              type="number"
+              type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
               placeholder={t("application.financial.income.placeholder")}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
-              prepend="$"
               errorMessage={t("errors.numberError")}
-              inputProps={{ step: 0.01, onBlur: formatValue }}
+              setValue={setValue}
+              getValues={getValues}
+              prepend={"$"}
             />
 
             <fieldset>

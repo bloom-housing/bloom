@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+  - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
 
 - Added:
 
@@ -39,6 +40,7 @@ All notable changes to this project will be documented in this file. The format 
   - Optionally hide preferences from Listing page ([#1280](https://github.com/bloom-housing/bloom/pull/1280)) (Emily Jablonski)
   - Add ability for site header logo to have custom widths, image only ([#1346](https://github.com/bloom-housing/bloom/pull/1346)) (Emily Jablonski)
   - Created duplicates pages ([#1132](https://github.com/bloom-housing/bloom/pull/1132)) (Dominik Barcikowski)
+  - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
 
 - Fixed:
 
@@ -53,6 +55,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
+  - Refactored currency field logic to be generic & reusable ([#1356](https://github.com/bloom-housing/bloom/pull/1356)) Emily Jablonski
 
 ### UI Components
 
