@@ -1,12 +1,12 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, Field } from "@bloom-housing/ui-components"
+import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, control } = formMethods
 
   return (
     <div>
@@ -30,12 +30,13 @@ const LeasingAgent = () => {
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
           />
-          <Field
+          <PhoneField
             label={t("t.phone")}
             name={"leasingAgentPhone"}
             id={"leasingAgentPhone"}
             placeholder={t("t.phoneNumberPlaceholder")}
-            register={register}
+            control={control}
+            controlClassName={"control"}
           />
         </GridSection>
         <GridSection columns={2}>
