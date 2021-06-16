@@ -9,7 +9,7 @@
   .label {
     @apply text-gray-750;
     @apply font-semibold;
-    font-size: .875rem;
+    font-size: 0.875rem;
   }
 
   label + .control {
@@ -55,9 +55,12 @@
       background: transparent;
     }
 
-    // & input:not(:first-child)
-    .prepend + input {
+    .prepend + input[aria-invalid="false"] {
       @apply pl-8;
+    }
+
+    .prepend + input[aria-invalid="true"] {
+      @apply pl-12;
     }
 
     &.control-narrower {
@@ -176,7 +179,7 @@
     @apply bg-gray-400;
     cursor: not-allowed;
     @apply text-gray-700;
-    @apply border-gray-500; 
+    @apply border-gray-500;
   }
 
   select:disabled,
@@ -234,8 +237,8 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
-  -moz-appearance:textfield;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .field-group--inline {
@@ -313,3 +316,19 @@ input[type=number] {
   @apply font-semibold;
 }
 
+.form-section__title {
+  @apply font-alt-sans;
+  @apply text-lg;
+  @apply text-gray-900;
+  @apply font-medium;
+  @apply block;
+  @apply mb-1;
+}
+
+.form-section__description {
+  @apply font-sans;
+  @apply text-base;
+  @apply text-gray-750;
+  @apply block;
+  @apply mb-8;
+}

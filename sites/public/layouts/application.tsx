@@ -45,7 +45,7 @@ const Layout = (props) => {
           </Link>
           {/* Only show Get Assistance if housing counselor data is available */}
           {process.env.housingCounselorServiceUrl && (
-            <Link href="/housing-counselors">
+            <Link href={process.env.housingCounselorServiceUrl}>
               <a className="navbar-item">{t("nav.getAssistance")}</a>
             </Link>
           )}

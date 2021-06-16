@@ -51,7 +51,6 @@ export async function importListing(apiUrl, email, password, listing) {
     baseURL: apiUrl,
     timeout: 10000,
   })
-
   // Log in to retrieve an access token.
   const authService = new client.AuthService()
   const { accessToken } = await authService.login({

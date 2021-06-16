@@ -19,6 +19,7 @@ import { ListingContext } from "../../../src/listings/ListingContext"
 import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
 import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
 import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
+import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -100,6 +101,7 @@ export default function ApplicationsList() {
                 <DetailListingData />
                 <DetailProperty />
                 <DetailApplication />
+                <DetailAdditionalDetails />
               </div>
 
               <div className="md:w-3/12 pl-6">

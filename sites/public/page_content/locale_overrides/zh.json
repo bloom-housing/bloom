@@ -1,0 +1,73 @@
+{
+  "application": {
+    "contact": {
+      "doYouWorkIn": "您是否在 %{county} 工作？",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "他們是否在 %{county} 工作？",
+        "workInRegionNote": ""
+      }
+    },
+    "preferences": {
+      "dontWant": "我不想使用這些優先權",
+      "liveWork": {
+        "live": {
+          "label": "住在 %{county} 的優先權",
+          "description": "我家至少有一人住在 %{county}"
+        },
+        "work": {
+          "label": "在 %{county} 工作優先權",
+          "description": "我家至少有一人在 %{county}工作或獲得工作機會"
+        }
+      },
+      "displacedTenant": {
+        "general": {
+          "label": "無居所租客房屋優先權",
+          "description": "由於 %{county} 房屋管理局、重建管理局或 %{county} 市政府進行重建活動，我家至少有一人被迫搬出住宅物業。"
+        },
+        "missionCorridor": {
+          "label": "Mission Boulevard Corridor (SR 238) 無居所租客房屋優先權",
+          "description": "根據 SR 238 和解實施項目條款規定，我家至少有一人是 SR 238 計劃參與者。計劃參與者是 SR 238 Mission Boulevard 走廊沿線先前已出售的 Caltrans 物業租戶；此走廊興建低於市價的全新住房時，計劃參與者有入住優先權。"
+        }
+      }
+    }
+  },
+  "footer": {
+    "copyRight": "阿拉米達縣 © 2020 • 版權所有",
+    "disclaimer": "免責聲明",
+    "getAssistance": "尋求協助",
+    "giveFeedback": "提供回饋意見",
+    "header": "阿拉米達縣房屋網站",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "是阿拉米達縣房屋及社區發展部 (HCD) 推出的項目",
+    "forAdditionalOpportunities": "查詢灣區其他住房機會，請瀏覽：",
+    "forGeneralInquiries": "一般計劃查詢，或者想透過電話使用翻譯服務以了解本網站的內容，您可以致電 510-670-5404 聯絡阿拉米達縣房屋及社區發展部 (HCD)。",
+    "forListingQuestions": "若有上市名單和申請方面的疑問，請聯絡每個上市名單上顯示的物業經紀人。",
+    "privacyPolicy": "隱私權政策",
+    "SFHousingPortal": "三藩市房屋網站",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "阿拉米達縣房屋網站",
+    "getFeedback": "我們希望獲得 ",
+    "yourFeedback": "您的回饋意見",
+    "bonusFeedback": "！為感謝您花時間提供回饋意見，您可獲得一張禮品卡。"
+  },
+  "pageTitle": {
+    "additionalResources": "其他住房機會"
+  },
+  "pageDescription": {
+    "additionalResources": "我們建議您瀏覽其他可負擔房屋資源。"
+  },
+  "region": {
+    "name": "阿拉米達縣"
+  },
+  "listings": {
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "抽籤"
+    }
+  }
+}
