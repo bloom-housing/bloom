@@ -43,7 +43,7 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
-  const { listing } = props
+  const { listing, preview = false } = props
 
   const oneLineAddress = <OneLineAddress address={listing.property.buildingAddress} />
 
@@ -287,18 +287,18 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {listing.applicationMethods.length > 0 ? (
+              {!preview && listing.applicationMethods.length > 0 ? (
                 <ApplicationSection
                   listing={listing}
                   internalFormRoute="/applications/start/choose-language"
                 />
-              ) : (
+              ) : !preview ? (
                 <ReferralApplication
                   phoneNumber={t("application.referralApplication.phoneNumber")}
                   description={t("application.referralApplication.instructions")}
                   title={t("application.referralApplication.furtherInformation")}
                 />
-              )}
+              ) : null}
             </div>
 
             {openHouseEvents && (

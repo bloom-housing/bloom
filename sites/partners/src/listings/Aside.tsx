@@ -23,7 +23,7 @@ type AsideType = "add" | "edit" | "details"
 const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
   const listing = useContext(ListingContext)
 
-  const lisitngId = listing?.id
+  const listingId = listing?.id
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
@@ -47,7 +47,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     if (type === "details") {
       elements.push(
         <GridCell key="btn-submitNew">
-          <LocalizedLink href={`/listings/${lisitngId}/edit`}>
+          <LocalizedLink href={`/listings/${listingId}/edit`}>
             <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>
@@ -81,7 +81,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
 
     elements.push(
       <GridCell key="btn-preview">
-        <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${lisitngId}`}>
+        <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
           <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
             {t("listings.actions.preview")}
           </Button>
@@ -91,7 +91,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     )
 
     return elements
-  }, [lisitngId, setStatusAndSubmit, type])
+  }, [listingId, setStatusAndSubmit, type])
 
   return (
     <>
