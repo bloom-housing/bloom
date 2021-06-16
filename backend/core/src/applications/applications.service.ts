@@ -12,7 +12,7 @@ import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
-import retry = require("async-retry")
+import retry from "async-retry"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
