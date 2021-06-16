@@ -712,6 +712,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
+      "fourBdrm": "4 BR",
+      "fiveBdrm": "5 BR",
       "studio": "Studio",
       "SRO": "Single Room Occupancy"
     },

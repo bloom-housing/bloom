@@ -182,7 +182,7 @@ type UnitMap = {
   [key: string]: Unit[]
 }
 
-const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm", "fiveBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
 const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitSummary[] => {

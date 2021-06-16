@@ -34,8 +34,33 @@ async function uploadListing(listing) {
   }
 }
 
+async function uploadAmiCharts(property) {
+  const amiChartService = new client.AmiChartsService()
+  const charts = await amiChartService.list()
+  
+  for (const unit of property.units) {
+    const chartFromUnit = unit.amiChart
+    if (!chartFromUnit) {
+      console.log(property)
+      console.log("Error: each unit must have an amiChart.")
+      process.exit(1)
+    }
+
+    // Look for the chart by name.
+    let chart = charts.filter((chart) => chart.name == chartFromUnit.name)[0]
+
+    // If it doesn't exist, create it.
+    if (!chart) {
+      chart = await amiChartService.create({body: chartFromUnit})
+    }
+    unit.amiChart = chart
+  }
+}
+
 async function uploadProperty(property) {
   try {
+    await uploadAmiCharts(property)
+
     const propertyService = new client.PropertiesService()
     return await propertyService.create({
       body: property,

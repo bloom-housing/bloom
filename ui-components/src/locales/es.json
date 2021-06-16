@@ -531,6 +531,8 @@
       "oneBdrm": "1 dormitorio",
       "twoBdrm": "2 dormitorios",
       "threeBdrm": "3 dormitorios",
+      "fourBdrm": "4 dormitorios",
+      "fiveBdrm": "5 dormitorios",
       "studio": "Estudio",
       "SRO": "Ocupación de habitación individual"
     },

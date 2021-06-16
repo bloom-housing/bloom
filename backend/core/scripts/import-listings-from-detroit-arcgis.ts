@@ -9,6 +9,38 @@ import { CSVFormattingType } from "../src/csv/types/csv-formatting-type-enum"
 // Sample usage:
 // $ yarn ts-node scripts/import-listings-from-detroit-arcgis.ts http://localhost:3100 test@example.com:abcdef https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Affordable_Housing_Website_data_12_20/FeatureServer/0//query
 
+function createUnitsArray(type, number) {
+  let units = []
+  for (let unit_index = 0; unit_index < number; unit_index++) {
+    units.push({
+      "unitType": type,
+
+      // This amiPercentage is made up.       
+      "amiPercentage": "30",
+
+      "amiChart" : {
+        "name": "Fake AMI Chart Name",
+        "items": [],
+
+        // Add null id, createdAt, etc. to avoid compilation errors.
+        // (These will be replaced by real values when the script uploads/de-dupes this amiChart.)
+        "id": null,
+        "createdAt": null,
+        "updatedAt": null,
+        "units": null
+      },
+
+      // Add null id, createdAt, etc. to avoid compilation errors.
+      // (These will be replaced by real values when the script uploads this unit.)
+      "id": null,
+      "createdAt": null,
+      "updatedAt": null,
+      "property": null
+    })
+  }
+  return units
+}
+
 async function main() {
   if (process.argv.length < 5) {
     console.log("usage: yarn ts-node scripts/import-listings-from-detroit-arcgis.ts import_api_url email:password arcgis_url")
@@ -40,12 +72,57 @@ async function main() {
     property.buildingAddress = address
     property.neighborhood = listingAttributes.Neighborhood
     property.unitsAvailable = parseInt(listingAttributes.Affordable_Units)
+
     property.units = []
+    if (listingAttributes.Number_0BR) {
+      property.units = property.units.concat(createUnitsArray("studio", listingAttributes.Number_0BR))
+    }
+    if (listingAttributes.Number_1BR) {
+      property.units = property.units.concat(createUnitsArray("oneBdrm", parseInt(listingAttributes.Number_1BR)))
+    }
+    if (listingAttributes.Number_2BR) {
+      property.units = property.units.concat(createUnitsArray("twoBdrm", parseInt(listingAttributes.Number_2BR)))
+    }
+    if (listingAttributes.Number_3BR) {
+      property.units = property.units.concat(createUnitsArray("threeBdrm", parseInt(listingAttributes.Number_3BR)))
+    }
+    if (listingAttributes.Number_4BR) {
+      property.units = property.units.concat(createUnitsArray("fourBdrm", parseInt(listingAttributes.Number_4BR)))
+    }
+    if (listingAttributes.Number_5BR) {
+      property.units = property.units.concat(createUnitsArray("fiveBdrm", parseInt(listingAttributes.Number_5BR)))
+    }
+
+    // The /listings/id view won't render if there isn't at least one unit; add a dummy "studio"
+    if (property.units.length == 0) {
+      property.units = createUnitsArray("studio", 1)
+    }
 
     listing.property = property
     listing.name = listingAttributes.Project_Name
     listing.leasingAgentName = listingAttributes.Manager_Contact
-    listing.leasingAgentPhone = listingAttributes.Manager_Phone
+
+    if (listingAttributes.Manager_Phone) {
+      listing.leasingAgentPhone = listingAttributes.Manager_Phone
+    } else if (listingAttributes.Property_Phone) {
+      listing.leasingAgentPhone = listingAttributes.Property_Phone
+    } else {
+      listing.leasingAgentPhone = "(555) 555-5555"
+    }
+
+    listing.leasingAgentAddress = {
+      "city": "Fake City",
+      "state": "XX",
+      "street": "123 Fake St",
+      "zipCode": "12345",
+
+      // Add null id, createdAt, etc. to avoid compilation errors.
+      // (These will be replaced by real values when the script uploads this address.)
+      "id": null,
+      "createdAt": null,
+      "updatedAt": null
+    }
+    
     listing.preferences = []
     listing.assets = []
     listing.applicationMethods = []

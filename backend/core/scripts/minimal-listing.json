@@ -1,18 +1,33 @@
 {
+  "name": "Minimal Listing",
   "status": "active",
   "CSVFormattingType": "basic",
   "countyCode": "Alameda",
   "preferences": [],
   "property": {
       "buildingAddress": {
-          "city": "Detroit",
-          "state": "MI",
-          "street": "Main St",
-          "zipCode": "48127"
+          "city": "Fake City",
+          "state": "XX",
+          "street": "123 Make Believe St",
+          "zipCode": "12345"
       },
-      "units": []
+      "units": [{
+        "unitType": "oneBdrm",
+        "amiPercentage": "30",
+        "amiChart" : {
+          "name": "Fake AMI Chart Name",
+          "items": []
+        }
+      }]
   },
   "assets": [],
   "applicationMethods": [],
-  "events": []
+  "events": [],
+  "leasingAgentPhone": "(555) 555-5555",
+  "leasingAgentAddress": {
+    "city": "Fake City",
+    "state": "XX",
+    "street": "456 Not A Real St",
+    "zipCode": "12345"
+  }
 }
