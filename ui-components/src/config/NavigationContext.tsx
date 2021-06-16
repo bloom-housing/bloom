@@ -5,7 +5,7 @@ type Url = UrlObject | string
 
 export interface LinkProps {
   href: string
-  aria?: Record<string, string>
+  ariaProps?: Record<string, string>
   className?: string
   tabIndex?: number
 }
@@ -35,7 +35,7 @@ export const NavigationContext = createContext<NavigationContextProps>({
         e.preventDefault()
         alert(`You clicked: ${props.href}`)
       }}
-      {...props.aria}
+      {...props.ariaProps}
     >
       {props.children}
     </a>
