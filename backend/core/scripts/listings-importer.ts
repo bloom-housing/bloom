@@ -124,6 +124,9 @@ function reformatListing(listing, relationsKeys: string[]) {
   if (!("status" in listing)) {
     listing.status = ListingStatus.active
   }
+  if (!("countyCode" in listing)) {
+    listing.countyCode = "Alameda"
+  }
   try {
     delete listing["id"]
   } catch (e) {
@@ -169,7 +172,7 @@ async function main() {
 
   const newListing = await uploadListing(listing)
 
-  console.log(newListing)
+  console.log("Success, New Listing: ", newListing)
 }
 
 void main()

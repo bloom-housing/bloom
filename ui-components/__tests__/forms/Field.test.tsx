@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, fireEvent, getByPlaceholderText } from "@testing-library/react"
 import { Field } from "../../src/forms/Field"
 import { useForm } from "react-hook-form"
 
@@ -38,10 +38,28 @@ const FieldCustomProps = () => {
       caps={true}
       primary={true}
       readerOnly={true}
-      prepend={"Enter Here:"}
       describedBy={"Test Input"}
       label={"Test Input Custom"}
       type={"text"}
+    />
+  )
+}
+
+const FieldCurrency = () => {
+  const { register, getValues, setValue } = useForm({ mode: "onChange" })
+  return (
+    <Field
+      register={register}
+      name={"Test Input"}
+      className={"custom-class"}
+      controlClassName={"custom-control-class"}
+      describedBy={"Test Input"}
+      label={"Test Input Custom"}
+      type={"currency"}
+      getValues={getValues}
+      setValue={setValue}
+      placeholder={"Enter Income"}
+      prepend={"$"}
     />
   )
 }
@@ -57,8 +75,13 @@ describe("<Field>", () => {
     expect(getByLabelText("Test Input Error")).toBeTruthy()
   })
   it("can render custom state", async () => {
-    const { getByText, getByLabelText } = render(<FieldCustomProps />)
-    expect(getByText("Enter Here:")).toBeTruthy()
+    const { getByLabelText } = render(<FieldCustomProps />)
     expect(getByLabelText("Test Input Custom")).toBeTruthy()
+  })
+  it("can render currency field", async () => {
+    const { getByText, getByLabelText, getByPlaceholderText } = render(<FieldCurrency />)
+    expect(getByLabelText("Test Input Custom")).toBeTruthy()
+    expect(getByText("$")).toBeTruthy()
+    expect(getByPlaceholderText("Enter Income")).toBeTruthy()
   })
 })

@@ -10,6 +10,7 @@ if (process.argv.length < 3) {
 
 const [listingFilePath] = process.argv.slice(2)
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertApplicationMethods(listing: any) {
   const applicationMethods: Array<ApplicationMethodDto> = []
   if (listing.acceptsPostmarkedApplications) {

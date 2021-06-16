@@ -1,0 +1,243 @@
+{
+  "id": "6b172ba0-0cf8-0139-7cff-2683e7458fb7",
+  "events":[],
+  "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
+  "amenities": "Community Room, Laundry",
+  "applicationAddress": {
+    "city": "San Jose",
+    "street": "35 East Gish Road",
+    "zipCode": "95112",
+    "state": "CA",
+    "latitude": 37.36219,
+    "longitude": -121.909447
+  },
+  "applicationDueDate": "2019-12-09T12:58:21.000-07:00",
+  "applicationOrganization": "35 East Gish Road",
+  "applicationPhone": "(408) 436-8972",
+  "buildingAddress": {
+    "city": "San Jose",
+    "street": "35 East Gish Road",
+    "zipCode": "95112",
+    "state": "CA",
+    "latitude": 37.36219,
+    "longitude": -121.909447
+  },
+  "buildingSelectionCriteria": null,
+  "costsNotIncluded": "Residents responsible for PG&E and Internet. Residents encourage to obtain renter’s insurance but this is not a requirement. Rent is due by the 5rd of each month. Late fee is $20.00. Owner pays for water, trash, and sewage. Resident to pay $25 for each returned check or rejected electronic payment.",
+  "creditHistory": "A credit reference and background check will be required for all household members age 18 or older.  A poor credit history may be grounds to deem an applicant ineligible for housing.   Applicants will have the option to explain mitigating circumstances and/or include supplemental information with their application to explain any issues such as foreclosure, bankruptcy and negative credit.\n\nAny of the following circumstances may be defined as Poor Credit History or grounds for denial: \n\n* Total unmet credit problems in excess of $3,000. \n* A bankruptcy (within the last three years).\n* A total of seven (7) unmet credit problems of any value.\n* An Unlawful Detainer and/or judgment against an applicant obtained by the current or any previous landlord.\n* An unmet obligation owed to previous landlord.\n* The applicant must have made timely payments of last year’s rental payments.",
+  "depositMax": "1500.0",
+  "depositMin": "800.0",
+  "developer": "First Community Housing",
+  "imageUrl": "/images/gish.jpg",
+  "programRules": null,
+  "externalId": null,
+  "waitlistMaxSize": 150,
+  "name": "Gish Apartments 2",
+  "neighborhood": "San Jose",
+  "waitlistCurrentSize": 89,
+  "petPolicy": "No Pets Allowed",
+  "prioritiesDescriptor": null,
+  "requiredDocuments": "3 Months Paystubs or Award Letter for Social Security, 6 Months Bank Statements, 401K/ Retirement Statement dated with in 120 days.",
+  "reservedCommunityMaximumAge": null,
+  "reservedCommunityMinimumAge": null,
+  "reservedDescriptor": "Special needs / multi-family",
+  "smokingPolicy": "No Smoking Building",
+  "yearBuilt": 2009,
+  "createdAt": "2019-06-19T15:11:26.446-07:00",
+  "updatedAt": "2019-06-24T11:47:47.150-07:00",
+  "groupId": 1,
+  "hideUnitFeatures": false,
+  "unitAmenities": "Dishwasher",
+  "applicationFee": "38.0",
+  "criminalBackground": "A check will be made of criminal conviction records for the past seven years for all adult Applicants of the household.  Reports will be obtained from local and/or state records and may also include local Police records.  If the Applicant has resided in a state other than California and has a past felony conviction, a report will be required from that state or federal organization.  Generally, public records of this sort are only available for the past seven (7) years. However, if information becomes known during the screening process regarding criminal activity that happened before the past seven year period which could impact the Applicant household’s eligibility to live at the property, the Management Agent reserves the right to consider this information as well.\n\nSerious felony offenses and/or continued and ongoing criminal activity will be grounds for rejection if such offenses involve physical violence to persons or property, domestic violence, sexual abuse, the manufacture or sale narcotics, possession of an illegal weapon, breaking and entering, burglary or drug related criminal offenses. The nature, severity and recency of such offenses and/or ongoing criminal activity will be considered when reviewing the Applicant and only those potentially impacting the health, safety, security or right to peaceful enjoyment of the property of and by other residents, visitors or employees will be considered.\n\nAdditionally, applicants may be rejected due to:\n\n* A history of violence or abuse (physical or verbal), in which the applicant was determined to be the antagonist.\n* A household in which any member is currently engaged in illegal use of drugs or for which the owner has reasonable cause to believe that a member’s illegal use or pattern of use of a drug may interfere with the health, safety, security, or right to peaceful enjoyment of the property of and by other residents, visitors or employees.\n* Any member, if there is reasonable cause to believe that a member’s behavior, from abuse or pattern of abuse of alcohol, may interfere with the health, safety, security or right to peaceful enjoyment of the property of and by other residents, visitors or employees.",
+  "leasingAgentAddress": {
+    "city": "San Jose",
+    "street": "35 East Gish Road",
+    "zipCode": "95112",
+    "state": "CA",
+    "latitude": 37.36219,
+    "longitude": -121.909447
+  },
+  "leasingAgentEmail": "gish@jsco.net",
+  "leasingAgentName": "Jonaye Wilbert",
+  "leasingAgentOfficeHours": "Monday-Friday, 9:00 am - 3:00 pm",
+  "leasingAgentPhone": "(408) 436-8972",
+  "leasingAgentTitle": "",
+  "rentalHistory": "The applicants’ landlord references must verify a history of responsible occupancy, behavior, and conduct.  Current landlord references will be requested along with a third party unlawful detainer search.  All previous landlords during the past three years will also be contacted.  Landlord references will help to determine whether or not the applicant has a good rent paying history, whether or not there have been any disturbing behavior patterns including repeated lease violations, destruction of property, etc.  Any documented behavior which would constitute a material violation of the standard lease to be used at this location may be considered grounds for ineligibility.",
+  "preferences": [
+    {
+      "ordinal": 1,
+      "title": "Certificate of Preference (COP)",
+      "subtitle": "Up to 56 units available",
+      "description": "For households in which at least one member holds a Certificate of Preference from the former San Francisco Redevelopment Agency. COP holders were displaced by Agency action generally during the 1960s and 1970s.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        }
+      ]
+    },
+    {
+      "ordinal": 2,
+      "title": "Displaced Tenant Housing Preference (DTHP)",
+      "subtitle": "Up to 3 units available",
+      "description": "For households in which at least one member holds a Displaced Tenant Housing Preference Certificate. DTHP Certificate holders are tenants who were evicted through either an Ellis Act Eviction or an Owner Move In Eviction, or have been displaced by a fire. Once all units reserved for this preference are filled, remaining DTHP holders will receive Live/Work preference, regardless of their current residence or work location.",
+      "links": [
+        {
+          "title": "Read More",
+          "url": "https://domain.com"
+        },
+        {
+          "title": "View Document Checklist",
+          "url": "https://domain.com/d"
+        }
+      ]
+    },
+    {
+      "ordinal": 3,
+      "title": "Classroom teachers who are employees of the San Mateo Foster City School District and San Mateo County Community College District"
+    }
+  ],
+  "buildingTotalUnits": 5,
+  "disableUnitsAccordion": true,
+  "units": [
+    {
+      "id": "6b172bf0-0cf8-0139-7cff-2683e7458fb7",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "25628.0",
+      "monthlyIncomeMin": "2135.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "854.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": "205",
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "355",
+      "status": "occupied",
+      "unitType": "studio",
+      "createdAt": "2019-06-20T21:20:34.291Z",
+      "updatedAt": "2019-06-25T17:26:21.072Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha7",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "6b172c10-0cf8-0139-7cff-2683e7458fb7",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "25628.0",
+      "monthlyIncomeMin": "2135.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "854.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": "206",
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": "355",
+      "status": "occupied",
+      "unitType": "studio",
+      "createdAt": "2019-06-25T17:26:59.698Z",
+      "updatedAt": "2019-06-25T17:26:59.698Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha7",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "6b172c30-0cf8-0139-7cff-2683e7458fb7",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "25628.0",
+      "monthlyIncomeMin": "2135.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "854.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": "303",
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "355",
+      "status": "occupied",
+      "unitType": "studio",
+      "createdAt": "2019-06-25T17:27:12.228Z",
+      "updatedAt": "2019-06-25T17:27:12.228Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha7",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "6b172c50-0cf8-0139-7cff-2683e7458fb7",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "25628.0",
+      "monthlyIncomeMin": "2135.0",
+      "floor": 4,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "854.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": "403",
+      "priorityType": null,
+      "reservedType": "veteran",
+      "sqFeet": "355",
+      "status": "occupied",
+      "unitType": "studio",
+      "createdAt": "2019-06-25T17:27:23.985Z",
+      "updatedAt": "2019-06-25T17:27:23.985Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha7",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null
+    },
+    {
+      "id": "6b172c70-0cf8-0139-7cff-2683e7458fb7",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "25628.0",
+      "monthlyIncomeMin": "2135.0",
+      "floor": 4,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "854.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": "406",
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "355",
+      "status": "occupied",
+      "unitType": "studio",
+      "createdAt": "2019-06-25T17:27:38.397Z",
+      "updateAt": "2019-06-25T17:28:02.659Z",
+      "listingId": "sz0UrxnBdAxHMdfgcgha7",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null
+    }
+  ],
+  "totalUnits": 5,
+  "unitsAvailable": 0,
+  "applicationMethods": [
+    {
+      "type": "FileDownload",
+      "acceptsPostmarkedApplications": false,
+      "externalReference": "https://drive.google.com/file/d/0B4CsVae6UWpLRDJBUzlFbHBFa0t0WTJ6em5EdEwtU0VoMWs4/view?usp=sharing",
+      "label": "English"
+    }
+  ],
+  "assets": [
+    {
+      "referenceType": "Listing",
+      "referenceId": "",
+      "label": "building",
+      "fileId": "/images/gish.jpg"
+    }
+  ]
+}

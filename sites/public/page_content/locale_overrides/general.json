@@ -1,5 +1,120 @@
 {
-  "welcome": {
-    "seeRentalListings": "Browse Rentals"
+  "application": {
+    "contact": {
+      "doYouWorkIn": "Do you work in %{county} County?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "Do they work in the %{county} County?",
+        "workInRegionNote": ""
+      }
+    },
+    "referralApplication": {
+      "instructions": "The permanent supportive housing units are referred directly through Alameda County's Coordinated Entry System. Households experiencing homelessness can call 211 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "furtherInformation": "For further information"
+    },
+    "preferences": {
+      "liveWork": {
+        "title": "Live or Work in %{county} County",
+        "live": {
+          "label": "Live in %{county} County Preference",
+          "description": "At least one member of my household lives in the %{county} County"
+        },
+        "work": {
+          "label": "Work in %{county} County Preference",
+          "description": "At least one member of my household works or has been offered work in the %{county} County"
+        }
+      },
+      "PBV": {
+        "title": "Oakland Housing Authority",
+        "residency": {
+          "label": "Residency",
+          "description": "You have lived and/or worked in the City of Oakland when you submitted your initial application and/or at the time of your application interview for a Project-Based Voucher at Coliseum Place and can verify your previous residency/employment at the applicant interview."
+        },
+        "family": {
+          "label": "Family",
+          "description": "You are a family with two or more persons, or a single person applicant that is 62 years of age or older, or a single person applicant with a disability."
+        },
+        "veteran": {
+          "label": "Veteran",
+          "description": "You are a Veteran or active member of the military."
+        },
+        "homeless": {
+          "label": "Homeless",
+          "description": "You are an individual or family who meets the McKinney-Vento Act definition of homelessness. Family is identified as: individuals who lack a fixed, regular, and adequate nighttime residence and: (i) children and youths who are sharing the housing of other persons due to loss of housing, economic hardship, or a similar reason; are living in motels, hotels, trailer parks, or camping grounds due to the lack of alternative adequate accommodations; are living in emergency or transitional shelters; or are abandoned in hospitals; (ii) children and youths who have a primary nighttime residence that is a public or private place not designed for or ordinarily used as a regular sleeping accommodation for human beings; (iii) children and youths who are living in cars, parks, public spaces, abandoned buildings, substandard housing, bus or train stations, or similar settings; and (iv) migratory children who qualify as homeless for the purposes of this subtitle because the children are living in circumstances described in clauses (i) through (iii).",
+          "link": "https://uscode.house.gov/view.xhtml?path=/prelim@title42/chapter119/subchapter6/partB&edition=prelim"
+        },
+        "noneApplyButConsider": {
+          "label": "None of these preferences apply to me, but I would like to be considered"
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
+        }
+      },
+      "HOPWA": {
+        "title": "Housing Opportunities for Persons with AIDS",
+        "hopwa": {
+          "label": "Housing Opportunities for Persons with AIDS",
+          "description": "If you have questions about HOPWA eligibility or need support in submitting this application, please contact AHIP (AIDS Housing Information Project) at (510) 537-2600 or (510) 695-5222."
+        },
+        "doNotConsider": {
+          "label": "I don't want to be considered"
+        }
+      },
+      "displacedTenant": {
+        "title": "Displaced Tenant Housing Preference",
+        "whichHouseholdMember": "Which household member is claiming this preference?",
+        "whatAddress": "What address was the household member displaced from?",
+        "general": {
+          "label": "Displacee Tenant Housing Preference",
+          "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward."
+        }
+      }
+    }
+  },
+  "footer": {
+    "copyRight": "Alameda County © 2020 • All Rights Reserved",
+    "disclaimer": "Disclaimer",
+    "getAssistance": "Get Assistance",
+    "giveFeedback": "Give Feedback",
+    "header": "Alameda County Housing Portal is a project of the",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "Alameda County - Housing and Community Development (HCD) Department",
+    "forAdditionalOpportunities": "For additional Bay Area opportunities, please visit:",
+    "forGeneralInquiries": "For general program inquiries, or to access translation services for content on this website by phone, you may call Alameda County HCD at 510-670-5404.",
+    "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on each listing.",
+    "privacyPolicy": "Privacy Policy",
+    "SFHousingPortal": "San Francisco Housing Portal",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "Alameda County Housing Portal",
+    "getFeedback": "We'd love to get ",
+    "yourFeedback": "your feedback!",
+    "bonusFeedback": ""
+  },
+  "pageTitle": {
+    "additionalResources": "Additional Housing Opportunities and Resources"
+  },
+  "pageDescription": {
+    "additionalResources": "We encourage you to browse other affordable housing resources."
+  },
+  "region": {
+    "name": "Alameda County"
+  },
+  "listings": {
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "Lottery"
+    }
+  },
+  "timeout": {
+    "afterMessage": "We care about your security. We ended your session due to inactivity. Please start a new application to continue."
+  },
+  "referralApplication": {
+    "instructions": "The permanent supportive housing units are referred directly through Alameda County Coordinated Entry System. Households experiencing homelessness can call 211 in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+    "furtherInformation": "For further information",
+    "phoneNumber": "211"
   }
 }
