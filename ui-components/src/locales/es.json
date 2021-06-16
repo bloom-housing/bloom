@@ -418,7 +418,6 @@
     "officeHours": "Horario de oficina"
   },
   "listings": {
-    "additionalFees": "Cargos adicionales",
     "additionalInformation": "Información adicional",
     "allUnits": "Todas las viviendas",
     "allUnitsReservedFor": "Todas las viviendas reservadas para %{type}",
@@ -503,6 +502,7 @@
     "reservedUnitsDescription": "Para poder reunir los requisitos de estas viviendas, una de las siguientes condiciones debe aplicarse a usted o a alguna persona de su hogar:",
     "reservedUnitsForWhoAre": "Reservada para %{communityType} que son %{reservedType}",
     "sections": {
+      "additionalFees": "Cargos adicionales",
       "eligibilityTitle": "Elegibilidad",
       "eligibilitySubtitle": "Ingresos, ocupación, preferencias y subsidios",
       "rentalAssistanceTitle": "Asistencia en el alquiler",
