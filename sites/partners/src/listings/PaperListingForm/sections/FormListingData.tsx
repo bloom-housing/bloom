@@ -34,7 +34,7 @@ const FormListingData = () => {
           <Field
             id="property.id"
             name="property.id"
-            label="Property ID (can't save without this for now)"
+            label="Property ID (required for now)"
             placeholder="Property ID"
             register={register}
           />

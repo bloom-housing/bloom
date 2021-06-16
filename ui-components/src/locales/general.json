@@ -271,7 +271,6 @@
         "description": "We'll only use this information to contact them about your application.",
         "phoneNumberFormLabel": "Contact phone number",
         "emailAddressFormLabel": "Contact email address",
-        "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "Contact mailing address",
         "contactMailingAddressHelperText": "Choose an address where they can receive updates and materials about your application"
       }
@@ -703,7 +702,11 @@
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
     "dueToHighCallVolume": "Due to high call volume you may hear a message.",
-    "officeHours": "Office Hours"
+    "name": "Leasing Agent Name",
+    "namePlaceholder": "Full Name",
+    "title": "Leasing Agent Title",
+    "officeHours": "Office Hours",
+    "officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday"
   },
   "listings": {
     "active": "Accepting Applications",
@@ -841,6 +844,8 @@
       "featuresTitle": "Features",
       "housingPreferencesSubtitle": "Preference holders will be given highest ranking.",
       "housingPreferencesTitle": "Housing Preferences",
+      "leasingAgentSubtitle": "Provide details about the leasing agent who will be managing the application process.",
+      "leasingAgentTitle": "Leasing Agent",
       "neighborhoodSubtitle": "Location and transportation",
       "neighborhoodTitle": "Neighborhood",
       "processSubtitle": "Important dates and contact information",
@@ -1009,6 +1014,7 @@
     "deposit": "Deposit",
     "done": "Done",
     "description": "Enter Description",
+    "emailAddressPlaceholder": "you@myemail.com",
     "export": "Export",
     "enterAmount": "Enter amount",
     "filter": "Filter",
