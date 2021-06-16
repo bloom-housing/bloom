@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file. The format 
   - Created duplicates pages ([#1132](https://github.com/bloom-housing/bloom/pull/1132)) (Dominik Barcikowski)
   - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
   - Add Additional Eligibility section to listing management ([#1374](https://github.com/bloom-housing/bloom/pull/1374)) (Emily Jablonski)
+  - Add Leasing Agent section to listing management ([#1349](https://github.com/bloom-housing/bloom/pull/1349)) (Emily Jablonski)
 
 - Fixed:
 
