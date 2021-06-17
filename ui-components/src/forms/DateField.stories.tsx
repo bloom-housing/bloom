@@ -35,7 +35,6 @@ export const Birthday = () => {
       register={register}
       watch={watch}
       error={errors?.dateOfBirth}
-      birthdate={true}
       errorMessage={"Please enter a valid Date of Birth, must be 18 or older"}
       validateAge18={true}
     />

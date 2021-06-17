@@ -115,7 +115,6 @@ export default () => {
               name="dob"
               id="dob"
               watch={watch}
-              birthdate={true}
               validateAge18={true}
               label={t("authentication.createAccount.yourDateOfBirth")}
               errorMessage={t("errors.dateOfBirthAge")}

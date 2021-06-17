@@ -21,7 +21,6 @@ export interface DateFieldProps {
   required?: boolean
   disabled?: boolean
   readerOnly?: boolean
-  birthdate?: boolean
   validateAge18?: boolean
 }
 
@@ -34,14 +33,8 @@ const DateField = (props: DateFieldProps) => {
   const month = watch(fieldName("month"))
 
   const validateAge = (value: string) => {
-    const nextYearData = moment().add(1, "year")
     const inputDate = moment(`${month}/${day}/${value}`, "MM/DD/YYYY")
-    console.log("calling validateAge")
-    return (
-      parseInt(value) > 1900 &&
-      (props.validateAge18 ? inputDate < moment().subtract(18, "years") : true) &&
-      inputDate <= nextYearData
-    )
+    return inputDate < moment().subtract(18, "years")
   }
 
   const labelClasses = ["field-label--caps"]
@@ -104,9 +97,9 @@ const DateField = (props: DateFieldProps) => {
             required: props.required,
             validate: {
               yearRange: (value: string) => {
+                if (value?.length && props.validateAge18) return validateAge(value)
                 if (props.required && value && parseInt(value) < 1900) return false
                 if (!props.required && !value?.length) return true
-                if (value?.length && props.birthdate) return validateAge(value)
                 return true
               },
             },
