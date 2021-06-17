@@ -16,8 +16,8 @@ import {
   RequireLogin,
   AlertTypes,
   passwordRegex,
-  DOBField,
-  DOBFieldValues,
+  DateField,
+  DateFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
@@ -59,16 +59,14 @@ const Edit = () => {
     }
   }
 
-  const onBirthdateSubmit = async (data: { dateOfBirth: DOBFieldValues }) => {
+  const onBirthdateSubmit = async (data: { dateOfBirth: DateFieldValues }) => {
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
       await userService.update({
         body: {
           ...profile,
-          dob: moment(
-            `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
-          ).toDate(),
+          dob: moment(`${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`).toDate(),
         },
       })
       setDobAlert({ type: "success", message: `${t("account.settings.alerts.dobSuccess")}` })
@@ -186,19 +184,20 @@ const Edit = () => {
               </AlertBox>
             )}
             <div className="form-card__group border-b">
-              <DOBField
+              <DateField
                 id="dateOfBirth"
                 name="dateOfBirth"
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
-                defaultDOB={{
-                  birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
-                  birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
-                  birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
+                defaultDate={{
+                  day: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
+                  month: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
+                  year: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
-                errorMessage={t("errors.dateOfBirthError")}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
+                birthdate={true}
               />
               <div className="text-center mt-5">
                 <Button className="items-center">{t("account.settings.update")}</Button>

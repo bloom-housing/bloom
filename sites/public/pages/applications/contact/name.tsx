@@ -8,7 +8,7 @@ import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  DOBField,
+  DateField,
   Field,
   Form,
   FormCard,
@@ -129,11 +129,11 @@ const ApplicationName = () => {
           </div>
 
           <div className="form-card__group border-b">
-            <DOBField
-              defaultDOB={{
-                birthDay: application.applicant.birthDay,
-                birthMonth: application.applicant.birthMonth,
-                birthYear: application.applicant.birthYear,
+            <DateField
+              defaultDate={{
+                day: application.applicant.birthDay,
+                month: application.applicant.birthMonth,
+                year: application.applicant.birthYear,
               }}
               disabled={autofilled}
               register={register}
@@ -142,7 +142,8 @@ const ApplicationName = () => {
               name="applicant"
               id="applicant.dateOfBirth"
               watch={watch}
-              atAge={true}
+              birthdate={true}
+              errorMessage={t("errors.dateOfBirthAge")}
               label={
                 <>
                   {t("application.name.yourDateOfBirth")}

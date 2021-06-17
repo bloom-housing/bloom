@@ -7,7 +7,7 @@ import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  DOBField,
+  DateField,
   ErrorMessage,
   Field,
   FieldGroup,
@@ -170,17 +170,19 @@ const ApplicationMember = () => {
               </div>
 
               <div className="form-card__group border-b">
-                <DOBField
+                <DateField
                   id="applicant.member.dateOfBirth"
                   required={true}
-                  defaultDOB={{
-                    birthDay: member.birthDay,
-                    birthMonth: member.birthMonth,
-                    birthYear: member.birthYear,
+                  defaultDate={{
+                    day: member.birthDay,
+                    month: member.birthMonth,
+                    year: member.birthYear,
                   }}
                   register={register}
                   error={errors}
                   watch={watch}
+                  birthdate={true}
+                  errorMessage={t("errors.dateOfBirthAge")}
                   label={t("application.household.member.dateOfBirth")}
                 />
               </div>

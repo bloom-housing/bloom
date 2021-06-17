@@ -5,7 +5,7 @@ import {
   GridSection,
   ViewItem,
   GridCell,
-  DOBField,
+  DateField,
   Field,
   Select,
   relationshipKeys,
@@ -41,9 +41,9 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
       sameAddress: currentlyEdited?.sameAddress,
       workInRegion: currentlyEdited?.workInRegion,
       dateOfBirth: {
-        birthMonth: currentlyEdited?.birthMonth,
-        birthDay: currentlyEdited?.birthDay,
-        birthYear: currentlyEdited?.birthYear,
+        month: currentlyEdited?.birthMonth,
+        day: currentlyEdited?.birthDay,
+        year: currentlyEdited?.birthYear,
       },
       address: currentlyEdited?.address,
       workAddress: currentlyEdited?.workAddress,
@@ -61,14 +61,14 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
     const data = getValues()
 
     const { sameAddress, workInRegion } = data
-    const { birthMonth, birthDay, birthYear } = data.dateOfBirth
+    const { month, day, year } = data.dateOfBirth
     const formData = {
       createdAt: undefined,
       updatedAt: undefined,
       ...data,
-      birthMonth,
-      birthDay,
-      birthYear,
+      month,
+      day,
+      year,
       sameAddress: sameAddress ? sameAddress : null,
       workInRegion: workInRegion ? workInRegion : null,
     }
@@ -153,15 +153,16 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           </GridCell>
           <GridCell>
             <ViewItem label={t("application.household.member.dateOfBirth")}>
-              <DOBField
+              <DateField
                 id="dateOfBirth"
                 name="dateOfBirth"
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
                 label={t("application.name.yourDateOfBirth")}
+                birthdate={true}
                 readerOnly
-                validateHhAge
+                errorMessage={t("errors.dateOfBirthAge")}
               />
             </ViewItem>
           </GridCell>

@@ -11,7 +11,7 @@ import {
   Form,
   emailRegex,
   t,
-  DOBField,
+  DateField,
   AlertBox,
   SiteAlert,
   Modal,
@@ -108,15 +108,16 @@ export default () => {
           </div>
 
           <div className="form-card__group border-b">
-            <DOBField
+            <DateField
               register={register}
               required={true}
               error={errors.dob}
               name="dob"
               id="dob"
               watch={watch}
-              atAge={true}
+              birthdate={true}
               label={t("authentication.createAccount.yourDateOfBirth")}
+              errorMessage={t("errors.dateOfBirthAge")}
             />
           </div>
 

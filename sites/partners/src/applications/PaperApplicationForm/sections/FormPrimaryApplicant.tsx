@@ -4,7 +4,7 @@ import {
   t,
   GridSection,
   ViewItem,
-  DOBField,
+  DateField,
   Select,
   GridCell,
   Field,
@@ -92,15 +92,16 @@ const FormPrimaryApplicant = () => {
         </GridCell>
         <GridCell>
           <ViewItem label={t("application.household.member.dateOfBirth")}>
-            <DOBField
+            <DateField
               id="dateOfBirth"
               name="dateOfBirth"
               register={register}
               error={errors?.dateOfBirth}
               watch={watch}
-              atAge={true}
+              birthdate={true}
               label={t("application.name.yourDateOfBirth")}
               readerOnly
+              errorMessage={t("errors.dateOfBirthAge")}
             />
           </ViewItem>
         </GridCell>
