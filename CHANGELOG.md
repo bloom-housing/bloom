@@ -74,6 +74,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - Refactored DOBField to be a generic DateField ([#1389](https://github.com/bloom-housing/bloom/pull/1389)) (Emily Jablonski)
+    - **Breaking Change**: you will need to re-name `DOBField` to `DateField`, the `defaultDOB` prop was renamed to `defaultDate`, `atAge` and `validateHhAge` props were removed, and a new optional prop `validateAge18` was added which includes birthdate validation
 
 ## 1.0.0 / 2021-05-21
 
