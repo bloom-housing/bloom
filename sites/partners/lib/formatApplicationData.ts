@@ -55,7 +55,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
 
     // rename default (wrong property names)
-    const { birthDay: submissionDay, birthMonth: submissionMonth, birthYear: submissionYear } =
+    const { day: submissionDay, month: submissionMonth, year: submissionYear } =
       data.dateSubmitted || {}
     const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
 
@@ -201,9 +201,9 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
     const { birthDay, birthMonth, birthYear } = applicationData.applicant
 
     return {
-      birthDay,
-      birthMonth,
-      birthYear,
+      day: birthDay,
+      month: birthMonth,
+      year: birthYear,
     }
   })()
 
@@ -235,9 +235,9 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
     const birthYear = submissionDate.format("YYYY")
 
     return {
-      birthMonth,
-      birthDay,
-      birthYear,
+      month: birthMonth,
+      day: birthDay,
+      year: birthYear,
     }
   })()
 
