@@ -46,7 +46,7 @@ const DateField = (props: DateFieldProps) => {
 
       <div className="field-group--date">
         <Field
-          name={fieldName("month")}
+          name={fieldName(props.validateAge18 ? "birthMonth" : "month")}
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
@@ -66,7 +66,7 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName("day")}
+          name={fieldName(props.validateAge18 ? "birthDay" : "day")}
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
@@ -86,7 +86,7 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName("year")}
+          name={fieldName(props.validateAge18 ? "birthYear" : "year")}
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
