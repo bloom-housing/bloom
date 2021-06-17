@@ -22,6 +22,7 @@ export interface DateFieldProps {
   disabled?: boolean
   readerOnly?: boolean
   birthdate?: boolean
+  validateAge18?: boolean
 }
 
 const DateField = (props: DateFieldProps) => {
@@ -38,7 +39,7 @@ const DateField = (props: DateFieldProps) => {
     console.log("calling validateAge")
     return (
       parseInt(value) > 1900 &&
-      inputDate < moment().subtract(18, "years") &&
+      (props.validateAge18 ? inputDate < moment().subtract(18, "years") : true) &&
       inputDate <= nextYearData
     )
   }
