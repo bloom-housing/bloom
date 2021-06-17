@@ -1,4 +1,4 @@
-import { DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
+import { DateFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
 import { Language, IncomePeriod } from "@bloom-housing/backend-core/types"
 
 type Address = {
@@ -63,9 +63,9 @@ export type ApplicationTypes = {
 }
 
 export type FormTypes = {
-  dateOfBirth: DOBFieldValues
+  dateOfBirth: DateFieldValues
   timeSubmitted: TimeFieldValues
-  dateSubmitted: DOBFieldValues
+  dateSubmitted: DateFieldValues
   phoneNumber: string
   incomeYear?: string
   incomeMonth?: string
