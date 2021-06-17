@@ -97,9 +97,9 @@ const DateField = (props: DateFieldProps) => {
             required: props.required,
             validate: {
               yearRange: (value: string) => {
-                if (value?.length && props.validateAge18) return validateAge(value)
                 if (props.required && value && parseInt(value) < 1900) return false
                 if (!props.required && !value?.length) return true
+                if (value?.length && props.validateAge18) return validateAge(value)
                 return true
               },
             },

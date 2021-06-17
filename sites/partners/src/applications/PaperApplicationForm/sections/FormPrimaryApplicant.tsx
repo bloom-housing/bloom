@@ -101,7 +101,7 @@ const FormPrimaryApplicant = () => {
               validateAge18={true}
               label={t("application.name.yourDateOfBirth")}
               readerOnly
-              errorMessage={t("errors.dateOfBirthAge")}
+              errorMessage={t("errors.dateOfBirthErrorAge")}
             />
           </ViewItem>
         </GridCell>

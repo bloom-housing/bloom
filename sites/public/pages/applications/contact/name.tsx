@@ -143,7 +143,7 @@ const ApplicationName = () => {
               id="applicant.dateOfBirth"
               validateAge18={true}
               watch={watch}
-              errorMessage={t("errors.dateOfBirthAge")}
+              errorMessage={t("errors.dateOfBirthErrorAge")}
               label={
                 <>
                   {t("application.name.yourDateOfBirth")}

@@ -117,7 +117,7 @@ export default () => {
               watch={watch}
               validateAge18={true}
               label={t("authentication.createAccount.yourDateOfBirth")}
-              errorMessage={t("errors.dateOfBirthAge")}
+              errorMessage={t("errors.dateOfBirthErrorAge")}
             />
           </div>
 
@@ -205,14 +205,7 @@ export default () => {
             />
 
             <div className="text-center mt-10">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  console.info("button has been clicked!")
-                }}
-              >
-                {t("account.createAccount")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("account.createAccount")}</Button>
             </div>
           </div>
         </Form>
