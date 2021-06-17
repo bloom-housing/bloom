@@ -141,6 +141,7 @@ const ApplicationName = () => {
               error={errors.applicant}
               name="applicant"
               id="applicant.dateOfBirth"
+              validateAge18={true}
               watch={watch}
               birthdate={true}
               errorMessage={t("errors.dateOfBirthAge")}

@@ -99,6 +99,7 @@ const FormPrimaryApplicant = () => {
               error={errors?.dateOfBirth}
               watch={watch}
               birthdate={true}
+              validateAge18={true}
               label={t("application.name.yourDateOfBirth")}
               readerOnly
               errorMessage={t("errors.dateOfBirthAge")}
