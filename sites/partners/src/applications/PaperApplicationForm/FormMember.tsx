@@ -162,7 +162,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 label={t("application.name.yourDateOfBirth")}
                 birthdate={true}
                 readerOnly
-                errorMessage={t("errors.dateOfBirthAge")}
+                errorMessage={t("errors.dateOfBirth")}
               />
             </ViewItem>
           </GridCell>

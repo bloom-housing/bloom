@@ -182,7 +182,7 @@ const ApplicationMember = () => {
                   error={errors}
                   watch={watch}
                   birthdate={true}
-                  errorMessage={t("errors.dateOfBirthAge")}
+                  errorMessage={t("errors.dateOfBirth")}
                   label={t("application.household.member.dateOfBirth")}
                 />
               </div>
