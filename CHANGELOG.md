@@ -50,11 +50,8 @@ All notable changes to this project will be documented in this file. The format 
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
-    <<<<<<< HEAD
-    =======
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
-    > > > > > > > upstream/master
 
 - Changed:
 
@@ -73,6 +70,10 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+
+- Changed:
+
+  - Refactored DOBField to be a generic DateField ([#1389](https://github.com/bloom-housing/bloom/pull/1389)) (Emily Jablonski)
 
 ## 1.0.0 / 2021-05-21
 
