@@ -10,6 +10,7 @@
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
     "start": "node --optimize_for_size --gc_interval=100  --max_old_space_size=1900 dist/src/main",
+    "start-debug": "node --inspect -r tsconfig-paths/register -r ts-node/register --optimize_for_size --gc_interval=100  --max_old_space_size=1900 dist/src/main",
     "dev": "NODE_ENV=development nest start --watch --preserveWatchOutput",
     "debug": "nest start --debug --watch",
     "db:drop": "psql -c 'DROP DATABASE IF EXISTS bloom;'",
