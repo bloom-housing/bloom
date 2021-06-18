@@ -34,7 +34,7 @@ import {
   DownloadLotteryResults,
   ReferralApplication,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
 
 interface ListingProps {
   listing: Listing
@@ -139,7 +139,7 @@ export const ListingView = (props: ListingProps) => {
   let lotterySection
   if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
     lotterySection = <PublicLotteryEvent event={publicLottery} />
-    if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
+    if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
       lotterySection = <LotteryResultsEvent event={lotteryResults} />
     }
   }

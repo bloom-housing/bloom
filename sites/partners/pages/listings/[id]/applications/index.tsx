@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from "react"
 import { useRouter } from "next/router"
-import moment from "moment"
+import dayjs from "dayjs"
 import Head from "next/head"
 import {
   Field,
@@ -116,7 +116,7 @@ const ApplicationsList = () => {
       })
 
       const now = new Date()
-      const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
+      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
 
       const blob = new Blob([content], { type: "text/csv" })
       const fileLink = document.createElement("a")

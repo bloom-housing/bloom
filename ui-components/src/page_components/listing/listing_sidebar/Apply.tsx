@@ -4,7 +4,7 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
 } from "@bloom-housing/backend-core/types"
-import moment from "moment"
+import dayjs from "dayjs"
 import { t } from "../../../helpers/translator"
 import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
@@ -52,7 +52,7 @@ const Apply = (props: ApplyProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
-  const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
+  const openDate = dayjs(listing.applicationOpenDate).format("MMMM D, YYYY")
 
   if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
     onlineApplicationUrl = `${internalFormRoute}?listingId=${listing.id}`
@@ -146,10 +146,10 @@ const Apply = (props: ApplyProps) => {
                 {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
                   ?.acceptsPostmarkedApplications
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
-                      applicationDueDate: moment(listing.applicationDueDate).format(
+                      applicationDueDate: dayjs(listing.applicationDueDate).format(
                         `MMM. DD, YYYY [${t("t.at")}] h A`
                       ),
-                      postmarkReceivedByDate: moment(
+                      postmarkReceivedByDate: dayjs(
                         listing.postmarkedApplicationsReceivedByDate
                       ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
                       developer: listing.property.developer,

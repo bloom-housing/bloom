@@ -1,5 +1,5 @@
 import * as React from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { Apply } from "./Apply"
 import { Waitlist } from "./Waitlist"
@@ -19,8 +19,8 @@ const showWaitlist = (listing: Listing) => {
 
 const ApplicationSection = (props: ApplicationSectionProps) => {
   const listing = props.listing
-  const dueDate = moment(listing.applicationDueDate)
-  const nowTime = moment()
+  const dueDate = dayjs(listing.applicationDueDate)
+  const nowTime = dayjs()
 
   // If applications are closed, hide this section
   if (nowTime > dueDate) return null

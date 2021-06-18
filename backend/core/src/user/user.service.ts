@@ -11,7 +11,7 @@ import { FindConditions, Repository } from "typeorm"
 import { randomBytes, scrypt } from "crypto"
 import { EmailDto, UserCreateDto, UserUpdateDto } from "./dto/user.dto"
 import { decode, encode } from "jwt-simple"
-import moment from "moment"
+import dayjs from "dayjs"
 import { UpdatePasswordDto } from "./dto/update-password.dto"
 import { ConfirmDto } from "./dto/confirm.dto"
 import { assignDefined } from "../shared/assign-defined"
@@ -85,7 +85,7 @@ export class UserService {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
     const payload = decode(dto.token, process.env.APP_SECRET)
-    if (moment(payload.expiresAt) < moment()) {
+    if (dayjs(payload.expiresAt) < dayjs()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
     user.confirmedAt = new Date()
@@ -110,7 +110,7 @@ export class UserService {
         USER_ERRORS.ACCOUNT_CONFIRMED.status
       )
     } else {
-      const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
+      const payload = { id: user.id, expiresAt: dayjs().add(24, "hours") }
       const token = encode(payload, process.env.APP_SECRET)
       user.confirmationToken = token
       try {
@@ -135,7 +135,7 @@ export class UserService {
     user.dob = dto.dob
     user.email = dto.email
     user.language = dto.language
-    const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
+    const payload = { id: user.id, expiresAt: dayjs().add(24, "hours") }
     const token = encode(payload, process.env.APP_SECRET)
     user.confirmationToken = token
     try {
@@ -154,7 +154,7 @@ export class UserService {
     }
 
     // Token expires in 24 hours
-    const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
+    const payload = { id: user.id, expiresAt: dayjs().add(1, "hour") }
     const token = encode(payload, process.env.APP_SECRET)
     user.resetToken = token
     await this.repo.save(user)
@@ -168,7 +168,7 @@ export class UserService {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
     const payload = decode(user.resetToken, process.env.APP_SECRET)
-    if (moment(payload.expiresAt) < moment()) {
+    if (dayjs(payload.expiresAt) < dayjs()) {
       throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
     }
     user.passwordHash = await this.passwordToHash(dto.password)

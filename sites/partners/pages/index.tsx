@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
 import { PageHeader, t, lRoute, UserContext } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
@@ -69,7 +69,7 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
+        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YYYY"),
       },
       {
         headerName: t("listings.availableUnits"),

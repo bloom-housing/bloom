@@ -3,7 +3,7 @@ import { render, cleanup } from "@testing-library/react"
 import { LeasingAgent } from "../../src/page_components/listing/listing_sidebar/LeasingAgent"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
+import dayjs from "dayjs"
 
 afterEach(cleanup)
 
@@ -17,7 +17,7 @@ describe("<LeasingAgent>", () => {
   })
   it("renders nothing if application is not open", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
-    listing.applicationOpenDate = new Date(moment().add(10, "days").format())
+    listing.applicationOpenDate = new Date(dayjs().add(10, "days").format())
     const { queryByText } = render(<LeasingAgent listing={listing} />)
     expect(queryByText(listing.leasingAgentName)).toBeNull()
     expect(queryByText(listing.leasingAgentPhone, { exact: false })).toBeNull()

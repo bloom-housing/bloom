@@ -1,7 +1,7 @@
-import moment from "moment"
+import dayjs from "dayjs"
 import { Listing } from "@bloom-housing/backend-core/types"
 
 export const openDateState = (listing: Listing) => {
-  const nowTime = moment()
-  return listing.applicationOpenDate && nowTime < moment(listing.applicationOpenDate)
+  const nowTime = dayjs()
+  return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
 }

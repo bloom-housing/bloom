@@ -2,7 +2,7 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { SidebarAddress } from "../../src/page_components/listing/listing_sidebar/SidebarAddress"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
-import moment from "moment"
+import dayjs from "dayjs"
 
 afterEach(cleanup)
 
@@ -17,8 +17,8 @@ describe("<SidebarAddress>", () => {
       <SidebarAddress
         address={{
           id: "abcd1234",
-          createdAt: new Date(moment().format()),
-          updatedAt: new Date(moment().format()),
+          createdAt: new Date(dayjs().format()),
+          updatedAt: new Date(dayjs().format()),
         }}
         officeHours={"These are my office hours"}
       />

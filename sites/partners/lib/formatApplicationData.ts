@@ -19,7 +19,11 @@ import {
   YesNoAnswer,
   ApplicationTypes,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(utc)
+dayjs.extend(customParseFormat)
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -61,12 +65,12 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 
-    const dateString = moment(
+    const dateString = dayjs(
       `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
       "MM/DD/YYYY hh:mm:ss A"
     ).format(TIME_24H_FORMAT)
 
-    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
+    const formattedDate = dayjs(dateString, TIME_24H_FORMAT).utc(true).toDate()
 
     return formattedDate
   })()
@@ -138,15 +142,15 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     data.application.incomeVouchers === YesNoAnswer.Yes
       ? true
       : data.application.incomeVouchers === YesNoAnswer.No
-      ? false
-      : null
+        ? false
+        : null
 
   const acceptedTerms =
     data.application.acceptedTerms === YesNoAnswer.Yes
       ? true
       : data.application.acceptedTerms === YesNoAnswer.No
-      ? false
-      : null
+        ? false
+        : null
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionType.paper
   const status = ApplicationStatus.submitted
@@ -194,7 +198,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
 export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
-    ? moment(new Date(applicationData.submissionDate)).utc()
+    ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null
 
   const dateOfBirth = (() => {
@@ -264,15 +268,15 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       applicationData.incomeVouchers === null
         ? null
         : applicationData.incomeVouchers
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
+          ? YesNoAnswer.Yes
+          : YesNoAnswer.No
 
     const acceptedTerms: YesNoAnswer =
       applicationData.acceptedTerms === null
         ? null
         : applicationData.acceptedTerms
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
+          ? YesNoAnswer.Yes
+          : YesNoAnswer.No
     const workInRegion = applicationData.applicant.workInRegion as YesNoAnswer
 
     const applicant = {

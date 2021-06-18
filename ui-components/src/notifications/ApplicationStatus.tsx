@@ -1,5 +1,5 @@
 import * as React from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import { t } from "../helpers/translator"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { openDateState } from "../helpers/state"
@@ -24,7 +24,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   if (openDateState(listing)) {
     const date = listing.applicationOpenDate
-    const openDate = moment(date)
+    const openDate = dayjs(date)
     formattedDate = openDate.format("MMMM D, YYYY")
 
     bgColor = vivid ? "bg-primary" : "bg-primary-light"
@@ -32,11 +32,11 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   } else {
     const date = listing.applicationDueDate
     if (listing.applicationDueDate) {
-      const dueDate = moment(date)
+      const dueDate = dayjs(date)
       formattedDate = dueDate.format("MMM. DD, YYYY") + " at " + dueDate.format("h:mm A")
 
       // if due date is in future, listing is open
-      if (moment() < dueDate) {
+      if (dayjs() < dueDate) {
         bgColor = vivid ? "bg-primary" : "bg-primary-light"
         content = t("listings.applicationDeadline")
       } else {

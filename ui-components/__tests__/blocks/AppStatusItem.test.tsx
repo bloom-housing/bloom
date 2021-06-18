@@ -3,7 +3,7 @@ import { render, cleanup, fireEvent } from "@testing-library/react"
 import { AppStatusItem } from "../../src/blocks/AppStatusItem"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
-import moment from "moment"
+import dayjs from "dayjs"
 import { t } from "../../src/helpers/translator"
 
 const listing = Object.assign({}, ArcherListing) as Listing
@@ -13,7 +13,7 @@ afterEach(cleanup)
 
 describe("<AppStatusItem>", () => {
   it("renders properly for an in progress application", () => {
-    listing.applicationDueDate = new Date(moment().add(10, "days").format())
+    listing.applicationDueDate = new Date(dayjs().add(10, "days").format())
     const { getByText, queryByText } = render(
       <AppStatusItem application={application} listing={listing} />
     )

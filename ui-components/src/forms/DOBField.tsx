@@ -1,7 +1,9 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 
 export type DOBFieldValues = {
   birthDay: string
@@ -39,14 +41,14 @@ const DOBField = (props: DOBFieldProps) => {
 
     return (
       parseInt(value) > 1900 &&
-      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
-        moment().subtract(atAge ? 18 : 0, "years")
+      dayjs(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
+      dayjs().subtract(atAge ? 18 : 0, "years")
     )
   }
 
   const validateHouseholdMemberAge = (value: string) => {
-    const nextYearData = moment().add(1, "year")
-    const inputDate = moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY")
+    const nextYearData = dayjs().add(1, "year")
+    const inputDate = dayjs(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY")
 
     return parseInt(value) > 1900 && inputDate <= nextYearData
   }

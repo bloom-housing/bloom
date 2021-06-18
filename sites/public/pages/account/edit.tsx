@@ -1,5 +1,4 @@
 import React, { useContext, useState, useRef } from "react"
-import moment from "moment"
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -21,6 +20,9 @@ import {
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 
 type AlertMessage = {
   type: AlertTypes
@@ -66,7 +68,7 @@ const Edit = () => {
       await userService.update({
         body: {
           ...profile,
-          dob: moment(
+          dob: dayjs(
             `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
           ).toDate(),
         },
@@ -193,9 +195,9 @@ const Edit = () => {
                 error={errors?.dateOfBirth}
                 watch={watch}
                 defaultDOB={{
-                  birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
-                  birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
-                  birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
+                  birthDay: profile ? dayjs(new Date(profile.dob)).utc().format("DD") : null,
+                  birthMonth: profile ? dayjs(new Date(profile.dob)).utc().format("MM") : null,
+                  birthYear: profile ? dayjs(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
                 errorMessage={t("errors.dateOfBirthError")}

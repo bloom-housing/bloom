@@ -1,7 +1,7 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, Transform, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   PreferenceCreateDto,
   PreferenceDto,
@@ -64,7 +64,7 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @Transform((_value, listing) => {
-    if (moment(listing.applicationDueDate).isBefore()) {
+    if (dayjs(listing.applicationDueDate).isBefore(dayjs())) {
       listing.status = ListingStatus.closed
     }
 

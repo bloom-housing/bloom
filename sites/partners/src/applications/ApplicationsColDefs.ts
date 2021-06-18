@@ -1,13 +1,15 @@
 import { t, formatIncome, formatYesNoLabel } from "@bloom-housing/ui-components"
 import { IncomePeriod, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 import { convertDataToPst } from "../../lib/helpers"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 
 function compareDates(a, b, node, nextNode, isInverted) {
   const dateStringFormat = "MM/DD/YYYY at hh:mm:ss A"
 
-  const dateA = moment(a, dateStringFormat)
-  const dateB = moment(b, dateStringFormat)
+  const dateA = dayjs(a, dateStringFormat)
+  const dateB = dayjs(b, dateStringFormat)
 
   if (a && b && dateA.isSame(dateB)) {
     return 0

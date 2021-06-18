@@ -3,7 +3,7 @@ import { render, cleanup } from "@testing-library/react"
 import { Hero } from "../../src/headers/Hero"
 import Archer from "../../__tests__/fixtures/archer.json"
 import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
+import dayjs from "dayjs"
 
 afterEach(cleanup)
 
@@ -22,8 +22,8 @@ describe("<Hero>", () => {
   })
   it("renders with closed listings", () => {
     const pastArcher = archer
-    pastArcher.applicationDueDate = moment().subtract(10, "days").format()
-    pastArcher.applicationOpenDate = moment().subtract(15, "days").format()
+    pastArcher.applicationDueDate = dayjs().subtract(10, "days").format()
+    pastArcher.applicationOpenDate = dayjs().subtract(15, "days").format()
     const { getByText } = render(
       <Hero
         title={<>Say Hello to Your Hero</>}
@@ -40,8 +40,8 @@ describe("<Hero>", () => {
   })
   it("renders with some listings open", () => {
     const futureArcher = archer
-    futureArcher.applicationDueDate = moment().add(15, "days").format()
-    futureArcher.applicationOpenDate = moment().subtract(10, "days").format()
+    futureArcher.applicationDueDate = dayjs().add(15, "days").format()
+    futureArcher.applicationOpenDate = dayjs().subtract(10, "days").format()
     const { getByText } = render(
       <Hero
         title={<>Say Hello to Your Hero</>}

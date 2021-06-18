@@ -1,7 +1,7 @@
 import * as React from "react"
 import { LinkButton } from "../actions/LinkButton"
 import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
+import dayjs from "dayjs"
 import { t } from "../helpers/translator"
 import { openDateState } from "../helpers/state"
 import "./Hero.scss"
@@ -19,7 +19,7 @@ export interface HeroProps {
 }
 
 const listingOpen = (listing: Listing) => {
-  return moment() < moment(listing.applicationDueDate)
+  return dayjs() < dayjs(listing.applicationDueDate)
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (

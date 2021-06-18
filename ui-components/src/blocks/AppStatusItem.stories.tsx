@@ -1,7 +1,7 @@
 import React from "react"
 import { AppStatusItem } from "./AppStatusItem"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
-import moment from "moment"
+import dayjs from "dayjs"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 const listing = Object.assign({}, ArcherListing) as Listing
 
@@ -11,7 +11,7 @@ export default {
 
 const application = {} as Application
 let days = 10
-listing.applicationDueDate = new Date(moment().add(days, "days").format())
+listing.applicationDueDate = new Date(dayjs().add(days, "days").format())
 application.listing = listing
 application.updatedAt = new Date()
 

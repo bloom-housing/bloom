@@ -18,7 +18,7 @@ import {
   passwordRegex,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import moment from "moment"
+import dayjs from "dayjs"
 import { useRouter } from "next/router"
 
 export default () => {
@@ -42,7 +42,7 @@ export default () => {
       await createUser(
         {
           ...rest,
-          dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+          dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
           language,
         },
         language

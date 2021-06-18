@@ -1,6 +1,6 @@
 import React from "react"
 import "./AppStatusItem.scss"
-import moment from "moment"
+import dayjs from "dayjs"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { t } from "../helpers/translator"
@@ -13,8 +13,8 @@ interface AppStatusItemProps {
 const AppStatusItem = (props: AppStatusItemProps) => {
   const { application, listing } = props
 
-  const applicationDueDate = moment(listing.applicationDueDate)
-  const editDate = moment(application.updatedAt)
+  const applicationDueDate = dayjs(listing.applicationDueDate)
+  const editDate = dayjs(application.updatedAt)
 
   return (
     <article className="status-item is-editable animated-fade">

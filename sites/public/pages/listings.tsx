@@ -1,6 +1,6 @@
 import Head from "next/head"
 import axios from "axios"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   ListingsGroup,
   ListingsList,
@@ -66,16 +66,16 @@ export async function getStaticProps() {
 
   try {
     const response = await axios.get(process.env.listingServiceUrl)
-    const nowTime = moment()
+    const nowTime = dayjs()
     openListings = response.data.filter((listing: Listing) => {
       return (
         openDateState(listing) ||
-        nowTime <= moment(listing.applicationDueDate) ||
+        nowTime <= dayjs(listing.applicationDueDate) ||
         listing.applicationDueDate == null
       )
     })
     closedListings = response.data.filter((listing: Listing) => {
-      return nowTime > moment(listing.applicationDueDate)
+      return nowTime > dayjs(listing.applicationDueDate)
     })
   } catch (error) {
     console.error(error)
