@@ -52,11 +52,8 @@ All notable changes to this project will be documented in this file. The format 
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
-    <<<<<<< HEAD
-    =======
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
-    > > > > > > > upstream/master
 
 - Changed:
 
@@ -71,6 +68,7 @@ All notable changes to this project will be documented in this file. The format 
   - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+  - Generic date component ([#1392](https://github.com/bloom-housing/bloom/pull/1392)) (Emily Jablonski)
 
 - Fixed:
 
