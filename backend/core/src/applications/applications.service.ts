@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from "@nestjs/common"
+import { HttpException, HttpStatus, Inject, Injectable, Scope } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -158,23 +158,39 @@ export class ApplicationsService {
 
   private async _create(applicationCreateDto: ApplicationUpdateDto) {
     let application: Application
-    await retry(
-      async (bail) => {
-        try {
-          application = await this._createApplication(applicationCreateDto)
-        } catch (e) {
-          console.error(e.message)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          if (!(e instanceof QueryFailedError && e.code === "40001")) {
-            // 40001: could not serialize access due to read/write dependencies among transactions
-            bail(e)
+
+    try {
+      await retry(
+        async (bail) => {
+          try {
+            application = await this._createApplication(applicationCreateDto)
+          } catch (e) {
+            console.error(e.message)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (!(e instanceof QueryFailedError && e.code === "40001")) {
+              // 40001: could not serialize access due to read/write dependencies among transactions
+              bail(e)
+            }
+            throw e
           }
-          throw e
-        }
-      },
-      { retries: 5, minTimeout: 200 }
-    )
+        },
+        { retries: 6, minTimeout: 200 }
+      )
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (e instanceof QueryFailedError && e.code === "40001") {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.TOO_MANY_REQUESTS,
+            error: "Too Many Requests",
+            message: "Please try again later.",
+          },
+          429
+        )
+      }
+    }
 
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {

@@ -83,21 +83,24 @@ export class ApplicationFlaggedSetsService {
       const appsToBeResolved = afs.applications.filter((afsApp) =>
         dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
       )
+
       const appsNotToBeResolved = afs.applications.filter(
         (afsApp) => !dto.applications.map((appIdDto) => appIdDto.id).includes(afsApp.id)
       )
 
       for (const appToBeResolved of appsToBeResolved) {
         appToBeResolved.markedAsDuplicate = true
-        await transApplicationsRepository.save(appToBeResolved)
       }
 
       for (const appNotToBeResolved of appsNotToBeResolved) {
         appNotToBeResolved.markedAsDuplicate = false
-        await transApplicationsRepository.save(appNotToBeResolved)
       }
+
+      await transApplicationsRepository.save([...appsToBeResolved, ...appsNotToBeResolved])
+
       appsToBeResolved.forEach((app) => (app.markedAsDuplicate = true))
       await transAfsRepository.save(afs)
+
       return afs
     })
   }
