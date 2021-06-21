@@ -54,7 +54,9 @@ export class ListingsController {
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   @UseInterceptors(CacheInterceptor)
   async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
-    return mapTo(ListingDto, await this.listingsService.findOne(listingId))
+    const result = mapTo(ListingDto, await this.listingsService.findOne(listingId))
+
+    return result
   }
 
   @Put(`:listingId`)

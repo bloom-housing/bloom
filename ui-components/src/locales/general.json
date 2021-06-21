@@ -767,7 +767,6 @@
       "updatedDate": "Date Updated",
       "id": "Listing ID"
     },
-    "developer": "Housing Developer",
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
     "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
@@ -806,12 +805,9 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
-    "property": {
-      "id": "Property ID",
-      "title": "Property Data",
-      "developer": "Housing Developer",
-      "buildingAddress": "Address"
-    },
+    "title": "Property Data",
+    "developer": "Housing Developer",
+    "buildingAddress": "Address",
     "publicLottery": {
       "header": "Public Lottery",
       "seeVideo": "See Video"

@@ -1,14 +1,20 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import { plainToClass } from "class-transformer"
+import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
+import { Property } from "../property/entities/property.entity"
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}
+  constructor(
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    @InjectRepository(Property) private readonly propertyRepository: Repository<Property>
+  ) {}
 
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
@@ -36,25 +42,38 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    return Listing.save(listingDto)
+    const listing = Listing.create({
+      ...listingDto,
+      property: plainToClass(PropertyCreateDto, listingDto),
+    })
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const listing = await Listing.findOneOrFail({
+    const listing = await Listing.findOne({
       where: { id: listingDto.id },
       relations: ["property"],
     })
-    /*
-      NOTE: Object.assign would replace listing.property of type Property with object of type IdDto
-       coming from ListingUpdateDto, which is causing a problem for dynamically computed
-       listingUrlSlug property (it requires property.buildingAddress.city to exist). The solution is
-       to assign this separately so that other properties (outside of IdDto type) of
-       listing.property are retained.
-    */
-    const { property, ...dto } = listingDto
-    Object.assign(listing, dto)
-    Object.assign(listing.property, property)
-    return await listing.save()
+    if (!listing) {
+      throw new NotFoundException()
+    }
+
+    Object.assign(listing, {
+      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      property: plainToClass(
+        PropertyUpdateDto,
+        {
+          // NOTE: Create a property out of fields encapsulated in listingDto
+          ...listingDto,
+          // NOTE: Since we use the entire listingDto to create a property object the listing ID
+          //  would overwrite propertyId fetched from DB
+          id: listing.property.id,
+        },
+        { excludeExtraneousValues: true }
+      ),
+    })
+
+    return await this.listingRepository.save(listing)
   }
 
   async delete(listingId: string) {
@@ -65,11 +84,15 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    return await this.getQueryBuilder()
+    const result = await this.getQueryBuilder()
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",
       })
       .getOne()
+    if (!result) {
+      throw new NotFoundException()
+    }
+    return result
   }
 }

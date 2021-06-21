@@ -73,9 +73,6 @@ const defaults: FormListing = {
   postmarkedApplicationsReceivedByDate: new Date(),
   preferences: [],
   programRules: "",
-  property: {
-    id: "", // FYI listings won't save without an actual ID
-  },
   rentalAssistance: "",
   rentalHistory: "",
   requiredDocuments: "",
@@ -83,6 +80,21 @@ const defaults: FormListing = {
   waitlistCurrentSize: 0,
   waitlistMaxSize: 0,
   whatToExpect: [],
+  units: [],
+  accessibility: "",
+  amenities: "",
+  buildingAddress: defaultAddress,
+  buildingTotalUnits: 0,
+  developer: "",
+  householdSizeMax: 0,
+  householdSizeMin: 0,
+  neighborhood: "",
+  petPolicy: "",
+  smokingPolicy: "",
+  unitsAvailable: 0,
+  unitAmenities: "",
+  servicesOffered: "",
+  yearBuilt: 0,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

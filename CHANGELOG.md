@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
+  - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
 
 ### Frontend
 

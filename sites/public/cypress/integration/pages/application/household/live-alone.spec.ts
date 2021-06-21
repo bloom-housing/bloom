@@ -11,10 +11,8 @@ describe("applications/household/live-alone", function () {
 
   it("Should move to preferred-units and save members value", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -62,10 +60,8 @@ describe("applications/household/live-alone", function () {
 
   it("Should move to members-info and save members value", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
