@@ -71,18 +71,19 @@ Test if Redis is working:
 
 ### Debugging
 
-You can connect a debugger to the backend by starting the backend server with `yarn start-debug`.
+You can connect a debugger to the backend by starting the backend server with `yarn debug`.
 
 To connect to it from VS Code, add a configuration to launch.json that looks like
 ```shell script
 {
-  "name": "Attach to backend",
+  "name": "Attach to Backend",
   "port": 9229,
   "request": "attach",
   "skipFiles": [
     "<node_internals>/**"
   ],
-  "type": "pwa-node"
+  "type": "node",
+  "restart": true
 },
 ```
 
