@@ -57,7 +57,7 @@ const DOBField = (props: DOBFieldProps) => {
           disabled={props.disabled}
           readerOnly={true}
           placeholder="MM"
-          defaultValue={defaultDOB?.birthMonth ?? ""}
+          defaultValue={defaultDOB?.birthMonth ? defaultDOB.birthMonth : ""}
           error={error?.birthMonth !== undefined}
           validation={{
             required: props.required,
@@ -78,7 +78,7 @@ const DOBField = (props: DOBFieldProps) => {
           disabled={props.disabled}
           readerOnly={true}
           placeholder="DD"
-          defaultValue={defaultDOB?.birthDay ?? ""}
+          defaultValue={defaultDOB?.birthDay ? defaultDOB.birthDay : ""}
           error={error?.birthDay !== undefined}
           validation={{
             required: props.required,
@@ -99,7 +99,7 @@ const DOBField = (props: DOBFieldProps) => {
           disabled={props.disabled}
           readerOnly={true}
           placeholder="YYYY"
-          defaultValue={defaultDOB?.birthYear ?? ""}
+          defaultValue={defaultDOB?.birthYear ? defaultDOB.birthYear : ""}
           error={error?.birthYear !== undefined}
           validation={{
             required: props.required,
