@@ -26,11 +26,13 @@ export interface DateFieldProps {
 
 const DateField = (props: DateFieldProps) => {
   const { defaultDate, error, register, watch, name, id, errorMessage } = props
-  const fieldName = (baseName: string) => {
+
+  const getFieldName = (baseName: string) => {
+    // Append overall date field name to individual date field name
     return [name, baseName].filter((item) => item).join(".")
   }
-  const day = watch(fieldName("day"))
-  const month = watch(fieldName("month"))
+  const day = watch(getFieldName("day"))
+  const month = watch(getFieldName("month"))
 
   const validateAge = (value: string) => {
     const inputDate = moment(`${month}/${day}/${value}`, "MM/DD/YYYY")
@@ -46,7 +48,7 @@ const DateField = (props: DateFieldProps) => {
 
       <div className="field-group--date">
         <Field
-          name={fieldName(props.validateAge18 ? "birthMonth" : "month")}
+          name={getFieldName(props.validateAge18 ? "birthMonth" : "month")}
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
@@ -66,7 +68,7 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName(props.validateAge18 ? "birthDay" : "day")}
+          name={getFieldName(props.validateAge18 ? "birthDay" : "day")}
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
@@ -86,7 +88,7 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName(props.validateAge18 ? "birthYear" : "year")}
+          name={getFieldName(props.validateAge18 ? "birthYear" : "year")}
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
@@ -98,6 +100,9 @@ const DateField = (props: DateFieldProps) => {
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
+                if (props.required && value && parseInt(value) > moment().year() + 10) {
+                  return false
+                }
                 if (!props.required && !value?.length) return true
                 if (value?.length && props.validateAge18) return validateAge(value)
                 return true
