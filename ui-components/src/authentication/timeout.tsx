@@ -1,5 +1,5 @@
 import React, { createElement, FunctionComponent, useContext, useEffect, useState } from "react"
-import { UserContext } from "./UserContext"
+import { AuthContext } from "./AuthContext"
 import { ConfigContext, NavigationContext } from "../config"
 import { Button } from "../actions/Button"
 import { Modal } from "../overlays/Modal"
@@ -105,7 +105,7 @@ export const IdleTimeout: FunctionComponent<IdleTimeoutProps> = ({
 }
 
 export const LoggedInUserIdleTimeout = ({ onTimeout }: { onTimeout?: () => unknown }) => {
-  const { profile, signOut } = useContext(UserContext)
+  const { profile, signOut } = useContext(AuthContext)
 
   const timeoutFxn = async () => {
     onTimeout && (await onTimeout())
