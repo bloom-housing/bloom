@@ -1,4 +1,5 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
+import { CountyCode } from "../shared/types/county-code"
 
 export class addJurisdictionsTable1624272587523 implements MigrationInterface {
     name = 'addJurisdictionsTable1624272587523'
@@ -11,8 +12,12 @@ export class addJurisdictionsTable1624272587523 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "preferences" ALTER COLUMN "page" DROP DEFAULT`);
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_8317da96d5a775889e2631cc25" ON "translations" ("county_code", "language") `);
         await queryRunner.query(`ALTER TABLE "listings" ADD CONSTRAINT "FK_ba0026e02ecfe91791aed1a4818" FOREIGN KEY ("jurisdiction_id") REFERENCES "jurisdictions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
-        for(const countyName of ["Alameda", "San Jose", "San Mateo"]) {
-            await queryRunner.query(`INSERT INTO "jurisdictions" (name) VALUES ($1)`, [countyName]);
+        for(const jurisdictionName of [CountyCode.alameda, CountyCode.san_jose, CountyCode.san_mateo]) {
+            const jurisdiction = await queryRunner.query(`INSERT INTO "jurisdictions" (name) VALUES ($1)`, [jurisdictionName]);
+            const listingsMatchingJurisdiction = await queryRunner.query(`SELECT id from listings where county_code = ($1)`, [jurisdictionName])
+            for (const listing of listingsMatchingJurisdiction) {
+              await queryRunner.query(`UPDATE listings SET jurisdiction_id = ($1) WHERE id = ($2)`, [jurisdiction.id, listing.id])
+            }
         }
     }
 
