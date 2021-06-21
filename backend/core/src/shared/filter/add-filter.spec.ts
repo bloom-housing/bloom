@@ -1,4 +1,4 @@
-import addFilter from "."
+import { addFilter } from "."
 
 describe("addFilter", () => {
   let mockRepo, andWhere
@@ -15,11 +15,12 @@ describe("addFilter", () => {
   it("Should add = filter", () => {
     const qb = mockRepo.createQueryBuilder()
     addFilter(
-      {
-        foo: {
-          "=": "bar",
+      [
+        {
+          operator: "=",
+          foo: "bar",
         },
-      },
+      ],
       "listings",
       qb
     )
@@ -30,11 +31,12 @@ describe("addFilter", () => {
   it("Should add <> filter", () => {
     const qb = mockRepo.createQueryBuilder()
     addFilter(
-      {
-        foo: {
-          "<>": "bar",
+      [
+        {
+          operator: "<>",
+          foo: "bar",
         },
-      },
+      ],
       "listings",
       qb
     )
@@ -45,14 +47,16 @@ describe("addFilter", () => {
   it("Should add = and <> filters", () => {
     const qb = mockRepo.createQueryBuilder()
     addFilter(
-      {
-        foo: {
-          "=": "bar",
+      [
+        {
+          operator: "=",
+          foo: "bar",
         },
-        bar: {
-          "<>": "foo",
+        {
+          operator: "<>",
+          bar: "foo",
         },
-      },
+      ],
       "listings",
       qb
     )

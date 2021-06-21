@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common"
 import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
-import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
+import { ListingCreateDto, ListingUpdateDto, ListingWhereParams } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import addFilter from "../shared/filter"
+import { addFilter } from "../shared/filter"
 
 @Injectable()
 export class ListingsService {
@@ -21,11 +21,11 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
   }
 
-  public async list(jsonpath, filter): Promise<Listing[]> {
+  public async list(jsonpath?: string, filter?: ListingWhereParams[]): Promise<Listing[]> {
     const qb = this.getQueryBuilder()
 
     if (filter) {
-      addFilter(filter, "listings", qb)
+      addFilter<ListingWhereParams>(filter, "listings", qb)
     }
 
     qb.orderBy({
