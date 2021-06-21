@@ -157,8 +157,9 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 id="dateOfBirth"
                 name="dateOfBirth"
                 register={register}
-                error={errors?.dateOfBirth}
+                error={errors?.dateOfBirth !== undefined}
                 watch={watch}
+                birthdate={true}
                 label={t("application.name.yourDateOfBirth")}
                 readerOnly
                 errorMessage={t("errors.dateOfBirth")}

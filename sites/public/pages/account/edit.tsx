@@ -198,6 +198,7 @@ const Edit = () => {
                 label={t("application.name.yourDateOfBirth")}
                 errorMessage={t("errors.dateOfBirthErrorAge")}
                 validateAge18={true}
+                birthdate={true}
               />
               <div className="text-center mt-5">
                 <Button className="items-center">{t("account.settings.update")}</Button>

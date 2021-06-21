@@ -179,8 +179,9 @@ const ApplicationMember = () => {
                     year: member.birthYear,
                   }}
                   register={register}
-                  error={errors}
+                  error={errors !== undefined}
                   watch={watch}
+                  birthdate={true}
                   errorMessage={t("errors.dateOfBirth")}
                   label={t("application.household.member.dateOfBirth")}
                 />

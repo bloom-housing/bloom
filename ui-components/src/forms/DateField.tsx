@@ -2,15 +2,16 @@ import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
 import moment from "moment"
-import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
+import { UseFormMethods } from "react-hook-form"
 
 export type DateFieldValues = {
   day: string
   month: string
   year: string
 }
+
 export interface DateFieldProps {
-  error?: DeepMap<DateFieldValues, FieldError>
+  error?: boolean
   errorMessage?: string
   label: React.ReactNode
   register: UseFormMethods["register"]
@@ -21,6 +22,7 @@ export interface DateFieldProps {
   required?: boolean
   disabled?: boolean
   readerOnly?: boolean
+  birthdate?: boolean
   validateAge18?: boolean
 }
 
@@ -31,8 +33,8 @@ const DateField = (props: DateFieldProps) => {
     // Append overall date field name to individual date field name
     return [name, baseName].filter((item) => item).join(".")
   }
-  const day = watch(getFieldName("day"))
-  const month = watch(getFieldName("month"))
+  const day = watch(getFieldName(props.birthdate ? "birthDay" : "day"))
+  const month = watch(getFieldName(props.birthdate ? "birthMonth" : "month"))
 
   const validateAge = (value: string) => {
     const inputDate = moment(`${month}/${day}/${value}`, "MM/DD/YYYY")
@@ -48,13 +50,13 @@ const DateField = (props: DateFieldProps) => {
 
       <div className="field-group--date">
         <Field
-          name={getFieldName(props.validateAge18 ? "birthMonth" : "month")}
+          name={getFieldName(props.birthdate ? "birthMonth" : "month")}
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="MM"
           defaultValue={defaultDate?.month ? defaultDate.month : ""}
-          error={error?.month !== undefined}
+          error={error}
           validation={{
             required: props.required,
             validate: {
@@ -68,13 +70,13 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={getFieldName(props.validateAge18 ? "birthDay" : "day")}
+          name={getFieldName(props.birthdate ? "birthDay" : "day")}
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="DD"
           defaultValue={defaultDate?.day ? defaultDate.day : ""}
-          error={error?.day !== undefined}
+          error={error}
           validation={{
             required: props.required,
             validate: {
@@ -88,21 +90,19 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
         <Field
-          name={getFieldName(props.validateAge18 ? "birthYear" : "year")}
+          name={getFieldName(props.birthdate ? "birthYear" : "year")}
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="YYYY"
           defaultValue={defaultDate?.year ? defaultDate.year : ""}
-          error={error?.year !== undefined}
+          error={error}
           validation={{
             required: props.required,
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
-                if (props.required && value && parseInt(value) > moment().year() + 10) {
-                  return false
-                }
+                if (props.required && value && parseInt(value) > moment().year() + 10) return false
                 if (!props.required && !value?.length) return true
                 if (value?.length && props.validateAge18) return validateAge(value)
                 return true
@@ -114,7 +114,7 @@ const DateField = (props: DateFieldProps) => {
         />
       </div>
 
-      {(error?.month || error?.day || error?.year) && (
+      {error && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
             {errorMessage ? errorMessage : t("errors.dateError")}

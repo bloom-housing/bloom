@@ -138,10 +138,15 @@ const ApplicationName = () => {
               disabled={autofilled}
               register={register}
               required={true}
-              error={errors.applicant}
+              error={
+                errors.applicant?.birthDay ||
+                errors.applicant?.birthMonth ||
+                errors.applicant?.birthYear
+              }
               name="applicant"
               id="applicant.dateOfBirth"
               validateAge18={true}
+              birthdate={true}
               watch={watch}
               errorMessage={t("errors.dateOfBirthErrorAge")}
               label={
