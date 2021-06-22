@@ -10,7 +10,6 @@ archer.property = {}
 archer.property.unitsSummarized = {}
 archer.property.unitsSummarized.byNonReservedUnitType = []
 archer.property.unitsSummarized.byReservedType = []
-archer.waitlistCurrentSize = 300
 
 triton.property = {}
 triton.property.unitsSummarized = {}
