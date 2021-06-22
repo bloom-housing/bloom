@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file. The format 
   - `/assets` endpoints (create and createPresignedUploadMetadata)
   - "noEmailConfirmation" query param to `POST /users` endpoint
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+  - `/jurisdictions` endpoint and DB schema ([#1391](https://github.com/bloom-housing/bloom/pull/1391))
 
 - Changed:
 

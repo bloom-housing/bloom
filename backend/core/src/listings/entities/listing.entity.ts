@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -38,6 +39,7 @@ import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -188,6 +190,13 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   disableUnitsAccordion: boolean | null
+
+  @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
+  @JoinColumn()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Jurisdiction)
+  jurisdiction?: Jurisdiction
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
