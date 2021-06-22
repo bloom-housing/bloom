@@ -7,9 +7,9 @@
 
   label,
   .label {
-    @apply text-gray-750;
-    @apply font-semibold;
-    font-size: 0.875rem;
+    @apply pb-2;
+    @apply text-tiny;
+    @apply text-gray-800;
   }
 
   label + .control {
@@ -34,7 +34,7 @@
 
     .input {
       @apply border;
-      @apply border-gray-450;
+      @apply border-gray-500;
       @apply bg-gray-200;
       @apply rounded;
       @apply w-full;
@@ -149,7 +149,7 @@
     @apply text-gray-900;
     @apply rounded;
     @apply border;
-    @apply border-gray-450;
+    @apply border-gray-500;
     @apply bg-gray-200;
     @apply text-gray-900;
     @apply leading-tight;
@@ -251,9 +251,9 @@ input[type="number"] {
 }
 
 .field-label {
-  @apply text-gray-750;
+  @apply pb-2;
   @apply text-tiny;
-  @apply font-semibold;
+  @apply text-gray-800;
 }
 
 .field-label--caps {

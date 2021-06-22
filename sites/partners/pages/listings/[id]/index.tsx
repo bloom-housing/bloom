@@ -20,6 +20,8 @@ import DetailListingData from "../../../src/listings/PaperListingDetails/section
 import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
 import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
+import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
+import DetailLeasingAgent from "../../../src/listings/PaperListingDetails/sections/DetailLeasingAgent"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -101,7 +103,9 @@ export default function ApplicationsList() {
                 <DetailListingData />
                 <DetailProperty />
                 <DetailApplication />
+                <DetailAdditionalEligibility />
                 <DetailAdditionalDetails />
+                <DetailLeasingAgent />
               </div>
 
               <div className="md:w-3/12 pl-6">

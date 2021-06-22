@@ -23,6 +23,8 @@ import {
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
 import AdditionalDetails from "./sections/AdditionalDetails"
+import AdditionalEligibility from "./sections/AdditionalEligibility"
+import LeasingAgent from "./sections/LeasingAgent"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -71,9 +73,6 @@ const defaults: FormListing = {
   postmarkedApplicationsReceivedByDate: new Date(),
   preferences: [],
   programRules: "",
-  property: {
-    id: "", // FYI listings won't save without an actual ID
-  },
   rentalAssistance: "",
   rentalHistory: "",
   requiredDocuments: "",
@@ -81,6 +80,21 @@ const defaults: FormListing = {
   waitlistCurrentSize: 0,
   waitlistMaxSize: 0,
   whatToExpect: [],
+  units: [],
+  accessibility: "",
+  amenities: "",
+  buildingAddress: defaultAddress,
+  buildingTotalUnits: 0,
+  developer: "",
+  householdSizeMax: 0,
+  householdSizeMin: 0,
+  neighborhood: "",
+  petPolicy: "",
+  smokingPolicy: "",
+  unitsAvailable: 0,
+  unitAmenities: "",
+  servicesOffered: "",
+  yearBuilt: 0,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -200,7 +214,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormListingData />
+                    <AdditionalEligibility />
                     <AdditionalDetails />
+                    <LeasingAgent />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">

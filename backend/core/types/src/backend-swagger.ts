@@ -1535,85 +1535,6 @@ export interface ListingFilterParams {
   status?: EnumListingFilterParamsStatus;
 }
 
-export interface PreferenceLink {
-  /**  */
-  title: string;
-
-  /**  */
-  url: string;
-}
-
-export interface FormMetadataExtraData {
-  /**  */
-  type: InputType;
-
-  /**  */
-  key: string;
-}
-
-export interface FormMetadataOptions {
-  /**  */
-  key: string;
-
-  /**  */
-  extraData?: FormMetadataExtraData[];
-
-  /**  */
-  description: boolean;
-
-  /**  */
-  exclusive: boolean;
-}
-
-export interface FormMetadata {
-  /**  */
-  key: string;
-
-  /**  */
-  options: FormMetadataOptions[];
-
-  /**  */
-  hideGenericDecline: boolean;
-
-  /**  */
-  customSelectText: string;
-
-  /**  */
-  hideFromListing: boolean;
-}
-
-export interface Preference {
-  /**  */
-  links: PreferenceLink[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  formMetadata?: FormMetadata;
-
-  /**  */
-  page: number;
-}
-
 export interface MinMaxCurrency {
   /**  */
   min: string;
@@ -1715,6 +1636,123 @@ export interface UnitsSummarized {
   hmi: HMI;
 }
 
+export interface PreferenceLink {
+  /**  */
+  title: string;
+
+  /**  */
+  url: string;
+}
+
+export interface FormMetadataExtraData {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+}
+
+export interface FormMetadataOptions {
+  /**  */
+  key: string;
+
+  /**  */
+  extraData?: FormMetadataExtraData[];
+
+  /**  */
+  description: boolean;
+
+  /**  */
+  exclusive: boolean;
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string;
+
+  /**  */
+  options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline: boolean;
+
+  /**  */
+  customSelectText: string;
+
+  /**  */
+  hideFromListing: boolean;
+}
+
+export interface Preference {
+  /**  */
+  links: PreferenceLink[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  formMetadata?: FormMetadata;
+
+  /**  */
+  page: number;
+}
+
+export interface Address {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  placeName?: string;
+
+  /**  */
+  city?: string;
+
+  /**  */
+  county?: string;
+
+  /**  */
+  state?: string;
+
+  /**  */
+  street?: string;
+
+  /**  */
+  street2?: string;
+
+  /**  */
+  zipCode?: string;
+
+  /**  */
+  latitude?: number;
+
+  /**  */
+  longitude?: number;
+}
+
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number;
@@ -1811,103 +1849,6 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
-export interface Address {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  placeName?: string;
-
-  /**  */
-  city?: string;
-
-  /**  */
-  county?: string;
-
-  /**  */
-  state?: string;
-
-  /**  */
-  street?: string;
-
-  /**  */
-  street2?: string;
-
-  /**  */
-  zipCode?: string;
-
-  /**  */
-  latitude?: number;
-
-  /**  */
-  longitude?: number;
-}
-
-export interface Property {
-  /**  */
-  unitsSummarized: UnitsSummarized;
-
-  /**  */
-  units: Unit[];
-
-  /**  */
-  buildingAddress: Address;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  accessibility: string;
-
-  /**  */
-  amenities: string;
-
-  /**  */
-  buildingTotalUnits: number;
-
-  /**  */
-  developer: string;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
-  servicesOffered?: string;
-
-  /**  */
-  yearBuilt: number;
-}
-
 export interface ApplicationMethod {
   /**  */
   type: ApplicationMethodType;
@@ -1990,10 +1931,10 @@ export interface Listing {
   showWaitlist: boolean;
 
   /**  */
-  preferences: Preference[];
+  unitsSummarized: UnitsSummarized;
 
   /**  */
-  property: Property;
+  preferences: Preference[];
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -2006,6 +1947,51 @@ export interface Listing {
 
   /**  */
   leasingAgents?: UserBasic[];
+
+  /**  */
+  units: Unit[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: Address;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
 
   /**  */
   id: string;
@@ -2162,6 +2148,65 @@ export interface AddressCreate {
   longitude?: number;
 }
 
+export interface UnitCreate {
+  /**  */
+  amiChart: CombinedAmiChartTypes;
+
+  /**  */
+  amiPercentage?: string;
+
+  /**  */
+  annualIncomeMin?: string;
+
+  /**  */
+  monthlyIncomeMin?: string;
+
+  /**  */
+  floor?: number;
+
+  /**  */
+  annualIncomeMax?: string;
+
+  /**  */
+  maxOccupancy?: number;
+
+  /**  */
+  minOccupancy?: number;
+
+  /**  */
+  monthlyRent?: string;
+
+  /**  */
+  numBathrooms?: number;
+
+  /**  */
+  numBedrooms?: number;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  priorityType?: string;
+
+  /**  */
+  reservedType?: string;
+
+  /**  */
+  sqFeet?: string;
+
+  /**  */
+  status?: string;
+
+  /**  */
+  unitType?: string;
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string;
+
+  /**  */
+  bmrProgramChart?: boolean;
+}
+
 export interface ListingCreate {
   /**  */
   status: ListingStatus;
@@ -2179,9 +2224,6 @@ export interface ListingCreate {
   preferences: PreferenceCreate[];
 
   /**  */
-  property: Id;
-
-  /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
@@ -2192,6 +2234,51 @@ export interface ListingCreate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  units: UnitCreate[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: AddressCreate;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
 
   /**  */
   applicationMethods: ApplicationMethod[];
@@ -2351,6 +2438,68 @@ export interface AddressUpdate {
   longitude?: number;
 }
 
+export interface UnitUpdate {
+  /**  */
+  amiChart: CombinedAmiChartTypes;
+
+  /**  */
+  amiPercentage?: string;
+
+  /**  */
+  annualIncomeMin?: string;
+
+  /**  */
+  monthlyIncomeMin?: string;
+
+  /**  */
+  floor?: number;
+
+  /**  */
+  annualIncomeMax?: string;
+
+  /**  */
+  maxOccupancy?: number;
+
+  /**  */
+  minOccupancy?: number;
+
+  /**  */
+  monthlyRent?: string;
+
+  /**  */
+  numBathrooms?: number;
+
+  /**  */
+  numBedrooms?: number;
+
+  /**  */
+  number?: string;
+
+  /**  */
+  priorityType?: string;
+
+  /**  */
+  reservedType?: string;
+
+  /**  */
+  sqFeet?: string;
+
+  /**  */
+  status?: string;
+
+  /**  */
+  unitType?: string;
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string;
+
+  /**  */
+  bmrProgramChart?: boolean;
+
+  /**  */
+  id: string;
+}
+
 export interface ListingUpdate {
   /**  */
   status: ListingStatus;
@@ -2377,9 +2526,6 @@ export interface ListingUpdate {
   preferences: PreferenceUpdate[];
 
   /**  */
-  property: Id;
-
-  /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
@@ -2390,6 +2536,51 @@ export interface ListingUpdate {
 
   /**  */
   leasingAgents?: Id[];
+
+  /**  */
+  units: UnitUpdate[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: AddressUpdate;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
 
   /**  */
   applicationMethods: ApplicationMethod[];
@@ -3378,125 +3569,63 @@ export interface ApplicationUpdate {
   submissionDate?: Date;
 }
 
-export interface UnitCreate {
+export interface Property {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  unitsSummarized: UnitsSummarized;
 
   /**  */
-  amiPercentage?: string;
+  units: Unit[];
 
   /**  */
-  annualIncomeMin?: string;
-
-  /**  */
-  monthlyIncomeMin?: string;
-
-  /**  */
-  floor?: number;
-
-  /**  */
-  annualIncomeMax?: string;
-
-  /**  */
-  maxOccupancy?: number;
-
-  /**  */
-  minOccupancy?: number;
-
-  /**  */
-  monthlyRent?: string;
-
-  /**  */
-  numBathrooms?: number;
-
-  /**  */
-  numBedrooms?: number;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  priorityType?: string;
-
-  /**  */
-  reservedType?: string;
-
-  /**  */
-  sqFeet?: string;
-
-  /**  */
-  status?: string;
-
-  /**  */
-  unitType?: string;
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string;
-
-  /**  */
-  bmrProgramChart?: boolean;
-}
-
-export interface UnitUpdate {
-  /**  */
-  amiChart: CombinedAmiChartTypes;
-
-  /**  */
-  amiPercentage?: string;
-
-  /**  */
-  annualIncomeMin?: string;
-
-  /**  */
-  monthlyIncomeMin?: string;
-
-  /**  */
-  floor?: number;
-
-  /**  */
-  annualIncomeMax?: string;
-
-  /**  */
-  maxOccupancy?: number;
-
-  /**  */
-  minOccupancy?: number;
-
-  /**  */
-  monthlyRent?: string;
-
-  /**  */
-  numBathrooms?: number;
-
-  /**  */
-  numBedrooms?: number;
-
-  /**  */
-  number?: string;
-
-  /**  */
-  priorityType?: string;
-
-  /**  */
-  reservedType?: string;
-
-  /**  */
-  sqFeet?: string;
-
-  /**  */
-  status?: string;
-
-  /**  */
-  unitType?: string;
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string;
-
-  /**  */
-  bmrProgramChart?: boolean;
+  buildingAddress: Address;
 
   /**  */
   id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
 }
 
 export interface PropertyCreate {

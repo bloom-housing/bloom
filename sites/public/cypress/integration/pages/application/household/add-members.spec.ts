@@ -29,10 +29,8 @@ describe("applications/household/add-members", function () {
 
   it("Should move to /household/member Add member click", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -74,10 +72,8 @@ describe("applications/household/add-members", function () {
 
   it("Should move to next route Add member click", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
