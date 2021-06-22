@@ -8,5 +8,5 @@ export const defaultValidationPipeOptions: ValidationPipeOptions = {
     enableImplicitConversion: false,
   },
   groups: [ValidationsGroupsEnum.default],
-  forbidUnknownValues: true,
+  forbidUnknownValues: false,
 }

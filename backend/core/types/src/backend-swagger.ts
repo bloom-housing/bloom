@@ -128,7 +128,7 @@ export class UserService {
       body?: Email;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<UserBasic> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/user/resend-confirmation';
 
@@ -274,7 +274,7 @@ export class ListingsService {
       /**  */
       jsonpath?: string;
       /**  */
-      filter: string;
+      filter?: ListingFilterParams[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing[]> {
@@ -1439,33 +1439,9 @@ export interface Email {
   appUrl?: string;
 }
 
-export interface UserBasic {
+export interface Status {
   /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
+  status: string;
 }
 
 export interface Confirm {
@@ -1546,6 +1522,17 @@ export interface Login {
 
   /**  */
   password: string;
+}
+
+export interface ListingFilterParams {
+  /**  */
+  comparison: string;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  status?: EnumListingFilterParamsStatus;
 }
 
 export interface PreferenceLink {
@@ -3824,7 +3811,11 @@ export enum Language {
   'vi' = 'vi',
   'zh' = 'zh'
 }
-
+export enum EnumListingFilterParamsStatus {
+  'active' = 'active',
+  'pending' = 'pending',
+  'closed' = 'closed'
+}
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending',
@@ -3849,7 +3840,7 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
+export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -3864,10 +3855,10 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
-export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export type CombinedApplicationAddressTypes = AddressUpdate;
+export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
+export type CombinedLeasingAgentAddressTypes = AddressUpdate;
+export type CombinedWhatToExpectTypes = WhatToExpect;
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'

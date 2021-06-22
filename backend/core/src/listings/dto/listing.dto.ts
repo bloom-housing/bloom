@@ -1,20 +1,20 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, Transform, Type } from "class-transformer"
-import { IsDate, IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import moment from "moment"
 import {
   PreferenceCreateDto,
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
-import { ApiPropertyOptional, OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { PropertyDto } from "../../property/dto/property.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../user/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
-import { BaseWhereParams } from "../../shared/dto/where.dto"
+import { BaseFilter } from "../../shared/dto/filter.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "preferences",
@@ -193,14 +193,21 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   leasingAgents?: IdDto[] | null
 }
 
-export class ListingWhereParams extends BaseWhereParams {
+// add other listing filter params here
+export class ListingFilterParams extends BaseFilter {
   @Expose()
-  @ApiPropertyOptional({
-    type: ListingStatus,
-    example: ListingStatus.pending,
+  @ApiProperty({
+    type: String,
+    example: "Coliseum",
     required: false,
   })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  name?: string
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(ListingStatus),
+    example: "active",
+    required: false,
+  })
   status?: ListingStatus
 }

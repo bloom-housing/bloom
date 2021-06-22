@@ -17,7 +17,7 @@ describe("addFilter", () => {
     addFilter(
       [
         {
-          operator: "=",
+          $comparison: "=",
           foo: "bar",
         },
       ],
@@ -33,7 +33,7 @@ describe("addFilter", () => {
     addFilter(
       [
         {
-          operator: "<>",
+          $comparison: "<>",
           foo: "bar",
         },
       ],
@@ -49,11 +49,11 @@ describe("addFilter", () => {
     addFilter(
       [
         {
-          operator: "=",
+          $comparison: "=",
           foo: "bar",
         },
         {
-          operator: "<>",
+          $comparison: "<>",
           bar: "foo",
         },
       ],

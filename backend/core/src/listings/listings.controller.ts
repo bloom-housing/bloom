@@ -8,18 +8,27 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
+import { Request } from "express"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+  getSchemaPath,
+} from "@nestjs/swagger"
 import {
   ListingCreateDto,
   ListingDto,
   ListingUpdateDto,
-  ListingWhereParams,
+  ListingFilterParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -44,11 +53,28 @@ export class ListingsController {
     required: false,
     type: String,
   })
-  @ApiProperty({ name: "filter", required: false })
+  @ApiExtraModels(ListingFilterParams)
+  @ApiQuery({
+    name: "filter",
+    required: false,
+    type: [String],
+    schema: {
+      type: "array",
+      example: [
+        { $comparison: "=", status: "active" },
+        { $comparison: "<>", name: "Coliseum" },
+      ],
+      items: {
+        $ref: getSchemaPath(ListingFilterParams),
+      },
+    },
+  })
   @UseInterceptors(CacheInterceptor)
   public async getAll(
+    @Req() request: Request,
     @Query("jsonpath") jsonpath?: string,
-    @Query("filter") filter?: ListingWhereParams[]
+    @Query("filter") filter?: ListingFilterParams[]
+    // TODO: Add options param here for paging and sorting
   ): Promise<ListingDto[]> {
     return mapTo(ListingDto, await this.listingsService.list(jsonpath, filter))
   }
