@@ -8,7 +8,9 @@
           "city": "Detroit",
           "state": "MI",
           "street": "Main St",
-          "zipCode": "48127"
+          "zipCode": "48127",
+          "latitude": "42.36",
+          "longitude": "-83.1"
       },
       "units": []
   },
