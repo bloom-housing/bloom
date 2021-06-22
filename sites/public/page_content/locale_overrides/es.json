@@ -1,0 +1,73 @@
+{
+  "application": {
+    "contact": {
+      "doYouWorkIn": "¿Trabaja usted en %{county}?",
+      "doYouWorkInDescription": ""
+    },
+    "household": {
+      "member": {
+        "workInRegion": "¿Trabaja él o ella en %{county}?",
+        "workInRegionNote": ""
+      }
+    },
+    "preferences": {
+      "dontWant": "No quiero solicitar ninguna de estas preferencias",
+      "liveWork": {
+        "live": {
+          "label": "Preferencia de vivir en %{county}",
+          "description": "Al menos un miembro de mi hogar vive en %{county}"
+        },
+        "work": {
+          "label": "Preferencia de trabajar en %{county}",
+          "description": "Al menos un miembro de mi hogar trabaja o le han ofrecido trabajo en %{county}"
+        }
+      },
+      "displacedTenant": {
+        "general": {
+          "label": "Preferencia de vivienda para inquilinos desplazados",
+          "description": "Al menos un miembro de mi hogar fue desplazado de una propiedad residencial debido a la actividad de reurbanización por parte de la Autoridad de Vivienda de Hayward, la Agencia de Reurbanización o la Ciudad de Hayward."
+        },
+        "missionCorridor": {
+          "label": "Preferencia de vivienda para inquilinos desplazados de Mission Boulevard Corridor (SR 238)",
+          "description": "Al menos un miembro de mi hogar es Participante del Programa de SR 238 de acuerdo con lo requerido por los términos del Proyecto de Implementación del Acuerdo de SR 238. Los participantes del programa son inquilinos de propiedades de Caltrans vendidas anteriormente a lo largo del corredor de SR 238 Mission Boulevard y se les dará preferencia de ocupación cuando se construyan nuevas viviendas por debajo del valor del mercado en el corredor."
+        }
+      }
+    }
+  },
+  "footer": {
+    "copyRight": "Condado de Alameda © 2020 • Todos los derechos reservados",
+    "disclaimer": "Exención de responsabilidades",
+    "getAssistance": "Obtener asistencia",
+    "giveFeedback": "Proporcione sus comentarios",
+    "header": "El Portal de Vivienda del Condado de Alameda es un proyecto del",
+    "headerUrl": "https://www.acgov.org/cda/hcd/",
+    "headerLink": "Condado de Alameda - Departamento de Desarrollo Comunitario y de Vivienda (HCD)",
+    "forAdditionalOpportunities": "Para ver oportunidades adicionales en el Área de la Bahía, sírvase visitar:",
+    "forGeneralInquiries": "Para obtener información general sobre el programa, o acceder a servicios de traducción del contenido de este sitio web por teléfono, puede llamar al HCD del Condado de Alameda al 510-670-5404.",
+    "forListingQuestions": "Si tiene alguna pregunta relacionada con los listados y la solicitud, sírvase poner en contacto con el Agente de la Propiedad que aparece indicado en cada listado.",
+    "privacyPolicy": "Política de privacidad",
+    "SFHousingPortal": "Portal de Vivienda de San Francisco",
+    "SFHousingUrl": "https://housing.sfgov.org"
+  },
+  "nav": {
+    "siteTitle": "Portal de Vivienda del Condado de Alameda",
+    "getFeedback": "¡Nos encantaría recibir  ",
+    "yourFeedback": "sus comentarios!",
+    "bonusFeedback": ""
+  },
+  "pageTitle": {
+    "additionalResources": "Oportunidades adicionales de vivienda"
+  },
+  "pageDescription": {
+    "additionalResources": "Le invitamos a consultar otros recursos de vivienda de precio accesible."
+  },
+  "region": {
+    "name": "Condado de Alameda"
+  },
+  "listings": {
+    "depositOrMonthsRent": "",
+    "publicLottery": {
+      "header": "LOTERÍA"
+    }
+  }
+}

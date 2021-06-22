@@ -34,8 +34,33 @@ async function uploadListing(listing) {
   }
 }
 
+async function uploadAmiCharts(property) {
+  const amiChartService = new client.AmiChartsService()
+  const charts = await amiChartService.list()
+  
+  for (const unit of property.units) {
+    const chartFromUnit = unit.amiChart
+    if (!chartFromUnit) {
+      console.log(property)
+      console.log("Error: each unit must have an amiChart.")
+      process.exit(1)
+    }
+
+    // Look for the chart by name.
+    let chart = charts.filter((chart) => chart.name == chartFromUnit.name)[0]
+
+    // If it doesn't exist, create it.
+    if (!chart) {
+      chart = await amiChartService.create({body: chartFromUnit})
+    }
+    unit.amiChart = chart
+  }
+}
+
 async function uploadProperty(property) {
   try {
+    await uploadAmiCharts(property)
+
     const propertyService = new client.PropertiesService()
     return await propertyService.create({
       body: property,
@@ -51,7 +76,6 @@ export async function importListing(apiUrl, email, password, listing) {
     baseURL: apiUrl,
     timeout: 10000,
   })
-
   // Log in to retrieve an access token.
   const authService = new client.AuthService()
   const { accessToken } = await authService.login({

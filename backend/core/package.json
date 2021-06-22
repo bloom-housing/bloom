@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": false,
@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
-    "start": "node dist/src/main",
+    "start": "node --optimize_for_size --gc_interval=100  --max_old_space_size=1900 dist/src/main",
     "dev": "NODE_ENV=development nest start --watch --preserveWatchOutput",
     "debug": "nest start --debug --watch",
     "db:drop": "psql -c 'DROP DATABASE IF EXISTS bloom;'",
@@ -55,7 +55,7 @@
     "handlebars": "^4.7.6",
     "ioredis": "^4.24.4",
     "joi": "^17.3.0",
-    "jsonpath": "^1.0.2",
+    "jsonpath": "^1.1.0",
     "jwt-simple": "^0.5.6",
     "moment": "^2.29.1",
     "nanoid": "^3.1.12",
@@ -112,7 +112,7 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": "14",
+    "node": "12",
     "yarn": "^1.22"
   }
 }

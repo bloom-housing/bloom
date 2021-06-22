@@ -7,6 +7,7 @@ export interface PageHeaderProps {
   title: React.ReactNode
   subtitle?: string
   children?: React.ReactNode
+  tabNav?: React.ReactNode
 }
 
 const PageHeader = (props: PageHeaderProps) => {
@@ -27,9 +28,10 @@ const PageHeader = (props: PageHeaderProps) => {
       <hgroup className="page-header__group">
         <h1 className="page-header__title">{props.title}</h1>
         {props.subtitle && <p className="page-header__lead"> {props.subtitle}</p>}
-      </hgroup>
+        {props.children}
 
-      {props.children}
+        {props.tabNav ? props.tabNav : null}
+      </hgroup>
     </header>
   )
 }

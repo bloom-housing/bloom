@@ -33,9 +33,11 @@ export * from "./src/forms/HouseholdSizeField"
 export * from "./src/forms/FieldGroup"
 export * from "./src/forms/Select"
 export * from "./src/forms/Form"
+export * from "./src/forms/Textarea"
 export * from "./src/forms/TimeField"
 /* Global */
 export * from "./src/global/AppearanceTypes"
+export * from "./src/global/vendor/AgPagination"
 
 /* Headers */
 export * from "./src/headers/Hero"
@@ -64,6 +66,7 @@ export * from "./src/helpers/formatYesNoLabel"
 export * from "./src/helpers/getTranslationWithArguments"
 export * from "./src/helpers/preferences"
 export * from "./src/helpers/resolveObject"
+export * from "./src/helpers/useMutate"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"

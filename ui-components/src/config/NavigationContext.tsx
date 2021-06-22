@@ -35,6 +35,7 @@ export const NavigationContext = createContext<NavigationContextProps>({
         e.preventDefault()
         alert(`You clicked: ${props.href}`)
       }}
+      {...props.aria}
     >
       {props.children}
     </a>

@@ -20,9 +20,9 @@ import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/Ap
 import React, { useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 
-const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(process.env.listingServiceUrl)
-  conductor.listing = response.data.find((listing) => listing.id == listingId) || response.data[0] // FIXME: temporary fallback
+const loadListing = async (listingId: string, stateFunction, conductor, context) => {
+  const response = await axios.get(process.env.backendApiBase + "/listings/" + listingId)
+  conductor.listing = response.data
   const applicationConfig = retrieveApplicationConfig() // TODO: load from backend
   conductor.config = applicationConfig
   stateFunction(conductor.listing)
@@ -36,7 +36,7 @@ const ApplicationChooseLanguage = () => {
   const { initialStateLoaded, profile } = useContext(UserContext)
   const { conductor, application } = context
 
-  const listingId = router.query.listingId
+  const listingId = router.query.listingId as string
 
   useEffect(() => {
     if (router.isReady && !listingId) {

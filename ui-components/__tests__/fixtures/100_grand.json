@@ -1,0 +1,162 @@
+{
+  "id": "V1StGXR8Z5jdHi6BmyT",
+  "acceptingApplicationsAtLeasingAgent": false,
+  "acceptingApplicationsByPoBox": false,
+  "acceptingOnlineApplications": false,
+  "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
+  "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spafitness center, clubhouse, business center, heated pool & spa, outdoor BBQ’s, courtyard w/ fireplace",
+  "applicationDueDate": "2020-08-10T17:00:00.000-07:00",
+  "applicationOrganization": "One Hundred Grand",
+  "applicationAddress": {
+    "city": "Foster City",
+    "county": "San Mateo",
+    "zipCode": "94404",
+    "state": "CA",
+    "street": "100 Grand Lane",
+    "latitude": 37.562493,
+    "longitude": -122.268743
+  },
+  "applicationPhone": "(650) 350-1099",
+  "blankPaperApplicationCanBePickedUp": false,
+  "buildingAddress": {
+    "city": "Foster City",
+    "county": "San Mateo",
+    "zipCode": "94404",
+    "state": "CA",
+    "street": "100 Grand Lane",
+    "latitude": 37.562493,
+    "longitude": -122.268743
+  },
+  "buildingName": "One Hundred Grand",
+  "buildingSelectionCriteria": null,
+  "costsNotIncluded": "Residents responsible for utilities: electric, gas, cable/internet, water, sewer, trash, admin fee. Residents required to maintain a renter's insurance policy as outlined in the lease agreement. Rent is due by the 3rd of each month and rent is considered late on the 4th of each month. Late fee is $150.00. Resident to pay $35 for each returned check or rejected electronic payment. Pet Deposit is $500 per pet. $50 monthly pet rent per pet.",
+  "creditHistory": "No collections, no bankruptcy, income is twice monthly rent. A credit report will be completed on all applicants to verify credit ratings. Income plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency.  Credit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons: a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months",
+  "depositMax": "2946",
+  "depositMin": "600",
+  "developer": "CV Triton, LLC",
+  "imageUrl": "/images/100_grand.jpg",
+  "programRules": null,
+  "externalId": null,
+  "waitlistMaxSize": 1000,
+  "name": "One Hundred Grand",
+  "neighborhood": "Foster City",
+  "waitlistCurrentSize": 452,
+  "petPolicy": "The following breeds are restricted from this community: Chows, Doberman Pinschers, Pit Bull/Staffordshire Terriers, Rottweilers, Presa Canarios, Akitas, Alaskan Malamutes, and Wolf-hybrids. Prohibited pets include, but are not limited to, monkeys, snakes, ferrets, iguanas, potbelly pigs and rabbits. There is a maximum of two pets per apartment home. The maximum weight limit for pets is 50 lbs.",
+  "prioritiesDescriptor": null,
+  "requiredDocuments": "Due at Interview: Income: If you work and receive paystubs: ▪ Copies of 3 months’ worth of consecutive paystubs, beginning with the most recent paystub.\n\n▪ If hired recently, provide Employment Offer Letter. If you receive severance pay, Social Security, unemployment benefits, retirement income, disability, public assistance, or the like, submit: ▪ Most recent benefits letter(s) stating your monthly award If you are Self-Employed, you must: ▪ Complete an Self-Employed Declaration form ▪ Submit Year-to-Date Profit and Loss statement ▪ Submit the past year’s federal income tax returns  If you are Unemployed and have ZERO income, you must: ▪ Complete an Unemployment Declaration  ▪ Submit the previous year’s federal income tax returns Assets: ▪ 6-consecutive and most recent official bank statements for Checking accounts and include ALL pages. ▪ 1 most recent statement for all other assets (IE: Savings, 401K, Money Market, etc.) and include ALL pages. ▪ A written explanation and supporting documentation for any deposit over $100 other than that of your documented employment. Building Documents: ▪ BMR Questionnaire ▪ Release & Consent Form ▪ Resident Qualification Acknowledgment ",
+  "reservedCommunityMaximumAge": 0,
+  "reservedCommunityMinimumAge": 0,
+  "reservedDescriptor": null,
+  "smokingPolicy": "Non-Smoking",
+  "yearBuilt": 1999,
+  "createdAt": "2019-06-03T10:30:41.039Z",
+  "updatedAt": "2020-06-9T22:15:15.443Z",
+  "hideUnitFeatures": false,
+  "unitAmenities": "Refrigerator, washer/dryer, gas stoves, microwave, dishwasher, central AC/Heat, quartz countertops, wood flooring, patio/balcony",
+  "attachments": [
+    {
+      "fileUrl": "https://100grandapts.com/bmr.php",
+      "label": "English",
+      "type": 1
+    }
+  ],
+  "applicationFee": "50.94",
+  "criminalBackground": "We obtain a criminal background check on each applicant who will reside in the apartment home. It is possible your application will be denied due to criminal convictions.",
+  "leasingAgentAddress": {
+    "city": "Foster City",
+    "county": "San Mateo",
+    "zipCode": "94404",
+    "state": "CA",
+    "street": "100 Grand Lane",
+    "latitude": 37.562493,
+    "longitude": -122.268743
+  },
+  "leasingAgentEmail": "100grandbmr@greystar.com",
+  "leasingAgentName": "Tori Ames",
+  "leasingAgentOfficeHours": "Due to COVID-19, our offices are closed. In-person visits and application drop off will not be accepted.",
+  "leasingAgentPhone": "(650) 350-1099",
+  "leasingAgentTitle": "Assistant Community Manager",
+  "rentalHistory": "Our credit reporting agency also reviews eviction and court databases to search for both eviction filings and judgements within the past 24 months and may include rent payment history as an indicator of future rent payment performance. Applicants are responsible for ensuring their rental history is accurate. No Fault or Dismissed evictions will not be held against the household. If a household does not meet the rental or credit criteria it could result in the denial of their application. Mitigating Circumstances will be considered on a case-by-case basis.",
+  "buildingTotalUnits": 1,
+  "acceptsPostmarkedApplications": false,
+  "postmarkedApplicationsReceivedByDate": null,
+  "totalUnits": 166,
+  "unitsAvailable": 1,
+  "units": [
+    {
+      "id": 437,
+      "amiPercentage": "80.0",
+      "annualIncomeMin": "70704.0",
+      "monthlyIncomeMin": "5892.0",
+      "floor": "3",
+      "annualIncomeMax": "97,600-150,600",
+      "maxOccupancy": 5,
+      "minOccupancy": 2,
+      "monthlyRent": "2946.0",
+      "numBathrooms": null,
+      "numBedrooms": 1,
+      "number": "308",
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": 1138,
+      "status": "available",
+      "unitType": "twoBdrm",
+      "createdAt": "2019-06-03T10:42:43.134Z",
+      "updatedAt": "2019-07-10T09:44:01.384Z",
+      "listingId": 3,
+      "amiChartId": 7,
+      "monthlyRentAsPercentOfIncome": null
+    }
+  ],
+  "preferences": [
+    {
+      "ordinal": 1,
+      "title": "Preference 1a",
+      "subtitle": null,
+      "description": "Persons who are living in a Below Market Rate deed restricted unit in Foster City for a minimum of twelve (12) months that is subject to termination of affordability restrictions within three (3) years.",
+      "links": []
+    },
+    {
+      "ordinal": 2,
+      "title": "Preference 1b",
+      "subtitle": null,
+      "description": "Persons who live and work in Foster City.",
+      "links": []
+    },
+    {
+      "ordinal": 3,
+      "title": "Preference 2",
+      "subtitle": null,
+      "description": "Persons who live in Foster City.",
+      "links": []
+    },
+    {
+      "ordinal": 4,
+      "title": "Preference 3",
+      "subtitle": null,
+      "description": "Employees of the City of Foster City.",
+      "links": []
+    },
+    {
+      "ordinal": 5,
+      "title": "Preference 4",
+      "subtitle": null,
+      "description": "Classroom teachers who are employees of the San Mateo-Foster City School District, the San Mateo Union High School District and the San Mateo County Community College District.",
+      "links": []
+    },
+    {
+      "ordinal": 6,
+      "title": "Preference 5",
+      "subtitle": null,
+      "description": "Persons who work in Foster City.",
+      "links": []
+    },
+    {
+      "ordinal": 7,
+      "title": "Preference 6",
+      "subtitle": null,
+      "description": "All others who are income qualified.",
+      "links": []
+    }
+  ]
+}

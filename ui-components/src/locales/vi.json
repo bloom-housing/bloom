@@ -531,6 +531,8 @@
       "oneBdrm": "1 Phòng ngủ",
       "twoBdrm": "2 Phòng ngủ",
       "threeBdrm": "3 Phòng ngủ",
+      "fourBdrm": "4 Phòng ngủ",
+      "fiveBdrm": "5 Phòng ngủ",
       "studio": "Một phòng kiểu studio",
       "SRO": "Số người ở Phòng đơn"
     },

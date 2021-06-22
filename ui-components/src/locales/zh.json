@@ -531,6 +531,8 @@
       "oneBdrm": "1 臥室",
       "twoBdrm": "2 臥室",
       "threeBdrm": "3 卧室",
+      "fourBdrm": "4 卧室",
+      "fiveBdrm": "5 卧室",
       "studio": "套房",
       "SRO": "單人房"
     },

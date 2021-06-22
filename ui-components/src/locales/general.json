@@ -47,6 +47,7 @@
       "vi": "Bắt đầu"
     },
     "totalApplications": "Total Applications",
+    "totalSets": "Total Sets",
     "addApplication": "Add Application",
     "newApplication": "New Application",
     "editApplication": "Edit Application",
@@ -570,6 +571,14 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "flags": {
+    "flaggedSet": "Flagged Set",
+    "ruleName": "Rule Name",
+    "pendingReview": "Pending Review",
+    "totalSets": "Total Sets",
+    "resolveFlag": "Resolve Flag",
+    "markedAsDuplicate": "%{quantity} applications marked as duplicate"
+  },
   "authentication": {
     "forgotPassword": {
       "changePassword": "Change Password",
@@ -707,6 +716,8 @@
       "clone": "Clone"
     },
     "addListing": "Add Listing",
+    "additionalDetails": "Additional Details",
+    "additionalDetailsSubtext": "Are there any other required documents and selection criteria?",
     "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
@@ -839,6 +850,7 @@
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
     "seeUnitInformation": "See Unit Information",
+    "selectionCriteria": "Selection Criteria",
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
@@ -848,6 +860,8 @@
       "oneBdrm": "1 BR",
       "twoBdrm": "2 BR",
       "threeBdrm": "3 BR",
+      "fourBdrm": "4 BR",
+      "fiveBdrm": "5 BR",
       "studio": "Studio",
       "SRO": "Single Room Occupancy"
     },
@@ -904,7 +918,8 @@
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal",
-    "skip": "Skip to main content"
+    "skip": "Skip to main content",
+    "flags": "Flags"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
