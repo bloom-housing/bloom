@@ -6,10 +6,12 @@
   "preferences": [],
   "property": {
       "buildingAddress": {
-          "city": "Fake City",
-          "state": "XX",
-          "street": "123 Make Believe St",
-          "zipCode": "12345"
+          "city": "Detroit",
+          "state": "MI",
+          "street": "Main St",
+          "zipCode": "48127",
+          "latitude": "42.36",
+          "longitude": "-83.1"
       },
       "units": [{
         "unitType": "oneBdrm",
