@@ -31,5 +31,8 @@ p, anonymous, jurisdiction, true, read
 p, admin, listing, true, .*
 p, anonymous, listing, true, read
 
+p, admin, reservedCommunityType, true, .*
+p, anonymous, reservedCommunityType, true, read
+
 g, admin, user
 g, user, anonymous
