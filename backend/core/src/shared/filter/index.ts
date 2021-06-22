@@ -11,12 +11,12 @@ import { WhereExpression } from "typeorm"
  */
 export function addFilter<Filter>(filter: Filter[], schema: string, qb: WhereExpression): void {
   const operator = "andWhere"
-  console.log("filter = ", filter)
   /**
-   * Comparisons are in order, so we can apply them by iterating
+   * By specifying that the filter is an array, it keeps the keys in order, so we can iterate like below
    */
   let comparisons: unknown[],
     comparisonCount = 0
+
   // eslint-disable-next-line @typescript-eslint/no-for-in-array
   for (const key in filter) {
     const value = filter[key]
@@ -27,11 +27,23 @@ export function addFilter<Filter>(filter: Filter[], schema: string, qb: WhereExp
         comparisons = [value]
       }
     } else {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      qb[operator](`${schema}.${key} ${comparisons[comparisonCount]} :${key}`, {
-        [key]: value,
-      })
-      comparisonCount++
+      if (value !== undefined) {
+        let values
+        // handle multiple values for the same key
+        if (Array.isArray(value)) {
+          values = value
+        } else {
+          values = [value]
+        }
+
+        values.forEach((val: unknown) => {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          qb[operator](`${schema}.${key} ${comparisons[comparisonCount]} :${key}`, {
+            [key]: val,
+          })
+          comparisonCount++
+        })
+      }
     }
   }
 }

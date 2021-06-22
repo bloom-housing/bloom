@@ -57,7 +57,9 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 }
 
 export async function getStaticProps(context: { params: Record<string, string> }) {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
+  const response = await axios.get(
+    `${process.env.backendApiBase}/listings/${context.params.id}?filter[$comparison]=<>&filter[status]=pending`
+  )
 
   return {
     props: {
