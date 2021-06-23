@@ -12,7 +12,7 @@ The following steps should provide a working local environement for development 
 
 ### Setting up your local environment variables
 
-Operational configuration the service is read from environment variables. Copy `.env.template` to `.env` and edit the settings specific to your development environment. Make sure the Database URL matches your Postgres configuration.
+Operational configuration the service is read from environment variables. Copy `.env.template` to `.env` and edit the settings specific to your development environment. Make sure the Database URL and Test Database URL match your Postgres configuration.
 
 ### Installing Postgres
 
@@ -20,7 +20,7 @@ You can install Postgres using Homebrew with the following command: `brew instal
 
 ### Setting up a Database
 
-There are two databases used in this project: `bloom` and `bloom_test`. First is used every time  you are starting a project with `yarn dev` and second one is only used in end-to-end tests. Corresponding TypeORM configs are defined in `ormconfig.ts` and `ormconfig.test.ts`.
+There are two databases used in this project: `bloom` and `bloom_test`. First is used every time you are starting a project with `yarn dev` and second one is only used in end-to-end tests. Corresponding TypeORM configs are defined in `ormconfig.ts` and `ormconfig.test.ts`.
 If you are just starting to work with the projects it's best to simply run:
 
 ```shell script
