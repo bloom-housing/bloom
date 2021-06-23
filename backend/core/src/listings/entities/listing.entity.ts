@@ -361,7 +361,6 @@ class Listing extends BaseEntity {
   }
 
   @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })
-  @JoinColumn()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ReservedCommunityType)
