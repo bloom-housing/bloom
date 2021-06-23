@@ -2,7 +2,7 @@ import {
   AppearanceStyleType,
   Button,
   Modal,
-  UserContext,
+  AuthContext,
   t,
   Form,
   Field,
@@ -19,11 +19,10 @@ export interface ConfirmationModalProps {
 
 const ConfirmationModal = (props: ConfirmationModalProps) => {
   const { setSiteAlertMessage } = props
-  const { resendConfirmation, profile, confirmAccount } = useContext(UserContext)
+  const { resendConfirmation, profile, confirmAccount } = useContext(AuthContext)
   const [openModal, setOpenModal] = useState(false)
   const [modalMessage, setModalMessage] = useState(null)
   const router = useRouter()
-  const language = router.locale
 
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
@@ -35,7 +34,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   const onSubmit = async ({ email }) => {
     try {
-      await resendConfirmation(email, language)
+      await resendConfirmation(email)
 
       setSiteAlertMessage(t(`authentication.createAccount.emailSent`), "success")
       setOpenModal(false)
@@ -48,7 +47,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
 
   useEffect(() => {
     if (router?.query?.token && !profile) {
-      confirmAccount(router.query.token.toString(), language)
+      confirmAccount(router.query.token.toString())
         .then(() => {
           void router.push({
             pathname: "/account/dashboard",

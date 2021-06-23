@@ -24,6 +24,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
 import { Reflector } from "@nestjs/core"
 import { AssetsModule } from "./assets/assets.module"
+import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -63,6 +64,18 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [
+        AmiChartsModule,
+        ApplicationFlaggedSetsModule,
+        ApplicationsModule,
+        AssetsModule,
+        AuthModule,
+        JurisdictionsModule,
+        ListingsModule,
+        PreferencesModule,
+        PropertiesModule,
+        PropertyGroupsModule,
+        SharedModule,
+        TranslationsModule,
         TypeOrmModule.forRoot({
           ...dbOptions,
           autoLoadEntities: true,
@@ -76,19 +89,8 @@ export class AppModule {
             storage: new ThrottlerStorageRedisService(redis),
           }),
         }),
-        UserModule,
-        AuthModule,
-        ListingsModule,
-        ApplicationsModule,
-        PreferencesModule,
         UnitsModule,
-        PropertiesModule,
-        PropertyGroupsModule,
-        AmiChartsModule,
-        SharedModule,
-        TranslationsModule,
-        ApplicationFlaggedSetsModule,
-        AssetsModule,
+        UserModule,
       ],
     }
   }
