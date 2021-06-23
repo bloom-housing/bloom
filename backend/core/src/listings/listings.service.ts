@@ -19,6 +19,7 @@ export class ListingsService {
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
+      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
   public async list(jsonpath?: string): Promise<Listing[]> {

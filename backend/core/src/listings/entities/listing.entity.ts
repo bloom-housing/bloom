@@ -40,6 +40,7 @@ import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -358,6 +359,18 @@ class Listing extends BaseEntity {
       this.waitlistCurrentSize < this.waitlistMaxSize
     )
   }
+
+  @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ReservedCommunityType)
+  reservedCommunityType?: ReservedCommunityType
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  reservedCommunityMinAge?: number | null
 }
 
 export { Listing as default, Listing }

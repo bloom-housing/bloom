@@ -18467,12 +18467,12 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-swagger-axios-codegen@^0.11.10:
-  version "0.11.10"
-  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.11.10.tgz#dab3e33e7c19e8c3674cbdef8f3b9a20b7fb413b"
-  integrity sha512-WqDFcbHj/6PIAEeMeDvw1nrMafJmh64RKtFVbRarDVYDi1HeiUoybsKfBrwpkPkYt04FN+kZGEXCUNz2EQlwJg==
+swagger-axios-codegen@0.11.16:
+  version "0.11.16"
+  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.11.16.tgz#eae7dd2ad254eaac485db2dde558958f70437f46"
+  integrity sha512-OB5cvRSdfPsGaws/Y1YuNYG7/cGSp5PLc36294hUsFiP57cDdC5sxdXUnHcy00+6hpCe/1Y9vcGaouvevt4jeQ==
   dependencies:
-    axios "^0.19.0"
+    axios "^0.21.1"
     camelcase "^5.0.0"
     multimatch "^4.0.0"
     pascalcase "^0.1.1"
