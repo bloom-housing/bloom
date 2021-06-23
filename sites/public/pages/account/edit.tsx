@@ -6,13 +6,12 @@ import {
   Field,
   FormCard,
   Icon,
-  UserContext,
+  AuthContext,
   Form,
   emailRegex,
   t,
   AlertBox,
   SiteAlert,
-  ApiClientContext,
   RequireLogin,
   AlertTypes,
   passwordRegex,
@@ -31,8 +30,7 @@ const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
-  const { profile } = useContext(UserContext)
-  const { userService } = useContext(ApiClientContext)
+  const { profile, userService } = useContext(AuthContext)
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()

@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -38,6 +39,8 @@ import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { AddressDto } from "../../shared/dto/address.dto"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -188,6 +191,13 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   disableUnitsAccordion: boolean | null
+
+  @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
+  @JoinColumn()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Jurisdiction)
+  jurisdiction?: Jurisdiction
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -349,6 +359,18 @@ class Listing extends BaseEntity {
       this.waitlistCurrentSize < this.waitlistMaxSize
     )
   }
+
+  @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ReservedCommunityType)
+  reservedCommunityType?: ReservedCommunityType
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  reservedCommunityMinAge?: number | null
 }
 
 export { Listing as default, Listing }

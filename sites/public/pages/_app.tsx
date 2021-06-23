@@ -5,9 +5,8 @@ import {
   addTranslation,
   GenericRouter,
   NavigationContext,
-  UserProvider,
+  AuthProvider,
   ConfigProvider,
-  ApiClientProvider,
   LoggedInUserIdleTimeout,
   blankApplication,
 } from "@bloom-housing/ui-components"
@@ -82,12 +81,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
         }}
       >
         <ConfigProvider apiUrl={process.env.backendApiBase}>
-          <UserProvider>
-            <ApiClientProvider>
-              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-              <Component {...pageProps} />
-            </ApiClientProvider>
-          </UserProvider>
+          <AuthProvider>
+            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+            <Component {...pageProps} />
+          </AuthProvider>
         </ConfigProvider>
       </AppSubmissionContext.Provider>
     </NavigationContext.Provider>

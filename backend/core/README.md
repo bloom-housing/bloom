@@ -69,6 +69,24 @@ To have launch Redis as background service and restart at login:
 Test if Redis is working:
 `redis-cli ping`
 
+### Debugging
+
+You can connect a debugger to the backend by starting the backend server with `yarn debug`.
+
+To connect to it from VS Code, add a configuration to launch.json that looks like
+```shell script
+{
+  "name": "Attach to Backend",
+  "port": 9229,
+  "request": "attach",
+  "skipFiles": [
+    "<node_internals>/**"
+  ],
+  "type": "node",
+  "restart": true
+},
+```
+
 ### Running Tests
 
 End-to-end tests:

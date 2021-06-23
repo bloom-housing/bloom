@@ -44,74 +44,73 @@ describe("applications/financial/income", function () {
     cy.isNextRouteValid("income")
   })
 
-  // TODO: toggle this verification off at the jurisdiction level with a feature flag
-  // it("Should show error when annual income is lower than allowed", function () {
-  //   cy.loadConfig()
-  //   cy.visit(route)
+  it("Should show error when annual income is lower than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
 
-  //   const income = getListingIncome()
+    const income = getListingIncome()
 
-  //   const annualMin = income?.annualMax ? income?.annualMin - 1 : null
+    const annualMin = income?.annualMax ? income?.annualMin - 1 : null
 
-  //   cy.getByID("income").type(`${annualMin}`)
-  //   cy.getByID("incomePeriodYearly").check()
+    cy.getByID("income").type(`${annualMin}`)
+    cy.getByID("incomePeriodYearly").check()
 
-  //   cy.goNext()
+    cy.goNext()
 
-  //   cy.checkErrorAlert("be.visible")
-  //   cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
-  // })
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
+  })
 
-  // it("Should show error when annual income is more than allowed", function () {
-  //   cy.loadConfig()
-  //   cy.visit(route)
+  it("Should show error when annual income is more than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
 
-  //   const income = getListingIncome()
+    const income = getListingIncome()
 
-  //   const annualMax = income?.annualMax ? income?.annualMax + 1 : null
+    const annualMax = income?.annualMax ? income?.annualMax + 1 : null
 
-  //   cy.getByID("income").type(`${annualMax}`)
-  //   cy.getByID("incomePeriodYearly").check()
+    cy.getByID("income").type(`${annualMax}`)
+    cy.getByID("incomePeriodYearly").check()
 
-  //   cy.goNext()
+    cy.goNext()
 
-  //   cy.checkErrorAlert("be.visible")
-  //   cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
-  // })
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
+  })
 
-  // it("Should show error when monthly income is less than allowed", function () {
-  //   cy.loadConfig()
-  //   cy.visit(route)
+  it("Should show error when monthly income is less than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
 
-  //   const income = getListingIncome()
+    const income = getListingIncome()
 
-  //   const monthlyMin = income?.monthlyMin ? income?.monthlyMin - 1 : null
+    const monthlyMin = income?.monthlyMin ? income?.monthlyMin - 1 : null
 
-  //   cy.getByID("income").type(`${monthlyMin}`)
-  //   cy.getByID("incomePeriodMonthly").check()
+    cy.getByID("income").type(`${monthlyMin}`)
+    cy.getByID("incomePeriodMonthly").check()
 
-  //   cy.goNext()
+    cy.goNext()
 
-  //   cy.checkErrorAlert("be.visible")
-  //   cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
-  // })
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooLowErrorText"])
+  })
 
-  // it("Should show error when monthly income is more than allowed", function () {
-  //   cy.loadConfig()
-  //   cy.visit(route)
+  it("Should show error when monthly income is more than allowed", function () {
+    cy.loadConfig()
+    cy.visit(route)
 
-  //   const income = getListingIncome()
+    const income = getListingIncome()
 
-  //   const monthlyMax = income?.monthlyMax ? income?.monthlyMax + 1 : null
+    const monthlyMax = income?.monthlyMax ? income?.monthlyMax + 1 : null
 
-  //   cy.getByID("income").type(`${monthlyMax}`)
-  //   cy.getByID("incomePeriodMonthly").check()
+    cy.getByID("income").type(`${monthlyMax}`)
+    cy.getByID("incomePeriodMonthly").check()
 
-  //   cy.goNext()
+    cy.goNext()
 
-  //   cy.checkErrorAlert("be.visible")
-  //   cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
-  // })
+    cy.checkErrorAlert("be.visible")
+    cy.get(".alert").should("be.visible").and("contain.text", this.data["incomeTooHighErrorText"])
+  })
 
   it("Should save form values and redirect to the next step", function () {
     cy.loadConfig()

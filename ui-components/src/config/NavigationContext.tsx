@@ -18,6 +18,7 @@ export interface GenericRouter {
   push: (url: Url, as?: Url, options?: GenericRouterOptions) => void
   pathname: string
   asPath: string
+  locale?: string
 }
 
 export interface NavigationContextProps {
@@ -46,5 +47,6 @@ export const NavigationContext = createContext<NavigationContextProps>({
     },
     pathname: "",
     asPath: "",
+    locale: "",
   },
 })

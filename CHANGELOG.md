@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+- Added:
+
+  - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
+
 ### Backend
 
 - Fixed:
@@ -15,6 +19,7 @@ All notable changes to this project will be documented in this file. The format 
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
   - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
+  - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
 
 - Added:
 
@@ -24,6 +29,8 @@ All notable changes to this project will be documented in this file. The format 
   - `/assets` endpoints (create and createPresignedUploadMetadata)
   - "noEmailConfirmation" query param to `POST /users` endpoint
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+  - `/jurisdictions` endpoint and DB schema ([#1391](https://github.com/bloom-housing/bloom/pull/1391))
+  - `/reservedCommunityTypes` endpoint and DB schema ([#1395](https://github.com/bloom-housing/bloom/pull/1395))
 
 - Changed:
 
@@ -53,11 +60,8 @@ All notable changes to this project will be documented in this file. The format 
   - Fix repetition of select text on preferences ([#1270](https://github.com/bloom-housing/bloom/pull/1270)) (Emily Jablonski)
   - Fix aplication submission and broken test ([#1270](https://github.com/bloom-housing/bloom/pull/1282)) (Dominik Barcikowski)
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
-    <<<<<<< HEAD
-    =======
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
-    > > > > > > > upstream/master
 
 - Changed:
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import { useRouter } from "next/router"
 import {
-  ApiClientContext,
+  AuthContext,
   t,
   Form,
   AlertBox,
@@ -106,7 +106,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const router = useRouter()
 
-  const { listingsService } = useContext(ApiClientContext)
+  const { listingsService } = useContext(AuthContext)
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)

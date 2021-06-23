@@ -8,7 +8,7 @@ import {
   Form,
   FormCard,
   Icon,
-  UserContext,
+  AuthContext,
   t,
   AlertBox,
   SiteAlert,
@@ -19,7 +19,7 @@ import FormsLayout from "../layouts/forms"
 const ResetPassword = () => {
   const router = useRouter()
   const { token } = router.query
-  const { resetPassword } = useContext(UserContext)
+  const { resetPassword } = useContext(AuthContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
