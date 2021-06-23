@@ -27,16 +27,19 @@ import { transformUnits } from "../../shared/units-transformations"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
+import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
   "applicationAddress",
   "applicationFlaggedSets",
   "applicationPickUpAddress",
+  "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
   "preferences",
   "property",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -75,6 +78,13 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => JurisdictionDto)
   jurisdiction?: JurisdictionDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ReservedCommunityTypeDto)
+  reservedCommunityType?: ReservedCommunityTypeDto
 
   @Expose()
   @Transform((_value, listing) => {
@@ -288,6 +298,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "yearBuilt",
   "unitsSummarized",
   "jurisdiction",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -404,6 +415,13 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdiction?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  reservedCommunityType?: IdDto
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -434,6 +452,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "yearBuilt",
   "unitsSummarized",
   "jurisdiction",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -567,4 +586,11 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdiction?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  reservedCommunityType?: IdDto
 }

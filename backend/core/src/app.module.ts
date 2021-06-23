@@ -25,6 +25,7 @@ import { TranslationsModule } from "./translations/translations.module"
 import { Reflector } from "@nestjs/core"
 import { AssetsModule } from "./assets/assets.module"
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module"
+import { ReservedCommunityTypesModule } from "./reserved-community-type/reserved-community-types.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -74,6 +75,7 @@ export class AppModule {
         PreferencesModule,
         PropertiesModule,
         PropertyGroupsModule,
+        ReservedCommunityTypesModule,
         SharedModule,
         TranslationsModule,
         TypeOrmModule.forRoot({

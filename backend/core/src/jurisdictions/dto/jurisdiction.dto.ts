@@ -4,7 +4,7 @@ import { IsDate, IsOptional, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
 
-export class JurisdictionDto extends OmitType(Jurisdiction, [] as const) {}
+export class JurisdictionDto extends OmitType(Jurisdiction, ["listings"] as const) {}
 
 export class JurisdictionCreateDto extends OmitType(JurisdictionDto, [
   "id",
