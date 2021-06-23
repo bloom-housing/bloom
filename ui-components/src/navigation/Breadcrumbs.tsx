@@ -10,7 +10,7 @@ const BreadcrumbLink = (props: { href: string; children: React.ReactNode; curren
   <li>
     <LocalizedLink
       className={props.current ? "is-active" : undefined}
-      ariaProps={props.current ? { "aria-current": "page" } : undefined}
+      aria-current={props.current ? "page" : undefined}
       href={props.href}
     >
       {props.children}
