@@ -10,14 +10,14 @@ import {
   Form,
   FormCard,
   Icon,
-  UserContext,
+  AuthContext,
   t,
 } from "@bloom-housing/ui-components"
 import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
 
 export default () => {
-  const { login } = useContext(UserContext)
+  const { login } = useContext(AuthContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, setError, clearErrors } = useForm()

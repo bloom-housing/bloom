@@ -25,18 +25,22 @@ import { ListingStatus } from "../types/listing-status-enum"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { transformUnits } from "../../shared/units-transformations"
-import { UnitsSummarized } from "../../units/types/units-summarized"
+import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { Unit } from "../../units/entities/unit.entity"
+import { UnitsSummarized } from "../../units/types/units-summarized"
+import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 
 export class ListingDto extends OmitType(Listing, [
+  "applications",
+  "applicationAddress",
+  "applicationFlaggedSets",
+  "applicationPickUpAddress",
+  "jurisdiction",
+  "leasingAgents",
+  "leasingAgentAddress",
   "preferences",
   "property",
-  "applicationAddress",
-  "applicationPickUpAddress",
-  "leasingAgentAddress",
-  "leasingAgents",
-  "applications",
-  "applicationFlaggedSets",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -68,6 +72,20 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UserBasicDto)
   leasingAgents?: UserBasicDto[] | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => JurisdictionDto)
+  jurisdiction?: JurisdictionDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ReservedCommunityTypeDto)
+  reservedCommunityType?: ReservedCommunityTypeDto
 
   @Expose()
   @Transform((_value, listing) => {
@@ -280,6 +298,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "servicesOffered",
   "yearBuilt",
   "unitsSummarized",
+  "jurisdiction",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -389,6 +409,20 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   yearBuilt: number | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdiction?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  reservedCommunityType?: IdDto
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -418,6 +452,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "servicesOffered",
   "yearBuilt",
   "unitsSummarized",
+  "jurisdiction",
+  "reservedCommunityType",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -544,6 +580,20 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   yearBuilt: number | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdiction?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  reservedCommunityType?: IdDto
 }
 
 // add other listing filter params here

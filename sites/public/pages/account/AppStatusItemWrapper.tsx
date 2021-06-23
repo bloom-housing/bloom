@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
-import { AppStatusItem, ApiClientContext } from "@bloom-housing/ui-components"
+import { AppStatusItem, AuthContext } from "@bloom-housing/ui-components"
 
 interface AppStatusItemWrapperProps {
   application: Application
 }
 
 const AppStatusItemWrapper = (props: AppStatusItemWrapperProps) => {
-  const { listingsService } = useContext(ApiClientContext)
+  const { listingsService } = useContext(AuthContext)
   const [listing, setListing] = useState<Listing>()
 
   useEffect(() => {

@@ -59,7 +59,6 @@ export default function Home(props: IndexProps) {
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings"
         listings={props.listings}
-        centered
       />
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>
