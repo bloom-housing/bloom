@@ -1,4 +1,4 @@
-import React, { createContext, FunctionComponent } from "react"
+import React, { AriaAttributes, createContext, FunctionComponent } from "react"
 import { UrlObject } from "url"
 
 type Url = UrlObject | string
@@ -6,7 +6,7 @@ type Url = UrlObject | string
 export interface LinkProps {
   href: string
   "aria-label"?: string
-  "aria-current"?: string
+  "aria-current"?: AriaAttributes["aria-current"]
   className?: string
   tabIndex?: number
 }
