@@ -27,10 +27,8 @@ describe("applications/household/live-alone", function () {
 
   it("Should show an error when min. household size is > 1", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 1,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 1,
     })
     cy.visit(route)
 
