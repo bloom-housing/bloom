@@ -1,80 +1,89 @@
 /** Generate by swagger-axios-codegen */
 // tslint:disable
 /* eslint-disable */
-import axiosStatic, { AxiosInstance } from 'axios';
+import axiosStatic, { AxiosInstance } from "axios"
 
 export interface IRequestOptions {
-  headers?: any;
-  baseURL?: string;
-  responseType?: string;
+  headers?: any
+  baseURL?: string
+  responseType?: string
 }
 
 export interface IRequestConfig {
-  method?: any;
-  headers?: any;
-  url?: any;
-  data?: any;
-  params?: any;
+  method?: any
+  headers?: any
+  url?: any
+  data?: any
+  params?: any
 }
 
 // Add options interface
 export interface ServiceOptions {
-  axios?: AxiosInstance;
+  axios?: AxiosInstance
 }
 
 // Add default options
-export const serviceOptions: ServiceOptions = {};
+export const serviceOptions: ServiceOptions = {}
 
 // Instance selector
-export function axios(configs: IRequestConfig, resolve: (p: any) => void, reject: (p: any) => void): Promise<any> {
+export function axios(
+  configs: IRequestConfig,
+  resolve: (p: any) => void,
+  reject: (p: any) => void
+): Promise<any> {
   if (serviceOptions.axios) {
     return serviceOptions.axios
       .request(configs)
-      .then(res => {
-        resolve(res.data);
+      .then((res) => {
+        resolve(res.data)
       })
-      .catch(err => {
-        reject(err);
-      });
+      .catch((err) => {
+        reject(err)
+      })
   } else {
-    throw new Error('please inject yourself instance like axios  ');
+    throw new Error("please inject yourself instance like axios  ")
   }
 }
 
-export function getConfigs(method: string, contentType: string, url: string, options: any): IRequestConfig {
-  const configs: IRequestConfig = { ...options, method, url };
+export function getConfigs(
+  method: string,
+  contentType: string,
+  url: string,
+  options: any
+): IRequestConfig {
+  const configs: IRequestConfig = { ...options, method, url }
   configs.headers = {
     ...options.headers,
-    'Content-Type': contentType
-  };
-  return configs;
+    "Content-Type": contentType,
+  }
+  return configs
 }
 
-const basePath = '';
+const basePath = ""
 
 export interface IList<T> extends Array<T> {}
 export interface List<T> extends Array<T> {}
 export interface IDictionary<TValue> {
-  [key: string]: TValue;
+  [key: string]: TValue
 }
 export interface Dictionary<TValue> extends IDictionary<TValue> {}
 
 export interface IListResult<T> {
-  items?: T[];
+  items?: T[]
 }
 
 export class ListResult<T> implements IListResult<T> {
-  items?: T[];
+  items?: T[]
 }
 
 export interface IPagedResult<T> extends IListResult<T> {
-  totalCount?: number;
-  items?: T[];
+  totalCount?: number
+  items?: T[]
 }
 
 export class PagedResult<T> implements IPagedResult<T> {
-  totalCount?: number;
-  items?: T[];
+  totalCount?: number
+  items?: T[]
 }
 
 // customer definition
@@ -86,36 +95,38 @@ export class UserService {
    */
   userControllerProfile(options: IRequestOptions = {}): Promise<User> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
+      let url = basePath + "/user"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create user
    */
   create(
     params: {
+      /**  */
+      noWelcomeEmail?: boolean
       /** requestBody */
-      body?: UserCreate;
+      body?: UserCreate
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Status> {
+  ): Promise<UserBasic> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
+      let url = basePath + "/user"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+      configs.params = { noWelcomeEmail: params["noWelcomeEmail"] }
+      let data = params.body
 
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Resend confirmation
@@ -123,20 +134,20 @@ export class UserService {
   resendConfirmation(
     params: {
       /** requestBody */
-      body?: Email;
+      body?: Email
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<UserBasic> {
+  ): Promise<Status> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user/resend-confirmation';
+      let url = basePath + "/user/resend-confirmation"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Confirm email
@@ -144,20 +155,20 @@ export class UserService {
   confirm(
     params: {
       /** requestBody */
-      body?: Confirm;
+      body?: Confirm
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user/confirm';
+      let url = basePath + "/user/confirm"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Forgot Password
@@ -165,20 +176,20 @@ export class UserService {
   forgotPassword(
     params: {
       /** requestBody */
-      body?: ForgotPassword;
+      body?: ForgotPassword
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ForgotPasswordResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user/forgot-password';
+      let url = basePath + "/user/forgot-password"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update Password
@@ -186,20 +197,20 @@ export class UserService {
   updatePassword(
     params: {
       /** requestBody */
-      body?: UpdatePassword;
+      body?: UpdatePassword
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user/update-password';
+      let url = basePath + "/user/update-password"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update user
@@ -207,20 +218,20 @@ export class UserService {
   update(
     params: {
       /** requestBody */
-      body?: UserUpdate;
+      body?: UserUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<User> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/user/{id}';
+      let url = basePath + "/user/{id}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -231,35 +242,35 @@ export class AuthService {
   login(
     params: {
       /** requestBody */
-      body?: Login;
+      body?: Login
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/auth/login';
+      let url = basePath + "/auth/login"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Token
    */
   token(options: IRequestOptions = {}): Promise<LoginResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/auth/token';
+      let url = basePath + "/auth/token"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -270,20 +281,20 @@ export class ListingsService {
   list(
     params: {
       /**  */
-      jsonpath?: string;
+      jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/listings';
+      let url = basePath + "/listings"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { jsonpath: params['jsonpath'] };
-      let data = null;
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { jsonpath: params["jsonpath"] }
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create listing
@@ -291,20 +302,20 @@ export class ListingsService {
   create(
     params: {
       /** requestBody */
-      body?: ListingCreate;
+      body?: ListingCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/listings';
+      let url = basePath + "/listings"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get listing by id
@@ -312,21 +323,21 @@ export class ListingsService {
   retrieve(
     params: {
       /**  */
-      listingId: string;
+      listingId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/listings/{listingId}';
-      url = url.replace('{listingId}', params['listingId'] + '');
+      let url = basePath + "/listings/{listingId}"
+      url = url.replace("{listingId}", params["listingId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update listing by id
@@ -334,23 +345,23 @@ export class ListingsService {
   update(
     params: {
       /**  */
-      listingId: string;
+      listingId: string
       /** requestBody */
-      body?: ListingUpdate;
+      body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/listings/{listingId}';
-      url = url.replace('{listingId}', params['listingId'] + '');
+      let url = basePath + "/listings/{listingId}"
+      url = url.replace("{listingId}", params["listingId"] + "")
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete listing by id
@@ -358,21 +369,21 @@ export class ListingsService {
   delete(
     params: {
       /**  */
-      listingId: string;
+      listingId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/listings/{listingId}';
-      url = url.replace('{listingId}', params['listingId'] + '');
+      let url = basePath + "/listings/{listingId}"
+      url = url.replace("{listingId}", params["listingId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -383,43 +394,43 @@ export class ApplicationsService {
   list(
     params: {
       /**  */
-      page?: number;
+      page?: number
       /**  */
-      limit?: number;
+      limit?: number
       /**  */
-      listingId?: string;
+      listingId?: string
       /**  */
-      search?: string;
+      search?: string
       /**  */
-      userId?: string;
+      userId?: string
       /**  */
-      orderBy?: string;
+      orderBy?: string
       /**  */
-      order?: string;
+      order?: string
       /**  */
-      markedAsDuplicate?: boolean;
+      markedAsDuplicate?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplication> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications';
+      let url = basePath + "/applications"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
-        page: params['page'],
-        limit: params['limit'],
-        listingId: params['listingId'],
-        search: params['search'],
-        userId: params['userId'],
-        orderBy: params['orderBy'],
-        order: params['order'],
-        markedAsDuplicate: params['markedAsDuplicate']
-      };
-      let data = null;
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        search: params["search"],
+        userId: params["userId"],
+        orderBy: params["orderBy"],
+        order: params["order"],
+        markedAsDuplicate: params["markedAsDuplicate"],
+      }
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create application
@@ -427,20 +438,20 @@ export class ApplicationsService {
   create(
     params: {
       /** requestBody */
-      body?: ApplicationCreate;
+      body?: ApplicationCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications';
+      let url = basePath + "/applications"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * List applications as csv
@@ -448,49 +459,49 @@ export class ApplicationsService {
   listAsCsv(
     params: {
       /**  */
-      page?: number;
+      page?: number
       /**  */
-      limit?: number;
+      limit?: number
       /**  */
-      listingId?: string;
+      listingId?: string
       /**  */
-      search?: string;
+      search?: string
       /**  */
-      userId?: string;
+      userId?: string
       /**  */
-      orderBy?: string;
+      orderBy?: string
       /**  */
-      order?: string;
+      order?: string
       /**  */
-      markedAsDuplicate?: boolean;
+      markedAsDuplicate?: boolean
       /**  */
-      includeHeaders?: boolean;
+      includeHeaders?: boolean
       /**  */
-      includeDemographics?: boolean;
+      includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/csv';
+      let url = basePath + "/applications/csv"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = {
-        page: params['page'],
-        limit: params['limit'],
-        listingId: params['listingId'],
-        search: params['search'],
-        userId: params['userId'],
-        orderBy: params['orderBy'],
-        order: params['order'],
-        markedAsDuplicate: params['markedAsDuplicate'],
-        includeHeaders: params['includeHeaders'],
-        includeDemographics: params['includeDemographics']
-      };
-      let data = null;
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+        search: params["search"],
+        userId: params["userId"],
+        orderBy: params["orderBy"],
+        order: params["order"],
+        markedAsDuplicate: params["markedAsDuplicate"],
+        includeHeaders: params["includeHeaders"],
+        includeDemographics: params["includeDemographics"],
+      }
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get application by id
@@ -498,21 +509,21 @@ export class ApplicationsService {
   retrieve(
     params: {
       /**  */
-      applicationId: string;
+      applicationId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
-      url = url.replace('{applicationId}', params['applicationId'] + '');
+      let url = basePath + "/applications/{applicationId}"
+      url = url.replace("{applicationId}", params["applicationId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update application by id
@@ -520,23 +531,23 @@ export class ApplicationsService {
   update(
     params: {
       /**  */
-      applicationId: string;
+      applicationId: string
       /** requestBody */
-      body?: ApplicationUpdate;
+      body?: ApplicationUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
-      url = url.replace('{applicationId}', params['applicationId'] + '');
+      let url = basePath + "/applications/{applicationId}"
+      url = url.replace("{applicationId}", params["applicationId"] + "")
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete application by id
@@ -544,21 +555,21 @@ export class ApplicationsService {
   delete(
     params: {
       /**  */
-      applicationId: string;
+      applicationId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/{applicationId}';
-      url = url.replace('{applicationId}', params['applicationId'] + '');
+      let url = basePath + "/applications/{applicationId}"
+      url = url.replace("{applicationId}", params["applicationId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Submit application
@@ -566,20 +577,20 @@ export class ApplicationsService {
   submit(
     params: {
       /** requestBody */
-      body?: ApplicationCreate;
+      body?: ApplicationCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applications/submit';
+      let url = basePath + "/applications/submit"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -589,15 +600,15 @@ export class PreferencesService {
    */
   list(options: IRequestOptions = {}): Promise<Preference[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/preferences';
+      let url = basePath + "/preferences"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create preference
@@ -605,20 +616,20 @@ export class PreferencesService {
   create(
     params: {
       /** requestBody */
-      body?: PreferenceCreate;
+      body?: PreferenceCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/preferences';
+      let url = basePath + "/preferences"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update preference
@@ -626,20 +637,20 @@ export class PreferencesService {
   update(
     params: {
       /** requestBody */
-      body?: PreferenceUpdate;
+      body?: PreferenceUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/preferences/{preferenceId}';
+      let url = basePath + "/preferences/{preferenceId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get preference by id
@@ -647,21 +658,21 @@ export class PreferencesService {
   retrieve(
     params: {
       /**  */
-      preferenceId: string;
+      preferenceId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Preference> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/preferences/{preferenceId}';
-      url = url.replace('{preferenceId}', params['preferenceId'] + '');
+      let url = basePath + "/preferences/{preferenceId}"
+      url = url.replace("{preferenceId}", params["preferenceId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete preference by id
@@ -669,21 +680,21 @@ export class PreferencesService {
   delete(
     params: {
       /**  */
-      preferenceId: string;
+      preferenceId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/preferences/{preferenceId}';
-      url = url.replace('{preferenceId}', params['preferenceId'] + '');
+      let url = basePath + "/preferences/{preferenceId}"
+      url = url.replace("{preferenceId}", params["preferenceId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -693,15 +704,15 @@ export class UnitsService {
    */
   list(options: IRequestOptions = {}): Promise<Unit[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/units';
+      let url = basePath + "/units"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create unit
@@ -709,20 +720,20 @@ export class UnitsService {
   create(
     params: {
       /** requestBody */
-      body?: UnitCreate;
+      body?: UnitCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/units';
+      let url = basePath + "/units"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update unit
@@ -730,20 +741,20 @@ export class UnitsService {
   update(
     params: {
       /** requestBody */
-      body?: UnitUpdate;
+      body?: UnitUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/units/{unitId}';
+      let url = basePath + "/units/{unitId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get unit by id
@@ -751,21 +762,21 @@ export class UnitsService {
   retrieve(
     params: {
       /**  */
-      unitId: string;
+      unitId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Unit> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/units/{unitId}';
-      url = url.replace('{unitId}', params['unitId'] + '');
+      let url = basePath + "/units/{unitId}"
+      url = url.replace("{unitId}", params["unitId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete unit by id
@@ -773,21 +784,21 @@ export class UnitsService {
   delete(
     params: {
       /**  */
-      unitId: string;
+      unitId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/units/{unitId}';
-      url = url.replace('{unitId}', params['unitId'] + '');
+      let url = basePath + "/units/{unitId}"
+      url = url.replace("{unitId}", params["unitId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -797,15 +808,15 @@ export class PropertiesService {
    */
   list(options: IRequestOptions = {}): Promise<Property[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/properties';
+      let url = basePath + "/properties"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create property
@@ -813,20 +824,20 @@ export class PropertiesService {
   create(
     params: {
       /** requestBody */
-      body?: PropertyCreate;
+      body?: PropertyCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Property> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/properties';
+      let url = basePath + "/properties"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update property
@@ -834,20 +845,20 @@ export class PropertiesService {
   update(
     params: {
       /** requestBody */
-      body?: PropertyUpdate;
+      body?: PropertyUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Property> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/properties/{propertyId}';
+      let url = basePath + "/properties/{propertyId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get property by id
@@ -855,21 +866,21 @@ export class PropertiesService {
   retrieve(
     params: {
       /**  */
-      propertyId: string;
+      propertyId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Property> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/properties/{propertyId}';
-      url = url.replace('{propertyId}', params['propertyId'] + '');
+      let url = basePath + "/properties/{propertyId}"
+      url = url.replace("{propertyId}", params["propertyId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete property by id
@@ -877,21 +888,21 @@ export class PropertiesService {
   delete(
     params: {
       /**  */
-      propertyId: string;
+      propertyId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/properties/{propertyId}';
-      url = url.replace('{propertyId}', params['propertyId'] + '');
+      let url = basePath + "/properties/{propertyId}"
+      url = url.replace("{propertyId}", params["propertyId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -901,15 +912,15 @@ export class PropertyGroupsService {
    */
   list(options: IRequestOptions = {}): Promise<PropertyGroup[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/propertyGroups';
+      let url = basePath + "/propertyGroups"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create propertyGroup
@@ -917,20 +928,20 @@ export class PropertyGroupsService {
   create(
     params: {
       /** requestBody */
-      body?: PropertyGroupCreate;
+      body?: PropertyGroupCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PropertyGroup> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/propertyGroups';
+      let url = basePath + "/propertyGroups"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update propertyGroup
@@ -938,20 +949,20 @@ export class PropertyGroupsService {
   update(
     params: {
       /** requestBody */
-      body?: PropertyGroupUpdate;
+      body?: PropertyGroupUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PropertyGroup> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/propertyGroups/{propertyGroupId}';
+      let url = basePath + "/propertyGroups/{propertyGroupId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get propertyGroup by id
@@ -959,21 +970,21 @@ export class PropertyGroupsService {
   retrieve(
     params: {
       /**  */
-      propertyGroupId: string;
+      propertyGroupId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PropertyGroup> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/propertyGroups/{propertyGroupId}';
-      url = url.replace('{propertyGroupId}', params['propertyGroupId'] + '');
+      let url = basePath + "/propertyGroups/{propertyGroupId}"
+      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete propertyGroup by id
@@ -981,21 +992,21 @@ export class PropertyGroupsService {
   delete(
     params: {
       /**  */
-      propertyGroupId: string;
+      propertyGroupId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/propertyGroups/{propertyGroupId}';
-      url = url.replace('{propertyGroupId}', params['propertyGroupId'] + '');
+      let url = basePath + "/propertyGroups/{propertyGroupId}"
+      url = url.replace("{propertyGroupId}", params["propertyGroupId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -1005,15 +1016,15 @@ export class AmiChartsService {
    */
   list(options: IRequestOptions = {}): Promise<AmiChart[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/amiCharts';
+      let url = basePath + "/amiCharts"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create amiChart
@@ -1021,20 +1032,20 @@ export class AmiChartsService {
   create(
     params: {
       /** requestBody */
-      body?: AmiChartCreate;
+      body?: AmiChartCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AmiChart> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/amiCharts';
+      let url = basePath + "/amiCharts"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update amiChart
@@ -1042,20 +1053,20 @@ export class AmiChartsService {
   update(
     params: {
       /** requestBody */
-      body?: AmiChartUpdate;
+      body?: AmiChartUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AmiChart> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/amiCharts/{amiChartId}';
+      let url = basePath + "/amiCharts/{amiChartId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get amiChart by id
@@ -1063,21 +1074,21 @@ export class AmiChartsService {
   retrieve(
     params: {
       /**  */
-      amiChartId: string;
+      amiChartId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AmiChart> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/amiCharts/{amiChartId}';
-      url = url.replace('{amiChartId}', params['amiChartId'] + '');
+      let url = basePath + "/amiCharts/{amiChartId}"
+      url = url.replace("{amiChartId}", params["amiChartId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete amiChart by id
@@ -1085,21 +1096,21 @@ export class AmiChartsService {
   delete(
     params: {
       /**  */
-      amiChartId: string;
+      amiChartId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/amiCharts/{amiChartId}';
-      url = url.replace('{amiChartId}', params['amiChartId'] + '');
+      let url = basePath + "/amiCharts/{amiChartId}"
+      url = url.replace("{amiChartId}", params["amiChartId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -1109,15 +1120,15 @@ export class TranslationsService {
    */
   list(options: IRequestOptions = {}): Promise<Translation[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/translations';
+      let url = basePath + "/translations"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create translation
@@ -1125,20 +1136,20 @@ export class TranslationsService {
   create(
     params: {
       /** requestBody */
-      body?: TranslationCreate;
+      body?: TranslationCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Translation> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/translations';
+      let url = basePath + "/translations"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Update translation
@@ -1146,20 +1157,20 @@ export class TranslationsService {
   update(
     params: {
       /** requestBody */
-      body?: TranslationUpdate;
+      body?: TranslationUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Translation> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/translations/{translationId}';
+      let url = basePath + "/translations/{translationId}"
 
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Get translation by id
@@ -1167,21 +1178,21 @@ export class TranslationsService {
   retrieve(
     params: {
       /**  */
-      translationId: string;
+      translationId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Translation> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/translations/{translationId}';
-      url = url.replace('{translationId}', params['translationId'] + '');
+      let url = basePath + "/translations/{translationId}"
+      url = url.replace("{translationId}", params["translationId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Delete translation by id
@@ -1189,21 +1200,21 @@ export class TranslationsService {
   delete(
     params: {
       /**  */
-      translationId: string;
+      translationId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/translations/{translationId}';
-      url = url.replace('{translationId}', params['translationId'] + '');
+      let url = basePath + "/translations/{translationId}"
+      url = url.replace("{translationId}", params["translationId"] + "")
 
-      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -1214,24 +1225,28 @@ export class ApplicationFlaggedSetsService {
   list(
     params: {
       /**  */
-      page?: number;
+      page?: number
       /**  */
-      limit?: number;
+      limit?: number
       /**  */
-      listingId: string;
+      listingId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedApplicationFlaggedSet> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationFlaggedSets';
+      let url = basePath + "/applicationFlaggedSets"
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { page: params['page'], limit: params['limit'], listingId: params['listingId'] };
-      let data = null;
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        listingId: params["listingId"],
+      }
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Retrieve application flagged set by id
@@ -1239,21 +1254,21 @@ export class ApplicationFlaggedSetsService {
   retrieve(
     params: {
       /**  */
-      afsId: string;
+      afsId: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationFlaggedSet> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationFlaggedSets/{afsId}';
-      url = url.replace('{afsId}', params['afsId'] + '');
+      let url = basePath + "/applicationFlaggedSets/{afsId}"
+      url = url.replace("{afsId}", params["afsId"] + "")
 
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null;
+      let data = null
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Resolve application flagged set
@@ -1261,20 +1276,20 @@ export class ApplicationFlaggedSetsService {
   resolve(
     params: {
       /** requestBody */
-      body?: ApplicationFlaggedSetResolve;
+      body?: ApplicationFlaggedSetResolve
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<ApplicationFlaggedSet> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/applicationFlaggedSets/resolve';
+      let url = basePath + "/applicationFlaggedSets/resolve"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
@@ -1285,20 +1300,20 @@ export class AssetsService {
   create(
     params: {
       /** requestBody */
-      body?: AssetCreate;
+      body?: AssetCreate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Asset> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/assets';
+      let url = basePath + "/assets"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
   /**
    * Create presigned upload metadata
@@ -1306,2557 +1321,2557 @@ export class AssetsService {
   createPresignedUploadMetadata(
     params: {
       /** requestBody */
-      body?: CreatePresignedUploadMetadata;
+      body?: CreatePresignedUploadMetadata
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<CreatePresignedUploadMetadataResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/assets/presigned-upload-metadata';
+      let url = basePath + "/assets/presigned-upload-metadata"
 
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body;
+      let data = params.body
 
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
   }
 }
 
 export interface Id {
   /**  */
-  id: string;
+  id: string
 }
 
 export interface User {
   /**  */
-  roles: UserRole[];
+  roles: UserRole[]
 
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  leasingAgentInListings?: Id[];
+  leasingAgentInListings?: Id[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  confirmedAt?: Date;
+  confirmedAt?: Date
 
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  firstName: string;
+  firstName: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName: string;
+  lastName: string
 
   /**  */
-  dob: Date;
+  dob: Date
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 }
 
 export interface UserCreate {
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  password: string;
+  password: string
 
   /**  */
-  passwordConfirmation: string;
+  passwordConfirmation: string
 
   /**  */
-  emailConfirmation: string;
+  emailConfirmation: string
 
   /**  */
-  appUrl?: string;
+  appUrl?: string
 
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  firstName: string;
+  firstName: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName: string;
+  lastName: string
 
   /**  */
-  dob: Date;
-}
-
-export interface Status {
-  /**  */
-  status: string;
-}
-
-export interface Email {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
+  dob: Date
 }
 
 export interface UserBasic {
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  confirmedAt?: Date;
+  confirmedAt?: Date
 
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  firstName: string;
+  firstName: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName: string;
+  lastName: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
+}
+
+export interface Email {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface Status {
+  /**  */
+  status: string
 }
 
 export interface Confirm {
   /**  */
-  token: string;
+  token: string
 }
 
 export interface LoginResponse {
   /**  */
-  accessToken: string;
+  accessToken: string
 }
 
 export interface ForgotPassword {
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  appUrl?: string;
+  appUrl?: string
 }
 
 export interface ForgotPasswordResponse {
   /**  */
-  message: string;
+  message: string
 }
 
 export interface UpdatePassword {
   /**  */
-  password: string;
+  password: string
 
   /**  */
-  passwordConfirmation: string;
+  passwordConfirmation: string
 
   /**  */
-  token: string;
+  token: string
 }
 
 export interface UserUpdate {
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  password?: string;
+  password?: string
 
   /**  */
-  currentPassword?: string;
+  currentPassword?: string
 
   /**  */
-  confirmedAt?: Date;
+  confirmedAt?: Date
 
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  firstName: string;
+  firstName: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName: string;
+  lastName: string
 
   /**  */
-  dob: Date;
+  dob: Date
 }
 
 export interface Login {
   /**  */
-  email: string;
+  email: string
 
   /**  */
-  password: string;
+  password: string
 }
 
 export interface PreferenceLink {
   /**  */
-  title: string;
+  title: string
 
   /**  */
-  url: string;
+  url: string
 }
 
 export interface FormMetadataExtraData {
   /**  */
-  type: InputType;
+  type: InputType
 
   /**  */
-  key: string;
+  key: string
 }
 
 export interface FormMetadataOptions {
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  extraData?: FormMetadataExtraData[];
+  extraData?: FormMetadataExtraData[]
 
   /**  */
-  description: boolean;
+  description: boolean
 
   /**  */
-  exclusive: boolean;
+  exclusive: boolean
 }
 
 export interface FormMetadata {
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  options: FormMetadataOptions[];
+  options: FormMetadataOptions[]
 
   /**  */
-  hideGenericDecline: boolean;
+  hideGenericDecline: boolean
 
   /**  */
-  customSelectText: string;
+  customSelectText: string
 
   /**  */
-  hideFromListing: boolean;
+  hideFromListing: boolean
 }
 
 export interface Preference {
   /**  */
-  links: PreferenceLink[];
+  links: PreferenceLink[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  ordinal: number;
+  ordinal: number
 
   /**  */
-  title: string;
+  title: string
 
   /**  */
-  subtitle: string;
+  subtitle: string
 
   /**  */
-  description: string;
+  description: string
 
   /**  */
-  formMetadata?: FormMetadata;
+  formMetadata?: FormMetadata
 
   /**  */
-  page: number;
+  page: number
 }
 
 export interface MinMaxCurrency {
   /**  */
-  min: string;
+  min: string
 
   /**  */
-  max: string;
+  max: string
 }
 
 export interface MinMax {
   /**  */
-  min: number;
+  min: number
 
   /**  */
-  max: number;
+  max: number
 }
 
 export interface UnitSummary {
   /**  */
-  unitType: string;
+  unitType: string
 
   /**  */
-  minIncomeRange: MinMaxCurrency;
+  minIncomeRange: MinMaxCurrency
 
   /**  */
-  occupancyRange: MinMax;
+  occupancyRange: MinMax
 
   /**  */
-  rentAsPercentIncomeRange: MinMax;
+  rentAsPercentIncomeRange: MinMax
 
   /**  */
-  rentRange: MinMaxCurrency;
+  rentRange: MinMaxCurrency
 
   /**  */
-  totalAvailable: number;
+  totalAvailable: number
 
   /**  */
-  areaRange: MinMax;
+  areaRange: MinMax
 
   /**  */
-  floorRange?: MinMax;
+  floorRange?: MinMax
 }
 
 export interface UnitSummaryByReservedType {
   /**  */
-  reservedType: string;
+  reservedType: string
 
   /**  */
-  byUnitTypeAndRent: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[]
 }
 
 export interface UnitSummaryByAMI {
   /**  */
-  percent: string;
+  percent: string
 
   /**  */
-  byNonReservedUnitType: UnitSummary[];
+  byNonReservedUnitType: UnitSummary[]
 
   /**  */
-  byReservedType: UnitSummaryByReservedType[];
+  byReservedType: UnitSummaryByReservedType[]
 }
 
 export interface HMI {
   /**  */
-  columns: object;
+  columns: object
 
   /**  */
-  rows: object[];
+  rows: object[]
 }
 
 export interface UnitsSummarized {
   /**  */
-  unitTypes: string[];
+  unitTypes: string[]
 
   /**  */
-  reservedTypes: string[];
+  reservedTypes: string[]
 
   /**  */
-  priorityTypes: string[];
+  priorityTypes: string[]
 
   /**  */
-  amiPercentages: string[];
+  amiPercentages: string[]
 
   /**  */
-  byUnitTypeAndRent: UnitSummary[];
+  byUnitTypeAndRent: UnitSummary[]
 
   /**  */
-  byUnitType: UnitSummary[];
+  byUnitType: UnitSummary[]
 
   /**  */
-  byNonReservedUnitType: UnitSummary[];
+  byNonReservedUnitType: UnitSummary[]
 
   /**  */
-  byReservedType: UnitSummaryByReservedType[];
+  byReservedType: UnitSummaryByReservedType[]
 
   /**  */
-  byAMI: UnitSummaryByAMI[];
+  byAMI: UnitSummaryByAMI[]
 
   /**  */
-  hmi: HMI;
+  hmi: HMI
 }
 
 export interface AmiChartItem {
   /**  */
-  percentOfAmi: number;
+  percentOfAmi: number
 
   /**  */
-  householdSize: number;
+  householdSize: number
 
   /**  */
-  income: number;
+  income: number
 }
 
 export interface AmiChart {
   /**  */
-  items: AmiChartItem[];
+  items: AmiChartItem[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  name: string;
+  name: string
 }
 
 export interface Unit {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart: CombinedAmiChartTypes
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  amiPercentage?: string;
+  amiPercentage?: string
 
   /**  */
-  annualIncomeMin?: string;
+  annualIncomeMin?: string
 
   /**  */
-  monthlyIncomeMin?: string;
+  monthlyIncomeMin?: string
 
   /**  */
-  floor?: number;
+  floor?: number
 
   /**  */
-  annualIncomeMax?: string;
+  annualIncomeMax?: string
 
   /**  */
-  maxOccupancy?: number;
+  maxOccupancy?: number
 
   /**  */
-  minOccupancy?: number;
+  minOccupancy?: number
 
   /**  */
-  monthlyRent?: string;
+  monthlyRent?: string
 
   /**  */
-  numBathrooms?: number;
+  numBathrooms?: number
 
   /**  */
-  numBedrooms?: number;
+  numBedrooms?: number
 
   /**  */
-  number?: string;
+  number?: string
 
   /**  */
-  priorityType?: string;
+  priorityType?: string
 
   /**  */
-  reservedType?: string;
+  reservedType?: string
 
   /**  */
-  sqFeet?: string;
+  sqFeet?: string
 
   /**  */
-  status?: string;
+  status?: string
 
   /**  */
-  unitType?: string;
+  unitType?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  bmrProgramChart?: boolean;
+  bmrProgramChart?: boolean
 }
 
 export interface Address {
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  placeName?: string;
+  placeName?: string
 
   /**  */
-  city?: string;
+  city?: string
 
   /**  */
-  county?: string;
+  county?: string
 
   /**  */
-  state?: string;
+  state?: string
 
   /**  */
-  street?: string;
+  street?: string
 
   /**  */
-  street2?: string;
+  street2?: string
 
   /**  */
-  zipCode?: string;
+  zipCode?: string
 
   /**  */
-  latitude?: number;
+  latitude?: number
 
   /**  */
-  longitude?: number;
+  longitude?: number
 }
 
 export interface Property {
   /**  */
-  unitsSummarized: UnitsSummarized;
+  unitsSummarized: UnitsSummarized
 
   /**  */
-  units: Unit[];
+  units: Unit[]
 
   /**  */
-  buildingAddress: Address;
+  buildingAddress: Address
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt?: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  accessibility: string;
+  accessibility: string
 
   /**  */
-  amenities: string;
+  amenities: string
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: number
 
   /**  */
-  developer: string;
+  developer: string
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax: number
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin: number
 
   /**  */
-  neighborhood: string;
+  neighborhood: string
 
   /**  */
-  petPolicy: string;
+  petPolicy: string
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy: string
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: number
 
   /**  */
-  unitAmenities: string;
+  unitAmenities: string
 
   /**  */
-  servicesOffered?: string;
+  servicesOffered?: string
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: number
 }
 
 export interface ApplicationMethod {
   /**  */
-  type: ApplicationMethodType;
+  type: ApplicationMethodType
 
   /**  */
-  label: string;
+  label: string
 
   /**  */
-  externalReference: string;
+  externalReference: string
 
   /**  */
-  acceptsPostmarkedApplications: boolean;
+  acceptsPostmarkedApplications: boolean
 }
 
 export interface Asset {
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  fileId: string;
+  fileId: string
 
   /**  */
-  label: string;
+  label: string
 }
 
 export interface ListingEvent {
   /**  */
-  type: ListingEventType;
+  type: ListingEventType
 
   /**  */
-  startTime?: Date;
+  startTime?: Date
 
   /**  */
-  endTime?: Date;
+  endTime?: Date
 
   /**  */
-  url?: string;
+  url?: string
 
   /**  */
-  note?: string;
+  note?: string
 
   /**  */
-  label?: string;
+  label?: string
 }
 
 export interface WhatToExpect {
   /**  */
-  applicantsWillBeContacted: string;
+  applicantsWillBeContacted: string
 
   /**  */
-  allInfoWillBeVerified: string;
+  allInfoWillBeVerified: string
 
   /**  */
-  bePreparedIfChosen: string;
+  bePreparedIfChosen: string
 }
 
 export interface Listing {
   /**  */
-  status: ListingStatus;
+  status: ListingStatus
 
   /**  */
-  urlSlug: string;
+  urlSlug: string
 
   /**  */
-  displayWaitlistSize: boolean;
+  displayWaitlistSize: boolean
 
   /**  */
-  CSVFormattingType: CSVFormattingType;
+  CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  showWaitlist: boolean;
+  showWaitlist: boolean
 
   /**  */
-  preferences: Preference[];
+  preferences: Preference[]
 
   /**  */
-  property: Property;
+  property: Property
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationAddress: CombinedApplicationAddressTypes
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes
 
   /**  */
-  leasingAgents?: UserBasic[];
+  leasingAgents?: UserBasic[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  applicationMethods: ApplicationMethod[];
+  applicationMethods: ApplicationMethod[]
 
   /**  */
-  assets: Asset[];
+  assets: Asset[]
 
   /**  */
-  events: ListingEvent[];
+  events: ListingEvent[]
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate: Date
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate: Date
 
   /**  */
-  applicationFee: string;
+  applicationFee: string
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization: string
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours: string
 
   /**  */
-  buildingSelectionCriteria: string;
+  buildingSelectionCriteria: string
 
   /**  */
-  costsNotIncluded: string;
+  costsNotIncluded: string
 
   /**  */
-  creditHistory: string;
+  creditHistory: string
 
   /**  */
-  criminalBackground: string;
+  criminalBackground: string
 
   /**  */
-  depositMin: string;
+  depositMin: string
 
   /**  */
-  depositMax: string;
+  depositMax: string
 
   /**  */
-  disableUnitsAccordion: boolean;
+  disableUnitsAccordion: boolean
 
   /**  */
-  leasingAgentEmail: string;
+  leasingAgentEmail: string
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentName: string
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentOfficeHours: string
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentPhone: string
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentTitle: string
 
   /**  */
-  name: string;
+  name: string
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate: Date
 
   /**  */
-  programRules: string;
+  programRules: string
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance: string
 
   /**  */
-  rentalHistory: string;
+  rentalHistory: string
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments: string
 
   /**  */
   specialNotes?: string
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: number
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: number
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect: CombinedWhatToExpectTypes
 
   /**  */
-  applicationConfig?: object;
+  applicationConfig?: object
 }
 
 export interface PreferenceCreate {
   /**  */
-  links: PreferenceLink[];
+  links: PreferenceLink[]
 
   /**  */
-  ordinal: number;
+  ordinal: number
 
   /**  */
-  title: string;
+  title: string
 
   /**  */
-  subtitle: string;
+  subtitle: string
 
   /**  */
-  description: string;
+  description: string
 
   /**  */
-  formMetadata?: FormMetadata;
+  formMetadata?: FormMetadata
 
   /**  */
-  page: number;
+  page: number
 }
 
 export interface AddressCreate {
   /**  */
-  placeName?: string;
+  placeName?: string
 
   /**  */
-  city?: string;
+  city?: string
 
   /**  */
-  county?: string;
+  county?: string
 
   /**  */
-  state?: string;
+  state?: string
 
   /**  */
-  street?: string;
+  street?: string
 
   /**  */
-  street2?: string;
+  street2?: string
 
   /**  */
-  zipCode?: string;
+  zipCode?: string
 
   /**  */
-  latitude?: number;
+  latitude?: number
 
   /**  */
-  longitude?: number;
+  longitude?: number
 }
 
 export interface ListingCreate {
   /**  */
-  status: ListingStatus;
+  status: ListingStatus
 
   /**  */
-  displayWaitlistSize: boolean;
+  displayWaitlistSize: boolean
 
   /**  */
-  CSVFormattingType: CSVFormattingType;
+  CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  preferences?: PreferenceCreate[];
+  preferences: PreferenceCreate[]
 
   /**  */
-  property: Id;
+  property: Id
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationAddress: CombinedApplicationAddressTypes
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes
 
   /**  */
-  leasingAgents?: Id[];
+  leasingAgents?: Id[]
 
   /**  */
-  applicationMethods: ApplicationMethod[];
+  applicationMethods: ApplicationMethod[]
 
   /**  */
-  assets: Asset[];
+  assets: Asset[]
 
   /**  */
-  events: ListingEvent[];
+  events: ListingEvent[]
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate: Date
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate: Date
 
   /**  */
-  applicationFee: string;
+  applicationFee: string
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization: string
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours: string
 
   /**  */
-  buildingSelectionCriteria: string;
+  buildingSelectionCriteria: string
 
   /**  */
-  costsNotIncluded: string;
+  costsNotIncluded: string
 
   /**  */
-  creditHistory: string;
+  creditHistory: string
 
   /**  */
-  criminalBackground: string;
+  criminalBackground: string
 
   /**  */
-  depositMin: string;
+  depositMin: string
 
   /**  */
-  depositMax: string;
+  depositMax: string
 
   /**  */
-  disableUnitsAccordion: boolean;
+  disableUnitsAccordion: boolean
 
   /**  */
-  leasingAgentEmail: string;
+  leasingAgentEmail: string
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentName: string
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentOfficeHours: string
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentPhone: string
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentTitle: string
 
   /**  */
-  name: string;
+  name: string
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate: Date
 
   /**  */
-  programRules: string;
+  programRules: string
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance: string
 
   /**  */
-  rentalHistory: string;
+  rentalHistory: string
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments: string
 
   /**  */
-  specialNotes?: string;
+  specialNotes?: string
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: number
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: number
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect: CombinedWhatToExpectTypes
 
   /**  */
-  applicationConfig?: object;
+  applicationConfig?: object
 }
 
 export interface PreferenceUpdate {
   /**  */
-  links: PreferenceLink[];
+  links: PreferenceLink[]
 
   /**  */
-  ordinal: number;
+  ordinal: number
 
   /**  */
-  title: string;
+  title: string
 
   /**  */
-  subtitle: string;
+  subtitle: string
 
   /**  */
-  description: string;
+  description: string
 
   /**  */
-  formMetadata?: FormMetadata;
+  formMetadata?: FormMetadata
 
   /**  */
-  page: number;
+  page: number
 
   /**  */
-  id: string;
+  id: string
 }
 
 export interface AddressUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  placeName?: string;
+  placeName?: string
 
   /**  */
-  city?: string;
+  city?: string
 
   /**  */
-  county?: string;
+  county?: string
 
   /**  */
-  state?: string;
+  state?: string
 
   /**  */
-  street?: string;
+  street?: string
 
   /**  */
-  street2?: string;
+  street2?: string
 
   /**  */
-  zipCode?: string;
+  zipCode?: string
 
   /**  */
-  latitude?: number;
+  latitude?: number
 
   /**  */
-  longitude?: number;
+  longitude?: number
 }
 
 export interface ListingUpdate {
   /**  */
-  status: ListingStatus;
+  status: ListingStatus
 
   /**  */
-  displayWaitlistSize: boolean;
+  displayWaitlistSize: boolean
 
   /**  */
-  CSVFormattingType: CSVFormattingType;
+  CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  preferences?: PreferenceUpdate[];
+  preferences: PreferenceUpdate[]
 
   /**  */
-  property: Id;
+  property: Id
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationAddress: CombinedApplicationAddressTypes
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes
 
   /**  */
-  leasingAgents?: Id[];
+  leasingAgents?: Id[]
 
   /**  */
-  applicationMethods: ApplicationMethod[];
+  applicationMethods: ApplicationMethod[]
 
   /**  */
-  assets: Asset[];
+  assets: Asset[]
 
   /**  */
-  events: ListingEvent[];
+  events: ListingEvent[]
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate: Date
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate: Date
 
   /**  */
-  applicationFee: string;
+  applicationFee: string
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization: string
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours: string
 
   /**  */
-  buildingSelectionCriteria: string;
+  buildingSelectionCriteria: string
 
   /**  */
-  costsNotIncluded: string;
+  costsNotIncluded: string
 
   /**  */
-  creditHistory: string;
+  creditHistory: string
 
   /**  */
-  criminalBackground: string;
+  criminalBackground: string
 
   /**  */
-  depositMin: string;
+  depositMin: string
 
   /**  */
-  depositMax: string;
+  depositMax: string
 
   /**  */
-  disableUnitsAccordion: boolean;
+  disableUnitsAccordion: boolean
 
   /**  */
-  leasingAgentEmail: string;
+  leasingAgentEmail: string
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentName: string
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentOfficeHours: string
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentPhone: string
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentTitle: string
 
   /**  */
-  name: string;
+  name: string
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate: Date
 
   /**  */
-  programRules: string;
+  programRules: string
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance: string
 
   /**  */
-  rentalHistory: string;
+  rentalHistory: string
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments: string
 
   /**  */
-  specialNotes?: string;
+  specialNotes?: string
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize: number
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize: number
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect: CombinedWhatToExpectTypes
 
   /**  */
-  applicationConfig?: object;
+  applicationConfig?: object
 }
 
 export interface BooleanInput {
   /**  */
-  type: InputType;
+  type: InputType
 
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  value: boolean;
+  value: boolean
 }
 
 export interface TextInput {
   /**  */
-  type: InputType;
+  type: InputType
 
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  value: string;
+  value: string
 }
 
 export interface AddressInput {
   /**  */
-  type: InputType;
+  type: InputType
 
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  value: AddressCreate;
+  value: AddressCreate
 }
 
 export interface Applicant {
   /**  */
-  address: Address;
+  address: Address
 
   /**  */
-  workAddress: Address;
+  workAddress: Address
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface AlternateContact {
   /**  */
-  mailingAddress: Address;
+  mailingAddress: Address
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  type?: string;
+  type?: string
 
   /**  */
-  otherType?: string;
+  otherType?: string
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  agency?: string;
+  agency?: string
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 }
 
 export interface Accessibility {
   /**  */
-  mobility?: boolean;
+  mobility?: boolean
 
   /**  */
-  vision?: boolean;
+  vision?: boolean
 
   /**  */
-  hearing?: boolean;
+  hearing?: boolean
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 }
 
 export interface Demographics {
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  ethnicity?: string;
+  ethnicity?: string
 
   /**  */
-  gender?: string;
+  gender?: string
 
   /**  */
-  sexualOrientation?: string;
+  sexualOrientation?: string
 
   /**  */
-  howDidYouHear: string[];
+  howDidYouHear: string[]
 
   /**  */
-  race?: string;
+  race?: string
 }
 
 export interface HouseholdMember {
   /**  */
-  address: Address;
+  address: Address
 
   /**  */
-  workAddress: Address;
+  workAddress: Address
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  orderId?: number;
+  orderId?: number
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  sameAddress?: string;
+  sameAddress?: string
 
   /**  */
-  relationship?: string;
+  relationship?: string
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface ApplicationPreferenceOption {
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  checked: boolean;
+  checked: boolean
 
   /**  */
-  extraData?: AllExtraDataTypes[];
+  extraData?: AllExtraDataTypes[]
 }
 
 export interface ApplicationPreference {
   /**  */
-  key: string;
+  key: string
 
   /**  */
-  claimed: boolean;
+  claimed: boolean
 
   /**  */
-  options: ApplicationPreferenceOption[];
+  options: ApplicationPreferenceOption[]
 }
 
 export interface Application {
   /**  */
-  incomePeriod?: IncomePeriod;
+  incomePeriod?: IncomePeriod
 
   /**  */
-  status: ApplicationStatus;
+  status: ApplicationStatus
 
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  submissionType: ApplicationSubmissionType;
+  submissionType: ApplicationSubmissionType
 
   /**  */
-  applicant: Applicant;
+  applicant: Applicant
 
   /**  */
-  listing: Id;
+  listing: Id
 
   /**  */
-  user?: Id;
+  user?: Id
 
   /**  */
-  mailingAddress: Address;
+  mailingAddress: Address
 
   /**  */
-  alternateAddress: Address;
+  alternateAddress: Address
 
   /**  */
-  alternateContact: AlternateContact;
+  alternateContact: AlternateContact
 
   /**  */
-  accessibility: Accessibility;
+  accessibility: Accessibility
 
   /**  */
-  demographics: Demographics;
+  demographics: Demographics
 
   /**  */
-  householdMembers: HouseholdMember[];
+  householdMembers: HouseholdMember[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  deletedAt?: Date;
+  deletedAt?: Date
 
   /**  */
-  appUrl?: string;
+  appUrl?: string
 
   /**  */
-  additionalPhone?: boolean;
+  additionalPhone?: boolean
 
   /**  */
-  additionalPhoneNumber?: string;
+  additionalPhoneNumber?: string
 
   /**  */
-  additionalPhoneNumberType?: string;
+  additionalPhoneNumberType?: string
 
   /**  */
-  contactPreferences: string[];
+  contactPreferences: string[]
 
   /**  */
-  householdSize?: number;
+  householdSize?: number
 
   /**  */
-  housingStatus?: string;
+  housingStatus?: string
 
   /**  */
-  sendMailToMailingAddress?: boolean;
+  sendMailToMailingAddress?: boolean
 
   /**  */
-  incomeVouchers?: boolean;
+  incomeVouchers?: boolean
 
   /**  */
-  income?: string;
+  income?: string
 
   /**  */
-  preferredUnit: string[];
+  preferredUnit: string[]
 
   /**  */
-  preferences: ApplicationPreference[];
+  preferences: ApplicationPreference[]
 
   /**  */
-  acceptedTerms?: boolean;
+  acceptedTerms?: boolean
 
   /**  */
-  submissionDate?: Date;
+  submissionDate?: Date
 
   /**  */
-  markedAsDuplicate: boolean;
+  markedAsDuplicate: boolean
 }
 
 export interface PaginationMeta {
   /**  */
-  currentPage: number;
+  currentPage: number
 
   /**  */
-  itemCount: number;
+  itemCount: number
 
   /**  */
-  itemsPerPage: number;
+  itemsPerPage: number
 
   /**  */
-  totalItems: number;
+  totalItems: number
 
   /**  */
-  totalPages: number;
+  totalPages: number
 }
 
 export interface PaginatedApplication {
   /**  */
-  items: Application[];
+  items: Application[]
 
   /**  */
-  meta: PaginationMeta;
+  meta: PaginationMeta
 }
 
 export interface ApplicantCreate {
   /**  */
-  address: AddressCreate;
+  address: AddressCreate
 
   /**  */
-  workAddress: AddressCreate;
+  workAddress: AddressCreate
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface AlternateContactCreate {
   /**  */
-  mailingAddress: AddressCreate;
+  mailingAddress: AddressCreate
 
   /**  */
-  type?: string;
+  type?: string
 
   /**  */
-  otherType?: string;
+  otherType?: string
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  agency?: string;
+  agency?: string
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 }
 
 export interface AccessibilityCreate {
   /**  */
-  mobility?: boolean;
+  mobility?: boolean
 
   /**  */
-  vision?: boolean;
+  vision?: boolean
 
   /**  */
-  hearing?: boolean;
+  hearing?: boolean
 }
 
 export interface DemographicsCreate {
   /**  */
-  ethnicity?: string;
+  ethnicity?: string
 
   /**  */
-  gender?: string;
+  gender?: string
 
   /**  */
-  sexualOrientation?: string;
+  sexualOrientation?: string
 
   /**  */
-  howDidYouHear: string[];
+  howDidYouHear: string[]
 
   /**  */
-  race?: string;
+  race?: string
 }
 
 export interface HouseholdMemberCreate {
   /**  */
-  address: AddressCreate;
+  address: AddressCreate
 
   /**  */
-  workAddress: AddressCreate;
+  workAddress: AddressCreate
 
   /**  */
-  orderId?: number;
+  orderId?: number
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  sameAddress?: string;
+  sameAddress?: string
 
   /**  */
-  relationship?: string;
+  relationship?: string
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface ApplicationCreate {
   /**  */
-  incomePeriod?: IncomePeriod;
+  incomePeriod?: IncomePeriod
 
   /**  */
-  status: ApplicationStatus;
+  status: ApplicationStatus
 
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  submissionType: ApplicationSubmissionType;
+  submissionType: ApplicationSubmissionType
 
   /**  */
-  listing: Id;
+  listing: Id
 
   /**  */
-  applicant: ApplicantCreate;
+  applicant: ApplicantCreate
 
   /**  */
-  mailingAddress: AddressCreate;
+  mailingAddress: AddressCreate
 
   /**  */
-  alternateAddress: AddressCreate;
+  alternateAddress: AddressCreate
 
   /**  */
-  alternateContact: AlternateContactCreate;
+  alternateContact: AlternateContactCreate
 
   /**  */
-  accessibility: AccessibilityCreate;
+  accessibility: AccessibilityCreate
 
   /**  */
-  demographics: DemographicsCreate;
+  demographics: DemographicsCreate
 
   /**  */
-  householdMembers: HouseholdMemberCreate[];
+  householdMembers: HouseholdMemberCreate[]
 
   /**  */
-  appUrl?: string;
+  appUrl?: string
 
   /**  */
-  additionalPhone?: boolean;
+  additionalPhone?: boolean
 
   /**  */
-  additionalPhoneNumber?: string;
+  additionalPhoneNumber?: string
 
   /**  */
-  additionalPhoneNumberType?: string;
+  additionalPhoneNumberType?: string
 
   /**  */
-  contactPreferences: string[];
+  contactPreferences: string[]
 
   /**  */
-  householdSize?: number;
+  householdSize?: number
 
   /**  */
-  housingStatus?: string;
+  housingStatus?: string
 
   /**  */
-  sendMailToMailingAddress?: boolean;
+  sendMailToMailingAddress?: boolean
 
   /**  */
-  incomeVouchers?: boolean;
+  incomeVouchers?: boolean
 
   /**  */
-  income?: string;
+  income?: string
 
   /**  */
-  preferredUnit: string[];
+  preferredUnit: string[]
 
   /**  */
-  preferences: ApplicationPreference[];
+  preferences: ApplicationPreference[]
 
   /**  */
-  acceptedTerms?: boolean;
+  acceptedTerms?: boolean
 
   /**  */
-  submissionDate?: Date;
+  submissionDate?: Date
 }
 
 export interface ApplicantUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  address: AddressUpdate;
+  address: AddressUpdate
 
   /**  */
-  workAddress: AddressUpdate;
+  workAddress: AddressUpdate
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface AlternateContactUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  mailingAddress: AddressUpdate;
+  mailingAddress: AddressUpdate
 
   /**  */
-  type?: string;
+  type?: string
 
   /**  */
-  otherType?: string;
+  otherType?: string
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  agency?: string;
+  agency?: string
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 }
 
 export interface AccessibilityUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  mobility?: boolean;
+  mobility?: boolean
 
   /**  */
-  vision?: boolean;
+  vision?: boolean
 
   /**  */
-  hearing?: boolean;
+  hearing?: boolean
 }
 
 export interface DemographicsUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  ethnicity?: string;
+  ethnicity?: string
 
   /**  */
-  gender?: string;
+  gender?: string
 
   /**  */
-  sexualOrientation?: string;
+  sexualOrientation?: string
 
   /**  */
-  howDidYouHear: string[];
+  howDidYouHear: string[]
 
   /**  */
-  race?: string;
+  race?: string
 }
 
 export interface HouseholdMemberUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  address: AddressUpdate;
+  address: AddressUpdate
 
   /**  */
-  workAddress: AddressUpdate;
+  workAddress: AddressUpdate
 
   /**  */
-  orderId?: number;
+  orderId?: number
 
   /**  */
-  firstName?: string;
+  firstName?: string
 
   /**  */
-  middleName?: string;
+  middleName?: string
 
   /**  */
-  lastName?: string;
+  lastName?: string
 
   /**  */
-  birthMonth?: string;
+  birthMonth?: string
 
   /**  */
-  birthDay?: string;
+  birthDay?: string
 
   /**  */
-  birthYear?: string;
+  birthYear?: string
 
   /**  */
-  emailAddress?: string;
+  emailAddress?: string
 
   /**  */
-  noEmail?: boolean;
+  noEmail?: boolean
 
   /**  */
-  phoneNumber?: string;
+  phoneNumber?: string
 
   /**  */
-  phoneNumberType?: string;
+  phoneNumberType?: string
 
   /**  */
-  noPhone?: boolean;
+  noPhone?: boolean
 
   /**  */
-  sameAddress?: string;
+  sameAddress?: string
 
   /**  */
-  relationship?: string;
+  relationship?: string
 
   /**  */
-  workInRegion?: string;
+  workInRegion?: string
 }
 
 export interface ApplicationUpdate {
   /**  */
-  incomePeriod?: IncomePeriod;
+  incomePeriod?: IncomePeriod
 
   /**  */
-  status: ApplicationStatus;
+  status: ApplicationStatus
 
   /**  */
-  language?: Language;
+  language?: Language
 
   /**  */
-  submissionType: ApplicationSubmissionType;
+  submissionType: ApplicationSubmissionType
 
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  deletedAt?: Date;
+  deletedAt?: Date
 
   /**  */
-  listing: Id;
+  listing: Id
 
   /**  */
-  applicant: ApplicantUpdate;
+  applicant: ApplicantUpdate
 
   /**  */
-  mailingAddress: AddressUpdate;
+  mailingAddress: AddressUpdate
 
   /**  */
-  alternateAddress: AddressUpdate;
+  alternateAddress: AddressUpdate
 
   /**  */
-  alternateContact: AlternateContactUpdate;
+  alternateContact: AlternateContactUpdate
 
   /**  */
-  accessibility: AccessibilityUpdate;
+  accessibility: AccessibilityUpdate
 
   /**  */
-  demographics: DemographicsUpdate;
+  demographics: DemographicsUpdate
 
   /**  */
-  householdMembers: HouseholdMemberUpdate[];
+  householdMembers: HouseholdMemberUpdate[]
 
   /**  */
-  appUrl?: string;
+  appUrl?: string
 
   /**  */
-  additionalPhone?: boolean;
+  additionalPhone?: boolean
 
   /**  */
-  additionalPhoneNumber?: string;
+  additionalPhoneNumber?: string
 
   /**  */
-  additionalPhoneNumberType?: string;
+  additionalPhoneNumberType?: string
 
   /**  */
-  contactPreferences: string[];
+  contactPreferences: string[]
 
   /**  */
-  householdSize?: number;
+  householdSize?: number
 
   /**  */
-  housingStatus?: string;
+  housingStatus?: string
 
   /**  */
-  sendMailToMailingAddress?: boolean;
+  sendMailToMailingAddress?: boolean
 
   /**  */
-  incomeVouchers?: boolean;
+  incomeVouchers?: boolean
 
   /**  */
-  income?: string;
+  income?: string
 
   /**  */
-  preferredUnit: string[];
+  preferredUnit: string[]
 
   /**  */
-  preferences: ApplicationPreference[];
+  preferences: ApplicationPreference[]
 
   /**  */
-  acceptedTerms?: boolean;
+  acceptedTerms?: boolean
 
   /**  */
-  submissionDate?: Date;
+  submissionDate?: Date
 }
 
 export interface UnitCreate {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart: CombinedAmiChartTypes
 
   /**  */
-  amiPercentage?: string;
+  amiPercentage?: string
 
   /**  */
-  annualIncomeMin?: string;
+  annualIncomeMin?: string
 
   /**  */
-  monthlyIncomeMin?: string;
+  monthlyIncomeMin?: string
 
   /**  */
-  floor?: number;
+  floor?: number
 
   /**  */
-  annualIncomeMax?: string;
+  annualIncomeMax?: string
 
   /**  */
-  maxOccupancy?: number;
+  maxOccupancy?: number
 
   /**  */
-  minOccupancy?: number;
+  minOccupancy?: number
 
   /**  */
-  monthlyRent?: string;
+  monthlyRent?: string
 
   /**  */
-  numBathrooms?: number;
+  numBathrooms?: number
 
   /**  */
-  numBedrooms?: number;
+  numBedrooms?: number
 
   /**  */
-  number?: string;
+  number?: string
 
   /**  */
-  priorityType?: string;
+  priorityType?: string
 
   /**  */
-  reservedType?: string;
+  reservedType?: string
 
   /**  */
-  sqFeet?: string;
+  sqFeet?: string
 
   /**  */
-  status?: string;
+  status?: string
 
   /**  */
-  unitType?: string;
+  unitType?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  bmrProgramChart?: boolean;
+  bmrProgramChart?: boolean
 }
 
 export interface UnitUpdate {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart: CombinedAmiChartTypes
 
   /**  */
-  amiPercentage?: string;
+  amiPercentage?: string
 
   /**  */
-  annualIncomeMin?: string;
+  annualIncomeMin?: string
 
   /**  */
-  monthlyIncomeMin?: string;
+  monthlyIncomeMin?: string
 
   /**  */
-  floor?: number;
+  floor?: number
 
   /**  */
-  annualIncomeMax?: string;
+  annualIncomeMax?: string
 
   /**  */
-  maxOccupancy?: number;
+  maxOccupancy?: number
 
   /**  */
-  minOccupancy?: number;
+  minOccupancy?: number
 
   /**  */
-  monthlyRent?: string;
+  monthlyRent?: string
 
   /**  */
-  numBathrooms?: number;
+  numBathrooms?: number
 
   /**  */
-  numBedrooms?: number;
+  numBedrooms?: number
 
   /**  */
-  number?: string;
+  number?: string
 
   /**  */
-  priorityType?: string;
+  priorityType?: string
 
   /**  */
-  reservedType?: string;
+  reservedType?: string
 
   /**  */
-  sqFeet?: string;
+  sqFeet?: string
 
   /**  */
-  status?: string;
+  status?: string
 
   /**  */
-  unitType?: string;
+  unitType?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  bmrProgramChart?: boolean;
+  bmrProgramChart?: boolean
 
   /**  */
-  id: string;
+  id: string
 }
 
 export interface PropertyCreate {
   /**  */
-  buildingAddress: AddressUpdate;
+  buildingAddress: AddressUpdate
 
   /**  */
-  units: UnitCreate[];
+  units: UnitCreate[]
 
   /**  */
-  accessibility: string;
+  accessibility: string
 
   /**  */
-  amenities: string;
+  amenities: string
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: number
 
   /**  */
-  developer: string;
+  developer: string
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax: number
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin: number
 
   /**  */
-  neighborhood: string;
+  neighborhood: string
 
   /**  */
-  petPolicy: string;
+  petPolicy: string
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy: string
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: number
 
   /**  */
-  unitAmenities: string;
+  unitAmenities: string
 
   /**  */
-  servicesOffered?: string;
+  servicesOffered?: string
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: number
 }
 
 export interface PropertyUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  buildingAddress: AddressUpdate;
+  buildingAddress: AddressUpdate
 
   /**  */
-  units: UnitUpdate[];
+  units: UnitUpdate[]
 
   /**  */
-  accessibility: string;
+  accessibility: string
 
   /**  */
-  amenities: string;
+  amenities: string
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits: number
 
   /**  */
-  developer: string;
+  developer: string
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax: number
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin: number
 
   /**  */
-  neighborhood: string;
+  neighborhood: string
 
   /**  */
-  petPolicy: string;
+  petPolicy: string
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy: string
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable: number
 
   /**  */
-  unitAmenities: string;
+  unitAmenities: string
 
   /**  */
-  servicesOffered?: string;
+  servicesOffered?: string
 
   /**  */
-  yearBuilt: number;
+  yearBuilt: number
 }
 
 export interface PropertyGroup {
   /**  */
-  properties: Id[];
+  properties: Id[]
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  name: string;
+  name: string
 }
 
 export interface PropertyGroupCreate {
   /**  */
-  name: string;
+  name: string
 
   /**  */
-  properties: Id[];
+  properties: Id[]
 }
 
 export interface PropertyGroupUpdate {
   /**  */
-  name: string;
+  name: string
 
   /**  */
-  properties: Id[];
+  properties: Id[]
 
   /**  */
-  id: string;
+  id: string
 }
 
 export interface AmiChartCreate {
   /**  */
-  items: AmiChartItem[];
+  items: AmiChartItem[]
 
   /**  */
-  name: string;
+  name: string
 }
 
 export interface AmiChartUpdate {
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  items: AmiChartItem[];
+  items: AmiChartItem[]
 
   /**  */
-  name: string;
+  name: string
 }
 
 export interface Translation {
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  language: Language;
+  language: Language
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  translations: object;
+  translations: object
 }
 
 export interface TranslationCreate {
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  language: Language;
+  language: Language
 
   /**  */
-  translations: object;
+  translations: object
 }
 
 export interface TranslationUpdate {
   /**  */
-  countyCode: CountyCode;
+  countyCode: CountyCode
 
   /**  */
-  language: Language;
+  language: Language
 
   /**  */
-  id?: string;
+  id?: string
 
   /**  */
-  createdAt?: Date;
+  createdAt?: Date
 
   /**  */
-  updatedAt?: Date;
+  updatedAt?: Date
 
   /**  */
-  translations: object;
+  translations: object
 }
 
 export interface ApplicationFlaggedSet {
   /**  */
-  resolvingUser: Id;
+  resolvingUser: Id
 
   /**  */
-  applications: Application[];
+  applications: Application[]
 
   /**  */
-  listing: Id;
+  listing: Id
 
   /**  */
-  id: string;
+  id: string
 
   /**  */
-  createdAt: Date;
+  createdAt: Date
 
   /**  */
-  updatedAt: Date;
+  updatedAt: Date
 
   /**  */
-  rule: string;
+  rule: string
 
   /**  */
-  resolvedTime?: Date;
+  resolvedTime?: Date
 
   /**  */
-  status: EnumApplicationFlaggedSetStatus;
+  status: EnumApplicationFlaggedSetStatus
 
   /**  */
-  listingId: string;
+  listingId: string
 }
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
-  currentPage: number;
+  currentPage: number
 
   /**  */
-  itemCount: number;
+  itemCount: number
 
   /**  */
-  itemsPerPage: number;
+  itemsPerPage: number
 
   /**  */
-  totalItems: number;
+  totalItems: number
 
   /**  */
-  totalPages: number;
+  totalPages: number
 
   /**  */
-  totalFlagged: number;
+  totalFlagged: number
 }
 
 export interface PaginatedApplicationFlaggedSet {
   /**  */
-  items: ApplicationFlaggedSet[];
+  items: ApplicationFlaggedSet[]
 
   /**  */
-  meta: ApplicationFlaggedSetPaginationMeta;
+  meta: ApplicationFlaggedSetPaginationMeta
 }
 
 export interface ApplicationFlaggedSetResolve {
   /**  */
-  afsId: string;
+  afsId: string
 
   /**  */
-  applications: Id[];
+  applications: Id[]
 }
 
 export interface AssetCreate {
   /**  */
-  fileId: string;
+  fileId: string
 
   /**  */
-  label: string;
+  label: string
 }
 
 export interface CreatePresignedUploadMetadata {
   /**  */
-  parametersToSign: object;
+  parametersToSign: object
 }
 
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
-  signature: string;
+  signature: string
 }
 
 export enum UserRole {
-  'user' = 'user',
-  'admin' = 'admin'
+  "user" = "user",
+  "admin" = "admin",
 }
 
 export enum Language {
-  'en' = 'en',
-  'es' = 'es',
-  'vi' = 'vi',
-  'zh' = 'zh'
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
 }
 
 export enum ListingStatus {
-  'active' = 'active',
-  'pending' = 'pending',
-  'closed' = 'closed'
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
 }
 
 export enum CSVFormattingType {
-  'basic' = 'basic',
-  'withDisplaceeNameAndAddress' = 'withDisplaceeNameAndAddress',
-  'ohaFormat' = 'ohaFormat'
+  "basic" = "basic",
+  "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
+  "ohaFormat" = "ohaFormat",
 }
 
 export enum CountyCode {
-  'Alameda' = 'Alameda',
-  'San Mateo' = 'San Mateo',
-  'San Jose' = 'San Jose'
+  "Alameda" = "Alameda",
+  "San Mateo" = "San Mateo",
+  "San Jose" = "San Jose",
 }
 
 export enum InputType {
-  'boolean' = 'boolean',
-  'text' = 'text',
-  'address' = 'address',
-  'hhMemberSelect' = 'hhMemberSelect'
+  "boolean" = "boolean",
+  "text" = "text",
+  "address" = "address",
+  "hhMemberSelect" = "hhMemberSelect",
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
+export type CombinedAmiChartTypes = (AmiChart & any) | null
 export enum ApplicationMethodType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
+  "Internal" = "Internal",
+  "FileDownload" = "FileDownload",
+  "ExternalLink" = "ExternalLink",
+  "PaperPickup" = "PaperPickup",
+  "POBox" = "POBox",
+  "LeasingAgent" = "LeasingAgent",
 }
 
 export enum ListingEventType {
-  'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery',
-  'lotteryResults' = 'lotteryResults'
+  "openHouse" = "openHouse",
+  "publicLottery" = "publicLottery",
+  "lotteryResults" = "lotteryResults",
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
-export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null
+export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null
+export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null
+export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null
 export enum IncomePeriod {
-  'perMonth' = 'perMonth',
-  'perYear' = 'perYear'
+  "perMonth" = "perMonth",
+  "perYear" = "perYear",
 }
 
 export enum ApplicationStatus {
-  'draft' = 'draft',
-  'submitted' = 'submitted',
-  'removed' = 'removed'
+  "draft" = "draft",
+  "submitted" = "submitted",
+  "removed" = "removed",
 }
 
 export enum ApplicationSubmissionType {
-  'paper' = 'paper',
-  'electronical' = 'electronical'
+  "paper" = "paper",
+  "electronical" = "electronical",
 }
-export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput;
+export type AllExtraDataTypes = BooleanInput | TextInput | AddressInput
 export enum EnumApplicationFlaggedSetStatus {
-  'flagged' = 'flagged',
-  'resolved' = 'resolved'
+  "flagged" = "flagged",
+  "resolved" = "resolved",
 }

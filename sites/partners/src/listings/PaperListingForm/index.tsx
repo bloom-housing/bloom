@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import { useRouter } from "next/router"
 import {
-  ApiClientContext,
+  AuthContext,
   t,
   Form,
   AlertBox,
@@ -22,6 +22,7 @@ import {
 
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
+import AdditionalDetails from "./sections/AdditionalDetails"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -91,7 +92,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const router = useRouter()
 
-  const { listingsService } = useContext(ApiClientContext)
+  const { listingsService } = useContext(AuthContext)
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
@@ -199,6 +200,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormListingData />
+                    <AdditionalDetails />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
