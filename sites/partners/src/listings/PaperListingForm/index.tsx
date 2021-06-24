@@ -97,7 +97,7 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: null,
+  yearBuilt: 2021,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -144,12 +144,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
+      const typedData: FormListing = {
+        ...data,
+        yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+      }
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,
-            body: { id: listing.id, ...data },
+            body: { id: listing.id, ...typedData },
           })
-        : await listingsService.create({ body: data })
+        : await listingsService.create({ body: typedData })
       setLoading(false)
 
       if (result) {

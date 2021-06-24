@@ -15,7 +15,7 @@ const DetailBuildingDetails = () => {
       <GridSection columns={3}>
         <GridCell span={2}>
           <ViewItem label={t("application.contact.streetAddress")}>
-            {listing.requiredDocuments}
+            {listing.buildingAddress.street}
           </ViewItem>
         </GridCell>
         <ViewItem label={t("t.neighborhood")}>{listing.neighborhood}</ViewItem>

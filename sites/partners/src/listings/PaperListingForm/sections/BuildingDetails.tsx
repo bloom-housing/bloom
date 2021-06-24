@@ -28,7 +28,7 @@ const BuildingDetails = () => {
           <Field
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
-            id={"leasingAgentEmail"}
+            id={"buildingAddress.street"}
             placeholder={t("application.contact.streetAddress")}
             register={register}
           />
@@ -77,10 +77,9 @@ const BuildingDetails = () => {
             label={t("listings.yearBuilt")}
             name={"yearBuilt"}
             id={"yearBuilt"}
-            type={"number"}
             placeholder={t("listings.yearBuilt")}
+            type={"number"}
             register={register}
-            inputProps={{ maxLength: 4 }}
           />
         </GridCell>
       </GridSection>
