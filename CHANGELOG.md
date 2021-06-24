@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Leasing Agent section to listing management ([#1349](https://github.com/bloom-housing/bloom/pull/1349)) (Emily Jablonski)
   - Add Additional Fees section to listing management ([#1377](https://github.com/bloom-housing/bloom/pull/1377)) (Emily Jablonski)
   - Add Building Details and Intro section to listing management ([#1420](https://github.com/bloom-housing/bloom/pull/1420)) (Emily Jablonski)
+  - Add Building Features section to listing management ([#1412](https://github.com/bloom-housing/bloom/pull/1412)) (Emily Jablonski)
 
 - Fixed:
 
