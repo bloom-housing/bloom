@@ -5,13 +5,15 @@ import { Listing } from "./entities/listing.entity"
 import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import { ListingsListQueryParams } from "./listings.controller"
 
 @Injectable()
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}
 
   private getQueryBuilder() {
-    return Listing.createQueryBuilder("listings")
+    return this.repository
+      .createQueryBuilder("listings")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
@@ -20,27 +22,34 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
   }
 
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await this.getQueryBuilder()
-      .orderBy({
-        "listings.id": "DESC",
-        "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
-      })
-      .getMany()
+  public async list(params: ListingsListQueryParams): Promise<Listing[]> {
+    const query = this.getQueryBuilder().orderBy({
+      "listings.id": "DESC",
+      "units.maxOccupancy": "ASC",
+      "preferences.ordinal": "ASC",
+    })
 
-    if (jsonpath) {
-      listings = jp.query(listings, jsonpath)
+    if (params.neighborhood) {
+      // This works because there's only one property per listing. If that
+      // weren't true for a field (for example, if we filtered on a unit's
+      // fields), we couldn't use this type of where clause.
+      query.andWhere("property.neighborhood = :neighborhood", { neighborhood: params.neighborhood })
+    }
+
+    let listings = await query.getMany()
+
+    if (params.jsonpath) {
+      listings = jp.query(listings, params.jsonpath)
     }
     return listings
   }
 
   async create(listingDto: ListingCreateDto) {
-    return Listing.save(listingDto)
+    return this.repository.save(listingDto)
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const listing = await Listing.findOneOrFail({
+    const listing = await this.repository.findOneOrFail({
       where: { id: listingDto.id },
       relations: ["property"],
     })
@@ -58,10 +67,10 @@ export class ListingsService {
   }
 
   async delete(listingId: string) {
-    const listing = await Listing.findOneOrFail({
+    const listing = await this.repository.findOneOrFail({
       where: { id: listingId },
     })
-    return await Listing.remove(listing)
+    return await this.repository.remove(listing)
   }
 
   async findOne(listingId: string) {

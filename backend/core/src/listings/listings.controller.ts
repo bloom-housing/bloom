@@ -14,7 +14,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -22,6 +22,32 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { Expose } from "class-transformer"
+import { IsOptional, IsString } from "class-validator"
+import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
+
+//TODO extend query params to add paginations
+export class ListingsListQueryParams {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Fox Creek",
+    required: false,
+    description: "The neighborhood to filter by",
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  neighborhood?: string
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  jsonpath?: string
+}
 
 @Controller("listings")
 @ApiTags("listings")
@@ -40,8 +66,8 @@ export class ListingsController {
     type: String,
   })
   @UseInterceptors(CacheInterceptor)
-  public async getAll(@Query("jsonpath") jsonpath?: string): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(jsonpath))
+  async list(@Query() queryParams: ListingsListQueryParams): Promise<ListingDto[]> {
+    return mapTo(ListingDto, await this.listingsService.list(queryParams))
   }
 
   @Post()
