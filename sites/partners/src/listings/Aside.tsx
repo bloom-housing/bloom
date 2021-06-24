@@ -38,7 +38,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
 
     const cancel = (
       <GridCell className="flex" key="btn-cancel">
-        <LinkButton unstyled fullWidth className="bg-opacity-0" href="/">
+        <LinkButton unstyled fullWidth className="bg-opacity-0" href={`/listings/${listingId}`}>
           {t("t.cancel")}
         </LinkButton>
       </GridCell>
@@ -87,9 +87,12 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
               {t("listings.actions.preview")}
             </Button>
           </a>
-        </GridCell>,
-        cancel
+        </GridCell>
       )
+    }
+
+    if (type === "add" || type === "edit") {
+      elements.push(cancel)
     }
 
     return elements

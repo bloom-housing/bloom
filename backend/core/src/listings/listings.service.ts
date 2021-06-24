@@ -31,7 +31,6 @@ export class ListingsService {
 
   public async list(jsonpath?: string, filter?: ListingFilterParams[]): Promise<Listing[]> {
     const qb = this.getQueryBuilder()
-    console.log("***** filter ****** ", filter)
     if (filter) {
       addFilter<ListingFilterParams>(filter, "listings", qb)
     }
