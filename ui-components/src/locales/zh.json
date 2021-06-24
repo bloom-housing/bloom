@@ -119,7 +119,6 @@
         "description": "我們只會為您的申請事宜使用此資料聯絡他們。",
         "phoneNumberFormLabel": "聯絡人電話號碼",
         "emailAddressFormLabel": "聯絡人電郵地址",
-        "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "聯絡人郵寄地址",
         "contactMailingAddressHelperText": "請選擇一個他們可收到您最新申請消息和資料的地址"
       }
@@ -673,6 +672,7 @@
     "deposit": "訂金",
     "edit": "編輯",
     "email": "電子郵件",
+    "emailAddressPlaceHolder": "you@myemail.com",
     "floor": "樓層",
     "floors": "樓層",
     "getDirections": "取得路線",

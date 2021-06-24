@@ -26,7 +26,7 @@ type IncomePeriod = "perMonth" | "perYear"
 
 function verifyIncome(listing: Listing, income: number, period: IncomePeriod): IncomeError {
   // Look through all the units on this listing to see what the absolute max/min income requirements are.
-  const [annualMin, annualMax, monthlyMin] = listing.property.units.reduce(
+  const [annualMin, annualMax, monthlyMin] = listing.units.reduce(
     ([aMin, aMax, mMin], unit) => [
       Math.min(aMin, parseFloat(unit.annualIncomeMin)),
       Math.max(aMax, parseFloat(unit.annualIncomeMax)),
@@ -63,6 +63,7 @@ const ApplicationIncome = () => {
     },
     shouldFocusError: false,
   })
+
   const onSubmit = (data) => {
     const { income, incomePeriod } = data
     // Skip validation of total income if the applicant has income vouchers.
@@ -81,14 +82,6 @@ const ApplicationIncome = () => {
   }
   const onError = () => {
     window.scrollTo(0, 0)
-  }
-
-  const formatValue = () => {
-    const { income } = getValues()
-    const numericIncome = parseFloat(income)
-    if (!isNaN(numericIncome)) {
-      setValue("income", numericIncome.toFixed(2))
-    }
   }
 
   const incomePeriodValues = [
@@ -164,16 +157,17 @@ const ApplicationIncome = () => {
             <Field
               id="income"
               name="income"
-              type="number"
+              type="currency"
               label={t("application.financial.income.prompt")}
               caps={true}
               placeholder={t("application.financial.income.placeholder")}
               validation={{ required: true, min: 0.01 }}
               error={errors.income}
               register={register}
-              prepend="$"
               errorMessage={t("errors.numberError")}
-              inputProps={{ step: 0.01, onBlur: formatValue }}
+              setValue={setValue}
+              getValues={getValues}
+              prepend={"$"}
             />
 
             <fieldset>

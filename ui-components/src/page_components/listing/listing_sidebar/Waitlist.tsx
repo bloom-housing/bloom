@@ -19,13 +19,13 @@ const Waitlist = (props: WaitlistProps) => {
   const waitlistOpen = listing.waitlistCurrentSize < listing.waitlistMaxSize
   let header, subheader, waitlistItems
 
-  if (listing.property.unitsAvailable > 0 && waitlistOpen) {
+  if (listing.unitsAvailable > 0 && waitlistOpen) {
     header = t("listings.waitlist.unitsAndWaitlist")
     subheader = t("listings.waitlist.submitAnApplication")
     waitlistItems = (
       <>
         <WaitlistItem
-          value={listing.property.unitsAvailable}
+          value={listing.unitsAvailable}
           text={t("listings.availableUnits")}
           className={"font-semibold"}
         />

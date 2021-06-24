@@ -6,18 +6,33 @@ p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
+
 p, admin, preference, true, .*
+
 p, admin, applicationMethod, true, .*
+
 p, admin, unit, true, .*
+
 p, admin, listingEvent, true, .*
+
 p, admin, property, true, .*
+
 p, admin, propertyGroup, true, .*
+
 p, admin, amiChart, true, .*
+
 p, admin, applicationFlaggedSet, true, .*
+
 p, admin, translation, true, .*
+
+p, admin, jurisdiction, true, .*
+p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
 p, anonymous, listing, true, read
+
+p, admin, reservedCommunityType, true, .*
+p, anonymous, reservedCommunityType, true, read
 
 g, admin, user
 g, user, anonymous

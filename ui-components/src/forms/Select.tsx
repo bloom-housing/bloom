@@ -1,6 +1,7 @@
 import React from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { FormOptions, SelectOption } from "../helpers/formOptions"
+import { UseFormMethods } from "react-hook-form"
 
 interface SelectProps {
   error?: boolean
@@ -13,7 +14,7 @@ interface SelectProps {
   label?: string
   defaultValue?: string
   placeholder?: string
-  register: any // comes from React Hook Form
+  register: UseFormMethods["register"]
   validation?: Record<string, any>
   disabled?: boolean
   options: (string | SelectOption)[]

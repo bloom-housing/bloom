@@ -8,12 +8,18 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+- Added:
+
+  - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
+
 ### Backend
 
 - Fixed:
 
   - Poor TypeORM performance in `/applications` endpoint ([#1131](https://github.com/bloom-housing/bloom/issues/1131)) (Michał Plebański)
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+  - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
+  - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
 
 - Added:
 
@@ -22,15 +28,19 @@ All notable changes to this project will be documented in this file. The format 
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)
   - `/assets` endpoints (create and createPresignedUploadMetadata)
   - "noEmailConfirmation" query param to `POST /users` endpoint
+  - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
+  - `/jurisdictions` endpoint and DB schema ([#1391](https://github.com/bloom-housing/bloom/pull/1391))
+  - `/reservedCommunityTypes` endpoint and DB schema ([#1395](https://github.com/bloom-housing/bloom/pull/1395))
 
 - Changed:
 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
+  - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
 
 ### Frontend
 
 - Added:
-
+  - Adds filtering capability to listings list and implements on public site ([#1351](https://github.com/bloom-housing/bloom/pull/1359))
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
     - detail page accessible at `/listings/[id]`
@@ -40,6 +50,8 @@ All notable changes to this project will be documented in this file. The format 
   - Add ability for site header logo to have custom widths, image only ([#1346](https://github.com/bloom-housing/bloom/pull/1346)) (Emily Jablonski)
   - Created duplicates pages ([#1132](https://github.com/bloom-housing/bloom/pull/1132)) (Dominik Barcikowski)
   - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
+  - Add Additional Eligibility section to listing management ([#1374](https://github.com/bloom-housing/bloom/pull/1374)) (Emily Jablonski)
+  - Add Leasing Agent section to listing management ([#1349](https://github.com/bloom-housing/bloom/pull/1349)) (Emily Jablonski)
 
 - Fixed:
 
@@ -54,6 +66,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - Allow preferences to have optional descriptions and an optional generic decline ([#1267](https://github.com/bloom-housing/bloom/pull/1267)) Emily Jablonski
+  - Refactored currency field logic to be generic & reusable ([#1356](https://github.com/bloom-housing/bloom/pull/1356)) Emily Jablonski
 
 ### UI Components
 

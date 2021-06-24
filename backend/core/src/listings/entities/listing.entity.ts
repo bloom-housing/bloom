@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -29,7 +30,6 @@ import {
 import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
-import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 import { ListingStatus } from "../types/listing-status-enum"
@@ -38,6 +38,9 @@ import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
+import { AddressDto } from "../../shared/dto/address.dto"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -83,7 +86,7 @@ class Listing extends BaseEntity {
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
-  @ManyToOne(() => Property, (property) => property.listings, { nullable: false })
+  @ManyToOne(() => Property, (property) => property.listings, { nullable: false, cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Property)
@@ -131,15 +134,15 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  applicationAddress: Address | null
+  @Type(() => AddressDto)
+  applicationAddress: AddressDto | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  applicationPickUpAddress: Address | null
+  @Type(() => AddressDto)
+  applicationPickUpAddress: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -189,12 +192,19 @@ class Listing extends BaseEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   disableUnitsAccordion: boolean | null
 
+  @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
+  @JoinColumn()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Jurisdiction)
+  jurisdiction?: Jurisdiction
+
   @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  leasingAgentAddress: Address | null
+  @Type(() => AddressDto)
+  leasingAgentAddress: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -349,6 +359,18 @@ class Listing extends BaseEntity {
       this.waitlistCurrentSize < this.waitlistMaxSize
     )
   }
+
+  @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ReservedCommunityType)
+  reservedCommunityType?: ReservedCommunityType
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  reservedCommunityMinAge?: number | null
 }
 
 export { Listing as default, Listing }

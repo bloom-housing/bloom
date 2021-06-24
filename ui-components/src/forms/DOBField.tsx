@@ -2,6 +2,7 @@ import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
 import moment from "moment"
+import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
 export type DOBFieldValues = {
   birthDay: string
@@ -9,14 +10,11 @@ export type DOBFieldValues = {
   birthYear: string
 }
 export interface DOBFieldProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error?: any
+  error?: DeepMap<DOBFieldValues, FieldError>
   errorMessage?: string
   label: React.ReactNode
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  watch: any // comes from React Hook Form
+  register: UseFormMethods["register"]
+  watch: UseFormMethods["watch"]
   defaultDOB?: DOBFieldValues
   atAge?: boolean
   validateHhAge?: boolean
@@ -66,7 +64,7 @@ const DOBField = (props: DOBFieldProps) => {
           readerOnly={true}
           placeholder="MM"
           defaultValue={defaultDOB?.birthMonth ? defaultDOB.birthMonth : ""}
-          error={error?.birthMonth}
+          error={error?.birthMonth !== undefined}
           validation={{
             required: props.required,
             validate: {
@@ -87,7 +85,7 @@ const DOBField = (props: DOBFieldProps) => {
           readerOnly={true}
           placeholder="DD"
           defaultValue={defaultDOB?.birthDay ? defaultDOB.birthDay : ""}
-          error={error?.birthDay}
+          error={error?.birthDay !== undefined}
           validation={{
             required: props.required,
             validate: {
@@ -108,7 +106,7 @@ const DOBField = (props: DOBFieldProps) => {
           readerOnly={true}
           placeholder="YYYY"
           defaultValue={defaultDOB?.birthYear ? defaultDOB.birthYear : ""}
-          error={error?.birthYear}
+          error={error?.birthYear !== undefined}
           validation={{
             required: props.required,
             validate: {
