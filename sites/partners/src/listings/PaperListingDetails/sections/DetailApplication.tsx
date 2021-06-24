@@ -7,7 +7,7 @@ const DetailApplication = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.applicationTitle")}
       grid={false}
       inset

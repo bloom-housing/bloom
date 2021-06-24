@@ -2,12 +2,12 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 
-const DetailAdditionalDetails = () => {
+const DetailAdditionalFees = () => {
   const listing = useContext(ListingContext)
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.sections.additionalFees")}
       grid={false}
       inset
@@ -34,4 +34,4 @@ const DetailAdditionalDetails = () => {
   )
 }
 
-export default DetailAdditionalDetails
+export default DetailAdditionalFees
