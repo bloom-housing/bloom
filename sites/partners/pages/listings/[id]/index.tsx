@@ -108,7 +108,6 @@ export default function ApplicationsList() {
                 <DetailBuildingDetails />
                 <DetailApplication />
                 <DetailAdditionalFees />
-                <DetailAdditionalFees />
                 <DetailBuildingFeatures />
                 <DetailAdditionalEligibility />
                 <DetailAdditionalDetails />
