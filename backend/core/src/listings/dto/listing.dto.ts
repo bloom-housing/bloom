@@ -22,6 +22,7 @@ import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../user/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
+import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { transformUnits } from "../../shared/units-transformations"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
@@ -593,4 +594,23 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
+}
+
+// add other listing filter params here
+export class ListingFilterParams extends BaseFilter {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Coliseum",
+    required: false,
+  })
+  name?: string
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(ListingStatus),
+    example: "active",
+    required: false,
+  })
+  status?: ListingStatus
 }

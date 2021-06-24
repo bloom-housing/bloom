@@ -2,9 +2,10 @@ import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
-import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
+import { ListingCreateDto, ListingUpdateDto, ListingFilterParams } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import { addFilter } from "../shared/filter"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { Property } from "../property/entities/property.entity"
@@ -28,14 +29,19 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await this.getQueryBuilder()
-      .orderBy({
-        "listings.id": "DESC",
-        "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
-      })
-      .getMany()
+  public async list(jsonpath?: string, filter?: ListingFilterParams[]): Promise<Listing[]> {
+    const qb = this.getQueryBuilder()
+    if (filter) {
+      addFilter<ListingFilterParams>(filter, "listings", qb)
+    }
+
+    qb.orderBy({
+      "listings.id": "DESC",
+      "units.max_occupancy": "ASC",
+      "preferences.ordinal": "ASC",
+    })
+
+    let listings = await qb.getMany()
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)

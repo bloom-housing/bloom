@@ -658,6 +658,8 @@ export class ListingsService {
     params: {
       /**  */
       jsonpath?: string;
+      /**  */
+      filter?: ListingFilterParams[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing[]> {
@@ -665,7 +667,7 @@ export class ListingsService {
       let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { jsonpath: params['jsonpath'] };
+      configs.params = { jsonpath: params['jsonpath'], filter: params['filter'] };
       let data = null;
 
       configs.data = data;
@@ -2729,6 +2731,17 @@ export interface JurisdictionUpdate {
   name: string;
 }
 
+export interface ListingFilterParams {
+  /**  */
+  $comparison: EnumListingFilterParamsComparison;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  status?: EnumListingFilterParamsStatus;
+}
+
 export interface MinMaxCurrency {
   /**  */
   min: string;
@@ -4244,7 +4257,15 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
-
+export enum EnumListingFilterParamsComparison {
+  '=' = '=',
+  '<>' = '<>'
+}
+export enum EnumListingFilterParamsStatus {
+  'active' = 'active',
+  'pending' = 'pending',
+  'closed' = 'closed'
+}
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending',

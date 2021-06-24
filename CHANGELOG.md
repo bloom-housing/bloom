@@ -40,7 +40,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Frontend
 
 - Added:
-
+  - Adds filtering capability to listings list and implements on public site ([#1351](https://github.com/bloom-housing/bloom/pull/1359))
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
     - detail page accessible at `/listings/[id]`
