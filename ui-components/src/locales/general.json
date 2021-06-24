@@ -719,7 +719,6 @@
       "clone": "Clone"
     },
     "addListing": "Add Listing",
-    "additionalFees": "Additional Fees",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
@@ -759,6 +758,8 @@
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
     "deleteListingDescription": "Deleting this listing means you will lose all the information you've entered.",
+    "depositMax": "Deposit Max",
+    "depositMin": "Deposit Min",
     "depositOrMonthsRent": "or one month's rent",
     "depositMayBeHigherForLowerCredit": "May be higher for lower credit scores",
     "details": {
@@ -832,8 +833,11 @@
       "additionalEligibilitySubtext": "Let applicants know any other rules of the building.",
       "additionalEligibilitySubtitle": "Applicants must also qualify under the rules of the building.",
       "additionalEligibilityTitle": "Additional Eligibility Rules",
+      "additionalFees": "Additional Fees",
+      "additionalFeesSubtitle": "Tell us about any other fees required by the applicant.",
       "additionalInformationSubtitle": "Required documents and selection criteria",
       "additionalInformationTitle": "Additional Information",
+      "costsNotIncluded": "Costs Not Included",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "eligibilityTitle": "Eligibility",
       "featuresSubtitle": "Amenities, unit details and additional fees",

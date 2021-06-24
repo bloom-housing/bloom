@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
   - Add Additional Eligibility section to listing management ([#1374](https://github.com/bloom-housing/bloom/pull/1374)) (Emily Jablonski)
   - Add Leasing Agent section to listing management ([#1349](https://github.com/bloom-housing/bloom/pull/1349)) (Emily Jablonski)
+  - Add Additional Fees section to listing management ([#1377](https://github.com/bloom-housing/bloom/pull/1377)) (Emily Jablonski)
 
 - Fixed:
 
