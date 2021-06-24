@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file. The format 
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
   - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
   - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
+  - Fix units availability ([#1397](https://github.com/bloom-housing/bloom/issues/1397))
 
 - Added:
 
@@ -40,6 +41,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Frontend
 
 - Added:
+
   - Adds filtering capability to listings list and implements on public site ([#1351](https://github.com/bloom-housing/bloom/pull/1359))
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
