@@ -31,6 +31,20 @@
           "label": "Mission Boulevard Corridor (SR 238) 無居所租客房屋優先權",
           "description": "根據 SR 238 和解實施項目條款規定，我家至少有一人是 SR 238 計劃參與者。計劃參與者是 SR 238 Mission Boulevard 走廊沿線先前已出售的 Caltrans 物業租戶；此走廊興建低於市價的全新住房時，計劃參與者有入住優先權。"
         }
+      },
+      "BVSPD": {
+        "title": "Broadway Valdez Specific Plan District",
+        "bvspd": {
+          "label": "Broadway Valdez Specific Plan District",
+          "description": "At least one member of my household lives in the Broadway Valdez Specific Plan District. Boundaries for the District area can be found in the Broadway Valdez District Specific Plan Map",
+          "link": "https://cao-94612.s3.amazonaws.com/documents/Broadway-Valdez-Photo-Key-of-projects-3-4-20.pdf"
+        }
+      },
+      "OSDE": {
+        "title": "Oakland School District Employees",
+        "osde": {
+          "label": "Oakland School District Employees"
+        }
       }
     }
   },
