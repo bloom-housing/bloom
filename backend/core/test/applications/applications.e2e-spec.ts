@@ -579,11 +579,14 @@ describe("Applications", () => {
 
     const getListingRes = await supertest(app.getHttpServer()).get(`/listings/${listing1Id}`)
     const listing: Listing = getListingRes.body
+
+    const oldApplicationDueDate = listing.applicationDueDate
     listing.applicationDueDate = new Date()
     await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
+      .expect(200)
 
     const res = await supertest(app.getHttpServer())
       .post(`/applications/submit`)
@@ -591,6 +594,13 @@ describe("Applications", () => {
       .set(...setAuthorization(user1AccessToken))
       .expect(400)
     expect(res.body.message).toBe("Listing is not open for application submission.")
+
+    listing.applicationDueDate = oldApplicationDueDate
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
   })
 
   afterEach(async () => {
