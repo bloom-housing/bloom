@@ -842,6 +842,8 @@
       "additionalInformationTitle": "Additional Information",
       "buildingDetailsTitle": "Building Details",
       "buildingDetailsSubtitle": "Tell us where the building is located.",
+      "buildingFeaturesTitle": "Building Features",
+      "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
       "costsNotIncluded": "Costs Not Included",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "eligibilityTitle": "Eligibility",
