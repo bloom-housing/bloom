@@ -35,6 +35,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
   "applicationFlaggedSets",
   "applicationPickUpAddress",
+  "image",
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
@@ -59,6 +60,12 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   applicationPickUpAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  image?: IdDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
