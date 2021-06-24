@@ -779,6 +779,7 @@
     "householdSize": "Household Size",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "latitude": "Latitude",
     "listingStatus": {
       "active": "Open",
       "pending": "Draft",
@@ -786,6 +787,7 @@
     },
     "listingSubmitted": "Listing Submitted",
     "listingUpdated": "Listing Updated",
+    "longitude": "Longitude",
     "lotteryResults": {
       "completeResultsWillBePosted": "Complete lottery results will be posted soon.",
       "downloadResults": "Download Results",
@@ -830,7 +832,7 @@
     "reservedUnitsForWhoAre": "Reserved for %{communityType} who are %{reservedType}",
     "sections": {
       "additionalDetails": "Additional Details",
-      "additionalDetailsSubtext": "Are there any other required documents and selection criteria?",
+      "additionalDetailsSubtitle": "Are there any other required documents and selection criteria?",
       "additionalEligibilitySubtext": "Let applicants know any other rules of the building.",
       "additionalEligibilitySubtitle": "Applicants must also qualify under the rules of the building.",
       "additionalEligibilityTitle": "Additional Eligibility Rules",
@@ -838,6 +840,8 @@
       "additionalFeesSubtitle": "Tell us about any other fees required by the applicant.",
       "additionalInformationSubtitle": "Required documents and selection criteria",
       "additionalInformationTitle": "Additional Information",
+      "buildingDetailsTitle": "Building Details",
+      "buildingDetailsSubtitle": "Tell us where the building is located.",
       "costsNotIncluded": "Costs Not Included",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "eligibilityTitle": "Eligibility",
@@ -845,6 +849,8 @@
       "featuresTitle": "Features",
       "housingPreferencesSubtitle": "Preference holders will be given highest ranking.",
       "housingPreferencesTitle": "Housing Preferences",
+      "introTitle": "Listing Intro",
+      "introSubtitle": "Let's get started with some basic information about your listing.",
       "leasingAgentSubtitle": "Provide details about the leasing agent who will be managing the application process.",
       "leasingAgentTitle": "Leasing Agent",
       "neighborhoodSubtitle": "Location and transportation",
@@ -889,6 +895,7 @@
       "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
       "unitsAndWaitlist": "Available Units and Waitlist"
     },
+    "yearBuilt": "Year Built",
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
     "downloadPdf": "Download PDF",

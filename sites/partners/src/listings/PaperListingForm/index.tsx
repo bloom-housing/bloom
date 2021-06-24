@@ -26,6 +26,8 @@ import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
+import BuildingDetails from "./sections/BuildingDetails"
+import ListingIntro from "./sections/ListingIntro"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -95,7 +97,7 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: 0,
+  yearBuilt: null,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -214,7 +216,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
+                    <ListingIntro />
                     <FormListingData />
+                    <BuildingDetails />
                     <AdditionalFees />
                     <AdditionalEligibility />
                     <AdditionalDetails />
