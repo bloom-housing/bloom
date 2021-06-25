@@ -55,9 +55,9 @@ const ApplicationAddress = () => {
   return (
     <div>
       <hr className="mt-6 mb-6" />
-      <span className="form-section__title">{t("listings.sections.additionalDetails")}</span>
+      <span className="form-section__title">{t("listings.sections.applicationAddressTitle")}</span>
       <span className="form-section__description">
-        {t("listings.sections.additionalDetailsSubtext")}
+        {t("listings.sections.applicationAddressSubtitle")}
       </span>
       <GridSection grid={false} subtitle={t("listings.leasingAgentAddress")}>
         <GridSection columns={3}>
