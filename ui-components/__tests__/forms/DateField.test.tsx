@@ -1,28 +1,26 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { DOBField } from "../../src/forms/DOBField"
+import { DateField } from "../../src/forms/DateField"
 import { useForm } from "react-hook-form"
 
 afterEach(cleanup)
-// Could not figure out how to test the field validations from here given this documentation: https://react-hook-form.com/advanced-usage/#TestingForm
 const Optional = ({ disabled = false }) => {
   const { register, watch, errors } = useForm({ mode: "onChange" })
   return (
-    <DOBField
-      id="dateOfBirth"
-      name="dateOfBirth"
-      label="Date of Birth"
+    <DateField
+      id="appDueDate"
+      name="appDueDate"
+      label="Application Due Date"
       required={false}
       register={register}
       watch={watch}
       disabled={disabled || undefined}
-      error={errors?.dateOfBirth}
-      validateAge18={true}
+      error={errors?.appDueDate}
     />
   )
 }
 
-describe("<DOBField>", () => {
+describe("<DateField>", () => {
   it("can render all optional props", () => {
     const { getByLabelText } = render(<Optional />)
     expect(getByLabelText("Month")).not.toBeNull()

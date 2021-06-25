@@ -418,7 +418,6 @@
     "officeHours": "Giờ Làm việc"
   },
   "listings": {
-    "additionalFees": "Các Loại Phí Bổ sung",
     "additionalInformation": "Thông tin Bổ sung",
     "allUnits": "Tất cả các Căn nhà",
     "allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
@@ -503,6 +502,7 @@
     "reservedUnitsDescription": "Để hội đủ điều kiện được nhận các căn nhà này, một trong những điều sau đây phải đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
     "reservedUnitsForWhoAre": "Dành riêng cho %{communityType} những người %{reservedType}",
     "sections": {
+      "additionalFees": "Các Loại Phí Bổ sung",
       "eligibilityTitle": "Tình trạng Hội đủ Điều kiện",
       "eligibilitySubtitle": "Thu nhập, số người ở, lựa chọn ưu tiên và các khoản trợ cấp",
       "rentalAssistanceTitle": "Hỗ trợ Tiền thuê nhà",
