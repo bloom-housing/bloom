@@ -774,6 +774,7 @@
     },
     "developmentalDisabilities": "Persons with developmental disabilities",
     "developmentalDisabilitiesDescription": "A portion number of units in this building are set aside for persons with developmental disabilities. Please visit <a href='http://www.housingchoices.org/' target='_blank'>housingchoices.org</a> for information on eligibility, requirements, how to get an application and for answers to any other questions you may have about the process.",
+    "dropOffAddress": "Drop Off Address",
     "enterLotteryForWaitlist": "Submit an application for an open slot on the waitlist for %{units} units.",
     "forIncomeCalculations": "For income calculations, household size includes everyone (all ages) living in the unit.",
     "forIncomeCalculationsBMR": "Income calculations are based on unit type",
@@ -915,6 +916,7 @@
       "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
       "unitsAndWaitlist": "Available Units and Waitlist"
     },
+    "whereDropOffQuestion": "Where are applications dropped off?",
     "wherePickupQuestion": "Where are applications picked up?",
     "yearBuilt": "Year Built",
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
