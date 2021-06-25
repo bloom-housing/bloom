@@ -29,6 +29,7 @@ import AdditionalFees from "./sections/AdditionalFees"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
+import RankingsAndResults from "./sections/RankingsAndResults"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -228,6 +229,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <BuildingFeatures />
                     <AdditionalEligibility />
                     <AdditionalDetails />
+                    <RankingsAndResults />
                     <LeasingAgent />
                   </div>
 
