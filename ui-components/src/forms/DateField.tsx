@@ -22,6 +22,7 @@ export interface DateFieldProps {
   required?: boolean
   disabled?: boolean
   readerOnly?: boolean
+  note?: string
 }
 
 const DateField = (props: DateFieldProps) => {
@@ -38,7 +39,6 @@ const DateField = (props: DateFieldProps) => {
   return (
     <fieldset id={id}>
       <legend className={labelClasses.join(" ")}>{props.label}</legend>
-
       <div className="field-group--date">
         <Field
           name={getFieldName("month")}
@@ -103,6 +103,7 @@ const DateField = (props: DateFieldProps) => {
           register={register}
         />
       </div>
+      {props.note && <p className="field-note mb-2 mt-4">{props.note}</p>}
 
       {(error?.month || error?.day || error?.year) && (
         <div className="field error">

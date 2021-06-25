@@ -37,6 +37,7 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
+import ApplicationDates from "./sections/ApplicationDates"
 
 export type FormListing = Listing & {
   waitlistOpenQuestion?: YesNoAnswer
@@ -394,6 +395,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
                     <ApplicationAddress listing={listing} />
+                    <ApplicationDates />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
