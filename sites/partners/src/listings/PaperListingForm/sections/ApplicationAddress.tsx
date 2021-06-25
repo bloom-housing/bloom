@@ -37,6 +37,8 @@ const ApplicationAddress = () => {
     },
   ]
 
+  console.log(paperMailedToAnotherAddress)
+
   const locationRadioOptions = [
     {
       label: "At the leasing agent address",
@@ -54,6 +56,7 @@ const ApplicationAddress = () => {
 
   return (
     <div>
+      <hr className="mt-6 mb-6" />
       <span className="form-section__title">{t("listings.sections.additionalDetails")}</span>
       <span className="form-section__description">
         {t("listings.sections.additionalDetailsSubtext")}
@@ -168,6 +171,7 @@ const ApplicationAddress = () => {
             </GridSection>
           </GridSection>
         )}
+        <hr className="mt-6 mb-6" />
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
@@ -247,8 +251,21 @@ const ApplicationAddress = () => {
                 register={register}
               />
             </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={2}>
+                <Textarea
+                  label={t("leasingAgent.officeHours")}
+                  name={"pickupAddress.officeHours"}
+                  id={"pickupAddress.officeHours"}
+                  fullWidth={true}
+                  register={register}
+                  placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                />
+              </GridCell>
+            </GridSection>
           </GridSection>
         )}
+        <hr className="mt-6 mb-6" />
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.applicationDropOffQuestion")}</p>
@@ -328,8 +345,22 @@ const ApplicationAddress = () => {
                 register={register}
               />
             </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={2}>
+                <Textarea
+                  label={t("leasingAgent.officeHours")}
+                  name={"dropOffAddress.officeHours"}
+                  id={"dropOffAddress.officeHours"}
+                  fullWidth={true}
+                  register={register}
+                  placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                />
+              </GridCell>
+            </GridSection>
           </GridSection>
         )}
+        <hr className="mt-6 mb-6" />
+
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
@@ -359,6 +390,7 @@ const ApplicationAddress = () => {
             </GridCell>
           </GridSection>
         )}
+        <hr className="mt-6 mb-6" />
         <GridSection columns={3}>
           <GridCell span={2}>
             <Textarea
