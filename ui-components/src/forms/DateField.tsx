@@ -4,20 +4,19 @@ import { Field } from "./Field"
 import moment from "moment"
 import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
-export type DOBFieldValues = {
-  birthDay: string
-  birthMonth: string
-  birthYear: string
+export type DateFieldValues = {
+  day: string
+  month: string
+  year: string
 }
 
-export interface DOBFieldProps {
-  error?: DeepMap<DOBFieldValues, FieldError>
+export interface DateFieldProps {
+  error?: DeepMap<DateFieldValues, FieldError>
   errorMessage?: string
   label: React.ReactNode
   register: UseFormMethods["register"]
   watch: UseFormMethods["watch"]
-  defaultDOB?: DOBFieldValues
-  validateAge18?: boolean
+  defaultDate?: DateFieldValues
   name?: string
   id?: string
   required?: boolean
@@ -25,22 +24,12 @@ export interface DOBFieldProps {
   readerOnly?: boolean
 }
 
-const DOBField = (props: DOBFieldProps) => {
-  const { defaultDOB, error, register, watch, validateAge18, name, id, errorMessage } = props
+const DateField = (props: DateFieldProps) => {
+  const { defaultDate, error, register, name, id, errorMessage } = props
 
   const getFieldName = (baseName: string) => {
     // Append overall date field name to individual date field name
     return [name, baseName].filter((item) => item).join(".")
-  }
-
-  const birthDay = watch(getFieldName("birthDay"))
-  const birthMonth = watch(getFieldName("birthMonth"))
-
-  const validateAge = (value: string) => {
-    return (
-      parseInt(value) > 1900 &&
-      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") < moment().subtract(18, "years")
-    )
   }
 
   const labelClasses = ["field-label--caps"]
@@ -52,19 +41,18 @@ const DOBField = (props: DOBFieldProps) => {
 
       <div className="field-group--date">
         <Field
-          name={getFieldName("birthMonth")}
+          name={getFieldName("month")}
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="MM"
-          defaultValue={defaultDOB?.birthMonth ? defaultDOB.birthMonth : ""}
-          error={error?.birthMonth !== undefined}
+          defaultValue={defaultDate?.month ?? ""}
+          error={error?.month !== undefined}
           validation={{
             required: props.required,
             validate: {
               monthRange: (value: string) => {
                 if (!props.required && !value?.length) return true
-
                 return parseInt(value) > 0 && parseInt(value) <= 12
               },
             },
@@ -73,19 +61,18 @@ const DOBField = (props: DOBFieldProps) => {
           register={register}
         />
         <Field
-          name={getFieldName("birthDay")}
+          name={getFieldName("day")}
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="DD"
-          defaultValue={defaultDOB?.birthDay ? defaultDOB.birthDay : ""}
-          error={error?.birthDay !== undefined}
+          defaultValue={defaultDate?.day ?? ""}
+          error={error?.day !== undefined}
           validation={{
             required: props.required,
             validate: {
               dayRange: (value: string) => {
                 if (!props.required && !value?.length) return true
-
                 return parseInt(value) > 0 && parseInt(value) <= 31
               },
             },
@@ -94,13 +81,13 @@ const DOBField = (props: DOBFieldProps) => {
           register={register}
         />
         <Field
-          name={getFieldName("birthYear")}
+          name={getFieldName("year")}
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
           placeholder="YYYY"
-          defaultValue={defaultDOB?.birthYear ? defaultDOB.birthYear : ""}
-          error={error?.birthYear !== undefined}
+          defaultValue={defaultDate?.year ?? ""}
+          error={error?.year !== undefined}
           validation={{
             required: props.required,
             validate: {
@@ -108,7 +95,6 @@ const DOBField = (props: DOBFieldProps) => {
                 if (props.required && value && parseInt(value) < 1900) return false
                 if (props.required && value && parseInt(value) > moment().year() + 10) return false
                 if (!props.required && !value?.length) return true
-                if (value?.length && validateAge18) return validateAge(value)
                 return true
               },
             },
@@ -118,10 +104,10 @@ const DOBField = (props: DOBFieldProps) => {
         />
       </div>
 
-      {(error?.birthMonth || error?.birthDay || error?.birthYear) && (
+      {(error?.month || error?.day || error?.year) && (
         <div className="field error">
           <span id={`${id}-error`} className="error-message">
-            {errorMessage ? errorMessage : t("errors.dateOfBirthError")}
+            {errorMessage ? errorMessage : t("errors.dateError")}
           </span>
         </div>
       )}
@@ -129,4 +115,4 @@ const DOBField = (props: DOBFieldProps) => {
   )
 }
 
-export { DOBField as default, DOBField }
+export { DateField as default, DateField }
