@@ -41,6 +41,7 @@ import { CountyCode } from "../../shared/types/county-code"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
+import { Asset } from "../../assets/entities/asset.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -371,6 +372,13 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
+
+  @ManyToOne(() => Asset, { eager: true, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  image?: Asset | null
 }
 
 export { Listing as default, Listing }

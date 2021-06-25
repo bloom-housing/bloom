@@ -19,6 +19,7 @@ export class ListingsService {
 
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
+      .leftJoinAndSelect("listings.image", "image")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
