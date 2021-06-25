@@ -269,6 +269,12 @@ export class ListingDto extends OmitType(Listing, [
       return transformUnits(this.units as Unit[])
     }
   }
+
+  @Expose()
+  @Transform((_value, listing) => {
+    return listing.applications ? listing.applications.length : 0
+  })
+  applicationCount: number
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [
@@ -300,6 +306,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
+  "applicationCount",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -454,6 +461,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
+  "applicationCount",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

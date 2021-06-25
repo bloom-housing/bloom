@@ -22,8 +22,8 @@ const FormListingData = () => {
         </GridSection>
         <GridSection grid={false} separator>
           <FormAddress
-            subtitle={t("listings.property.buildingAddress")}
-            dataKey="property.buildingAddress"
+            subtitle={t("listings.buildingAddress")}
+            dataKey="buildingAddress"
             type="mailing"
             register={register}
           />
@@ -32,17 +32,10 @@ const FormListingData = () => {
       <GridSection grid={false} separator>
         <GridSection columns={3}>
           <Field
-            id="property.id"
-            name="property.id"
-            label="Property ID (required for now)"
-            placeholder="Property ID"
-            register={register}
-          />
-          <Field
-            id="property.developer"
-            name="property.developer"
-            label={t("listings.property.developer")}
-            placeholder={t("listings.property.developer")}
+            id="developer"
+            name="developer"
+            label={t("listings.developer")}
+            placeholder={t("listings.developer")}
             register={register}
           />
           <Field

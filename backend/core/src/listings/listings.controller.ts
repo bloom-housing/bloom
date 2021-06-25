@@ -1,20 +1,20 @@
 import {
   Body,
   CacheInterceptor,
+  CACHE_MANAGER,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
   Query,
-  Req,
   UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { Request } from "express"
 import { ListingsService } from "./listings.service"
 import {
   ApiBearerAuth,
@@ -44,7 +44,13 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class ListingsController {
-  constructor(private readonly listingsService: ListingsService) {}
+  cacheKeys: string[]
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager,
+    private readonly listingsService: ListingsService
+  ) {
+    this.cacheKeys = ["/listings", "/listings?filter[$comparison]=%3C%3E&filter[status]=pending"]
+  }
 
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
@@ -71,7 +77,6 @@ export class ListingsController {
   })
   @UseInterceptors(CacheInterceptor)
   public async getAll(
-    @Req() request: Request,
     @Query("jsonpath") jsonpath?: string,
     @Query("filter") filter?: ListingFilterParams[]
     // TODO: Add options param here for paging and sorting
@@ -82,7 +87,15 @@ export class ListingsController {
   @Post()
   @ApiOperation({ summary: "Create listing", operationId: "create" })
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
-    return mapTo(ListingDto, await this.listingsService.create(listingDto))
+    const listing = await this.listingsService.create(listingDto)
+    /**
+     * clear list caches
+     * As we get more listings we'll want to update this to be more selective in clearing entries
+     */
+    for (const key of this.cacheKeys) {
+      await this.cacheManager.del(key)
+    }
+    return mapTo(ListingDto, listing)
   }
 
   @Get(`:listingId`)
@@ -100,12 +113,25 @@ export class ListingsController {
     @Param("listingId") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
-    return mapTo(ListingDto, await this.listingsService.update(listingUpdateDto))
+    const listing = await this.listingsService.update(listingUpdateDto)
+    /**
+     * clear list caches
+     * As we get more listings we'll want to update this to be more selective in clearing entries
+     */
+    for (const key of this.cacheKeys) {
+      await this.cacheManager.del(key)
+    }
+    await this.cacheManager.del(`/listings/${listingId}`)
+    return mapTo(ListingDto, listing)
   }
 
   @Delete(`:listingId`)
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)
+    for (const key of this.cacheKeys) {
+      await this.cacheManager.del(key)
+    }
+    await this.cacheManager.del(`/listings/${listingId}`)
   }
 }
