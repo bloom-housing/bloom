@@ -720,6 +720,7 @@
       "clone": "Clone"
     },
     "addListing": "Add Listing",
+    "additionalApplicationSubmissionNotes": "Additional Application Submission Notes",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
@@ -731,7 +732,9 @@
     "applicationFeeDueAt": "Due at interview",
     "applicationOpenPeriod": "Applications Open",
     "applicationPerApplicantAgeDescription": "per applicant age 18 and over",
+    "applicationPickupQuestion": "Can applications be picked up?",
     "applicationsClosed": "Applications Closed",
+    "applicationDropOffQuestion": "Can applications be dropped off?",
     "apply": {
       "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
       "applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
@@ -780,6 +783,7 @@
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "latitude": "Latitude",
+    "leasingAgentAddress": "Leasing Agent Address",
     "listingStatus": {
       "active": "Open",
       "pending": "Draft",
@@ -806,7 +810,11 @@
       "header": "Open Houses",
       "seeVideo": "See Video"
     },
+    "paperDifferentAddress": "Paper applications are mailed to another address",
     "percentAMIUnit": "%{percent}% AMI Unit",
+    "pickupAddress": "Pickup Address",
+    "postmarkByDate": "Postmark by Date",
+    "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
     "title": "Property Data",
@@ -871,6 +879,7 @@
     "singleRoomOccupancy": "Single Room Occupancy",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
     "specialNotes": "Special Notes",
+    "streetAddressOrPOBox": "Street Address or PO Box",
     "totalListings": "Total Listings",
     "unitTypes": {
       "oneBdrm": "1 BR",
@@ -906,6 +915,7 @@
       "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
       "unitsAndWaitlist": "Available Units and Waitlist"
     },
+    "wherePickupQuestion": "Where are applications picked up?",
     "yearBuilt": "Year Built",
     "cc&r": "Covenants, Conditions and Restrictions (CC&R's)",
     "cc&rDescription": "The CC&R's explain the rules of the homeowners' association, and restrict how you can modify the property.",
@@ -1016,6 +1026,7 @@
     "WY": "Wyoming"
   },
   "t": {
+    "addNotes": "Add notes",
     "at": "at",
     "additionalPhone": "Additional Phone",
     "area": "area",

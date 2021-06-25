@@ -31,6 +31,7 @@ import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
+import ApplicationAddress from "./sections/ApplicationAddress"
 
 export type FormListing = ListingCreate &
   ListingUpdate & {
@@ -251,6 +252,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <AdditionalDetails />
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
+                    <ApplicationAddress />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
