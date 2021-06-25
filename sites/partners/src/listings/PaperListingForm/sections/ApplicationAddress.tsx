@@ -18,11 +18,13 @@ const ApplicationAddress = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, getValues } = formMethods
+  const { register, watch } = formMethods
   const postmarksConsidered: YesNoAnswer = watch("applicationAddress.postmarksConsidered")
   const applicationsPickedUp: YesNoAnswer = watch("applicationAddress.applicationsPickedUp")
   const applicationsPickedUpAddress = watch("applicationAddress.applicationsPickedUpAddress")
   const paperMailedToAnotherAddress = watch("applicationAddress.differentPaperAddress")
+  const applicationsDroppedOff: YesNoAnswer = watch("applicationAddress.applicationsDroppedOff")
+  const droppedOffAtAnotherAddress = watch("applicationAddress.applicationsDroppedOffAddress")
 
   const yesNoRadioOptions = [
     {
@@ -35,19 +37,16 @@ const ApplicationAddress = () => {
     },
   ]
 
-  const pickupRadioOptions = [
+  const locationRadioOptions = [
     {
-      id: "applicationPickupAddress.leasingAgentAddress",
       label: "At the leasing agent address",
       value: "leasingAgentAddress",
     },
     {
-      id: "applicationPickupAddress.mailingAddress",
       label: "At the mailing address",
       value: "mailingAddress",
     },
     {
-      id: "applicationPickupAddress.anotherAddress",
       label: "At another address",
       value: "anotherAddress",
     },
@@ -117,6 +116,58 @@ const ApplicationAddress = () => {
             register={register}
           />
         </GridSection>
+        {paperMailedToAnotherAddress && (
+          <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
+            <GridSection columns={3}>
+              <Field
+                label={t("listings.streetAddressOrPOBox")}
+                name={"mailingAddress.street"}
+                id={"mailingAddress.street"}
+                register={register}
+                placeholder={t("application.contact.streetAddress")}
+              />
+              <Field
+                label={t("application.contact.apt")}
+                name={"mailingAddress.street2"}
+                id={"mailingAddress.street2"}
+                register={register}
+                placeholder={t("application.contact.apt")}
+              />
+            </GridSection>
+            <GridSection columns={6}>
+              <GridCell span={2}>
+                <Field
+                  label={t("application.contact.city")}
+                  name={"mailingAddress.city"}
+                  id={"mailingAddress.city"}
+                  register={register}
+                  placeholder={t("application.contact.city")}
+                />
+              </GridCell>
+              <ViewItem label={t("application.contact.state")} className="mb-0">
+                <Select
+                  id={`mailingAddress.state`}
+                  name={`mailingAddress.state`}
+                  label={t("application.contact.state")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="states"
+                  errorMessage={t("errors.stateError")}
+                />
+              </ViewItem>
+              <Field
+                label={t("application.contact.zip")}
+                name={"mailingAddress.zipCode"}
+                id={"mailingAddress.zipCode"}
+                placeholder={t("application.contact.zip")}
+                errorMessage={t("errors.zipCodeError")}
+                register={register}
+              />
+            </GridSection>
+          </GridSection>
+        )}
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
@@ -138,7 +189,11 @@ const ApplicationAddress = () => {
               name="applicationAddress.applicationsPickedUpAddress"
               type="radio"
               register={register}
-              fields={pickupRadioOptions}
+              fields={[
+                { ...locationRadioOptions[0], id: "pickUpAddressLeasingAgent" },
+                { ...locationRadioOptions[1], id: "pickUpAddressMailingAddress" },
+                { ...locationRadioOptions[2], id: "pickUpAddressAnotherAddress" },
+              ]}
             />
           </GridSection>
         )}
@@ -208,6 +263,73 @@ const ApplicationAddress = () => {
             ]}
           />
         </GridSection>
+        {applicationsDroppedOff === YesNoAnswer.Yes && (
+          <GridSection columns={4}>
+            <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
+            <FieldGroup
+              name="applicationAddress.applicationsDroppedOffAddress"
+              type="radio"
+              register={register}
+              fields={[
+                { ...locationRadioOptions[0], id: "dropOffAddressLeasingAgent" },
+                { ...locationRadioOptions[1], id: "dropOffAddressMailingAddress" },
+                { ...locationRadioOptions[2], id: "dropOffAddressAnotherAddress" },
+              ]}
+            />
+          </GridSection>
+        )}
+        {droppedOffAtAnotherAddress === "anotherAddress" && (
+          <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
+            <GridSection columns={3}>
+              <Field
+                label={t("listings.streetAddressOrPOBox")}
+                name={"dropOffAddress.street"}
+                id={"dropOffAddress.street"}
+                register={register}
+                placeholder={t("application.contact.streetAddress")}
+              />
+              <Field
+                label={t("application.contact.apt")}
+                name={"dropOffAddress.street2"}
+                id={"dropOffAddress.street2"}
+                register={register}
+                placeholder={t("application.contact.apt")}
+              />
+            </GridSection>
+            <GridSection columns={6}>
+              <GridCell span={2}>
+                <Field
+                  label={t("application.contact.city")}
+                  name={"dropOffAddress.city"}
+                  id={"dropOffAddress.city"}
+                  register={register}
+                  placeholder={t("application.contact.city")}
+                />
+              </GridCell>
+              <ViewItem label={t("application.contact.state")} className="mb-0">
+                <Select
+                  id={`dropOffAddress.state`}
+                  name={`dropOffAddress.state`}
+                  label={t("application.contact.state")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={stateKeys}
+                  keyPrefix="states"
+                  errorMessage={t("errors.stateError")}
+                />
+              </ViewItem>
+              <Field
+                label={t("application.contact.zip")}
+                name={"dropOffAddress.zipCode"}
+                id={"dropOffAddress.zipCode"}
+                placeholder={t("application.contact.zip")}
+                errorMessage={t("errors.zipCodeError")}
+                register={register}
+              />
+            </GridSection>
+          </GridSection>
+        )}
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
