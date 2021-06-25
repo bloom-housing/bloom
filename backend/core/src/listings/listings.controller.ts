@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Headers,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -77,11 +78,12 @@ export class ListingsController {
   })
   @UseInterceptors(CacheInterceptor)
   public async getAll(
+    @Headers("origin") origin: string,
     @Query("jsonpath") jsonpath?: string,
     @Query("filter") filter?: ListingFilterParams[]
     // TODO: Add options param here for paging and sorting
   ): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(jsonpath, filter))
+    return mapTo(ListingDto, await this.listingsService.list(origin, jsonpath, filter))
   }
 
   @Post()

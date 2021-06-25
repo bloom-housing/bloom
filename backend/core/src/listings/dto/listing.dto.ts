@@ -269,12 +269,6 @@ export class ListingDto extends OmitType(Listing, [
       return transformUnits(this.units as Unit[])
     }
   }
-
-  @Expose()
-  @Transform((_value, listing) => {
-    return listing.applications ? listing.applications.length : 0
-  })
-  applicationCount: number
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [
