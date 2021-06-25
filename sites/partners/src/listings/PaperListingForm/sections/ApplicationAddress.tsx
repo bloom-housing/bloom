@@ -37,19 +37,17 @@ const ApplicationAddress = () => {
     },
   ]
 
-  console.log(paperMailedToAnotherAddress)
-
   const locationRadioOptions = [
     {
-      label: "At the leasing agent address",
+      label: t("listings.atLeasingAgentAddress"),
       value: "leasingAgentAddress",
     },
     {
-      label: "At the mailing address",
+      label: t("listings.atMailingAddress"),
       value: "mailingAddress",
     },
     {
-      label: "At another address",
+      label: t("listings.atAnotherAddress"),
       value: "anotherAddress",
     },
   ]
