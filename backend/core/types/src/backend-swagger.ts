@@ -3113,6 +3113,9 @@ export interface Listing {
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
+  image?: CombinedImageTypes;
+
+  /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
@@ -3531,6 +3534,9 @@ export interface ListingCreate {
 
   /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  image?: CombinedImageTypes;
 }
 
 export interface PreferenceUpdate {
@@ -3804,6 +3810,9 @@ export interface ListingUpdate {
 
   /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  image?: CombinedImageTypes;
 }
 
 export interface Property {
@@ -4300,6 +4309,7 @@ export enum ListingEventType {
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedImageTypes = (Id & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum UserRole {
