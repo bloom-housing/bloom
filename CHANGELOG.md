@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
   - `/reservedCommunityTypes` endpoint and DB schema ([#1395](https://github.com/bloom-housing/bloom/pull/1395))
   - `image` field to `listing` model ([#1413](https://github.com/bloom-housing/bloom/pull/1413))
   - reserved_community_type table seeds (`senior` and `specialNeeds`)
+  - add applicationDueDate check on submission ([#1409](https://github.com/bloom-housing/bloom/pull/1409))
 
 - Changed:
 
