@@ -165,11 +165,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       <>
         <StatusBar
           backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => router.back()}
-            >
+            <Button inlineIcon="left" icon="arrowBack" onClick={() => router.back()}>
               {t("t.back")}
             </Button>
           }
