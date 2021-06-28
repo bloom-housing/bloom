@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -195,7 +194,6 @@ class Listing extends BaseEntity {
   disableUnitsAccordion: boolean | null
 
   @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
-  @JoinColumn()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
