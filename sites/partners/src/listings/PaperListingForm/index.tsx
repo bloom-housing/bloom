@@ -168,7 +168,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             <Button
               inlineIcon="left"
               icon="arrowBack"
-              onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+              onClick={() => router.back()}
             >
               {t("t.back")}
             </Button>
