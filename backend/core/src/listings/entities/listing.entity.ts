@@ -25,6 +25,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  MaxLength,
   ValidateNested,
 } from "class-validator"
 import { listingUrlSlug } from "../../shared/url-helper"
@@ -331,14 +332,9 @@ class Listing extends BaseEntity {
   @Expose()
   applicationCount?: number
 
-  @Column({
-    type: "boolean",
-    default: false,
-    nullable: false,
-  })
+  @Column({ type: "boolean" })
   @Expose()
-  @ApiProperty()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   displayWaitlistSize: boolean
 
   @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
@@ -389,6 +385,25 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
   result?: Asset | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  resultLink?: string | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isWaitlistOpen?: boolean | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  waitlistOpenSpots?: number | null
 }
 
 export { Listing as default, Listing }
