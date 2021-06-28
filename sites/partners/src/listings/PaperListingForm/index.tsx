@@ -28,6 +28,7 @@ import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
+import BuildingFeatures from "./sections/BuildingFeatures"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -224,6 +225,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <FormListingData />
                     <BuildingDetails />
                     <AdditionalFees />
+                    <BuildingFeatures />
                     <AdditionalEligibility />
                     <AdditionalDetails />
                     <LeasingAgent />
