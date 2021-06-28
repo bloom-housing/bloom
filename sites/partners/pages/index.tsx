@@ -138,9 +138,11 @@ export default function ListingsList() {
             <div className="flex justify-between">
               <div className="w-56"></div>
               <div className="flex-row">
-                <Button className="mx-1" onClick={() => void router.push("/listings/add")}>
-                  {t("listings.addListing")}
-                </Button>
+                {profile.roles.includes(UserRole.admin) && (
+                  <Button className="mx-1" onClick={() => void router.push("/listings/add")}>
+                    {t("listings.addListing")}
+                  </Button>
+                )}
               </div>
             </div>
             <div className="applications-table mt-5">

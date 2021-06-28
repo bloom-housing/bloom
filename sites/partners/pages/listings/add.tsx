@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useContext } from "react"
 import Head from "next/head"
-import { PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
+import { PageHeader, SiteAlert, t, UserContext } from "@bloom-housing/ui-components"
+import { UserRole } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
 import { MetaTags } from "../../src/MetaTags"
@@ -8,6 +9,9 @@ import { MetaTags } from "../../src/MetaTags"
 const NewListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
+  const { profile } = useContext(UserContext)
+
+  if (!profile.roles.includes(UserRole.admin)) return "An error has occurred."
 
   return (
     <Layout>
