@@ -10,7 +10,6 @@ import { Asset } from "../entities/asset.entity"
 import { UploadService } from "./upload.service"
 import { paginate } from "nestjs-typeorm-paginate"
 import { PaginationQueryParams } from "../../shared/dto/pagination.dto"
-import { QueryOneOptions } from "../../shared/services/abstract-service"
 
 @Injectable()
 export class AssetsService {
