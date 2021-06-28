@@ -3,11 +3,11 @@ import {
   t,
   GridSection,
   ViewItem,
-  DOBField,
-  DOBFieldValues,
   Select,
   applicationLanguageKeys,
   TimeField,
+  DateField,
+  DateFieldValues,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 
@@ -17,13 +17,13 @@ const FormApplicationData = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, setValue } = formMethods
 
-  const dateSubmittedValue: DOBFieldValues = watch("dateSubmitted")
+  const dateSubmittedValue: DateFieldValues = watch("dateSubmitted")
   const dateSubmittedError = !!errors?.dateSubmitted
   const isDateFilled =
-    dateSubmittedValue?.birthDay && dateSubmittedValue?.birthMonth && dateSubmittedValue?.birthYear
+    dateSubmittedValue?.day && dateSubmittedValue?.month && dateSubmittedValue?.year
 
   const isDateRequired =
-    dateSubmittedValue?.birthDay || dateSubmittedValue?.birthMonth || dateSubmittedValue?.birthYear
+    dateSubmittedValue?.day || dateSubmittedValue?.month || dateSubmittedValue?.year
 
   useEffect(() => {
     if (dateSubmittedError || !isDateRequired) {
@@ -37,7 +37,7 @@ const FormApplicationData = () => {
     <GridSection title={t("application.details.applicationData")} grid={false}>
       <GridSection columns={3}>
         <ViewItem label={t("application.add.dateSubmitted")}>
-          <DOBField
+          <DateField
             id="dateSubmitted"
             name="dateSubmitted"
             register={register}
@@ -45,7 +45,6 @@ const FormApplicationData = () => {
             watch={watch}
             label={t("application.add.dateSubmitted")}
             readerOnly
-            atAge={false}
             errorMessage={t("errors.dateError")}
             required={!!isDateRequired}
           />

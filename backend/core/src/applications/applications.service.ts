@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable, Scope } from "@nestjs/common"
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Scope,
+} from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -51,6 +58,13 @@ export class ApplicationsService {
 
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
+    const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
+    if (
+      listing.applicationDueDate &&
+      applicationCreateDto.submissionDate > listing.applicationDueDate
+    ) {
+      throw new BadRequestException("Listing is not open for application submission.")
+    }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
     const application = await this._create(applicationCreateDto)
     return application
