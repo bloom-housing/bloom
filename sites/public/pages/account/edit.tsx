@@ -190,13 +190,14 @@ const Edit = () => {
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
+                validateAge18={true}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
                 defaultDOB={{
                   birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
                   birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
                   birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
-                errorMessage={t("errors.dateOfBirthError")}
               />
               <div className="text-center mt-5">
                 <Button className="items-center">{t("account.settings.update")}</Button>

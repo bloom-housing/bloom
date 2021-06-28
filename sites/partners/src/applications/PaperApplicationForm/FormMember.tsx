@@ -161,7 +161,6 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
                 watch={watch}
                 label={t("application.name.yourDateOfBirth")}
                 readerOnly
-                validateHhAge
               />
             </ViewItem>
           </GridCell>

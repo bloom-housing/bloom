@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
   - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
   - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
+  - Fix units availability ([#1397](https://github.com/bloom-housing/bloom/issues/1397))
 
 - Added:
 
@@ -32,6 +33,9 @@ All notable changes to this project will be documented in this file. The format 
   - POST `/users` endpoint response from StatusDTO to UserBasicDto (Michał Plebański)
   - `/jurisdictions` endpoint and DB schema ([#1391](https://github.com/bloom-housing/bloom/pull/1391))
   - `/reservedCommunityTypes` endpoint and DB schema ([#1395](https://github.com/bloom-housing/bloom/pull/1395))
+  - `image` field to `listing` model ([#1413](https://github.com/bloom-housing/bloom/pull/1413))
+  - reserved_community_type table seeds (`senior` and `specialNeeds`)
+  - add applicationDueDate check on submission ([#1409](https://github.com/bloom-housing/bloom/pull/1409))
 
 - Changed:
 
@@ -41,6 +45,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Frontend
 
 - Added:
+
   - Adds filtering capability to listings list and implements on public site ([#1351](https://github.com/bloom-housing/bloom/pull/1359))
   - Listings Management pieces added to Parnter's app, including add and detail pages
     - add accessible at `/listings/add`
@@ -53,6 +58,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Additional Details section to listing management ([#1338](https://github.com/bloom-housing/bloom/pull/1338)) (Emily Jablonski)
   - Add Additional Eligibility section to listing management ([#1374](https://github.com/bloom-housing/bloom/pull/1374)) (Emily Jablonski)
   - Add Leasing Agent section to listing management ([#1349](https://github.com/bloom-housing/bloom/pull/1349)) (Emily Jablonski)
+  - Add Additional Fees section to listing management ([#1377](https://github.com/bloom-housing/bloom/pull/1377)) (Emily Jablonski)
 
 - Fixed:
 
@@ -77,6 +83,7 @@ All notable changes to this project will be documented in this file. The format 
   - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
+  - Generic date component ([#1392](https://github.com/bloom-housing/bloom/pull/1392)) (Emily Jablonski)
 
 - Fixed:
 
