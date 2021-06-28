@@ -25,6 +25,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from "@nestjs/swagger"
+import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
   ListingDto,
@@ -37,6 +38,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { clearCacheKeys } from "../libs/cacheLib"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -47,7 +49,7 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 export class ListingsController {
   cacheKeys: string[]
   constructor(
-    @Inject(CACHE_MANAGER) private cacheManager,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly listingsService: ListingsService
   ) {
     this.cacheKeys = ["/listings", "/listings?filter[$comparison]=%3C%3E&filter[status]=pending"]
@@ -94,9 +96,7 @@ export class ListingsController {
      * clear list caches
      * As we get more listings we'll want to update this to be more selective in clearing entries
      */
-    for (const key of this.cacheKeys) {
-      await this.cacheManager.del(key)
-    }
+    await clearCacheKeys(this.cacheManager, this.cacheKeys)
     return mapTo(ListingDto, listing)
   }
 
@@ -120,10 +120,7 @@ export class ListingsController {
      * clear list caches
      * As we get more listings we'll want to update this to be more selective in clearing entries
      */
-    for (const key of this.cacheKeys) {
-      await this.cacheManager.del(key)
-    }
-    await this.cacheManager.del(`/listings/${listingId}`)
+    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
     return mapTo(ListingDto, listing)
   }
 
@@ -131,9 +128,6 @@ export class ListingsController {
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)
-    for (const key of this.cacheKeys) {
-      await this.cacheManager.del(key)
-    }
-    await this.cacheManager.del(`/listings/${listingId}`)
+    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
   }
 }
