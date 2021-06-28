@@ -1,0 +1,27 @@
+// The header logo should allow for a larger maximum height than the default
+// logo.
+.navbar-brand .logo .logo__image {
+  min-height: 5rem;
+  max-height: 8rem;
+  @screen md {
+    min-height: 5rem;
+    max-height: 8rem;
+  }
+}
+
+.navbar-item.logo {
+  max-height: 15rem;
+  max-width: 30rem;
+}
+
+// Listing table Detroit styles
+.ag-theme-alpine.ag-theme-bloom {
+  // Cell focus indicator color
+  --ag-range-selection-border-color: #004445;
+  // Row heading focus indicator color
+  --ag-input-focus-border-color: #004445;
+  // Table row hover background color
+  --ag-row-hover-color: #F2F2F2;
+}
+
+

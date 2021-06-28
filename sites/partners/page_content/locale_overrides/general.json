@@ -1,18 +1,12 @@
 {
-  "welcome": {
-    "seeRentalListings": "Browse Rentals"
+  "nav": {
+    "siteTitle": "Detroit Housing Portal"
   },
-  "application": {
-    "details": {
-      "countyName": "Alameda County"
-    },
-    "preferences": {
-      "PBV": {
-        "title": "Oakland Housing Authority",
-        "doNotConsider": {
-          "label": "I don't want to be considered for Oakland Housing Authority project-based voucher units"
-        }
-      }
-    }
+
+  "footer": {
+    "copyright": "City of Detroit © 2021 • All Rights Reserved",
+    "header": "Detroit Housing Portal is a project of the",
+    "headerUrl": "https://detroitmi.gov/departments/housing-and-revitalization-department",
+    "headerLink": "City of Detroit - Housing and Revitalization Department"
   }
 }

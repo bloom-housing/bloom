@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import type { AppProps } from "next/app"
-
 import "@bloom-housing/ui-components/src/global/index.scss"
+import "../styles/overrides.scss"
 import {
   addTranslation,
   ConfigProvider,

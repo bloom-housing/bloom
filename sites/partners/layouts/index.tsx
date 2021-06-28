@@ -23,7 +23,7 @@ const Layout = (props) => {
 
         <SiteHeader
           skip={t("nav.skip")}
-          logoSrc="/images/logo_glyph.svg"
+          logoSrc="/images/detroit-logo.png"
           notice=""
           title={t("nav.siteTitle")}
         >
@@ -40,7 +40,19 @@ const Layout = (props) => {
         <main>{props.children}</main>
 
         <SiteFooter>
-          <FooterNav copyright="© 2020 • All Rights Reserved">
+          <FooterSection>
+            <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
+          </FooterSection>
+          <FooterSection>
+            <p>
+              {t("footer.header")}
+              <br />
+              <a href={t("footer.headerUrl")} target="_blank">
+                {t("footer.headerLink")}
+              </a>
+            </p>
+          </FooterSection>
+          <FooterNav copyright={t("footer.copyright")}>
             <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
             <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
           </FooterNav>
