@@ -6,7 +6,7 @@ import { ListingStatus } from "../src/listings/types/listing-status-enum"
 // NOTE: This script relies on any logged-in users having permission to create
 // listings and properties (defined in backend/core/src/auth/authz_policy.csv)
 
-async function uploadPreferences(listing) {
+function uploadPreferences(listing) {
   const preferencesService = new client.PreferencesService()
   listing.preferences.map(async (preference) => {
     try {
@@ -37,7 +37,7 @@ async function uploadListing(listing) {
 async function uploadAmiCharts(property) {
   const amiChartService = new client.AmiChartsService()
   const charts = await amiChartService.list()
-  
+
   for (const unit of property.units) {
     const chartFromUnit = unit.amiChart
     if (!chartFromUnit) {
@@ -51,7 +51,7 @@ async function uploadAmiCharts(property) {
 
     // If it doesn't exist, create it.
     if (!chart) {
-      chart = await amiChartService.create({body: chartFromUnit})
+      chart = await amiChartService.create({ body: chartFromUnit })
     }
     unit.amiChart = chart
   }
@@ -107,7 +107,7 @@ export async function importListing(apiUrl, email, password, listing) {
 
   // Extract the associated property, to be uploaded first.
   if (!listing.property) {
-    throw new Error('Listing must include a non-null Property.')
+    throw new Error("Listing must include a non-null Property.")
   }
   let property = listing.property
   delete listing.property

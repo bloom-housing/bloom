@@ -188,14 +188,9 @@ describe("Authz", () => {
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
-    it(`should allow normal/anonymous user to POST listings`, async () => {
+    it(`should not allow anonymous user to POST listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer()).post(listingsEndpoint).expect(403)
-      // logged in normal user
-      await supertest(app.getHttpServer())
-        .post(listingsEndpoint)
-        .set(...setAuthorization(userAccessToken))
-        .expect(403)
     })
   })
 

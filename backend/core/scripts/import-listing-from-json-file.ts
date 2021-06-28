@@ -4,18 +4,18 @@ import fs from "fs"
 // Example usage (from within /backend/core):
 // $ yarn ts-node scripts/import-listing-from-json-file.ts http://localhost:3100 test@example.com:abcdef scripts/minimal-listing.json
 
-
 async function main() {
-
   if (process.argv.length < 5) {
-    console.log("usage: yarn ts-node scripts/import-listing-from-json-file.ts api_url email:password input_listing.json")
+    console.log(
+      "usage: yarn ts-node scripts/import-listing-from-json-file.ts api_url email:password input_listing.json"
+    )
     process.exit(1)
   }
 
   const [apiUrl, userAndPassword, listingFilePath] = process.argv.slice(2)
   const [email, password] = userAndPassword.split(":")
 
-  let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
+  const listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
 
   let newListing
   try {
@@ -26,7 +26,7 @@ async function main() {
   }
 
   console.log(newListing)
-  console.log('Success! New listing created.')
+  console.log("Success! New listing created.")
 }
 
 void main()
