@@ -38,7 +38,7 @@ export interface StandardTableProps {
 }
 
 export const StandardTable = (props: StandardTableProps) => {
-  const { headers, data, cellClassName } = props
+  const { headers = {}, data = [], cellClassName } = props
 
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()

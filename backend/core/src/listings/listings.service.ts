@@ -8,14 +8,11 @@ import { Repository } from "typeorm"
 import { addFilter } from "../shared/filter"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
-import { Property } from "../property/entities/property.entity"
+import { arrayIndex } from "../libs/arrayLib"
 
 @Injectable()
 export class ListingsService {
-  constructor(
-    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
-    @InjectRepository(Property) private readonly propertyRepository: Repository<Property>
-  ) {}
+  constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
@@ -30,7 +27,11 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(jsonpath?: string, filter?: ListingFilterParams[]): Promise<Listing[]> {
+  public async list(
+    origin: string,
+    jsonpath?: string,
+    filter?: ListingFilterParams[]
+  ): Promise<Listing[]> {
     const qb = this.getQueryBuilder()
     if (filter) {
       addFilter<ListingFilterParams>(filter, "listings", qb)
@@ -43,6 +44,22 @@ export class ListingsService {
     })
 
     let listings = await qb.getMany()
+
+    /**
+     * Get the application counts and map them to listings
+     */
+    if (origin === process.env.PARTNERS_BASE_URL) {
+      const counts = await Listing.createQueryBuilder("listing")
+        .select("listing.id")
+        .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
+        .getMany()
+
+      const countIndex = arrayIndex<Listing>(counts, "id")
+
+      listings.forEach((listing: Listing) => {
+        listing.applicationCount = countIndex[listing.id].applicationCount
+      })
+    }
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)

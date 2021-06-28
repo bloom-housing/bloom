@@ -6,12 +6,7 @@ const DetailProperty = () => {
   const listing = useContext(ListingContext)
 
   return (
-    <GridSection
-      className="bg-primary-ligher"
-      title={t("listings.property.title")}
-      grid={false}
-      inset
-    >
+    <GridSection className="bg-primary-ligher" title={t("listings.title")} grid={false} inset>
       <GridSection columns={2}>
         <GridCell>
           <ViewItem label={t("listings.developer")}>{listing.developer}</ViewItem>

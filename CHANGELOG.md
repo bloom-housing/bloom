@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
+  - Added cache manager to lisitngs controller, added add listing button and cleanup ([#1422](https://github.com/bloom-housing/bloom/pull/1422))
 
 ### Backend
 

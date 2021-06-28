@@ -57,16 +57,18 @@ export const ListingView = (props: ListingProps) => {
     availability: t("t.availability"),
   }
 
-  const amiValues = listing.unitsSummarized.amiPercentages
-    .map((percent) => {
-      const percentInt = parseInt(percent, 10)
-      return percentInt
-    })
-    .sort()
+  const amiValues = listing?.unitsSummarized?.amiPercentages
+    ? listing.unitsSummarized.amiPercentages
+        .map((percent) => {
+          const percentInt = parseInt(percent, 10)
+          return percentInt
+        })
+        .sort()
+    : []
 
-  const hmiHeaders = listing.unitsSummarized.hmi.columns as TableHeaders
+  const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
-  const hmiData = listing.unitsSummarized.hmi.rows.map((row) => {
+  const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
     return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
   })
   let groupedUnits: GroupedTableGroup[] = null
@@ -85,7 +87,7 @@ export const ListingView = (props: ListingProps) => {
   }
   const occupancyData = occupancyTable(listing)
 
-  const householdMaximumIncomeSubheader = listing.units[0].bmrProgramChart
+  const householdMaximumIncomeSubheader = listing?.units[0]?.bmrProgramChart
     ? t("listings.forIncomeCalculationsBMR")
     : t("listings.forIncomeCalculations")
 
@@ -335,7 +337,7 @@ export const ListingView = (props: ListingProps) => {
                 description={
                   <UnitTables
                     units={listing.units}
-                    unitSummaries={listing.unitsSummarized.byUnitType}
+                    unitSummaries={listing?.unitsSummarized?.byUnitType}
                     disableAccordion={listing.disableUnitsAccordion}
                   />
                 }

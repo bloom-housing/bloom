@@ -307,6 +307,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
+  "applicationCount",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -461,6 +462,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
+  "applicationCount",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
