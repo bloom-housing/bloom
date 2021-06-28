@@ -7,7 +7,7 @@ const DetailAdditionalEligibility = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.sections.additionalEligibilityTitle")}
       grid={false}
       inset

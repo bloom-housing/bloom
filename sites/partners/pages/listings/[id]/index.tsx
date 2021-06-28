@@ -17,7 +17,8 @@ import Layout from "../../../layouts"
 import Aside from "../../../src/listings/Aside"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
-import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
+import DetailListingIntro from "../../../src/listings/PaperListingDetails/sections/DetailListingIntro"
+import DetailBuildingDetails from "../../../src/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
 import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -102,7 +103,8 @@ export default function ApplicationsList() {
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
                 <DetailListingData />
-                <DetailProperty />
+                <DetailListingIntro />
+                <DetailBuildingDetails />
                 <DetailApplication />
                 <DetailAdditionalFees />
                 <DetailAdditionalEligibility />

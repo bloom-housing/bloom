@@ -26,6 +26,8 @@ import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
+import BuildingDetails from "./sections/BuildingDetails"
+import ListingIntro from "./sections/ListingIntro"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -95,7 +97,7 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: 0,
+  yearBuilt: 2021,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -142,12 +144,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
+      const typedData: FormListing = {
+        ...data,
+        yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+      }
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,
-            body: { id: listing.id, ...data },
+            body: { id: listing.id, ...typedData },
           })
-        : await listingsService.create({ body: data })
+        : await listingsService.create({ body: typedData })
       setLoading(false)
 
       if (result) {
@@ -214,7 +220,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
+                    <ListingIntro />
                     <FormListingData />
+                    <BuildingDetails />
                     <AdditionalFees />
                     <AdditionalEligibility />
                     <AdditionalDetails />

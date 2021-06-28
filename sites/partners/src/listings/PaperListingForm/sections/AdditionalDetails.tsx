@@ -13,7 +13,7 @@ const AdditionalDetails = () => {
       <GridSection grid={false} separator>
         <span className="form-section__title">{t("listings.sections.additionalDetails")}</span>
         <span className="form-section__description">
-          {t("listings.sections.additionalDetailsSubtext")}
+          {t("listings.sections.additionalDetailsSubtitle")}
         </span>
         <GridSection columns={2}>
           <Textarea
