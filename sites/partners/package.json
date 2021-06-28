@@ -20,6 +20,8 @@
     "@zeit/next-sass": "^1.0.1",
     "ag-grid-community": "^24.1.0",
     "ag-grid-react": "^24.1.0",
+    "@mdx-js/loader": "1.6.18",
+    "@next/mdx": "^10.1.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "moment": "^2.29.1",

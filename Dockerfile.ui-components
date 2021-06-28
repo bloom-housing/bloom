@@ -1,0 +1,28 @@
+# Here we're using a non alpine image because it includes python
+FROM node:12.16 AS build
+
+WORKDIR /usr/src/app/
+
+# default port is 40953
+ENV PORT=40953
+
+COPY . .
+
+WORKDIR /usr/src/app/ui-components
+
+COPY ui-components/yarn*.lock ui-components/package.json ./
+
+RUN yarn install
+
+COPY ./ui-components .
+
+RUN yarn build-storybook
+
+EXPOSE ${PORT}
+
+WORKDIR /usr/src/app/ui-components/storybook-static
+
+# Can't use the ["", ""] syntax here because it doesn't interpolate variables.
+# This is the "shell" form of CMD
+# We're serving the static assets with python because start-storybook takes a long time
+CMD python -m SimpleHTTPServer ${PORT}
