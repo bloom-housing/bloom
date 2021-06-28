@@ -6,7 +6,7 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ApplicationMethodType, AssetDto, Unit } from "../.."
+import { ApplicationMethodType, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { User } from "../user/entities/user.entity"
@@ -19,6 +19,7 @@ import { CountyCode } from "../shared/types/county-code"
 import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { AssetCreateDto } from "../assets/dto/asset.dto"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
@@ -68,7 +69,7 @@ type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
 
 type ListingEventDtoSeedType = Omit<ListingEventDto, "listing">
 
-type AssetDtoSeedType = Omit<AssetDto, "listing">
+type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {

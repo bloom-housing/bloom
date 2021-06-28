@@ -35,13 +35,13 @@ import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/a
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
-import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
+import { AssetCreateDto } from "../../assets/dto/asset.dto"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -78,8 +78,8 @@ class Listing extends BaseEntity {
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetDto)
-  assets: AssetDto[]
+  @Type(() => AssetCreateDto)
+  assets: AssetCreateDto[]
 
   @Column("jsonb")
   @Expose()
@@ -376,12 +376,19 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
 
-  @ManyToOne(() => Asset, { eager: true, nullable: true })
+  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
   image?: Asset | null
+
+  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  result?: Asset | null
 }
 
 export { Listing as default, Listing }

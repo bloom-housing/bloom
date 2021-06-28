@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file. The format 
   - reserved_community_type table seeds (`senior` and `specialNeeds`)
   - add applicationDueDate check on submission ([#1409](https://github.com/bloom-housing/bloom/pull/1409))
   - list and retrieve methods to `/assets` endpoint
+  - add result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
 
 - Changed:
 
