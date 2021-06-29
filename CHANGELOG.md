@@ -65,6 +65,7 @@ All notable changes to this project will be documented in this file. The format 
   - added result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
   - added resultLink, isWaitlistOpen and waitlistOpenSpots to Listing model
   - Added applicationPickUpAddressType and applicationDropOffAddressType columns to Listing model ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Michał Plebański)
+  - added unit_accessibility_priority_types, unit_rent_types, unit_types table and corresponding API endpoints (also created a relation between Unit and mentioned tables) ([#1439](https://github.com/bloom-housing/bloom/pull/1439)
 
 - Changed:
 
