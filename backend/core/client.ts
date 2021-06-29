@@ -1686,6 +1686,9 @@ export interface Listing {
   /**  */
   property: Property
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
 
@@ -1868,6 +1871,9 @@ export interface ListingCreate {
 
   /**  */
   property: Id
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
@@ -2060,6 +2066,9 @@ export interface ListingUpdate {
 
   /**  */
   property: Id
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
