@@ -84,7 +84,7 @@ const defaults: FormListing = {
   leasingAgentPhone: "",
   leasingAgentTitle: "",
   name: "",
-  postmarkedApplicationsReceivedByDate: new Date(),
+  postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
   rentalAssistance: "",
@@ -162,6 +162,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
       waitlistOpenSpots:
         data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+      postmarkedApplicationsReceivedByDate: data.postmarkedApplicationsReceivedByDate
+        ? new Date(data.postmarkedApplicationsReceivedByDate)
+        : null,
     }
   }
 
