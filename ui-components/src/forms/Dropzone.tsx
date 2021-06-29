@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
+import { t } from "../helpers/translator"
 import "./Dropzone.scss"
 
 interface DropzoneProps {
@@ -8,10 +9,14 @@ interface DropzoneProps {
   helptext?: string
   accept?: string | string[]
   progress?: number
+  className?: string
 }
 
 const Dropzone = (props: DropzoneProps) => {
   const { uploader } = props
+  const classNames = ["field"]
+  if (props.className) classNames.push(props.className)
+
   const onDrop = useCallback(
     (acceptedFiles) => {
       acceptedFiles.forEach((file: File) => uploader(file))
@@ -24,25 +29,30 @@ const Dropzone = (props: DropzoneProps) => {
     maxFiles: 1,
   })
 
-  const classes = ["dropzone", "control"]
-  if (isDragActive) classes.push("is-active")
+  const dropzoneClasses = ["dropzone", "control"]
+  if (isDragActive) dropzoneClasses.push("is-active")
 
+  // Three states:
+  // * File dropzone by default
+  // * Progress > 0 and < 100 shows a progress bar
+  // * Progress 100 doesn't show progress bar or dropzone
   return (
-    <div className="field">
+    <div className={classNames.join(" ")}>
       <label className="label">{props.label}</label>
-      {props.helptext && <p className="text-sm mt-2 mb-4 text-gray-700">{props.helptext}</p>}
-      {props.progress && props.progress == 100 ? (
+      {props.helptext && <p className="view-item__label mt-2 mb-4">{props.helptext}</p>}
+      {props.progress && props.progress === 100 ? (
         <></>
       ) : props.progress && props.progress > 0 ? (
-        <progress style={{ maxWidth: "250px" }} max="100" value={props.progress}></progress>
+        <progress className="dropzone__progress" max="100" value={props.progress}></progress>
       ) : (
-        <div className={classes.join(" ")} {...getRootProps()}>
+        <div className={dropzoneClasses.join(" ")} {...getRootProps()}>
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p>Drop files here…</p>
+            <p>{t("t.dropFilesHere")}</p>
           ) : (
             <p>
-              Drag files here or <u className="text-primary">choose from folder</u>
+              {t("t.dragFilesHere")} {t("t.or")}{" "}
+              <u className="text-primary">{t("t.chooseFromFolder").toLowerCase()}</u>
             </p>
           )}
         </div>

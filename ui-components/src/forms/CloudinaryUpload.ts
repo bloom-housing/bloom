@@ -21,8 +21,10 @@ export const CloudinaryUpload = async ({
   data.append("tags", tag)
   data.append("file", file)
 
-  if (cloudName == "" || uploadPreset == "") {
-    return alert("Please supply a cloud name and upload preset for Cloudinary")
+  if (!cloudName || cloudName == "" || !uploadPreset || uploadPreset == "") {
+    const err = "Please supply a cloud name and upload preset for Cloudinary"
+    alert(err)
+    throw err
   }
 
   const response = await axios.request({
