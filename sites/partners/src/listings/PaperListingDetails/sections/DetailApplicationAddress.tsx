@@ -7,7 +7,7 @@ const DetailApplicationAddress = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.sections.applicationAddressTitle")}
       grid={false}
       inset
@@ -34,6 +34,39 @@ const DetailApplicationAddress = () => {
             {listing.applicationAddress.zipCode}
           </ViewItem>
         </GridSection>
+
+        {listing.applicationMailingAddress && (
+          <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
+            <GridSection columns={3}>
+              <ViewItem label={t("listings.streetAddressOrPOBox")}>
+                {listing.applicationMailingAddress.street}
+              </ViewItem>
+              <ViewItem label={t("application.contact.apt")}>
+                {listing.applicationMailingAddress.street2}
+              </ViewItem>
+            </GridSection>
+            <GridSection columns={6}>
+              <GridCell span={2}>
+                <ViewItem label={t("application.contact.city")}>
+                  {listing.applicationMailingAddress.city}
+                </ViewItem>
+              </GridCell>
+              <ViewItem label={t("application.contact.state")}>
+                {listing.applicationMailingAddress.state}
+              </ViewItem>
+              <ViewItem label={t("application.contact.zip")}>
+                {listing.applicationMailingAddress.zipCode}
+              </ViewItem>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={2}>
+                <ViewItem label={t("leasingAgent.officeHours")}>
+                  {listing.applicationMailingAddress.officeHours}
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+          </GridSection>
+        )}
 
         {listing.applicationPickUpAddress && (
           <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
@@ -67,6 +100,40 @@ const DetailApplicationAddress = () => {
             </GridSection>
           </GridSection>
         )}
+
+        {listing.applicationDropOffAddress && (
+          <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
+            <GridSection columns={3}>
+              <ViewItem label={t("listings.streetAddressOrPOBox")}>
+                {listing.applicationDropOffAddress.street}
+              </ViewItem>
+              <ViewItem label={t("application.contact.apt")}>
+                {listing.applicationDropOffAddress.street2}
+              </ViewItem>
+            </GridSection>
+            <GridSection columns={6}>
+              <GridCell span={2}>
+                <ViewItem label={t("application.contact.city")}>
+                  {listing.applicationDropOffAddress.city}
+                </ViewItem>
+              </GridCell>
+              <ViewItem label={t("application.contact.state")}>
+                {listing.applicationDropOffAddress.state}
+              </ViewItem>
+              <ViewItem label={t("application.contact.zip")}>
+                {listing.applicationDropOffAddress.zipCode}
+              </ViewItem>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={2}>
+                <ViewItem label={t("leasingAgent.officeHours")}>
+                  {listing.applicationDropOffAddress.officeHours}
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+          </GridSection>
+        )}
+
         {listing.postmarkedApplicationsReceivedByDate && (
           <GridSection columns={4}>
             <GridCell span={2}>
@@ -76,13 +143,6 @@ const DetailApplicationAddress = () => {
             </GridCell>
           </GridSection>
         )}
-        {/* <GridSection columns={3}>
-          <GridCell span={2}>
-            <ViewItem label={t("listings.postmarkByDate")}>
-              {listing.????}
-            </ViewItem>
-          </GridCell>
-        </GridSection> */}
       </GridSection>
     </GridSection>
   )

@@ -3151,6 +3151,15 @@ export interface Listing {
   applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
 
   /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3449,6 +3458,15 @@ export interface ListingCreate {
 
   /**  */
   applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   status: ListingStatus;
@@ -3751,6 +3769,15 @@ export interface ListingUpdate {
 
   /**  */
   applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   status: ListingStatus;

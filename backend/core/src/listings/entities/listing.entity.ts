@@ -147,6 +147,12 @@ class Listing extends BaseEntity {
   @Type(() => AddressDto)
   applicationPickUpAddress: AddressDto | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  applicationPickUpAddressOfficeHours: string | null
+
   @Column({ type: "enum", enum: ListingApplicationPickUpAddressType, nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -156,6 +162,19 @@ class Listing extends BaseEntity {
     enumName: "ListingApplicationPickUpAddressType",
   })
   applicationPickUpAddressType?: ListingApplicationPickUpAddressType | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  applicationDropOffAddress: AddressDto | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  applicationDropOffAddressOfficeHours: string | null
 
   @Column({ type: "enum", enum: ListingApplicationDropOffAddressType, nullable: true })
   @Expose()
@@ -167,11 +186,12 @@ class Listing extends BaseEntity {
   })
   applicationDropOffAddressType?: ListingApplicationDropOffAddressType | null
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "jsonb", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  applicationPickUpAddressOfficeHours: string | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  applicationMailingAddress: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
