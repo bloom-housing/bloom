@@ -42,6 +42,7 @@ export type FormListing = ListingCreate &
     whereApplicationsDroppedOff?: ListingApplicationDropOffAddressType
     whereApplicationsPickedUp?: ListingApplicationPickUpAddressType
     arePaperAppsMailedToAnotherAddress?: boolean
+    arePostmarksConsidered?: boolean
     canApplicationsBeDroppedOff?: boolean
     canPaperApplicationsBePickedUp?: boolean
     postMarkDate: {
@@ -175,9 +176,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
       waitlistOpenSpots:
         data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
-      postmarkedApplicationsReceivedByDate: data.postMarkDate
-        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
-        : null,
+      postmarkedApplicationsReceivedByDate:
+        data.postMarkDate && data.arePostmarksConsidered
+          ? new Date(
+              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
+            )
+          : null,
       applicationDropOffAddressType:
         ListingApplicationDropOffAddressType[data.whereApplicationsDroppedOff] ?? null,
       applicationPickUpAddressType:
