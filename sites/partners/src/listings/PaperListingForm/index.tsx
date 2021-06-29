@@ -31,7 +31,7 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import ApplicationAddress from "./sections/ApplicationAddress"
 
-type FormListing = ListingCreate & ListingUpdate
+export type FormListing = ListingCreate & ListingUpdate
 
 type ListingFormProps = {
   listing?: FormListing
@@ -56,6 +56,9 @@ const defaults: FormListing = {
   applicationOrganization: "",
   applicationPickUpAddress: defaultAddress,
   applicationPickUpAddressOfficeHours: "",
+  applicationMailingAddress: null,
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
   countyCode: CountyCode.Alameda,
@@ -230,7 +233,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <AdditionalEligibility />
                     <AdditionalDetails />
                     <LeasingAgent />
-                    <ApplicationAddress />
+                    <ApplicationAddress listing={listing} />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">

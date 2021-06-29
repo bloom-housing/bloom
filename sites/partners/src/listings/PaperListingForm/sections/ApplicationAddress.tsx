@@ -13,8 +13,13 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
+import { FormListing } from "../index"
 
-const ApplicationAddress = () => {
+type ApplicationAddressProps = {
+  listing?: FormListing
+}
+
+const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -115,6 +120,7 @@ const ApplicationAddress = () => {
             type="checkbox"
             label={t("listings.paperDifferentAddress")}
             register={register}
+            defaultValue={listing?.applicationMailingAddress}
           />
         </GridSection>
         {paperMailedToAnotherAddress && (
