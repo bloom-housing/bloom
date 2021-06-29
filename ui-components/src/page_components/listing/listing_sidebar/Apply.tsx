@@ -21,10 +21,6 @@ const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMet
   return applicationMethods.some((method) => method.type == type)
 }
 
-const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
-  return applicationMethods.some((method) => types.some((type) => type == method.type))
-}
-
 const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
   return applicationMethods.find((method) => method.type == type)
 }
@@ -114,7 +110,7 @@ const Apply = (props: ApplyProps) => {
             </p>
           ))}
 
-        {hasMethod(listing.applicationMethods, ApplicationMethodType.PaperPickup) && (
+        {listing.applicationPickUpAddress && (
           <>
             {!openDateState(listing) &&
               (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
@@ -122,29 +118,23 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={listing.applicationPickUpAddress || listing.leasingAgentAddress}
-              officeHours={
-                listing.applicationPickUpAddressOfficeHours || listing.leasingAgentOfficeHours
-              }
+              address={listing.applicationPickUpAddress}
+              officeHours={listing.applicationPickUpAddressOfficeHours}
             />
           </>
         )}
       </section>
 
-      {hasAnyMethods(listing.applicationMethods, [
-        ApplicationMethodType.POBox,
-        ApplicationMethodType.LeasingAgent,
-      ]) && (
+      {(listing.applicationMailingAddress || listing.applicationDropOffAddress) && (
         <section className="aside-block is-tinted bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) && (
+          {listing.applicationMailingAddress && (
             <>
               <SubHeader text={t("listings.apply.sendByUsMail")} />
               <p className="text-gray-700">{listing.applicationOrganization}</p>
-              <SidebarAddress address={listing.applicationAddress} />
+              <SidebarAddress address={listing.applicationMailingAddress} />
               <p className="mt-4 text-tiny text-gray-750">
-                {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
-                  ?.acceptsPostmarkedApplications
+                {listing.postmarkedApplicationsReceivedByDate
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
                       applicationDueDate: moment(listing.applicationDueDate).format(
                         `MMM. DD, YYYY [${t("t.at")}] h A`
@@ -158,16 +148,15 @@ const Apply = (props: ApplyProps) => {
               </p>
             </>
           )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) &&
-            hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
-              <OrDivider bgColor="gray-100" />
-            )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
+          {listing.applicationMailingAddress && listing.applicationDropOffAddress && (
+            <OrDivider bgColor="gray-100" />
+          )}
+          {listing.applicationDropOffAddress && (
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
-                address={listing.leasingAgentAddress}
-                officeHours={listing.leasingAgentOfficeHours}
+                address={listing.applicationDropOffAddress}
+                officeHours={listing.applicationDropOffAddressOfficeHours}
               />
             </>
           )}

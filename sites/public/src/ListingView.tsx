@@ -199,7 +199,10 @@ export const ListingView = (props: ListingProps) => {
         <ApplicationStatus listing={listing} />
         <div className="mx-4">
           <DownloadLotteryResults event={lotteryResults} />
-          {listing.applicationMethods.length > 0 ? (
+          {listing.applicationDropOffAddress ||
+          listing.applicationMailingAddress ||
+          listing.applicationPickUpAddress ||
+          listing.applicationMethods?.length > 0 ? (
             <ApplicationSection
               listing={listing}
               internalFormRoute="/applications/start/choose-language"

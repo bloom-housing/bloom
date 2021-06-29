@@ -2346,18 +2346,6 @@ const coliseumUnits: Array<UnitSeedType> = [
 // Application Method Sets
 const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
-    type: ApplicationMethodType.POBox,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
     type: ApplicationMethodType.Internal,
     acceptsPostmarkedApplications: false,
     label: "Label",
@@ -2372,12 +2360,6 @@ const tritonApplicationMethods: Array<ApplicationMethodSeedType> = [
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
   },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
 ]
 
 const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
@@ -2386,12 +2368,6 @@ const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
     acceptsPostmarkedApplications: false,
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
   },
 ]
 

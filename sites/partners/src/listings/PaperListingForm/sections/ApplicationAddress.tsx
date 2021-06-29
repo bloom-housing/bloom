@@ -77,15 +77,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         <GridSection columns={3}>
           <Field
             label={t("listings.streetAddressOrPOBox")}
-            name={"applicationAddress.street"}
-            id={"applicationAddress.street"}
+            name={"leasingAgentAddress.street"}
+            id={"leasingAgentAddress.street"}
             register={register}
             placeholder={t("application.contact.streetAddress")}
           />
           <Field
             label={t("application.contact.apt")}
-            name={"applicationAddress.street2"}
-            id={"applicationAddress.street2"}
+            name={"leasingAgentAddress.street2"}
+            id={"leasingAgentAddress.street2"}
             register={register}
             placeholder={t("application.contact.apt")}
           />
@@ -94,16 +94,16 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           <GridCell span={2}>
             <Field
               label={t("application.contact.city")}
-              name={"applicationAddress.city"}
-              id={"applicationAddress.city"}
+              name={"leasingAgentAddress.city"}
+              id={"leasingAgentAddress.city"}
               register={register}
               placeholder={t("application.contact.city")}
             />
           </GridCell>
           <ViewItem label={t("application.contact.state")} className="mb-0">
             <Select
-              id={`applicationAddress.state`}
-              name={`applicationAddress.state`}
+              id={`leasingAgentAddress.state`}
+              name={`leasingAgentAddress.state`}
               label={t("application.contact.state")}
               labelClassName="sr-only"
               register={register}
@@ -115,8 +115,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           </ViewItem>
           <Field
             label={t("application.contact.zip")}
-            name={"applicationAddress.zipCode"}
-            id={"applicationAddress.zipCode"}
+            name={"leasingAgentAddress.zipCode"}
+            id={"leasingAgentAddress.zipCode"}
             placeholder={t("application.contact.zip")}
             errorMessage={t("errors.zipCodeError")}
             register={register}
