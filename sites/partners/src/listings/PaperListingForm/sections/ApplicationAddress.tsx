@@ -122,15 +122,15 @@ const ApplicationAddress = () => {
             <GridSection columns={3}>
               <Field
                 label={t("listings.streetAddressOrPOBox")}
-                name={"mailingAddress.street"}
-                id={"mailingAddress.street"}
+                name={"applicationMailingAddress.street"}
+                id={"applicationMailingAddress.street"}
                 register={register}
                 placeholder={t("application.contact.streetAddress")}
               />
               <Field
                 label={t("application.contact.apt")}
-                name={"mailingAddress.street2"}
-                id={"mailingAddress.street2"}
+                name={"applicationMailingAddress.street2"}
+                id={"applicationMailingAddress.street2"}
                 register={register}
                 placeholder={t("application.contact.apt")}
               />
@@ -139,16 +139,16 @@ const ApplicationAddress = () => {
               <GridCell span={2}>
                 <Field
                   label={t("application.contact.city")}
-                  name={"mailingAddress.city"}
-                  id={"mailingAddress.city"}
+                  name={"applicationMailingAddress.city"}
+                  id={"applicationMailingAddress.city"}
                   register={register}
                   placeholder={t("application.contact.city")}
                 />
               </GridCell>
               <ViewItem label={t("application.contact.state")} className="mb-0">
                 <Select
-                  id={`mailingAddress.state`}
-                  name={`mailingAddress.state`}
+                  id={`applicationMailingAddress.state`}
+                  name={`applicationMailingAddress.state`}
                   label={t("application.contact.state")}
                   labelClassName="sr-only"
                   register={register}
@@ -160,8 +160,8 @@ const ApplicationAddress = () => {
               </ViewItem>
               <Field
                 label={t("application.contact.zip")}
-                name={"mailingAddress.zipCode"}
-                id={"mailingAddress.zipCode"}
+                name={"applicationMailingAddress.zipCode"}
+                id={"applicationMailingAddress.zipCode"}
                 placeholder={t("application.contact.zip")}
                 errorMessage={t("errors.zipCodeError")}
                 register={register}
@@ -204,15 +204,15 @@ const ApplicationAddress = () => {
             <GridSection columns={3}>
               <Field
                 label={t("listings.streetAddressOrPOBox")}
-                name={"pickupAddress.street"}
-                id={"pickupAddress.street"}
+                name={"applicationPickUpAddress.street"}
+                id={"applicationPickUpAddress.street"}
                 register={register}
                 placeholder={t("application.contact.streetAddress")}
               />
               <Field
                 label={t("application.contact.apt")}
-                name={"pickupAddress.street2"}
-                id={"pickupAddress.street2"}
+                name={"applicationPickUpAddress.street2"}
+                id={"applicationPickUpAddress.street2"}
                 register={register}
                 placeholder={t("application.contact.apt")}
               />
@@ -221,16 +221,16 @@ const ApplicationAddress = () => {
               <GridCell span={2}>
                 <Field
                   label={t("application.contact.city")}
-                  name={"pickupAddress.city"}
-                  id={"pickupAddress.city"}
+                  name={"applicationPickUpAddress.city"}
+                  id={"applicationPickUpAddress.city"}
                   register={register}
                   placeholder={t("application.contact.city")}
                 />
               </GridCell>
               <ViewItem label={t("application.contact.state")} className="mb-0">
                 <Select
-                  id={`pickupAddress.state`}
-                  name={`pickupAddress.state`}
+                  id={`applicationPickUpAddress.state`}
+                  name={`applicationPickUpAddress.state`}
                   label={t("application.contact.state")}
                   labelClassName="sr-only"
                   register={register}
@@ -242,8 +242,8 @@ const ApplicationAddress = () => {
               </ViewItem>
               <Field
                 label={t("application.contact.zip")}
-                name={"pickupAddress.zipCode"}
-                id={"pickupAddress.zipCode"}
+                name={"applicationPickUpAddress.zipCode"}
+                id={"applicationPickUpAddress.zipCode"}
                 placeholder={t("application.contact.zip")}
                 errorMessage={t("errors.zipCodeError")}
                 register={register}
@@ -253,8 +253,8 @@ const ApplicationAddress = () => {
               <GridCell span={2}>
                 <Textarea
                   label={t("leasingAgent.officeHours")}
-                  name={"pickupAddress.officeHours"}
-                  id={"pickupAddress.officeHours"}
+                  name={"applicationPickUpAddressOfficeHours"}
+                  id={"applicationPickUpAddressOfficeHours"}
                   fullWidth={true}
                   register={register}
                   placeholder={t("leasingAgent.officeHoursPlaceholder")}
@@ -298,15 +298,15 @@ const ApplicationAddress = () => {
             <GridSection columns={3}>
               <Field
                 label={t("listings.streetAddressOrPOBox")}
-                name={"dropOffAddress.street"}
-                id={"dropOffAddress.street"}
+                name={"applicationDropOffAddress.street"}
+                id={"applicationDropOffAddress.street"}
                 register={register}
                 placeholder={t("application.contact.streetAddress")}
               />
               <Field
                 label={t("application.contact.apt")}
-                name={"dropOffAddress.street2"}
-                id={"dropOffAddress.street2"}
+                name={"applicationDropOffAddress.street2"}
+                id={"applicationDropOffAddress.street2"}
                 register={register}
                 placeholder={t("application.contact.apt")}
               />
@@ -315,16 +315,16 @@ const ApplicationAddress = () => {
               <GridCell span={2}>
                 <Field
                   label={t("application.contact.city")}
-                  name={"dropOffAddress.city"}
-                  id={"dropOffAddress.city"}
+                  name={"applicationDropOffAddress.city"}
+                  id={"applicationDropOffAddress.city"}
                   register={register}
                   placeholder={t("application.contact.city")}
                 />
               </GridCell>
               <ViewItem label={t("application.contact.state")} className="mb-0">
                 <Select
-                  id={`dropOffAddress.state`}
-                  name={`dropOffAddress.state`}
+                  id={`applicationDropOffAddress.state`}
+                  name={`applicationDropOffAddress.state`}
                   label={t("application.contact.state")}
                   labelClassName="sr-only"
                   register={register}
@@ -336,8 +336,8 @@ const ApplicationAddress = () => {
               </ViewItem>
               <Field
                 label={t("application.contact.zip")}
-                name={"dropOffAddress.zipCode"}
-                id={"dropOffAddress.zipCode"}
+                name={"applicationDropOffAddress.zipCode"}
+                id={"applicationDropOffAddress.zipCode"}
                 placeholder={t("application.contact.zip")}
                 errorMessage={t("errors.zipCodeError")}
                 register={register}
@@ -347,8 +347,8 @@ const ApplicationAddress = () => {
               <GridCell span={2}>
                 <Textarea
                   label={t("leasingAgent.officeHours")}
-                  name={"dropOffAddress.officeHours"}
-                  id={"dropOffAddress.officeHours"}
+                  name={"applicationDropOffAddressOfficeHours"}
+                  id={"applicationDropOffAddressOfficeHours"}
                   fullWidth={true}
                   register={register}
                   placeholder={t("leasingAgent.officeHoursPlaceholder")}
@@ -379,8 +379,8 @@ const ApplicationAddress = () => {
               <ViewItem label={t("listings.postmarkByDate")} className="mb-0">
                 <DateField
                   label={""}
-                  name={"postmarkByDate"}
-                  id={"postmarkByDate"}
+                  name={"postmarkedApplicationsReceivedByDate"}
+                  id={"postmarkedApplicationsReceivedByDate"}
                   register={register}
                   watch={watch}
                 />
@@ -389,6 +389,7 @@ const ApplicationAddress = () => {
           </GridSection>
         )}
         <hr className="mt-6 mb-6" />
+        {/* This is not currently shown on any listing?
         <GridSection columns={3}>
           <GridCell span={2}>
             <Textarea
@@ -400,7 +401,7 @@ const ApplicationAddress = () => {
               placeholder={t("t.addNotes")}
             />
           </GridCell>
-        </GridSection>
+        </GridSection> */}
       </GridSection>
     </div>
   )
