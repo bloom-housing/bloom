@@ -27,30 +27,30 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const { register, watch } = formMethods
   const postmarksConsidered: YesNoAnswer = watch(
     "arePostmarksConsidered",
-    listing.postmarkedApplicationsReceivedByDate !== null ? "yes" : "no"
+    listing && listing?.postmarkedApplicationsReceivedByDate !== null ? "yes" : "no"
   )
   const applicationsPickedUp: YesNoAnswer = watch(
     "canPaperApplicationsBePickedUp",
-    listing.applicationPickUpAddress || listing.applicationPickUpAddressType ? "yes" : "no"
+    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType ? "yes" : "no"
   )
   const applicationsDroppedOff: YesNoAnswer = watch(
     "canApplicationsBeDroppedOff",
-    listing.applicationDropOffAddress || listing.applicationDropOffAddressType ? "yes" : "no"
+    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType ? "yes" : "no"
   )
   const applicationsPickedUpAddress = watch(
     "whereApplicationsPickedUp",
-    listing.applicationPickUpAddress || listing.applicationPickUpAddressType
-      ? listing.applicationPickUpAddressType || "anotherAddress"
+    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
+      ? listing?.applicationPickUpAddressType || "anotherAddress"
       : null
   )
   const paperMailedToAnotherAddress = watch(
     "arePaperAppsMailedToAnotherAddress",
-    listing.applicationMailingAddress !== null
+    listing && listing?.applicationMailingAddress !== null
   )
   const droppedOffAddress = watch(
     "whereApplicationsDroppedOff",
-    listing.applicationDropOffAddress || listing.applicationDropOffAddressType
-      ? listing.applicationDropOffAddressType || "anotherAddress"
+    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
+      ? listing?.applicationDropOffAddressType || "anotherAddress"
       : null
   )
 
@@ -160,7 +160,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             label={t("listings.paperDifferentAddress")}
             register={register}
             inputProps={{
-              defaultChecked: listing?.applicationMailingAddress !== null,
+              defaultChecked: listing && listing?.applicationMailingAddress !== null,
             }}
           />
         </GridSection>
@@ -230,14 +230,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 ...yesNoRadioOptions[0],
                 id: "applicationsPickedUpYes",
                 defaultChecked:
-                  listing.applicationPickUpAddress || listing.applicationPickUpAddressType,
+                  listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType,
               },
               {
                 ...yesNoRadioOptions[1],
                 id: "applicationsPickedUpNo",
                 defaultChecked:
-                  listing.applicationPickUpAddress === null &&
-                  listing.applicationPickUpAddressType === null,
+                  listing?.applicationPickUpAddress === null &&
+                  listing?.applicationPickUpAddressType === null,
               },
             ]}
           />
@@ -251,8 +251,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               register={register}
               fields={getLocationOptions(
                 "pickUp",
-                listing.applicationPickUpAddressType,
-                listing.applicationPickUpAddress
+                listing?.applicationPickUpAddressType,
+                listing?.applicationPickUpAddress
               )}
             />
           </GridSection>
@@ -336,14 +336,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 ...yesNoRadioOptions[0],
                 id: "applicationsDroppedOffYes",
                 defaultChecked:
-                  listing.applicationDropOffAddress || listing.applicationDropOffAddressType,
+                  listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType,
               },
               {
                 ...yesNoRadioOptions[1],
                 id: "applicationsDroppedOffNo",
                 defaultChecked:
-                  listing.applicationDropOffAddress === null &&
-                  listing.applicationDropOffAddressType === null,
+                  listing?.applicationDropOffAddress === null &&
+                  listing?.applicationDropOffAddressType === null,
               },
             ]}
           />
@@ -357,8 +357,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               register={register}
               fields={getLocationOptions(
                 "dropOff",
-                listing.applicationDropOffAddressType,
-                listing.applicationDropOffAddress
+                listing?.applicationDropOffAddressType,
+                listing?.applicationDropOffAddress
               )}
             />
           </GridSection>
@@ -441,12 +441,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               {
                 ...yesNoRadioOptions[0],
                 id: "postmarksConsideredYes",
-                defaultChecked: listing.postmarkedApplicationsReceivedByDate !== null,
+                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate !== null,
               },
               {
                 ...yesNoRadioOptions[1],
                 id: "postmarksConsideredNo",
-                defaultChecked: !listing.postmarkedApplicationsReceivedByDate,
+                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate === null,
               },
             ]}
           />
@@ -463,15 +463,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   watch={watch}
                   defaultDate={{
                     month:
-                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
                         .format("MM") ?? null,
                     day:
-                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
                         .format("DD") ?? null,
                     year:
-                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
                         .format("YYYY") ?? null,
                   }}
