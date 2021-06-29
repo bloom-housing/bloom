@@ -189,7 +189,7 @@ const DetailApplicationAddress = () => {
           <GridSection columns={4}>
             <GridCell span={2}>
               <ViewItem label={t("listings.postmarkByDate")}>
-                {listing.postmarkedApplicationsReceivedByDate}
+                {new Date(listing.postmarkedApplicationsReceivedByDate).toDateString()}
               </ViewItem>
             </GridCell>
           </GridSection>
