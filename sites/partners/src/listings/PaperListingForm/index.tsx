@@ -35,8 +35,16 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 
 export type FormListing = ListingCreate &
   ListingUpdate & {
-    whereApplicationsDroppedOff?: ListingApplicationDropOffAddressType
-    whereApplicationsPickedUp?: ListingApplicationPickUpAddressType
+    arePaperAppsMailedToAnotherAddress?: boolean
+    canApplicationsBeDroppedOff?: boolean
+    canPaperApplicationsBePickedUp?: boolean
+    whereApplicationsDroppedOff?: string
+    whereApplicationsPickedUp?: string
+    postMarkDate: {
+      month: string
+      day: string
+      year: string
+    }
   }
 
 type ListingFormProps = {
@@ -60,7 +68,7 @@ const defaults: FormListing = {
   applicationMethods: [],
   applicationOpenDate: new Date(),
   applicationOrganization: "",
-  applicationPickUpAddress: defaultAddress,
+  applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
   applicationMailingAddress: null,
   applicationDropOffAddress: null,
@@ -84,6 +92,7 @@ const defaults: FormListing = {
   leasingAgentPhone: "",
   leasingAgentTitle: "",
   name: "",
+  postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
@@ -155,14 +164,30 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
+      console.log(data)
       const typedData: FormListing = {
         ...data,
         yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-        postmarkedApplicationsReceivedByDate: data.postmarkedApplicationsReceivedByDate
-          ? new Date(data.postmarkedApplicationsReceivedByDate)
+        postmarkedApplicationsReceivedByDate: data.postMarkDate
+          ? new Date(
+              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
+            )
           : null,
-        applicationDropOffAddressType: data.whereApplicationsDroppedOff ?? null,
-        applicationPickUpAddressType: data.whereApplicationsPickedUp ?? null,
+        applicationDropOffAddressType:
+          ListingApplicationDropOffAddressType[data.whereApplicationsDroppedOff] ?? null,
+        applicationPickUpAddressType:
+          ListingApplicationPickUpAddressType[data.whereApplicationsPickedUp] ?? null,
+        applicationDropOffAddress:
+          data.canApplicationsBeDroppedOff && data.whereApplicationsPickedUp === "anotherAddress"
+            ? data.applicationDropOffAddress
+            : null,
+        applicationPickUpAddress:
+          data.canPaperApplicationsBePickedUp && data.whereApplicationsPickedUp === "anotherAddress"
+            ? data.applicationPickUpAddress
+            : null,
+        applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+          ? data.applicationMailingAddress
+          : null,
       }
 
       const result = editMode

@@ -24,12 +24,34 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
-  const postmarksConsidered: YesNoAnswer = watch("arePostmarksConsidered")
-  const applicationsPickedUp: YesNoAnswer = watch("canPaperApplicationsBePickedUp")
-  const applicationsDroppedOff: YesNoAnswer = watch("canApplicationsBeDroppedOff")
-  const applicationsPickedUpAddress = watch("whereApplicationsPickedUp")
-  const paperMailedToAnotherAddress = watch("arePaperAppsMailedToAnotherAddress")
-  const droppedOffAddress = watch("whereApplicationsDroppedOff")
+  const postmarksConsidered: YesNoAnswer = watch(
+    "arePostmarksConsidered",
+    listing.postmarkedApplicationsReceivedByDate
+  )
+  const applicationsPickedUp: YesNoAnswer = watch(
+    "canPaperApplicationsBePickedUp",
+    listing.applicationPickUpAddress || listing.applicationPickUpAddressType ? "yes" : "no"
+  )
+  const applicationsDroppedOff: YesNoAnswer = watch(
+    "canApplicationsBeDroppedOff",
+    listing.applicationDropOffAddress || listing.applicationDropOffAddressType ? "yes" : "no"
+  )
+  const applicationsPickedUpAddress = watch(
+    "whereApplicationsPickedUp",
+    listing.applicationPickUpAddress || listing.applicationPickUpAddressType
+      ? listing.applicationPickUpAddressType || "anotherAddress"
+      : null
+  )
+  const paperMailedToAnotherAddress = watch(
+    "arePaperAppsMailedToAnotherAddress",
+    listing.applicationMailingAddress !== null
+  )
+  const droppedOffAddress = watch(
+    "whereApplicationsDroppedOff",
+    listing.applicationDropOffAddress || listing.applicationDropOffAddressType
+      ? listing.applicationDropOffAddressType || "anotherAddress"
+      : null
+  )
 
   const yesNoRadioOptions = [
     {
@@ -43,20 +65,27 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   ]
 
   // Only show mailing address as an option if they have indicated a mailing address exists
-  const getLocationOptions = (prefix: string) => {
+  const getLocationOptions = (
+    prefix: string,
+    addressType: string,
+    anotherAddressExists: boolean
+  ) => {
     const locationRadioOptions = [
       {
         label: t("listings.atLeasingAgentAddress"),
+        defaultChecked: addressType === "leasingAgent",
         value: "leasingAgent",
       },
       {
         label: t("listings.atAnotherAddress"),
+        defaultChecked: anotherAddressExists,
         value: "anotherAddress",
       },
     ]
     if (paperMailedToAnotherAddress) {
       locationRadioOptions.splice(1, 0, {
         label: t("listings.atMailingAddress"),
+        defaultChecked: addressType === "mailingAddress",
         value: "mailingAddress",
       })
     }
@@ -129,7 +158,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             type="checkbox"
             label={t("listings.paperDifferentAddress")}
             register={register}
-            defaultValue={listing?.applicationMailingAddress}
+            inputProps={{
+              defaultChecked: listing?.applicationMailingAddress !== null,
+            }}
           />
         </GridSection>
         {paperMailedToAnotherAddress && (
@@ -194,8 +225,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "applicationsPickedUpYes" },
-              { ...yesNoRadioOptions[1], id: "applicationsPickedUpNo" },
+              {
+                ...yesNoRadioOptions[0],
+                id: "applicationsPickedUpYes",
+                defaultChecked:
+                  listing.applicationPickUpAddress || listing.applicationPickUpAddressType,
+              },
+              {
+                ...yesNoRadioOptions[1],
+                id: "applicationsPickedUpNo",
+                defaultChecked:
+                  listing.applicationPickUpAddress === null &&
+                  listing.applicationPickUpAddressType === null,
+              },
             ]}
           />
         </GridSection>
@@ -206,74 +248,79 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               name="whereApplicationsPickedUp"
               type="radio"
               register={register}
-              fields={getLocationOptions("pickUp")}
+              fields={getLocationOptions(
+                "pickUp",
+                listing.applicationPickUpAddressType,
+                listing.applicationPickUpAddress
+              )}
             />
           </GridSection>
         )}
-        {applicationsPickedUpAddress === "anotherAddress" && (
-          <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
-            <GridSection columns={3}>
-              <Field
-                label={t("listings.streetAddressOrPOBox")}
-                name={"applicationPickUpAddress.street"}
-                id={"applicationPickUpAddress.street"}
-                register={register}
-                placeholder={t("application.contact.streetAddress")}
-              />
-              <Field
-                label={t("application.contact.apt")}
-                name={"applicationPickUpAddress.street2"}
-                id={"applicationPickUpAddress.street2"}
-                register={register}
-                placeholder={t("application.contact.apt")}
-              />
-            </GridSection>
-            <GridSection columns={6}>
-              <GridCell span={2}>
+        {applicationsPickedUp === YesNoAnswer.Yes &&
+          applicationsPickedUpAddress === "anotherAddress" && (
+            <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
+              <GridSection columns={3}>
                 <Field
-                  label={t("application.contact.city")}
-                  name={"applicationPickUpAddress.city"}
-                  id={"applicationPickUpAddress.city"}
+                  label={t("listings.streetAddressOrPOBox")}
+                  name={"applicationPickUpAddress.street"}
+                  id={"applicationPickUpAddress.street"}
                   register={register}
-                  placeholder={t("application.contact.city")}
+                  placeholder={t("application.contact.streetAddress")}
                 />
-              </GridCell>
-              <ViewItem label={t("application.contact.state")} className="mb-0">
-                <Select
-                  id={`applicationPickUpAddress.state`}
-                  name={`applicationPickUpAddress.state`}
-                  label={t("application.contact.state")}
-                  labelClassName="sr-only"
+                <Field
+                  label={t("application.contact.apt")}
+                  name={"applicationPickUpAddress.street2"}
+                  id={"applicationPickUpAddress.street2"}
                   register={register}
-                  controlClassName="control"
-                  options={stateKeys}
-                  keyPrefix="states"
-                  errorMessage={t("errors.stateError")}
+                  placeholder={t("application.contact.apt")}
                 />
-              </ViewItem>
-              <Field
-                label={t("application.contact.zip")}
-                name={"applicationPickUpAddress.zipCode"}
-                id={"applicationPickUpAddress.zipCode"}
-                placeholder={t("application.contact.zip")}
-                errorMessage={t("errors.zipCodeError")}
-                register={register}
-              />
+              </GridSection>
+              <GridSection columns={6}>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.city")}
+                    name={"applicationPickUpAddress.city"}
+                    id={"applicationPickUpAddress.city"}
+                    register={register}
+                    placeholder={t("application.contact.city")}
+                  />
+                </GridCell>
+                <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <Select
+                    id={`applicationPickUpAddress.state`}
+                    name={`applicationPickUpAddress.state`}
+                    label={t("application.contact.state")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="states"
+                    errorMessage={t("errors.stateError")}
+                  />
+                </ViewItem>
+                <Field
+                  label={t("application.contact.zip")}
+                  name={"applicationPickUpAddress.zipCode"}
+                  id={"applicationPickUpAddress.zipCode"}
+                  placeholder={t("application.contact.zip")}
+                  errorMessage={t("errors.zipCodeError")}
+                  register={register}
+                />
+              </GridSection>
+              <GridSection columns={3}>
+                <GridCell span={2}>
+                  <Textarea
+                    label={t("leasingAgent.officeHours")}
+                    name={"applicationPickUpAddressOfficeHours"}
+                    id={"applicationPickUpAddressOfficeHours"}
+                    fullWidth={true}
+                    register={register}
+                    placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                  />
+                </GridCell>
+              </GridSection>
             </GridSection>
-            <GridSection columns={3}>
-              <GridCell span={2}>
-                <Textarea
-                  label={t("leasingAgent.officeHours")}
-                  name={"applicationPickUpAddressOfficeHours"}
-                  id={"applicationPickUpAddressOfficeHours"}
-                  fullWidth={true}
-                  register={register}
-                  placeholder={t("leasingAgent.officeHoursPlaceholder")}
-                />
-              </GridCell>
-            </GridSection>
-          </GridSection>
-        )}
+          )}
         <hr className="mt-6 mb-6" />
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
@@ -284,8 +331,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "applicationsDroppedOffYes" },
-              { ...yesNoRadioOptions[1], id: "applicationsDroppedOffNo" },
+              {
+                ...yesNoRadioOptions[0],
+                id: "applicationsDroppedOffYes",
+                defaultChecked:
+                  listing.applicationDropOffAddress || listing.applicationDropOffAddressType,
+              },
+              {
+                ...yesNoRadioOptions[1],
+                id: "applicationsDroppedOffNo",
+                defaultChecked:
+                  listing.applicationDropOffAddress === null &&
+                  listing.applicationDropOffAddressType === null,
+              },
             ]}
           />
         </GridSection>
@@ -296,11 +354,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               name="whereApplicationsDroppedOff"
               type="radio"
               register={register}
-              fields={getLocationOptions("dropOff")}
+              fields={getLocationOptions(
+                "dropOff",
+                listing.applicationDropOffAddressType,
+                listing.applicationDropOffAddress
+              )}
             />
           </GridSection>
         )}
-        {droppedOffAddress === "anotherAddress" && (
+        {applicationsDroppedOff === YesNoAnswer.Yes && droppedOffAddress === "anotherAddress" && (
           <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
             <GridSection columns={3}>
               <Field
@@ -375,8 +437,16 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "postmarksConsideredYes" },
-              { ...yesNoRadioOptions[1], id: "postmarksConsideredNo" },
+              {
+                ...yesNoRadioOptions[0],
+                id: "postmarksConsideredYes",
+                defaultChecked: listing.postmarkedApplicationsReceivedByDate !== null,
+              },
+              {
+                ...yesNoRadioOptions[1],
+                id: "postmarksConsideredNo",
+                defaultChecked: !listing.postmarkedApplicationsReceivedByDate,
+              },
             ]}
           />
         </GridSection>
@@ -386,8 +456,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               <ViewItem label={t("listings.postmarkByDate")} className="mb-0">
                 <DateField
                   label={""}
-                  name={"postmarkedApplicationsReceivedByDate"}
-                  id={"postmarkedApplicationsReceivedByDate"}
+                  name={"postMarkDate"}
+                  id={"postMarkDate"}
                   register={register}
                   watch={watch}
                 />

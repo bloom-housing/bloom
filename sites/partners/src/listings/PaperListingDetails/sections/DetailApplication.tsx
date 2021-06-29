@@ -10,7 +10,7 @@ const DetailApplication = () => {
       <GridSection columns={2}>
         <GridCell>
           <ViewItem label={t("listings.applicationDeadline")}>
-            {listing.applicationDueDate}
+            {new Date(listing.applicationDueDate).toDateString()}
           </ViewItem>
         </GridCell>
       </GridSection>
