@@ -22,6 +22,7 @@ import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
+import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 
 @Entity({ name: "units" })
 class Unit {
@@ -173,6 +174,13 @@ class Unit {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitRentType)
   unitRentType?: UnitRentType | null
+
+  @ManyToOne(() => UnitAccessibilityPriorityType, { eager: true, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAccessibilityPriorityType)
+  unitAccessibilityPriorityType?: UnitAccessibilityPriorityType | null
 }
 
 export { Unit as default, Unit }

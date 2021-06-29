@@ -11,6 +11,7 @@ export class UnitDto extends OmitType(Unit, [
   "amiChart",
   "unitTypeRef",
   "unitRentType",
+  "unitAccessibilityPriorityType",
 ] as const) {
   @Exclude()
   @ApiHideProperty()
@@ -35,6 +36,13 @@ export class UnitDto extends OmitType(Unit, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   unitRentType?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  unitAccessibilityPriorityType?: IdDto
 }
 
 export class UnitCreateDto extends OmitType(UnitDto, [
