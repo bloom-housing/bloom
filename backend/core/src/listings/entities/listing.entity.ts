@@ -42,6 +42,8 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
+import { ListingApplicationPickUpAddressType } from "../types/listing-application-pick-up-address-type"
+import { ListingApplicationDropOffAddressType } from "../types/listing-application-drop-off-address-type"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -144,6 +146,26 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   applicationPickUpAddress: AddressDto | null
+
+  @Column({ type: "enum", enum: ListingApplicationPickUpAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationPickUpAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationPickUpAddressType,
+    enumName: "ListingApplicationPickUpAddressType",
+  })
+  applicationPickUpAddressType?: ListingApplicationPickUpAddressType | null
+
+  @Column({ type: "enum", enum: ListingApplicationDropOffAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationDropOffAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationDropOffAddressType,
+    enumName: "ListingApplicationDropOffAddressType",
+  })
+  applicationDropOffAddressType?: ListingApplicationDropOffAddressType | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

@@ -3145,6 +3145,12 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
+  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3438,6 +3444,12 @@ export interface UnitCreate {
 }
 
 export interface ListingCreate {
+  /**  */
+  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+
   /**  */
   status: ListingStatus;
 
@@ -3734,6 +3746,12 @@ export interface UnitUpdate {
 }
 
 export interface ListingUpdate {
+  /**  */
+  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+
   /**  */
   status: ListingStatus;
 
@@ -4393,6 +4411,16 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
+export enum ListingApplicationPickUpAddressType {
+  'leasingAgent' = 'leasingAgent',
+  'mailingAddress' = 'mailingAddress'
+}
+
+export enum ListingApplicationDropOffAddressType {
+  'leasingAgent' = 'leasingAgent',
+  'mailingAddress' = 'mailingAddress'
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending',
