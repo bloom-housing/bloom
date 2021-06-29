@@ -3,6 +3,8 @@ import {
   Listing,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingApplicationDropOffAddressType,
+  ListingApplicationPickUpAddressType,
 } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
@@ -62,6 +64,22 @@ const Apply = (props: ApplyProps) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
+  const getDropOffAddress = (addressType: string | undefined) => {
+    return addressType === ListingApplicationDropOffAddressType.leasingAgent
+      ? listing.leasingAgentAddress
+      : addressType === ListingApplicationDropOffAddressType.mailingAddress
+      ? listing.applicationMailingAddress
+      : listing.applicationDropOffAddress
+  }
+
+  const getPickUpAddress = (addressType: string | undefined) => {
+    return addressType === ListingApplicationPickUpAddressType.leasingAgent
+      ? listing.leasingAgentAddress
+      : addressType === ListingApplicationPickUpAddressType.mailingAddress
+      ? listing.applicationMailingAddress
+      : listing.applicationPickUpAddress
+  }
+
   return (
     <>
       <section className="aside-block">
@@ -110,7 +128,7 @@ const Apply = (props: ApplyProps) => {
             </p>
           ))}
 
-        {listing.applicationPickUpAddress && (
+        {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
           <>
             {!openDateState(listing) &&
               (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
@@ -118,14 +136,16 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={listing.applicationPickUpAddress}
-              officeHours={listing.applicationPickUpAddressOfficeHours}
+              address={getPickUpAddress(listing.applicationPickUpAddressType)}
+              officeHours={listing.applicationPickUpAddressOfficeHours ?? null}
             />
           </>
         )}
       </section>
 
-      {(listing.applicationMailingAddress || listing.applicationDropOffAddress) && (
+      {(listing.applicationMailingAddress ||
+        listing.applicationDropOffAddress ||
+        listing.applicationDropOffAddressType) && (
         <section className="aside-block is-tinted bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
           {listing.applicationMailingAddress && (
@@ -151,12 +171,12 @@ const Apply = (props: ApplyProps) => {
           {listing.applicationMailingAddress && listing.applicationDropOffAddress && (
             <OrDivider bgColor="gray-100" />
           )}
-          {listing.applicationDropOffAddress && (
+          {(listing.applicationDropOffAddress || listing.applicationDropOffAddressType) && (
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
-                address={listing.applicationDropOffAddress}
-                officeHours={listing.applicationDropOffAddressOfficeHours}
+                address={getDropOffAddress(listing.applicationDropOffAddressType)}
+                officeHours={listing.applicationDropOffAddressOfficeHours ?? null}
               />
             </>
           )}

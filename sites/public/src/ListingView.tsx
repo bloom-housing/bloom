@@ -198,10 +198,13 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ApplicationStatus listing={listing} />
         <div className="mx-4">
+          {/*TODO: Add referralApplication boolean field to avoid this logic */}
           <DownloadLotteryResults event={lotteryResults} />
           {listing.applicationDropOffAddress ||
+          listing.applicationDropOffAddressType ||
           listing.applicationMailingAddress ||
           listing.applicationPickUpAddress ||
+          listing.applicationPickUpAddressType ||
           listing.applicationMethods?.length > 0 ? (
             <ApplicationSection
               listing={listing}
