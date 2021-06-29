@@ -23,18 +23,16 @@ export class UserService {
   constructor(@InjectRepository(User) private readonly repo: Repository<User>) {}
 
   public async findByEmail(email: string) {
-    return this.repo.findOne({ email })
+    return this.repo.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.repo.findOne(options)
+    return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
   async update(dto: Partial<UserUpdateDto>) {
-    const user = await this.repo.findOne({
-      where: {
-        id: dto.id,
-      },
+    const user = await this.find({
+      id: dto.id,
     })
     if (!user) {
       throw new NotFoundException()
@@ -80,7 +78,7 @@ export class UserService {
   }
 
   public async confirm(dto: ConfirmDto) {
-    const user = await this.repo.findOne({ confirmationToken: dto.token })
+    const user = await this.find({ confirmationToken: dto.token })
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
@@ -163,7 +161,7 @@ export class UserService {
   }
 
   public async updatePassword(dto: UpdatePasswordDto) {
-    const user = await this.repo.findOne({ resetToken: dto.token })
+    const user = await this.find({ resetToken: dto.token })
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }

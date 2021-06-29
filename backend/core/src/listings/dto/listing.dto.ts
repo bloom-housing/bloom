@@ -29,6 +29,7 @@ import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
+import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
@@ -42,6 +43,7 @@ export class ListingDto extends OmitType(Listing, [
   "preferences",
   "property",
   "reservedCommunityType",
+  "result",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -64,8 +66,8 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  image?: IdDto | null
+  @Type(() => AssetDto)
+  image?: AssetDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -93,6 +95,12 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ReservedCommunityTypeDto)
   reservedCommunityType?: ReservedCommunityTypeDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetDto)
+  result?: AssetDto | null
 
   @Expose()
   @Transform((_value, listing) => {
@@ -285,6 +293,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "preferences",
   "applicationAddress",
   "applicationPickUpAddress",
+  "image",
   "leasingAgentAddress",
   "leasingAgents",
   "urlSlug",
@@ -308,6 +317,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "jurisdiction",
   "reservedCommunityType",
   "applicationCount",
+  "result",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -326,6 +336,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationPickUpAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreateDto)
+  image?: AssetCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -431,6 +447,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreateDto)
+  result?: AssetCreateDto | null
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -440,6 +462,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "preferences",
   "applicationAddress",
   "applicationPickUpAddress",
+  "image",
   "leasingAgentAddress",
   "urlSlug",
   "leasingAgents",
@@ -463,6 +486,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "jurisdiction",
   "reservedCommunityType",
   "applicationCount",
+  "result",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -498,6 +522,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationPickUpAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetUpdateDto)
+  image?: AssetUpdateDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -603,6 +633,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetUpdateDto)
+  result?: AssetUpdateDto
 }
 
 // add other listing filter params here

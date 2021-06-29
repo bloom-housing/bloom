@@ -38,11 +38,14 @@ All notable changes to this project will be documented in this file. The format 
   - reserved_community_type table seeds (`senior` and `specialNeeds`)
   - add applicationDueDate check on submission ([#1409](https://github.com/bloom-housing/bloom/pull/1409))
   - list and retrieve methods to `/assets` endpoint
+  - added result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
+  - added resultLink, isWaitlistOpen and waitlistOpenSpots to Listing model
 
 - Changed:
 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
+  - removed eager relation to listing from User model
 
 ### Frontend
 

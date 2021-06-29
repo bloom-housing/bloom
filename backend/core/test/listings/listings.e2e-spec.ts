@@ -4,9 +4,10 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { allSeeds } from "../../src/seeds/listings"
-import { ListingDto } from "../../src/listings/dto/listing.dto"
+import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -76,6 +77,35 @@ describe("Listings", () => {
 
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
+  })
+
+  it("should add/overwrite image in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const fileId = "fileId"
+    const label = "label"
+    const image: AssetCreateDto = {
+      fileId: fileId,
+      label: label,
+    }
+    listing.image = image
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.image.fileId).toBe(fileId)
+    expect(modifiedListing.image.label).toBe(label)
+    expect(modifiedListing.image).toHaveProperty("id")
+    expect(modifiedListing.image).toHaveProperty("createdAt")
+    expect(modifiedListing.image).toHaveProperty("updatedAt")
   })
 
   afterEach(() => {
