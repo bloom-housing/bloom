@@ -1,8 +1,10 @@
 .dropzone {
-  border: 2px dashed grey;
-  padding: 3rem;
-  text-align: center;
-  max-width: 28rem;
+  @apply border-2;
+  @apply border-gray-600;
+  @apply border-dashed;
+  @apply text-center;
+  padding: 2.5rem;
+  max-width: 32rem;
   cursor: pointer;
 
   &.is-active {

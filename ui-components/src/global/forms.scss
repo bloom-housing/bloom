@@ -332,3 +332,26 @@ input[type="number"] {
   @apply block;
   @apply mb-8;
 }
+
+progress {
+  @apply bg-gray-400;
+  border: 0;
+  height: 12px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+progress::-webkit-progress-bar {
+  @apply bg-gray-400;
+  border: 0;
+  height: 12px;
+  border-radius: 6px;
+}
+progress::-webkit-progress-value {
+  border-radius: 6px;
+  @apply bg-primary;
+}
+progress::-moz-progress-bar {
+  border-radius: 6px;
+  @apply bg-primary;
+}
