@@ -5,6 +5,11 @@ import { ListingContext } from "../../ListingContext"
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
 
+  const getAddressString = (addressType: string): string | undefined => {
+    if (addressType === "leasingAgent") return t("listings.leasingAgentAddress")
+    if (addressType === "mailingAddress") return t("application.contact.mailingAddress")
+  }
+
   return (
     <GridSection
       className="bg-primary-lighter"
@@ -86,7 +91,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationPickUpAddressType && (
             <ViewItem label={t("listings.wherePickupQuestion")}>
-              {listing.applicationPickUpAddressType}
+              {getAddressString(listing.applicationPickUpAddressType)}
             </ViewItem>
           )}
         </GridSection>
@@ -134,7 +139,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationDropOffAddressType && (
             <ViewItem label={t("listings.whereDropOffQuestion")}>
-              {listing.applicationDropOffAddressType}
+              {getAddressString(listing.applicationDropOffAddressType)}
             </ViewItem>
           )}
         </GridSection>
