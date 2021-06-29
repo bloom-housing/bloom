@@ -65,6 +65,11 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   updatedAt: Date
 
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  additionalApplicationSubmissionNotes?: string | null
+
   @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

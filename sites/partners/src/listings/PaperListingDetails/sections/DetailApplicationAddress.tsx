@@ -194,6 +194,12 @@ const DetailApplicationAddress = () => {
             </GridCell>
           </GridSection>
         )}
+
+        <GridSection columns={2}>
+          <ViewItem label={t("listings.additionalApplicationSubmissionNotes")}>
+            {listing.additionalApplicationSubmissionNotes}
+          </ViewItem>
+        </GridSection>
       </GridSection>
     </GridSection>
   )

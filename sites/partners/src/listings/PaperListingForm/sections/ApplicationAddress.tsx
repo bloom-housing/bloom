@@ -396,7 +396,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           </GridSection>
         )}
         <hr className="mt-6 mb-6" />
-        {/* This is not currently shown on any listing?
         <GridSection columns={3}>
           <GridCell span={2}>
             <Textarea
@@ -408,7 +407,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               placeholder={t("t.addNotes")}
             />
           </GridCell>
-        </GridSection> */}
+        </GridSection>
       </GridSection>
     </div>
   )

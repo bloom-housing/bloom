@@ -3180,6 +3180,9 @@ export interface Listing {
   /**  */
   preferences: Preference[];
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
@@ -3479,6 +3482,9 @@ export interface ListingCreate {
 
   /**  */
   preferences: PreferenceCreate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -3799,6 +3805,9 @@ export interface ListingUpdate {
 
   /**  */
   preferences: PreferenceUpdate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
