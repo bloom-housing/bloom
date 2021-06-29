@@ -78,7 +78,7 @@ const defaults: FormListing = {
   leasingAgentPhone: "",
   leasingAgentTitle: "",
   name: "",
-  postmarkedApplicationsReceivedByDate: new Date(),
+  postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
   rentalAssistance: "",
@@ -152,6 +152,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       const typedData: FormListing = {
         ...data,
         yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+        postmarkedApplicationsReceivedByDate: data.postmarkedApplicationsReceivedByDate
+          ? new Date(data.postmarkedApplicationsReceivedByDate)
+          : null,
       }
       const result = editMode
         ? await listingsService.update({
