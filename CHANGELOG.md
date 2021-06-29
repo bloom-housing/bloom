@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix units availability ([#1397](https://github.com/bloom-housing/bloom/issues/1397))
 
 - Added:
-
+  - Adds units to listings ([#1350](https://github.com/bloom-housing/bloom/issues/1350))
   - Added "closed" to ListingStatus enum
   - Added Transform to ListingStatus field to return closed if applicationDueDate is in the past
   - Added "ohaFormat" to CSV exporter (includes OHA and HOPWA preferences) ([#1292](https://github.com/bloom-housing/bloom/pull/1292)) (Michał Plebański)

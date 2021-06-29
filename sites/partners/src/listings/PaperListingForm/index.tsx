@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   AuthContext,
@@ -18,6 +18,7 @@ import {
   ListingUpdate,
   CSVFormattingType,
   CountyCode,
+  Unit,
 } from "@bloom-housing/backend-core/types"
 
 import Aside from "../Aside"
@@ -26,6 +27,7 @@ import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
+import Units from "./sections/Units"
 
 type FormListing = ListingCreate & ListingUpdate
 
@@ -111,6 +113,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [units, setUnits] = useState<Unit[]>([])
+
+  useEffect(() => {
+    if (listing?.units) {
+      setUnits(listing.units)
+    }
+  }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, clearErrors, reset, trigger, getValues } = formMethods
@@ -215,6 +224,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormListingData />
+                    <Units units={units} setUnits={setUnits} />
                     <AdditionalFees />
                     <AdditionalEligibility />
                     <AdditionalDetails />
