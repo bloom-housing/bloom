@@ -24,7 +24,9 @@ export const Default = () => (
 export const Current = () => (
   <SideNav>
     <li>
-      <a href="#" className="is-current">One</a>
+      <a href="#" className="is-current">
+        One
+      </a>
     </li>
     <li>
       <a href="#">Two</a>

@@ -6,13 +6,11 @@ import { ExpandableContent } from "../../src/actions/ExpandableContent"
 afterEach(cleanup)
 
 describe("<ExpandableContent>", () => {
-  const INNER_CONTENT_CLASS = 'inner-content'
+  const INNER_CONTENT_CLASS = "inner-content"
   const content = <div data-testid={INNER_CONTENT_CLASS}>Sample content</div>
 
   it("renders content after button click", () => {
-    const { getByText, queryByTestId } = render(
-      <ExpandableContent>{content}</ExpandableContent>
-    )
+    const { getByText, queryByTestId } = render(<ExpandableContent>{content}</ExpandableContent>)
 
     // Expand the content
     const expandButton = getByText("read more")
@@ -24,9 +22,7 @@ describe("<ExpandableContent>", () => {
   })
 
   it("collapses content after button click", () => {
-    const { getByText, queryByTestId } = render(
-      <ExpandableContent>{content}</ExpandableContent>
-    )
+    const { getByText, queryByTestId } = render(<ExpandableContent>{content}</ExpandableContent>)
 
     // Expand the content
     const expandButton = getByText("read more")
