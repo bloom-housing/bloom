@@ -1,11 +1,12 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Unit } from "../entities/unit.entity"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { IdDto } from "../../shared/dto/id.dto"
 
-export class UnitDto extends OmitType(Unit, ["property", "amiChart"] as const) {
+export class UnitDto extends OmitType(Unit, ["property", "amiChart", "unitTypeRef"] as const) {
   @Exclude()
   @ApiHideProperty()
   property
@@ -15,6 +16,13 @@ export class UnitDto extends OmitType(Unit, ["property", "amiChart"] as const) {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartDto)
   amiChart?: AmiChartDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  unitTypeRef?: IdDto
 }
 
 export class UnitCreateDto extends OmitType(UnitDto, [

@@ -23,6 +23,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.unitTypeRef", "unitTypeRef")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")

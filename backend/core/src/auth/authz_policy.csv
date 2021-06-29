@@ -34,5 +34,8 @@ p, anonymous, listing, true, read
 p, admin, reservedCommunityType, true, .*
 p, anonymous, reservedCommunityType, true, read
 
+p, admin, unitType, true, .*
+p, anonymous, unitType, true, read
+
 g, admin, user
 g, user, anonymous
