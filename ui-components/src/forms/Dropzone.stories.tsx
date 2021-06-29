@@ -32,6 +32,7 @@ export const defaultDropzone = () => {
   return (
     <>
       <Dropzone
+        id="test-uploading"
         label="Upload File"
         helptext="Select JPEG or PNG files"
         uploader={exampleUploader}
