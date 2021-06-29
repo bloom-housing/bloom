@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file. The format 
   - list and retrieve methods to `/assets` endpoint
   - added result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
   - added resultLink, isWaitlistOpen and waitlistOpenSpots to Listing model
+  - applicationPickUpAddressType and applicationDropOffAddressType columns to Listing model
 
 - Changed:
 
