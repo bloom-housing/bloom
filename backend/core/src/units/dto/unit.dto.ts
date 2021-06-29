@@ -6,7 +6,12 @@ import { AmiChartDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
 
-export class UnitDto extends OmitType(Unit, ["property", "amiChart", "unitTypeRef"] as const) {
+export class UnitDto extends OmitType(Unit, [
+  "property",
+  "amiChart",
+  "unitTypeRef",
+  "unitRentType",
+] as const) {
   @Exclude()
   @ApiHideProperty()
   property
@@ -23,6 +28,13 @@ export class UnitDto extends OmitType(Unit, ["property", "amiChart", "unitTypeRe
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   unitTypeRef?: IdDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  unitRentType?: IdDto
 }
 
 export class UnitCreateDto extends OmitType(UnitDto, [
