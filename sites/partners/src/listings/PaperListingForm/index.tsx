@@ -18,6 +18,8 @@ import {
   ListingUpdate,
   CSVFormattingType,
   CountyCode,
+  ListingApplicationDropOffAddressType,
+  ListingApplicationPickUpAddressType,
 } from "@bloom-housing/backend-core/types"
 
 import Aside from "../Aside"
@@ -31,7 +33,11 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import ApplicationAddress from "./sections/ApplicationAddress"
 
-export type FormListing = ListingCreate & ListingUpdate
+export type FormListing = ListingCreate &
+  ListingUpdate & {
+    whereApplicationsDroppedOff?: ListingApplicationDropOffAddressType
+    whereApplicationsPickedUp?: ListingApplicationPickUpAddressType
+  }
 
 type ListingFormProps = {
   listing?: FormListing
@@ -155,7 +161,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         postmarkedApplicationsReceivedByDate: data.postmarkedApplicationsReceivedByDate
           ? new Date(data.postmarkedApplicationsReceivedByDate)
           : null,
+        applicationDropOffAddressType: data.whereApplicationsDroppedOff ?? null,
+        applicationPickUpAddressType: data.whereApplicationsPickedUp ?? null,
       }
+
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,

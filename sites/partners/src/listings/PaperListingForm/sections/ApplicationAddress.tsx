@@ -24,12 +24,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
-  const postmarksConsidered: YesNoAnswer = watch("applicationAddress.postmarksConsidered")
-  const applicationsPickedUp: YesNoAnswer = watch("applicationAddress.applicationsPickedUp")
-  const applicationsPickedUpAddress = watch("applicationAddress.applicationsPickedUpAddress")
-  const paperMailedToAnotherAddress = watch("applicationAddress.differentPaperAddress")
-  const applicationsDroppedOff: YesNoAnswer = watch("applicationAddress.applicationsDroppedOff")
-  const droppedOffAtAnotherAddress = watch("applicationAddress.applicationsDroppedOffAddress")
+  const postmarksConsidered: YesNoAnswer = watch("arePostmarksConsidered")
+  const applicationsPickedUp: YesNoAnswer = watch("canPaperApplicationsBePickedUp")
+  const applicationsDroppedOff: YesNoAnswer = watch("canApplicationsBeDroppedOff")
+  const applicationsPickedUpAddress = watch("whereApplicationsPickedUp")
+  const paperMailedToAnotherAddress = watch("arePaperAppsMailedToAnotherAddress")
+  const droppedOffAddress = watch("whereApplicationsDroppedOff")
 
   const yesNoRadioOptions = [
     {
@@ -42,20 +42,29 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     },
   ]
 
-  const locationRadioOptions = [
-    {
-      label: t("listings.atLeasingAgentAddress"),
-      value: "leasingAgentAddress",
-    },
-    {
-      label: t("listings.atMailingAddress"),
-      value: "mailingAddress",
-    },
-    {
-      label: t("listings.atAnotherAddress"),
-      value: "anotherAddress",
-    },
-  ]
+  // Only show mailing address as an option if they have indicated a mailing address exists
+  const getLocationOptions = (prefix: string) => {
+    const locationRadioOptions = [
+      {
+        label: t("listings.atLeasingAgentAddress"),
+        value: "leasingAgent",
+      },
+      {
+        label: t("listings.atAnotherAddress"),
+        value: "anotherAddress",
+      },
+    ]
+    if (paperMailedToAnotherAddress) {
+      locationRadioOptions.splice(1, 0, {
+        label: t("listings.atMailingAddress"),
+        value: "mailingAddress",
+      })
+    }
+    return locationRadioOptions.map((option) => {
+      const optionID = `${prefix}${option.value[0].toUpperCase() + option.value.slice(1)}`
+      return { ...option, id: optionID }
+    })
+  }
 
   return (
     <div>
@@ -115,8 +124,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         </GridSection>
         <GridSection columns={1}>
           <Field
-            id="applicationAddress.differentPaperAddress"
-            name="applicationAddress.differentPaperAddress"
+            id="arePaperAppsMailedToAnotherAddress"
+            name="arePaperAppsMailedToAnotherAddress"
             type="checkbox"
             label={t("listings.paperDifferentAddress")}
             register={register}
@@ -181,12 +190,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
           </GridCell>
           <FieldGroup
-            name="applicationAddress.applicationsPickedUp"
+            name="canPaperApplicationsBePickedUp"
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "applicationAddress.applicationsPickedUpYes" },
-              { ...yesNoRadioOptions[1], id: "applicationAddress.applicationsPickedUpNo" },
+              { ...yesNoRadioOptions[0], id: "applicationsPickedUpYes" },
+              { ...yesNoRadioOptions[1], id: "applicationsPickedUpNo" },
             ]}
           />
         </GridSection>
@@ -194,14 +203,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           <GridSection columns={4}>
             <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
             <FieldGroup
-              name="applicationAddress.applicationsPickedUpAddress"
+              name="whereApplicationsPickedUp"
               type="radio"
               register={register}
-              fields={[
-                { ...locationRadioOptions[0], id: "pickUpAddressLeasingAgent" },
-                { ...locationRadioOptions[1], id: "pickUpAddressMailingAddress" },
-                { ...locationRadioOptions[2], id: "pickUpAddressAnotherAddress" },
-              ]}
+              fields={getLocationOptions("pickUp")}
             />
           </GridSection>
         )}
@@ -275,12 +280,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <p className="field-label m-4 ml-0">{t("listings.applicationDropOffQuestion")}</p>
           </GridCell>
           <FieldGroup
-            name="applicationAddress.applicationsDroppedOff"
+            name="canApplicationsBeDroppedOff"
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "applicationAddress.applicationsDroppedOffYes" },
-              { ...yesNoRadioOptions[1], id: "applicationAddress.applicationsDroppedOffNo" },
+              { ...yesNoRadioOptions[0], id: "applicationsDroppedOffYes" },
+              { ...yesNoRadioOptions[1], id: "applicationsDroppedOffNo" },
             ]}
           />
         </GridSection>
@@ -288,18 +293,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           <GridSection columns={4}>
             <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
             <FieldGroup
-              name="applicationAddress.applicationsDroppedOffAddress"
+              name="whereApplicationsDroppedOff"
               type="radio"
               register={register}
-              fields={[
-                { ...locationRadioOptions[0], id: "dropOffAddressLeasingAgent" },
-                { ...locationRadioOptions[1], id: "dropOffAddressMailingAddress" },
-                { ...locationRadioOptions[2], id: "dropOffAddressAnotherAddress" },
-              ]}
+              fields={getLocationOptions("dropOff")}
             />
           </GridSection>
         )}
-        {droppedOffAtAnotherAddress === "anotherAddress" && (
+        {droppedOffAddress === "anotherAddress" && (
           <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
             <GridSection columns={3}>
               <Field
@@ -370,12 +371,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
           </GridCell>
           <FieldGroup
-            name="applicationAddress.postmarksConsidered"
+            name="arePostmarksConsidered"
             type="radio"
             register={register}
             fields={[
-              { ...yesNoRadioOptions[0], id: "applicationAddress.postmarksConsideredYes" },
-              { ...yesNoRadioOptions[1], id: "applicationAddress.postmarksConsideredNo" },
+              { ...yesNoRadioOptions[0], id: "postmarksConsideredYes" },
+              { ...yesNoRadioOptions[1], id: "postmarksConsideredNo" },
             ]}
           />
         </GridSection>
