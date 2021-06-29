@@ -20,23 +20,23 @@ const DetailApplicationAddress = () => {
       <GridSection grid={false} subtitle={t("listings.leasingAgentAddress")}>
         <GridSection columns={3}>
           <ViewItem label={t("listings.streetAddressOrPOBox")}>
-            {listing.applicationAddress.street}
+            {listing.leasingAgentAddress.street}
           </ViewItem>
           <ViewItem label={t("application.contact.apt")}>
-            {listing.applicationAddress.street2}
+            {listing.leasingAgentAddress.street2}
           </ViewItem>
         </GridSection>
         <GridSection columns={6}>
           <GridCell span={2}>
             <ViewItem label={t("application.contact.city")}>
-              {listing.applicationAddress.city}
+              {listing.leasingAgentAddress.city}
             </ViewItem>
           </GridCell>
           <ViewItem label={t("application.contact.state")}>
-            {listing.applicationAddress.state}
+            {listing.leasingAgentAddress.state}
           </ViewItem>
           <ViewItem label={t("application.contact.zip")}>
-            {listing.applicationAddress.zipCode}
+            {listing.leasingAgentAddress.zipCode}
           </ViewItem>
         </GridSection>
 

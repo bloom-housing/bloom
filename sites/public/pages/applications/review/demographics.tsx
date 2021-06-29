@@ -66,7 +66,6 @@ const ApplicationDemographics = () => {
 
   return (
     <FormsLayout>
-      {console.log(application)}
       <FormCard header={listing?.name}>
         <ProgressNav
           currentPageSection={currentPageSection}

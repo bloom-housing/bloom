@@ -171,6 +171,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         : null,
       applicationDropOffAddressType: data.whereApplicationsDroppedOff ?? null,
       applicationPickUpAddressType: data.whereApplicationsPickedUp ?? null,
+      applicationMethods: [],
     }
   }
 
