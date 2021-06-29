@@ -155,7 +155,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
-      const appMethods = []
       const typedData: FormListing = {
         ...data,
         yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -164,7 +163,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           : null,
         applicationDropOffAddressType: data.whereApplicationsDroppedOff ?? null,
         applicationPickUpAddressType: data.whereApplicationsPickedUp ?? null,
-        applicationMethods: appMethods,
       }
 
       const result = editMode
