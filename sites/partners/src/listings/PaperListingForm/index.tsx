@@ -36,6 +36,7 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 export type FormListing = ListingCreate &
   ListingUpdate & {
     arePaperAppsMailedToAnotherAddress?: boolean
+    arePostmarksConsidered?: boolean
     canApplicationsBeDroppedOff?: boolean
     canPaperApplicationsBePickedUp?: boolean
     whereApplicationsDroppedOff?: string
@@ -164,15 +165,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
-      console.log(data)
       const typedData: FormListing = {
         ...data,
         yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-        postmarkedApplicationsReceivedByDate: data.postMarkDate
-          ? new Date(
-              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
-            )
-          : null,
+        postmarkedApplicationsReceivedByDate:
+          data.postMarkDate && data.arePostmarksConsidered
+            ? new Date(
+                `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
+              )
+            : null,
         applicationDropOffAddressType:
           ListingApplicationDropOffAddressType[data.whereApplicationsDroppedOff] ?? null,
         applicationPickUpAddressType:

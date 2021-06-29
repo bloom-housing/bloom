@@ -14,6 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
+import moment from "moment"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -26,7 +27,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const { register, watch } = formMethods
   const postmarksConsidered: YesNoAnswer = watch(
     "arePostmarksConsidered",
-    listing.postmarkedApplicationsReceivedByDate
+    listing.postmarkedApplicationsReceivedByDate !== null ? "yes" : "no"
   )
   const applicationsPickedUp: YesNoAnswer = watch(
     "canPaperApplicationsBePickedUp",
@@ -460,6 +461,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   id={"postMarkDate"}
                   register={register}
                   watch={watch}
+                  defaultDate={{
+                    month:
+                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                        .utc()
+                        .format("MM") ?? null,
+                    day:
+                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                        .utc()
+                        .format("DD") ?? null,
+                    year:
+                      moment(new Date(listing.postmarkedApplicationsReceivedByDate))
+                        .utc()
+                        .format("YYYY") ?? null,
+                  }}
                 />
               </ViewItem>
             </GridCell>
