@@ -84,7 +84,6 @@ const Apply = (props: ApplyProps) => {
     <>
       <section className="aside-block">
         <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
-
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">
             {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
@@ -114,7 +113,6 @@ const Apply = (props: ApplyProps) => {
             </Button>
           </>
         )}
-
         {showDownload &&
           downloadMethods.map((method: ApplicationMethod) => (
             <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
@@ -127,7 +125,6 @@ const Apply = (props: ApplyProps) => {
               </a>
             </p>
           ))}
-
         {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
           <>
             {!openDateState(listing) &&

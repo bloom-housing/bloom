@@ -147,6 +147,15 @@ export const ListingView = (props: ListingProps) => {
     }
   }
 
+  //TODO: Add isReferralApplication boolean field to avoid this logic
+  const isReferralApp =
+    !listing.applicationDropOffAddress &&
+    !listing.applicationDropOffAddressType &&
+    !listing.applicationMailingAddress &&
+    !listing.applicationPickUpAddress &&
+    !listing.applicationPickUpAddressType &&
+    listing.applicationMethods?.length === 0
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -198,24 +207,14 @@ export const ListingView = (props: ListingProps) => {
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ApplicationStatus listing={listing} />
         <div className="mx-4">
-          {/*TODO: Add referralApplication boolean field to avoid this logic */}
           <DownloadLotteryResults event={lotteryResults} />
-          {listing.applicationDropOffAddress ||
-          listing.applicationDropOffAddressType ||
-          listing.applicationMailingAddress ||
-          listing.applicationPickUpAddress ||
-          listing.applicationPickUpAddressType ||
-          listing.applicationMethods?.length > 0 ? (
+          {!isReferralApp ? (
             <ApplicationSection
               listing={listing}
               internalFormRoute="/applications/start/choose-language"
             />
           ) : (
-            <ReferralApplication
-              phoneNumber={t("application.referralApplication.phoneNumber")}
-              description={t("application.referralApplication.instructions")}
-              title={t("application.referralApplication.furtherInformation")}
-            />
+            <></>
           )}
         </div>
       </div>
@@ -295,7 +294,7 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!preview && listing.applicationMethods.length > 0 ? (
+              {!preview && !isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
                   internalFormRoute="/applications/start/choose-language"

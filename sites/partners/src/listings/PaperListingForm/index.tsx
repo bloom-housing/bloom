@@ -22,6 +22,7 @@ import {
   ListingApplicationPickUpAddressType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
+import moment from "moment"
 
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
@@ -71,7 +72,7 @@ const defaults: FormListing = {
   applicationDueDate: new Date(),
   applicationFee: "0",
   applicationMethods: [],
-  applicationOpenDate: new Date(),
+  applicationOpenDate: new Date(moment().subtract(10).format()),
   applicationOrganization: "",
   applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
