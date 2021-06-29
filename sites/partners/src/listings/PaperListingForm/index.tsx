@@ -62,6 +62,9 @@ const defaults: FormListing = {
   applicationOrganization: "",
   applicationPickUpAddress: defaultAddress,
   applicationPickUpAddressOfficeHours: "",
+  applicationMailingAddress: null,
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
   countyCode: CountyCode.Alameda,
@@ -252,7 +255,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <AdditionalDetails />
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
-                    <ApplicationAddress />
+                    <ApplicationAddress listing={listing} />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">

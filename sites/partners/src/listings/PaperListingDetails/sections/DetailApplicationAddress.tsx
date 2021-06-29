@@ -35,6 +35,14 @@ const DetailApplicationAddress = () => {
           </ViewItem>
         </GridSection>
 
+        <hr className={"mb-4"} />
+
+        <GridSection columns={3}>
+          <ViewItem label={t("listings.paperDifferentAddress")}>
+            {listing.applicationMailingAddress ? t("t.yes") : t("t.no")}
+          </ViewItem>
+        </GridSection>
+
         {listing.applicationMailingAddress && (
           <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
             <GridSection columns={3}>
@@ -67,6 +75,21 @@ const DetailApplicationAddress = () => {
             </GridSection>
           </GridSection>
         )}
+
+        <hr className={"mt-4 mb-4"} />
+
+        <GridSection columns={3}>
+          <ViewItem label={t("listings.applicationPickupQuestion")}>
+            {listing.applicationPickUpAddress || listing.applicationPickUpAddressType
+              ? t("t.yes")
+              : t("t.no")}
+          </ViewItem>
+          {listing.applicationPickUpAddressType && (
+            <ViewItem label={t("listings.wherePickupQuestion")}>
+              {listing.applicationPickUpAddressType}
+            </ViewItem>
+          )}
+        </GridSection>
 
         {listing.applicationPickUpAddress && (
           <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
@@ -101,6 +124,21 @@ const DetailApplicationAddress = () => {
           </GridSection>
         )}
 
+        <hr className={"mt-4 mb-4"} />
+
+        <GridSection columns={3}>
+          <ViewItem label={t("listings.applicationDropOffQuestion")}>
+            {listing.applicationDropOffAddress || listing.applicationDropOffAddressType
+              ? t("t.yes")
+              : t("t.no")}
+          </ViewItem>
+          {listing.applicationDropOffAddressType && (
+            <ViewItem label={t("listings.whereDropOffQuestion")}>
+              {listing.applicationDropOffAddressType}
+            </ViewItem>
+          )}
+        </GridSection>
+
         {listing.applicationDropOffAddress && (
           <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
             <GridSection columns={3}>
@@ -133,6 +171,14 @@ const DetailApplicationAddress = () => {
             </GridSection>
           </GridSection>
         )}
+
+        <hr className={"mt-4 mb-4"} />
+
+        <GridSection columns={3}>
+          <ViewItem label={t("listings.postmarksConsideredQuestion")}>
+            {listing.postmarkedApplicationsReceivedByDate ? t("t.yes") : t("t.no")}
+          </ViewItem>
+        </GridSection>
 
         {listing.postmarkedApplicationsReceivedByDate && (
           <GridSection columns={4}>
