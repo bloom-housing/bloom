@@ -64,7 +64,7 @@ const Apply = (props: ApplyProps) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
-  const getDropOffAddress = (addressType: string | undefined) => {
+  const getDropOffAddress = (addressType: ListingApplicationDropOffAddressType | undefined) => {
     return addressType === ListingApplicationDropOffAddressType.leasingAgent
       ? listing.leasingAgentAddress
       : addressType === ListingApplicationDropOffAddressType.mailingAddress
@@ -72,7 +72,7 @@ const Apply = (props: ApplyProps) => {
       : listing.applicationDropOffAddress
   }
 
-  const getPickUpAddress = (addressType: string | undefined) => {
+  const getPickUpAddress = (addressType: ListingApplicationPickUpAddressType | undefined) => {
     return addressType === ListingApplicationPickUpAddressType.leasingAgent
       ? listing.leasingAgentAddress
       : addressType === ListingApplicationPickUpAddressType.mailingAddress
