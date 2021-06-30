@@ -1,0 +1,11 @@
+language: node_js
+
+node_js:
+  # Node version
+  - 12
+
+script:
+  - yarn install:all
+  - yarn test:shared:ui
+  - yarn build:app:public
+  - yarn build:app:partners
