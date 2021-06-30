@@ -1,6 +1,6 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, DateField } from "@bloom-housing/ui-components"
+import { t, GridSection, DateField, TimeField } from "@bloom-housing/ui-components"
 
 const ApplicationDates = () => {
   const formMethods = useFormContext()
@@ -18,19 +18,19 @@ const ApplicationDates = () => {
         <GridSection columns={3}>
           <DateField
             label={t("listings.applicationDeadline")}
-            name={"applicationDueDate"}
-            id={"applicationDueDate"}
+            name={"applicationDueDateField"}
+            id={"applicationDueDateField"}
             register={register}
             watch={watch}
             note={t("listings.whenApplicationsClose")}
           />
-          {/* <DateField
+          <TimeField
             label={t("listings.applicationDueTime")}
-            name={"applicationDueTime"}
-            id={"applicationDueTime"}
+            name={"applicationDueTimeField"}
+            id={"applicationDueTimeField"}
             register={register}
             watch={watch}
-          /> */}
+          />
         </GridSection>
       </GridSection>
     </div>

@@ -10,6 +10,7 @@ import {
   StatusBar,
   AppearanceStyleType,
   Button,
+  TimeFieldPeriod,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -40,8 +41,6 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 
 export type FormListing = Listing & {
-  waitlistOpenQuestion?: YesNoAnswer
-  waitlistSizeQuestion?: YesNoAnswer
   whereApplicationsDroppedOff?: ListingApplicationAddressType
   whereApplicationsPickedUp?: ListingApplicationAddressType
   arePaperAppsMailedToAnotherAddress?: boolean
@@ -53,6 +52,19 @@ export type FormListing = Listing & {
     day: string
     year: string
   }
+  applicationDueDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  applicationDueTimeField?: {
+    hours?: string
+    minutes?: string
+    seconds?: string
+    period?: TimeFieldPeriod
+  }
+  waitlistOpenQuestion?: YesNoAnswer
+  waitlistSizeQuestion?: YesNoAnswer
 }
 
 export const addressTypes = {
@@ -83,6 +95,7 @@ const defaults: FormListing = {
   updatedAt: undefined,
   applicationAddress: defaultAddress,
   applicationDueDate: new Date(),
+  applicationDueTime: null,
   applicationFee: "0",
   applicationMethods: [],
   applicationOpenDate: new Date(moment().subtract(10).format()),
@@ -261,6 +274,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
       units: units,
       isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+      applicationDueTime: new Date(
+        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${
+          data.applicationDueDateField.day
+        }T${
+          data.applicationDueTimeField.period === "pm"
+            ? parseInt(data.applicationDueTimeField.hours) + 12
+            : data.applicationDueTimeField.hours
+        }-${data.applicationDueTimeField.minutes}-${data.applicationDueTimeField.seconds}`
+      ),
+      applicationDueDate: new Date(
+        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+      ),
       yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
       waitlistCurrentSize:
         data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,

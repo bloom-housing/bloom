@@ -19,7 +19,7 @@ const DetailApplicationDates = () => {
           </ViewItem>
         </GridCell>
         <GridCell>
-          {/* <ViewItem label={t("listings.applicationDueTime")}>{listing.??}</ViewItem> */}
+          <ViewItem label={t("listings.applicationDueTime")}>{listing.applicationDueTime}</ViewItem>
         </GridCell>
       </GridSection>
     </GridSection>

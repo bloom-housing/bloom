@@ -2410,6 +2410,7 @@ const defaultListing: ListingSeedType = {
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "20",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "Application Organization",
@@ -2481,6 +2482,7 @@ const tritonListing: ListingSeedType = {
   applicationDueDate: getDate(10),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
+  applicationDueTime: null,
   applicationOrganization: "Triton",
   applicationPickUpAddress: {
     city: "Foster City",
@@ -2547,6 +2549,7 @@ const coliseumListing: ListingSeedType = {
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "John Stewart Company",
