@@ -65,6 +65,7 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   updatedAt: Date
 
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
