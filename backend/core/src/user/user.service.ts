@@ -1,9 +1,11 @@
 import {
   BadRequestException,
   HttpException,
+  Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  Scope,
+  UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
@@ -17,17 +19,45 @@ import { ConfirmDto } from "./dto/confirm.dto"
 import { assignDefined } from "../shared/assign-defined"
 import { SALT_SIZE, SCRYPT_KEYLEN } from "./constants"
 import { USER_ERRORS } from "./user-errors"
+import { EmailService } from "../shared/email/email.service"
+import { authzActions, AuthzService } from "../auth/authz.service"
+import { REQUEST } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
+import { ForgotPasswordDto } from "./dto/forgot-password.dto"
+import { AuthService } from "../auth/auth.service"
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UserService {
-  constructor(@InjectRepository(User) private readonly repo: Repository<User>) {}
+  constructor(
+    @Inject(REQUEST) private req: ExpressRequest,
+    @InjectRepository(User) private readonly repo: Repository<User>,
+    private readonly emailService: EmailService,
+    private readonly authzService: AuthzService,
+    private readonly authService: AuthService
+  ) {}
 
   public async findByEmail(email: string) {
-    return this.repo.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return this.repo.findOne({
+      where: { email },
+      join: {
+        alias: "user",
+        leftJoinAndSelect: {
+          leasingAgentInListings: "user.leasingAgentInListings",
+        },
+      },
+    })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return this.repo.findOne({
+      where: options,
+      join: {
+        alias: "user",
+        leftJoinAndSelect: {
+          leasingAgentInListings: "user.leasingAgentInListings",
+        },
+      },
+    })
   }
 
   async update(dto: Partial<UserUpdateDto>) {
@@ -37,6 +67,10 @@ export class UserService {
     if (!user) {
       throw new NotFoundException()
     }
+
+    await this.authzService.canOrThrow(this.req.user, "user", authzActions.update, {
+      ...dto,
+    })
 
     let passwordHash
     if (dto.password) {
@@ -82,10 +116,7 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const payload = decode(dto.token, process.env.APP_SECRET)
-    if (moment(payload.expiresAt) < moment()) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
-    }
+    decode(dto.token, process.env.APP_SECRET)
     user.confirmedAt = new Date()
     user.confirmationToken = null
 
@@ -100,7 +131,7 @@ export class UserService {
   public async resendConfirmation(dto: EmailDto) {
     const user = await this.findByEmail(dto.email)
     if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+      throw new HttpException(USER_ERRORS.EMAIL_NOT_FOUND.message, USER_ERRORS.EMAIL_NOT_FOUND.status)
     }
     if (user.confirmedAt) {
       throw new HttpException(
@@ -109,10 +140,10 @@ export class UserService {
       )
     } else {
       const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
-      const token = encode(payload, process.env.APP_SECRET)
-      user.confirmationToken = token
+      user.confirmationToken = encode(payload, process.env.APP_SECRET)
       try {
         await this.repo.save(user)
+        await this.emailService.welcome(user, dto.appUrl)
         return user
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
@@ -120,7 +151,7 @@ export class UserService {
     }
   }
 
-  public async createUser(dto: UserCreateDto) {
+  public async createUser(dto: UserCreateDto, noWelcomeEmail?: boolean) {
     let user = await this.findByEmail(dto.email)
     if (user) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
@@ -134,30 +165,31 @@ export class UserService {
     user.email = dto.email
     user.language = dto.language
     const payload = { id: user.id, expiresAt: moment().add(24, "hours") }
-    const token = encode(payload, process.env.APP_SECRET)
-    user.confirmationToken = token
+    user.confirmationToken = encode(payload, process.env.APP_SECRET)
     try {
       user.passwordHash = await this.passwordToHash(password)
       await this.repo.save(user)
+      if (!noWelcomeEmail) {
+        await this.emailService.welcome(user, dto.appUrl)
+      }
       return user
     } catch (err) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
   }
 
-  public async forgotPassword(email: string) {
-    const user = await this.findByEmail(email)
+  public async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.findByEmail(dto.email)
     if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+      throw new HttpException(USER_ERRORS.EMAIL_NOT_FOUND.message, USER_ERRORS.EMAIL_NOT_FOUND.status)
     }
 
     // Token expires in 24 hours
     const payload = { id: user.id, expiresAt: moment().add(1, "hour") }
-    const token = encode(payload, process.env.APP_SECRET)
-    user.resetToken = token
+    user.resetToken = encode(payload, process.env.APP_SECRET)
     await this.repo.save(user)
-
-    return user
+    await this.emailService.forgotPassword(user, dto.appUrl)
+    return this.authService.generateAccessToken(user)
   }
 
   public async updatePassword(dto: UpdatePasswordDto) {
@@ -165,19 +197,15 @@ export class UserService {
     if (!user) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const payload = decode(user.resetToken, process.env.APP_SECRET)
-    if (moment(payload.expiresAt) < moment()) {
-      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
-    }
+    decode(user.resetToken, process.env.APP_SECRET)
     user.passwordHash = await this.passwordToHash(dto.password)
     user.resetToken = null
     await this.repo.save(user)
-
-    return user
+    return this.authService.generateAccessToken(user)
   }
 
   private async passwordToHash(password: string) {
-    const salt = this.generateSalt()
+    const salt = UserService.generateSalt()
     const hash = await this.hashPassword(password, salt)
     return `${salt.toString("hex")}#${hash}`
   }
@@ -190,7 +218,7 @@ export class UserService {
     )
   }
 
-  private generateSalt(size = SALT_SIZE) {
+  private static generateSalt(size = SALT_SIZE) {
     return randomBytes(size)
   }
 }

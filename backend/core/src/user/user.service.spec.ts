@@ -38,14 +38,14 @@ describe("UserService", () => {
   describe("forgotPassword", () => {
     it("should return 400 if email is not found", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
-      await expect(service.forgotPassword("abc@xyz.com")).rejects.toThrow(
-        new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+      await expect(service.forgotPassword(dto)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_NOT_FOUND.message, USER_ERRORS.EMAIL_NOT_FOUND.status)
       )
     })
 
     it("should set resetToken", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser, resetToken: null })
-      const user = await service.forgotPassword("abc@xyz.com")
+      const user = await service.forgotPassword(dto)
       expect(user["resetToken"]).toBeDefined()
     })
   })
@@ -62,7 +62,7 @@ describe("UserService", () => {
     it("should set resetToken", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser })
       // Sets resetToken
-      await service.forgotPassword("abc@xyz.com")
+      await service.forgotPassword(dto)
       const user = await service.updatePassword(updateDto)
       expect(user["resetToken"]).toBeFalsy()
     })

@@ -22,7 +22,9 @@ const parseSeed = (seedData: ListingSeed): ListingSeed => {
 export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
   const usersService = app.get<UserService>(UserService)
   const leasingAgents = await Promise.all(
-    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+    seed.leasingAgents.map(
+      async (leasingAgent) => await usersService.createUser(leasingAgent, true)
+    )
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
@@ -71,7 +73,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    true
   )
   await userService.confirm({ token: user1.confirmationToken })
 
@@ -85,7 +88,8 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
-    })
+    }),
+    true
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -99,7 +103,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    true
   )
 
   for (let i = 0; i < 10; i++) {
