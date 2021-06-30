@@ -324,14 +324,24 @@ export const ListingView = (props: ListingProps) => {
             <dl className="column-definition-list">
               <Description term={t("t.neighborhood")} description={listing.neighborhood} />
               <Description term={t("t.built")} description={listing.yearBuilt} />
-              <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
-              <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
-              <Description term={t("t.propertyAmenities")} description={listing.amenities} />
-              <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
+              {listing.smokingPolicy && (
+                <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
+              )}
+              {listing.petPolicy && (
+                <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
+              )}
+              {listing.amenities && (
+                <Description term={t("t.propertyAmenities")} description={listing.amenities} />
+              )}
+              {listing.unitAmenities && (
+                <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
+              )}
               {listing.servicesOffered && (
                 <Description term={t("t.servicesOffered")} description={listing.servicesOffered} />
               )}
-              <Description term={t("t.accessibility")} description={listing.accessibility} />
+              {listing.accessibility && (
+                <Description term={t("t.accessibility")} description={listing.accessibility} />
+              )}
               <Description
                 term={t("t.unitFeatures")}
                 description={

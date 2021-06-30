@@ -485,6 +485,29 @@ export class AssetsService {
     });
   }
   /**
+   * List assets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      limit?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAssets> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { page: params['page'], limit: params['limit'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Create presigned upload metadata
    */
   createPresignedUploadMetadata(
@@ -500,6 +523,28 @@ export class AssetsService {
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get asset by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      assetId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets/{assetId}';
+      url = url.replace('{assetId}', params['assetId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -2669,10 +2714,19 @@ export interface AssetCreate {
 
 export interface Asset {
   /**  */
-  label: string;
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -2683,6 +2737,14 @@ export interface CreatePresignedUploadMetadata {
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
   signature: string;
+}
+
+export interface PaginatedAssets {
+  /**  */
+  items: Asset[];
+
+  /**  */
+  meta: PaginationMeta;
 }
 
 export interface Login {
@@ -3089,9 +3151,6 @@ export interface Listing {
   urlSlug: string;
 
   /**  */
-  displayWaitlistSize: boolean;
-
-  /**  */
   CSVFormattingType: CSVFormattingType;
 
   /**  */
@@ -3113,6 +3172,9 @@ export interface Listing {
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
 
   /**  */
+  image?: CombinedImageTypes;
+
+  /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
 
   /**  */
@@ -3123,6 +3185,9 @@ export interface Listing {
 
   /**  */
   reservedCommunityType?: ReservedCommunityType;
+
+  /**  */
+  result?: CombinedResultTypes;
 
   /**  */
   units: Unit[];
@@ -3182,7 +3247,7 @@ export interface Listing {
   applicationMethods: ApplicationMethod[];
 
   /**  */
-  assets: Asset[];
+  assets: AssetCreate[];
 
   /**  */
   events: ListingEvent[];
@@ -3272,7 +3337,22 @@ export interface Listing {
   applicationConfig?: object;
 
   /**  */
+  applicationCount?: number;
+
+  /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
 }
 
 export interface PreferenceCreate {
@@ -3362,9 +3442,6 @@ export interface ListingCreate {
   status: ListingStatus;
 
   /**  */
-  displayWaitlistSize: boolean;
-
-  /**  */
   CSVFormattingType: CSVFormattingType;
 
   /**  */
@@ -3378,6 +3455,9 @@ export interface ListingCreate {
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  image?: CombinedImageTypes;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -3437,10 +3517,13 @@ export interface ListingCreate {
   reservedCommunityType?: Id;
 
   /**  */
+  result?: CombinedResultTypes;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
-  assets: Asset[];
+  assets: AssetCreate[];
 
   /**  */
   events: ListingEvent[];
@@ -3530,7 +3613,19 @@ export interface ListingCreate {
   applicationConfig?: object;
 
   /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
 }
 
 export interface PreferenceUpdate {
@@ -3557,6 +3652,23 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string;
+}
+
+export interface AssetUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface UnitUpdate {
@@ -3626,9 +3738,6 @@ export interface ListingUpdate {
   status: ListingStatus;
 
   /**  */
-  displayWaitlistSize: boolean;
-
-  /**  */
   CSVFormattingType: CSVFormattingType;
 
   /**  */
@@ -3651,6 +3760,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  image?: AssetUpdate;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -3710,10 +3822,13 @@ export interface ListingUpdate {
   reservedCommunityType?: Id;
 
   /**  */
+  result?: AssetUpdate;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
-  assets: Asset[];
+  assets: AssetCreate[];
 
   /**  */
   events: ListingEvent[];
@@ -3803,7 +3918,19 @@ export interface ListingUpdate {
   applicationConfig?: object;
 
   /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
 }
 
 export interface Property {
@@ -4300,7 +4427,9 @@ export enum ListingEventType {
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedImageTypes = (AssetCreate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedResultTypes = (AssetCreate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum UserRole {
   'user' = 'user',

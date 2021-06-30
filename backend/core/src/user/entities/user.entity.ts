@@ -88,7 +88,7 @@ export class User {
   @OneToMany(() => Application, (application) => application.user)
   applications: Application[]
 
-  @ManyToMany(() => Listing, (listing) => listing.leasingAgents, { nullable: true, eager: true })
+  @ManyToMany(() => Listing, (listing) => listing.leasingAgents, { nullable: true })
   leasingAgentInListings?: Listing[] | null
 
   @Column("boolean", { default: false })

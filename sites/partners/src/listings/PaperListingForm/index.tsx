@@ -29,6 +29,9 @@ import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
 import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import { useAmiChartList } from "../../../lib/hooks"
+import BuildingDetails from "./sections/BuildingDetails"
+import ListingIntro from "./sections/ListingIntro"
+import BuildingFeatures from "./sections/BuildingFeatures"
 
 type FormListing = Listing
 
@@ -104,7 +107,7 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: 0,
+  yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
   unitsSummarized: {
@@ -227,12 +230,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         delete unit.tempId
       })
       data.units = units
+      const typedData: FormListing = {
+        ...data,
+        yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+      }
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,
-            body: { id: listing.id, ...data },
+            body: { id: listing.id, ...typedData },
           })
-        : await listingsService.create({ body: data })
+        : await listingsService.create({ body: typedData })
       setLoading(false)
 
       if (result) {
@@ -299,9 +306,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
+                    <ListingIntro />
                     <FormListingData />
+                    <BuildingDetails />
                     <Units units={units} setUnits={setUnits} amiCharts={amiCharts} />
                     <AdditionalFees />
+                    <BuildingFeatures />
                     <AdditionalEligibility />
                     <AdditionalDetails />
                     <LeasingAgent />

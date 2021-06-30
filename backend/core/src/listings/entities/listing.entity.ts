@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -25,6 +24,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  MaxLength,
   ValidateNested,
 } from "class-validator"
 import { listingUrlSlug } from "../../shared/url-helper"
@@ -35,13 +35,13 @@ import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/a
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
-import { AssetDto } from "../dto/asset.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
+import { AssetCreateDto } from "../../assets/dto/asset.dto"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -78,8 +78,8 @@ class Listing extends BaseEntity {
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetDto)
-  assets: AssetDto[]
+  @Type(() => AssetCreateDto)
+  assets: AssetCreateDto[]
 
   @Column("jsonb")
   @Expose()
@@ -194,7 +194,6 @@ class Listing extends BaseEntity {
   disableUnitsAccordion: boolean | null
 
   @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
-  @JoinColumn()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
@@ -331,14 +330,9 @@ class Listing extends BaseEntity {
   @Expose()
   applicationCount?: number
 
-  @Column({
-    type: "boolean",
-    default: false,
-    nullable: false,
-  })
+  @Column({ type: "boolean" })
   @Expose()
-  @ApiProperty()
-  @IsBoolean()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   displayWaitlistSize: boolean
 
   @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
@@ -376,12 +370,38 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
 
-  @ManyToOne(() => Asset, { eager: true, nullable: true })
+  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
   image?: Asset | null
+
+  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  result?: Asset | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  resultLink?: string | null
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isWaitlistOpen?: boolean | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  waitlistOpenSpots?: number | null
 }
 
 export { Listing as default, Listing }
