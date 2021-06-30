@@ -586,7 +586,6 @@ export const ArcherListing: Listing = {
     bePreparedIfChosen: "",
   },
   status: ListingStatus.active,
-  postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
     id: "id",
     createdAt: new Date(),

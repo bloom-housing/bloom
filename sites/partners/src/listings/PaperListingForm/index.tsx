@@ -18,8 +18,7 @@ import {
   ListingUpdate,
   CSVFormattingType,
   CountyCode,
-  ListingApplicationDropOffAddressType,
-  ListingApplicationPickUpAddressType,
+  ListingApplicationAddressType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -40,18 +39,23 @@ export type FormListing = ListingCreate &
   ListingUpdate & {
     waitlistOpenQuestion?: YesNoAnswer
     waitlistSizeQuestion?: YesNoAnswer
-    whereApplicationsDroppedOff?: ListingApplicationDropOffAddressType
-    whereApplicationsPickedUp?: ListingApplicationPickUpAddressType
+    whereApplicationsDroppedOff?: ListingApplicationAddressType
+    whereApplicationsPickedUp?: ListingApplicationAddressType
     arePaperAppsMailedToAnotherAddress?: boolean
     arePostmarksConsidered?: boolean
     canApplicationsBeDroppedOff?: boolean
     canPaperApplicationsBePickedUp?: boolean
-    postMarkDate: {
+    postMarkDate?: {
       month: string
       day: string
       year: string
     }
   }
+
+export const addressTypes = {
+  ...ListingApplicationAddressType,
+  anotherAddress: "anotherAddress",
+}
 
 type ListingFormProps = {
   listing?: FormListing
@@ -184,15 +188,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             )
           : null,
       applicationDropOffAddressType:
-        ListingApplicationDropOffAddressType[data.whereApplicationsDroppedOff] ?? null,
+        addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
+          ? addressTypes[data.whereApplicationsDroppedOff]
+          : null,
       applicationPickUpAddressType:
-        ListingApplicationPickUpAddressType[data.whereApplicationsPickedUp] ?? null,
+        addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
+          ? addressTypes[data.whereApplicationsPickedUp]
+          : null,
       applicationDropOffAddress:
-        data.canApplicationsBeDroppedOff && data.whereApplicationsPickedUp === "anotherAddress"
+        data.canApplicationsBeDroppedOff &&
+        data.whereApplicationsPickedUp === addressTypes.anotherAddress
           ? data.applicationDropOffAddress
           : null,
       applicationPickUpAddress:
-        data.canPaperApplicationsBePickedUp && data.whereApplicationsPickedUp === "anotherAddress"
+        data.canPaperApplicationsBePickedUp &&
+        data.whereApplicationsPickedUp === addressTypes.anotherAddress
           ? data.applicationPickUpAddress
           : null,
       applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress

@@ -13,7 +13,7 @@ import {
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { FormListing } from "../index"
+import { FormListing, addressTypes } from "../index"
 import moment from "moment"
 
 type ApplicationAddressProps = {
@@ -40,7 +40,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const applicationsPickedUpAddress = watch(
     "whereApplicationsPickedUp",
     listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
-      ? listing?.applicationPickUpAddressType || "anotherAddress"
+      ? listing?.applicationPickUpAddressType || addressTypes.anotherAddress
       : null
   )
   const paperMailedToAnotherAddress = watch(
@@ -50,7 +50,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const droppedOffAddress = watch(
     "whereApplicationsDroppedOff",
     listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
-      ? listing?.applicationDropOffAddressType || "anotherAddress"
+      ? listing?.applicationDropOffAddressType || addressTypes.anotherAddress
       : null
   )
 
@@ -74,20 +74,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     const locationRadioOptions = [
       {
         label: t("listings.atLeasingAgentAddress"),
-        defaultChecked: addressType === "leasingAgent",
-        value: "leasingAgent",
+        defaultChecked: addressType === addressTypes.leasingAgent,
+        value: addressTypes.leasingAgent,
       },
       {
         label: t("listings.atAnotherAddress"),
         defaultChecked: anotherAddressExists,
-        value: "anotherAddress",
+        value: addressTypes.anotherAddress,
       },
     ]
     if (paperMailedToAnotherAddress) {
       locationRadioOptions.splice(1, 0, {
         label: t("listings.atMailingAddress"),
-        defaultChecked: addressType === "mailingAddress",
-        value: "mailingAddress",
+        defaultChecked: addressType === addressTypes.mailingAddress,
+        value: addressTypes.mailingAddress,
       })
     }
     return locationRadioOptions.map((option) => {
@@ -258,7 +258,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           </GridSection>
         )}
         {applicationsPickedUp === YesNoAnswer.Yes &&
-          applicationsPickedUpAddress === "anotherAddress" && (
+          applicationsPickedUpAddress === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
               <GridSection columns={3}>
                 <Field
@@ -363,70 +363,71 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             />
           </GridSection>
         )}
-        {applicationsDroppedOff === YesNoAnswer.Yes && droppedOffAddress === "anotherAddress" && (
-          <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
-            <GridSection columns={3}>
-              <Field
-                label={t("listings.streetAddressOrPOBox")}
-                name={"applicationDropOffAddress.street"}
-                id={"applicationDropOffAddress.street"}
-                register={register}
-                placeholder={t("application.contact.streetAddress")}
-              />
-              <Field
-                label={t("application.contact.apt")}
-                name={"applicationDropOffAddress.street2"}
-                id={"applicationDropOffAddress.street2"}
-                register={register}
-                placeholder={t("application.contact.apt")}
-              />
-            </GridSection>
-            <GridSection columns={6}>
-              <GridCell span={2}>
+        {applicationsDroppedOff === YesNoAnswer.Yes &&
+          droppedOffAddress === addressTypes.anotherAddress && (
+            <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
+              <GridSection columns={3}>
                 <Field
-                  label={t("application.contact.city")}
-                  name={"applicationDropOffAddress.city"}
-                  id={"applicationDropOffAddress.city"}
+                  label={t("listings.streetAddressOrPOBox")}
+                  name={"applicationDropOffAddress.street"}
+                  id={"applicationDropOffAddress.street"}
                   register={register}
-                  placeholder={t("application.contact.city")}
+                  placeholder={t("application.contact.streetAddress")}
                 />
-              </GridCell>
-              <ViewItem label={t("application.contact.state")} className="mb-0">
-                <Select
-                  id={`applicationDropOffAddress.state`}
-                  name={`applicationDropOffAddress.state`}
-                  label={t("application.contact.state")}
-                  labelClassName="sr-only"
+                <Field
+                  label={t("application.contact.apt")}
+                  name={"applicationDropOffAddress.street2"}
+                  id={"applicationDropOffAddress.street2"}
                   register={register}
-                  controlClassName="control"
-                  options={stateKeys}
-                  keyPrefix="states"
-                  errorMessage={t("errors.stateError")}
+                  placeholder={t("application.contact.apt")}
                 />
-              </ViewItem>
-              <Field
-                label={t("application.contact.zip")}
-                name={"applicationDropOffAddress.zipCode"}
-                id={"applicationDropOffAddress.zipCode"}
-                placeholder={t("application.contact.zip")}
-                errorMessage={t("errors.zipCodeError")}
-                register={register}
-              />
+              </GridSection>
+              <GridSection columns={6}>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.city")}
+                    name={"applicationDropOffAddress.city"}
+                    id={"applicationDropOffAddress.city"}
+                    register={register}
+                    placeholder={t("application.contact.city")}
+                  />
+                </GridCell>
+                <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <Select
+                    id={`applicationDropOffAddress.state`}
+                    name={`applicationDropOffAddress.state`}
+                    label={t("application.contact.state")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="states"
+                    errorMessage={t("errors.stateError")}
+                  />
+                </ViewItem>
+                <Field
+                  label={t("application.contact.zip")}
+                  name={"applicationDropOffAddress.zipCode"}
+                  id={"applicationDropOffAddress.zipCode"}
+                  placeholder={t("application.contact.zip")}
+                  errorMessage={t("errors.zipCodeError")}
+                  register={register}
+                />
+              </GridSection>
+              <GridSection columns={3}>
+                <GridCell span={2}>
+                  <Textarea
+                    label={t("leasingAgent.officeHours")}
+                    name={"applicationDropOffAddressOfficeHours"}
+                    id={"applicationDropOffAddressOfficeHours"}
+                    fullWidth={true}
+                    register={register}
+                    placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                  />
+                </GridCell>
+              </GridSection>
             </GridSection>
-            <GridSection columns={3}>
-              <GridCell span={2}>
-                <Textarea
-                  label={t("leasingAgent.officeHours")}
-                  name={"applicationDropOffAddressOfficeHours"}
-                  id={"applicationDropOffAddressOfficeHours"}
-                  fullWidth={true}
-                  register={register}
-                  placeholder={t("leasingAgent.officeHoursPlaceholder")}
-                />
-              </GridCell>
-            </GridSection>
-          </GridSection>
-        )}
+          )}
         <hr className="mt-6 mb-6" />
 
         <GridSection columns={8} className={"flex items-center"}>
