@@ -44,11 +44,6 @@ export class ListingDto extends OmitType(Listing, [
   "result",
 ] as const) {
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  additionalApplicationSubmissionNotes?: string | null
-
-  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceDto)
@@ -333,11 +328,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "result",
 ] as const) {
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  additionalApplicationSubmissionNotes?: string | null
-
-  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceCreateDto)
@@ -532,11 +522,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  additionalApplicationSubmissionNotes?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
