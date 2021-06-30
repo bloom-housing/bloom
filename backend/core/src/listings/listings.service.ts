@@ -83,7 +83,11 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
-
+    listingDto.units.forEach((unit) => {
+      if (unit.id.length === 0 || unit.id === "undefined") {
+        delete unit.id
+      }
+    })
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
       property: plainToClass(

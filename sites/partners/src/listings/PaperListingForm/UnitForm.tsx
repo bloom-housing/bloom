@@ -1,5 +1,4 @@
-import React, { useMemo } from "react"
-import { Unit } from "@bloom-housing/backend-core/types"
+import React, { useEffect, useState } from "react"
 import {
   t,
   GridSection,
@@ -12,28 +11,32 @@ import {
   FieldGroup,
   Button,
   Form,
+  bedroomKeys,
+  numberOptions,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { useAmiChartList } from "../../../lib/hooks"
+import { TempUnit } from "."
+import { AmiChart } from "@bloom-housing/backend-core/types"
 
 type UnitFormProps = {
-  onSubmit: (unit: Unit) => void
+  onSubmit: (unit: TempUnit) => void
   onClose: () => void
-  units: Unit[]
-  currentNumber: string
+  units: TempUnit[]
+  amiCharts: AmiChart[]
+  currentTempId: number
 }
 
-const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) => {
-  const current = useMemo(() => units.filter((unit) => unit.number === currentNumber)[0], [
-    units,
-    currentNumber,
-  ])
+const getRentType = (unit: TempUnit): string | null => {
+  return unit?.monthlyIncomeMin || unit?.monthlyRent
+    ? "fixed"
+    : unit?.monthlyRentAsPercentOfIncome
+    ? "percentage"
+    : null
+}
 
-  /**
-   * fetch options
-   */
-  const { data: amiCharts = [] } = useAmiChartList()
-  console.log("amiCharts = ", amiCharts)
+const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFormProps) => {
+  const [current, setCurrent] = useState<TempUnit>(null)
+  const [tempId, setTempId] = useState<number | null>(null)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, trigger, getValues, reset } = useForm({
@@ -46,14 +49,25 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
       status: current?.status,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiChart: current?.amiChart,
+      amiChart: current?.amiChart.id,
       amiPercentage: current?.amiPercentage,
       monthlyIncomeMin: current?.monthlyIncomeMin,
       monthlyRent: current?.monthlyRent,
-      monthlyRentAsPercentageOfIncome: current?.monthlyRentAsPercentOfIncome,
+      monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
       priorityType: current?.priorityType,
+      rentType: getRentType(current),
     },
   })
+
+  useEffect(() => {
+    setTempId(currentTempId)
+  }, [currentTempId])
+
+  useEffect(() => {
+    const unit = units.filter((unit) => unit.tempId === tempId)[0]
+    setCurrent(unit)
+    reset({ ...unit, rentType: getRentType(unit) })
+  }, [units, setCurrent, tempId, reset])
 
   const rentType = watch("rentType")
 
@@ -70,13 +84,19 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
       ...data,
     }
 
-    const current = units.find((unit) => unit.number === currentNumber)
+    const current = units.find((unit) => unit.tempId === tempId)
 
-    onSubmit({ ...current, ...formData })
-
+    if (current) {
+      onSubmit({ ...current, ...formData })
+    } else {
+      onSubmit({ ...formData, id: undefined, tempId: units.length + 1 })
+    }
+    setTempId(null)
     if (action === "copyNew") {
-      reset({ ...data, number: null })
+      setCurrent({ ...current, ...formData, tempId: units.length + 1 })
+      reset({ ...current, ...formData })
     } else if (action === "saveNew") {
+      setCurrent(null)
       reset()
     } else {
       onClose()
@@ -108,58 +128,67 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
                 label={t("listings.unit.unitNumber")}
                 placeholder={t("listings.unit.unitNumber")}
                 register={register}
-                error={errors.number}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
+                type="number"
                 readerOnly
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.type")}>
-              <Field
+              <Select
                 id="unitType"
                 name="unitType"
                 label={t("listings.unit.type")}
                 placeholder={t("listings.unit.type")}
+                labelClassName="sr-only"
                 register={register}
-                readerOnly
+                controlClassName="control"
+                options={bedroomKeys}
+                keyPrefix="listings.unitTypes"
+                error={errors?.unitType !== undefined}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.numBathrooms")}>
-              <Field
+              <Select
                 id="numBathrooms"
                 name="numBathrooms"
                 label={t("listings.unit.numBathrooms")}
                 placeholder={t("listings.unit.numBathrooms")}
+                labelClassName="sr-only"
                 register={register}
-                readerOnly
+                controlClassName="control"
+                options={numberOptions(5)}
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.floor")}>
-              <Field
+              <Select
                 id="floor"
                 name="floor"
                 label={t("listings.unit.floor")}
                 placeholder={t("listings.unit.floor")}
+                labelClassName="sr-only"
                 register={register}
-                readerOnly
+                controlClassName="control"
+                options={numberOptions(10)}
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.squareFootage")}>
               <Field
-                id="sqft"
-                name="sqft"
+                id="sqFeet"
+                name="sqFeet"
                 label={t("listings.unit.squareFootage")}
                 placeholder={t("listings.unit.squareFootage")}
                 register={register}
                 readerOnly
+                type="number"
               />
             </ViewItem>
           </GridCell>
@@ -177,32 +206,34 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.minOccupancy")}>
-              <Field
+              <Select
                 id="minOccupancy"
                 name="minOccupancy"
                 label={t("listings.unit.minOccupancy")}
                 placeholder={t("listings.unit.minOccupancy")}
+                labelClassName="sr-only"
                 register={register}
-                type="number"
-                readerOnly
+                controlClassName="control"
+                options={numberOptions(10)}
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.maxOccupancy")}>
-              <Field
+              <Select
                 id="maxOccupancy"
                 name="maxOccupancy"
                 label={t("listings.unit.maxOccupancy")}
                 placeholder={t("listings.unit.maxOccupancy")}
+                labelClassName="sr-only"
                 register={register}
-                type="number"
-                readerOnly
+                controlClassName="control"
+                options={numberOptions(10)}
               />
             </ViewItem>
           </GridCell>
         </GridSection>
-        <GridSection title={t("listings.unit.eligibility")} columns={3}>
+        <GridSection title={t("listings.unit.eligibility")} columns={4} separator>
           <GridCell>
             <ViewItem label={t("listings.unit.amiChart")}>
               <Select
@@ -213,7 +244,10 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={amiCharts.map((chart) => ({ label: chart.name, value: chart.id }))}
+                options={amiCharts.map((chart) => ({
+                  label: chart.name,
+                  value: chart.id,
+                }))}
               />
             </ViewItem>
           </GridCell>
@@ -242,6 +276,8 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
               />
             </ViewItem>
           </GridCell>
+        </GridSection>
+        <GridSection columns={4} className="pt-6">
           {rentType === "fixed" && (
             <>
               <GridCell>
@@ -292,7 +328,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
             </>
           )}
         </GridSection>
-        <GridSection title={t("t.accessibility")} columns={4}>
+        <GridSection title={t("t.accessibility")} columns={4} separator>
           <GridCell>
             <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
               <Field
@@ -312,6 +348,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
           type="button"
           onClick={() => onFormSubmit("copyNew")}
           styleType={AppearanceStyleType.secondary}
+          className="mr-4"
         >
           {t("t.copyNew")}
         </Button>
@@ -320,6 +357,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentNumber }: UnitFormProps) =>
           type="button"
           onClick={() => onFormSubmit("saveNew")}
           styleType={AppearanceStyleType.secondary}
+          className="mr-4"
         >
           {t("t.saveNew")}
         </Button>

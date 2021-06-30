@@ -13,12 +13,11 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
-  ListingCreate,
   ListingStatus,
-  ListingUpdate,
   CSVFormattingType,
   CountyCode,
   Unit,
+  Listing,
 } from "@bloom-housing/backend-core/types"
 
 import Aside from "../Aside"
@@ -28,8 +27,10 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
+import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
+import { useAmiChartList } from "../../../lib/hooks"
 
-type FormListing = ListingCreate & ListingUpdate
+type FormListing = Listing
 
 type ListingFormProps = {
   listing?: FormListing
@@ -39,6 +40,9 @@ type ListingFormProps = {
 type AlertErrorType = "api" | "form"
 
 const defaultAddress = {
+  id: undefined,
+  createdAt: undefined,
+  updatedAt: undefined,
   city: "",
   state: "",
   street: "",
@@ -46,6 +50,9 @@ const defaultAddress = {
 }
 
 const defaults: FormListing = {
+  id: undefined,
+  createdAt: undefined,
+  updatedAt: undefined,
   applicationAddress: defaultAddress,
   applicationDueDate: new Date(),
   applicationFee: "0",
@@ -98,6 +105,27 @@ const defaults: FormListing = {
   unitAmenities: "",
   servicesOffered: "",
   yearBuilt: 0,
+  urlSlug: undefined,
+  showWaitlist: false,
+  unitsSummarized: {
+    unitTypes: [],
+    reservedTypes: [],
+    priorityTypes: [],
+    amiPercentages: [],
+    byUnitTypeAndRent: [],
+    byUnitType: [],
+    byNonReservedUnitType: [],
+    byReservedType: [],
+    byAMI: [],
+    hmi: {
+      columns: [],
+      rows: [],
+    },
+  },
+}
+
+export type TempUnit = Unit & {
+  tempId?: number
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -111,13 +139,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const { listingsService } = useContext(AuthContext)
 
+  /**
+   * fetch options
+   */
+  const { data: amiCharts = [] } = useAmiChartList()
+
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [units, setUnits] = useState<Unit[]>([])
+  const [units, setUnits] = useState<TempUnit[]>([])
 
   useEffect(() => {
     if (listing?.units) {
-      setUnits(listing.units)
+      const tempUnits = listing.units.map((unit, i) => ({
+        ...unit,
+        tempId: i + 1,
+      }))
+      setUnits(tempUnits)
     }
   }, [listing, setUnits])
 
@@ -151,6 +188,45 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
+      // data cleanup and formatting
+      data.disableUnitsAccordion = stringToBoolean(data.disableUnitsAccordion)
+      units.forEach((unit) => {
+        switch (unit.unitType) {
+          case "threeBdrm":
+            unit.numBedrooms = 3
+            break
+          case "twoBdrm":
+            unit.numBedrooms = 2
+            break
+          default:
+            unit.numBedrooms = 1
+        }
+
+        unit.floor = stringToNumber(unit.floor)
+        unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
+        unit.minOccupancy = stringToNumber(unit.minOccupancy)
+        unit.numBathrooms = stringToNumber(unit.numBathrooms)
+
+        if (unit.sqFeet.length === 0) {
+          delete unit.sqFeet
+        }
+
+        if (unit.amiChart?.length) {
+          const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
+          unit.amiChart = chart
+        } else {
+          delete unit.amiChart
+        }
+
+        if (unit.id === undefined) {
+          unit.id = ""
+          delete unit.updatedAt
+          delete unit.createdAt
+        }
+
+        delete unit.tempId
+      })
+      data.units = units
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,
@@ -224,7 +300,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <FormListingData />
-                    <Units units={units} setUnits={setUnits} />
+                    <Units units={units} setUnits={setUnits} amiCharts={amiCharts} />
                     <AdditionalFees />
                     <AdditionalEligibility />
                     <AdditionalDetails />

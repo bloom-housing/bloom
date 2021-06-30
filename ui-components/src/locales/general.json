@@ -1,4 +1,5 @@
 {
+  "": "",
   "account": {
     "accountSettings": "Account Settings",
     "errorFetchingApplications": "Error fetching applications",
@@ -931,11 +932,11 @@
       "unitTypes": "Unit Types",
       "individualUnits": "Individual Units",
       "delete": "Delete this Unit",
-      "deleteConf": "Do you really want to delete this unit?"
+      "deleteConf": "Do you really want to delete this unit?",
+      "eligibility": "Eligibility"
     },
     "units": "Listing Units",
-    "eligibility": "Eligibility",
-    "unitsDescription": "Select the building units that are available through the listing",
+    "unitsDescription": "Select the building units that are available through the listing.",
     "unitTypesOrIndividual": "Do you want to show unit types or individual units?"
   },
   "lottery": {

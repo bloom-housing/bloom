@@ -13,47 +13,52 @@ import {
   GridCell,
   Field,
 } from "@bloom-housing/ui-components"
-
-import { Unit } from "@bloom-housing/backend-core/types"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
+import { TempUnit } from "../"
+import { AmiChart } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
-  units: Unit[]
-  setUnits: (units: Unit[]) => void
+  units: TempUnit[]
+  setUnits: (units: TempUnit[]) => void
+  amiCharts: AmiChart[]
 }
 
-const FormUnits = ({ units, setUnits }: UnitProps) => {
-  const [unitDrawer, setUnitDrawer] = useState<string | null>(null)
-  const [unitDrawerOpen, setUnitDrawerOpen] = useState<boolean>(false)
-  const [unitDeleteModal, setUnitDeleteModal] = useState<string | null>(null)
+const FormUnits = ({ units, setUnits, amiCharts }: UnitProps) => {
+  const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
+  // const [unitDrawerOpen, setUnitDrawerOpen] = useState<boolean>(false)
+  const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = formMethods
 
   const unitTableHeaders = {
-    number: t("listings.unit.number"),
-    unitType: t("listings.unit.type"),
-    amiPercentage: t("listings.unit.ami"),
-    monthlyRent: t("listings.unit.rent"),
-    sqFeet: t("listings.unit.sqft"),
-    priorityType: t("listings.unit.priorityType"),
-    status: t("listings.unit.status"),
+    number: "listings.unit.number",
+    unitType: "listings.unit.type",
+    amiPercentage: "listings.unit.ami",
+    monthlyRent: "listings.unit.rent",
+    sqFeet: "listings.unit.sqft",
+    priorityType: "listings.unit.priorityType",
+    status: "listings.unit.status",
     action: "",
   }
 
   const editUnit = useCallback(
-    (number: string | null) => {
-      setUnitDrawer(number)
-      setUnitDrawerOpen(true)
+    (tempId: number) => {
+      setUnitDrawer(tempId)
     },
     [setUnitDrawer]
   )
 
   const deleteUnit = useCallback(
-    (number: string) => {
-      const updatedUnits = units.filter((unit) => unit.number !== number)
+    (tempId: number) => {
+      const updatedUnits = units
+        .filter((unit) => unit.tempId !== tempId)
+        .map((updatedUnit, index) => ({
+          ...updatedUnit,
+          tempId: index + 1,
+        }))
 
       setUnits(updatedUnits)
       setUnitDeleteModal(null)
@@ -61,12 +66,11 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
     [setUnitDeleteModal, setUnits, units]
   )
 
-  function saveUnit(newUnit: Unit) {
-    const exists = units.some((unit) => unit.number === newUnit.number)
-
+  function saveUnit(newUnit: TempUnit) {
+    const exists = units.some((unit) => unit.tempId === newUnit.tempId)
     if (exists) {
-      const withoutUpdated = units.filter((unit) => unit.number !== newUnit.number)
-      setUnits([...withoutUpdated, newUnit])
+      const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
+      setUnits(updateUnits)
     } else {
       setUnits([...units, newUnit])
     }
@@ -86,7 +90,7 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
             <Button
               type="button"
               className="front-semibold uppercase"
-              onClick={() => editUnit(unit.number)}
+              onClick={() => editUnit(unit.tempId)}
               unstyled
             >
               {t("t.edit")}
@@ -94,7 +98,7 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
             <Button
               type="button"
               className="front-semibold uppercase text-red-700"
-              onClick={() => setUnitDeleteModal(unit.number)}
+              onClick={() => setUnitDeleteModal(unit.tempId)}
               unstyled
             >
               {t("t.delete")}
@@ -109,34 +113,33 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
     <>
       <GridSection title={t("listings.units")} grid={false} separator>
         <ViewItem label={t("listings.unitsDescription")} />
+        <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
         <GridSection columns={3}>
           <GridCell>
-            <ViewItem label={t("listings.unitTypesOrIndividual")}>
-              <div className="flex h-12 items-center">
-                <Field
-                  id="disableUnitsAccordion"
-                  name="disableUnitsAccordion"
-                  className="m-0"
-                  type="radio"
-                  label={t("listings.unit.unitTypes")}
-                  register={register}
-                  inputProps={{
-                    value: false,
-                  }}
-                />
-                <Field
-                  id="disableUnitsAccordion"
-                  name="disableUnitsAccordion"
-                  className="m-0"
-                  type="radio"
-                  label={t("listings.unit.individualUnits")}
-                  register={register}
-                  inputProps={{
-                    value: true,
-                  }}
-                />
-              </div>
-            </ViewItem>
+            <div className="flex h-12 items-center">
+              <Field
+                id="disableUnitsAccordion"
+                name="disableUnitsAccordion"
+                className="m-0"
+                type="radio"
+                label={t("listings.unit.unitTypes")}
+                register={register}
+                inputProps={{
+                  value: false,
+                }}
+              />
+              <Field
+                id="disableUnitsAccordion"
+                name="disableUnitsAccordion"
+                className="m-0"
+                type="radio"
+                label={t("listings.unit.individualUnits")}
+                register={register}
+                inputProps={{
+                  value: true,
+                }}
+              />
+            </div>
           </GridCell>
         </GridSection>
         <div className="bg-gray-300 px-4 py-5">
@@ -145,23 +148,28 @@ const FormUnits = ({ units, setUnits }: UnitProps) => {
               <MinimalTable headers={unitTableHeaders} data={unitTableData} />
             </div>
           )}
-          <Button type="button" size={AppearanceSizeType.normal} onClick={() => editUnit(null)}>
+          <Button
+            type="button"
+            size={AppearanceSizeType.normal}
+            onClick={() => editUnit(units.length + 1)}
+          >
             {t("listings.unit.add")}
           </Button>
         </div>
       </GridSection>
 
       <Drawer
-        open={unitDrawerOpen}
+        open={!!unitDrawer}
         title={t("listings.unit.add")}
         ariaDescription={t("listings.unit.add")}
-        onClose={() => setUnitDrawerOpen(false)}
+        onClose={() => setUnitDrawer(null)}
       >
         <UnitForm
           onSubmit={(unit) => saveUnit(unit)}
-          onClose={() => setUnitDrawerOpen(false)}
+          onClose={() => setUnitDrawer(null)}
           units={units}
-          currentNumber={unitDrawer}
+          amiCharts={amiCharts}
+          currentTempId={unitDrawer}
         />
       </Drawer>
 
