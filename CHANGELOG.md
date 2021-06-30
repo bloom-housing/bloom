@@ -78,6 +78,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+  - Fix aria reserved for future use warning ([#1378](https://github.com/bloom-housing/bloom/issues/1378)) (Andrea Egan)
 
 ## 1.0.0 / 2021-05-21
 
