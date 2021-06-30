@@ -904,6 +904,7 @@
     "listingStatusText": "Listing Status",
     "applications": "Applications",
     "unit": {
+      "title": "Unit",
       "add": "Add Unit",
       "number": "Unit #",
       "unitNumber": "Unit Number",

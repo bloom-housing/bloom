@@ -17,6 +17,7 @@ import {
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
 import { AmiChart } from "@bloom-housing/backend-core/types"
+import { getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -24,14 +25,6 @@ type UnitFormProps = {
   units: TempUnit[]
   amiCharts: AmiChart[]
   currentTempId: number
-}
-
-const getRentType = (unit: TempUnit): string | null => {
-  return unit?.monthlyIncomeMin || unit?.monthlyRent
-    ? "fixed"
-    : unit?.monthlyRentAsPercentOfIncome
-    ? "percentage"
-    : null
 }
 
 const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFormProps) => {

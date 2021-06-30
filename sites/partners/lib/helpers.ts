@@ -1,6 +1,7 @@
 import { t } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { TempUnit } from "../src/listings/PaperListingForm"
 
 type DateTimePST = {
   hour: string
@@ -73,4 +74,12 @@ export const stringToNumber = (str: string | number | undefined): number => {
 
 export const stringToBoolean = (str: string | boolean | undefined): boolean => {
   return str === true || str === "true"
+}
+
+export const getRentType = (unit: TempUnit): string | null => {
+  return unit?.monthlyIncomeMin || unit?.monthlyRent
+    ? "fixed"
+    : unit?.monthlyRentAsPercentOfIncome
+    ? "percentage"
+    : null
 }
