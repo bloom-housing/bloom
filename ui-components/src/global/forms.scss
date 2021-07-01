@@ -315,20 +315,3 @@ input[type="number"] {
   @apply text-gray-700;
   @apply font-semibold;
 }
-
-.form-section__title {
-  @apply font-alt-sans;
-  @apply text-lg;
-  @apply text-gray-900;
-  @apply font-medium;
-  @apply block;
-  @apply mb-1;
-}
-
-.form-section__description {
-  @apply font-sans;
-  @apply text-base;
-  @apply text-gray-750;
-  @apply block;
-  @apply mb-8;
-}

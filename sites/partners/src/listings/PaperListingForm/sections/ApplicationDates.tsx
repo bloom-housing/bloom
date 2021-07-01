@@ -16,11 +16,12 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
 
   return (
     <div>
-      <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.sections.applicationDatesTitle")}</span>
-        <span className="form-section__description">
-          {t("listings.sections.applicationDatesSubtitle")}
-        </span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.applicationDatesTitle")}
+        description={t("listings.sections.applicationDatesSubtitle")}
+      >
         <GridSection columns={2}>
           <DateField
             label={t("listings.applicationDeadline")}

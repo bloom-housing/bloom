@@ -23,8 +23,8 @@
 .grid-section__header {
   @apply mb-4;
   @apply flex;
-  @apply items-center;
   @apply flex-wrap;
+  @apply flex-col;
 }
 
 .grid-section__title {
@@ -47,6 +47,14 @@
   @apply tracking-widest;
   @apply w-full;
   @apply mt-4;
+}
+
+.grid-section__description {
+  @apply font-sans;
+  @apply text-base;
+  @apply text-gray-750;
+  @apply block;
+  @apply mb-4;
 }
 
 .grid-section__inner {

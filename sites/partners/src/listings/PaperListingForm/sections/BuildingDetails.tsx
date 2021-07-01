@@ -17,12 +17,13 @@ const BuildingDetails = () => {
   const { register } = formMethods
 
   return (
-    <GridSection grid={false} columns={3} separator>
-      <span className="form-section__title">{t("listings.sections.buildingDetailsTitle")}</span>
-      <span className="form-section__description">
-        {t("listings.sections.buildingDetailsSubtitle")}
-      </span>
-
+    <GridSection
+      grid={false}
+      columns={3}
+      separator
+      title={t("listings.sections.buildingDetailsTitle")}
+      description={t("listings.sections.buildingDetailsSubtitle")}
+    >
       <GridSection columns={3}>
         <GridCell span={2}>
           <Field

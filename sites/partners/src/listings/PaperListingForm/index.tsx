@@ -225,7 +225,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
-  console.log(listing)
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
