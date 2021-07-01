@@ -41,6 +41,17 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 
 export type FormListing = Listing & {
+  applicationDueDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  applicationDueTimeField?: {
+    hours: string
+    minutes: string
+    seconds: string
+    period: TimeFieldPeriod
+  }
   whereApplicationsDroppedOff?: ListingApplicationAddressType
   whereApplicationsPickedUp?: ListingApplicationAddressType
   arePaperAppsMailedToAnotherAddress?: boolean
@@ -51,17 +62,6 @@ export type FormListing = Listing & {
     month: string
     day: string
     year: string
-  }
-  applicationDueDateField?: {
-    month: string
-    day: string
-    year: string
-  }
-  applicationDueTimeField?: {
-    hours?: string
-    minutes?: string
-    seconds?: string
-    period?: TimeFieldPeriod
   }
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
