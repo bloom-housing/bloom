@@ -313,7 +313,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       units={units}
                       setUnits={setUnits}
                       amiCharts={amiCharts}
-                      disableUnitsAccordion={listing.disableUnitsAccordion}
+                      disableUnitsAccordion={listing?.disableUnitsAccordion}
                     />
                     <AdditionalFees />
                     <BuildingFeatures />
