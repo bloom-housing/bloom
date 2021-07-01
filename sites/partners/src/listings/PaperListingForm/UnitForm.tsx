@@ -71,6 +71,13 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
 
     const data = getValues()
 
+    if (data.rentType === "fixed") {
+      delete data.monthlyRentAsPercentOfIncome
+    } else if (data.rentType === "percentage") {
+      delete data.monthlyIncomeMin
+      delete data.monthlyRent
+    }
+
     const formData = {
       createdAt: undefined,
       updatedAt: undefined,
@@ -80,14 +87,14 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
     const current = units.find((unit) => unit.tempId === tempId)
 
     if (current) {
-      onSubmit({ ...current, ...formData })
+      onSubmit({ ...formData, id: current.id, tempId: current.tempId })
     } else {
       onSubmit({ ...formData, id: undefined, tempId: units.length + 1 })
     }
     setTempId(null)
     if (action === "copyNew") {
-      setCurrent({ ...current, ...formData, tempId: units.length + 1 })
-      reset({ ...current, ...formData })
+      setCurrent({ ...formData, id: current.id, tempId: units.length + 1 })
+      reset({ ...formData })
     } else if (action === "saveNew") {
       setCurrent(null)
       reset()
@@ -308,8 +315,8 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
               <GridCell>
                 <ViewItem label={t("listings.unit.percentage")}>
                   <Field
-                    id="monthlyRentAsPercentageOfIncome"
-                    name="monthlyRentAsPercentageOfIncome"
+                    id="monthlyRentAsPercentOfIncome"
+                    name="monthlyRentAsPercentOfIncome"
                     label={t("listings.unit.%incomeRent")}
                     placeholder={t("listings.unit.percentage")}
                     register={register}

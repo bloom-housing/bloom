@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, Button } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable, Button, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
 
@@ -53,6 +53,19 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       tinted
       inset
     >
+      <GridSection title={t("listings.unit.details")} tinted={true} inset={true} grid={false}>
+        <GridSection grid columns={1}>
+          <ViewItem
+            label={t("listings.unitTypesOrIndividual")}
+            children={
+              listing.disableUnitsAccordion
+                ? t("listings.unit.unitTypes")
+                : t("listings.unit.individualUnits")
+            }
+          />
+        </GridSection>
+      </GridSection>
+
       {listing.units.length ? (
         <MinimalTable headers={unitTableHeaders} data={unitTableData} />
       ) : (

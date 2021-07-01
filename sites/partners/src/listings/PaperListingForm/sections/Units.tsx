@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react"
+import React, { useState, useMemo, useCallback, useEffect } from "react"
 import {
   t,
   GridSection,
@@ -11,7 +11,7 @@ import {
   AppearanceBorderType,
   ViewItem,
   GridCell,
-  Field,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
@@ -22,16 +22,17 @@ type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
   amiCharts: AmiChart[]
+  disableUnitsAccordion: boolean
 }
 
-const FormUnits = ({ units, setUnits, amiCharts }: UnitProps) => {
+const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
   // const [unitDrawerOpen, setUnitDrawerOpen] = useState<boolean>(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, setValue } = formMethods
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -43,6 +44,10 @@ const FormUnits = ({ units, setUnits, amiCharts }: UnitProps) => {
     status: "listings.unit.status",
     action: "",
   }
+
+  useEffect(() => {
+    setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
+  }, [disableUnitsAccordion, setValue])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -109,6 +114,19 @@ const FormUnits = ({ units, setUnits, amiCharts }: UnitProps) => {
     [editUnit, units]
   )
 
+  const disableUnitsAccordionOptions = [
+    {
+      id: "unitTypes",
+      label: t("listings.unit.unitTypes"),
+      value: "true",
+    },
+    {
+      id: "individualUnits",
+      label: t("listings.unit.individualUnits"),
+      value: "false",
+    },
+  ]
+
   return (
     <>
       <GridSection title={t("listings.units")} grid={false} separator>
@@ -116,30 +134,16 @@ const FormUnits = ({ units, setUnits, amiCharts }: UnitProps) => {
         <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
         <GridSection columns={3}>
           <GridCell>
-            <div className="flex h-12 items-center">
-              <Field
-                id="disableUnitsAccordion"
+            <ViewItem>
+              <FieldGroup
                 name="disableUnitsAccordion"
-                className="m-0"
                 type="radio"
-                label={t("listings.unit.unitTypes")}
                 register={register}
-                inputProps={{
-                  value: false,
-                }}
+                fields={disableUnitsAccordionOptions}
+                fieldClassName="m-0"
+                fieldGroupClassName="flex h-12 items-center"
               />
-              <Field
-                id="disableUnitsAccordion"
-                name="disableUnitsAccordion"
-                className="m-0"
-                type="radio"
-                label={t("listings.unit.individualUnits")}
-                register={register}
-                inputProps={{
-                  value: true,
-                }}
-              />
-            </div>
+            </ViewItem>
           </GridCell>
         </GridSection>
         <div className="bg-gray-300 px-4 py-5">

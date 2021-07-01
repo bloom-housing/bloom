@@ -309,7 +309,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <ListingIntro />
                     <FormListingData />
                     <BuildingDetails />
-                    <Units units={units} setUnits={setUnits} amiCharts={amiCharts} />
+                    <Units
+                      units={units}
+                      setUnits={setUnits}
+                      amiCharts={amiCharts}
+                      disableUnitsAccordion={listing.disableUnitsAccordion}
+                    />
                     <AdditionalFees />
                     <BuildingFeatures />
                     <AdditionalEligibility />

@@ -171,10 +171,12 @@ export const ListingView = (props: ListingProps) => {
               return parseInt(item.percent, 10) == percent
             })
 
-            groupedUnits = groupNonReservedAndReservedSummaries(
-              byAMI.byNonReservedUnitType,
-              byAMI.byReservedType
-            )
+            groupedUnits = byAMI
+              ? groupNonReservedAndReservedSummaries(
+                  byAMI.byNonReservedUnitType,
+                  byAMI.byReservedType
+                )
+              : []
 
             return (
               <>

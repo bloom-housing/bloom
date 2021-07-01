@@ -58,7 +58,7 @@ export class ListingsService {
       const countIndex = arrayIndex<Listing>(counts, "id")
 
       listings.forEach((listing: Listing) => {
-        listing.applicationCount = countIndex[listing.id].applicationCount
+        listing.applicationCount = countIndex[listing.id].applicationCount || 0
       })
     }
 

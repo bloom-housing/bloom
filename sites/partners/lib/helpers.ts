@@ -73,7 +73,11 @@ export const stringToNumber = (str: string | number | undefined): number => {
 }
 
 export const stringToBoolean = (str: string | boolean | undefined): boolean => {
-  return str === true || str === "true"
+  return str === true || str === "true" || str === "yes"
+}
+
+export const booleanToString = (bool: boolean): string => {
+  return bool === true ? "true" : "false"
 }
 
 export const getRentType = (unit: TempUnit): string | null => {
