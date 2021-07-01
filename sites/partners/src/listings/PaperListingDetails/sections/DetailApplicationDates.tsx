@@ -20,7 +20,8 @@ const DetailApplicationDates = () => {
         </GridCell>
         <GridCell>
           <ViewItem label={t("listings.applicationDueTime")}>
-            {new Date(listing.applicationDueTime).toLocaleTimeString()}
+            {listing.applicationDueTime &&
+              new Date(listing.applicationDueTime).toLocaleTimeString()}
           </ViewItem>
         </GridCell>
       </GridSection>

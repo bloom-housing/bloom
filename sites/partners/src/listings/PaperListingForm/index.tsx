@@ -25,7 +25,6 @@ import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
 
 import Aside from "../Aside"
-import FormListingData from "./sections/FormListingData"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
@@ -226,6 +225,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
+  console.log(listing)
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -414,7 +414,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <ListingIntro />
-                    <FormListingData />
                     <BuildingDetails />
                     <Units
                       units={units}
