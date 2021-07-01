@@ -7,7 +7,7 @@ const DetailApplicationDates = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.sections.applicationDatesTitle")}
       grid={false}
       inset
@@ -15,11 +15,13 @@ const DetailApplicationDates = () => {
       <GridSection columns={3}>
         <GridCell>
           <ViewItem label={t("listings.applicationDeadline")}>
-            {listing.applicationDueDate}
+            {new Date(listing.applicationDueDate).toDateString()}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("listings.applicationDueTime")}>{listing.applicationDueTime}</ViewItem>
+          <ViewItem label={t("listings.applicationDueTime")}>
+            {new Date(listing.applicationDueTime).toLocaleTimeString()}
+          </ViewItem>
         </GridCell>
       </GridSection>
     </GridSection>

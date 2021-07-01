@@ -1,8 +1,14 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, DateField, TimeField } from "@bloom-housing/ui-components"
+import { FormListing } from "../index"
+import moment from "moment"
 
-const ApplicationDates = () => {
+type ApplicationDatesProps = {
+  listing?: FormListing
+}
+
+const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -15,7 +21,7 @@ const ApplicationDates = () => {
         <span className="form-section__description">
           {t("listings.sections.applicationDatesSubtitle")}
         </span>
-        <GridSection columns={3}>
+        <GridSection columns={2}>
           <DateField
             label={t("listings.applicationDeadline")}
             name={"applicationDueDateField"}
@@ -23,6 +29,17 @@ const ApplicationDates = () => {
             register={register}
             watch={watch}
             note={t("listings.whenApplicationsClose")}
+            defaultDate={{
+              month: listing?.applicationDueDate
+                ? moment(new Date(listing?.applicationDueDate)).utc().format("MM")
+                : null,
+              day: listing?.applicationDueDate
+                ? moment(new Date(listing?.applicationDueDate)).utc().format("DD")
+                : null,
+              year: listing?.applicationDueDate
+                ? moment(new Date(listing?.applicationDueDate)).utc().format("YYYY")
+                : null,
+            }}
           />
           <TimeField
             label={t("listings.applicationDueTime")}
@@ -30,6 +47,18 @@ const ApplicationDates = () => {
             id={"applicationDueTimeField"}
             register={register}
             watch={watch}
+            defaultValues={{
+              hours: listing?.applicationDueTime
+                ? moment(new Date(listing?.applicationDueTime)).format("hh")
+                : null,
+              minutes: listing?.applicationDueTime
+                ? moment(new Date(listing?.applicationDueTime)).format("mm")
+                : null,
+              seconds: listing?.applicationDueTime
+                ? moment(new Date(listing?.applicationDueTime)).format("ss")
+                : null,
+              period: new Date(listing?.applicationDueTime).getHours() >= 12 ? "pm" : "am",
+            }}
           />
         </GridSection>
       </GridSection>

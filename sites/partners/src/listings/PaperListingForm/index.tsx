@@ -229,6 +229,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+
+    const getDueTime = () => {
+      let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
+      if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
+        dueTimeHours = 0
+      }
+      if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
+        dueTimeHours = dueTimeHours + 12
+      }
+      const dueTime = new Date()
+      dueTime.setHours(
+        dueTimeHours,
+        parseInt(data.applicationDueTimeField.minutes),
+        parseInt(data.applicationDueTimeField.seconds)
+      )
+      return dueTime
+    }
     units.forEach((unit) => {
       switch (unit.unitType) {
         case "threeBdrm":
@@ -271,18 +288,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
     return {
       ...data,
+      applicationDueTime: getDueTime(),
       disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
       units: units,
       isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-      applicationDueTime: new Date(
-        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${
-          data.applicationDueDateField.day
-        }T${
-          data.applicationDueTimeField.period === "pm"
-            ? parseInt(data.applicationDueTimeField.hours) + 12
-            : data.applicationDueTimeField.hours
-        }-${data.applicationDueTimeField.minutes}-${data.applicationDueTimeField.seconds}`
-      ),
       applicationDueDate: new Date(
         `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
       ),
@@ -420,7 +429,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
                     <ApplicationAddress listing={listing} />
-                    <ApplicationDates />
+                    <ApplicationDates listing={listing} />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
