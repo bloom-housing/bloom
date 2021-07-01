@@ -289,23 +289,11 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   specialNotes?: string | null
 
-  @Column({ type: "boolean", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  isWaitlistOpen: boolean | null
-
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistCurrentSize: number | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  waitlistOpenSpots: number | null
 
   @Column({ type: "integer", nullable: true })
   @Expose()

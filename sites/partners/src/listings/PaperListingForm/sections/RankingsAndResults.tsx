@@ -15,8 +15,14 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
 
-  const waitlistOpen: YesNoAnswer = watch("waitlistOpenQuestion", listing?.isWaitlistOpen)
-  const showWaitlistSize: YesNoAnswer = watch("waitlistSizeQuestion", listing?.waitlistMaxSize)
+  const waitlistOpen: YesNoAnswer = watch(
+    "waitlistOpenQuestion",
+    listing?.isWaitlistOpen ? YesNoAnswer.Yes : YesNoAnswer.No
+  )
+  const showWaitlistSize: YesNoAnswer = watch(
+    "waitlistSizeQuestion",
+    listing?.waitlistMaxSize ? YesNoAnswer.Yes : YesNoAnswer.No
+  )
 
   const yesNoRadioOptions = [
     {
@@ -83,7 +89,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
             />
           </GridSection>
         )}
-        {showWaitlistSize === YesNoAnswer.Yes && (
+        {showWaitlistSize === YesNoAnswer.Yes && waitlistOpen === YesNoAnswer.Yes && (
           <GridSection columns={3} className={"flex items-center"}>
             <Field
               name="waitlistMaxSize"

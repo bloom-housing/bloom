@@ -7,18 +7,30 @@ const DetailRankingsAndResults = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
+      className="bg-primary-lighter"
       title={t("listings.sections.rankingsResultsTitle")}
       grid={false}
       inset
     >
+      <GridSection columns={3}>
+        <ViewItem label={t("listings.waitlist.openQuestion")}>
+          {listing.isWaitlistOpen ? t("t.yes") : t("t.no")}
+        </ViewItem>
+      </GridSection>
+      {listing.isWaitlistOpen && (
+        <GridSection columns={3}>
+          <ViewItem label={t("listings.waitlist.sizeQuestion")}>
+            {listing.waitlistMaxSize ? t("t.yes") : t("t.no")}
+          </ViewItem>
+        </GridSection>
+      )}
       {listing.waitlistMaxSize && (
-        <GridSection columns={3} className={"flex items-center"}>
+        <GridSection columns={3}>
           <ViewItem label={t("listings.waitlist.maxSize")}>{listing.waitlistMaxSize}</ViewItem>
           <ViewItem label={t("listings.waitlist.currentSize")}>
             {listing.waitlistCurrentSize}
           </ViewItem>
-          {/* <ViewItem label={t("listings.waitlist.openSize")}>{listing.???}</ViewItem> */}
+          <ViewItem label={t("listings.waitlist.openSize")}>{listing.waitlistOpenSpots}</ViewItem>
         </GridSection>
       )}
     </GridSection>

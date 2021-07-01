@@ -15,11 +15,14 @@ export interface WaitlistProps {
 
 const Waitlist = (props: WaitlistProps) => {
   const listing = props.listing
-  const showWaitlistValues = listing.waitlistCurrentSize != null && listing.waitlistMaxSize != null
-  const waitlistOpen = listing.waitlistCurrentSize < listing.waitlistMaxSize
+  const showWaitlistValues =
+    listing.showWaitlist &&
+    listing.waitlistMaxSize &&
+    listing.waitlistCurrentSize &&
+    listing.waitlistOpenSpots
   let header, subheader, waitlistItems
 
-  if (listing.unitsAvailable > 0 && waitlistOpen) {
+  if (listing.unitsAvailable > 0 && listing.isWaitlistOpen) {
     header = t("listings.waitlist.unitsAndWaitlist")
     subheader = t("listings.waitlist.submitAnApplication")
     waitlistItems = (
@@ -29,9 +32,9 @@ const Waitlist = (props: WaitlistProps) => {
           text={t("listings.availableUnits")}
           className={"font-semibold"}
         />
-        {listing.displayWaitlistSize && (
+        {showWaitlistValues && (
           <WaitlistItem
-            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+            value={listing.waitlistOpenSpots ?? 0}
             text={t("listings.waitlist.openSlots")}
             className={"font-semibold"}
           />
@@ -39,7 +42,7 @@ const Waitlist = (props: WaitlistProps) => {
       </>
     )
   } else {
-    if (waitlistOpen) {
+    if (listing.isWaitlistOpen) {
       header = t("listings.waitlist.isOpen")
       subheader = t("listings.waitlist.submitForWaitlist")
     } else {
@@ -54,7 +57,7 @@ const Waitlist = (props: WaitlistProps) => {
         />
         {listing.displayWaitlistSize && (
           <WaitlistItem
-            value={listing.waitlistMaxSize - listing.waitlistCurrentSize}
+            value={listing.waitlistOpenSpots ?? 0}
             text={t("listings.waitlist.openSlots")}
             className={"font-semibold"}
           />
