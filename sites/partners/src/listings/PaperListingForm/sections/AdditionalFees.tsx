@@ -13,7 +13,7 @@ const AdditionalFees = () => {
       <GridSection grid={false} separator>
         <span className="form-section__title">{t("listings.sections.additionalFees")}</span>
         <span className="form-section__description">
-          {t("listings.sections.additionalFeesSubtitle")}{" "}
+          {t("listings.sections.additionalFeesSubtitle")}
         </span>
         <GridSection columns={3}>
           <Field

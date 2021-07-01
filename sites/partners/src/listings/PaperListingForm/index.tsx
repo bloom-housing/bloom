@@ -19,6 +19,7 @@ import {
   CSVFormattingType,
   CountyCode,
 } from "@bloom-housing/backend-core/types"
+import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
@@ -29,8 +30,13 @@ import AdditionalFees from "./sections/AdditionalFees"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
+import RankingsAndResults from "./sections/RankingsAndResults"
 
-type FormListing = ListingCreate & ListingUpdate
+export type FormListing = ListingCreate &
+  ListingUpdate & {
+    waitlistOpenQuestion?: YesNoAnswer
+    waitlistSizeQuestion?: YesNoAnswer
+  }
 
 type ListingFormProps = {
   listing?: FormListing
@@ -81,8 +87,10 @@ const defaults: FormListing = {
   rentalHistory: "",
   requiredDocuments: "",
   status: ListingStatus.pending,
-  waitlistCurrentSize: 0,
-  waitlistMaxSize: 0,
+  waitlistCurrentSize: null,
+  waitlistMaxSize: null,
+  isWaitlistOpen: null,
+  waitlistOpenSpots: null,
   whatToExpect: [],
   units: [],
   accessibility: "",
@@ -137,6 +145,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
+  const formatFormData = (data: FormListing) => {
+    const showWaitlistNumber =
+      data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+    return {
+      ...data,
+      isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+      yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+      waitlistCurrentSize:
+        data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
+      waitlistMaxSize:
+        data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
+      waitlistOpenSpots:
+        data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+    }
+  }
+
   /*
     @data: form data comes from the react-hook-form
     @redirect: open listing details or reset form
@@ -145,16 +169,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
-      const typedData: FormListing = {
-        ...data,
-        yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-      }
+      const formattedData = formatFormData(data)
       const result = editMode
         ? await listingsService.update({
             listingId: listing.id,
-            body: { id: listing.id, ...typedData },
+            body: { id: listing.id, ...formattedData },
           })
-        : await listingsService.create({ body: typedData })
+        : await listingsService.create({ body: formattedData })
       setLoading(false)
 
       if (result) {
@@ -228,6 +249,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <BuildingFeatures />
                     <AdditionalEligibility />
                     <AdditionalDetails />
+                    <RankingsAndResults listing={listing} />
                     <LeasingAgent />
                   </div>
 

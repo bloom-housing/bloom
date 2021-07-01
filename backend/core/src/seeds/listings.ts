@@ -2477,6 +2477,8 @@ const defaultListing: ListingSeedType = {
   specialNotes: "Custom special notes text",
   status: ListingStatus.active,
   waitlistCurrentSize: null,
+  waitlistOpenSpots: null,
+  isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: {
     allInfoWillBeVerified: "Custom all info will be verified text",
@@ -2544,6 +2546,8 @@ const tritonListing: ListingSeedType = {
   status: ListingStatus.active,
   waitlistCurrentSize: 400,
   waitlistMaxSize: 600,
+  waitlistOpenSpots: 200,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 
@@ -2610,6 +2614,8 @@ const coliseumListing: ListingSeedType = {
   status: ListingStatus.active,
   waitlistCurrentSize: 0,
   waitlistMaxSize: 3000,
+  waitlistOpenSpots: 3000,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 
