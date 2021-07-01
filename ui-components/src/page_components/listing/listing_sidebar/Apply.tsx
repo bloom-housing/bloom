@@ -63,12 +63,23 @@ const Apply = (props: ApplyProps) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
-  const getAddress = (addressType: ListingApplicationAddressType | undefined) => {
-    return addressType === ListingApplicationAddressType.leasingAgent
-      ? listing.leasingAgentAddress
-      : addressType === ListingApplicationAddressType.mailingAddress
-      ? listing.applicationMailingAddress
-      : listing.applicationDropOffAddress
+  type AddressLocation = "dropOff" | "pickUp"
+
+  const getAddress = (
+    addressType: ListingApplicationAddressType | undefined,
+    location: AddressLocation
+  ) => {
+    if (addressType === ListingApplicationAddressType.leasingAgent) {
+      return listing.leasingAgentAddress
+    }
+    if (addressType === ListingApplicationAddressType.mailingAddress) {
+      return listing.applicationMailingAddress
+    }
+    if (location === "dropOff") {
+      return listing.applicationDropOffAddress
+    } else {
+      return listing.applicationPickUpAddress
+    }
   }
 
   return (
@@ -124,7 +135,7 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={getAddress(listing.applicationPickUpAddressType)}
+              address={getAddress(listing.applicationPickUpAddressType, "pickUp")}
               officeHours={listing.applicationPickUpAddressOfficeHours ?? null}
             />
           </>
@@ -163,7 +174,7 @@ const Apply = (props: ApplyProps) => {
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
-                address={getAddress(listing.applicationDropOffAddressType)}
+                address={getAddress(listing.applicationDropOffAddressType, "dropOff")}
                 officeHours={listing.applicationDropOffAddressOfficeHours ?? null}
               />
             </>
