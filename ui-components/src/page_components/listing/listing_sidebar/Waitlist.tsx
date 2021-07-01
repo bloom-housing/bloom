@@ -16,7 +16,6 @@ export interface WaitlistProps {
 const Waitlist = (props: WaitlistProps) => {
   const listing = props.listing
   const showWaitlistValues =
-    listing.showWaitlist &&
     listing.waitlistMaxSize !== null &&
     listing.waitlistCurrentSize !== null &&
     listing.waitlistOpenSpots !== null
