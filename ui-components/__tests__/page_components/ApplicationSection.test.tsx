@@ -12,7 +12,10 @@ describe("<ApplicationSection>", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
     const days = 10
     listing.applicationOpenDate = new Date(moment().format())
-    listing.waitlistCurrentSize = 0
+    listing.waitlistCurrentSize = 25
+    listing.isWaitlistOpen = true
+    listing.waitlistMaxSize = 100
+    listing.waitlistOpenSpots = 75
     listing.applicationDueDate = new Date(moment().add(days, "days").format())
     const { getByText, getAllByText } = render(
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
