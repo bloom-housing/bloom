@@ -1786,6 +1786,12 @@ export interface Listing {
   requiredDocuments: string
 
   /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
+
+  /**  */
   waitlistCurrentSize: number
 
   /**  */
@@ -1958,6 +1964,12 @@ export interface ListingCreate {
 
   /**  */
   requiredDocuments: string
+
+  /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
 
   /**  */
   waitlistCurrentSize: number
@@ -2150,6 +2162,12 @@ export interface ListingUpdate {
 
   /**  */
   requiredDocuments: string
+
+  /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
 
   /**  */
   waitlistCurrentSize: number

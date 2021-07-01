@@ -3325,6 +3325,12 @@ export interface Listing {
   specialNotes?: string;
 
   /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
+
+  /**  */
   waitlistCurrentSize: number;
 
   /**  */
@@ -3599,6 +3605,12 @@ export interface ListingCreate {
 
   /**  */
   specialNotes?: string;
+
+  /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
 
   /**  */
   waitlistCurrentSize: number;
@@ -3904,6 +3916,12 @@ export interface ListingUpdate {
 
   /**  */
   specialNotes?: string;
+
+  /**  */
+  isWaitlistOpen: boolean
+
+  /**  */
+  waitlistOpenSpots: number
 
   /**  */
   waitlistCurrentSize: number;

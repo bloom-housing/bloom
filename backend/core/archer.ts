@@ -320,6 +320,8 @@ export const ArcherListing: Listing = {
   waitlistMaxSize: 300,
   name: "Archer Studios",
   waitlistCurrentSize: 300,
+  waitlistOpenSpots: 0,
+  isWaitlistOpen: true,
   // Addng displayWaitListSize for #707
   displayWaitlistSize: false,
   // TODO confirm not used anywhere

@@ -31,7 +31,10 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 
-type FormListing = ListingCreate & ListingUpdate
+export type FormListing = ListingCreate &
+  ListingUpdate & {
+    waitlistSizeQuestion?: boolean
+  }
 
 type ListingFormProps = {
   listing?: FormListing
@@ -82,8 +85,10 @@ const defaults: FormListing = {
   rentalHistory: "",
   requiredDocuments: "",
   status: ListingStatus.pending,
-  waitlistCurrentSize: 0,
-  waitlistMaxSize: 0,
+  waitlistCurrentSize: null,
+  waitlistMaxSize: null,
+  isWaitlistOpen: null,
+  waitlistOpenSpots: null,
   whatToExpect: [],
   units: [],
   accessibility: "",
