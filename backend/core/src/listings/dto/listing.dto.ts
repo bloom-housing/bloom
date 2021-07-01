@@ -14,6 +14,7 @@ import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../user/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
+import { PaginationFactory } from "../../shared/dto/pagination.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "preferences",
@@ -72,6 +73,8 @@ export class ListingDto extends OmitType(Listing, [
   })
   status: ListingStatus
 }
+
+export class PaginatedListingsDto extends PaginationFactory<ListingDto>(ListingDto) {}
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",

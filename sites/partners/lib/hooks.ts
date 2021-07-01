@@ -1,5 +1,7 @@
 import { useContext } from "react"
 import useSWR, { mutate } from "swr"
+import { Listing } from "@bloom-housing/backend-core/types"
+
 
 import { ApiClientContext } from "@bloom-housing/ui-components"
 
@@ -29,7 +31,7 @@ export function useListingsData() {
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings`, fetcher)
 
   return {
-    listingDtos: data,
+    listingDtos: data ? data.items : [],
     listingsLoading: !error && !data,
     listingsError: error,
   }

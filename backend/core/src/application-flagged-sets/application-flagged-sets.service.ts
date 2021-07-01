@@ -26,7 +26,10 @@ export class ApplicationFlaggedSetsService {
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
     const results = await paginate<ApplicationFlaggedSet>(
       this.afsRepository,
-      { limit: queryParams.limit, page: queryParams.page },
+      {
+        limit: queryParams.limit > 0 ? queryParams.limit : Number.MAX_SAFE_INTEGER,
+        page: queryParams.page > 0 ? queryParams.page : 1,
+      },
       {
         relations: ["listing", "applications"],
         where: {

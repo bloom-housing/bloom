@@ -109,6 +109,7 @@ export default function ListingsList() {
   )
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
+
   // filter listings to show items depends on user role
   const filteredListings = useMemo(() => {
     if (profile.roles.includes(UserRole.admin)) return listingDtos

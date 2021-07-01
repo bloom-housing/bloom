@@ -15,19 +15,23 @@ import {
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
-import { ListingCreateDto, ListingDto, ListingUpdateDto } from "./dto/listing.dto"
+import {
+  ListingCreateDto,
+  ListingDto,
+  ListingUpdateDto,
+  PaginatedListingsDto,
+} from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
-import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Expose } from "class-transformer"
 import { IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
+import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 
-//TODO extend query params to add paginations
-export class ListingsListQueryParams {
+export class ListingsListQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
     type: String,
@@ -60,14 +64,9 @@ export class ListingsController {
 
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
-  @ApiImplicitQuery({
-    name: "jsonpath",
-    required: false,
-    type: String,
-  })
   @UseInterceptors(CacheInterceptor)
-  async list(@Query() queryParams: ListingsListQueryParams): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(queryParams))
+  async list(@Query() queryParams: ListingsListQueryParams): Promise<PaginatedListingsDto> {
+    return await this.listingsService.list(queryParams)
   }
 
   @Post()
