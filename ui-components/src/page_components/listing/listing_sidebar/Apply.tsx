@@ -3,8 +3,7 @@ import {
   Listing,
   ApplicationMethod,
   ApplicationMethodType,
-  ListingApplicationDropOffAddressType,
-  ListingApplicationPickUpAddressType,
+  ListingApplicationAddressType,
 } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
@@ -64,20 +63,12 @@ const Apply = (props: ApplyProps) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
-  const getDropOffAddress = (addressType: ListingApplicationDropOffAddressType | undefined) => {
-    return addressType === ListingApplicationDropOffAddressType.leasingAgent
+  const getAddress = (addressType: ListingApplicationAddressType | undefined) => {
+    return addressType === ListingApplicationAddressType.leasingAgent
       ? listing.leasingAgentAddress
-      : addressType === ListingApplicationDropOffAddressType.mailingAddress
+      : addressType === ListingApplicationAddressType.mailingAddress
       ? listing.applicationMailingAddress
       : listing.applicationDropOffAddress
-  }
-
-  const getPickUpAddress = (addressType: ListingApplicationPickUpAddressType | undefined) => {
-    return addressType === ListingApplicationPickUpAddressType.leasingAgent
-      ? listing.leasingAgentAddress
-      : addressType === ListingApplicationPickUpAddressType.mailingAddress
-      ? listing.applicationMailingAddress
-      : listing.applicationPickUpAddress
   }
 
   return (
@@ -133,7 +124,7 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={getPickUpAddress(listing.applicationPickUpAddressType)}
+              address={getAddress(listing.applicationPickUpAddressType)}
               officeHours={listing.applicationPickUpAddressOfficeHours ?? null}
             />
           </>
@@ -172,7 +163,7 @@ const Apply = (props: ApplyProps) => {
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
-                address={getDropOffAddress(listing.applicationDropOffAddressType)}
+                address={getAddress(listing.applicationDropOffAddressType)}
                 officeHours={listing.applicationDropOffAddressOfficeHours ?? null}
               />
             </>

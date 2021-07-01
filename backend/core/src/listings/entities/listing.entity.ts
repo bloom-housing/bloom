@@ -42,8 +42,7 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
-import { ListingApplicationPickUpAddressType } from "../types/listing-application-pick-up-address-type"
-import { ListingApplicationDropOffAddressType } from "../types/listing-application-drop-off-address-type"
+import { ListingApplicationAddressType } from "../types/listing-application-address-type"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -159,15 +158,15 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationPickUpAddressOfficeHours: string | null
 
-  @Column({ type: "enum", enum: ListingApplicationPickUpAddressType, nullable: true })
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingApplicationPickUpAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
-    enum: ListingApplicationPickUpAddressType,
-    enumName: "ListingApplicationPickUpAddressType",
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
   })
-  applicationPickUpAddressType?: ListingApplicationPickUpAddressType | null
+  applicationPickUpAddressType?: ListingApplicationAddressType | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -182,15 +181,15 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationDropOffAddressOfficeHours: string | null
 
-  @Column({ type: "enum", enum: ListingApplicationDropOffAddressType, nullable: true })
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingApplicationDropOffAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({
-    enum: ListingApplicationDropOffAddressType,
-    enumName: "ListingApplicationDropOffAddressType",
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
   })
-  applicationDropOffAddressType?: ListingApplicationDropOffAddressType | null
+  applicationDropOffAddressType?: ListingApplicationAddressType | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()

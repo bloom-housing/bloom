@@ -1,20 +1,15 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import {
-  ListingApplicationDropOffAddressType,
-  ListingApplicationPickUpAddressType,
-} from "@bloom-housing/backend-core/types"
+import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
 
-  const getAddressString = (
-    addressType: ListingApplicationPickUpAddressType | ListingApplicationDropOffAddressType
-  ): string | undefined => {
-    if (addressType === ListingApplicationPickUpAddressType.leasingAgent)
+  const getAddressString = (addressType: ListingApplicationAddressType): string | undefined => {
+    if (addressType === ListingApplicationAddressType.leasingAgent)
       return t("listings.leasingAgentAddress")
-    if (addressType === ListingApplicationPickUpAddressType.mailingAddress)
+    if (addressType === ListingApplicationAddressType.mailingAddress)
       return t("application.contact.mailingAddress")
   }
 

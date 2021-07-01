@@ -3145,10 +3145,10 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
-  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+  applicationPickUpAddressType?: ListingApplicationAddressType;
 
   /**  */
-  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+  applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
   applicationMailingAddress: CombinedApplicationAddressTypes;
@@ -3457,10 +3457,10 @@ export interface UnitCreate {
 
 export interface ListingCreate {
   /**  */
-  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+  applicationPickUpAddressType?: ListingApplicationAddressType;
 
   /**  */
-  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+  applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
   applicationMailingAddress: CombinedApplicationAddressTypes;
@@ -3771,10 +3771,10 @@ export interface UnitUpdate {
 
 export interface ListingUpdate {
   /**  */
-  applicationPickUpAddressType?: ListingApplicationPickUpAddressType;
+  applicationPickUpAddressType?: ListingApplicationAddressType;
 
   /**  */
-  applicationDropOffAddressType?: ListingApplicationDropOffAddressType;
+  applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
   applicationMailingAddress: CombinedApplicationAddressTypes;
@@ -4447,12 +4447,8 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
-export enum ListingApplicationPickUpAddressType {
-  'leasingAgent' = 'leasingAgent',
-  'mailingAddress' = 'mailingAddress'
-}
 
-export enum ListingApplicationDropOffAddressType {
+export enum ListingApplicationAddressType {
   'leasingAgent' = 'leasingAgent',
   'mailingAddress' = 'mailingAddress'
 }
