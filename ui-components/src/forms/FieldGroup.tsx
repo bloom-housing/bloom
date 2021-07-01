@@ -42,26 +42,23 @@ const FieldGroup = ({
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""}`}>
-        {fields?.map((item) => {
-          console.log("item = ", item)
-          return (
-            <div className={`field ${fieldClassName || ""}`} key={item.id}>
-              <input
-                aria-describedby={`${name}-error`}
-                aria-invalid={!!error || false}
-                type={type}
-                id={item.id}
-                defaultValue={item.value || item.id}
-                name={name}
-                defaultChecked={item.defaultChecked || false}
-                ref={register(validation)}
-              />
-              <label htmlFor={item.id} className="font-semibold">
-                {item.label}
-              </label>
-            </div>
-          )
-        })}
+        {fields?.map((item) => (
+          <div className={`field ${fieldClassName || ""}`} key={item.id}>
+            <input
+              aria-describedby={`${name}-error`}
+              aria-invalid={!!error || false}
+              type={type}
+              id={item.id}
+              defaultValue={item.value || item.id}
+              name={name}
+              defaultChecked={item.defaultChecked || false}
+              ref={register(validation)}
+            />
+            <label htmlFor={item.id} className="font-semibold">
+              {item.label}
+            </label>
+          </div>
+        ))}
 
         {error && errorMessage && (
           <ErrorMessage id={`${name}-error`} error={error}>

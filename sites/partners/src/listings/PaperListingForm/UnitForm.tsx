@@ -42,7 +42,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
       status: current?.status,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiChart: current?.amiChart.id,
+      amiChart: current?.amiChart?.id,
       amiPercentage: current?.amiPercentage,
       monthlyIncomeMin: current?.monthlyIncomeMin,
       monthlyRent: current?.monthlyRent,
