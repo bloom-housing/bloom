@@ -19,7 +19,7 @@ export class addPickUpAndDropOffColumnsToListing1624959910201 implements Migrati
     await queryRunner.query(
       `ALTER TABLE "listings" DROP COLUMN "application_drop_off_address_type"`
     )
-    await queryRunner.query(`DROP TYPE "listings_application_address_type_enum"`)
     await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN "application_pick_up_address_type"`)
+    await queryRunner.query(`DROP TYPE "listings_application_address_type_enum"`)
   }
 }
