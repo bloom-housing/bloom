@@ -146,7 +146,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    * fetch options
    */
   const { data: amiCharts = [] } = useAmiChartList()
-
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
@@ -201,8 +200,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           case "twoBdrm":
             unit.numBedrooms = 2
             break
-          default:
+          case "oneBdrm":
             unit.numBedrooms = 1
+            break
+          default:
+            unit.numBedrooms = null
         }
 
         unit.floor = stringToNumber(unit.floor)

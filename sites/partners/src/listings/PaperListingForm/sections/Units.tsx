@@ -27,7 +27,6 @@ type UnitProps = {
 
 const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
-  // const [unitDrawerOpen, setUnitDrawerOpen] = useState<boolean>(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
 
   const formMethods = useFormContext()

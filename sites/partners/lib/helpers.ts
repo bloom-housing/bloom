@@ -1,6 +1,6 @@
 import { t } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import { AmiChart, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
 import { TempUnit } from "../src/listings/PaperListingForm"
 
 type DateTimePST = {
@@ -81,9 +81,16 @@ export const booleanToString = (bool: boolean): string => {
 }
 
 export const getRentType = (unit: TempUnit): string | null => {
-  return unit?.monthlyIncomeMin || unit?.monthlyRent
+  return unit?.monthlyIncomeMin && unit?.monthlyRent
     ? "fixed"
     : unit?.monthlyRentAsPercentOfIncome
     ? "percentage"
     : null
+}
+
+export const getAmiChartId = (chart: AmiChart | string | undefined): string | null => {
+  if (chart === undefined) {
+    return null
+  }
+  return chart instanceof Object ? chart.id : chart
 }

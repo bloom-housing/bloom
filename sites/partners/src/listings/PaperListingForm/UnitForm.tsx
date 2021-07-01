@@ -17,7 +17,7 @@ import {
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
 import { AmiChart } from "@bloom-housing/backend-core/types"
-import { getRentType } from "../../../lib/helpers"
+import { getAmiChartId, getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -26,6 +26,8 @@ type UnitFormProps = {
   amiCharts: AmiChart[]
   currentTempId: number
 }
+
+const STATUS = "available"
 
 const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFormProps) => {
   const [current, setCurrent] = useState<TempUnit>(null)
@@ -39,10 +41,10 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
       numBathrooms: current?.numBathrooms,
       floor: current?.floor,
       sqFeet: current?.sqFeet,
-      status: current?.status,
+      status: STATUS,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiChart: current?.amiChart?.id,
+      amiChart: getAmiChartId(current?.amiChart),
       amiPercentage: current?.amiPercentage,
       monthlyIncomeMin: current?.monthlyIncomeMin,
       monthlyRent: current?.monthlyRent,
@@ -59,7 +61,8 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
-    reset({ ...unit, rentType: getRentType(unit) })
+    const amiChartId = getAmiChartId(unit?.amiChart)
+    reset({ ...unit, rentType: getRentType(unit), status: STATUS, amiChart: amiChartId })
   }, [units, setCurrent, tempId, reset])
 
   const rentType = watch("rentType")
@@ -74,7 +77,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
     if (data.rentType === "fixed") {
       delete data.monthlyRentAsPercentOfIncome
     } else if (data.rentType === "percentage") {
-      delete data.monthlyIncomeMin
+      data.monthlyIncomeMin = "0"
       delete data.monthlyRent
     }
 
@@ -85,7 +88,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
     }
 
     const current = units.find((unit) => unit.tempId === tempId)
-
+    console.log("formData = ", formData)
     if (current) {
       onSubmit({ ...formData, id: current.id, tempId: current.tempId })
     } else {
@@ -93,7 +96,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
     }
     setTempId(null)
     if (action === "copyNew") {
-      setCurrent({ ...formData, id: current.id, tempId: units.length + 1 })
+      setCurrent({ ...formData, id: current?.id, tempId: units.length + 1 })
       reset({ ...formData })
     } else if (action === "saveNew") {
       setCurrent(null)
@@ -201,6 +204,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
                 placeholder={t("listings.unit.unitStatus")}
                 register={register}
                 readerOnly
+                disabled
               />
             </ViewItem>
           </GridCell>
