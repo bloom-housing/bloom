@@ -74,13 +74,6 @@ const DetailApplicationAddress = () => {
                 {listing.applicationMailingAddress.zipCode}
               </ViewItem>
             </GridSection>
-            <GridSection columns={3}>
-              <GridCell span={2}>
-                <ViewItem label={t("leasingAgent.officeHours")}>
-                  {listing.applicationMailingAddress.officeHours}
-                </ViewItem>
-              </GridCell>
-            </GridSection>
           </GridSection>
         )}
 
@@ -125,7 +118,7 @@ const DetailApplicationAddress = () => {
             <GridSection columns={3}>
               <GridCell span={2}>
                 <ViewItem label={t("leasingAgent.officeHours")}>
-                  {listing.applicationPickUpAddress.officeHours}
+                  {listing.applicationPickUpAddressOfficeHours}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -173,7 +166,7 @@ const DetailApplicationAddress = () => {
             <GridSection columns={3}>
               <GridCell span={2}>
                 <ViewItem label={t("leasingAgent.officeHours")}>
-                  {listing.applicationDropOffAddress.officeHours}
+                  {listing.applicationDropOffAddressOfficeHours}
                 </ViewItem>
               </GridCell>
             </GridSection>
