@@ -27,15 +27,21 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const { register, watch } = formMethods
   const postmarksConsidered: YesNoAnswer = watch(
     "arePostmarksConsidered",
-    listing && listing?.postmarkedApplicationsReceivedByDate !== null ? "yes" : "no"
+    listing && listing?.postmarkedApplicationsReceivedByDate !== null
+      ? YesNoAnswer.Yes
+      : YesNoAnswer.No
   )
   const applicationsPickedUp: YesNoAnswer = watch(
     "canPaperApplicationsBePickedUp",
-    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType ? "yes" : "no"
+    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
+      ? YesNoAnswer.Yes
+      : YesNoAnswer.No
   )
   const applicationsDroppedOff: YesNoAnswer = watch(
     "canApplicationsBeDroppedOff",
-    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType ? "yes" : "no"
+    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
+      ? YesNoAnswer.Yes
+      : YesNoAnswer.No
   )
   const applicationsPickedUpAddress = watch(
     "whereApplicationsPickedUp",
