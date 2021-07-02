@@ -52,7 +52,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
         locale: locale,
       }))
     ),
-    fallback: false,
+    fallback: true,
   }
 }
 
