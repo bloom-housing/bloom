@@ -66,9 +66,10 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            yarn test:backend:core:dbsetup
-            yarn test:backend:core
-            yarn test:e2e:backend:core
+            cd backend/core
+            yarn db:reseed
+            yarn test
+            yarn test:e2e
           environment:
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
