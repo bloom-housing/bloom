@@ -24,6 +24,10 @@ import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/s
 import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
 import DetailLeasingAgent from "../../../src/listings/PaperListingDetails/sections/DetailLeasingAgent"
 import DetailAdditionalFees from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalFees"
+import { DetailUnits } from "../../../src/listings/PaperListingDetails/sections/DetailUnits"
+import DetailUnitDrawer, {
+  UnitDrawer,
+} from "../../../src/listings/PaperListingDetails/DetailsUnitDrawer"
 import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/sections/DetailBuildingFeatures"
 import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
 
@@ -32,6 +36,7 @@ export default function ApplicationsList() {
   const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const [errorAlert, setErrorAlert] = useState(false)
+  const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
 
   const listingStatus = useMemo(() => {
     switch (listingDto?.status) {
@@ -108,6 +113,7 @@ export default function ApplicationsList() {
                 <DetailListingIntro />
                 <DetailBuildingDetails />
                 <DetailApplication />
+                <DetailUnits setUnitDrawer={setUnitDrawer} />
                 <DetailAdditionalFees />
                 <DetailBuildingFeatures />
                 <DetailAdditionalEligibility />
@@ -123,6 +129,8 @@ export default function ApplicationsList() {
           </div>
         </section>
       </Layout>
+
+      <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
     </ListingContext.Provider>
   )
 }
