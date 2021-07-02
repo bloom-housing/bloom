@@ -3151,6 +3151,15 @@ export interface Listing {
   applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3171,17 +3180,14 @@ export interface Listing {
   /**  */
   preferences: Preference[];
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
-
-  /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -3256,9 +3262,6 @@ export interface Listing {
   updatedAt: Date;
 
   /**  */
-  additionalApplicationSubmissionNotes?: string;
-
-  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -3271,7 +3274,7 @@ export interface Listing {
   applicationDueDate: Date;
 
   /**  */
-  applicationDueTime: Date;
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;
@@ -3284,9 +3287,6 @@ export interface Listing {
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -3466,6 +3466,15 @@ export interface ListingCreate {
   applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3477,17 +3486,14 @@ export interface ListingCreate {
   /**  */
   preferences: PreferenceCreate[];
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
-
-  /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -3553,9 +3559,6 @@ export interface ListingCreate {
   result?: CombinedResultTypes;
 
   /**  */
-  additionalApplicationSubmissionNotes?: string;
-
-  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -3568,7 +3571,7 @@ export interface ListingCreate {
   applicationDueDate: Date;
 
   /**  */
-  applicationDueTime: Date;
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;
@@ -3581,9 +3584,6 @@ export interface ListingCreate {
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -3783,6 +3783,15 @@ export interface ListingUpdate {
   applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3803,17 +3812,14 @@ export interface ListingUpdate {
   /**  */
   preferences: PreferenceUpdate[];
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
-
-  /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: AssetUpdate;
@@ -3879,9 +3885,6 @@ export interface ListingUpdate {
   result?: AssetUpdate;
 
   /**  */
-  additionalApplicationSubmissionNotes?: string;
-
-  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -3894,7 +3897,7 @@ export interface ListingUpdate {
   applicationDueDate: Date;
 
   /**  */
-  applicationDueTime: Date;
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;
@@ -3907,9 +3910,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   buildingSelectionCriteria: string;
@@ -4456,6 +4456,7 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
+
 export enum ListingApplicationAddressType {
   'leasingAgent' = 'leasingAgent',
   'mailingAddress' = 'mailingAddress'
@@ -4478,12 +4479,12 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
-export type CombinedAmiChartTypes = AmiChart;
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup'
+  "PaperPickup" = "PaperPickup",
 }
 
 export enum ListingEventType {
@@ -4491,14 +4492,12 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = AddressUpdate;
-export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
-export type CombinedApplicationDropOffAddressTypes = AddressCreate;
-export type CombinedApplicationMailingAddressTypes = AddressCreate;
-export type CombinedImageTypes = AssetCreate;
-export type CombinedLeasingAgentAddressTypes = AddressUpdate;
-export type CombinedResultTypes = AssetCreate;
-export type CombinedWhatToExpectTypes = WhatToExpect;
+export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedImageTypes = (AssetCreate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedResultTypes = (AssetCreate & any) | null;
+export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
