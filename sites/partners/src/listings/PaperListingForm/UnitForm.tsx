@@ -88,7 +88,6 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
     }
 
     const current = units.find((unit) => unit.tempId === tempId)
-    console.log("formData = ", formData)
     if (current) {
       onSubmit({ ...formData, id: current.id, tempId: current.tempId })
     } else {

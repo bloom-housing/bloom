@@ -17,8 +17,7 @@ import {
   CSVFormattingType,
   CountyCode,
   Unit,
-  ListingCreate,
-  ListingUpdate,
+  Listing,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -36,11 +35,10 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 
-export type FormListing = ListingCreate &
-  ListingUpdate & {
-    waitlistOpenQuestion?: YesNoAnswer
-    waitlistSizeQuestion?: YesNoAnswer
-  }
+export type FormListing = Listing & {
+  waitlistOpenQuestion?: YesNoAnswer
+  waitlistSizeQuestion?: YesNoAnswer
+}
 
 type ListingFormProps = {
   listing?: FormListing
@@ -194,8 +192,50 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+    units.forEach((unit) => {
+      switch (unit.unitType) {
+        case "threeBdrm":
+          unit.numBedrooms = 3
+          break
+        case "twoBdrm":
+          unit.numBedrooms = 2
+          break
+        case "oneBdrm":
+          unit.numBedrooms = 1
+          break
+        default:
+          unit.numBedrooms = null
+      }
+
+      unit.floor = stringToNumber(unit.floor)
+      unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
+      unit.minOccupancy = stringToNumber(unit.minOccupancy)
+      unit.numBathrooms = stringToNumber(unit.numBathrooms)
+
+      if (unit.sqFeet.length === 0) {
+        delete unit.sqFeet
+      }
+
+      if (unit.amiChart?.length) {
+        const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
+        unit.amiChart = chart
+      } else {
+        delete unit.amiChart
+      }
+
+      if (unit.id === undefined) {
+        unit.id = ""
+        delete unit.updatedAt
+        delete unit.createdAt
+      }
+
+      delete unit.tempId
+    })
+
     return {
       ...data,
+      disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
+      units: units,
       isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
       yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
       waitlistCurrentSize:
@@ -215,52 +255,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert(null)
     setLoading(true)
     try {
-      // data cleanup and formatting
-      data.disableUnitsAccordion = stringToBoolean(data.disableUnitsAccordion)
-      units.forEach((unit) => {
-        switch (unit.unitType) {
-          case "threeBdrm":
-            unit.numBedrooms = 3
-            break
-          case "twoBdrm":
-            unit.numBedrooms = 2
-            break
-          case "oneBdrm":
-            unit.numBedrooms = 1
-            break
-          default:
-            unit.numBedrooms = null
-        }
-
-        unit.floor = stringToNumber(unit.floor)
-        unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
-        unit.minOccupancy = stringToNumber(unit.minOccupancy)
-        unit.numBathrooms = stringToNumber(unit.numBathrooms)
-
-        if (unit.sqFeet.length === 0) {
-          delete unit.sqFeet
-        }
-
-        if (unit.amiChart?.length) {
-          const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
-          unit.amiChart = chart
-        } else {
-          delete unit.amiChart
-        }
-
-        if (unit.id === undefined) {
-          unit.id = ""
-          delete unit.updatedAt
-          delete unit.createdAt
-        }
-
-        delete unit.tempId
-      })
-      data.units = units
-      const typedData: FormListing = {
-        ...data,
-        yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-      }
       const formattedData = formatFormData(data)
       const result = editMode
         ? await listingsService.update({
