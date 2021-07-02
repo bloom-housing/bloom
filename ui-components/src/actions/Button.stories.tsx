@@ -125,3 +125,16 @@ export const loading = () => (
 export const inaccessible = () => (
   <button style={{ backgroundColor: "red", color: "darkRed" }}>Inaccessible button</button>
 )
+
+inaccessible.parameters = {
+  a11y: {
+    config: {
+      rules: [
+        {
+          id: 'color-contrast',
+          enabled: false
+        }
+      ]
+    }
+  }
+}

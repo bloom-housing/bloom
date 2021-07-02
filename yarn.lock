@@ -4788,7 +4788,7 @@
     react-select "^3.0.8"
     regenerator-runtime "^0.13.7"
 
-"@storybook/addon-storyshots-puppeteer@^6.3.2":
+"@storybook/addon-storyshots-puppeteer@^6.0.26":
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/@storybook/addon-storyshots-puppeteer/-/addon-storyshots-puppeteer-6.3.2.tgz#df4bbbaa8d2a70dcc12c405c6b9979fbce8be473"
   integrity sha512-gk182BBvSYmP61PRHxvY7Lul+coH7PDYRtnuub1t0ggCFZIuKqAXlQ9uaK8jXQmNGpTeEPMKD8Pny0iQagoHEg==

@@ -24,4 +24,15 @@ export const parameters = {
       ],
     },
   },
+  a11y: {
+    config: {
+      rules: [
+        // An example of how you can turn off a specific rule
+        // {
+        //   id: 'color-contrast',
+        //   enabled: false
+        // }
+    ]
+    }
+  }
 }
