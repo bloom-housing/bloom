@@ -3274,6 +3274,9 @@ export interface Listing {
   applicationDueDate: Date;
 
   /**  */
+  applicationDueTime: Date
+
+  /**  */
   applicationOpenDate: Date;
 
   /**  */
@@ -3566,6 +3569,9 @@ export interface ListingCreate {
 
   /**  */
   applicationDueDate: Date;
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;
@@ -3889,6 +3895,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationDueDate: Date;
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;

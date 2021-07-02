@@ -37,11 +37,12 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
 
   return (
     <div>
-      <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.sections.rankingsResultsTitle")}</span>
-        <span className="form-section__description">
-          {t("listings.sections.rankingsResultsSubtitle")}
-        </span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.rankingsResultsTitle")}
+        description={t("listings.sections.rankingsResultsSubtitle")}
+      >
         <GridSection columns={8} className={"flex items-center"}>
           <GridCell span={2}>
             <p className="field-label m-4 ml-0">{t("listings.waitlist.openQuestion")}</p>

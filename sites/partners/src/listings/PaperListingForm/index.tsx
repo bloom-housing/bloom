@@ -10,6 +10,7 @@ import {
   StatusBar,
   AppearanceStyleType,
   Button,
+  TimeFieldPeriod,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -24,7 +25,6 @@ import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
 
 import Aside from "../Aside"
-import FormListingData from "./sections/FormListingData"
 import AdditionalDetails from "./sections/AdditionalDetails"
 import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
@@ -37,10 +37,20 @@ import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
+import ApplicationDates from "./sections/ApplicationDates"
 
 export type FormListing = Listing & {
-  waitlistOpenQuestion?: YesNoAnswer
-  waitlistSizeQuestion?: YesNoAnswer
+  applicationDueDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  applicationDueTimeField?: {
+    hours: string
+    minutes: string
+    seconds: string
+    period: TimeFieldPeriod
+  }
   whereApplicationsDroppedOff?: ListingApplicationAddressType
   whereApplicationsPickedUp?: ListingApplicationAddressType
   arePaperAppsMailedToAnotherAddress?: boolean
@@ -52,6 +62,8 @@ export type FormListing = Listing & {
     day: string
     year: string
   }
+  waitlistOpenQuestion?: YesNoAnswer
+  waitlistSizeQuestion?: YesNoAnswer
 }
 
 export const addressTypes = {
@@ -82,6 +94,7 @@ const defaults: FormListing = {
   updatedAt: undefined,
   applicationAddress: defaultAddress,
   applicationDueDate: new Date(),
+  applicationDueTime: null,
   applicationFee: "0",
   applicationMethods: [],
   applicationOpenDate: new Date(moment().subtract(10).format()),
@@ -215,6 +228,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+
+    const getDueTime = () => {
+      let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
+      if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
+        dueTimeHours = 0
+      }
+      if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
+        dueTimeHours = dueTimeHours + 12
+      }
+      const dueTime = new Date()
+      dueTime.setHours(
+        dueTimeHours,
+        parseInt(data.applicationDueTimeField.minutes),
+        parseInt(data.applicationDueTimeField.seconds)
+      )
+      return dueTime
+    }
     units.forEach((unit) => {
       switch (unit.unitType) {
         case "threeBdrm":
@@ -257,9 +287,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
     return {
       ...data,
+      applicationDueTime: getDueTime(),
       disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
       units: units,
       isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+      applicationDueDate: new Date(
+        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+      ),
       yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
       waitlistCurrentSize:
         data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
@@ -379,7 +413,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <ListingIntro />
-                    <FormListingData />
                     <BuildingDetails />
                     <Units
                       units={units}
@@ -394,6 +427,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
                     <ApplicationAddress listing={listing} />
+                    <ApplicationDates listing={listing} />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">

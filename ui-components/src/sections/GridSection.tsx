@@ -19,6 +19,7 @@ export interface GridSectionProps {
   title?: string
   edit?: string
   subtitle?: string
+  description?: string
   tinted?: boolean
   grid?: boolean
   columns?: number
@@ -67,6 +68,9 @@ const GridSection = (props: GridSectionProps) => {
             </span>
           )}
           {props.subtitle && <h3 className={subtitleClasses.join(" ")}>{props.subtitle}</h3>}
+          {props.description && (
+            <span className={"grid-section__description"}>{props.description}</span>
+          )}
         </header>
       )}
 
