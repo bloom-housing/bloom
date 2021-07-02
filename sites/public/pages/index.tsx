@@ -89,5 +89,5 @@ export async function getStaticProps() {
     console.error(error)
   }
 
-  return { props: { listings } }
+  return { props: { listings }, revalidate: process.env.cacheRevalidate }
 }

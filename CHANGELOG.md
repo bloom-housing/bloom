@@ -71,6 +71,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Rankings and Results section to listing management ([#1433](https://github.com/bloom-housing/bloom/pull/1433)) (Emily Jablonski)
   - Add Application Address section to listing management ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Emily Jablonski)
   - Add Application Dates section to listing management ([#1432](https://github.com/bloom-housing/bloom/pull/1432)) (Emily Jablonski)
+  - Adds cache revalidation to frontend public app
 
 - Fixed:
 

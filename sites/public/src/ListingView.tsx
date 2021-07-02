@@ -35,6 +35,7 @@ import {
   ReferralApplication,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
+import { ErrorPage } from "../pages/_error"
 
 interface ListingProps {
   listing: Listing
@@ -44,6 +45,10 @@ interface ListingProps {
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing, preview = false } = props
+
+  if (!listing) {
+    return <ErrorPage />
+  }
 
   const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
 
