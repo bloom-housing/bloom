@@ -112,6 +112,7 @@ All notable changes to this project will be documented in this file. The format 
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
   - Icon support for standard variants of Button component ([#1268](https://github.com/bloom-housing/bloom/pull/1268)) (Jared White)
   - Generic date component ([#1392](https://github.com/bloom-housing/bloom/pull/1392)) (Emily Jablonski)
+  - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
 
 - Fixed:
 
