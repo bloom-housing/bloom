@@ -16,14 +16,16 @@ const DetailApplicationDates = () => {
       <GridSection columns={3}>
         <GridCell>
           <ViewItem label={t("listings.applicationDeadline")}>
-            {listing.applicationDueDate &&
-              moment(new Date(listing?.applicationDueDate)).utc().format("MM/DD/YYYY")}
+            {listing.applicationDueDate
+              ? moment(new Date(listing?.applicationDueDate)).utc().format("MM/DD/YYYY")
+              : t("t.none")}
           </ViewItem>
         </GridCell>
         <GridCell>
           <ViewItem label={t("listings.applicationDueTime")}>
-            {listing.applicationDueTime &&
-              moment(new Date(listing?.applicationDueTime)).format("hh:mm:ss A")}
+            {listing.applicationDueTime
+              ? moment(new Date(listing?.applicationDueTime)).format("hh:mm:ss A")
+              : t("t.none")}
           </ViewItem>
         </GridCell>
       </GridSection>

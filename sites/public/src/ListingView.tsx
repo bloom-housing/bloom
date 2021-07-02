@@ -161,6 +161,9 @@ export const ListingView = (props: ListingProps) => {
     !listing.applicationPickUpAddressType &&
     listing.applicationMethods?.length === 0
 
+  const showMap =
+    listing.buildingAddress.latitude !== null && listing.buildingAddress.longitude !== null
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -374,7 +377,7 @@ export const ListingView = (props: ListingProps) => {
           </div>
         </ListingDetailItem>
 
-        {listing.buildingAddress.latitude && listing.buildingAddress.longitude && (
+        {showMap && (
           <ListingDetailItem
             imageAlt={t("listings.neighborhoodBuildings")}
             imageSrc="/images/listing-neighborhood.svg"

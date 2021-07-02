@@ -31,6 +31,10 @@ import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicati
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
 
+export const getDetailFieldString = (listingString: string) => {
+  return listingString && listingString !== "" ? listingString : t("t.none")
+}
+
 export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string
@@ -79,7 +83,7 @@ export default function ApplicationsList() {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitle")}</title>
+          <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
         <PageHeader
