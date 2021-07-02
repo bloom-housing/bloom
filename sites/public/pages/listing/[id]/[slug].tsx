@@ -65,5 +65,6 @@ export async function getStaticProps(context: { params: Record<string, string> }
     props: {
       listing: response.data,
     },
+    revalidate: 60,
   }
 }
