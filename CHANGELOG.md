@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
   - Terms page checkbox text changed to blue ([#1645](https://github.com/bloom-housing/bloom/pull/1645)) (Emily Jablonski)
+  - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
