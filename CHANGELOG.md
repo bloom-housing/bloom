@@ -66,6 +66,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Building Details and Intro section to listing management ([#1420](https://github.com/bloom-housing/bloom/pull/1420)) (Emily Jablonski)
   - Add Building Features section to listing management ([#1412](https://github.com/bloom-housing/bloom/pull/1412)) (Emily Jablonski)
   - Adds units to listings ([#1448](https://github.com/bloom-housing/bloom/pull/1448))
+  - Add Rankings and Results section to listing management ([#1433](https://github.com/bloom-housing/bloom/pull/1433)) (Emily Jablonski)
 
 - Fixed:
 

@@ -29,6 +29,7 @@ import DetailUnitDrawer, {
   UnitDrawer,
 } from "../../../src/listings/PaperListingDetails/DetailsUnitDrawer"
 import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/sections/DetailBuildingFeatures"
+import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -117,6 +118,7 @@ export default function ApplicationsList() {
                 <DetailBuildingFeatures />
                 <DetailAdditionalEligibility />
                 <DetailAdditionalDetails />
+                <DetailRankingsAndResults />
                 <DetailLeasingAgent />
               </div>
 

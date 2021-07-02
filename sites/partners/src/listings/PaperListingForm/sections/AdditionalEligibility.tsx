@@ -15,7 +15,7 @@ const AdditionalEligibility = () => {
           {t("listings.sections.additionalEligibilityTitle")}
         </span>
         <span className="form-section__description">
-          {t("listings.sections.additionalEligibilitySubtext")}{" "}
+          {t("listings.sections.additionalEligibilitySubtext")}
         </span>
         <GridSection columns={2}>
           <Textarea
