@@ -66,12 +66,9 @@ jobs:
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            sudo apt-get update
-            sudo apt-get install postgresql-client
-            cd backend/core
-            yarn db:reseed
-            yarn test
-            yarn test:e2e
+            yarn test:backend:core:dbsetup
+            yarn test:backend:core
+            yarn test:e2e:backend:core
           environment:
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
