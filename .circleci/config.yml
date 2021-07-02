@@ -61,12 +61,16 @@ jobs:
   jest-backend:
     executor: standard-node
     steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: DB Setup + Backend Core Tests
           command: |
-            yarn test:backend:core:dbsetup
-            yarn test:backend:core
-            yarn test:e2e:backend:core
+            sudo apt install postgresql-client
+            cd backend/core
+            yarn db:reseed
+            yarn test
+            yarn test:e2e
           environment:
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
