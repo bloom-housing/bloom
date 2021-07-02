@@ -58,7 +58,7 @@ export class ListingsService {
       const countIndex = arrayIndex<Listing>(counts, "id")
 
       listings.forEach((listing: Listing) => {
-        listing.applicationCount = countIndex[listing.id].applicationCount
+        listing.applicationCount = countIndex[listing.id].applicationCount || 0
       })
     }
 
@@ -84,7 +84,11 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
-
+    listingDto.units.forEach((unit) => {
+      if (unit.id.length === 0 || unit.id === "undefined") {
+        delete unit.id
+      }
+    })
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
       property: plainToClass(
