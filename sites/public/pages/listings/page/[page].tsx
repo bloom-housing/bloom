@@ -47,12 +47,12 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
         params: { page: response.meta.totalPages },
         locale: locale,
       })),
-      fallback: "blocking",
+      fallback: false,
     }
   } catch (e) {
     return {
       paths: [],
-      fallback: "blocking",
+      fallback: false,
     }
   }
 }
