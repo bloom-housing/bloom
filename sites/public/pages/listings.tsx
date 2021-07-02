@@ -65,7 +65,9 @@ export async function getStaticProps() {
   let closedListings = []
 
   try {
-    const response = await axios.get(process.env.listingServiceUrl)
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: { page: "1", limit: "10" },
+    })
     const nowTime = moment()
     openListings = response.data.items.filter((listing: Listing) => {
       return (
