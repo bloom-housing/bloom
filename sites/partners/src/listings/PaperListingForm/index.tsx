@@ -16,10 +16,12 @@ import {
   ListingStatus,
   CSVFormattingType,
   CountyCode,
+  ListingApplicationAddressType,
   Unit,
   Listing,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
+import moment from "moment"
 
 import Aside from "../Aside"
 import FormListingData from "./sections/FormListingData"
@@ -34,10 +36,27 @@ import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
+import ApplicationAddress from "./sections/ApplicationAddress"
 
 export type FormListing = Listing & {
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
+  whereApplicationsDroppedOff?: ListingApplicationAddressType
+  whereApplicationsPickedUp?: ListingApplicationAddressType
+  arePaperAppsMailedToAnotherAddress?: boolean
+  arePostmarksConsidered?: boolean
+  canApplicationsBeDroppedOff?: boolean
+  canPaperApplicationsBePickedUp?: boolean
+  postMarkDate?: {
+    month: string
+    day: string
+    year: string
+  }
+}
+
+export const addressTypes = {
+  ...ListingApplicationAddressType,
+  anotherAddress: "anotherAddress",
 }
 
 type ListingFormProps = {
@@ -65,10 +84,13 @@ const defaults: FormListing = {
   applicationDueDate: new Date(),
   applicationFee: "0",
   applicationMethods: [],
-  applicationOpenDate: new Date(),
+  applicationOpenDate: new Date(moment().subtract(10).format()),
   applicationOrganization: "",
-  applicationPickUpAddress: defaultAddress,
+  applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
+  applicationMailingAddress: null,
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
   countyCode: CountyCode.Alameda,
@@ -88,7 +110,8 @@ const defaults: FormListing = {
   leasingAgentPhone: "",
   leasingAgentTitle: "",
   name: "",
-  postmarkedApplicationsReceivedByDate: new Date(),
+  postMarkDate: null,
+  postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
   rentalAssistance: "",
@@ -244,6 +267,33 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
       waitlistOpenSpots:
         data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+      postmarkedApplicationsReceivedByDate:
+        data.postMarkDate && data.arePostmarksConsidered
+          ? new Date(
+              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
+            )
+          : null,
+      applicationDropOffAddressType:
+        addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
+          ? addressTypes[data.whereApplicationsDroppedOff]
+          : null,
+      applicationPickUpAddressType:
+        addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
+          ? addressTypes[data.whereApplicationsPickedUp]
+          : null,
+      applicationDropOffAddress:
+        data.canApplicationsBeDroppedOff &&
+        data.whereApplicationsPickedUp === addressTypes.anotherAddress
+          ? data.applicationDropOffAddress
+          : null,
+      applicationPickUpAddress:
+        data.canPaperApplicationsBePickedUp &&
+        data.whereApplicationsPickedUp === addressTypes.anotherAddress
+          ? data.applicationPickUpAddress
+          : null,
+      applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+        ? data.applicationMailingAddress
+        : null,
     }
   }
 
@@ -343,6 +393,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <AdditionalDetails />
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
+                    <ApplicationAddress listing={listing} />
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">

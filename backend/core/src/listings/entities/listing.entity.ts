@@ -42,6 +42,7 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
+import { ListingApplicationAddressType } from "../types/listing-application-address-type"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -62,6 +63,12 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  additionalApplicationSubmissionNotes?: string | null
 
   @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
   @Expose()
@@ -150,6 +157,46 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationPickUpAddressOfficeHours: string | null
+
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
+  })
+  applicationPickUpAddressType?: ListingApplicationAddressType | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  applicationDropOffAddress: AddressDto | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  applicationDropOffAddressOfficeHours: string | null
+
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
+  })
+  applicationDropOffAddressType?: ListingApplicationAddressType | null
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressDto)
+  applicationMailingAddress: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()

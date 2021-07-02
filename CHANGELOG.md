@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file. The format 
   - list and retrieve methods to `/assets` endpoint
   - added result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
   - added resultLink, isWaitlistOpen and waitlistOpenSpots to Listing model
+  - Added applicationPickUpAddressType and applicationDropOffAddressType columns to Listing model ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Michał Plebański)
 
 - Changed:
 
@@ -67,6 +68,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Building Features section to listing management ([#1412](https://github.com/bloom-housing/bloom/pull/1412)) (Emily Jablonski)
   - Adds units to listings ([#1448](https://github.com/bloom-housing/bloom/pull/1448))
   - Add Rankings and Results section to listing management ([#1433](https://github.com/bloom-housing/bloom/pull/1433)) (Emily Jablonski)
+  - Add Application Address section to listing management ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Emily Jablonski)
 
 - Fixed:
 

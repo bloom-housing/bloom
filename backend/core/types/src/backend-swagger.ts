@@ -3145,6 +3145,21 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3164,6 +3179,9 @@ export interface Listing {
 
   /**  */
   preferences: Preference[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -3439,6 +3457,21 @@ export interface UnitCreate {
 
 export interface ListingCreate {
   /**  */
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3449,6 +3482,9 @@ export interface ListingCreate {
 
   /**  */
   preferences: PreferenceCreate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -3735,6 +3771,21 @@ export interface UnitUpdate {
 
 export interface ListingUpdate {
   /**  */
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3754,6 +3805,9 @@ export interface ListingUpdate {
 
   /**  */
   preferences: PreferenceUpdate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
@@ -4393,6 +4447,12 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
+
+export enum ListingApplicationAddressType {
+  'leasingAgent' = 'leasingAgent',
+  'mailingAddress' = 'mailingAddress'
+}
+
 export enum ListingStatus {
   'active' = 'active',
   'pending' = 'pending',
@@ -4415,9 +4475,6 @@ export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
 }
 
 export enum ListingEventType {

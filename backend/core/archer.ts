@@ -1,11 +1,4 @@
-import {
-  AmiChart,
-  ApplicationMethodType,
-  CountyCode,
-  CSVFormattingType,
-  Listing,
-  ListingStatus,
-} from "./types"
+import { AmiChart, CountyCode, CSVFormattingType, Listing, ListingStatus } from "./types"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
@@ -247,6 +240,9 @@ export const ArcherListing: Listing = {
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   countyCode: CountyCode["San Jose"],
   depositMax: "",
   disableUnitsAccordion: false,
@@ -272,26 +268,7 @@ export const ArcherListing: Listing = {
     longitude: -121.91071,
   },
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationMethods: [
-    {
-      type: ApplicationMethodType.POBox,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.LeasingAgent,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.PaperPickup,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-  ],
+  applicationMethods: [],
   applicationOrganization: "98 Archer Street",
   // TODO confirm not used anywhere
   // applicationPhone: "(408) 217-8562",

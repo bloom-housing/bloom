@@ -33,9 +33,7 @@ import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
-  "applicationAddress",
   "applicationFlaggedSets",
-  "applicationPickUpAddress",
   "image",
   "jurisdiction",
   "leasingAgents",
@@ -62,6 +60,18 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   applicationPickUpAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationDropOffAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationMailingAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -291,8 +301,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "preferences",
-  "applicationAddress",
-  "applicationPickUpAddress",
   "image",
   "leasingAgentAddress",
   "leasingAgents",
@@ -336,6 +344,18 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationPickUpAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationDropOffAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationMailingAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -460,8 +480,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "preferences",
-  "applicationAddress",
-  "applicationPickUpAddress",
   "image",
   "leasingAgentAddress",
   "urlSlug",
@@ -522,6 +540,18 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationPickUpAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationDropOffAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AddressCreateDto)
+  applicationMailingAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

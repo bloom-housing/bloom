@@ -2346,18 +2346,6 @@ const coliseumUnits: Array<UnitSeedType> = [
 // Application Method Sets
 const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
-    type: ApplicationMethodType.POBox,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
     type: ApplicationMethodType.Internal,
     acceptsPostmarkedApplications: false,
     label: "Label",
@@ -2372,12 +2360,6 @@ const tritonApplicationMethods: Array<ApplicationMethodSeedType> = [
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
   },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
 ]
 
 const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
@@ -2386,12 +2368,6 @@ const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
     acceptsPostmarkedApplications: false,
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
   },
 ]
 
@@ -2430,6 +2406,9 @@ const defaultListing: ListingSeedType = {
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
   applicationFee: "20",
   applicationOpenDate: getDate(-10),
@@ -2496,6 +2475,9 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
@@ -2561,6 +2543,9 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
   applicationFee: "12",
   applicationOpenDate: getDate(-10),

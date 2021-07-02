@@ -1,10 +1,4 @@
-import {
-  AmiChart,
-  ApplicationMethodType,
-  CountyCode,
-  Listing,
-  ListingStatus,
-} from "./backend-swagger"
+import { AmiChart, CountyCode, Listing, ListingStatus } from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
@@ -592,7 +586,6 @@ export const ArcherListing: Listing = {
     bePreparedIfChosen: "",
   },
   status: ListingStatus.active,
-  postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
     id: "id",
     createdAt: new Date(),
@@ -605,26 +598,7 @@ export const ArcherListing: Listing = {
     longitude: -121.91071,
   },
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationMethods: [
-    {
-      type: ApplicationMethodType.POBox,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.LeasingAgent,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.PaperPickup,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-  ],
+  applicationMethods: [],
   applicationOrganization: "98 Archer Street",
   // TODO confirm not used anywhere
   // applicationPhone: "(408) 217-8562",

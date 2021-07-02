@@ -45,10 +45,12 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         </p>
       )}
 
-      <SidebarAddress
-        address={listing.leasingAgentAddress}
-        officeHours={listing.leasingAgentOfficeHours}
-      />
+      {listing.leasingAgentAddress && (
+        <SidebarAddress
+          address={listing.leasingAgentAddress}
+          officeHours={listing.leasingAgentOfficeHours}
+        />
+      )}
     </section>
   )
 }
