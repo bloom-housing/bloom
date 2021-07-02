@@ -26,7 +26,7 @@ const ImageCard = (props: ImageCardProps) => {
   const image = (
     <div className="image-card__wrapper">
       <figure className="image-card">
-        {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}
+        {props.imageUrl && <img src={props.imageUrl} alt={"A picture of the building"} />}
         {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
 
         <figcaption className="image-card__figcaption">

@@ -18,13 +18,13 @@ const InfoCard = (props: InfoCardProps) => {
   return (
     <div className={wrapperClasses.join(" ")}>
       {props.externalHref ? (
-        <h4 className="info-card__title">
+        <h3 className="info-card__title">
           <a href={props.externalHref} target="_blank">
             {props.title}
           </a>
-        </h4>
+        </h3>
       ) : (
-        <h4 className="info-card__title">{props.title}</h4>
+        <h3 className="info-card__title">{props.title}</h3>
       )}
       {typeof props.children == "string" ? (
         <div className="markdown">

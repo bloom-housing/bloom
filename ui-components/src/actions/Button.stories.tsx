@@ -126,6 +126,7 @@ export const inaccessible = () => (
   <button style={{ backgroundColor: "red", color: "darkRed" }}>Inaccessible button</button>
 )
 
+// Example of how you can override axe a11y checks
 inaccessible.parameters = {
   a11y: {
     config: {
