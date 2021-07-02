@@ -19,7 +19,6 @@ import { ListingContext } from "../../../src/listings/ListingContext"
 import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../src/listings/PaperListingDetails/sections/DetailListingIntro"
 import DetailBuildingDetails from "../../../src/listings/PaperListingDetails/sections/DetailBuildingDetails"
-import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
 import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
 import DetailLeasingAgent from "../../../src/listings/PaperListingDetails/sections/DetailLeasingAgent"
@@ -114,7 +113,6 @@ export default function ApplicationsList() {
                 <DetailListingData />
                 <DetailListingIntro />
                 <DetailBuildingDetails />
-                <DetailApplication />
                 <DetailUnits setUnitDrawer={setUnitDrawer} />
                 <DetailAdditionalFees />
                 <DetailBuildingFeatures />
