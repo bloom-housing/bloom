@@ -7,6 +7,6 @@ import * as path from "path"
 initStoryshots({
   suite: "a11y checks",
   test: axeTest({
-    storybookUrl: `file://${path.resolve(__dirname, "../static-storybook")}`,
+    storybookUrl: `file://${path.resolve(__dirname, "../storybook-static")}`,
   }),
 })
