@@ -2,10 +2,11 @@
 
 import initStoryshots from "@storybook/addon-storyshots"
 import { axeTest } from "@storybook/addon-storyshots-puppeteer"
+import * as path from "path"
 
 initStoryshots({
   suite: "a11y checks",
   test: axeTest({
-    storybookUrl: "http://192.168.0.102:62285",
+    storybookUrl: `file://${path.resolve(__dirname, "../static-storybook")}`,
   }),
 })
