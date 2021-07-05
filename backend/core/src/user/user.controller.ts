@@ -98,6 +98,6 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
   async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
-    return mapTo(UserDto, await this.userService.update(dto))
+    return mapTo(UserDto, await this.userService.update(dto, req.context.user))
   }
 }

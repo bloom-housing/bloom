@@ -5,7 +5,6 @@ import { Unit } from "../units/entities/unit.entity"
 import { Application } from "../applications/entities/application.entity"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { UserService } from "../user/user.service"
 import { User } from "../user/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
 import dbOptions = require("../../ormconfig")
@@ -22,6 +21,9 @@ import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/appl
 import { ApplicationsModule } from "../applications/applications.module"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { SharedModule } from "../shared/shared.module"
+import { EmailService } from "../shared/email/email.service"
+import { TranslationsModule } from "../translations/translations.module"
+import { CountyCodeResolverService } from "../shared/services/county-code-resolver.service"
 
 @Module({})
 export class SeederModule {
@@ -52,14 +54,16 @@ export class SeederModule {
           AmiChart,
           ApplicationFlaggedSet,
         ]),
+        TranslationsModule,
       ],
       providers: [
         AuthzService,
         ApplicationFlaggedSetsService,
-        UserService,
-        ListingsService,
         CsvBuilder,
         CsvEncoder,
+        CountyCodeResolverService,
+        EmailService,
+        ListingsService,
       ],
     }
   }

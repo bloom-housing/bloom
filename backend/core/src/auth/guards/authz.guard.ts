@@ -1,6 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common"
 import { AuthzService } from "../authz.service"
 import { Reflector } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
 
 const httpMethodsToAction = {
   PUT: "update",
@@ -15,8 +16,8 @@ export class AuthzGuard implements CanActivate {
   constructor(private authzService: AuthzService, private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext) {
-    const req = context.switchToHttp().getRequest()
-    const authUser = req.user
+    const req: ExpressRequest = context.switchToHttp().getRequest()
+    const authUser = req.context.user
     const type = this.reflector.getAllAndOverride<string>("authz_type", [
       context.getClass(),
       context.getHandler(),

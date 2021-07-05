@@ -15,7 +15,11 @@
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": false
+    "strict": false,
+    "typeRoots": [
+      "./src/typings/",
+      "./node_modules/@types"
+    ]
   },
   "exclude": ["node_modules", "dist"]
 }

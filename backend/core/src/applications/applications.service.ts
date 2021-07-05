@@ -1,11 +1,4 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-  Scope,
-} from "@nestjs/common"
+import { BadRequestException, HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -15,16 +8,14 @@ import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { assignDefined } from "../shared/assign-defined"
 import { authzActions, AuthzService } from "../auth/authz.service"
-import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
-import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
+import { AuthContext } from "../auth/types/auth-context"
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ApplicationsService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     private readonly applicationFlaggedSetsService: ApplicationFlaggedSetsService,
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
@@ -32,31 +23,32 @@ export class ApplicationsService {
     @InjectRepository(Application) private readonly repository: Repository<Application>
   ) {}
 
-  public async list(params: PaginatedApplicationListQueryParams) {
+  public async list(params: PaginatedApplicationListQueryParams, authContext: AuthContext) {
     const qb = this._getQb(params)
     const result = await qb.getMany()
     await Promise.all(
       result.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        await this.authorizeUserAction(authContext.user, application, authzActions.read)
       })
     )
     return result
   }
 
   async listPaginated(
-    params: PaginatedApplicationListQueryParams
+    params: PaginatedApplicationListQueryParams,
+    authContext: AuthContext
   ): Promise<Pagination<Application>> {
     const qb = this._getQb(params)
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
       result.items.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        await this.authorizeUserAction(authContext.user, application, authzActions.read)
       })
     )
     return result
   }
 
-  async submit(applicationCreateDto: ApplicationCreateDto) {
+  async submit(applicationCreateDto: ApplicationCreateDto, authContext: AuthContext) {
     applicationCreateDto.submissionDate = new Date()
     const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
     if (
@@ -65,33 +57,37 @@ export class ApplicationsService {
     ) {
       throw new BadRequestException("Listing is not open for application submission.")
     }
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    const application = await this._create(applicationCreateDto)
+    await this.authorizeUserAction(authContext.user, applicationCreateDto, authzActions.submit)
+    const application = await this._create(applicationCreateDto, authContext)
     return application
   }
 
-  async create(applicationCreateDto: ApplicationCreateDto) {
-    await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
-    return this._create(applicationCreateDto)
+  async create(applicationCreateDto: ApplicationCreateDto, authContext: AuthContext) {
+    await this.authorizeUserAction(authContext.user, applicationCreateDto, authzActions.create)
+    return this._create(applicationCreateDto, authContext)
   }
 
-  async findOne(applicationId: string) {
+  async findOne(applicationId: string, authContext: AuthContext) {
     const application = await this.repository.findOneOrFail({
       where: {
         id: applicationId,
       },
     })
-    await this.authorizeUserAction(this.req.user, application, authzActions.read)
+    await this.authorizeUserAction(authContext.user, application, authzActions.read)
     return application
   }
 
-  async update(applicationUpdateDto: ApplicationUpdateDto, existing?: Application) {
+  async update(
+    applicationUpdateDto: ApplicationUpdateDto,
+    authContext: AuthContext,
+    existing?: Application
+  ) {
     const application =
       existing ||
       (await this.repository.findOneOrFail({
         where: { id: applicationUpdateDto.id },
       }))
-    await this.authorizeUserAction(this.req.user, application, authzActions.update)
+    await this.authorizeUserAction(authContext.user, application, authzActions.update)
     assignDefined(application, {
       ...applicationUpdateDto,
       id: application.id,
@@ -101,8 +97,8 @@ export class ApplicationsService {
     return application
   }
 
-  async delete(applicationId: string) {
-    await this.findOne(applicationId)
+  async delete(applicationId: string, authContext: AuthContext) {
+    await this.findOne(applicationId, authContext)
     return await this.repository.softRemove({ id: applicationId })
   }
 
@@ -155,12 +151,15 @@ export class ApplicationsService {
     return qb
   }
 
-  private async _createApplication(applicationCreateDto: ApplicationUpdateDto) {
+  private async _createApplication(
+    applicationCreateDto: ApplicationUpdateDto,
+    authContext: AuthContext
+  ) {
     return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
       const applicationsRepository = transactionalEntityManager.getRepository(Application)
       const application = await applicationsRepository.save({
         ...applicationCreateDto,
-        user: this.req.user,
+        user: authContext.user,
       })
       await this.applicationFlaggedSetsService.onApplicationSave(
         application,
@@ -170,14 +169,14 @@ export class ApplicationsService {
     })
   }
 
-  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+  private async _create(applicationCreateDto: ApplicationUpdateDto, authContext: AuthContext) {
     let application: Application
 
     try {
       await retry(
         async (bail) => {
           try {
-            application = await this._createApplication(applicationCreateDto)
+            application = await this._createApplication(applicationCreateDto, authContext)
           } catch (e) {
             console.error(e.message)
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

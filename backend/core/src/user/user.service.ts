@@ -1,11 +1,9 @@
 import {
   BadRequestException,
   HttpException,
-  Inject,
   Injectable,
   NotFoundException,
-  Scope,
-  UnauthorizedException
+  UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "./entities/user.entity"
@@ -21,15 +19,13 @@ import { SALT_SIZE, SCRYPT_KEYLEN } from "./constants"
 import { USER_ERRORS } from "./user-errors"
 import { EmailService } from "../shared/email/email.service"
 import { authzActions, AuthzService } from "../auth/authz.service"
-import { REQUEST } from "@nestjs/core"
-import { Request as ExpressRequest } from "express"
 import { ForgotPasswordDto } from "./dto/forgot-password.dto"
 import { AuthService } from "../auth/auth.service"
+import { AuthContext } from "../auth/types/auth-context"
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class UserService {
   constructor(
-    @Inject(REQUEST) private req: ExpressRequest,
     @InjectRepository(User) private readonly repo: Repository<User>,
     private readonly emailService: EmailService,
     private readonly authzService: AuthzService,
@@ -60,7 +56,7 @@ export class UserService {
     })
   }
 
-  async update(dto: Partial<UserUpdateDto>) {
+  async update(dto: Partial<UserUpdateDto>, context: AuthContext) {
     const user = await this.find({
       id: dto.id,
     })
@@ -68,7 +64,7 @@ export class UserService {
       throw new NotFoundException()
     }
 
-    await this.authzService.canOrThrow(this.req.user, "user", authzActions.update, {
+    await this.authzService.canOrThrow(context.user, "user", authzActions.update, {
       ...dto,
     })
 
@@ -131,7 +127,10 @@ export class UserService {
   public async resendConfirmation(dto: EmailDto) {
     const user = await this.findByEmail(dto.email)
     if (!user) {
-      throw new HttpException(USER_ERRORS.EMAIL_NOT_FOUND.message, USER_ERRORS.EMAIL_NOT_FOUND.status)
+      throw new HttpException(
+        USER_ERRORS.EMAIL_NOT_FOUND.message,
+        USER_ERRORS.EMAIL_NOT_FOUND.status
+      )
     }
     if (user.confirmedAt) {
       throw new HttpException(
@@ -181,7 +180,10 @@ export class UserService {
   public async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.findByEmail(dto.email)
     if (!user) {
-      throw new HttpException(USER_ERRORS.EMAIL_NOT_FOUND.message, USER_ERRORS.EMAIL_NOT_FOUND.status)
+      throw new HttpException(
+        USER_ERRORS.EMAIL_NOT_FOUND.message,
+        USER_ERRORS.EMAIL_NOT_FOUND.status
+      )
     }
 
     // Token expires in 24 hours

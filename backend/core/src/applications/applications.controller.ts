@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Query,
   UseGuards,
   UsePipes,
@@ -32,6 +33,7 @@ import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-
 import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
+import { Request as ExpressRequest } from "express"
 
 enum OrderByParam {
   firstName = "applicant.firstName",
@@ -174,16 +176,23 @@ export class ApplicationsController {
   @Get()
   @ApiOperation({ summary: "List applications", operationId: "list" })
   async list(
+    @Request() req: ExpressRequest,
     @Query() queryParams: PaginatedApplicationListQueryParams
   ): Promise<PaginatedApplicationDto> {
-    return mapTo(PaginatedApplicationDto, await this.applicationsService.listPaginated(queryParams))
+    return mapTo(
+      PaginatedApplicationDto,
+      await this.applicationsService.listPaginated(queryParams, req.context)
+    )
   }
 
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    const applications = await this.applicationsService.list(queryParams)
+  async listAsCsv(
+    @Request() req: ExpressRequest,
+    @Query() queryParams: ApplicationsCsvListQueryParams
+  ): Promise<string> {
+    const applications = await this.applicationsService.list(queryParams, req.context)
     const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(
       applications,
@@ -195,30 +204,40 @@ export class ApplicationsController {
 
   @Post()
   @ApiOperation({ summary: "Create application", operationId: "create" })
-  async create(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
-    const application = await this.applicationsService.create(applicationCreateDto)
+  async create(
+    @Request() req: ExpressRequest,
+    @Body() applicationCreateDto: ApplicationCreateDto
+  ): Promise<ApplicationDto> {
+    const application = await this.applicationsService.create(applicationCreateDto, req.context)
     return mapTo(ApplicationDto, application)
   }
 
   @Get(`:applicationId`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  async retrieve(@Param("applicationId") applicationId: string): Promise<ApplicationDto> {
-    const app = await this.applicationsService.findOne(applicationId)
+  async retrieve(
+    @Request() req: ExpressRequest,
+    @Param("applicationId") applicationId: string
+  ): Promise<ApplicationDto> {
+    const app = await this.applicationsService.findOne(applicationId, req.context)
     return mapTo(ApplicationDto, app)
   }
 
   @Put(`:applicationId`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
   async update(
+    @Request() req: ExpressRequest,
     @Param("applicationId") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<ApplicationDto> {
-    return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
+    return mapTo(
+      ApplicationDto,
+      await this.applicationsService.update(applicationUpdateDto, req.context)
+    )
   }
 
   @Delete(`:applicationId`)
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Param("applicationId") applicationId: string) {
-    await this.applicationsService.delete(applicationId)
+  async delete(@Request() req: ExpressRequest, @Param("applicationId") applicationId: string) {
+    await this.applicationsService.delete(applicationId, req.context)
   }
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Post,
+  Request,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -10,8 +18,9 @@ import { ResourceAction } from "../auth/decorators/resource-action.decorator"
 import { authzActions } from "../auth/authz.service"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
-import { ThrottlerGuard, Throttle } from "@nestjs/throttler"
+import { ThrottlerGuard } from "@nestjs/throttler"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
+import { Request as ExpressRequest } from "express"
 
 @Controller("applications")
 @ApiTags("applications")
@@ -31,8 +40,11 @@ export class ApplicationsSubmissionController {
   @Post(`submit`)
   @ApiOperation({ summary: "Submit application", operationId: "submit" })
   @ResourceAction(authzActions.submit)
-  async submit(@Body() applicationCreateDto: ApplicationCreateDto): Promise<ApplicationDto> {
-    const application = await this.applicationsService.submit(applicationCreateDto)
+  async submit(
+    @Request() req: ExpressRequest,
+    @Body() applicationCreateDto: ApplicationCreateDto
+  ): Promise<ApplicationDto> {
+    const application = await this.applicationsService.submit(applicationCreateDto, req.context)
     return mapTo(ApplicationDto, application)
   }
 }

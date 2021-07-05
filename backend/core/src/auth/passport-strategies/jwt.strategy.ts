@@ -5,6 +5,7 @@ import { Request } from "express"
 import { UserService } from "../../user/user.service"
 import { AuthService } from "../auth.service"
 import { ConfigService } from "@nestjs/config"
+import { AuthContext } from "../types/auth-context"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
@@ -33,6 +34,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException()
     }
     const userId = payload.sub
-    return this.userService.find({ id: userId })
+    return new AuthContext(await this.userService.find({ id: userId }))
   }
 }

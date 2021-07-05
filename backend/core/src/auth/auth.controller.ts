@@ -7,6 +7,7 @@ import { LoginDto, LoginResponseDto } from "./dto/login.dto"
 import { mapTo } from "../shared/mapTo"
 import { UserService } from "../user/user.service"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { Request as ExpressRequest } from "express"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -21,16 +22,16 @@ export class AuthController {
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
-  login(@Request() req): LoginResponseDto {
-    const accessToken = this.authService.generateAccessToken(req.user)
+  login(@Request() req: ExpressRequest): LoginResponseDto {
+    const accessToken = this.authService.generateAccessToken(req.context.user)
     return mapTo(LoginResponseDto, { accessToken })
   }
 
   @UseGuards(DefaultAuthGuard)
   @Post("token")
   @ApiOperation({ summary: "Token", operationId: "token" })
-  token(@Request() req): LoginResponseDto {
-    const accessToken = this.authService.generateAccessToken(req.user)
+  token(@Request() req: ExpressRequest): LoginResponseDto {
+    const accessToken = this.authService.generateAccessToken(req.context.user)
     return mapTo(LoginResponseDto, { accessToken })
   }
 }
