@@ -43,6 +43,8 @@ module.exports = withCSS(
             showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
             publicBaseUrl: process.env.PUBLIC_BASE_URL,
             showLMLinks: process.env.SHOW_LM_LINKS === "TRUE",
+            cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+            cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

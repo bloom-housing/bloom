@@ -19,6 +19,16 @@ const NewListing = () => {
 
   if (!listingDto) return false
 
+  // Set image
+  if (listingDto.assets.length > 0) {
+    listingDto.image = listingDto.assets.find(
+      (asset) => asset.label == "cloudinaryBuilding" || asset.label == "building"
+    )
+  }
+  if (listingDto.image == null) {
+    listingDto.image = { fileId: "", label: "" }
+  }
+
   return (
     <ListingContext.Provider value={listingDto}>
       <Layout>
