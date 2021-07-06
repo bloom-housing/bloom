@@ -14,6 +14,7 @@ import { User } from "./entities/user.entity"
 import { UserService } from "./services/user.service"
 import { UserController } from "./controllers/user.controller"
 import { EmailModule } from "../shared/email/email.module"
+import { PasswordService } from "./services/password.service"
 
 @Module({
   imports: [
@@ -32,8 +33,8 @@ import { EmailModule } from "../shared/email/email.module"
     SharedModule,
     EmailModule,
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService],
-  exports: [AuthzService, AuthService],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
+  exports: [AuthzService, AuthService, UserService],
   controllers: [AuthController, UserController],
 })
 export class AuthModule {}

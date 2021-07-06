@@ -20,7 +20,7 @@ const parseSeed = (seedData: ListingSeed): ListingSeed => {
 }
 
 export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
-  const usersService = app.get<UserService>(UserService)
+  const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
     seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
   )
@@ -55,8 +55,8 @@ const seedListings = async (app: INestApplicationContext) => {
 }
 
 async function seed() {
-  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  const userService = app.get<UserService>(UserService)
+  const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const listings = await seedListings(app)

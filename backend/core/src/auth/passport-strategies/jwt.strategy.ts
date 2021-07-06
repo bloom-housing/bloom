@@ -3,8 +3,10 @@ import { PassportStrategy } from "@nestjs/passport"
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { Request } from "express"
 import { ConfigService } from "@nestjs/config"
-import { UserService } from "../services/user.service"
 import { AuthService } from "../services/auth.service"
+import { InjectRepository } from "@nestjs/typeorm"
+import { User } from "../entities/user.entity"
+import { Repository } from "typeorm"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
@@ -14,7 +16,7 @@ function extractTokenFromAuthHeader(req: Request) {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private userService: UserService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private authService: AuthService,
     private configService: ConfigService
   ) {
@@ -33,6 +35,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException()
     }
     const userId = payload.sub
-    return this.userService.find({ id: userId })
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ["leasingAgentInListings"],
+    })
   }
 }

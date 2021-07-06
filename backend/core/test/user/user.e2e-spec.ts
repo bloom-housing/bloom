@@ -107,7 +107,7 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userService = app.get<UserService>(UserService)
+    const userService = await app.resolve<UserService>(UserService)
     const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
@@ -201,7 +201,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
-    const userService = app.get<UserService>(UserService)
+    const userService = await app.resolve<UserService>(UserService)
     const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())

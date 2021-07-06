@@ -6,7 +6,6 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ApplicationMethodType, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { User } from "../auth/entities/user.entity"
@@ -20,6 +19,8 @@ import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AssetCreateDto } from "../assets/dto/asset.dto"
+import { Unit } from "../units/entities/unit.entity"
+import { ApplicationMethodType } from "../listings/types/application-method-type-enum"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
