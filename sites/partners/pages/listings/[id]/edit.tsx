@@ -19,12 +19,11 @@ const NewListing = () => {
 
   if (!listingDto) return false
 
-  // Set image
-  if (listingDto.assets.length > 0) {
-    listingDto.image = listingDto.assets.find(
-      (asset) => asset.label == "cloudinaryBuilding" || asset.label == "building"
-    )
+  // Set listing photo from assets if necessary:
+  if (listingDto.image == null && listingDto.assets.length > 0) {
+    listingDto.image = listingDto.assets.find((asset) => asset.label == "building")
   }
+  // If that didn't do the trick, set a default:
   if (listingDto.image == null) {
     listingDto.image = { fileId: "", label: "" }
   }

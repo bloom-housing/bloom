@@ -6,10 +6,14 @@ export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
 }
 
 export const imageUrlFromListing = (listing: Listing, size = 400) => {
-  const cloudinaryBuilding = listing?.assets?.find(
+  // Use the new `image` field
+  const imageAssets = listing?.image ? [listing.image] : listing?.assets
+
+  // Fallback to `assets`
+  const cloudinaryBuilding = imageAssets?.find(
     (asset: Asset) => asset.label == "cloudinaryBuilding"
   )?.fileId
   if (cloudinaryBuilding) return cloudinaryUrlFromId(cloudinaryBuilding, size)
 
-  return listing?.assets?.find((asset: Asset) => asset.label == "building")?.fileId
+  return imageAssets?.find((asset: Asset) => asset.label == "building")?.fileId
 }
