@@ -44,7 +44,7 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
-  const { listing, preview = false } = props
+  const { listing } = props
 
   if (!listing) {
     return <ErrorPage />
@@ -301,18 +301,18 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!preview && !isReferralApp ? (
+              {!isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
                   internalFormRoute="/applications/start/choose-language"
                 />
-              ) : !preview ? (
+              ) : (
                 <ReferralApplication
                   phoneNumber={t("application.referralApplication.phoneNumber")}
                   description={t("application.referralApplication.instructions")}
                   title={t("application.referralApplication.furtherInformation")}
                 />
-              ) : null}
+              )}
             </div>
 
             {openHouseEvents && (
