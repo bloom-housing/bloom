@@ -92,6 +92,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Dropzone-style file upload component ([#1437](https://github.com/bloom-housing/bloom/pull/1437)) (Jared White)
   - Table image thumbnails component along with minimal left/right flush table styles ([#1339](https://github.com/bloom-housing/bloom/pull/1339)) (Jared White)
   - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`
