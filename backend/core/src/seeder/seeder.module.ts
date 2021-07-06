@@ -1,12 +1,11 @@
 import { DynamicModule, Module } from "@nestjs/common"
-import { UserModule } from "../user/user.module"
 import { Listing } from "../listings/entities/listing.entity"
 import { Unit } from "../units/entities/unit.entity"
 import { Application } from "../applications/entities/application.entity"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { UserService } from "../user/user.service"
-import { User } from "../user/entities/user.entity"
+import { UserService } from "../auth/services/user.service"
+import { User } from "../auth/entities/user.entity"
 import { ListingsService } from "../listings/listings.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
@@ -17,7 +16,7 @@ import { Preference } from "../preferences/entities/preference.entity"
 import { Property } from "../property/entities/property.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
-import { AuthzService } from "../auth/authz.service"
+import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
 import { ApplicationsModule } from "../applications/applications.module"
 import { ThrottlerModule } from "@nestjs/throttler"
@@ -31,7 +30,6 @@ export class SeederModule {
       module: SeederModule,
       imports: [
         ApplicationsModule,
-        UserModule,
         SharedModule,
         TypeOrmModule.forRoot({
           ...dbConfig,

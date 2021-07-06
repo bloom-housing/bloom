@@ -6,17 +6,17 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { User } from "./entities/user.entity"
 import { FindConditions, Repository } from "typeorm"
 import { randomBytes, scrypt } from "crypto"
-import { EmailDto, UserCreateDto, UserUpdateDto } from "./dto/user.dto"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
-import { UpdatePasswordDto } from "./dto/update-password.dto"
-import { ConfirmDto } from "./dto/confirm.dto"
-import { assignDefined } from "../shared/assign-defined"
-import { SALT_SIZE, SCRYPT_KEYLEN } from "./constants"
-import { USER_ERRORS } from "./user-errors"
+import { User } from "../entities/user.entity"
+import { EmailDto, UserCreateDto, UserUpdateDto } from "../dto/user.dto"
+import { assignDefined } from "../../shared/assign-defined"
+import { ConfirmDto } from "../dto/confirm.dto"
+import { USER_ERRORS } from "../user-errors"
+import { UpdatePasswordDto } from "../dto/update-password.dto"
+import { SALT_SIZE, SCRYPT_KEYLEN } from "../constants"
 
 @Injectable()
 export class UserService {

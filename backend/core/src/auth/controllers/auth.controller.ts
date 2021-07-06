@@ -1,12 +1,12 @@
 import { Controller, Request, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
-import { LocalAuthGuard } from "./guards/local-auth.guard"
-import { AuthService } from "./auth.service"
-import { DefaultAuthGuard } from "./guards/default.guard"
+import { LocalAuthGuard } from "../guards/local-auth.guard"
+import { AuthService } from "../services/auth.service"
+import { DefaultAuthGuard } from "../guards/default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { LoginDto, LoginResponseDto } from "./dto/login.dto"
-import { mapTo } from "../shared/mapTo"
-import { UserService } from "../user/user.service"
-import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { LoginDto, LoginResponseDto } from "../dto/login.dto"
+import { mapTo } from "../../shared/mapTo"
+import { UserService } from "../services/user.service"
+import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 
 @Controller("auth")
 @ApiTags("auth")

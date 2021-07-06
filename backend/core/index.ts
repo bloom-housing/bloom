@@ -1,5 +1,5 @@
 /* Models */
-export * from "./src/user/entities/user.entity"
+export * from "./src/auth/entities/user.entity"
 export * from "./src/listings/entities/listing.entity"
 export * from "./src/units/entities/unit.entity"
 export { ListingEventType } from "./src/listings/types/listing-event-type-enum"
@@ -14,4 +14,4 @@ export { UnitSummaryByReservedType } from "./src/units/types/unit-summary-by-res
 export { UnitSummaryByAMI } from "./src/units/types/unit-summary-by-ami"
 export { HMI } from "./src/units/types/hmi"
 export { UnitsSummarized } from "./src/units/types/units-summarized"
-export { UserRole } from "./src/user/types/user-role-enum"
+export { UserRole } from "./src/auth/enum/user-role-enum"

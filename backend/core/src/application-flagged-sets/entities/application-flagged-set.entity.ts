@@ -4,7 +4,7 @@ import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-vali
 import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Application } from "../../applications/entities/application.entity"
-import { User } from "../../user/entities/user.entity"
+import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../.."
 import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 import { Rule } from "../types/rule-enum"

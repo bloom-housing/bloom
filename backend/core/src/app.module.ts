@@ -1,6 +1,5 @@
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import { AuthModule } from "./auth/auth.module"
@@ -92,7 +91,6 @@ export class AppModule {
           }),
         }),
         UnitsModule,
-        UserModule,
       ],
     }
   }

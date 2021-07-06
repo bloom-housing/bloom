@@ -2,9 +2,9 @@ import { ExtractJwt, Strategy } from "passport-jwt"
 import { PassportStrategy } from "@nestjs/passport"
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { Request } from "express"
-import { UserService } from "../../user/user.service"
-import { AuthService } from "../auth.service"
 import { ConfigService } from "@nestjs/config"
+import { UserService } from "../services/user.service"
+import { AuthService } from "../services/auth.service"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
