@@ -3,6 +3,4 @@ export enum ApplicationMethodType {
   FileDownload = "FileDownload",
   ExternalLink = "ExternalLink",
   PaperPickup = "PaperPickup",
-  POBox = "POBox",
-  LeasingAgent = "LeasingAgent",
 }

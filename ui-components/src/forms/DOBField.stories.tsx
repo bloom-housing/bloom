@@ -19,7 +19,7 @@ export const Default = () => {
       register={register}
       watch={watch}
       error={errors?.dateOfBirth}
-      atAge={true}
+      validateAge18={true}
     />
   )
 }

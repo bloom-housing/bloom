@@ -11,10 +11,8 @@ describe("applications/household/live-alone", function () {
 
   it("Should move to preferred-units and save members value", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -27,20 +25,17 @@ describe("applications/household/live-alone", function () {
     })
   })
 
-  // TODO: toggle this verification off at the jurisdiction level with a feature flag
-  // it("Should show an error when min. household size is > 1", function () {
-  //   cy.loadConfig({
-  //     property: {
-  //       householdSizeMax: 2,
-  //       householdSizeMin: 1,
-  //     },
-  //   })
-  //   cy.visit(route)
+  it("Should show an error when min. household size is > 1", function () {
+    cy.loadConfig({
+      householdSizeMax: 2,
+      householdSizeMin: 1,
+    })
+    cy.visit(route)
 
-  //   cy.getByID("btn-live-alone").click()
+    cy.getByID("btn-live-alone").click()
 
-  //   cy.get(".alert-notice").should("be.visible").and("contain", "small")
-  // })
+    cy.get(".alert-notice").should("be.visible").and("contain", "small")
+  })
 
   // TODO: should be implemented, but first frontend have to be fixed
   // it("Should show an error when max. household size is 1", function () {
@@ -62,10 +57,8 @@ describe("applications/household/live-alone", function () {
 
   it("Should move to members-info and save members value", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 

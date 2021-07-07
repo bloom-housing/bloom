@@ -9,6 +9,7 @@ import {
   UserService,
   serviceOptions,
   Status,
+  AmiChartsService,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -26,6 +27,7 @@ import { clearToken, getToken, getTokenTtl, setToken } from "./token"
 import { NavigationContext } from "../config/NavigationContext"
 
 type ContextProps = {
+  amiChartsService: AmiChartsService
   applicationsService: ApplicationsService
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
@@ -202,6 +204,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
   }, [state.profile, state.accessToken, apiUrl, userService, state.loading])
 
   const contextValues: ContextProps = {
+    amiChartsService: new AmiChartsService(),
     applicationsService: new ApplicationsService(),
     applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),

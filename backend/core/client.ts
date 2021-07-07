@@ -1686,6 +1686,9 @@ export interface Listing {
   /**  */
   property: Property
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
 
@@ -1718,6 +1721,9 @@ export interface Listing {
 
   /**  */
   applicationDueDate: Date
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date
@@ -1869,6 +1875,9 @@ export interface ListingCreate {
   /**  */
   property: Id
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
 
@@ -1892,6 +1901,9 @@ export interface ListingCreate {
 
   /**  */
   applicationDueDate: Date
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date
@@ -2061,6 +2073,9 @@ export interface ListingUpdate {
   /**  */
   property: Id
 
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
   /**  */
   applicationAddress: CombinedApplicationAddressTypes
 
@@ -2084,6 +2099,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationDueDate: Date
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date
@@ -3329,8 +3347,6 @@ export enum ApplicationMethodType {
   "FileDownload" = "FileDownload",
   "ExternalLink" = "ExternalLink",
   "PaperPickup" = "PaperPickup",
-  "POBox" = "POBox",
-  "LeasingAgent" = "LeasingAgent",
 }
 
 export enum InputType {
