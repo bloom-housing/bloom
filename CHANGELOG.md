@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+### Backend
+
+### Frontend
+
+### UI Components
+
+## 1.0.4 / 2021-07-07
+
+### General
+
 - Added:
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
