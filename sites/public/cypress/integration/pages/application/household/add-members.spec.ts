@@ -3,10 +3,8 @@ describe("applications/household/add-members", function () {
 
   it("Should render form", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -16,10 +14,8 @@ describe("applications/household/add-members", function () {
 
   it("Should move to /contact/name after Edit click", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -29,10 +25,8 @@ describe("applications/household/add-members", function () {
 
   it("Should move to /household/member Add member click", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 
@@ -42,10 +36,8 @@ describe("applications/household/add-members", function () {
 
   it("Should show an error when min. household size is > 1 and defined less", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 2,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 2,
     })
     cy.visit(route)
 
@@ -57,10 +49,8 @@ describe("applications/household/add-members", function () {
   it("Should show an error if max. household size is 1 and defined more", function () {
     cy.loadConfig(
       {
-        property: {
-          householdSizeMax: 1,
-          householdSizeMin: 0,
-        },
+        householdSizeMax: 1,
+        householdSizeMin: 0,
       },
       "applicationConfigFilled.json"
     )
@@ -73,10 +63,8 @@ describe("applications/household/add-members", function () {
 
   it("Should move to next route Add member click", function () {
     cy.loadConfig({
-      property: {
-        householdSizeMax: 2,
-        householdSizeMin: 0,
-      },
+      householdSizeMax: 2,
+      householdSizeMin: 0,
     })
     cy.visit(route)
 

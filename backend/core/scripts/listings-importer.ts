@@ -32,7 +32,6 @@ serviceOptions.axios = instance
 
 const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
-const propertyService = new client.PropertiesService()
 const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
 
@@ -63,17 +62,6 @@ async function uploadListing(listing) {
   } catch (e) {
     console.log(listing)
     console.log(e.response.data.message)
-    process.exit(1)
-  }
-}
-
-async function uploadProperty(property) {
-  try {
-    return await propertyService.create({
-      body: property,
-    })
-  } catch (e) {
-    console.log(e.response)
     process.exit(1)
   }
 }
@@ -150,22 +138,17 @@ async function main() {
   })
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
-  let property = listing.property
-  delete listing.property
   const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
   listing = await uploadEntity("preferences", preferencesService, listing)
 
-  property.listings = [listing]
   const amiChartName = listing.amiChart.name
   let chart = await getAmiChart(amiChartName)
   if (!chart) {
     chart = await uploadAmiChart(listing.amiChart)
   }
 
-  property.units.forEach((unit) => (unit.amiChart = chart))
-  property = await uploadProperty(property)
-  listing.property = property
+  listing.units.forEach((unit) => (unit.amiChart = chart))
 
   const newListing = await uploadListing(listing)
 

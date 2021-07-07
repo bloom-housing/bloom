@@ -18,7 +18,7 @@ interface FieldGroupProps {
   fields?: FieldSingle[]
   groupNote?: string
   register: UseFormMethods["register"]
-  validation?: Record<string, any>
+  validation?: Record<string, unknown>
   fieldGroupClassName?: string
   fieldClassName?: string
 }
