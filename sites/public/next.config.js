@@ -51,7 +51,6 @@ module.exports = withCSS(
             cacheRevalidate: process.env.CACHE_REVALIDATE
               ? Number(process.env.CACHE_REVALIDATE)
               : 60,
-            NEW_RELIC_BROWSER_KEY: process.env.NEW_RELIC_BROWSER_KEY || null,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
