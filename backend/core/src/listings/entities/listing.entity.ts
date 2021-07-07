@@ -179,13 +179,13 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  applicationDropOffAddress: AddressDto | null
+  applicationDropOffAddress?: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  applicationDropOffAddressOfficeHours: string | null
+  applicationDropOffAddressOfficeHours?: string | null
 
   @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
   @Expose()
@@ -202,7 +202,7 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  applicationMailingAddress: AddressDto | null
+  applicationMailingAddress?: AddressDto | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
