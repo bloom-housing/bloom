@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "../../../../pages/application/[id]/index"
+import { getDetailFieldString } from "./helpers"
 
 const DetailAdditionalFees = () => {
   const listing = useContext(ListingContext)

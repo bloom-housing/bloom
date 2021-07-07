@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { getDetailFieldString } from "../../../../pages/application/[id]/index"
+import { getDetailFieldString } from "./helpers"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)

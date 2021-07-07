@@ -31,10 +31,6 @@ import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicati
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
 
-export const getDetailFieldString = (listingString: string) => {
-  return listingString && listingString !== "" ? listingString : t("t.none")
-}
-
 export default function ApplicationsList() {
   const router = useRouter()
   const applicationId = router.query.id as string

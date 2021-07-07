@@ -161,9 +161,6 @@ export const ListingView = (props: ListingProps) => {
     !listing.applicationPickUpAddressType &&
     listing.applicationMethods?.length === 0
 
-  const showMap =
-    listing.buildingAddress.latitude !== null && listing.buildingAddress.longitude !== null
-
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -377,19 +374,17 @@ export const ListingView = (props: ListingProps) => {
           </div>
         </ListingDetailItem>
 
-        {showMap && (
-          <ListingDetailItem
-            imageAlt={t("listings.neighborhoodBuildings")}
-            imageSrc="/images/listing-neighborhood.svg"
-            title={t("listings.sections.neighborhoodTitle")}
-            subtitle={t("listings.sections.neighborhoodSubtitle")}
-            desktopClass="bg-primary-lighter"
-          >
-            <div className="listing-detail-panel">
-              <ListingMap address={listing.buildingAddress} listing={listing} />
-            </div>
-          </ListingDetailItem>
-        )}
+        <ListingDetailItem
+          imageAlt={t("listings.neighborhoodBuildings")}
+          imageSrc="/images/listing-neighborhood.svg"
+          title={t("listings.sections.neighborhoodTitle")}
+          subtitle={t("listings.sections.neighborhoodSubtitle")}
+          desktopClass="bg-primary-lighter"
+        >
+          <div className="listing-detail-panel">
+            <ListingMap address={listing.buildingAddress} listing={listing} />
+          </div>
+        </ListingDetailItem>
 
         {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
           <ListingDetailItem
