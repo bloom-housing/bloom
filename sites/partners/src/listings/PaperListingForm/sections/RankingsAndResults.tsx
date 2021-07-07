@@ -68,7 +68,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               register={register}
               fields={[
                 {
-                  label: "First come first serve",
+                  label: t("listings.firstComeFirstServe"),
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
                   defaultChecked: lotteryEvent === null,
