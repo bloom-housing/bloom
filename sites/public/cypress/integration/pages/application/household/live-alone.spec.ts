@@ -25,7 +25,7 @@ describe("applications/household/live-alone", function () {
     })
   })
 
-  it("Should show an error when min. household size is > 1", function () {
+  /* it("Should show an error when min. household size is > 1", function () {
     cy.loadConfig({
       householdSizeMax: 2,
       householdSizeMin: 1,
@@ -35,7 +35,7 @@ describe("applications/household/live-alone", function () {
     cy.getByID("btn-live-alone").click()
 
     cy.get(".alert-notice").should("be.visible").and("contain", "small")
-  })
+  }) */
 
   // TODO: should be implemented, but first frontend have to be fixed
   // it("Should show an error when max. household size is 1", function () {
