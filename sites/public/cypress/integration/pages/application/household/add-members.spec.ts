@@ -34,7 +34,7 @@ describe("applications/household/add-members", function () {
     cy.location("pathname").should("include", "applications/household/member")
   })
 
-  it("Should show an error when min. household size is > 1 and defined less", function () {
+  /* it("Should show an error when min. household size is > 1 and defined less", function () {
     cy.loadConfig({
       householdSizeMax: 2,
       householdSizeMin: 2,
@@ -59,7 +59,7 @@ describe("applications/household/add-members", function () {
     cy.getByID("btn-add-done").click()
 
     cy.get(".alert-notice").should("be.visible").and("contain", "too big")
-  })
+  }) */
 
   it("Should move to next route Add member click", function () {
     cy.loadConfig({
