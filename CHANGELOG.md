@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 ### Backend
+- Fixed:
+  - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
 
 ### Frontend
 
@@ -32,7 +34,6 @@ All notable changes to this project will be documented in this file. The format 
   - Replaces `toPrecision` function on `units-transformations` to `toFixed` ([#1304](https://github.com/bloom-housing/bloom/pull/1304)) (Marcin Jędras)
   - "totalFlagged" computation and a race condition on Application insertion ([#1366](https://github.com/bloom-housing/bloom/pull/1366))
   - Fix units availability ([#1397](https://github.com/bloom-housing/bloom/issues/1397))
-  - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
 
 - Added:
 
