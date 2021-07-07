@@ -29,9 +29,11 @@ const ActionBlock = ({
 }: ActionBlockProps) => {
   const actionBlockClasses = ["action-block"]
   if (background) actionBlockClasses.push(background)
-  layout === "block"
-    ? actionBlockClasses.push("action-block__block")
-    : actionBlockClasses.push("action-block__inline")
+  if (layout === "block") {
+    actionBlockClasses.push("action-block__block")
+  } else {
+    actionBlockClasses.push("action-block__inline")
+  }
 
   return (
     <div className={actionBlockClasses.join(" ")}>
@@ -39,7 +41,7 @@ const ActionBlock = ({
         {icon && <div className="action-block__icon">{icon}</div>}
         <h3 className="action-block__header">{header}</h3>
         {subheader && layout === ActionBlockLayout.block && (
-          <h5 className="action-block__subheader">{subheader}</h5>
+          <p className="action-block__subheader">{subheader}</p>
         )}
       </div>
       <div className="action-block__actions">{actions}</div>

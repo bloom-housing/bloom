@@ -8,6 +8,9 @@
   &.primary-darker {
     @apply bg-primary-darker;
     @apply text-white;
+    .action-block__icon {
+      @apply border-white;
+    }
   }
   .action-block__actions {
     @media (max-width: 640px) {
