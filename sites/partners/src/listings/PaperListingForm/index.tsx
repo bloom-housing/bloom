@@ -21,6 +21,8 @@ import {
   Unit,
   Listing,
   AmiChart,
+  ListingEvent,
+  ListingEventType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -52,19 +54,26 @@ export type FormListing = Listing & {
     seconds: string
     period: TimeFieldPeriod
   }
-  whereApplicationsDroppedOff?: ListingApplicationAddressType
-  whereApplicationsPickedUp?: ListingApplicationAddressType
   arePaperAppsMailedToAnotherAddress?: boolean
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
+  lotteryDate?: {
+    month: string
+    day: string
+    year: string
+  }
+  lotteryDateNotes?: string
   postMarkDate?: {
     month: string
     day: string
     year: string
   }
+  reviewOrderQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
+  whereApplicationsDroppedOff?: ListingApplicationAddressType
+  whereApplicationsPickedUp?: ListingApplicationAddressType
 }
 
 export const addressTypes = {
@@ -245,6 +254,17 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
     delete unit.tempId
   })
 
+  const events: ListingEvent[] = []
+  if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
+    events.push({
+      type: ListingEventType.publicLottery,
+      startTime: new Date(
+        `${data.lotteryDate.year}-${data.lotteryDate.month}-${data.lotteryDate.day}`
+      ),
+      note: data.lotteryDateNotes,
+    })
+  }
+
   return {
     ...data,
     applicationDueTime: getDueTime(),
@@ -286,6 +306,7 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
     applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
       ? data.applicationMailingAddress
       : null,
+    events: events,
   }
 }
 
