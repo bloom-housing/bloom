@@ -27,7 +27,7 @@ export const parameters = {
   a11y: {
     config: {
       rules: [
-        // An example of how you can turn off a specific rule
+        // TODO: Enable color-contrast after resolving #1488
         {
           id: 'color-contrast',
           enabled: false
