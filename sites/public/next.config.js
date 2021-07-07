@@ -11,7 +11,7 @@ const withMDX = require("@next/mdx")()
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-
+require("newrelic")
 // Set up app-wide constants
 let BACKEND_API_BASE = "http://localhost:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
@@ -51,6 +51,7 @@ module.exports = withCSS(
             cacheRevalidate: process.env.CACHE_REVALIDATE
               ? Number(process.env.CACHE_REVALIDATE)
               : 60,
+            NEW_RELIC_BROWSER_KEY: process.env.NEW_RELIC_BROWSER_KEY || null,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

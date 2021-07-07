@@ -1,3 +1,12 @@
+// dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("dotenv").config()
+  console.log("process.env.NEW_RELIC_LICENSE_KEY = ", process.env.NEW_RELIC_LICENSE_KEY)
+} catch {
+  // Pass
+}
+import "newrelic"
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { UserModule } from "./user/user.module"
