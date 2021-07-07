@@ -14,7 +14,7 @@ describe("<ImageCard>", () => {
     )
     expect(getByText("My Building")).not.toBeNull()
     expect(getByText("The Address")).not.toBeNull()
-    expect(getByAltText("My Building")).not.toBeNull()
+    expect(getByAltText("A picture of the building")).not.toBeNull()
   })
   it("renders with a link", () => {
     const { getByAltText } = render(
@@ -25,7 +25,7 @@ describe("<ImageCard>", () => {
         href="/listings"
       />
     )
-    expect(getByAltText("My Building").closest("a")?.getAttribute("href")).toBe("/listings")
+    expect(getByAltText("A picture of the building").closest("a")?.getAttribute("href")).toBe("/listings")
   })
   it("renders with an application status bar", () => {
     const { getByText } = render(
