@@ -3178,10 +3178,10 @@ export interface Listing {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -3286,7 +3286,7 @@ export interface Listing {
   applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  applicationDropOffAddressOfficeHours: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
   buildingSelectionCriteria?: string;
@@ -3484,10 +3484,10 @@ export interface ListingCreate {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -3583,7 +3583,7 @@ export interface ListingCreate {
   applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  applicationDropOffAddressOfficeHours: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
   buildingSelectionCriteria?: string;
@@ -3810,10 +3810,10 @@ export interface ListingUpdate {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: AssetUpdate;
@@ -3909,7 +3909,7 @@ export interface ListingUpdate {
   applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  applicationDropOffAddressOfficeHours: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
   buildingSelectionCriteria?: string;
