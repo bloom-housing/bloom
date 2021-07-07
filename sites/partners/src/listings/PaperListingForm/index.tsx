@@ -197,7 +197,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
         ...unit,
-        tempId: i + 1,
+        tempId: i++,
       }))
       setUnits(tempUnits)
     }
