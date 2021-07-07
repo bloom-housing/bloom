@@ -44,7 +44,7 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
-  const { listing, preview = false } = props
+  const { listing } = props
 
   if (!listing) {
     return <ErrorPage />
@@ -256,35 +256,40 @@ export const ListingView = (props: ListingProps) => {
 
             {preferencesSection}
 
-            <ListSection
-              title={t("listings.sections.additionalEligibilityTitle")}
-              subtitle={t("listings.sections.additionalEligibilitySubtitle")}
-            >
-              <>
-                {listing.creditHistory && (
-                  <InfoCard title={t("listings.creditHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.creditHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.rentalHistory && (
-                  <InfoCard title={t("listings.rentalHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.rentalHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.criminalBackground && (
-                  <InfoCard title={t("listings.criminalBackground")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.criminalBackground}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {buildingSelectionCriteria}
-              </>
-            </ListSection>
+            {(listing.creditHistory ||
+              listing.rentalHistory ||
+              listing.criminalBackground ||
+              buildingSelectionCriteria) && (
+              <ListSection
+                title={t("listings.sections.additionalEligibilityTitle")}
+                subtitle={t("listings.sections.additionalEligibilitySubtitle")}
+              >
+                <>
+                  {listing.creditHistory && (
+                    <InfoCard title={t("listings.creditHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.rentalHistory && (
+                    <InfoCard title={t("listings.rentalHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.criminalBackground && (
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {buildingSelectionCriteria}
+                </>
+              </ListSection>
+            )}
           </ul>
         </ListingDetailItem>
 
@@ -301,18 +306,18 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!preview && !isReferralApp ? (
+              {!isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
                   internalFormRoute="/applications/start/choose-language"
                 />
-              ) : !preview ? (
+              ) : (
                 <ReferralApplication
                   phoneNumber={t("application.referralApplication.phoneNumber")}
                   description={t("application.referralApplication.instructions")}
                   title={t("application.referralApplication.furtherInformation")}
                 />
-              ) : null}
+              )}
             </div>
 
             {openHouseEvents && (
