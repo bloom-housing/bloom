@@ -7,6 +7,7 @@ import { Unit } from "../units/entities/unit.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../user/entities/user.entity"
+import { Property } from "../property/entities/property.entity"
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { User } from "../user/entities/user.entity"
       ttl: 24 * 60 * 60,
       max: 10,
     }),
-    TypeOrmModule.forFeature([Listing, Preference, Unit, User]),
+    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
   ],
   providers: [ListingsService],

@@ -17,15 +17,27 @@ import Layout from "../../../layouts"
 import Aside from "../../../src/listings/Aside"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
-import DetailProperty from "../../../src/listings/PaperListingDetails/sections/DetailProperty"
-import DetailApplication from "../../../src/listings/PaperListingDetails/sections/DetailApplication"
+import DetailListingIntro from "../../../src/listings/PaperListingDetails/sections/DetailListingIntro"
+import DetailBuildingDetails from "../../../src/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
+import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
+import DetailLeasingAgent from "../../../src/listings/PaperListingDetails/sections/DetailLeasingAgent"
+import DetailAdditionalFees from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalFees"
+import { DetailUnits } from "../../../src/listings/PaperListingDetails/sections/DetailUnits"
+import DetailUnitDrawer, {
+  UnitDrawer,
+} from "../../../src/listings/PaperListingDetails/DetailsUnitDrawer"
+import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/sections/DetailBuildingFeatures"
+import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
+import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
+import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
 
 export default function ApplicationsList() {
   const router = useRouter()
   const listingId = router.query.id as string
   const { listingDto } = useSingleListingData(listingId)
   const [errorAlert, setErrorAlert] = useState(false)
+  const [unitDrawer, setUnitDrawer] = useState<UnitDrawer>(null)
 
   const listingStatus = useMemo(() => {
     switch (listingDto?.status) {
@@ -99,9 +111,17 @@ export default function ApplicationsList() {
             <div className="flex flex-row flex-wrap ">
               <div className="info-card md:w-9/12">
                 <DetailListingData />
-                <DetailProperty />
-                <DetailApplication />
+                <DetailListingIntro />
+                <DetailBuildingDetails />
+                <DetailUnits setUnitDrawer={setUnitDrawer} />
+                <DetailAdditionalFees />
+                <DetailBuildingFeatures />
+                <DetailAdditionalEligibility />
                 <DetailAdditionalDetails />
+                <DetailRankingsAndResults />
+                <DetailLeasingAgent />
+                <DetailApplicationAddress />
+                <DetailApplicationDates />
               </div>
 
               <div className="md:w-3/12 pl-6">
@@ -111,6 +131,8 @@ export default function ApplicationsList() {
           </div>
         </section>
       </Layout>
+
+      <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
     </ListingContext.Provider>
   )
 }

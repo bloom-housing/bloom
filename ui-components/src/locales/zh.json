@@ -119,7 +119,6 @@
         "description": "我們只會為您的申請事宜使用此資料聯絡他們。",
         "phoneNumberFormLabel": "聯絡人電話號碼",
         "emailAddressFormLabel": "聯絡人電郵地址",
-        "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "聯絡人郵寄地址",
         "contactMailingAddressHelperText": "請選擇一個他們可收到您最新申請消息和資料的地址"
       }
@@ -419,7 +418,6 @@
     "officeHours": "辦公時間"
   },
   "listings": {
-    "additionalFees": "其他費用",
     "additionalInformation": "其他資訊",
     "allUnits": "所有單位",
     "allUnitsReservedFor": "保留給 %{type} 的所有單位",
@@ -504,6 +502,7 @@
     "reservedUnitsDescription": "您或您的家庭成員必須符合以下其中一項條件，才符合這些單位的申請資格：",
     "reservedUnitsForWhoAre": "保留給是 %{reservedType} 的 %{communityType}",
     "sections": {
+      "additionalFees": "其他費用",
       "eligibilityTitle": "資格要求",
       "eligibilitySubtitle": "收入、入住人數、優先權和補貼",
       "rentalAssistanceTitle": "租屋援助",
@@ -673,6 +672,7 @@
     "deposit": "訂金",
     "edit": "編輯",
     "email": "電子郵件",
+    "emailAddressPlaceHolder": "you@myemail.com",
     "floor": "樓層",
     "floors": "樓層",
     "getDirections": "取得路線",

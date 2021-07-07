@@ -25,6 +25,7 @@ export * from "./src/footers/ExygyFooter"
 export * from "./src/footers/SiteFooter"
 
 /* Forms */
+export * from "./src/forms/DateField"
 export * from "./src/forms/DOBField"
 export * from "./src/forms/Field"
 export * from "./src/forms/PhoneField"

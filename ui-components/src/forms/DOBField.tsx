@@ -9,6 +9,7 @@ export type DOBFieldValues = {
   birthMonth: string
   birthYear: string
 }
+
 export interface DOBFieldProps {
   error?: DeepMap<DOBFieldValues, FieldError>
   errorMessage?: string
@@ -16,8 +17,7 @@ export interface DOBFieldProps {
   register: UseFormMethods["register"]
   watch: UseFormMethods["watch"]
   defaultDOB?: DOBFieldValues
-  atAge?: boolean
-  validateHhAge?: boolean
+  validateAge18?: boolean
   name?: string
   id?: string
   required?: boolean
@@ -26,27 +26,21 @@ export interface DOBFieldProps {
 }
 
 const DOBField = (props: DOBFieldProps) => {
-  const { defaultDOB, error, register, watch, atAge, validateHhAge, name, id, errorMessage } = props
-  const fieldName = (baseName: string) => {
+  const { defaultDOB, error, register, watch, validateAge18, name, id, errorMessage } = props
+
+  const getFieldName = (baseName: string) => {
+    // Append overall date field name to individual date field name
     return [name, baseName].filter((item) => item).join(".")
   }
-  const birthDay = watch(fieldName("birthDay"))
-  const birthMonth = watch(fieldName("birthMonth"))
-  const validateAge = (value: string) => {
-    if (!atAge) return true
 
+  const birthDay = watch(getFieldName("birthDay"))
+  const birthMonth = watch(getFieldName("birthMonth"))
+
+  const validateAge = (value: string) => {
     return (
       parseInt(value) > 1900 &&
-      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") <
-        moment().subtract(atAge ? 18 : 0, "years")
+      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") < moment().subtract(18, "years")
     )
-  }
-
-  const validateHouseholdMemberAge = (value: string) => {
-    const nextYearData = moment().add(1, "year")
-    const inputDate = moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY")
-
-    return parseInt(value) > 1900 && inputDate <= nextYearData
   }
 
   const labelClasses = ["field-label--caps"]
@@ -58,7 +52,7 @@ const DOBField = (props: DOBFieldProps) => {
 
       <div className="field-group--date">
         <Field
-          name={fieldName("birthMonth")}
+          name={getFieldName("birthMonth")}
           label={t("t.month")}
           disabled={props.disabled}
           readerOnly={true}
@@ -79,7 +73,7 @@ const DOBField = (props: DOBFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName("birthDay")}
+          name={getFieldName("birthDay")}
           label={t("t.day")}
           disabled={props.disabled}
           readerOnly={true}
@@ -100,7 +94,7 @@ const DOBField = (props: DOBFieldProps) => {
           register={register}
         />
         <Field
-          name={fieldName("birthYear")}
+          name={getFieldName("birthYear")}
           label={t("t.year")}
           disabled={props.disabled}
           readerOnly={true}
@@ -112,11 +106,10 @@ const DOBField = (props: DOBFieldProps) => {
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
+                if (props.required && value && parseInt(value) > moment().year() + 10) return false
                 if (!props.required && !value?.length) return true
-
-                if (value?.length && validateHhAge) return validateHouseholdMemberAge(value)
-
-                return validateAge(value)
+                if (value?.length && validateAge18) return validateAge(value)
+                return true
               },
             },
           }}

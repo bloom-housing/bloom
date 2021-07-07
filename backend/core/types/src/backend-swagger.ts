@@ -485,6 +485,29 @@ export class AssetsService {
     });
   }
   /**
+   * List assets
+   */
+  list(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      limit?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedAssets> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { page: params['page'], limit: params['limit'] };
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
    * Create presigned upload metadata
    */
   createPresignedUploadMetadata(
@@ -500,6 +523,28 @@ export class AssetsService {
       const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
 
       let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get asset by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      assetId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Asset> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/assets/{assetId}';
+      url = url.replace('{assetId}', params['assetId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -658,6 +703,8 @@ export class ListingsService {
     params: {
       /**  */
       jsonpath?: string;
+      /**  */
+      filter?: ListingFilterParams[];
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing[]> {
@@ -665,7 +712,7 @@ export class ListingsService {
       let url = basePath + '/listings';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { jsonpath: params['jsonpath'] };
+      configs.params = { jsonpath: params['jsonpath'], filter: params['filter'] };
       let data = null;
 
       configs.data = data;
@@ -2667,10 +2714,19 @@ export interface AssetCreate {
 
 export interface Asset {
   /**  */
-  label: string;
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
 
   /**  */
   fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -2681,6 +2737,14 @@ export interface CreatePresignedUploadMetadata {
 export interface CreatePresignedUploadMetadataResponse {
   /**  */
   signature: string;
+}
+
+export interface PaginatedAssets {
+  /**  */
+  items: Asset[];
+
+  /**  */
+  meta: PaginationMeta;
 }
 
 export interface Login {
@@ -2729,83 +2793,15 @@ export interface JurisdictionUpdate {
   name: string;
 }
 
-export interface PreferenceLink {
+export interface ListingFilterParams {
   /**  */
-  title: string;
+  $comparison: EnumListingFilterParamsComparison;
 
   /**  */
-  url: string;
-}
-
-export interface FormMetadataExtraData {
-  /**  */
-  type: InputType;
+  name?: string;
 
   /**  */
-  key: string;
-}
-
-export interface FormMetadataOptions {
-  /**  */
-  key: string;
-
-  /**  */
-  extraData?: FormMetadataExtraData[];
-
-  /**  */
-  description: boolean;
-
-  /**  */
-  exclusive: boolean;
-}
-
-export interface FormMetadata {
-  /**  */
-  key: string;
-
-  /**  */
-  options: FormMetadataOptions[];
-
-  /**  */
-  hideGenericDecline: boolean;
-
-  /**  */
-  customSelectText: string;
-
-  /**  */
-  hideFromListing: boolean;
-}
-
-export interface Preference {
-  /**  */
-  links: PreferenceLink[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  formMetadata?: FormMetadata;
-
-  /**  */
-  page: number;
+  status?: EnumListingFilterParamsStatus;
 }
 
 export interface MinMaxCurrency {
@@ -2909,6 +2905,131 @@ export interface UnitsSummarized {
   hmi: HMI;
 }
 
+export interface PreferenceLink {
+  /**  */
+  title: string;
+
+  /**  */
+  url: string;
+}
+
+export interface FormMetadataExtraData {
+  /**  */
+  type: InputType;
+
+  /**  */
+  key: string;
+}
+
+export interface FormMetadataOptions {
+  /**  */
+  key: string;
+
+  /**  */
+  extraData?: FormMetadataExtraData[];
+
+  /**  */
+  description: boolean;
+
+  /**  */
+  exclusive: boolean;
+}
+
+export interface FormMetadata {
+  /**  */
+  key: string;
+
+  /**  */
+  options: FormMetadataOptions[];
+
+  /**  */
+  hideGenericDecline: boolean;
+
+  /**  */
+  customSelectText: string;
+
+  /**  */
+  hideFromListing: boolean;
+}
+
+export interface Preference {
+  /**  */
+  links: PreferenceLink[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  formMetadata?: FormMetadata;
+
+  /**  */
+  page: number;
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface ReservedCommunityType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+
+  /**  */
+  description?: string;
+}
+
 export interface Unit {
   /**  */
   amiChart: CombinedAmiChartTypes;
@@ -2977,111 +3098,6 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
-export interface Property {
-  /**  */
-  unitsSummarized: UnitsSummarized;
-
-  /**  */
-  units: Unit[];
-
-  /**  */
-  buildingAddress: Address;
-
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  accessibility: string;
-
-  /**  */
-  amenities: string;
-
-  /**  */
-  buildingTotalUnits: number;
-
-  /**  */
-  developer: string;
-
-  /**  */
-  householdSizeMax: number;
-
-  /**  */
-  householdSizeMin: number;
-
-  /**  */
-  neighborhood: string;
-
-  /**  */
-  petPolicy: string;
-
-  /**  */
-  smokingPolicy: string;
-
-  /**  */
-  unitsAvailable: number;
-
-  /**  */
-  unitAmenities: string;
-
-  /**  */
-  servicesOffered?: string;
-
-  /**  */
-  yearBuilt: number;
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
-export interface ReservedCommunityType {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  name: string;
-
-  /**  */
-  description?: string;
-}
-
 export interface ApplicationMethod {
   /**  */
   type: ApplicationMethodType;
@@ -3129,13 +3145,25 @@ export interface WhatToExpect {
 
 export interface Listing {
   /**  */
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
   status: ListingStatus;
 
   /**  */
   urlSlug: string;
-
-  /**  */
-  displayWaitlistSize: boolean;
 
   /**  */
   CSVFormattingType: CSVFormattingType;
@@ -3147,16 +3175,22 @@ export interface Listing {
   showWaitlist: boolean;
 
   /**  */
-  preferences: Preference[];
+  unitsSummarized: UnitsSummarized;
 
   /**  */
-  property: Property;
+  preferences: Preference[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
 
   /**  */
   applicationAddress: CombinedApplicationAddressTypes;
 
   /**  */
   applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  image?: CombinedImageTypes;
 
   /**  */
   leasingAgentAddress: CombinedLeasingAgentAddressTypes;
@@ -3171,6 +3205,54 @@ export interface Listing {
   reservedCommunityType?: ReservedCommunityType;
 
   /**  */
+  result?: CombinedResultTypes;
+
+  /**  */
+  units: Unit[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: Address;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
+
+  /**  */
   id: string;
 
   /**  */
@@ -3183,13 +3265,16 @@ export interface Listing {
   applicationMethods: ApplicationMethod[];
 
   /**  */
-  assets: Asset[];
+  assets: AssetCreate[];
 
   /**  */
   events: ListingEvent[];
 
   /**  */
   applicationDueDate: Date;
+
+  /**  */
+  applicationDueTime: Date
 
   /**  */
   applicationOpenDate: Date;
@@ -3273,7 +3358,22 @@ export interface Listing {
   applicationConfig?: object;
 
   /**  */
+  applicationCount?: number;
+
+  /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
   reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
 }
 
 export interface PreferenceCreate {
@@ -3297,309 +3397,6 @@ export interface PreferenceCreate {
 
   /**  */
   page: number;
-}
-
-export interface ListingCreate {
-  /**  */
-  status: ListingStatus;
-
-  /**  */
-  displayWaitlistSize: boolean;
-
-  /**  */
-  CSVFormattingType: CSVFormattingType;
-
-  /**  */
-  countyCode: CountyCode;
-
-  /**  */
-  preferences: PreferenceCreate[];
-
-  /**  */
-  property: Id;
-
-  /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
-
-  /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
-
-  /**  */
-  leasingAgents?: Id[];
-
-  /**  */
-  jurisdiction?: Id;
-
-  /**  */
-  reservedCommunityType?: Id;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
-
-  /**  */
-  assets: Asset[];
-
-  /**  */
-  events: ListingEvent[];
-
-  /**  */
-  applicationDueDate: Date;
-
-  /**  */
-  applicationOpenDate: Date;
-
-  /**  */
-  applicationFee: string;
-
-  /**  */
-  applicationOrganization: string;
-
-  /**  */
-  applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  buildingSelectionCriteria: string;
-
-  /**  */
-  costsNotIncluded: string;
-
-  /**  */
-  creditHistory: string;
-
-  /**  */
-  criminalBackground: string;
-
-  /**  */
-  depositMin: string;
-
-  /**  */
-  depositMax: string;
-
-  /**  */
-  disableUnitsAccordion: boolean;
-
-  /**  */
-  leasingAgentEmail: string;
-
-  /**  */
-  leasingAgentName: string;
-
-  /**  */
-  leasingAgentOfficeHours: string;
-
-  /**  */
-  leasingAgentPhone: string;
-
-  /**  */
-  leasingAgentTitle: string;
-
-  /**  */
-  name: string;
-
-  /**  */
-  postmarkedApplicationsReceivedByDate: Date;
-
-  /**  */
-  programRules: string;
-
-  /**  */
-  rentalAssistance: string;
-
-  /**  */
-  rentalHistory: string;
-
-  /**  */
-  requiredDocuments: string;
-
-  /**  */
-  specialNotes?: string;
-
-  /**  */
-  waitlistCurrentSize: number;
-
-  /**  */
-  waitlistMaxSize: number;
-
-  /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  applicationConfig?: object;
-
-  /**  */
-  reservedCommunityMinAge?: number;
-}
-
-export interface PreferenceUpdate {
-  /**  */
-  links: PreferenceLink[];
-
-  /**  */
-  ordinal: number;
-
-  /**  */
-  title: string;
-
-  /**  */
-  subtitle: string;
-
-  /**  */
-  description: string;
-
-  /**  */
-  formMetadata?: FormMetadata;
-
-  /**  */
-  page: number;
-
-  /**  */
-  id: string;
-}
-
-export interface ListingUpdate {
-  /**  */
-  status: ListingStatus;
-
-  /**  */
-  displayWaitlistSize: boolean;
-
-  /**  */
-  CSVFormattingType: CSVFormattingType;
-
-  /**  */
-  countyCode: CountyCode;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  preferences: PreferenceUpdate[];
-
-  /**  */
-  property: Id;
-
-  /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
-
-  /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
-
-  /**  */
-  leasingAgents?: Id[];
-
-  /**  */
-  jurisdiction?: Id;
-
-  /**  */
-  reservedCommunityType?: Id;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
-
-  /**  */
-  assets: Asset[];
-
-  /**  */
-  events: ListingEvent[];
-
-  /**  */
-  applicationDueDate: Date;
-
-  /**  */
-  applicationOpenDate: Date;
-
-  /**  */
-  applicationFee: string;
-
-  /**  */
-  applicationOrganization: string;
-
-  /**  */
-  applicationPickUpAddressOfficeHours: string;
-
-  /**  */
-  buildingSelectionCriteria: string;
-
-  /**  */
-  costsNotIncluded: string;
-
-  /**  */
-  creditHistory: string;
-
-  /**  */
-  criminalBackground: string;
-
-  /**  */
-  depositMin: string;
-
-  /**  */
-  depositMax: string;
-
-  /**  */
-  disableUnitsAccordion: boolean;
-
-  /**  */
-  leasingAgentEmail: string;
-
-  /**  */
-  leasingAgentName: string;
-
-  /**  */
-  leasingAgentOfficeHours: string;
-
-  /**  */
-  leasingAgentPhone: string;
-
-  /**  */
-  leasingAgentTitle: string;
-
-  /**  */
-  name: string;
-
-  /**  */
-  postmarkedApplicationsReceivedByDate: Date;
-
-  /**  */
-  programRules: string;
-
-  /**  */
-  rentalAssistance: string;
-
-  /**  */
-  rentalHistory: string;
-
-  /**  */
-  requiredDocuments: string;
-
-  /**  */
-  specialNotes?: string;
-
-  /**  */
-  waitlistCurrentSize: number;
-
-  /**  */
-  waitlistMaxSize: number;
-
-  /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
-
-  /**  */
-  applicationConfig?: object;
-
-  /**  */
-  reservedCommunityMinAge?: number;
 }
 
 export interface UnitCreate {
@@ -3661,9 +3458,51 @@ export interface UnitCreate {
   bmrProgramChart?: boolean;
 }
 
-export interface PropertyCreate {
+export interface ListingCreate {
   /**  */
-  buildingAddress: AddressUpdate;
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
+  status: ListingStatus;
+
+  /**  */
+  CSVFormattingType: CSVFormattingType;
+
+  /**  */
+  countyCode: CountyCode;
+
+  /**  */
+  preferences: PreferenceCreate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  applicationAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  image?: CombinedImageTypes;
+
+  /**  */
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgents?: Id[];
 
   /**  */
   units: UnitCreate[];
@@ -3673,6 +3512,9 @@ export interface PropertyCreate {
 
   /**  */
   amenities: string;
+
+  /**  */
+  buildingAddress: AddressCreate;
 
   /**  */
   buildingTotalUnits: number;
@@ -3706,6 +3548,169 @@ export interface PropertyCreate {
 
   /**  */
   yearBuilt: number;
+
+  /**  */
+  jurisdiction?: Id;
+
+  /**  */
+  reservedCommunityType?: Id;
+
+  /**  */
+  result?: CombinedResultTypes;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: AssetCreate[];
+
+  /**  */
+  events: ListingEvent[];
+
+  /**  */
+  applicationDueDate: Date;
+
+  /**  */
+  applicationDueTime: Date
+
+  /**  */
+  applicationOpenDate: Date;
+
+  /**  */
+  applicationFee: string;
+
+  /**  */
+  applicationOrganization: string;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
+  buildingSelectionCriteria: string;
+
+  /**  */
+  costsNotIncluded: string;
+
+  /**  */
+  creditHistory: string;
+
+  /**  */
+  criminalBackground: string;
+
+  /**  */
+  depositMin: string;
+
+  /**  */
+  depositMax: string;
+
+  /**  */
+  disableUnitsAccordion: boolean;
+
+  /**  */
+  leasingAgentEmail: string;
+
+  /**  */
+  leasingAgentName: string;
+
+  /**  */
+  leasingAgentOfficeHours: string;
+
+  /**  */
+  leasingAgentPhone: string;
+
+  /**  */
+  leasingAgentTitle: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  postmarkedApplicationsReceivedByDate: Date;
+
+  /**  */
+  programRules: string;
+
+  /**  */
+  rentalAssistance: string;
+
+  /**  */
+  rentalHistory: string;
+
+  /**  */
+  requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
+
+  /**  */
+  waitlistCurrentSize: number;
+
+  /**  */
+  waitlistMaxSize: number;
+
+  /**  */
+  whatToExpect: CombinedWhatToExpectTypes;
+
+  /**  */
+  applicationConfig?: object;
+
+  /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
+  reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
+}
+
+export interface PreferenceUpdate {
+  /**  */
+  links: PreferenceLink[];
+
+  /**  */
+  ordinal: number;
+
+  /**  */
+  title: string;
+
+  /**  */
+  subtitle: string;
+
+  /**  */
+  description: string;
+
+  /**  */
+  formMetadata?: FormMetadata;
+
+  /**  */
+  page: number;
+
+  /**  */
+  id: string;
+}
+
+export interface AssetUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
 }
 
 export interface UnitUpdate {
@@ -3768,6 +3773,333 @@ export interface UnitUpdate {
 
   /**  */
   id: string;
+}
+
+export interface ListingUpdate {
+  /**  */
+  applicationPickUpAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationDropOffAddressType?: ListingApplicationAddressType;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationDropOffAddressOfficeHours: string;
+
+  /**  */
+  status: ListingStatus;
+
+  /**  */
+  CSVFormattingType: CSVFormattingType;
+
+  /**  */
+  countyCode: CountyCode;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  preferences: PreferenceUpdate[];
+
+  /** */
+  additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  applicationAddress: CombinedApplicationAddressTypes;
+
+  /**  */
+  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+
+  /**  */
+  image?: AssetUpdate;
+
+  /**  */
+  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+
+  /**  */
+  leasingAgents?: Id[];
+
+  /**  */
+  units: UnitUpdate[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingAddress: AddressUpdate;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
+
+  /**  */
+  jurisdiction?: Id;
+
+  /**  */
+  reservedCommunityType?: Id;
+
+  /**  */
+  result?: AssetUpdate;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
+
+  /**  */
+  assets: AssetCreate[];
+
+  /**  */
+  events: ListingEvent[];
+
+  /**  */
+  applicationDueDate: Date;
+
+  /**  */
+  applicationDueTime: Date
+
+  /**  */
+  applicationOpenDate: Date;
+
+  /**  */
+  applicationFee: string;
+
+  /**  */
+  applicationOrganization: string;
+
+  /**  */
+  applicationPickUpAddressOfficeHours: string;
+
+  /**  */
+  buildingSelectionCriteria: string;
+
+  /**  */
+  costsNotIncluded: string;
+
+  /**  */
+  creditHistory: string;
+
+  /**  */
+  criminalBackground: string;
+
+  /**  */
+  depositMin: string;
+
+  /**  */
+  depositMax: string;
+
+  /**  */
+  disableUnitsAccordion: boolean;
+
+  /**  */
+  leasingAgentEmail: string;
+
+  /**  */
+  leasingAgentName: string;
+
+  /**  */
+  leasingAgentOfficeHours: string;
+
+  /**  */
+  leasingAgentPhone: string;
+
+  /**  */
+  leasingAgentTitle: string;
+
+  /**  */
+  name: string;
+
+  /**  */
+  postmarkedApplicationsReceivedByDate: Date;
+
+  /**  */
+  programRules: string;
+
+  /**  */
+  rentalAssistance: string;
+
+  /**  */
+  rentalHistory: string;
+
+  /**  */
+  requiredDocuments: string;
+
+  /**  */
+  specialNotes?: string;
+
+  /**  */
+  waitlistCurrentSize: number;
+
+  /**  */
+  waitlistMaxSize: number;
+
+  /**  */
+  whatToExpect: CombinedWhatToExpectTypes;
+
+  /**  */
+  applicationConfig?: object;
+
+  /**  */
+  displayWaitlistSize: boolean;
+
+  /**  */
+  reservedCommunityMinAge?: number;
+
+  /**  */
+  resultLink?: string;
+
+  /**  */
+  isWaitlistOpen?: boolean;
+
+  /**  */
+  waitlistOpenSpots?: number;
+}
+
+export interface Property {
+  /**  */
+  unitsSummarized: UnitsSummarized;
+
+  /**  */
+  units: Unit[];
+
+  /**  */
+  buildingAddress: Address;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
+}
+
+export interface PropertyCreate {
+  /**  */
+  buildingAddress: AddressUpdate;
+
+  /**  */
+  units: UnitCreate[];
+
+  /**  */
+  accessibility: string;
+
+  /**  */
+  amenities: string;
+
+  /**  */
+  buildingTotalUnits: number;
+
+  /**  */
+  developer: string;
+
+  /**  */
+  householdSizeMax: number;
+
+  /**  */
+  householdSizeMin: number;
+
+  /**  */
+  neighborhood: string;
+
+  /**  */
+  petPolicy: string;
+
+  /**  */
+  smokingPolicy: string;
+
+  /**  */
+  unitsAvailable: number;
+
+  /**  */
+  unitAmenities: string;
+
+  /**  */
+  servicesOffered?: string;
+
+  /**  */
+  yearBuilt: number;
 }
 
 export interface PropertyUpdate {
@@ -4115,6 +4447,20 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
+export enum EnumListingFilterParamsComparison {
+  '=' = '=',
+  '<>' = '<>'
+}
+export enum EnumListingFilterParamsStatus {
+  'active' = 'active',
+  'pending' = 'pending',
+  'closed' = 'closed'
+}
+
+export enum ListingApplicationAddressType {
+  'leasingAgent' = 'leasingAgent',
+  'mailingAddress' = 'mailingAddress'
+}
 
 export enum ListingStatus {
   'active' = 'active',
@@ -4138,9 +4484,7 @@ export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup',
-  'POBox' = 'POBox',
-  'LeasingAgent' = 'LeasingAgent'
+  "PaperPickup" = "PaperPickup",
 }
 
 export enum ListingEventType {
@@ -4150,7 +4494,9 @@ export enum ListingEventType {
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedImageTypes = (AssetCreate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedResultTypes = (AssetCreate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
 export enum UserRole {
   'user' = 'user',

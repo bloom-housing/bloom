@@ -4,8 +4,9 @@
   @apply border;
   @apply border-gray-500;
   @apply p-2;
-  @apply text-tiny;
-  @apply text-gray-750;
+  @apply text-gray-900;
+  @apply bg-gray-200;
+  font-size: 1rem;
 }
 
 .textarea-resize-off {

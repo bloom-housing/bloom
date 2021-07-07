@@ -12,18 +12,7 @@
     "longitude": -121.91071
   },
   "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
-  "applicationMethods": [
-    {
-      "type": "POBox",
-      "acceptsPostmarkedApplications": true
-    },
-    {
-      "type": "LeasingAgent"
-    },
-    {
-      "type": "PaperPickup"
-    }
-  ],
+  "applicationMethods": [],
   "applicationOrganization": "98 Archer Street",
   "applicationPhone": "(408) 217-8562",
   "assets": [

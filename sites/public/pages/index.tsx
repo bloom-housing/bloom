@@ -80,11 +80,14 @@ export default function Home(props: IndexProps) {
 export async function getStaticProps() {
   let listings = []
   try {
-    const response = await axios.get(process.env.listingServiceUrl)
+    // const response = await axios.get(process.env.listingServiceUrl)
+    const response = await axios.get(
+      process.env.listingServiceUrl + "?filter[$comparison]=<>&filter[status]=pending"
+    )
     listings = response.data
   } catch (error) {
     console.error(error)
   }
 
-  return { props: { listings } }
+  return { props: { listings }, revalidate: process.env.cacheRevalidate }
 }
