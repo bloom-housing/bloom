@@ -33,16 +33,36 @@ import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 
-enum OrderByParam {
+export enum OrderByParam {
   firstName = "applicant.firstName",
   lastName = "applicant.lastName",
   submissionDate = "application.submissionDate",
   createdAt = "application.createdAt",
 }
 
-enum OrderParam {
+export enum OrderParam {
   ASC = "ASC",
   DESC = "DESC",
+}
+
+class ApplicationsApiExtraModel {
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(OrderByParam),
+    example: "createdAt",
+    default: "createdAt",
+    required: false,
+  })
+  orderBy?: OrderByParam
+
+  @Expose()
+  @ApiProperty({
+    enum: OrderParam,
+    example: "DESC",
+    default: "DESC",
+    required: false,
+  })
+  order?: OrderParam
 }
 
 export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
@@ -163,7 +183,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels)
+@ApiExtraModels(...applicationPreferenceApiExtraModels, ApplicationsApiExtraModel)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,

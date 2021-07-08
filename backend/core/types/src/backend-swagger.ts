@@ -2122,6 +2122,14 @@ export interface AddressInput {
   value: AddressCreate;
 }
 
+export interface ApplicationsApiExtraModel {
+  /**  */
+  orderBy?: EnumApplicationsApiExtraModelOrderBy;
+
+  /**  */
+  order?: EnumApplicationsApiExtraModelOrder;
+}
+
 export interface PaginationMeta {
   /**  */
   currentPage: number;
@@ -4447,6 +4455,16 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
+export enum EnumApplicationsApiExtraModelOrderBy {
+  'firstName' = 'firstName',
+  'lastName' = 'lastName',
+  'submissionDate' = 'submissionDate',
+  'createdAt' = 'createdAt'
+}
+export enum EnumApplicationsApiExtraModelOrder {
+  'ASC' = 'ASC',
+  'DESC' = 'DESC'
+}
 export enum EnumListingFilterParamsComparison {
   '=' = '=',
   '<>' = '<>'
@@ -4456,7 +4474,6 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
-
 export enum ListingApplicationAddressType {
   'leasingAgent' = 'leasingAgent',
   'mailingAddress' = 'mailingAddress'
