@@ -2,6 +2,7 @@ import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, DateField, TimeField } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
+import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
 
 type ApplicationDatesProps = {
@@ -13,6 +14,7 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
+  const enableDueDate: YesNoAnswer = watch("dueDateQuestion")
 
   return (
     <div>
@@ -30,6 +32,7 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
             register={register}
             watch={watch}
             note={t("listings.whenApplicationsClose")}
+            disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
                 ? moment(new Date(listing?.applicationDueDate)).utc().format("MM")
@@ -48,6 +51,7 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
             id={"applicationDueTimeField"}
             register={register}
             watch={watch}
+            disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
               hours: listing?.applicationDueTime
                 ? moment(new Date(listing?.applicationDueTime)).format("hh")

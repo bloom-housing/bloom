@@ -34,9 +34,15 @@ const DetailRankingsAndResults = () => {
       </GridSection>
       {lotteryEvent && (
         <>
-          <GridSection columns={2}>
+          <GridSection columns={3}>
             <ViewItem label={t("listings.lotteryDateQuestion")}>
               {moment(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
+            </ViewItem>
+            <ViewItem label={t("listings.lotteryStartTime")}>
+              {moment(new Date(lotteryEvent?.startTime)).format("hh:mm A")}
+            </ViewItem>
+            <ViewItem label={t("listings.lotteryEndTime")}>
+              {moment(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
             </ViewItem>
           </GridSection>
           <GridSection columns={2}>

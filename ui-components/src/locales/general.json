@@ -804,11 +804,13 @@
     "lottery": "Lottery",
     "lotteryDateNotes": "Lottery Date Notes",
     "lotteryDateQuestion": "When will the lottery be run?",
+    "lotteryEndTime": "Lottery End Time",
     "lotteryResults": {
       "completeResultsWillBePosted": "Complete lottery results will be posted soon.",
       "downloadResults": "Download Results",
       "header": "Lottery Results"
     },
+    "lotteryStartTime": "Lottery Start Time",
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
     "moreBuildingSelectionCriteria": "Find out more about Building Selection Criteria",
