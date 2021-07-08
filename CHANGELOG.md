@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
 
+- Changed:
+  - User module has been removed and incorporated into Auth module
+
 ### Frontend
 
 ### UI Components
@@ -60,7 +63,6 @@ All notable changes to this project will be documented in this file. The format 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
   - removed eager relation to listing from User model
-  - User module has been removed and incorporated into Auth module
 
 ### Frontend
 
