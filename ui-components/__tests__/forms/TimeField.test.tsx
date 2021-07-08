@@ -15,13 +15,14 @@ const DefaultTimeField = () => {
       required={true}
       register={register}
       watch={watch}
+      seconds={true}
       error={!!errors?.time}
     />
   )
 }
 
 describe("<TimeField>", () => {
-  it("renders defalt state", () => {
+  it("renders default state", () => {
     const { getByText } = render(<DefaultTimeField />)
     expect(getByText("Time")).toBeTruthy()
     expect(getByText("Hour")).toBeTruthy()

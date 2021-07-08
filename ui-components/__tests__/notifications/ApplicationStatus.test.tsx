@@ -6,7 +6,6 @@ import {
   openSoon,
   openSoonVivid,
   openedAlready,
-  openedWithNoDue,
   openedWithFCFS,
   openedWithFCFSVivid,
 } from "../../src/notifications/ApplicationStatus.stories"
@@ -37,10 +36,6 @@ describe("<ApplicationStatus>", () => {
   it("renders as due soon", () => {
     const { getByText } = render(openedAlready())
     expect(getByText("Application Due Date:", { exact: false })).toBeTruthy()
-  })
-  it("renders as no due date", () => {
-    const { getByText } = render(openedWithNoDue())
-    expect(getByText("First Come First Serve", { exact: false })).toBeTruthy()
   })
   it("renders as first come first serve", () => {
     const { getByText } = render(openedWithFCFS())
