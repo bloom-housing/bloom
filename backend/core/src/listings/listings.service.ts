@@ -57,7 +57,7 @@ export class ListingsService {
 
       // Issue a separate "COUNT(*) from listings;" query to get the total listings count.
       totalItemsCount = await this.repository.count()
-      totalPages = Math.floor(totalItemsCount / itemsPerPage)
+      totalPages = Math.ceil(totalItemsCount / itemsPerPage)
     } else {
       // If currentPage or itemsPerPage aren't specified (or are invalid), issue the SQL query to
       // get all listings (no pagination).
