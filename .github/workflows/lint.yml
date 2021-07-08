@@ -9,6 +9,9 @@ on:
   pull_request:
     branches:
       - dev
+  pull_request_target: # Run on fork PRs
+    branches:
+      - dev
 
 jobs:
   run-linters:
