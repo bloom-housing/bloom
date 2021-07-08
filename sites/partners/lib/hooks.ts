@@ -39,7 +39,9 @@ export function useApplicationsData(
   pageIndex: number,
   limit = 10,
   listingId: string,
-  search: string
+  search: string,
+  orderBy?: string,
+  order?: string
 ) {
   const { applicationsService } = useContext(AuthContext)
 
@@ -52,6 +54,11 @@ export function useApplicationsData(
     searchParams.append("search", search)
   }
 
+  if (orderBy) {
+    searchParams.append("orderBy", search)
+    searchParams.append("order", order ?? "ASC")
+  }
+
   const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
 
   const params = {
@@ -62,6 +69,10 @@ export function useApplicationsData(
 
   if (search) {
     Object.assign(params, { search })
+  }
+
+  if (orderBy) {
+    Object.assign(params, { orderBy, order: order ?? "ASC" })
   }
 
   const fetcher = () => applicationsService.list(params)
