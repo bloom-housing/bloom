@@ -30,10 +30,10 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               name="householdSize"
               defaultValue={householdSize}
               ref={
-                listing.householdSizeMin && listing.householdSizeMax
+                listing.householdSizeMax
                   ? register({
                       min: {
-                        value: listing.householdSizeMin,
+                        value: listing.householdSizeMin || 0,
                         message: t("errors.householdTooSmall"),
                       },
                       max: {
