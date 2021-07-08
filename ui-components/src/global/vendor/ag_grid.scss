@@ -6,7 +6,7 @@
   // would like to remove the local theme class
   @include ag-theme-alpine(
     (
-           // use theme parameters wher
+           /
       header-height: 83px,
       row-height: 58px
     )
@@ -133,9 +133,6 @@
       @apply bg-white;
     }
   }
-}
-
-.data-pager__previous {
 }
 
 .data-pager__control-group {
