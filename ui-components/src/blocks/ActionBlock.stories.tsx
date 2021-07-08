@@ -55,11 +55,7 @@ export const blockWithSubheader = () => (
     subheader="Brunch leggings trust fund tattooed, flannel sustainable man braid venmo. "
     icon={<Icon size="3xl" symbol="mail" />}
     background="primary-lighter"
-    actions={[
-      <Button onClick={() => console.log("click")} styleType={AppearanceStyleType.secondary}>
-        Action
-      </Button>,
-    ]}
+    actions={[<Button onClick={() => console.log("click")}>Action</Button>]}
   ></ActionBlock>
 )
 
@@ -83,12 +79,8 @@ export const inlineBlockWith2actions = () => (
     background="primary-darker"
     layout={ActionBlockLayout.inline}
     actions={[
-      <Button onClick={() => console.log("click")} styleType={AppearanceStyleType.primary}>
-        First Come, First Served
-      </Button>,
-      <Button onClick={() => console.log("click")} styleType={AppearanceStyleType.primary}>
-        First Come, First Served
-      </Button>,
+      <Button onClick={() => console.log("click")}>First Come, First Served</Button>,
+      <Button onClick={() => console.log("click")}>First Come, First Served</Button>,
     ]}
   ></ActionBlock>
 )

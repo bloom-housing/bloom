@@ -101,5 +101,8 @@
   }
   .action-block__header {
     @apply ml-6;
+    @media (max-width: 640px) {
+      @apply ml-0;
+    }
   }
 }
