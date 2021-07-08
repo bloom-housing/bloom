@@ -9,6 +9,7 @@ import {
   GridCell,
   Textarea,
   DateField,
+  TimeField,
 } from "@bloom-housing/ui-components"
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
@@ -108,40 +109,86 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
           </GridSection>
         )}
         {reviewOrder === "reviewOrderLottery" && (
-          <GridSection columns={3}>
-            <GridCell>
-              <DateField
-                label={t("listings.lotteryDateQuestion")}
-                name={"lotteryDate"}
-                id={"lotteryDate"}
-                register={register}
-                watch={watch}
-                defaultDate={{
-                  month: lotteryEvent?.startTime
-                    ? moment(new Date(lotteryEvent?.startTime)).utc().format("MM")
-                    : null,
-                  day: lotteryEvent?.startTime
-                    ? moment(new Date(lotteryEvent?.startTime)).utc().format("DD")
-                    : null,
-                  year: lotteryEvent?.startTime
-                    ? moment(new Date(lotteryEvent?.startTime)).utc().format("YYYY")
-                    : null,
-                }}
-              />
-            </GridCell>
-            <GridCell span={2}>
-              <Textarea
-                label={t("listings.lotteryDateNotes")}
-                name={"lotteryDateNotes"}
-                id={"lotteryDateNotes"}
-                placeholder={t("t.notes")}
-                note={t("t.optional")}
-                fullWidth={true}
-                register={register}
-                defaultValue={lotteryEvent ? lotteryEvent.note : null}
-              />
-            </GridCell>
-          </GridSection>
+          <>
+            <GridSection columns={3}>
+              <GridCell>
+                <DateField
+                  label={t("listings.lotteryDateQuestion")}
+                  name={"lotteryDate"}
+                  id={"lotteryDate"}
+                  register={register}
+                  watch={watch}
+                  defaultDate={{
+                    month: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("MM")
+                      : null,
+                    day: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("DD")
+                      : null,
+                    year: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("YYYY")
+                      : null,
+                  }}
+                />
+              </GridCell>
+              <GridCell>
+                <TimeField
+                  label={t("listings.lotteryStartTime")}
+                  name={"lotteryStartTime"}
+                  id={"lotteryStartTime"}
+                  register={register}
+                  watch={watch}
+                  defaultValues={{
+                    hours: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).format("hh")
+                      : null,
+                    minutes: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).format("mm")
+                      : null,
+                    seconds: lotteryEvent?.startTime
+                      ? moment(new Date(lotteryEvent?.startTime)).format("ss")
+                      : null,
+                    period: new Date(lotteryEvent?.startTime).getHours() >= 12 ? "pm" : "am",
+                  }}
+                />
+              </GridCell>
+              <GridCell>
+                <TimeField
+                  label={t("listings.lotteryEndTime")}
+                  name={"lotteryEndTime"}
+                  id={"lotteryEndTime"}
+                  register={register}
+                  watch={watch}
+                  defaultValues={{
+                    hours: lotteryEvent?.endTime
+                      ? moment(new Date(lotteryEvent?.endTime)).format("hh")
+                      : null,
+                    minutes: lotteryEvent?.endTime
+                      ? moment(new Date(lotteryEvent?.endTime)).format("mm")
+                      : null,
+                    seconds: lotteryEvent?.endTime
+                      ? moment(new Date(lotteryEvent?.endTime)).format("ss")
+                      : null,
+                    period: new Date(lotteryEvent?.endTime).getHours() >= 12 ? "pm" : "am",
+                  }}
+                />
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={2}>
+                <Textarea
+                  label={t("listings.lotteryDateNotes")}
+                  name={"lotteryDateNotes"}
+                  id={"lotteryDateNotes"}
+                  placeholder={t("t.notes")}
+                  note={t("t.optional")}
+                  fullWidth={true}
+                  register={register}
+                  defaultValue={lotteryEvent ? lotteryEvent.note : null}
+                />
+              </GridCell>
+            </GridSection>
+          </>
         )}
         <GridSection columns={2} className={"flex items-center"}>
           <GridCell>
