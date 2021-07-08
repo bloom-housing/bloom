@@ -1,1440 +1,1414 @@
 {
-   "id":"06436559-e84c-4f75-881a-13765f480b39",
-   "createdAt":"2019-07-08T22:37:19.565Z",
-   "updatedAt":"2019-07-09T21:35:11.142Z",
-   "accessibility":"There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
-   "amenities":"Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-   "applicationDueDate":"2019-12-31T15:22:57.000-07:00",
-   "applicationOpenDate":null,
-   "applicationFee":"30.0",
-   "applicationOrganization":"98 Archer Street",
-   "applicationAddress":{
-      "city":"San Jose",
-      "state":"CA",
-      "street":"98 Archer Street",
-      "zipCode":"95112",
-      "latitude":37.36537,
-      "longitude":-121.91071
-   },
-   "blankPaperApplicationCanBePickedUp":true,
-   "buildingAddress":{
-      "city":"San Jose",
-      "state":"CA",
-      "street":"98 Archer Street",
-      "zipCode":"95112",
-      "latitude":37.36537,
-      "longitude":-121.91071
-   },
-   "buildingTotalUnits":"35",
-   "buildingSelectionCriteria":"Tenant Selection Criteria will be available to all applicants upon request.",
-   "costsNotIncluded":"Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
-   "creditHistory":"Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
-   "criminalBackground":"A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
-   "depositMin":"1140.0",
-   "depositMax":null,
-   "developer":"Charities Housing ",
-   "disableUnitsAccordion":null,
-   "householdSizeMax":null,
-   "householdSizeMin":null,
-   "imageUrl":"https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
-   "leasingAgentAddress":{
-      "city":"San Jose",
-      "state":"CA",
-      "street":"98 Archer Street",
-      "zipCode":"95112",
-      "latitude":37.36537,
-      "longitude":-121.91071
-   },
-   "leasingAgentEmail":"mbaca@charitieshousing.org",
-   "leasingAgentName":"Marisela Baca",
-   "leasingAgentOfficeHours":"Monday, Tuesday & Friday, 9:00AM - 5:00PM",
-   "leasingAgentPhone":"(408) 217-8562",
-   "leasingAgentTitle":"",
-   "name":"Archer Studios",
-   "neighborhood":"Rosemary Gardens Park",
-   "petPolicy":"No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
-   "postmarkedApplicationsReceivedByDate":"2019-12-05",
-   "programRules":"Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
-   "rentalAssistance":null,
-   "rentalHistory":"Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
-   "requiredDocuments":"Completed application and government issued IDs",
-   "smokingPolicy":"Non-smoking building",
-   "unitsAvailable":"0",
-   "unitAmenities":"Dishwasher",
-   "waitlistCurrentSize":"300",
-   "waitlistMaxSize":"300",
-   "whatToExpect":null,
-   "yearBuilt":"2012",
-   "status":"pending",
-   "unitsSummarized":{
-      "unitTypes":[
-         "studio"
-      ],
-      "reservedTypes":[
-         "senior"
-      ],
-      "priorityTypes":[
-         
-      ],
-      "amiPercentages":[
-         "30.0",
-         "45.0"
-      ],
-      "byUnitType":[
-         {
-            "unitType":"studio",
-            "totalAvailable":0,
-            "minIncomeRange":{
-               "min":"$1,438",
-               "max":"$2,208"
-            },
-            "occupancyRange":{
-               "min":1,
-               "max":2
-            },
-            "rentAsPercentIncomeRange":{
-               "min":null,
-               "max":null
-            },
-            "rentRange":{
-               "min":"$719",
-               "max":"$1,104"
-            },
-            "floorRange":{
-               "min":2,
-               "max":3
-            },
-            "areaRange":{
-               "min":285,
-               "max":285
-            }
-         }
-      ],
-      "byNonReservedUnitType":[
-         {
-            "unitType":"studio",
-            "totalAvailable":0,
-            "minIncomeRange":{
-               "min":"$1,438",
-               "max":"$2,208"
-            },
-            "occupancyRange":{
-               "min":1,
-               "max":2
-            },
-            "rentAsPercentIncomeRange":{
-               "min":null,
-               "max":null
-            },
-            "rentRange":{
-               "min":"$719",
-               "max":"$1,104"
-            },
-            "floorRange":{
-               "min":2,
-               "max":3
-            },
-            "areaRange":{
-               "min":285,
-               "max":285
-            }
-         }
-      ],
-      "byReservedType":[
-         {
-            "reservedType":"senior",
-            "byUnitType":[
-               {
-                  "unitType":"studio",
-                  "totalAvailable":0,
-                  "minIncomeRange":{
-                     "min":"$2,208",
-                     "max":"$2,208"
-                  },
-                  "occupancyRange":{
-                     "min":1,
-                     "max":2
-                  },
-                  "rentAsPercentIncomeRange":{
-                     "min":null,
-                     "max":null
-                  },
-                  "rentRange":{
-                     "min":"$1,104",
-                     "max":"$1,104"
-                  },
-                  "floorRange":{
-                     "min":2,
-                     "max":2
-                  },
-                  "areaRange":{
-                     "min":285,
-                     "max":285
-                  }
-               }
-            ]
-         }
-      ],
-      "byAMI":[
-         {
-            "percent":"30.0",
-            "byNonReservedUnitType":[
-               {
-                  "unitType":"studio",
-                  "totalAvailable":0,
-                  "minIncomeRange":{
-                     "min":"$1,438",
-                     "max":"$1,438"
-                  },
-                  "occupancyRange":{
-                     "min":1,
-                     "max":2
-                  },
-                  "rentAsPercentIncomeRange":{
-                     "min":null,
-                     "max":null
-                  },
-                  "rentRange":{
-                     "min":"$719",
-                     "max":"$719"
-                  },
-                  "floorRange":{
-                     "min":2,
-                     "max":3
-                  },
-                  "areaRange":{
-                     "min":285,
-                     "max":285
-                  }
-               }
-            ],
-            "byReservedType":[
-               
-            ]
-         },
-         {
-            "percent":"45.0",
-            "byNonReservedUnitType":[
-               {
-                  "unitType":"studio",
-                  "totalAvailable":0,
-                  "minIncomeRange":{
-                     "min":"$2,208",
-                     "max":"$2,208"
-                  },
-                  "occupancyRange":{
-                     "min":1,
-                     "max":2
-                  },
-                  "rentAsPercentIncomeRange":{
-                     "min":null,
-                     "max":null
-                  },
-                  "rentRange":{
-                     "min":"$1,104",
-                     "max":"$1,104"
-                  },
-                  "floorRange":{
-                     "min":2,
-                     "max":3
-                  },
-                  "areaRange":{
-                     "min":285,
-                     "max":285
-                  }
-               }
-            ],
-            "byReservedType":[
-               {
-                  "reservedType":"senior",
-                  "byUnitType":[
-                     {
-                        "unitType":"studio",
-                        "totalAvailable":0,
-                        "minIncomeRange":{
-                           "min":"$2,208",
-                           "max":"$2,208"
-                        },
-                        "occupancyRange":{
-                           "min":1,
-                           "max":2
-                        },
-                        "rentAsPercentIncomeRange":{
-                           "min":null,
-                           "max":null
-                        },
-                        "rentRange":{
-                           "min":"$1,104",
-                           "max":"$1,104"
-                        },
-                        "floorRange":{
-                           "min":2,
-                           "max":2
-                        },
-                        "areaRange":{
-                           "min":285,
-                           "max":285
-                        }
-                     }
-                  ]
-               }
-            ]
-         }
-      ],
-      "hmi":{
-         "columns":{
-            "householdSize":"Household Size",
-            "ami30":"30% AMI Units",
-            "ami45":"45% AMI Units"
-         },
-         "rows":[
-            {
-               "householdSize":1,
-               "ami30":"$30,750",
-               "ami45":"$46,125"
-            },
-            {
-               "householdSize":2,
-               "ami30":"$35,130",
-               "ami45":"$52,695"
-            }
-         ]
-      }
-   },
-   "urlSlug":"archer_studios_98_archer_street_san_jose_ca",
-   "applicationMethods":[
-      
-   ],
-   "assets":[
-      
-   ],
-   "preferences": [
+  "id": "06436559-e84c-4f75-881a-13765f480b39",
+  "createdAt": "2019-07-08T22:37:19.565Z",
+  "updatedAt": "2019-07-09T21:35:11.142Z",
+  "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
+  "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
+  "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
+  "applicationOpenDate": null,
+  "applicationFee": "30.0",
+  "applicationOrganization": "98 Archer Street",
+  "applicationAddress": {
+    "city": "San Jose",
+    "state": "CA",
+    "street": "98 Archer Street",
+    "zipCode": "95112",
+    "latitude": 37.36537,
+    "longitude": -121.91071
+  },
+  "blankPaperApplicationCanBePickedUp": true,
+  "buildingAddress": {
+    "city": "San Jose",
+    "state": "CA",
+    "street": "98 Archer Street",
+    "zipCode": "95112",
+    "latitude": 37.36537,
+    "longitude": -121.91071
+  },
+  "buildingTotalUnits": "35",
+  "buildingSelectionCriteria": "Tenant Selection Criteria will be available to all applicants upon request.",
+  "costsNotIncluded": "Resident responsible for PG&E, internet and phone.  Owner pays for water, trash, and sewage.  Residents encouraged to obtain renter's insurance but this is not a requirement.  Rent is due by the 5th of each month. Late fee $35 and returned check fee is $35 additional.",
+  "creditHistory": "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
+  "criminalBackground": "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
+  "depositMin": "1140.0",
+  "depositMax": null,
+  "developer": "Charities Housing ",
+  "disableUnitsAccordion": null,
+  "householdSizeMax": null,
+  "householdSizeMin": null,
+  "imageUrl": "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/archer/archer-studios.jpg",
+  "leasingAgentAddress": {
+    "city": "San Jose",
+    "state": "CA",
+    "street": "98 Archer Street",
+    "zipCode": "95112",
+    "latitude": 37.36537,
+    "longitude": -121.91071
+  },
+  "leasingAgentEmail": "mbaca@charitieshousing.org",
+  "leasingAgentName": "Marisela Baca",
+  "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
+  "leasingAgentPhone": "(408) 217-8562",
+  "leasingAgentTitle": "",
+  "name": "Archer Studios",
+  "neighborhood": "Rosemary Gardens Park",
+  "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
+  "postmarkedApplicationsReceivedByDate": "2019-12-05",
+  "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
+  "rentalAssistance": null,
+  "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
+  "requiredDocuments": "Completed application and government issued IDs",
+  "smokingPolicy": "Non-smoking building",
+  "unitsAvailable": "0",
+  "unitAmenities": "Dishwasher",
+  "waitlistCurrentSize": "300",
+  "waitlistMaxSize": "300",
+  "whatToExpect": null,
+  "yearBuilt": "2012",
+  "status": "pending",
+  "unitsSummarized": {
+    "unitTypes": ["studio"],
+    "reservedTypes": ["senior"],
+    "priorityTypes": [],
+    "amiPercentages": ["30.0", "45.0"],
+    "byUnitType": [
       {
-          "id": "e095a124-3d95-4f71-a9e2-4e93aac00bfa",
-          "createdAt": "2021-04-24T10:31:17.607Z",
-          "updatedAt": "2021-04-24T10:31:17.607Z",
-          "ordinal": 1,
-          "page": 1,
-          "title": "Live or Work in Hayward",
-          "subtitle": "",
-          "description": "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
-          "links": [],
-          "formMetadata": {
-              "key": "liveWork",
-              "options": [
-                  {
-                      "key": "live",
-                      "extraData": []
-                  },
-                  {
-                      "key": "work",
-                      "extraData": []
-                  }
-              ]
-          }
-      },
-      {
-          "id": "8b46a50c-c321-4506-ad71-a80245ef4602",
-          "createdAt": "2021-04-24T10:31:17.607Z",
-          "updatedAt": "2021-04-24T10:31:17.607Z",
-          "ordinal": 2,
-          "page": 1,
-          "title": "Displaced Tenant Housing Preference",
-          "subtitle": "",
-          "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
-          "links": [],
-          "formMetadata": {
-              "key": "displacedTenant",
-              "options": [
-                  {
-                      "key": "general",
-                      "extraData": [
-                          {
-                              "type": "hhMemberSelect",
-                              "key": "name"
-                          },
-                          {
-                              "type": "address",
-                              "key": "address"
-                          }
-                      ]
-                  },
-                  {
-                      "key": "missionCorridor",
-                      "extraData": [
-                          {
-                              "type": "hhMemberSelect",
-                              "key": "name"
-                          },
-                          {
-                              "type": "address",
-                              "key": "address"
-                          }
-                      ]
-                  }
-              ]
-          }
+        "unitType": "studio",
+        "totalAvailable": 0,
+        "minIncomeRange": {
+          "min": "$1,438",
+          "max": "$2,208"
+        },
+        "occupancyRange": {
+          "min": 1,
+          "max": 2
+        },
+        "rentAsPercentIncomeRange": {
+          "min": null,
+          "max": null
+        },
+        "rentRange": {
+          "min": "$719",
+          "max": "$1,104"
+        },
+        "floorRange": {
+          "min": 2,
+          "max": 3
+        },
+        "areaRange": {
+          "min": 285,
+          "max": 285
+        }
       }
     ],
-   "units":[
+    "byNonReservedUnitType": [
       {
-         "id":"fab3456e-9af8-46ae-a59e-3de6608bf5a2",
-         "createdAt":"2019-08-14T22:56:06.593Z",
-         "updatedAt":"2019-08-14T23:06:59.254Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"f505a681-d6be-40a1-971b-29649f68d21a",
-         "createdAt":"2019-08-14T22:56:06.606Z",
-         "updatedAt":"2019-08-14T23:06:59.260Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"dce72e59-f16f-4533-92b6-500c5b5b9f96",
-         "createdAt":"2019-08-14T22:56:06.612Z",
-         "updatedAt":"2019-08-14T23:06:59.267Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"118bfa58-03a3-46e3-9cd6-51cba1b46f45",
-         "createdAt":"2019-08-14T22:52:08.790Z",
-         "updatedAt":"2019-08-14T23:06:59.060Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"3effd0c9-77cf-46d5-bfe5-b9ee14b914c6",
-         "createdAt":"2019-08-14T22:52:08.796Z",
-         "updatedAt":"2019-08-14T23:06:59.067Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":"senior",
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"b4c79274-099e-45d0-8ea9-46e7cc31475f",
-         "createdAt":"2019-08-14T22:52:08.802Z",
-         "updatedAt":"2019-08-14T23:06:59.074Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"ee0a7fea-c24e-4276-95c2-01da342a244f",
-         "createdAt":"2019-08-14T22:52:08.807Z",
-         "updatedAt":"2019-08-14T23:06:59.080Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"b8daabcd-c1dc-4b3d-a28c-2027f441a955",
-         "createdAt":"2019-08-14T22:52:08.813Z",
-         "updatedAt":"2019-08-14T23:06:59.086Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"ccf5f022-5179-4689-a0a9-978c0bda651e",
-         "createdAt":"2019-08-14T22:52:08.819Z",
-         "updatedAt":"2019-08-14T23:06:59.093Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"1b63bd84-f31f-404a-aeed-36c75518e702",
-         "createdAt":"2019-08-14T22:53:09.921Z",
-         "updatedAt":"2019-08-14T23:06:59.099Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"2b5235a9-72af-42cd-ae61-ad5b5be9d2f3",
-         "createdAt":"2019-08-14T22:53:09.927Z",
-         "updatedAt":"2019-08-14T23:06:59.105Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"21a4c6c1-b0f6-40a9-9c44-089362217b8a",
-         "createdAt":"2019-08-14T22:53:09.933Z",
-         "updatedAt":"2019-08-14T23:06:59.111Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"9ce2fbfc-79f4-4690-9ecc-0c02a11a2188",
-         "createdAt":"2019-08-14T22:53:09.938Z",
-         "updatedAt":"2019-08-14T23:06:59.118Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"8f4284ae-b771-4155-8baa-a3fc80c04c9e",
-         "createdAt":"2019-08-14T22:53:09.944Z",
-         "updatedAt":"2019-08-14T23:06:59.124Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"a5e8d305-9e54-42f3-b176-16651d6326d6",
-         "createdAt":"2019-08-14T22:53:09.950Z",
-         "updatedAt":"2019-08-14T23:06:59.130Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"9a467456-88a4-40f9-bb2c-69cb2f77a41c",
-         "createdAt":"2019-08-14T22:53:09.955Z",
-         "updatedAt":"2019-08-14T23:06:59.136Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"bd7978ed-0483-4692-8bb2-29671264b1a7",
-         "createdAt":"2019-08-14T22:53:09.960Z",
-         "updatedAt":"2019-08-14T23:06:59.142Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"95a436e5-559c-471b-abca-eef2916c85cb",
-         "createdAt":"2019-08-14T22:53:09.965Z",
-         "updatedAt":"2019-08-14T23:06:59.148Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"2a961fae-d68f-405e-a5f1-0caac408310f",
-         "createdAt":"2019-08-14T22:53:09.970Z",
-         "updatedAt":"2019-08-14T23:06:59.155Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"55da1173-6ac7-4d42-ad9e-c7c0cea43b1f",
-         "createdAt":"2019-07-09T21:20:05.783Z",
-         "updatedAt":"2019-08-14T23:05:43.913Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"d0e4cbfa-e397-4a0f-aeb3-f2556e78c09c",
-         "createdAt":"2019-08-14T22:53:09.982Z",
-         "updatedAt":"2019-08-14T23:06:59.015Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"361d84bd-1b33-41eb-aa39-d58d21a62ea4",
-         "createdAt":"2019-08-14T22:52:08.758Z",
-         "updatedAt":"2019-08-14T23:06:59.023Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"f748a7a8-a3bf-44ce-b358-64107c80414d",
-         "createdAt":"2019-08-14T22:52:08.766Z",
-         "updatedAt":"2019-08-14T23:06:59.031Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"e7d97fbb-5a97-4e2c-adab-9bcffc031484",
-         "createdAt":"2019-08-14T22:52:08.771Z",
-         "updatedAt":"2019-08-14T23:06:59.039Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"331fb66f-6fc0-4987-b1b2-95efb87a492d",
-         "createdAt":"2019-08-14T22:52:08.777Z",
-         "updatedAt":"2019-08-14T23:06:59.046Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"e59721c1-32e0-4255-8412-174e7e2da691",
-         "createdAt":"2019-08-14T22:52:08.783Z",
-         "updatedAt":"2019-08-14T23:06:59.053Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":2,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"82f72a45-607f-4b31-a01d-175a2a37d2f5",
-         "createdAt":"2019-08-14T22:53:09.976Z",
-         "updatedAt":"2019-08-14T23:06:59.161Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"b1d4a618-675e-483a-aa58-12aa1e3b32e2",
-         "createdAt":"2019-08-14T22:53:09.976Z",
-         "updatedAt":"2019-08-14T23:06:59.167Z",
-         "amiPercentage":"45.0",
-         "annualIncomeMin":"26496.0",
-         "monthlyIncomeMin":"2208.0",
-         "floor":3,
-         "annualIncomeMax":"46125.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"1104.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"7af08604-e4b0-4581-a06e-f4359f5a8ce8",
-         "createdAt":"2019-07-09T21:24:14.122Z",
-         "updatedAt":"2019-08-14T23:06:59.173Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"1cd55712-7890-4fd5-aabe-4e94d3e29294",
-         "createdAt":"2019-08-14T22:55:22.950Z",
-         "updatedAt":"2019-08-14T23:06:59.179Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"c171386e-c624-436e-96cf-9e0a49d75116",
-         "createdAt":"2019-08-14T22:55:22.956Z",
-         "updatedAt":"2019-08-14T23:06:59.186Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"54ee1aec-3941-4bd7-9fd4-1fca0f532b91",
-         "createdAt":"2019-08-14T22:55:22.961Z",
-         "updatedAt":"2019-08-14T23:06:59.192Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"7212e3d3-b181-4f2f-b86d-2af11a99ece2",
-         "createdAt":"2019-08-14T22:55:22.967Z",
-         "updatedAt":"2019-08-14T23:06:59.198Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"59b1264c-9f0f-46fe-8567-d1668c3cfa6b",
-         "createdAt":"2019-08-14T22:55:22.972Z",
-         "updatedAt":"2019-08-14T23:06:59.204Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"32665f0d-04e9-4f01-a0e0-c87880564d2b",
-         "createdAt":"2019-08-14T22:55:22.978Z",
-         "updatedAt":"2019-08-14T23:06:59.210Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"c6c1dc70-8900-40bd-9f5a-2936c03fd2ab",
-         "createdAt":"2019-08-14T22:55:22.984Z",
-         "updatedAt":"2019-08-14T23:06:59.216Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":2,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"fe53b33d-058f-4145-9c31-7f5762420471",
-         "createdAt":"2019-08-14T22:56:06.563Z",
-         "updatedAt":"2019-08-14T23:06:59.222Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"c49fc978-1400-4512-b4c6-a20fbc41de45",
-         "createdAt":"2019-08-14T22:56:06.570Z",
-         "updatedAt":"2019-08-14T23:06:59.229Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"d0158261-04d2-4749-87e2-84343df2898c",
-         "createdAt":"2019-08-14T22:56:06.575Z",
-         "updatedAt":"2019-08-14T23:06:59.235Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"1b619d8d-5910-4595-be5b-464bf236aff7",
-         "createdAt":"2019-08-14T22:56:06.580Z",
-         "updatedAt":"2019-08-14T23:06:59.241Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
-      },
-      {
-         "id":"bed5f71e-1508-4f06-80ea-50d502e23349",
-         "createdAt":"2019-08-14T22:56:06.587Z",
-         "updatedAt":"2019-08-14T23:06:59.247Z",
-         "amiPercentage":"30.0",
-         "annualIncomeMin":"17256.0",
-         "monthlyIncomeMin":"1438.0",
-         "floor":3,
-         "annualIncomeMax":"30750.0",
-         "maxOccupancy":2,
-         "minOccupancy":1,
-         "monthlyRent":"719.0",
-         "numBathrooms":null,
-         "numBedrooms":null,
-         "number":null,
-         "priorityType":null,
-         "reservedType":null,
-         "sqFeet":"285.00",
-         "status":"occupied",
-         "unitType":"studio",
-         "amiChartId":4,
-         "monthlyRentAsPercentOfIncome":null,
-         "bmrProgramChart":null
+        "unitType": "studio",
+        "totalAvailable": 0,
+        "minIncomeRange": {
+          "min": "$1,438",
+          "max": "$2,208"
+        },
+        "occupancyRange": {
+          "min": 1,
+          "max": 2
+        },
+        "rentAsPercentIncomeRange": {
+          "min": null,
+          "max": null
+        },
+        "rentRange": {
+          "min": "$719",
+          "max": "$1,104"
+        },
+        "floorRange": {
+          "min": 2,
+          "max": 3
+        },
+        "areaRange": {
+          "min": 285,
+          "max": 285
+        }
       }
-   ],
-   "events":[
-      
-   ],
-   "applicationConfig":{
-      "sections":[
-         "you",
-         "household",
-         "income",
-         "preferences",
-         "review"
-      ],
-      "languages":[
-         "en",
-         "zh"
-      ],
-      "steps":[
-         {
-            "name":"chooseLanguage"
-         },
-         {
-            "name":"whatToExpect"
-         },
-         {
-            "name":"primaryApplicantName"
-         },
-         {
-            "name":"primaryApplicantAddress"
-         },
-         {
-            "name":"alternateContactType"
-         },
-         {
-            "name":"alternateContactName"
-         },
-         {
-            "name":"alternateContactInfo"
-         },
-         {
-            "name":"liveAlone"
-         },
-         {
-            "name":"householdMemberInfo"
-         },
-         {
-            "name":"addMembers"
-         },
-         {
-            "name":"preferredUnitSize"
-         },
-         {
-            "name":"adaHouseholdMembers"
-         },
-         {
-            "name":"vouchersSubsidies"
-         },
-         {
-            "name":"income"
-         },
-         {
-            "name":"preferencesAll"
-         },
-         {
-            "name":"generalPool"
-         },
-         {
-            "name":"demographics"
-         },
-         {
-            "name":"summary"
-         },
-         {
-            "name":"terms"
-         }
+    ],
+    "byReservedType": [
+      {
+        "reservedType": "senior",
+        "byUnitType": [
+          {
+            "unitType": "studio",
+            "totalAvailable": 0,
+            "minIncomeRange": {
+              "min": "$2,208",
+              "max": "$2,208"
+            },
+            "occupancyRange": {
+              "min": 1,
+              "max": 2
+            },
+            "rentAsPercentIncomeRange": {
+              "min": null,
+              "max": null
+            },
+            "rentRange": {
+              "min": "$1,104",
+              "max": "$1,104"
+            },
+            "floorRange": {
+              "min": 2,
+              "max": 2
+            },
+            "areaRange": {
+              "min": 285,
+              "max": 285
+            }
+          }
+        ]
+      }
+    ],
+    "byAMI": [
+      {
+        "percent": "30.0",
+        "byNonReservedUnitType": [
+          {
+            "unitType": "studio",
+            "totalAvailable": 0,
+            "minIncomeRange": {
+              "min": "$1,438",
+              "max": "$1,438"
+            },
+            "occupancyRange": {
+              "min": 1,
+              "max": 2
+            },
+            "rentAsPercentIncomeRange": {
+              "min": null,
+              "max": null
+            },
+            "rentRange": {
+              "min": "$719",
+              "max": "$719"
+            },
+            "floorRange": {
+              "min": 2,
+              "max": 3
+            },
+            "areaRange": {
+              "min": 285,
+              "max": 285
+            }
+          }
+        ],
+        "byReservedType": []
+      },
+      {
+        "percent": "45.0",
+        "byNonReservedUnitType": [
+          {
+            "unitType": "studio",
+            "totalAvailable": 0,
+            "minIncomeRange": {
+              "min": "$2,208",
+              "max": "$2,208"
+            },
+            "occupancyRange": {
+              "min": 1,
+              "max": 2
+            },
+            "rentAsPercentIncomeRange": {
+              "min": null,
+              "max": null
+            },
+            "rentRange": {
+              "min": "$1,104",
+              "max": "$1,104"
+            },
+            "floorRange": {
+              "min": 2,
+              "max": 3
+            },
+            "areaRange": {
+              "min": 285,
+              "max": 285
+            }
+          }
+        ],
+        "byReservedType": [
+          {
+            "reservedType": "senior",
+            "byUnitType": [
+              {
+                "unitType": "studio",
+                "totalAvailable": 0,
+                "minIncomeRange": {
+                  "min": "$2,208",
+                  "max": "$2,208"
+                },
+                "occupancyRange": {
+                  "min": 1,
+                  "max": 2
+                },
+                "rentAsPercentIncomeRange": {
+                  "min": null,
+                  "max": null
+                },
+                "rentRange": {
+                  "min": "$1,104",
+                  "max": "$1,104"
+                },
+                "floorRange": {
+                  "min": 2,
+                  "max": 2
+                },
+                "areaRange": {
+                  "min": 285,
+                  "max": 285
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "hmi": {
+      "columns": {
+        "householdSize": "Household Size",
+        "ami30": "30% AMI Units",
+        "ami45": "45% AMI Units"
+      },
+      "rows": [
+        {
+          "householdSize": 1,
+          "ami30": "$30,750",
+          "ami45": "$46,125"
+        },
+        {
+          "householdSize": 2,
+          "ami30": "$35,130",
+          "ami45": "$52,695"
+        }
       ]
-   }
+    }
+  },
+  "urlSlug": "archer_studios_98_archer_street_san_jose_ca",
+  "applicationMethods": [],
+  "assets": [],
+  "preferences": [
+    {
+      "id": "e095a124-3d95-4f71-a9e2-4e93aac00bfa",
+      "createdAt": "2021-04-24T10:31:17.607Z",
+      "updatedAt": "2021-04-24T10:31:17.607Z",
+      "ordinal": 1,
+      "page": 1,
+      "title": "Live or Work in Hayward",
+      "subtitle": "",
+      "description": "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+      "links": [],
+      "formMetadata": {
+        "key": "liveWork",
+        "options": [
+          {
+            "key": "live",
+            "extraData": []
+          },
+          {
+            "key": "work",
+            "extraData": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "8b46a50c-c321-4506-ad71-a80245ef4602",
+      "createdAt": "2021-04-24T10:31:17.607Z",
+      "updatedAt": "2021-04-24T10:31:17.607Z",
+      "ordinal": 2,
+      "page": 1,
+      "title": "Displaced Tenant Housing Preference",
+      "subtitle": "",
+      "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+      "links": [],
+      "formMetadata": {
+        "key": "displacedTenant",
+        "options": [
+          {
+            "key": "general",
+            "extraData": [
+              {
+                "type": "hhMemberSelect",
+                "key": "name"
+              },
+              {
+                "type": "address",
+                "key": "address"
+              }
+            ]
+          },
+          {
+            "key": "missionCorridor",
+            "extraData": [
+              {
+                "type": "hhMemberSelect",
+                "key": "name"
+              },
+              {
+                "type": "address",
+                "key": "address"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "units": [
+    {
+      "id": "fab3456e-9af8-46ae-a59e-3de6608bf5a2",
+      "createdAt": "2019-08-14T22:56:06.593Z",
+      "updatedAt": "2019-08-14T23:06:59.254Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "f505a681-d6be-40a1-971b-29649f68d21a",
+      "createdAt": "2019-08-14T22:56:06.606Z",
+      "updatedAt": "2019-08-14T23:06:59.260Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "dce72e59-f16f-4533-92b6-500c5b5b9f96",
+      "createdAt": "2019-08-14T22:56:06.612Z",
+      "updatedAt": "2019-08-14T23:06:59.267Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "118bfa58-03a3-46e3-9cd6-51cba1b46f45",
+      "createdAt": "2019-08-14T22:52:08.790Z",
+      "updatedAt": "2019-08-14T23:06:59.060Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "3effd0c9-77cf-46d5-bfe5-b9ee14b914c6",
+      "createdAt": "2019-08-14T22:52:08.796Z",
+      "updatedAt": "2019-08-14T23:06:59.067Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": "senior",
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "b4c79274-099e-45d0-8ea9-46e7cc31475f",
+      "createdAt": "2019-08-14T22:52:08.802Z",
+      "updatedAt": "2019-08-14T23:06:59.074Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "ee0a7fea-c24e-4276-95c2-01da342a244f",
+      "createdAt": "2019-08-14T22:52:08.807Z",
+      "updatedAt": "2019-08-14T23:06:59.080Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "b8daabcd-c1dc-4b3d-a28c-2027f441a955",
+      "createdAt": "2019-08-14T22:52:08.813Z",
+      "updatedAt": "2019-08-14T23:06:59.086Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "ccf5f022-5179-4689-a0a9-978c0bda651e",
+      "createdAt": "2019-08-14T22:52:08.819Z",
+      "updatedAt": "2019-08-14T23:06:59.093Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "1b63bd84-f31f-404a-aeed-36c75518e702",
+      "createdAt": "2019-08-14T22:53:09.921Z",
+      "updatedAt": "2019-08-14T23:06:59.099Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "2b5235a9-72af-42cd-ae61-ad5b5be9d2f3",
+      "createdAt": "2019-08-14T22:53:09.927Z",
+      "updatedAt": "2019-08-14T23:06:59.105Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "21a4c6c1-b0f6-40a9-9c44-089362217b8a",
+      "createdAt": "2019-08-14T22:53:09.933Z",
+      "updatedAt": "2019-08-14T23:06:59.111Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "9ce2fbfc-79f4-4690-9ecc-0c02a11a2188",
+      "createdAt": "2019-08-14T22:53:09.938Z",
+      "updatedAt": "2019-08-14T23:06:59.118Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "8f4284ae-b771-4155-8baa-a3fc80c04c9e",
+      "createdAt": "2019-08-14T22:53:09.944Z",
+      "updatedAt": "2019-08-14T23:06:59.124Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "a5e8d305-9e54-42f3-b176-16651d6326d6",
+      "createdAt": "2019-08-14T22:53:09.950Z",
+      "updatedAt": "2019-08-14T23:06:59.130Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "9a467456-88a4-40f9-bb2c-69cb2f77a41c",
+      "createdAt": "2019-08-14T22:53:09.955Z",
+      "updatedAt": "2019-08-14T23:06:59.136Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "bd7978ed-0483-4692-8bb2-29671264b1a7",
+      "createdAt": "2019-08-14T22:53:09.960Z",
+      "updatedAt": "2019-08-14T23:06:59.142Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "95a436e5-559c-471b-abca-eef2916c85cb",
+      "createdAt": "2019-08-14T22:53:09.965Z",
+      "updatedAt": "2019-08-14T23:06:59.148Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "2a961fae-d68f-405e-a5f1-0caac408310f",
+      "createdAt": "2019-08-14T22:53:09.970Z",
+      "updatedAt": "2019-08-14T23:06:59.155Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "55da1173-6ac7-4d42-ad9e-c7c0cea43b1f",
+      "createdAt": "2019-07-09T21:20:05.783Z",
+      "updatedAt": "2019-08-14T23:05:43.913Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "d0e4cbfa-e397-4a0f-aeb3-f2556e78c09c",
+      "createdAt": "2019-08-14T22:53:09.982Z",
+      "updatedAt": "2019-08-14T23:06:59.015Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "361d84bd-1b33-41eb-aa39-d58d21a62ea4",
+      "createdAt": "2019-08-14T22:52:08.758Z",
+      "updatedAt": "2019-08-14T23:06:59.023Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "f748a7a8-a3bf-44ce-b358-64107c80414d",
+      "createdAt": "2019-08-14T22:52:08.766Z",
+      "updatedAt": "2019-08-14T23:06:59.031Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "e7d97fbb-5a97-4e2c-adab-9bcffc031484",
+      "createdAt": "2019-08-14T22:52:08.771Z",
+      "updatedAt": "2019-08-14T23:06:59.039Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "331fb66f-6fc0-4987-b1b2-95efb87a492d",
+      "createdAt": "2019-08-14T22:52:08.777Z",
+      "updatedAt": "2019-08-14T23:06:59.046Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "e59721c1-32e0-4255-8412-174e7e2da691",
+      "createdAt": "2019-08-14T22:52:08.783Z",
+      "updatedAt": "2019-08-14T23:06:59.053Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 2,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "82f72a45-607f-4b31-a01d-175a2a37d2f5",
+      "createdAt": "2019-08-14T22:53:09.976Z",
+      "updatedAt": "2019-08-14T23:06:59.161Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "b1d4a618-675e-483a-aa58-12aa1e3b32e2",
+      "createdAt": "2019-08-14T22:53:09.976Z",
+      "updatedAt": "2019-08-14T23:06:59.167Z",
+      "amiPercentage": "45.0",
+      "annualIncomeMin": "26496.0",
+      "monthlyIncomeMin": "2208.0",
+      "floor": 3,
+      "annualIncomeMax": "46125.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "1104.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "7af08604-e4b0-4581-a06e-f4359f5a8ce8",
+      "createdAt": "2019-07-09T21:24:14.122Z",
+      "updatedAt": "2019-08-14T23:06:59.173Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "1cd55712-7890-4fd5-aabe-4e94d3e29294",
+      "createdAt": "2019-08-14T22:55:22.950Z",
+      "updatedAt": "2019-08-14T23:06:59.179Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "c171386e-c624-436e-96cf-9e0a49d75116",
+      "createdAt": "2019-08-14T22:55:22.956Z",
+      "updatedAt": "2019-08-14T23:06:59.186Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "54ee1aec-3941-4bd7-9fd4-1fca0f532b91",
+      "createdAt": "2019-08-14T22:55:22.961Z",
+      "updatedAt": "2019-08-14T23:06:59.192Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "7212e3d3-b181-4f2f-b86d-2af11a99ece2",
+      "createdAt": "2019-08-14T22:55:22.967Z",
+      "updatedAt": "2019-08-14T23:06:59.198Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "59b1264c-9f0f-46fe-8567-d1668c3cfa6b",
+      "createdAt": "2019-08-14T22:55:22.972Z",
+      "updatedAt": "2019-08-14T23:06:59.204Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "32665f0d-04e9-4f01-a0e0-c87880564d2b",
+      "createdAt": "2019-08-14T22:55:22.978Z",
+      "updatedAt": "2019-08-14T23:06:59.210Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "c6c1dc70-8900-40bd-9f5a-2936c03fd2ab",
+      "createdAt": "2019-08-14T22:55:22.984Z",
+      "updatedAt": "2019-08-14T23:06:59.216Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 2,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "fe53b33d-058f-4145-9c31-7f5762420471",
+      "createdAt": "2019-08-14T22:56:06.563Z",
+      "updatedAt": "2019-08-14T23:06:59.222Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "c49fc978-1400-4512-b4c6-a20fbc41de45",
+      "createdAt": "2019-08-14T22:56:06.570Z",
+      "updatedAt": "2019-08-14T23:06:59.229Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "d0158261-04d2-4749-87e2-84343df2898c",
+      "createdAt": "2019-08-14T22:56:06.575Z",
+      "updatedAt": "2019-08-14T23:06:59.235Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "1b619d8d-5910-4595-be5b-464bf236aff7",
+      "createdAt": "2019-08-14T22:56:06.580Z",
+      "updatedAt": "2019-08-14T23:06:59.241Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    },
+    {
+      "id": "bed5f71e-1508-4f06-80ea-50d502e23349",
+      "createdAt": "2019-08-14T22:56:06.587Z",
+      "updatedAt": "2019-08-14T23:06:59.247Z",
+      "amiPercentage": "30.0",
+      "annualIncomeMin": "17256.0",
+      "monthlyIncomeMin": "1438.0",
+      "floor": 3,
+      "annualIncomeMax": "30750.0",
+      "maxOccupancy": 2,
+      "minOccupancy": 1,
+      "monthlyRent": "719.0",
+      "numBathrooms": null,
+      "numBedrooms": null,
+      "number": null,
+      "priorityType": null,
+      "reservedType": null,
+      "sqFeet": "285.00",
+      "status": "occupied",
+      "unitType": "studio",
+      "amiChartId": 4,
+      "monthlyRentAsPercentOfIncome": null,
+      "bmrProgramChart": null
+    }
+  ],
+  "events": [],
+  "applicationConfig": {
+    "sections": ["you", "household", "income", "preferences", "review"],
+    "languages": ["en", "zh"],
+    "steps": [
+      {
+        "name": "chooseLanguage"
+      },
+      {
+        "name": "whatToExpect"
+      },
+      {
+        "name": "primaryApplicantName"
+      },
+      {
+        "name": "primaryApplicantAddress"
+      },
+      {
+        "name": "alternateContactType"
+      },
+      {
+        "name": "alternateContactName"
+      },
+      {
+        "name": "alternateContactInfo"
+      },
+      {
+        "name": "liveAlone"
+      },
+      {
+        "name": "householdMemberInfo"
+      },
+      {
+        "name": "addMembers"
+      },
+      {
+        "name": "preferredUnitSize"
+      },
+      {
+        "name": "adaHouseholdMembers"
+      },
+      {
+        "name": "vouchersSubsidies"
+      },
+      {
+        "name": "income"
+      },
+      {
+        "name": "preferencesAll"
+      },
+      {
+        "name": "generalPool"
+      },
+      {
+        "name": "demographics"
+      },
+      {
+        "name": "summary"
+      },
+      {
+        "name": "terms"
+      }
+    ]
+  }
 }

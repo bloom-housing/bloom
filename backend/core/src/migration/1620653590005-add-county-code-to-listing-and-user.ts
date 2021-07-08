@@ -9,9 +9,9 @@ export class addCountyCodeToListingAndUser1620653590005 implements MigrationInte
       `ALTER TABLE "listings" ADD "county_code" character varying NOT NULL DEFAULT 'Alameda'`
     )
     const mappings = {
-      'Alameda': CountyCode.alameda,
-      'San Mateo': CountyCode.san_mateo,
-      'San Jose': CountyCode.san_jose
+      Alameda: CountyCode.alameda,
+      "San Mateo": CountyCode.san_mateo,
+      "San Jose": CountyCode.san_jose,
     }
     for (const [dbBuildingAddressCountyValue, countyCode] of Object.entries(mappings)) {
       await queryRunner.query(
