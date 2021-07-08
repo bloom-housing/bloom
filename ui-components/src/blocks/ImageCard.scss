@@ -1,5 +1,15 @@
 @import "../global/mixins.scss";
 
+.image-card__wrapper {
+  @apply relative;
+}
+
+.image-card__tag {
+  @apply absolute;
+  @apply z-10;
+  @apply m-5;
+}
+
 .image-card {
   @apply relative;
   @include has-image-skeleton();

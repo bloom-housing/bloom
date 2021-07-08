@@ -32,3 +32,14 @@ export const withListing = () => (
     listing={listing}
   />
 )
+
+export const withListingAndTag = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+    listing={listing}
+    tagLabel="Label"
+  />
+)
