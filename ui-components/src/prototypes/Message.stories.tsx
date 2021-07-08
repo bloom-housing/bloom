@@ -8,8 +8,4 @@ export default {
 
 export const standard = () => <Message>Message</Message>
 
-export const warning = () => (
-  <Message warning={true}>
-    Warning
-  </Message>
-)
+export const warning = () => <Message warning={true}>Warning</Message>

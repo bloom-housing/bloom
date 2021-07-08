@@ -1,0 +1,17 @@
+.dropzone {
+  @apply border-2;
+  @apply border-gray-600;
+  @apply border-dashed;
+  @apply text-center;
+  padding: 2.5rem;
+  max-width: 32rem;
+  cursor: pointer;
+
+  &.is-active {
+    @apply bg-accent-cool-light;
+  }
+}
+
+.dropzone__progress {
+  max-width: 250px;
+}

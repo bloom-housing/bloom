@@ -11,7 +11,7 @@
   animation-name: bounce;
   animation-fill-mode: both;
   animation-duration: 1s;
-  
+
   &:after {
     @apply absolute;
     @apply rounded-full;

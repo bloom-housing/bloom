@@ -38,25 +38,25 @@ class Preference {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  ordinal: number | null
+  ordinal?: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  title: string | null
+  title?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  subtitle: string | null
+  subtitle?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  description: string | null
+  description?: string | null
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -64,7 +64,7 @@ class Preference {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceLink)
   @ApiProperty({ type: [PreferenceLink] })
-  links: PreferenceLink[] | null
+  links?: PreferenceLink[] | null
 
   @ManyToOne(() => Listing, (listing) => listing.preferences, {
     onDelete: "CASCADE",
@@ -83,7 +83,7 @@ class Preference {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  page: number | null
+  page?: number | null
 }
 
 export { Preference as default, Preference }
