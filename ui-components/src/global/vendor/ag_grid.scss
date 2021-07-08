@@ -4,13 +4,7 @@
 
 .ag-theme-alpine.ag-theme-bloom {
   // would like to remove the local theme class
-  @include ag-theme-alpine(
-    (
-           /
-      header-height: 83px,
-      row-height: 58px
-    )
-  );
+  @include ag-theme-alpine((/ header-height: 83px, row-height: 58px));
 
   .ag-row {
     height: ag-param(row-height);
