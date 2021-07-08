@@ -119,7 +119,7 @@ export class ApplicationsService {
       userId: (qb, { userId }) => qb.andWhere("application.user_id = :uid", { uid: userId }),
       listingId: (qb, { listingId }) =>
         qb.andWhere("application.listing_id = :lid", { lid: listingId }),
-      orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
+      orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order, "NULLS LAST"),
       search: (qb, { search }) =>
         qb.andWhere(
           `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g')) as text), ':*'))`,
