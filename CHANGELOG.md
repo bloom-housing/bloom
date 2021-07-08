@@ -8,6 +8,19 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+### Backend
+
+- Fixed:
+  - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
+
+### Frontend
+
+### UI Components
+
+## 1.0.4 / 2021-07-07
+
+### General
+
 - Added:
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
@@ -82,6 +95,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
+  - Hide Additional Eligibility header if no sections present ([#1457](https://github.com/bloom-housing/bloom/pull/1457)) (Emily Jablonski)
 
 - Changed:
 
@@ -92,6 +106,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Dropzone-style file upload component ([#1437](https://github.com/bloom-housing/bloom/pull/1437)) (Jared White)
   - Table image thumbnails component along with minimal left/right flush table styles ([#1339](https://github.com/bloom-housing/bloom/pull/1339)) (Jared White)
   - Tabs component based on React Tabs ([#1305](https://github.com/bloom-housing/bloom/pull/1305)) (Jared White)
     - **Note**: the previous `Tab` child of `TabNav` has been renamed to `TabNavItem`

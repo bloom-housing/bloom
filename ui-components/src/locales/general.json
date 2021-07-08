@@ -711,6 +711,7 @@
     "officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday"
   },
   "listings": {
+    "error": "There was an issue submitting the form.",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -1087,12 +1088,15 @@
     "call": "Call",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "chooseFromFolder": "Choose from folder",
     "day": "Day",
     "delete": "Delete",
     "deposit": "Deposit",
     "done": "Done",
     "description": "Enter Description",
     "emailAddressPlaceholder": "you@myemail.com",
+    "dragFilesHere": "Drag files here",
+    "dropFilesHere": "Drop files here…",
     "export": "Export",
     "enterAmount": "Enter amount",
     "filter": "Filter",

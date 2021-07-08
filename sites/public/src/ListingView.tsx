@@ -256,35 +256,40 @@ export const ListingView = (props: ListingProps) => {
 
             {preferencesSection}
 
-            <ListSection
-              title={t("listings.sections.additionalEligibilityTitle")}
-              subtitle={t("listings.sections.additionalEligibilitySubtitle")}
-            >
-              <>
-                {listing.creditHistory && (
-                  <InfoCard title={t("listings.creditHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.creditHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.rentalHistory && (
-                  <InfoCard title={t("listings.rentalHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.rentalHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.criminalBackground && (
-                  <InfoCard title={t("listings.criminalBackground")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.criminalBackground}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {buildingSelectionCriteria}
-              </>
-            </ListSection>
+            {(listing.creditHistory ||
+              listing.rentalHistory ||
+              listing.criminalBackground ||
+              buildingSelectionCriteria) && (
+              <ListSection
+                title={t("listings.sections.additionalEligibilityTitle")}
+                subtitle={t("listings.sections.additionalEligibilitySubtitle")}
+              >
+                <>
+                  {listing.creditHistory && (
+                    <InfoCard title={t("listings.creditHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.rentalHistory && (
+                    <InfoCard title={t("listings.rentalHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.criminalBackground && (
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {buildingSelectionCriteria}
+                </>
+              </ListSection>
+            )}
           </ul>
         </ListingDetailItem>
 
