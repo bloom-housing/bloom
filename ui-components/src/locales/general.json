@@ -711,6 +711,7 @@
     "officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday"
   },
   "listings": {
+    "error": "There was an issue submitting the form.",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",

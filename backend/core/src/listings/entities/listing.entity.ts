@@ -300,11 +300,10 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   leasingAgentTitle?: string | null
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "text" })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  name?: string | null
+  name: string
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()

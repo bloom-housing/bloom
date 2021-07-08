@@ -3325,7 +3325,7 @@ export interface Listing {
   leasingAgentTitle?: string;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date;
@@ -3622,7 +3622,7 @@ export interface ListingCreate {
   leasingAgentTitle?: string;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date;
@@ -3948,7 +3948,7 @@ export interface ListingUpdate {
   leasingAgentTitle?: string;
 
   /**  */
-  name?: string;
+  name: string;
 
   /**  */
   postmarkedApplicationsReceivedByDate?: Date;
