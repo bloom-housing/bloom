@@ -24,16 +24,16 @@ Default.parameters = {
     config: {
       rules: [
         {
-          id: 'no-focusable-content',
-          enabled: false
+          id: "no-focusable-content",
+          enabled: false,
         },
         {
-          id: 'nested-interactive',
-          enabled: false
-        }
-      ]
-    }
-  }
+          id: "nested-interactive",
+          enabled: false,
+        },
+      ],
+    },
+  },
 }
 
 export const Other = () => {
@@ -55,14 +55,14 @@ Other.parameters = {
     config: {
       rules: [
         {
-          id: 'no-focusable-content',
-          enabled: false
+          id: "no-focusable-content",
+          enabled: false,
         },
         {
-          id: 'nested-interactive',
-          enabled: false
-        }
-      ]
-    }
-  }
+          id: "nested-interactive",
+          enabled: false,
+        },
+      ],
+    },
+  },
 }
