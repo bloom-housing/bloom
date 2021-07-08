@@ -160,6 +160,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         </GridSection>
         <GridSection columns={1}>
           <Field
+            className={"font-semibold"}
             id="arePaperAppsMailedToAnotherAddress"
             name="arePaperAppsMailedToAnotherAddress"
             type="checkbox"
