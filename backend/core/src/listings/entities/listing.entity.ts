@@ -10,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
-import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../user/entities/user.entity"
 import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
@@ -94,17 +93,11 @@ class Listing extends BaseEntity {
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
-  @ManyToOne(() => Property, (property) => property.listings, { nullable: false, cascade: true })
+  @ManyToOne(() => Property, { nullable: false, cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Property)
   property: Property
-
-  @OneToMany(() => Application, (application) => application.listing)
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Application)
-  applications: Application[]
 
   @OneToMany(() => ApplicationFlaggedSet, (afs) => afs.listing)
   @Expose()
@@ -274,6 +267,8 @@ class Listing extends BaseEntity {
 
   @ManyToMany(() => User, (leasingAgent) => leasingAgent.leasingAgentInListings, {
     nullable: true,
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
   })
   @JoinTable()
   @Expose()

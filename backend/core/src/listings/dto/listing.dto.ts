@@ -32,7 +32,6 @@ import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/rese
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 
 export class ListingDto extends OmitType(Listing, [
-  "applications",
   "applicationFlaggedSets",
   "image",
   "jurisdiction",

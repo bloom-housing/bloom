@@ -37,7 +37,7 @@ export class PropertyGroup {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   name: string
 
-  @ManyToMany(() => Property)
+  @ManyToMany(() => Property, { onDelete: "NO ACTION", onUpdate: "NO ACTION" })
   @JoinTable()
   properties: Property[]
 }

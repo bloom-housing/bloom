@@ -23,17 +23,12 @@ import { AssetCreateDto } from "../assets/dto/asset.dto"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
-  | "propertyGroups"
-  | "listings"
-  | "units"
-  | "unitsSummarized"
-  | "householdSizeMin"
-  | "householdSizeMax"
+  "propertyGroups" | "units" | "unitsSummarized" | "householdSizeMin" | "householdSizeMax"
 >
 
 type UnitSeedType = Omit<UnitCreateDto, "property">
 
-type ApplicationMethodSeedType = Omit<ApplicationMethodDto, "listing">
+type ApplicationMethodSeedType = ApplicationMethodDto
 
 type ListingSeedType = Omit<
   ListingCreateDto,
@@ -67,9 +62,9 @@ type ListingSeedType = Omit<
 
 type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
 
-type ListingEventDtoSeedType = Omit<ListingEventDto, "listing">
+type ListingEventDtoSeedType = ListingEventDto
 
-type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
+type AssetDtoSeedType = AssetCreateDto
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {

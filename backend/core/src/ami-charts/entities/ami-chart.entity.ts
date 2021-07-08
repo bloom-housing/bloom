@@ -1,15 +1,7 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm"
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartItem } from "./ami-chart-item.entity"
-import { Unit } from "../../units/entities/unit.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 @Entity()
@@ -38,9 +30,6 @@ export class AmiChart {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AmiChartItem)
   items: AmiChartItem[]
-
-  @OneToMany(() => Unit, (unit) => unit.amiChart)
-  units: Unit[]
 
   @Column()
   @Expose()

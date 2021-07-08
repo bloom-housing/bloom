@@ -19,7 +19,6 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
-import { Listing } from "../../listings/entities/listing.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Unit } from "../../units/entities/unit.entity"
 import { transformUnits } from "../../shared/units-transformations"
@@ -51,10 +50,7 @@ export class Property {
   @OneToMany(() => Unit, (unit) => unit.property, { eager: true, cascade: true })
   units: Unit[]
 
-  @OneToMany(() => Listing, (listing) => listing.property)
-  listings: Listing[]
-
-  @ManyToMany(() => PropertyGroup)
+  @ManyToMany(() => PropertyGroup, { onUpdate: "NO ACTION", onDelete: "NO ACTION" })
   propertyGroups: PropertyGroup[]
 
   @Column({ type: "text", nullable: true })

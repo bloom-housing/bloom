@@ -36,13 +36,13 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @IsEnum(FlaggedSetStatus, { groups: [ValidationsGroupsEnum.default] })
   status: FlaggedSetStatus
 
-  @ManyToMany(() => Application)
+  @ManyToMany(() => Application, { onUpdate: "NO ACTION", onDelete: "NO ACTION" })
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
 
-  @ManyToOne(() => Listing, (listing) => listing.applications)
+  @ManyToOne(() => Listing)
   listing: Listing
 
   @Column()
