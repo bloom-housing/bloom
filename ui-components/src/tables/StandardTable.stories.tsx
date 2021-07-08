@@ -46,7 +46,7 @@ dataWithImage[0].image = (
 )
 dataWithImage[1].image = (
   <TableThumbnail>
-    <img src="/images/logo_glyph.svg" alt="logo"/>
+    <img src="/images/logo_glyph.svg" alt="logo" />
   </TableThumbnail>
 )
 

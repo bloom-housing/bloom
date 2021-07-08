@@ -132,10 +132,10 @@ inaccessible.parameters = {
     config: {
       rules: [
         {
-          id: 'color-contrast',
-          enabled: false
-        }
-      ]
-    }
-  }
+          id: "color-contrast",
+          enabled: false,
+        },
+      ],
+    },
+  },
 }
