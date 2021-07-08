@@ -34,5 +34,6 @@ jobs:
       - name: Run linters
         uses: wearerequired/lint-action@v1
         with:
+          github_token: ${{ secrets.github_token }}
           prettier: true
           auto_fix: true
