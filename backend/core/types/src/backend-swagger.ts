@@ -3323,6 +3323,9 @@ export interface Listing {
   /**  */
   showWaitlist: boolean;
 
+  /** */
+  reviewOrderType: ListingReviewOrder
+
   /**  */
   unitsSummarized: UnitsSummarized;
 
@@ -4522,3 +4525,7 @@ export type CombinedLeasingAgentAddressTypes = AddressUpdate;
 export type CombinedResultTypes = AssetCreate;
 export type CombinedWhatToExpectTypes = WhatToExpect;
 export type CombinedJurisdictionTypes = Id;
+export enum ListingReviewOrder {
+  'lottery' = 'lottery',
+  'firstComeFirstServe' = 'firstComeFirstServe',
+}

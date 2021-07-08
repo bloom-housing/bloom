@@ -1,4 +1,11 @@
-import { AmiChart, CountyCode, CSVFormattingType, Listing, ListingStatus } from "./types"
+import {
+  AmiChart,
+  CountyCode,
+  CSVFormattingType,
+  Listing,
+  ListingReviewOrder,
+  ListingStatus,
+} from "./types"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
@@ -249,6 +256,7 @@ export const ArcherListing: Listing = {
   disableUnitsAccordion: false,
   events: [],
   showWaitlist: false,
+  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
   urlSlug: "listing-slug-abcdef",
   whatToExpect: {
     applicantsWillBeContacted: "Applicant will be contacted.",

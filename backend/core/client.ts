@@ -1805,6 +1805,9 @@ export interface Listing {
 
   /** */
   showWaitlist?: boolean
+
+  /** */
+  reviewOrderType?: ListingReviewOrder
 }
 
 export interface PreferenceCreate {
@@ -3357,6 +3360,10 @@ export enum InputType {
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
+}
+export enum ListingReviewOrder {
+  "lottery" = "lottery",
+  "firstComeFirstServe" = "firstComeFirstServe",
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null
