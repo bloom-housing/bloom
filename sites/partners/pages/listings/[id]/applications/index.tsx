@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from "react"
+import React, { useState, useEffect, useRef, useMemo, useContext, useCallback } from "react"
 import { useRouter } from "next/router"
 import moment from "moment"
 import Head from "next/head"
@@ -27,6 +27,11 @@ import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 
+type ApplicationsListSortOptions = {
+  orderBy: string
+  order: string
+}
+
 const ApplicationsList = () => {
   const COLUMN_STATE_KEY = "column-state"
 
@@ -45,8 +50,21 @@ const ApplicationsList = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)
 
+  /* OrderBy columns */
+  const [sortOptions, setSortOptions] = useState<ApplicationsListSortOptions>({
+    orderBy: null,
+    order: null,
+  })
+
   const listingId = router.query.id as string
-  const { appsData } = useApplicationsData(currentPage, itemsPerPage, listingId, delayedFilterValue)
+  const { appsData } = useApplicationsData(
+    currentPage,
+    itemsPerPage,
+    listingId,
+    delayedFilterValue,
+    sortOptions.orderBy,
+    sortOptions.order
+  )
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
@@ -54,7 +72,7 @@ const ApplicationsList = () => {
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
-    limit: 1,
+    limit: 3,
   })
 
   /* CSV export */
@@ -154,8 +172,39 @@ const ApplicationsList = () => {
     }
   }
 
+  // update table items order on sort change
+  const initialLoadOnSort = useRef<boolean>(false)
+  const onSortChange = useCallback((columns: ColumnState[]) => {
+    // prevent multiple fetch on initial render
+    if (!initialLoadOnSort.current) {
+      initialLoadOnSort.current = true
+      return
+    }
+
+    const sortedBy = columns.find((col) => col.sort)
+    const { colId, sort } = sortedBy || {}
+
+    // These ids are also defined in the applications.controller.ts
+    const allowedSortColIds = [
+      "applicant.firstName",
+      "applicant.lastName",
+      "submissionDate",
+      "createdAt",
+    ]
+
+    if (allowedSortColIds.includes(colId)) {
+      setSortOptions({
+        orderBy: colId,
+        order: sort.toUpperCase(),
+      })
+    }
+  }, [])
+
   const gridOptions: GridOptions = {
-    onSortChanged: (params) => saveColumnState(params.columnApi),
+    onSortChanged: (params) => {
+      saveColumnState(params.columnApi)
+      onSortChange(params.columnApi.getColumnState())
+    },
     onColumnMoved: (params) => saveColumnState(params.columnApi),
     components: {
       formatLinkCell: formatLinkCell,
@@ -236,7 +285,7 @@ const ApplicationsList = () => {
                 headerHeight={83}
                 rowHeight={58}
                 suppressPaginationPanel={true}
-                paginationPageSize={8}
+                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
                 suppressScrollOnNewData={true}
               ></AgGridReact>
 
