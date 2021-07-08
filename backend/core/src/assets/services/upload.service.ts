@@ -14,8 +14,14 @@ export class CloudinaryService implements UploadService {
 
   createPresignedUploadMetadata(parametersToSign: Record<string, string>): { signature: string } {
     // Based on https://cloudinary.com/documentation/upload_images#signed_upload_video_tutorial
+
+    const parametersToSignWithTimestamp = {
+      timestamp: parseInt(parametersToSign.timestamp),
+      ...parametersToSign,
+    }
+
     const signature = cloudinary.utils.api_sign_request(
-      parametersToSign,
+      parametersToSignWithTimestamp,
       this.configService.get<string>("CLOUDINARY_SECRET")
     )
     return {

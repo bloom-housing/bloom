@@ -14,6 +14,7 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { AssetsService } from "@bloom-housing/backend-core/types"
 
 let newCloudinaryId = ""
 
@@ -106,7 +107,6 @@ const ListingPhoto = () => {
             type="button"
             className="font-semibold uppercase text-red-700"
             onClick={() => {
-              console.info("DELETE")
               newCloudinaryId = ""
               deletePhoto()
             }}
@@ -119,14 +119,37 @@ const ListingPhoto = () => {
     })
   }
 
-  const exampleUploader = (file: File) => {
+  const fileUploader = async (file: File) => {
+    setProgressValue(1)
+
+    const timestamp = Math.round(new Date().getTime() / 1000)
+    const tag = "browser_upload"
+
+    const assetsService = new AssetsService()
+    const params = {
+      timestamp,
+      tags: tag,
+      upload_preset: uploadPreset,
+    }
+
+    const resp = await assetsService.createPresignedUploadMetadata({
+      body: { parametersToSign: params },
+    })
+    const signature = resp.signature
+
+    setProgressValue(3)
+
     void CloudinaryUpload({
+      signature,
+      apiKey: process.env.cloudinaryKey,
+      timestamp,
       file: file,
       onUploadProgress: (progress) => {
         setProgressValue(progress)
       },
       cloudName,
       uploadPreset,
+      tag,
     }).then((response) => {
       newCloudinaryId = response.data.public_id
       setProgressValue(100)
@@ -192,7 +215,7 @@ const ListingPhoto = () => {
             id="listing-photo-upload"
             label="Upload File"
             helptext="Select JPEG or PNG files"
-            uploader={exampleUploader}
+            uploader={fileUploader}
             accept="image/*"
             progress={progressValue}
           />
