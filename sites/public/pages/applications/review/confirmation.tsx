@@ -9,7 +9,7 @@ import {
   Button,
   FormCard,
   imageUrlFromListing,
-  UserContext,
+  AuthContext,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -18,7 +18,7 @@ import React, { useContext } from "react"
 
 const ApplicationConfirmation = () => {
   const { application, listing } = useContext(AppSubmissionContext)
-  const { initialStateLoaded, profile } = useContext(UserContext)
+  const { initialStateLoaded, profile } = useContext(AuthContext)
   const router = useRouter()
 
   const imageUrl = imageUrlFromListing(listing)

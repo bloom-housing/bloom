@@ -27,15 +27,15 @@ const ListingsList = (props: ListingsProps) => {
     }
 
     let unitSummaries = [] as GroupedTableGroup[]
-    if (listing.property.unitsSummarized !== undefined) {
+    if (listing.unitsSummarized !== undefined) {
       unitSummaries = groupNonReservedAndReservedSummaries(
-        listing.property.unitsSummarized.byNonReservedUnitType,
-        listing.property.unitsSummarized.byReservedType
+        listing.unitsSummarized.byNonReservedUnitType,
+        listing.unitsSummarized.byReservedType
       )
     }
 
     // address as subtitle
-    const { street, city, state, zipCode } = listing.property?.buildingAddress || {}
+    const { street, city, state, zipCode } = listing.buildingAddress || {}
     const subtitle = `${street}, ${city} ${state}, ${zipCode}`
 
     return (

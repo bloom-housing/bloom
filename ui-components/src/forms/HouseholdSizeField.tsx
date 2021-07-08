@@ -31,11 +31,11 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               defaultValue={householdSize}
               ref={register({
                 min: {
-                  value: listing.property.householdSizeMin,
+                  value: listing.householdSizeMin,
                   message: t("errors.householdTooSmall"),
                 },
                 max: {
-                  value: listing.property.householdSizeMax,
+                  value: listing.householdSizeMax,
                   message: t("errors.householdTooBig"),
                 },
               })}

@@ -69,7 +69,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       <LocalizedLink
         className={`navbar-item logo ${logoClass} ${getLogoWidthClass()}`}
         href="/"
-        aria={{ "aria-label": "homepage" }}
+        aria-label="homepage"
       >
         <div
           className={`logo__lockup ${getLogoWidthClass()} ${
