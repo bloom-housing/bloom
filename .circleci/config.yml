@@ -29,6 +29,9 @@ executors:
       REDIS_USE_TLS: "0"
       CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
+  puppeteer-node:
+    docker:
+      - image: "circleci/node:latest-browsers:12.18.4"
 
 jobs:
   setup:
@@ -59,7 +62,7 @@ jobs:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
   jest-ui-components-a11y:
-    executor: standard-node
+    executor: puppeteer-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
