@@ -162,6 +162,7 @@ const defaults: FormListing = {
   yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
+  reviewOrderType: null,
   unitsSummarized: {
     unitTypes: [],
     reservedTypes: [],

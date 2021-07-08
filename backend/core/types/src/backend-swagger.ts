@@ -3165,6 +3165,9 @@ export interface Listing {
   /**  */
   showWaitlist: boolean;
 
+  /** */
+  reviewOrderType: ListingReviewOrder
+
   /**  */
   unitsSummarized: UnitsSummarized;
 
@@ -4490,6 +4493,10 @@ export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
+}
+export enum ListingReviewOrder {
+  'lottery' = 'lottery',
+  'firstComeFirstServe' = 'firstComeFirstServe',
 }
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;

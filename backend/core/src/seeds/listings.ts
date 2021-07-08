@@ -47,6 +47,7 @@ type ListingSeedType = Omit<
   | "preferences"
   | "leasingAgents"
   | "showWaitlist"
+  | "reviewOrderType"
   | "units"
   | "propertyGroups"
   | "accessibility"
@@ -116,7 +117,7 @@ export async function seedListing(
 
   const listingCreateDto: Omit<
     DeepPartial<Listing>,
-    keyof BaseEntity | "urlSlug" | "showWaitlist"
+    keyof BaseEntity | "urlSlug" | "showWaitlist" | "reviewOrderType"
   > = {
     ...seed.listing,
     property: property,
@@ -2651,7 +2652,7 @@ const defaultFCFS: ListingSeed = {
   assets: defaultAssets,
   leasingAgents: defaultLeasingAgents,
   listing: { ...defaultListing, name: "Test: Default, FCFS", applicationDueDate: null },
-  listingEvents: defaultListingEvents,
+  listingEvents: [],
   preferences: [],
   property: defaultProperty,
   units: defaultUnits,
