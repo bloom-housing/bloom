@@ -31,7 +31,7 @@ executors:
       CLOUDINARY_KEY: "fake_key"
   puppeteer-node:
     docker:
-      - image: "circleci/node:latest-browsers:12.18.4"
+      - image: "cimg/node:12.18.4-browsers"
 
 jobs:
   setup:
