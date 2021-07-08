@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file. The format 
 ### Backend
 
 ### Frontend
+- Added:
+
+  - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
 
 ### UI Components
 
