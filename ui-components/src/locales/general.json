@@ -718,7 +718,9 @@
       "publish": "Publish",
       "draft": "Save as Draft",
       "preview": "Preview",
-      "clone": "Clone"
+      "close": "Close",
+      "viewListing": "View listing",
+      "unpublish": "Unpublish"
     },
     "addListing": "Add Listing",
     "additionalApplicationSubmissionNotes": "Additional Application Submission Notes",

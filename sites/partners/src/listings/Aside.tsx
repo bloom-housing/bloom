@@ -6,6 +6,7 @@ import {
   Button,
   GridCell,
   AppearanceStyleType,
+  AppearanceBorderType,
   StatusMessages,
   LocalizedLink,
   LinkButton,
@@ -61,7 +62,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
       )
     }
 
-    if (type === "add" || type === "edit") {
+    if (type === "add") {
       elements.push(
         <GridCell key="btn-publish">
           <Button
@@ -84,6 +85,56 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
       )
     }
 
+    if (type === "edit") {
+      elements.push(
+        <GridCell key="btn-view-listing">
+          <LocalizedLink href={`/listings/${listingId}`}>
+            <Button styleType={AppearanceStyleType.accentCool} fullWidth>
+              {t("listings.actions.viewListing")}
+            </Button>
+          </LocalizedLink>
+        </GridCell>,
+        <GridCell key="btn-save">
+          <Button
+            styleType={AppearanceStyleType.primary}
+            fullWidth
+            onClick={() => setStatusAndSubmit(listing.status)}
+          >
+            {t("t.saveExit")}
+          </Button>
+        </GridCell>
+      )
+
+      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+        elements.push(
+          <GridCell key="btn-publish">
+            <Button
+              styleType={AppearanceStyleType.success}
+              fullWidth
+              onClick={() => setStatusAndSubmit(ListingStatus.active)}
+            >
+              {t("listings.actions.publish")}
+            </Button>
+          </GridCell>
+        )
+      }
+
+      if (listing.status === ListingStatus.active) {
+        elements.push(
+          <GridCell key="btn-unpublish">
+            <Button
+              styleType={AppearanceStyleType.alert}
+              fullWidth
+              onClick={() => setStatusAndSubmit(ListingStatus.pending)}
+              border={AppearanceBorderType.outlined}
+            >
+              {t("listings.actions.unpublish")}
+            </Button>
+          </GridCell>
+        )
+      }
+    }
+
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
@@ -101,7 +152,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     }
 
     return elements
-  }, [listingId, setStatusAndSubmit, type])
+  }, [listing.status, listingId, setStatusAndSubmit, type])
 
   return (
     <>

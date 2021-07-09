@@ -220,7 +220,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
 
       if (data) {
-        void onSubmit(data, editMode ? "details" : "new")
+        await onSubmit(data, editMode ? "details" : "new")
+
+        // reload page after redirection to fetch new listing data
+        router.reload()
       }
     }
   }
