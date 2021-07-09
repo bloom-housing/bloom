@@ -23,9 +23,9 @@ export class ListingsService {
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.unitTypeRef", "unitTypeRef")
+      .leftJoinAndSelect("units.unitType", "unitTypeRef")
       .leftJoinAndSelect("units.unitRentType", "unitRentType")
-      .leftJoinAndSelect("units.unitAccessibilityPriorityType", "unitAccessibilityPriorityType")
+      .leftJoinAndSelect("units.priorityType", "priorityType")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
@@ -80,10 +80,10 @@ export class ListingsService {
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const listing = await Listing.findOne({
-      where: { id: listingDto.id },
-      relations: ["property"],
-    })
+    const qb = this.getQueryBuilder()
+    qb.where("listings.id = :id", { id: listingDto.id })
+    const listing = await qb.getOne()
+
     if (!listing) {
       throw new NotFoundException()
     }

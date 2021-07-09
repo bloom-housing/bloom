@@ -142,7 +142,7 @@ const getDefaultSummaryRanges = (unit: Unit) => {
     },
     unitType: unit.unitType,
     totalAvailable: 0,
-  } as UnitSummary
+  }
 }
 
 const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {

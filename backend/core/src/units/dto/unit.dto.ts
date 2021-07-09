@@ -4,7 +4,6 @@ import { Exclude, Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { IdDto } from "../../shared/dto/id.dto"
 import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 import { UnitRentTypeDto } from "../../unit-rent-types/dto/unit-rent-type.dto"
 import { UnitAccessibilityPriorityTypeDto } from "../../unit-accessbility-priority-types/dto/unit-accessibility-priority-type.dto"
@@ -30,21 +29,21 @@ export class UnitDto extends OmitType(Unit, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
+  @Type(() => UnitTypeDto)
   unitType?: UnitTypeDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
+  @Type(() => UnitRentTypeDto)
   unitRentType?: UnitRentTypeDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
+  @Type(() => UnitAccessibilityPriorityTypeDto)
   priorityType?: UnitAccessibilityPriorityTypeDto
 }
 
