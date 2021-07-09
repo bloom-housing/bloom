@@ -13,8 +13,8 @@ declare const expect: jest.Expect
 let service: ListingsService
 const origin = "localhost"
 const mockListings = [
-  { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [] },
-  { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [] },
+  { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [], status: "closed" },
 ]
 const mockListingsDto = mapTo<ListingDto, Listing>(ListingDto, mockListings as Listing[])
 const mockQueryBuilder = {

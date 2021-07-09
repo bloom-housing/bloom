@@ -8,11 +8,5 @@
     "header": "Detroit Housing Portal is a project of the",
     "headerUrl": "https://detroitmi.gov/departments/housing-and-revitalization-department",
     "headerLink": "City of Detroit - Housing and Revitalization Department"
-  },
-
-  "application": {
-    "details": {
-      "countyName": "Alameda County"
-    }
   }
 }
