@@ -242,4 +242,9 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   markedAsDuplicate: boolean
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  flagged?: boolean
 }

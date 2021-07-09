@@ -411,6 +411,7 @@ describe("Applications", () => {
     expect(createRes.body).toMatchObject(body)
     expect(createRes.body).toHaveProperty("createdAt")
     expect(createRes.body).toHaveProperty("updatedAt")
+    expect(createRes.body).toHaveProperty("flagged")
     expect(createRes.body).toHaveProperty("id")
     const res = await supertest(app.getHttpServer())
       .get(`/applications/csv/?includeHeaders=true&listingId=${listing1Id}`)

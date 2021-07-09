@@ -45,6 +45,7 @@ import {
   formatVouchersOrSubsidies,
   formatWorkPreference,
   formatMarkedAsDuplicate,
+  formatFlagged,
 } from "../formatters"
 
 export const basicFormattingMetadata = [
@@ -94,4 +95,5 @@ export const basicFormattingMetadata = [
   formatHouseholdSize,
   formatHoueholdMembers,
   formatMarkedAsDuplicate,
+  formatFlagged,
 ]

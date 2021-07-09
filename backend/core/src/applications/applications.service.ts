@@ -46,7 +46,7 @@ export class ApplicationsService {
   public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
     const qb = this._getQb(params)
     const result = await qb
-      .leftJoinAndSelect(
+      .leftJoin(
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications.applications_id = application.id"
@@ -57,13 +57,16 @@ export class ApplicationsService {
       .addSelect(
         "count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
       )
-      .getMany()
+      .getRawAndEntities()
+    let index = 0
     await Promise.all(
-      result.map(async (application) => {
+      result.entities.map(async (application) => {
+        application.flagged = result.raw[index].flagged
         await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        index += 1
       })
     )
-    return result
+    return result.entities
   }
 
   async listPaginated(
