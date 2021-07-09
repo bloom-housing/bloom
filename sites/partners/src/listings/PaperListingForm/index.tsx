@@ -250,7 +250,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
     const createDate = (formDate: { year: string; month: string; day: string }) => {
-      return new Date(`${formDate.year}-${formDate.month}-${formDate.day}`)
+      return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
     }
 
     const createTime = (
