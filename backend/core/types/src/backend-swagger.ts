@@ -3374,6 +3374,8 @@ export interface Listing {
 
   /**  */
   waitlistOpenSpots?: number;
+
+  isReservedBuilding?: boolean;
 }
 
 export interface PreferenceCreate {
