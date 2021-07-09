@@ -18,14 +18,15 @@ const Layout = (props) => {
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
         <Head>
-          <title>{t("nav.siteTitle")}</title>
+          <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
         <SiteHeader
           skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
           notice=""
-          title={t("nav.siteTitle")}
+          title={t("nav.siteTitlePartners")}
+          logoWidth={"medium"}
         >
           <LocalizedLink href="/" className="navbar-item">
             {t("nav.listings")}
