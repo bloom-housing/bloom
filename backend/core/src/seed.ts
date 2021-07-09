@@ -2,12 +2,12 @@ import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
 import { ListingSeed, seedListing, defaultListingSeed, allSeeds } from "./seeds/listings"
-import { UserService } from "./user/user.service"
+import { UserService } from "./auth/services/user.service"
 import { plainToClass } from "class-transformer"
-import { UserCreateDto } from "./user/dto/user.dto"
+import { UserCreateDto } from "./auth/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { User } from "./user/entities/user.entity"
+import { User } from "./auth/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
 
@@ -20,7 +20,7 @@ const parseSeed = (seedData: ListingSeed): ListingSeed => {
 }
 
 export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
-  const usersService = app.get<UserService>(UserService)
+  const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
     seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
   )
@@ -55,8 +55,8 @@ const seedListings = async (app: INestApplicationContext) => {
 }
 
 async function seed() {
-  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
-  const userService = app.get<UserService>(UserService)
+  const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const listings = await seedListings(app)
