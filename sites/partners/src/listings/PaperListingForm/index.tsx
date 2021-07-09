@@ -403,9 +403,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             <div className="max-w-screen-xl px-5 mx-auto">
               {alert && (
                 <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                  {alert === "form"
-                    ? t("listing.add.listingAddError")
-                    : t("errors.alert.badRequest")}
+                  {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
                 </AlertBox>
               )}
 

@@ -61,13 +61,13 @@ export class Property {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  accessibility: string | null
+  accessibility?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amenities: string | null
+  amenities?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })
   @JoinColumn()
@@ -81,55 +81,55 @@ export class Property {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  buildingTotalUnits: number | null
+  buildingTotalUnits?: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  developer: string | null
+  developer?: string | null
 
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMax: number | null
+  householdSizeMax?: number | null
 
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMin: number | null
+  householdSizeMin?: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  neighborhood: string | null
+  neighborhood?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  petPolicy: string | null
+  petPolicy?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  smokingPolicy: string | null
+  smokingPolicy?: string | null
 
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  unitsAvailable: number | null
+  unitsAvailable?: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitAmenities: string | null
+  unitAmenities?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -141,7 +141,7 @@ export class Property {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  yearBuilt: number | null
+  yearBuilt?: number | null
 
   @Expose()
   @ApiProperty({ type: UnitsSummarized })

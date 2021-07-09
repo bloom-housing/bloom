@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common"
-import { AuthzService } from "../authz.service"
 import { Reflector } from "@nestjs/core"
+import { AuthzService } from "../services/authz.service"
 
 const httpMethodsToAction = {
   PUT: "update",
