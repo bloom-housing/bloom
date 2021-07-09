@@ -117,12 +117,6 @@ class Unit {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  priorityType?: string | null
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   reservedType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
@@ -136,12 +130,6 @@ class Unit {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   status?: string | null
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
@@ -166,7 +154,7 @@ class Unit {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitType)
-  unitTypeRef?: UnitType | null
+  unitType?: UnitType | null
 
   @ManyToOne(() => UnitRentType, { eager: true, nullable: true })
   @Expose()
@@ -180,7 +168,7 @@ class Unit {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityType)
-  unitAccessibilityPriorityType?: UnitAccessibilityPriorityType | null
+  priorityType?: UnitAccessibilityPriorityType | null
 }
 
 export { Unit as default, Unit }
