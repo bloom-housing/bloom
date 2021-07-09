@@ -43,55 +43,54 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         title={t("listings.sections.rankingsResultsTitle")}
         description={t("listings.sections.rankingsResultsSubtitle")}
       >
-        <GridSection columns={8} className={"flex items-center"}>
-          <GridCell span={2}>
+        <GridSection columns={2}>
+          <GridCell>
             <p className="field-label m-4 ml-0">{t("listings.waitlist.openQuestion")}</p>
-          </GridCell>
-          <FieldGroup
-            name="waitlistOpenQuestion"
-            type="radio"
-            register={register}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "waitlistOpenYes",
-                defaultChecked: listing && listing.isWaitlistOpen,
-              },
-
-              {
-                ...yesNoRadioOptions[1],
-                id: "waitlistOpenNo",
-                defaultChecked: listing && !listing.isWaitlistOpen,
-              },
-            ]}
-          />
-        </GridSection>
-        {waitlistOpen === YesNoAnswer.Yes && (
-          <GridSection columns={8} className={"flex items-center"}>
-            <GridCell span={2}>
-              <p className="field-label m-4 ml-0">{t("listings.waitlist.sizeQuestion")}</p>
-            </GridCell>
             <FieldGroup
-              name="waitlistSizeQuestion"
+              name="waitlistOpenQuestion"
               type="radio"
               register={register}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
-                  id: "showWaitlistSizeYes",
-                  defaultChecked: listing && listing.waitlistMaxSize !== null,
+                  id: "waitlistOpenYes",
+                  defaultChecked: listing && listing.isWaitlistOpen,
                 },
+
                 {
                   ...yesNoRadioOptions[1],
-                  id: "showWaitlistSizeNo",
-                  defaultChecked: listing && !listing.waitlistMaxSize,
+                  id: "waitlistOpenNo",
+                  defaultChecked: listing && !listing.isWaitlistOpen,
                 },
               ]}
             />
-          </GridSection>
-        )}
+          </GridCell>
+          {waitlistOpen === YesNoAnswer.Yes && (
+            <GridCell>
+              <p className="field-label m-4 ml-0">{t("listings.waitlist.sizeQuestion")}</p>
+              <FieldGroup
+                name="waitlistSizeQuestion"
+                type="radio"
+                register={register}
+                fields={[
+                  {
+                    ...yesNoRadioOptions[0],
+                    id: "showWaitlistSizeYes",
+                    defaultChecked: listing && listing.waitlistMaxSize !== null,
+                  },
+                  {
+                    ...yesNoRadioOptions[1],
+                    id: "showWaitlistSizeNo",
+                    defaultChecked: listing && !listing.waitlistMaxSize,
+                  },
+                ]}
+              />
+            </GridCell>
+          )}
+        </GridSection>
+
         {showWaitlistSize === YesNoAnswer.Yes && waitlistOpen === YesNoAnswer.Yes && (
-          <GridSection columns={3} className={"flex items-center"}>
+          <GridSection columns={3}>
             <Field
               name="waitlistMaxSize"
               id="waitlistMaxSize"

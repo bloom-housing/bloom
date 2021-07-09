@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
+import { getDetailFieldString } from "./helpers"
 
 const DetailAdditionalEligibility = () => {
   const listing = useContext(ListingContext)
@@ -12,21 +13,31 @@ const DetailAdditionalEligibility = () => {
       grid={false}
       inset
     >
-      <GridSection columns={2}>
+      <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.creditHistory")}>{listing.creditHistory}</ViewItem>
-        </GridCell>
-        <GridCell>
-          <ViewItem label={t("listings.rentalHistory")}>{listing.rentalHistory}</ViewItem>
+          <ViewItem label={t("listings.creditHistory")}>
+            {getDetailFieldString(listing.creditHistory)}
+          </ViewItem>
         </GridCell>
       </GridSection>
-      <GridSection columns={2}>
+      <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.criminalBackground")}>{listing.criminalBackground}</ViewItem>
+          <ViewItem label={t("listings.rentalHistory")}>
+            {getDetailFieldString(listing.rentalHistory)}
+          </ViewItem>
         </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("listings.criminalBackground")}>
+            {getDetailFieldString(listing.criminalBackground)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
         <GridCell>
           <ViewItem label={t("listings.sections.rentalAssistanceTitle")}>
-            {listing.rentalAssistance}
+            {getDetailFieldString(listing.rentalAssistance)}
           </ViewItem>
         </GridCell>
       </GridSection>

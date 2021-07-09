@@ -6,9 +6,8 @@
   // would like to remove the local theme class
   @include ag-theme-alpine(
     (
-           // use theme parameters wher
       header-height: 83px,
-      row-height: 58px
+      row-height: 58px,
     )
   );
 
@@ -99,6 +98,7 @@
     ::-webkit-scrollbar-track {
       @apply bg-gray-100;
       -webkit-box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.7);
+      box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.7);
     }
   }
 
@@ -133,9 +133,6 @@
       @apply bg-white;
     }
   }
-}
-
-.data-pager__previous {
 }
 
 .data-pager__control-group {

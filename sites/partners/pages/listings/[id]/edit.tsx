@@ -23,10 +23,14 @@ const EditListing = () => {
     <ListingContext.Provider value={listingDto}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitle")}</title>
+          <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
-        <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
+        <MetaTags
+          title={t("nav.siteTitlePartners")}
+          image={metaImage}
+          description={metaDescription}
+        />
 
         <PageHeader
           title={

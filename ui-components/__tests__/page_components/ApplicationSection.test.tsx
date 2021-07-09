@@ -45,7 +45,7 @@ describe("<ApplicationSection>", () => {
     const { queryByText } = render(
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
-    expect(queryByText(listing.waitlistMaxSize)).toBeNull()
+    expect(listing.waitlistMaxSize && queryByText(listing.waitlistMaxSize)).toBeNull()
     expect(queryByText(listing.applicationAddress.street || "")).toBeNull()
   })
 })

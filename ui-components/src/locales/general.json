@@ -711,6 +711,7 @@
     "officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday"
   },
   "listings": {
+    "error": "There was an issue submitting the form.",
     "closeThisListing": "Do you really want to close this listing?",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
@@ -1001,6 +1002,7 @@
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "siteTitle": "Housing Portal",
+    "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
     "flags": "Flags"
   },

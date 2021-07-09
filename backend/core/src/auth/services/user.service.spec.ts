@@ -2,8 +2,12 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { HttpException } from "@nestjs/common"
 import { UserService } from "./user.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { User } from "./entities/user.entity"
-import { USER_ERRORS } from "./user-errors"
+import { User } from "../entities/user.entity"
+import { USER_ERRORS } from "../user-errors"
+import { EmailService } from "../../shared/email/email.service"
+import { AuthService } from "./auth.service"
+import { AuthzService } from "./authz.service"
+import { PasswordService } from "./password.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,10 +29,20 @@ describe("UserService", () => {
           provide: getRepositoryToken(User),
           useValue: mockUserRepo,
         },
+        {
+          provide: EmailService,
+          useValue: { forgotPassword: jest.fn() },
+        },
+        {
+          provide: AuthService,
+          useValue: { generateAccessToken: jest.fn().mockReturnValue("accessToken") },
+        },
+        AuthzService,
+        PasswordService,
       ],
     }).compile()
 
-    service = module.get(UserService)
+    service = await module.resolve(UserService)
   })
 
   it("should be defined", () => {
@@ -38,14 +52,14 @@ describe("UserService", () => {
   describe("forgotPassword", () => {
     it("should return 400 if email is not found", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
-      await expect(service.forgotPassword("abc@xyz.com")).rejects.toThrow(
+      await expect(service.forgotPassword({ email: "abc@xyz.com" })).rejects.toThrow(
         new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
       )
     })
 
     it("should set resetToken", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser, resetToken: null })
-      const user = await service.forgotPassword("abc@xyz.com")
+      const user = await service.forgotPassword({ email: "abc@xyz.com" })
       expect(user["resetToken"]).toBeDefined()
     })
   })
@@ -62,9 +76,9 @@ describe("UserService", () => {
     it("should set resetToken", async () => {
       mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser })
       // Sets resetToken
-      await service.forgotPassword("abc@xyz.com")
-      const user = await service.updatePassword(updateDto)
-      expect(user["resetToken"]).toBeFalsy()
+      await service.forgotPassword({ email: "abc@xyz.com" })
+      const accessToken = await service.updatePassword(updateDto)
+      expect(accessToken).toBeDefined()
     })
   })
 })
