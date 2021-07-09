@@ -4476,7 +4476,7 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
-export type CombinedAmiChartTypes = AmiChart;
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -4496,8 +4496,8 @@ export type CombinedImageTypes = (AssetCreate & any) | null;
 export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
 export type CombinedResultTypes = (AssetCreate & any) | null;
 export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export type CombinedApplicationDropOffAddressTypes = AddressCreate;
-export type CombinedApplicationMailingAddressTypes = AddressCreate;
+export type CombinedApplicationDropOffAddressTypes = (AddressCreate & any) | null;
+export type CombinedApplicationMailingAddressTypes = (AddressCreate & any) | null;
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
