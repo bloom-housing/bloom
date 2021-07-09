@@ -10,9 +10,4 @@
 .markdown-section__inner {
   @apply max-w-5xl;
   @apply m-auto;
-
-  ol {
-    list-style: decimal;
-    @apply px-8;
-  }
 }

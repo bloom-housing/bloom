@@ -7,7 +7,7 @@ import {
   FormCard,
   Icon,
   LinkButton,
-  UserContext,
+  AuthContext,
   Form,
   emailRegex,
   t,
@@ -22,7 +22,7 @@ import moment from "moment"
 import { useRouter } from "next/router"
 
 export default () => {
-  const { createUser, resendConfirmation } = useContext(UserContext)
+  const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -39,14 +39,11 @@ export default () => {
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
-      await createUser(
-        {
-          ...rest,
-          dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
-          language,
-        },
-        language
-      )
+      await createUser({
+        ...rest,
+        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        language,
+      })
 
       setOpenModal(true)
     } catch (err) {
@@ -115,7 +112,8 @@ export default () => {
               name="dob"
               id="dob"
               watch={watch}
-              atAge={true}
+              validateAge18={true}
+              errorMessage={t("errors.dateOfBirthErrorAge")}
               label={t("authentication.createAccount.yourDateOfBirth")}
             />
           </div>
@@ -247,7 +245,7 @@ export default () => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setConfirmationResent(true)
-              void resendConfirmation(email.current.toString(), language)
+              void resendConfirmation(email.current.toString())
             }}
           >
             {t("authentication.createAccount.resendTheEmail")}

@@ -10,33 +10,8 @@ if (process.argv.length < 3) {
 
 const [listingFilePath] = process.argv.slice(2)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertApplicationMethods(listing: any) {
   const applicationMethods: Array<ApplicationMethodDto> = []
-  if (listing.acceptsPostmarkedApplications) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.LeasingAgent,
-        acceptsPostmarkedApplications: listing.acceptsPostmarkedApplications as boolean,
-      })
-    )
-  }
-  if (listing.acceptingApplicationsByPoBox) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.POBox,
-        acceptsPostmarkedApplications: false,
-      })
-    )
-  }
-  if (listing.blankPaperApplicationCanBePickedUp) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.PaperPickup,
-        acceptsPostmarkedApplications: false,
-      })
-    )
-  }
 
   if ("attachments" in listing) {
     listing.attachments.forEach((attachment) => {
@@ -65,7 +40,6 @@ function convertApplicationMethods(listing: any) {
 
   ;[
     "acceptingApplicationsAtLeasingAgent",
-    "acceptingApplicationsByPoBox",
     "acceptingOnlineApplications",
     "acceptsPostmarkedApplications",
     "blankPaperApplicationCanBePickedUp",

@@ -1,6 +1,13 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import { PageHeader, t, lRoute, UserContext, Button } from "@bloom-housing/ui-components"
+import {
+  PageHeader,
+  t,
+  lRoute,
+  AuthContext,
+  Button,
+  LocalizedLink,
+} from "@bloom-housing/ui-components"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
@@ -12,7 +19,7 @@ import { MetaTags } from "../src/MetaTags"
 import { Router, useRouter } from "next/router"
 
 export default function ListingsList() {
-  const { profile } = useContext(UserContext)
+  const { profile } = useContext(AuthContext)
   const leasingAgentInListings = profile.leasingAgentInListings?.map((item) => item.id)
   const router = useRouter()
   class formatLinkCell {
@@ -27,6 +34,20 @@ export default function ListingsList() {
 
     getGui() {
       return this.link
+    }
+  }
+
+  class ApplicationsLink extends formatLinkCell {
+    init(params) {
+      super.init(params)
+      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    }
+  }
+
+  class ListingsLink extends formatLinkCell {
+    init(params) {
+      super.init(params)
+      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
     }
   }
 
@@ -47,23 +68,25 @@ export default function ListingsList() {
 
   const gridOptions: GridOptions = {
     components: {
-      formatLinkCell: formatLinkCell,
-      formatWaitlistStatus: formatWaitlistStatus,
+      ApplicationsLink,
+      formatLinkCell,
+      formatWaitlistStatus,
+      ListingsLink,
     },
   }
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
 
-  const columnDefs = useMemo(
-    () => [
+  const columnDefs = useMemo(() => {
+    const columns = [
       {
         headerName: t("name"),
         field: "name",
         sortable: false,
         filter: false,
         resizable: true,
-        cellRenderer: "formatLinkCell",
+        cellRenderer: "ApplicationsLink",
       },
       {
         headerName: t("listings.property.buildingAddress"),
@@ -82,7 +105,7 @@ export default function ListingsList() {
       },
       {
         headerName: t("listings.availableUnits"),
-        field: "property.unitsAvailable",
+        field: "unitsAvailable",
         sortable: false,
         filter: false,
         resizable: true,
@@ -104,9 +127,19 @@ export default function ListingsList() {
         flex: 1,
         valueFormatter: ({ value }) => t(`listings.${value}`),
       },
-    ],
-    []
-  )
+    ]
+    if (process.env.showLMLinks) {
+      columns.unshift({
+        headerName: t("listings.listingName"),
+        field: "name",
+        sortable: false,
+        filter: false,
+        resizable: true,
+        cellRenderer: "ListingsLink",
+      })
+    }
+    return columns
+  }, [])
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
 
@@ -139,7 +172,7 @@ export default function ListingsList() {
             <div className="flex justify-between">
               <div className="w-56"></div>
               <div className="flex-row">
-                {profile.roles.includes(UserRole.admin) && (
+                {profile.roles.includes(UserRole.admin) && process.env.showLMLinks && (
                   <Button className="mx-1" onClick={() => void router.push("/listings/add")}>
                     {t("listings.addListing")}
                   </Button>

@@ -1,7 +1,7 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { LoggedInUserIdleTimeout } from "../../src/authentication/timeout"
-import { UserContext } from "../../src/authentication/UserContext"
+import { AuthContext } from "../../src/authentication/AuthContext"
 
 afterEach(cleanup)
 
@@ -11,7 +11,7 @@ describe("<Timeout>", () => {
     const anchorMocked = document.createElement("div")
     const createElementSpy = jest.spyOn(document, "createElement").mockReturnValueOnce(anchorMocked)
     render(
-      <UserContext.Provider
+      <AuthContext.Provider
         value={{
           profile: {
             roles: [],
@@ -27,7 +27,7 @@ describe("<Timeout>", () => {
         }}
       >
         <LoggedInUserIdleTimeout onTimeout={onTimeoutSpy} />
-      </UserContext.Provider>
+      </AuthContext.Provider>
     )
     expect(createElementSpy).toHaveBeenCalledTimes(2)
     createElementSpy.mockRestore()
@@ -38,13 +38,13 @@ describe("<Timeout>", () => {
     const anchorMocked = document.createElement("div")
     const createElementSpy = jest.spyOn(document, "createElement").mockReturnValueOnce(anchorMocked)
     render(
-      <UserContext.Provider
+      <AuthContext.Provider
         value={{
           signOut: () => {},
         }}
       >
         <LoggedInUserIdleTimeout onTimeout={onTimeoutSpy} />
-      </UserContext.Provider>
+      </AuthContext.Provider>
     )
     expect(createElementSpy).toHaveBeenCalledTimes(1)
     createElementSpy.mockRestore()

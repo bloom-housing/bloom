@@ -20,6 +20,7 @@ import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import { Listing } from "../../types"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -553,7 +554,7 @@ describe("Applications", () => {
       .expect(400)
   })
 
-  it(`should disallow a user to send too mutch application submits`, async () => {
+  it(`should disallow a user to send too much application submits`, async () => {
     const body = getTestAppBody(listing1Id)
     const failAfter = 2
 
@@ -566,6 +567,40 @@ describe("Applications", () => {
         .set(...setAuthorization(user1AccessToken))
         .expect(expect)
     }
+  })
+
+  it(`should disallow a user to create an application post submission due date`, async () => {
+    const body = getTestAppBody(listing1Id)
+    await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(201)
+
+    const getListingRes = await supertest(app.getHttpServer()).get(`/listings/${listing1Id}`)
+    const listing: Listing = getListingRes.body
+
+    const oldApplicationDueDate = listing.applicationDueDate
+    listing.applicationDueDate = new Date()
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const res = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .set(...setAuthorization(user1AccessToken))
+      .expect(400)
+    expect(res.body.message).toBe("Listing is not open for application submission.")
+
+    listing.applicationDueDate = oldApplicationDueDate
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
   })
 
   afterEach(async () => {

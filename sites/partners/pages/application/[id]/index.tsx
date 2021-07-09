@@ -7,7 +7,7 @@ import {
   t,
   Tag,
   Button,
-  ApiClientContext,
+  AuthContext,
   AlertBox,
   SiteAlert,
 } from "@bloom-housing/ui-components"
@@ -36,7 +36,7 @@ export default function ApplicationsList() {
   const applicationId = router.query.id as string
   const { application } = useSingleApplicationData(applicationId)
 
-  const { applicationsService } = useContext(ApiClientContext)
+  const { applicationsService } = useContext(AuthContext)
   const [errorAlert, setErrorAlert] = useState(false)
 
   const [membersDrawer, setMembersDrawer] = useState<MembersDrawer>(null)
