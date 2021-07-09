@@ -43,6 +43,29 @@ export class ApplicationsService {
     return result
   }
 
+  public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
+    const qb = this._getQb(params)
+    const result = await qb
+      .leftJoinAndSelect(
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications.applications_id = application.id"
+      )
+      .groupBy(
+        "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, application_flagged_set_applications_applications.application_flagged_set_id, application_flagged_set_applications_applications.applications_id"
+      )
+      .addSelect(
+        "count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
+      )
+      .getMany()
+    await Promise.all(
+      result.map(async (application) => {
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+      })
+    )
+    return result
+  }
+
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
