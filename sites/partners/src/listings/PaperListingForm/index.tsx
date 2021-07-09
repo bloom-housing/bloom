@@ -11,6 +11,8 @@ import {
   AppearanceStyleType,
   Button,
   TimeFieldPeriod,
+  Modal,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -192,6 +194,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
+
+  /**
+   * Close modal
+   */
+  const [closeModal, setCloseModal] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -377,75 +384,107 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }
 
   return (
-    <LoadingOverlay isLoading={loading}>
-      <>
-        <StatusBar
-          backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
-            >
-              {t("t.back")}
-            </Button>
-          }
-          tagStyle={
-            listing?.status == ListingStatus.active
-              ? AppearanceStyleType.success
-              : AppearanceStyleType.primary
-          }
-          tagLabel={
-            listing?.status
-              ? t(`listings.listingStatus.${listing.status}`)
-              : t(`listings.listingStatus.pending`)
-          }
-        />
+    <>
+      <LoadingOverlay isLoading={loading}>
+        <>
+          <StatusBar
+            backButton={
+              <Button
+                inlineIcon="left"
+                icon="arrowBack"
+                onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+              >
+                {t("t.back")}
+              </Button>
+            }
+            tagStyle={
+              listing?.status == ListingStatus.active
+                ? AppearanceStyleType.success
+                : AppearanceStyleType.primary
+            }
+            tagLabel={
+              listing?.status
+                ? t(`listings.listingStatus.${listing.status}`)
+                : t(`listings.listingStatus.pending`)
+            }
+          />
 
-        <FormProvider {...formMethods}>
-          <section className="bg-primary-lighter py-5">
-            <div className="max-w-screen-xl px-5 mx-auto">
-              {alert && (
-                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                  {alert === "form"
-                    ? t("listing.add.listingAddError")
-                    : t("errors.alert.badRequest")}
-                </AlertBox>
-              )}
+          <FormProvider {...formMethods}>
+            <section className="bg-primary-lighter py-5">
+              <div className="max-w-screen-xl px-5 mx-auto">
+                {alert && (
+                  <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                    {alert === "form"
+                      ? t("listing.add.listingAddError")
+                      : t("errors.alert.badRequest")}
+                  </AlertBox>
+                )}
 
-              <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-                <div className="flex flex-row flex-wrap">
-                  <div className="info-card md:w-9/12">
-                    <ListingIntro />
-                    <BuildingDetails />
-                    <Units
-                      units={units}
-                      setUnits={setUnits}
-                      amiCharts={amiCharts}
-                      disableUnitsAccordion={listing?.disableUnitsAccordion}
-                    />
-                    <AdditionalFees />
-                    <BuildingFeatures />
-                    <AdditionalEligibility />
-                    <AdditionalDetails />
-                    <RankingsAndResults listing={listing} />
-                    <LeasingAgent />
-                    <ApplicationAddress listing={listing} />
-                    <ApplicationDates listing={listing} />
+                <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                  <div className="flex flex-row flex-wrap">
+                    <div className="info-card md:w-9/12">
+                      <ListingIntro />
+                      <BuildingDetails />
+                      <Units
+                        units={units}
+                        setUnits={setUnits}
+                        amiCharts={amiCharts}
+                        disableUnitsAccordion={listing?.disableUnitsAccordion}
+                      />
+                      <AdditionalFees />
+                      <BuildingFeatures />
+                      <AdditionalEligibility />
+                      <AdditionalDetails />
+                      <RankingsAndResults listing={listing} />
+                      <LeasingAgent />
+                      <ApplicationAddress listing={listing} />
+                      <ApplicationDates listing={listing} />
+                    </div>
+
+                    <aside className="md:w-3/12 md:pl-6">
+                      <Aside
+                        type={editMode ? "edit" : "add"}
+                        setStatusAndSubmit={setStatusAndSubmit}
+                        showCloseListingModal={() => setCloseModal(true)}
+                      />
+                    </aside>
                   </div>
+                </Form>
+              </div>
+            </section>
+          </FormProvider>
+        </>
+      </LoadingOverlay>
 
-                  <aside className="md:w-3/12 md:pl-6">
-                    <Aside
-                      type={editMode ? "edit" : "add"}
-                      setStatusAndSubmit={setStatusAndSubmit}
-                    />
-                  </aside>
-                </div>
-              </Form>
-            </div>
-          </section>
-        </FormProvider>
-      </>
-    </LoadingOverlay>
+      <Modal
+        open={!!closeModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.closeThisListing")}
+        onClose={() => setCloseModal(false)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            onClick={() => {
+              void setStatusAndSubmit(ListingStatus.closed)
+              setCloseModal(false)
+            }}
+          >
+            {t("listings.actions.close")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setCloseModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.closeThisListing")}
+      </Modal>
+    </>
   )
 }
 

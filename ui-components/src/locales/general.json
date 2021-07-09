@@ -711,6 +711,7 @@
     "officeHoursPlaceholder": "ex: 9:00am - 5:00pm, Monday to Friday"
   },
   "listings": {
+    "closeThisListing": "Do you really want to close this listing?",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -1076,6 +1077,7 @@
     "WY": "Wyoming"
   },
   "t": {
+    "areYouSure": "Are you sure?",
     "addNotes": "Add notes",
     "at": "at",
     "additionalPhone": "Additional Phone",

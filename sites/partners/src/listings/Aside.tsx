@@ -10,6 +10,7 @@ import {
   StatusMessages,
   LocalizedLink,
   LinkButton,
+  GridSection,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "./ListingContext"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
@@ -17,11 +18,12 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 type AsideProps = {
   type: AsideType
   setStatusAndSubmit?: (status: ListingStatus) => Promise<void>
+  showCloseListingModal: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
+const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -104,6 +106,9 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
           </Button>
         </GridCell>
       )
+      // <GridSection columns={3}>
+
+      // </GridSection>
 
       if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
         elements.push(
@@ -121,7 +126,16 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
 
       if (listing.status === ListingStatus.active) {
         elements.push(
-          <GridCell key="btn-unpublish">
+          <div className="grid grid-cols-2 gap-2" key="btn-close-unpublish">
+            <Button
+              type="button"
+              styleType={AppearanceStyleType.secondary}
+              fullWidth
+              onClick={() => showCloseListingModal()}
+            >
+              {t("listings.actions.close")}
+            </Button>
+
             <Button
               styleType={AppearanceStyleType.alert}
               fullWidth
@@ -130,7 +144,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
             >
               {t("listings.actions.unpublish")}
             </Button>
-          </GridCell>
+          </div>
         )
       }
     }
@@ -152,7 +166,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     }
 
     return elements
-  }, [listing.status, listingId, setStatusAndSubmit, type])
+  }, [listing.status, listingId, setStatusAndSubmit, showCloseListingModal, type])
 
   return (
     <>
