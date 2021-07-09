@@ -6,12 +6,10 @@ import {
   ListingDto,
   ListingCreateDto,
   ListingUpdateDto,
-  ListingFilterParams,
   PaginatedListingsDto,
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { addFilter } from "../shared/filter"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
@@ -95,7 +93,7 @@ export class ListingsService {
      */
     if (origin === process.env.PARTNERS_BASE_URL) {
       const counts = await this.listingRepository
-        .createQueryBuilder("listings")
+        .createQueryBuilder("listing")
         .select("listing.id")
         .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
         .getMany()

@@ -76,7 +76,7 @@ export class ListingsController {
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
   @UseInterceptors(CacheInterceptor)
-  async list(
+  public async getAll(
     @Headers("origin") origin: string,
     @Query() queryParams: ListingsListQueryParams
   ): Promise<PaginatedListingsDto> {
