@@ -2,11 +2,11 @@ import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
 import { UnitTables } from "../../src/page_components/listing/UnitTables"
 import Archer from "../fixtures/archer.json"
-import { UnitSummary } from "@bloom-housing/backend-core/types"
+import { Listing, UnitSummary } from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)
 
-const archer = Object.assign({}, Archer) as any
+const archer: Listing = Object.assign({}, Archer) as any
 
 // copied from listings service output
 const summaries: {
@@ -15,13 +15,23 @@ const summaries: {
   amiPercentages: string[]
   [key: string]: any
 } = {
-  unitTypes: ["studio"],
+  unitTypes: [{
+    id: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "studio",
+  }],
   reservedTypes: ["senior"],
   priorityTypes: [],
   amiPercentages: ["45.0", "30.0"],
   byUnitType: [
     {
-      unitType: "studio",
+      unitType: {
+        id: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        name: "studio",
+      },
       totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
@@ -33,7 +43,12 @@ const summaries: {
   ],
   byUnitTypeWithoutFloor: [
     {
-      unitType: "studio",
+      unitType: {
+        id: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        name: "studio",
+      },
       totalAvailable: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
@@ -44,7 +59,12 @@ const summaries: {
   ],
   byNonReservedUnitType: [
     {
-      unitType: "studio",
+      unitType: {
+        id: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        name: "studio",
+      },
       totalAvailable: 40,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
@@ -59,7 +79,12 @@ const summaries: {
       reservedType: "senior",
       byUnitType: [
         {
-          unitType: "studio",
+          unitType: {
+            id: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: "studio",
+          },
           totalAvailable: 1,
           minIncomeRange: { min: "$2,208", max: "$2,208" },
           occupancyRange: { min: 1, max: 2 },
@@ -76,7 +101,12 @@ const summaries: {
       percent: "45.0",
       byNonReservedUnitType: [
         {
-          unitType: "studio",
+          unitType: {
+            id: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: "studio",
+          },
           totalAvailable: 24,
           minIncomeRange: { min: "$2,208", max: "$2,208" },
           occupancyRange: { min: 1, max: 2 },
@@ -91,7 +121,12 @@ const summaries: {
           reservedType: "senior",
           byUnitType: [
             {
-              unitType: "studio",
+              unitType: {
+                id: "",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                name: "studio",
+              },
               totalAvailable: 1,
               minIncomeRange: { min: "$2,208", max: "$2,208" },
               occupancyRange: { min: 1, max: 2 },
@@ -108,7 +143,12 @@ const summaries: {
       percent: "30.0",
       byNonReservedUnitType: [
         {
-          unitType: "studio",
+          unitType: {
+            id: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            name: "studio",
+          },
           totalAvailable: 16,
           minIncomeRange: { min: "$1,438", max: "$1,438" },
           occupancyRange: { min: 1, max: 2 },

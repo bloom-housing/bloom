@@ -13,7 +13,7 @@ export class UnitsSummarized {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
+  @ApiProperty({ type: [UnitTypeDto] })
   unitTypes: UnitTypeDto[]
 
   @Expose()
@@ -25,7 +25,7 @@ export class UnitsSummarized {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
+  @ApiProperty({ type: [UnitAccessibilityPriorityType] })
   priorityTypes: UnitAccessibilityPriorityType[]
 
   @Expose()
