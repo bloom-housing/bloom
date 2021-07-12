@@ -25,7 +25,7 @@ const ImageCard = (props: ImageCardProps) => {
         <ApplicationStatus listing={props.listing} vivid />
       </aside>
     )
-    if (props.listing.isReservedBuilding) {
+    if (props.tagLabel) {
       tag = (
         <Tag styleType={AppearanceStyleType.warning} className="image-card__tag">
           {props.tagLabel}
