@@ -218,6 +218,7 @@ export const ListingView = (props: ListingProps) => {
           {!isReferralApp ? (
             <ApplicationSection
               listing={listing}
+              preview={props.preview}
               internalFormRoute="/applications/start/choose-language"
             />
           ) : (
@@ -309,6 +310,7 @@ export const ListingView = (props: ListingProps) => {
               {!isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
+                  preview={props.preview}
                   internalFormRoute="/applications/start/choose-language"
                 />
               ) : (

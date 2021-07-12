@@ -2,7 +2,11 @@ import * as React from "react"
 import moment from "moment"
 import { ApplicationSection } from "./ApplicationSection"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
-import { Listing } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationMethod,
+  ApplicationMethodType,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 
 export default {
   component: ApplicationSection,
@@ -16,6 +20,48 @@ export const dueSoon = () => {
   listing.waitlistCurrentSize = 0
   listing.applicationDueDate = new Date(moment().add(days, "days").format())
   return <ApplicationSection listing={listing} internalFormRoute="/forms" />
+}
+
+export const previewState = () => {
+  const listing = Object.assign({}, ArcherListing) as Listing
+  const days = 10
+  listing.applicationOpenDate = new Date(moment().format())
+  listing.waitlistCurrentSize = 0
+  listing.applicationDueDate = new Date(moment().add(days, "days").format())
+
+  const testMethod1: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    label: "English",
+    externalReference: "#english",
+    type: ApplicationMethodType.FileDownload,
+  }
+  const testMethod2: ApplicationMethod = {
+    acceptsPostmarkedApplications: false,
+    label: "Spanish",
+    externalReference: "#spanish",
+    type: ApplicationMethodType.FileDownload,
+  }
+
+  listing.applicationMethods = listing.applicationMethods.concat([testMethod1, testMethod2])
+
+  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" />
+}
+
+export const previewStateExternalLink = () => {
+  const listing = Object.assign({}, ArcherListing) as Listing
+  const days = 10
+  listing.applicationOpenDate = new Date(moment().format())
+  listing.waitlistCurrentSize = 0
+  listing.applicationDueDate = new Date(moment().add(days, "days").format())
+
+  const linkMethod: ApplicationMethod = {
+    externalReference: "https://www.exygy.com",
+    type: ApplicationMethodType.ExternalLink,
+  }
+
+  listing.applicationMethods = listing.applicationMethods.concat([linkMethod])
+
+  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" />
 }
 
 /*
