@@ -320,13 +320,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @redirect: open listing details or reset form
   */
   const onSubmit = async (data: FormListing) => {
-    setAlert(null)
-    setLoading(true)
     const validation = await trigger()
 
     if (!validation) {
       return
     }
+
+    setAlert(null)
+    setLoading(true)
 
     try {
       data = {
