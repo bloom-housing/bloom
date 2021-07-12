@@ -110,8 +110,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     defaultValues,
   })
 
-  console.info(listing)
-
   const router = useRouter()
 
   const { listingsService } = useContext(AuthContext)
