@@ -127,8 +127,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const setStatusAndSubmit = async (status: ListingStatus) => {
     const validation = await trigger()
 
-    console.info("VALUES", getValues())
-
     if (validation) {
       let data = getValues()
       data = {
@@ -138,8 +136,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
 
       if (data) {
-        console.info("DATA!", data)
-
         void onSubmit(data, editMode ? "details" : "new")
       }
     }
@@ -226,13 +222,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 </AlertBox>
               )}
 
-              <Form
-                id="listing-form"
-                onSubmit={handleSubmit(() => {
-                  // TODO: we had a problem before, there was a double-submit going on.
-                  // Need to refactor. -JW
-                })}
-              >
+              <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                 <div className="flex flex-row flex-wrap">
                   <div className="info-card md:w-9/12">
                     <ListingIntro />
