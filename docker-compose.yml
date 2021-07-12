@@ -17,9 +17,11 @@ services:
     env_file:
       - ./sites/public/.env
     environment:
-      # TODO(CityOfDetroit/affordable-housing-app#84): login currently doesn't work, likely
-      # needs a separate env variable to point client requests to localhost:3100 instead.
+      # The URLs are different here because requests made using BACKEND_API_BASE are done from
+      # the NextJS server, which must address other containers by container name. Requests made
+      # using INCOMING_HOOK_BODY are done from the client side browser and must use localhost.
       BACKEND_API_BASE: "http://backend-core:3100"
+      INCOMING_HOOK_BODY: "http://localhost:3100"
       NEXTJS_PORT: "3000"
     command: yarn dev
     depends_on:
