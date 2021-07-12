@@ -94,6 +94,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
         </GridCell>,
         <GridCell key="btn-save">
           <Button
+            type="button"
             styleType={AppearanceStyleType.primary}
             fullWidth
             onClick={() => setStatusAndSubmit(listing.status)}
@@ -102,14 +103,12 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
           </Button>
         </GridCell>
       )
-      // <GridSection columns={3}>
-
-      // </GridSection>
 
       if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
               onClick={() => setStatusAndSubmit(ListingStatus.active)}
@@ -133,6 +132,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
             </Button>
 
             <Button
+              type="button"
               styleType={AppearanceStyleType.alert}
               fullWidth
               onClick={() => setStatusAndSubmit(ListingStatus.pending)}
