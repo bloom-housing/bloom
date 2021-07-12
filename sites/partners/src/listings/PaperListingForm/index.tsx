@@ -191,6 +191,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const { data: amiCharts = [] } = useAmiChartList()
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [status, setStatus] = useState<ListingStatus>(ListingStatus.pending)
   const [units, setUnits] = useState<TempUnit[]>([])
 
   useEffect(() => {
@@ -204,26 +205,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, clearErrors, reset, trigger, getValues } = formMethods
+  const { handleSubmit, trigger } = formMethods
 
-  const triggerSubmit = async (data: FormListing) => onSubmit(data, "details")
-
-  const setStatusAndSubmit = async (status: ListingStatus) => {
-    const validation = await trigger()
-
-    if (validation) {
-      let data = getValues()
-      data = {
-        ...defaultValues,
-        ...data,
-        status,
-      }
-
-      if (data) {
-        void onSubmit(data, editMode ? "details" : "new")
-      }
-    }
-  }
+  const triggerSubmit = async (data: FormListing) => onSubmit(data)
 
   const formatFormData = (data: FormListing) => {
     const showWaitlistNumber =
@@ -335,10 +319,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
     @redirect: open listing details or reset form
   */
-  const onSubmit = async (data: FormListing, redirect: "details" | "new") => {
+  const onSubmit = async (data: FormListing) => {
     setAlert(null)
     setLoading(true)
+    const validation = await trigger()
+
+    if (!validation) {
+      return
+    }
+
     try {
+      data = {
+        ...defaultValues,
+        ...data,
+        status,
+      }
       const formattedData = formatFormData(data)
       const result = editMode
         ? await listingsService.update({
@@ -354,14 +349,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           "success"
         )
 
-        if (redirect === "details") {
-          void router.push(`/listings/${result.id}`)
-        } else {
-          reset()
-          clearErrors()
-          setAlert(null)
-          void router.push("/")
-        }
+        void router.push(`/listings/${result.id}`)
       }
     } catch (err) {
       setLoading(false)
@@ -429,10 +417,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
-                    <Aside
-                      type={editMode ? "edit" : "add"}
-                      setStatusAndSubmit={setStatusAndSubmit}
-                    />
+                    <Aside type={editMode ? "edit" : "add"} setStatus={setStatus} />
                   </aside>
                 </div>
               </Form>
