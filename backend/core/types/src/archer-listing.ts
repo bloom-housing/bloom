@@ -1391,5 +1391,4 @@ export const ArcherListing: Listing = {
   ],
   // TODO confirm not used anywhere
   // totalUnits: 2,
-  isReservedBuilding: true,
 }
