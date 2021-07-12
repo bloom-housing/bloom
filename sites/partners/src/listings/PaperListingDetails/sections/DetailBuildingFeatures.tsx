@@ -1,6 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
+import { getDetailFieldString } from "./helpers"
 
 const DetailBuildingFeatures = () => {
   const listing = useContext(ListingContext)
@@ -12,28 +13,44 @@ const DetailBuildingFeatures = () => {
       grid={false}
       inset
     >
-      <GridSection columns={2}>
+      <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.propertyAmenities")}>{listing.amenities}</ViewItem>
-        </GridCell>
-        <GridCell>
-          <ViewItem label={t("t.accessibility")}>{listing.accessibility}</ViewItem>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={2}>
-        <GridCell>
-          <ViewItem label={t("t.unitAmenities")}>{listing.unitAmenities}</ViewItem>
-        </GridCell>
-        <GridCell>
-          <ViewItem label={t("t.smokingPolicy")}>{listing.smokingPolicy}</ViewItem>
+          <ViewItem label={t("t.propertyAmenities")}>
+            {getDetailFieldString(listing.amenities)}
+          </ViewItem>
         </GridCell>
       </GridSection>
-      <GridSection columns={2}>
+      <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.petsPolicy")}>{listing.petPolicy}</ViewItem>
+          <ViewItem label={t("t.unitAmenities")}>
+            {getDetailFieldString(listing.unitAmenities)}
+          </ViewItem>
         </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.servicesOffered")}>{listing.servicesOffered}</ViewItem>
+          <ViewItem label={t("t.accessibility")}>
+            {getDetailFieldString(listing.accessibility)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("t.smokingPolicy")}>
+            {getDetailFieldString(listing.smokingPolicy)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("t.petsPolicy")}>{getDetailFieldString(listing.petPolicy)}</ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("t.servicesOffered")}>
+            {getDetailFieldString(listing.servicesOffered)}
+          </ViewItem>
         </GridCell>
       </GridSection>
     </GridSection>
