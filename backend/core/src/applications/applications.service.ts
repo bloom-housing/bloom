@@ -45,28 +45,35 @@ export class ApplicationsService {
 
   public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
     const qb = this._getQb(params)
-    const result = await qb
+    const result = await qb.getMany()
+
+    // Get flagged applications
+    const flaggedQuery = await this.repository
+      .createQueryBuilder("applications")
       .leftJoin(
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications",
-        "application_flagged_set_applications_applications.applications_id = application.id"
+        "application_flagged_set_applications_applications.applications_id = applications.id"
       )
-      .groupBy(
-        "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, application_flagged_set_applications_applications.application_flagged_set_id, application_flagged_set_applications_applications.applications_id"
+      .andWhere("applications.listing_id = :lid", { lid: params.listingId })
+      .select(
+        "applications.id, count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
       )
-      .addSelect(
-        "count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
-      )
+      .groupBy("applications.id")
       .getRawAndEntities()
-    let index = 0
+
+    // Reorganize flagged to object to make it faster to map
+    const flagged = flaggedQuery.raw.reduce((obj, application) => {
+      return { ...obj, [application.id]: application.flagged }
+    }, {})
     await Promise.all(
-      result.entities.map(async (application) => {
-        application.flagged = result.raw[index].flagged
+      result.map(async (application) => {
+        // Because TypeOrm can't map extra flagged field we need to map it manually
+        application.flagged = flagged[application.id]
         await this.authorizeUserAction(this.req.user, application, authzActions.read)
-        index += 1
       })
     )
-    return result.entities
+    return result
   }
 
   async listPaginated(
