@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ### UI Components
 
+- Added:
+  - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
+
 ## 1.0.4 / 2021-07-07
 
 ### General
