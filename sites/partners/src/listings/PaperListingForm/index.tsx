@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   AuthContext,
@@ -20,6 +20,7 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
+  AmiChart,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -174,6 +175,110 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
+const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUnit[]) => {
+  const showWaitlistNumber =
+    data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+
+  const getDueTime = () => {
+    let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
+    if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
+      dueTimeHours = 0
+    }
+    if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
+      dueTimeHours = dueTimeHours + 12
+    }
+    const dueTime = new Date()
+    dueTime.setHours(
+      dueTimeHours,
+      parseInt(data.applicationDueTimeField.minutes),
+      parseInt(data.applicationDueTimeField.seconds)
+    )
+    return dueTime
+  }
+  units.forEach((unit) => {
+    switch (unit.unitType) {
+      case "threeBdrm":
+        unit.numBedrooms = 3
+        break
+      case "twoBdrm":
+        unit.numBedrooms = 2
+        break
+      case "oneBdrm":
+        unit.numBedrooms = 1
+        break
+      default:
+        unit.numBedrooms = null
+    }
+
+    unit.floor = stringToNumber(unit.floor)
+    unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
+    unit.minOccupancy = stringToNumber(unit.minOccupancy)
+    unit.numBathrooms = stringToNumber(unit.numBathrooms)
+
+    if (unit.sqFeet.length === 0) {
+      delete unit.sqFeet
+    }
+
+    if (unit.amiChart?.length) {
+      const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
+      unit.amiChart = chart
+    } else {
+      delete unit.amiChart
+    }
+
+    if (unit.id === undefined) {
+      unit.id = ""
+      delete unit.updatedAt
+      delete unit.createdAt
+    }
+
+    delete unit.tempId
+  })
+
+  return {
+    ...data,
+    applicationDueTime: getDueTime(),
+    disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
+    units: units,
+    isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+    applicationDueDate: new Date(
+      `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+    ),
+    yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+    waitlistCurrentSize:
+      data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
+    waitlistMaxSize:
+      data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
+    waitlistOpenSpots:
+      data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+    postmarkedApplicationsReceivedByDate:
+      data.postMarkDate && data.arePostmarksConsidered
+        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
+        : null,
+    applicationDropOffAddressType:
+      addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
+        ? addressTypes[data.whereApplicationsDroppedOff]
+        : null,
+    applicationPickUpAddressType:
+      addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
+        ? addressTypes[data.whereApplicationsPickedUp]
+        : null,
+    applicationDropOffAddress:
+      data.canApplicationsBeDroppedOff &&
+      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+        ? data.applicationDropOffAddress
+        : null,
+    applicationPickUpAddress:
+      data.canPaperApplicationsBePickedUp &&
+      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+        ? data.applicationPickUpAddress
+        : null,
+    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+      ? data.applicationMailingAddress
+      : null,
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : defaults
@@ -209,154 +314,60 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const triggerSubmit = async (data: FormListing) => onSubmit(data)
 
-  const formatFormData = (data: FormListing) => {
-    const showWaitlistNumber =
-      data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
-    const getDueTime = () => {
-      let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
-      if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
-        dueTimeHours = 0
-      }
-      if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
-        dueTimeHours = dueTimeHours + 12
-      }
-      const dueTime = new Date()
-      dueTime.setHours(
-        dueTimeHours,
-        parseInt(data.applicationDueTimeField.minutes),
-        parseInt(data.applicationDueTimeField.seconds)
-      )
-      return dueTime
-    }
-    units.forEach((unit) => {
-      switch (unit.unitType) {
-        case "threeBdrm":
-          unit.numBedrooms = 3
-          break
-        case "twoBdrm":
-          unit.numBedrooms = 2
-          break
-        case "oneBdrm":
-          unit.numBedrooms = 1
-          break
-        default:
-          unit.numBedrooms = null
-      }
-
-      unit.floor = stringToNumber(unit.floor)
-      unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
-      unit.minOccupancy = stringToNumber(unit.minOccupancy)
-      unit.numBathrooms = stringToNumber(unit.numBathrooms)
-
-      if (unit.sqFeet.length === 0) {
-        delete unit.sqFeet
-      }
-
-      if (unit.amiChart?.length) {
-        const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
-        unit.amiChart = chart
-      } else {
-        delete unit.amiChart
-      }
-
-      if (unit.id === undefined) {
-        unit.id = ""
-        delete unit.updatedAt
-        delete unit.createdAt
-      }
-
-      delete unit.tempId
-    })
-
-    return {
-      ...data,
-      applicationDueTime: getDueTime(),
-      disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
-      units: units,
-      isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-      applicationDueDate: new Date(
-        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
-      ),
-      yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-      waitlistCurrentSize:
-        data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
-      waitlistMaxSize:
-        data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
-      waitlistOpenSpots:
-        data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
-      postmarkedApplicationsReceivedByDate:
-        data.postMarkDate && data.arePostmarksConsidered
-          ? new Date(
-              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
-            )
-          : null,
-      applicationDropOffAddressType:
-        addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
-          ? addressTypes[data.whereApplicationsDroppedOff]
-          : null,
-      applicationPickUpAddressType:
-        addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
-          ? addressTypes[data.whereApplicationsPickedUp]
-          : null,
-      applicationDropOffAddress:
-        data.canApplicationsBeDroppedOff &&
-        data.whereApplicationsPickedUp === addressTypes.anotherAddress
-          ? data.applicationDropOffAddress
-          : null,
-      applicationPickUpAddress:
-        data.canPaperApplicationsBePickedUp &&
-        data.whereApplicationsPickedUp === addressTypes.anotherAddress
-          ? data.applicationPickUpAddress
-          : null,
-      applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
-        ? data.applicationMailingAddress
-        : null,
-    }
-  }
-
   /*
     @data: form data comes from the react-hook-form
-    @redirect: open listing details or reset form
   */
-  const onSubmit = async (data: FormListing) => {
-    const validation = await trigger()
+  const onSubmit = useCallback(
+    async (data: FormListing) => {
+      const validation = await trigger()
 
-    if (!validation) {
-      return
-    }
-
-    setAlert(null)
-    setLoading(true)
-
-    try {
-      data = {
-        ...defaultValues,
-        ...data,
-        status,
+      if (!validation) {
+        return
       }
-      const formattedData = formatFormData(data)
-      const result = editMode
-        ? await listingsService.update({
-            listingId: listing.id,
-            body: { id: listing.id, ...formattedData },
-          })
-        : await listingsService.create({ body: formattedData })
-      setLoading(false)
 
-      if (result) {
-        setSiteAlertMessage(
-          editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
-          "success"
-        )
+      setAlert(null)
+      setLoading(true)
 
-        void router.push(`/listings/${result.id}`)
+      try {
+        data = {
+          ...defaultValues,
+          ...data,
+          status,
+        }
+        const formattedData = formatFormData(data, amiCharts, units)
+        const result = editMode
+          ? await listingsService.update({
+              listingId: listing.id,
+              body: { id: listing.id, ...formattedData },
+            })
+          : await listingsService.create({ body: formattedData })
+        setLoading(false)
+
+        if (result) {
+          setSiteAlertMessage(
+            editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+            "success"
+          )
+
+          void router.push(`/listings/${result.id}`)
+        }
+      } catch (err) {
+        setLoading(false)
+        setAlert("api")
       }
-    } catch (err) {
-      setLoading(false)
-      setAlert("api")
-    }
-  }
+    },
+    [
+      amiCharts,
+      defaultValues,
+      editMode,
+      listing.id,
+      listingsService,
+      router,
+      status,
+      trigger,
+      units,
+    ]
+  )
 
   const onError = () => {
     setAlert("form")
