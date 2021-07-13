@@ -318,8 +318,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, trigger } = formMethods
 
-  const triggerSubmit = (data: FormListing) =>
+  const triggerSubmit = (data: FormListing) => {
+    setAlert(null)
+    setLoading(true)
     setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
+  }
 
   /*
     @data: form data comes from the react-hook-form
@@ -329,11 +332,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       const validation = await trigger()
 
       if (!validation) {
+        setLoading(false)
         return
       }
-
-      setAlert(null)
-      setLoading(true)
 
       try {
         data = {
