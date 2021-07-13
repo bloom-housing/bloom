@@ -45,21 +45,21 @@ export function useApplicationsData(
 ) {
   const { applicationsService } = useContext(AuthContext)
 
-  const searchParams = new URLSearchParams()
-  searchParams.append("listingId", listingId)
-  searchParams.append("page", pageIndex.toString())
-  searchParams.append("limit", limit.toString())
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", pageIndex.toString())
+  queryParams.append("limit", limit.toString())
 
   if (search) {
-    searchParams.append("search", search)
+    queryParams.append("search", search)
   }
 
   if (orderBy) {
-    searchParams.append("orderBy", search)
-    searchParams.append("order", order ?? "ASC")
+    queryParams.append("orderBy", search)
+    queryParams.append("order", order ?? "ASC")
   }
 
-  const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
+  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
 
   const params = {
     listingId,
@@ -106,12 +106,12 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
-  const searchParams = new URLSearchParams()
-  searchParams.append("listingId", listingId)
-  searchParams.append("page", page.toString())
-  searchParams.append("limit", limit.toString())
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", page.toString())
+  queryParams.append("limit", limit.toString())
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${searchParams.toString()}`
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
   const fetcher = () =>
     applicationFlaggedSetsService.list({
