@@ -79,6 +79,11 @@ type ListingFormProps = {
 
 type AlertErrorType = "api" | "form"
 
+interface SubmitData {
+  ready: boolean
+  data: FormListing
+}
+
 const defaultAddress = {
   id: undefined,
   createdAt: undefined,
@@ -296,7 +301,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const { data: amiCharts = [] } = useAmiChartList()
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [status, setStatus] = useState<ListingStatus>(ListingStatus.pending)
+  const [status, setStatus] = useState<ListingStatus>(null)
+  const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
 
   useEffect(() => {
@@ -312,7 +318,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, trigger } = formMethods
 
-  const triggerSubmit = async (data: FormListing) => onSubmit(data)
+  const triggerSubmit = (data: FormListing) =>
+    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
 
   /*
     @data: form data comes from the react-hook-form
@@ -330,7 +337,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       try {
         data = {
-          ...defaultValues,
           ...data,
           status,
         }
@@ -356,22 +362,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [
-      amiCharts,
-      defaultValues,
-      editMode,
-      listing.id,
-      listingsService,
-      router,
-      status,
-      trigger,
-      units,
-    ]
+    [amiCharts, editMode, listing.id, listingsService, router, status, trigger, units]
   )
 
   const onError = () => {
     setAlert("form")
   }
+
+  useEffect(() => {
+    if (submitData.ready === true) {
+      void onSubmit(submitData.data)
+    }
+  }, [submitData.ready, submitData.data, onSubmit])
 
   return (
     <LoadingOverlay isLoading={loading}>
