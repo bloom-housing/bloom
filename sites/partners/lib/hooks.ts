@@ -2,6 +2,10 @@ import { useContext } from "react"
 import useSWR, { mutate } from "swr"
 
 import { AuthContext } from "@bloom-housing/ui-components"
+import {
+  EnumApplicationsApiExtraModelOrder,
+  EnumApplicationsApiExtraModelOrderBy,
+} from "@bloom-housing/backend-core/types"
 
 type UseSingleApplicationDataProps = {
   listingId: string
@@ -40,8 +44,8 @@ export function useApplicationsData(
   limit = 10,
   listingId: string,
   search: string,
-  orderBy?: string,
-  order?: string
+  orderBy?: EnumApplicationsApiExtraModelOrderBy,
+  order?: EnumApplicationsApiExtraModelOrder
 ) {
   const { applicationsService } = useContext(AuthContext)
 
@@ -56,7 +60,7 @@ export function useApplicationsData(
 
   if (orderBy) {
     queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? "ASC")
+    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
   }
 
   const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`

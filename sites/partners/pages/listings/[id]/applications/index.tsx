@@ -26,10 +26,13 @@ import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
-import { EnumApplicationsApiExtraModelOrder } from "@bloom-housing/backend-core/types"
+import {
+  EnumApplicationsApiExtraModelOrder,
+  EnumApplicationsApiExtraModelOrderBy,
+} from "@bloom-housing/backend-core/types"
 
 type ApplicationsListSortOptions = {
-  orderBy: string
+  orderBy: EnumApplicationsApiExtraModelOrderBy
   order: EnumApplicationsApiExtraModelOrder
 }
 
@@ -185,18 +188,13 @@ const ApplicationsList = () => {
     const sortedBy = columns.find((col) => col.sort)
     const { colId, sort } = sortedBy || {}
 
-    // These ids are also defined in the applications.controller.ts
-    const allowedSortColIds = [
-      "applicant.firstName",
-      "applicant.lastName",
-      "submissionDate",
-      "createdAt",
-    ]
+    const allowedSortColIds: string[] = Object.values(EnumApplicationsApiExtraModelOrderBy)
 
     if (allowedSortColIds.includes(colId)) {
-      console.log(colId)
+      const name = EnumApplicationsApiExtraModelOrderBy[colId]
+
       setSortOptions({
-        orderBy: colId,
+        orderBy: name,
         order: sort.toUpperCase() as EnumApplicationsApiExtraModelOrder,
       })
     }

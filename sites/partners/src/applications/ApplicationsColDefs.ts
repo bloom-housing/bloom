@@ -85,6 +85,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     {
       headerName: t("application.name.firstName"),
       field: "applicant.firstName",
+      colId: "firstName",
       sortable: true,
       unSortIcon: true,
       filter: false,
@@ -96,6 +97,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     {
       headerName: t("application.name.lastName"),
       field: "applicant.lastName",
+      colId: "lastName",
       sortable: true,
       unSortIcon: true,
       filter: "agTextColumnFilter",
