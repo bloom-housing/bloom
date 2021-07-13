@@ -2,6 +2,10 @@ import { useContext } from "react"
 import useSWR, { mutate } from "swr"
 
 import { AuthContext } from "@bloom-housing/ui-components"
+import {
+  EnumApplicationsApiExtraModelOrder,
+  EnumApplicationsApiExtraModelOrderBy,
+} from "@bloom-housing/backend-core/types"
 
 type UseSingleApplicationDataProps = {
   listingId: string
@@ -39,20 +43,27 @@ export function useApplicationsData(
   pageIndex: number,
   limit = 10,
   listingId: string,
-  search: string
+  search: string,
+  orderBy?: EnumApplicationsApiExtraModelOrderBy,
+  order?: EnumApplicationsApiExtraModelOrder
 ) {
   const { applicationsService } = useContext(AuthContext)
 
-  const searchParams = new URLSearchParams()
-  searchParams.append("listingId", listingId)
-  searchParams.append("page", pageIndex.toString())
-  searchParams.append("limit", limit.toString())
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", pageIndex.toString())
+  queryParams.append("limit", limit.toString())
 
   if (search) {
-    searchParams.append("search", search)
+    queryParams.append("search", search)
   }
 
-  const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
+  if (orderBy) {
+    queryParams.append("orderBy", search)
+    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
+  }
+
+  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
 
   const params = {
     listingId,
@@ -62,6 +73,10 @@ export function useApplicationsData(
 
   if (search) {
     Object.assign(params, { search })
+  }
+
+  if (orderBy) {
+    Object.assign(params, { orderBy, order: order ?? "ASC" })
   }
 
   const fetcher = () => applicationsService.list(params)
@@ -95,12 +110,12 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
-  const searchParams = new URLSearchParams()
-  searchParams.append("listingId", listingId)
-  searchParams.append("page", page.toString())
-  searchParams.append("limit", limit.toString())
+  const queryParams = new URLSearchParams()
+  queryParams.append("listingId", listingId)
+  queryParams.append("page", page.toString())
+  queryParams.append("limit", limit.toString())
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${searchParams.toString()}`
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
   const fetcher = () =>
     applicationFlaggedSetsService.list({
