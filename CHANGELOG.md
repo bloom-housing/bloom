@@ -21,6 +21,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### UI Components
 
+- Added:
+
+  - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
+
 ## 1.0.4 / 2021-07-07
 
 ### General
