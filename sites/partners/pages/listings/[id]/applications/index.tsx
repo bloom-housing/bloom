@@ -26,10 +26,11 @@ import { useForm } from "react-hook-form"
 import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
+import { EnumApplicationsApiExtraModelOrder } from "@bloom-housing/backend-core/types"
 
 type ApplicationsListSortOptions = {
   orderBy: string
-  order: string
+  order: EnumApplicationsApiExtraModelOrder
 }
 
 const ApplicationsList = () => {
@@ -193,9 +194,10 @@ const ApplicationsList = () => {
     ]
 
     if (allowedSortColIds.includes(colId)) {
+      console.log(colId)
       setSortOptions({
         orderBy: colId,
-        order: sort.toUpperCase(),
+        order: sort.toUpperCase() as EnumApplicationsApiExtraModelOrder,
       })
     }
   }, [])
