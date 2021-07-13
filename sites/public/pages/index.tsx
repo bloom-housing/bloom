@@ -57,7 +57,7 @@ export default function Home(props: IndexProps) {
       <Hero
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
-        buttonLink="/listings"
+        buttonLink="/listings?page=1"
         listings={props.listings}
       />
       <div className="homepage-extra">

@@ -40,7 +40,7 @@ const Layout = (props) => {
             codes: router?.locales,
           }}
         >
-          <Link href="/listings">
+          <Link href="/listings?page=1">
             <a className="navbar-item">{t("nav.listings")}</a>
           </Link>
           {/* Only show Get Assistance if housing counselor data is available */}

@@ -6,8 +6,9 @@ type AgPaginationProps = {
   totalPages: number
   currentPage: number
   itemsPerPage: number
+  sticky?: boolean
   quantityLabel?: string
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>> | ((page: number) => void)
   setItemsPerPage: React.Dispatch<React.SetStateAction<number>>
   onPageChange?: (page: number) => void
   onPerPageChange?: (size: number) => void
@@ -20,6 +21,7 @@ const AgPagination = ({
   totalPages,
   currentPage,
   itemsPerPage,
+  sticky,
   quantityLabel,
   setCurrentPage,
   setItemsPerPage,
@@ -41,8 +43,13 @@ const AgPagination = ({
     onPerPageChange && onPerPageChange(itemsPerPage)
   }
 
+  const dataPagerClassName = ["data-pager flex flex-col md:flex-row"]
+  if (sticky) {
+    dataPagerClassName.push("sticky")
+  }
+
   return (
-    <div className="data-pager flex flex-col md:flex-row">
+    <div className={dataPagerClassName.join(" ")}>
       <div className="hidden md:block">
         <Button
           className="data-pager__previous data-pager__control"

@@ -119,6 +119,13 @@
   @apply bg-gray-200;
 }
 
+.sticky {
+  @apply fixed;
+  @apply z-40;
+  @apply bottom-0;
+  @apply left-0;
+}
+
 .data-pager__control {
   @apply px-4;
 

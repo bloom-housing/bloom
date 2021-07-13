@@ -1,7 +1,5 @@
 import { useContext } from "react"
 import useSWR, { mutate } from "swr"
-import { Listing } from "@bloom-housing/backend-core/types"
-
 
 import { AuthContext } from "@bloom-housing/ui-components"
 
@@ -24,6 +22,7 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
+/* TODO: move this function so it can be shared between public and partner sites.*/
 export function useListingsData() {
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingsService.list()

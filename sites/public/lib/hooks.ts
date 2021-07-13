@@ -1,8 +1,10 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { useRouter } from "next/router"
-import { isInternalLink } from "@bloom-housing/ui-components"
+import useSWR from "swr"
+import { isInternalLink, AuthContext } from "@bloom-housing/ui-components"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
+import { ListingsService } from "@bloom-housing/backend-core/types"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -29,4 +31,29 @@ export const useFormConductor = (stepName: string) => {
     conductor.skipCurrentStepIfNeeded()
   }, [conductor])
   return context
+}
+
+const listingsFetcher = function (listingsService: ListingsService) {
+  return (_url: string, page: number, limit: number) => {
+    const params = {
+      page,
+      limit,
+    }
+    return listingsService?.list(params)
+  }
+}
+
+// TODO: move this so it can be shared with the partner site.
+export function useListingsData(pageIndex: number, limit = 10) {
+  const { listingsService } = useContext(AuthContext)
+  const { data, error } = useSWR(
+    [`${process.env.listingServiceUrl}`, pageIndex, limit],
+    listingsFetcher(listingsService)
+  )
+
+  return {
+    listingsData: data,
+    listingsLoading: !error && !data,
+    listingsError: error,
+  }
 }
