@@ -1,32 +1,19 @@
-import { Injectable, NotFoundException } from "@nestjs/common"
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
-import { ListingCreateDto, ListingUpdateDto, ListingFilterParams } from "./dto/listing.dto"
+import { ListingCreateDto, ListingFilterParams, ListingUpdateDto } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { addFilter } from "../shared/filter"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
+import { ListingStatus } from "./types/listing-status-enum"
 
 @Injectable()
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
-
-  private getQueryBuilder() {
-    return Listing.createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.image", "image")
-      .leftJoinAndSelect("listings.result", "result")
-      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-      .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
-      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
-  }
 
   public async list(
     origin: string,
@@ -125,5 +112,47 @@ export class ListingsService {
       throw new NotFoundException()
     }
     return result
+  }
+
+  async close(listingId: string) {
+    const listing = await Listing.findOne({
+      where: { id: listingId },
+    })
+    if (!listing) {
+      throw new NotFoundException()
+    }
+    if (listing.status === ListingStatus.closed) {
+      throw new BadRequestException("Listing is already closed.")
+    }
+    listing.status = ListingStatus.closed
+    await listing.save()
+  }
+
+  async unpublish(listingId: string) {
+    const listing = await Listing.findOne({
+      where: { id: listingId },
+    })
+    if (!listing) {
+      throw new NotFoundException()
+    }
+    if (listing.status === ListingStatus.pending) {
+      throw new BadRequestException("Listing is already unpublished.")
+    }
+    listing.status = ListingStatus.pending
+    await listing.save()
+  }
+
+  private getQueryBuilder() {
+    return Listing.createQueryBuilder("listings")
+      .leftJoinAndSelect("listings.image", "image")
+      .leftJoinAndSelect("listings.result", "result")
+      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
+      .leftJoinAndSelect("listings.preferences", "preferences")
+      .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
+      .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.amiChart", "amiChart")
+      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
+      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 }

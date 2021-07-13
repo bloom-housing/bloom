@@ -133,4 +133,18 @@ export class ListingsController {
     await this.listingsService.delete(listingId)
     await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
   }
+
+  @Put(`:listingId/close`)
+  @ApiOperation({ summary: "Close listing by id", operationId: "close" })
+  async close(@Param("listingId") listingId: string) {
+    await this.listingsService.close(listingId)
+    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
+  }
+
+  @Put(`:listingId/unpublish`)
+  @ApiOperation({ summary: "Unpublish listing by id", operationId: "unpublish" })
+  async unpublish(@Param("listingId") listingId: string) {
+    await this.listingsService.unpublish(listingId)
+    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
+  }
 }
