@@ -33,7 +33,7 @@
     "test:shared:ui": "cd ui-components && yarn && yarn test",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
-    "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
+    "test:e2e:backend:core": "cd backend/core && yarn test:e2e:local",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",

@@ -98,8 +98,9 @@ describe("Listings", () => {
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingDto = { ...res.body[0] }
+    const listing: ListingDto = { ...res.body.items[0] }
 
+    const oldAmenitiesValue = listing.amenities
     const amenitiesValue = "Random amenities value"
     expect(listing.amenities).not.toBe(amenitiesValue)
     listing.amenities = amenitiesValue
@@ -118,12 +119,22 @@ describe("Listings", () => {
 
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
+
+    // Clean up: revert the changes to listing.
+    listing.amenities = oldAmenitiesValue
+    listing.units[0].maxOccupancy = oldOccupancy
+
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
   })
 
   it("should add/overwrite image in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body[0] }
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
 
     const fileId = "fileId"
     const label = "label"

@@ -21,7 +21,7 @@ import { UserService } from "../../src/user/user.service"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Applications", () => {
+describe("Users", () => {
   let app: INestApplication
   let user1AccessToken: string
   let user2AccessToken: string
@@ -85,7 +85,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
-    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto)
+    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
