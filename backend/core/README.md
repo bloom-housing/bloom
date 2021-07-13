@@ -14,6 +14,16 @@ The following steps should provide a working local environement for development 
 
 Operational configuration the service is read from environment variables. Copy `.env.template` to `.env` and edit the settings specific to your development environment. Make sure the Database URL and Test Database URL match your Postgres configuration.
 
+### Using Docker containers
+
+If you don't want to install Postgres and Redis on your local machine and instead want to use Docker containers, run:
+
+```shell script
+docker-compose up redis postgres
+```
+
+All `psql` and `yarn` commands related to databases will then be connecting to the database in the docker container `postgres`.
+
 ### Installing Postgres
 
 You can install Postgres using Homebrew with the following command: `brew install postgresql`.
