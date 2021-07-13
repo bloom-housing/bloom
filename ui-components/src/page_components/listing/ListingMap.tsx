@@ -6,7 +6,7 @@ import "./ListingMap.scss"
 import { MultiLineAddress } from "../../helpers/address"
 
 export interface ListingMapProps {
-  address: Address
+  address?: Address
   listing: Listing
 }
 
@@ -21,8 +21,8 @@ export interface Viewport {
 const ListingMap = (props: ListingMapProps) => {
   const address = props.address
   const [viewport, setViewPort] = React.useState({
-    latitude: address.latitude,
-    longitude: address.longitude,
+    latitude: address?.latitude,
+    longitude: address?.longitude,
     zoom: 13,
   } as Viewport)
   const _onViewportChange = (viewport: Viewport) => {
@@ -32,6 +32,8 @@ const ListingMap = (props: ListingMapProps) => {
     viewport.height = 400
     setViewPort({ ...viewport })
   }
+
+  if (!props.address) return null
 
   return (
     <div className="listing-map">

@@ -14,14 +14,7 @@ describe("<SidebarAddress>", () => {
   })
   it("renders with office hours and no address", () => {
     const { getByText, queryByText } = render(
-      <SidebarAddress
-        address={{
-          id: "abcd1234",
-          createdAt: new Date(moment().format()),
-          updatedAt: new Date(moment().format()),
-        }}
-        officeHours={"These are my office hours"}
-      />
+      <SidebarAddress officeHours={"These are my office hours"} />
     )
     expect(queryByText("Get Directions")).toBeNull()
     expect(getByText("These are my office hours")).toBeTruthy()
