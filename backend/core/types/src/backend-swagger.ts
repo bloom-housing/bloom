@@ -3292,13 +3292,13 @@ export interface ListingEvent {
 
 export interface WhatToExpect {
   /**  */
-  applicantsWillBeContacted: string;
+  applicantsWillBeContacted?: string;
 
   /**  */
-  allInfoWillBeVerified: string;
+  allInfoWillBeVerified?: string;
 
   /**  */
-  bePreparedIfChosen: string;
+  bePreparedIfChosen?: string;
 }
 
 export interface Listing {
