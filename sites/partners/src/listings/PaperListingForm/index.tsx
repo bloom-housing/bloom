@@ -370,10 +370,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }
 
   useEffect(() => {
-    if (submitData.ready === true) {
+    if (submitData.ready === true && status !== null) {
       void onSubmit(submitData.data)
     }
-  }, [submitData.ready, submitData.data, onSubmit])
+  }, [submitData.ready, submitData.data, onSubmit, status])
 
   return (
     <LoadingOverlay isLoading={loading}>
