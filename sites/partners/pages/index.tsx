@@ -1,13 +1,6 @@
 import React, { useMemo, useContext } from "react"
 import Head from "next/head"
-import {
-  PageHeader,
-  t,
-  lRoute,
-  AuthContext,
-  Button,
-  LocalizedLink,
-} from "@bloom-housing/ui-components"
+import { PageHeader, t, lRoute, AuthContext, Button } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { UserRole, Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
@@ -16,7 +9,7 @@ import { GridOptions } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
-import { Router, useRouter } from "next/router"
+import { useRouter } from "next/router"
 
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
@@ -81,16 +74,8 @@ export default function ListingsList() {
   const columnDefs = useMemo(() => {
     const columns = [
       {
-        headerName: t("name"),
-        field: "name",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        cellRenderer: "ApplicationsLink",
-      },
-      {
-        headerName: t("listings.property.buildingAddress"),
-        field: "property.buildingAddress.street",
+        headerName: t("listings.buildingAddress"),
+        field: "buildingAddress.street",
         sortable: false,
         filter: false,
         resizable: true,
