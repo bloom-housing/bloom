@@ -83,7 +83,7 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
     () =>
       units.map((unit) => ({
         number: unit.number,
-        unitType: t(`listings.unitTypes.${unit.unitType}`),
+        unitType: t(`listings.unitTypes.${unit.unitType.name}`),
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
