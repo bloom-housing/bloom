@@ -15,12 +15,14 @@ const summaries: {
   amiPercentages: string[]
   [key: string]: any
 } = {
-  unitTypes: [{
-    id: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    name: "studio",
-  }],
+  unitTypes: [
+    {
+      id: "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      name: "studio",
+    },
+  ],
   reservedTypes: ["senior"],
   priorityTypes: [],
   amiPercentages: ["45.0", "30.0"],
