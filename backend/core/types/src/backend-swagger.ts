@@ -2125,6 +2125,14 @@ export interface AddressInput {
   value: AddressCreate;
 }
 
+export interface ApplicationsApiExtraModel {
+  /**  */
+  orderBy?: EnumApplicationsApiExtraModelOrderBy;
+
+  /**  */
+  order?: EnumApplicationsApiExtraModelOrder;
+}
+
 export interface PaginationMeta {
   /**  */
   currentPage: number;
@@ -3293,13 +3301,13 @@ export interface ListingEvent {
 
 export interface WhatToExpect {
   /**  */
-  applicantsWillBeContacted: string;
+  applicantsWillBeContacted?: string;
 
   /**  */
-  allInfoWillBeVerified: string;
+  allInfoWillBeVerified?: string;
 
   /**  */
-  bePreparedIfChosen: string;
+  bePreparedIfChosen?: string;
 }
 
 export interface Listing {
@@ -4456,7 +4464,16 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
-
+export enum EnumApplicationsApiExtraModelOrderBy {
+  'firstName' = 'firstName',
+  'lastName' = 'lastName',
+  'submissionDate' = 'submissionDate',
+  'createdAt' = 'createdAt'
+}
+export enum EnumApplicationsApiExtraModelOrder {
+  'ASC' = 'ASC',
+  'DESC' = 'DESC'
+}
 export enum UserRole {
   'user' = 'user',
   'admin' = 'admin'
