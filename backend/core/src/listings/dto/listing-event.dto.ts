@@ -1,40 +1,35 @@
+import { OmitType } from "@nestjs/swagger"
+import { ListingEvent } from "../entities/listing-event.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsEnum, IsOptional, IsString } from "class-validator"
+import { IsDate, IsOptional, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ListingEventType } from "../types/listing-event-type-enum"
-import { ApiProperty } from "@nestjs/swagger"
 
-export class ListingEventDto {
+export class ListingEventDto extends OmitType(ListingEvent, ["listing"]) {}
+export class ListingEventCreateDto extends OmitType(ListingEventDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+] as const) {}
+
+export class ListingEventUpdateDto extends OmitType(ListingEventDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+] as const) {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(ListingEventType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
-  type: ListingEventType
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  id?: string
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  startTime?: Date
+  createdAt?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  endTime?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  url?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  note?: string | null
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label?: string | null
+  updatedAt?: Date
 }

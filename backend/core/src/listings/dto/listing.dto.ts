@@ -30,9 +30,11 @@ import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
+  "events",
   "image",
   "jurisdiction",
   "leasingAgents",
@@ -71,6 +73,12 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventDto)
+  events: ListingEventDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -300,6 +308,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "preferences",
+  "events",
   "image",
   "leasingAgentAddress",
   "leasingAgents",
@@ -355,6 +364,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventCreateDto)
+  events: ListingEventCreateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -480,6 +495,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "updatedAt",
   "preferences",
   "image",
+  "events",
   "leasingAgentAddress",
   "urlSlug",
   "leasingAgents",
@@ -551,6 +567,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventUpdateDto)
+  events: ListingEventUpdateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

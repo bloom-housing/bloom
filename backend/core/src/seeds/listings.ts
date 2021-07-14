@@ -11,7 +11,7 @@ import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { User } from "../auth/entities/user.entity"
 import { UserCreateDto } from "../auth/dto/user.dto"
 import { ListingStatus } from "../listings/types/listing-status-enum"
-import { ListingEventDto } from "../listings/dto/listing-event.dto"
+import { ListingEventCreateDto } from "../listings/dto/listing-event.dto"
 import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
 import { CSVFormattingType } from "../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../shared/types/county-code"
@@ -68,8 +68,6 @@ type ListingSeedType = Omit<
 
 type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
 
-type ListingEventDtoSeedType = Omit<ListingEventDto, "listing">
-
 type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
 // Properties that are ommited in DTOS derived types are relations and getters
@@ -79,7 +77,7 @@ export interface ListingSeed {
   applicationMethods: Array<ApplicationMethodSeedType>
   property: PropertySeedType
   preferences: Array<PreferenceSeedType>
-  listingEvents: Array<ListingEventDtoSeedType>
+  listingEvents: Array<ListingEventCreateDto>
   assets: Array<AssetDtoSeedType>
   listing: ListingSeedType
   leasingAgents: UserCreateDto[]
@@ -1124,7 +1122,7 @@ const hopwaPreference: PreferenceSeedType = {
 }
 
 // Events
-const defaultListingEvents: Array<ListingEventDtoSeedType> = [
+const defaultListingEvents: Array<ListingEventCreateDto> = [
   {
     startTime: getDate(10),
     endTime: getDate(10),
