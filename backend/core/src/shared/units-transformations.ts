@@ -1,3 +1,4 @@
+import { UnitStatus } from "../units/types/unit-status-enum"
 import { Unit } from "../units/entities/unit.entity"
 import { MinMax } from "../units/types/min-max"
 import { MinMaxCurrency } from "../units/types/min-max-currency"
@@ -204,7 +205,9 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
       return getUnitsSummary(unit, index === 0 ? null : summary)
     }, {} as UnitSummary)
-    finalSummary.totalAvailable = unitMap[key].filter((unit) => unit.status === "available").length
+    finalSummary.totalAvailable = unitMap[key].filter(
+      (unit) => unit.status === UnitStatus.available
+    ).length
     summaries.push(finalSummary)
   }
 

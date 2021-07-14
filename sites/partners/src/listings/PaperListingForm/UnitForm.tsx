@@ -16,7 +16,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
-import { AmiChart } from "@bloom-housing/backend-core/types"
+import { AmiChart, UnitStatus } from "@bloom-housing/backend-core/types"
 import { getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
@@ -26,8 +26,6 @@ type UnitFormProps = {
   amiCharts: AmiChart[]
   currentTempId: number
 }
-
-const STATUS = "available"
 
 const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFormProps) => {
   const [current, setCurrent] = useState<TempUnit>(null)
@@ -41,7 +39,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
       numBathrooms: current?.numBathrooms,
       floor: current?.floor,
       sqFeet: current?.sqFeet,
-      status: STATUS,
+      status: UnitStatus.unknown,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
       amiChart: current?.amiChart,
@@ -61,7 +59,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
-    reset({ ...unit, rentType: getRentType(unit), status: STATUS, amiChart: unit?.amiChart })
+    reset({ ...unit, rentType: getRentType(unit), status: unit?.status, amiChart: unit?.amiChart })
   }, [units, setCurrent, tempId, reset])
 
   const rentType = watch("rentType")
