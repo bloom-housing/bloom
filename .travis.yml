@@ -4,8 +4,38 @@ node_js:
   # Node version
   - 12
 
-script:
+services:
+  - docker
+
+cache:
+  yarn: true
+
+before_install:
+  - sudo service postgresql stop
+  - sudo service redis-server stop
+  - sleep 1
+
+before_script:
+  - cp sites/public/.env.template sites/public/.env
+  - cp sites/partners/.env.template sites/partners/.env
+  - cp backend/core/.env.template backend/core/.env
+  - docker-compose up -d redis postgres
   - yarn install:all
-  - yarn test:shared:ui
-  - yarn build:app:public
-  - yarn build:app:partners
+
+jobs:
+  include:
+    - script: yarn test:shared:ui
+      name: "UI components tests"
+    - script: yarn build:app:public
+      name: "Build public site"
+    - script: yarn build:app:partners
+      name: "Build partners site"
+    - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
+      name: "Backend unit tests"
+
+env:
+  global:
+    PGUSER=postgres
+    PGPASSWORD=postgres
+    TEST_DATABASE_URL=postgres://localhost:5432/bloom_test
+    REDIS_TLS_URL=redis://127.0.0.1:6379/0
