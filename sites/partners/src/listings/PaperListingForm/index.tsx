@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useCallback, useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   AuthContext,
@@ -20,6 +20,7 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
+  AmiChart,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -30,7 +31,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
+import { getAmiChartId, stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import { useAmiChartList } from "../../../lib/hooks"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
@@ -77,6 +78,11 @@ type ListingFormProps = {
 }
 
 type AlertErrorType = "api" | "form"
+
+interface SubmitData {
+  ready: boolean
+  data: FormListing
+}
 
 const defaultAddress = {
   id: undefined,
@@ -135,7 +141,11 @@ const defaults: FormListing = {
   waitlistMaxSize: null,
   isWaitlistOpen: null,
   waitlistOpenSpots: null,
-  whatToExpect: [],
+  whatToExpect: {
+    applicantsWillBeContacted: null,
+    allInfoWillBeVerified: null,
+    bePreparedIfChosen: null,
+  },
   units: [],
   accessibility: "",
   amenities: "",
@@ -174,6 +184,111 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
+const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUnit[]) => {
+  const showWaitlistNumber =
+    data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
+
+  const getDueTime = () => {
+    let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
+    if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
+      dueTimeHours = 0
+    }
+    if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
+      dueTimeHours = dueTimeHours + 12
+    }
+    const dueTime = new Date()
+    dueTime.setHours(
+      dueTimeHours,
+      parseInt(data.applicationDueTimeField.minutes),
+      parseInt(data.applicationDueTimeField.seconds)
+    )
+    return dueTime
+  }
+  units.forEach((unit) => {
+    switch (unit.unitType) {
+      case "threeBdrm":
+        unit.numBedrooms = 3
+        break
+      case "twoBdrm":
+        unit.numBedrooms = 2
+        break
+      case "oneBdrm":
+        unit.numBedrooms = 1
+        break
+      default:
+        unit.numBedrooms = null
+    }
+
+    unit.floor = stringToNumber(unit.floor)
+    unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
+    unit.minOccupancy = stringToNumber(unit.minOccupancy)
+    unit.numBathrooms = stringToNumber(unit.numBathrooms)
+
+    if (unit.sqFeet.length === 0) {
+      delete unit.sqFeet
+    }
+
+    const amiChartId = getAmiChartId(unit.amiChart)
+    if (amiChartId) {
+      const chart = amiCharts.find((chart) => chart.id === amiChartId)
+      unit.amiChart = chart
+    } else {
+      delete unit.amiChart
+    }
+
+    if (unit.id === undefined) {
+      unit.id = ""
+      delete unit.updatedAt
+      delete unit.createdAt
+    }
+
+    delete unit.tempId
+  })
+
+  return {
+    ...data,
+    applicationDueTime: getDueTime(),
+    disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
+    units: units,
+    isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+    applicationDueDate: new Date(
+      `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+    ),
+    yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
+    waitlistCurrentSize:
+      data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
+    waitlistMaxSize:
+      data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
+    waitlistOpenSpots:
+      data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+    postmarkedApplicationsReceivedByDate:
+      data.postMarkDate && data.arePostmarksConsidered
+        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
+        : null,
+    applicationDropOffAddressType:
+      addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
+        ? addressTypes[data.whereApplicationsDroppedOff]
+        : null,
+    applicationPickUpAddressType:
+      addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
+        ? addressTypes[data.whereApplicationsPickedUp]
+        : null,
+    applicationDropOffAddress:
+      data.canApplicationsBeDroppedOff &&
+      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+        ? data.applicationDropOffAddress
+        : null,
+    applicationPickUpAddress:
+      data.canPaperApplicationsBePickedUp &&
+      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+        ? data.applicationPickUpAddress
+        : null,
+    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+      ? data.applicationMailingAddress
+      : null,
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : defaults
@@ -191,6 +306,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const { data: amiCharts = [] } = useAmiChartList()
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [status, setStatus] = useState<ListingStatus>(null)
+  const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
 
   useEffect(() => {
@@ -204,174 +321,65 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, clearErrors, reset, trigger, getValues } = formMethods
+  const { handleSubmit, trigger } = formMethods
 
-  const triggerSubmit = async (data: FormListing) => onSubmit(data, "details")
-
-  const setStatusAndSubmit = async (status: ListingStatus) => {
-    const validation = await trigger()
-
-    if (validation) {
-      let data = getValues()
-      data = {
-        ...defaultValues,
-        ...data,
-        status,
-      }
-
-      if (data) {
-        void onSubmit(data, editMode ? "details" : "new")
-      }
-    }
-  }
-
-  const formatFormData = (data: FormListing) => {
-    const showWaitlistNumber =
-      data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
-    const getDueTime = () => {
-      let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
-      if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
-        dueTimeHours = 0
-      }
-      if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
-        dueTimeHours = dueTimeHours + 12
-      }
-      const dueTime = new Date()
-      dueTime.setHours(
-        dueTimeHours,
-        parseInt(data.applicationDueTimeField.minutes),
-        parseInt(data.applicationDueTimeField.seconds)
-      )
-      return dueTime
-    }
-    units.forEach((unit) => {
-      switch (unit.unitType) {
-        case "threeBdrm":
-          unit.numBedrooms = 3
-          break
-        case "twoBdrm":
-          unit.numBedrooms = 2
-          break
-        case "oneBdrm":
-          unit.numBedrooms = 1
-          break
-        default:
-          unit.numBedrooms = null
-      }
-
-      unit.floor = stringToNumber(unit.floor)
-      unit.maxOccupancy = stringToNumber(unit.maxOccupancy)
-      unit.minOccupancy = stringToNumber(unit.minOccupancy)
-      unit.numBathrooms = stringToNumber(unit.numBathrooms)
-
-      if (unit.sqFeet.length === 0) {
-        delete unit.sqFeet
-      }
-
-      if (unit.amiChart?.length) {
-        const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
-        unit.amiChart = chart
-      } else {
-        delete unit.amiChart
-      }
-
-      if (unit.id === undefined) {
-        unit.id = ""
-        delete unit.updatedAt
-        delete unit.createdAt
-      }
-
-      delete unit.tempId
-    })
-
-    return {
-      ...data,
-      applicationDueTime: getDueTime(),
-      disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
-      units: units,
-      isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-      applicationDueDate: new Date(
-        `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
-      ),
-      yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-      waitlistCurrentSize:
-        data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
-      waitlistMaxSize:
-        data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
-      waitlistOpenSpots:
-        data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
-      postmarkedApplicationsReceivedByDate:
-        data.postMarkDate && data.arePostmarksConsidered
-          ? new Date(
-              `${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`
-            )
-          : null,
-      applicationDropOffAddressType:
-        addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
-          ? addressTypes[data.whereApplicationsDroppedOff]
-          : null,
-      applicationPickUpAddressType:
-        addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
-          ? addressTypes[data.whereApplicationsPickedUp]
-          : null,
-      applicationDropOffAddress:
-        data.canApplicationsBeDroppedOff &&
-        data.whereApplicationsPickedUp === addressTypes.anotherAddress
-          ? data.applicationDropOffAddress
-          : null,
-      applicationPickUpAddress:
-        data.canPaperApplicationsBePickedUp &&
-        data.whereApplicationsPickedUp === addressTypes.anotherAddress
-          ? data.applicationPickUpAddress
-          : null,
-      applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
-        ? data.applicationMailingAddress
-        : null,
-    }
+  const triggerSubmit = (data: FormListing) => {
+    setAlert(null)
+    setLoading(true)
+    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
   }
 
   /*
     @data: form data comes from the react-hook-form
-    @redirect: open listing details or reset form
   */
-  const onSubmit = async (data: FormListing, redirect: "details" | "new") => {
-    setAlert(null)
-    setLoading(true)
-    try {
-      const formattedData = formatFormData(data)
-      const result = editMode
-        ? await listingsService.update({
-            listingId: listing.id,
-            body: { id: listing.id, ...formattedData },
-          })
-        : await listingsService.create({ body: formattedData })
-      setLoading(false)
+  const onSubmit = useCallback(
+    async (data: FormListing) => {
+      const validation = await trigger()
 
-      if (result) {
-        setSiteAlertMessage(
-          editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
-          "success"
-        )
-
-        if (redirect === "details") {
-          void router.push(`/listings/${result.id}`)
-        } else {
-          reset()
-          clearErrors()
-          setAlert(null)
-          void router.push("/")
-        }
+      if (!validation) {
+        setLoading(false)
+        return
       }
-    } catch (err) {
-      setLoading(false)
-      setAlert("api")
-    }
-  }
+
+      try {
+        data = {
+          ...data,
+          status,
+        }
+        const formattedData = formatFormData(data, amiCharts, units)
+        const result = editMode
+          ? await listingsService.update({
+              listingId: listing.id,
+              body: { id: listing.id, ...formattedData },
+            })
+          : await listingsService.create({ body: formattedData })
+        setLoading(false)
+
+        if (result) {
+          setSiteAlertMessage(
+            editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+            "success"
+          )
+
+          void router.push(`/listings/${result.id}`)
+        }
+      } catch (err) {
+        setLoading(false)
+        setAlert("api")
+      }
+    },
+    [amiCharts, editMode, listing.id, listingsService, router, status, trigger, units]
+  )
 
   const onError = () => {
     setAlert("form")
   }
+
+  useEffect(() => {
+    if (submitData.ready === true && status !== null) {
+      void onSubmit(submitData.data)
+    }
+  }, [submitData.ready, submitData.data, onSubmit, status])
 
   return (
     <LoadingOverlay isLoading={loading}>
@@ -403,9 +411,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             <div className="max-w-screen-xl px-5 mx-auto">
               {alert && (
                 <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                  {alert === "form"
-                    ? t("listing.add.listingAddError")
-                    : t("errors.alert.badRequest")}
+                  {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
                 </AlertBox>
               )}
 
@@ -431,10 +437,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   </div>
 
                   <aside className="md:w-3/12 md:pl-6">
-                    <Aside
-                      type={editMode ? "edit" : "add"}
-                      setStatusAndSubmit={setStatusAndSubmit}
-                    />
+                    <Aside type={editMode ? "edit" : "add"} setStatus={setStatus} />
                   </aside>
                 </div>
               </Form>

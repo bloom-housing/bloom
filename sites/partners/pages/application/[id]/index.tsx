@@ -79,7 +79,7 @@ export default function ApplicationsList() {
     <ApplicationContext.Provider value={application}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitle")}</title>
+          <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
         <PageHeader

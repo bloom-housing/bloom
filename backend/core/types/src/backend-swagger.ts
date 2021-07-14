@@ -591,6 +591,152 @@ export class AuthService {
   }
 }
 
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean;
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Resend confirmation
+   */
+  resendConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/resend-confirmation';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/confirm';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/forgot-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/update-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -1434,152 +1580,6 @@ export class UnitsService {
   }
 }
 
-export class UserService {
-  /**
-   *
-   */
-  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create user
-   */
-  create(
-    params: {
-      /**  */
-      noWelcomeEmail?: boolean;
-      /** requestBody */
-      body?: UserCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Resend confirmation
-   */
-  resendConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/resend-confirmation';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Confirm email
-   */
-  confirm(
-    params: {
-      /** requestBody */
-      body?: Confirm;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/confirm';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Forgot Password
-   */
-  forgotPassword(
-    params: {
-      /** requestBody */
-      body?: ForgotPassword;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ForgotPasswordResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/forgot-password';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update Password
-   */
-  updatePassword(
-    params: {
-      /** requestBody */
-      body?: UpdatePassword;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/update-password';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/{id}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number;
@@ -2120,6 +2120,14 @@ export interface AddressInput {
 
   /**  */
   value: AddressCreate;
+}
+
+export interface ApplicationsApiExtraModel {
+  /**  */
+  orderBy?: EnumApplicationsApiExtraModelOrderBy;
+
+  /**  */
+  order?: EnumApplicationsApiExtraModelOrder;
 }
 
 export interface PaginationMeta {
@@ -2760,6 +2768,185 @@ export interface LoginResponse {
   accessToken: string;
 }
 
+export interface User {
+  /**  */
+  roles: UserRole[];
+
+  /**  */
+  language?: Language;
+
+  /**  */
+  leasingAgentInListings?: Id[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface UserCreate {
+  /**  */
+  language?: Language;
+
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  emailConfirmation: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface Email {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface Status {
+  /**  */
+  status: string;
+}
+
+export interface Confirm {
+  /**  */
+  token: string;
+}
+
+export interface ForgotPassword {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string;
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  token: string;
+}
+
+export interface UserUpdate {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  password?: string;
+
+  /**  */
+  currentPassword?: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+}
+
 export interface Jurisdiction {
   /**  */
   id: string;
@@ -2954,7 +3141,7 @@ export interface FormMetadata {
 
 export interface Preference {
   /**  */
-  links: PreferenceLink[];
+  links?: PreferenceLink[];
 
   /**  */
   id: string;
@@ -2966,51 +3153,22 @@ export interface Preference {
   updatedAt: Date;
 
   /**  */
-  ordinal: number;
+  ordinal?: number;
 
   /**  */
-  title: string;
+  title?: string;
 
   /**  */
-  subtitle: string;
+  subtitle?: string;
 
   /**  */
-  description: string;
+  description?: string;
 
   /**  */
   formMetadata?: FormMetadata;
 
   /**  */
-  page: number;
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
+  page?: number;
 }
 
 export interface ReservedCommunityType {
@@ -3032,7 +3190,7 @@ export interface ReservedCommunityType {
 
 export interface Unit {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   id: string;
@@ -3103,13 +3261,13 @@ export interface ApplicationMethod {
   type: ApplicationMethodType;
 
   /**  */
-  label: string;
+  label?: string;
 
   /**  */
-  externalReference: string;
+  externalReference?: string;
 
   /**  */
-  acceptsPostmarkedApplications: boolean;
+  acceptsPostmarkedApplications?: boolean;
 }
 
 export interface ListingEvent {
@@ -3134,13 +3292,13 @@ export interface ListingEvent {
 
 export interface WhatToExpect {
   /**  */
-  applicantsWillBeContacted: string;
+  applicantsWillBeContacted?: string;
 
   /**  */
-  allInfoWillBeVerified: string;
+  allInfoWillBeVerified?: string;
 
   /**  */
-  bePreparedIfChosen: string;
+  bePreparedIfChosen?: string;
 }
 
 export interface Listing {
@@ -3149,15 +3307,6 @@ export interface Listing {
 
   /**  */
   applicationDropOffAddressType?: ListingApplicationAddressType;
-
-  /**  */
-  applicationMailingAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
 
   /**  */
   status: ListingStatus;
@@ -3180,20 +3329,23 @@ export interface Listing {
   /**  */
   preferences: Preference[];
 
-  /** */
-  additionalApplicationSubmissionNotes?: string
+  /**  */
+  applicationAddress?: CombinedApplicationAddressTypes;
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress?: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgents?: UserBasic[];
@@ -3211,46 +3363,46 @@ export interface Listing {
   units: Unit[];
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
   buildingAddress: Address;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 
   /**  */
   id: string;
@@ -3262,6 +3414,9 @@ export interface Listing {
   updatedAt: Date;
 
   /**  */
+  additionalApplicationSubmissionNotes?: string;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -3271,88 +3426,91 @@ export interface Listing {
   events: ListingEvent[];
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate?: Date;
 
   /**  */
-  applicationDueTime: Date
+  applicationDueTime?: Date;
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate?: Date;
 
   /**  */
-  applicationFee: string;
+  applicationFee?: string;
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization?: string;
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  buildingSelectionCriteria: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
-  costsNotIncluded: string;
+  buildingSelectionCriteria?: string;
 
   /**  */
-  creditHistory: string;
+  costsNotIncluded?: string;
 
   /**  */
-  criminalBackground: string;
+  creditHistory?: string;
 
   /**  */
-  depositMin: string;
+  criminalBackground?: string;
 
   /**  */
-  depositMax: string;
+  depositMin?: string;
 
   /**  */
-  disableUnitsAccordion: boolean;
+  depositMax?: string;
 
   /**  */
-  leasingAgentEmail: string;
+  disableUnitsAccordion?: boolean;
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentEmail?: string;
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentName?: string;
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentOfficeHours?: string;
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentPhone?: string;
+
+  /**  */
+  leasingAgentTitle?: string;
 
   /**  */
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate?: Date;
 
   /**  */
-  programRules: string;
+  programRules?: string;
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance?: string;
 
   /**  */
-  rentalHistory: string;
+  rentalHistory?: string;
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments?: string;
 
   /**  */
   specialNotes?: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize?: number;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize?: number;
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect?: CombinedWhatToExpectTypes;
 
   /**  */
   applicationConfig?: object;
@@ -3378,30 +3536,30 @@ export interface Listing {
 
 export interface PreferenceCreate {
   /**  */
-  links: PreferenceLink[];
+  links?: PreferenceLink[];
 
   /**  */
-  ordinal: number;
+  ordinal?: number;
 
   /**  */
-  title: string;
+  title?: string;
 
   /**  */
-  subtitle: string;
+  subtitle?: string;
 
   /**  */
-  description: string;
+  description?: string;
 
   /**  */
   formMetadata?: FormMetadata;
 
   /**  */
-  page: number;
+  page?: number;
 }
 
 export interface UnitCreate {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   amiPercentage?: string;
@@ -3466,15 +3624,6 @@ export interface ListingCreate {
   applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
-
-  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3486,20 +3635,23 @@ export interface ListingCreate {
   /**  */
   preferences: PreferenceCreate[];
 
-  /** */
-  additionalApplicationSubmissionNotes?: string
+  /**  */
+  applicationAddress?: CombinedApplicationAddressTypes;
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress?: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgents?: Id[];
@@ -3508,55 +3660,58 @@ export interface ListingCreate {
   units: UnitCreate[];
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
   buildingAddress: AddressCreate;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 
   /**  */
-  jurisdiction?: Id;
+  jurisdiction?: CombinedJurisdictionTypes;
 
   /**  */
   reservedCommunityType?: Id;
 
   /**  */
   result?: CombinedResultTypes;
+
+  /**  */
+  additionalApplicationSubmissionNotes?: string;
 
   /**  */
   applicationMethods: ApplicationMethod[];
@@ -3568,88 +3723,91 @@ export interface ListingCreate {
   events: ListingEvent[];
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate?: Date;
 
   /**  */
-  applicationDueTime: Date
+  applicationDueTime?: Date;
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate?: Date;
 
   /**  */
-  applicationFee: string;
+  applicationFee?: string;
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization?: string;
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  buildingSelectionCriteria: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
-  costsNotIncluded: string;
+  buildingSelectionCriteria?: string;
 
   /**  */
-  creditHistory: string;
+  costsNotIncluded?: string;
 
   /**  */
-  criminalBackground: string;
+  creditHistory?: string;
 
   /**  */
-  depositMin: string;
+  criminalBackground?: string;
 
   /**  */
-  depositMax: string;
+  depositMin?: string;
 
   /**  */
-  disableUnitsAccordion: boolean;
+  depositMax?: string;
 
   /**  */
-  leasingAgentEmail: string;
+  disableUnitsAccordion?: boolean;
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentEmail?: string;
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentName?: string;
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentOfficeHours?: string;
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentPhone?: string;
+
+  /**  */
+  leasingAgentTitle?: string;
 
   /**  */
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate?: Date;
 
   /**  */
-  programRules: string;
+  programRules?: string;
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance?: string;
 
   /**  */
-  rentalHistory: string;
+  rentalHistory?: string;
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments?: string;
 
   /**  */
   specialNotes?: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize?: number;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize?: number;
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect?: CombinedWhatToExpectTypes;
 
   /**  */
   applicationConfig?: object;
@@ -3672,25 +3830,25 @@ export interface ListingCreate {
 
 export interface PreferenceUpdate {
   /**  */
-  links: PreferenceLink[];
+  links?: PreferenceLink[];
 
   /**  */
-  ordinal: number;
+  ordinal?: number;
 
   /**  */
-  title: string;
+  title?: string;
 
   /**  */
-  subtitle: string;
+  subtitle?: string;
 
   /**  */
-  description: string;
+  description?: string;
 
   /**  */
   formMetadata?: FormMetadata;
 
   /**  */
-  page: number;
+  page?: number;
 
   /**  */
   id: string;
@@ -3715,7 +3873,7 @@ export interface AssetUpdate {
 
 export interface UnitUpdate {
   /**  */
-  amiChart: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   amiPercentage?: string;
@@ -3783,15 +3941,6 @@ export interface ListingUpdate {
   applicationDropOffAddressType?: ListingApplicationAddressType;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddress: CombinedApplicationAddressTypes;
-
-  /**  */
-  applicationDropOffAddressOfficeHours: string;
-
-  /**  */
   status: ListingStatus;
 
   /**  */
@@ -3812,20 +3961,23 @@ export interface ListingUpdate {
   /**  */
   preferences: PreferenceUpdate[];
 
-  /** */
-  additionalApplicationSubmissionNotes?: string
+  /**  */
+  applicationAddress?: CombinedApplicationAddressTypes;
 
   /**  */
-  applicationAddress: CombinedApplicationAddressTypes;
+  applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationPickUpAddress: CombinedApplicationPickUpAddressTypes;
+  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+
+  /**  */
+  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: AssetUpdate;
 
   /**  */
-  leasingAgentAddress: CombinedLeasingAgentAddressTypes;
+  leasingAgentAddress?: CombinedLeasingAgentAddressTypes;
 
   /**  */
   leasingAgents?: Id[];
@@ -3834,46 +3986,46 @@ export interface ListingUpdate {
   units: UnitUpdate[];
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
   buildingAddress: AddressUpdate;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 
   /**  */
   jurisdiction?: Id;
@@ -3885,6 +4037,9 @@ export interface ListingUpdate {
   result?: AssetUpdate;
 
   /**  */
+  additionalApplicationSubmissionNotes?: string;
+
+  /**  */
   applicationMethods: ApplicationMethod[];
 
   /**  */
@@ -3894,88 +4049,91 @@ export interface ListingUpdate {
   events: ListingEvent[];
 
   /**  */
-  applicationDueDate: Date;
+  applicationDueDate?: Date;
 
   /**  */
-  applicationDueTime: Date
+  applicationDueTime?: Date;
 
   /**  */
-  applicationOpenDate: Date;
+  applicationOpenDate?: Date;
 
   /**  */
-  applicationFee: string;
+  applicationFee?: string;
 
   /**  */
-  applicationOrganization: string;
+  applicationOrganization?: string;
 
   /**  */
-  applicationPickUpAddressOfficeHours: string;
+  applicationPickUpAddressOfficeHours?: string;
 
   /**  */
-  buildingSelectionCriteria: string;
+  applicationDropOffAddressOfficeHours?: string;
 
   /**  */
-  costsNotIncluded: string;
+  buildingSelectionCriteria?: string;
 
   /**  */
-  creditHistory: string;
+  costsNotIncluded?: string;
 
   /**  */
-  criminalBackground: string;
+  creditHistory?: string;
 
   /**  */
-  depositMin: string;
+  criminalBackground?: string;
 
   /**  */
-  depositMax: string;
+  depositMin?: string;
 
   /**  */
-  disableUnitsAccordion: boolean;
+  depositMax?: string;
 
   /**  */
-  leasingAgentEmail: string;
+  disableUnitsAccordion?: boolean;
 
   /**  */
-  leasingAgentName: string;
+  leasingAgentEmail?: string;
 
   /**  */
-  leasingAgentOfficeHours: string;
+  leasingAgentName?: string;
 
   /**  */
-  leasingAgentPhone: string;
+  leasingAgentOfficeHours?: string;
 
   /**  */
-  leasingAgentTitle: string;
+  leasingAgentPhone?: string;
+
+  /**  */
+  leasingAgentTitle?: string;
 
   /**  */
   name: string;
 
   /**  */
-  postmarkedApplicationsReceivedByDate: Date;
+  postmarkedApplicationsReceivedByDate?: Date;
 
   /**  */
-  programRules: string;
+  programRules?: string;
 
   /**  */
-  rentalAssistance: string;
+  rentalAssistance?: string;
 
   /**  */
-  rentalHistory: string;
+  rentalHistory?: string;
 
   /**  */
-  requiredDocuments: string;
+  requiredDocuments?: string;
 
   /**  */
   specialNotes?: string;
 
   /**  */
-  waitlistCurrentSize: number;
+  waitlistCurrentSize?: number;
 
   /**  */
-  waitlistMaxSize: number;
+  waitlistMaxSize?: number;
 
   /**  */
-  whatToExpect: CombinedWhatToExpectTypes;
+  whatToExpect?: CombinedWhatToExpectTypes;
 
   /**  */
   applicationConfig?: object;
@@ -4016,43 +4174,43 @@ export interface Property {
   updatedAt: Date;
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 }
 
 export interface PropertyCreate {
@@ -4063,43 +4221,43 @@ export interface PropertyCreate {
   units: UnitCreate[];
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 }
 
 export interface PropertyUpdate {
@@ -4119,43 +4277,43 @@ export interface PropertyUpdate {
   units: UnitUpdate[];
 
   /**  */
-  accessibility: string;
+  accessibility?: string;
 
   /**  */
-  amenities: string;
+  amenities?: string;
 
   /**  */
-  buildingTotalUnits: number;
+  buildingTotalUnits?: number;
 
   /**  */
-  developer: string;
+  developer?: string;
 
   /**  */
-  householdSizeMax: number;
+  householdSizeMax?: number;
 
   /**  */
-  householdSizeMin: number;
+  householdSizeMin?: number;
 
   /**  */
-  neighborhood: string;
+  neighborhood?: string;
 
   /**  */
-  petPolicy: string;
+  petPolicy?: string;
 
   /**  */
-  smokingPolicy: string;
+  smokingPolicy?: string;
 
   /**  */
-  unitsAvailable: number;
+  unitsAvailable?: number;
 
   /**  */
-  unitAmenities: string;
+  unitAmenities?: string;
 
   /**  */
   servicesOffered?: string;
 
   /**  */
-  yearBuilt: number;
+  yearBuilt?: number;
 }
 
 export interface PropertyGroup {
@@ -4264,156 +4422,6 @@ export interface TranslationUpdate {
   translations: object;
 }
 
-export interface User {
-  /**  */
-  roles: UserRole[];
-
-  /**  */
-  language?: Language;
-
-  /**  */
-  leasingAgentInListings?: Id[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
-export interface UserCreate {
-  /**  */
-  language?: Language;
-
-  /**  */
-  password: string;
-
-  /**  */
-  passwordConfirmation: string;
-
-  /**  */
-  emailConfirmation: string;
-
-  /**  */
-  appUrl?: string;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-}
-
-export interface Email {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
-}
-
-export interface Status {
-  /**  */
-  status: string;
-}
-
-export interface Confirm {
-  /**  */
-  token: string;
-}
-
-export interface ForgotPassword {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
-}
-
-export interface ForgotPasswordResponse {
-  /**  */
-  message: string;
-}
-
-export interface UpdatePassword {
-  /**  */
-  password: string;
-
-  /**  */
-  passwordConfirmation: string;
-
-  /**  */
-  token: string;
-}
-
-export interface UserUpdate {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  password?: string;
-
-  /**  */
-  currentPassword?: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-}
-
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
@@ -4447,6 +4455,20 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
+export enum EnumApplicationsApiExtraModelOrderBy {
+  'firstName' = 'firstName',
+  'lastName' = 'lastName',
+  'submissionDate' = 'submissionDate',
+  'createdAt' = 'createdAt'
+}
+export enum EnumApplicationsApiExtraModelOrder {
+  'ASC' = 'ASC',
+  'DESC' = 'DESC'
+}
+export enum UserRole {
+  'user' = 'user',
+  'admin' = 'admin'
+}
 export enum EnumListingFilterParamsComparison {
   '=' = '=',
   '<>' = '<>'
@@ -4456,7 +4478,6 @@ export enum EnumListingFilterParamsStatus {
   'pending' = 'pending',
   'closed' = 'closed'
 }
-
 export enum ListingApplicationAddressType {
   'leasingAgent' = 'leasingAgent',
   'mailingAddress' = 'mailingAddress'
@@ -4479,12 +4500,12 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
-export type CombinedAmiChartTypes = (AmiChart & any) | null;
+export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
-  "PaperPickup" = "PaperPickup",
+  'PaperPickup' = 'PaperPickup'
 }
 
 export enum ListingEventType {
@@ -4492,13 +4513,12 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
-export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
-export type CombinedImageTypes = (AssetCreate & any) | null;
-export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
-export type CombinedResultTypes = (AssetCreate & any) | null;
-export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
-export enum UserRole {
-  'user' = 'user',
-  'admin' = 'admin'
-}
+export type CombinedApplicationAddressTypes = AddressUpdate;
+export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
+export type CombinedApplicationDropOffAddressTypes = AddressCreate;
+export type CombinedApplicationMailingAddressTypes = AddressCreate;
+export type CombinedImageTypes = AssetCreate;
+export type CombinedLeasingAgentAddressTypes = AddressUpdate;
+export type CombinedResultTypes = AssetCreate;
+export type CombinedWhatToExpectTypes = WhatToExpect;
+export type CombinedJurisdictionTypes = Id;

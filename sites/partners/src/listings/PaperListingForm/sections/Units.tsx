@@ -128,21 +128,23 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
 
   return (
     <>
-      <GridSection title={t("listings.units")} grid={false} separator>
-        <ViewItem label={t("listings.unitsDescription")} />
-        <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
-        <GridSection columns={3}>
+      <GridSection
+        title={t("listings.units")}
+        description={t("listings.unitsDescription")}
+        grid={false}
+        separator
+      >
+        <GridSection columns={2}>
           <GridCell>
-            <ViewItem>
-              <FieldGroup
-                name="disableUnitsAccordion"
-                type="radio"
-                register={register}
-                fields={disableUnitsAccordionOptions}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-              />
-            </ViewItem>
+            <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
+            <FieldGroup
+              name="disableUnitsAccordion"
+              type="radio"
+              register={register}
+              fields={disableUnitsAccordionOptions}
+              fieldClassName="m-0"
+              fieldGroupClassName="flex h-12 items-center"
+            />
           </GridCell>
         </GridSection>
         <div className="bg-gray-300 px-4 py-5">

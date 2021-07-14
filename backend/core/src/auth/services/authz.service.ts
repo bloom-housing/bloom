@@ -1,8 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { newEnforcer } from "casbin"
 import path from "path"
-import { User } from "../user/entities/user.entity"
-import { Listing } from "../listings/entities/listing.entity"
+import { User } from "../entities/user.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 
 export enum authzActions {
   create = "create",
@@ -32,8 +32,8 @@ export class AuthzService {
     obj?: any
   ): Promise<boolean> {
     const e = await newEnforcer(
-      path.join(__dirname, "authz_model.conf"),
-      path.join(__dirname, "authz_policy.csv")
+      path.join(__dirname, "..", "authz_model.conf"),
+      path.join(__dirname, "..", "authz_policy.csv")
     )
 
     // Get User roles and add them to our enforcer

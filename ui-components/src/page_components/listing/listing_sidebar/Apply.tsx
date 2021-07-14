@@ -136,7 +136,7 @@ const Apply = (props: ApplyProps) => {
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={getAddress(listing.applicationPickUpAddressType, "pickUp")}
-              officeHours={listing.applicationPickUpAddressOfficeHours ?? null}
+              officeHours={listing.applicationPickUpAddressOfficeHours}
             />
           </>
         )}
@@ -175,7 +175,7 @@ const Apply = (props: ApplyProps) => {
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
                 address={getAddress(listing.applicationDropOffAddressType, "dropOff")}
-                officeHours={listing.applicationDropOffAddressOfficeHours ?? null}
+                officeHours={listing.applicationDropOffAddressOfficeHours}
               />
             </>
           )}

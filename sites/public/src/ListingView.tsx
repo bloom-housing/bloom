@@ -374,19 +374,17 @@ export const ListingView = (props: ListingProps) => {
           </div>
         </ListingDetailItem>
 
-        {listing.buildingAddress.latitude && listing.buildingAddress.longitude && (
-          <ListingDetailItem
-            imageAlt={t("listings.neighborhoodBuildings")}
-            imageSrc="/images/listing-neighborhood.svg"
-            title={t("listings.sections.neighborhoodTitle")}
-            subtitle={t("listings.sections.neighborhoodSubtitle")}
-            desktopClass="bg-primary-lighter"
-          >
-            <div className="listing-detail-panel">
-              <ListingMap address={listing.buildingAddress} listing={listing} />
-            </div>
-          </ListingDetailItem>
-        )}
+        <ListingDetailItem
+          imageAlt={t("listings.neighborhoodBuildings")}
+          imageSrc="/images/listing-neighborhood.svg"
+          title={t("listings.sections.neighborhoodTitle")}
+          subtitle={t("listings.sections.neighborhoodSubtitle")}
+          desktopClass="bg-primary-lighter"
+        >
+          <div className="listing-detail-panel">
+            <ListingMap address={listing.buildingAddress} listing={listing} />
+          </div>
+        </ListingDetailItem>
 
         {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
           <ListingDetailItem

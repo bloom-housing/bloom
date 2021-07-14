@@ -15,8 +15,8 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
-import { UserRole } from "../types/user-role-enum"
 import { Language } from "../../shared/types/language-enum"
+import { UserRole } from "../enum/user-role-enum"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
