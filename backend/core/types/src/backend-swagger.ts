@@ -591,152 +591,6 @@ export class AuthService {
   }
 }
 
-export class UserService {
-  /**
-   *
-   */
-  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
-
-      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Create user
-   */
-  create(
-    params: {
-      /**  */
-      noWelcomeEmail?: boolean;
-      /** requestBody */
-      body?: UserCreate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<UserBasic> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Resend confirmation
-   */
-  resendConfirmation(
-    params: {
-      /** requestBody */
-      body?: Email;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/resend-confirmation';
-
-      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Confirm email
-   */
-  confirm(
-    params: {
-      /** requestBody */
-      body?: Confirm;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/confirm';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Forgot Password
-   */
-  forgotPassword(
-    params: {
-      /** requestBody */
-      body?: ForgotPassword;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<ForgotPasswordResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/forgot-password';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update Password
-   */
-  updatePassword(
-    params: {
-      /** requestBody */
-      body?: UpdatePassword;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<LoginResponse> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/update-password';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Update user
-   */
-  update(
-    params: {
-      /** requestBody */
-      body?: UserUpdate;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/user/{id}';
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = params.body;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-}
-
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -947,50 +801,6 @@ export class ListingsService {
       url = url.replace('{listingId}', params['listingId'] + '');
 
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Close listing by id
-   */
-  close(
-    params: {
-      /**  */
-      listingId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listings/{listingId}/close';
-      url = url.replace('{listingId}', params['listingId'] + '');
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
-
-      let data = null;
-
-      configs.data = data;
-      axios(configs, resolve, reject);
-    });
-  }
-  /**
-   * Unpublish listing by id
-   */
-  unpublish(
-    params: {
-      /**  */
-      listingId: string;
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + '/listings/{listingId}/unpublish';
-      url = url.replace('{listingId}', params['listingId'] + '');
-
-      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
 
       let data = null;
 
@@ -1617,6 +1427,152 @@ export class UnitsService {
       const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
 
       let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class UserService {
+  /**
+   *
+   */
+  userControllerProfile(options: IRequestOptions = {}): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create user
+   */
+  create(
+    params: {
+      /**  */
+      noWelcomeEmail?: boolean;
+      /** requestBody */
+      body?: UserCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+      configs.params = { noWelcomeEmail: params['noWelcomeEmail'] };
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Resend confirmation
+   */
+  resendConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/resend-confirmation';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Confirm email
+   */
+  confirm(
+    params: {
+      /** requestBody */
+      body?: Confirm;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/confirm';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Forgot Password
+   */
+  forgotPassword(
+    params: {
+      /** requestBody */
+      body?: ForgotPassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ForgotPasswordResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/forgot-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update Password
+   */
+  updatePassword(
+    params: {
+      /** requestBody */
+      body?: UpdatePassword;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<LoginResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/update-password';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/user/{id}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
 
       configs.data = data;
       axios(configs, resolve, reject);
@@ -2804,185 +2760,6 @@ export interface LoginResponse {
   accessToken: string;
 }
 
-export interface User {
-  /**  */
-  roles: UserRole[];
-
-  /**  */
-  language?: Language;
-
-  /**  */
-  leasingAgentInListings?: Id[];
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
-export interface UserCreate {
-  /**  */
-  language?: Language;
-
-  /**  */
-  password: string;
-
-  /**  */
-  passwordConfirmation: string;
-
-  /**  */
-  emailConfirmation: string;
-
-  /**  */
-  appUrl?: string;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-}
-
-export interface Email {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
-}
-
-export interface Status {
-  /**  */
-  status: string;
-}
-
-export interface Confirm {
-  /**  */
-  token: string;
-}
-
-export interface ForgotPassword {
-  /**  */
-  email: string;
-
-  /**  */
-  appUrl?: string;
-}
-
-export interface ForgotPasswordResponse {
-  /**  */
-  message: string;
-}
-
-export interface UpdatePassword {
-  /**  */
-  password: string;
-
-  /**  */
-  passwordConfirmation: string;
-
-  /**  */
-  token: string;
-}
-
-export interface UserUpdate {
-  /**  */
-  language?: Language;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  password?: string;
-
-  /**  */
-  currentPassword?: string;
-
-  /**  */
-  confirmedAt?: Date;
-
-  /**  */
-  email: string;
-
-  /**  */
-  firstName: string;
-
-  /**  */
-  middleName?: string;
-
-  /**  */
-  lastName: string;
-
-  /**  */
-  dob: Date;
-}
-
 export interface Jurisdiction {
   /**  */
   id: string;
@@ -3207,6 +2984,35 @@ export interface Preference {
   page?: number;
 }
 
+export interface UserBasic {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
 export interface ReservedCommunityType {
   /**  */
   id: string;
@@ -3372,10 +3178,10 @@ export interface Listing {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -3678,10 +3484,10 @@ export interface ListingCreate {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: CombinedImageTypes;
@@ -4004,10 +3810,10 @@ export interface ListingUpdate {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes;
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes;
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes;
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes;
 
   /**  */
   image?: AssetUpdate;
@@ -4458,6 +4264,156 @@ export interface TranslationUpdate {
   translations: object;
 }
 
+export interface User {
+  /**  */
+  roles: UserRole[];
+
+  /**  */
+  language?: Language;
+
+  /**  */
+  leasingAgentInListings?: Id[];
+
+  /**  */
+  id: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface UserCreate {
+  /**  */
+  language?: Language;
+
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  emailConfirmation: string;
+
+  /**  */
+  appUrl?: string;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+}
+
+export interface Email {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface Status {
+  /**  */
+  status: string;
+}
+
+export interface Confirm {
+  /**  */
+  token: string;
+}
+
+export interface ForgotPassword {
+  /**  */
+  email: string;
+
+  /**  */
+  appUrl?: string;
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string;
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string;
+
+  /**  */
+  passwordConfirmation: string;
+
+  /**  */
+  token: string;
+}
+
+export interface UserUpdate {
+  /**  */
+  language?: Language;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  password?: string;
+
+  /**  */
+  currentPassword?: string;
+
+  /**  */
+  confirmedAt?: Date;
+
+  /**  */
+  email: string;
+
+  /**  */
+  firstName: string;
+
+  /**  */
+  middleName?: string;
+
+  /**  */
+  lastName: string;
+
+  /**  */
+  dob: Date;
+}
+
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
@@ -4491,11 +4447,6 @@ export enum InputType {
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
 }
-
-export enum UserRole {
-  'user' = 'user',
-  'admin' = 'admin'
-}
 export enum EnumListingFilterParamsComparison {
   '=' = '=',
   '<>' = '<>'
@@ -4527,7 +4478,7 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
-export type CombinedAmiChartTypes = AmiChart;
+export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
@@ -4540,12 +4491,16 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
-export type CombinedApplicationAddressTypes = AddressUpdate;
-export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
-export type CombinedApplicationDropOffAddressTypes = AddressCreate;
-export type CombinedApplicationMailingAddressTypes = AddressCreate;
-export type CombinedImageTypes = AssetCreate;
-export type CombinedLeasingAgentAddressTypes = AddressUpdate;
-export type CombinedResultTypes = AssetCreate;
-export type CombinedWhatToExpectTypes = WhatToExpect;
-export type CombinedJurisdictionTypes = Id;
+export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) | null;
+export type CombinedApplicationDropOffAddressTypes = (AddressCreate & any) | null;
+export type CombinedApplicationMailingAddressTypes = (AddressCreate & any) | null;
+export type CombinedImageTypes = (AssetCreate & any) | null;
+export type CombinedLeasingAgentAddressTypes = (AddressUpdate & any) | null;
+export type CombinedResultTypes = (AssetCreate & any) | null;
+export type CombinedWhatToExpectTypes = (WhatToExpect & any) | null;
+export type CombinedJurisdictionTypes = (Id & any) | null;
+export enum UserRole {
+  'user' = 'user',
+  'admin' = 'admin'
+}
