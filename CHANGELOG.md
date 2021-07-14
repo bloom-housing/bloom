@@ -8,6 +8,34 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+### Backend
+
+- Fixed:
+
+  - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
+
+- Changed:
+  - User module has been removed and incorporated into Auth module
+
+### Frontend
+
+- Fixed:
+
+  - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
+
+- Added:
+  - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
+
+### UI Components
+
+- Added:
+  - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
+  - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
+
+## 1.0.4 / 2021-07-07
+
+### General
+
 - Added:
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
@@ -40,6 +68,7 @@ All notable changes to this project will be documented in this file. The format 
   - list and retrieve methods to `/assets` endpoint
   - added result_id to Listing model, allow creating `image` and `result` through listing endpoint (cascade)
   - added resultLink, isWaitlistOpen and waitlistOpenSpots to Listing model
+  - Added applicationPickUpAddressType and applicationDropOffAddressType columns to Listing model ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Michał Plebański)
 
 - Changed:
 
@@ -66,6 +95,11 @@ All notable changes to this project will be documented in this file. The format 
   - Add Additional Fees section to listing management ([#1377](https://github.com/bloom-housing/bloom/pull/1377)) (Emily Jablonski)
   - Add Building Details and Intro section to listing management ([#1420](https://github.com/bloom-housing/bloom/pull/1420)) (Emily Jablonski)
   - Add Building Features section to listing management ([#1412](https://github.com/bloom-housing/bloom/pull/1412)) (Emily Jablonski)
+  - Adds units to listings ([#1448](https://github.com/bloom-housing/bloom/pull/1448))
+  - Add Rankings and Results section to listing management ([#1433](https://github.com/bloom-housing/bloom/pull/1433)) (Emily Jablonski)
+  - Add Application Address section to listing management ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Emily Jablonski)
+  - Add Application Dates section to listing management ([#1432](https://github.com/bloom-housing/bloom/pull/1432)) (Emily Jablonski)
+  - Adds cache revalidation to frontend public app
 
 - Fixed:
 
@@ -76,6 +110,8 @@ All notable changes to this project will be documented in this file. The format 
   - Fix broken application search in Partners ([#1301](https://github.com/bloom-housing/bloom/pull/1301)) (Dominik Barcikowski)
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
+  - Hide Additional Eligibility header if no sections present ([#1457](https://github.com/bloom-housing/bloom/pull/1457)) (Emily Jablonski)
+  - Listings Management MVP visual QA round ([#1463](https://github.com/bloom-housing/bloom/pull/1463)) (Emily Jablonski)
 
 - Changed:
 

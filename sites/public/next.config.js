@@ -49,6 +49,9 @@ module.exports = withCSS(
             gtmKey: process.env.GTM_KEY || null,
             idleTimeout: process.env.IDLE_TIMEOUT,
             countyCode: process.env.COUNTY_CODE,
+            cacheRevalidate: process.env.CACHE_REVALIDATE
+              ? Number(process.env.CACHE_REVALIDATE)
+              : 60,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],

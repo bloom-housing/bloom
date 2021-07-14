@@ -8,5 +8,7 @@ export default {
 }
 
 export const Back = () => (
-  <span className="back"><a href="#">Back</a></span>
+  <span className="back">
+    <a href="#">Back</a>
+  </span>
 )

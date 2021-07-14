@@ -10,13 +10,12 @@ const AdditionalEligibility = () => {
 
   return (
     <div>
-      <GridSection grid={false} separator>
-        <span className="form-section__title">
-          {t("listings.sections.additionalEligibilityTitle")}
-        </span>
-        <span className="form-section__description">
-          {t("listings.sections.additionalEligibilitySubtext")}{" "}
-        </span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.additionalEligibilityTitle")}
+        description={t("listings.sections.additionalEligibilitySubtext")}
+      >
         <GridSection columns={2}>
           <Textarea
             label={t("listings.creditHistory")}

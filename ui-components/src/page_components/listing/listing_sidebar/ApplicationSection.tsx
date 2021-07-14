@@ -10,11 +10,13 @@ export interface ApplicationSectionProps {
 }
 
 const showWaitlist = (listing: Listing) => {
-  const hasWaitlist =
-    !isNaN(listing.waitlistMaxSize) && listing.waitlistMaxSize - listing.waitlistCurrentSize > 0
-
-  // Hide waitlist for FCFS and when ther are no waitlist spots
-  return listing.applicationDueDate != null && hasWaitlist
+  // Hide waitlist for FCFS and when there are no waitlist spots
+  return (
+    listing.applicationDueDate != null &&
+    listing.isWaitlistOpen &&
+    listing.waitlistOpenSpots &&
+    listing.waitlistOpenSpots > 0
+  )
 }
 
 const ApplicationSection = (props: ApplicationSectionProps) => {

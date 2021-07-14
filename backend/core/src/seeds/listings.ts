@@ -6,11 +6,10 @@ import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
 import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ApplicationMethodType, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
-import { User } from "../user/entities/user.entity"
-import { UserCreateDto } from "../user/dto/user.dto"
+import { User } from "../auth/entities/user.entity"
+import { UserCreateDto } from "../auth/dto/user.dto"
 import { ListingStatus } from "../listings/types/listing-status-enum"
 import { ListingEventDto } from "../listings/dto/listing-event.dto"
 import { ApplicationMethodDto } from "../listings/dto/application-method.dto"
@@ -20,6 +19,8 @@ import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AssetCreateDto } from "../assets/dto/asset.dto"
+import { Unit } from "../units/entities/unit.entity"
+import { ApplicationMethodType } from "../listings/types/application-method-type-enum"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
@@ -2346,18 +2347,6 @@ const coliseumUnits: Array<UnitSeedType> = [
 // Application Method Sets
 const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
-    type: ApplicationMethodType.POBox,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
     type: ApplicationMethodType.Internal,
     acceptsPostmarkedApplications: false,
     label: "Label",
@@ -2372,12 +2361,6 @@ const tritonApplicationMethods: Array<ApplicationMethodSeedType> = [
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
   },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
 ]
 
 const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
@@ -2386,12 +2369,6 @@ const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
     acceptsPostmarkedApplications: false,
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
   },
 ]
 
@@ -2430,7 +2407,11 @@ const defaultListing: ListingSeedType = {
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "20",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "Application Organization",
@@ -2477,6 +2458,8 @@ const defaultListing: ListingSeedType = {
   specialNotes: "Custom special notes text",
   status: ListingStatus.active,
   waitlistCurrentSize: null,
+  waitlistOpenSpots: null,
+  isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: {
     allInfoWillBeVerified: "Custom all info will be verified text",
@@ -2494,9 +2477,13 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
+  applicationDueTime: null,
   applicationOrganization: "Triton",
   applicationPickUpAddress: {
     city: "Foster City",
@@ -2544,6 +2531,8 @@ const tritonListing: ListingSeedType = {
   status: ListingStatus.active,
   waitlistCurrentSize: 400,
   waitlistMaxSize: 600,
+  waitlistOpenSpots: 200,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 
@@ -2557,7 +2546,11 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "John Stewart Company",
@@ -2610,6 +2603,8 @@ const coliseumListing: ListingSeedType = {
   status: ListingStatus.active,
   waitlistCurrentSize: 0,
   waitlistMaxSize: 3000,
+  waitlistOpenSpots: 3000,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 

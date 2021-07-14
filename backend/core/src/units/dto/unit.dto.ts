@@ -14,7 +14,7 @@ export class UnitDto extends OmitType(Unit, ["property", "amiChart"] as const) {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartDto)
-  amiChart: AmiChartDto | null
+  amiChart?: AmiChartDto | null
 }
 
 export class UnitCreateDto extends OmitType(UnitDto, [
@@ -27,7 +27,7 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AmiChartDto)
-  amiChart: AmiChartDto | null
+  amiChart?: AmiChartDto | null
 }
 
 export class UnitUpdateDto extends UnitCreateDto {

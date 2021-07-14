@@ -18,7 +18,7 @@ interface FieldGroupProps {
   fields?: FieldSingle[]
   groupNote?: string
   register: UseFormMethods["register"]
-  validation?: Record<string, any>
+  validation?: Record<string, unknown>
   fieldGroupClassName?: string
   fieldClassName?: string
 }
@@ -36,6 +36,11 @@ const FieldGroup = ({
   fieldGroupClassName,
   fieldClassName,
 }: FieldGroupProps) => {
+  // Always align two-option radio groups side by side
+  if (fields?.length === 2) {
+    fieldGroupClassName = `${fieldGroupClassName} flex`
+    fieldClassName = `${fieldClassName} flex-initial mr-4`
+  }
   return (
     <>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}

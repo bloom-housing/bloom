@@ -6,6 +6,7 @@ export * from "./src/actions/LocalizedLink"
 export * from "./src/actions/ExpandableContent"
 
 /* Blocks */
+export * from "./src/blocks/ActionBlock"
 export * from "./src/blocks/AppStatusItem"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"

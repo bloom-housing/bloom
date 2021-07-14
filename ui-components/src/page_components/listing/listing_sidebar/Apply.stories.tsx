@@ -17,14 +17,28 @@ const internalFormRoute = "/applications/start/choose-language"
 
 export const hardApplicationDeadline = () => {
   listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
-  listing.applicationMethods[0].acceptsPostmarkedApplications = false
+  listing.applicationMailingAddress = {
+    city: "San Jose",
+    street: "98 Archer Street",
+    zipCode: "95112",
+    state: "CA",
+    latitude: 37.36537,
+    longitude: -121.91071,
+  }
 
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />
 }
 
 export const acceptsPostmarkedApplications = () => {
   listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
-  listing.applicationMethods[0].acceptsPostmarkedApplications = true
+  listing.applicationMailingAddress = {
+    city: "San Jose",
+    street: "98 Archer Street",
+    zipCode: "95112",
+    state: "CA",
+    latitude: 37.36537,
+    longitude: -121.91071,
+  }
   listing.postmarkedApplicationsReceivedByDate = new Date("2021-12-05")
 
   return <Apply listing={listing} internalFormRoute={internalFormRoute} />

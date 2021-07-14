@@ -3,6 +3,7 @@ import {
   Listing,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingApplicationAddressType,
 } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
@@ -19,10 +20,6 @@ export interface ApplyProps {
 
 const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
   return applicationMethods.some((method) => method.type == type)
-}
-
-const hasAnyMethods = (applicationMethods: ApplicationMethod[], types: ApplicationMethodType[]) => {
-  return applicationMethods.some((method) => types.some((type) => type == method.type))
 }
 
 const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
@@ -66,11 +63,29 @@ const Apply = (props: ApplyProps) => {
     return method.type == ApplicationMethodType.FileDownload
   })
 
+  type AddressLocation = "dropOff" | "pickUp"
+
+  const getAddress = (
+    addressType: ListingApplicationAddressType | undefined,
+    location: AddressLocation
+  ) => {
+    if (addressType === ListingApplicationAddressType.leasingAgent) {
+      return listing.leasingAgentAddress
+    }
+    if (addressType === ListingApplicationAddressType.mailingAddress) {
+      return listing.applicationMailingAddress
+    }
+    if (location === "dropOff") {
+      return listing.applicationDropOffAddress
+    } else {
+      return listing.applicationPickUpAddress
+    }
+  }
+
   return (
     <>
       <section className="aside-block">
         <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
-
         {openDateState(listing) && (
           <p className="mb-5 text-gray-700">
             {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
@@ -100,7 +115,6 @@ const Apply = (props: ApplyProps) => {
             </Button>
           </>
         )}
-
         {showDownload &&
           downloadMethods.map((method: ApplicationMethod) => (
             <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
@@ -113,8 +127,7 @@ const Apply = (props: ApplyProps) => {
               </a>
             </p>
           ))}
-
-        {hasMethod(listing.applicationMethods, ApplicationMethodType.PaperPickup) && (
+        {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
           <>
             {!openDateState(listing) &&
               (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
@@ -122,29 +135,25 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={listing.applicationPickUpAddress || listing.leasingAgentAddress}
-              officeHours={
-                listing.applicationPickUpAddressOfficeHours || listing.leasingAgentOfficeHours
-              }
+              address={getAddress(listing.applicationPickUpAddressType, "pickUp")}
+              officeHours={listing.applicationPickUpAddressOfficeHours}
             />
           </>
         )}
       </section>
 
-      {hasAnyMethods(listing.applicationMethods, [
-        ApplicationMethodType.POBox,
-        ApplicationMethodType.LeasingAgent,
-      ]) && (
+      {(listing.applicationMailingAddress ||
+        listing.applicationDropOffAddress ||
+        listing.applicationDropOffAddressType) && (
         <section className="aside-block is-tinted bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) && (
+          {listing.applicationMailingAddress && (
             <>
               <SubHeader text={t("listings.apply.sendByUsMail")} />
               <p className="text-gray-700">{listing.applicationOrganization}</p>
-              <SidebarAddress address={listing.applicationAddress} />
+              <SidebarAddress address={listing.applicationMailingAddress} />
               <p className="mt-4 text-tiny text-gray-750">
-                {getMethod(listing.applicationMethods, ApplicationMethodType.POBox)
-                  ?.acceptsPostmarkedApplications
+                {listing.postmarkedApplicationsReceivedByDate
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
                       applicationDueDate: moment(listing.applicationDueDate).format(
                         `MMM. DD, YYYY [${t("t.at")}] h A`
@@ -158,16 +167,15 @@ const Apply = (props: ApplyProps) => {
               </p>
             </>
           )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.POBox) &&
-            hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
-              <OrDivider bgColor="gray-100" />
-            )}
-          {hasMethod(listing.applicationMethods, ApplicationMethodType.LeasingAgent) && (
+          {listing.applicationMailingAddress && listing.applicationDropOffAddress && (
+            <OrDivider bgColor="gray-100" />
+          )}
+          {(listing.applicationDropOffAddress || listing.applicationDropOffAddressType) && (
             <>
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
-                address={listing.leasingAgentAddress}
-                officeHours={listing.leasingAgentOfficeHours}
+                address={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+                officeHours={listing.applicationDropOffAddressOfficeHours}
               />
             </>
           )}

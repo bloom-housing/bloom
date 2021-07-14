@@ -12,30 +12,6 @@ const [listingFilePath] = process.argv.slice(2)
 
 function convertApplicationMethods(listing: any) {
   const applicationMethods: Array<ApplicationMethodDto> = []
-  if (listing.acceptsPostmarkedApplications) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.LeasingAgent,
-        acceptsPostmarkedApplications: listing.acceptsPostmarkedApplications as boolean,
-      })
-    )
-  }
-  if (listing.acceptingApplicationsByPoBox) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.POBox,
-        acceptsPostmarkedApplications: false,
-      })
-    )
-  }
-  if (listing.blankPaperApplicationCanBePickedUp) {
-    applicationMethods.push(
-      plainToClass(ApplicationMethodDto, {
-        type: ApplicationMethodType.PaperPickup,
-        acceptsPostmarkedApplications: false,
-      })
-    )
-  }
 
   if ("attachments" in listing) {
     listing.attachments.forEach((attachment) => {
@@ -64,7 +40,6 @@ function convertApplicationMethods(listing: any) {
 
   ;[
     "acceptingApplicationsAtLeasingAgent",
-    "acceptingApplicationsByPoBox",
     "acceptingOnlineApplications",
     "acceptsPostmarkedApplications",
     "blankPaperApplicationCanBePickedUp",

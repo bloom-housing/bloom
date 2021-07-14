@@ -1,11 +1,4 @@
-import {
-  AmiChart,
-  ApplicationMethodType,
-  CountyCode,
-  CSVFormattingType,
-  Listing,
-  ListingStatus,
-} from "./types"
+import { AmiChart, CountyCode, CSVFormattingType, Listing, ListingStatus } from "./types"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
@@ -245,8 +238,12 @@ export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
+  applicationDueTime: new Date(),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   countyCode: CountyCode["San Jose"],
   depositMax: "",
   disableUnitsAccordion: false,
@@ -272,26 +269,7 @@ export const ArcherListing: Listing = {
     longitude: -121.91071,
   },
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationMethods: [
-    {
-      type: ApplicationMethodType.POBox,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.LeasingAgent,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-    {
-      type: ApplicationMethodType.PaperPickup,
-      acceptsPostmarkedApplications: true,
-      label: "",
-      externalReference: "",
-    },
-  ],
+  applicationMethods: [],
   applicationOrganization: "98 Archer Street",
   // TODO confirm not used anywhere
   // applicationPhone: "(408) 217-8562",
@@ -320,6 +298,8 @@ export const ArcherListing: Listing = {
   waitlistMaxSize: 300,
   name: "Archer Studios",
   waitlistCurrentSize: 300,
+  waitlistOpenSpots: 0,
+  isWaitlistOpen: true,
   // Addng displayWaitListSize for #707
   displayWaitlistSize: false,
   // TODO confirm not used anywhere

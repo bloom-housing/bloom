@@ -10,11 +10,12 @@ const LeasingAgent = () => {
 
   return (
     <div>
-      <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.sections.leasingAgentTitle")}</span>
-        <span className="form-section__description">
-          {t("listings.sections.leasingAgentSubtitle")}
-        </span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.leasingAgentTitle")}
+        description={t("listings.sections.leasingAgentSubtitle")}
+      >
         <GridSection columns={3}>
           <Field
             label={t("leasingAgent.name")}

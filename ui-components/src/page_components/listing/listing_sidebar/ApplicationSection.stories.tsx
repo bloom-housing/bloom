@@ -12,7 +12,7 @@ export default {
 export const dueSoon = () => {
   const listing = Object.assign({}, ArcherListing) as Listing
   const days = 10
-  listing.applicationOpenDate =  new Date(moment().format())
+  listing.applicationOpenDate = new Date(moment().format())
   listing.waitlistCurrentSize = 0
   listing.applicationDueDate = new Date(moment().add(days, "days").format())
   return <ApplicationSection listing={listing} internalFormRoute="/forms" />

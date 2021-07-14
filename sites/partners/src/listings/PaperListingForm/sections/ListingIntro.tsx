@@ -6,31 +6,34 @@ const ListingIntro = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { errors, register } = formMethods
 
   return (
-    <>
-      <span className="form-section__title">{t("listings.sections.introTitle")}</span>
-      <span className="form-section__description">{t("listings.sections.introSubtitle")}</span>
-      <GridSection columns={3}>
-        <GridCell span={2}>
-          <Field
-            id="name"
-            name="name"
-            label={t("listings.listingName")}
-            placeholder={t("listings.listingName")}
-            register={register}
-          />
-        </GridCell>
+    <GridSection
+      columns={3}
+      title={t("listings.sections.introTitle")}
+      description={t("listings.sections.introSubtitle")}
+    >
+      <GridCell span={2}>
         <Field
-          id="developer"
-          name="developer"
-          label={t("listings.developer")}
-          placeholder={t("listings.developer")}
+          id="name"
+          name="name"
+          label={t("listings.listingName")}
+          placeholder={t("listings.listingName")}
           register={register}
+          error={errors?.name !== undefined}
+          errorMessage={t("errors.requiredFieldError")}
+          validation={{ required: true }}
         />
-      </GridSection>
-    </>
+      </GridCell>
+      <Field
+        id="developer"
+        name="developer"
+        label={t("listings.developer")}
+        placeholder={t("listings.developer")}
+        register={register}
+      />
+    </GridSection>
   )
 }
 

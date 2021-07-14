@@ -15,16 +15,17 @@ export type TimeFieldValues = {
 }
 
 export type TimeFieldProps = {
-  error?: boolean
-  register: UseFormMethods["register"]
-  watch: UseFormMethods["watch"]
-  name?: string
-  id?: string
-  label: string
-  required?: boolean
-  readerOnly?: boolean
   defaultValues?: TimeFieldValues
   disabled?: boolean
+  error?: boolean
+  id?: string
+  label: string
+  labelClass?: string
+  name?: string
+  readerOnly?: boolean
+  register: UseFormMethods["register"]
+  required?: boolean
+  watch: UseFormMethods["watch"]
 }
 
 const TimeField = ({
@@ -35,6 +36,7 @@ const TimeField = ({
   name,
   id,
   label,
+  labelClass,
   readerOnly,
   defaultValues,
   disabled,
@@ -55,7 +57,7 @@ const TimeField = ({
     setInnerRequiredRule(someFieldsFilled)
   }, [hoursField, minutesField, secondsField])
 
-  const labelClasses = ["field-label--caps"]
+  const labelClasses = ["field-label", labelClass]
   if (readerOnly) labelClasses.push("sr-only")
 
   return (
@@ -65,7 +67,7 @@ const TimeField = ({
         <Field
           name={fieldName("hours")}
           label={t("t.hour")}
-          defaultValue={defaultValues?.hours || ""}
+          defaultValue={defaultValues?.hours ?? ""}
           readerOnly={true}
           placeholder="HH"
           error={error}
@@ -88,7 +90,7 @@ const TimeField = ({
         <Field
           name={fieldName("minutes")}
           label={t("t.minutes")}
-          defaultValue={defaultValues?.minutes || ""}
+          defaultValue={defaultValues?.minutes ?? ""}
           readerOnly={true}
           placeholder="MM"
           error={error}
@@ -110,7 +112,7 @@ const TimeField = ({
 
         <Field
           label={t("t.seconds")}
-          defaultValue={defaultValues?.seconds || ""}
+          defaultValue={defaultValues?.seconds ?? ""}
           name={fieldName("seconds")}
           readerOnly={true}
           placeholder="SS"

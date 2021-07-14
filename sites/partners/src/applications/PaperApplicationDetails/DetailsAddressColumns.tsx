@@ -71,7 +71,6 @@ const DetailsAddressColumns = ({
     }
 
     if (type === AddressColsType.memberResidence) {
-      console.log(householdMember)
       if (householdMember?.sameAddress === "yes") {
         address[item] = application.applicant.address[item]
           ? application.applicant.address[item]

@@ -12,14 +12,29 @@ describe("<ApplicationSection>", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
     const days = 10
     listing.applicationOpenDate = new Date(moment().format())
-    listing.waitlistCurrentSize = 0
+    listing.waitlistCurrentSize = 25
+    listing.isWaitlistOpen = true
+    listing.waitlistMaxSize = 100
+    listing.waitlistOpenSpots = 75
     listing.applicationDueDate = new Date(moment().add(days, "days").format())
+    listing.applicationPickUpAddress = {
+      id: "id",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      city: "San Jose",
+      street: "98 Archer Street",
+      zipCode: "95112",
+      state: "CA",
+      latitude: 37.36537,
+      longitude: -121.91071,
+    }
+    listing.applicationPickUpAddressOfficeHours = "Monday, Tuesday & Friday, 9:00AM - 5:00PM"
     const { getByText, getAllByText } = render(
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
     expect(getByText(listing.waitlistMaxSize)).toBeTruthy()
-    expect(getAllByText(listing.applicationAddress.street || "").length).toBe(4)
-    expect(getAllByText(listing.leasingAgentOfficeHours).length).toBe(2)
+    expect(getAllByText(listing.applicationAddress?.street || "").length).toBe(1)
+    expect(getAllByText(listing.applicationPickUpAddressOfficeHours).length).toBe(1)
   })
   it("renders nothing if applications are closed", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
@@ -30,7 +45,7 @@ describe("<ApplicationSection>", () => {
     const { queryByText } = render(
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
-    expect(queryByText(listing.waitlistMaxSize)).toBeNull()
-    expect(queryByText(listing.applicationAddress.street || "")).toBeNull()
+    expect(listing.waitlistMaxSize && queryByText(listing.waitlistMaxSize)).toBeNull()
+    expect(queryByText(listing.applicationAddress?.street || "")).toBeNull()
   })
 })

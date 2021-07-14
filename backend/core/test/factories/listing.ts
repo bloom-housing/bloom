@@ -8,7 +8,6 @@ export default Factory.define<Listing>(({ sequence, factories }) => ({
   units: [factories.unit.build()],
   attachments: [],
   acceptingApplicationsAtLeasingAgent: true,
-  acceptingApplicationsByPoBox: true,
   acceptingOnlineApplications: false,
   acceptsPostmarkedApplications: true,
   accessibility: "There is a total of 5 ADA units in the complex",

@@ -8,7 +8,7 @@ interface CloudinaryUploadProps {
   tag?: string
   signature?: string
   apiKey?: string
-  timestamp: number
+  timestamp?: number
 }
 
 export const CloudinaryUpload = async ({

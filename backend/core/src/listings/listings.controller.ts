@@ -104,6 +104,9 @@ export class ListingsController {
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   @UseInterceptors(CacheInterceptor)
   async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
+    if (listingId === undefined || listingId === "undefined") {
+      return mapTo(ListingDto, {})
+    }
     const result = mapTo(ListingDto, await this.listingsService.findOne(listingId))
 
     return result

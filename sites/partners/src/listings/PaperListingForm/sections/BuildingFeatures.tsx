@@ -10,11 +10,12 @@ const BuildingFeatures = () => {
 
   return (
     <div>
-      <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.sections.buildingFeaturesTitle")}</span>
-        <span className="form-section__description">
-          {t("listings.sections.buildingFeaturesSubtitle")}
-        </span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.buildingFeaturesTitle")}
+        description={t("listings.sections.buildingFeaturesSubtitle")}
+      >
         <GridSection columns={2}>
           <Textarea
             label={t("t.propertyAmenities")}
