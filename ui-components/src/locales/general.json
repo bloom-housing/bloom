@@ -1196,5 +1196,27 @@
     "applicantsWillBeContacted": "Applicants will be contacted by the property agent in rank order until vacancies are filled.",
     "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
     "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
+  },
+  "eligibility": {
+    "progressHeader": "Let's find your next home",
+    "welcome": {
+      "header": "Welcome",
+      "description": "To find you a home that best fits your needs, let's answer a few questions first. Some properties only accept people with certain ages, incomes, etc."
+    },
+    "bedrooms": {
+      "prompt": "How many bedrooms do you need?",
+      "studio": "Studio",
+      "srCountLabel": "Bedroom count"
+    },
+    "age" : {
+      "prompt": "How old are you?",
+      "description": "Some properties only accept individuals over 62 years of age.",
+      "label": "years old"
+    },
+    "disability" : {
+      "prompt" : "Do you have a disability?",
+      "description" : "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application.",
+      "preferNotToSay": "Prefer not to say"
+    }
   }
 }

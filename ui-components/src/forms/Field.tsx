@@ -27,6 +27,7 @@ export interface FieldProps {
   describedBy?: string
   getValues?: UseFormMethods["getValues"]
   setValue?: UseFormMethods["setValue"]
+  isLabelAfterField?: boolean
 }
 
 const Field = (props: FieldProps) => {
@@ -65,6 +66,9 @@ const Field = (props: FieldProps) => {
     if (props.caps) labelClasses.push("field-label--caps")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
+    if (props.isLabelAfterField && !isRadioOrCheckbox) {
+      labelClasses.push("field-label-extra-space")
+    }
 
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
@@ -82,7 +86,7 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {!isRadioOrCheckbox && label}
+      {!isRadioOrCheckbox && !props.isLabelAfterField && label}
       {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
@@ -101,7 +105,7 @@ const Field = (props: FieldProps) => {
           onDrop={props.onDrop}
           {...inputProps}
         />
-        {isRadioOrCheckbox && label}
+        {(isRadioOrCheckbox || props.isLabelAfterField) && label}
       </div>
       {props.errorMessage && (
         <ErrorMessage id={`${idOrName}-error`} error={props.error}>
