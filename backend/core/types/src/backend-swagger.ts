@@ -4515,8 +4515,8 @@ export enum ListingEventType {
 }
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
-export type CombinedApplicationDropOffAddressTypes = AddressCreate;
-export type CombinedApplicationMailingAddressTypes = AddressCreate;
+export type CombinedApplicationDropOffAddressTypes = AddressUpdate;
+export type CombinedApplicationMailingAddressTypes = AddressUpdate;
 export type CombinedImageTypes = AssetCreate;
 export type CombinedLeasingAgentAddressTypes = AddressUpdate;
 export type CombinedResultTypes = AssetCreate;
