@@ -20,6 +20,7 @@ import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AssetCreateDto } from "../assets/dto/asset.dto"
+import { UnitStatus } from "../units/types/unit-status-enum"
 
 type PropertySeedType = Omit<
   PropertyCreateDto,
@@ -1245,7 +1246,7 @@ const defaultUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "635",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "oneBdrm",
   },
   {
@@ -1266,7 +1267,7 @@ const defaultUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
 ]
@@ -1289,7 +1290,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "1100",
-    status: "occupied",
+    status: UnitStatus.occupied,
     unitType: "twoBdrm",
   },
   {
@@ -1309,7 +1310,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
     unitType: "oneBdrm",
   },
   {
@@ -1329,7 +1330,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
     unitType: "oneBdrm",
   },
   {
@@ -1349,7 +1350,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
     unitType: "oneBdrm",
   },
   {
@@ -1369,7 +1370,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
     unitType: "oneBdrm",
   },
 ]
@@ -1393,7 +1394,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Mobility with Hearing & Visual",
     reservedType: null,
     sqFeet: "486",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "oneBdrm",
   },
   {
@@ -1414,7 +1415,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Mobility with Hearing & Visual",
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "oneBdrm",
   },
   {
@@ -1435,7 +1436,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Mobility with Hearing & Visual",
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "oneBdrm",
   },
   {
@@ -1456,7 +1457,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "oneBdrm",
   },
   {
@@ -1477,7 +1478,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1498,7 +1499,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1519,7 +1520,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1540,7 +1541,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1561,7 +1562,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1582,7 +1583,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1603,7 +1604,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1624,7 +1625,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1645,7 +1646,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1666,7 +1667,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and Hearing & Visual",
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1687,7 +1688,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1708,7 +1709,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1729,7 +1730,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1750,7 +1751,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1771,7 +1772,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1792,7 +1793,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1813,7 +1814,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1834,7 +1835,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1855,7 +1856,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1876,7 +1877,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1897,7 +1898,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1918,7 +1919,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1939,7 +1940,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility and hearing",
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "twoBdrm",
   },
   {
@@ -1960,7 +1961,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -1981,7 +1982,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1080",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2002,7 +2003,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2023,7 +2024,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2044,7 +2045,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2065,7 +2066,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2086,7 +2087,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2107,7 +2108,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2128,7 +2129,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2149,7 +2150,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2170,7 +2171,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2191,7 +2192,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2212,7 +2213,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2233,7 +2234,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2254,7 +2255,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2275,7 +2276,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2296,7 +2297,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2317,7 +2318,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
   {
@@ -2338,7 +2339,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     priorityType: "Mobility",
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
     unitType: "threeBdrm",
   },
 ]

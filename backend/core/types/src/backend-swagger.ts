@@ -3030,6 +3030,9 @@ export interface ReservedCommunityType {
 
 export interface Unit {
   /**  */
+  status: UnitStatus;
+
+  /**  */
   amiChart: CombinedAmiChartTypes;
 
   /**  */
@@ -3082,9 +3085,6 @@ export interface Unit {
 
   /**  */
   sqFeet?: string;
-
-  /**  */
-  status?: string;
 
   /**  */
   unitType?: string;
@@ -3407,6 +3407,9 @@ export interface PreferenceCreate {
 
 export interface UnitCreate {
   /**  */
+  status: UnitStatus;
+
+  /**  */
   amiChart: CombinedAmiChartTypes;
 
   /**  */
@@ -3450,9 +3453,6 @@ export interface UnitCreate {
 
   /**  */
   sqFeet?: string;
-
-  /**  */
-  status?: string;
 
   /**  */
   unitType?: string;
@@ -3721,6 +3721,9 @@ export interface AssetUpdate {
 
 export interface UnitUpdate {
   /**  */
+  status: UnitStatus;
+
+  /**  */
   amiChart: CombinedAmiChartTypes;
 
   /**  */
@@ -3764,9 +3767,6 @@ export interface UnitUpdate {
 
   /**  */
   sqFeet?: string;
-
-  /**  */
-  status?: string;
 
   /**  */
   unitType?: string;
@@ -4476,6 +4476,13 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
+
+export enum UnitStatus {
+  'unknown' = 'unknown',
+  'available' = 'available',
+  'occupied' = 'occupied'
+}
+
 export type CombinedAmiChartTypes = (AmiChart & any) | null;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
@@ -4489,6 +4496,7 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
+
 export type CombinedApplicationAddressTypes = (AddressUpdate & any) | null;
 export type CombinedApplicationPickUpAddressTypes = (AddressUpdate & any) |
   null;
