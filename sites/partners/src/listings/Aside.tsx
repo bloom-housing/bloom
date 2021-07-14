@@ -15,7 +15,7 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
-  setStatus: (status: ListingStatus) => void
+  setStatus?: (status: ListingStatus) => void
 }
 
 type AsideType = "add" | "edit" | "details"
