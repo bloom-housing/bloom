@@ -5,11 +5,11 @@ import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 export class WhatToExpect {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  applicantsWillBeContacted: string
+  applicantsWillBeContacted?: string | null
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  allInfoWillBeVerified: string
+  allInfoWillBeVerified?: string | null
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  bePreparedIfChosen: string
+  bePreparedIfChosen?: string | null
 }

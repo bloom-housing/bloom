@@ -30,7 +30,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
+import { getAmiChartId, stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import { useAmiChartList } from "../../../lib/hooks"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
@@ -135,7 +135,11 @@ const defaults: FormListing = {
   waitlistMaxSize: null,
   isWaitlistOpen: null,
   waitlistOpenSpots: null,
-  whatToExpect: [],
+  whatToExpect: {
+    applicantsWillBeContacted: null,
+    allInfoWillBeVerified: null,
+    bePreparedIfChosen: null,
+  },
   units: [],
   accessibility: "",
   amenities: "",
@@ -269,8 +273,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         delete unit.sqFeet
       }
 
-      if (unit.amiChart?.length) {
-        const chart = amiCharts.find((chart) => chart.id === unit.amiChart)
+      const amiChartId = getAmiChartId(unit.amiChart)
+      if (amiChartId) {
+        const chart = amiCharts.find((chart) => chart.id === amiChartId)
         unit.amiChart = chart
       } else {
         delete unit.amiChart

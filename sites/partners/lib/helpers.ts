@@ -94,3 +94,7 @@ export const getAmiChartId = (chart: AmiChart | string | undefined): string | nu
   }
   return chart instanceof Object ? chart.id : chart
 }
+
+export const isNullOrUndefined = (value: unknown): boolean => {
+  return value === null || value === undefined
+}
