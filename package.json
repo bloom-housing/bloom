@@ -19,9 +19,11 @@
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
     "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test",
+    "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test:headless",
     "build:app:public": "cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
     "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test",
+    "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test:headless",
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
@@ -34,6 +36,7 @@
     "test:backend:core": "cd backend/core && yarn test",
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
+    "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
   },
   "devDependencies": {

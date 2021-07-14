@@ -17,7 +17,7 @@ import {
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
 import { AmiChart } from "@bloom-housing/backend-core/types"
-import { getAmiChartId, getRentType } from "../../../lib/helpers"
+import { getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -44,7 +44,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
       status: STATUS,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiChart: getAmiChartId(current?.amiChart),
+      amiChart: current?.amiChart,
       amiPercentage: current?.amiPercentage,
       monthlyIncomeMin: current?.monthlyIncomeMin,
       monthlyRent: current?.monthlyRent,
@@ -61,8 +61,7 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
-    const amiChartId = getAmiChartId(unit?.amiChart)
-    reset({ ...unit, rentType: getRentType(unit), status: STATUS, amiChart: amiChartId })
+    reset({ ...unit, rentType: getRentType(unit), status: STATUS, amiChart: unit?.amiChart })
   }, [units, setCurrent, tempId, reset])
 
   const rentType = watch("rentType")
@@ -240,8 +239,8 @@ const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFo
           <GridCell>
             <ViewItem label={t("listings.unit.amiChart")}>
               <Select
-                id="amiChart"
-                name="amiChart"
+                id="amiChart.id"
+                name="amiChart.id"
                 label={t("listings.unit.amiChart")}
                 placeholder={t("listings.unit.amiChart")}
                 labelClassName="sr-only"
