@@ -32,6 +32,10 @@ import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/rese
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 
 export class ListingDto extends OmitType(Listing, [
+  "applicationAddress",
+  "applicationPickUpAddress",
+  "applicationDropOffAddress",
+  "applicationMailingAddress",
   "applications",
   "applicationFlaggedSets",
   "image",
@@ -64,14 +68,14 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationDropOffAddress: AddressCreateDto | null
+  @Type(() => AddressDto)
+  applicationDropOffAddress: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationMailingAddress: AddressCreateDto | null
+  @Type(() => AddressDto)
+  applicationMailingAddress: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -544,14 +548,14 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationDropOffAddress: AddressCreateDto | null
+  @Type(() => AddressUpdateDto)
+  applicationDropOffAddress: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationMailingAddress: AddressCreateDto | null
+  @Type(() => AddressUpdateDto)
+  applicationMailingAddress: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
