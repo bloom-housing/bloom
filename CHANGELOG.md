@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
   - User module has been removed and incorporated into Auth module
+  - convert listing events jsonb column to separate listing_events table
 
 ### Frontend
 
