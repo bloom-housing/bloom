@@ -49,7 +49,7 @@ export default function ApplicationsList() {
         )
       case ListingStatus.closed:
         return (
-          <Tag styleType={AppearanceStyleType.warning} pillStyle>
+          <Tag pillStyle styleType={AppearanceStyleType.closed}>
             {t(`listings.listingStatus.closed`)}
           </Tag>
         )
@@ -68,7 +68,7 @@ export default function ApplicationsList() {
     <ListingContext.Provider value={listingDto}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitle")}</title>
+          <title>{t("nav.siteTitlePartners")}</title>
         </Head>
 
         <PageHeader

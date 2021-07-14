@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
-import { User } from "../../user/entities/user.entity"
+import { User } from "../../auth/entities/user.entity"
 import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"

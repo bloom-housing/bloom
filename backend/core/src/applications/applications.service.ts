@@ -14,7 +14,7 @@ import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { assignDefined } from "../shared/assign-defined"
-import { authzActions, AuthzService } from "../auth/authz.service"
+import { authzActions, AuthzService } from "../auth/services/authz.service"
 import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
@@ -119,7 +119,7 @@ export class ApplicationsService {
       userId: (qb, { userId }) => qb.andWhere("application.user_id = :uid", { uid: userId }),
       listingId: (qb, { listingId }) =>
         qb.andWhere("application.listing_id = :lid", { lid: listingId }),
-      orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order),
+      orderBy: (qb, { orderBy, order }) => qb.orderBy(orderBy, order, "NULLS LAST"),
       search: (qb, { search }) =>
         qb.andWhere(
           `to_tsvector('english', REGEXP_REPLACE(concat_ws(' ', applicant, alternateContact.emailAddress), '[_]|[-]', '/', 'g')) @@ to_tsquery(CONCAT(CAST(plainto_tsquery(REGEXP_REPLACE(:search, '[_]|[-]', '/', 'g')) as text), ':*'))`,

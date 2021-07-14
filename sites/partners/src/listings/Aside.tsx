@@ -53,7 +53,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
       elements.push(
         <GridCell key="btn-submitNew">
           <LocalizedLink href={`/listings/${listingId}/edit`}>
-            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+            <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>
           </LocalizedLink>
@@ -65,7 +65,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
       elements.push(
         <GridCell key="btn-publish">
           <Button
-            styleType={AppearanceStyleType.primary}
+            styleType={AppearanceStyleType.success}
             fullWidth
             onClick={() => setStatusAndSubmit(ListingStatus.active)}
           >
@@ -73,11 +73,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button
-            styleType={AppearanceStyleType.secondary}
-            fullWidth
-            onClick={() => setStatusAndSubmit(ListingStatus.pending)}
-          >
+          <Button fullWidth onClick={() => setStatusAndSubmit(ListingStatus.pending)}>
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
@@ -88,7 +84,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
       elements.push(
         <GridCell key="btn-preview">
           <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
-            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+            <Button fullWidth onClick={() => false}>
               {t("listings.actions.preview")}
             </Button>
           </a>

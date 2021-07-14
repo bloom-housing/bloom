@@ -11,14 +11,23 @@ All notable changes to this project will be documented in this file. The format 
 ### Backend
 
 - Fixed:
+
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
 
+- Changed:
+  - User module has been removed and incorporated into Auth module
+
 ### Frontend
+
+- Added:
+
+  - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
 
 ### UI Components
 
 - Added:
   - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
+  - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
 
 ## 1.0.4 / 2021-07-07
 
@@ -99,6 +108,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
   - Hide Additional Eligibility header if no sections present ([#1457](https://github.com/bloom-housing/bloom/pull/1457)) (Emily Jablonski)
+  - Listings Management MVP visual QA round ([#1463](https://github.com/bloom-housing/bloom/pull/1463)) (Emily Jablonski)
 
 - Changed:
 

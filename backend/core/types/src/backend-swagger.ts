@@ -2122,6 +2122,14 @@ export interface AddressInput {
   value: AddressCreate;
 }
 
+export interface ApplicationsApiExtraModel {
+  /**  */
+  orderBy?: EnumApplicationsApiExtraModelOrderBy;
+
+  /**  */
+  order?: EnumApplicationsApiExtraModelOrder;
+}
+
 export interface PaginationMeta {
   /**  */
   currentPage: number;
@@ -4446,6 +4454,16 @@ export enum InputType {
   'text' = 'text',
   'address' = 'address',
   'hhMemberSelect' = 'hhMemberSelect'
+}
+export enum EnumApplicationsApiExtraModelOrderBy {
+  'firstName' = 'firstName',
+  'lastName' = 'lastName',
+  'submissionDate' = 'submissionDate',
+  'createdAt' = 'createdAt'
+}
+export enum EnumApplicationsApiExtraModelOrder {
+  'ASC' = 'ASC',
+  'DESC' = 'DESC'
 }
 export enum EnumListingFilterParamsComparison {
   '=' = '=',
