@@ -6,9 +6,9 @@
   // would like to remove the local theme class
   @include ag-theme-alpine(
     (
-      // use theme parameters
+           // use theme param
       header-height: 83px,
-      row-height: 58px,
+      row-height: 58px
     )
   );
 
