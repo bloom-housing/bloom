@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Frontend
 
 - Fixed:
+
   - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
 
 - Added:
