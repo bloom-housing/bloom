@@ -10,7 +10,12 @@ afterEach(cleanup)
 describe("<ImageCard>", () => {
   it("renders title, subtitle, image and alt text", () => {
     const { getByText, getByAltText } = render(
-      <ImageCard imageUrl={"/images/listing.jpg"} title={"My Building"} subtitle={"The Address"} description={"A description of the image"} />
+      <ImageCard
+        imageUrl={"/images/listing.jpg"}
+        title={"My Building"}
+        subtitle={"The Address"}
+        description={"A description of the image"}
+      />
     )
     expect(getByText("My Building")).not.toBeNull()
     expect(getByText("The Address")).not.toBeNull()
