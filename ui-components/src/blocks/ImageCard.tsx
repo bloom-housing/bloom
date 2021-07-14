@@ -28,7 +28,7 @@ const ImageCard = (props: ImageCardProps) => {
     <div className="image-card__wrapper">
       <figure className="image-card">
         {props.imageUrl && (
-          <img src={props.imageUrl} alt={props.description || "An picture of the building"} />
+          <img src={props.imageUrl} alt={props.description || "A picture of the building"} />
         )}
 
         <figcaption className="image-card__figcaption">
