@@ -250,7 +250,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       return dueTime
     }
     units.forEach((unit) => {
-      switch (unit.unitType) {
+      switch (unit.unitType.name) {
         case "threeBdrm":
           unit.numBedrooms = 3
           break
