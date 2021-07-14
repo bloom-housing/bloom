@@ -9,6 +9,7 @@
     "dev": "next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
+    "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
     "export": "next export",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "dev:listings": "cd ../../backend/core && yarn dev",
