@@ -15,6 +15,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
+import { isNullOrUndefined } from "../../../../lib/helpers"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -237,7 +238,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   ...yesNoRadioOptions[0],
                   id: "applicationsPickedUpYes",
                   defaultChecked:
-                    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType,
+                    isNullOrUndefined(listing?.applicationPickUpAddress) === false ||
+                    isNullOrUndefined(listing?.applicationPickUpAddressType) === false,
                 },
                 {
                   ...yesNoRadioOptions[1],
@@ -262,7 +264,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   ...yesNoRadioOptions[0],
                   id: "applicationsDroppedOffYes",
                   defaultChecked:
-                    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType,
+                    isNullOrUndefined(listing?.applicationDropOffAddress) === false ||
+                    isNullOrUndefined(listing?.applicationDropOffAddressType) === false,
                 },
                 {
                   ...yesNoRadioOptions[1],
@@ -286,7 +289,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 fields={getLocationOptions(
                   "pickUp",
                   listing?.applicationPickUpAddressType,
-                  listing?.applicationPickUpAddress
+                  isNullOrUndefined(listing?.applicationPickUpAddress) === false
                 )}
               />
             </GridCell>
@@ -307,7 +310,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   fields={getLocationOptions(
                     "dropOff",
                     listing?.applicationDropOffAddressType,
-                    listing?.applicationDropOffAddress
+                    isNullOrUndefined(listing?.applicationDropOffAddress) === false
                   )}
                 />
               </GridCell>
