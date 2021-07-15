@@ -10,6 +10,7 @@ import {
   MaxLength,
   ValidateNested,
   IsEmail,
+  MinLength,
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -21,6 +22,7 @@ export class Applicant extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
   firstName?: string | null
 
   @Column({ type: "text", nullable: true })
@@ -35,6 +37,7 @@ export class Applicant extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MinLength(1, { groups: [ValidationsGroupsEnum.default] })
   lastName?: string | null
 
   @Column({ type: "text", nullable: true })

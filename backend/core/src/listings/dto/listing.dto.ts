@@ -33,7 +33,6 @@ import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
-  "applicationFlaggedSets",
   "image",
   "jurisdiction",
   "leasingAgents",
