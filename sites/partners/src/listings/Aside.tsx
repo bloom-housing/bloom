@@ -96,7 +96,9 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
             type="button"
             styleType={AppearanceStyleType.primary}
             fullWidth
-            onClick={() => setStatus(listing.status)}
+            onClick={() => {
+              setStatus(listing.status)
+            }}
           >
             {t("t.saveExit")}
           </Button>
@@ -161,7 +163,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
     }
 
     return elements
-  }, [listing.status, listingId, setStatus, showCloseListingModal, type])
+  }, [listing, listingId, setStatus, showCloseListingModal, type])
 
   return (
     <>
