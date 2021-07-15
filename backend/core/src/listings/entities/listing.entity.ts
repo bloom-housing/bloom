@@ -43,8 +43,6 @@ import { ReservedCommunityType } from "../../reserved-community-type/entities/re
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { ListingApplicationAddressType } from "../types/listing-application-address-type"
-import { ListingReviewOrder } from "../types/listing-review-order-enum"
-import { ListingEventType } from "../types/listing-event-type-enum"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -410,19 +408,6 @@ class Listing extends BaseEntity {
       this.waitlistCurrentSize !== null &&
       this.waitlistCurrentSize < this.waitlistMaxSize
     )
-  }
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
-  get reviewOrderType(): ListingReviewOrder {
-    let lotteryEventExists = false
-    this.events.forEach((event) => {
-      if (event.type === ListingEventType.publicLottery) {
-        lotteryEventExists = true
-      }
-    })
-    return lotteryEventExists ? ListingReviewOrder.lottery : ListingReviewOrder.firstComeFirstServe
   }
 
   @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })

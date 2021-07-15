@@ -30,6 +30,8 @@ import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { ListingReviewOrder } from "../types/listing-review-order-enum"
+import { ListingEventType } from "../types/listing-event-type-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
@@ -121,6 +123,18 @@ export class ListingDto extends OmitType(Listing, [
     return listing.status
   })
   status: ListingStatus
+
+  @Expose()
+  @Transform((_value, listing) => {
+    let lotteryEventExists = false
+    listing.events.forEach((event) => {
+      if (event.type === ListingEventType.publicLottery) {
+        lotteryEventExists = true
+      }
+    })
+    return lotteryEventExists ? ListingReviewOrder.lottery : ListingReviewOrder.firstComeFirstServe
+  })
+  reviewOrderType: ListingReviewOrder
 
   @Expose()
   @Type(() => UnitDto)
