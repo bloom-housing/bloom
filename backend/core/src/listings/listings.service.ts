@@ -18,6 +18,7 @@ export class ListingsService {
     return Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.image", "image")
       .leftJoinAndSelect("listings.events", "listingEvents")
+      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")

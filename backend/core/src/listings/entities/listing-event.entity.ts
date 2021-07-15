@@ -6,6 +6,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Column, Entity, ManyToOne } from "typeorm"
 import { Listing } from "./listing.entity"
+import { Asset } from "../../assets/entities/asset.entity"
 
 @Entity({ name: "listing_events" })
 export class ListingEvent extends AbstractEntity {
@@ -53,4 +54,10 @@ export class ListingEvent extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ListingEvent)
   listing: Listing
+
+  @ManyToOne(() => Asset, { eager: true, cascade: true })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  file?: Asset
 }

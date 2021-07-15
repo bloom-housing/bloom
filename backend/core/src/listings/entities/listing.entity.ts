@@ -87,7 +87,10 @@ class Listing extends BaseEntity {
   @Type(() => AssetCreateDto)
   assets: AssetCreateDto[]
 
-  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing, { eager: true })
+  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing, {
+    eager: true,
+    cascade: true,
+  })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEvent)

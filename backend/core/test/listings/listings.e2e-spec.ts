@@ -122,6 +122,10 @@ describe("Listings", () => {
       url: "testurl",
       note: "testnote",
       label: "testlabel",
+      file: {
+        fileId: "testid",
+        label: "testlabel",
+      },
     }
     listing.events = [listingEvent]
 
@@ -138,6 +142,9 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].url).toBe(listingEvent.url)
     expect(modifiedListing.events[0].note).toBe(listingEvent.note)
     expect(modifiedListing.events[0].label).toBe(listingEvent.label)
+    expect(modifiedListing.events[0].file.id).toBeDefined()
+    expect(modifiedListing.events[0].file.fileId).toBe(listingEvent.file.fileId)
+    expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
   afterEach(() => {
