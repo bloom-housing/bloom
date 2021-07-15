@@ -34,7 +34,7 @@ type PropertySeedType = Omit<
 
 type UnitSeedType = Omit<UnitCreateDto, "property">
 
-type ApplicationMethodSeedType = Omit<ApplicationMethodDto, "listing">
+type ApplicationMethodSeedType = ApplicationMethodDto
 
 type ListingSeedType = Omit<
   ListingCreateDto,
