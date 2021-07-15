@@ -79,6 +79,7 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
       setUnits([...units, newUnit])
     }
   }
+  console.log("units = ", units)
   const unitTableData = useMemo(
     () =>
       units.map((unit) => ({
@@ -87,7 +88,7 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType,
+        priorityType: unit.priorityType.name,
         status: unit.status,
         action: (
           <div className="flex">

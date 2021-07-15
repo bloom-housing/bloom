@@ -29,7 +29,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType,
+        priorityType: unit.priorityType.name,
         status: unit.status,
         action: (
           <Button
