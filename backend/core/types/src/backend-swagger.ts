@@ -3171,6 +3171,23 @@ export interface Preference {
   page?: number;
 }
 
+export interface Asset {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
 export interface ListingEvent {
   /**  */
   type: ListingEventType;
@@ -3198,6 +3215,9 @@ export interface ListingEvent {
 
   /**  */
   label?: string;
+
+  /**  */
+  file?: Asset;
 }
 
 export interface ReservedCommunityType {
@@ -3571,6 +3591,9 @@ export interface ListingEventCreate {
   type: ListingEventType;
 
   /**  */
+  file?: AssetCreate;
+
+  /**  */
   startTime?: Date;
 
   /**  */
@@ -3883,35 +3906,6 @@ export interface PreferenceUpdate {
   id: string;
 }
 
-export interface ListingEventUpdate {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  startTime?: Date;
-
-  /**  */
-  endTime?: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-
-  /**  */
-  label?: string;
-}
-
 export interface AssetUpdate {
   /**  */
   id?: string;
@@ -3927,6 +3921,38 @@ export interface AssetUpdate {
 
   /**  */
   label: string;
+}
+
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  file?: AssetUpdate;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
 }
 
 export interface UnitUpdate {
