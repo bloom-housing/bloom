@@ -75,6 +75,7 @@ All notable changes to this project will be documented in this file. The format 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
   - removed eager relation to listing from User model
+  - removed unused inverse relations from entities
 
 ### Frontend
 

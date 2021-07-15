@@ -31,7 +31,6 @@ import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
@@ -94,7 +93,7 @@ class Listing extends BaseEntity {
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
-  @ManyToOne(() => Property, (property) => property.listings, { nullable: false, cascade: true })
+  @ManyToOne(() => Property, { nullable: false, cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   property: Property
@@ -104,12 +103,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Application)
   applications: Application[]
-
-  @OneToMany(() => ApplicationFlaggedSet, (afs) => afs.listing)
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationFlaggedSet)
-  applicationFlaggedSets: ApplicationFlaggedSet[]
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()
