@@ -370,7 +370,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [amiCharts, editMode, listing.id, listingsService, router, status, trigger, units]
+    [amiCharts, editMode, listing?.id, listingsService, router, status, trigger, units]
   )
 
   const onError = () => {
