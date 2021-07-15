@@ -382,7 +382,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(512, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitCreateDto)
   units: UnitCreateDto[]
 

@@ -1,6 +1,6 @@
 import * as client from "../client"
 import axios from "axios"
-import { serviceOptions } from "../client"
+import { ListingCreate, serviceOptions } from "../client"
 import { ListingStatus } from "../src/listings/types/listing-status-enum"
 
 // NOTE: This script relies on any logged-in users having permission to create
@@ -21,7 +21,7 @@ function uploadPreferences(listing) {
   })
 }
 
-async function uploadListing(listing) {
+async function uploadListing(listing: ListingCreate) {
   try {
     const listingsService = new client.ListingsService()
     return await listingsService.create({
@@ -34,14 +34,14 @@ async function uploadListing(listing) {
   }
 }
 
-async function uploadAmiCharts(property) {
+async function uploadAmiCharts(units) {
   const amiChartService = new client.AmiChartsService()
   const charts = await amiChartService.list()
 
-  for (const unit of property.units) {
+  for (const unit of units) {
     const chartFromUnit = unit.amiChart
     if (!chartFromUnit) {
-      console.log(property)
+      console.log(unit)
       console.log("Error: each unit must have an amiChart.")
       process.exit(1)
     }
@@ -59,8 +59,6 @@ async function uploadAmiCharts(property) {
 
 async function uploadProperty(property) {
   try {
-    await uploadAmiCharts(property)
-
     const propertyService = new client.PropertiesService()
     return await propertyService.create({
       body: property,
@@ -109,14 +107,21 @@ export async function importListing(apiUrl, email, password, listing) {
   if (!listing.property) {
     throw new Error("Listing must include a non-null Property.")
   }
+
   let property = listing.property
   delete listing.property
+
+  await uploadAmiCharts(property.units)
 
   property.listings = [listing]
   property = await uploadProperty(property)
 
   // Link the uploaded property to the listing by id.
   listing.property = property
+
+  // The ListinCreateDto expects to include units and buildingAddress
+  listing.units = property.units
+  listing.buildingAddress = property.buildingAddress
 
   // Upload the listing, and then return it.
   return await uploadListing(listing)

@@ -1,11 +1,11 @@
 import { importListing } from "./listings-importer"
-import moment from "moment"
 import axios from "axios"
 import { Listing } from "../src/listings/entities/listing.entity"
 import { Property } from "../src/property/entities/property.entity"
 import { Address } from "../src/shared/entities/address.entity"
 import { CountyCode } from "../src/shared/types/county-code"
 import { CSVFormattingType } from "../src/csv/types/csv-formatting-type-enum"
+import { UnitStatus } from "../src/units/types/unit-status-enum"
 
 // Sample usage:
 // $ yarn ts-node scripts/import-listings-from-detroit-arcgis.ts http://localhost:3100 test@example.com:abcdef https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Affordable_Housing_Website_data_12_20/FeatureServer/0//query
@@ -15,6 +15,8 @@ function createUnitsArray(type, number) {
   for (let unit_index = 0; unit_index < number; unit_index++) {
     units.push({
       unitType: type,
+
+      status: UnitStatus.unknown,
 
       // This amiPercentage is made up.
       amiPercentage: "30",
@@ -144,6 +146,7 @@ async function main() {
     listing.events = []
     listing.CSVFormattingType = CSVFormattingType.basic
     listing.countyCode = CountyCode.alameda
+    listing.displayWaitlistSize = false
 
     try {
       const newListing = await importListing(importApiUrl, email, password, listing)

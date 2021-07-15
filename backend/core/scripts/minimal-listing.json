@@ -5,22 +5,25 @@
   "countyCode": "Alameda",
   "preferences": [],
   "property": {
-      "buildingAddress": {
-          "city": "Detroit",
-          "state": "MI",
-          "street": "Main St",
-          "zipCode": "48127",
-          "latitude": "42.36",
-          "longitude": "-83.1"
-      },
-      "units": [{
+    "buildingAddress": {
+      "city": "Detroit",
+      "state": "MI",
+      "street": "Main St",
+      "zipCode": "48127",
+      "latitude": "42.36",
+      "longitude": "-83.1"
+    },
+    "units": [
+      {
         "unitType": "oneBdrm",
         "amiPercentage": "30",
-        "amiChart" : {
+        "status": "available",
+        "amiChart": {
           "name": "Fake AMI Chart Name",
           "items": []
         }
-      }]
+      }
+    ]
   },
   "assets": [],
   "applicationMethods": [],
@@ -31,5 +34,6 @@
     "state": "XX",
     "street": "456 Not A Real St",
     "zipCode": "12345"
-  }
+  },
+  "displayWaitlistSize": false
 }
