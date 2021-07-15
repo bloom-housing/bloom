@@ -4,22 +4,13 @@ node_js:
   # Node version
   - 12
 
-services:
-  - docker
-
 cache:
   yarn: true
-
-before_install:
-  - sudo service postgresql stop
-  - sudo service redis-server stop
-  - sleep 1
 
 before_script:
   - cp sites/public/.env.template sites/public/.env
   - cp sites/partners/.env.template sites/partners/.env
   - cp backend/core/.env.template backend/core/.env
-  - docker-compose up -d redis postgres
   - yarn install:all
 
 jobs:
@@ -30,8 +21,6 @@ jobs:
       name: "Build public site"
     - script: yarn build:app:partners
       name: "Build partners site"
-    - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
-      name: "Backend unit tests"
 
 env:
   global:
