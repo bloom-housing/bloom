@@ -57,6 +57,7 @@ export class ListingEvent extends AbstractEntity {
 
   @ManyToOne(() => Asset, { eager: true, cascade: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Asset)
   file?: Asset

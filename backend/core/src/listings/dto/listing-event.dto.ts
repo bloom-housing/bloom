@@ -13,6 +13,7 @@ export class ListingEventCreateDto extends OmitType(ListingEventDto, [
   "file",
 ] as const) {
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreateDto)
   file?: AssetCreateDto
@@ -42,6 +43,7 @@ export class ListingEventUpdateDto extends OmitType(ListingEventDto, [
   updatedAt?: Date
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   file?: AssetUpdateDto

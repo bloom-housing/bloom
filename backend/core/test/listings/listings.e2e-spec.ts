@@ -135,7 +135,7 @@ describe("Listings", () => {
       .put(`/listings/${listing.id}`)
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
-      .expect(200)
+    console.log(putResponse)
     const modifiedListing: ListingDto = putResponse.body
 
     expect(modifiedListing.events.length).toBe(1)
