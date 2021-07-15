@@ -142,9 +142,9 @@ const defaults: FormListing = {
   isWaitlistOpen: null,
   waitlistOpenSpots: null,
   whatToExpect: {
-    applicantsWillBeContacted: null,
-    allInfoWillBeVerified: null,
-    bePreparedIfChosen: null,
+    applicantsWillBeContacted: "",
+    allInfoWillBeVerified: "",
+    bePreparedIfChosen: "",
   },
   units: [],
   accessibility: "",
@@ -336,7 +336,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     async (data: FormListing) => {
       const validation = await trigger()
 
-      if (!validation) {
+      if (validation) {
         setLoading(false)
         return
       }
@@ -354,7 +354,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
           : await listingsService.create({ body: formattedData })
         setLoading(false)
-
         if (result) {
           setSiteAlertMessage(
             editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
@@ -368,7 +367,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [amiCharts, editMode, listing.id, listingsService, router, status, trigger, units]
+    [amiCharts, editMode, listing?.id, listingsService, router, status, trigger, units]
   )
 
   const onError = () => {
