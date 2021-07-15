@@ -44,7 +44,7 @@ class Unit {
   @Type(() => Date)
   updatedAt: Date
 
-  @ManyToOne(() => AmiChart, (amiChart) => amiChart.units, { eager: true, nullable: true })
+  @ManyToOne(() => AmiChart, { eager: true, nullable: true })
   amiChart: AmiChart | null
 
   @Column({ nullable: true, type: "text" })

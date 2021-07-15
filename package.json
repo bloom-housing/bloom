@@ -31,6 +31,7 @@
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd ui-components && yarn && yarn test",
+    "test:shared:ui:a11y": "cd ui-components && yarn && yarn test:a11y",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",

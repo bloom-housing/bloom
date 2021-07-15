@@ -29,6 +29,9 @@ executors:
       REDIS_USE_TLS: "0"
       CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
+  puppeteer-node:
+    docker:
+      - image: "cimg/node:12.18.4-browsers"
 
 jobs:
   setup:
@@ -58,6 +61,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
+  jest-ui-components-a11y:
+    executor: puppeteer-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:shared:ui:a11y
   jest-backend:
     executor: standard-node
     steps:
@@ -102,6 +111,9 @@ workflows:
           requires:
             - setup
       - jest-ui-components:
+          requires:
+            - setup
+      - jest-ui-components-a11y:
           requires:
             - setup
       - jest-backend:
