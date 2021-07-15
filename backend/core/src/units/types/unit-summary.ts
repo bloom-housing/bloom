@@ -1,5 +1,5 @@
 import { Expose, Type } from "class-transformer"
-import { IsDefined, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { MinMaxCurrency } from "./min-max-currency"
 import { MinMax } from "./min-max"
@@ -42,9 +42,15 @@ export class UnitSummary {
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   totalAvailable: number
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  totalCount: number
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

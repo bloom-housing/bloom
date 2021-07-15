@@ -2838,6 +2838,9 @@ export interface UnitSummary {
   totalAvailable: number;
 
   /**  */
+  totalCount: number;
+
+  /**  */
   areaRange: MinMax;
 
   /**  */

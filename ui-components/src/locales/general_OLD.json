@@ -840,6 +840,7 @@
     "smokingPolicy": "Smoking Policy",
     "street": "Street",
     "sqFeet": "sqft",
+    "totalCount": "Total Count",
     "relationship": "Relationship",
     "unitAmenities": "Unit Amenities",
     "unitFeatures": "Unit Features",

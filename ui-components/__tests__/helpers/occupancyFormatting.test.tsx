@@ -29,6 +29,7 @@ ArcherListing.unitsSummarized = {
         max: "350",
       },
       totalAvailable: 8,
+      totalCount: 8,
       areaRange: {
         min: 5,
         max: 60,
@@ -55,6 +56,7 @@ ArcherListing.unitsSummarized = {
         max: "350",
       },
       totalAvailable: 8,
+      totalCount: 8,
       areaRange: {
         min: 5,
         max: 60,
@@ -79,6 +81,7 @@ ArcherListing.unitsSummarized = {
         max: "350",
       },
       totalAvailable: 8,
+      totalCount: 8,
       areaRange: {
         min: 5,
         max: 60,

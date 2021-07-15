@@ -22,7 +22,8 @@ const summaries: {
   byUnitType: [
     {
       unitType: "studio",
-      totalAvailable: 41,
+      totalAvailable: 0,
+      totalCount: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: 10, max: 80 },
@@ -34,7 +35,8 @@ const summaries: {
   byUnitTypeWithoutFloor: [
     {
       unitType: "studio",
-      totalAvailable: 41,
+      totalAvailable: 0,
+      totalCount: 41,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: 10, max: 80 },
@@ -45,7 +47,8 @@ const summaries: {
   byNonReservedUnitType: [
     {
       unitType: "studio",
-      totalAvailable: 40,
+      totalAvailable: 0,
+      totalCount: 40,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
       rentAsPercentIncomeRange: { min: null, max: null },
@@ -60,7 +63,8 @@ const summaries: {
       byUnitType: [
         {
           unitType: "studio",
-          totalAvailable: 1,
+          totalAvailable: 0,
+          totalCount: 1,
           minIncomeRange: { min: "$2,208", max: "$2,208" },
           occupancyRange: { min: 1, max: 2 },
           rentAsPercentIncomeRange: { min: null, max: null },
@@ -77,7 +81,8 @@ const summaries: {
       byNonReservedUnitType: [
         {
           unitType: "studio",
-          totalAvailable: 24,
+          totalAvailable: 0,
+          totalCount: 24,
           minIncomeRange: { min: "$2,208", max: "$2,208" },
           occupancyRange: { min: 1, max: 2 },
           rentAsPercentIncomeRange: { min: null, max: null },
@@ -92,7 +97,8 @@ const summaries: {
           byUnitType: [
             {
               unitType: "studio",
-              totalAvailable: 1,
+              totalAvailable: 0,
+              totalCount: 1,
               minIncomeRange: { min: "$2,208", max: "$2,208" },
               occupancyRange: { min: 1, max: 2 },
               rentAsPercentIncomeRange: { min: null, max: null },
@@ -109,7 +115,8 @@ const summaries: {
       byNonReservedUnitType: [
         {
           unitType: "studio",
-          totalAvailable: 16,
+          totalAvailable: 0,
+          totalCount: 16,
           minIncomeRange: { min: "$1,438", max: "$1,438" },
           occupancyRange: { min: 1, max: 2 },
           rentAsPercentIncomeRange: { min: null, max: null },
@@ -135,9 +142,19 @@ describe("<UnitTables>", () => {
     const { getAllByText, getByRole, container } = render(
       <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
     )
+
+    // Verify that UnitTables shows the total count of units.
+    const buttonHeader = getByRole("button")
+    expect(buttonHeader.textContent).toContain(summaries.byUnitType[0].totalCount + " units")
+
+    // All units have the same square-foot area minimum; find all HTML elements that include that
+    // text (this should be all rows, one per unit) and make sure the total number of rows matches
+    // the totalCount of units.
     expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
-      summaries.byUnitType[0].totalAvailable
+      summaries.byUnitType[0].totalCount
     )
+
+    // Expect the table with one row per unit to be hidden until the button is clicked.
     expect(container.getElementsByClassName("hidden").length).toBe(1)
     fireEvent.click(getByRole("button"))
     expect(container.getElementsByClassName("hidden").length).toBe(0)
@@ -150,9 +167,19 @@ describe("<UnitTables>", () => {
         disableAccordion={true}
       />
     )
+
+    // Verify that UnitTables shows the total count of units.
+    const buttonHeader = getByRole("button")
+    expect(buttonHeader.textContent).toContain(summaries.byUnitType[0].totalCount + " units")
+
+    // All units have the same square-foot area minimum; find all HTML elements that include that
+    // text (this should be all rows, one per unit) and make sure the total number of rows matches
+    // the totalCount of units.
     expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
-      summaries.byUnitType[0].totalAvailable
+      summaries.byUnitType[0].totalCount
     )
+
+    // Expect the table with one row per unit to be hidden, even if the button is clicked.
     expect(container.getElementsByClassName("hidden").length).toBe(1)
     fireEvent.click(getByRole("button"))
     expect(container.getElementsByClassName("hidden").length).toBe(1)

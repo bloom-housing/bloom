@@ -5,7 +5,6 @@ import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map((unitSummary) => {
-    const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (
         <strong>{unitSummary.minIncomeRange.min}</strong>
@@ -52,11 +51,18 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
         <>
           {unitSummary.totalAvailable > 0 ? (
             <>
-              <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
+              <strong>{unitSummary.totalAvailable}</strong>{" "}
+              {unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")}
             </>
           ) : (
             <span className="uppercase">{t("listings.waitlist.label")}</span>
           )}
+        </>
+      ),
+      totalCount: (
+        <>
+          <strong>{unitSummary.totalCount}</strong>{" "}
+          {unitSummary.totalCount == 1 ? t("t.unit") : t("t.units")}
         </>
       ),
     }
