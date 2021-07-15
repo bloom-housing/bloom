@@ -10,20 +10,19 @@ import {
   StatusMessages,
   LocalizedLink,
   LinkButton,
-  GridSection,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "./ListingContext"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
-  setStatusAndSubmit?: (status: ListingStatus) => Promise<void>
+  setStatus?: (status: ListingStatus) => void
   showCloseListingModal: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) => {
+const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -70,13 +69,13 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
           <Button
             styleType={AppearanceStyleType.success}
             fullWidth
-            onClick={() => setStatusAndSubmit(ListingStatus.active)}
+            onClick={() => setStatus(ListingStatus.active)}
           >
             {t("listings.actions.publish")}
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button fullWidth onClick={() => setStatusAndSubmit(ListingStatus.pending)}>
+          <Button fullWidth onClick={() => setStatus(ListingStatus.pending)}>
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
@@ -97,7 +96,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
             type="button"
             styleType={AppearanceStyleType.primary}
             fullWidth
-            onClick={() => setStatusAndSubmit(listing.status)}
+            onClick={() => setStatus(listing.status)}
           >
             {t("t.saveExit")}
           </Button>
@@ -111,7 +110,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
-              onClick={() => setStatusAndSubmit(ListingStatus.active)}
+              onClick={() => setStatus(ListingStatus.active)}
             >
               {t("listings.actions.publish")}
             </Button>
@@ -135,7 +134,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
               type="button"
               styleType={AppearanceStyleType.alert}
               fullWidth
-              onClick={() => setStatusAndSubmit(ListingStatus.pending)}
+              onClick={() => setStatus(ListingStatus.pending)}
               border={AppearanceBorderType.outlined}
             >
               {t("listings.actions.unpublish")}
@@ -162,7 +161,7 @@ const Aside = ({ type, setStatusAndSubmit, showCloseListingModal }: AsideProps) 
     }
 
     return elements
-  }, [listing.status, listingId, setStatusAndSubmit, showCloseListingModal, type])
+  }, [listing.status, listingId, setStatus, showCloseListingModal, type])
 
   return (
     <>
