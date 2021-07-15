@@ -11,7 +11,16 @@ export class refactorUnitTypesRentTypesAndPriorityTypes1625825502154 implements 
     await queryRunner.query(
       `ALTER TABLE "units" ADD CONSTRAINT "FK_1e193f5ffdda908517e47d4e021" FOREIGN KEY ("unit_type_id") REFERENCES "unit_types"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
-    for (const unitType of ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]) {
+
+    const unitTypeSeeds = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
+    const existingUnitTypes = (await queryRunner.query(`SELECT DISTINCT unit_type FROM units`)).map(
+      (result) => result.unit_type
+    )
+    const unitTypesSet = new Set()
+    for (const unitType of [...unitTypeSeeds, ...existingUnitTypes]) {
+      unitTypesSet.add(unitType)
+    }
+    for (const unitType of unitTypesSet.keys()) {
       const [
         newUnitType,
       ] = await queryRunner.query(`INSERT INTO "unit_types" (name) VALUES ($1) RETURNING id`, [
@@ -37,13 +46,25 @@ export class refactorUnitTypesRentTypesAndPriorityTypes1625825502154 implements 
     await queryRunner.query(
       `ALTER TABLE "units" ADD CONSTRAINT "FK_6981f323d01ba8d55190480078d" FOREIGN KEY ("priority_type_id") REFERENCES "unit_accessibility_priority_types"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
-    for (const accessibilityPriorityType of [
+
+    const accessibilityPriorityTypeSeeds = [
       "Mobility and Hearing & Visual",
       "Mobility and Mobility with Hearing & Visual",
       "Mobility and hearing",
       "Mobility",
       "mobility",
+    ]
+    const existingAccessibilityPriorityTypes = (
+      await queryRunner.query(`SELECT DISTINCT priority_type FROM units`)
+    ).map((result) => result.priority_type).filter(result => result !== null)
+    const accessibilityPriorityTypeSet = new Set()
+    for (const accessibilityPriorityType of [
+      ...accessibilityPriorityTypeSeeds,
+      ...existingAccessibilityPriorityTypes,
     ]) {
+      accessibilityPriorityTypeSet.add(accessibilityPriorityType)
+    }
+    for (const accessibilityPriorityType of accessibilityPriorityTypeSet.keys()) {
       const [
         newAccessibilityPriorityType,
       ] = await queryRunner.query(
