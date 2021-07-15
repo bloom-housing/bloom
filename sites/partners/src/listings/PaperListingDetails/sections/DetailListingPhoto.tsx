@@ -18,7 +18,7 @@ const DetailListingPhoto = () => {
   if (listing.image == null && listing.assets.length > 0) {
     listingFormPhoto = listing.assets.find((asset) => asset.label == "building")
   }
-  const listingPhotoUrl = listingFormPhoto.fileId.match(/https?:\/\//)
+  const listingPhotoUrl = /https?:\/\//.exec(listingFormPhoto.fileId)
     ? listingFormPhoto.fileId
     : cloudinaryUrlFromId(listingFormPhoto.fileId)
 
