@@ -203,7 +203,7 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     return dueTime
   }
   units.forEach((unit) => {
-    switch (unit.unitType.name) {
+    switch (unit.unitType?.name) {
       case "fourBdrm":
         unit.numBedrooms = 4
         break
