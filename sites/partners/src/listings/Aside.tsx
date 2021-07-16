@@ -17,7 +17,7 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 type AsideProps = {
   type: AsideType
   setStatus?: (status: ListingStatus) => void
-  showCloseListingModal: () => void
+  showCloseListingModal?: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
@@ -125,7 +125,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
               type="button"
               styleType={AppearanceStyleType.secondary}
               fullWidth
-              onClick={() => showCloseListingModal()}
+              onClick={() => showCloseListingModal && showCloseListingModal()}
             >
               {t("listings.actions.close")}
             </Button>
