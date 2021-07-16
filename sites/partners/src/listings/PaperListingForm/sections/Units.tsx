@@ -16,16 +16,14 @@ import {
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
 import { TempUnit } from "../"
-import { AmiChart } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
-  amiCharts: AmiChart[]
   disableUnitsAccordion: boolean
 }
 
-const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitProps) => {
+const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
 
@@ -79,7 +77,7 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
       setUnits([...units, newUnit])
     }
   }
-  console.log("units = ", units)
+
   const unitTableData = useMemo(
     () =>
       units.map((unit) => ({
@@ -88,7 +86,7 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType.name,
+        priorityType: unit.priorityType?.name,
         status: unit.status,
         action: (
           <div className="flex">
@@ -174,7 +172,6 @@ const FormUnits = ({ units, setUnits, amiCharts, disableUnitsAccordion }: UnitPr
           onSubmit={(unit) => saveUnit(unit)}
           onClose={() => setUnitDrawer(null)}
           units={units}
-          amiCharts={amiCharts}
           currentTempId={unitDrawer}
         />
       </Drawer>

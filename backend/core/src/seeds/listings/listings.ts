@@ -21,7 +21,7 @@ export type PropertySeedType = Omit<
 
 export type UnitSeedType = Omit<UnitCreateDto, "property">
 
-export type ApplicationMethodSeedType = Omit<ApplicationMethodDto, "listing">
+export type ApplicationMethodSeedType = ApplicationMethodDto
 
 export type ListingSeedType = Omit<
   ListingCreateDto,
