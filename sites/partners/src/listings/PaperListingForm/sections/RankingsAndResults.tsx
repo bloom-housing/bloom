@@ -1,6 +1,6 @@
 import React from "react"
 import moment from "moment"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -15,6 +15,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
 import { getLotteryEvent } from "../../helpers"
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -24,22 +25,30 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
+  const { register, watch, control } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 
-  const waitlistOpen: YesNoAnswer = watch(
-    "waitlistOpenQuestion",
-    listing?.isWaitlistOpen ? YesNoAnswer.Yes : YesNoAnswer.No
-  )
-  const showWaitlistSize: YesNoAnswer = watch(
-    "waitlistSizeQuestion",
-    listing?.waitlistMaxSize ? YesNoAnswer.Yes : YesNoAnswer.No
-  )
-  const reviewOrder = watch(
-    "reviewOrderQuestion",
-    lotteryEvent ? "reviewOrderLottery" : "reviewOrderFCFS"
-  )
+  const waitlistOpen = useWatch({
+    control,
+    name: "waitlistOpenQuestion",
+    defaultValue: listing?.isWaitlistOpen ? YesNoAnswer.Yes : YesNoAnswer.No,
+  })
+
+  const showWaitlistSize = useWatch({
+    control,
+    name: "waitlistSizeQuestion",
+    defaultValue: listing?.waitlistMaxSize ? YesNoAnswer.Yes : YesNoAnswer.No,
+  })
+
+  const reviewOrder = useWatch({
+    control,
+    name: "reviewOrderQuestion",
+    defaultValue:
+      listing.reviewOrderType === ListingReviewOrder.lottery
+        ? "reviewOrderLottery"
+        : "reviewOrderFCFS",
+  })
 
   const yesNoRadioOptions = [
     {

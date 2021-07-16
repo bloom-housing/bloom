@@ -1,5 +1,5 @@
 import React from "react"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import { t, GridSection, DateField, TimeField } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
@@ -13,8 +13,12 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
-  const enableDueDate: YesNoAnswer = watch("dueDateQuestion")
+  const { register, watch, control } = formMethods
+
+  const enableDueDate = useWatch({
+    control,
+    name: "dueDateQuestion",
+  })
 
   return (
     <div>
