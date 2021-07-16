@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file. The format 
 ### UI Components
 
 - Added:
+  - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
   - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
   - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
 
