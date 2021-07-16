@@ -354,7 +354,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           )
 
           await router.push(`/listings/${result.id}`)
-          void router.reload()
         }
       } catch (err) {
         console.log(err)
