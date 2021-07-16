@@ -350,8 +350,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           )
 
           void router.push(`/listings/${result.id}`)
+          void router.reload()
         }
       } catch (err) {
+        console.log(err)
         setLoading(false)
         setAlert("api")
       }
@@ -450,6 +452,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               void setStatus(ListingStatus.closed)
+              setSubmitData({ ...submitData, ready: true })
               setCloseModal(false)
             }}
           >

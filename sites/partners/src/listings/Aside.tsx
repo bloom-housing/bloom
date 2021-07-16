@@ -93,7 +93,6 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
         </GridCell>,
         <GridCell key="btn-save">
           <Button
-            type="button"
             styleType={AppearanceStyleType.primary}
             fullWidth
             onClick={() => {
@@ -109,7 +108,6 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
         elements.push(
           <GridCell key="btn-publish">
             <Button
-              type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
               onClick={() => setStatus(ListingStatus.active)}
@@ -133,7 +131,6 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
             </Button>
 
             <Button
-              type="button"
               styleType={AppearanceStyleType.alert}
               fullWidth
               onClick={() => setStatus(ListingStatus.pending)}
