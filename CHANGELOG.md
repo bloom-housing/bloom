@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. The format 
 ## Detroit Team M7
 - Added:
   - Debug flags for public and partner site ([#195](https://github.com/CityOfDetroit/bloom/pull/195))
+  - Upstream filter param parsing, with changes to support pagination params and filters that aren't on the listings table ([#180](https://github.com/CityOfDetroit/bloom/pull/180))
 
 ## Unreleased
 

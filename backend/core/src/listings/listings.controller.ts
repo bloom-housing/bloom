@@ -17,13 +17,14 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags, getSchemaPath } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
   ListingDto,
   ListingUpdateDto,
   PaginatedListingsDto,
+  ListingFilterParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -36,17 +37,19 @@ import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { clearCacheKeys } from "../libs/cacheLib"
 
-export class ListingsListQueryParams extends PaginationQueryParams {
+export class ListingsQueryParams extends PaginationQueryParams {
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "Fox Creek",
+    name: "filter",
     required: false,
-    description: "The neighborhood to filter by",
+    type: [String],
+    items: {
+      $ref: getSchemaPath(ListingFilterParams),
+    },
+    example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  neighborhood?: string
+  filter?: ListingFilterParams
 
   @Expose()
   @ApiProperty({
@@ -73,12 +76,13 @@ export class ListingsController {
     this.cacheKeys = ["/listings", "/listings?filter[$comparison]=%3C%3E&filter[status]=pending"]
   }
 
+  // TODO: limit requests to defined fields
   @Get()
   @ApiOperation({ summary: "List listings", operationId: "list" })
   @UseInterceptors(CacheInterceptor)
   public async getAll(
     @Headers("origin") origin: string,
-    @Query() queryParams: ListingsListQueryParams
+    @Query() queryParams: ListingsQueryParams
   ): Promise<PaginatedListingsDto> {
     return await this.listingsService.list(origin, queryParams)
   }

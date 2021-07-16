@@ -4,6 +4,8 @@ import { getRepositoryToken } from "@nestjs/typeorm"
 import { Listing } from "./entities/listing.entity"
 import { mapTo } from "../shared/mapTo"
 import { ListingDto } from "./dto/listing.dto"
+import { Compare } from "../shared/dto/filter.dto"
+import { ListingsQueryParams } from "./listings.controller"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -65,7 +67,14 @@ describe("ListingsService", () => {
     it("should add a WHERE clause if the neighborhood filter is applied", async () => {
       const expectedNeighborhood = "Fox Creek"
 
-      const listings = await service.list(origin, { neighborhood: expectedNeighborhood })
+      const queryParams: ListingsQueryParams = {
+        filter: {
+          $comparison: Compare["="],
+          neighborhood: expectedNeighborhood,
+        },
+      }
+
+      const listings = await service.list(origin, queryParams)
 
       expect(listings.items).toEqual(mockListingsDto)
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(

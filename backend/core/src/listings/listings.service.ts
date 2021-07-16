@@ -7,14 +7,16 @@ import {
   ListingCreateDto,
   ListingUpdateDto,
   PaginatedListingsDto,
+  ListingFilterParams,
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
-import { ListingsListQueryParams } from "./listings.controller"
+import { ListingsQueryParams } from "./listings.controller"
 import { mapTo } from "../shared/mapTo"
+import { addFilter } from "../shared/filter"
 
 @Injectable()
 export class ListingsService {
@@ -35,20 +37,15 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(
-    origin: string,
-    params: ListingsListQueryParams
-  ): Promise<PaginatedListingsDto> {
-    let query = this.getQueryBuilder().orderBy({
+  public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
+    let qb = this.getQueryBuilder()
+    if (params.filter) {
+      addFilter<ListingFilterParams>(params.filter, "listings", qb)
+    }
+
+    qb.orderBy({
       "listings.id": "DESC",
     })
-
-    if (params.neighborhood) {
-      // This works because there's only one property per listing. If that
-      // weren't true for a field (for example, if we filtered on a unit's
-      // fields), we couldn't use this type of where clause.
-      query.andWhere("property.neighborhood = :neighborhood", { neighborhood: params.neighborhood })
-    }
 
     let currentPage: number = params.page
     let itemsPerPage: number = params.limit
@@ -59,9 +56,9 @@ export class ListingsService {
     if (currentPage > 0 && itemsPerPage > 0) {
       // Calculate the number of listings to skip (because they belong to lower page numbers)
       const skip = (currentPage - 1) * itemsPerPage
-      query = query.skip(skip).take(itemsPerPage)
+      qb = qb.skip(skip).take(itemsPerPage)
 
-      listings = await query.getMany()
+      listings = await qb.getMany()
 
       itemCount = listings.length
 
@@ -71,7 +68,7 @@ export class ListingsService {
     } else {
       // If currentPage or itemsPerPage aren't specified (or are invalid), issue the SQL query to
       // get all listings (no pagination).
-      listings = await query.getMany()
+      listings = await qb.getMany()
 
       currentPage = 1
       totalPages = 1

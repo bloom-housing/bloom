@@ -691,4 +691,12 @@ export class ListingFilterParams extends BaseFilter {
     required: false,
   })
   status?: ListingStatus
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Fox Creek",
+    required: false,
+  })
+  neighborhood?: string
 }
