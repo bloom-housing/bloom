@@ -362,7 +362,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, editMode, listingsService, listing.id, router]
+    [units, editMode, listingsService, listing, router]
   )
 
   const onError = () => {
