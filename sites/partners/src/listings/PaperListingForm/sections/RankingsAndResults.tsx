@@ -45,7 +45,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     control,
     name: "reviewOrderQuestion",
     defaultValue:
-      listing.reviewOrderType === ListingReviewOrder.lottery
+      listing?.reviewOrderType === ListingReviewOrder.lottery
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })
