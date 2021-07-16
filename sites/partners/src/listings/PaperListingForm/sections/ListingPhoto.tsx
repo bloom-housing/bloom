@@ -16,8 +16,6 @@ import {
 } from "@bloom-housing/ui-components"
 import { AssetsService } from "@bloom-housing/backend-core/types"
 
-let newCloudinaryId = ""
-
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 
@@ -29,18 +27,26 @@ const ListingPhoto = () => {
 
   const listingFormPhoto = watch("image")
 
+  /*
+    Set state for the drawer, upload progress, drawer, and more
+  */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = React.useState(0)
-  const [cloudinaryImage, setCloudinaryImage] = React.useState("")
+  const [cloudinaryData, setCloudinaryData] = React.useState({
+    id: "",
+    url: "",
+  })
   const resetDrawerState = () => {
-    newCloudinaryId = ""
     setProgressValue(0)
-    setCloudinaryImage("")
+    setCloudinaryData({
+      id: "",
+      url: "",
+    })
     setDrawerState(false)
   }
 
   const savePhoto = () => {
-    setValue("image", { fileId: newCloudinaryId, label: "cloudinaryBuilding" })
+    setValue("image", { fileId: cloudinaryData.id, label: "cloudinaryBuilding" })
   }
   const deletePhoto = () => {
     setValue("image", { fileId: "", label: "" })
@@ -52,22 +58,27 @@ const ListingPhoto = () => {
     actions: "",
   }
 
+  /*
+    Show a preview of the uploaded file within the photo drawer
+  */
   const previewTableRows = []
-  if (cloudinaryImage != "") {
+  if (cloudinaryData.url != "") {
     previewTableRows.push({
       preview: (
         <TableThumbnail>
-          <img src={cloudinaryImage} />
+          <img src={cloudinaryData.url} />
         </TableThumbnail>
       ),
-      fileName: newCloudinaryId.split("/").slice(-1).join(),
+      fileName: cloudinaryData.id.split("/").slice(-1).join(),
       actions: (
         <Button
           type="button"
           className="font-semibold uppercase text-red-700"
           onClick={() => {
-            newCloudinaryId = ""
-            setCloudinaryImage("")
+            setCloudinaryData({
+              id: "",
+              url: "",
+            })
             setProgressValue(0)
           }}
           unstyled
@@ -78,6 +89,9 @@ const ListingPhoto = () => {
     })
   }
 
+  /*
+    Show the selected photo in the listing form if its present
+  */
   const listingPhotoTableRows = []
   if (listingFormPhoto?.fileId && listingFormPhoto.fileId != "") {
     const listingPhotoUrl = listingFormPhoto.fileId.match(/https?:\/\//)
@@ -107,7 +121,7 @@ const ListingPhoto = () => {
             type="button"
             className="font-semibold uppercase text-red-700"
             onClick={() => {
-              newCloudinaryId = ""
+              setCloudinaryData({ ...cloudinaryData, id: "" })
               deletePhoto()
             }}
             unstyled
@@ -119,6 +133,9 @@ const ListingPhoto = () => {
     })
   }
 
+  /*
+    Uploader callback for the dropzone
+  */
   const fileUploader = async (file: File) => {
     setProgressValue(1)
 
@@ -151,9 +168,11 @@ const ListingPhoto = () => {
       uploadPreset,
       tag,
     }).then((response) => {
-      newCloudinaryId = response.data.public_id
       setProgressValue(100)
-      setCloudinaryImage(cloudinaryUrlFromId(response.data.public_id))
+      setCloudinaryData({
+        id: response.data.public_id,
+        url: cloudinaryUrlFromId(response.data.public_id),
+      })
     })
   }
 
@@ -219,7 +238,7 @@ const ListingPhoto = () => {
             accept="image/*"
             progress={progressValue}
           />
-          {cloudinaryImage != "" && (
+          {cloudinaryData.url != "" && (
             <MinimalTable headers={photoTableHeaders} data={previewTableRows}></MinimalTable>
           )}
         </section>
