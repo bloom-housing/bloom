@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
   - Added cache manager to lisitngs controller, added add listing button and cleanup ([#1422](https://github.com/bloom-housing/bloom/pull/1422))
+  - Added unit_accessibility_priority_types, unit_rent_types, unit_types table and corresponding API endpoints (also created a relation between Unit and mentioned tables) ([#1439](https://github.com/bloom-housing/bloom/pull/1439)
 
 ### Backend
 
