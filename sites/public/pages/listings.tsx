@@ -1,11 +1,5 @@
 import Head from "next/head"
-import {
-  ListingsList,
-  PageHeader,
-  AgPagination,
-  AG_PER_PAGE_OPTIONS,
-  t,
-} from "@bloom-housing/ui-components"
+import { ListingsList, PageHeader, AgPagination, t } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import React, { useEffect, useState } from "react"
@@ -17,7 +11,7 @@ const ListingsPage = () => {
 
   /* Pagination state */
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const itemsPerPage = 10
 
   function setPage(page: number) {
     if (page != currentPage) {
@@ -28,16 +22,10 @@ const ListingsPage = () => {
         },
         undefined,
         { shallow: true }
-      ) 
-      setCurrentPage(page)  
-    } 
-  }
-
-  useEffect(() => {
-    if (currentPage != 1) {
-      setPage(1)
+      )
+      setCurrentPage(page)
     }
-  }, [itemsPerPage])
+  }
 
   // Checks if the url is updated manually.
   useEffect(() => {
@@ -70,7 +58,6 @@ const ListingsPage = () => {
             sticky={true}
             quantityLabel={t("listings.totalListings")}
             setCurrentPage={setPage}
-            setItemsPerPage={setItemsPerPage}
           />
         </div>
       )}
