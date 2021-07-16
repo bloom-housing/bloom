@@ -20,7 +20,6 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
-  AmiChart,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -31,8 +30,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { getAmiChartId, stringToBoolean, stringToNumber } from "../../../lib/helpers"
-import { useAmiChartList } from "../../../lib/hooks"
+import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -144,9 +142,9 @@ const defaults: FormListing = {
   isWaitlistOpen: null,
   waitlistOpenSpots: null,
   whatToExpect: {
-    applicantsWillBeContacted: null,
-    allInfoWillBeVerified: null,
-    bePreparedIfChosen: null,
+    applicantsWillBeContacted: "",
+    allInfoWillBeVerified: "",
+    bePreparedIfChosen: "",
   },
   units: [],
   accessibility: "",
@@ -186,7 +184,7 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
-const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUnit[]) => {
+const formatFormData = (data: FormListing, units: TempUnit[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
@@ -207,7 +205,10 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
     return dueTime
   }
   units.forEach((unit) => {
-    switch (unit.unitType) {
+    switch (unit.unitType.name) {
+      case "fourBdrm":
+        unit.numBedrooms = 4
+        break
       case "threeBdrm":
         unit.numBedrooms = 3
         break
@@ -228,14 +229,6 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
 
     if (unit.sqFeet.length === 0) {
       delete unit.sqFeet
-    }
-
-    const amiChartId = getAmiChartId(unit.amiChart)
-    if (amiChartId) {
-      const chart = amiCharts.find((chart) => chart.id === amiChartId)
-      unit.amiChart = chart
-    } else {
-      delete unit.amiChart
     }
 
     if (unit.id === undefined) {
@@ -302,10 +295,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const { listingsService } = useContext(AuthContext)
 
-  /**
-   * fetch options
-   */
-  const { data: amiCharts = [] } = useAmiChartList()
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [status, setStatus] = useState<ListingStatus>(null)
@@ -323,7 +312,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, trigger } = formMethods
+  const { handleSubmit } = formMethods
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
@@ -336,19 +325,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   */
   const onSubmit = useCallback(
     async (data: FormListing) => {
-      const validation = await trigger()
-
-      if (!validation) {
-        setLoading(false)
-        return
-      }
-
       try {
         data = {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, amiCharts, units)
+        const formattedData = formatFormData(data, units)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -356,7 +338,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
           : await listingsService.create({ body: formattedData })
         setLoading(false)
-
         if (result) {
           setSiteAlertMessage(
             editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
@@ -370,10 +351,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [amiCharts, editMode, listing?.id, listingsService, router, status, trigger, units]
+    [status, units, editMode, listingsService, listing?.id, router]
   )
 
   const onError = () => {
+    setLoading(false)
     setAlert("form")
   }
 
@@ -426,7 +408,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <Units
                       units={units}
                       setUnits={setUnits}
-                      amiCharts={amiCharts}
                       disableUnitsAccordion={listing?.disableUnitsAccordion}
                     />
                     <AdditionalFees />
