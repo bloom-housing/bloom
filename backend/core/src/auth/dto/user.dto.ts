@@ -20,7 +20,6 @@ import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 
 export class UserDto extends OmitType(User, [
-  "applications",
   "isAdmin",
   "leasingAgentInListings",
   "passwordHash",
@@ -36,7 +35,6 @@ export class UserDto extends OmitType(User, [
 }
 
 export class UserBasicDto extends OmitType(User, [
-  "applications",
   "dob",
   "isAdmin",
   "leasingAgentInListings",

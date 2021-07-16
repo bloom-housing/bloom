@@ -60,7 +60,9 @@ const UnitTables = (props: UnitTablesProps) => {
     <>
       {unitSummaries.map((unitSummary: UnitSummary) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
-        const units = props.units.filter((unit: Unit) => unit.unitType == unitSummary.unitType)
+        const units = props.units.filter(
+          (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
+        )
         const unitsFormatted = [] as Array<Record<string, React.ReactNode>>
         let floorSection
         units.forEach((unit: Unit) => {
@@ -91,7 +93,7 @@ const UnitTables = (props: UnitTablesProps) => {
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="toggle-header">
-                <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>:&nbsp;
+                <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
                 {unitsLabel(units)},&nbsp;
                 {formatRange(unitSummary.areaRange)} {t("t.squareFeet")}
                 {floorSection}

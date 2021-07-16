@@ -15,12 +15,12 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
-  setStatusAndSubmit?: (status: ListingStatus) => Promise<void>
+  setStatus?: (status: ListingStatus) => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
+const Aside = ({ type, setStatus }: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -67,13 +67,13 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
           <Button
             styleType={AppearanceStyleType.success}
             fullWidth
-            onClick={() => setStatusAndSubmit(ListingStatus.active)}
+            onClick={() => setStatus(ListingStatus.active)}
           >
             {t("listings.actions.publish")}
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button fullWidth onClick={() => setStatusAndSubmit(ListingStatus.pending)}>
+          <Button fullWidth onClick={() => setStatus(ListingStatus.pending)}>
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
@@ -97,7 +97,7 @@ const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
     }
 
     return elements
-  }, [listingId, setStatusAndSubmit, type])
+  }, [listingId, setStatus, type])
 
   return (
     <>

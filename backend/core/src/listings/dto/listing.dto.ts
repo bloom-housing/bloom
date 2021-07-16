@@ -33,7 +33,6 @@ import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset
 
 export class ListingDto extends OmitType(Listing, [
   "applications",
-  "applicationFlaggedSets",
   "image",
   "jurisdiction",
   "leasingAgents",
@@ -126,7 +125,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => UnitDto)
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.units
+      return obj.property?.units
     },
     { toClassOnly: true }
   )

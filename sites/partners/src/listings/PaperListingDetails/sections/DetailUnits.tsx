@@ -25,11 +25,11 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     () =>
       listing?.units.map((unit) => ({
         number: unit.number,
-        unitType: t(`listings.unitTypes.${unit.unitType}`),
+        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType,
+        priorityType: unit.priorityType?.name,
         status: unit.status,
         action: (
           <Button
