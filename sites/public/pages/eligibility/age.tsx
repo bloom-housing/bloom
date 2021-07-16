@@ -5,18 +5,17 @@ Prompts the user for their age to filter for properties that are age dependent.
 import { AppearanceStyleType, Button, FormCard, t, Form, Field } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../lib/hooks"
 import "./age.scss"
 import React from "react"
+import {useRouter} from 'next/router';
 
 const EligibilityAge = () => {
-  // The conductor is not yet implemented.
-  const { conductor } = useFormConductor("age")
+  const router = useRouter();
 
   /* Form Handler */
   const { handleSubmit, register } = useForm()
   const onSubmit = () => {
-    conductor.routeToNextOrReturnUrl()
+    // Not yet implemented.
   }
 
   return (
@@ -47,7 +46,7 @@ const EligibilityAge = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
+                onClick={() => router.push('/eligibility/disability')}
               >
                 {t("t.next")}
               </Button>

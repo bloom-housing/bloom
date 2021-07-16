@@ -5,17 +5,16 @@ Whether the applicant has accessibility needs.
 import { AppearanceStyleType, Button, FormCard, t, Form, Field } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../lib/hooks"
 import React from "react"
+import {useRouter} from 'next/router';
 
 const EligibilityDisability = () => {
-  // The conductor is not yet implemented.
-  const { conductor } = useFormConductor("whatToExpect")
+  const router = useRouter();
 
   /* Form Handler */
   const { handleSubmit, register } = useForm()
   const onSubmit = () => {
-    conductor.routeToNextOrReturnUrl()
+    // Not yet implemented.
   }
 
   return (
@@ -73,7 +72,7 @@ const EligibilityDisability = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
+                onClick={() => router.push('/eligibility/income')}
               >
                 {t("t.next")}
               </Button>

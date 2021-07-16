@@ -5,17 +5,16 @@ Explanation about the purpose of the questionnaire.
 import { AppearanceStyleType, Button, FormCard, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { useFormConductor } from "../../lib/hooks"
 import React from "react"
+import { useRouter } from 'next/router'
 
 const EligibilityWelcome = () => {
-  // The conductor is not yet implemented.
-  const { conductor } = useFormConductor("welcome")
+  const router = useRouter();
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    conductor.routeToNextOrReturnUrl()
+    // Not implemented yet.
   }
 
   return (
@@ -36,7 +35,7 @@ const EligibilityWelcome = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => conductor.setNavigatedBack(false)}
+                onClick={() => router.push('/eligibility/bedrooms')}
               >
                 {t("t.next")}
               </Button>
