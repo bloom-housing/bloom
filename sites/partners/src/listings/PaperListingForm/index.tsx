@@ -189,6 +189,8 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
   const getDueTime = () => {
+    if (!data.applicationDueTimeField) return null
+
     let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
     if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
       dueTimeHours = 0
@@ -246,9 +248,11 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-    applicationDueDate: new Date(
-      `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
-    ),
+    applicationDueDate: data.applicationDueDateField
+      ? new Date(
+          `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+        )
+      : null,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
       data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
@@ -329,7 +333,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
   */
   const onSubmit = useCallback(
-    async (data: FormListing) => {
+    async (data: FormListing, status: ListingStatus) => {
       try {
         data = {
           ...data,
@@ -349,7 +353,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             "success"
           )
 
-          void router.push(`/listings/${result.id}`)
+          await router.push(`/listings/${result.id}`)
           void router.reload()
         }
       } catch (err) {
@@ -358,7 +362,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [status, units, editMode, listingsService, listing?.id, router]
+    [units, editMode, listingsService, listing.id, router]
   )
 
   const onError = () => {
@@ -368,7 +372,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   useEffect(() => {
     if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data)
+      void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
@@ -386,11 +390,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 {t("t.back")}
               </Button>
             }
-            tagStyle={
-              listing?.status == ListingStatus.active
-                ? AppearanceStyleType.success
-                : AppearanceStyleType.primary
-            }
+            tagStyle={(() => {
+              switch (listing?.status) {
+                case ListingStatus.active:
+                  return AppearanceStyleType.success
+                case ListingStatus.closed:
+                  return AppearanceStyleType.closed
+                default:
+                  return AppearanceStyleType.primary
+              }
+            })()}
             tagLabel={
               listing?.status
                 ? t(`listings.listingStatus.${listing.status}`)
@@ -451,8 +460,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              void setStatus(ListingStatus.closed)
-              setSubmitData({ ...submitData, ready: true })
+              setStatus(ListingStatus.closed)
+              void onSubmit(submitData.data, ListingStatus.closed)
               setCloseModal(false)
             }}
           >
