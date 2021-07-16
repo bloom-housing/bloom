@@ -3,6 +3,7 @@ import * as React from "react"
 import moment from "moment"
 import { ApplicationStatus } from "./ApplicationStatus"
 import Archer from "../../__tests__/fixtures/archer.json"
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 export default {
   component: ApplicationStatus,
@@ -43,13 +44,9 @@ export const openedAlready = () => <ApplicationStatus listing={listing3} />
 const listing4 = Object.assign({}, Archer) as any
 days = 15
 listing4.applicationOpenDate = moment().subtract(days, "days").format()
-listing4.applicationDueDate = ""
-export const openedWithNoDue = () => <ApplicationStatus listing={listing4} />
+listing4.applicationDueDate = null
+listing4.events = []
+listing4.reviewOrderType = ListingReviewOrder.firstComeFirstServe
+export const openedWithFCFS = () => <ApplicationStatus listing={listing4} />
 
-const listing5 = Object.assign({}, Archer) as any
-days = 15
-listing5.applicationOpenDate = moment().subtract(days, "days").format()
-listing5.applicationDueDate = null
-export const openedWithFCFS = () => <ApplicationStatus listing={listing5} />
-
-export const openedWithFCFSVivid = () => <ApplicationStatus listing={listing5} vivid />
+export const openedWithFCFSVivid = () => <ApplicationStatus listing={listing4} vivid />
