@@ -2,12 +2,12 @@ import React, { useState } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
+import Icon from "../icons/Icon"
+import { t } from "../helpers/translator"
 
 export interface TableHeaders {
   [key: string]: string
 }
-
-export const HeaderCell = (props: { children: React.ReactNode }) => <th>{props.children}</th>
 
 export const Cell = (props: {
   headerLabel?: string
@@ -34,14 +34,24 @@ export interface StandardTableProps {
 }
 
 export const StandardTable = (props: StandardTableProps) => {
-  const { headers = {}, data = [], cellClassName } = props
+  const { headers = {}, cellClassName } = props
 
   const [tableData, setTableData] = useState(props.data)
 
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{getTranslationWithArguments(header)}</HeaderCell>
+    return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
   })
+
+  if (props.draggable) {
+    headerLabels.splice(
+      0,
+      0,
+      <th key={"header-draggable"} className={"table__draggable-cell"}>
+        {t("t.sort")}
+      </th>
+    )
+  }
 
   const body = tableData.map((row: Record<string, React.ReactNode>, dataIndex) => {
     const rowKey = row["id"]
@@ -62,19 +72,41 @@ export const StandardTable = (props: StandardTableProps) => {
         </Cell>
       )
     })
+    if (props.draggable) {
+      cols.splice(
+        0,
+        0,
+        <Cell
+          key={`${dataIndex}-draggable`}
+          headerLabel={t("t.sort")}
+          className={`table__draggable-cell`}
+        >
+          <Icon symbol={"draggable"} size={"medium"} />
+        </Cell>
+      )
+    }
     return (
-      <Draggable draggableId={rowKey} index={dataIndex}>
-        {(provided) => (
-          <tr
-            id={rowKey}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
+      <>
+        {props.draggable ? (
+          <Draggable draggableId={rowKey} index={dataIndex} key={rowKey}>
+            {(provided) => (
+              <tr
+                key={rowKey}
+                id={rowKey}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+              >
+                {cols}
+              </tr>
+            )}
+          </Draggable>
+        ) : (
+          <tr id={rowKey} key={rowKey}>
             {cols}
           </tr>
         )}
-      </Draggable>
+      </>
     )
   })
 
@@ -110,20 +142,28 @@ export const StandardTable = (props: StandardTableProps) => {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="standard-table">
-        {(provided) => (
-          <div style={{ overflowX: "auto" }} {...provided.droppableProps} ref={provided.innerRef}>
-            <table className={tableClasses.join(" ")}>
-              <thead>
-                <tr>{headerLabels}</tr>
-              </thead>
-              <tbody>{body}</tbody>
-            </table>
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <>
+      <div style={{ overflowX: "auto" }}>
+        <table className={tableClasses.join(" ")}>
+          <thead>
+            <tr>{headerLabels}</tr>
+          </thead>
+          {props.draggable ? (
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="standard-table">
+                {(provided) => (
+                  <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                    {body}
+                    {provided.placeholder}
+                  </tbody>
+                )}
+              </Droppable>
+            </DragDropContext>
+          ) : (
+            <tbody>{body}</tbody>
+          )}
+        </table>
+      </div>
+    </>
   )
 }

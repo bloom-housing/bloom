@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { HeaderCell, Cell, StandardTableProps } from "./StandardTable"
+import { Cell, StandardTableProps } from "./StandardTable"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
@@ -17,7 +17,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
   const headerLabels = Object.values(headers).map((col, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{col}</HeaderCell>
+    return <th key={uniqKey}>{col}</th>
   })
 
   const body: React.ReactNode[] = []
