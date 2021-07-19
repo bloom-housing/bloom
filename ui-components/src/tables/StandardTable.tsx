@@ -126,7 +126,6 @@ export const StandardTable = (props: StandardTableProps) => {
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
-
     return result
   }
 
@@ -142,28 +141,26 @@ export const StandardTable = (props: StandardTableProps) => {
   }
 
   return (
-    <>
-      <div style={{ overflowX: "auto" }}>
-        <table className={tableClasses.join(" ")}>
-          <thead>
-            <tr>{headerLabels}</tr>
-          </thead>
-          {props.draggable ? (
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="standard-table">
-                {(provided) => (
-                  <tbody {...provided.droppableProps} ref={provided.innerRef}>
-                    {body}
-                    {provided.placeholder}
-                  </tbody>
-                )}
-              </Droppable>
-            </DragDropContext>
-          ) : (
-            <tbody>{body}</tbody>
-          )}
-        </table>
-      </div>
-    </>
+    <div style={{ overflowX: "auto" }}>
+      <table className={tableClasses.join(" ")}>
+        <thead>
+          <tr>{headerLabels}</tr>
+        </thead>
+        {props.draggable ? (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="standard-table">
+              {(provided) => (
+                <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                  {body}
+                  {provided.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : (
+          <tbody>{body}</tbody>
+        )}
+      </table>
+    </div>
   )
 }
