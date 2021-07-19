@@ -1,16 +1,11 @@
-import * as React from "react"
+import React, { useState } from "react"
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
 
 export interface TableHeaders {
   [key: string]: string
 }
-
-export const Row = (props: { id?: string; className?: string; children: React.ReactNode }) => (
-  <tr id={props.id} className={props.className}>
-    {props.children}
-  </tr>
-)
 
 export const HeaderCell = (props: { children: React.ReactNode }) => <th>{props.children}</th>
 
@@ -30,6 +25,7 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 }
 
 export interface StandardTableProps {
+  draggable?: boolean
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
   tableClassName?: string
@@ -40,12 +36,14 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, data = [], cellClassName } = props
 
+  const [tableData, setTableData] = useState(props.data)
+
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <HeaderCell key={uniqKey}>{getTranslationWithArguments(header)}</HeaderCell>
   })
 
-  const body = data.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData.map((row: Record<string, React.ReactNode>, dataIndex) => {
     const rowKey = row["id"]
       ? `row-${row["id"] as string}`
       : process.env.NODE_ENV === "test"
@@ -65,9 +63,18 @@ export const StandardTable = (props: StandardTableProps) => {
       )
     })
     return (
-      <Row id={rowKey} key={rowKey}>
-        {cols}
-      </Row>
+      <Draggable draggableId={rowKey} index={dataIndex}>
+        {(provided) => (
+          <tr
+            id={rowKey}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+          >
+            {cols}
+          </tr>
+        )}
+      </Draggable>
     )
   })
 
@@ -79,14 +86,44 @@ export const StandardTable = (props: StandardTableProps) => {
     tableClasses.push(props.tableClassName)
   }
 
+  const reorder = (
+    list: Record<string, React.ReactNode>[],
+    startIndex: number,
+    endIndex: number
+  ) => {
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
+
+    return result
+  }
+
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return
+    }
+    if (result.destination.index === result.source.index) {
+      return
+    }
+    const reorderedTableData = reorder(tableData, result.source.index, result.destination.index)
+    setTableData(reorderedTableData)
+  }
+
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table className={tableClasses.join(" ")}>
-        <thead>
-          <Row>{headerLabels}</Row>
-        </thead>
-        <tbody>{body}</tbody>
-      </table>
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="standard-table">
+        {(provided) => (
+          <div style={{ overflowX: "auto" }} {...provided.droppableProps} ref={provided.innerRef}>
+            <table className={tableClasses.join(" ")}>
+              <thead>
+                <tr>{headerLabels}</tr>
+              </thead>
+              <tbody>{body}</tbody>
+            </table>
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   )
 }

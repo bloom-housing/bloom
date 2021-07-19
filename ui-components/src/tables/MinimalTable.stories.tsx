@@ -57,3 +57,5 @@ export const ImageCells = () => (
     flushRight={true}
   />
 )
+
+export const Draggable = () => <MinimalTable headers={headers} data={data} draggable={true} />
