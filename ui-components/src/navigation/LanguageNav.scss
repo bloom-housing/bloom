@@ -11,16 +11,22 @@
 
 .language-nav__list {
   @apply flex;
+}
 
-  button {
-    @apply py-2;
-    @apply px-2;
-    @apply text-gray-500;
-    @apply font-semibold;
-    @apply cursor-pointer;
+.language-nav__list-button {
+  @apply py-2;
+  @apply px-2;
+  @apply text-gray-500;
+  @apply font-semibold;
+  @apply cursor-pointer;
+  @apply bg-none;
 
-    &.is-active {
-      @apply text-white;
-    }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
+  }
+
+  &.is-active {
+    @apply text-white;
   }
 }

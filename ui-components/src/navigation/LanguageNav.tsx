@@ -32,7 +32,12 @@ const LanguageNav = ({ language }: LanguageNavProps) => {
                   onClick={() => {
                     void router.push(router.asPath, router.asPath, { locale: item.prefix || "en" })
                   }}
-                  className={routePrefix === item.prefix ? "is-active" : ""}
+                  className={
+                    routePrefix === item.prefix
+                      ? "language-nav__list-button is-active"
+                      : "language-nav__list-button"
+                  }
+                  type="button"
                 >
                   {item.label}
                 </button>
