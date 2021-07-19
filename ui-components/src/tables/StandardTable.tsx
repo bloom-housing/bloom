@@ -89,13 +89,14 @@ export const StandardTable = (props: StandardTableProps) => {
       <>
         {props.draggable ? (
           <Draggable draggableId={rowKey} index={dataIndex} key={rowKey}>
-            {(provided) => (
+            {(provided, snapshot) => (
               <tr
                 key={rowKey}
                 id={rowKey}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
                 ref={provided.innerRef}
+                className={snapshot.isDragging ? "table__is-dragging" : ""}
               >
                 {cols}
               </tr>

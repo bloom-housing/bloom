@@ -155,6 +155,10 @@ table.td-plain {
 }
 
 .table__draggable-cell {
-  width: 20px;
+  width: 35px;
   padding: 0px;
+}
+
+.table__is-dragging {
+  display: table;
 }
