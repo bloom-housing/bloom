@@ -43,6 +43,39 @@ export class ApplicationsService {
     return result
   }
 
+  public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
+    const qb = this._getQb(params)
+    const result = await qb.getMany()
+
+    // Get flagged applications
+    const flaggedQuery = await this.repository
+      .createQueryBuilder("applications")
+      .leftJoin(
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications",
+        "application_flagged_set_applications_applications.applications_id = applications.id"
+      )
+      .andWhere("applications.listing_id = :lid", { lid: params.listingId })
+      .select(
+        "applications.id, count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
+      )
+      .groupBy("applications.id")
+      .getRawAndEntities()
+
+    // Reorganize flagged to object to make it faster to map
+    const flagged = flaggedQuery.raw.reduce((obj, application) => {
+      return { ...obj, [application.id]: application.flagged }
+    }, {})
+    await Promise.all(
+      result.map(async (application) => {
+        // Because TypeOrm can't map extra flagged field we need to map it manually
+        application.flagged = flagged[application.id]
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+      })
+    )
+    return result
+  }
+
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
