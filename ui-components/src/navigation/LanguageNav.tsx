@@ -27,14 +27,15 @@ const LanguageNav = ({ language }: LanguageNavProps) => {
         <nav className="language-nav">
           <ul className="language-nav__list">
             {language.list?.map((item) => (
-              <li
-                key={item.prefix}
-                onClick={() => {
-                  void router.push(router.asPath, router.asPath, { locale: item.prefix || "en" })
-                }}
-                className={routePrefix === item.prefix ? "is-active" : ""}
-              >
-                {item.label}
+              <li key={item.prefix}>
+                <button
+                  onClick={() => {
+                    void router.push(router.asPath, router.asPath, { locale: item.prefix || "en" })
+                  }}
+                  className={routePrefix === item.prefix ? "is-active" : ""}
+                >
+                  {item.label}
+                </button>
               </li>
             ))}
           </ul>
