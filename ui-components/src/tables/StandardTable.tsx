@@ -53,7 +53,7 @@ export const StandardTable = (props: StandardTableProps) => {
     )
   }
 
-  const body = tableData.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData?.map((row: Record<string, React.ReactNode>, dataIndex) => {
     const rowKey = row["id"]
       ? `row-${row["id"] as string}`
       : process.env.NODE_ENV === "test"
