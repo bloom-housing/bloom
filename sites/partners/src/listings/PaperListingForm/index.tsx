@@ -354,7 +354,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           )
 
           await router.push(`/listings/${result.id}`)
-          void router.reload()
         }
       } catch (err) {
         console.log(err)
@@ -362,7 +361,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, editMode, listingsService, listing.id, router]
+    [units, editMode, listingsService, listing, router]
   )
 
   const onError = () => {
