@@ -2302,9 +2302,6 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean;
-
-  /**  */
-  flagged?: boolean;
 }
 
 export interface ApplicationFlaggedSet {
@@ -2699,9 +2696,6 @@ export interface ApplicationCreate {
 
   /**  */
   submissionDate?: Date;
-
-  /**  */
-  flagged?: boolean;
 }
 
 export interface AddressUpdate {
@@ -3028,9 +3022,6 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date;
-
-  /**  */
-  flagged?: boolean;
 }
 
 export interface AssetCreate {

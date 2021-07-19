@@ -411,13 +411,13 @@ describe("Applications", () => {
     expect(createRes.body).toMatchObject(body)
     expect(createRes.body).toHaveProperty("createdAt")
     expect(createRes.body).toHaveProperty("updatedAt")
-    expect(createRes.body).toHaveProperty("flagged")
     expect(createRes.body).toHaveProperty("id")
     const res = await supertest(app.getHttpServer())
       .get(`/applications/csv/?includeHeaders=true&listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(typeof res.body === "string")
+    expect(typeof res.text === "string")
+    expect(new RegExp(/Flagged/).test(res.text)).toEqual(true)
   })
 
   it(`should allow an admin to delete user's applications`, async () => {
