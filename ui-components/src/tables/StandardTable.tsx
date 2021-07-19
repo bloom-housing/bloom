@@ -47,7 +47,7 @@ export const StandardTable = (props: StandardTableProps) => {
     headerLabels.splice(
       0,
       0,
-      <th key={"header-draggable"} className={"table__draggable-cell"}>
+      <th key={"header-draggable"} className={"table__draggable-cell pl-5"}>
         {t("t.sort")}
       </th>
     )
@@ -79,7 +79,7 @@ export const StandardTable = (props: StandardTableProps) => {
         <Cell
           key={`${dataIndex}-draggable`}
           headerLabel={t("t.sort")}
-          className={`table__draggable-cell`}
+          className={`table__draggable-cell pl-5`}
         >
           <Icon symbol={"draggable"} size={"medium"} />
         </Cell>
@@ -95,6 +95,7 @@ export const StandardTable = (props: StandardTableProps) => {
                 id={rowKey}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
+                // eslint-disable-next-line @typescript-eslint/unbound-method
                 ref={provided.innerRef}
                 className={snapshot.isDragging ? "table__is-dragging" : ""}
               >
@@ -151,6 +152,7 @@ export const StandardTable = (props: StandardTableProps) => {
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="standard-table">
               {(provided) => (
+                // eslint-disable-next-line @typescript-eslint/unbound-method
                 <tbody {...provided.droppableProps} ref={provided.innerRef}>
                   {body}
                   {provided.placeholder}
