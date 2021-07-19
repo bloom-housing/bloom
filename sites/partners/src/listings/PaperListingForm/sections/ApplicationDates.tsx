@@ -1,7 +1,16 @@
-import React from "react"
+import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, DateField, TimeField } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  DateField,
+  TimeField,
+  Drawer,
+  Button,
+  AppearanceSizeType,
+} from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
+import { OpenHouseForm } from "../OpenHouseForm"
 import moment from "moment"
 
 type ApplicationDatesProps = {
@@ -14,8 +23,10 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
 
+  const [drawerOpenHouse, setDrawerOpenHouse] = useState(false)
+
   return (
-    <div>
+    <>
       <GridSection
         grid={false}
         separator
@@ -62,8 +73,30 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
             }}
           />
         </GridSection>
+        <div className="bg-gray-300 px-4 py-5 mt-5">
+          {/* <div className="mb-5">
+            <MinimalTable headers={{}} data={[]} />
+          </div> */}
+
+          <Button
+            type="button"
+            size={AppearanceSizeType.normal}
+            onClick={() => setDrawerOpenHouse(true)}
+          >
+            {t("listings.sections.addOpenHouse")}
+          </Button>
+        </div>
       </GridSection>
-    </div>
+
+      <Drawer
+        open={!!drawerOpenHouse}
+        title={t("listings.sections.addOpenHouse")}
+        ariaDescription={t("listings.sections.addOpenHouse")}
+        onClose={() => setDrawerOpenHouse(null)}
+      >
+        <OpenHouseForm />
+      </Drawer>
+    </>
   )
 }
 
