@@ -20,6 +20,7 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
+  ListingEvent,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -182,6 +183,10 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
+export type OpenHouseEvent = ListingEvent & {
+  id?: string
+}
+
 const formatFormData = (data: FormListing, units: TempUnit[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -298,6 +303,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [status, setStatus] = useState<ListingStatus>(null)
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [openHouseEvents, setOpenHouseEvents] = useState<OpenHouseEvent[]>([])
 
   useEffect(() => {
     if (listing?.units) {
@@ -414,8 +420,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <RankingsAndResults listing={listing} />
                     <LeasingAgent />
                     <ApplicationAddress listing={listing} />
-                    <ApplicationDates listing={listing} />
+                    <ApplicationDates
+                      listing={listing}
+                      openHouseEvents={openHouseEvents}
+                      setOpenHouseEvents={setOpenHouseEvents}
+                    />
                   </div>
+
+                  {console.log("open house events", openHouseEvents)}
 
                   <aside className="md:w-3/12 md:pl-6">
                     <Aside type={editMode ? "edit" : "add"} setStatus={setStatus} />

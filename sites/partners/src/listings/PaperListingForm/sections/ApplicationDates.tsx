@@ -1,5 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
+import moment from "moment"
 import { useFormContext } from "react-hook-form"
+
 import {
   t,
   GridSection,
@@ -8,22 +10,51 @@ import {
   Drawer,
   Button,
   AppearanceSizeType,
+  MinimalTable,
 } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
 import { OpenHouseForm } from "../OpenHouseForm"
-import moment from "moment"
+import type { OpenHouseEvent } from "../"
 
 type ApplicationDatesProps = {
+  openHouseEvents: OpenHouseEvent[]
+  setOpenHouseEvents: (events: OpenHouseEvent[]) => void
   listing?: FormListing
 }
 
-const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
+const ApplicationDates = ({
+  listing,
+  openHouseEvents,
+  setOpenHouseEvents,
+}: ApplicationDatesProps) => {
+  const openHouseHeaders = {
+    date: t("t.date"),
+    startTime: t("t.startTime"),
+    endTime: t("t.endTime"),
+    link: t("t.link"),
+  }
+
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState(false)
+
+  const onOpenHouseEventsSubmit = (data) => {
+    // TODO: support edit mode
+    setOpenHouseEvents([...openHouseEvents, data])
+    setDrawerOpenHouse(null)
+  }
+
+  const openHouseTableData = useMemo(() => {
+    return openHouseEvents.map(({ date, startTime, endTime, link }) => ({
+      date: `${date.month}/${date.day}/${date.year}`,
+      startTime: "start time",
+      endTime: "end time",
+      link: link ? `<a href="${link}">URL</a>` : null,
+    }))
+  }, [openHouseEvents])
 
   return (
     <>
@@ -74,9 +105,9 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
           />
         </GridSection>
         <div className="bg-gray-300 px-4 py-5 mt-5">
-          {/* <div className="mb-5">
-            <MinimalTable headers={{}} data={[]} />
-          </div> */}
+          <div className="mb-5">
+            <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
+          </div>
 
           <Button
             type="button"
@@ -88,13 +119,15 @@ const ApplicationDates = ({ listing }: ApplicationDatesProps) => {
         </div>
       </GridSection>
 
+      {/* {console.log(listing)} */}
+
       <Drawer
         open={!!drawerOpenHouse}
         title={t("listings.sections.addOpenHouse")}
         ariaDescription={t("listings.sections.addOpenHouse")}
         onClose={() => setDrawerOpenHouse(null)}
       >
-        <OpenHouseForm />
+        <OpenHouseForm onSubmit={onOpenHouseEventsSubmit} />
       </Drawer>
     </>
   )
