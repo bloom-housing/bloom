@@ -53,3 +53,5 @@ dataWithImage[1].image = (
 export const ImageCells = () => (
   <StandardTable headers={headersWithImage} data={dataWithImage} responsiveCollapse />
 )
+
+export const Draggable = () => <StandardTable headers={headers} data={data} draggable={true} />
