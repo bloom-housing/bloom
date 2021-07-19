@@ -84,13 +84,6 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
 
     if (type === "edit") {
       elements.push(
-        <GridCell key="btn-view-listing">
-          <LocalizedLink href={`/listings/${listingId}`}>
-            <Button styleType={AppearanceStyleType.accentCool} fullWidth>
-              {t("listings.actions.viewListing")}
-            </Button>
-          </LocalizedLink>
-        </GridCell>,
         <GridCell key="btn-save">
           <Button
             styleType={AppearanceStyleType.primary}
