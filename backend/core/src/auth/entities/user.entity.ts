@@ -4,12 +4,10 @@ import {
   Entity,
   Index,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from "typeorm"
-import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
@@ -84,9 +82,6 @@ export class User {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
-
-  @OneToMany(() => Application, (application) => application.user)
-  applications: Application[]
 
   @ManyToMany(() => Listing, (listing) => listing.leasingAgents, { nullable: true })
   leasingAgentInListings?: Listing[] | null

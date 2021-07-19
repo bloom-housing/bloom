@@ -42,7 +42,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
 
-  @ManyToOne(() => Listing, (listing) => listing.applications)
+  @ManyToOne(() => Listing)
   listing: Listing
 
   @Column()

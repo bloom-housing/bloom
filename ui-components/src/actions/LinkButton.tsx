@@ -14,7 +14,7 @@ const LinkButton = (props: LinkButtonProps) => {
 
   if (isExternalLink(props.href)) {
     return (
-      <a href={props.href} className={props.className}>
+      <a href={props.href} className={buttonClasses.join(" ")}>
         {buttonInner(props)}
       </a>
     )
