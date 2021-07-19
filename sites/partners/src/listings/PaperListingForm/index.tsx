@@ -35,6 +35,7 @@ import Units from "./sections/Units"
 import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
+import ListingPhoto from "./sections/ListingPhoto"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
@@ -122,6 +123,7 @@ const defaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
+  image: { fileId: "", label: "" },
   leasingAgentAddress: defaultAddress,
   leasingAgentEmail: "test@email.com",
   leasingAgentName: "",
@@ -419,6 +421,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   <div className="flex flex-row flex-wrap">
                     <div className="info-card md:w-9/12">
                       <ListingIntro />
+                      <ListingPhoto />
                       <BuildingDetails />
                       <Units
                         units={units}
