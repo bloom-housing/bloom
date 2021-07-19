@@ -255,6 +255,110 @@ export class ApplicationFlaggedSetsService {
   }
 }
 
+export class ApplicationMethodsService {
+  /**
+   * List applicationMethods
+   */
+  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationMethods';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create applicationMethod
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationMethods';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update applicationMethod
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get applicationMethod by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      applicationMethodId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
+      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete applicationMethod by id
+   */
+  delete(
+    params: {
+      /**  */
+      applicationMethodId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/applicationMethods/{applicationMethodId}';
+      url = url.replace('{applicationMethodId}', params['applicationMethodId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export class ApplicationsService {
   /**
    * List applications
@@ -2372,6 +2476,117 @@ export interface ApplicationFlaggedSetResolve {
   applications: Id[];
 }
 
+export interface Asset {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  file?: CombinedFileTypes;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  label?: string;
+
+  /**  */
+  externalReference?: string;
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean;
+}
+
+export interface AssetCreate {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface ApplicationMethodCreate {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  file?: CombinedFileTypes;
+
+  /**  */
+  label?: string;
+
+  /**  */
+  externalReference?: string;
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean;
+}
+
+export interface AssetUpdate {
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+}
+
+export interface ApplicationMethodUpdate {
+  /**  */
+  type: ApplicationMethodType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  file?: CombinedFileTypes;
+
+  /**  */
+  label?: string;
+
+  /**  */
+  externalReference?: string;
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean;
+}
+
 export interface BooleanInput {
   /**  */
   type: InputType;
@@ -3024,31 +3239,6 @@ export interface ApplicationUpdate {
   submissionDate?: Date;
 }
 
-export interface AssetCreate {
-  /**  */
-  fileId: string;
-
-  /**  */
-  label: string;
-}
-
-export interface Asset {
-  /**  */
-  id: string;
-
-  /**  */
-  createdAt: Date;
-
-  /**  */
-  updatedAt: Date;
-
-  /**  */
-  fileId: string;
-
-  /**  */
-  label: string;
-}
-
 export interface CreatePresignedUploadMetadata {
   /**  */
   parametersToSign: object;
@@ -3627,20 +3817,6 @@ export interface Unit {
   bmrProgramChart?: boolean;
 }
 
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType;
-
-  /**  */
-  label?: string;
-
-  /**  */
-  externalReference?: string;
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean;
-}
-
 export interface ListingEvent {
   /**  */
   type: ListingEventType;
@@ -3696,6 +3872,9 @@ export interface Listing {
 
   /**  */
   unitsSummarized: UnitsSummarized;
+
+  /**  */
+  applicationMethods: ApplicationMethod[];
 
   /**  */
   preferences: Preference[];
@@ -3786,9 +3965,6 @@ export interface Listing {
 
   /**  */
   additionalApplicationSubmissionNotes?: string;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
 
   /**  */
   assets: AssetCreate[];
@@ -4007,6 +4183,9 @@ export interface ListingCreate {
   countyCode: CountyCode;
 
   /**  */
+  applicationMethods: ApplicationMethodCreate[];
+
+  /**  */
   preferences: PreferenceCreate[];
 
   /**  */
@@ -4086,9 +4265,6 @@ export interface ListingCreate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
 
   /**  */
   assets: AssetCreate[];
@@ -4228,23 +4404,6 @@ export interface PreferenceUpdate {
   id: string;
 }
 
-export interface AssetUpdate {
-  /**  */
-  id?: string;
-
-  /**  */
-  createdAt?: Date;
-
-  /**  */
-  updatedAt?: Date;
-
-  /**  */
-  fileId: string;
-
-  /**  */
-  label: string;
-}
-
 export interface UnitUpdate {
   /**  */
   amiChart?: CombinedAmiChartTypes;
@@ -4336,6 +4495,9 @@ export interface ListingUpdate {
   updatedAt?: Date;
 
   /**  */
+  applicationMethods: ApplicationMethodUpdate[];
+
+  /**  */
   preferences: PreferenceUpdate[];
 
   /**  */
@@ -4415,9 +4577,6 @@ export interface ListingUpdate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string;
-
-  /**  */
-  applicationMethods: ApplicationMethod[];
 
   /**  */
   assets: AssetCreate[];
@@ -4865,6 +5024,13 @@ export enum EnumApplicationFlaggedSetStatus {
   'flagged' = 'flagged',
   'resolved' = 'resolved'
 }
+export enum ApplicationMethodType {
+  'Internal' = 'Internal',
+  'FileDownload' = 'FileDownload',
+  'ExternalLink' = 'ExternalLink',
+  'PaperPickup' = 'PaperPickup'
+}
+export type CombinedFileTypes = AssetUpdate;
 export enum InputType {
   'boolean' = 'boolean',
   'text' = 'text',
@@ -4917,13 +5083,6 @@ export enum CountyCode {
   'San Jose' = 'San Jose'
 }
 export type CombinedAmiChartTypes = AmiChart;
-export enum ApplicationMethodType {
-  'Internal' = 'Internal',
-  'FileDownload' = 'FileDownload',
-  'ExternalLink' = 'ExternalLink',
-  'PaperPickup' = 'PaperPickup'
-}
-
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery',

@@ -12,11 +12,11 @@ import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
-import { ApplicationMethodType } from "../../listings/types/application-method-type-enum"
 import { UserCreateDto } from "../../auth/dto/user.dto"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
+import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export const getDate = (days: number) => {
   const someDate = new Date()

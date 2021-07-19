@@ -33,7 +33,6 @@ import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
-import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
@@ -42,6 +41,7 @@ import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { ListingApplicationAddressType } from "../types/listing-application-address-type"
 import { Address } from "../../shared/entities/address.entity"
+import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -75,11 +75,11 @@ class Listing extends BaseEntity {
   @Type(() => Preference)
   preferences: Preference[]
 
-  @Column("jsonb")
+  @OneToMany(() => ApplicationMethod, (am) => am.listing, { eager: true, cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationMethodDto)
-  applicationMethods: ApplicationMethodDto[]
+  @Type(() => ApplicationMethod)
+  applicationMethods: ApplicationMethod[]
 
   @Column("jsonb")
   @Expose()

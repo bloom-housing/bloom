@@ -43,5 +43,8 @@ p, anonymous, unitRentType, true, read
 p, admin, unitAccessibilityPriorityType, true, .*
 p, anonymous, unitAccessibilityPriorityType, true, read
 
+p, admin, applicationMethod, true, .*
+p, anonymous, applicationMethod, true, read
+
 g, admin, user
 g, user, anonymous

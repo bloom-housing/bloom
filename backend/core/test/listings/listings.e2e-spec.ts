@@ -7,6 +7,8 @@ import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
+import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
+import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -105,6 +107,36 @@ describe("Listings", () => {
     expect(modifiedListing.image).toHaveProperty("id")
     expect(modifiedListing.image).toHaveProperty("createdAt")
     expect(modifiedListing.image).toHaveProperty("updatedAt")
+  })
+
+  it("should add/overwrite application methods in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const am: ApplicationMethodCreateDto = {
+      type: ApplicationMethodType.FileDownload,
+      file: {
+        label: "testlabel",
+        fileId: "testId",
+      },
+    }
+    listing.applicationMethods = [am]
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
+    expect(modifiedListing.applicationMethods[0].type).toBe(am.type)
+    expect(modifiedListing.applicationMethods[0].file).toHaveProperty("id")
+    expect(modifiedListing.applicationMethods[0].file.label).toBe(am.file.label)
+    expect(modifiedListing.applicationMethods[0].file.fileId).toBe(am.file.fileId)
   })
 
   afterEach(() => {

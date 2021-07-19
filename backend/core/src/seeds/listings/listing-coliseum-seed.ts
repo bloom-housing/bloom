@@ -20,7 +20,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { ApplicationMethodType } from "../../listings/types/application-method-type-enum"
+import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
