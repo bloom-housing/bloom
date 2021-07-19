@@ -28,14 +28,10 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       {previewBarVisible && (
-        <div
-          className="bg-red-700 text-white font-bold text-sm"
-          style={{ padding: "1.5rem 0 1rem" }}
-        >
+        <div className="pt-6 pb-4 bg-red-700 text-white font-bold text-sm">
           <div className="max-w-5xl m-auto">{t("listings.listingPreviewOnly")}</div>
           <button
-            className="alert-box__close text-white"
-            style={{ marginTop: "-2rem" }}
+            className="-mt-8 alert-box__close text-white"
             onClick={() => {
               setPreviewBarVisible(false)
             }}
