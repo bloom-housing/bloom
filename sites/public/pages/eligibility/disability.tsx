@@ -2,11 +2,20 @@
 Disability
 Whether the applicant has accessibility needs.
 */
-import { AppearanceStyleType, Button, FormCard, t, Form, Field } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  t,
+  Form,
+  Field,
+  ProgressNav,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React from "react"
 import { useRouter } from "next/router"
+import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 
 const EligibilityDisability = () => {
   const router = useRouter()
@@ -19,6 +28,13 @@ const EligibilityDisability = () => {
 
   return (
     <FormsLayout>
+      <FormCard header={t("eligibility.progress.header")}>
+        <ProgressNav
+          currentPageSection={4}
+          completedSections={3}
+          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
+        />
+      </FormCard>
       <FormCard>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
@@ -68,7 +84,7 @@ const EligibilityDisability = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => router.push("/eligibility/income")}
+                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[4]}`)}
               >
                 {t("t.next")}
               </Button>

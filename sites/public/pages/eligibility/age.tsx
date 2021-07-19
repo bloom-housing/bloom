@@ -2,12 +2,21 @@
 Age
 Prompts the user for their age to filter for properties that are age dependent.
 */
-import { AppearanceStyleType, Button, FormCard, t, Form, Field } from "@bloom-housing/ui-components"
+import {
+  AppearanceStyleType,
+  Button,
+  FormCard,
+  t,
+  Form,
+  Field,
+  ProgressNav,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import "./age.scss"
 import React from "react"
 import { useRouter } from "next/router"
+import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 
 const EligibilityAge = () => {
   const router = useRouter()
@@ -20,6 +29,13 @@ const EligibilityAge = () => {
 
   return (
     <FormsLayout>
+      <FormCard header={t("eligibility.progress.header")}>
+        <ProgressNav
+          currentPageSection={3}
+          completedSections={2}
+          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
+        />
+      </FormCard>
       <FormCard>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group is-borderless">
@@ -42,7 +58,7 @@ const EligibilityAge = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => router.push("/eligibility/disability")}
+                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[3]}`)}
               >
                 {t("t.next")}
               </Button>

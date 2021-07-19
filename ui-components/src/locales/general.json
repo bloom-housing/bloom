@@ -1228,7 +1228,17 @@
     }
   },
   "eligibility": {
-    "progressHeader": "Let's find your next home",
+    "progress": {
+      "header" : "Let's find your next home",
+      "sections": {
+        "welcome" : "Welcome",
+        "bedrooms" : "Bedrooms",
+        "age" : "Age",
+        "disability" : "Disability",
+        "income" : "Income",
+        "section8": "Section 8"
+      }
+    },
     "welcome": {
       "header": "Welcome",
       "description": "To find you a home that best fits your needs, let's answer a few questions first. Some properties only accept people with certain ages, incomes, etc."

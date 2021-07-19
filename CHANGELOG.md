@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
   - Debug flags for public and partner site ([#195](https://github.com/CityOfDetroit/bloom/pull/195))
   - Upstream filter param parsing, with changes to support pagination params and filters that aren't on the listings table ([#180](https://github.com/CityOfDetroit/bloom/pull/180))
+  - Eligibility questionnaire ([#154](https://github.com/CityOfDetroit/bloom/pull/154), [#198](https://github.com/CityOfDetroit/bloom/pull/198), [#208](https://github.com/CityOfDetroit/bloom/pull/208))
 
 ## Unreleased
 
