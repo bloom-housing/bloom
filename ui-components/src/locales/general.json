@@ -712,6 +712,7 @@
   },
   "listings": {
     "error": "There was an issue submitting the form.",
+    "closeThisListing": "Do you really want to close this listing?",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -719,7 +720,9 @@
       "publish": "Publish",
       "draft": "Save as Draft",
       "preview": "Preview",
-      "clone": "Clone"
+      "close": "Close",
+      "viewListing": "View listing",
+      "unpublish": "Unpublish"
     },
     "addListing": "Add Listing",
     "addPhoto": "Add Photo",
@@ -1080,6 +1083,7 @@
     "WY": "Wyoming"
   },
   "t": {
+    "areYouSure": "Are you sure?",
     "addNotes": "Add notes",
     "at": "at",
     "additionalPhone": "Additional Phone",

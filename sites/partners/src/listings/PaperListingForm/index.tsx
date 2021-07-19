@@ -11,6 +11,8 @@ import {
   AppearanceStyleType,
   Button,
   TimeFieldPeriod,
+  Modal,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -189,6 +191,8 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
   const getDueTime = () => {
+    if (!data.applicationDueTimeField) return null
+
     let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
     if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
       dueTimeHours = 0
@@ -246,9 +250,11 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-    applicationDueDate: new Date(
-      `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
-    ),
+    applicationDueDate: data.applicationDueDateField
+      ? new Date(
+          `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
+        )
+      : null,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
       data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
@@ -301,6 +307,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
 
+  /**
+   * Close modal
+   */
+  const [closeModal, setCloseModal] = useState(false)
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -312,7 +323,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit } = formMethods
+  const { handleSubmit, getValues } = formMethods
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
@@ -324,7 +335,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
   */
   const onSubmit = useCallback(
-    async (data: FormListing) => {
+    async (data: FormListing, status: ListingStatus) => {
       try {
         data = {
           ...data,
@@ -344,14 +355,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             "success"
           )
 
-          void router.push(`/listings/${result.id}`)
+          await router.push(`/listings/${result.id}`)
         }
       } catch (err) {
+        console.log(err)
         setLoading(false)
         setAlert("api")
       }
     },
-    [status, units, editMode, listingsService, listing?.id, router]
+    [units, editMode, listingsService, listing, router]
   )
 
   const onError = () => {
@@ -361,75 +373,116 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   useEffect(() => {
     if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data)
+      void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
   return (
-    <LoadingOverlay isLoading={loading}>
-      <>
-        <StatusBar
-          backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
-            >
-              {t("t.back")}
-            </Button>
-          }
-          tagStyle={
-            listing?.status == ListingStatus.active
-              ? AppearanceStyleType.success
-              : AppearanceStyleType.primary
-          }
-          tagLabel={
-            listing?.status
-              ? t(`listings.listingStatus.${listing.status}`)
-              : t(`listings.listingStatus.pending`)
-          }
-        />
+    <>
+      <LoadingOverlay isLoading={loading}>
+        <>
+          <StatusBar
+            backButton={
+              <Button
+                inlineIcon="left"
+                icon="arrowBack"
+                onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+              >
+                {t("t.back")}
+              </Button>
+            }
+            tagStyle={(() => {
+              switch (listing?.status) {
+                case ListingStatus.active:
+                  return AppearanceStyleType.success
+                case ListingStatus.closed:
+                  return AppearanceStyleType.closed
+                default:
+                  return AppearanceStyleType.primary
+              }
+            })()}
+            tagLabel={
+              listing?.status
+                ? t(`listings.listingStatus.${listing.status}`)
+                : t(`listings.listingStatus.pending`)
+            }
+          />
 
-        <FormProvider {...formMethods}>
-          <section className="bg-primary-lighter py-5">
-            <div className="max-w-screen-xl px-5 mx-auto">
-              {alert && (
-                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                  {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
-                </AlertBox>
-              )}
+          <FormProvider {...formMethods}>
+            <section className="bg-primary-lighter py-5">
+              <div className="max-w-screen-xl px-5 mx-auto">
+                {alert && (
+                  <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                    {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
+                  </AlertBox>
+                )}
 
-              <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-                <div className="flex flex-row flex-wrap">
-                  <div className="info-card md:w-9/12">
-                    <ListingIntro />
-                    <ListingPhoto />
-                    <BuildingDetails />
-                    <Units
-                      units={units}
-                      setUnits={setUnits}
-                      disableUnitsAccordion={listing?.disableUnitsAccordion}
-                    />
-                    <AdditionalFees />
-                    <BuildingFeatures />
-                    <AdditionalEligibility />
-                    <AdditionalDetails />
-                    <RankingsAndResults listing={listing} />
-                    <LeasingAgent />
-                    <ApplicationAddress listing={listing} />
-                    <ApplicationDates listing={listing} />
+                <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                  <div className="flex flex-row flex-wrap">
+                    <div className="info-card md:w-9/12">
+                      <ListingIntro />
+                      <ListingPhoto />
+                      <BuildingDetails />
+                      <Units
+                        units={units}
+                        setUnits={setUnits}
+                        disableUnitsAccordion={listing?.disableUnitsAccordion}
+                      />
+                      <AdditionalFees />
+                      <BuildingFeatures />
+                      <AdditionalEligibility />
+                      <AdditionalDetails />
+                      <RankingsAndResults listing={listing} />
+                      <LeasingAgent />
+                      <ApplicationAddress listing={listing} />
+                      <ApplicationDates listing={listing} />
+                    </div>
+
+                    <aside className="md:w-3/12 md:pl-6">
+                      <Aside
+                        type={editMode ? "edit" : "add"}
+                        setStatus={setStatus}
+                        showCloseListingModal={() => setCloseModal(true)}
+                      />
+                    </aside>
                   </div>
+                </Form>
+              </div>
+            </section>
+          </FormProvider>
+        </>
+      </LoadingOverlay>
 
-                  <aside className="md:w-3/12 md:pl-6">
-                    <Aside type={editMode ? "edit" : "add"} setStatus={setStatus} />
-                  </aside>
-                </div>
-              </Form>
-            </div>
-          </section>
-        </FormProvider>
-      </>
-    </LoadingOverlay>
+      <Modal
+        open={!!closeModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.closeThisListing")}
+        onClose={() => setCloseModal(false)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            onClick={() => {
+              setStatus(ListingStatus.closed)
+              triggerSubmit(getValues())
+              setCloseModal(false)
+            }}
+          >
+            {t("listings.actions.close")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setCloseModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.closeThisListing")}
+      </Modal>
+    </>
   )
 }
 

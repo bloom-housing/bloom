@@ -8,7 +8,7 @@ import { useSingleListingData } from "../../../lib/hooks"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import { MetaTags } from "../../../src/MetaTags"
 
-const NewListing = () => {
+const EditListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
@@ -59,4 +59,4 @@ const NewListing = () => {
   )
 }
 
-export default NewListing
+export default EditListing
