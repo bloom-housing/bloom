@@ -37,12 +37,12 @@ const EligibilityDisability = () => {
       </FormCard>
       <FormCard>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__lead pb-0">
+            <h2 className="form-card__title is-borderless">{t("eligibility.disability.prompt")}</h2>
+          </div>
           <div className="form-card__group">
             <fieldset>
-              <legend className="field-label--caps">{t("eligibility.disability.prompt")}</legend>
-
               <p className="field-note mb-4">{t("eligibility.disability.description")}</p>
-
               <Field
                 type="radio"
                 id="disabilityNo"

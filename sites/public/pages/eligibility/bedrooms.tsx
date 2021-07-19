@@ -44,13 +44,14 @@ const EligibilityBedrooms = () => {
         />
       </FormCard>
       <FormCard>
+        <div className="form-card__lead pb-0">
+          <h2 className="form-card__title is-borderless">{t("eligibility.bedrooms.prompt")}</h2>
+        </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__group is-borderless">
-            <legend className="sr-only">{t("eligibility.bedrooms.srLabel")}</legend>
+          <div className="form-card__group">
             <FieldGroup
               type="checkbox"
               name="preferredUnit"
-              groupNote={t("eligibility.bedrooms.prompt")}
               fields={preferredUnitOptions}
               error={errors.preferredUnit}
               errorMessage={t("errors.selectAtLeastOne")}

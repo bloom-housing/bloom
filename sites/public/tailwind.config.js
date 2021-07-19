@@ -16,5 +16,7 @@ bloomTheme.theme.colors["gray-800"] = "#18252A"
 bloomTheme.theme.colors["gray-950"] = "#000000"
 bloomTheme.theme.colors.warn = "#feb70d"
 bloomTheme.theme.colors["accent-cool"] = "#279989"
+// The progress bar "done" sections color
+bloomTheme.theme.colors.lush = "#feb70d"
 
 module.exports = bloomTheme

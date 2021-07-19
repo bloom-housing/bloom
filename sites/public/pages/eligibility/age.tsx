@@ -38,11 +38,11 @@ const EligibilityAge = () => {
       </FormCard>
       <FormCard>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__lead pb-0">
+            <h2 className="form-card__title is-borderless">{t("eligibility.age.prompt")}</h2>
+          </div>
           <div className="form-card__group is-borderless">
-            <legend className="field-label--caps">{t("eligibility.age.prompt")}</legend>
-
             <p className="field-note mb-4">{t("eligibility.age.description")}</p>
-
             <Field
               className="age-field"
               id="age"
