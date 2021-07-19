@@ -321,7 +321,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit } = formMethods
+  const { handleSubmit, getValues } = formMethods
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
@@ -461,7 +461,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
               setStatus(ListingStatus.closed)
-              void onSubmit(submitData.data, ListingStatus.closed)
+              triggerSubmit(getValues())
               setCloseModal(false)
             }}
           >
