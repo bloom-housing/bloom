@@ -6,10 +6,10 @@ import { AppearanceStyleType, Button, FormCard, t, Form, Field } from "@bloom-ho
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React from "react"
-import {useRouter} from 'next/router';
+import { useRouter } from "next/router"
 
 const EligibilityDisability = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   /* Form Handler */
   const { handleSubmit, register } = useForm()
@@ -23,13 +23,9 @@ const EligibilityDisability = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
             <fieldset>
-              <legend className="field-label--caps">
-                {t("eligibility.disability.prompt")}
-              </legend>
+              <legend className="field-label--caps">{t("eligibility.disability.prompt")}</legend>
 
-              <p className="field-note mb-4">
-                {t("eligibility.disability.description")}
-              </p>
+              <p className="field-note mb-4">{t("eligibility.disability.description")}</p>
 
               <Field
                 type="radio"
@@ -72,7 +68,7 @@ const EligibilityDisability = () => {
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
-                onClick={() => router.push('/eligibility/income')}
+                onClick={() => router.push("/eligibility/income")}
               >
                 {t("t.next")}
               </Button>

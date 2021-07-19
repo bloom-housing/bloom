@@ -3,10 +3,10 @@ Income
 Prompts the user for their annual income.
 */
 import FormsLayout from "../../layouts/forms"
-import React from 'react';
+import React from "react"
 
 const EligibilityIncome = () => {
-  return(<FormsLayout/>);
+  return <FormsLayout />
 }
 
 export default EligibilityIncome
