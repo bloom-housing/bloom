@@ -124,16 +124,12 @@ export class ListingDto extends OmitType(Listing, [
   status: ListingStatus
 
   @Expose()
-  @Transform((_value, listing) => {
-    let lotteryEventExists = false
-    listing.events.forEach((event) => {
-      if (event.type === ListingEventType.publicLottery) {
-        lotteryEventExists = true
-      }
-    })
-    return lotteryEventExists ? ListingReviewOrder.lottery : ListingReviewOrder.firstComeFirstServe
-  })
-  reviewOrderType: ListingReviewOrder
+  @ApiProperty({ enum: ListingReviewOrder })
+  get reviewOrderType() {
+    return this.events.some((event) => event.type === ListingEventType.publicLottery)
+      ? ListingReviewOrder.lottery
+      : ListingReviewOrder.firstComeFirstServe
+  }
 
   @Expose()
   @Type(() => UnitDto)
