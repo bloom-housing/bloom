@@ -3511,6 +3511,55 @@ export interface Preference {
   page?: number;
 }
 
+export interface Asset {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+
+  /**  */
+  file?: Asset;
+}
+
 export interface ReservedCommunityType {
   /**  */
   id: string;
@@ -3641,26 +3690,6 @@ export interface ApplicationMethod {
   acceptsPostmarkedApplications?: boolean;
 }
 
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  startTime?: Date;
-
-  /**  */
-  endTime?: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-
-  /**  */
-  label?: string;
-}
-
 export interface WhatToExpect {
   /**  */
   applicantsWillBeContacted?: string;
@@ -3711,6 +3740,9 @@ export interface Listing {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   image?: CombinedImageTypes;
@@ -3792,9 +3824,6 @@ export interface Listing {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -3928,6 +3957,29 @@ export interface PreferenceCreate {
   page?: number;
 }
 
+export interface ListingEventCreate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  file?: AssetCreate;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+}
+
 export interface UnitCreate {
   /**  */
   amiChart?: CombinedAmiChartTypes;
@@ -4022,6 +4074,9 @@ export interface ListingCreate {
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
+  events: ListingEventCreate[];
+
+  /**  */
   image?: CombinedImageTypes;
 
   /**  */
@@ -4092,9 +4147,6 @@ export interface ListingCreate {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -4245,6 +4297,38 @@ export interface AssetUpdate {
   label: string;
 }
 
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  file?: AssetUpdate;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+}
+
 export interface UnitUpdate {
   /**  */
   amiChart?: CombinedAmiChartTypes;
@@ -4351,6 +4435,9 @@ export interface ListingUpdate {
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
 
   /**  */
+  events: ListingEventUpdate[];
+
+  /**  */
   image?: AssetUpdate;
 
   /**  */
@@ -4421,9 +4508,6 @@ export interface ListingUpdate {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -4916,18 +5000,18 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
+
+export enum ListingEventType {
+  'openHouse' = 'openHouse',
+  'publicLottery' = 'publicLottery',
+  'lotteryResults' = 'lotteryResults'
+}
 export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
   'Internal' = 'Internal',
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
   'PaperPickup' = 'PaperPickup'
-}
-
-export enum ListingEventType {
-  'openHouse' = 'openHouse',
-  'publicLottery' = 'publicLottery',
-  'lotteryResults' = 'lotteryResults'
 }
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
