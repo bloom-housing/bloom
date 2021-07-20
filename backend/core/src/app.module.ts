@@ -29,6 +29,7 @@ import { UnitTypesModule } from "./unit-types/unit-types.module"
 import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
 import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
+import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -76,6 +77,7 @@ export class AppModule {
         AuthModule,
         JurisdictionsModule,
         ListingsModule,
+        PaperApplicationsModule,
         PreferencesModule,
         PropertiesModule,
         PropertyGroupsModule,

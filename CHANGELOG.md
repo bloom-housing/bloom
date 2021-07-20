@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Backend
 
+- Added:
+  - /applicationMethods and /paperApplications endpoints and corresponding DB schema
+
 - Fixed:
 
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))

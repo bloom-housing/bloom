@@ -46,5 +46,8 @@ p, anonymous, unitAccessibilityPriorityType, true, read
 p, admin, applicationMethod, true, .*
 p, anonymous, applicationMethod, true, read
 
+p, admin, paperApplication, true, .*
+p, anonymous, paperApplication, true, read
+
 g, admin, user
 g, user, anonymous

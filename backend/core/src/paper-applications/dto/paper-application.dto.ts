@@ -2,39 +2,39 @@ import { Expose, Type } from "class-transformer"
 import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ApplicationMethod } from "../entities/application-method.entity"
-import { PaperApplicationDto } from "../../paper-applications/dto/paper-application.dto"
+import { PaperApplication } from "../entities/paper-application.entity"
+import { AssetDto } from "../../assets/dto/asset.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
-export class ApplicationMethodDto extends OmitType(ApplicationMethod, [
-  "listing",
-  "paperApplications",
+export class PaperApplicationDto extends OmitType(PaperApplication, [
+  "applicationMethod",
+  "file",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PaperApplicationDto)
-  paperApplications?: PaperApplicationDto[] | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetDto)
+  file?: AssetDto | null
 }
 
-export class ApplicationMethodCreateDto extends OmitType(ApplicationMethodDto, [
+export class PaperApplicationCreateDto extends OmitType(PaperApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "paperApplications",
+  "file",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  paperApplications?: IdDto[] | null
+  file?: IdDto | null
 }
 
-export class ApplicationMethodUpdateDto extends OmitType(ApplicationMethodDto, [
+export class PaperApplicationUpdateDto extends OmitType(PaperApplicationDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "paperApplications",
+  "file",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -55,7 +55,7 @@ export class ApplicationMethodUpdateDto extends OmitType(ApplicationMethodDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  paperApplications?: IdDto[] | null
+  file?: IdDto | null
 }

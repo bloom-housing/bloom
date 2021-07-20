@@ -1,10 +1,5 @@
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
-import {
-  ApplicationMethodSeedType,
-  ListingSeedType,
-  PropertySeedType,
-  UnitSeedType,
-} from "./listings"
+import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
 import { getDefaultAmiChart, getDate, getDefaultAssets, getLiveWorkPreference } from "./shared"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
@@ -692,14 +687,7 @@ const tritonUnits: Array<UnitSeedType> = [
     status: "occupied",
   },
 ]
-const tritonApplicationMethods: Array<ApplicationMethodSeedType> = [
-  {
-    type: ApplicationMethodType.FileDownload,
-    acceptsPostmarkedApplications: false,
-    externalReference: "https://bit.ly/2wH6dLF",
-    label: "English",
-  },
-]
+
 const tritonListing: ListingSeedType = {
   applicationAddress: {
     city: "Foster City",
@@ -798,6 +786,9 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     unitsToBeCreated[4].unitType = unitTypeOneBdrm
 
     await this.unitsRepository.save(unitsToBeCreated)
+    const applicationMethods = await this.applicationMethodRepository.find({
+      type: ApplicationMethodType.FileDownload,
+    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -807,7 +798,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference()],
-      applicationMethods: tritonApplicationMethods,
+      applicationMethods: applicationMethods,
       events: [],
     }
 

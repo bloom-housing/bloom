@@ -1,9 +1,4 @@
-import {
-  ApplicationMethodSeedType,
-  ListingSeedType,
-  PropertySeedType,
-  UnitSeedType,
-} from "./listings"
+import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
 import {
   getDate,
   getDefaultAmiChart,
@@ -922,14 +917,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     status: "available",
   },
 ]
-const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
-  {
-    type: ApplicationMethodType.FileDownload,
-    acceptsPostmarkedApplications: false,
-    externalReference: "https://bit.ly/2wH6dLF",
-    label: "English",
-  },
-]
+
 const coliseumListing: ListingSeedType = {
   applicationAddress: {
     county: "Alameda",
@@ -1068,6 +1056,9 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
     }
 
     await this.unitsRepository.save(unitsToBeCreated)
+    const applicationMethods = await this.applicationMethodRepository.find({
+      type: ApplicationMethodType.Internal,
+    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -1081,7 +1072,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         { ...getPbvPreference(), ordinal: 2, page: 2 },
         { ...getHopwaPreference(), ordinal: 3, page: 3 },
       ],
-      applicationMethods: coliseumApplicationMethods,
+      applicationMethods: applicationMethods,
       events: [],
     }
 

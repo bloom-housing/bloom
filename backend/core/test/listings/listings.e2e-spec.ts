@@ -9,6 +9,10 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
+import { Language } from "../../types"
+import { AssetsModule } from "../../src/assets/assets.module"
+import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
+import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -23,7 +27,13 @@ describe("Listings", () => {
   let app
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), ListingsModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        ListingsModule,
+        AssetsModule,
+        ApplicationMethodsModule,
+        PaperApplicationsModule,
+      ],
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
@@ -114,16 +124,37 @@ describe("Listings", () => {
 
     const listing: ListingUpdateDto = { ...res.body[0] }
 
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const assetCreateDto: AssetCreateDto = {
+      fileId: "testFileId2",
+      label: "testLabel2",
+    }
+
+    const file = await supertest(app.getHttpServer())
+      .post(`/assets`)
+      .send(assetCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    const paperApplication = await supertest(app.getHttpServer())
+      .post(`/paperApplications`)
+      .send({ language: Language.en, file: file.body })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
     const am: ApplicationMethodCreateDto = {
       type: ApplicationMethodType.FileDownload,
-      file: {
-        label: "testlabel",
-        fileId: "testId",
-      },
+      paperApplications: [{ id: paperApplication.body.id }],
     }
-    listing.applicationMethods = [am]
 
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    const applicationMethod = await supertest(app.getHttpServer())
+      .post(`/applicationMethods`)
+      .send(am)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    listing.applicationMethods = [applicationMethod.body]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -133,10 +164,6 @@ describe("Listings", () => {
     const modifiedListing: ListingDto = putResponse.body
 
     expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
-    expect(modifiedListing.applicationMethods[0].type).toBe(am.type)
-    expect(modifiedListing.applicationMethods[0].file).toHaveProperty("id")
-    expect(modifiedListing.applicationMethods[0].file.label).toBe(am.file.label)
-    expect(modifiedListing.applicationMethods[0].file.fileId).toBe(am.file.fileId)
   })
 
   afterEach(() => {

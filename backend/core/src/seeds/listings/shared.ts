@@ -1,6 +1,5 @@
 // AMI Charts
 import {
-  ApplicationMethodSeedType,
   AssetDtoSeedType,
   ListingEventDtoSeedType,
   ListingSeedType,
@@ -16,7 +15,6 @@ import { UserCreateDto } from "../../auth/dto/user.dto"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -423,24 +421,6 @@ export const defaultUnits: Array<UnitSeedType> = [
     status: "available",
   },
 ]
-// Application Method Sets
-export function getDefaultApplicationMethods() {
-  return JSON.parse(JSON.stringify(defaultApplicationMethods))
-}
-
-export const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
-  {
-    type: ApplicationMethodType.Internal,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-]
-
-// Leasing Agent Sets
-export function getDefaultLeasingAgents() {
-  return JSON.parse(JSON.stringify(defaultLeasingAgents))
-}
 
 export const defaultLeasingAgents: UserCreateDto[] = [
   {

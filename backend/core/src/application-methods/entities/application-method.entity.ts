@@ -1,12 +1,12 @@
-import { Column, Entity, ManyToOne } from "typeorm"
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsBoolean, IsEnum, IsOptional, IsString, MaxLength } from "class-validator"
+import { IsBoolean, IsEnum, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { ApiProperty } from "@nestjs/swagger"
 import { Listing } from "../../listings/entities/listing.entity"
-import { Asset } from "../../assets/entities/asset.entity"
 import { ApplicationMethodType } from "../types/application-method-type-enum"
+import { PaperApplication } from "../../paper-applications/entities/paper-application.entity"
 
 @Entity({ name: "application_methods" })
 export class ApplicationMethod extends AbstractEntity {
@@ -37,10 +37,21 @@ export class ApplicationMethod extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   acceptsPostmarkedApplications?: boolean | null
 
-  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
-  @Type(() => Asset)
-  file?: Asset | null
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
+  phoneNumber?: string | null
+
+  @OneToMany(() => PaperApplication, (paperApplication) => paperApplication.applicationMethod, {
+    eager: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => PaperApplication)
+  paperApplications?: PaperApplication[] | null
 
   @ManyToOne(() => Listing, (listing) => listing.applicationMethods)
   listing: Listing

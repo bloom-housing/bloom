@@ -30,11 +30,7 @@ import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
-import {
-  ApplicationMethodCreateDto,
-  ApplicationMethodDto,
-  ApplicationMethodUpdateDto,
-} from "../../application-methods/dto/application-method.dto"
+import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -346,8 +342,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationMethodCreateDto)
-  applicationMethods: ApplicationMethodCreateDto[]
+  @Type(() => IdDto)
+  applicationMethods: IdDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -549,8 +545,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationMethodUpdateDto)
-  applicationMethods: ApplicationMethodUpdateDto[]
+  @Type(() => IdDto)
+  applicationMethods: IdDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
