@@ -46,6 +46,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import Preferences from "./sections/Preferences"
+import CommunityType from "./sections/CommunityType"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -484,6 +485,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <ListingIntro />
                       <ListingPhoto />
                       <BuildingDetails />
+                      <CommunityType />
                       <Units
                         units={units}
                         setUnits={setUnits}

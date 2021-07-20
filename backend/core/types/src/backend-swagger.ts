@@ -4239,6 +4239,9 @@ export interface Listing {
   displayWaitlistSize: boolean
 
   /**  */
+  reservedCommunityDescription?: string
+
+  /**  */
   reservedCommunityMinAge?: number
 
   /**  */
@@ -4560,6 +4563,9 @@ export interface ListingCreate {
 
   /**  */
   reservedCommunityMinAge?: number
+
+  /** */
+  reservedCommunityDescription?: string
 
   /**  */
   resultLink?: string
@@ -4918,6 +4924,9 @@ export interface ListingUpdate {
 
   /**  */
   displayWaitlistSize: boolean
+
+  /**  */
+  reservedCommunityDescription?: string
 
   /**  */
   reservedCommunityMinAge?: number
