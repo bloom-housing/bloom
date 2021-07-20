@@ -62,3 +62,16 @@ export const ImageCells = () => (
 export const Draggable = () => (
   <MinimalTable headers={preferenceHeaders} data={preferenceData} draggable={true} />
 )
+
+Draggable.parameters = {
+  a11y: {
+    config: {
+      rules: [
+        {
+          id: "nested-interactive",
+          enabled: false,
+        },
+      ],
+    },
+  },
+}
