@@ -1,9 +1,10 @@
 import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
-import { Asset, Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { LinkButton } from "../../actions/LinkButton"
 import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
+import { imageUrlFromListing } from "../../helpers/photos"
 import { t } from "../../helpers/translator"
 import "./ListingsList.scss"
 
@@ -11,15 +12,12 @@ export interface ListingsProps {
   listings: Listing[]
 }
 
-const imageUrlFromListing = (listing: Listing) => {
-  return listing?.assets?.find((asset: Asset) => asset.label == "building")?.fileId
-}
-
 const ListingsList = (props: ListingsProps) => {
   const listings = props.listings
 
   const listItems = listings.map((listing: Listing) => {
-    const imageUrl = imageUrlFromListing(listing) || ""
+    const imageUrl =
+      imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || ""
     const unitSummariesHeaders = {
       unitType: t("t.unitType"),
       minimumIncome: t("t.minimumIncome"),
@@ -74,4 +72,4 @@ const ListingsList = (props: ListingsProps) => {
   return <>{listItems}</>
 }
 
-export { ListingsList as default, ListingsList, imageUrlFromListing }
+export { ListingsList as default, ListingsList }

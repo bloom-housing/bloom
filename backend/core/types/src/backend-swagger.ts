@@ -1580,6 +1580,318 @@ export class UnitsService {
   }
 }
 
+export class UnitTypesService {
+  /**
+   * List unitTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitTypeUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes/{unitTypeId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes/{unitTypeId}';
+      url = url.replace('{unitTypeId}', params['unitTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitType by id
+   */
+  delete(
+    params: {
+      /**  */
+      unitTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitTypes/{unitTypeId}';
+      url = url.replace('{unitTypeId}', params['unitTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class UnitRentTypesService {
+  /**
+   * List unitRentTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitRentType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitRentType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitRentType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitRentTypeUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitRentType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitRentTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitRentType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+      url = url.replace('{unitRentTypeId}', params['unitRentTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitRentType by id
+   */
+  delete(
+    params: {
+      /**  */
+      unitRentTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitRentTypes/{unitRentTypeId}';
+      url = url.replace('{unitRentTypeId}', params['unitRentTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export class UnitAccessibilityPriorityTypesService {
+  /**
+   * List unitAccessibilityPriorityTypes
+   */
+  list(options: IRequestOptions = {}): Promise<UnitAccessibilityPriorityType[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes';
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Create unitAccessibilityPriorityType
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: UnitAccessibilityPriorityTypeCreate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes';
+
+      const configs: IRequestConfig = getConfigs('post', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Update unitAccessibilityPriorityType
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UnitAccessibilityPriorityTypeUpdate;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}';
+
+      const configs: IRequestConfig = getConfigs('put', 'application/json', url, options);
+
+      let data = params.body;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Get unitAccessibilityPriorityType by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      unitAccessibilityPriorityTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UnitAccessibilityPriorityType> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}';
+      url = url.replace('{unitAccessibilityPriorityTypeId}', params['unitAccessibilityPriorityTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+  /**
+   * Delete unitAccessibilityPriorityType by id
+   */
+  delete(
+    params: {
+      /**  */
+      unitAccessibilityPriorityTypeId: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/unitAccessibilityPriorityTypes/{unitAccessibilityPriorityTypeId}';
+      url = url.replace('{unitAccessibilityPriorityTypeId}', params['unitAccessibilityPriorityTypeId'] + '');
+
+      const configs: IRequestConfig = getConfigs('delete', 'application/json', url, options);
+
+      let data = null;
+
+      configs.data = data;
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
 export interface AmiChartItem {
   /**  */
   percentOfAmi: number;
@@ -2991,6 +3303,34 @@ export interface ListingFilterParams {
   status?: EnumListingFilterParamsStatus;
 }
 
+export interface UnitType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+}
+
+export interface UnitAccessibilityPriorityType {
+  /**  */
+  name: string;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
 export interface MinMaxCurrency {
   /**  */
   min: string;
@@ -3009,7 +3349,7 @@ export interface MinMax {
 
 export interface UnitSummary {
   /**  */
-  unitType: string;
+  unitType: UnitType;
 
   /**  */
   minIncomeRange: MinMaxCurrency;
@@ -3062,13 +3402,13 @@ export interface HMI {
 
 export interface UnitsSummarized {
   /**  */
-  unitTypes: string[];
+  unitTypes: UnitType[];
 
   /**  */
   reservedTypes: string[];
 
   /**  */
-  priorityTypes: string[];
+  priorityTypes: UnitAccessibilityPriorityType[];
 
   /**  */
   amiPercentages: string[];
@@ -3237,9 +3577,46 @@ export interface ReservedCommunityType {
   description?: string;
 }
 
+export interface UnitRentType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+}
+
+export interface UnitAccessibilityPriorityType {
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  name: string;
+}
+
 export interface Unit {
   /**  */
   amiChart?: CombinedAmiChartTypes;
+
+  /**  */
+  unitType?: UnitType;
+
+  /**  */
+  unitRentType?: UnitRentType;
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType;
 
   /**  */
   id: string;
@@ -3284,9 +3661,6 @@ export interface Unit {
   number?: string;
 
   /**  */
-  priorityType?: string;
-
-  /**  */
   reservedType?: string;
 
   /**  */
@@ -3294,9 +3668,6 @@ export interface Unit {
 
   /**  */
   status?: string;
-
-  /**  */
-  unitType?: string;
 
   /**  */
   monthlyRentAsPercentOfIncome?: string;
@@ -3647,9 +4018,6 @@ export interface UnitCreate {
   number?: string;
 
   /**  */
-  priorityType?: string;
-
-  /**  */
   reservedType?: string;
 
   /**  */
@@ -3659,13 +4027,19 @@ export interface UnitCreate {
   status?: string;
 
   /**  */
-  unitType?: string;
-
-  /**  */
   monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
+
+  /**  */
+  unitType?: UnitType;
+
+  /**  */
+  unitRentType?: UnitRentType;
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType;
 }
 
 export interface ListingCreate {
@@ -3993,9 +4367,6 @@ export interface UnitUpdate {
   number?: string;
 
   /**  */
-  priorityType?: string;
-
-  /**  */
   reservedType?: string;
 
   /**  */
@@ -4005,13 +4376,19 @@ export interface UnitUpdate {
   status?: string;
 
   /**  */
-  unitType?: string;
-
-  /**  */
   monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
+
+  /**  */
+  unitType?: UnitType;
+
+  /**  */
+  unitRentType?: UnitRentType;
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType;
 
   /**  */
   id: string;
@@ -4506,6 +4883,45 @@ export interface TranslationUpdate {
   translations: object;
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  name: string;
+
+  /**  */
+  id: string;
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string;
+
+  /**  */
+  id: string;
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string;
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string;
+
+  /**  */
+  id: string;
+}
+
 export enum IncomePeriod {
   'perMonth' = 'perMonth',
   'perYear' = 'perYear'
@@ -4599,8 +5015,8 @@ export enum ApplicationMethodType {
 }
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
-export type CombinedApplicationDropOffAddressTypes = AddressCreate;
-export type CombinedApplicationMailingAddressTypes = AddressCreate;
+export type CombinedApplicationDropOffAddressTypes = AddressUpdate;
+export type CombinedApplicationMailingAddressTypes = AddressUpdate;
 export type CombinedImageTypes = AssetCreate;
 export type CombinedLeasingAgentAddressTypes = AddressUpdate;
 export type CombinedResultTypes = AssetCreate;

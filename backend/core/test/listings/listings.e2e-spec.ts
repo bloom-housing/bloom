@@ -3,7 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
-import { allSeeds } from "../../src/seeds/listings"
 import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
@@ -33,7 +32,7 @@ describe("Listings", () => {
 
   it("should return all listings", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    expect(res.body.length).toEqual(allSeeds.length)
+    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
   it("should return only the specified listings", async () => {
@@ -53,7 +52,7 @@ describe("Listings", () => {
   it("should return only active listings", async () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(allSeeds.length)
+    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {

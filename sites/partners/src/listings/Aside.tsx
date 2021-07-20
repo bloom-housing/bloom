@@ -6,6 +6,7 @@ import {
   Button,
   GridCell,
   AppearanceStyleType,
+  AppearanceBorderType,
   StatusMessages,
   LocalizedLink,
   LinkButton,
@@ -16,11 +17,12 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 type AsideProps = {
   type: AsideType
   setStatus?: (status: ListingStatus) => void
+  showCloseListingModal?: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatus }: AsideProps) => {
+const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -61,7 +63,7 @@ const Aside = ({ type, setStatus }: AsideProps) => {
       )
     }
 
-    if (type === "add" || type === "edit") {
+    if (type === "add") {
       elements.push(
         <GridCell key="btn-publish">
           <Button
@@ -78,6 +80,60 @@ const Aside = ({ type, setStatus }: AsideProps) => {
           </Button>
         </GridCell>
       )
+    }
+
+    if (type === "edit") {
+      elements.push(
+        <GridCell key="btn-save">
+          <Button
+            styleType={AppearanceStyleType.primary}
+            fullWidth
+            onClick={() => {
+              setStatus(listing.status)
+            }}
+          >
+            {t("t.saveExit")}
+          </Button>
+        </GridCell>
+      )
+
+      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+        elements.push(
+          <GridCell key="btn-publish">
+            <Button
+              styleType={AppearanceStyleType.success}
+              fullWidth
+              onClick={() => setStatus(ListingStatus.active)}
+            >
+              {t("listings.actions.publish")}
+            </Button>
+          </GridCell>
+        )
+      }
+
+      if (listing.status === ListingStatus.active) {
+        elements.push(
+          <div className="grid grid-cols-2 gap-2" key="btn-close-unpublish">
+            <Button
+              type="button"
+              styleType={AppearanceStyleType.secondary}
+              fullWidth
+              onClick={() => showCloseListingModal && showCloseListingModal()}
+            >
+              {t("listings.actions.close")}
+            </Button>
+
+            <Button
+              styleType={AppearanceStyleType.alert}
+              fullWidth
+              onClick={() => setStatus(ListingStatus.pending)}
+              border={AppearanceBorderType.outlined}
+            >
+              {t("listings.actions.unpublish")}
+            </Button>
+          </div>
+        )
+      }
     }
 
     if (type === "details") {
@@ -97,7 +153,7 @@ const Aside = ({ type, setStatus }: AsideProps) => {
     }
 
     return elements
-  }, [listingId, setStatus, type])
+  }, [listing, listingId, setStatus, showCloseListingModal, type])
 
   return (
     <>

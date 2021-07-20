@@ -13,10 +13,13 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
+  - add duplicates to CSV export ([#1352](https://github.com/bloom-housing/bloom/issues/1352))
 
 - Changed:
   - User module has been removed and incorporated into Auth module
   - convert listing events jsonb column to separate listing_events table
+  - convert listing address jsonb columns to separate address tables
+  - removed unused inverse relations from entities
 
 ### Frontend
 
@@ -25,11 +28,13 @@ All notable changes to this project will be documented in this file. The format 
   - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
 
 - Added:
+  - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
   - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
 
 ### UI Components
 
 - Added:
+  - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
   - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
   - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
 
@@ -41,6 +46,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
   - Added cache manager to lisitngs controller, added add listing button and cleanup ([#1422](https://github.com/bloom-housing/bloom/pull/1422))
+  - Added unit_accessibility_priority_types, unit_rent_types, unit_types table and corresponding API endpoints (also created a relation between Unit and mentioned tables) ([#1439](https://github.com/bloom-housing/bloom/pull/1439)
 
 ### Backend
 
@@ -76,7 +82,6 @@ All notable changes to this project will be documented in this file. The format 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
   - removed eager relation to listing from User model
-  - removed unused inverse relations from entities
 
 ### Frontend
 
