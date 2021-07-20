@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. The format 
   - User module has been removed and incorporated into Auth module
   - convert listing address jsonb columns to separate address tables
   - removed unused inverse relations from entities
+  - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
 
 ### Frontend
 
@@ -81,7 +82,6 @@ All notable changes to this project will be documented in this file. The format 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
   - removed eager relation to listing from User model
-  - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
 
 ### Frontend
 
