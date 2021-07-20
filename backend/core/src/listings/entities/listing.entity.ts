@@ -32,7 +32,6 @@ import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
-import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
@@ -41,6 +40,7 @@ import { ReservedCommunityType } from "../../reserved-community-type/entities/re
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { ListingApplicationAddressType } from "../types/listing-application-address-type"
+import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 
 @Entity({ name: "listings" })
@@ -87,11 +87,14 @@ class Listing extends BaseEntity {
   @Type(() => AssetCreateDto)
   assets: AssetCreateDto[]
 
-  @Column("jsonb")
+  @OneToMany(() => ListingEvent, (listingEvent) => listingEvent.listing, {
+    eager: true,
+    cascade: true,
+  })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingEventDto)
-  events: ListingEventDto[]
+  @Type(() => ListingEvent)
+  events: ListingEvent[]
 
   @ManyToOne(() => Property, { nullable: false, cascade: true })
   @Expose()
