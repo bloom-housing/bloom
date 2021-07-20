@@ -15,7 +15,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
 import { getLotteryEvent } from "../../helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -45,7 +45,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     control,
     name: "reviewOrderQuestion",
     defaultValue:
-      listing?.reviewOrderType === ListingReviewOrder.lottery
+      listing?.reviewOrderType === EnumListingReviewOrderType.lottery
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })

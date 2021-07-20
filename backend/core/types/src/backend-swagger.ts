@@ -3323,8 +3323,8 @@ export interface Listing {
   /**  */
   showWaitlist: boolean;
 
-  /** */
-  reviewOrderType: ListingReviewOrder
+  /**  */
+  reviewOrderType: EnumListingReviewOrderType;
 
   /**  */
   unitsSummarized: UnitsSummarized;
@@ -4516,6 +4516,10 @@ export enum ListingEventType {
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
+export enum EnumListingReviewOrderType {
+  'lottery' = 'lottery',
+  'firstComeFirstServe' = 'firstComeFirstServe'
+}
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
 export type CombinedApplicationDropOffAddressTypes = AddressCreate;
@@ -4525,7 +4529,3 @@ export type CombinedLeasingAgentAddressTypes = AddressUpdate;
 export type CombinedResultTypes = AssetCreate;
 export type CombinedWhatToExpectTypes = WhatToExpect;
 export type CombinedJurisdictionTypes = Id;
-export enum ListingReviewOrder {
-  'lottery' = 'lottery',
-  'firstComeFirstServe' = 'firstComeFirstServe',
-}

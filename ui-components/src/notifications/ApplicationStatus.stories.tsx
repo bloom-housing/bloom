@@ -3,7 +3,7 @@ import * as React from "react"
 import moment from "moment"
 import { ApplicationStatus } from "./ApplicationStatus"
 import Archer from "../../__tests__/fixtures/archer.json"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
 
 export default {
   component: ApplicationStatus,
@@ -46,7 +46,7 @@ days = 15
 listing4.applicationOpenDate = moment().subtract(days, "days").format()
 listing4.applicationDueDate = null
 listing4.events = []
-listing4.reviewOrderType = ListingReviewOrder.firstComeFirstServe
+listing4.reviewOrderType = EnumListingReviewOrderType.firstComeFirstServe
 export const openedWithFCFS = () => <ApplicationStatus listing={listing4} />
 
 export const openedWithFCFSVivid = () => <ApplicationStatus listing={listing4} vivid />
