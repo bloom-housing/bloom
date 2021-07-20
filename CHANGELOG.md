@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file. The format 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
 ## Unreleased
+- Added:
+  - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
 
 ### General
 
