@@ -164,7 +164,10 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
-        <ImageCard title={listing.name} imageUrl={imageUrlFromListing(listing)} />
+        <ImageCard
+          title={listing.name}
+          imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+        />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
             {oneLineAddress}
@@ -218,6 +221,7 @@ export const ListingView = (props: ListingProps) => {
           {!isReferralApp ? (
             <ApplicationSection
               listing={listing}
+              preview={props.preview}
               internalFormRoute="/applications/start/choose-language"
             />
           ) : (
@@ -309,6 +313,7 @@ export const ListingView = (props: ListingProps) => {
               {!isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
+                  preview={props.preview}
                   internalFormRoute="/applications/start/choose-language"
                 />
               ) : (
