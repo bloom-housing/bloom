@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  GridCell,
-  Field,
-  ViewItem,
-  Select,
-  Textarea,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, GridCell, ViewItem, Select, Textarea } from "@bloom-housing/ui-components"
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import { arrayToFormOptions } from "../../../../lib/helpers"
 import { ReservedCommunityType } from "@bloom-housing/backend-core/types"
+import { FormListing } from "../index"
 
-const CommunityType = () => {
+type CommunityTypeProps = {
+  listing?: FormListing
+}
+
+const CommunityType = ({ listing }: CommunityTypeProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, reset } = formMethods
 
   const [options, setOptions] = useState([])
 
@@ -28,6 +25,7 @@ const CommunityType = () => {
       return { ...communityType, name: t(`listings.reservedCommunityTypes.${communityType.name}`) }
     })
     setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
+    reset()
   }, [reservedCommunityTypes])
 
   return (
@@ -41,14 +39,14 @@ const CommunityType = () => {
       <GridSection columns={2}>
         <ViewItem label={t("listings.reservedCommunityType")}>
           <Select
-            id={`reservedCommunityType`}
-            name={`reservedCommunityType`}
+            id={`reservedCommunityType.id`}
+            name={`reservedCommunityType.id`}
             label={t("listings.reservedCommunityType")}
             labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={options}
-            errorMessage={t("errors.stateError")}
+            defaultValue={listing?.reservedCommunityType?.id}
           />
         </ViewItem>
       </GridSection>

@@ -329,6 +329,7 @@ const formatFormData = (
       ? data.applicationMailingAddress
       : null,
     events,
+    reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
   }
 }
 
@@ -485,7 +486,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <ListingIntro />
                       <ListingPhoto />
                       <BuildingDetails />
-                      <CommunityType />
+                      <CommunityType listing={listing} />
                       <Units
                         units={units}
                         setUnits={setUnits}
