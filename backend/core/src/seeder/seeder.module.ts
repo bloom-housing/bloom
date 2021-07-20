@@ -9,6 +9,22 @@ import { AuthModule } from "../auth/auth.module"
 import { ApplicationsModule } from "../applications/applications.module"
 import { ListingsModule } from "../listings/listings.module"
 import { AmiChartsModule } from "../ami-charts/ami-charts.module"
+import { ListingDefaultSeed } from "../seeds/listings/listing-default-seed"
+import { Listing } from "../listings/entities/listing.entity"
+import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { Property } from "../property/entities/property.entity"
+import { Unit } from "../units/entities/unit.entity"
+import { User } from "../auth/entities/user.entity"
+import { ListingColiseumSeed } from "../seeds/listings/listing-coliseum-seed"
+import { ListingDefaultOnePreferenceSeed } from "../seeds/listings/listing-default-one-preference-seed"
+import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-default-no-preference-seed"
+import { Preference } from "../preferences/entities/preference.entity"
+import { ListingDefaultFCFSPreferenceSeed } from "../seeds/listings/listing-default-fcfs-seed"
+import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
+import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
 
 @Module({})
 export class SeederModule {
@@ -21,6 +37,17 @@ export class SeederModule {
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),
+        TypeOrmModule.forFeature([
+          Listing,
+          Preference,
+          UnitAccessibilityPriorityType,
+          UnitType,
+          UnitRentType,
+          AmiChart,
+          Property,
+          Unit,
+          User,
+        ]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
@@ -30,6 +57,15 @@ export class SeederModule {
         AuthModule,
         ListingsModule,
         AmiChartsModule,
+      ],
+      providers: [
+        ListingDefaultSeed,
+        ListingColiseumSeed,
+        ListingDefaultOnePreferenceSeed,
+        ListingDefaultNoPreferenceSeed,
+        ListingDefaultFCFSPreferenceSeed,
+        ListingDefaultBmrChartSeed,
+        ListingTritonSeed,
       ],
     }
   }

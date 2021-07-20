@@ -53,7 +53,9 @@ const ApplicationChooseLanguage = () => {
 
   const currentPageSection = 1
 
-  const imageUrl = listing?.assets ? imageUrlFromListing(listing) : ""
+  const imageUrl = listing?.assets
+    ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
+    : ""
 
   const onLanguageSelect = (language: Language) => {
     conductor.currentStep.save({

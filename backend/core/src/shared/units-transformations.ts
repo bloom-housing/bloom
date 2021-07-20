@@ -3,6 +3,7 @@ import { MinMax } from "../units/types/min-max"
 import { MinMaxCurrency } from "../units/types/min-max-currency"
 import { UnitSummary } from "../units/types/unit-summary"
 import { UnitsSummarized } from "../units/types/units-summarized"
+import { UnitTypeDto } from "../unit-types/dto/unit-type.dto"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -141,7 +142,7 @@ const getDefaultSummaryRanges = (unit: Unit) => {
     },
     unitType: unit.unitType,
     totalAvailable: 0,
-  } as UnitSummary
+  }
 }
 
 const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
@@ -195,7 +196,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
   units.forEach((unit) => {
     const currentUnitType = unit.unitType
     const currentUnitRent = unit.monthlyRentAsPercentOfIncome
-    const thisKey = currentUnitType.concat(currentUnitRent)
+    const thisKey = currentUnitType.name.concat(currentUnitRent)
     if (!(thisKey in unitMap)) unitMap[thisKey] = []
     unitMap[thisKey].push(unit)
   })
@@ -210,7 +211,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
+      UnitTypeSort.indexOf(a.unitType.name) - UnitTypeSort.indexOf(b.unitType.name) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
@@ -219,16 +220,16 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 // One row per unit type
 const summarizeUnitsByType = (
   units: Units,
-  unitTypes: string[],
+  unitTypes: UnitTypeDto[],
   reservedType?: string
 ): UnitSummary[] => {
   if (!reservedType) {
     reservedType = null
   }
   const summaries = unitTypes.map(
-    (unitType: string): UnitSummary => {
+    (unitType: UnitTypeDto): UnitSummary => {
       const summary = {} as UnitSummary
-      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
+      const unitsByType = units.filter((unit: Unit) => unit.unitType.name == unitType.name)
       const finalSummary = Array.from(unitsByType).reduce((summary, unit, index) => {
         return getUnitsSummary(unit, index === 0 ? null : summary)
       }, summary)
@@ -237,7 +238,7 @@ const summarizeUnitsByType = (
   )
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
+      UnitTypeSort.indexOf(a.unitType.name) - UnitTypeSort.indexOf(b.unitType.name) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })

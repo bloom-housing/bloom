@@ -31,18 +31,17 @@ import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { ApplicationFlaggedSet } from "../../application-flagged-sets/entities/application-flagged-set.entity"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingEventDto } from "../dto/listing-event.dto"
 import { ApplicationMethodDto } from "../dto/application-method.dto"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { CountyCode } from "../../shared/types/county-code"
-import { AddressDto } from "../../shared/dto/address.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { ListingApplicationAddressType } from "../types/listing-application-address-type"
+import { Address } from "../../shared/entities/address.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -94,7 +93,7 @@ class Listing extends BaseEntity {
   @Type(() => ListingEventDto)
   events: ListingEventDto[]
 
-  @ManyToOne(() => Property, (property) => property.listings, { nullable: false, cascade: true })
+  @ManyToOne(() => Property, { nullable: false, cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   property: Property
@@ -104,12 +103,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Application)
   applications: Application[]
-
-  @OneToMany(() => ApplicationFlaggedSet, (afs) => afs.listing)
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ApplicationFlaggedSet)
-  applicationFlaggedSets: ApplicationFlaggedSet[]
 
   @Column({ type: "timestamptz", nullable: true })
   @Expose()
@@ -144,19 +137,19 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationOrganization?: string | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationAddress?: AddressDto | null
+  @Type(() => Address)
+  applicationAddress?: Address | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationPickUpAddress?: AddressDto | null
+  @Type(() => Address)
+  applicationPickUpAddress?: Address | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -174,12 +167,12 @@ class Listing extends BaseEntity {
   })
   applicationPickUpAddressType?: ListingApplicationAddressType | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationDropOffAddress?: AddressDto | null
+  @Type(() => Address)
+  applicationDropOffAddress?: Address | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -197,12 +190,12 @@ class Listing extends BaseEntity {
   })
   applicationDropOffAddressType?: ListingApplicationAddressType | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationMailingAddress?: AddressDto | null
+  @Type(() => Address)
+  applicationMailingAddress?: Address | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -253,12 +246,12 @@ class Listing extends BaseEntity {
   @Type(() => Jurisdiction)
   jurisdiction?: Jurisdiction | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  leasingAgentAddress?: AddressDto | null
+  @Type(() => Address)
+  leasingAgentAddress?: Address | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
