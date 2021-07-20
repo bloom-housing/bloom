@@ -27,9 +27,9 @@ const ImageCard = (props: ImageCardProps) => {
     )
     if (props.tagLabel) {
       tag = (
-        <Tag styleType={AppearanceStyleType.warning} className="image-card__tag">
-          {props.tagLabel}
-        </Tag>
+        <div className="image-card-tag__wrapper">
+          <Tag styleType={AppearanceStyleType.warning}>{props.tagLabel}</Tag>
+        </div>
       )
     }
   }
