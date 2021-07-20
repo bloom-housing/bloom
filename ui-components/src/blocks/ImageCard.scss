@@ -4,10 +4,20 @@
   @apply relative;
 }
 
-.image-card__tag {
+.image-card-tag__wrapper {
+  @apply flex;  
+  @apply items-center;
+  @apply justify-center;
   @apply absolute;
   @apply z-10;
-  @apply m-5;
+  @apply w-full;
+  @apply mt-4;
+
+  @screen md {
+    @apply items-start;
+    @apply justify-start;
+    @apply ml-4;
+  }
 }
 
 .image-card {
