@@ -97,6 +97,10 @@ Draggable.parameters = {
           id: "nested-interactive",
           enabled: false,
         },
+        {
+          id: "color-contrast",
+          enabled: false,
+        },
       ],
     },
   },
