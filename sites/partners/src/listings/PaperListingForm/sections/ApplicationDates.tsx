@@ -63,41 +63,43 @@ const ApplicationDates = ({
     setModalDeleteOpenHouse(null)
   }
 
-  const openHouseTableData = useMemo(() => {
-    return openHouseEvents.map((event) => {
-      const { startTime, endTime, url, tempId } = event
+  const openHouseTableData = useMemo(
+    () =>
+      openHouseEvents.map((event) => {
+        const { startTime, endTime, url, tempId } = event
 
-      const startTimeDate = moment(startTime)
-      const endTimeDate = moment(endTime)
+        const startTimeDate = moment(startTime)
+        const endTimeDate = moment(endTime)
 
-      return {
-        date: startTimeDate.format("MM/DD/YYYY"),
-        startTime: startTimeDate.format("hh:mm:ss A"),
-        endTime: endTimeDate.format("hh:mm:ss A"),
-        url: url ? url : "",
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase"
-              onClick={() => setDrawerOpenHouse(event)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => setModalDeleteOpenHouse(tempId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      }
-    })
-  }, [openHouseEvents])
+        return {
+          date: startTimeDate.format("MM/DD/YYYY"),
+          startTime: startTimeDate.format("hh:mm:ss A"),
+          endTime: endTimeDate.format("hh:mm:ss A"),
+          url: url ? url : "",
+          action: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase"
+                onClick={() => setDrawerOpenHouse(event)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => setModalDeleteOpenHouse(tempId)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        }
+      }),
+    [openHouseEvents]
+  )
 
   return (
     <>
@@ -148,22 +150,21 @@ const ApplicationDates = ({
           />
         </GridSection>
         <div className="mt-5">
-          {!!openHouseTableData.length && (
-            <div className="bg-gray-300 px-4 py-5 mt-5">
+          <div className="bg-gray-300 px-4 py-5 mt-5">
+            {!!openHouseTableData.length && (
               <div className="mb-5">
                 <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
               </div>
-            </div>
-          )}
+            )}
 
-          <Button
-            className="mt-5"
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => setDrawerOpenHouse(true)}
-          >
-            {t("listings.sections.addOpenHouse")}
-          </Button>
+            <Button
+              type="button"
+              size={AppearanceSizeType.normal}
+              onClick={() => setDrawerOpenHouse(true)}
+            >
+              {t("listings.sections.addOpenHouse")}
+            </Button>
+          </div>
         </div>
       </GridSection>
 
