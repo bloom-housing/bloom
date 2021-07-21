@@ -25,9 +25,7 @@ export class ListingDefaultSeed {
   constructor(
     @InjectRepository(Listing) protected readonly listingRepository: Repository<Listing>,
     @InjectRepository(UnitAccessibilityPriorityType)
-    protected readonly unitAccessibilityPriorityTypeRepository: Repository<
-      UnitAccessibilityPriorityType
-    >,
+    protected readonly unitAccessibilityPriorityTypeRepository: Repository<UnitAccessibilityPriorityType>,
     @InjectRepository(UnitType) protected readonly unitTypeRepository: Repository<UnitType>,
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
     @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
