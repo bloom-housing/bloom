@@ -82,7 +82,7 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: GroupedTableGroup[] = null
 
   if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitType)
+    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)

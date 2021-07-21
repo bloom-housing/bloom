@@ -127,7 +127,7 @@ export const unitsSummaries = () => {
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <StandardTable
               headers={unitSummariesHeaders}
-              data={unitSummariesTable(byAMI.byUnitType)}
+              data={unitSummariesTable(byAMI.byUnitTypeAndRent)}
               responsiveCollapse={true}
             />
           </div>
