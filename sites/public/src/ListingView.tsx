@@ -12,7 +12,7 @@ import {
   getOccupancyDescription,
   GroupedTable,
   GroupedTableGroup,
-  groupNonReservedAndReservedSummaries,
+  getSummariesTable,
   ImageCard,
   imageUrlFromListing,
   InfoCard,
@@ -82,9 +82,7 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: GroupedTableGroup[] = null
 
   if (amiValues.length == 1) {
-    groupedUnits = groupNonReservedAndReservedSummaries(
-      listing.unitsSummarized.byNonReservedUnitType
-    )
+    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitType)
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -204,9 +202,7 @@ export const ListingView = (props: ListingProps) => {
               return parseInt(item.percent, 10) == percent
             })
 
-            groupedUnits = byAMI
-              ? groupNonReservedAndReservedSummaries(byAMI.byNonReservedUnitType)
-              : []
+            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
             return (
               <>

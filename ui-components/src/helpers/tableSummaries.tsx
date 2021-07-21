@@ -65,11 +65,11 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
   return unitSummaries
 }
 
-export const groupNonReservedAndReservedSummaries = (nonReservedSummaries: UnitSummary[]) => {
+export const getSummariesTable = (summaries: UnitSummary[]) => {
   let groupedUnits = [] as Array<GroupedTableGroup>
 
-  if (nonReservedSummaries.length > 0) {
-    const unitSummaries = unitSummariesTable(nonReservedSummaries)
+  if (summaries.length > 0) {
+    const unitSummaries = unitSummariesTable(summaries)
     groupedUnits = [
       {
         data: unitSummaries,

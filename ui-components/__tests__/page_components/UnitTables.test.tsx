@@ -25,23 +25,6 @@ const summaries: {
   ],
   priorityTypes: [],
   amiPercentages: ["45.0", "30.0"],
-  byUnitType: [
-    {
-      unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "studio",
-      },
-      totalAvailable: 41,
-      minIncomeRange: { min: "$1,438", max: "$2,208" },
-      occupancyRange: { min: 1, max: 2 },
-      rentAsPercentIncomeRange: { min: 10, max: 80 },
-      rentRange: { min: "$719", max: "$1,104" },
-      floorRange: { min: 2, max: 3 },
-      areaRange: { min: 285, max: 285 },
-    },
-  ],
   byUnitTypeWithoutFloor: [
     {
       unitType: {
@@ -58,7 +41,7 @@ const summaries: {
       areaRange: { min: 285, max: 285 },
     },
   ],
-  byNonReservedUnitType: [
+  byUnitType: [
     {
       unitType: {
         id: "",
@@ -69,37 +52,16 @@ const summaries: {
       totalAvailable: 40,
       minIncomeRange: { min: "$1,438", max: "$2,208" },
       occupancyRange: { min: 1, max: 2 },
-      rentAsPercentIncomeRange: { min: null, max: null },
+      rentAsPercentIncomeRange: { min: 10, max: 80 },
       rentRange: { min: "$719", max: "$1,104" },
       floorRange: { min: 2, max: 3 },
       areaRange: { min: 285, max: 285 },
     },
   ],
-  byReservedType: [
-    {
-      byUnitType: [
-        {
-          unitType: {
-            id: "",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            name: "studio",
-          },
-          totalAvailable: 1,
-          minIncomeRange: { min: "$2,208", max: "$2,208" },
-          occupancyRange: { min: 1, max: 2 },
-          rentAsPercentIncomeRange: { min: null, max: null },
-          rentRange: { min: "$1,104", max: "$1,104" },
-          floorRange: { min: 2, max: 2 },
-          areaRange: { min: 285, max: 285 },
-        },
-      ],
-    },
-  ],
   byAMI: [
     {
       percent: "45.0",
-      byNonReservedUnitType: [
+      byUnitType: [
         {
           unitType: {
             id: "",
@@ -119,7 +81,7 @@ const summaries: {
     },
     {
       percent: "30.0",
-      byNonReservedUnitType: [
+      byUnitType: [
         {
           unitType: {
             id: "",
@@ -136,7 +98,6 @@ const summaries: {
           areaRange: { min: 285, max: 285 },
         },
       ],
-      byReservedType: [],
     },
   ],
   hmi: {

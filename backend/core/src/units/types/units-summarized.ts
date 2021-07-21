@@ -44,13 +44,6 @@ export class UnitsSummarized {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitSummary)
-  @ApiProperty({ type: [UnitSummary] })
-  byNonReservedUnitType: UnitSummary[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitSummaryByAMI)
   @ApiProperty({ type: [UnitSummaryByAMI] })
   byAMI: UnitSummaryByAMI[]

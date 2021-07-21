@@ -196,7 +196,6 @@ const defaults: FormListing = {
     amiPercentages: [],
     byUnitTypeAndRent: [],
     byUnitType: [],
-    byNonReservedUnitType: [],
     byAMI: [],
     hmi: {
       columns: [],

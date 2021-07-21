@@ -3714,7 +3714,7 @@ export interface UnitSummaryByAMI {
   percent: string
 
   /**  */
-  byNonReservedUnitType: UnitSummary[]
+  byUnitType: UnitSummary[]
 }
 
 export interface HMI {
