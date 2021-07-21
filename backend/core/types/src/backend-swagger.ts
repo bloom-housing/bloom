@@ -3626,10 +3626,10 @@ export interface UnitAccessibilityPriorityType {
 
 export interface Unit {
   /**  */
-  status: UnitStatus;
+  status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   unitType?: UnitType
@@ -3689,7 +3689,7 @@ export interface Unit {
   sqFeet?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
   bmrProgramChart?: boolean
@@ -4001,10 +4001,10 @@ export interface ListingEventCreate {
 
 export interface UnitCreate {
   /**  */
-  status: UnitStatus;
+  status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -4046,7 +4046,7 @@ export interface UnitCreate {
   sqFeet?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
   bmrProgramChart?: boolean
@@ -4350,10 +4350,10 @@ export interface ListingEventUpdate {
 
 export interface UnitUpdate {
   /**  */
-  status: UnitStatus;
+  status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes;
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -4395,7 +4395,7 @@ export interface UnitUpdate {
   sqFeet?: string
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string;
+  monthlyRentAsPercentOfIncome?: string
 
   /**  */
   bmrProgramChart?: boolean
@@ -5027,11 +5027,11 @@ export enum ListingEventType {
 }
 
 export enum UnitStatus {
-  'unknown' = 'unknown',
-  'available' = 'available',
-  'occupied' = 'occupied'
+  "unknown" = "unknown",
+  "available" = "available",
+  "occupied" = "occupied",
 }
-export type CombinedAmiChartTypes = AmiChart;
+export type CombinedAmiChartTypes = AmiChart
 export enum ApplicationMethodType {
   "Internal" = "Internal",
   "FileDownload" = "FileDownload",
