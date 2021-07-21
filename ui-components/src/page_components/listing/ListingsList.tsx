@@ -100,7 +100,7 @@ const ListingsList = (props: ListingsProps) => {
           <div className="listings-row_table">
             {unitSummaries && (
               <>
-                {listing.reservedCommunityType && `heblo`}
+                {/* {listing.reservedCommunityType && `heblo`} */}
                 <GroupedTable
                   headers={unitSummariesHeaders}
                   data={unitSummaries}
