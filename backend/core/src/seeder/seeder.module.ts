@@ -12,6 +12,7 @@ import { AmiChartsModule } from "../ami-charts/ami-charts.module"
 import { ListingDefaultSeed } from "../seeds/listings/listing-default-seed"
 import { Listing } from "../listings/entities/listing.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { ReservedCommunityType } from "../reserved-community-type/entities/reserved-community-type.entity"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
@@ -49,6 +50,7 @@ export class SeederModule {
           Preference,
           UnitAccessibilityPriorityType,
           UnitType,
+          ReservedCommunityType,
           UnitRentType,
           AmiChart,
           Property,
