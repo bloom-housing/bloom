@@ -21,6 +21,7 @@ import {
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
+import { ReservedCommunityType } from "src/reserved-community-type/entities/reserved-community-type.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -30,6 +31,8 @@ export class ListingDefaultSeed {
       UnitAccessibilityPriorityType
     >,
     @InjectRepository(UnitType) protected readonly unitTypeRepository: Repository<UnitType>,
+    @InjectRepository(UnitType)
+    protected readonly reservedTypeRepository: Repository<ReservedCommunityType>,
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
     @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
@@ -44,6 +47,8 @@ export class ListingDefaultSeed {
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+
+    const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "senior62" })
 
     const amiChart = await this.amiChartRepository.save(getDefaultAmiChart())
 
@@ -78,6 +83,7 @@ export class ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...getDefaultListing(),
+      reservedCommunityType: reservedType,
       name: "Test: Default, Two Preferences",
       property: property,
       assets: getDefaultAssets(),

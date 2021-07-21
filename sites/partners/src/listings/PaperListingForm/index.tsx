@@ -192,13 +192,11 @@ const defaults: FormListing = {
   reviewOrderType: null,
   unitsSummarized: {
     unitTypes: [],
-    reservedTypes: [],
     priorityTypes: [],
     amiPercentages: [],
     byUnitTypeAndRent: [],
     byUnitType: [],
     byNonReservedUnitType: [],
-    byReservedType: [],
     byAMI: [],
     hmi: {
       columns: [],

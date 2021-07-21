@@ -23,6 +23,8 @@ import { PaperApplicationsService } from "./paper-applications/paper-application
 import { Language } from "./shared/types/language-enum"
 import { AssetsService } from "./assets/services/assets.service"
 import { AuthContext } from "./auth/types/auth-context"
+import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
+import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -90,6 +92,8 @@ const seedListings = async (app: INestApplicationContext) => {
     app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
     app.get<ListingDefaultSeed>(ListingTritonSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultReservedSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultFCFSSeed),
   ]
 
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))

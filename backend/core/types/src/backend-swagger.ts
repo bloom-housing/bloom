@@ -3715,9 +3715,6 @@ export interface UnitSummaryByAMI {
 
   /**  */
   byNonReservedUnitType: UnitSummary[]
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[]
 }
 
 export interface HMI {
@@ -3733,9 +3730,6 @@ export interface UnitsSummarized {
   unitTypes: UnitType[]
 
   /**  */
-  reservedTypes: string[]
-
-  /**  */
   priorityTypes: UnitAccessibilityPriorityType[]
 
   /**  */
@@ -3749,9 +3743,6 @@ export interface UnitsSummarized {
 
   /**  */
   byNonReservedUnitType: UnitSummary[]
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[]
 
   /**  */
   byAMI: UnitSummaryByAMI[]
