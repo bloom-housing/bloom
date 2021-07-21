@@ -12,7 +12,7 @@
     @apply self-center;
 
     &:not(:last-child)::after {
-      content: "\203A";
+      content: '\203A';
       @apply text-lg;
       @apply px-2;
       line-height: 1.4rem;

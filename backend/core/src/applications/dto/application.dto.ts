@@ -43,7 +43,6 @@ export class ApplicationDto extends OmitType(Application, [
   "accessibility",
   "demographics",
   "householdMembers",
-  "flagged",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

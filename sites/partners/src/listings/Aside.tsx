@@ -6,7 +6,6 @@ import {
   Button,
   GridCell,
   AppearanceStyleType,
-  AppearanceBorderType,
   StatusMessages,
   LocalizedLink,
   LinkButton,
@@ -16,13 +15,12 @@ import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
-  setStatus?: (status: ListingStatus) => void
-  showCloseListingModal?: () => void
+  setStatusAndSubmit?: (status: ListingStatus) => Promise<void>
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
+const Aside = ({ type, setStatusAndSubmit }: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -55,7 +53,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
       elements.push(
         <GridCell key="btn-submitNew">
           <LocalizedLink href={`/listings/${listingId}/edit`}>
-            <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
+            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>
           </LocalizedLink>
@@ -63,84 +61,34 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
       )
     }
 
-    if (type === "add") {
+    if (type === "add" || type === "edit") {
       elements.push(
         <GridCell key="btn-publish">
           <Button
-            styleType={AppearanceStyleType.success}
+            styleType={AppearanceStyleType.primary}
             fullWidth
-            onClick={() => setStatus(ListingStatus.active)}
+            onClick={() => setStatusAndSubmit(ListingStatus.active)}
           >
             {t("listings.actions.publish")}
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button fullWidth onClick={() => setStatus(ListingStatus.pending)}>
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            fullWidth
+            onClick={() => setStatusAndSubmit(ListingStatus.pending)}
+          >
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
       )
     }
 
-    if (type === "edit") {
-      elements.push(
-        <GridCell key="btn-save">
-          <Button
-            styleType={AppearanceStyleType.primary}
-            fullWidth
-            onClick={() => {
-              setStatus(listing.status)
-            }}
-          >
-            {t("t.saveExit")}
-          </Button>
-        </GridCell>
-      )
-
-      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
-        elements.push(
-          <GridCell key="btn-publish">
-            <Button
-              styleType={AppearanceStyleType.success}
-              fullWidth
-              onClick={() => setStatus(ListingStatus.active)}
-            >
-              {t("listings.actions.publish")}
-            </Button>
-          </GridCell>
-        )
-      }
-
-      if (listing.status === ListingStatus.active) {
-        elements.push(
-          <div className="grid grid-cols-2 gap-2" key="btn-close-unpublish">
-            <Button
-              type="button"
-              styleType={AppearanceStyleType.secondary}
-              fullWidth
-              onClick={() => showCloseListingModal && showCloseListingModal()}
-            >
-              {t("listings.actions.close")}
-            </Button>
-
-            <Button
-              styleType={AppearanceStyleType.alert}
-              fullWidth
-              onClick={() => setStatus(ListingStatus.pending)}
-              border={AppearanceBorderType.outlined}
-            >
-              {t("listings.actions.unpublish")}
-            </Button>
-          </div>
-        )
-      }
-    }
-
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
           <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
-            <Button fullWidth onClick={() => false}>
+            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
               {t("listings.actions.preview")}
             </Button>
           </a>
@@ -153,7 +101,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
     }
 
     return elements
-  }, [listing, listingId, setStatus, showCloseListingModal, type])
+  }, [listingId, setStatusAndSubmit, type])
 
   return (
     <>

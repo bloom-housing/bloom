@@ -32,11 +32,3 @@ export const withListing = () => (
     listing={listing}
   />
 )
-
-export const withDescriptionAsAlt = () => (
-  <ImageCard
-    imageUrl="/images/listing.jpg"
-    title="Hello World"
-    description="An image of the building"
-  />
-)

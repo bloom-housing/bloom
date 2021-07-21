@@ -10,7 +10,6 @@ export interface ImageCardProps {
   title: string
   href?: string
   listing?: Listing
-  description?: string
 }
 
 const ImageCard = (props: ImageCardProps) => {
@@ -27,9 +26,8 @@ const ImageCard = (props: ImageCardProps) => {
   const image = (
     <div className="image-card__wrapper">
       <figure className="image-card">
-        {props.imageUrl && (
-          <img src={props.imageUrl} alt={props.description || "A picture of the building"} />
-        )}
+        {props.imageUrl && <img src={props.imageUrl} alt={props.title} />}
+        {!props.imageUrl && <div style={{ height: "300px", background: "#ccc" }}></div>}
 
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>

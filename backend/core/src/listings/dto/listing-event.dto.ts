@@ -1,50 +1,40 @@
-import { OmitType } from "@nestjs/swagger"
-import { ListingEvent } from "../entities/listing-event.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsDefined, IsEnum, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { AssetCreateDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { ListingEventType } from "../types/listing-event-type-enum"
+import { ApiProperty } from "@nestjs/swagger"
 
-export class ListingEventDto extends OmitType(ListingEvent, ["listing"]) {}
-export class ListingEventCreateDto extends OmitType(ListingEventDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "file",
-] as const) {
+export class ListingEventDto {
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AssetCreateDto)
-  file?: AssetCreateDto
-}
-
-export class ListingEventUpdateDto extends OmitType(ListingEventDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-  "file",
-] as const) {
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  id?: string
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingEventType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: ListingEventType, enumName: "ListingEventType" })
+  type: ListingEventType
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  createdAt?: Date
+  startTime?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  updatedAt?: Date
+  endTime?: Date
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AssetUpdateDto)
-  file?: AssetUpdateDto
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  url?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  note?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  label?: string | null
 }

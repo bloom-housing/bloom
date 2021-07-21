@@ -42,12 +42,7 @@ export const defaultDropzone = () => {
       {progressValue == 0 && (
         <p className="mt-16">(Provide Cloudinary credentials via the Knobs below.)</p>
       )}
-      <img
-        src={cloudinaryImage}
-        style={{ width: "200px" }}
-        role={cloudinaryImage ? undefined : "none"}
-        alt={cloudinaryImage && "uploaded file"}
-      />
+      <img src={cloudinaryImage} style={{ width: "200px" }} />
     </>
   )
 }

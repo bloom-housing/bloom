@@ -8,16 +8,14 @@ export default {
 }
 
 export const Default = () => (
-  <LanguageNav
-    items={[
-      {
-        prefix: "",
-        label: "English",
-      },
-      {
-        prefix: "es",
-        label: "Spanish",
-      },
-    ]}
-  />
+  <LanguageNav items={[
+    {
+      prefix: "",
+      label: "English",
+    },
+    {
+      prefix: "es",
+      label: "Spanish",
+    },
+  ]}/>
 )

@@ -18,23 +18,6 @@ export const Default = () => {
     </TabNav>
   )
 }
-// TODO: Fix tab roles for this component in #1489
-Default.parameters = {
-  a11y: {
-    config: {
-      rules: [
-        {
-          id: "no-focusable-content",
-          enabled: false,
-        },
-        {
-          id: "nested-interactive",
-          enabled: false,
-        },
-      ],
-    },
-  },
-}
 
 export const Other = () => {
   return (
@@ -47,22 +30,4 @@ export const Other = () => {
       </TabNavItem>
     </TabNav>
   )
-}
-
-// TODO: Fix tab roles for this component in #1489
-Other.parameters = {
-  a11y: {
-    config: {
-      rules: [
-        {
-          id: "no-focusable-content",
-          enabled: false,
-        },
-        {
-          id: "nested-interactive",
-          enabled: false,
-        },
-      ],
-    },
-  },
 }

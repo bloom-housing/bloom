@@ -2,10 +2,6 @@ import { useContext } from "react"
 import useSWR, { mutate } from "swr"
 
 import { AuthContext } from "@bloom-housing/ui-components"
-import {
-  EnumApplicationsApiExtraModelOrder,
-  EnumApplicationsApiExtraModelOrderBy,
-} from "@bloom-housing/backend-core/types"
 
 type UseSingleApplicationDataProps = {
   listingId: string
@@ -43,27 +39,20 @@ export function useApplicationsData(
   pageIndex: number,
   limit = 10,
   listingId: string,
-  search: string,
-  orderBy?: EnumApplicationsApiExtraModelOrderBy,
-  order?: EnumApplicationsApiExtraModelOrder
+  search: string
 ) {
   const { applicationsService } = useContext(AuthContext)
 
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", pageIndex.toString())
-  queryParams.append("limit", limit.toString())
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", pageIndex.toString())
+  searchParams.append("limit", limit.toString())
 
   if (search) {
-    queryParams.append("search", search)
+    searchParams.append("search", search)
   }
 
-  if (orderBy) {
-    queryParams.append("orderBy", search)
-    queryParams.append("order", order ?? EnumApplicationsApiExtraModelOrder.ASC)
-  }
-
-  const endpoint = `${process.env.backendApiBase}/applications?${queryParams.toString()}`
+  const endpoint = `${process.env.backendApiBase}/applications?${searchParams.toString()}`
 
   const params = {
     listingId,
@@ -73,10 +62,6 @@ export function useApplicationsData(
 
   if (search) {
     Object.assign(params, { search })
-  }
-
-  if (orderBy) {
-    Object.assign(params, { orderBy, order: order ?? "ASC" })
   }
 
   const fetcher = () => applicationsService.list(params)
@@ -110,12 +95,12 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
-  const queryParams = new URLSearchParams()
-  queryParams.append("listingId", listingId)
-  queryParams.append("page", page.toString())
-  queryParams.append("limit", limit.toString())
+  const searchParams = new URLSearchParams()
+  searchParams.append("listingId", listingId)
+  searchParams.append("page", page.toString())
+  searchParams.append("limit", limit.toString())
 
-  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
+  const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${searchParams.toString()}`
 
   const fetcher = () =>
     applicationFlaggedSetsService.list({
@@ -157,35 +142,6 @@ export function useAmiChartList() {
   const fetcher = () => amiChartsService.list()
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
-export function useUnitPriorityList() {
-  const { unitPriorityService } = useContext(AuthContext)
-  const fetcher = () => unitPriorityService.list()
-
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/unitAccessibilityPriorityTypes`,
-    fetcher
-  )
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
-export function useUnitTypeList() {
-  const { unitTypesService } = useContext(AuthContext)
-  const fetcher = () => unitTypesService.list()
-
-  const { data, error } = useSWR(`${process.env.backendApiBase}/unitTypes`, fetcher)
 
   return {
     data,

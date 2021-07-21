@@ -1,30 +1,27 @@
 import { DynamicModule, Module } from "@nestjs/common"
+import { UserModule } from "../user/user.module"
+import { Listing } from "../listings/entities/listing.entity"
+import { Unit } from "../units/entities/unit.entity"
+import { Application } from "../applications/entities/application.entity"
 
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { UserService } from "../user/user.service"
+import { User } from "../user/entities/user.entity"
+import { ListingsService } from "../listings/listings.service"
 import dbOptions = require("../../ormconfig")
 import testDbOptions = require("../../ormconfig.test")
+import { CsvBuilder } from "../csv/csv-builder.service"
+import { CsvEncoder } from "../csv/csv-encoder.service"
+import { PropertyGroup } from "../property-groups/entities/property-group.entity"
+import { Preference } from "../preferences/entities/preference.entity"
+import { Property } from "../property/entities/property.entity"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
+import { AuthzService } from "../auth/authz.service"
+import { ApplicationFlaggedSet } from "../application-flagged-sets/entities/application-flagged-set.entity"
+import { ApplicationsModule } from "../applications/applications.module"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { SharedModule } from "../shared/shared.module"
-import { AuthModule } from "../auth/auth.module"
-import { ApplicationsModule } from "../applications/applications.module"
-import { ListingsModule } from "../listings/listings.module"
-import { AmiChartsModule } from "../ami-charts/ami-charts.module"
-import { ListingDefaultSeed } from "../seeds/listings/listing-default-seed"
-import { Listing } from "../listings/entities/listing.entity"
-import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
-import { UnitType } from "../unit-types/entities/unit-type.entity"
-import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
-import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { Property } from "../property/entities/property.entity"
-import { Unit } from "../units/entities/unit.entity"
-import { User } from "../auth/entities/user.entity"
-import { ListingColiseumSeed } from "../seeds/listings/listing-coliseum-seed"
-import { ListingDefaultOnePreferenceSeed } from "../seeds/listings/listing-default-one-preference-seed"
-import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-default-no-preference-seed"
-import { Preference } from "../preferences/entities/preference.entity"
-import { ListingDefaultFCFSPreferenceSeed } from "../seeds/listings/listing-default-fcfs-seed"
-import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
-import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
 
 @Module({})
 export class SeederModule {
@@ -33,39 +30,36 @@ export class SeederModule {
     return {
       module: SeederModule,
       imports: [
+        ApplicationsModule,
+        UserModule,
         SharedModule,
         TypeOrmModule.forRoot({
           ...dbConfig,
         }),
-        TypeOrmModule.forFeature([
-          Listing,
-          Preference,
-          UnitAccessibilityPriorityType,
-          UnitType,
-          UnitRentType,
-          AmiChart,
-          Property,
-          Unit,
-          User,
-        ]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
-        ApplicationsModule,
-        AuthModule,
-        ListingsModule,
-        AmiChartsModule,
+        TypeOrmModule.forFeature([
+          Listing,
+          Unit,
+          Application,
+          User,
+          Property,
+          PropertyGroup,
+          Preference,
+          AmiChart,
+          ApplicationFlaggedSet,
+        ]),
       ],
       providers: [
-        ListingDefaultSeed,
-        ListingColiseumSeed,
-        ListingDefaultOnePreferenceSeed,
-        ListingDefaultNoPreferenceSeed,
-        ListingDefaultFCFSPreferenceSeed,
-        ListingDefaultBmrChartSeed,
-        ListingTritonSeed,
+        AuthzService,
+        ApplicationFlaggedSetsService,
+        UserService,
+        ListingsService,
+        CsvBuilder,
+        CsvEncoder,
       ],
     }
   }

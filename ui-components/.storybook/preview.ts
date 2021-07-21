@@ -24,15 +24,4 @@ export const parameters = {
       ],
     },
   },
-  a11y: {
-    config: {
-      rules: [
-        // TODO: Enable color-contrast after resolving #1488
-        {
-          id: "color-contrast",
-          enabled: false,
-        },
-      ],
-    },
-  },
 }

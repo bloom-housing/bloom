@@ -17,22 +17,12 @@ export class ListingsService {
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
       .leftJoinAndSelect("listings.image", "image")
-      .leftJoinAndSelect("listings.events", "listingEvents")
-      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
-      .leftJoinAndSelect("listings.applicationAddress", "applicationAddress")
-      .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")
-      .leftJoinAndSelect("listings.applicationPickUpAddress", "applicationPickUpAddress")
-      .leftJoinAndSelect("listings.applicationMailingAddress", "applicationMailingAddress")
-      .leftJoinAndSelect("listings.applicationDropOffAddress", "applicationDropOffAddress")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.unitType", "unitTypeRef")
-      .leftJoinAndSelect("units.unitRentType", "unitRentType")
-      .leftJoinAndSelect("units.priorityType", "priorityType")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
@@ -87,10 +77,10 @@ export class ListingsService {
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const qb = this.getQueryBuilder()
-    qb.where("listings.id = :id", { id: listingDto.id })
-    const listing = await qb.getOne()
-
+    const listing = await Listing.findOne({
+      where: { id: listingDto.id },
+      relations: ["property"],
+    })
     if (!listing) {
       throw new NotFoundException()
     }

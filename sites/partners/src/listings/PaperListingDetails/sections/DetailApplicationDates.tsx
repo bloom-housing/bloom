@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
+import moment from "moment"
 
 const DetailApplicationDates = () => {
   const listing = useContext(ListingContext)
@@ -16,12 +16,14 @@ const DetailApplicationDates = () => {
       <GridSection columns={3}>
         <GridCell>
           <ViewItem label={t("listings.applicationDeadline")}>
-            {getDetailFieldDate(listing.applicationDueDate)}
+            {listing.applicationDueDate &&
+              moment(new Date(listing?.applicationDueDate)).utc().format("MM/DD/YYYY")}
           </ViewItem>
         </GridCell>
         <GridCell>
           <ViewItem label={t("listings.applicationDueTime")}>
-            {getDetailFieldTime(listing.applicationDueTime)}
+            {listing.applicationDueTime &&
+              moment(new Date(listing?.applicationDueTime)).format("hh:mm:ss A")}
           </ViewItem>
         </GridCell>
       </GridSection>

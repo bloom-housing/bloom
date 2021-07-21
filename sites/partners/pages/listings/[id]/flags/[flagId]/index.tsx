@@ -107,7 +107,7 @@ const Flag = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{t("nav.siteTitle")}</title>
       </Head>
 
       <PageHeader

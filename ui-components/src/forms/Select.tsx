@@ -15,7 +15,7 @@ interface SelectProps {
   defaultValue?: string
   placeholder?: string
   register: UseFormMethods["register"]
-  validation?: Record<string, unknown>
+  validation?: Record<string, any>
   disabled?: boolean
   options: (string | SelectOption)[]
   keyPrefix?: string

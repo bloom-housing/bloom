@@ -79,7 +79,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
           <img
             className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
             src={props.logoSrc}
-            alt={"Site logo"}
+            alt={props.title}
           />
           {!props.imageOnly && <div className="logo__title">{props.title}</div>}
         </div>

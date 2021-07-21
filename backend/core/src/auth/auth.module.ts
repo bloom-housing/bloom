@@ -1,20 +1,16 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
 import { LocalStrategy } from "./passport-strategies/local.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
+import { AuthController } from "./auth.controller"
 import { PassportModule } from "@nestjs/passport"
+import { AuthService } from "./auth.service"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { RevokedToken } from "./entities/revoked-token.entity"
 import { SharedModule } from "../shared/shared.module"
+import { AuthzService } from "./authz.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
-import { AuthService } from "./services/auth.service"
-import { AuthzService } from "./services/authz.service"
-import { AuthController } from "./controllers/auth.controller"
-import { User } from "./entities/user.entity"
-import { UserService } from "./services/user.service"
-import { UserController } from "./controllers/user.controller"
-import { EmailModule } from "../shared/email/email.module"
-import { PasswordService } from "./services/password.service"
+import { UserModule } from "../user/user.module"
 
 @Module({
   imports: [
@@ -29,12 +25,12 @@ import { PasswordService } from "./services/password.service"
         },
       }),
     }),
-    TypeOrmModule.forFeature([RevokedToken, User]),
+    TypeOrmModule.forFeature([RevokedToken]),
     SharedModule,
-    EmailModule,
+    forwardRef(() => UserModule),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
-  exports: [AuthzService, AuthService, UserService],
-  controllers: [AuthController, UserController],
+  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService],
+  exports: [AuthzService, AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}

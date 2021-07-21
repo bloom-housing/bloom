@@ -32,7 +32,7 @@ const PreferencesList = (props: PreferencesListProps) => {
       <li key={index} className={itemClasses.join(" ")}>
         <div className="preferences-list__number">
           {preference.ordinal}
-          <sup>{preference.ordinal ? getOrdinal(preference.ordinal) : ""}</sup>
+          <sup>{getOrdinal(preference.ordinal)}</sup>
         </div>
         <h4 className="info-card__title">{preference.title}</h4>
         {preference.subtitle && (

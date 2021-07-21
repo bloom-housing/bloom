@@ -26,15 +26,11 @@ const DetailRankingsAndResults = () => {
       )}
       {listing.waitlistMaxSize && (
         <GridSection columns={3}>
-          <ViewItem label={t("listings.waitlist.maxSize")}>
-            {listing.waitlistMaxSize.toString()}
-          </ViewItem>
+          <ViewItem label={t("listings.waitlist.maxSize")}>{listing.waitlistMaxSize}</ViewItem>
           <ViewItem label={t("listings.waitlist.currentSize")}>
-            {listing.waitlistCurrentSize.toString()}
+            {listing.waitlistCurrentSize}
           </ViewItem>
-          <ViewItem label={t("listings.waitlist.openSize")}>
-            {listing.waitlistOpenSpots.toString()}
-          </ViewItem>
+          <ViewItem label={t("listings.waitlist.openSize")}>{listing.waitlistOpenSpots}</ViewItem>
         </GridSection>
       )}
     </GridSection>

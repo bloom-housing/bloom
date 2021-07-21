@@ -3,7 +3,6 @@
 ## Issue
 
 Addresses # (issue)
-
 - [ ] This change addresses the issue in full
 - [ ] This change addresses only certain aspects of the issue
 - [ ] This change is a dependency for another issue
@@ -26,7 +25,6 @@ Please include a summary of the change and which issue is addressed. Please also
 ## How Can This Be Tested/Reviewed?
 
 Please describe the tests that you ran to verify your changes. Provide instructions so we can review. Please also list any relevant details for your test configuration
-
 - [ ] Desktop View
 - [ ] Mobile View
 - [ ] Test A

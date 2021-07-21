@@ -12,13 +12,9 @@ const NewListing = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
+        <title>{t("nav.siteTitle")}</title>
       </Head>
-      <MetaTags
-        title={t("nav.siteTitlePartners")}
-        image={metaImage}
-        description={metaDescription}
-      />
+      <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
 
       <PageHeader className="relative" title={t("listings.newListing")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">

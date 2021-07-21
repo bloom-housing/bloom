@@ -4,7 +4,9 @@ import { OmitType } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ReservedCommunityType } from "../entities/reserved-community-type.entity"
 
-export class ReservedCommunityTypeDto extends OmitType(ReservedCommunityType, [] as const) {}
+export class ReservedCommunityTypeDto extends OmitType(ReservedCommunityType, [
+  "listings",
+] as const) {}
 
 export class ReservedCommunityTypeCreateDto extends OmitType(ReservedCommunityTypeDto, [
   "id",

@@ -42,19 +42,16 @@ yarn db:create
 ```
 
 Seeding the DB:
-
 ```shell script
 yarn db:seed
 ```
 
 Generating a new migration:
-
 ```shell script
 yarn db:migration:generate
 ```
 
 Applying migrations:
-
 ```shell script
 yarn db:migration:run
 ```
@@ -77,7 +74,6 @@ Test if Redis is working:
 You can connect a debugger to the backend by starting the backend server with `yarn debug`.
 
 To connect to it from VS Code, add a configuration to launch.json that looks like
-
 ```shell script
 {
   "name": "Attach to Backend",

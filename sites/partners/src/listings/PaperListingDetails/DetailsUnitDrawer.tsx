@@ -31,10 +31,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
           <GridSection grid columns={4}>
             <ViewItem label={t("listings.unit.unitNumber")} children={unit?.number || t("t.n/a")} />
 
-            <ViewItem
-              label={t("listings.unit.type")}
-              children={unit?.unitType?.name || t("t.n/a")}
-            />
+            <ViewItem label={t("listings.unit.type")} children={unit?.unitType || t("t.n/a")} />
 
             <ViewItem
               label={t("listings.unit.numBathrooms")}
@@ -99,7 +96,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
           <GridSection grid columns={4}>
             <ViewItem
               label={t("listings.unit.accessibilityPriorityType")}
-              children={unit?.priorityType?.name || t("t.n/a")}
+              children={unit?.priorityType || t("t.n/a")}
             />
           </GridSection>
         </GridSection>

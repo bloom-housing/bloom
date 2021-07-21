@@ -1,5 +1,5 @@
 {
-  //  "extends": "../tsconfig.json",
+//  "extends": "../tsconfig.json",
   "compilerOptions": {
     "types": ["cypress"],
     "isolatedModules": false,
@@ -8,5 +8,8 @@
     "experimentalDecorators": true,
     "esModuleInterop": true
   },
-  "include": ["./**/*.ts", "../../../node_modules/cypress/types/cypress-global-vars.d.ts"]
+  "include": [
+    "./**/*.ts",
+    "../../../node_modules/cypress/types/cypress-global-vars.d.ts"
+  ]
 }

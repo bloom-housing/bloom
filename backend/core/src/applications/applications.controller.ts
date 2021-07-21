@@ -33,36 +33,16 @@ import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 
-export enum OrderByParam {
+enum OrderByParam {
   firstName = "applicant.firstName",
   lastName = "applicant.lastName",
   submissionDate = "application.submissionDate",
   createdAt = "application.createdAt",
 }
 
-export enum OrderParam {
+enum OrderParam {
   ASC = "ASC",
   DESC = "DESC",
-}
-
-class ApplicationsApiExtraModel {
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(OrderByParam),
-    example: "createdAt",
-    default: "createdAt",
-    required: false,
-  })
-  orderBy?: OrderByParam
-
-  @Expose()
-  @ApiProperty({
-    enum: OrderParam,
-    example: "DESC",
-    default: "DESC",
-    required: false,
-  })
-  order?: OrderParam
 }
 
 export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
@@ -183,7 +163,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels, ApplicationsApiExtraModel)
+@ApiExtraModels(...applicationPreferenceApiExtraModels)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -203,7 +183,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    const applications = await this.applicationsService.listWithFlagged(queryParams)
+    const applications = await this.applicationsService.list(queryParams)
     const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(
       applications,

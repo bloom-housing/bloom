@@ -8,34 +8,10 @@ import { Listing } from "@bloom-housing/backend-core/types"
 let ArcherListing: Listing = Object.assign({}, Archer) as any
 // @ts-ignore
 ArcherListing.unitsSummarized = {
-  unitTypes: [
-    {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      name: "threeBdrm",
-    },
-    {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      name: "twoBdrm",
-    },
-    {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      name: "SRO",
-    },
-  ],
+  unitTypes: ["threeBdrm", "twoBdrm", "SRO"],
   byUnitType: [
     {
-      unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "threeBdrm",
-      },
+      unitType: "threeBdrm",
       minIncomeRange: {
         min: "10",
         max: "20",
@@ -59,12 +35,7 @@ ArcherListing.unitsSummarized = {
       },
     },
     {
-      unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "twoBdrm",
-      },
+      unitType: "twoBdrm",
       minIncomeRange: {
         min: "10",
         max: "20",
@@ -90,12 +61,7 @@ ArcherListing.unitsSummarized = {
       },
     },
     {
-      unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "SRO",
-      },
+      unitType: "SRO",
       minIncomeRange: {
         min: "10",
         max: "20",
@@ -145,32 +111,12 @@ describe("occupancy formatting helper", () => {
   })
   it("properly creates occupany description for no SRO", () => {
     const NewListing = ArcherListing
-    NewListing.unitsSummarized.unitTypes = [
-      {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "threeBdrm",
-      },
-      {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "twoBdrm",
-      },
-    ]
+    NewListing.unitsSummarized.unitTypes = ["threeBdrm", "twoBdrm"]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionNoSro"))
   })
   it("properly creates occupany description for all SRO", () => {
     const NewListing = ArcherListing
-    NewListing.unitsSummarized.unitTypes = [
-      {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        name: "SRO",
-      },
-    ]
+    NewListing.unitsSummarized.unitTypes = ["SRO"]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })

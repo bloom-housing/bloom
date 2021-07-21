@@ -1,7 +1,6 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "./helpers"
 
 const DetailAdditionalDetails = () => {
   const listing = useContext(ListingContext)
@@ -13,25 +12,17 @@ const DetailAdditionalDetails = () => {
       grid={false}
       inset
     >
-      <GridSection columns={1}>
+      <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={t("listings.requiredDocuments")}>
-            {getDetailFieldString(listing.requiredDocuments)}
-          </ViewItem>
+          <ViewItem label={t("listings.requiredDocuments")}>{listing.requiredDocuments}</ViewItem>
+        </GridCell>
+        <GridCell>
+          <ViewItem label={t("listings.importantProgramRules")}>{listing.programRules}</ViewItem>
         </GridCell>
       </GridSection>
-      <GridSection columns={1}>
+      <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={t("listings.importantProgramRules")}>
-            {getDetailFieldString(listing.programRules)}
-          </ViewItem>
-        </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
-        <GridCell>
-          <ViewItem label={t("listings.specialNotes")}>
-            {getDetailFieldString(listing.specialNotes)}
-          </ViewItem>
+          <ViewItem label={t("listings.specialNotes")}>{listing.specialNotes}</ViewItem>
         </GridCell>
       </GridSection>
     </GridSection>

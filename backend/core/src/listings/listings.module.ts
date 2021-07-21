@@ -6,7 +6,7 @@ import { Listing } from "./entities/listing.entity"
 import { Unit } from "../units/entities/unit.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
-import { User } from "../auth/entities/user.entity"
+import { User } from "../user/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
 
 @Module({

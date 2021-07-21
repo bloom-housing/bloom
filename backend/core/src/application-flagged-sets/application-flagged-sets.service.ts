@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./application-flagged-sets.controller"
-import { AuthzService } from "../auth/services/authz.service"
+import { AuthzService } from "../auth/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import {
@@ -16,7 +16,7 @@ import { Application } from "../applications/entities/application.entity"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.dto"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
-import { User } from "../auth/entities/user.entity"
+import { User } from "../user/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { Rule } from "./types/rule-enum"
 

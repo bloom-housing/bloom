@@ -9,10 +9,11 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
+import { UserModule } from "../../src/user/user.module"
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/auth/dto/user.dto"
-import { UserService } from "../../src/auth/services/user.service"
+import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/user/dto/user.dto"
+import { UserService } from "../../src/user/user.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -39,7 +40,7 @@ describe("Applications", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule],
+      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, UserModule],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -107,7 +108,7 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const userService = await app.resolve<UserService>(UserService)
+    const userService = app.get<UserService>(UserService)
     const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())
@@ -201,7 +202,7 @@ describe("Applications", () => {
       dob: new Date(),
     }
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
-    const userService = await app.resolve<UserService>(UserService)
+    const userService = app.get<UserService>(UserService)
     const user = await userService.findByEmail(userCreateDto.email)
 
     await supertest(app.getHttpServer())

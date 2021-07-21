@@ -18,23 +18,23 @@ export class HousingCounselor {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  address?: string | null
+  address: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  citystate?: string | null
+  citystate: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(16, { groups: [ValidationsGroupsEnum.default] })
-  phone?: string | null
+  phone: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  website?: string | null
+  website: string | null
 }

@@ -16,9 +16,7 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     return null
   }
 
-  const phoneNumber = listing.leasingAgentPhone
-    ? `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
-    : ""
+  const phoneNumber = `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
 
   return (
     <section className="aside-block">

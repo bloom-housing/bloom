@@ -43,7 +43,7 @@
 }
 
 @mixin has-image-skeleton() {
-  @apply bg-gray-500;
+  @apply bg-gray-400;
 
   &::before {
     @apply float-left;

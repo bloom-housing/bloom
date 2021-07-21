@@ -11,42 +11,27 @@ import {
   FieldGroup,
   Button,
   Form,
+  bedroomKeys,
   numberOptions,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
-import {
-  AmiChart,
-  UnitAccessibilityPriorityType,
-  UnitType,
-} from "@bloom-housing/backend-core/types"
-import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
+import { AmiChart } from "@bloom-housing/backend-core/types"
+import { getAmiChartId, getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
   onClose: () => void
   units: TempUnit[]
+  amiCharts: AmiChart[]
   currentTempId: number
 }
 
 const STATUS = "available"
 
-const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, units, amiCharts, currentTempId }: UnitFormProps) => {
   const [current, setCurrent] = useState<TempUnit>(null)
   const [tempId, setTempId] = useState<number | null>(null)
-  const [options, setOptions] = useState({
-    amiCharts: [],
-    unitPriorities: [],
-    unitTypes: [],
-  })
-
-  /**
-   * fetch form options
-   */
-  const { data: amiCharts = [] } = useAmiChartList()
-  const { data: unitPriorities = [] } = useUnitPriorityList()
-  const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch, errors, trigger, getValues, reset } = useForm({
@@ -59,7 +44,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       status: STATUS,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiChart: current?.amiChart,
+      amiChart: getAmiChartId(current?.amiChart),
       amiPercentage: current?.amiPercentage,
       monthlyIncomeMin: current?.monthlyIncomeMin,
       monthlyRent: current?.monthlyRent,
@@ -76,12 +61,9 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
-    reset({
-      ...unit,
-      rentType: getRentType(unit),
-      status: STATUS,
-    })
-  }, [units, setCurrent, tempId, reset, options])
+    const amiChartId = getAmiChartId(unit?.amiChart)
+    reset({ ...unit, rentType: getRentType(unit), status: STATUS, amiChart: amiChartId })
+  }, [units, setCurrent, tempId, reset])
 
   const rentType = watch("rentType")
 
@@ -92,32 +74,11 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
 
     const data = getValues()
 
-    if (data.amiChart?.id) {
-      const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
-      data.amiChart = chart
-    } else {
-      delete data.amiChart
-    }
-
     if (data.rentType === "fixed") {
       delete data.monthlyRentAsPercentOfIncome
     } else if (data.rentType === "percentage") {
       data.monthlyIncomeMin = "0"
       delete data.monthlyRent
-    }
-
-    if (data.priorityType?.id) {
-      const priority = unitPriorities.find((priority) => priority.id === data.priorityType.id)
-      data.priorityType = priority
-    } else {
-      delete data.priorityType
-    }
-
-    if (data.unitType?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitType.id)
-      data.unitType = type
-    } else {
-      delete data.unitType
     }
 
     const formData = {
@@ -157,18 +118,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     },
   ]
 
-  useEffect(() => {
-    setOptions({
-      amiCharts: arrayToFormOptions<AmiChart>(amiCharts, "name", "id"),
-      unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
-        unitPriorities,
-        "name",
-        "id"
-      ),
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id"),
-    })
-  }, [amiCharts, unitPriorities, unitTypes])
-
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
@@ -189,14 +138,15 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           <GridCell>
             <ViewItem label={t("listings.unit.type")}>
               <Select
-                id="unitType.id"
-                name="unitType.id"
+                id="unitType"
+                name="unitType"
                 label={t("listings.unit.type")}
                 placeholder={t("listings.unit.type")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={options.unitTypes}
+                options={bedroomKeys}
+                keyPrefix="listings.unitTypes"
                 error={errors?.unitType !== undefined}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
@@ -290,14 +240,17 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           <GridCell>
             <ViewItem label={t("listings.unit.amiChart")}>
               <Select
-                id="amiChart.id"
-                name="amiChart.id"
+                id="amiChart"
+                name="amiChart"
                 label={t("listings.unit.amiChart")}
                 placeholder={t("listings.unit.amiChart")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
-                options={options.amiCharts}
+                options={amiCharts.map((chart) => ({
+                  label: chart.name,
+                  value: chart.id,
+                }))}
               />
             </ViewItem>
           </GridCell>
@@ -381,15 +334,13 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
         <GridSection title={t("t.accessibility")} columns={4} separator>
           <GridCell>
             <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
-              <Select
-                id="priorityType.id"
-                name="priorityType.id"
+              <Field
+                id="priorityType"
+                name="priorityType"
                 label={t("listings.unit.accessibilityPriorityType")}
                 placeholder={t("listings.unit.accessibilityPriorityType")}
-                labelClassName="sr-only"
                 register={register}
-                controlClassName="control"
-                options={options.unitPriorities}
+                readerOnly
               />
             </ViewItem>
           </GridCell>

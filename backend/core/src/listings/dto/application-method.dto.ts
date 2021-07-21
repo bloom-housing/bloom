@@ -14,15 +14,15 @@ export class ApplicationMethodDto {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  label?: string | null
+  label: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  externalReference?: string | null
+  externalReference: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  acceptsPostmarkedApplications?: boolean | null
+  acceptsPostmarkedApplications: boolean | null
 }

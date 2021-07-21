@@ -1,6 +1,6 @@
-import * as client from "../types/src/backend-swagger"
+import * as client from "../client"
 import axios from "axios"
-import { serviceOptions } from "../types/src/backend-swagger"
+import { serviceOptions } from "../client"
 import fs from "fs"
 import { ListingStatus } from "../src/listings/types/listing-status-enum"
 

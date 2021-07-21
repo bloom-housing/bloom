@@ -11,19 +11,18 @@ export type DateFieldValues = {
 }
 
 export interface DateFieldProps {
-  defaultDate?: DateFieldValues
-  disabled?: boolean
   error?: DeepMap<DateFieldValues, FieldError>
   errorMessage?: string
-  id?: string
   label: React.ReactNode
-  labelClass?: string
-  name?: string
-  note?: string
-  readerOnly?: boolean
   register: UseFormMethods["register"]
-  required?: boolean
   watch: UseFormMethods["watch"]
+  defaultDate?: DateFieldValues
+  name?: string
+  id?: string
+  required?: boolean
+  disabled?: boolean
+  readerOnly?: boolean
+  note?: string
 }
 
 const DateField = (props: DateFieldProps) => {
@@ -34,7 +33,7 @@ const DateField = (props: DateFieldProps) => {
     return [name, baseName].filter((item) => item).join(".")
   }
 
-  const labelClasses = ["field-label", props.labelClass]
+  const labelClasses = ["field-label--caps"]
   if (props.readerOnly) labelClasses.push("sr-only")
 
   return (

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { SendGridModule, SendGridService } from "@anchan828/nest-sendgrid"
-import { User } from "../../auth/entities/user.entity"
+import { User } from "../../user/entities/user.entity"
 import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing } from "../../../types"

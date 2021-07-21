@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
+import { UserModule } from "./user/user.module"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import { AuthModule } from "./auth/auth.module"
@@ -25,9 +26,6 @@ import { Reflector } from "@nestjs/core"
 import { AssetsModule } from "./assets/assets.module"
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module"
 import { ReservedCommunityTypesModule } from "./reserved-community-type/reserved-community-types.module"
-import { UnitTypesModule } from "./unit-types/unit-types.module"
-import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
-import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -94,9 +92,7 @@ export class AppModule {
           }),
         }),
         UnitsModule,
-        UnitTypesModule,
-        UnitRentTypesModule,
-        UnitAccessibilityPriorityTypesModule,
+        UserModule,
       ],
     }
   }

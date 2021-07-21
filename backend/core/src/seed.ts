@@ -1,31 +1,28 @@
 import { SeederModule } from "./seeder/seeder.module"
 import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
-import { UserService } from "./auth/services/user.service"
+import { ListingSeed, seedListing, defaultListingSeed, allSeeds } from "./seeds/listings"
+import { UserService } from "./user/user.service"
 import { plainToClass } from "class-transformer"
-import { UserCreateDto } from "./auth/dto/user.dto"
+import { UserCreateDto } from "./user/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { User } from "./auth/entities/user.entity"
+import { User } from "./user/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
-import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
-import { defaultLeasingAgents } from "./seeds/listings/shared"
-import { Listing } from "./listings/entities/listing.entity"
-import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
-import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
-import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
-import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
-import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
-export async function createLeasingAgents(app: INestApplicationContext) {
-  const usersService = await app.resolve<UserService>(UserService)
+const parseSeed = (seedData: ListingSeed): ListingSeed => {
+  return JSON.parse(JSON.stringify(seedData)) as ListingSeed
+}
+
+export async function getDefaultLeasingAgents(app: INestApplicationContext, seed: ListingSeed) {
+  const usersService = app.get<UserService>(UserService)
   const leasingAgents = await Promise.all(
-    defaultLeasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+    seed.leasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
@@ -35,37 +32,31 @@ export async function createLeasingAgents(app: INestApplicationContext) {
   return leasingAgents
 }
 
+const getListing = async (
+  app: INestApplicationContext,
+  leasingAgents: User[],
+  seed: ListingSeed
+) => {
+  const thisSeed = parseSeed(seed)
+  const thisListing = await seedListing(app, thisSeed, leasingAgents)
+  return thisListing
+}
+
 const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
-  const leasingAgents = await createLeasingAgents(app)
+  const leasingAgents = await getDefaultLeasingAgents(app, parseSeed(defaultListingSeed))
 
-  const allSeeds = [
-    app.get<ListingDefaultSeed>(ListingDefaultSeed),
-    app.get<ListingDefaultSeed>(ListingColiseumSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
-    app.get<ListingDefaultSeed>(ListingTritonSeed),
-  ]
-
-  const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
-
-  for (const [index, listingSeed] of allSeeds.entries()) {
+  allSeeds.forEach((seed, index) => {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
-    const listing = await listingSeed.seed()
-    listing.leasingAgents = [everyOtherAgent]
-    await listingRepository.save(listing)
-
-    seeds.push(listing)
-  }
+    seeds.push(getListing(app, [everyOtherAgent], seed))
+  })
 
   return seeds
 }
 
 async function seed() {
-  const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
-  const userService = await app.resolve<UserService>(UserService)
+  const app = await NestFactory.createApplicationContext(SeederModule.forRoot({ test: argv.test }))
+  const userService = app.get<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const listings = await seedListings(app)

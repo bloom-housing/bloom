@@ -19,7 +19,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     applicant: {
       firstName: "Applicant",
       middleName: "Middlename",
-      lastName: "lastName",
+      lastName: "",
       birthMonth: "",
       birthDay: "",
       birthYear: "",

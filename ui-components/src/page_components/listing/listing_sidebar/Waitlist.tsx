@@ -16,15 +16,12 @@ export interface WaitlistProps {
 const Waitlist = (props: WaitlistProps) => {
   const listing = props.listing
   const showWaitlistValues =
-    listing.waitlistMaxSize !== undefined &&
     listing.waitlistMaxSize !== null &&
-    listing.waitlistCurrentSize !== undefined &&
     listing.waitlistCurrentSize !== null &&
-    listing.waitlistOpenSpots !== undefined &&
     listing.waitlistOpenSpots !== null
   let header, subheader, waitlistItems
 
-  if (listing?.unitsAvailable && listing.unitsAvailable > 0 && listing.isWaitlistOpen) {
+  if (listing.unitsAvailable > 0 && listing.isWaitlistOpen) {
     header = t("listings.waitlist.unitsAndWaitlist")
     subheader = t("listings.waitlist.submitAnApplication")
     waitlistItems = (
@@ -60,7 +57,7 @@ const Waitlist = (props: WaitlistProps) => {
         {showWaitlistValues && (
           <>
             <WaitlistItem
-              value={listing.waitlistCurrentSize || 0}
+              value={listing.waitlistCurrentSize}
               text={t("listings.waitlist.currentSize")}
             />
             {listing.waitlistOpenSpots && (
@@ -70,10 +67,7 @@ const Waitlist = (props: WaitlistProps) => {
                 className={"font-semibold"}
               />
             )}
-            <WaitlistItem
-              value={listing.waitlistMaxSize || 0}
-              text={t("listings.waitlist.finalSize")}
-            />
+            <WaitlistItem value={listing.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
           </>
         )}
       </>

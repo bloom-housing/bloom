@@ -10,10 +10,10 @@
     @apply self-center;
 
     &:before {
-      content: "\2039";
+      content: '\2039';
       @apply text-xl;
       @apply px-2;
-      line-height: 0.75rem;
+      line-height: .75rem;
     }
   }
 }

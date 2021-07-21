@@ -93,9 +93,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-07-09T21:20:05.783Z",
       "updatedAt": "2019-08-14T23:05:43.913Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -119,9 +117,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.982Z",
       "updatedAt": "2019-08-14T23:06:59.015Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -145,9 +141,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.758Z",
       "updatedAt": "2019-08-14T23:06:59.023Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -171,9 +165,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.766Z",
       "updatedAt": "2019-08-14T23:06:59.031Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -197,9 +189,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.771Z",
       "updatedAt": "2019-08-14T23:06:59.039Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -223,9 +213,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.777Z",
       "updatedAt": "2019-08-14T23:06:59.046Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -249,9 +237,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.783Z",
       "updatedAt": "2019-08-14T23:06:59.053Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -275,9 +261,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.976Z",
       "updatedAt": "2019-08-14T23:06:59.161Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -301,9 +285,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.976Z",
       "updatedAt": "2019-08-14T23:06:59.167Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -327,9 +309,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-07-09T21:24:14.122Z",
       "updatedAt": "2019-08-14T23:06:59.173Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -353,9 +333,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.950Z",
       "updatedAt": "2019-08-14T23:06:59.179Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -379,9 +357,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.956Z",
       "updatedAt": "2019-08-14T23:06:59.186Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -405,9 +381,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.961Z",
       "updatedAt": "2019-08-14T23:06:59.192Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -431,9 +405,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.967Z",
       "updatedAt": "2019-08-14T23:06:59.198Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -457,9 +429,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.972Z",
       "updatedAt": "2019-08-14T23:06:59.204Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -483,9 +453,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.978Z",
       "updatedAt": "2019-08-14T23:06:59.210Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -509,9 +477,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:55:22.984Z",
       "updatedAt": "2019-08-14T23:06:59.216Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -535,9 +501,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.563Z",
       "updatedAt": "2019-08-14T23:06:59.222Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -561,9 +525,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.570Z",
       "updatedAt": "2019-08-14T23:06:59.229Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -587,9 +549,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.575Z",
       "updatedAt": "2019-08-14T23:06:59.235Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -613,9 +573,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.580Z",
       "updatedAt": "2019-08-14T23:06:59.241Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -639,9 +597,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.587Z",
       "updatedAt": "2019-08-14T23:06:59.247Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -665,9 +621,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.593Z",
       "updatedAt": "2019-08-14T23:06:59.254Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -691,9 +645,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.606Z",
       "updatedAt": "2019-08-14T23:06:59.260Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -717,9 +669,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:56:06.612Z",
       "updatedAt": "2019-08-14T23:06:59.267Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -743,9 +693,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.790Z",
       "updatedAt": "2019-08-14T23:06:59.060Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -769,9 +717,7 @@
       "reservedType": "senior",
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.796Z",
       "updatedAt": "2019-08-14T23:06:59.067Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -795,9 +741,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.802Z",
       "updatedAt": "2019-08-14T23:06:59.074Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -821,9 +765,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.807Z",
       "updatedAt": "2019-08-14T23:06:59.080Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -847,9 +789,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.813Z",
       "updatedAt": "2019-08-14T23:06:59.086Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -873,9 +813,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:52:08.819Z",
       "updatedAt": "2019-08-14T23:06:59.093Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -899,9 +837,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.921Z",
       "updatedAt": "2019-08-14T23:06:59.099Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -925,9 +861,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.927Z",
       "updatedAt": "2019-08-14T23:06:59.105Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -951,9 +885,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.933Z",
       "updatedAt": "2019-08-14T23:06:59.111Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -977,9 +909,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.938Z",
       "updatedAt": "2019-08-14T23:06:59.118Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1003,9 +933,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.944Z",
       "updatedAt": "2019-08-14T23:06:59.124Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1029,9 +957,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.950Z",
       "updatedAt": "2019-08-14T23:06:59.130Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1055,9 +981,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.955Z",
       "updatedAt": "2019-08-14T23:06:59.136Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1081,9 +1005,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.960Z",
       "updatedAt": "2019-08-14T23:06:59.142Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1107,9 +1029,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.965Z",
       "updatedAt": "2019-08-14T23:06:59.148Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",
@@ -1133,9 +1053,7 @@
       "reservedType": null,
       "sqFeet": 285,
       "status": "occupied",
-      "unitType": {
-        "name": "studio"
-      },
+      "unitType": "studio",
       "createdAt": "2019-08-14T22:53:09.970Z",
       "updatedAt": "2019-08-14T23:06:59.155Z",
       "listingId": "Uvbk5qurpB2WI9V6WnNdH",

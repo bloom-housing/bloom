@@ -21,7 +21,7 @@ export const occupancyTable = (listing: Listing) => {
       }
 
       return {
-        unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>,
+        unitType: <strong>{t("listings.unitTypes." + unitSummary.unitType)}</strong>,
         occupancy: occupancy,
       }
     })
@@ -32,10 +32,7 @@ export const occupancyTable = (listing: Listing) => {
 
 export const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
-  if (
-    unitsSummarized &&
-    unitsSummarized.unitTypes.map((unitType) => unitType.name).includes("SRO")
-  ) {
+  if (unitsSummarized && unitsSummarized.unitTypes.includes("SRO")) {
     return unitsSummarized.unitTypes.length == 1
       ? t("listings.occupancyDescriptionAllSro")
       : t("listings.occupancyDescriptionSomeSro")

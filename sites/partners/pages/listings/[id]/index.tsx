@@ -18,7 +18,6 @@ import Aside from "../../../src/listings/Aside"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import DetailListingData from "../../../src/listings/PaperListingDetails/sections/DetailListingData"
 import DetailListingIntro from "../../../src/listings/PaperListingDetails/sections/DetailListingIntro"
-import DetailListingPhoto from "../../../src/listings/PaperListingDetails/sections/DetailListingPhoto"
 import DetailBuildingDetails from "../../../src/listings/PaperListingDetails/sections/DetailBuildingDetails"
 import DetailAdditionalDetails from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalDetails"
 import DetailAdditionalEligibility from "../../../src/listings/PaperListingDetails/sections/DetailAdditionalEligibility"
@@ -50,7 +49,7 @@ export default function ApplicationsList() {
         )
       case ListingStatus.closed:
         return (
-          <Tag pillStyle styleType={AppearanceStyleType.closed}>
+          <Tag styleType={AppearanceStyleType.warning} pillStyle>
             {t(`listings.listingStatus.closed`)}
           </Tag>
         )
@@ -69,7 +68,7 @@ export default function ApplicationsList() {
     <ListingContext.Provider value={listingDto}>
       <Layout>
         <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
+          <title>{t("nav.siteTitle")}</title>
         </Head>
 
         <PageHeader
@@ -113,7 +112,6 @@ export default function ApplicationsList() {
               <div className="info-card md:w-9/12">
                 <DetailListingData />
                 <DetailListingIntro />
-                <DetailListingPhoto />
                 <DetailBuildingDetails />
                 <DetailUnits setUnitDrawer={setUnitDrawer} />
                 <DetailAdditionalFees />

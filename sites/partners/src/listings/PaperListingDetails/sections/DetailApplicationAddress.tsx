@@ -2,7 +2,6 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { getDetailFieldString } from "./helpers"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
@@ -119,7 +118,7 @@ const DetailApplicationAddress = () => {
             <GridSection columns={3}>
               <GridCell span={2}>
                 <ViewItem label={t("leasingAgent.officeHours")}>
-                  {getDetailFieldString(listing.applicationPickUpAddressOfficeHours)}
+                  {listing.applicationPickUpAddressOfficeHours}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -167,7 +166,7 @@ const DetailApplicationAddress = () => {
             <GridSection columns={3}>
               <GridCell span={2}>
                 <ViewItem label={t("leasingAgent.officeHours")}>
-                  {getDetailFieldString(listing.applicationDropOffAddressOfficeHours)}
+                  {listing.applicationDropOffAddressOfficeHours}
                 </ViewItem>
               </GridCell>
             </GridSection>
@@ -194,7 +193,7 @@ const DetailApplicationAddress = () => {
 
         <GridSection columns={2}>
           <ViewItem label={t("listings.additionalApplicationSubmissionNotes")}>
-            {getDetailFieldString(listing.additionalApplicationSubmissionNotes)}
+            {listing.additionalApplicationSubmissionNotes}
           </ViewItem>
         </GridSection>
       </GridSection>

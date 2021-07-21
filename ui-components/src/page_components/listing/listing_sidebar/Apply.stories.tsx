@@ -18,6 +18,9 @@ const internalFormRoute = "/applications/start/choose-language"
 export const hardApplicationDeadline = () => {
   listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
   listing.applicationMailingAddress = {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",
@@ -32,6 +35,9 @@ export const hardApplicationDeadline = () => {
 export const acceptsPostmarkedApplications = () => {
   listing.applicationDueDate = new Date("2021-11-30T15:22:57.000-07:00")
   listing.applicationMailingAddress = {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
     city: "San Jose",
     street: "98 Archer Street",
     zipCode: "95112",

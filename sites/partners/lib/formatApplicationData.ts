@@ -27,7 +27,7 @@ import moment from "moment"
 
 type GetAddressType = Omit<Address, "id" | "createdAt" | "updatedAt">
 
-const getAddress = (condition: boolean, addressData?: GetAddressType): GetAddressType => {
+function getAddress(condition: boolean, addressData?: GetAddressType): GetAddressType {
   const blankAddress: GetAddressType = {
     street: "",
     street2: "",
@@ -38,8 +38,6 @@ const getAddress = (condition: boolean, addressData?: GetAddressType): GetAddres
 
   return condition ? addressData : blankAddress
 }
-
-const mapEmptyStringToNull = (value: string) => (value === "" ? null : value)
 
 interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
@@ -82,9 +80,6 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     const noPhone = !phoneNumber
     const workInRegion: string | null = applicantData?.workInRegion || null
     const emailAddress: string | null = applicantData?.emailAddress || null
-
-    applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
-    applicantData.lastName = mapEmptyStringToNull(applicantData.firstName)
 
     const workAddress = getAddress(
       applicantData?.workInRegion === YesNoAnswer.Yes,

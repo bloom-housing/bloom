@@ -1,7 +1,6 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { getDetailFieldString } from "./helpers"
 
 const DetailLeasingAgent = () => {
   const listing = useContext(ListingContext)
@@ -15,30 +14,22 @@ const DetailLeasingAgent = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("leasingAgent.name")}>
-            {getDetailFieldString(listing.leasingAgentName)}
-          </ViewItem>
+          <ViewItem label={t("leasingAgent.name")}>{listing.leasingAgentName}</ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("t.email")}>
-            {getDetailFieldString(listing.leasingAgentEmail)}
-          </ViewItem>
+          <ViewItem label={t("t.email")}>{listing.leasingAgentEmail}</ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("t.phone")}>
-            {getDetailFieldString(listing.leasingAgentPhone)}
-          </ViewItem>
+          <ViewItem label={t("t.phone")}>{listing.leasingAgentPhone}</ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={t("leasingAgent.title")}>
-            {getDetailFieldString(listing.leasingAgentTitle)}
-          </ViewItem>
+          <ViewItem label={t("leasingAgent.title")}>{listing.leasingAgentTitle}</ViewItem>
         </GridCell>
         <GridCell>
           <ViewItem label={t("leasingAgent.officeHours")}>
-            {getDetailFieldString(listing.leasingAgentOfficeHours)}
+            {listing.leasingAgentOfficeHours}
           </ViewItem>
         </GridCell>
       </GridSection>

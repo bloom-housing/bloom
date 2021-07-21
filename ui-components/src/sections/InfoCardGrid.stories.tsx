@@ -33,7 +33,7 @@ More content
       className="is-normal-primary-lighter"
     >
       {`
-#### Header 4
+### Header 3
 
 * A list
 * of items
