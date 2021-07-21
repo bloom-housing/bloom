@@ -5001,16 +5001,16 @@ export enum CountyCode {
   'San Jose' = 'San Jose'
 }
 
-export enum UnitStatus {
-  'unknown' = 'unknown',
-  'available' = 'available',
-  'occupied' = 'occupied'
-}
-
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
+}
+
+export enum UnitStatus {
+  'unknown' = 'unknown',
+  'available' = 'available',
+  'occupied' = 'occupied'
 }
 export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
