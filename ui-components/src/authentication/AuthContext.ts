@@ -10,6 +10,8 @@ import {
   serviceOptions,
   Status,
   AmiChartsService,
+  UnitAccessibilityPriorityTypesService,
+  UnitTypesService,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -33,6 +35,8 @@ type ContextProps = {
   listingsService: ListingsService
   userService: UserService
   authService: AuthService
+  unitPriorityService: UnitAccessibilityPriorityTypesService
+  unitTypesService: UnitTypesService
   login: (email: string, password: string) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -210,6 +214,8 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     listingsService: new ListingsService(),
     userService: new UserService(),
     authService: new AuthService(),
+    unitPriorityService: new UnitAccessibilityPriorityTypesService(),
+    unitTypesService: new UnitTypesService(),
     loading: state.loading,
     accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
