@@ -4,6 +4,10 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { allSeeds } from "../../src/seeds/listings"
+import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
+import { getUserAccessToken } from "../utils/get-user-access-token"
+import { setAuthorization } from "../utils/set-authorization-helper"
+import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -48,6 +52,60 @@ describe("Listings", () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
     expect(res.body.length).toEqual(allSeeds.length)
+  })
+
+  it("should modify property related fields of a listing and return a modified value", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingDto = { ...res.body[0] }
+
+    const amenitiesValue = "Random amenities value"
+    expect(listing.amenities).not.toBe(amenitiesValue)
+    listing.amenities = amenitiesValue
+
+    const oldOccupancy = listing.units[0].maxOccupancy
+    listing.units[0].maxOccupancy = oldOccupancy + 1
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.amenities).toBe(amenitiesValue)
+    expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
+  })
+
+  it("should add/overwrite image in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const fileId = "fileId"
+    const label = "label"
+    const image: AssetCreateDto = {
+      fileId: fileId,
+      label: label,
+    }
+    listing.image = image
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.image.fileId).toBe(fileId)
+    expect(modifiedListing.image.label).toBe(label)
+    expect(modifiedListing.image).toHaveProperty("id")
+    expect(modifiedListing.image).toHaveProperty("createdAt")
+    expect(modifiedListing.image).toHaveProperty("updatedAt")
   })
 
   afterEach(() => {

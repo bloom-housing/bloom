@@ -3,10 +3,10 @@ import { ListingCreateDto } from "../listings/dto/listing.dto"
 import { UnitCreateDto } from "../units/dto/unit.dto"
 import { PropertyCreateDto } from "../property/dto/property.dto"
 import { PreferenceCreateDto } from "../preferences/dto/preference.dto"
-import { BaseEntity, Repository } from "typeorm"
+import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Property } from "../property/entities/property.entity"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ApplicationMethodType, AssetDto, Unit } from "../.."
+import { ApplicationMethodType, Unit } from "../.."
 import { INestApplicationContext } from "@nestjs/common"
 import { AmiChartCreateDto } from "../ami-charts/dto/ami-chart.dto"
 import { User } from "../user/entities/user.entity"
@@ -19,44 +19,75 @@ import { CountyCode } from "../shared/types/county-code"
 import { ListingEventType } from "../listings/types/listing-event-type-enum"
 import { InputType } from "../shared/types/input-type"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { IdDto } from "../shared/dto/id.dto"
+import { AssetCreateDto } from "../assets/dto/asset.dto"
+
+type PropertySeedType = Omit<
+  PropertyCreateDto,
+  | "propertyGroups"
+  | "listings"
+  | "units"
+  | "unitsSummarized"
+  | "householdSizeMin"
+  | "householdSizeMax"
+>
+
+type UnitSeedType = Omit<UnitCreateDto, "property">
+
+type ApplicationMethodSeedType = Omit<ApplicationMethodDto, "listing">
+
+type ListingSeedType = Omit<
+  ListingCreateDto,
+  | keyof BaseEntity
+  | "property"
+  | "urlSlug"
+  | "applicationMethods"
+  | "events"
+  | "assets"
+  | "preferences"
+  | "leasingAgents"
+  | "showWaitlist"
+  | "units"
+  | "propertyGroups"
+  | "accessibility"
+  | "amenities"
+  | "buildingAddress"
+  | "buildingTotalUnits"
+  | "developer"
+  | "householdSizeMax"
+  | "householdSizeMin"
+  | "neighborhood"
+  | "petPolicy"
+  | "smokingPolicy"
+  | "unitsAvailable"
+  | "unitAmenities"
+  | "servicesOffered"
+  | "yearBuilt"
+  | "unitsSummarized"
+>
+
+type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
+
+type ListingEventDtoSeedType = Omit<ListingEventDto, "listing">
+
+type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
 // Properties that are ommited in DTOS derived types are relations and getters
 export interface ListingSeed {
   amiChart: AmiChartCreateDto
-  units: Array<Omit<UnitCreateDto, "property">>
-  applicationMethods: Array<Omit<ApplicationMethodDto, "listing">>
-  property: Omit<
-    PropertyCreateDto,
-    | "propertyGroups"
-    | "listings"
-    | "units"
-    | "unitsSummarized"
-    | "householdSizeMin"
-    | "householdSizeMax"
-  >
-  preferences: Array<Omit<PreferenceCreateDto, "listing">>
-  listingEvents: Array<Omit<ListingEventDto, "listing">>
-  assets: Array<Omit<AssetDto, "listing">>
-  listing: Omit<
-    ListingCreateDto,
-    | keyof BaseEntity
-    | "property"
-    | "urlSlug"
-    | "applicationMethods"
-    | "events"
-    | "assets"
-    | "preferences"
-    | "leasingAgents"
-    | "showWaitlist"
-  >
+  units: Array<UnitSeedType>
+  applicationMethods: Array<ApplicationMethodSeedType>
+  property: PropertySeedType
+  preferences: Array<PreferenceSeedType>
+  listingEvents: Array<ListingEventDtoSeedType>
+  assets: Array<AssetDtoSeedType>
+  listing: ListingSeedType
   leasingAgents: UserCreateDto[]
 }
 
 export async function seedListing(
   app: INestApplicationContext,
   seed: ListingSeed,
-  leasingAgents: IdDto[]
+  leasingAgents: User[]
 ) {
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
   const propertyRepo = app.get<Repository<Property>>(getRepositoryToken(Property))
@@ -82,9 +113,12 @@ export async function seedListing(
   })
   await unitsRepo.save(unitsToBeCreated)
 
-  const listingCreateDto: Omit<ListingCreateDto, keyof BaseEntity | "urlSlug" | "showWaitlist"> = {
+  const listingCreateDto: Omit<
+    DeepPartial<Listing>,
+    keyof BaseEntity | "urlSlug" | "showWaitlist"
+  > = {
     ...seed.listing,
-    property,
+    property: property,
     leasingAgents: leasingAgents,
     assets: seed.assets,
     preferences: seed.preferences,
@@ -945,7 +979,7 @@ const tritonAmiChart: AmiChartCreateDto = {
 }
 
 // Preferences
-const liveWorkPreference: Omit<PreferenceCreateDto, "listing"> = {
+const liveWorkPreference: PreferenceSeedType = {
   ordinal: 1,
   page: 1,
   title: "Live/Work in County",
@@ -972,7 +1006,7 @@ const liveWorkPreference: Omit<PreferenceCreateDto, "listing"> = {
   },
 }
 
-const displaceePreference: Omit<PreferenceCreateDto, "listing"> = {
+const displaceePreference: PreferenceSeedType = {
   ordinal: 1,
   page: 1,
   title: "Displacee Tenant Housing",
@@ -1013,7 +1047,7 @@ const displaceePreference: Omit<PreferenceCreateDto, "listing"> = {
   },
 }
 
-const pbvPreference: Omit<PreferenceCreateDto, "listing"> = {
+const pbvPreference: PreferenceSeedType = {
   page: 1,
   ordinal: 1,
   title: "Housing Authority Project-Based Voucher",
@@ -1059,7 +1093,7 @@ const pbvPreference: Omit<PreferenceCreateDto, "listing"> = {
   },
 }
 
-const hopwaPreference: Omit<PreferenceCreateDto, "listing"> = {
+const hopwaPreference: PreferenceSeedType = {
   page: 1,
   ordinal: 1,
   title: "Housing Opportunities for Persons with AIDS",
@@ -1089,7 +1123,7 @@ const hopwaPreference: Omit<PreferenceCreateDto, "listing"> = {
 }
 
 // Events
-const defaultListingEvents: Array<Omit<ListingEventDto, "listing">> = [
+const defaultListingEvents: Array<ListingEventDtoSeedType> = [
   {
     startTime: getDate(10),
     endTime: getDate(10),
@@ -1109,7 +1143,7 @@ const defaultListingEvents: Array<Omit<ListingEventDto, "listing">> = [
 ]
 
 // Assets
-const defaultAssets: Array<Omit<AssetDto, "listing">> = [
+const defaultAssets: Array<AssetDtoSeedType> = [
   {
     label: "building",
     fileId:
@@ -1118,15 +1152,7 @@ const defaultAssets: Array<Omit<AssetDto, "listing">> = [
 ]
 
 // Properties
-const defaultProperty: Omit<
-  PropertyCreateDto,
-  | "propertyGroups"
-  | "listings"
-  | "units"
-  | "unitsSummarized"
-  | "householdSizeMin"
-  | "householdSizeMax"
-> = {
+const defaultProperty: PropertySeedType = {
   accessibility: "Custom accessibility text",
   amenities: "Custom property amenities text",
   buildingAddress: {
@@ -1149,15 +1175,7 @@ const defaultProperty: Omit<
   yearBuilt: 2021,
 }
 
-const tritonProperty: Omit<
-  PropertyCreateDto,
-  | "propertyGroups"
-  | "listings"
-  | "units"
-  | "unitsSummarized"
-  | "householdSizeMin"
-  | "householdSizeMax"
-> = {
+const tritonProperty: PropertySeedType = {
   accessibility:
     "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
@@ -1182,15 +1200,7 @@ const tritonProperty: Omit<
   yearBuilt: 2021,
 }
 
-const coliseumProperty: Omit<
-  PropertyCreateDto,
-  | "propertyGroups"
-  | "listings"
-  | "units"
-  | "unitsSummarized"
-  | "householdSizeMin"
-  | "householdSizeMax"
-> = {
+const coliseumProperty: PropertySeedType = {
   accessibility:
     "Fifteen (15) units are designed for residents with mobility impairments per HUD/U.F.A.S. guidelines with one (1) of these units further designed for residents with auditory or visual impairments.  There are two (2) additional units with features for those with auditory or visual impairments.  All the other units are adaptable. Accessible features in the property include: * 36” wide entries and doorways * Kitchens built to the accessibility standards of the California Building Code, including appliance controls and switch outlets within reach, and work surfaces and storage at accessible heights * Bathrooms built to the accessibility standards of the California Building Code, including grab bars, flexible shower spray hose, switch outlets within reach, and in-tub seats. * Closet rods and shelves at mobility height. * Window blinds/shades able to be used without grasping or twisting * Units for the Hearing & Visually Impaired will have a horn & strobe for fire alarm and a flashing light doorbell. The 44 non-ADA units are built to Adaptable standards.",
   amenities: "Community room, bike parking, courtyard off the community room, 2nd floor courtyard.",
@@ -1216,7 +1226,7 @@ const coliseumProperty: Omit<
 }
 
 // Unit Sets
-const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
+const defaultUnits: Array<UnitSeedType> = [
   {
     amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
@@ -1261,7 +1271,7 @@ const defaultUnits: Array<Omit<UnitCreateDto, "property">> = [
   },
 ]
 
-const tritonUnits: Array<Omit<UnitCreateDto, "property">> = [
+const tritonUnits: Array<UnitSeedType> = [
   {
     amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "120.0",
@@ -1364,7 +1374,7 @@ const tritonUnits: Array<Omit<UnitCreateDto, "property">> = [
   },
 ]
 
-const coliseumUnits: Array<Omit<UnitCreateDto, "property">> = [
+const coliseumUnits: Array<UnitSeedType> = [
   {
     amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
@@ -2334,19 +2344,7 @@ const coliseumUnits: Array<Omit<UnitCreateDto, "property">> = [
 ]
 
 // Application Method Sets
-const defaultApplicationMethods: Array<Omit<ApplicationMethodDto, "listing">> = [
-  {
-    type: ApplicationMethodType.POBox,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
+const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
     type: ApplicationMethodType.Internal,
     acceptsPostmarkedApplications: false,
@@ -2355,33 +2353,21 @@ const defaultApplicationMethods: Array<Omit<ApplicationMethodDto, "listing">> = 
   },
 ]
 
-const tritonApplicationMethods: Array<Omit<ApplicationMethodDto, "listing">> = [
+const tritonApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
     type: ApplicationMethodType.FileDownload,
     acceptsPostmarkedApplications: false,
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
   },
 ]
 
-const coliseumApplicationMethods: Array<Omit<ApplicationMethodDto, "listing">> = [
+const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
   {
     type: ApplicationMethodType.FileDownload,
     acceptsPostmarkedApplications: false,
     externalReference: "https://bit.ly/2wH6dLF",
     label: "English",
-  },
-  {
-    type: ApplicationMethodType.PaperPickup,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
   },
 ]
 
@@ -2410,18 +2396,7 @@ const defaultLeasingAgents: UserCreateDto[] = [
 ]
 
 // Listings
-const defaultListing: Omit<
-  ListingCreateDto,
-  | keyof BaseEntity
-  | "property"
-  | "urlSlug"
-  | "applicationMethods"
-  | "events"
-  | "assets"
-  | "preferences"
-  | "leasingAgents"
-  | "showWaitlist"
-> = {
+const defaultListing: ListingSeedType = {
   applicationAddress: {
     city: "San Francisco",
     state: "CA",
@@ -2431,7 +2406,11 @@ const defaultListing: Omit<
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "20",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "Application Organization",
@@ -2478,6 +2457,8 @@ const defaultListing: Omit<
   specialNotes: "Custom special notes text",
   status: ListingStatus.active,
   waitlistCurrentSize: null,
+  waitlistOpenSpots: null,
+  isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: {
     allInfoWillBeVerified: "Custom all info will be verified text",
@@ -2486,18 +2467,7 @@ const defaultListing: Omit<
   },
 }
 
-const tritonListing: Omit<
-  ListingCreateDto,
-  | keyof BaseEntity
-  | "property"
-  | "urlSlug"
-  | "applicationMethods"
-  | "events"
-  | "assets"
-  | "preferences"
-  | "leasingAgents"
-  | "showWaitlist"
-> = {
+const tritonListing: ListingSeedType = {
   applicationAddress: {
     city: "Foster City",
     state: "CA",
@@ -2506,9 +2476,13 @@ const tritonListing: Omit<
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
+  applicationDueTime: null,
   applicationOrganization: "Triton",
   applicationPickUpAddress: {
     city: "Foster City",
@@ -2556,21 +2530,12 @@ const tritonListing: Omit<
   status: ListingStatus.active,
   waitlistCurrentSize: 400,
   waitlistMaxSize: 600,
+  waitlistOpenSpots: 200,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 
-const coliseumListing: Omit<
-  ListingCreateDto,
-  | keyof BaseEntity
-  | "property"
-  | "urlSlug"
-  | "applicationMethods"
-  | "events"
-  | "assets"
-  | "preferences"
-  | "leasingAgents"
-  | "showWaitlist"
-> = {
+const coliseumListing: ListingSeedType = {
   applicationAddress: {
     county: "Alameda",
     city: "Oakland",
@@ -2580,7 +2545,11 @@ const coliseumListing: Omit<
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  applicationDropOffAddress: null,
+  applicationDropOffAddressOfficeHours: null,
+  applicationMailingAddress: null,
   applicationDueDate: getDate(10),
+  applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "John Stewart Company",
@@ -2633,6 +2602,8 @@ const coliseumListing: Omit<
   status: ListingStatus.active,
   waitlistCurrentSize: 0,
   waitlistMaxSize: 3000,
+  waitlistOpenSpots: 3000,
+  isWaitlistOpen: true,
   whatToExpect: null,
 }
 

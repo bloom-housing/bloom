@@ -25,6 +25,7 @@
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
+    "dev:frontend": "concurrently --names \" APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:ui": "cd ui-components && yarn && yarn test",

@@ -38,7 +38,7 @@ interface UnitTablesProps {
 }
 
 const UnitTables = (props: UnitTablesProps) => {
-  const unitSummaries = props.unitSummaries
+  const unitSummaries = props.unitSummaries || []
 
   const unitsHeaders = {
     number: "t.unit",

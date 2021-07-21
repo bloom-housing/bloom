@@ -30,10 +30,13 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     bgColor = vivid ? "bg-primary" : "bg-primary-light"
     content = vivid ? t("listings.comingSoon") : t("listings.applicationOpenPeriod")
   } else {
-    const date = listing.applicationDueDate
     if (listing.applicationDueDate) {
-      const dueDate = moment(date)
-      formattedDate = dueDate.format("MMM. DD, YYYY") + " at " + dueDate.format("h:mm A")
+      const dueDate = moment(listing.applicationDueDate)
+      const dueTime = moment(listing.applicationDueTime)
+      formattedDate = dueDate.format("MMM. DD, YYYY")
+      if (listing.applicationDueTime) {
+        formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
+      }
 
       // if due date is in future, listing is open
       if (moment() < dueDate) {

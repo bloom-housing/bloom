@@ -1,5 +1,6 @@
 import React from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
+import { UseFormMethods } from "react-hook-form"
 
 interface FieldSingle {
   id: string
@@ -16,8 +17,8 @@ interface FieldGroupProps {
   groupLabel?: string
   fields?: FieldSingle[]
   groupNote?: string
-  register: any
-  validation?: Record<string, any>
+  register: UseFormMethods["register"]
+  validation?: Record<string, unknown>
   fieldGroupClassName?: string
   fieldClassName?: string
 }

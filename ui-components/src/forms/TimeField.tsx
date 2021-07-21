@@ -65,7 +65,7 @@ const TimeField = ({
         <Field
           name={fieldName("hours")}
           label={t("t.hour")}
-          defaultValue={defaultValues?.hours || ""}
+          defaultValue={defaultValues?.hours ?? ""}
           readerOnly={true}
           placeholder="HH"
           error={error}
@@ -88,7 +88,7 @@ const TimeField = ({
         <Field
           name={fieldName("minutes")}
           label={t("t.minutes")}
-          defaultValue={defaultValues?.minutes || ""}
+          defaultValue={defaultValues?.minutes ?? ""}
           readerOnly={true}
           placeholder="MM"
           error={error}
@@ -110,7 +110,7 @@ const TimeField = ({
 
         <Field
           label={t("t.seconds")}
-          defaultValue={defaultValues?.seconds || ""}
+          defaultValue={defaultValues?.seconds ?? ""}
           name={fieldName("seconds")}
           readerOnly={true}
           placeholder="SS"

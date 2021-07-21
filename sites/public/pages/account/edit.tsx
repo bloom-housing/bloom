@@ -6,13 +6,12 @@ import {
   Field,
   FormCard,
   Icon,
-  UserContext,
+  AuthContext,
   Form,
   emailRegex,
   t,
   AlertBox,
   SiteAlert,
-  ApiClientContext,
   RequireLogin,
   AlertTypes,
   passwordRegex,
@@ -31,8 +30,7 @@ const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors, watch } = useForm()
-  const { profile } = useContext(UserContext)
-  const { userService } = useContext(ApiClientContext)
+  const { profile, userService } = useContext(AuthContext)
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
@@ -192,13 +190,14 @@ const Edit = () => {
                 register={register}
                 error={errors?.dateOfBirth}
                 watch={watch}
+                validateAge18={true}
+                errorMessage={t("errors.dateOfBirthErrorAge")}
                 defaultDOB={{
                   birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
                   birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
                   birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
-                errorMessage={t("errors.dateOfBirthError")}
               />
               <div className="text-center mt-5">
                 <Button className="items-center">{t("account.settings.update")}</Button>

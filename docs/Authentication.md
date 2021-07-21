@@ -9,14 +9,12 @@ routes.
 
 ```typescript
 // Module definition
-@Module({
+import {
   // All modules implementing authentication guards must import `PassportModule`
-  imports: [PassportModule, ...others],
   // providers, exports, controllers, etc.
-})
-
-// Controller definition
-import { DefaultAuthGuard } from "src/auth/default.guard"
+  // Controller definition
+  DefaultAuthGuard,
+} from "src/auth/default.guard"
 
 @Controller()
 export class MyController {
@@ -32,7 +30,6 @@ Using the `DefaultAuthGuard` in this way requires the client to provide a valid 
 `Authentication` header using the standard `Bearer <TOKEN>` format. Tokens are checked for a valid signature and
 valid expiry time (currently 10 minutes). Tokens may also be revoked by adding an entry to `revoked_tokens` table, or
 using the auth route `revoke_token`.
-
 
 ## Obtain a token
 
@@ -52,15 +49,14 @@ resulting user will be returned along with a valid `accessToken`.
 The app must be configured with an app secret to sign JWT tokens. In development, the app uses a hard-coded value, but
 the app will throw an error in production mode if `APP_SECRET` is not provided as an environment variable.
 
-
 # Front End Authentication/User Management
 
-A few tools are provided to help handle authentication/users in the front end. These are collected under 
-`shared/ui-components/authentication`. 
+A few tools are provided to help handle authentication/users in the front end. These are collected under
+`shared/ui-components/authentication`.
 
-## UserContext
+## AuthContext
 
-`UserContext` is a React Context that keeps track of the current user state and provides user-related utility
+`AuthContext` is a React Context that keeps track of the current user state and provides user and auth related utility
 functions.
 
 It provides:
@@ -78,16 +74,16 @@ type ContextProps = {
 }
 ```
 
-The context is provided to a React App using `UserProvider`, which in turn requires a `ConfigProvider` to function
+The context is provided to a React App using `AuthProvider`, which in turn requires a `ConfigProvider` to function
 properly:
 
 ```tsx
 import { UserProvider, ConfigProvider } from "@bloom-housing/ui-components"
 
 <ConfigProvider apiUrl={...}>
-  <UserProvider>
+  <AuthProvider>
      {/* ...rest of app tree */}
-  </UserProvider>
+  </AuthProvider>
 </ConfigProvider>
 ```
 
@@ -103,13 +99,13 @@ This is a convenience hook that allows a component to access a protected route o
 has been pre-configured to send an auth token to the API. It will return `undefined` if the user is not logged in.
 
 ```tsx
-const authClient = useAuthenticatedClient();
+const authClient = useAuthenticatedClient()
 if (authClient) {
-  authClient.get('/protected-route')
+  authClient.get("/protected-route")
 }
 ```
 
-This hook relies on access to the `UserContext` and the `ConfigContext`, so it will not work if the component isn't
+This hook relies on access to the `AuthContext` and the `ConfigContext`, so it will not work if the component isn't
 in a tree that has both of these providers.
 
 ## RequireLogin
@@ -134,7 +130,7 @@ both lists of strings, and may contain RegEx strings.
 
 This is a hook that can be applied to protect a single component by requiring a login without modifying the full app
 tree. It returns the logged in `User` if found, and `undefined` before the initial state has loaded. If no login is
-found, it redirects to `signInPath`. This hook requires `UserProvider` to be defined on the app tree to work. 
+found, it redirects to `signInPath`. This hook requires `UserProvider` to be defined on the app tree to work.
 
 ```typescript
 const user = useRequireLoggedInUser("/sign-in")
@@ -149,21 +145,21 @@ if (!user) {
 
 For API authorization, we use a combination of Role Based Access Control (RBAC) and ABAC (Attribute Based Access
 Control) implemented using the [casbin library](https://casbin.org/). We define authorizations in the context of
-performing a given _action_ on _resource type_ as a _role_. Actions are strings defined in 
+performing a given _action_ on _resource type_ as a _role_. Actions are strings defined in
 [authz.service.ts](../backend/core/src/auth/authz.service.ts) as an enum `authzActions`.
 
 For high-level Role-Based Access Control (RBAC), a Nest.js guard, `AuthzGuard` is provided. It can be defined on either
-a controller or individual request handler (method) scope, although the former is probably a more common use case. It 
-should be used in conjunction with the `@ResourceType` decorator to specify what type of entity (e.g. `"application"`) 
-this controller/handler will be requesting access to. It then checks access to all the requests based on the current 
-loaded `req.user` (so it must run after a passport-based `AuthGuard` that loads the user onto the request object), the 
+a controller or individual request handler (method) scope, although the former is probably a more common use case. It
+should be used in conjunction with the `@ResourceType` decorator to specify what type of entity (e.g. `"application"`)
+this controller/handler will be requesting access to. It then checks access to all the requests based on the current
+loaded `req.user` (so it must run after a passport-based `AuthGuard` that loads the user onto the request object), the
 `ResourceType`, and the requested action. The action is either automatically inferred from the request (e.g. a `PUT`
 corresponds to `"update"`, `GET` corresponds to `"read"`, etc.), or can be specified on a per-handler basis using the
 `@ResourceType("edit")` decorator.
 
 The other method for enforcing authorization allows for per-object/attribute based access control (ABAC). In this mode,
-we are checking specific attributes about the resource access is requested on, so it must be checked in the body of the 
-handler rather than as a guard (since the resource must be loaded from the DB). This is accomplished using the 
+we are checking specific attributes about the resource access is requested on, so it must be checked in the body of the
+handler rather than as a guard (since the resource must be loaded from the DB). This is accomplished using the
 `AuthzService.can` or `AuthzService.canOrThrow` methods.
 
 The rules themselves are defined in [authz_policy.csv](../backend/core/src/auth/authz_policy.csv). Each line in this
@@ -174,17 +170,19 @@ p, role, resourceType, evalRule, action
 ```
 
 An example:
+
 ```
 p, admin, application, true, .*
 ```
 
 In this case, this specifies a policy applying to the `admin` role accessing `application` objects. `evalRule` is a
-bit of arbitrary code that is evaluated by Casbin. See 
+bit of arbitrary code that is evaluated by Casbin. See
 [the docs](https://casbin.org/docs/en/abac#scaling-the-model-for-complex-and-large-number-of-abac-rules) for more
 info on how this works. In this example, `true` simply will always evaluate to `true`. Finally, the action is a regex
 -enabled matcher for the action verb requested - in this case a wildcard means that an admin can perform all actions.
 
 A more complicated example:
+
 ```
 p, user, application, !r.obj || (r.sub == r.obj.user_id), (read)|(update)|(delete)
 ```

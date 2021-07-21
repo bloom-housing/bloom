@@ -1,7 +1,5 @@
-export { UserContext, UserProvider } from "./UserContext"
-export { useAuthenticatedClient } from "./useAuthenticatedClient"
+export { AuthContext, AuthProvider } from "./AuthContext"
 export { RequireLogin } from "./RequireLogin"
 export { useRequireLoggedInUser } from "./useRequireLoggedInUser"
-export { ApiClientContext, ApiClientProvider } from "./client"
 export { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "./token"
 export { IdleTimeout, LoggedInUserIdleTimeout } from "./timeout"

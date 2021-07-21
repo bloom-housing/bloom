@@ -17,7 +17,7 @@ const Optional = ({ disabled = false }) => {
       watch={watch}
       disabled={disabled || undefined}
       error={errors?.dateOfBirth}
-      atAge={true}
+      validateAge18={true}
     />
   )
 }

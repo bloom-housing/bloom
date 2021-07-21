@@ -94,13 +94,15 @@ describe("ApplicationFlaggedSets", () => {
 
     const appContent = getTestAppBody(listing1Id)
     const apps = []
-    for (const payload of [appContent, appContent]) {
-      const appRes = await supertest(app.getHttpServer())
-        .post("/applications/submit")
-        .send(payload)
-        .expect(201)
-      apps.push(appRes)
-    }
+    await Promise.all(
+      [appContent, appContent].map(async (payload) => {
+        const appRes = await supertest(app.getHttpServer())
+          .post("/applications/submit")
+          .send(payload)
+          .expect(201)
+        apps.push(appRes)
+      })
+    )
 
     let afses = await supertest(app.getHttpServer())
       .get(`/applicationFlaggedSets?listingId=${listing1Id}`)
@@ -137,13 +139,15 @@ describe("ApplicationFlaggedSets", () => {
     appContent2.applicant.emailAddress = "another@email.com"
     const apps = []
 
-    for (const payload of [appContent1, appContent2]) {
-      const appRes = await supertest(app.getHttpServer())
-        .post("/applications/submit")
-        .send(payload)
-        .expect(201)
-      apps.push(appRes)
-    }
+    await Promise.all(
+      [appContent1, appContent2].map(async (payload) => {
+        const appRes = await supertest(app.getHttpServer())
+          .post("/applications/submit")
+          .send(payload)
+          .expect(201)
+        apps.push(appRes)
+      })
+    )
 
     let afses = await supertest(app.getHttpServer())
       .get(`/applicationFlaggedSets?listingId=${listing1Id}`)

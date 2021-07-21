@@ -122,7 +122,6 @@
         "description": "Solo utilizaremos esta información para ponernos en contacto con él o ella en relación con su solicitud.",
         "phoneNumberFormLabel": "Número telefónico del contacto",
         "emailAddressFormLabel": "Dirección de email del contacto",
-        "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "Dirección postal del contacto",
         "contactMailingAddressHelperText": "Elija una dirección en donde su contacto pueda recibir información actualizada y materiales relacionados con su solicitud"
       }
@@ -419,7 +418,6 @@
     "officeHours": "Horario de oficina"
   },
   "listings": {
-    "additionalFees": "Cargos adicionales",
     "additionalInformation": "Información adicional",
     "allUnits": "Todas las viviendas",
     "allUnitsReservedFor": "Todas las viviendas reservadas para %{type}",
@@ -504,6 +502,7 @@
     "reservedUnitsDescription": "Para poder reunir los requisitos de estas viviendas, una de las siguientes condiciones debe aplicarse a usted o a alguna persona de su hogar:",
     "reservedUnitsForWhoAre": "Reservada para %{communityType} que son %{reservedType}",
     "sections": {
+      "additionalFees": "Cargos adicionales",
       "eligibilityTitle": "Elegibilidad",
       "eligibilitySubtitle": "Ingresos, ocupación, preferencias y subsidios",
       "rentalAssistanceTitle": "Asistencia en el alquiler",
@@ -673,6 +672,7 @@
     "deposit": "Depósito",
     "edit": "Editar",
     "email": "Email",
+    "emailAddressPlaceHolder": "you@myemail.com",
     "floor": "piso",
     "floors": "pisos",
     "getDirections": "Obtener instrucciones para llegar",

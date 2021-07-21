@@ -22,26 +22,35 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     <section className="aside-block">
       <h4 className="text-caps-underline">{t("leasingAgent.contact")}</h4>
 
-      <p className="text-xl">{listing.leasingAgentName}</p>
-      <p className="text-gray-700">{listing.leasingAgentTitle}</p>
+      {listing.leasingAgentName && <p className="text-xl">{listing.leasingAgentName}</p>}
+      {listing.leasingAgentTitle && <p className="text-gray-700">{listing.leasingAgentTitle}</p>}
 
-      <p className="mt-5">
-        <a href={phoneNumber}>
-          <Icon symbol="phone" size="medium" fill={IconFillColors.primary} /> {t("t.call")}{" "}
-          {listing.leasingAgentPhone}
-        </a>
-      </p>
-      <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
+      {listing.leasingAgentPhone && (
+        <>
+          <p className="mt-5">
+            <a href={phoneNumber}>
+              <Icon symbol="phone" size="medium" fill={IconFillColors.primary} /> {t("t.call")}{" "}
+              {listing.leasingAgentPhone}
+            </a>
+          </p>
+          <p className="text-sm text-gray-700">{t("leasingAgent.dueToHighCallVolume")}</p>
+        </>
+      )}
 
-      <p className="my-5">
-        <a href={`mailto:${listing.leasingAgentEmail}`}>
-          <Icon symbol="mail" size="medium" fill={IconFillColors.primary} /> {t("t.email")}
-        </a>
-      </p>
-      <SidebarAddress
-        address={listing.leasingAgentAddress}
-        officeHours={listing.leasingAgentOfficeHours}
-      />
+      {listing.leasingAgentEmail && (
+        <p className="my-5">
+          <a href={`mailto:${listing.leasingAgentEmail}`}>
+            <Icon symbol="mail" size="medium" fill={IconFillColors.primary} /> {t("t.email")}
+          </a>
+        </p>
+      )}
+
+      {listing.leasingAgentAddress && (
+        <SidebarAddress
+          address={listing.leasingAgentAddress}
+          officeHours={listing.leasingAgentOfficeHours}
+        />
+      )}
     </section>
   )
 }

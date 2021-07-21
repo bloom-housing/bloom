@@ -1,4 +1,14 @@
-import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { mapTo } from "../shared/mapTo"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
@@ -12,6 +22,9 @@ import {
   CreatePresignedUploadMetadataDto,
   CreatePresignedUploadMetadataResponseDto,
 } from "./dto/asset.dto"
+import { PaginationFactory, PaginationQueryParams } from "../shared/dto/pagination.dto"
+
+export class PaginatedAssetsDto extends PaginationFactory<AssetDto>(AssetDto) {}
 
 @Controller("assets")
 @ApiTags("assets")
@@ -45,5 +58,18 @@ export class AssetsController {
       CreatePresignedUploadMetadataResponseDto,
       await this.assetsService.createPresignedUploadMetadata(createPresignedUploadMetadataDto)
     )
+  }
+
+  @Get()
+  @ApiOperation({ summary: "List assets", operationId: "list" })
+  async list(@Query() queryParams: PaginationQueryParams): Promise<PaginatedAssetsDto> {
+    return mapTo(PaginatedAssetsDto, await this.assetsService.list(queryParams))
+  }
+
+  @Get(`:assetId`)
+  @ApiOperation({ summary: "Get asset by id", operationId: "retrieve" })
+  async retrieve(@Param("assetId") assetId: string): Promise<AssetDto> {
+    const app = await this.assetsService.findOne(assetId)
+    return mapTo(AssetDto, app)
   }
 }

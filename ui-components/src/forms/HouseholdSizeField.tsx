@@ -3,12 +3,13 @@ import { Listing } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { AlertBox, AlertNotice } from "../notifications"
+import { UseFormMethods } from "react-hook-form"
 
 export interface HouseholdSizeFieldProps {
   listing: Listing
   householdSize: number
   validate: boolean
-  register: any
+  register: UseFormMethods["register"]
   error: any
   clearErrors: () => void
   assistanceUrl: string
@@ -30,11 +31,11 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               defaultValue={householdSize}
               ref={register({
                 min: {
-                  value: listing.property.householdSizeMin,
+                  value: listing.householdSizeMin,
                   message: t("errors.householdTooSmall"),
                 },
                 max: {
-                  value: listing.property.householdSizeMax,
+                  value: listing.householdSizeMax,
                   message: t("errors.householdTooBig"),
                 },
               })}

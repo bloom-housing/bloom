@@ -1,9 +1,9 @@
 import { createElement, useContext } from "react"
-import { IdleTimeout, UserContext, lRoute, t } from "@bloom-housing/ui-components"
+import { IdleTimeout, AuthContext, lRoute, t } from "@bloom-housing/ui-components"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 
 const ApplicationTimeout = () => {
-  const { profile } = useContext(UserContext)
+  const { profile } = useContext(AuthContext)
   const { conductor } = useContext(AppSubmissionContext)
 
   const onTimeout = () => {

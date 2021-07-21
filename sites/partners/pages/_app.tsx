@@ -5,9 +5,8 @@ import "@bloom-housing/ui-components/src/global/index.scss"
 import {
   addTranslation,
   ConfigProvider,
-  UserProvider,
+  AuthProvider,
   RequireLogin,
-  ApiClientProvider,
   NavigationContext,
   GenericRouter,
 } from "@bloom-housing/ui-components"
@@ -44,19 +43,17 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
       }}
     >
       <ConfigProvider apiUrl={process.env.backendApiBase}>
-        <UserProvider>
+        <AuthProvider>
           <RequireLogin
             signInPath="/sign-in"
             signInMessage={signInMessage}
             skipForRoutes={skipLoginRoutes}
           >
-            <ApiClientProvider>
-              <div suppressHydrationWarning>
-                {typeof window === "undefined" ? null : <Component {...pageProps} />}
-              </div>
-            </ApiClientProvider>
+            <div suppressHydrationWarning>
+              {typeof window === "undefined" ? null : <Component {...pageProps} />}
+            </div>
           </RequireLogin>
-        </UserProvider>
+        </AuthProvider>
       </ConfigProvider>
     </NavigationContext.Provider>
   )

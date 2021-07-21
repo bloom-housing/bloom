@@ -1,7 +1,7 @@
 import React from "react"
 import { render } from "@testing-library/react"
 import { RequireLogin } from "../../src/authentication/RequireLogin"
-import { UserContext } from "../../src/authentication/UserContext"
+import { AuthContext } from "../../src/authentication/AuthContext"
 import { User } from "@bloom-housing/backend-core/types"
 import { GenericRouter, NavigationContext } from "../../src/config/NavigationContext"
 
@@ -44,11 +44,11 @@ const itShouldRender = () =>
           LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
         }}
       >
-        <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
             <div aria-label="child" />
           </RequireLogin>
-        </UserContext.Provider>
+        </AuthContext.Provider>
       </NavigationContext.Provider>
     )
     expect(getByLabelText("child")).toBeTruthy()
@@ -63,11 +63,11 @@ const itShouldNotRenderChildren = () =>
           LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
         }}
       >
-        <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
             <div id="child" />
           </RequireLogin>
-        </UserContext.Provider>
+        </AuthContext.Provider>
       </NavigationContext.Provider>
     )
     expect(queryByLabelText("child")).toBeFalsy()
@@ -82,11 +82,11 @@ const itShouldRedirect = () =>
           LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
         }}
       >
-        <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
             <div id="child" />
           </RequireLogin>
-        </UserContext.Provider>
+        </AuthContext.Provider>
       </NavigationContext.Provider>
     )
     expect(mockRouter.pathname).toEqual("/sign-in")
@@ -101,11 +101,11 @@ const itShouldNotRedirect = () =>
           LinkComponent: (props) => <a href={props.href}>{props.children}</a>,
         }}
       >
-        <UserContext.Provider value={{ initialStateLoaded, profile }}>
+        <AuthContext.Provider value={{ initialStateLoaded, profile }}>
           <RequireLogin signInPath={"/sign-in"} signInMessage={"Test Sign-In Message"} {...props}>
             <div id="child" />
           </RequireLogin>
-        </UserContext.Provider>
+        </AuthContext.Provider>
       </NavigationContext.Provider>
     )
     expect(mockRouter.pathname).not.toEqual("/sign-in")

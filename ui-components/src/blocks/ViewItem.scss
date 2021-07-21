@@ -26,7 +26,7 @@
 }
 
 .view-item__label {
-  @apply text-gray-750;
+  @apply text-gray-800;
   @apply font-sans;
   @apply text-tiny;
   @apply block;
@@ -37,14 +37,15 @@
   @apply tracking-wide;
   @apply font-semibold;
   @apply block;
-  @apply pt-2;
+  padding-top: 10px;
 
   &.is-truncated {
     @include ellipsis;
   }
 
   // do not change font-family for inputs
-  .field .control .input, .error-message {
+  .field .control .input,
+  .error-message {
     @apply font-sans;
     @apply font-normal;
   }

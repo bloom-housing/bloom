@@ -35,7 +35,7 @@ const TabNavItem = (props: TabNavItemProps) => {
     >
       <LocalizedLink
         className={props.current ? "is-active" : undefined}
-        aria={props.current ? { "aria-current": "page" } : undefined}
+        aria-current={props.current ? "page" : undefined}
         href={props.href}
         tabIndex={props.current ? 0 : -1}
       >

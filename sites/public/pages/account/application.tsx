@@ -1,12 +1,5 @@
 import React, { useEffect, useState, useContext } from "react"
-import {
-  ApiClientContext,
-  RequireLogin,
-  t,
-  UserContext,
-  FormCard,
-  dateToString,
-} from "@bloom-housing/ui-components"
+import { AuthContext, RequireLogin, t, FormCard, dateToString } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
 import FormsLayout from "../../layouts/forms"
@@ -16,8 +9,8 @@ import { useRouter } from "next/router"
 export default () => {
   const router = useRouter()
   const applicationId = router.query.id as string
-  const { applicationsService, listingsService } = useContext(ApiClientContext)
-  const { profile } = useContext(UserContext)
+  const { applicationsService, listingsService } = useContext(AuthContext)
+  const { profile } = useContext(AuthContext)
   const [application, setApplication] = useState<Application>()
   const [listing, setListing] = useState<Listing>()
   const [unauthorized, setUnauthorized] = useState(false)

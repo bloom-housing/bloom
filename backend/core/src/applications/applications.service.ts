@@ -1,8 +1,15 @@
-import { Inject, Injectable, Scope } from "@nestjs/common"
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Scope,
+} from "@nestjs/common"
 import { Application } from "./entities/application.entity"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { getManager, QueryFailedError, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
@@ -12,6 +19,7 @@ import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
+import retry from "async-retry"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -50,6 +58,13 @@ export class ApplicationsService {
 
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
+    const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
+    if (
+      listing.applicationDueDate &&
+      applicationCreateDto.submissionDate > listing.applicationDueDate
+    ) {
+      throw new BadRequestException("Listing is not open for application submission.")
+    }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
     const application = await this._create(applicationCreateDto)
     return application
@@ -139,16 +154,62 @@ export class ApplicationsService {
     })
     return qb
   }
-  private async _create(applicationCreateDto: ApplicationUpdateDto) {
-    const application = await this.repository.save({
-      ...applicationCreateDto,
-      user: this.req.user,
+
+  private async _createApplication(applicationCreateDto: ApplicationUpdateDto) {
+    return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      const applicationsRepository = transactionalEntityManager.getRepository(Application)
+      const application = await applicationsRepository.save({
+        ...applicationCreateDto,
+        user: this.req.user,
+      })
+      await this.applicationFlaggedSetsService.onApplicationSave(
+        application,
+        transactionalEntityManager
+      )
+      return application
     })
+  }
+
+  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+    let application: Application
+
+    try {
+      await retry(
+        async (bail) => {
+          try {
+            application = await this._createApplication(applicationCreateDto)
+          } catch (e) {
+            console.error(e.message)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (!(e instanceof QueryFailedError && e.code === "40001")) {
+              // 40001: could not serialize access due to read/write dependencies among transactions
+              bail(e)
+            }
+            throw e
+          }
+        },
+        { retries: 6, minTimeout: 200 }
+      )
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (e instanceof QueryFailedError && e.code === "40001") {
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.TOO_MANY_REQUESTS,
+            error: "Too Many Requests",
+            message: "Please try again later.",
+          },
+          429
+        )
+      }
+    }
+
     const listing = await this.listingsService.findOne(application.listing.id)
     if (application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
-    await this.applicationFlaggedSetsService.onApplicationSave(application)
     return application
   }
 

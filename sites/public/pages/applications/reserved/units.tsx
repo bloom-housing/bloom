@@ -22,9 +22,7 @@ const ApplicationUnits = () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = (data) => {
-    console.log(data)
-
+  const onSubmit = () => {
     conductor.completeSection(2)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()

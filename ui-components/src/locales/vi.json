@@ -119,7 +119,6 @@
         "description": "Chúng tôi sẽ chỉ sử dụng thông tin này để liên lạc với họ về đơn ghi danh của quý vị.",
         "phoneNumberFormLabel": "Số điện thoại của người liên lạc",
         "emailAddressFormLabel": "Địa chỉ email của người liên lạc",
-        "emailAddressFormPlaceHolder": "you@myemail.com",
         "contactMailingAddressLabel": "Địa chỉ thư bưu điện của người liên lạc",
         "contactMailingAddressHelperText": "Chọn một địa chỉ nơi họ có thể nhận các thông tin cập nhật và tài liệu về đơn ghi danh của quý vị"
       }
@@ -419,7 +418,6 @@
     "officeHours": "Giờ Làm việc"
   },
   "listings": {
-    "additionalFees": "Các Loại Phí Bổ sung",
     "additionalInformation": "Thông tin Bổ sung",
     "allUnits": "Tất cả các Căn nhà",
     "allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
@@ -504,6 +502,7 @@
     "reservedUnitsDescription": "Để hội đủ điều kiện được nhận các căn nhà này, một trong những điều sau đây phải đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
     "reservedUnitsForWhoAre": "Dành riêng cho %{communityType} những người %{reservedType}",
     "sections": {
+      "additionalFees": "Các Loại Phí Bổ sung",
       "eligibilityTitle": "Tình trạng Hội đủ Điều kiện",
       "eligibilitySubtitle": "Thu nhập, số người ở, lựa chọn ưu tiên và các khoản trợ cấp",
       "rentalAssistanceTitle": "Hỗ trợ Tiền thuê nhà",
@@ -673,6 +672,7 @@
     "deposit": "Đặt cọc",
     "edit": "Hiệu đính",
     "email": "Email",
+    "emailAddressPlaceHolder": "you@myemail.com",
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",

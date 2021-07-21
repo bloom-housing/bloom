@@ -7,8 +7,8 @@ const DetailAdditionalDetails = () => {
 
   return (
     <GridSection
-      className="bg-primary-ligher"
-      title={t("listings.additionalDetails")}
+      className="bg-primary-lighter"
+      title={t("listings.sections.additionalDetails")}
       grid={false}
       inset
     >

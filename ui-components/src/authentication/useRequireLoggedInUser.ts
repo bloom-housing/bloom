@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { UserContext } from "./UserContext"
+import { AuthContext } from "./AuthContext"
 import { NavigationContext } from "../config/NavigationContext"
 
 /**
@@ -7,7 +7,7 @@ import { NavigationContext } from "../config/NavigationContext"
  * logged in.
  */
 function useRequireLoggedInUser(redirectPath: string) {
-  const { profile, initialStateLoaded } = useContext(UserContext)
+  const { profile, initialStateLoaded } = useContext(AuthContext)
   const { router } = useContext(NavigationContext)
 
   if (initialStateLoaded && !profile) {

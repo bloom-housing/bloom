@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
+import { UseFormMethods } from "react-hook-form"
 
 export interface FieldProps {
   error?: boolean
@@ -18,12 +19,14 @@ export interface FieldProps {
   onDrop?: (e: any) => boolean
   onPaste?: (e: any) => boolean
   placeholder?: string
-  register: any // comes from React Hook Form
+  register: UseFormMethods["register"]
   validation?: Record<string, any>
   disabled?: boolean
   prepend?: string
   inputProps?: Record<string, unknown>
   describedBy?: string
+  getValues?: UseFormMethods["getValues"]
+  setValue?: UseFormMethods["setValue"]
 }
 
 const Field = (props: FieldProps) => {
@@ -41,7 +44,20 @@ const Field = (props: FieldProps) => {
     controlClasses.push(props.controlClassName)
   }
 
-  const type = props.type || "text"
+  const formatValue = () => {
+    if (props.getValues && props.setValue) {
+      const currencyValue = props.getValues(props.name)
+      const numericIncome = parseFloat(currencyValue)
+      if (!isNaN(numericIncome)) {
+        props.setValue(props.name, numericIncome.toFixed(2))
+      }
+    }
+  }
+
+  let inputProps = { ...props.inputProps }
+  if (props.type === "currency") inputProps = { ...inputProps, step: 0.01, onBlur: formatValue }
+
+  const type = (props.type === "currency" && "number") || props.type || "text"
   const isRadioOrCheckbox = ["radio", "checkbox"].includes(type)
 
   const label = useMemo(() => {
@@ -83,7 +99,7 @@ const Field = (props: FieldProps) => {
           disabled={props.disabled}
           onPaste={props.onPaste}
           onDrop={props.onDrop}
-          {...props.inputProps}
+          {...inputProps}
         />
         {isRadioOrCheckbox && label}
       </div>

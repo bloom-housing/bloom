@@ -9,7 +9,7 @@ import {
   FormCard,
   Icon,
   LinkButton,
-  UserContext,
+  AuthContext,
   t,
   AlertBox,
   SiteAlert,
@@ -19,7 +19,7 @@ import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 
 const SignIn = () => {
-  const { login } = useContext(UserContext)
+  const { login } = useContext(AuthContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887

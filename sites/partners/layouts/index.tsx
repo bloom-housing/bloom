@@ -8,11 +8,11 @@ import {
   FooterSection,
   ExygyFooter,
   t,
-  UserContext,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
-  const { profile, signOut } = useContext(UserContext)
+  const { profile, signOut } = useContext(AuthContext)
 
   return (
     <div className="site-wrapper">

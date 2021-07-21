@@ -103,7 +103,7 @@ export default () => {
               name="emailAddress"
               label={t("application.alternateContact.contact.emailAddressFormLabel")}
               readerOnly={true}
-              placeholder={t("application.alternateContact.contact.emailAddressFormPlaceHolder")}
+              placeholder={t("t.emailAddressPlaceHolder")}
               defaultValue={application.alternateContact.emailAddress || null}
               register={register}
             />

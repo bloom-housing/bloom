@@ -6,6 +6,7 @@ import { imageUrlFromListing, t } from "@bloom-housing/ui-components"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
 import { MetaTags } from "../../../src/MetaTags"
+import { ErrorPage } from "../../_error"
 
 interface ListingProps {
   listing: Listing
@@ -13,6 +14,11 @@ interface ListingProps {
 
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
+
+  if (!listing) {
+    return <ErrorPage />
+  }
+
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
@@ -35,7 +41,9 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
   let response
 
   try {
-    response = await axios.get(process.env.listingServiceUrl)
+    response = await axios.get(
+      process.env.listingServiceUrl + "?filter[$comparison]=<>&filter[status]=pending"
+    )
   } catch (e) {
     return {
       paths: [],
@@ -50,7 +58,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
         locale: locale,
       }))
     ),
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -63,5 +71,6 @@ export async function getStaticProps(context: { params: Record<string, string> }
     props: {
       listing: response.data,
     },
+    revalidate: process.env.cacheRevalidate,
   }
 }

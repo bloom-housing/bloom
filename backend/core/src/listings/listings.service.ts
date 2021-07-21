@@ -1,33 +1,66 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
-import { ListingCreateDto, ListingUpdateDto } from "./dto/listing.dto"
+import { ListingCreateDto, ListingUpdateDto, ListingFilterParams } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
+import { addFilter } from "../shared/filter"
+import { plainToClass } from "class-transformer"
+import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
+import { arrayIndex } from "../libs/arrayLib"
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly repository: Repository<Listing>) {}
+  constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
   private getQueryBuilder() {
     return Listing.createQueryBuilder("listings")
+      .leftJoinAndSelect("listings.image", "image")
+      .leftJoinAndSelect("listings.result", "result")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChart", "amiChart")
+      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
+      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(jsonpath?: string): Promise<Listing[]> {
-    let listings = await this.getQueryBuilder()
-      .orderBy({
-        "listings.id": "DESC",
-        "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
+  public async list(
+    origin: string,
+    jsonpath?: string,
+    filter?: ListingFilterParams[]
+  ): Promise<Listing[]> {
+    const qb = this.getQueryBuilder()
+    if (filter) {
+      addFilter<ListingFilterParams>(filter, "listings", qb)
+    }
+
+    qb.orderBy({
+      "listings.id": "DESC",
+      "units.max_occupancy": "ASC",
+      "preferences.ordinal": "ASC",
+    })
+
+    let listings = await qb.getMany()
+
+    /**
+     * Get the application counts and map them to listings
+     */
+    if (origin === process.env.PARTNERS_BASE_URL) {
+      const counts = await Listing.createQueryBuilder("listing")
+        .select("listing.id")
+        .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
+        .getMany()
+
+      const countIndex = arrayIndex<Listing>(counts, "id")
+
+      listings.forEach((listing: Listing) => {
+        listing.applicationCount = countIndex[listing.id].applicationCount || 0
       })
-      .getMany()
+    }
 
     if (jsonpath) {
       listings = jp.query(listings, jsonpath)
@@ -36,25 +69,42 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    return Listing.save(listingDto)
+    const listing = Listing.create({
+      ...listingDto,
+      property: plainToClass(PropertyCreateDto, listingDto),
+    })
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const listing = await Listing.findOneOrFail({
+    const listing = await Listing.findOne({
       where: { id: listingDto.id },
       relations: ["property"],
     })
-    /*
-      NOTE: Object.assign would replace listing.property of type Property with object of type IdDto
-       coming from ListingUpdateDto, which is causing a problem for dynamically computed
-       listingUrlSlug property (it requires property.buildingAddress.city to exist). The solution is
-       to assign this separately so that other properties (outside of IdDto type) of
-       listing.property are retained.
-    */
-    const { property, ...dto } = listingDto
-    Object.assign(listing, dto)
-    Object.assign(listing.property, property)
-    return await listing.save()
+    if (!listing) {
+      throw new NotFoundException()
+    }
+    listingDto.units.forEach((unit) => {
+      if (unit.id.length === 0 || unit.id === "undefined") {
+        delete unit.id
+      }
+    })
+    Object.assign(listing, {
+      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      property: plainToClass(
+        PropertyUpdateDto,
+        {
+          // NOTE: Create a property out of fields encapsulated in listingDto
+          ...listingDto,
+          // NOTE: Since we use the entire listingDto to create a property object the listing ID
+          //  would overwrite propertyId fetched from DB
+          id: listing.property.id,
+        },
+        { excludeExtraneousValues: true }
+      ),
+    })
+
+    return await this.listingRepository.save(listing)
   }
 
   async delete(listingId: string) {
@@ -65,11 +115,15 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    return await this.getQueryBuilder()
+    const result = await this.getQueryBuilder()
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",
       })
       .getOne()
+    if (!result) {
+      throw new NotFoundException()
+    }
+    return result
   }
 }

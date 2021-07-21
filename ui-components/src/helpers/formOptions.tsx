@@ -196,7 +196,18 @@ export const preferredUnit: FieldGroupItem[] = [
   },
 ]
 
+export const bedroomKeys = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+
 export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
+
+export const numberOptions = (end: number, start = 1): SelectOption[] => {
+  const nums = []
+  for (let i = start; i <= end; i++) {
+    nums.push({ label: i.toString(), value: i.toString() })
+  }
+
+  return nums
+}
 
 export const FormOptions = (props: FormOptionsProps) => {
   const options = props.options.map((option: string | SelectOption) => {

@@ -12,7 +12,7 @@ import {
   LinkButton,
   FormCard,
   ProgressNav,
-  UserContext,
+  AuthContext,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -33,7 +33,7 @@ const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
   const context = useContext(AppSubmissionContext)
-  const { initialStateLoaded, profile } = useContext(UserContext)
+  const { initialStateLoaded, profile } = useContext(AuthContext)
   const { conductor, application } = context
 
   const listingId = router.query.listingId

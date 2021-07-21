@@ -10,12 +10,12 @@ import {
   ExygyFooter,
   UserNav,
   t,
-  UserContext,
+  AuthContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
-  const { profile, signOut } = useContext(UserContext)
+  const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
 
   const languages =
