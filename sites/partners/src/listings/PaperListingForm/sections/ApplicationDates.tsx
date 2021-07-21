@@ -46,15 +46,16 @@ const ApplicationDates = ({
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
 
   const onOpenHouseEventsSubmit = (event: TempEvent) => {
+    setDrawerOpenHouse(false)
+
     const eventsWitoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
 
-    if (eventsWitoutEdited.length) {
+    // determine if event is currently edited
+    if (eventsWitoutEdited.length !== openHouseEvents.length) {
       setOpenHouseEvents([...eventsWitoutEdited, event])
     } else {
       setOpenHouseEvents([...openHouseEvents, event])
     }
-
-    setDrawerOpenHouse(false)
   }
 
   const onOpenHouseEventDelete = (tempId: string) => {
