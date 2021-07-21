@@ -1,6 +1,6 @@
 import React from "react"
 import { useForm } from "react-hook-form"
-
+import { nanoid } from "nanoid"
 import {
   Button,
   AppearanceStyleType,
@@ -87,6 +87,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         startTime: createDate(data.date, data.startTime),
         endTime: createDate(data.date, data.endTime),
         url: data.url,
+        tempId: nanoid(),
       }
 
       onSubmit(event)

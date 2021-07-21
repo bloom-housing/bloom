@@ -147,12 +147,17 @@ const ApplicationDates = ({
             }}
           />
         </GridSection>
-        <div className="bg-gray-300 px-4 py-5 mt-5">
-          <div className="mb-5">
-            <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
-          </div>
+        <div className="mt-5">
+          {!!openHouseTableData.length && (
+            <div className="bg-gray-300 px-4 py-5 mt-5">
+              <div className="mb-5">
+                <MinimalTable headers={openHouseHeaders} data={openHouseTableData} />
+              </div>
+            </div>
+          )}
 
           <Button
+            className="mt-5"
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => setDrawerOpenHouse(true)}
