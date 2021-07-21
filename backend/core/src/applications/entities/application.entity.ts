@@ -8,7 +8,7 @@ import {
   OneToOne,
   RelationId,
 } from "typeorm"
-import { User } from "../../user/entities/user.entity"
+import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import {
   ArrayMaxSize,
@@ -54,7 +54,7 @@ export class Application extends AbstractEntity {
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
-  @ManyToOne(() => User, (user) => user.applications, { nullable: true })
+  @ManyToOne(() => User, { nullable: true })
   user: User | null
 
   @RelationId((application: Application) => application.user)
@@ -242,4 +242,10 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   markedAsDuplicate: boolean
+
+  // This is a 'virtual field' needed for CSV export
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  flagged?: boolean
 }

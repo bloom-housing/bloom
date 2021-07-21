@@ -15,6 +15,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
+import { isNullOrUndefined } from "../../../../lib/helpers"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -160,6 +161,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         </GridSection>
         <GridSection columns={1}>
           <Field
+            className={"font-semibold"}
             id="arePaperAppsMailedToAnotherAddress"
             name="arePaperAppsMailedToAnotherAddress"
             type="checkbox"
@@ -222,47 +224,100 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             </GridSection>
           </GridSection>
         )}
-        <hr className="mt-6 mb-6" />
-        <GridSection columns={8} className={"flex items-center"}>
-          <GridCell span={2}>
-            <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
-          </GridCell>
-          <FieldGroup
-            name="canPaperApplicationsBePickedUp"
-            type="radio"
-            register={register}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "applicationsPickedUpYes",
-                defaultChecked:
-                  listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "applicationsPickedUpNo",
-                defaultChecked:
-                  listing?.applicationPickUpAddress === null &&
-                  listing?.applicationPickUpAddressType === null,
-              },
-            ]}
-          />
-        </GridSection>
-        {applicationsPickedUp === YesNoAnswer.Yes && (
-          <GridSection columns={4}>
-            <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
+        <GridSection columns={2}>
+          <GridCell>
+            <GridCell span={2}>
+              <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
+            </GridCell>
             <FieldGroup
-              name="whereApplicationsPickedUp"
+              name="canPaperApplicationsBePickedUp"
               type="radio"
               register={register}
-              fields={getLocationOptions(
-                "pickUp",
-                listing?.applicationPickUpAddressType,
-                listing?.applicationPickUpAddress
-              )}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsPickedUpYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.applicationPickUpAddress) === false ||
+                    isNullOrUndefined(listing?.applicationPickUpAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsPickedUpNo",
+                  defaultChecked:
+                    listing?.applicationPickUpAddress === null &&
+                    listing?.applicationPickUpAddressType === null,
+                },
+              ]}
             />
-          </GridSection>
-        )}
+          </GridCell>
+          <GridCell>
+            <GridCell span={2}>
+              <p className="field-label m-4 ml-0">{t("listings.applicationDropOffQuestion")}</p>
+            </GridCell>
+            <FieldGroup
+              name="canApplicationsBeDroppedOff"
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsDroppedOffYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.applicationDropOffAddress) === false ||
+                    isNullOrUndefined(listing?.applicationDropOffAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsDroppedOffNo",
+                  defaultChecked:
+                    listing?.applicationDropOffAddress === null &&
+                    listing?.applicationDropOffAddressType === null,
+                },
+              ]}
+            />
+          </GridCell>
+        </GridSection>
+        <GridSection columns={2}>
+          {applicationsPickedUp === YesNoAnswer.Yes && (
+            <GridCell>
+              <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
+              <FieldGroup
+                name="whereApplicationsPickedUp"
+                type="radio"
+                register={register}
+                fields={getLocationOptions(
+                  "pickUp",
+                  listing?.applicationPickUpAddressType,
+                  isNullOrUndefined(listing?.applicationPickUpAddress) === false
+                )}
+              />
+            </GridCell>
+          )}
+          {applicationsDroppedOff === YesNoAnswer.Yes && (
+            <>
+              {applicationsPickedUp === YesNoAnswer.No && (
+                <GridCell>
+                  <></>
+                </GridCell>
+              )}
+              <GridCell>
+                <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
+                <FieldGroup
+                  name="whereApplicationsDroppedOff"
+                  type="radio"
+                  register={register}
+                  fields={getLocationOptions(
+                    "dropOff",
+                    listing?.applicationDropOffAddressType,
+                    isNullOrUndefined(listing?.applicationDropOffAddress) === false
+                  )}
+                />
+              </GridCell>
+            </>
+          )}
+        </GridSection>
+
         {applicationsPickedUp === YesNoAnswer.Yes &&
           applicationsPickedUpAddress === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
@@ -328,47 +383,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               </GridSection>
             </GridSection>
           )}
-        <hr className="mt-6 mb-6" />
-        <GridSection columns={8} className={"flex items-center"}>
-          <GridCell span={2}>
-            <p className="field-label m-4 ml-0">{t("listings.applicationDropOffQuestion")}</p>
-          </GridCell>
-          <FieldGroup
-            name="canApplicationsBeDroppedOff"
-            type="radio"
-            register={register}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "applicationsDroppedOffYes",
-                defaultChecked:
-                  listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "applicationsDroppedOffNo",
-                defaultChecked:
-                  listing?.applicationDropOffAddress === null &&
-                  listing?.applicationDropOffAddressType === null,
-              },
-            ]}
-          />
-        </GridSection>
-        {applicationsDroppedOff === YesNoAnswer.Yes && (
-          <GridSection columns={4}>
-            <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
-            <FieldGroup
-              name="whereApplicationsDroppedOff"
-              type="radio"
-              register={register}
-              fields={getLocationOptions(
-                "dropOff",
-                listing?.applicationDropOffAddressType,
-                listing?.applicationDropOffAddress
-              )}
-            />
-          </GridSection>
-        )}
         {applicationsDroppedOff === YesNoAnswer.Yes &&
           droppedOffAddress === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
@@ -434,33 +448,32 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               </GridSection>
             </GridSection>
           )}
-        <hr className="mt-6 mb-6" />
 
-        <GridSection columns={8} className={"flex items-center"}>
-          <GridCell span={2}>
-            <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
+        <GridSection columns={3} className={"flex items-center"}>
+          <GridCell>
+            <GridCell>
+              <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
+            </GridCell>
+            <FieldGroup
+              name="arePostmarksConsidered"
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "postmarksConsideredYes",
+                  defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate !== null,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "postmarksConsideredNo",
+                  defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate === null,
+                },
+              ]}
+            />
           </GridCell>
-          <FieldGroup
-            name="arePostmarksConsidered"
-            type="radio"
-            register={register}
-            fields={[
-              {
-                ...yesNoRadioOptions[0],
-                id: "postmarksConsideredYes",
-                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate !== null,
-              },
-              {
-                ...yesNoRadioOptions[1],
-                id: "postmarksConsideredNo",
-                defaultChecked: listing && listing.postmarkedApplicationsReceivedByDate === null,
-              },
-            ]}
-          />
-        </GridSection>
-        {postmarksConsidered === YesNoAnswer.Yes && (
-          <GridSection columns={4}>
-            <GridCell span={2}>
+          {postmarksConsidered === YesNoAnswer.Yes && (
+            <GridCell>
               <ViewItem label={t("listings.postmarkByDate")} className="mb-0">
                 <DateField
                   label={""}
@@ -485,9 +498,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 />
               </ViewItem>
             </GridCell>
-          </GridSection>
-        )}
-        <hr className="mt-6 mb-6" />
+          )}
+        </GridSection>
         <GridSection columns={3}>
           <GridCell span={2}>
             <Textarea

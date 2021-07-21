@@ -7,15 +7,10 @@ import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class PropertyDto extends OmitType(Property, [
-  "listings",
   "units",
   "propertyGroups",
   "buildingAddress",
 ] as const) {
-  @Exclude()
-  @ApiHideProperty()
-  listings
-
   @Exclude()
   @ApiHideProperty()
   propertyGroups
