@@ -3742,9 +3742,6 @@ export interface UnitsSummarized {
   byUnitType: UnitSummary[]
 
   /**  */
-  byNonReservedUnitType: UnitSummary[]
-
-  /**  */
   byAMI: UnitSummaryByAMI[]
 
   /**  */

@@ -79,8 +79,6 @@ const ListingsList = (props: ListingsProps) => {
       content = content + `: ${formattedDate}`
     }
 
-    console.log(listing)
-
     return (
       <article key={listing.id} className="listings-row">
         <div className="listings-row_figure">
@@ -99,15 +97,12 @@ const ListingsList = (props: ListingsProps) => {
           )}
           <div className="listings-row_table">
             {unitSummaries && (
-              <>
-                {/* {listing.reservedCommunityType && `heblo`} */}
-                <GroupedTable
-                  headers={unitSummariesHeaders}
-                  data={unitSummaries}
-                  responsiveCollapse={true}
-                  cellClassName="px-5 py-3"
-                />
-              </>
+              <GroupedTable
+                headers={unitSummariesHeaders}
+                data={unitSummaries}
+                responsiveCollapse={true}
+                cellClassName="px-5 py-3"
+              />
             )}
           </div>
           <LinkButton href={`/listing/${listing.id}/${listing.urlSlug}`}>

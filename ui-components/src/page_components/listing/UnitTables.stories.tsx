@@ -4,7 +4,7 @@ import { UnitTables } from "./UnitTables"
 import { StandardTable } from "../../tables/StandardTable"
 import Archer from "../../../__tests__/fixtures/archer.json"
 import { unitSummariesTable } from "../../helpers/tableSummaries"
-import { UnitSummary, UnitType } from "@bloom-housing/backend-core/types"
+import { UnitSummary } from "@bloom-housing/backend-core/types"
 
 export default {
   title: "Listing/Unit Summary Tables",
