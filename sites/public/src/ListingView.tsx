@@ -251,7 +251,7 @@ export const ListingView = (props: ListingProps) => {
               <ListSection title={getReservedTitle()} subtitle={null}>
                 <InfoCard
                   title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
-                  subtitle={"All Units"}
+                  subtitle={t("listings.allUnits")}
                 >
                   <ExpandableText className="text-sm text-gray-700">
                     {listing.reservedCommunityDescription}
