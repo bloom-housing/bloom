@@ -985,6 +985,10 @@
       "deleteConf": "Do you really want to delete this unit?",
       "eligibility": "Eligibility"
     },
+    "events": {
+      "deleteThisEvent": "Delete this event",
+      "deleteConf": "Do you really want to delete this event?"
+    },
     "units": "Listing Units",
     "unitsDescription": "Select the building units that are available through the listing.",
     "unitTypesOrIndividual": "Do you want to show unit types or individual units?"

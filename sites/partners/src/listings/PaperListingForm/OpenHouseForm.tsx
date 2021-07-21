@@ -11,23 +11,85 @@ import {
   Field,
   Form,
   DateField,
+  DateFieldValues,
   TimeField,
+  TimeFieldValues,
+  formatDateToTimeField,
+  formatTimeFieldToDate,
 } from "@bloom-housing/ui-components"
 
+import { TempEvent } from "./index"
+import moment from "moment"
+
 type OpenHouseFormProps = {
-  onSubmit: (data) => void
+  onSubmit: (data: TempEvent) => void
+  currentEvent?: TempEvent
 }
 
-const OpenHouseForm = ({ onSubmit }: OpenHouseFormProps) => {
+export type OpenHouseFormValues = {
+  date: DateFieldValues
+  startTime: TimeFieldValues
+  endTime: TimeFieldValues
+  url?: string
+}
+
+const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
+  const defaultValues = (() => {
+    if (!currentEvent) return null
+
+    const { url, startTime, endTime } = currentEvent || {}
+    const values = {}
+
+    if (url) {
+      Object.assign(values, { url })
+    }
+
+    Object.assign(values, { startTime: formatDateToTimeField(startTime) })
+    Object.assign(values, { endTime: formatDateToTimeField(endTime) })
+
+    const dateObject = moment(startTime).utc()
+
+    const date = {
+      day: dateObject.format("DD"),
+      month: dateObject.format("MM"),
+      year: dateObject.format("YYYY"),
+    }
+
+    Object.assign(values, { date })
+
+    return values as OpenHouseFormValues
+  })()
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, trigger, getValues, errors } = useForm()
+  const { register, watch, trigger, getValues, errors } = useForm<OpenHouseFormValues>({
+    defaultValues,
+  })
+
+  const createDate = (date: DateFieldValues, time: TimeFieldValues) => {
+    // update hour, minutes, seconds
+    const fullDate = formatTimeFieldToDate(time)
+
+    // set day, month, year
+    fullDate.setDate(parseInt(date.day))
+    fullDate.setMonth(parseInt(date.month))
+    fullDate.setFullYear(parseInt(date.year))
+
+    return fullDate
+  }
 
   const handleSubmit = async () => {
     const validation = await trigger()
 
     if (validation) {
       const data = getValues()
-      onSubmit(data)
+      const event = {
+        ...currentEvent,
+        startTime: createDate(data.date, data.startTime),
+        endTime: createDate(data.date, data.endTime),
+        url: data.url,
+      }
+
+      onSubmit(event)
     }
   }
 
@@ -47,7 +109,7 @@ const OpenHouseForm = ({ onSubmit }: OpenHouseFormProps) => {
                 error={errors?.date}
                 errorMessage={t("errors.requiredFieldError")}
                 required
-                // defaultDate={}
+                defaultDate={defaultValues?.date}
               />
             </ViewItem>
           </GridCell>
@@ -60,9 +122,9 @@ const OpenHouseForm = ({ onSubmit }: OpenHouseFormProps) => {
                 register={register}
                 watch={watch}
                 readerOnly
-                error={errors?.startTime}
+                error={!!errors?.startTime}
                 required
-                // defaultValues={}
+                defaultValues={defaultValues?.startTime}
               />
             </ViewItem>
           </GridCell>
@@ -75,17 +137,17 @@ const OpenHouseForm = ({ onSubmit }: OpenHouseFormProps) => {
                 register={register}
                 watch={watch}
                 readerOnly
-                error={errors?.startTime}
+                error={!!errors?.startTime}
                 required
-                // defaultValues={}
+                defaultValues={defaultValues?.endTime}
               />
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("t.url")}>
               <Field
-                id="link"
-                name="link"
+                id="url"
+                name="url"
                 label={t("t.url")}
                 placeholder={t("t.url")}
                 register={register}

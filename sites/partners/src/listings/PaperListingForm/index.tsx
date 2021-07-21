@@ -13,6 +13,9 @@ import {
   TimeFieldPeriod,
   Modal,
   AppearanceBorderType,
+  DateFieldValues,
+  TimeFieldValues,
+  formatTimeFieldToDate,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -23,9 +26,11 @@ import {
   Unit,
   Listing,
   ListingEvent,
+  ListingEventType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
+import { nanoid } from "nanoid"
 
 import Aside from "../Aside"
 import AdditionalDetails from "./sections/AdditionalDetails"
@@ -187,32 +192,22 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
-export type OpenHouseEvent = ListingEvent & {
-  id?: string
+export type TempEvent = ListingEvent & {
+  tempId?: string
 }
 
-const formatFormData = (data: FormListing, units: TempUnit[]) => {
+export type FormOpenHouseEvent = {
+  tempId?: string
+  date: DateFieldValues
+  startTime: TimeFieldValues
+  endTime: TimeFieldValues
+  url?: string
+}
+
+const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: TempEvent[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
-  const getDueTime = () => {
-    if (!data.applicationDueTimeField) return null
-
-    let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
-    if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
-      dueTimeHours = 0
-    }
-    if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
-      dueTimeHours = dueTimeHours + 12
-    }
-    const dueTime = new Date()
-    dueTime.setHours(
-      dueTimeHours,
-      parseInt(data.applicationDueTimeField.minutes),
-      parseInt(data.applicationDueTimeField.seconds)
-    )
-    return dueTime
-  }
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":
@@ -249,9 +244,23 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     delete unit.tempId
   })
 
+  let events = []
+
+  const openHouseEventsData: ListingEvent[] = openHouseEvents.map((event) => ({
+    type: ListingEventType.openHouse,
+    id: undefined,
+    createdAt: undefined,
+    updatedAt: undefined,
+    startTime: event.startTime,
+    endTime: event.endTime,
+    url: event.url,
+  }))
+
+  events = [...events, ...openHouseEventsData]
+
   return {
     ...data,
-    applicationDueTime: getDueTime(),
+    applicationDueTime: formatTimeFieldToDate(data.applicationDueTimeField),
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
@@ -292,6 +301,7 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
       ? data.applicationMailingAddress
       : null,
+    events,
   }
 }
 
@@ -311,7 +321,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [status, setStatus] = useState<ListingStatus>(null)
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
-  const [openHouseEvents, setOpenHouseEvents] = useState<OpenHouseEvent[]>([])
+  const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
 
   /**
    * Close modal
@@ -326,7 +336,19 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }))
       setUnits(tempUnits)
     }
-  }, [listing, setUnits])
+
+    if (listing?.events) {
+      const events = listing.events.map((event) => ({
+        ...event,
+        startTime: event.startTime,
+        endTime: event.endTime,
+        url: event.url,
+        tempId: nanoid(),
+      }))
+
+      setOpenHouseEvents(events)
+    }
+  }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues } = formMethods
@@ -347,7 +369,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, units)
+        const formattedData = formatFormData(data, units, openHouseEvents)
+
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -369,7 +392,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, editMode, listingsService, listing, router]
+    [units, openHouseEvents, editMode, listingsService, listing, router]
   )
 
   const onError = () => {

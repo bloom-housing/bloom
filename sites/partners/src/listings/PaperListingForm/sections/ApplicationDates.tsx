@@ -11,14 +11,16 @@ import {
   Button,
   AppearanceSizeType,
   MinimalTable,
+  Modal,
+  AppearanceStyleType,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { FormListing } from "../index"
+import { FormListing, TempEvent } from "../index"
 import { OpenHouseForm } from "../OpenHouseForm"
-import type { OpenHouseEvent } from "../"
 
 type ApplicationDatesProps = {
-  openHouseEvents: OpenHouseEvent[]
-  setOpenHouseEvents: (events: OpenHouseEvent[]) => void
+  openHouseEvents: TempEvent[]
+  setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
 }
 
@@ -31,7 +33,8 @@ const ApplicationDates = ({
     date: t("t.date"),
     startTime: t("t.startTime"),
     endTime: t("t.endTime"),
-    link: t("t.link"),
+    url: t("t.link"),
+    action: "",
   }
 
   const formMethods = useFormContext()
@@ -39,21 +42,61 @@ const ApplicationDates = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = formMethods
 
-  const [drawerOpenHouse, setDrawerOpenHouse] = useState(false)
+  const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
+  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
 
-  const onOpenHouseEventsSubmit = (data) => {
-    // TODO: support edit mode
-    setOpenHouseEvents([...openHouseEvents, data])
-    setDrawerOpenHouse(null)
+  const onOpenHouseEventsSubmit = (event: TempEvent) => {
+    const eventsWitoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
+
+    if (eventsWitoutEdited.length) {
+      setOpenHouseEvents([...eventsWitoutEdited, event])
+    } else {
+      setOpenHouseEvents([...openHouseEvents, event])
+    }
+
+    setDrawerOpenHouse(false)
+  }
+
+  const onOpenHouseEventDelete = (tempId: string) => {
+    const newEvents = openHouseEvents.filter((event) => event.tempId !== tempId)
+    setOpenHouseEvents(newEvents)
+    setModalDeleteOpenHouse(null)
   }
 
   const openHouseTableData = useMemo(() => {
-    return openHouseEvents.map(({ date, startTime, endTime, link }) => ({
-      date: `${date.month}/${date.day}/${date.year}`,
-      startTime: "start time",
-      endTime: "end time",
-      link: link ? `<a href="${link}">URL</a>` : null,
-    }))
+    return openHouseEvents.map((event) => {
+      const { startTime, endTime, url, tempId } = event
+
+      const startTimeDate = moment(startTime)
+      const endTimeDate = moment(endTime)
+
+      return {
+        date: startTimeDate.format("MM/DD/YYYY"),
+        startTime: startTimeDate.format("hh:mm:ss A"),
+        endTime: endTimeDate.format("hh:mm:ss A"),
+        url: url ? url : "",
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="front-semibold uppercase"
+              onClick={() => setDrawerOpenHouse(event)}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="front-semibold uppercase text-red-700"
+              onClick={() => setModalDeleteOpenHouse(tempId)}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      }
+    })
   }, [openHouseEvents])
 
   return (
@@ -119,16 +162,43 @@ const ApplicationDates = ({
         </div>
       </GridSection>
 
-      {/* {console.log(listing)} */}
-
       <Drawer
         open={!!drawerOpenHouse}
         title={t("listings.sections.addOpenHouse")}
         ariaDescription={t("listings.sections.addOpenHouse")}
-        onClose={() => setDrawerOpenHouse(null)}
+        onClose={() => setDrawerOpenHouse(false)}
       >
-        <OpenHouseForm onSubmit={onOpenHouseEventsSubmit} />
+        <OpenHouseForm
+          onSubmit={onOpenHouseEventsSubmit}
+          currentEvent={(drawerOpenHouse as TempEvent) || undefined}
+        />
       </Drawer>
+
+      <Modal
+        open={!!modalDeleteOpenHouse}
+        title={t("listings.events.deleteThisEvent")}
+        ariaDescription={t("listings.events.deleteConf")}
+        onClose={() => setModalDeleteOpenHouse(null)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.alert}
+            onClick={() => onOpenHouseEventDelete(modalDeleteOpenHouse)}
+          >
+            {t("t.delete")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setModalDeleteOpenHouse(null)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.events.deleteConf")}
+      </Modal>
     </>
   )
 }
