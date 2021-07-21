@@ -712,6 +712,7 @@
   },
   "listings": {
     "error": "There was an issue submitting the form.",
+    "closeThisListing": "Do you really want to close this listing?",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -719,9 +720,12 @@
       "publish": "Publish",
       "draft": "Save as Draft",
       "preview": "Preview",
-      "clone": "Clone"
+      "close": "Close",
+      "viewListing": "View listing",
+      "unpublish": "Unpublish"
     },
     "addListing": "Add Listing",
+    "addPhoto": "Add Photo",
     "additionalApplicationSubmissionNotes": "Additional Application Submission Notes",
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
@@ -876,6 +880,8 @@
       "leasingAgentTitle": "Leasing Agent",
       "neighborhoodSubtitle": "Location and transportation",
       "neighborhoodTitle": "Neighborhood",
+      "photoTitle": "Listing Photo",
+      "photoSubtitle": "Upload an image for the listing that will be used as a preview.",
       "processSubtitle": "Important dates and contact information",
       "processTitle": "Process",
       "rankingsResultsTitle": "Rankings & Results",
@@ -1079,6 +1085,7 @@
     "WY": "Wyoming"
   },
   "t": {
+    "areYouSure": "Are you sure?",
     "addNotes": "Add notes",
     "at": "at",
     "additionalPhone": "Additional Phone",
@@ -1105,6 +1112,7 @@
     "dropFilesHere": "Drop files here…",
     "export": "Export",
     "enterAmount": "Enter amount",
+    "fileName": "File Name",
     "filter": "Filter",
     "edit": "Edit",
     "email": "Email",
@@ -1146,6 +1154,7 @@
     "pleaseSelectOne": "Please select one.",
     "pm": "PM",
     "preferences": "Preferences",
+    "preview": "Preview",
     "previous": "Previous",
     "propertyAmenities": "Property Amenities",
     "range": "%{from} to %{to}",
