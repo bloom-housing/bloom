@@ -32,8 +32,12 @@ const DetailBuildingDetails = () => {
         </GridCell>
       </GridSection>
       <GridSection columns={3}>
-        <ViewItem label={t("listings.longitude")}>{listing.buildingAddress.longitude}</ViewItem>
-        <ViewItem label={t("listings.latitude")}>{listing.buildingAddress.latitude}</ViewItem>
+        <ViewItem label={t("listings.longitude")}>
+          {listing.buildingAddress.longitude.toString()}
+        </ViewItem>
+        <ViewItem label={t("listings.latitude")}>
+          {listing.buildingAddress.latitude.toString()}
+        </ViewItem>
       </GridSection>
     </GridSection>
   )

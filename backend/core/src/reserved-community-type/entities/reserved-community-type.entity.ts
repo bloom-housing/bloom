@@ -1,9 +1,8 @@
-import { Column, Entity, OneToMany } from "typeorm"
+import { Column, Entity } from "typeorm"
 import { Expose } from "class-transformer"
 import { IsOptional, IsString, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
-import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "reserved_community_types" })
 export class ReservedCommunityType extends AbstractEntity {
@@ -19,7 +18,4 @@ export class ReservedCommunityType extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(2048, { groups: [ValidationsGroupsEnum.default] })
   description?: string | null
-
-  @OneToMany(() => Listing, (listing) => listing.reservedCommunityType)
-  listings: Listing[]
 }

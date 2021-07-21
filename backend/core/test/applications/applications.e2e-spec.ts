@@ -15,12 +15,12 @@ import dbOptions = require("../../ormconfig.test")
 import { InputType } from "../../src/shared/types/input-type"
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
-import { UserDto } from "../../src/user/dto/user.dto"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { Listing } from "../../types"
+import { UserDto } from "../../src/auth/dto/user.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -416,7 +416,8 @@ describe("Applications", () => {
       .get(`/applications/csv/?includeHeaders=true&listingId=${listing1Id}`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(typeof res.body === "string")
+    expect(typeof res.text === "string")
+    expect(new RegExp(/Flagged/).test(res.text)).toEqual(true)
   })
 
   it(`should allow an admin to delete user's applications`, async () => {

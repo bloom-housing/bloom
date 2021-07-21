@@ -1,5 +1,4 @@
 import { INestApplicationContext } from "@nestjs/common"
-import { Listing, User } from "../.."
 import { ApplicationCreateDto } from "../applications/dto/application.dto"
 import { Repository } from "typeorm"
 import { Application } from "../applications/entities/application.entity"
@@ -9,6 +8,8 @@ import { Language } from "../shared/types/language-enum"
 import { ApplicationStatus } from "../applications/types/application-status-enum"
 import { ApplicationSubmissionType } from "../applications/types/application-submission-type-enum"
 import { IncomePeriod } from "../applications/types/income-period-enum"
+import { Listing } from "../listings/entities/listing.entity"
+import { User } from "../auth/entities/user.entity"
 
 const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing" | "listingId"> = {
   acceptedTerms: true,

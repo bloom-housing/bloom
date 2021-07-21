@@ -2,6 +2,11 @@ import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { ApplicationSection } from "../../src/page_components/listing/listing_sidebar/ApplicationSection"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
+import {
+  previewState,
+  previewStateExternalLink,
+} from "../../src/page_components/listing/listing_sidebar/ApplicationSection.stories"
+
 import { Listing } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 
@@ -33,7 +38,7 @@ describe("<ApplicationSection>", () => {
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
     expect(getByText(listing.waitlistMaxSize)).toBeTruthy()
-    expect(getAllByText(listing.applicationAddress.street || "").length).toBe(1)
+    expect(getAllByText(listing.applicationAddress?.street || "").length).toBe(1)
     expect(getAllByText(listing.applicationPickUpAddressOfficeHours).length).toBe(1)
   })
   it("renders nothing if applications are closed", () => {
@@ -45,7 +50,15 @@ describe("<ApplicationSection>", () => {
     const { queryByText } = render(
       <ApplicationSection listing={listing} internalFormRoute="/forms" />
     )
-    expect(queryByText(listing.waitlistMaxSize)).toBeNull()
-    expect(queryByText(listing.applicationAddress.street || "")).toBeNull()
+    expect(listing.waitlistMaxSize && queryByText(listing.waitlistMaxSize)).toBeNull()
+    expect(queryByText(listing.applicationAddress?.street || "")).toBeNull()
+  })
+  it("renders a preview state with disabled external link", () => {
+    const { getByText } = render(previewStateExternalLink())
+    expect(getByText("Apply Online").closest("button")?.disabled).toBe(true)
+  })
+  it("renders a preview state with disabled download button", () => {
+    const { getByText } = render(previewState())
+    expect(getByText("Download Application").closest("button")?.disabled).toBe(true)
   })
 })

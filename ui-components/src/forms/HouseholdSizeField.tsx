@@ -29,16 +29,20 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               id="householdSize"
               name="householdSize"
               defaultValue={householdSize}
-              ref={register({
-                min: {
-                  value: listing.householdSizeMin,
-                  message: t("errors.householdTooSmall"),
-                },
-                max: {
-                  value: listing.householdSizeMax,
-                  message: t("errors.householdTooBig"),
-                },
-              })}
+              ref={
+                listing.householdSizeMax
+                  ? register({
+                      min: {
+                        value: listing.householdSizeMin || 0,
+                        message: t("errors.householdTooSmall"),
+                      },
+                      max: {
+                        value: listing.householdSizeMax,
+                        message: t("errors.householdTooBig"),
+                      },
+                    })
+                  : register
+              }
             />
           </span>
           <ErrorMessage id={"householdsize-error"} error={error}>
