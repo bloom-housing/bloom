@@ -154,6 +154,15 @@ export const ListingView = (props: ListingProps) => {
     }
   }
 
+  const getReservedTitle = () => {
+    if (
+      listing.reservedCommunityType.name === "senior55" ||
+      listing.reservedCommunityType.name === "senior62"
+    ) {
+      return t("listings.reservedCommunitySeniorTitle")
+    }
+  }
+
   //TODO: Add isReferralApplication boolean field to avoid this logic
   const isReferralApp =
     !listing.applicationDropOffAddress &&
@@ -169,6 +178,11 @@ export const ListingView = (props: ListingProps) => {
         <ImageCard
           title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+          tagLabel={
+            listing.reservedCommunityType
+              ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
+              : null
+          }
         />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
@@ -237,6 +251,19 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <ul>
+            {listing.reservedCommunityType && (
+              <ListSection title={getReservedTitle()} subtitle={null}>
+                <InfoCard
+                  title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
+                  subtitle={"All Units"}
+                >
+                  <ExpandableText className="text-sm text-gray-700">
+                    {listing.reservedCommunityDescription}
+                  </ExpandableText>
+                </InfoCard>
+              </ListSection>
+            )}
+
             <ListSection
               title={t("listings.householdMaximumIncome")}
               subtitle={householdMaximumIncomeSubheader}

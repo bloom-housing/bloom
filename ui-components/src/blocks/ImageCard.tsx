@@ -5,6 +5,7 @@ import "./ImageCard.scss"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
+import { t } from "../helpers/translator"
 
 export interface ImageCardProps {
   imageUrl: string
@@ -42,9 +43,8 @@ const ImageCard = (props: ImageCardProps) => {
       {tag}
       <figure className="image-card">
         {props.imageUrl && (
-          <img src={props.imageUrl} alt={props.description || "A picture of the building"} />
+          <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
         )}
-
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>
           {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}

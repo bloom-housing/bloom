@@ -1,4 +1,3 @@
-import { ReservedCommunityType } from "types"
 import { ListingDefaultSeed } from "./listing-default-seed"
 
 export class ListingDefaultReservedSeed extends ListingDefaultSeed {

@@ -11,7 +11,6 @@ const triton: Listing = Object.assign({}, Triton) as any
 // @ts-ignore
 archer.unitsSummarized = {}
 archer.unitsSummarized.byNonReservedUnitType = []
-archer.unitsSummarized.byReservedType = []
 archer.waitlistCurrentSize = 300
 archer.waitlistMaxSize = 500
 archer.waitlistOpenSpots = 200
@@ -19,7 +18,6 @@ archer.waitlistOpenSpots = 200
 // @ts-ignore
 triton.unitsSummarized = {}
 triton.unitsSummarized.byNonReservedUnitType = []
-triton.unitsSummarized.byReservedType = []
 
 afterEach(cleanup)
 

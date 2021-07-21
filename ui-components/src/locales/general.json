@@ -770,6 +770,7 @@
     "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
     "bath": "bath",
     "browseListings": "Browse Listings",
+    "buildingImageAltText": "A picture of the building",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -853,9 +854,10 @@
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
+    "reservedCommunitySeniorTitle": "Senior Building",
     "reservedCommunityTypes": {
-      "senior55": "Senior 55+",
-      "senior62": "Senior 62+",
+      "senior55": "Seniors 55+",
+      "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs"
     },
     "reservedFor": "Reserved for %{type}",

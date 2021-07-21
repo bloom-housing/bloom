@@ -42,6 +42,17 @@
   }
 }
 
+.image-card__label {
+  @apply absolute;
+  @apply top-0;
+  @apply p-3;
+  @apply m-5;
+
+  @apply bg-accent-warm;
+  @apply text-white;
+  @apply rounded;
+}
+
 .image-card__title {
   @apply text-white;
   @apply text-left;
