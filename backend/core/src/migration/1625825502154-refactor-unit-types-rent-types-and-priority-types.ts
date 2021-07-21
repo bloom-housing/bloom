@@ -56,7 +56,9 @@ export class refactorUnitTypesRentTypesAndPriorityTypes1625825502154 implements 
     ]
     const existingAccessibilityPriorityTypes = (
       await queryRunner.query(`SELECT DISTINCT priority_type FROM units`)
-    ).map((result) => result.priority_type).filter(result => result !== null)
+    )
+      .map((result) => result.priority_type)
+      .filter((result) => result !== null)
     const accessibilityPriorityTypeSet = new Set()
     for (const accessibilityPriorityType of [
       ...accessibilityPriorityTypeSeeds,
