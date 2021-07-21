@@ -21,7 +21,7 @@ const ApplicationConfirmation = () => {
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const router = useRouter()
 
-  const imageUrl = imageUrlFromListing(listing)
+  const imageUrl = imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
 
   return (
     <FormsLayout>
