@@ -987,7 +987,8 @@
     },
     "events": {
       "deleteThisEvent": "Delete this event",
-      "deleteConf": "Do you really want to delete this event?"
+      "deleteConf": "Do you really want to delete this event?",
+      "openHouseNotes": "Open House Notes"
     },
     "units": "Listing Units",
     "unitsDescription": "Select the building units that are available through the listing.",
@@ -1144,9 +1145,11 @@
     "no": "No",
     "none": "None",
     "noneFound": "None found.",
+    "notes": "Notes",
     "occupancy": "Occupancy",
     "ok": "OK",
     "or": "or",
+    "optional": "Optional",
     "pageXofY": "Page %{num} of %{total}",
     "people": "people",
     "person": "person",

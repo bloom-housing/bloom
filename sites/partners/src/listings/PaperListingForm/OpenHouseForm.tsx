@@ -9,6 +9,7 @@ import {
   ViewItem,
   GridCell,
   Field,
+  Textarea,
   Form,
   DateField,
   DateFieldValues,
@@ -31,17 +32,22 @@ export type OpenHouseFormValues = {
   startTime: TimeFieldValues
   endTime: TimeFieldValues
   url?: string
+  note?: string
 }
 
 const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
   const defaultValues = (() => {
     if (!currentEvent) return null
 
-    const { url, startTime, endTime } = currentEvent || {}
+    const { startTime, endTime, url, note } = currentEvent || {}
     const values = {}
 
     if (url) {
       Object.assign(values, { url })
+    }
+
+    if (note) {
+      Object.assign(values, { note })
     }
 
     Object.assign(values, { startTime: formatDateToTimeField(startTime) })
@@ -88,6 +94,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         startTime: createDate(data.date, data.startTime),
         endTime: createDate(data.date, data.endTime),
         url: data.url,
+        note: data.note,
       }
 
       onSubmit(event)
@@ -151,6 +158,18 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 name="url"
                 label={t("t.url")}
                 placeholder={t("t.url")}
+                register={register}
+                readerOnly
+              />
+            </ViewItem>
+          </GridCell>
+          <GridCell>
+            <ViewItem label={t("listings.events.openHouseNotes")}>
+              <Textarea
+                id="note"
+                name="note"
+                label={t("listings.events.openHouseNotes")}
+                placeholder={t("t.notes")}
                 register={register}
                 readerOnly
               />

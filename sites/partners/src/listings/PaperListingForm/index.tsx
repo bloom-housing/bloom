@@ -196,14 +196,6 @@ export type TempEvent = ListingEvent & {
   tempId?: string
 }
 
-export type FormOpenHouseEvent = {
-  tempId?: string
-  date: DateFieldValues
-  startTime: TimeFieldValues
-  endTime: TimeFieldValues
-  url?: string
-}
-
 const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: TempEvent[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -251,9 +243,7 @@ const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: T
     id: undefined,
     createdAt: undefined,
     updatedAt: undefined,
-    startTime: event.startTime,
-    endTime: event.endTime,
-    url: event.url,
+    ...event,
   }))
 
   events = [...events, ...openHouseEventsData]
@@ -343,6 +333,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         startTime: event.startTime,
         endTime: event.endTime,
         url: event.url,
+        note: event.note,
         tempId: nanoid(),
       }))
 

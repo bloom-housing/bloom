@@ -119,7 +119,10 @@ const DetailApplicationDates = () => {
               <ViewItem label={t("t.date")}>{createDateLabel(drawer?.startTime)}</ViewItem>
               <ViewItem label={t("t.startTime")}>{createTimeLabel(drawer?.startTime)}</ViewItem>
               <ViewItem label={t("t.endTime")}>{createTimeLabel(drawer?.endTime)}</ViewItem>
-              <ViewItem label={t("t.url")}>{drawer?.url}</ViewItem>
+              <ViewItem label={t("t.url")}>{drawer?.url || t("n/a")}</ViewItem>
+              <ViewItem label={t("listings.events.openHouseNotes")}>
+                {drawer?.note || t("n/a")}
+              </ViewItem>
             </GridSection>
           </GridSection>
         </section>
