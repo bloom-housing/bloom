@@ -3626,7 +3626,10 @@ export interface UnitAccessibilityPriorityType {
 
 export interface Unit {
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  status: UnitStatus;
+
+  /**  */
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   unitType?: UnitType
@@ -3686,10 +3689,7 @@ export interface Unit {
   sqFeet?: string
 
   /**  */
-  status?: string
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean
@@ -4001,7 +4001,10 @@ export interface ListingEventCreate {
 
 export interface UnitCreate {
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  status: UnitStatus;
+
+  /**  */
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   amiPercentage?: string
@@ -4043,10 +4046,7 @@ export interface UnitCreate {
   sqFeet?: string
 
   /**  */
-  status?: string
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean
@@ -4350,7 +4350,10 @@ export interface ListingEventUpdate {
 
 export interface UnitUpdate {
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  status: UnitStatus;
+
+  /**  */
+  amiChart?: CombinedAmiChartTypes;
 
   /**  */
   amiPercentage?: string
@@ -4392,10 +4395,7 @@ export interface UnitUpdate {
   sqFeet?: string
 
   /**  */
-  status?: string
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
+  monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean
@@ -5025,7 +5025,13 @@ export enum ListingEventType {
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
 }
-export type CombinedAmiChartTypes = AmiChart
+
+export enum UnitStatus {
+  'unknown' = 'unknown',
+  'available' = 'available',
+  'occupied' = 'occupied'
+}
+export type CombinedAmiChartTypes = AmiChart;
 export enum ApplicationMethodType {
   "Internal" = "Internal",
   "FileDownload" = "FileDownload",

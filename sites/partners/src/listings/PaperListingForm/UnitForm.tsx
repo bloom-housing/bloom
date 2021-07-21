@@ -18,6 +18,7 @@ import { TempUnit } from "."
 import {
   AmiChart,
   UnitAccessibilityPriorityType,
+  UnitStatus,
   UnitType,
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
@@ -29,8 +30,6 @@ type UnitFormProps = {
   units: TempUnit[]
   currentTempId: number
 }
-
-const STATUS = "available"
 
 const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
   const [current, setCurrent] = useState<TempUnit>(null)
@@ -56,7 +55,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       numBathrooms: current?.numBathrooms,
       floor: current?.floor,
       sqFeet: current?.sqFeet,
-      status: STATUS,
+      status: UnitStatus.unknown,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
       amiChart: current?.amiChart,
@@ -79,7 +78,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     reset({
       ...unit,
       rentType: getRentType(unit),
-      status: STATUS,
+      status: UnitStatus.available,
     })
   }, [units, setCurrent, tempId, reset, options])
 
