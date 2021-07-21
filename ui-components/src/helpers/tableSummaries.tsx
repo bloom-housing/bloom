@@ -68,7 +68,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
 export const getSummariesTable = (summaries: UnitSummary[]) => {
   let groupedUnits = [] as Array<GroupedTableGroup>
 
-  if (summaries.length > 0) {
+  if (summaries?.length > 0) {
     const unitSummaries = unitSummariesTable(summaries)
     groupedUnits = [
       {
