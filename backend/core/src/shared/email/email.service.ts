@@ -28,12 +28,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper(
-      "t",
-      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
-        return polyglot.t(phrase, options)
-      }
-    )
+    Handlebars.registerHelper("t", function (
+      phrase: string,
+      options?: number | Polyglot.InterpolationOptions
+    ) {
+      return polyglot.t(phrase, options)
+    })
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -116,9 +116,9 @@ export class EmailService {
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a forget password email to ${
-          user.email
-        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a forget password email to ${user.email} from ${this.configService.get<
+          string
+        >("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
