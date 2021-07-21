@@ -1,5 +1,9 @@
 @import "../global/mixins.scss";
 
+.image-card__wrapper {
+  @apply relative;
+}
+
 .image-card {
   @apply relative;
   @include has-image-skeleton();
@@ -7,6 +11,22 @@
   img {
     @apply w-full;
     min-height: 3rem;
+  }
+}
+
+.image-card-tag__wrapper {
+  @apply flex;  
+  @apply items-center;
+  @apply justify-center;
+  @apply absolute;
+  @apply z-10;
+  @apply w-full;
+  @apply mt-4;
+
+  @screen md {
+    @apply items-start;
+    @apply justify-start;
+    @apply ml-4;
   }
 }
 
