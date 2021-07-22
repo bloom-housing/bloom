@@ -13,12 +13,16 @@ import { Filters } from "../../shared/dto/filter.dto"
  */
 export function addFilter<Filter>(filter: Filter, schema: string, qb: WhereExpression): void {
   const operator = "andWhere"
+  /**
+   * By specifying that the filter is an array, it keeps the keys in order, so we can iterate like below
+   */
   let comparisons: unknown[],
     comparisonCount = 0
 
   // TODO(#210): This assumes that the order of keys is consistent across browsers,
   // that the key order is the insertion order, and that the $comaprison field is first.
   // This may not always be the case.
+  // eslint-disable-next-line @typescript-eslint/no-for-in-array
   for (const key in filter) {
     const value = filter[key]
     if (key === "$comparison") {

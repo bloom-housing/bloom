@@ -4,13 +4,14 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { MinMaxCurrency } from "./min-max-currency"
 import { MinMax } from "./min-max"
 import { ApiProperty } from "@nestjs/swagger"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 
 export class UnitSummary {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  unitType: string
+  unitType?: UnitTypeDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

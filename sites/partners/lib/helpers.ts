@@ -13,6 +13,15 @@ type DateTimePST = {
   month: string
 }
 
+interface FormOption {
+  label: string
+  value: string
+}
+
+export interface FormOptions {
+  [key: string]: FormOption[]
+}
+
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType) => {
@@ -93,4 +102,16 @@ export const getAmiChartId = (chart: AmiChart | string | undefined): string | nu
     return null
   }
   return chart instanceof Object ? chart.id : chart
+}
+
+export const isNullOrUndefined = (value: unknown): boolean => {
+  return value === null || value === undefined
+}
+
+// TODO memoize this function
+export function arrayToFormOptions<T>(arr: T[], label: string, value: string): FormOption[] {
+  return arr.map((val: T) => ({
+    label: val[label],
+    value: val[value],
+  }))
 }

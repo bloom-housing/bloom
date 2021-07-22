@@ -1,5 +1,5 @@
 export enum UnitStatus {
-    unknown = "unknown",
-    available = "available",
-    occupied = "occupied",
+  unknown = "unknown",
+  available = "available",
+  occupied = "occupied",
 }

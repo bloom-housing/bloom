@@ -3,11 +3,12 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
-import { allSeeds } from "../../src/seeds/listings"
 import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
+import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
+import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -31,76 +32,34 @@ describe("Listings", () => {
 
   it("should return all listings", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    expect(res.body.items.length).toEqual(allSeeds.length)
+    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
-  it("should return the first page of paginated listings", async () => {
-    // Make the limit 1 less than the full number of listings, so that the first page contains all
-    // but the last listing.
-    const page = "1"
-    const limit = allSeeds.length - 1
-    const params = "/?page=" + page + "&limit=" + limit.toString()
-    const res = await supertest(app.getHttpServer())
-      .get("/listings" + params)
-      .expect(200)
-    expect(res.body.items.length).toEqual(allSeeds.length - 1)
-    expect(res.body.meta).toEqual({
-      currentPage: 1,
-      itemCount: limit,
-      itemsPerPage: limit,
-      totalItems: allSeeds.length,
-      totalPages: 2,
-    })
-  })
-
-  it("should return the last page of paginated listings", async () => {
-    // Make the limit 1 less than the full number of listings, so that the second page contains
-    // only one listing.
-    const page = "2"
-    const limit = allSeeds.length - 1
-    const params = "/?page=" + page + "&limit=" + limit.toString()
-    const res = await supertest(app.getHttpServer())
-      .get("/listings" + params)
-      .expect(200)
-    expect(res.body.items.length).toEqual(1)
-    expect(res.body.meta).toEqual({
-      currentPage: 2,
-      itemCount: 1,
-      itemsPerPage: limit,
-      totalItems: allSeeds.length,
-      totalPages: 2,
-    })
-  })
-
-  // TODO: replace jsonpath with SQL-level filtering
   it("should return only the specified listings", async () => {
     const query =
       "/?jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.length).toEqual(1)
-    expect(res.body.items[0].applicationAddress.city).toEqual("Foster City")
+    expect(res.body.length).toEqual(1)
+    expect(res.body[0].applicationAddress.city).toEqual("Foster City")
   })
 
-  // TODO: replace jsonpath with SQL-level filtering
   it("shouldn't return any listings for incorrect query", async () => {
     const query = "/?jsonpath=%24%5B%3F(%40.applicationNONSENSE.argh%3D%3D%22San+Jose%22)%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.length).toEqual(0)
+    expect(res.body.length).toEqual(0)
   })
 
-  // TODO: replace jsonpath with SQL-level filtering
   it("should return only active listings", async () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.length).toEqual(allSeeds.length)
+    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingDto = { ...res.body.items[0] }
+    const listing: ListingDto = { ...res.body[0] }
 
-    const oldAmenitiesValue = listing.amenities
     const amenitiesValue = "Random amenities value"
     expect(listing.amenities).not.toBe(amenitiesValue)
     listing.amenities = amenitiesValue
@@ -119,22 +78,12 @@ describe("Listings", () => {
 
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
-
-    // Clean up: revert the changes to listing.
-    listing.amenities = oldAmenitiesValue
-    listing.units[0].maxOccupancy = oldOccupancy
-
-    await supertest(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send(listing)
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
   })
 
   it("should add/overwrite image in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    const listing: ListingUpdateDto = { ...res.body[0] }
 
     const fileId = "fileId"
     const label = "label"
@@ -158,6 +107,43 @@ describe("Listings", () => {
     expect(modifiedListing.image).toHaveProperty("id")
     expect(modifiedListing.image).toHaveProperty("createdAt")
     expect(modifiedListing.image).toHaveProperty("updatedAt")
+  })
+
+  it("should add/overwrite listing events in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const listingEvent: ListingEventCreateDto = {
+      type: ListingEventType.openHouse,
+      startTime: new Date(),
+      endTime: new Date(),
+      url: "testurl",
+      note: "testnote",
+      label: "testlabel",
+      file: {
+        fileId: "testid",
+        label: "testlabel",
+      },
+    }
+    listing.events = [listingEvent]
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+    console.log(putResponse)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.events.length).toBe(1)
+    expect(modifiedListing.events[0].url).toBe(listingEvent.url)
+    expect(modifiedListing.events[0].note).toBe(listingEvent.note)
+    expect(modifiedListing.events[0].label).toBe(listingEvent.label)
+    expect(modifiedListing.events[0].file.id).toBeDefined()
+    expect(modifiedListing.events[0].file.fileId).toBe(listingEvent.file.fileId)
+    expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
   afterEach(() => {

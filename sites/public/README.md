@@ -13,9 +13,11 @@ This is the beginning of a reference implementation of the public-facing web app
 - `yarn dev`
 
 ### Debugging
+
 Starting the site with `yarn dev` includes the necessary debug flags.
 
 To connect to it from VS Code, add a configuration to launch.json that looks like
+
 ```shell script
 {
   "name": "Attach to Public Site",

@@ -26,12 +26,22 @@ export class ListingsService {
     return this.listingRepository
       .createQueryBuilder("listings")
       .leftJoinAndSelect("listings.image", "image")
+      .leftJoinAndSelect("listings.events", "listingEvents")
+      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
+      .leftJoinAndSelect("listings.applicationAddress", "applicationAddress")
+      .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")
+      .leftJoinAndSelect("listings.applicationPickUpAddress", "applicationPickUpAddress")
+      .leftJoinAndSelect("listings.applicationMailingAddress", "applicationMailingAddress")
+      .leftJoinAndSelect("listings.applicationDropOffAddress", "applicationDropOffAddress")
       .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
       .leftJoinAndSelect("listings.preferences", "preferences")
       .leftJoinAndSelect("listings.property", "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect("units.unitType", "unitTypeRef")
+      .leftJoinAndSelect("units.unitRentType", "unitRentType")
+      .leftJoinAndSelect("units.priorityType", "priorityType")
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
@@ -89,8 +99,7 @@ export class ListingsService {
      * Get the application counts and map them to listings
      */
     if (origin === process.env.PARTNERS_BASE_URL) {
-      const counts = await this.listingRepository
-        .createQueryBuilder("listing")
+      const counts = await Listing.createQueryBuilder("listing")
         .select("listing.id")
         .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
         .getMany()
@@ -126,14 +135,14 @@ export class ListingsService {
       ...listingDto,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
-    return this.listingRepository.save(listing)
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const listing = await this.listingRepository.findOneOrFail({
-      where: { id: listingDto.id },
-      relations: ["property"],
-    })
+    const qb = this.getQueryBuilder()
+    qb.where("listings.id = :id", { id: listingDto.id })
+    const listing = await qb.getOne()
+
     if (!listing) {
       throw new NotFoundException()
     }

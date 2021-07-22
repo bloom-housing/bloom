@@ -1,6 +1,6 @@
-import * as client from "../client"
+import * as client from "../types/src/backend-swagger"
 import axios from "axios"
-import { ListingCreate, serviceOptions } from "../client"
+import { ListingCreate, serviceOptions } from "../types/src/backend-swagger"
 import { ListingStatus } from "../src/listings/types/listing-status-enum"
 
 // NOTE: This script relies on any logged-in users having permission to create

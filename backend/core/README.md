@@ -52,16 +52,19 @@ yarn db:create
 ```
 
 Seeding the DB:
+
 ```shell script
 yarn db:seed
 ```
 
 Generating a new migration:
+
 ```shell script
 yarn db:migration:generate
 ```
 
 Applying migrations:
+
 ```shell script
 yarn db:migration:run
 ```

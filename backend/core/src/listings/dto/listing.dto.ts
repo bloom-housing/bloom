@@ -20,7 +20,7 @@ import { ApiProperty, OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UserBasicDto } from "../../user/dto/user.dto"
+import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
 import { PaginationFactory } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
@@ -31,10 +31,15 @@ import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
 
 export class ListingDto extends OmitType(Listing, [
+  "applicationAddress",
+  "applicationPickUpAddress",
+  "applicationDropOffAddress",
+  "applicationMailingAddress",
   "applications",
-  "applicationFlaggedSets",
+  "events",
   "image",
   "jurisdiction",
   "leasingAgents",
@@ -54,25 +59,31 @@ export class ListingDto extends OmitType(Listing, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  applicationAddress: AddressDto | null
+  applicationAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  applicationPickUpAddress: AddressDto | null
+  applicationPickUpAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationDropOffAddress: AddressCreateDto | null
+  @Type(() => AddressDto)
+  applicationDropOffAddress: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationMailingAddress: AddressCreateDto | null
+  @Type(() => AddressDto)
+  applicationMailingAddress: AddressDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventDto)
+  events: ListingEventDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -84,7 +95,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  leasingAgentAddress: AddressDto | null
+  leasingAgentAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -127,7 +138,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => UnitDto)
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.units
+      return obj.property?.units
     },
     { toClassOnly: true }
   )
@@ -142,7 +153,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  accessibility: string | null
+  accessibility?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -153,7 +164,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  amenities: string | null
+  amenities?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -176,7 +187,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  buildingTotalUnits: number | null
+  buildingTotalUnits?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -187,7 +198,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  developer: string | null
+  developer?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -198,7 +209,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  householdSizeMax: number | null
+  householdSizeMax?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -209,7 +220,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  householdSizeMin: number | null
+  householdSizeMin?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -220,7 +231,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  neighborhood: string | null
+  neighborhood?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -231,7 +242,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  petPolicy: string | null
+  petPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -242,7 +253,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  smokingPolicy: string | null
+  smokingPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -253,7 +264,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  unitsAvailable: number | null
+  unitsAvailable?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -264,7 +275,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  unitAmenities: string | null
+  unitAmenities?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -286,7 +297,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  yearBuilt: number | null
+  yearBuilt?: number | null
 
   @Expose()
   @ApiProperty({ type: UnitsSummarized })
@@ -304,6 +315,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "preferences",
+  "events",
   "image",
   "leasingAgentAddress",
   "leasingAgents",
@@ -340,13 +352,13 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  applicationAddress: AddressCreateDto | null
+  applicationAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  applicationPickUpAddress: AddressCreateDto | null
+  applicationPickUpAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -361,6 +373,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   applicationMailingAddress: AddressCreateDto | null
 
   @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventCreateDto)
+  events: ListingEventCreateDto[]
+
+  @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreateDto)
@@ -370,7 +388,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  leasingAgentAddress: AddressCreateDto | null
+  leasingAgentAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -389,12 +407,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  accessibility: string | null
+  accessibility?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amenities: string | null
+  amenities?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -405,47 +423,47 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  buildingTotalUnits: number | null
+  buildingTotalUnits?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  developer: string | null
+  developer?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMax: number | null
+  householdSizeMax?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMin: number | null
+  householdSizeMin?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  neighborhood: string | null
+  neighborhood?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  petPolicy: string | null
+  petPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  smokingPolicy: string | null
+  smokingPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  unitsAvailable: number | null
+  unitsAvailable?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitAmenities: string | null
+  unitAmenities?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -455,14 +473,14 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  yearBuilt: number | null
+  yearBuilt?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
-  jurisdiction?: IdDto
+  jurisdiction?: IdDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -484,6 +502,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "updatedAt",
   "preferences",
   "image",
+  "events",
   "leasingAgentAddress",
   "urlSlug",
   "leasingAgents",
@@ -536,25 +555,31 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  applicationAddress: AddressUpdateDto | null
+  applicationAddress?: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  applicationPickUpAddress: AddressUpdateDto | null
+  applicationPickUpAddress?: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationDropOffAddress: AddressCreateDto | null
+  @Type(() => AddressUpdateDto)
+  applicationDropOffAddress: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  applicationMailingAddress: AddressCreateDto | null
+  @Type(() => AddressUpdateDto)
+  applicationMailingAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingEventUpdateDto)
+  events: ListingEventUpdateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -566,7 +591,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  leasingAgentAddress: AddressUpdateDto | null
+  leasingAgentAddress?: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -585,12 +610,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  accessibility: string | null
+  accessibility?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amenities: string | null
+  amenities?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -601,47 +626,47 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  buildingTotalUnits: number | null
+  buildingTotalUnits?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  developer: string | null
+  developer?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMax: number | null
+  householdSizeMax?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  householdSizeMin: number | null
+  householdSizeMin?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  neighborhood: string | null
+  neighborhood?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  petPolicy: string | null
+  petPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  smokingPolicy: string | null
+  smokingPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  unitsAvailable: number | null
+  unitsAvailable?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitAmenities: string | null
+  unitAmenities?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -651,7 +676,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  yearBuilt: number | null
+  yearBuilt?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

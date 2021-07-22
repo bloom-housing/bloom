@@ -15,6 +15,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { Property } from "../../property/entities/property.entity"
@@ -22,6 +23,9 @@ import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitStatus } from "../types/unit-status-enum"
 import { ApiProperty } from "@nestjs/swagger"
+import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
+import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 
 @Entity({ name: "units" })
 class Unit {
@@ -43,7 +47,7 @@ class Unit {
   @Type(() => Date)
   updatedAt: Date
 
-  @ManyToOne(() => AmiChart, (amiChart) => amiChart.units, { eager: true, nullable: true })
+  @ManyToOne(() => AmiChart, { eager: true, nullable: true })
   amiChart: AmiChart | null
 
   @Column({ nullable: true, type: "text" })
@@ -116,12 +120,6 @@ class Unit {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  priorityType?: string | null
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   reservedType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
@@ -130,7 +128,7 @@ class Unit {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   sqFeet?: string | null
 
-  @Column({ 
+  @Column({
     type: "enum",
     enum: UnitStatus,
     default: UnitStatus.unknown,
@@ -139,12 +137,6 @@ class Unit {
   @IsEnum(UnitStatus, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: UnitStatus, enumName: "UnitStatus" })
   status: UnitStatus
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  unitType?: string | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
@@ -163,6 +155,27 @@ class Unit {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   bmrProgramChart?: boolean | null
+
+  @ManyToOne(() => UnitType, { eager: true, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitType)
+  unitType?: UnitType | null
+
+  @ManyToOne(() => UnitRentType, { eager: true, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitRentType)
+  unitRentType?: UnitRentType | null
+
+  @ManyToOne(() => UnitAccessibilityPriorityType, { eager: true, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAccessibilityPriorityType)
+  priorityType?: UnitAccessibilityPriorityType | null
 }
 
 export { Unit as default, Unit }

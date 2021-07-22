@@ -12,7 +12,7 @@ const NewApplication = () => {
   return (
     <Layout>
       <Head>
-        <title>{t("nav.siteTitle")}</title>
+        <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
       <PageHeader className="relative" title={t("applications.newApplication")}>

@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsController } from "./listings.controller"
 import { PassportModule } from "@nestjs/passport"
 import { ListingsService } from "./listings.service"
-import { AuthzService } from "../auth/authz.service"
+import { AuthzService } from "../auth/services/authz.service"
 import { CacheModule } from "@nestjs/common"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest

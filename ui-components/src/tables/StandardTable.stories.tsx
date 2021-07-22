@@ -40,13 +40,13 @@ const dataWithImage = [...data] as any
 dataWithImage[0].image = (
   <TableThumbnail>
     <a href="#">
-      <img src="/images/listing.jpg" />
+      <img src="/images/listing.jpg" alt="listing image" />
     </a>
   </TableThumbnail>
 )
 dataWithImage[1].image = (
   <TableThumbnail>
-    <img src="/images/logo_glyph.svg" />
+    <img src="/images/logo_glyph.svg" alt="logo" />
   </TableThumbnail>
 )
 

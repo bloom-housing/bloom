@@ -13,9 +13,11 @@ This is a reference implementation of the partners-facing web app, providing the
 - `yarn dev`
 
 ### Debugging
+
 Starting the site with `yarn dev` includes the necessary debug flags.
 
 To connect to it from VS Code, add a configuration to launch.json that looks like
+
 ```shell script
 {
   "name": "Attach to Partners Site",

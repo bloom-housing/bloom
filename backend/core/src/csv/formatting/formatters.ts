@@ -608,3 +608,19 @@ export const formatHOPWAPreference = {
     )
   },
 }
+
+export const formatMarkedAsDuplicate = {
+  label: "Marked as duplicate",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return booleanFormatter(application.markedAsDuplicate)
+  },
+}
+
+export const formatFlagged = {
+  label: "Flagged",
+  discriminator: "",
+  formatter: (application: Application) => {
+    return booleanFormatter(application.flagged)
+  },
+}
