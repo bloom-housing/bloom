@@ -8,8 +8,8 @@ import {
   FormCard,
   t,
   Form,
-  Field,
   ProgressNav,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -21,10 +21,28 @@ const EligibilityDisability = () => {
   const router = useRouter()
 
   /* Form Handler */
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, errors } = useForm()
   const onSubmit = () => {
     // Not yet implemented.
   }
+
+  const disabilityValues = [
+    {
+      id: "disabilityNo",
+      value: "no",
+      label: t("t.no"),
+    },
+    {
+      id: "disabilityYes",
+      value: "yes",
+      label: t("t.yes"),
+    },
+    {
+      id: "disabilityPreferNotToSay",
+      value: "preferNotToSay",
+      label: t("eligibility.disability.preferNotToSay"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -41,42 +59,17 @@ const EligibilityDisability = () => {
             <h2 className="form-card__title is-borderless">{t("eligibility.disability.prompt")}</h2>
           </div>
           <div className="form-card__group">
+            <p className="field-note mb-4">{t("eligibility.disability.description")}</p>
             <fieldset>
-              <p className="field-note mb-4">{t("eligibility.disability.description")}</p>
-              <Field
+              <legend className="sr-only">{t("eligibility.disability.prompt")}</legend>
+              <FieldGroup
                 type="radio"
-                id="disabilityNo"
-                name="disabilityNo"
-                label={t("t.no")}
+                name="disability"
+                error={errors.disability}
+                errorMessage={t("errors.selectOption")}
                 register={register}
                 validation={{ required: true }}
-                inputProps={{
-                  value: "no",
-                }}
-              />
-
-              <Field
-                type="radio"
-                id="disabilityYes"
-                name="disabilityYes"
-                label={t("t.yes")}
-                register={register}
-                validation={{ required: true }}
-                inputProps={{
-                  value: "yes",
-                }}
-              />
-
-              <Field
-                type="radio"
-                id="disabilityPreferNotToSay"
-                name="disabilityPreferNotToSay"
-                label={t("eligibility.disability.preferNotToSay")}
-                register={register}
-                validation={{ required: true }}
-                inputProps={{
-                  value: "preferNotToSay",
-                }}
+                fields={disabilityValues}
               />
             </fieldset>
           </div>

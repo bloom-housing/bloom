@@ -9,17 +9,29 @@ import { t } from "@bloom-housing/ui-components/src/helpers/translator"
 import { ProgressNav } from "@bloom-housing/ui-components/src/navigation/ProgressNav"
 import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { Form } from "@bloom-housing/ui-components/src/forms/Form"
-import { Field } from "@bloom-housing/ui-components/src/forms/Field"
 import { Button } from "@bloom-housing/ui-components/src/actions/Button"
-import { AppearanceStyleType } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, FieldGroup } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 
 const EligibilitySection8 = () => {
   /* Form Handler */
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, errors } = useForm()
   const onSubmit = () => {
     // Not yet implemented.
   }
+
+  const section8Values = [
+    {
+      id: "section8No",
+      value: "no",
+      label: t("t.no"),
+    },
+    {
+      id: "section8Yes",
+      value: "yes",
+      label: t("t.yes"),
+    },
+  ]
 
   return (
     <FormsLayout>
@@ -37,28 +49,15 @@ const EligibilitySection8 = () => {
           </div>
           <div className="form-card__group">
             <fieldset>
-              <Field
+              <legend className="sr-only">{t("eligibility.section8.prompt")}</legend>
+              <FieldGroup
                 type="radio"
-                id="section8No"
-                name="section8No"
-                label={t("t.no")}
+                name="section8"
+                error={errors.section8}
+                errorMessage={t("errors.selectOption")}
                 register={register}
                 validation={{ required: true }}
-                inputProps={{
-                  value: "no",
-                }}
-              />
-
-              <Field
-                type="radio"
-                id="section8Yes"
-                name="section8Yes"
-                label={t("t.yes")}
-                register={register}
-                validation={{ required: true }}
-                inputProps={{
-                  value: "yes",
-                }}
+                fields={section8Values}
               />
             </fieldset>
           </div>

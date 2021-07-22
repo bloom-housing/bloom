@@ -49,15 +49,18 @@ const EligibilityBedrooms = () => {
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <FieldGroup
-              type="checkbox"
-              name="preferredUnit"
-              fields={preferredUnitOptions}
-              error={errors.preferredUnit}
-              errorMessage={t("errors.selectAtLeastOne")}
-              validation={{ required: true }}
-              register={register}
-            />
+            <fieldset>
+              <legend className="sr-only">{t("eligibility.bedrooms.prompt")}</legend>
+              <FieldGroup
+                type="checkbox"
+                name="preferredUnit"
+                fields={preferredUnitOptions}
+                error={errors.preferredUnit}
+                errorMessage={t("errors.selectAtLeastOne")}
+                validation={{ required: true }}
+                register={register}
+              />
+            </fieldset>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
