@@ -40,12 +40,15 @@ const EligibilityIncome = () => {
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <p className="field-note mb-4">{t("eligibility.income.description")}</p>
+            <p className="field-note mb-4" id="income-description">
+              {t("eligibility.income.description")}
+            </p>
             <Select
               id="eligibility.income"
               name="eligibility.income"
               placeholder={t("eligibility.income.label")}
               label={t("eligibility.income.label")}
+              describedBy="income-description"
               validation={{ required: true }}
               defaultValue={t("eligibility.income.ranges")}
               register={register}

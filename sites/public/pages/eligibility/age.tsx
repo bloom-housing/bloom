@@ -42,12 +42,15 @@ const EligibilityAge = () => {
             <h2 className="form-card__title is-borderless">{t("eligibility.age.prompt")}</h2>
           </div>
           <div className="form-card__group is-borderless">
-            <p className="field-note mb-4">{t("eligibility.age.description")}</p>
+            <p className="field-note mb-4" id="age-description">
+              {t("eligibility.age.description")}
+            </p>
             <Field
               className="age-field"
               id="age"
               name="age"
               label={t("eligibility.age.label")}
+              describedBy="age-description"
               isLabelAfterField={true}
               inputProps={{ maxLength: 3 }}
               validation={{ required: true }}
