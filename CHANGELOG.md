@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
   - add duplicates to CSV export ([#1352](https://github.com/bloom-housing/bloom/issues/1352))
+  - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
   - User module has been removed and incorporated into Auth module
