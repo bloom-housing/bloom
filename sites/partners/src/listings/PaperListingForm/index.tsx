@@ -11,6 +11,8 @@ import {
   AppearanceStyleType,
   Button,
   TimeFieldPeriod,
+  Modal,
+  AppearanceBorderType,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -20,9 +22,8 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
-  AmiChart,
-  ListingEvent,
   ListingEventType,
+  ListingEventCreate,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -33,10 +34,10 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { getAmiChartId, stringToBoolean, stringToNumber } from "../../../lib/helpers"
-import { useAmiChartList } from "../../../lib/hooks"
+import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
+import ListingPhoto from "./sections/ListingPhoto"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
@@ -141,6 +142,7 @@ const defaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
+  image: { fileId: "", label: "" },
   leasingAgentAddress: defaultAddress,
   leasingAgentEmail: "test@email.com",
   leasingAgentName: "",
@@ -204,7 +206,7 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
-const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUnit[]) => {
+const formatFormData = (data: FormListing, units: TempUnit[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
@@ -234,7 +236,10 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
   )
 
   units.forEach((unit) => {
-    switch (unit.unitType) {
+    switch (unit.unitType?.name) {
+      case "fourBdrm":
+        unit.numBedrooms = 4
+        break
       case "threeBdrm":
         unit.numBedrooms = 3
         break
@@ -257,14 +262,6 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
       delete unit.sqFeet
     }
 
-    const amiChartId = getAmiChartId(unit.amiChart)
-    if (amiChartId) {
-      const chart = amiCharts.find((chart) => chart.id === amiChartId)
-      unit.amiChart = chart
-    } else {
-      delete unit.amiChart
-    }
-
     if (unit.id === undefined) {
       unit.id = ""
       delete unit.updatedAt
@@ -274,7 +271,7 @@ const formatFormData = (data: FormListing, amiCharts: AmiChart[], units: TempUni
     delete unit.tempId
   })
 
-  const events: ListingEvent[] = []
+  const events: ListingEventCreate[] = []
   if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
     const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
@@ -341,15 +338,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const { listingsService } = useContext(AuthContext)
 
-  /**
-   * fetch options
-   */
-  const { data: amiCharts = [] } = useAmiChartList()
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [status, setStatus] = useState<ListingStatus>(null)
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
+
+  /**
+   * Close modal
+   */
+  const [closeModal, setCloseModal] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -362,7 +360,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, trigger } = formMethods
+  const { handleSubmit, getValues } = formMethods
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
@@ -374,20 +372,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     @data: form data comes from the react-hook-form
   */
   const onSubmit = useCallback(
-    async (data: FormListing) => {
-      const validation = await trigger()
-
-      if (validation) {
-        setLoading(false)
-        return
-      }
-
+    async (data: FormListing, status: ListingStatus) => {
       try {
         data = {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, amiCharts, units)
+        const formattedData = formatFormData(data, units)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -401,91 +392,134 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             "success"
           )
 
-          void router.push(`/listings/${result.id}`)
+          await router.push(`/listings/${result.id}`)
         }
       } catch (err) {
+        console.log(err)
         setLoading(false)
         setAlert("api")
       }
     },
-    [amiCharts, editMode, listing?.id, listingsService, router, status, trigger, units]
+    [units, editMode, listingsService, listing, router]
   )
 
   const onError = () => {
+    setLoading(false)
     setAlert("form")
   }
 
   useEffect(() => {
     if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data)
+      void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
   return (
-    <LoadingOverlay isLoading={loading}>
-      <>
-        <StatusBar
-          backButton={
-            <Button
-              inlineIcon="left"
-              icon="arrowBack"
-              onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
-            >
-              {t("t.back")}
-            </Button>
-          }
-          tagStyle={
-            listing?.status == ListingStatus.active
-              ? AppearanceStyleType.success
-              : AppearanceStyleType.primary
-          }
-          tagLabel={
-            listing?.status
-              ? t(`listings.listingStatus.${listing.status}`)
-              : t(`listings.listingStatus.pending`)
-          }
-        />
+    <>
+      <LoadingOverlay isLoading={loading}>
+        <>
+          <StatusBar
+            backButton={
+              <Button
+                inlineIcon="left"
+                icon="arrowBack"
+                onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+              >
+                {t("t.back")}
+              </Button>
+            }
+            tagStyle={(() => {
+              switch (listing?.status) {
+                case ListingStatus.active:
+                  return AppearanceStyleType.success
+                case ListingStatus.closed:
+                  return AppearanceStyleType.closed
+                default:
+                  return AppearanceStyleType.primary
+              }
+            })()}
+            tagLabel={
+              listing?.status
+                ? t(`listings.listingStatus.${listing.status}`)
+                : t(`listings.listingStatus.pending`)
+            }
+          />
 
-        <FormProvider {...formMethods}>
-          <section className="bg-primary-lighter py-5">
-            <div className="max-w-screen-xl px-5 mx-auto">
-              {alert && (
-                <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                  {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
-                </AlertBox>
-              )}
+          <FormProvider {...formMethods}>
+            <section className="bg-primary-lighter py-5">
+              <div className="max-w-screen-xl px-5 mx-auto">
+                {alert && (
+                  <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
+                    {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
+                  </AlertBox>
+                )}
 
-              <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
-                <div className="flex flex-row flex-wrap">
-                  <div className="info-card md:w-9/12">
-                    <ListingIntro />
-                    <BuildingDetails />
-                    <Units
-                      units={units}
-                      setUnits={setUnits}
-                      amiCharts={amiCharts}
-                      disableUnitsAccordion={listing?.disableUnitsAccordion}
-                    />
-                    <AdditionalFees />
-                    <BuildingFeatures />
-                    <AdditionalEligibility />
-                    <AdditionalDetails />
-                    <RankingsAndResults listing={listing} />
-                    <LeasingAgent />
-                    <ApplicationAddress listing={listing} />
-                    <ApplicationDates listing={listing} />
+                <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                  <div className="flex flex-row flex-wrap">
+                    <div className="info-card md:w-9/12">
+                      <ListingIntro />
+                      <ListingPhoto />
+                      <BuildingDetails />
+                      <Units
+                        units={units}
+                        setUnits={setUnits}
+                        disableUnitsAccordion={listing?.disableUnitsAccordion}
+                      />
+                      <AdditionalFees />
+                      <BuildingFeatures />
+                      <AdditionalEligibility />
+                      <AdditionalDetails />
+                      <RankingsAndResults listing={listing} />
+                      <LeasingAgent />
+                      <ApplicationAddress listing={listing} />
+                      <ApplicationDates listing={listing} />
+                    </div>
+
+                    <aside className="md:w-3/12 md:pl-6">
+                      <Aside
+                        type={editMode ? "edit" : "add"}
+                        setStatus={setStatus}
+                        showCloseListingModal={() => setCloseModal(true)}
+                      />
+                    </aside>
                   </div>
+                </Form>
+              </div>
+            </section>
+          </FormProvider>
+        </>
+      </LoadingOverlay>
 
-                  <aside className="md:w-3/12 md:pl-6">
-                    <Aside type={editMode ? "edit" : "add"} setStatus={setStatus} />
-                  </aside>
-                </div>
-              </Form>
-            </div>
-          </section>
-        </FormProvider>
-      </>
-    </LoadingOverlay>
+      <Modal
+        open={!!closeModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.closeThisListing")}
+        onClose={() => setCloseModal(false)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            onClick={() => {
+              setStatus(ListingStatus.closed)
+              triggerSubmit(getValues())
+              setCloseModal(false)
+            }}
+          >
+            {t("listings.actions.close")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setCloseModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.closeThisListing")}
+      </Modal>
+    </>
   )
 }
 

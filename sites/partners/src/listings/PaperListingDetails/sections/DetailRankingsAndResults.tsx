@@ -3,15 +3,17 @@ import moment from "moment"
 import { t, GridSection, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "../../../../lib/helpers"
-import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
 
   const lotteryEvent = getLotteryEvent(listing)
 
-  const getReviewOrderType = (): ListingReviewOrder => {
-    return lotteryEvent ? ListingReviewOrder.lottery : ListingReviewOrder.firstComeFirstServe
+  const getReviewOrderType = (): EnumListingReviewOrderType => {
+    return lotteryEvent
+      ? EnumListingReviewOrderType.lottery
+      : EnumListingReviewOrderType.firstComeFirstServe
   }
 
   return (
@@ -23,7 +25,7 @@ const DetailRankingsAndResults = () => {
     >
       <GridSection columns={2}>
         <ViewItem label={t("listings.reviewOrderQuestion")}>
-          {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
+          {getReviewOrderType() === EnumListingReviewOrderType.firstComeFirstServe
             ? t("listings.firstComeFirstServe")
             : t("listings.lottery")}
         </ViewItem>
@@ -46,7 +48,7 @@ const DetailRankingsAndResults = () => {
           </GridSection>
         </>
       )}
-      {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe && (
+      {getReviewOrderType() === EnumListingReviewOrderType.firstComeFirstServe && (
         <GridSection columns={2}>
           <ViewItem label={t("listings.dueDateQuestion")}>
             {listing.applicationDueDate ? t("t.yes") : t("t.no")}
