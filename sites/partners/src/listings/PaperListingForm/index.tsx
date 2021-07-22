@@ -42,6 +42,7 @@ import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
+import Preferences from "./sections/Preferences"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -465,6 +466,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         setUnits={setUnits}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
+                      <Preferences listing={listing} />
                       <AdditionalFees />
                       <BuildingFeatures />
                       <AdditionalEligibility />
