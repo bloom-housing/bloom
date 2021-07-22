@@ -3743,10 +3743,10 @@ export interface Listing {
   showWaitlist: boolean
 
   /**  */
-  reviewOrderType: EnumListingReviewOrderType;
+  reviewOrderType: EnumListingReviewOrderType
 
   /**  */
-  unitsSummarized: UnitsSummarized;
+  unitsSummarized: UnitsSummarized
 
   /**  */
   preferences: Preference[]
@@ -5030,8 +5030,8 @@ export enum ListingEventType {
 }
 
 export enum EnumListingReviewOrderType {
-  'lottery' = 'lottery',
-  'firstComeFirstServe' = 'firstComeFirstServe'
+  "lottery" = "lottery",
+  "firstComeFirstServe" = "firstComeFirstServe",
 }
 
 export enum UnitStatus {
