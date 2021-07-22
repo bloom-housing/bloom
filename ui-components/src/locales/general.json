@@ -1268,6 +1268,21 @@
       "prompt" : "Do you have a disability?",
       "description" : "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application.",
       "preferNotToSay": "Prefer not to say"
+    },
+    "income" : {
+      "prompt": "What is your total household annual income?",
+      "description": "Include income for everyone who will be living in your household including yourself. Income includes social security, retirement accounts and wages.",
+      "label" : "Income range",
+      "ranges" : {
+        "below10k": "Below $10,000",
+        "10kTo20k": "$10,000 - $20,000",
+        "30kTo40k": "$30,000 - $40,000",
+        "40kTo50k": "$40,000 - $50,000",
+        "over50k": "Over $50,000"
+      }
+    },
+    "section8" : {
+      "prompt": "Do you have a Section 8 voucher?"
     }
   }
 }
