@@ -14,7 +14,7 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
-import { getLotteryEvent } from "../../helpers"
+import { getLotteryEvent } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
@@ -60,7 +60,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
       value: YesNoAnswer.No,
     },
   ]
-
   return (
     <div>
       <GridSection
@@ -81,13 +80,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   label: t("listings.firstComeFirstServe"),
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
-                  defaultChecked: lotteryEvent === null,
+                  defaultChecked: !lotteryEvent,
                 },
                 {
                   label: t("listings.lottery"),
                   value: "reviewOrderLottery",
                   id: "reviewOrderLottery",
-                  defaultChecked: lotteryEvent !== null,
+                  defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
                 },
               ]}
             />

@@ -1,7 +1,13 @@
 import { t } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { AmiChart, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import {
+  AmiChart,
+  ApplicationSubmissionType,
+  ListingEventType,
+  ListingEvent,
+} from "@bloom-housing/backend-core/types"
 import { TempUnit } from "../src/listings/PaperListingForm"
+import { FormListing } from "../src/listings/PaperListingForm/index"
 
 type DateTimePST = {
   hour: string
@@ -97,4 +103,11 @@ export const getAmiChartId = (chart: AmiChart | string | undefined): string | nu
 
 export const isNullOrUndefined = (value: unknown): boolean => {
   return value === null || value === undefined
+}
+
+export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
+  const lotteryEvents = listing?.events.filter(
+    (event) => event.type === ListingEventType.publicLottery
+  )
+  return lotteryEvents ? lotteryEvents[0] : null
 }
