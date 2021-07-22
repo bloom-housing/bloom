@@ -162,3 +162,18 @@ table.td-plain {
 .table__is-dragging {
   display: table;
 }
+
+.reserved-units-indicator {
+  @apply uppercase;
+  @apply bg-primary-lighter;
+  @apply font-semibold;
+  @apply tracking-wider;
+  @apply text-xs;
+  @apply p-1;
+  @apply pl-3;
+  @apply mb-4;
+  @apply border-l-4;
+  @apply border-solid;
+  @apply border-accent-warm;
+  @apply text-gray-800;
+}

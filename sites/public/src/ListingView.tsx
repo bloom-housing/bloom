@@ -196,6 +196,13 @@ export const ListingView = (props: ListingProps) => {
       </header>
 
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
+        {listing.reservedCommunityType && (
+          <div className={"reserved-units-indicator"}>
+            {t("listings.reservedFor", {
+              type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+            })}
+          </div>
+        )}
         {amiValues.length > 1 &&
           amiValues.map((percent) => {
             const byAMI = listing.unitsSummarized.byAMI.find((item) => {
