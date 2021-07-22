@@ -42,26 +42,22 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
     const { startTime, endTime, url, note } = currentEvent || {}
     const values = {}
 
-    if (url) {
-      Object.assign(values, { url })
+    url && Object.assign(values, { url })
+    note && Object.assign(values, { note })
+    startTime && Object.assign(values, { startTime: formatDateToTimeField(startTime) })
+    endTime && Object.assign(values, { endTime: formatDateToTimeField(endTime) })
+
+    if (startTime && endTime) {
+      const dateObject = moment(startTime).utc()
+
+      const date = {
+        day: dateObject.format("DD"),
+        month: dateObject.format("MM"),
+        year: dateObject.format("YYYY"),
+      }
+
+      Object.assign(values, { date })
     }
-
-    if (note) {
-      Object.assign(values, { note })
-    }
-
-    Object.assign(values, { startTime: formatDateToTimeField(startTime) })
-    Object.assign(values, { endTime: formatDateToTimeField(endTime) })
-
-    const dateObject = moment(startTime).utc()
-
-    const date = {
-      day: dateObject.format("DD"),
-      month: dateObject.format("MM"),
-      year: dateObject.format("YYYY"),
-    }
-
-    Object.assign(values, { date })
 
     return values as OpenHouseFormValues
   })()
