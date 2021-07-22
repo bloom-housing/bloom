@@ -24,6 +24,7 @@ import {
   Listing,
   ListingEventType,
   ListingEventCreate,
+  Preference,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -207,7 +208,7 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
-const formatFormData = (data: FormListing, units: TempUnit[]) => {
+const formatFormData = (data: FormListing, units: TempUnit[], preferences: Preference[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
@@ -290,6 +291,7 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
+    preferences: preferences,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -344,6 +346,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [status, setStatus] = useState<ListingStatus>(null)
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
 
   /**
    * Close modal
@@ -379,7 +382,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, units)
+        const formattedData = formatFormData(data, units, preferences)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -401,7 +404,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, editMode, listingsService, listing, router]
+    [units, editMode, listingsService, listing, router, preferences]
   )
 
   const onError = () => {
@@ -466,7 +469,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         setUnits={setUnits}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
-                      <Preferences listing={listing} />
+                      <Preferences
+                        listing={listing}
+                        preferences={preferences}
+                        setPreferences={setPreferences}
+                      />
                       <AdditionalFees />
                       <BuildingFeatures />
                       <AdditionalEligibility />

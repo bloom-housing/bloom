@@ -724,6 +724,7 @@
       "viewListing": "View listing",
       "unpublish": "Unpublish"
     },
+    "activePreferences": "Active Preferences",
     "addListing": "Add Listing",
     "addPhoto": "Add Photo",
     "addPreference": "Add Preference",
@@ -1116,6 +1117,7 @@
     "delete": "Delete",
     "deposit": "Deposit",
     "done": "Done",
+    "descriptionTitle": "Description",
     "description": "Enter Description",
     "emailAddressPlaceholder": "you@myemail.com",
     "dragFilesHere": "Drag files here",

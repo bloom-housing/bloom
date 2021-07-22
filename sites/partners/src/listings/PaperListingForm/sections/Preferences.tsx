@@ -16,26 +16,27 @@ import { Preference } from "@bloom-housing/backend-core/types"
 
 type PreferencesProps = {
   listing?: FormListing
+  preferences: Preference[]
+  setPreferences: (units: Preference[]) => void
 }
 
-const Preferences = ({ listing }: PreferencesProps) => {
+const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps) => {
   const [preferencesTableDrawer, setPreferencesTableDrawer] = useState<boolean | null>(null)
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
   const [uniquePreferences, setUniquePreferences] = useState<Preference[]>([])
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(listing?.preferences ?? [])
-  const [formPreferences, setFormPreferences] = useState<Preference[]>(listing?.preferences ?? [])
 
-  const { data: preferences = [] } = usePreferenceList()
+  const { data: preferencesData = [] } = usePreferenceList()
 
   useEffect(() => {
     setUniquePreferences(
-      preferences.reduce(
+      preferencesData.reduce(
         (items, item) =>
           items.find((x) => x.description === item.description) ? [...items] : [...items, item],
         []
       )
     )
-  }, [preferences])
+  }, [preferencesData])
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -74,7 +75,7 @@ const Preferences = ({ listing }: PreferencesProps) => {
 
   const formPreferenceTableData = useMemo(
     () =>
-      formPreferences.map((pref, index) => ({
+      preferences.map((pref, index) => ({
         order: index + 1,
         name: pref.title,
         action: (
@@ -83,9 +84,10 @@ const Preferences = ({ listing }: PreferencesProps) => {
               type="button"
               className="front-semibold uppercase text-red-700"
               onClick={() => {
-                const editedPreferences = [...formPreferences]
+                const editedPreferences = [...preferences]
                 editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                setFormPreferences(editedPreferences)
+                setPreferences(editedPreferences)
+                setDraftPreferences(editedPreferences)
               }}
               unstyled
             >
@@ -94,7 +96,7 @@ const Preferences = ({ listing }: PreferencesProps) => {
           </div>
         ),
       })),
-    [formPreferences]
+    [preferences]
   )
 
   return (
@@ -106,7 +108,7 @@ const Preferences = ({ listing }: PreferencesProps) => {
         separator
       >
         <div className="bg-gray-300 px-4 py-5">
-          {!!formPreferences.length && (
+          {!!preferences.length && (
             <div className="mb-5">
               <MinimalTable headers={preferenceTableHeaders} data={formPreferenceTableData} />
             </div>
@@ -117,7 +119,7 @@ const Preferences = ({ listing }: PreferencesProps) => {
             size={AppearanceSizeType.normal}
             onClick={() => setPreferencesTableDrawer(true)}
           >
-            {formPreferences.length ? t("listings.editPreferences") : t("listings.addPreference")}
+            {preferences.length ? t("listings.editPreferences") : t("listings.addPreference")}
           </Button>
         </div>
       </GridSection>
@@ -154,7 +156,7 @@ const Preferences = ({ listing }: PreferencesProps) => {
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
           onClick={() => {
-            setFormPreferences(draftPreferences)
+            setPreferences(draftPreferences)
             setPreferencesTableDrawer(null)
           }}
         >
@@ -167,7 +169,6 @@ const Preferences = ({ listing }: PreferencesProps) => {
         title={t("listings.selectPreferences")}
         ariaDescription={t("listings.selectPreferences")}
         onClose={() => {
-          console.log("select drawer on close")
           setPreferencesSelectDrawer(null)
         }}
         className={"w-auto"}
