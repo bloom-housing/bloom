@@ -1,10 +1,10 @@
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
+import axios from "axios"
 import useSWR from "swr"
-import { isInternalLink, AuthContext } from "@bloom-housing/ui-components"
+import { isInternalLink } from "@bloom-housing/ui-components"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
-import { ListingsService } from "@bloom-housing/backend-core/types"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -33,22 +33,35 @@ export const useFormConductor = (stepName: string) => {
   return context
 }
 
-const listingsFetcher = function (listingsService: ListingsService) {
-  return (_url: string, page: number, limit: number) => {
-    const params = {
-      page,
-      limit,
-    }
-    return listingsService?.list(params)
+// TODO: consolidate filter definitions (#253)
+export interface FilterOptions {
+  preferredUnit?: string
+  accessibility?: string
+  community?: string
+  neighborhood?: string
+}
+
+function filterStringFromFilters(filters: FilterOptions) {
+  if (!filters || filters.neighborhood == "") return ""
+
+  // Only `neighborhood` filter is currently supported.
+  return `&filter[$comparison]==&filter[neighborhood]=${filters.neighborhood}`
+}
+
+const listingsFetcher = function () {
+  return async (url: string, page: number, limit: number, filters: FilterOptions) => {
+    const res = await axios.get(
+      `${url}?page=${page}&limit=${limit}${filterStringFromFilters(filters)}`
+    )
+    return res.data
   }
 }
 
 // TODO: move this so it can be shared with the partner site.
-export function useListingsData(pageIndex: number, limit = 10) {
-  const { listingsService } = useContext(AuthContext)
+export function useListingsData(pageIndex: number, limit = 10, filters: FilterOptions) {
   const { data, error } = useSWR(
-    [`${process.env.listingServiceUrl}`, pageIndex, limit],
-    listingsFetcher(listingsService)
+    [`${process.env.listingServiceUrl}`, pageIndex, limit, filters],
+    listingsFetcher()
   )
 
   return {

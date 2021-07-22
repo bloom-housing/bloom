@@ -1236,6 +1236,9 @@
         "senior": "Senior",
         "assisted": "Assisted"
       }
+    },
+    "neighborhoodOptions":{
+      "label": "Neighborhood:"
     }
   },
   "eligibility": {
