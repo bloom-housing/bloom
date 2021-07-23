@@ -25,6 +25,73 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
   const [uniquePreferences, setUniquePreferences] = useState<Preference[]>([])
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [dragOrder, setDragOrder] = useState([])
+
+  const getDraggableTableData = () => {
+    return draftPreferences.map((pref, index) => ({
+      order: index + 1,
+      name: pref.title,
+      action: (
+        <div className="flex">
+          <Button
+            type="button"
+            className="front-semibold uppercase text-red-700"
+            onClick={() => {
+              const editedPreferences = [...draftPreferences]
+              editedPreferences.splice(editedPreferences.indexOf(pref), 1)
+              setDraftPreferences(editedPreferences)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        </div>
+      ),
+    }))
+  }
+
+  const getFormTableData = () => {
+    return preferences.map((pref, index) => ({
+      order: index + 1,
+      name: pref.title,
+      action: (
+        <div className="flex">
+          <Button
+            type="button"
+            className="front-semibold uppercase text-red-700"
+            onClick={() => {
+              const editedPreferences = [...preferences]
+              editedPreferences.splice(editedPreferences.indexOf(pref), 1)
+              setPreferences(editedPreferences)
+              setDraftPreferences(editedPreferences)
+            }}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        </div>
+      ),
+    }))
+  }
+
+  const [draggableTableData, setDraggableTableData] = useState(getDraggableTableData())
+  const [formTableData, setFormTableData] = useState(getFormTableData())
+
+  useEffect(() => {
+    setDraggableTableData(getDraggableTableData())
+  }, [draftPreferences])
+
+  useEffect(() => {
+    setFormTableData(getFormTableData())
+  }, [preferences])
+
+  useEffect(() => {
+    const newDragOrder = []
+    dragOrder.forEach((pref) => {
+      newDragOrder.push(draftPreferences.filter((draftPref) => draftPref.title === pref.name)[0])
+    })
+    setDraftPreferences(newDragOrder)
+  }, [dragOrder])
 
   const { data: preferencesData = [] } = usePreferenceList()
 
@@ -48,57 +115,6 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
     action: "",
   }
 
-  const draftPreferenceTableData = useMemo(
-    () =>
-      draftPreferences.map((pref, index) => ({
-        order: index + 1,
-        name: pref.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                const editedPreferences = [...draftPreferences]
-                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                setDraftPreferences(editedPreferences)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      })),
-    [draftPreferences]
-  )
-
-  const formPreferenceTableData = useMemo(
-    () =>
-      preferences.map((pref, index) => ({
-        order: index + 1,
-        name: pref.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                const editedPreferences = [...preferences]
-                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                setPreferences(editedPreferences)
-                setDraftPreferences(editedPreferences)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      })),
-    [preferences]
-  )
-
   return (
     <>
       <GridSection
@@ -110,7 +126,7 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
         <div className="bg-gray-300 px-4 py-5">
           {!!preferences.length && (
             <div className="mb-5">
-              <MinimalTable headers={preferenceTableHeaders} data={formPreferenceTableData} />
+              <MinimalTable headers={preferenceTableHeaders} data={formTableData} />
             </div>
           )}
 
@@ -137,7 +153,12 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
         <div className="border rounded-md p-8 bg-white">
           {!!draftPreferences.length && (
             <div className="mb-5">
-              <MinimalTable headers={preferenceTableHeaders} data={draftPreferenceTableData} />
+              <MinimalTable
+                headers={preferenceTableHeaders}
+                data={draggableTableData}
+                draggable={true}
+                setData={setDragOrder}
+              />
             </div>
           )}
           <Button

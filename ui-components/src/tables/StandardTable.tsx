@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
@@ -26,6 +26,7 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 
 export interface StandardTableProps {
   draggable?: boolean
+  setData?: (data: any[]) => void
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
   tableClassName?: string
@@ -36,12 +37,16 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
-  const [tableData, setTableData] = useState(props.data)
+  const [tableData, setTableData] = useState<Record<string, React.ReactNode>[]>(props.data)
 
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
   })
+
+  useEffect(() => {
+    setTableData(props.data)
+  }, [props.data])
 
   if (props.draggable) {
     headerLabels.splice(
@@ -53,7 +58,7 @@ export const StandardTable = (props: StandardTableProps) => {
     )
   }
 
-  const body = tableData?.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData.map((row: Record<string, React.ReactNode>, dataIndex) => {
     const rowKey = row["id"]
       ? `row-${row["id"] as string}`
       : process.env.NODE_ENV === "test"
@@ -140,10 +145,13 @@ export const StandardTable = (props: StandardTableProps) => {
     }
     const reorderedTableData = reorder(tableData, result.source.index, result.destination.index)
     setTableData(reorderedTableData)
+    if (props.setData) {
+      props.setData(reorderedTableData)
+    }
   }
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div style={{ overflow: "auto" }}>
       <table className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>
