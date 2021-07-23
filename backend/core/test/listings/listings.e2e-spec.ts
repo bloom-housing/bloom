@@ -166,8 +166,6 @@ describe("Listings", () => {
     const modifiedListing: ListingDto = putResponse.body
 
     expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
-    expect(modifiedListing.applicationMethods[0].paperApplications[0]).toHaveProperty("id")
-    expect(modifiedListing.applicationMethods[0].type).toBe(ApplicationMethodType.FileDownload)
   })
 
   it("should add/overwrite listing events in existing listing", async () => {
