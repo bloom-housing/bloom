@@ -2,6 +2,7 @@ import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
 import { TableThumbnail } from "./StandardTable"
+import { preferenceData, preferenceHeaders } from "./StandardTable.stories"
 
 export default {
   title: "Tables/MinimalTable",
@@ -40,12 +41,12 @@ const headersWithImage = { image: "Image", ...headers }
 const dataWithImage = [...data] as any
 dataWithImage[0].image = (
   <TableThumbnail>
-    <img src="/images/listing.jpg" />
+    <img src="/images/listing.jpg" alt="listing picture" />
   </TableThumbnail>
 )
 dataWithImage[1].image = (
   <TableThumbnail>
-    <img src="/images/logo_glyph.svg" />
+    <img src="/images/logo_glyph.svg" alt="site logo" />
   </TableThumbnail>
 )
 
@@ -57,3 +58,20 @@ export const ImageCells = () => (
     flushRight={true}
   />
 )
+
+export const Draggable = () => (
+  <MinimalTable headers={preferenceHeaders} data={preferenceData} draggable={true} />
+)
+
+Draggable.parameters = {
+  a11y: {
+    config: {
+      rules: [
+        {
+          id: "nested-interactive",
+          enabled: false,
+        },
+      ],
+    },
+  },
+}

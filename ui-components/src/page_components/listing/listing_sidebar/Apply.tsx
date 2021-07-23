@@ -16,6 +16,7 @@ import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 export interface ApplyProps {
   listing: Listing
   internalFormRoute: string
+  preview?: boolean
 }
 
 const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
@@ -43,7 +44,7 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 
 const Apply = (props: ApplyProps) => {
   // /applications/start/choose-language
-  const { listing, internalFormRoute } = props
+  const { listing, internalFormRoute, preview } = props
   let onlineApplicationUrl = ""
 
   const [showDownload, setShowDownload] = useState(false)
@@ -93,13 +94,19 @@ const Apply = (props: ApplyProps) => {
         )}
         {!openDateState(listing) && onlineApplicationUrl !== "" && (
           <>
-            <LinkButton
-              styleType={AppearanceStyleType.primary}
-              className="w-full mb-2"
-              href={onlineApplicationUrl}
-            >
-              {t("listings.apply.applyOnline")}
-            </LinkButton>
+            {preview ? (
+              <Button disabled className="w-full mb-2">
+                {t("listings.apply.applyOnline")}
+              </Button>
+            ) : (
+              <LinkButton
+                styleType={AppearanceStyleType.primary}
+                className="w-full mb-2"
+                href={onlineApplicationUrl}
+              >
+                {t("listings.apply.applyOnline")}
+              </LinkButton>
+            )}
           </>
         )}
         {!openDateState(listing) && downloadMethods.length > 0 && (
@@ -107,9 +114,12 @@ const Apply = (props: ApplyProps) => {
             {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
             <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
             <Button
-              styleType={onlineApplicationUrl === "" ? AppearanceStyleType.primary : undefined}
+              styleType={
+                !preview && onlineApplicationUrl === "" ? AppearanceStyleType.primary : undefined
+              }
               className="w-full mb-2"
               onClick={toggleDownload}
+              disabled={preview}
             >
               {t("listings.apply.downloadApplication")}
             </Button>
@@ -136,7 +146,7 @@ const Apply = (props: ApplyProps) => {
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={getAddress(listing.applicationPickUpAddressType, "pickUp")}
-              officeHours={listing.applicationPickUpAddressOfficeHours ?? null}
+              officeHours={listing.applicationPickUpAddressOfficeHours}
             />
           </>
         )}
@@ -175,7 +185,7 @@ const Apply = (props: ApplyProps) => {
               <SubHeader text={t("listings.apply.dropOffApplication")} />
               <SidebarAddress
                 address={getAddress(listing.applicationDropOffAddressType, "dropOff")}
-                officeHours={listing.applicationDropOffAddressOfficeHours ?? null}
+                officeHours={listing.applicationDropOffAddressOfficeHours}
               />
             </>
           )}

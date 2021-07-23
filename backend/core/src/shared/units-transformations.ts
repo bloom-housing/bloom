@@ -1,8 +1,12 @@
+import { UnitStatus } from "../units/types/unit-status-enum"
 import { Unit } from "../units/entities/unit.entity"
 import { MinMax } from "../units/types/min-max"
 import { MinMaxCurrency } from "../units/types/min-max-currency"
 import { UnitSummary } from "../units/types/unit-summary"
 import { UnitsSummarized } from "../units/types/units-summarized"
+import { UnitTypeDto } from "../unit-types/dto/unit-type.dto"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -141,7 +145,7 @@ const getDefaultSummaryRanges = (unit: Unit) => {
     },
     unitType: unit.unitType,
     totalAvailable: 0,
-  } as UnitSummary
+  }
 }
 
 const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
@@ -195,7 +199,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
   units.forEach((unit) => {
     const currentUnitType = unit.unitType
     const currentUnitRent = unit.monthlyRentAsPercentOfIncome
-    const thisKey = currentUnitType.concat(currentUnitRent)
+    const thisKey = currentUnitType.name.concat(currentUnitRent)
     if (!(thisKey in unitMap)) unitMap[thisKey] = []
     unitMap[thisKey].push(unit)
   })
@@ -204,13 +208,15 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
     const finalSummary = unitMap[key].reduce((summary, unit, index) => {
       return getUnitsSummary(unit, index === 0 ? null : summary)
     }, {} as UnitSummary)
-    finalSummary.totalAvailable = unitMap[key].filter((unit) => unit.status === "available").length
+    finalSummary.totalAvailable = unitMap[key].filter(
+      (unit) => unit.status === UnitStatus.available
+    ).length
     summaries.push(finalSummary)
   }
 
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
+      UnitTypeSort.indexOf(a.unitType.name) - UnitTypeSort.indexOf(b.unitType.name) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
@@ -219,16 +225,16 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 // One row per unit type
 const summarizeUnitsByType = (
   units: Units,
-  unitTypes: string[],
+  unitTypes: UnitTypeDto[],
   reservedType?: string
 ): UnitSummary[] => {
   if (!reservedType) {
     reservedType = null
   }
   const summaries = unitTypes.map(
-    (unitType: string): UnitSummary => {
+    (unitType: UnitTypeDto): UnitSummary => {
       const summary = {} as UnitSummary
-      const unitsByType = units.filter((unit: Unit) => unit.unitType == unitType)
+      const unitsByType = units.filter((unit: Unit) => unit.unitType.name == unitType.name)
       const finalSummary = Array.from(unitsByType).reduce((summary, unit, index) => {
         return getUnitsSummary(unit, index === 0 ? null : summary)
       }, summary)
@@ -237,7 +243,7 @@ const summarizeUnitsByType = (
   )
   return summaries.sort((a, b) => {
     return (
-      UnitTypeSort.indexOf(a.unitType) - UnitTypeSort.indexOf(b.unitType) ||
+      UnitTypeSort.indexOf(a.unitType.name) - UnitTypeSort.indexOf(b.unitType.name) ||
       Number(a.minIncomeRange.min) - Number(b.minIncomeRange.min)
     )
   })
@@ -271,15 +277,25 @@ const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: s
 
 export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
-  data.unitTypes = Array.from(
-    new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
-  )
+
+  const unitTypes = new Map<string, UnitType>()
+  for (const unitType of units.map((unit) => unit.unitType).filter((item) => item != null)) {
+    unitTypes.set(unitType.id, unitType)
+  }
+  data.unitTypes = Array.from(unitTypes.values())
+
   data.reservedTypes = Array.from(
     new Set(units.map((unit) => unit.reservedType).filter((item) => item != null))
   )
-  data.priorityTypes = Array.from(
-    new Set(units.map((unit) => unit.priorityType).filter((item) => item != null))
-  )
+
+  const priorityTypes = new Map<string, UnitAccessibilityPriorityType>()
+  for (const priorityType of units
+    .map((unit) => unit.priorityType)
+    .filter((item) => item != null)) {
+    priorityTypes.set(priorityType.id, priorityType)
+  }
+  data.priorityTypes = Array.from(priorityTypes.values())
+
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )

@@ -6,9 +6,10 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "dev": "next -p ${NEXTJS_PORT:-3000}",
+    "dev": "NODE_OPTIONS='--inspect=9230' next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
+    "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
     "export": "next export",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "dev:listings": "cd ../../backend/core && yarn dev",

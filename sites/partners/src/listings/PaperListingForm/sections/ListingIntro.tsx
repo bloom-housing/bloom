@@ -6,7 +6,7 @@ const ListingIntro = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { errors, register } = formMethods
 
   return (
     <GridSection
@@ -21,6 +21,9 @@ const ListingIntro = () => {
           label={t("listings.listingName")}
           placeholder={t("listings.listingName")}
           register={register}
+          error={errors?.name !== undefined}
+          errorMessage={t("errors.requiredFieldError")}
+          validation={{ required: true }}
         />
       </GridCell>
       <Field

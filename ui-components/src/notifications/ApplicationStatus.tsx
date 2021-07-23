@@ -1,7 +1,7 @@
 import * as React from "react"
 import moment from "moment"
 import { t } from "../helpers/translator"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
 import { openDateState } from "../helpers/state"
 import { Icon, IconFillColors } from "../icons/Icon"
 import "./ApplicationStatus.scss"
@@ -46,7 +46,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
         bgColor = vivid ? "bg-alert" : "bg-alert-light"
         content = t("listings.applicationsClosed")
       }
-    } else {
+    } else if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
       bgColor = vivid ? "bg-primary" : "bg-primary-light"
       content = t("listings.applicationFCFS")
     }

@@ -6,13 +6,15 @@ import { UnitSummaryByReservedType } from "./unit-summary-by-reserved-type"
 import { UnitSummaryByAMI } from "./unit-summary-by-ami"
 import { HMI } from "./hmi"
 import { ApiProperty } from "@nestjs/swagger"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
+import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 
 export class UnitsSummarized {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
-  unitTypes: string[]
+  @ApiProperty({ type: [UnitTypeDto] })
+  unitTypes: UnitTypeDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -23,8 +25,8 @@ export class UnitsSummarized {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
-  priorityTypes: string[]
+  @ApiProperty({ type: [UnitAccessibilityPriorityType] })
+  priorityTypes: UnitAccessibilityPriorityType[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -44,7 +44,7 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
-  const { listing, preview = false } = props
+  const { listing } = props
 
   if (!listing) {
     return <ErrorPage />
@@ -164,7 +164,10 @@ export const ListingView = (props: ListingProps) => {
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
-        <ImageCard title={listing.name} imageUrl={imageUrlFromListing(listing)} />
+        <ImageCard
+          title={listing.name}
+          imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+        />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
             {oneLineAddress}
@@ -218,6 +221,7 @@ export const ListingView = (props: ListingProps) => {
           {!isReferralApp ? (
             <ApplicationSection
               listing={listing}
+              preview={props.preview}
               internalFormRoute="/applications/start/choose-language"
             />
           ) : (
@@ -256,35 +260,40 @@ export const ListingView = (props: ListingProps) => {
 
             {preferencesSection}
 
-            <ListSection
-              title={t("listings.sections.additionalEligibilityTitle")}
-              subtitle={t("listings.sections.additionalEligibilitySubtitle")}
-            >
-              <>
-                {listing.creditHistory && (
-                  <InfoCard title={t("listings.creditHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.creditHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.rentalHistory && (
-                  <InfoCard title={t("listings.rentalHistory")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.rentalHistory}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {listing.criminalBackground && (
-                  <InfoCard title={t("listings.criminalBackground")}>
-                    <ExpandableText className="text-sm text-gray-700">
-                      {listing.criminalBackground}
-                    </ExpandableText>
-                  </InfoCard>
-                )}
-                {buildingSelectionCriteria}
-              </>
-            </ListSection>
+            {(listing.creditHistory ||
+              listing.rentalHistory ||
+              listing.criminalBackground ||
+              buildingSelectionCriteria) && (
+              <ListSection
+                title={t("listings.sections.additionalEligibilityTitle")}
+                subtitle={t("listings.sections.additionalEligibilitySubtitle")}
+              >
+                <>
+                  {listing.creditHistory && (
+                    <InfoCard title={t("listings.creditHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.creditHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.rentalHistory && (
+                    <InfoCard title={t("listings.rentalHistory")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.rentalHistory}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {listing.criminalBackground && (
+                    <InfoCard title={t("listings.criminalBackground")}>
+                      <ExpandableText className="text-sm text-gray-700">
+                        {listing.criminalBackground}
+                      </ExpandableText>
+                    </InfoCard>
+                  )}
+                  {buildingSelectionCriteria}
+                </>
+              </ListSection>
+            )}
           </ul>
         </ListingDetailItem>
 
@@ -301,18 +310,19 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!preview && !isReferralApp ? (
+              {!isReferralApp ? (
                 <ApplicationSection
                   listing={listing}
+                  preview={props.preview}
                   internalFormRoute="/applications/start/choose-language"
                 />
-              ) : !preview ? (
+              ) : (
                 <ReferralApplication
                   phoneNumber={t("application.referralApplication.phoneNumber")}
                   description={t("application.referralApplication.instructions")}
                   title={t("application.referralApplication.furtherInformation")}
                 />
-              ) : null}
+              )}
             </div>
 
             {openHouseEvents && (
@@ -369,19 +379,17 @@ export const ListingView = (props: ListingProps) => {
           </div>
         </ListingDetailItem>
 
-        {listing.buildingAddress.latitude && listing.buildingAddress.longitude && (
-          <ListingDetailItem
-            imageAlt={t("listings.neighborhoodBuildings")}
-            imageSrc="/images/listing-neighborhood.svg"
-            title={t("listings.sections.neighborhoodTitle")}
-            subtitle={t("listings.sections.neighborhoodSubtitle")}
-            desktopClass="bg-primary-lighter"
-          >
-            <div className="listing-detail-panel">
-              <ListingMap address={listing.buildingAddress} listing={listing} />
-            </div>
-          </ListingDetailItem>
-        )}
+        <ListingDetailItem
+          imageAlt={t("listings.neighborhoodBuildings")}
+          imageSrc="/images/listing-neighborhood.svg"
+          title={t("listings.sections.neighborhoodTitle")}
+          subtitle={t("listings.sections.neighborhoodSubtitle")}
+          desktopClass="bg-primary-lighter"
+        >
+          <div className="listing-detail-panel">
+            <ListingMap address={listing.buildingAddress} listing={listing} />
+          </div>
+        </ListingDetailItem>
 
         {(listing.requiredDocuments || listing.programRules || listing.specialNotes) && (
           <ListingDetailItem

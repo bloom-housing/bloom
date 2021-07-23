@@ -15,16 +15,18 @@ export type TimeFieldValues = {
 }
 
 export type TimeFieldProps = {
-  error?: boolean
-  register: UseFormMethods["register"]
-  watch: UseFormMethods["watch"]
-  name?: string
-  id?: string
-  label: string
-  required?: boolean
-  readerOnly?: boolean
   defaultValues?: TimeFieldValues
   disabled?: boolean
+  error?: boolean
+  id?: string
+  label: string
+  labelClass?: string
+  name?: string
+  readerOnly?: boolean
+  register: UseFormMethods["register"]
+  required?: boolean
+  watch: UseFormMethods["watch"]
+  seconds?: boolean
 }
 
 const TimeField = ({
@@ -35,7 +37,9 @@ const TimeField = ({
   name,
   id,
   label,
+  labelClass,
   readerOnly,
+  seconds,
   defaultValues,
   disabled,
 }: TimeFieldProps) => {
@@ -55,7 +59,7 @@ const TimeField = ({
     setInnerRequiredRule(someFieldsFilled)
   }, [hoursField, minutesField, secondsField])
 
-  const labelClasses = ["field-label--caps"]
+  const labelClasses = ["field-label", labelClass]
   if (readerOnly) labelClasses.push("sr-only")
 
   return (
@@ -108,28 +112,30 @@ const TimeField = ({
           disabled={disabled}
         />
 
-        <Field
-          label={t("t.seconds")}
-          defaultValue={defaultValues?.seconds ?? ""}
-          name={fieldName("seconds")}
-          readerOnly={true}
-          placeholder="SS"
-          error={error}
-          validation={{
-            required: required || innerRequiredRule,
-            validate: {
-              secondsRange: (value: string) => {
-                if (!required && !value?.length) return true
+        {seconds && (
+          <Field
+            label={t("t.seconds")}
+            defaultValue={defaultValues?.seconds ?? ""}
+            name={fieldName("seconds")}
+            readerOnly={true}
+            placeholder="SS"
+            error={error}
+            validation={{
+              required: required || innerRequiredRule,
+              validate: {
+                secondsRange: (value: string) => {
+                  if (!required && !value?.length) return true
 
-                return parseInt(value) >= 0 && parseInt(value) <= 59
+                  return parseInt(value) >= 0 && parseInt(value) <= 59
+                },
               },
-            },
-          }}
-          inputProps={{ maxLength: 2 }}
-          register={register}
-          describedBy={`${id}-error`}
-          disabled={disabled}
-        />
+            }}
+            inputProps={{ maxLength: 2 }}
+            register={register}
+            describedBy={`${id}-error`}
+            disabled={disabled}
+          />
+        )}
 
         <Select
           name={fieldName("period")}

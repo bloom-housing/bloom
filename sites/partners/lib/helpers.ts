@@ -1,7 +1,12 @@
 import { t } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { AmiChart, ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationSubmissionType,
+  ListingEventType,
+  ListingEvent,
+} from "@bloom-housing/backend-core/types"
 import { TempUnit } from "../src/listings/PaperListingForm"
+import { FormListing } from "../src/listings/PaperListingForm/index"
 
 type DateTimePST = {
   hour: string
@@ -11,6 +16,15 @@ type DateTimePST = {
   year: string
   day: string
   month: string
+}
+
+interface FormOption {
+  label: string
+  value: string
+}
+
+export interface FormOptions {
+  [key: string]: FormOption[]
 }
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -88,9 +102,21 @@ export const getRentType = (unit: TempUnit): string | null => {
     : null
 }
 
-export const getAmiChartId = (chart: AmiChart | string | undefined): string | null => {
-  if (chart === undefined) {
-    return null
-  }
-  return chart instanceof Object ? chart.id : chart
+export const isNullOrUndefined = (value: unknown): boolean => {
+  return value === null || value === undefined
+}
+
+export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
+  const lotteryEvents = listing?.events.filter(
+    (event) => event.type === ListingEventType.publicLottery
+  )
+  return lotteryEvents ? lotteryEvents[0] : null
+}
+
+// TODO memoize this function
+export function arrayToFormOptions<T>(arr: T[], label: string, value: string): FormOption[] {
+  return arr.map((val: T) => ({
+    label: val[label],
+    value: val[value],
+  }))
 }
