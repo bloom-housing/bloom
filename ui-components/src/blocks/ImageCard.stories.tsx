@@ -2,6 +2,8 @@ import * as React from "react"
 import { ImageCard } from "./ImageCard"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
+import { t } from "../helpers/translator"
+import { ApplicationStatusType } from "../global/ApplicationStatusType"
 
 const listing = Object.assign({}, ArcherListing) as Listing
 
@@ -30,6 +32,8 @@ export const withListing = () => (
     imageUrl="/images/listing.jpg"
     title="Hello World"
     listing={listing}
+    appStatus={ApplicationStatusType.Closed}
+    appStatusContent={t("listings.applicationsClosed")}
   />
 )
 
@@ -49,5 +53,7 @@ export const withListingAndTag = () => (
     subtitle="55 Triton Park Lane, Foster City CA, 94404"
     listing={listing}
     tagLabel="Label"
+    appStatus={ApplicationStatusType.Closed}
+    appStatusContent={t("listings.applicationsClosed")}
   />
 )

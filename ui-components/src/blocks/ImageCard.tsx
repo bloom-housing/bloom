@@ -4,6 +4,7 @@ import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { Tag } from "../text/Tag"
+import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 
 export interface ImageCardProps {
@@ -14,16 +15,18 @@ export interface ImageCardProps {
   listing?: Listing
   description?: string
   tagLabel?: string
+  appStatus?: ApplicationStatusType
+  appStatusContent?: string
 }
 
 const ImageCard = (props: ImageCardProps) => {
   let statusLabel
   let tag
 
-  if (props.listing) {
+  if (props.appStatus !== undefined && props.appStatusContent !== undefined) {
     statusLabel = (
       <aside className="image-card__status">
-        <ApplicationStatus listing={props.listing} vivid />
+        <ApplicationStatus status={props.appStatus} content={props.appStatusContent} vivid />
       </aside>
     )
   }
