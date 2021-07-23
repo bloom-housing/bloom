@@ -151,7 +151,7 @@ export const StandardTable = (props: StandardTableProps) => {
   }
 
   return (
-    <div style={{ overflow: "auto" }}>
+    <div style={{ overflowX: "auto" }}>
       <table className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>

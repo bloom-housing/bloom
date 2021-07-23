@@ -469,11 +469,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         setUnits={setUnits}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
-                      <Preferences
-                        listing={listing}
-                        preferences={preferences}
-                        setPreferences={setPreferences}
-                      />
+                      <Preferences preferences={preferences} setPreferences={setPreferences} />
                       <AdditionalFees />
                       <BuildingFeatures />
                       <AdditionalEligibility />

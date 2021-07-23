@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   t,
   GridSection,
@@ -10,91 +10,85 @@ import {
   Field,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { FormListing } from "../index"
 import { usePreferenceList } from "../../../../lib/hooks"
 import { Preference } from "@bloom-housing/backend-core/types"
 
 type PreferencesProps = {
-  listing?: FormListing
   preferences: Preference[]
   setPreferences: (units: Preference[]) => void
 }
 
-const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps) => {
+const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   const [preferencesTableDrawer, setPreferencesTableDrawer] = useState<boolean | null>(null)
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
   const [uniquePreferences, setUniquePreferences] = useState<Preference[]>([])
-  const [draftPreferences, setDraftPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
   const [dragOrder, setDragOrder] = useState([])
 
-  const getDraggableTableData = () => {
-    return draftPreferences.map((pref, index) => ({
-      order: index + 1,
-      name: pref.title,
-      action: (
-        <div className="flex">
-          <Button
-            type="button"
-            className="front-semibold uppercase text-red-700"
-            onClick={() => {
-              const editedPreferences = [...draftPreferences]
-              editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-              setDraftPreferences(editedPreferences)
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        </div>
-      ),
-    }))
-  }
+  const draggableTableData = useMemo(
+    () =>
+      draftPreferences.map((pref) => ({
+        name: pref.title,
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="front-semibold uppercase text-red-700"
+              onClick={() => {
+                const editedPreferences = [...draftPreferences]
+                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
+                "setting draft 1"
+                setDraftPreferences(editedPreferences)
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      })),
+    [draftPreferences]
+  )
 
-  const getFormTableData = () => {
-    return preferences.map((pref, index) => ({
-      order: index + 1,
-      name: pref.title,
-      action: (
-        <div className="flex">
-          <Button
-            type="button"
-            className="front-semibold uppercase text-red-700"
-            onClick={() => {
-              const editedPreferences = [...preferences]
-              editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-              setPreferences(editedPreferences)
-              setDraftPreferences(editedPreferences)
-            }}
-            unstyled
-          >
-            {t("t.delete")}
-          </Button>
-        </div>
-      ),
-    }))
-  }
+  const formTableData = useMemo(
+    () =>
+      preferences.map((pref, index) => ({
+        order: index + 1,
+        name: pref.title,
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="front-semibold uppercase text-red-700"
+              onClick={() => {
+                const editedPreferences = [...preferences]
+                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
+                setPreferences(editedPreferences)
+                setDraftPreferences(editedPreferences)
+              }}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      })),
+    [preferences]
+  )
 
-  const [draggableTableData, setDraggableTableData] = useState(getDraggableTableData())
-  const [formTableData, setFormTableData] = useState(getFormTableData())
-
+  // Update local state with dragged state
   useEffect(() => {
-    setDraggableTableData(getDraggableTableData())
-  }, [draftPreferences])
-
-  useEffect(() => {
-    setFormTableData(getFormTableData())
-  }, [preferences])
-
-  useEffect(() => {
-    const newDragOrder = []
-    dragOrder.forEach((pref) => {
-      newDragOrder.push(draftPreferences.filter((draftPref) => draftPref.title === pref.name)[0])
-    })
-    setDraftPreferences(newDragOrder)
+    if (draftPreferences.length > 0 && dragOrder.length > 0) {
+      const newDragOrder = []
+      dragOrder.forEach((pref) => {
+        newDragOrder.push(draftPreferences.filter((draftPref) => draftPref.title === pref.name)[0])
+      })
+      setDraftPreferences(newDragOrder)
+    }
   }, [dragOrder])
 
+  // Fetch and filter all preferences
   const { data: preferencesData = [] } = usePreferenceList()
-
   useEffect(() => {
     setUniquePreferences(
       preferencesData.reduce(
@@ -109,8 +103,13 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, getValues } = formMethods
 
-  const preferenceTableHeaders = {
+  const formTableHeaders = {
     order: "t.order",
+    name: "t.name",
+    action: "",
+  }
+
+  const draggableTableHeaders = {
     name: "t.name",
     action: "",
   }
@@ -126,7 +125,7 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
         <div className="bg-gray-300 px-4 py-5">
           {!!preferences.length && (
             <div className="mb-5">
-              <MinimalTable headers={preferenceTableHeaders} data={formTableData} />
+              <MinimalTable headers={formTableHeaders} data={formTableData} />
             </div>
           )}
 
@@ -154,7 +153,7 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
           {!!draftPreferences.length && (
             <div className="mb-5">
               <MinimalTable
-                headers={preferenceTableHeaders}
+                headers={draggableTableHeaders}
                 data={draggableTableData}
                 draggable={true}
                 setData={setDragOrder}
@@ -207,7 +206,7 @@ const Preferences = ({ listing, preferences, setPreferences }: PreferencesProps)
                   register={register}
                   inputProps={{
                     defaultChecked: draftPreferences.some(
-                      (existingPref) => existingPref.id === pref.id
+                      (existingPref) => existingPref.title === pref.title
                     ),
                   }}
                 />
