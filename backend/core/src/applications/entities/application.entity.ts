@@ -242,4 +242,10 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   markedAsDuplicate: boolean
+
+  // This is a 'virtual field' needed for CSV export
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  flagged?: boolean
 }

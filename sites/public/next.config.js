@@ -43,6 +43,7 @@ module.exports = withCSS(
           env: {
             backendApiBase: BACKEND_API_BASE,
             listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+            listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
             mapBoxToken: MAPBOX_TOKEN,
             housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
             gtmKey: process.env.GTM_KEY || null,

@@ -2,7 +2,6 @@
 import {
   ApplicationMethodSeedType,
   AssetDtoSeedType,
-  ListingEventDtoSeedType,
   ListingSeedType,
   PreferenceSeedType,
   PropertySeedType,
@@ -17,6 +16,8 @@ import { UserCreateDto } from "../../auth/dto/user.dto"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
+import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
+import { UnitStatus } from "../../units/types/unit-status-enum"
 
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -319,7 +320,7 @@ export function getDefaultListingEvents() {
   return JSON.parse(JSON.stringify(defaultListingEvents))
 }
 
-export const defaultListingEvents: Array<ListingEventDtoSeedType> = [
+export const defaultListingEvents: Array<ListingEventCreateDto> = [
   {
     startTime: getDate(10),
     endTime: getDate(10),
@@ -401,7 +402,7 @@ export const defaultUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "635",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: defaultAmiChart as AmiChart,
@@ -420,7 +421,7 @@ export const defaultUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
 ]
 // Application Method Sets

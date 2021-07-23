@@ -12,6 +12,27 @@ This is a reference implementation of the partners-facing web app, providing the
 - Copy `.env.template` to `.env.local` and edit variables appropriate to your local environment. S[ee the docs here](https://nextjs.org/docs/basic-features/environment-variables) for more detail on configuration options.
 - `yarn dev`
 
+### Debugging
+
+Starting the site with `yarn dev` includes the necessary debug flags.
+
+To connect to it from VS Code, add a configuration to launch.json that looks like
+
+```shell script
+{
+  "name": "Attach to Partners Site",
+  "port": 9231,
+  "request": "attach",
+  "skipFiles": [
+    "<node_internals>/**"
+  ],
+  "type": "node",
+  "restart": true,
+  "sourceMaps": true,
+  "cwd": "${workspaceFolder}/sites/partners"
+},
+```
+
 ## Running end-to-end tests locally
 
 - Start the Next.js server: `yarn test`

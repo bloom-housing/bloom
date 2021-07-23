@@ -8,7 +8,7 @@ import { useSingleListingData } from "../../../lib/hooks"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import { MetaTags } from "../../../src/MetaTags"
 
-const NewListing = () => {
+const EditListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
 
@@ -18,6 +18,15 @@ const NewListing = () => {
   const { listingDto } = useSingleListingData(listingId)
 
   if (!listingDto) return false
+
+  // Set listing photo from assets if necessary:
+  if (listingDto.image == null && listingDto.assets.length > 0) {
+    listingDto.image = listingDto.assets.find((asset) => asset.label == "building")
+  }
+  // If that didn't do the trick, set a default:
+  if (listingDto.image == null) {
+    listingDto.image = { fileId: "", label: "" }
+  }
 
   return (
     <ListingContext.Provider value={listingDto}>
@@ -50,4 +59,4 @@ const NewListing = () => {
   )
 }
 
-export default NewListing
+export default EditListing
