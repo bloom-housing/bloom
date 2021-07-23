@@ -95,10 +95,7 @@ days = 15
 listing4.applicationOpenDate = moment().subtract(days, "days").format()
 listing4.applicationDueDate = ""
 export const openedWithNoDue = () => (
-  <ApplicationStatus
-    content={t("listings.applicationFCFS")}
-    status={ApplicationStatusType.Open}
-  />
+  <ApplicationStatus content={t("listings.applicationFCFS")} status={ApplicationStatusType.Open} />
 )
 
 const listing5 = Object.assign({}, Archer) as any
@@ -106,10 +103,7 @@ days = 15
 listing5.applicationOpenDate = moment().subtract(days, "days").format()
 listing5.applicationDueDate = null
 export const openedWithFCFS = () => (
-  <ApplicationStatus
-    content={t("listings.applicationFCFS")}
-    status={ApplicationStatusType.Open}
-  />
+  <ApplicationStatus content={t("listings.applicationFCFS")} status={ApplicationStatusType.Open} />
 )
 
 export const openedWithFCFSVivid = () => (
