@@ -16,12 +16,12 @@ const DetailApplicationDates = () => {
       <GridSection columns={3}>
         <GridCell>
           <ViewItem label={t("listings.applicationDeadline")}>
-            {getDetailFieldDate(listing.applicationDueDate)}
+            {listing.applicationDueDate && getDetailFieldDate(listing.applicationDueDate)}
           </ViewItem>
         </GridCell>
         <GridCell>
           <ViewItem label={t("listings.applicationDueTime")}>
-            {getDetailFieldTime(listing.applicationDueTime)}
+            {listing.applicationDueTime && getDetailFieldTime(listing.applicationDueTime)}
           </ViewItem>
         </GridCell>
       </GridSection>
