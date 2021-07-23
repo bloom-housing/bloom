@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import axios from "axios"
 import useSWR from "swr"
 import { isInternalLink } from "@bloom-housing/ui-components"
+import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 
@@ -33,23 +34,15 @@ export const useFormConductor = (stepName: string) => {
   return context
 }
 
-// TODO: consolidate filter definitions (#253)
-export interface FilterOptions {
-  preferredUnit?: string
-  accessibility?: string
-  community?: string
-  neighborhood?: string
-}
-
-function filterStringFromFilters(filters: FilterOptions) {
+function filterStringFromFilters(filters: ListingFilterParams) {
   if (!filters || filters.neighborhood == "") return ""
 
   // Only `neighborhood` filter is currently supported.
-  return `&filter[$comparison]==&filter[neighborhood]=${filters.neighborhood}`
+  return `&filter[$comparison]==&filter[${ListingFilterKeys.neighborhood}]=${filters.neighborhood}`
 }
 
 const listingsFetcher = function () {
-  return async (url: string, page: number, limit: number, filters: FilterOptions) => {
+  return async (url: string, page: number, limit: number, filters: ListingFilterParams) => {
     const res = await axios.get(
       `${url}?page=${page}&limit=${limit}${filterStringFromFilters(filters)}`
     )
@@ -58,7 +51,7 @@ const listingsFetcher = function () {
 }
 
 // TODO: move this so it can be shared with the partner site.
-export function useListingsData(pageIndex: number, limit = 10, filters: FilterOptions) {
+export function useListingsData(pageIndex: number, limit = 10, filters: ListingFilterParams) {
   const { data, error } = useSWR(
     [`${process.env.listingServiceUrl}`, pageIndex, limit, filters],
     listingsFetcher()

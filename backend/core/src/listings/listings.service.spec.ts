@@ -3,9 +3,8 @@ import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { Listing } from "./entities/listing.entity"
 import { mapTo } from "../shared/mapTo"
-import { ListingDto } from "./dto/listing.dto"
+import { ListingDto, ListingsQueryParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
-import { ListingsQueryParams } from "./listings.controller"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

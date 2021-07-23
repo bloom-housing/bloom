@@ -1212,34 +1212,7 @@
   "listingFilters":{
     "modalTitle":"Filter Results",
     "modalHeader":"Use these options to refine your list of properties.",
-    "unitOptions":{
-      "label": "Unit Size:",
-      "unitOptionsTypes": {
-        "1": "1 Bedroom",
-        "2": "2 Bedrooms",
-        "3": "3 Bedrooms",
-        "4": "4+ Bedrooms",
-        "studio": "Studio"
-      }
-    },
-    "accessibilityOptions":{
-      "label": "Accessible:",
-      "accessibilityOptionsTypes": {
-        "y": "Yes",
-        "n": "No"
-      }
-    },
-    "communityOptions":{
-      "label": "Community:",
-      "communityOptionsTypes": {
-        "general": "General",
-        "senior": "Senior",
-        "assisted": "Assisted"
-      }
-    },
-    "neighborhoodOptions":{
-      "label": "Neighborhood:"
-    }
+    "neighborhood":"Neighborhood:"
   },
   "eligibility": {
     "progress": {

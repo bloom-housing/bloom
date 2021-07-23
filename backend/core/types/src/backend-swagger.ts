@@ -851,8 +851,8 @@ export class ListingsService {
       page?: number;
       /**  */
       limit?: number;
-      /** The neighborhood to filter by */
-      neighborhood?: string;
+      /**  */
+      filter?: ListingFilterParams;
       /**  */
       jsonpath?: string;
     } = {} as any,
@@ -3309,7 +3309,10 @@ export interface ListingFilterParams {
   name?: string;
 
   /**  */
-  status?: EnumListingFilterParamsStatus;
+  status?: ListingStatus;
+
+  /**  */
+  neighborhood?: string;
 }
 
 export interface UnitType {
@@ -4993,10 +4996,10 @@ export enum EnumListingFilterParamsComparison {
   '=' = '=',
   '<>' = '<>'
 }
-export enum EnumListingFilterParamsStatus {
-  'active' = 'active',
-  'pending' = 'pending',
-  'closed' = 'closed'
+export enum ListingFilterKeys {
+  'status' = 'status',
+  'name' = 'name',
+  'neighborhood' = 'neighborhood',
 }
 export enum ListingApplicationAddressType {
   'leasingAgent' = 'leasingAgent',

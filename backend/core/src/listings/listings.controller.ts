@@ -19,12 +19,8 @@ import {
 import { ListingsService } from "./listings.service"
 import {
   ApiBearerAuth,
-  ApiExtraModels,
   ApiOperation,
-  ApiProperty,
-  ApiQuery,
   ApiTags,
-  getSchemaPath,
 } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
@@ -32,42 +28,14 @@ import {
   ListingDto,
   ListingUpdateDto,
   PaginatedListingsDto,
-  ListingFilterParams,
+  ListingsQueryParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { Expose } from "class-transformer"
-import { IsOptional, IsString } from "class-validator"
-import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
-import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { clearCacheKeys } from "../libs/cacheLib"
-
-export class ListingsQueryParams extends PaginationQueryParams {
-  @Expose()
-  @ApiProperty({
-    name: "filter",
-    required: false,
-    type: [String],
-    items: {
-      $ref: getSchemaPath(ListingFilterParams),
-    },
-    example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  filter?: ListingFilterParams
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jsonpath?: string
-}
 
 @Controller("listings")
 @ApiTags("listings")

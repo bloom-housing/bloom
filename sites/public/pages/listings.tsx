@@ -17,25 +17,43 @@ import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { FilterOptions, useListingsData } from "../lib/hooks"
+import { useListingsData } from "../lib/hooks"
+import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
 
 const ListingsPage = () => {
   const router = useRouter()
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [filterState, setFilterState] = useState<FilterOptions>(null)
+  const [filterState, setFilterState] = useState<ListingFilterParams>()
   const itemsPerPage = 10
 
   // Filter state
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false)
 
   // TODO: Select options should come from the database (#252)
-  const preferredUnitOptions = ["", "1", "2", "3", "4", "studio"]
-  const accessibilityOptions = ["", "n", "y"]
-  const communityOptions = ["", "general", "senior", "assisted"]
+  const EMPTY_OPTION = { value: "", label: "" }
+  const preferredUnitOptions: SelectOption[] = [
+    EMPTY_OPTION,
+    { value: "one", label: "1 Bedroom" },
+    { value: "two", label: "2 Bedroom" },
+    { value: "three", label: "3 Bedroom" },
+    { value: "four", label: "4 Bedroom" },
+    { value: "studio", label: "Studio" },
+  ]
+  const accessibilityOptions: SelectOption[] = [
+    EMPTY_OPTION, 
+    { value: "n", label: "No" },
+    { value: "y", label: "Yes" },
+  ]
+  const communityOptions: SelectOption[] = [
+    EMPTY_OPTION, 
+    { value: "general", label: "General" },
+    { value: "senior", label: "Senior" },
+    { value: "assisted", label: "Assisted" },
+  ]
   const neighborhoodOptions: SelectOption[] = [
-    { value: "", label: "" },
+    EMPTY_OPTION,
     { value: "Foster City", label: "Foster City" },
   ]
 
@@ -74,7 +92,7 @@ const ListingsPage = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register } = useForm()
-  const onSubmit = (data: FilterOptions) => {
+  const onSubmit = (data: ListingFilterParams) => {
     setFilterModalVisible(false)
     setPageAndFilterState(/*page=*/ 1, data)
   }
@@ -98,37 +116,31 @@ const ListingsPage = () => {
             <Select
               id="unitOptions"
               name="preferredUnit"
-              label={t("listingFilters.unitOptions.label")}
+              label="Unit Options"
               register={register}
               controlClassName="control"
               options={preferredUnitOptions}
-              keyPrefix="listingFilters.unitOptions.unitOptionsTypes"
-              defaultValue={filterState?.preferredUnit}
             />
             <Select
               id="accessibilityOptions"
               name="accessibility"
-              label={t("listingFilters.accessibilityOptions.label")}
+              label="Accessibility"
               register={register}
               controlClassName="control"
               options={accessibilityOptions}
-              keyPrefix="listingFilters.accessibilityOptions.accessibilityOptionsTypes"
-              defaultValue={filterState?.accessibility}
             />
             <Select
               id="communityOptions"
               name="community"
-              label={t("listingFilters.communityOptions.label")}
+              label="Community Type"
               register={register}
               controlClassName="control"
               options={communityOptions}
-              keyPrefix="listingFilters.communityOptions.communityOptionsTypes"
-              defaultValue={filterState?.community}
             />
             <Select
               id="neighborhoodOptions"
-              name="neighborhood"
-              label={t("listingFilters.neighborhoodOptions.label")}
+              name={ListingFilterKeys.neighborhood}
+              label={t("listingFilters.neighborhood")}
               register={register}
               controlClassName="control"
               options={neighborhoodOptions}
