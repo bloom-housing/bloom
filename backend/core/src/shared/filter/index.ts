@@ -1,76 +1,71 @@
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
-import { ListingFilterKeys } from "../../listings/dto/listing.dto"
 
 /**
  *
- * @param filter
- * @param schema
+ * @param filterParams
+ * @param filterTypeToFieldMap
  * @param qb
  */
 /**
- * This is super simple right now, but we can expand to include complex filter with ands, ors, more than one schema, etc
+ * Add filters to provided QueryBuilder, using the provided map to find the field name.
+ * The order of the params matters:
+ * - A $comparison must be first.
+ * - Comparisons in $comparison will be applied to each filter in order.
  */
-export function addFilter<Filter>(filter: Filter, schema: string, qb: WhereExpression): void {
-  const operator = "andWhere"
-  /**
-   * By specifying that the filter is an array, it keeps the keys in order, so we can iterate like below
-   */
-  let comparisons: unknown[],
+export function addFilters<FilterParams, FilterFieldMap>(
+  filterParams: FilterParams,
+  filterTypeToFieldMap: FilterFieldMap,
+  qb: WhereExpression
+): void {
+  let comparisons: string[],
     comparisonCount = 0
 
   // TODO(#210): This assumes that the order of keys is consistent across browsers,
   // that the key order is the insertion order, and that the $comaprison field is first.
   // This may not always be the case.
-  // eslint-disable-next-line @typescript-eslint/no-for-in-array
-  for (const key in filter) {
-    const value = filter[key]
-    if (key === "$comparison") {
+  for (const filterType in filterParams) {
+    const value = filterParams[filterType]
+    if (filterType === "$comparison") {
       if (Array.isArray(value)) {
         comparisons = value
-      } else {
+      } else if (typeof value == "string") {
         comparisons = [value]
       }
     } else {
       if (value !== undefined) {
-        let values
+        let values: string[]
         // handle multiple values for the same key
         if (Array.isArray(value)) {
           values = value
-        } else {
+        } else if (typeof value == "string") {
           values = [value]
         }
 
-        // TODO(#202): Refactor this out into a provided map, so addFilter() is generic again
-        switch (key.toUpperCase()) {
-          case ListingFilterKeys.status:
-          case ListingFilterKeys.name:
-            addFilterClause(values, key)
-            break
-          case ListingFilterKeys.neighborhood:
-            values.forEach((val: unknown) => {
-              // TODO add support for multiple neighborhoods by using a sub orWhere expression
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              qb[operator](`property.neighborhood ${comparisons[comparisonCount]} :neighborhood`, {
-                neighborhood: val,
-              })
-              comparisonCount++
-            })
-            break
-          default:
-            throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+        const comparisonsForCurrentFilter = comparisons.slice(
+          comparisonCount,
+          comparisonCount + values.length
+        )
+        comparisonCount += values.length
+
+        // Throw if this is not a supported filter type
+        if (!(filterType.toLowerCase() in filterTypeToFieldMap)) {
+          throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
         }
+
+        values.forEach((val: string, i: number) => {
+          // Each WHERE param must be unique across the entire QueryBuilder
+          const whereParameterName = `${filterType}_${i}`
+          qb.andWhere(
+            `LOWER(${filterTypeToFieldMap[filterType.toLowerCase()]}) ${
+              comparisonsForCurrentFilter[i]
+            } LOWER(:${whereParameterName})`,
+            {
+              [whereParameterName]: val,
+            }
+          )
+        })
       }
     }
-  }
-
-  function addFilterClause(values: [string], key: string) {
-    values.forEach((val: unknown) => {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      qb[operator](`${schema}.${key} ${comparisons[comparisonCount]} :${key}`, {
-        [key]: val,
-      })
-      comparisonCount++
-    })
   }
 }

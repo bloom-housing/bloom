@@ -17,11 +17,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiTags,
-} from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,

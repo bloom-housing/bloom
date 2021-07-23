@@ -42,12 +42,12 @@ const ListingsPage = () => {
     { value: "studio", label: "Studio" },
   ]
   const accessibilityOptions: SelectOption[] = [
-    EMPTY_OPTION, 
+    EMPTY_OPTION,
     { value: "n", label: "No" },
     { value: "y", label: "Yes" },
   ]
   const communityOptions: SelectOption[] = [
-    EMPTY_OPTION, 
+    EMPTY_OPTION,
     { value: "general", label: "General" },
     { value: "senior", label: "Senior" },
     { value: "assisted", label: "Assisted" },

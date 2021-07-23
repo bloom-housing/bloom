@@ -751,7 +751,14 @@ export class ListingsQueryParams extends PaginationQueryParams {
 }
 
 export enum ListingFilterKeys {
-  status = "STATUS",
-  name = "NAME",
-  neighborhood = "NEIGHBORHOOD",
+  status = "status",
+  name = "name",
+  neighborhood = "neighborhood",
+}
+
+// Using a record lets us enforce that all types are handled in addFilter
+export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
+  status: "listings.status",
+  name: "listings.name",
+  neighborhood: "property.neighborhood",
 }

@@ -1,9 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { HttpException, HttpStatus } from "@nestjs/common"
 import { Listing } from "./entities/listing.entity"
 import { mapTo } from "../shared/mapTo"
-import { ListingDto, ListingsQueryParams } from "./dto/listing.dto"
+import { ListingDto, ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -34,6 +35,7 @@ const mockListingsRepo = {
 describe("ListingsService", () => {
   beforeEach(async () => {
     process.env.APP_SECRET = "SECRET"
+    process.env.EMAIL_API_KEY = "SG.KEY"
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ListingsService,
@@ -77,10 +79,25 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListingsDto)
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "property.neighborhood = :neighborhood",
+        "LOWER(property.neighborhood) = LOWER(:neighborhood_0)",
         {
-          neighborhood: expectedNeighborhood,
+          neighborhood_0: expectedNeighborhood,
         }
+      )
+    })
+
+    it("should throw an exception if an unsupported filter is used", async () => {
+      const queryParams: ListingsQueryParams = {
+        filter: {
+          $comparison: Compare["="],
+          otherField: "otherField",
+          // The querystring can contain unknown fields that aren't on the
+          // ListingFilterParams type, so we force it to the type for testing
+        } as ListingFilterParams,
+      }
+
+      await expect(service.list(origin, queryParams)).rejects.toThrow(
+        new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
   })

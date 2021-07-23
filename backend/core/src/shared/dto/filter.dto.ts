@@ -6,7 +6,6 @@ export enum Compare {
   "=" = "=",
   "<>" = "<>",
 }
-
 export class BaseFilter {
   @Expose()
   @ApiProperty({
