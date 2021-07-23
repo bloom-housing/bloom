@@ -9,6 +9,16 @@ export interface TableHeaders {
   [key: string]: string
 }
 
+export const Row = (props: { id?: string; className?: string; children: React.ReactNode }) => (
+  <tr id={props.id} className={props.className}>
+    {props.children}
+  </tr>
+)
+
+export const HeaderCell = (props: { children: React.ReactNode; className?: string }) => (
+  <th className={props.className}>{props.children}</th>
+)
+
 export const Cell = (props: {
   headerLabel?: string
   className?: string

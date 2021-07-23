@@ -1,0 +1,88 @@
+table.responsive-table {
+  @apply w-full;
+
+  th:last-of-type,
+  td:last-of-type {
+    @apply text-right;
+  }
+  thead {
+    th {
+      background: transparent;
+      @apply p-2;
+      @apply border-b;
+      @apply border-gray-550;
+      @apply text-gray-700;
+    }
+  }
+
+  tbody {
+    th {
+      @apply hidden;
+    }
+    td {
+      @apply p-2;
+      @apply border-b;
+      @apply border-gray-550;
+      @apply text-left;
+      background: transparent;
+    }
+  }
+
+  .responsive-table__row {
+    @apply w-full;
+
+    .responsive-table__inner-row {
+      background: transparent;
+    }
+  }
+}
+
+@media screen and (max-width: 639px) {
+  table.responsive-table {
+    thead {
+      @apply hidden;
+    }
+    tbody {
+      @apply flex;
+      @apply flex-col;
+      @apply pb-6;
+
+      th,
+      td {
+        @apply flex;
+        @apply p-1;
+        @apply border-0;
+      }
+    }
+    tr:first-of-type {
+      th {
+        @apply text-gray-700;
+      }
+    }
+    tr:last-of-type {
+      td {
+        @apply ml-auto;
+        @apply flex-col;
+        @apply ml-auto;
+        p {
+          @apply text-right;
+        }
+      }
+    }
+
+    .responsive-table__row {
+      @apply flex;
+      @apply flex-row;
+      @apply w-full;
+
+      .responsive-table__inner-row {
+        @apply flex;
+        @apply flex-col;
+        @apply flex-grow;
+        @apply justify-between;
+        @apply items-start;
+        background: transparent;
+      }
+    }
+  }
+}
