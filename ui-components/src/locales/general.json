@@ -722,7 +722,8 @@
       "preview": "Preview",
       "close": "Close",
       "viewListing": "View listing",
-      "unpublish": "Unpublish"
+      "unpublish": "Unpublish",
+      "postResults": "Post Results"
     },
     "addListing": "Add Listing",
     "addPhoto": "Add Photo",

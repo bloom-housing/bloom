@@ -40,6 +40,7 @@ import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
+import LotteryResults from "./sections/LotteryResults"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -312,6 +313,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    */
   const [closeModal, setCloseModal] = useState(false)
 
+  /**
+   * Lottery results drawer
+   */
+  const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -377,6 +383,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
+  console.info("listing!!!", listing)
+
   return (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -436,6 +444,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <LeasingAgent />
                       <ApplicationAddress listing={listing} />
                       <ApplicationDates listing={listing} />
+                      {listing.status === ListingStatus.closed && (
+                        <LotteryResults
+                          submitCallback={() => triggerSubmit(getValues())}
+                          drawerState={lotteryResultsDrawer}
+                          showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
+                        />
+                      )}
                     </div>
 
                     <aside className="md:w-3/12 md:pl-6">
@@ -443,6 +458,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? "edit" : "add"}
                         setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
+                        showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                       />
                     </aside>
                   </div>

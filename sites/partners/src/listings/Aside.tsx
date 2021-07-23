@@ -10,19 +10,26 @@ import {
   StatusMessages,
   LocalizedLink,
   LinkButton,
+  Icon,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "./ListingContext"
-import { ListingStatus } from "@bloom-housing/backend-core/types"
+import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
   setStatus?: (status: ListingStatus) => void
   showCloseListingModal?: () => void
+  showLotteryResultsDrawer?: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
+const Aside = ({
+  type,
+  setStatus,
+  showCloseListingModal,
+  showLotteryResultsDrawer,
+}: AsideProps) => {
   const listing = useContext(ListingContext)
 
   const listingId = listing?.id
@@ -134,6 +141,40 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
           </div>
         )
       }
+
+      if (listing.events.find((event) => event.type === ListingEventType.publicLottery)) {
+        elements.push(
+          <GridCell className="flex" key="btn-edit-lottery">
+            <Button
+              type="button"
+              unstyled
+              fullWidth
+              className="bg-opacity-0"
+              onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
+            >
+              Results Posted{" "}
+              {moment(
+                listing.events.find((event) => event.type === ListingEventType.publicLottery)
+                  ?.startTime
+              ).format("MMMM DD, YYYY")}
+              <Icon size="medium" symbol="edit" className="ml-2" />
+            </Button>
+          </GridCell>
+        )
+      } else if (listing.status === ListingStatus.closed) {
+        elements.push(
+          <GridCell key="btn-post-results">
+            <Button
+              type="button"
+              styleType={AppearanceStyleType.success}
+              fullWidth
+              onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
+            >
+              {t("listings.actions.postResults")}
+            </Button>
+          </GridCell>
+        )
+      }
     }
 
     if (type === "details") {
@@ -153,7 +194,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
     }
 
     return elements
-  }, [listing, listingId, setStatus, showCloseListingModal, type])
+  }, [listing, listingId, setStatus, showCloseListingModal, showLotteryResultsDrawer, type])
 
   return (
     <>
