@@ -37,7 +37,6 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
               onClick={() => {
                 const editedPreferences = [...draftPreferences]
                 editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                "setting draft 1"
                 setDraftPreferences(editedPreferences)
               }}
               unstyled
