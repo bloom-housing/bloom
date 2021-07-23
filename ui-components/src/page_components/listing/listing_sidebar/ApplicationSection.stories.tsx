@@ -30,7 +30,7 @@ export const previewState = () => {
   listing.applicationDueDate = new Date(moment().add(days, "days").format())
 
   const testMethod1: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -39,7 +39,7 @@ export const previewState = () => {
     type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
-    id: '2',
+    id: "2",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -61,7 +61,7 @@ export const previewStateExternalLink = () => {
   listing.applicationDueDate = new Date(moment().add(days, "days").format())
 
   const linkMethod: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     externalReference: "https://www.exygy.com",

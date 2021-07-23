@@ -48,7 +48,7 @@ export const showsMultipleDownloadURLs = () => {
   const listingWithDownloadMethods = Object.assign({}, listing)
 
   const testMethod1: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -57,7 +57,7 @@ export const showsMultipleDownloadURLs = () => {
     type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
-    id: '2',
+    id: "2",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -77,7 +77,7 @@ export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -97,7 +97,7 @@ export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -107,7 +107,7 @@ export const linkToInternalApplicationAndDownloads = () => {
   }
 
   const downloadMethod: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
@@ -127,7 +127,7 @@ export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
   const externalMethod: ApplicationMethod = {
-    id: '1',
+    id: "1",
     createdAt: new Date(),
     updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
