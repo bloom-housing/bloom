@@ -3,6 +3,8 @@ import { render, cleanup } from "@testing-library/react"
 import { ImageCard } from "../../src/blocks/ImageCard"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
+import { t } from "../../src/helpers/translator"
+import { ApplicationStatusType } from "../../src/global/ApplicationStatusType"
 
 const listing = Object.assign({}, ArcherListing) as Listing
 afterEach(cleanup)
@@ -41,6 +43,8 @@ describe("<ImageCard>", () => {
         title={"My Building"}
         subtitle={"The Address"}
         listing={listing}
+        appStatus={ApplicationStatusType.Closed}
+        appStatusContent={t("listings.applicationsClosed")}
       />
     )
     expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
