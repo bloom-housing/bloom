@@ -42,15 +42,11 @@
   }
 }
 
-.image-card__label {
+.image-card__tag {
   @apply absolute;
   @apply top-0;
   @apply p-3;
   @apply m-5;
-
-  @apply bg-accent-warm;
-  @apply text-white;
-  @apply rounded;
 }
 
 .image-card__title {

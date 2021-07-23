@@ -33,6 +33,7 @@ import {
   OpenHouseEvent,
   DownloadLotteryResults,
   ReferralApplication,
+  Message,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
@@ -197,11 +198,11 @@ export const ListingView = (props: ListingProps) => {
 
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
         {listing.reservedCommunityType && (
-          <div className={"reserved-units-indicator"}>
+          <Message warning={true}>
             {t("listings.reservedFor", {
               type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
             })}
-          </div>
+          </Message>
         )}
         {amiValues.length > 1 &&
           amiValues.map((percent) => {
