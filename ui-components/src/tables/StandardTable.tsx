@@ -39,7 +39,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
   const [tableData, setTableData] = useState<Record<string, React.ReactNode>[]>(props.data)
 
-  const headerLabels = Object.values(headers).map((header, index) => {
+  const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
   })
@@ -58,13 +58,13 @@ export const StandardTable = (props: StandardTableProps) => {
     )
   }
 
-  const body = tableData.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData?.map((row: Record<string, React.ReactNode>, dataIndex) => {
     const rowKey = row["id"]
       ? `row-${row["id"] as string}`
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
-    const cols = Object.keys(headers).map((colKey, colIndex) => {
+    const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
       return (
