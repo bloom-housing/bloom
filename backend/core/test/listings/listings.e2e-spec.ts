@@ -13,6 +13,8 @@ import { Language } from "../../types"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
+import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
+import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -164,6 +166,45 @@ describe("Listings", () => {
     const modifiedListing: ListingDto = putResponse.body
 
     expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
+    expect(modifiedListing.applicationMethods[0].paperApplications[0]).toHaveProperty("id")
+    expect(modifiedListing.applicationMethods[0].type).toBe(ApplicationMethodType.FileDownload)
+  })
+
+  it("should add/overwrite listing events in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const listingEvent: ListingEventCreateDto = {
+      type: ListingEventType.openHouse,
+      startTime: new Date(),
+      endTime: new Date(),
+      url: "testurl",
+      note: "testnote",
+      label: "testlabel",
+      file: {
+        fileId: "testid",
+        label: "testlabel",
+      },
+    }
+    listing.events = [listingEvent]
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.events.length).toBe(1)
+    expect(modifiedListing.events[0].url).toBe(listingEvent.url)
+    expect(modifiedListing.events[0].note).toBe(listingEvent.note)
+    expect(modifiedListing.events[0].label).toBe(listingEvent.label)
+    expect(modifiedListing.events[0].file.id).toBeDefined()
+    expect(modifiedListing.events[0].file.fileId).toBe(listingEvent.file.fileId)
+    expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
   afterEach(() => {

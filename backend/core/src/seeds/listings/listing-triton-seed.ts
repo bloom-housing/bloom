@@ -10,6 +10,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
+import { UnitStatus } from "../../units/types/unit-status-enum"
 
 const tritonAmiChart: AmiChartCreateDto = {
   name: "San Jose TCAC 2019",
@@ -608,7 +609,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "1100",
-    status: "occupied",
+    status: UnitStatus.occupied,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -627,7 +628,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -646,7 +647,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -665,7 +666,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -684,7 +685,7 @@ const tritonUnits: Array<UnitSeedType> = [
     priorityType: null,
     reservedType: null,
     sqFeet: "750",
-    status: "occupied",
+    status: UnitStatus.occupied,
   },
 ]
 

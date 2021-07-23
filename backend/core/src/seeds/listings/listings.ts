@@ -3,7 +3,7 @@ import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
 import { ListingCreateDto } from "../../listings/dto/listing.dto"
 import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
-import { ListingEventDto } from "../../listings/dto/listing-event.dto"
+import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { UserCreateDto } from "../../auth/dto/user.dto"
@@ -55,8 +55,6 @@ export type ListingSeedType = Omit<
 
 export type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
 
-export type ListingEventDtoSeedType = Omit<ListingEventDto, "listing">
-
 export type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
 // Properties that are ommited in DTOS derived types are relations and getters
@@ -66,7 +64,7 @@ export interface ListingSeed {
   applicationMethods: Array<ApplicationMethodSeedType>
   property: PropertySeedType
   preferences: Array<PreferenceSeedType>
-  listingEvents: Array<ListingEventDtoSeedType>
+  listingEvents: Array<ListingEventCreateDto>
   assets: Array<AssetDtoSeedType>
   listing: ListingSeedType
   leasingAgents: UserCreateDto[]

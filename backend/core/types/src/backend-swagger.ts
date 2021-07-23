@@ -3814,6 +3814,55 @@ export interface Preference {
   page?: number;
 }
 
+export interface Asset {
+  /**  */
+  fileId: string;
+
+  /**  */
+  label: string;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id: string;
+
+  /**  */
+  createdAt: Date;
+
+  /**  */
+  updatedAt: Date;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+
+  /**  */
+  file?: Asset;
+}
+
 export interface ReservedCommunityType {
   /**  */
   id: string;
@@ -3860,6 +3909,9 @@ export interface UnitAccessibilityPriorityType {
 }
 
 export interface Unit {
+  /**  */
+  status: UnitStatus;
+
   /**  */
   amiChart?: CombinedAmiChartTypes;
 
@@ -3921,33 +3973,10 @@ export interface Unit {
   sqFeet?: string;
 
   /**  */
-  status?: string;
-
-  /**  */
   monthlyRentAsPercentOfIncome?: string;
 
   /**  */
   bmrProgramChart?: boolean;
-}
-
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType;
-
-  /**  */
-  startTime?: Date;
-
-  /**  */
-  endTime?: Date;
-
-  /**  */
-  url?: string;
-
-  /**  */
-  note?: string;
-
-  /**  */
-  label?: string;
 }
 
 export interface WhatToExpect {
@@ -4003,6 +4032,9 @@ export interface Listing {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+
+  /**  */
+  events: ListingEvent[];
 
   /**  */
   image?: CombinedImageTypes;
@@ -4081,9 +4113,6 @@ export interface Listing {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -4217,7 +4246,33 @@ export interface PreferenceCreate {
   page?: number;
 }
 
+export interface ListingEventCreate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  file?: AssetCreate;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+}
+
 export interface UnitCreate {
+  /**  */
+  status: UnitStatus;
+
   /**  */
   amiChart?: CombinedAmiChartTypes;
 
@@ -4259,9 +4314,6 @@ export interface UnitCreate {
 
   /**  */
   sqFeet?: string;
-
-  /**  */
-  status?: string;
 
   /**  */
   monthlyRentAsPercentOfIncome?: string;
@@ -4312,6 +4364,9 @@ export interface ListingCreate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+
+  /**  */
+  events: ListingEventCreate[];
 
   /**  */
   image?: CombinedImageTypes;
@@ -4381,9 +4436,6 @@ export interface ListingCreate {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -4534,7 +4586,42 @@ export interface AssetUpdate {
   label: string;
 }
 
+export interface ListingEventUpdate {
+  /**  */
+  type: ListingEventType;
+
+  /**  */
+  id?: string;
+
+  /**  */
+  createdAt?: Date;
+
+  /**  */
+  updatedAt?: Date;
+
+  /**  */
+  file?: AssetUpdate;
+
+  /**  */
+  startTime?: Date;
+
+  /**  */
+  endTime?: Date;
+
+  /**  */
+  url?: string;
+
+  /**  */
+  note?: string;
+
+  /**  */
+  label?: string;
+}
+
 export interface UnitUpdate {
+  /**  */
+  status: UnitStatus;
+
   /**  */
   amiChart?: CombinedAmiChartTypes;
 
@@ -4576,9 +4663,6 @@ export interface UnitUpdate {
 
   /**  */
   sqFeet?: string;
-
-  /**  */
-  status?: string;
 
   /**  */
   monthlyRentAsPercentOfIncome?: string;
@@ -4641,6 +4725,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes;
+
+  /**  */
+  events: ListingEventUpdate[];
 
   /**  */
   image?: AssetUpdate;
@@ -4710,9 +4797,6 @@ export interface ListingUpdate {
 
   /**  */
   assets: AssetCreate[];
-
-  /**  */
-  events: ListingEvent[];
 
   /**  */
   applicationDueDate?: Date;
@@ -5237,12 +5321,19 @@ export enum CountyCode {
   'San Mateo' = 'San Mateo',
   'San Jose' = 'San Jose'
 }
-export type CombinedAmiChartTypes = AmiChart;
+
 export enum ListingEventType {
   'openHouse' = 'openHouse',
   'publicLottery' = 'publicLottery',
   'lotteryResults' = 'lotteryResults'
 }
+
+export enum UnitStatus {
+  'unknown' = 'unknown',
+  'available' = 'available',
+  'occupied' = 'occupied'
+}
+export type CombinedAmiChartTypes = AmiChart;
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate;

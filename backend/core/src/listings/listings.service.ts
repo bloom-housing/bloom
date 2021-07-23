@@ -20,6 +20,8 @@ export class ListingsService {
       .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
       .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
       .leftJoinAndSelect("listings.image", "image")
+      .leftJoinAndSelect("listings.events", "listingEvents")
+      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
       .leftJoinAndSelect("listings.applicationAddress", "applicationAddress")
       .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")

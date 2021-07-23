@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+- Added:
+  - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
+
 ### General
 
 ### Backend
@@ -17,9 +20,11 @@ All notable changes to this project will be documented in this file. The format 
 
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
   - add duplicates to CSV export ([#1352](https://github.com/bloom-housing/bloom/issues/1352))
+  - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
   - User module has been removed and incorporated into Auth module
+  - convert listing events jsonb column to separate listing_events table
   - convert listing address jsonb columns to separate address tables
   - removed unused inverse relations from entities
   - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
