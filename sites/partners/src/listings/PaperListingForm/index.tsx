@@ -382,7 +382,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, units, preferences)
+        const orderedPreferences = preferences.map((pref, index) => {
+          return { ...pref, ordinal: index }
+        })
+        const formattedData = formatFormData(data, units, orderedPreferences)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
