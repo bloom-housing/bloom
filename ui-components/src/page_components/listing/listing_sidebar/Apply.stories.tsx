@@ -48,12 +48,18 @@ export const showsMultipleDownloadURLs = () => {
   const listingWithDownloadMethods = Object.assign({}, listing)
 
   const testMethod1: ApplicationMethod = {
+    id: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
   }
   const testMethod2: ApplicationMethod = {
+    id: '2',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     label: "Spanish",
     externalReference: "#spanish",
@@ -71,6 +77,9 @@ export const linkDirectlyToInternalApplication = () => {
   const listingWithInternalLink = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
+    id: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     externalReference: "",
     label: "",
@@ -88,6 +97,9 @@ export const linkToInternalApplicationAndDownloads = () => {
   const listingWithInternalAndDownload = Object.assign({}, listing)
 
   const internalMethod: ApplicationMethod = {
+    id: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     externalReference: "",
     label: "",
@@ -95,6 +107,9 @@ export const linkToInternalApplicationAndDownloads = () => {
   }
 
   const downloadMethod: ApplicationMethod = {
+    id: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     label: "English",
     externalReference: "#english",
@@ -112,6 +127,9 @@ export const linkDirectlyToExternalApplication = () => {
   const listingWithMethodLinks = Object.assign({}, listing)
 
   const externalMethod: ApplicationMethod = {
+    id: '1',
+    createdAt: new Date(),
+    updatedAt: new Date(),
     acceptsPostmarkedApplications: false,
     label: "External",
     externalReference: "https://icann.org",
