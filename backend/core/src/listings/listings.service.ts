@@ -12,7 +12,7 @@ import {
   ListingsQueryParams,
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { SelectQueryBuilder, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
@@ -23,10 +23,10 @@ import { addFilters } from "../shared/filter"
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
-  private getQueryBuilder() {
-    return this.listingRepository
-      .createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.image", "image")
+  private getQueryBuilder(innerFilteredQuery?: SelectQueryBuilder<Listing>) {
+    const qb = this.listingRepository.createQueryBuilder("listings")
+
+    qb.leftJoinAndSelect("listings.image", "image")
       .leftJoinAndSelect("listings.events", "listingEvents")
       .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
@@ -46,10 +46,28 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
+
+    if (!innerFilteredQuery) {
+      return qb
+    }
+
+    return qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
   }
 
   public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
-    let qb = this.getQueryBuilder()
+    const innerQuery = this.listingRepository
+      .createQueryBuilder("listings")
+      .select("listings.id", "listings_id")
+      // .distinctOn(["listings.id"])
+      .leftJoin("listings.property", "property")
+      .leftJoin("property.units", "units")
+      .andWhere("units.maxOccupancy = :maxOccupancy", { maxOccupancy: 3 })
+      .groupBy("listings.id")
+      .orderBy({ "listings.id": "DESC" })
+    const innerCount = await innerQuery.getCount()
+    console.log("avaleske: inner count is " + innerCount.toString())
+
+    let qb = this.getQueryBuilder(innerQuery)
     if (params.filter) {
       addFilters<ListingFilterParams, typeof filterTypeToFieldMap>(
         params.filter,
@@ -104,7 +122,8 @@ export class ListingsService {
      * Get the application counts and map them to listings
      */
     if (origin === process.env.PARTNERS_BASE_URL) {
-      const counts = await Listing.createQueryBuilder("listing")
+      const counts = await this.listingRepository
+        .createQueryBuilder("listing")
         .select("listing.id")
         .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
         .getMany()
@@ -136,7 +155,7 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    const listing = Listing.create({
+    const listing = this.listingRepository.create({
       ...listingDto,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
