@@ -16,10 +16,10 @@ import {
   TimeField,
   TimeFieldValues,
   formatDateToTimeField,
-  formatTimeFieldToDate,
 } from "@bloom-housing/ui-components"
 
 import { TempEvent } from "./index"
+import { createDate, createTime } from "../../../lib/helpers"
 import moment from "moment"
 
 type OpenHouseFormProps = {
@@ -47,13 +47,13 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
     startTime && Object.assign(values, { startTime: formatDateToTimeField(startTime) })
     endTime && Object.assign(values, { endTime: formatDateToTimeField(endTime) })
 
-    if (startTime && endTime) {
-      const dateObject = moment(startTime).utc()
+    if (startTime) {
+      const dateObj = moment(startTime)
 
       const date = {
-        day: dateObject.format("DD"),
-        month: dateObject.format("MM"),
-        year: dateObject.format("YYYY"),
+        day: dateObj.format("DD"),
+        month: dateObj.format("MM"),
+        year: dateObj.format("YYYY"),
       }
 
       Object.assign(values, { date })
@@ -67,28 +67,17 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
     defaultValues,
   })
 
-  const createDate = (date: DateFieldValues, time: TimeFieldValues) => {
-    // update hour, minutes, seconds
-    const fullDate = formatTimeFieldToDate(time)
-
-    // set day, month, year
-    fullDate.setDate(parseInt(date.day))
-    fullDate.setMonth(parseInt(date.month))
-    fullDate.setFullYear(parseInt(date.year))
-
-    return fullDate
-  }
-
   const handleSubmit = async () => {
     const validation = await trigger()
 
     if (validation) {
       const data = getValues()
+
       const event = {
         tempId: nanoid(),
         ...currentEvent,
-        startTime: createDate(data.date, data.startTime),
-        endTime: createDate(data.date, data.endTime),
+        startTime: createTime(createDate(data.date), data.startTime),
+        endTime: createTime(createDate(data.date), data.endTime),
         url: data.url,
         note: data.note,
       }

@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState, useCallback } from "react"
-import moment from "moment"
+import React, { useContext, useMemo, useState } from "react"
+
 import {
   t,
   GridSection,
@@ -9,7 +9,6 @@ import {
   Button,
   Drawer,
   AppearanceStyleType,
-  formatDateToTimeField,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
@@ -35,13 +34,10 @@ const DetailApplicationDates = () => {
         .map((event) => {
           const { startTime, endTime, url } = event
 
-          const startTimeDate = moment(startTime)
-          const endTimeDate = moment(endTime)
-
           return {
-            date: startTimeDate.format("MM/DD/YYYY"),
-            startTime: startTimeDate.format("hh:mm:ss A"),
-            endTime: endTimeDate.format("hh:mm:ss A"),
+            date: startTime && getDetailFieldDate(startTime),
+            startTime: startTime && getDetailFieldTime(startTime),
+            endTime: endTime && getDetailFieldTime(endTime),
             url: url ? url : "",
             view: (
               <div className="flex">
@@ -59,22 +55,6 @@ const DetailApplicationDates = () => {
         }),
     [listing]
   )
-
-  const createTimeLabel = useCallback((date: Date) => {
-    if (!date) return ""
-
-    const { hours, minutes, seconds, period } = formatDateToTimeField(date)
-
-    return `${hours}:${minutes}:${seconds} ${period.toUpperCase()}`
-  }, [])
-
-  const createDateLabel = useCallback((date: Date) => {
-    if (!date) return ""
-
-    const dateObject = moment(date).utc()
-
-    return `${dateObject.format("MM")}/${dateObject.format("DD")}/${dateObject.format("YYYY")}`
-  }, [])
 
   return (
     <>
@@ -116,9 +96,15 @@ const DetailApplicationDates = () => {
           <section className="border rounded-md p-8 bg-white mb-8">
             <GridSection tinted={true} inset={true} grid={false}>
               <GridSection grid columns={3}>
-                <ViewItem label={t("t.date")}>{createDateLabel(drawer?.startTime)}</ViewItem>
-                <ViewItem label={t("t.startTime")}>{createTimeLabel(drawer?.startTime)}</ViewItem>
-                <ViewItem label={t("t.endTime")}>{createTimeLabel(drawer?.endTime)}</ViewItem>
+                <ViewItem label={t("t.date")}>
+                  {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
+                </ViewItem>
+                <ViewItem label={t("t.startTime")}>
+                  {getDetailFieldTime(drawer?.startTime)}
+                </ViewItem>
+                <ViewItem label={t("t.endTime")}>
+                  {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
+                </ViewItem>
                 <ViewItem label={t("t.url")}>{drawer?.url || t("n/a")}</ViewItem>
                 <ViewItem label={t("listings.events.openHouseNotes")}>
                   {drawer?.note || t("n/a")}

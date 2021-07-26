@@ -51,13 +51,13 @@ export const formatTimeFieldToDate = (values: TimeFieldValues) => {
 }
 
 export const formatDateToTimeField = (date: Date) => {
-  const utcDate = moment(date).utc()
+  const dateObj = moment(date)
 
   return {
-    hours: utcDate.format("hh"),
-    minutes: utcDate.format("mm"),
-    seconds: utcDate.format("ss"),
-    period: utcDate.format("a"),
+    hours: dateObj.format("hh"),
+    minutes: dateObj.format("mm"),
+    seconds: dateObj.format("ss"),
+    period: new Date(date).getHours() >= 12 ? "pm" : "am",
   }
 }
 

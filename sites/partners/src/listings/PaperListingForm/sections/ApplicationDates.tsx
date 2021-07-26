@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { useWatch, useFormContext } from "react-hook-form"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
+import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import moment from "moment"
 
 import {
@@ -38,43 +39,38 @@ const ApplicationDates = ({
     action: "",
   }
 
-  const openHouseTableData = useMemo(
-    () =>
-      openHouseEvents.map((event) => {
-        const { startTime, endTime, url, tempId } = event
+  const openHouseTableData = useMemo(() => {
+    return openHouseEvents.map((event) => {
+      const { startTime, endTime, url, tempId } = event
 
-        const startTimeDate = moment(startTime)
-        const endTimeDate = moment(endTime)
-
-        return {
-          date: startTimeDate.format("MM/DD/YYYY"),
-          startTime: startTimeDate.format("hh:mm:ss A"),
-          endTime: endTimeDate.format("hh:mm:ss A"),
-          url: url ? url : "",
-          action: (
-            <div className="flex">
-              <Button
-                type="button"
-                className="front-semibold uppercase"
-                onClick={() => setDrawerOpenHouse(event)}
-                unstyled
-              >
-                {t("t.edit")}
-              </Button>
-              <Button
-                type="button"
-                className="front-semibold uppercase text-red-700"
-                onClick={() => setModalDeleteOpenHouse(tempId)}
-                unstyled
-              >
-                {t("t.delete")}
-              </Button>
-            </div>
-          ),
-        }
-      }),
-    [openHouseEvents]
-  )
+      return {
+        date: startTime && getDetailFieldDate(startTime),
+        startTime: startTime && getDetailFieldTime(startTime),
+        endTime: endTime && getDetailFieldTime(endTime),
+        url: url ? url : "",
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="front-semibold uppercase"
+              onClick={() => setDrawerOpenHouse(event)}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="front-semibold uppercase text-red-700"
+              onClick={() => setModalDeleteOpenHouse(tempId)}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      }
+    })
+  }, [openHouseEvents])
 
   const formMethods = useFormContext()
 

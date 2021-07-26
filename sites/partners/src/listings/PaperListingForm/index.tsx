@@ -36,7 +36,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
+import { stringToBoolean, stringToNumber, createDate, createTime } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -216,25 +216,6 @@ const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: T
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
-  const createDate = (formDate: { year: string; month: string; day: string }) => {
-    return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
-  }
-
-  const createTime = (
-    date: Date,
-    formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
-  ) => {
-    let formattedHours = parseInt(formTime.hours)
-    if (formTime.period === "am" && formattedHours === 12) {
-      formattedHours = 0
-    }
-    if (formTime.period === "pm" && formattedHours !== 12) {
-      formattedHours = formattedHours + 12
-    }
-    date.setHours(formattedHours, parseInt(formTime.minutes), 0)
-    return date
-  }
-
   const applicationDueDateFormatted = createDate(data.applicationDueDateField)
   const applicationDueTimeFormatted = createTime(
     applicationDueDateFormatted,
@@ -359,10 +340,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-
-  /**
-   * Close modal
-   */
   const [closeModal, setCloseModal] = useState(false)
 
   useEffect(() => {
