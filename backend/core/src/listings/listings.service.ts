@@ -46,6 +46,8 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
+      // add the inner query parameters to the outer query cause there's a bug
+      .setParameter("maxOccupancy", 3)
 
     if (!innerFilteredQuery) {
       return qb
@@ -62,6 +64,7 @@ export class ListingsService {
       .leftJoin("listings.property", "property")
       .leftJoin("property.units", "units")
       .andWhere("units.maxOccupancy = :maxOccupancy", { maxOccupancy: 3 })
+      // .andWhere("units.maxOccupancy = 3")
       .groupBy("listings.id")
       .orderBy({ "listings.id": "DESC" })
     const innerCount = await innerQuery.getCount()
