@@ -6,16 +6,16 @@ import { WhereExpression } from "typeorm"
  * @param filterParams
  * @param filterTypeToFieldMap
  * @param innerQb The inner query on which filters are applied.
- * @param whereParameters The whereParamters used for the inner query
+ * @param whereParameters Passes out the whereParamters used for the inner query.
  */
 /**
  * Add filters to provided QueryBuilder, using the provided map to find the field name.
  * The order of the params matters:
  * - A $comparison must be first.
  * - Comparisons in $comparison will be applied to each filter in order.
- * Passing in the outer query is necessary due to a bug in TypeORM: The WHERE
- * params are dropped from the inner query, so they must be added to the outer
- * query.
+ * Passing out the WHERE parameters is necessary due to a bug in TypeORM: The
+ * WHERE params are dropped from the inner query, so they must be added to the
+ * outer query manually.
  */
 export function addFilters<FilterParams, FilterFieldMap>(
   filterParams: FilterParams,
@@ -64,7 +64,10 @@ export function addFilters<FilterParams, FilterFieldMap>(
           innerQb.andWhere(
             `LOWER(${filterTypeToFieldMap[filterType.toLowerCase()]}) ${
               comparisonsForCurrentFilter[i]
-            } LOWER(:${whereParameterName})`
+            } LOWER(:${whereParameterName})`,
+            {
+              [whereParameterName]: val,
+            }
           )
           whereParameters[whereParameterName] = val
         })

@@ -24,9 +24,9 @@ export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
   private getFullyJoinedQueryBuilder() {
-    const qb = this.listingRepository.createQueryBuilder("listings")
-
-    qb.leftJoinAndSelect("listings.image", "image")
+    return this.listingRepository
+      .createQueryBuilder("listings")
+      .leftJoinAndSelect("listings.image", "image")
       .leftJoinAndSelect("listings.events", "listingEvents")
       .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect("listings.result", "result")
@@ -46,15 +46,6 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
-      // add the inner query parameters to the outer query cause there's a bug
-      // .setParameter("maxOccupancy", 3)
-
-    // if (!innerFilteredQuery) {
-    //   return qb
-    // }
-
-    return qb
-    // return qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
   }
 
   public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
@@ -72,7 +63,7 @@ export class ListingsService {
     // const innerCount = await innerFilteredQuery.getCount()
     // console.log("avaleske: inner count is " + innerCount.toString())
 
-    let qb = this.getFullyJoinedQueryBuilder()
+    const qb = this.getFullyJoinedQueryBuilder()
     const whereParameters: { [key: string]: string } = {}
     if (params.filter) {
       addFilters<ListingFilterParams, typeof filterTypeToFieldMap>(
@@ -83,51 +74,58 @@ export class ListingsService {
       )
     }
 
-    qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")").setParameters(
-      whereParameters
-    )
-
     qb.orderBy({
       "listings.id": "DESC",
+      "units.max_occupancy": "ASC",
+      "preferences.ordinal": "ASC",
     })
 
-    let currentPage: number = params.page
-    let itemsPerPage: number = params.limit
-
-    let itemCount: number, totalItemsCount: number, totalPages: number
+    const paginationInfo = {
+      currentPage: params.page,
+      itemCount: undefined as number,
+      itemsPerPage: params.limit,
+      totalItems: undefined as number,
+      totalPages: undefined as number,
+    }
     let listings: Listing[]
 
-    if (currentPage > 0 && itemsPerPage > 0) {
+    if (paginationInfo.currentPage > 0 && paginationInfo.itemsPerPage > 0) {
       // Calculate the number of listings to skip (because they belong to lower page numbers)
-      const skip = (currentPage - 1) * itemsPerPage
-      qb = qb.skip(skip).take(itemsPerPage)
+      const offset = (paginationInfo.currentPage - 1) * paginationInfo.itemsPerPage
+      innerFilteredQuery.offset(offset).limit(paginationInfo.itemsPerPage)
+      qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")").setParameters(
+        whereParameters
+      )
 
       listings = await qb.getMany()
 
-      itemCount = listings.length
+      paginationInfo.itemCount = listings.length
 
-      // Issue a separate "COUNT(*) from listings;" query to get the total listings count.
-      totalItemsCount = await this.listingRepository.count()
-      totalPages = Math.ceil(totalItemsCount / itemsPerPage)
+      // Get the total listings count, with filters applied. getCount() ignores any offsets and limits
+      paginationInfo.totalItems = await innerFilteredQuery.getCount()
+      paginationInfo.totalPages = Math.ceil(paginationInfo.totalItems / paginationInfo.itemsPerPage)
     } else {
       // If currentPage or itemsPerPage aren't specified (or are invalid), issue the SQL query to
       // get all listings (no pagination).
+      qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")").setParameters(
+        whereParameters
+      )
       listings = await qb.getMany()
 
-      currentPage = 1
-      totalPages = 1
-      itemCount = listings.length
-      itemsPerPage = listings.length
-      totalItemsCount = listings.length
+      paginationInfo.currentPage = 1
+      paginationInfo.itemCount = listings.length
+      paginationInfo.totalPages = 1
+      paginationInfo.itemsPerPage = listings.length
+      paginationInfo.totalItems = listings.length
     }
 
     // Sort units and preferences.
     // This step was removed from the SQL query because it interferes with pagination
     // (See https://github.com/CityOfDetroit/affordable-housing-app/issues/88#issuecomment-865329223)
-    listings.forEach((listing) => {
-      listing.property.units.sort((a, b) => a.maxOccupancy - b.maxOccupancy)
-      listing.preferences.sort((a, b) => a.ordinal - b.ordinal)
-    })
+    // listings.forEach((listing) => {
+    //   listing.property.units.sort((a, b) => a.maxOccupancy - b.maxOccupancy)
+    //   listing.preferences.sort((a, b) => a.ordinal - b.ordinal)
+    // })
 
     /**
      * Get the application counts and map them to listings
@@ -153,13 +151,7 @@ export class ListingsService {
 
     const paginatedListings = {
       items: mapTo<ListingDto, Listing>(ListingDto, listings),
-      meta: {
-        currentPage: currentPage,
-        itemCount: itemCount,
-        itemsPerPage: itemsPerPage,
-        totalItems: totalItemsCount,
-        totalPages: totalPages,
-      },
+      meta: paginationInfo,
     }
 
     return paginatedListings
