@@ -1,7 +1,12 @@
 import { t } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationSubmissionType,
+  ListingEventType,
+  ListingEvent,
+} from "@bloom-housing/backend-core/types"
 import { TempUnit } from "../src/listings/PaperListingForm"
+import { FormListing } from "../src/listings/PaperListingForm/index"
 
 type DateTimePST = {
   hour: string
@@ -99,6 +104,13 @@ export const getRentType = (unit: TempUnit): string | null => {
 
 export const isNullOrUndefined = (value: unknown): boolean => {
   return value === null || value === undefined
+}
+
+export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
+  const lotteryEvents = listing?.events.filter(
+    (event) => event.type === ListingEventType.publicLottery
+  )
+  return lotteryEvents ? lotteryEvents[0] : null
 }
 
 // TODO memoize this function

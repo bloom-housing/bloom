@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react"
+import { useWatch, useFormContext } from "react-hook-form"
+import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
-import { useFormContext } from "react-hook-form"
 
 import {
   t,
@@ -40,7 +41,12 @@ const ApplicationDates = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
+  const { register, watch, control } = formMethods
+
+  const enableDueDate = useWatch({
+    control,
+    name: "dueDateQuestion",
+  })
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
   const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
@@ -118,6 +124,7 @@ const ApplicationDates = ({
             register={register}
             watch={watch}
             note={t("listings.whenApplicationsClose")}
+            disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
                 ? moment(new Date(listing?.applicationDueDate)).utc().format("MM")
@@ -136,6 +143,7 @@ const ApplicationDates = ({
             id={"applicationDueTimeField"}
             register={register}
             watch={watch}
+            disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
               hours: listing?.applicationDueTime
                 ? moment(new Date(listing?.applicationDueTime)).format("hh")

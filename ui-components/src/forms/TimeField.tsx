@@ -27,6 +27,7 @@ export type TimeFieldProps = {
   register: UseFormMethods["register"]
   required?: boolean
   watch: UseFormMethods["watch"]
+  seconds?: boolean
 }
 
 /**
@@ -70,6 +71,7 @@ const TimeField = ({
   label,
   labelClass,
   readerOnly,
+  seconds,
   defaultValues,
   disabled,
 }: TimeFieldProps) => {
@@ -142,28 +144,30 @@ const TimeField = ({
           disabled={disabled}
         />
 
-        <Field
-          label={t("t.seconds")}
-          defaultValue={defaultValues?.seconds ?? ""}
-          name={fieldName("seconds")}
-          readerOnly={true}
-          placeholder="SS"
-          error={error}
-          validation={{
-            required: required || innerRequiredRule,
-            validate: {
-              secondsRange: (value: string) => {
-                if (!required && !value?.length) return true
+        {seconds && (
+          <Field
+            label={t("t.seconds")}
+            defaultValue={defaultValues?.seconds ?? ""}
+            name={fieldName("seconds")}
+            readerOnly={true}
+            placeholder="SS"
+            error={error}
+            validation={{
+              required: required || innerRequiredRule,
+              validate: {
+                secondsRange: (value: string) => {
+                  if (!required && !value?.length) return true
 
-                return parseInt(value) >= 0 && parseInt(value) <= 59
+                  return parseInt(value) >= 0 && parseInt(value) <= 59
+                },
               },
-            },
-          }}
-          inputProps={{ maxLength: 2 }}
-          register={register}
-          describedBy={`${id}-error`}
-          disabled={disabled}
-        />
+            }}
+            inputProps={{ maxLength: 2 }}
+            register={register}
+            describedBy={`${id}-error`}
+            disabled={disabled}
+          />
+        )}
 
         <Select
           name={fieldName("period")}

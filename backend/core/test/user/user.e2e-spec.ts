@@ -72,6 +72,61 @@ describe("Applications", () => {
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
   })
 
+  it("should not allow user to create an account which is already confirmed nor confirm it using PUT", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "abc@b.com",
+      emailConfirmation: "abc@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      confirmedAt: new Date(),
+    }
+    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(403)
+
+    delete userCreateDto.confirmedAt
+    const userCreateResponse = await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .send(userCreateDto)
+      .expect(201)
+
+    expect(userCreateResponse.body.confirmedAt).toBe(null)
+
+    // Not confirmed user should not be able to log in
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    const userModifyResponse = await supertest(app.getHttpServer())
+      .put(`/user/${userCreateResponse.body.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .send({
+        ...userCreateResponse.body,
+        confirmedAt: new Date(),
+      })
+      .expect(200)
+
+    expect(userModifyResponse.body.confirmedAt).toBeDefined()
+
+    const userLoginResponse = await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(201)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/${userCreateResponse.body.id}`)
+      .send({
+        ...userCreateResponse.body,
+        confirmedAt: new Date(),
+      })
+      .set(...setAuthorization(userLoginResponse.body.accessToken))
+      .expect(403)
+  })
+
   it("should allow anonymous user to create an account", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",

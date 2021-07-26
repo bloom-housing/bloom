@@ -87,50 +87,41 @@ const DetailApplicationDates = () => {
         <GridSection columns={3}>
           <GridCell>
             <ViewItem label={t("listings.applicationDeadline")}>
-              {getDetailFieldDate(listing.applicationDueDate)}
+              {listing.applicationDueDate && getDetailFieldDate(listing.applicationDueDate)}
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.applicationDueTime")}>
-              {getDetailFieldTime(listing.applicationDueTime)}
+              {listing.applicationDueTime && getDetailFieldTime(listing.applicationDueTime)}
             </ViewItem>
           </GridCell>
         </GridSection>
-        <GridSection columns={1}>
-          <ViewItem label={t("listings.openHouseEvent.header")}>
-            <div className="mt-5">
-              <div className="mb-5">
-                <MinimalTable headers={openHouseHeaders} data={openHouseEvents} />
-              </div>
-            </div>
-          </ViewItem>
-        </GridSection>
-      </GridSection>
 
-      <Drawer
-        open={!!drawer}
-        title={t("listings.sections.openHouse")}
-        ariaDescription={t("listings.unit.title")}
-        onClose={() => setDrawer(null)}
-      >
-        <section className="border rounded-md p-8 bg-white mb-8">
-          <GridSection tinted={true} inset={true} grid={false}>
-            <GridSection grid columns={3}>
-              <ViewItem label={t("t.date")}>{createDateLabel(drawer?.startTime)}</ViewItem>
-              <ViewItem label={t("t.startTime")}>{createTimeLabel(drawer?.startTime)}</ViewItem>
-              <ViewItem label={t("t.endTime")}>{createTimeLabel(drawer?.endTime)}</ViewItem>
-              <ViewItem label={t("t.url")}>{drawer?.url || t("n/a")}</ViewItem>
-              <ViewItem label={t("listings.events.openHouseNotes")}>
-                {drawer?.note || t("n/a")}
-              </ViewItem>
+        <Drawer
+          open={!!drawer}
+          title={t("listings.sections.openHouse")}
+          ariaDescription={t("listings.unit.title")}
+          onClose={() => setDrawer(null)}
+        >
+          <section className="border rounded-md p-8 bg-white mb-8">
+            <GridSection tinted={true} inset={true} grid={false}>
+              <GridSection grid columns={3}>
+                <ViewItem label={t("t.date")}>{createDateLabel(drawer?.startTime)}</ViewItem>
+                <ViewItem label={t("t.startTime")}>{createTimeLabel(drawer?.startTime)}</ViewItem>
+                <ViewItem label={t("t.endTime")}>{createTimeLabel(drawer?.endTime)}</ViewItem>
+                <ViewItem label={t("t.url")}>{drawer?.url || t("n/a")}</ViewItem>
+                <ViewItem label={t("listings.events.openHouseNotes")}>
+                  {drawer?.note || t("n/a")}
+                </ViewItem>
+              </GridSection>
             </GridSection>
-          </GridSection>
-        </section>
+          </section>
 
-        <Button styleType={AppearanceStyleType.primary} onClick={() => setDrawer(null)}>
-          {t("t.done")}
-        </Button>
-      </Drawer>
+          <Button styleType={AppearanceStyleType.primary} onClick={() => setDrawer(null)}>
+            {t("t.done")}
+          </Button>
+        </Drawer>
+      </GridSection>
     </>
   )
 }

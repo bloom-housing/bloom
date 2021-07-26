@@ -7,6 +7,7 @@ type WrapOptions = "soft" | "hard"
 
 export interface TextareaProps {
   cols?: number
+  defaultValue?: string
   disabled?: boolean
   errorMessage?: string
   fullWidth?: boolean
@@ -14,6 +15,7 @@ export interface TextareaProps {
   label: string
   maxLength?: number
   name: string
+  note?: string
   placeholder?: string
   register: UseFormMethods["register"]
   resize?: boolean
@@ -41,6 +43,7 @@ export const Textarea = (props: TextareaProps) => {
         className={textareaClassnames.join(" ")}
         cols={props.cols ?? 40}
         disabled={props.disabled}
+        defaultValue={props.defaultValue}
         id={props.id ?? props.name}
         maxLength={props.maxLength ?? 150}
         name={props.name}
@@ -50,6 +53,7 @@ export const Textarea = (props: TextareaProps) => {
         wrap={props.wrap ?? "soft"}
         title={props.label}
       />
+      {props.note && <p className="field-note font-normal mb-2">{props.note}</p>}
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
     </div>
   )
