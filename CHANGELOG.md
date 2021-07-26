@@ -25,7 +25,6 @@ All notable changes to this project will be documented in this file. The format 
   - convert listing address jsonb columns to separate address tables
   - removed unused inverse relations from entities
   - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
-  
 - Added:
   - ability for an admin to confirm users by `/users` POST/PUT methods
 
