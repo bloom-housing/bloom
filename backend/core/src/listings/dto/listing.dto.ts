@@ -300,12 +300,19 @@ export class ListingDto extends OmitType(Listing, [
   yearBuilt?: number | null
 
   @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units as Unit[])
-    }
-  }
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitsSummarized)
+  @Transform(
+    (value, obj: Listing) => {
+      const units = obj.property.units
+      if (Array.isArray(units) && units.length > 0) {
+        return transformUnits(units)
+      }
+    },
+    { toClassOnly: true }
+  )
+  unitsSummarized: UnitsSummarized | undefined
 }
 
 export class PaginatedListingsDto extends PaginationFactory<ListingDto>(ListingDto) {}
