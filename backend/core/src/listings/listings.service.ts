@@ -23,7 +23,7 @@ import { addFilters } from "../shared/filter"
 export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
-  private getQueryBuilder(innerFilteredQuery?: SelectQueryBuilder<Listing>) {
+  private getFullyJoinedQueryBuilder() {
     const qb = this.listingRepository.createQueryBuilder("listings")
 
     qb.leftJoinAndSelect("listings.image", "image")
@@ -47,37 +47,45 @@ export class ListingsService {
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
       // add the inner query parameters to the outer query cause there's a bug
-      .setParameter("maxOccupancy", 3)
+      // .setParameter("maxOccupancy", 3)
 
-    if (!innerFilteredQuery) {
-      return qb
-    }
+    // if (!innerFilteredQuery) {
+    //   return qb
+    // }
 
-    return qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
+    return qb
+    // return qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
   }
 
   public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
-    const innerQuery = this.listingRepository
+    const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       // .distinctOn(["listings.id"])
       .leftJoin("listings.property", "property")
       .leftJoin("property.units", "units")
-      .andWhere("units.maxOccupancy = :maxOccupancy", { maxOccupancy: 3 })
-      // .andWhere("units.maxOccupancy = 3")
+      // .andWhere("units.maxOccupancy = :maxOccupancy")
       .groupBy("listings.id")
       .orderBy({ "listings.id": "DESC" })
-    const innerCount = await innerQuery.getCount()
-    console.log("avaleske: inner count is " + innerCount.toString())
+      // .offset(3)
+      // .limit(2)
+    // const innerCount = await innerFilteredQuery.getCount()
+    // console.log("avaleske: inner count is " + innerCount.toString())
 
-    let qb = this.getQueryBuilder(innerQuery)
+    let qb = this.getFullyJoinedQueryBuilder()
+    const whereParameters: { [key: string]: string } = {}
     if (params.filter) {
       addFilters<ListingFilterParams, typeof filterTypeToFieldMap>(
         params.filter,
         filterTypeToFieldMap,
-        qb
+        innerFilteredQuery,
+        whereParameters
       )
     }
+
+    qb.andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")").setParameters(
+      whereParameters
+    )
 
     qb.orderBy({
       "listings.id": "DESC",
@@ -166,7 +174,7 @@ export class ListingsService {
   }
 
   async update(listingDto: ListingUpdateDto) {
-    const qb = this.getQueryBuilder()
+    const qb = this.getFullyJoinedQueryBuilder()
     qb.where("listings.id = :id", { id: listingDto.id })
     const listing = await qb.getOne()
 
@@ -204,7 +212,7 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    const result = await this.getQueryBuilder()
+    const result = await this.getFullyJoinedQueryBuilder()
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",
