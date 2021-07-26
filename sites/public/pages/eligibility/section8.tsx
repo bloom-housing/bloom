@@ -44,7 +44,7 @@ const EligibilitySection8 = () => {
       </FormCard>
       <FormCard>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__lead pb-0">
+          <div className="form-card__lead pb-0 pt-8">
             <h2 className="form-card__title is-borderless">{t("eligibility.section8.prompt")}</h2>
           </div>
           <div className="form-card__group">

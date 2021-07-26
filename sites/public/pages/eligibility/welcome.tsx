@@ -35,8 +35,8 @@ const EligibilityWelcome = () => {
         />
       </FormCard>
       <FormCard>
-        <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless mt-4">{t("eligibility.welcome.header")}</h2>
+        <div className="form-card__lead pb-0 pt-8">
+          <h2 className="form-card__title is-borderless">{t("eligibility.welcome.header")}</h2>
         </div>
         <div className="form-card__pager-row px-16">
           <p className="field-note py-2">{t("eligibility.welcome.description")}</p>

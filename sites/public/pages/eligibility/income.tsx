@@ -35,7 +35,7 @@ const EligibilityIncome = () => {
         />
       </FormCard>
       <FormCard>
-        <div className="form-card__lead pb-0">
+        <div className="form-card__lead pb-0 pt-8">
           <h2 className="form-card__title is-borderless">{t("eligibility.income.prompt")}</h2>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -46,7 +46,6 @@ const EligibilityIncome = () => {
             <Select
               id="eligibility.income"
               name="eligibility.income"
-              placeholder={t("eligibility.income.label")}
               label={t("eligibility.income.label")}
               describedBy="income-description"
               validation={{ required: true }}
