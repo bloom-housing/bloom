@@ -3154,6 +3154,9 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
+  confirmedAt?: Date
+
+  /**  */
   email: string
 
   /**  */
@@ -3190,6 +3193,9 @@ export interface UserBasic {
 
   /**  */
   lastName: string
+
+  /**  */
+  dob: Date
 
   /**  */
   createdAt: Date
@@ -5029,11 +5035,6 @@ export enum ListingEventType {
   "lotteryResults" = "lotteryResults",
 }
 
-export enum EnumListingReviewOrderType {
-  "lottery" = "lottery",
-  "firstComeFirstServe" = "firstComeFirstServe",
-}
-
 export enum UnitStatus {
   "unknown" = "unknown",
   "available" = "available",
@@ -5045,6 +5046,10 @@ export enum ApplicationMethodType {
   "FileDownload" = "FileDownload",
   "ExternalLink" = "ExternalLink",
   "PaperPickup" = "PaperPickup",
+}
+export enum EnumListingReviewOrderType {
+  "lottery" = "lottery",
+  "firstComeFirstServe" = "firstComeFirstServe",
 }
 export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
