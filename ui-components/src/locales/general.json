@@ -630,7 +630,7 @@
       "resendAnEmailTo": "Resend an email to",
       "errors": {
         "accountConfirmed": "Your account is already confirmed.",
-        "errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+        "errorSaving": "Oops! Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
         "emailInUse": "Email is already in use",
         "emailMismatch": "The emails do not match",
         "emailNotFound": "Email not found. Please register first.",
@@ -649,7 +649,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact sfhousing.info@sfgov.org if you're still experiencing issues.",
+      "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
       "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
     },
     "notFound": {

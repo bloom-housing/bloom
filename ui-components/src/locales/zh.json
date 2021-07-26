@@ -372,7 +372,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "糟糕！好像出了點問題。請再試一次。\n\n如果仍然遇到問題，請聯絡 sfhousing.info@sfgov.org。",
+      "badRequest": "糟糕！好像出了點問題。請再試一次。\n\n\n如果您仍然遇到问题，请联系您的住房部门。",
       "timeoutPleaseTryAgain": "糟糕！好像出了點問題。請再試一次。"
     },
     "notFound": {
