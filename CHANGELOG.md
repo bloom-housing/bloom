@@ -43,6 +43,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ### UI Components
 
+- Fixed:
+
+  - Fix a11y language navigation ([#1528](https://github.com/bloom-housing/bloom/pull/1528)) (Dominik Barcikowski)
+
 - Added:
   - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
   - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
@@ -117,6 +121,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Application Address section to listing management ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Emily Jablonski)
   - Add Application Dates section to listing management ([#1432](https://github.com/bloom-housing/bloom/pull/1432)) (Emily Jablonski)
   - Adds cache revalidation to frontend public app
+  - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
 
 - Fixed:
 

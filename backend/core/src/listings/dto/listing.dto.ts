@@ -31,6 +31,8 @@ import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
+import { ListingReviewOrder } from "../types/listing-review-order-enum"
+import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
 
 export class ListingDto extends OmitType(Listing, [
@@ -140,6 +142,14 @@ export class ListingDto extends OmitType(Listing, [
     return listing.status
   })
   status: ListingStatus
+
+  @Expose()
+  @ApiProperty({ enum: ListingReviewOrder })
+  get reviewOrderType() {
+    return this.events.some((event) => event.type === ListingEventType.publicLottery)
+      ? ListingReviewOrder.lottery
+      : ListingReviewOrder.firstComeFirstServe
+  }
 
   @Expose()
   @Type(() => UnitDto)
@@ -327,6 +337,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "leasingAgents",
   "urlSlug",
   "showWaitlist",
+  "reviewOrderType",
   "units",
   "accessibility",
   "amenities",
@@ -520,6 +531,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "urlSlug",
   "leasingAgents",
   "showWaitlist",
+  "reviewOrderType",
   "units",
   "accessibility",
   "amenities",
