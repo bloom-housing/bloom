@@ -1,5 +1,5 @@
 import React from "react"
-import { useFormContext } from "react-hook-form"
+import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -25,41 +25,58 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = formMethods
-  const postmarksConsidered: YesNoAnswer = watch(
-    "arePostmarksConsidered",
-    listing && listing?.postmarkedApplicationsReceivedByDate !== null
-      ? YesNoAnswer.Yes
-      : YesNoAnswer.No
-  )
-  const applicationsPickedUp: YesNoAnswer = watch(
-    "canPaperApplicationsBePickedUp",
-    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
-      ? YesNoAnswer.Yes
-      : YesNoAnswer.No
-  )
-  const applicationsDroppedOff: YesNoAnswer = watch(
-    "canApplicationsBeDroppedOff",
-    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
-      ? YesNoAnswer.Yes
-      : YesNoAnswer.No
-  )
-  const applicationsPickedUpAddress = watch(
-    "whereApplicationsPickedUp",
-    listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
-      ? listing?.applicationPickUpAddressType || addressTypes.anotherAddress
-      : null
-  )
-  const paperMailedToAnotherAddress = watch(
-    "arePaperAppsMailedToAnotherAddress",
-    listing && listing?.applicationMailingAddress !== null
-  )
-  const droppedOffAddress = watch(
-    "whereApplicationsDroppedOff",
-    listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
-      ? listing?.applicationDropOffAddressType || addressTypes.anotherAddress
-      : null
-  )
+  const { register, watch, control } = formMethods
+
+  const postmarksConsidered: YesNoAnswer = useWatch({
+    control,
+    name: "arePostmarksConsidered",
+    defaultValue:
+      listing && listing?.postmarkedApplicationsReceivedByDate !== null
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No,
+  })
+
+  const applicationsPickedUp: YesNoAnswer = useWatch({
+    control,
+    name: "canPaperApplicationsBePickedUp",
+    defaultValue:
+      listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No,
+  })
+
+  const applicationsDroppedOff: YesNoAnswer = useWatch({
+    control,
+    name: "canApplicationsBeDroppedOff",
+    defaultValue:
+      listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No,
+  })
+
+  const applicationsPickedUpAddress = useWatch({
+    control,
+    name: "whereApplicationsPickedUp",
+    defaultValue:
+      listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
+        ? listing?.applicationPickUpAddressType || addressTypes.anotherAddress
+        : null,
+  })
+
+  const paperMailedToAnotherAddress = useWatch({
+    control,
+    name: "arePaperAppsMailedToAnotherAddress",
+    defaultValue: listing && listing?.applicationMailingAddress !== null,
+  })
+
+  const droppedOffAddress = useWatch({
+    control,
+    name: "whereApplicationsDroppedOff",
+    defaultValue:
+      listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
+        ? listing?.applicationDropOffAddressType || addressTypes.anotherAddress
+        : null,
+  })
 
   const yesNoRadioOptions = [
     {

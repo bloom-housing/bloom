@@ -2,6 +2,7 @@ import {
   AmiChart,
   CountyCode,
   CSVFormattingType,
+  EnumListingReviewOrderType,
   Listing,
   ListingStatus,
   UnitStatus,
@@ -256,6 +257,7 @@ export const ArcherListing: Listing = {
   disableUnitsAccordion: false,
   events: [],
   showWaitlist: false,
+  reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
   urlSlug: "listing-slug-abcdef",
   whatToExpect: {
     applicantsWillBeContacted: "Applicant will be contacted.",

@@ -3730,6 +3730,9 @@ export interface Listing {
   showWaitlist: boolean;
 
   /**  */
+  reviewOrderType: EnumListingReviewOrderType;
+
+  /**  */
   unitsSummarized: UnitsSummarized;
 
   /**  */
@@ -5024,6 +5027,10 @@ export enum ApplicationMethodType {
   'FileDownload' = 'FileDownload',
   'ExternalLink' = 'ExternalLink',
   'PaperPickup' = 'PaperPickup'
+}
+export enum EnumListingReviewOrderType {
+  'lottery' = 'lottery',
+  'firstComeFirstServe' = 'firstComeFirstServe'
 }
 export type CombinedApplicationAddressTypes = AddressUpdate;
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate;
