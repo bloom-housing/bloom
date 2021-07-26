@@ -38,38 +38,6 @@ const ApplicationDates = ({
     action: "",
   }
 
-  const formMethods = useFormContext()
-
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
-
-  const enableDueDate = useWatch({
-    control,
-    name: "dueDateQuestion",
-  })
-
-  const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
-  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
-
-  const onOpenHouseEventsSubmit = (event: TempEvent) => {
-    setDrawerOpenHouse(false)
-
-    const eventsWitoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
-
-    // determine if event is currently edited
-    if (eventsWitoutEdited.length !== openHouseEvents.length) {
-      setOpenHouseEvents([...eventsWitoutEdited, event])
-    } else {
-      setOpenHouseEvents([...openHouseEvents, event])
-    }
-  }
-
-  const onOpenHouseEventDelete = (tempId: string) => {
-    const newEvents = openHouseEvents.filter((event) => event.tempId !== tempId)
-    setOpenHouseEvents(newEvents)
-    setModalDeleteOpenHouse(null)
-  }
-
   const openHouseTableData = useMemo(
     () =>
       openHouseEvents.map((event) => {
@@ -107,6 +75,38 @@ const ApplicationDates = ({
       }),
     [openHouseEvents]
   )
+
+  const formMethods = useFormContext()
+
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch, control } = formMethods
+
+  const enableDueDate = useWatch({
+    control,
+    name: "dueDateQuestion",
+  })
+
+  const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
+  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
+
+  const onOpenHouseEventsSubmit = (event: TempEvent) => {
+    setDrawerOpenHouse(false)
+
+    const eventsWitoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
+
+    // determine if event is currently edited
+    if (eventsWitoutEdited.length !== openHouseEvents.length) {
+      setOpenHouseEvents([...eventsWitoutEdited, event])
+    } else {
+      setOpenHouseEvents([...openHouseEvents, event])
+    }
+  }
+
+  const onOpenHouseEventDelete = (tempId: string) => {
+    const newEvents = openHouseEvents.filter((event) => event.tempId !== tempId)
+    setOpenHouseEvents(newEvents)
+    setModalDeleteOpenHouse(null)
+  }
 
   return (
     <>

@@ -16,6 +16,10 @@ import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
 import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 
 const DetailApplicationDates = () => {
+  const listing = useContext(ListingContext)
+
+  const [drawer, setDrawer] = useState<ListingEvent | null>(null)
+
   const openHouseHeaders = {
     date: t("t.date"),
     startTime: t("t.startTime"),
@@ -23,10 +27,6 @@ const DetailApplicationDates = () => {
     url: t("t.link"),
     view: "",
   }
-
-  const listing = useContext(ListingContext)
-
-  const [drawer, setDrawer] = useState<ListingEvent | null>(null)
 
   const openHouseEvents = useMemo(
     () =>
@@ -95,6 +95,16 @@ const DetailApplicationDates = () => {
               {listing.applicationDueTime && getDetailFieldTime(listing.applicationDueTime)}
             </ViewItem>
           </GridCell>
+        </GridSection>
+
+        <GridSection columns={1}>
+          <ViewItem label={t("listings.openHouseEvent.header")}>
+            <div className="mt-5">
+              <div className="mb-5">
+                <MinimalTable headers={openHouseHeaders} data={openHouseEvents} />
+              </div>
+            </div>
+          </ViewItem>
         </GridSection>
 
         <Drawer

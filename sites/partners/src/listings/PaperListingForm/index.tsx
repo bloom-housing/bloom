@@ -290,6 +290,15 @@ const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: T
     })
   }
 
+  if (openHouseEvents) {
+    openHouseEvents.forEach((event) => {
+      events.push({
+        type: ListingEventType.openHouse,
+        ...event,
+      })
+    })
+  }
+
   return {
     ...data,
     applicationDueTime: applicationDueTimeFormatted,
