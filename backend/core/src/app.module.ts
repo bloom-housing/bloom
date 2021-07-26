@@ -2,7 +2,6 @@
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
-  console.log("process.env.NEW_RELIC_LICENSE_KEY = ", process.env.NEW_RELIC_LICENSE_KEY)
 } catch {
   // Pass
 }

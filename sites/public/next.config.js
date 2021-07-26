@@ -11,7 +11,6 @@ const withMDX = require("@next/mdx")()
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-require("newrelic")
 // Set up app-wide constants
 let BACKEND_API_BASE = "http://localhost:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
