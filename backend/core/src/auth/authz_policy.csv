@@ -2,6 +2,7 @@ p, admin, application, true, .*
 p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
+p, admin, user, true, .*
 p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 

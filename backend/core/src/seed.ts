@@ -22,6 +22,7 @@ import { ApplicationMethodType } from "./application-methods/types/application-m
 import { PaperApplicationsService } from "./paper-applications/paper-applications.service"
 import { Language } from "./shared/types/language-enum"
 import { AssetsService } from "./assets/services/assets.service"
+import { AuthContext } from "./auth/types/auth-context"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -30,7 +31,9 @@ const argv = yargs.scriptName("seed").options({
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
-    defaultLeasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+    defaultLeasingAgents.map(
+      async (leasingAgent) => await usersService.createUser(leasingAgent, new AuthContext(null))
+    )
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
@@ -120,7 +123,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user1.confirmationToken })
 
@@ -134,7 +138,8 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -148,7 +153,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
 
   for (let i = 0; i < 10; i++) {

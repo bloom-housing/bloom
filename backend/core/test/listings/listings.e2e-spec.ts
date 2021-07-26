@@ -194,6 +194,7 @@ describe("Listings", () => {
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+
     const modifiedListing: ListingDto = putResponse.body
 
     expect(modifiedListing.events.length).toBe(1)
