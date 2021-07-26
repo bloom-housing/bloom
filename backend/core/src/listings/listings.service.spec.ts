@@ -79,7 +79,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListingsDto)
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(property.neighborhood) = LOWER(:neighborhood_0)",
+        "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
           neighborhood_0: expectedNeighborhood,
         }

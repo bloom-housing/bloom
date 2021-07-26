@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file. The format 
 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
+## Detroit Team M8
+- Added:
+  - Made `addFilters()` more generic ([#257](https://github.com/CityOfDetroit/bloom/pull/257))
+  - Fixed lowercaseing issue in query built by `addFilters()` ([#264](https://github.com/CityOfDetroit/bloom/pull/264))
+
 ## Detroit Team M7
 - Added:
   - Debug flags for public and partner site ([#195](https://github.com/CityOfDetroit/bloom/pull/195))
