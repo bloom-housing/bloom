@@ -23,9 +23,12 @@ const ListingMap = (props: ListingMapProps) => {
   const [viewport, setViewPort] = React.useState({
     latitude: address?.latitude,
     longitude: address?.longitude,
+    width: "100%",
+    height: 400,
     zoom: 13,
   } as Viewport)
-  const _onViewportChange = (viewport: Viewport) => {
+
+  const onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with
     // the responsive wrappers
     viewport.width = "100%"
@@ -44,7 +47,7 @@ const ListingMap = (props: ListingMapProps) => {
       {props.address.latitude !== undefined && props.address.longitude !== undefined && (
         <ReactMapGL
           mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-          onViewportChange={_onViewportChange}
+          onViewportChange={onViewportChange}
           mapStyle="mapbox://styles/mapbox/streets-v11"
           scrollZoom={false}
           {...viewport}

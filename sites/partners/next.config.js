@@ -24,6 +24,9 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
+const MAPBOX_TOKEN =
+  process.env.MAPBOX_TOKEN ||
+  "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
 // Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
@@ -45,6 +48,7 @@ module.exports = withCSS(
             cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
             cloudinaryKey: process.env.CLOUDINARY_KEY,
             cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
+            mapBoxToken: MAPBOX_TOKEN,
           },
           i18n: {
             locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
