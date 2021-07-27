@@ -31,7 +31,6 @@ export const withListing = () => (
     href="/listings"
     imageUrl="/images/listing.jpg"
     title="Hello World"
-    listing={listing}
     appStatus={ApplicationStatusType.Closed}
     appStatusContent={t("listings.applicationsClosed")}
   />
@@ -51,7 +50,6 @@ export const withListingAndTag = () => (
     imageUrl="/images/listing.jpg"
     title="Hello World"
     subtitle="55 Triton Park Lane, Foster City CA, 94404"
-    listing={listing}
     tagLabel="Label"
     appStatus={ApplicationStatusType.Closed}
     appStatusContent={t("listings.applicationsClosed")}
