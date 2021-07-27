@@ -84,7 +84,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     previewTableRows.push({
       preview: (
         <TableThumbnail>
-          <img src={cloudinaryData.url} />
+          <img alt="PDF preview" src={cloudinaryData.url} />
         </TableThumbnail>
       ),
       fileName: cloudinaryData.id.split("/").slice(-1).join(),
@@ -165,7 +165,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           }}
           styleType={AppearanceStyleType.primary}
         >
-          Post
+          {t("t.post")}
         </Button>,
         <Button
           key={1}
@@ -175,7 +175,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >
-          Cancel
+          {t("t.cancel")}
         </Button>,
       ]}
     >
@@ -183,7 +183,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
         <Dropzone
           id="lottery-results-upload"
           label="Upload Results"
-          helptext="Select PDF files"
+          helptext="Select PDF file"
           uploader={fileUploader}
           accept="application/pdf"
           progress={progressValue}
