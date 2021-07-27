@@ -1,6 +1,4 @@
 import * as React from "react"
-import moment from "moment"
-import { t } from "../helpers/translator"
 import { Icon, IconFillColors } from "../icons/Icon"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import "./ApplicationStatus.scss"
@@ -8,8 +6,6 @@ import "./ApplicationStatus.scss"
 export interface ApplicationStatusProps {
   content: string
   status: ApplicationStatusType
-  date?: Date
-  showTime?: boolean
   vivid?: boolean
 }
 
@@ -23,10 +19,6 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
 
   const status = props.status || ApplicationStatusType.Open
   const content = props.content || "Application status content"
-  const date = props.date || undefined
-  const formattedDate = date ? moment(date).format("MMMM D, YYYY") : undefined
-  const formattedTime =
-    date && props.showTime ? ` ${t("t.at")} ` + moment(date).format("h:mm A") : ""
 
   switch (status) {
     case ApplicationStatusType.Open:
@@ -43,7 +35,6 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
       <Icon size="medium" symbol="clock" fill={vivid ? IconFillColors.white : undefined} /> &nbsp;
       {content}
-      {formattedDate ? `: ${formattedDate}` + `${formattedTime}` : ""}
     </div>
   )
 }
