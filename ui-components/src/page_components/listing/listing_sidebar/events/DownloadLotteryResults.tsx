@@ -6,7 +6,7 @@ import moment from "moment"
 
 const DownloadLotteryResults = (props: { event: ListingEvent }) => {
   const { event } = props
-  const eventUrl = pdfUrlFromListingEvents([event], ListingEventType.lotteryResults)
+  const eventUrl = event ? pdfUrlFromListingEvents([event], ListingEventType.lotteryResults) : null
   return (
     <>
       {eventUrl && (
