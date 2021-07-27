@@ -120,7 +120,8 @@ export class ListingsService {
       ...listingDto,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
-    return await listing.save()
+    const saveResult = await listing.save()
+    return saveResult
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -173,11 +174,18 @@ export class ListingsService {
       throw new NotFoundException()
     }
 
-    result.unitsSummarized = transformUnits(result.property.units)
     if (lang !== Language.en) {
       await this.translationService.translateListing(result, lang)
     }
 
+    this.addUnitsSummarized(result)
     return result
+  }
+
+  private addUnitsSummarized(listing: Listing) {
+    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
+      listing.unitsSummarized = transformUnits(listing.property.units)
+    }
+    return listing
   }
 }

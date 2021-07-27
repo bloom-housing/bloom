@@ -28,7 +28,7 @@ p, admin, propertyGroup, true, .*
 p, partner, propertyGroup, true, read
 
 p, admin, amiChart, true, .*
-p, partner, amiChart, true, read
+p, anonymous, amiChart, true, read
 
 p, admin, applicationFlaggedSet, true, .*
 

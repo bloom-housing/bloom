@@ -18,12 +18,14 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { IdDto } from "../../shared/dto/id.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
+import { UserRolesDto } from "./user-roles.dto"
 
 export class UserDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "resetToken",
   "confirmationToken",
+  "roles",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -31,6 +33,12 @@ export class UserDto extends OmitType(User, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgentInListings?: IdDto[] | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UserRolesDto)
+  roles: UserRolesDto
 }
 
 export class UserBasicDto extends OmitType(User, [
@@ -38,7 +46,14 @@ export class UserBasicDto extends OmitType(User, [
   "passwordHash",
   "confirmationToken",
   "resetToken",
-] as const) {}
+  "roles",
+] as const) {
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UserRolesDto)
+  roles: UserRolesDto
+}
 
 export class UserDtoWithAccessToken extends UserDto {
   @Expose()
@@ -62,6 +77,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
+  "roles",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -94,6 +110,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
+  "roles",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

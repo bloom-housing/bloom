@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from "typeorm"
 import {
@@ -47,8 +48,12 @@ class Unit {
   @Type(() => Date)
   updatedAt: Date
 
-  @ManyToOne(() => AmiChart, { eager: true, nullable: true })
-  amiChart: AmiChart | null
+  @ManyToOne(() => AmiChart, { eager: false, nullable: true })
+  amiChart?: AmiChart | null
+
+  @RelationId((unit: Unit) => unit.amiChart)
+  @Expose()
+  amiChartId?: string
 
   @Column({ nullable: true, type: "text" })
   @Expose()
