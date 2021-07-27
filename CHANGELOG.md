@@ -4,12 +4,26 @@ All notable changes to this project will be documented in this file. The format 
 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
+## Detroit Team M8
+
+- Added:
+  - Made `addFilters()` more generic ([#257](https://github.com/CityOfDetroit/bloom/pull/257))
+  - Fixed lowercaseing issue in query built by `addFilters()` ([#264](https://github.com/CityOfDetroit/bloom/pull/264))
+  - Move where clauses and pagination to subquery, so filtered results return all listing data ([#271](https://github.com/CityOfDetroit/bloom/pull/271))
+
+## Detroit Team M7
+
+- Added:
+  - Debug flags for public and partner site ([#195](https://github.com/CityOfDetroit/bloom/pull/195))
+  - Upstream filter param parsing, with changes to support pagination params and filters that aren't on the listings table ([#180](https://github.com/CityOfDetroit/bloom/pull/180))
+  - Eligibility questionnaire ([#154](https://github.com/CityOfDetroit/bloom/pull/154), [#198](https://github.com/CityOfDetroit/bloom/pull/198), [#208](https://github.com/CityOfDetroit/bloom/pull/208))
+
 ## Unreleased
+
+### General
 
 - Added:
   - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
-
-### General
 
 ### Backend
 
@@ -27,6 +41,7 @@ All notable changes to this project will be documented in this file. The format 
   - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
 - Added:
   - ability for an admin to confirm users by `/users` POST/PUT methods
+  - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#x](https://github.com/CityOfDetroit/bloom/pull/1)
 
 ### Frontend
 
@@ -152,6 +167,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+  - Fix aria reserved for future use warning ([#1378](https://github.com/bloom-housing/bloom/issues/1378)) (Andrea Egan)
 
 ## 1.0.0 / 2021-05-21
 

@@ -1,47 +1,70 @@
+import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 
 /**
  *
- * @param filter
- * @param schema
- * @param qb
+ * @param filterParams
+ * @param filterTypeToFieldMap
+ * @param qb The query on which filters are applied.
  */
 /**
- * This is super simple right now, but we can expand to include complex filter with ands, ors, more than one schema, etc
+ * Add filters to provided QueryBuilder, using the provided map to find the field name.
+ * The order of the params matters:
+ * - A $comparison must be first.
+ * - Comparisons in $comparison will be applied to each filter in order.
  */
-export function addFilter<Filter>(filter: Filter[], schema: string, qb: WhereExpression): void {
-  const operator = "andWhere"
-  /**
-   * By specifying that the filter is an array, it keeps the keys in order, so we can iterate like below
-   */
-  let comparisons: unknown[],
+export function addFilters<FilterParams, FilterFieldMap>(
+  filterParams: FilterParams,
+  filterTypeToFieldMap: FilterFieldMap,
+  qb: WhereExpression
+): void {
+  let comparisons: string[],
     comparisonCount = 0
 
-  // eslint-disable-next-line @typescript-eslint/no-for-in-array
-  for (const key in filter) {
-    const value = filter[key]
-    if (key === "$comparison") {
+  // TODO(https://github.com/CityOfDetroit/bloom/issues/210): This assumes that
+  // the order of keys is consistent across browsers, that the key order is the
+  // insertion order, and that the $comaprison field is first.
+  // This may not always be the case.
+  for (const filterType in filterParams) {
+    const value = filterParams[filterType]
+    if (filterType === "$comparison") {
       if (Array.isArray(value)) {
         comparisons = value
-      } else {
+      } else if (typeof value === "string") {
         comparisons = [value]
       }
     } else {
       if (value !== undefined) {
-        let values
-        // handle multiple values for the same key
+        let values: string[]
+        // Handle multiple values for the same key
         if (Array.isArray(value)) {
           values = value
-        } else {
+        } else if (typeof value === "string") {
           values = [value]
         }
 
-        values.forEach((val: unknown) => {
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          qb[operator](`${schema}.${key} ${comparisons[comparisonCount]} :${key}`, {
-            [key]: val,
-          })
-          comparisonCount++
+        const comparisonsForCurrentFilter = comparisons.slice(
+          comparisonCount,
+          comparisonCount + values.length
+        )
+        comparisonCount += values.length
+
+        // Throw if this is not a supported filter type
+        if (!(filterType.toLowerCase() in filterTypeToFieldMap)) {
+          throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+        }
+
+        values.forEach((val: string, i: number) => {
+          // Each WHERE param must be unique across the entire QueryBuilder
+          const whereParameterName = `${filterType}_${i}`
+          qb.andWhere(
+            `LOWER(CAST(${filterTypeToFieldMap[filterType.toLowerCase()]} as text)) ${
+              comparisonsForCurrentFilter[i]
+            } LOWER(:${whereParameterName})`,
+            {
+              [whereParameterName]: val,
+            }
+          )
         })
       }
     }
