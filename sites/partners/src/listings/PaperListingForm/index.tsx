@@ -383,8 +383,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
-  console.info("listing!!!", listing)
-
   return (
     <>
       <LoadingOverlay isLoading={loading}>
