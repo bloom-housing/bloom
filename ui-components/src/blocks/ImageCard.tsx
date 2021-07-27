@@ -2,7 +2,6 @@ import * as React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { ApplicationStatus } from "../notifications/ApplicationStatus"
 import "./ImageCard.scss"
-import { Listing } from "@bloom-housing/backend-core/types"
 import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
@@ -12,7 +11,6 @@ export interface ImageCardProps {
   subtitle?: string
   title: string
   href?: string
-  listing?: Listing
   description?: string
   tagLabel?: string
   appStatus?: ApplicationStatusType
