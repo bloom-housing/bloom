@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from "react"
 import moment from "moment"
 import {
+  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -187,6 +188,19 @@ const Aside = ({
           </a>
         </GridCell>
       )
+
+      if (listing.events.find((event) => event.type === ListingEventType.publicLottery)) {
+        const eventUrl = pdfUrlFromListingEvents(listing.events, ListingEventType.publicLottery)
+        elements.push(
+          <GridCell className="flex" key="btn-preview-results">
+            <a href={eventUrl} target="_blank" className="inline-flex w-full">
+              <Button type="button" unstyled fullWidth className="bg-opacity-0">
+                {t("listings.actions.previewLotteryResults")}
+              </Button>
+            </a>
+          </GridCell>
+        )
+      }
     }
 
     if (type === "add" || type === "edit") {

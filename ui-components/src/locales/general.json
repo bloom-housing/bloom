@@ -723,7 +723,8 @@
       "close": "Close",
       "viewListing": "View listing",
       "unpublish": "Unpublish",
-      "postResults": "Post Results"
+      "postResults": "Post Results",
+      "previewLotteryResults": "Preview Lottery Results"
     },
     "addListing": "Add Listing",
     "addPhoto": "Add Photo",

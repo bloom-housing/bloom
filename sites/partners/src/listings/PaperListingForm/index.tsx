@@ -446,7 +446,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <ApplicationDates listing={listing} />
                       {listing.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={() => triggerSubmit(getValues())}
+                          submitCallback={(data) => {
+                            setStatus(ListingStatus.closed)
+                            triggerSubmit({ ...getValues(), ...data })
+                          }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
                         />

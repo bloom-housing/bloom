@@ -1,13 +1,15 @@
 import * as React from "react"
-import { ListingEvent } from "@bloom-housing/backend-core/types"
+import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import { t } from "../../../../helpers/translator"
+import { pdfUrlFromListingEvents } from "../../../../helpers/pdfs"
 import moment from "moment"
 
 const DownloadLotteryResults = (props: { event: ListingEvent }) => {
   const { event } = props
+  const eventUrl = pdfUrlFromListingEvents([event], ListingEventType.lotteryResults)
   return (
     <>
-      {event && event.url && (
+      {eventUrl && (
         <section className="aside-block text-center">
           <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
           <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
@@ -15,7 +17,7 @@ const DownloadLotteryResults = (props: { event: ListingEvent }) => {
           </p>
           <a
             className="button is-primary w-full mb-2"
-            href={event.url}
+            href={eventUrl}
             title={t("listings.lotteryResults.downloadResults")}
             target="_blank"
           >

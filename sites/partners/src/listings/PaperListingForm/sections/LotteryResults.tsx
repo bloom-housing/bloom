@@ -14,12 +14,13 @@ import {
 } from "@bloom-housing/ui-components"
 import {
   AssetsService,
+  ListingEvent,
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
 
 interface LotteryResultsProps {
-  submitCallback: () => void
+  submitCallback: (data: { events: ListingEvent[] }) => void
   drawerState: boolean
   showDrawer: (toggle: boolean) => void
 }
@@ -28,12 +29,10 @@ const LotteryResults = (props: LotteryResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { setValue, watch } = formMethods
+  const { watch } = formMethods
 
   const cloudName = process.env.cloudinaryCloudName
   const uploadPreset = process.env.cloudinarySignedPreset
-
-  const listingFormEvents = watch("events")
 
   const { submitCallback, drawerState, showDrawer } = props
   const [progressValue, setProgressValue] = React.useState(0)
@@ -42,31 +41,33 @@ const LotteryResults = (props: LotteryResultsProps) => {
     url: "",
   })
 
+  const listingEvents = watch("events")
+
   const resetDrawerState = () => {
     showDrawer(false)
   }
 
   const savePDF = () => {
-    let newEvent = {} as ListingEventCreate
+    const updatedEvents = [...listingEvents]
 
-    const lotteryIndex = listingFormEvents.findIndex(
+    const lotteryIndex = updatedEvents.findIndex(
       (event) => event.type === ListingEventType.publicLottery
     )
-
-    if (lotteryIndex !== -1) {
-      newEvent = listingFormEvents[lotteryIndex]
+    if (lotteryIndex > -1) {
+      updatedEvents.splice(lotteryIndex, 1)
     }
-    newEvent.type = ListingEventType.publicLottery
-    newEvent.startTime = new Date()
-    newEvent.endTime = newEvent.startTime
-    newEvent.file = {
-      fileId: cloudinaryData.id,
-      label: "cloudinaryPDF",
-    }
-    if (lotteryIndex !== -1) listingFormEvents.push(newEvent)
 
-    setValue("events", listingFormEvents)
-    submitCallback()
+    const newEvent: ListingEventCreate = {
+      type: ListingEventType.publicLottery,
+      startTime: new Date(),
+      file: {
+        fileId: cloudinaryData.id,
+        label: "cloudinaryPDF",
+      },
+    }
+
+    updatedEvents.push(newEvent as ListingEvent)
+    submitCallback({ events: updatedEvents })
   }
 
   const resultsTableHeaders = {
