@@ -44,7 +44,7 @@ const ListingMap = (props: ListingMapProps) => {
         <h3 className="text-caps-tiny">{props.listing.name}</h3>
         <MultiLineAddress address={address} />
       </div>
-      {props.address.latitude !== undefined && props.address.longitude !== undefined && (
+      {props.address.latitude && props.address.longitude && (
         <ReactMapGL
           mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
           onViewportChange={onViewportChange}
