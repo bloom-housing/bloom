@@ -32,6 +32,5 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           eslint: true
+          prettier: true
           auto_fix: true
-          # Uncomment this after fixes.
-          # prettier: true

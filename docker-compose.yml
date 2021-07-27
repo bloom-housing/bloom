@@ -80,6 +80,7 @@ services:
       REDIS_TLS_URL: "redis://redis:6379/0"
       REDIS_URL: "redis://redis:6379/0"
       PGUSER: "postgres"
+      PGPASSWORD: "postgres"
       PGDATABASE: "bloom"
     depends_on:
       - redis
@@ -88,8 +89,8 @@ services:
     container_name: redis
     restart: always
     image: redis:latest
-    expose:
-      - "6379"
+    ports:
+      - "6379:6379"
     networks:
       - backend
   postgres:
@@ -99,8 +100,6 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      # Never do this in production or with any sensitive / non-test data:
-      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: "bloom"
       PG_DATA: /var/lib/postgresql/data
     ports:

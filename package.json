@@ -72,11 +72,6 @@
     "printWidth": 100,
     "semi": false
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo 'Test' && lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --max-warnings 0"
   }
