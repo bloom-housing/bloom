@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
-import Icon from "../icons/Icon"
+import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 
 export interface TableHeaders {
@@ -33,7 +33,7 @@ export interface StandardTableProps {
   responsiveCollapse?: boolean
 }
 
-export type StandardTableData = Record<string, React.ReactNode>[]
+export type StandardTableData = Record<string, React.ReactNode>[] | undefined
 
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
@@ -127,10 +127,12 @@ export const StandardTable = (props: StandardTableProps) => {
   }
 
   const reorder = (
-    list: Record<string, React.ReactNode>[],
+    list: Record<string, React.ReactNode>[] | undefined,
     startIndex: number,
     endIndex: number
   ) => {
+    if (!list) return
+
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
