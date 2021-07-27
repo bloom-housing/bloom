@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { Message } from "../../src/prototypes/Message"
+import { Message } from "../../src/text/Message"
 
 afterEach(cleanup)
 

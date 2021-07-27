@@ -122,9 +122,6 @@ export * from "./src/page_components/listing/listing_sidebar/events/LotteryResul
 export * from "./src/page_components/listing/listing_sidebar/events/PublicLotteryEvent"
 export * from "./src/page_components/listing/listing_sidebar/events/EventDateSection"
 
-/* Prototypes */
-export * from "./src/prototypes/Message"
-
 /* Responsive Wrappers */
 export * from "./src/sections/ResponsiveWrappers"
 
@@ -144,4 +141,5 @@ export * from "./src/tables/MinimalTable"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Message"
 export * from "./src/text/Tag"
