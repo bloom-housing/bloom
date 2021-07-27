@@ -34,17 +34,23 @@ export const useFormConductor = (stepName: string) => {
   return context
 }
 
-function filterStringFromFilters(filters: ListingFilterParams) {
-  if (!filters || filters.neighborhood == "") return ""
-
-  // Only `neighborhood` filter is currently supported.
-  return `&filter[$comparison]==&filter[${ListingFilterKeys.neighborhood}]=${filters.neighborhood}`
+// TODO(abbiefarr): move this to a filters helper file
+function backendFilterParamsFromFilters(filters: ListingFilterParams) {
+  if (!filters) return ""
+  let filterString = ""
+  for (const filterKey in ListingFilterKeys) {
+    const value = filters[filterKey]
+    if (value && value != "") {
+      filterString += `&filter[$comparison]==&filter[${filterKey}]=${value}`
+    }
+  }
+  return filterString
 }
 
 const listingsFetcher = function () {
   return async (url: string, page: number, limit: number, filters: ListingFilterParams) => {
     const res = await axios.get(
-      `${url}?page=${page}&limit=${limit}${filterStringFromFilters(filters)}`
+      `${url}?page=${page}&limit=${limit}${backendFilterParamsFromFilters(filters)}`
     )
     return res.data
   }
