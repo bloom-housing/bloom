@@ -153,7 +153,7 @@ const Aside = ({
               className="bg-opacity-0"
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
-              Results Posted{" "}
+              {t("listings.actions.resultsPosted")}{" "}
               {moment(
                 listing.events.find((event) => event.type === ListingEventType.publicLottery)
                   ?.startTime
@@ -195,7 +195,8 @@ const Aside = ({
           <GridCell className="flex" key="btn-preview-results">
             <a href={eventUrl} target="_blank" className="inline-flex w-full">
               <Button type="button" unstyled fullWidth className="bg-opacity-0">
-                {t("listings.actions.previewLotteryResults")}
+                {t("listings.actions.previewLotteryResults")}{" "}
+                <Icon size="medium" symbol="link" className="ml-2" />
               </Button>
             </a>
           </GridCell>
