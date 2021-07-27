@@ -9,15 +9,18 @@ export default {
 
 export const Default = () => (
   <LanguageNav
-    items={[
-      {
-        prefix: "",
-        label: "English",
-      },
-      {
-        prefix: "es",
-        label: "Spanish",
-      },
-    ]}
+    language={{
+      list: [
+        {
+          prefix: "",
+          label: "English",
+        },
+        {
+          prefix: "es",
+          label: "Spanish",
+        },
+      ],
+      codes: ["en", "es"],
+    }}
   />
 )

@@ -22,6 +22,8 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
+  ListingEventType,
+  ListingEventCreate,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -51,22 +53,39 @@ export type FormListing = Listing & {
   applicationDueTimeField?: {
     hours: string
     minutes: string
-    seconds: string
     period: TimeFieldPeriod
   }
-  whereApplicationsDroppedOff?: ListingApplicationAddressType
-  whereApplicationsPickedUp?: ListingApplicationAddressType
   arePaperAppsMailedToAnotherAddress?: boolean
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
+  dueDateQuestion?: boolean
+  lotteryDate?: {
+    month: string
+    day: string
+    year: string
+  }
+  lotteryStartTime?: {
+    hours: string
+    minutes: string
+    period: TimeFieldPeriod
+  }
+  lotteryEndTime?: {
+    hours: string
+    minutes: string
+    period: TimeFieldPeriod
+  }
+  lotteryDateNotes?: string
   postMarkDate?: {
     month: string
     day: string
     year: string
   }
+  reviewOrderQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
+  whereApplicationsDroppedOff?: ListingApplicationAddressType
+  whereApplicationsPickedUp?: ListingApplicationAddressType
 }
 
 export const addressTypes = {
@@ -166,6 +185,7 @@ const defaults: FormListing = {
   yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
+  reviewOrderType: null,
   unitsSummarized: {
     unitTypes: [],
     reservedTypes: [],
@@ -191,24 +211,31 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
-  const getDueTime = () => {
-    if (!data.applicationDueTimeField) return null
-
-    let dueTimeHours = parseInt(data.applicationDueTimeField.hours)
-    if (data.applicationDueTimeField.period === "am" && dueTimeHours === 12) {
-      dueTimeHours = 0
-    }
-    if (data.applicationDueTimeField.period === "pm" && dueTimeHours !== 12) {
-      dueTimeHours = dueTimeHours + 12
-    }
-    const dueTime = new Date()
-    dueTime.setHours(
-      dueTimeHours,
-      parseInt(data.applicationDueTimeField.minutes),
-      parseInt(data.applicationDueTimeField.seconds)
-    )
-    return dueTime
+  const createDate = (formDate: { year: string; month: string; day: string }) => {
+    return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
   }
+
+  const createTime = (
+    date: Date,
+    formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
+  ) => {
+    let formattedHours = parseInt(formTime.hours)
+    if (formTime.period === "am" && formattedHours === 12) {
+      formattedHours = 0
+    }
+    if (formTime.period === "pm" && formattedHours !== 12) {
+      formattedHours = formattedHours + 12
+    }
+    date.setHours(formattedHours, parseInt(formTime.minutes), 0)
+    return date
+  }
+
+  const applicationDueDateFormatted = createDate(data.applicationDueDateField)
+  const applicationDueTimeFormatted = createTime(
+    applicationDueDateFormatted,
+    data.applicationDueTimeField
+  )
+
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":
@@ -245,17 +272,26 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     delete unit.tempId
   })
 
+  const events: ListingEventCreate[] = []
+  if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
+    const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
+    const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
+
+    events.push({
+      type: ListingEventType.publicLottery,
+      startTime: startTime,
+      endTime: endTime,
+      note: data.lotteryDateNotes,
+    })
+  }
+
   return {
     ...data,
-    applicationDueTime: getDueTime(),
+    applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
-    applicationDueDate: data.applicationDueDateField
-      ? new Date(
-          `${data.applicationDueDateField.year}-${data.applicationDueDateField.month}-${data.applicationDueDateField.day}`
-        )
-      : null,
+    applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
       data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
@@ -288,6 +324,7 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
       ? data.applicationMailingAddress
       : null,
+    events: events,
   }
 }
 
