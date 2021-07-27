@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
@@ -27,16 +27,22 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 export interface StandardTableProps {
   draggable?: boolean
   headers: TableHeaders
-  data: Record<string, React.ReactNode>[]
+  data: StandardTableData
   tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
 }
 
+export type StandardTableData = Record<string, React.ReactNode>[]
+
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
-  const [tableData, setTableData] = useState(props.data)
+  const [tableData, setTableData] = useState<StandardTableData>()
+
+  useEffect(() => {
+    setTableData(props.data)
+  }, [props.data])
 
   const headerLabels = Object.values(headers).map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
