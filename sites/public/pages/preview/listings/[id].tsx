@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -13,6 +13,7 @@ interface ListingProps {
 
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
+  const [previewBarVisible, setPreviewBarVisible] = useState(true)
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
@@ -26,6 +27,19 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
+      {previewBarVisible && (
+        <div className="pt-6 pb-4 bg-red-700 text-white font-bold text-sm">
+          <div className="max-w-5xl m-auto">{t("listings.listingPreviewOnly")}</div>
+          <button
+            className="-mt-8 alert-box__close text-white"
+            onClick={() => {
+              setPreviewBarVisible(false)
+            }}
+          >
+            &times;
+          </button>
+        </div>
+      )}
       <ListingView listing={listing} preview={true} />
     </Layout>
   )

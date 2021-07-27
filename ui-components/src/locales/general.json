@@ -797,6 +797,7 @@
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
     "latitude": "Latitude",
     "leasingAgentAddress": "Leasing Agent Address",
+    "listingPreviewOnly": "This is a listing preview only.",
     "listingStatus": {
       "active": "Open",
       "pending": "Draft",
