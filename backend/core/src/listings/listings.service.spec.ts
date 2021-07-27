@@ -17,14 +17,35 @@ const origin = "localhost"
 const mockListings = [
   { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [], status: "closed" },
   { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf3", property: { id: "test-property3", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf4", property: { id: "test-property4", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf5", property: { id: "test-property5", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf6", property: { id: "test-property6", units: [] }, preferences: [], status: "closed" },
+  { id: "asdf7", property: { id: "test-property7", units: [] }, preferences: [], status: "closed" },
 ]
+const mockFilteredListings = mockListings.slice(0, 2)
 const mockListingsDto = mapTo<ListingDto, Listing>(ListingDto, mockListings as Listing[])
+const mockFilteredListingsDto = mapTo<ListingDto, Listing>(
+  ListingDto,
+  mockFilteredListings as Listing[]
+)
+const mockInnerQueryBuilder = {
+  select: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
+  groupBy: jest.fn().mockReturnThis(),
+  andWhere: jest.fn().mockReturnThis(),
+  offset: jest.fn().mockReturnThis(),
+  limit: jest.fn().mockReturnThis(),
+  getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
+  getQuery: jest.fn().mockReturnValue("innerQuery"),
+  getCount: jest.fn().mockReturnValue(7),
+}
 const mockQueryBuilder = {
   leftJoinAndSelect: jest.fn().mockReturnThis(),
-  orderBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
-  take: jest.fn().mockReturnThis(),
-  skip: jest.fn().mockReturnThis(),
+  setParameters: jest.fn().mockReturnThis(),
+  orderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
 }
 const mockListingsRepo = {
@@ -59,13 +80,20 @@ describe("ListingsService", () => {
 
   describe("getListingsList", () => {
     it("should not add a WHERE clause if no filters are applied", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+
       const listings = await service.list(origin, {})
 
       expect(listings.items).toEqual(mockListingsDto)
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
     })
 
     it("should add a WHERE clause if the neighborhood filter is applied", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
       const expectedNeighborhood = "Fox Creek"
 
       const queryParams: ListingsQueryParams = {
@@ -78,7 +106,7 @@ describe("ListingsService", () => {
       const listings = await service.list(origin, queryParams)
 
       expect(listings.items).toEqual(mockListingsDto)
-      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
           neighborhood_0: expectedNeighborhood,
@@ -87,6 +115,8 @@ describe("ListingsService", () => {
     })
 
     it("should throw an exception if an unsupported filter is used", async () => {
+      mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
+
       const queryParams: ListingsQueryParams = {
         filter: {
           $comparison: Compare["="],
@@ -100,28 +130,84 @@ describe("ListingsService", () => {
         new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
-  })
 
-  it("should call take() and skip() if pagination params are specified", async () => {
-    // Empty params (no pagination) -> no take/skip
-    let params = {}
-    let listings = await service.list(origin, params)
-    expect(listings.items).toEqual(mockListingsDto)
-    expect(mockQueryBuilder.take).toHaveBeenCalledTimes(0)
-    expect(mockQueryBuilder.skip).toHaveBeenCalledTimes(0)
+    it("should not call limit() and offset() if pagination params are not specified", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
 
-    // Invalid pagination params (page specified, but not limit) -> no take/skip
-    params = { page: 3 }
-    listings = await service.list(origin, params)
-    expect(listings.items).toEqual(mockListingsDto)
-    expect(mockQueryBuilder.take).toHaveBeenCalledTimes(0)
-    expect(mockQueryBuilder.skip).toHaveBeenCalledTimes(0)
+      // Empty params (no pagination) -> no limit/offset
+      const params = {}
+      const listings = await service.list(origin, params)
 
-    // Valid pagination params -> skip and take called appropriately
-    params = { page: 3, limit: 7 }
-    listings = await service.list(origin, params)
-    expect(listings.items).toEqual(mockListingsDto)
-    expect(mockQueryBuilder.take).toHaveBeenCalledWith(7)
-    expect(mockQueryBuilder.skip).toHaveBeenCalledWith(14)
+      expect(listings.items).toEqual(mockListingsDto)
+      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
+      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
+    })
+
+    it("should not call limit() and offset() if incomplete pagination params are specified", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+
+      // Invalid pagination params (page specified, but not limit) -> no limit/offset
+      const params = { page: 3 }
+      const listings = await service.list(origin, params)
+
+      expect(listings.items).toEqual(mockListingsDto)
+      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
+      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
+      expect(listings.meta).toEqual({
+        currentPage: 1,
+        itemCount: mockListings.length,
+        itemsPerPage: mockListings.length,
+        totalItems: mockListings.length,
+        totalPages: 1,
+      })
+    })
+
+    it("should not call limit() and offset() if invalid pagination params are specified", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+
+      // Invalid pagination params (page specified, but not limit) -> no limit/offset
+      const params = { page: ("hello" as unknown) as number } // force the type for testing
+      const listings = await service.list(origin, params)
+
+      expect(listings.items).toEqual(mockListingsDto)
+      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
+      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
+      expect(listings.meta).toEqual({
+        currentPage: 1,
+        itemCount: mockListings.length,
+        itemsPerPage: mockListings.length,
+        totalItems: mockListings.length,
+        totalPages: 1,
+      })
+    })
+
+    it("should call limit() and offset() if pagination params are specified", async () => {
+      mockQueryBuilder.getMany.mockReturnValueOnce(mockFilteredListings)
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+
+      // Valid pagination params -> offset and limit called appropriately
+      const params = { page: 3, limit: 2 }
+      const listings = await service.list(origin, params)
+
+      expect(listings.items).toEqual(mockFilteredListingsDto)
+      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledWith(2)
+      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledWith(4)
+      expect(mockInnerQueryBuilder.getCount).toHaveBeenCalledTimes(1)
+      expect(listings.meta).toEqual({
+        currentPage: 3,
+        itemCount: 2,
+        itemsPerPage: 2,
+        totalItems: mockListings.length,
+        totalPages: 4,
+      })
+    })
   })
 })

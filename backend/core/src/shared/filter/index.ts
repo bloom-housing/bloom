@@ -5,7 +5,7 @@ import { WhereExpression } from "typeorm"
  *
  * @param filterParams
  * @param filterTypeToFieldMap
- * @param qb
+ * @param innerQb The inner query on which filters are applied.
  */
 /**
  * Add filters to provided QueryBuilder, using the provided map to find the field name.
@@ -16,7 +16,7 @@ import { WhereExpression } from "typeorm"
 export function addFilters<FilterParams, FilterFieldMap>(
   filterParams: FilterParams,
   filterTypeToFieldMap: FilterFieldMap,
-  qb: WhereExpression
+  innerQb: WhereExpression
 ): void {
   let comparisons: string[],
     comparisonCount = 0
@@ -29,7 +29,7 @@ export function addFilters<FilterParams, FilterFieldMap>(
     if (filterType === "$comparison") {
       if (Array.isArray(value)) {
         comparisons = value
-      } else if (typeof value == "string") {
+      } else if (typeof value === "string") {
         comparisons = [value]
       }
     } else {
@@ -38,7 +38,7 @@ export function addFilters<FilterParams, FilterFieldMap>(
         // handle multiple values for the same key
         if (Array.isArray(value)) {
           values = value
-        } else if (typeof value == "string") {
+        } else if (typeof value === "string") {
           values = [value]
         }
 
@@ -56,7 +56,7 @@ export function addFilters<FilterParams, FilterFieldMap>(
         values.forEach((val: string, i: number) => {
           // Each WHERE param must be unique across the entire QueryBuilder
           const whereParameterName = `${filterType}_${i}`
-          qb.andWhere(
+          innerQb.andWhere(
             `LOWER(CAST(${filterTypeToFieldMap[filterType.toLowerCase()]} as text)) ${
               comparisonsForCurrentFilter[i]
             } LOWER(:${whereParameterName})`,

@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
   - Made `addFilters()` more generic ([#257](https://github.com/CityOfDetroit/bloom/pull/257))
   - Fixed lowercaseing issue in query built by `addFilters()` ([#264](https://github.com/CityOfDetroit/bloom/pull/264))
+  - Move where clauses and pagination to subquery, so filtered results return all listing data ([#271](https://github.com/CityOfDetroit/bloom/pull/271))
 
 ## Detroit Team M7
 - Added:
