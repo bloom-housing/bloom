@@ -1,3 +1,11 @@
+// dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("dotenv").config()
+} catch {
+  // Pass
+}
+import "newrelic"
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
