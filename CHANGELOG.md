@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file. The format 
   - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
 
 - Added:
+  - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
   - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
 
