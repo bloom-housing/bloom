@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+- Added:
+  - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
+
 ### General
 
 ### Backend
@@ -13,9 +16,17 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
+  - add duplicates to CSV export ([#1352](https://github.com/bloom-housing/bloom/issues/1352))
+  - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
   - User module has been removed and incorporated into Auth module
+  - convert listing events jsonb column to separate listing_events table
+  - convert listing address jsonb columns to separate address tables
+  - removed unused inverse relations from entities
+  - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
+- Added:
+  - ability for an admin to confirm users by `/users` POST/PUT methods
 
 ### Frontend
 
@@ -25,9 +36,14 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
   - A notice bar to the preview page of a listing ([#1532](https://github.com/bloom-housing/bloom/pull/1532)) (Jared White)
+  - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
   - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
 
 ### UI Components
+
+- Fixed:
+
+  - Fix a11y language navigation ([#1528](https://github.com/bloom-housing/bloom/pull/1528)) (Dominik Barcikowski)
 
 - Added:
   - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
@@ -78,7 +94,6 @@ All notable changes to this project will be documented in this file. The format 
   - Cleanup seed data generation and add more variety ([#1312](https://github.com/bloom-housing/bloom/pull/1312)) Emily Jablonski
   - Moved Property model to Listing (https://github.com/bloom-housing/bloom/issues/1328)
   - removed eager relation to listing from User model
-  - removed unused inverse relations from entities
 
 ### Frontend
 
@@ -104,6 +119,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add Application Address section to listing management ([#1425](https://github.com/bloom-housing/bloom/pull/1425)) (Emily Jablonski)
   - Add Application Dates section to listing management ([#1432](https://github.com/bloom-housing/bloom/pull/1432)) (Emily Jablonski)
   - Adds cache revalidation to frontend public app
+  - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
 
 - Fixed:
 
