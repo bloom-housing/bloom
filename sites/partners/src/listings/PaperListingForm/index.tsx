@@ -352,14 +352,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     if (listing?.events) {
-      const events = listing.events.map((event) => ({
-        ...event,
-        startTime: event.startTime,
-        endTime: event.endTime,
-        url: event.url,
-        note: event.note,
-        tempId: nanoid(),
-      }))
+      const events = listing.events
+        .filter((event) => event.type === ListingEventType.openHouse)
+        .map((event) => ({
+          ...event,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          url: event.url,
+          note: event.note,
+          tempId: nanoid(),
+        }))
 
       setOpenHouseEvents(events)
     }
