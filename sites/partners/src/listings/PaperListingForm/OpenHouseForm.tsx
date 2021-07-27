@@ -74,8 +74,8 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
       const data = getValues()
 
       const event = {
-        tempId: nanoid(),
         ...currentEvent,
+        tempId: currentEvent.tempId ? currentEvent.tempId : nanoid(),
         startTime: createTime(createDate(data.date), data.startTime),
         endTime: createTime(createDate(data.date), data.endTime),
         url: data.url,
