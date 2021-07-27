@@ -26,7 +26,7 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 
 export interface StandardTableProps {
   draggable?: boolean
-  setData?: (data: any[]) => void
+  setData?: (data: unknown[]) => void
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
   tableClassName?: string

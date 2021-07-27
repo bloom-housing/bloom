@@ -30,7 +30,7 @@ const DetailPreferences = () => {
       inset
     >
       <ViewItem label={t("listings.activePreferences")} className={"mb-2"} />
-      {listing?.preferences.length ? (
+      {preferenceTableData.length ? (
         <MinimalTable headers={preferencesTableHeaders} data={preferenceTableData} />
       ) : (
         <span className="text-base font-semibold pt-4">{t("t.none")}</span>

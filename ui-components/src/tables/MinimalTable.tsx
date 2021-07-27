@@ -3,7 +3,7 @@ import { TableHeaders, StandardTable } from "./StandardTable"
 
 interface MinimalTableProps {
   draggable?: boolean
-  setData?: (data: any[]) => void
+  setData?: (data: unknown[]) => void
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
   flushLeft?: boolean
