@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
   - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
+
   - User module has been removed and incorporated into Auth module
   - convert listing events jsonb column to separate listing_events table
   - convert listing address jsonb columns to separate address tables
