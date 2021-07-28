@@ -19,6 +19,20 @@ const BuildingDetails = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control } = formMethods
 
+  interface BuildingAddress {
+    city: string
+    state: string
+    street: string
+    zipCode: string
+  }
+
+  const buildingAddress: BuildingAddress = useWatch({
+    control,
+    name: "buildingAddress",
+  })
+
+  console.log(buildingAddress)
+
   const mapPinPosition = useWatch({
     control,
     name: "mapPinPosition",
@@ -33,16 +47,16 @@ const BuildingDetails = () => {
   }
 
   const [viewport, setViewport] = useState({
-    latitude: 37.5658,
-    longitude: -122.2704,
+    latitude: null,
+    longitude: null,
     zoom: 13,
     width: "100%",
     height: 400,
   } as Viewport)
 
   const [marker, setMarker] = useState({
-    latitude: 37.5658,
-    longitude: -122.2704,
+    latitude: null,
+    longitude: null,
   })
 
   const [events, logEvents] = useState({})
@@ -133,60 +147,65 @@ const BuildingDetails = () => {
           />
         </GridCell>
       </GridSection>
-      <GridSection columns={3}>
-        <GridCell span={2}>
-          <ViewItem label={"Map Preview"} />
-          <MapGL
-            mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-            width="100%"
-            height="100%"
-            mapStyle="mapbox://styles/mapbox/streets-v11"
-            scrollZoom={false}
-            onViewportChange={onViewportChange}
-            {...viewport}
-          >
-            <Marker
-              latitude={marker.latitude}
-              longitude={marker.longitude}
-              offsetTop={-20}
-              draggable={mapPinPosition === "custom"}
-              onDragStart={onMarkerDragStart}
-              onDrag={onMarkerDrag}
-              onDragEnd={onMarkerDragEnd}
-            >
-              <div className="pin"></div>
-            </Marker>
-          </MapGL>
-        </GridCell>
-        <GridCell>
-          <GridCell>
-            <p className="field-label m-4 ml-0">{"Map Pin Position"}</p>
-            <FieldGroup
-              name="mapPinPosition"
-              type="radio"
-              fieldGroupClassName={"flex-col"}
-              fieldClassName={"ml-0"}
-              register={register}
-              fields={[
-                {
-                  label: "Automatic",
-                  value: "automatic",
-                  id: "automatic",
-                  note: "Map pin position is based on the address provided",
-                  // defaultChecked: !lotteryEvent,
-                },
-                {
-                  label: "Custom",
-                  value: "custom",
-                  id: "custom",
-                  note: "Drag the pin to update the marker location",
-                  // defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
-                },
-              ]}
-            />
-          </GridCell>
-        </GridCell>
-      </GridSection>
+      {buildingAddress.city &&
+        buildingAddress.state &&
+        buildingAddress.street &&
+        buildingAddress.zipCode && (
+          <GridSection columns={3}>
+            <GridCell span={2}>
+              <ViewItem label={"Map Preview"} />
+              <MapGL
+                mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
+                width="100%"
+                height="100%"
+                mapStyle="mapbox://styles/mapbox/streets-v11"
+                scrollZoom={false}
+                onViewportChange={onViewportChange}
+                {...viewport}
+              >
+                <Marker
+                  latitude={marker.latitude}
+                  longitude={marker.longitude}
+                  offsetTop={-20}
+                  draggable={mapPinPosition === "custom"}
+                  onDragStart={onMarkerDragStart}
+                  onDrag={onMarkerDrag}
+                  onDragEnd={onMarkerDragEnd}
+                >
+                  <div className="pin"></div>
+                </Marker>
+              </MapGL>
+            </GridCell>
+            <GridCell>
+              <GridCell>
+                <p className="field-label m-4 ml-0">{"Map Pin Position"}</p>
+                <FieldGroup
+                  name="mapPinPosition"
+                  type="radio"
+                  fieldGroupClassName={"flex-col"}
+                  fieldClassName={"ml-0"}
+                  register={register}
+                  fields={[
+                    {
+                      label: "Automatic",
+                      value: "automatic",
+                      id: "automatic",
+                      note: "Map pin position is based on the address provided",
+                      // defaultChecked: !lotteryEvent,
+                    },
+                    {
+                      label: "Custom",
+                      value: "custom",
+                      id: "custom",
+                      note: "Drag the pin to update the marker location",
+                      // defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
+                    },
+                  ]}
+                />
+              </GridCell>
+            </GridCell>
+          </GridSection>
+        )}
     </GridSection>
   )
 }
