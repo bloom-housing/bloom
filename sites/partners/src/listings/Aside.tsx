@@ -10,10 +10,9 @@ import {
   StatusMessages,
   LocalizedLink,
   LinkButton,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "./ListingContext"
-import { ListingStatus, UserRole } from "@bloom-housing/backend-core/types"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
   type: AsideType
@@ -25,7 +24,6 @@ type AsideType = "add" | "edit" | "details"
 
 const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
   const listing = useContext(ListingContext)
-  const { profile } = useContext(AuthContext)
 
   const listingId = listing?.id
 
@@ -57,18 +55,9 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
       elements.push(
         <GridCell key="btn-submitNew">
           <LocalizedLink href={`/listings/${listingId}/edit`}>
-            {profile.roles.includes(UserRole.admin) && process.env.showLMLinks && (
-              <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-                {t("t.edit")}
-              </Button>
-            )}
-          </LocalizedLink>
-          <LocalizedLink href={`/`}>
-            {!profile.roles.includes(UserRole.admin) && process.env.showLMLinks && (
-              <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
-                {t("Request Edit")}
-              </Button>
-            )}
+            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+              {t("t.edit")}
+            </Button>
           </LocalizedLink>
         </GridCell>
       )
@@ -164,7 +153,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
     }
 
     return elements
-  }, [listing, listingId, profile.roles, setStatus, showCloseListingModal, type])
+  }, [listing, listingId, setStatus, showCloseListingModal, type])
 
   return (
     <>
