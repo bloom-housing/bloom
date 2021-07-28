@@ -47,28 +47,34 @@ const ListingMap = (props: ListingMapProps) => {
   } as Viewport)
 
   useEffect(() => {
-    if (!props.address?.latitude || !props.address?.longitude) {
-      const geocodingClient = GeocodeService({
-        accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
-      })
+    // Don't send a Mapbox request on every address key press - delay slightly instead
+    let timer = setTimeout(() => {
+      if (!props.address?.latitude || !props.address?.longitude) {
+        const geocodingClient = GeocodeService({
+          accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+        })
 
-      geocodingClient
-        .forwardGeocode({
-          query: `${props.address?.street}, ${props.address?.city}, ${props.address?.state}, ${props.address?.zipCode}`,
-          limit: 1,
-        })
-        .send()
-        .then((response: MapboxApiResponse) => {
-          setMarker({
-            latitude: response.body.features[0].center[1],
-            longitude: response.body.features[0].center[0],
+        geocodingClient
+          .forwardGeocode({
+            query: `${props.address?.street}, ${props.address?.city}, ${props.address?.state}, ${props.address?.zipCode}`,
+            limit: 1,
           })
-          setViewport({
-            ...viewport,
-            latitude: response.body.features[0].center[1],
-            longitude: response.body.features[0].center[0],
+          .send()
+          .then((response: MapboxApiResponse) => {
+            setMarker({
+              latitude: response.body.features[0].center[1],
+              longitude: response.body.features[0].center[0],
+            })
+            setViewport({
+              ...viewport,
+              latitude: response.body.features[0].center[1],
+              longitude: response.body.features[0].center[0],
+            })
           })
-        })
+      }
+    }, 500)
+    return () => {
+      clearTimeout(timer)
     }
   }, [props.address])
 
