@@ -26,12 +26,15 @@ All notable changes to this project will be documented in this file. The format 
   - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
+
   - User module has been removed and incorporated into Auth module
   - convert listing events jsonb column to separate listing_events table
   - convert listing address jsonb columns to separate address tables
   - removed unused inverse relations from entities
   - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
   - Listing applicationMethods jsonb column has been converted to a separate table
+  - updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
+
 - Added:
   - ability for an admin to confirm users by `/users` POST/PUT methods
 
