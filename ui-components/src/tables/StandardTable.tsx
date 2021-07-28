@@ -26,6 +26,7 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 
 export interface StandardTableProps {
   draggable?: boolean
+  setData?: (data: unknown[]) => void
   headers: TableHeaders
   data: StandardTableData
   tableClassName?: string
@@ -44,10 +45,14 @@ export const StandardTable = (props: StandardTableProps) => {
     setTableData(props.data)
   }, [props.data])
 
-  const headerLabels = Object.values(headers).map((header, index) => {
+  const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
   })
+
+  useEffect(() => {
+    setTableData(props.data)
+  }, [props.data])
 
   if (props.draggable) {
     headerLabels.splice(
@@ -65,7 +70,8 @@ export const StandardTable = (props: StandardTableProps) => {
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
-    const cols = Object.keys(headers).map((colKey, colIndex) => {
+
+    const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
       return (
@@ -92,7 +98,7 @@ export const StandardTable = (props: StandardTableProps) => {
       )
     }
     return (
-      <>
+      <React.Fragment key={rowKey}>
         {props.draggable ? (
           <Draggable draggableId={rowKey} index={dataIndex} key={rowKey}>
             {(provided, snapshot) => (
@@ -114,7 +120,7 @@ export const StandardTable = (props: StandardTableProps) => {
             {cols}
           </tr>
         )}
-      </>
+      </React.Fragment>
     )
   })
 
@@ -148,6 +154,9 @@ export const StandardTable = (props: StandardTableProps) => {
     }
     const reorderedTableData = reorder(tableData, result.source.index, result.destination.index)
     setTableData(reorderedTableData)
+    if (props.setData && reorderedTableData) {
+      props.setData(reorderedTableData)
+    }
   }
 
   return (

@@ -25,6 +25,7 @@ import {
   ListingEvent,
   ListingEventType,
   ListingEventCreate,
+  Preference,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -44,6 +45,7 @@ import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
+import Preferences from "./sections/Preferences"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -212,7 +214,12 @@ export type TempEvent = ListingEvent & {
   tempId?: string
 }
 
-const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: TempEvent[]) => {
+const formatFormData = (
+  data: FormListing,
+  units: TempUnit[],
+  openHouseEvents: TempEvent[],
+  preferences: Preference[]
+) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
 
@@ -285,6 +292,7 @@ const formatFormData = (data: FormListing, units: TempUnit[], openHouseEvents: T
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
+    preferences: preferences,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -340,6 +348,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
+  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+
+  /**
+   * Close modal
+   */
   const [closeModal, setCloseModal] = useState(false)
 
   useEffect(() => {
@@ -386,8 +399,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, units, openHouseEvents)
-
+        const orderedPreferences = preferences.map((pref, index) => {
+          return { ...pref, ordinal: index }
+        })
+        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -409,7 +424,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router]
+    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
   )
 
   const onError = () => {
@@ -474,6 +489,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         setUnits={setUnits}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
+                      <Preferences preferences={preferences} setPreferences={setPreferences} />
                       <AdditionalFees />
                       <BuildingFeatures />
                       <AdditionalEligibility />
