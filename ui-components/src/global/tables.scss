@@ -95,11 +95,30 @@ tr.group-reserved td:first-of-type {
   @apply border-accent-warm;
 }
 
+table.alternate-rows {
+  tr:nth-of-type(even) {
+    // background: inherit;
+    @apply bg-primary-lighter;
+    td {
+      @apply bg-primary-lighter;
+    }
+  }
+}
+
 /* Hat tip to this CSS solution:
 https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
 @media screen and (max-width: 639px) {
   table.responsive-collapse {
+    &.alternate-rows {
+      tr:nth-of-type(even) {
+        background: inherit;
+      }
+
+      td:nth-of-type(even) {
+        @apply bg-primary-lighter;
+      }
+    }
     thead {
       @apply hidden;
     }
@@ -107,14 +126,6 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     tr {
       @apply block;
       @apply mb-6;
-    }
-
-    tr:nth-of-type(even) {
-      background: inherit;
-    }
-
-    td:nth-of-type(even) {
-      @apply bg-primary-lighter;
     }
 
     td {

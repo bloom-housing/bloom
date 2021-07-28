@@ -5,8 +5,12 @@ import { getTranslationWithArguments } from "../helpers/getTranslationWithArgume
 import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 
+export interface TableHeadersOptions {
+  name: string
+  className: string
+}
 export interface TableHeaders {
-  [key: string]: string
+  [key: string]: string | TableHeadersOptions
 }
 
 export const Row = (props: { id?: string; className?: string; children: React.ReactNode }) => (
@@ -46,6 +50,21 @@ export interface StandardTableProps {
 
 export type StandardTableData = Record<string, React.ReactNode>[] | undefined
 
+const headerName = (header: string | TableHeadersOptions) => {
+  if (typeof header === "string") {
+    return header
+  } else {
+    return header.name
+  }
+}
+const headerClassName = (header: string | TableHeadersOptions) => {
+  if (typeof header === "string") {
+    return ""
+  } else {
+    return header.className
+  }
+}
+
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
@@ -57,7 +76,11 @@ export const StandardTable = (props: StandardTableProps) => {
 
   const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
+    return (
+      <HeaderCell key={uniqKey} className={headerClassName(header)}>
+        {getTranslationWithArguments(headerName(header))}
+      </HeaderCell>
+    )
   })
 
   useEffect(() => {
@@ -87,8 +110,8 @@ export const StandardTable = (props: StandardTableProps) => {
       return (
         <Cell
           key={uniqKey}
-          headerLabel={getTranslationWithArguments(headers[colKey])}
-          className={cellClassName}
+          headerLabel={getTranslationWithArguments(headerName(headers[colKey]))}
+          className={[cellClassName, headerClassName(headers[colKey])].join(" ")}
         >
           {cell}
         </Cell>

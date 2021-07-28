@@ -35,7 +35,9 @@ while (i > 0) {
   i--
 }
 
-export const Default = () => <MinimalTable headers={headers} data={data} />
+export const Default = () => (
+  <MinimalTable headers={headers} data={data} className="alternate-rows" />
+)
 
 const headersWithImage = { image: "Image", ...headers }
 const dataWithImage = [...data] as any
