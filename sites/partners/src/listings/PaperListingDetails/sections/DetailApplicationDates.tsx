@@ -120,11 +120,11 @@ const DetailApplicationDates = () => {
                       {drawer?.label ?? t("t.url")}
                     </LinkButton>
                   ) : (
-                    t("n/a")
+                    t("t.n/a")
                   )}
                 </ViewItem>
                 <ViewItem label={t("listings.events.openHouseNotes")}>
-                  {drawer?.note || t("n/a")}
+                  {drawer?.note || t("t.n/a")}
                 </ViewItem>
               </GridSection>
             </GridSection>
