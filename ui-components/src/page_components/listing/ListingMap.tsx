@@ -34,34 +34,30 @@ const ListingMap = (props: ListingMapProps) => {
     setViewPort({ ...viewport })
   }
 
-  if (!props.address) return null
+  if (!props.address || !props?.address.latitude || !props.address.longitude) return null
 
   return (
-    <>
-      {props.address.latitude && props.address.longitude && (
-        <div className="listing-map">
-          <div className="addressPopup">
-            <h3 className="text-caps-tiny">{props.listingName}</h3>
-            <MultiLineAddress address={props.address} />
-          </div>
-          <ReactMapGL
-            mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-            onViewportChange={onViewportChange}
-            mapStyle="mapbox://styles/mapbox/streets-v11"
-            scrollZoom={false}
-            {...viewport}
-          >
-            <Marker
-              latitude={props.address.latitude}
-              longitude={props.address.longitude}
-              offsetTop={-20}
-            >
-              <div className="pin"></div>
-            </Marker>
-          </ReactMapGL>
-        </div>
-      )}
-    </>
+    <div className="listing-map">
+      <div className="addressPopup">
+        <h3 className="text-caps-tiny">{props.listingName}</h3>
+        <MultiLineAddress address={props.address} />
+      </div>
+      <ReactMapGL
+        mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
+        onViewportChange={onViewportChange}
+        mapStyle="mapbox://styles/mapbox/streets-v11"
+        scrollZoom={false}
+        {...viewport}
+      >
+        <Marker
+          latitude={props.address.latitude}
+          longitude={props.address.longitude}
+          offsetTop={-20}
+        >
+          <div className="pin"></div>
+        </Marker>
+      </ReactMapGL>
+    </div>
   )
 }
 export { ListingMap as default, ListingMap }
