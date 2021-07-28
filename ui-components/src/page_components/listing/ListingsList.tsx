@@ -6,6 +6,9 @@ import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummari
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
 import { imageUrlFromListing } from "../../helpers/photos"
 import { t } from "../../helpers/translator"
+import moment from "moment"
+import { openDateState } from "../../helpers/state"
+import { ApplicationStatusType } from "../../global/ApplicationStatusType"
 import "./ListingsList.scss"
 
 export interface ListingsProps {
@@ -35,6 +38,46 @@ const ListingsList = (props: ListingsProps) => {
     // address as subtitle
     const { street, city, state, zipCode } = listing.buildingAddress || {}
     const subtitle = `${street}, ${city} ${state}, ${zipCode}`
+    let content = ""
+    let formattedDate = ""
+    let appStatus = ApplicationStatusType.Open
+
+    if (openDateState(listing)) {
+      const date = listing.applicationOpenDate
+      const openDate = moment(date)
+      formattedDate = openDate.format("MMMM D, YYYY")
+      content = t("listings.comingSoon")
+
+      // the line below is logic that was previously in /ui-components/src/notifications/ApplicationStatus.tsx
+      // `vivid` is a prop on ApplicationStatus that determines background color and text size
+      // but it was also previously used to determine content
+      // what is the corresponding date to determine content here?
+      // content = vivid ? t("listings.comingSoon") : t("listings.applicationOpenPeriod")
+    } else {
+      if (listing.applicationDueDate) {
+        const dueDate = moment(listing.applicationDueDate)
+        const dueTime = moment(listing.applicationDueTime)
+        formattedDate = dueDate.format("MMM. DD, YYYY")
+
+        if (listing.applicationDueTime) {
+          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
+        }
+
+        // if due date is in future, listing is open
+        if (moment() < dueDate) {
+          content = t("listings.applicationDeadline")
+        } else {
+          appStatus = ApplicationStatusType.Closed
+          content = t("listings.applicationsClosed")
+        }
+      } else {
+        content = t("listings.applicationFCFS")
+      }
+    }
+
+    if (formattedDate != "") {
+      content = content + `: ${formattedDate}`
+    }
 
     return (
       <article key={listing.id} className="listings-row">
@@ -44,7 +87,8 @@ const ListingsList = (props: ListingsProps) => {
             subtitle={subtitle}
             imageUrl={imageUrl}
             href={`/listing/${listing.id}/${listing.urlSlug}`}
-            listing={listing}
+            appStatus={appStatus}
+            appStatusContent={content}
           />
         </div>
         <div className="listings-row_content">
