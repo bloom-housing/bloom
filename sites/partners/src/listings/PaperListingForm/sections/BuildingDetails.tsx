@@ -127,7 +127,7 @@ const BuildingDetails = ({ listing }: BuildingDetailsProps) => {
           {displayMapPreview() ? (
             <ListingMap
               listingName={listing?.name}
-              address={{ ...buildingAddress, latitude: 37.36537, longitude: -121.91071 }}
+              address={{ ...buildingAddress }}
               customPinPositioning={mapPinPosition === "custom"}
             />
           ) : (

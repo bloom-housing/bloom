@@ -26,7 +26,7 @@ console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.
 
 const MAPBOX_TOKEN =
   process.env.MAPBOX_TOKEN ||
-  "pk.eyJ1IjoibWplZHJhcyIsImEiOiJjazI2OHA5YzQycTBpM29xdDVwbXNyMDlwIn0.XS5ilGzTh_yVl3XY-8UKeA"
+  "pk.eyJ1Ijoic2Vhbi1hbGJlcnQtZXh5Z3kiLCJhIjoiY2tybnY5amlyMDNraDJubXc4c3ZhOGswYyJ9.KE5FGb_Tch8BPrOYMvshXw"
 // Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
