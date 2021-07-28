@@ -4,7 +4,7 @@ import { ListingContext } from "../../ListingContext"
 
 const DetailBuildingDetails = () => {
   const listing = useContext(ListingContext)
-
+  console.log("buildingAddress from details", listing?.buildingAddress)
   return (
     <GridSection
       className="bg-primary-lighter"
@@ -33,10 +33,10 @@ const DetailBuildingDetails = () => {
       </GridSection>
       <GridSection columns={3}>
         <ViewItem label={t("listings.longitude")}>
-          {listing.buildingAddress.longitude.toString()}
+          {listing.buildingAddress.longitude && listing.buildingAddress.longitude.toString()}
         </ViewItem>
         <ViewItem label={t("listings.latitude")}>
-          {listing.buildingAddress.latitude.toString()}
+          {listing.buildingAddress.latitude && listing.buildingAddress.latitude.toString()}
         </ViewItem>
       </GridSection>
     </GridSection>

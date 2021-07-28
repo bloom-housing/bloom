@@ -13,6 +13,7 @@ import {
   TimeFieldPeriod,
   Modal,
   AppearanceBorderType,
+  LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -217,7 +218,8 @@ const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[]
+  preferences: Preference[],
+  saveLatLong: LatitudeLongitude
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -294,6 +296,11 @@ const formatFormData = (
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     preferences: preferences,
+    buildingAddress: {
+      ...data.buildingAddress,
+      latitude: saveLatLong.latitude,
+      longitude: saveLatLong.longitude,
+    },
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -351,6 +358,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [latLong, setLatLong] = useState<LatitudeLongitude>({
+    latitude: listing?.buildingAddress.latitude,
+    longitude: listing?.buildingAddress.longitude,
+  })
+
+  const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
+    if (!loading) {
+      setLatLong(latlong)
+    }
+  }
 
   /**
    * Close modal
@@ -401,6 +418,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   */
   const onSubmit = useCallback(
     async (data: FormListing, status: ListingStatus) => {
+      console.warn("onSubmit")
+
       try {
         data = {
           ...data,
@@ -409,7 +428,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         const orderedPreferences = preferences.map((pref, index) => {
           return { ...pref, ordinal: index + 1 }
         })
-        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
+        const formattedData = formatFormData(
+          data,
+          units,
+          openHouseEvents,
+          orderedPreferences,
+          latLong
+        )
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -431,7 +456,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
+    [units, openHouseEvents, editMode, listingsService, listing, router, preferences, latLong]
   )
 
   const onError = () => {
@@ -444,6 +469,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
+
+  console.log("latLong from form", latLong)
 
   return (
     <>
@@ -490,7 +517,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <div className="info-card md:w-9/12">
                       <ListingIntro />
                       <ListingPhoto />
-                      <BuildingDetails listing={listing} />
+                      <BuildingDetails
+                        listing={listing}
+                        setLatLong={setLatitudeLongitude}
+                        latLong={latLong}
+                      />
                       <CommunityType listing={listing} />
                       <Units
                         units={units}

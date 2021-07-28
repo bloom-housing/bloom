@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
-const GeocodeService = require("@mapbox/mapbox-sdk/services/geocoding")
 
 import "./ListingMap.scss"
 import { MultiLineAddress, Address } from "../../helpers/address"
@@ -10,6 +9,12 @@ export interface ListingMapProps {
   address?: Address
   listingName?: string
   customPinPositioning?: boolean
+  setLatLong?: (latLong: LatitudeLongitude) => void
+}
+
+export interface LatitudeLongitude {
+  latitude: number
+  longitude: number
 }
 
 export interface Viewport {
@@ -18,18 +23,6 @@ export interface Viewport {
   latitude?: number
   longitude?: number
   zoom: number
-}
-
-interface MapBoxFeature {
-  center: number[] // Index 0: longitude, Index 1: latitude
-}
-
-interface MapboxApiResponseBody {
-  features: MapBoxFeature[]
-}
-
-interface MapboxApiResponse {
-  body: MapboxApiResponseBody
 }
 
 const ListingMap = (props: ListingMapProps) => {
@@ -47,42 +40,31 @@ const ListingMap = (props: ListingMapProps) => {
   } as Viewport)
 
   useEffect(() => {
-    // Don't send a Mapbox request on every address key press - delay slightly instead
-    let timer = setTimeout(() => {
-      if (!props.address?.latitude || !props.address?.longitude) {
-        const geocodingClient = GeocodeService({
-          accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
-        })
-
-        geocodingClient
-          .forwardGeocode({
-            query: `${props.address?.street}, ${props.address?.city}, ${props.address?.state}, ${props.address?.zipCode}`,
-            limit: 1,
-          })
-          .send()
-          .then((response: MapboxApiResponse) => {
-            setMarker({
-              latitude: response.body.features[0].center[1],
-              longitude: response.body.features[0].center[0],
-            })
-            setViewport({
-              ...viewport,
-              latitude: response.body.features[0].center[1],
-              longitude: response.body.features[0].center[0],
-            })
-          })
-      }
-    }, 500)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [props.address])
+    onViewportChange({
+      ...viewport,
+      latitude: props.address?.latitude,
+      longitude: props.address?.longitude,
+    })
+    setMarker({
+      latitude: props.address?.latitude,
+      longitude: props.address?.longitude,
+    })
+  }, [props.address?.latitude, props.address?.longitude])
 
   const onMarkerDragEnd = useCallback((event) => {
-    setMarker({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
-    })
+    if (props.customPinPositioning) {
+      if (props.setLatLong) {
+        console.log("setting LAT LONG")
+        props.setLatLong({
+          latitude: event.lngLat[1],
+          longitude: event.lngLat[0],
+        })
+      }
+      setMarker({
+        latitude: event.lngLat[1],
+        longitude: event.lngLat[0],
+      })
+    }
   }, [])
 
   const onViewportChange = (viewport: Viewport) => {

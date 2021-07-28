@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -10,14 +10,31 @@ import {
   stateKeys,
   FieldGroup,
   ListingMap,
+  LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
+import { useEffect } from "react"
+const GeocodeService = require("@mapbox/mapbox-sdk/services/geocoding")
+
+interface MapBoxFeature {
+  center: number[] // Index 0: longitude, Index 1: latitude
+}
+
+interface MapboxApiResponseBody {
+  features: MapBoxFeature[]
+}
+
+interface MapboxApiResponse {
+  body: MapboxApiResponseBody
+}
 
 type BuildingDetailsProps = {
   listing?: FormListing
+  latLong?: LatitudeLongitude
+  setLatLong?: (latLong: LatitudeLongitude) => void
 }
 
-const BuildingDetails = ({ listing }: BuildingDetailsProps) => {
+const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -49,6 +66,37 @@ const BuildingDetails = ({ listing }: BuildingDetailsProps) => {
       buildingAddress.zipCode.length === 5
     )
   }
+
+  const geocodingClient = GeocodeService({
+    accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+  })
+
+  const getNewLatLong = () => {
+    if (
+      buildingAddress.city &&
+      buildingAddress.state &&
+      buildingAddress.street &&
+      buildingAddress.zipCode &&
+      geocodingClient
+    ) {
+      geocodingClient
+        .forwardGeocode({
+          query: `${buildingAddress.street}, ${buildingAddress.city}, ${buildingAddress.state}, ${buildingAddress.zipCode}`,
+          limit: 1,
+        })
+        .send()
+        .then((response: MapboxApiResponse) => {
+          console.log("SETTING LAT LONG FROM USE EFFECT")
+          setLatLong({
+            latitude: response.body.features[0].center[1],
+            longitude: response.body.features[0].center[0],
+          })
+        })
+    }
+  }
+  useEffect(() => {
+    getNewLatLong()
+  }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
 
   //TODO: On switch to automatic, change lat/long back to address default
 
@@ -127,8 +175,16 @@ const BuildingDetails = ({ listing }: BuildingDetailsProps) => {
           {displayMapPreview() ? (
             <ListingMap
               listingName={listing?.name}
-              address={{ ...buildingAddress }}
+              address={{
+                city: buildingAddress.city,
+                state: buildingAddress.state,
+                street: buildingAddress.street,
+                zipCode: buildingAddress.zipCode,
+                latitude: latLong.latitude,
+                longitude: latLong.longitude,
+              }}
               customPinPositioning={mapPinPosition === "custom"}
+              setLatLong={setLatLong}
             />
           ) : (
             <div className={"w-full h-64 bg-gray-400 p-3 flex items-center justify-center"}>
