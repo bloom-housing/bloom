@@ -11,6 +11,7 @@ import {
   TimeField,
   Drawer,
   Button,
+  LinkButton,
   AppearanceSizeType,
   MinimalTable,
   Modal,
@@ -47,7 +48,13 @@ const ApplicationDates = ({
         date: startTime && getDetailFieldDate(startTime),
         startTime: startTime && getDetailFieldTime(startTime),
         endTime: endTime && getDetailFieldTime(endTime),
-        url: url ?? "",
+        url: url.length ? (
+          <LinkButton className="mx-0 my-0" href={url} unstyled>
+            {t("t.url")}
+          </LinkButton>
+        ) : (
+          t("t.n/a")
+        ),
         action: (
           <div className="flex">
             <Button

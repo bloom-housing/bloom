@@ -9,6 +9,7 @@ import {
   Button,
   Drawer,
   AppearanceStyleType,
+  LinkButton,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldDate, getDetailFieldTime } from "./helpers"
@@ -38,7 +39,13 @@ const DetailApplicationDates = () => {
             date: startTime && getDetailFieldDate(startTime),
             startTime: startTime && getDetailFieldTime(startTime),
             endTime: endTime && getDetailFieldTime(endTime),
-            url: url ? url : "",
+            url: url ? (
+              <LinkButton className="mx-0" href={url} unstyled>
+                {t("t.url")}
+              </LinkButton>
+            ) : (
+              t("t.n/a")
+            ),
             view: (
               <div className="flex">
                 <Button
@@ -107,7 +114,15 @@ const DetailApplicationDates = () => {
                 <ViewItem label={t("t.endTime")}>
                   {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
                 </ViewItem>
-                <ViewItem label={t("t.url")}>{drawer?.url || t("n/a")}</ViewItem>
+                <ViewItem label={t("t.url")}>
+                  {drawer?.url ? (
+                    <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
+                      {drawer?.label ?? t("t.url")}
+                    </LinkButton>
+                  ) : (
+                    t("n/a")
+                  )}
+                </ViewItem>
                 <ViewItem label={t("listings.events.openHouseNotes")}>
                   {drawer?.note || t("n/a")}
                 </ViewItem>

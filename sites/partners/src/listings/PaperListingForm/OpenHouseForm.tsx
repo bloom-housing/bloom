@@ -16,6 +16,7 @@ import {
   TimeField,
   TimeFieldValues,
   formatDateToTimeField,
+  urlRegex,
 } from "@bloom-housing/ui-components"
 
 import { TempEvent } from "./index"
@@ -31,6 +32,7 @@ export type OpenHouseFormValues = {
   date: DateFieldValues
   startTime: TimeFieldValues
   endTime: TimeFieldValues
+  label?: string
   url?: string
   note?: string
 }
@@ -39,9 +41,10 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
   const defaultValues = (() => {
     if (!currentEvent) return null
 
-    const { startTime, endTime, url, note } = currentEvent || {}
+    const { startTime, endTime, label, url, note } = currentEvent || {}
     const values = {}
 
+    label && Object.assign(values, { label })
     url && Object.assign(values, { url })
     note && Object.assign(values, { note })
     startTime && Object.assign(values, { startTime: formatDateToTimeField(startTime) })
@@ -78,6 +81,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
         tempId: currentEvent.tempId ? currentEvent.tempId : nanoid(),
         startTime: createTime(createDate(data.date), data.startTime),
         endTime: createTime(createDate(data.date), data.endTime),
+        label: data.label,
         url: data.url,
         note: data.note,
       }
@@ -137,17 +141,39 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
             </ViewItem>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("t.url")}>
-              <Field
-                id="url"
-                name="url"
-                label={t("t.url")}
-                placeholder={t("t.url")}
-                register={register}
-                readerOnly
-              />
-            </ViewItem>
+            <GridSection columns={1}>
+              <GridCell>
+                <ViewItem label={t("t.label")}>
+                  <Field
+                    id="label"
+                    name="label"
+                    label={t("t.label")}
+                    placeholder={t("t.label")}
+                    register={register}
+                    readerOnly
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell>
+                <ViewItem label={t("t.url")}>
+                  <Field
+                    id="url"
+                    name="url"
+                    label={t("t.url")}
+                    placeholder={t("t.url")}
+                    register={register}
+                    readerOnly
+                    error={!!errors?.url}
+                    errorMessage={t("errors.urlError")}
+                    validation={{
+                      pattern: urlRegex,
+                    }}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
           </GridCell>
+
           <GridCell>
             <ViewItem label={t("listings.events.openHouseNotes")}>
               <Textarea
@@ -158,6 +184,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 register={register}
                 readerOnly
                 note={t("t.optional")}
+                rows={5}
               />
             </ViewItem>
           </GridCell>
