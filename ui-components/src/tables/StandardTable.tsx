@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
@@ -28,16 +28,22 @@ export interface StandardTableProps {
   draggable?: boolean
   setData?: (data: unknown[]) => void
   headers: TableHeaders
-  data: Record<string, React.ReactNode>[]
+  data: StandardTableData
   tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
 }
 
+export type StandardTableData = Record<string, React.ReactNode>[] | undefined
+
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
-  const [tableData, setTableData] = useState<Record<string, React.ReactNode>[]>(props.data)
+  const [tableData, setTableData] = useState<StandardTableData>()
+
+  useEffect(() => {
+    setTableData(props.data)
+  }, [props.data])
 
   const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
@@ -127,10 +133,12 @@ export const StandardTable = (props: StandardTableProps) => {
   }
 
   const reorder = (
-    list: Record<string, React.ReactNode>[],
+    list: Record<string, React.ReactNode>[] | undefined,
     startIndex: number,
     endIndex: number
   ) => {
+    if (!list) return
+
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
@@ -146,7 +154,7 @@ export const StandardTable = (props: StandardTableProps) => {
     }
     const reorderedTableData = reorder(tableData, result.source.index, result.destination.index)
     setTableData(reorderedTableData)
-    if (props.setData) {
+    if (props.setData && reorderedTableData) {
       props.setData(reorderedTableData)
     }
   }
