@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
+const GeocodeService = require("@mapbox/mapbox-sdk/services/geocoding")
 
 import "./ListingMap.scss"
 import { MultiLineAddress, Address } from "../../helpers/address"
@@ -19,7 +20,38 @@ export interface Viewport {
   zoom: number
 }
 
+interface MapBoxFeature {
+  center: number[]
+}
+
+interface MapboxApiResponseBody {
+  features: MapBoxFeature[]
+}
+
+interface MapboxApiResponse {
+  body: MapboxApiResponseBody
+}
+
 const ListingMap = (props: ListingMapProps) => {
+  if (process.env.mapBoxToken || process.env.MAPBOX_TOKEN) {
+    const geocodingClient = GeocodeService({
+      accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+    })
+
+    geocodingClient
+      .forwardGeocode({
+        query: "434 Bennington Ct, Saline MI, 48176",
+        limit: 1,
+      })
+      .send()
+      .then((response: MapboxApiResponse) => {
+        setMarker({
+          latitude: response.body.features[0].center[0],
+          longitude: response.body.features[0].center[1],
+        })
+      })
+  }
+
   const [viewport, setViewport] = useState({
     latitude: props.address?.latitude,
     longitude: props.address?.longitude,
