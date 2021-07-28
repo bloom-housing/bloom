@@ -371,7 +371,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
     setLoading(true)
-    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
+    const dataToSubmit = { ...submitData.data, ...data }
+    console.info("*** dataToSubmit", dataToSubmit)
+    setSubmitData({ ready: true, data: dataToSubmit })
   }
 
   /*
@@ -483,7 +485,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <LotteryResults
                           submitCallback={(data) => {
                             setStatus(ListingStatus.closed)
-                            triggerSubmit({ ...getValues(), ...data })
+                            const saveData = { ...getValues(), ...data }
+                            console.info("*** saveData", saveData)
+                            triggerSubmit(saveData)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}

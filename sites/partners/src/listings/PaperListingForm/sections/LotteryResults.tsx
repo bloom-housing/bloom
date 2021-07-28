@@ -67,6 +67,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
     }
 
     updatedEvents.push(newEvent as ListingEvent)
+    console.info("*** saving events", updatedEvents)
     submitCallback({ events: updatedEvents })
   }
 
