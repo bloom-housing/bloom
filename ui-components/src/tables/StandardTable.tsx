@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
-import Icon from "../icons/Icon"
+import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 
 export interface TableHeaders {
@@ -64,6 +64,7 @@ export const StandardTable = (props: StandardTableProps) => {
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
+
     const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
@@ -91,7 +92,7 @@ export const StandardTable = (props: StandardTableProps) => {
       )
     }
     return (
-      <>
+      <React.Fragment key={rowKey}>
         {props.draggable ? (
           <Draggable draggableId={rowKey} index={dataIndex} key={rowKey}>
             {(provided, snapshot) => (
@@ -113,7 +114,7 @@ export const StandardTable = (props: StandardTableProps) => {
             {cols}
           </tr>
         )}
-      </>
+      </React.Fragment>
     )
   })
 
