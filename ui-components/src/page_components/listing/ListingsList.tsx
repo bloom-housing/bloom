@@ -46,13 +46,16 @@ const ListingsList = (props: ListingsProps) => {
       const date = listing.applicationOpenDate
       const openDate = moment(date)
       formattedDate = openDate.format("MMMM D, YYYY")
-      content = t("listings.comingSoon")
 
-      // the line below is logic that was previously in /ui-components/src/notifications/ApplicationStatus.tsx
+      // XXX: the line below is logic that was previously in /ui-components/src/notifications/ApplicationStatus.tsx
       // `vivid` is a prop on ApplicationStatus that determines background color and text size
-      // but it was also previously used to determine content
+      // but it was also used to determine content
       // what is the corresponding date to determine content here?
+      //
       // content = vivid ? t("listings.comingSoon") : t("listings.applicationOpenPeriod")
+      //
+      // for now, use listings.comingSoon
+      content = t("listings.comingSoon")
     } else {
       if (listing.applicationDueDate) {
         const dueDate = moment(listing.applicationDueDate)
