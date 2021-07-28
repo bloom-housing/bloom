@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { nanoid } from "nanoid"
 import { getTranslationWithArguments } from "../helpers/getTranslationWithArguments"
-import Icon from "../icons/Icon"
+import { Icon } from "../icons/Icon"
 import { t } from "../helpers/translator"
 
 export interface TableHeaders {
@@ -26,6 +26,7 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 
 export interface StandardTableProps {
   draggable?: boolean
+  setData?: (data: unknown[]) => void
   headers: TableHeaders
   data: Record<string, React.ReactNode>[]
   tableClassName?: string
@@ -36,12 +37,16 @@ export interface StandardTableProps {
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
-  const [tableData, setTableData] = useState(props.data)
+  const [tableData, setTableData] = useState<Record<string, React.ReactNode>[]>(props.data)
 
-  const headerLabels = Object.values(headers).map((header, index) => {
+  const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return <th key={uniqKey}>{getTranslationWithArguments(header)}</th>
   })
+
+  useEffect(() => {
+    setTableData(props.data)
+  }, [props.data])
 
   if (props.draggable) {
     headerLabels.splice(
@@ -59,7 +64,8 @@ export const StandardTable = (props: StandardTableProps) => {
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
-    const cols = Object.keys(headers).map((colKey, colIndex) => {
+
+    const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
       return (
@@ -86,7 +92,7 @@ export const StandardTable = (props: StandardTableProps) => {
       )
     }
     return (
-      <>
+      <React.Fragment key={rowKey}>
         {props.draggable ? (
           <Draggable draggableId={rowKey} index={dataIndex} key={rowKey}>
             {(provided, snapshot) => (
@@ -108,7 +114,7 @@ export const StandardTable = (props: StandardTableProps) => {
             {cols}
           </tr>
         )}
-      </>
+      </React.Fragment>
     )
   })
 
@@ -140,6 +146,9 @@ export const StandardTable = (props: StandardTableProps) => {
     }
     const reorderedTableData = reorder(tableData, result.source.index, result.destination.index)
     setTableData(reorderedTableData)
+    if (props.setData) {
+      props.setData(reorderedTableData)
+    }
   }
 
   return (
