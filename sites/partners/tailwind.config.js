@@ -22,5 +22,22 @@ bloomTheme.theme.colors.warn = "#feb70d"
 bloomTheme.theme.colors["accent-cool"] = "#279989"
 // Table link color
 bloomTheme.theme.colors["blue-700"] = "#004445"
+bloomTheme.theme.fontFamily.sans = [
+  "Montserrat",
+  "Open Sans",
+  "Helvetica",
+  "Arial",
+  "Verdana",
+  "sans-serif",
+]
+bloomTheme.theme.fontFamily.serif = ["Montserrat", "Droid Serif", "Georgia", "Times", "serif"]
+bloomTheme.theme.fontFamily["alt-sans"] = [
+  "Montserrat",
+  "Lato",
+  "Helvetica",
+  "Arial",
+  "Verdana",
+  "sans-serif",
+]
 
 module.exports = bloomTheme

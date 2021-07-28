@@ -41,8 +41,7 @@ addons:
       - postgresql-client-11
 
 env:
-  global:
-    PGPORT=5433
+  global: PGPORT=5433
     PGUSER=travis
     TEST_DATABASE_URL=postgres://localhost:5433/bloom_test
     REDIS_TLS_URL=redis://127.0.0.1:6379/0

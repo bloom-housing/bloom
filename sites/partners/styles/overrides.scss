@@ -1,17 +1,19 @@
 // The header logo should allow for a larger maximum height than the default
 // logo.
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
+
 .navbar-brand .logo .logo__image {
-  min-height: 5rem;
-  max-height: 8rem;
+  min-height: 6rem;
+  max-height: 7rem;
   @screen md {
-    min-height: 5rem;
-    max-height: 8rem;
+    min-height: 6rem;
+    max-height: 7rem;
   }
 }
 
-.navbar-item.logo {
+.navbar-brand .logo {
   max-height: 15rem;
-  max-width: 30rem;
+  width: 35rem;
 }
 
 // Listing table Detroit styles
