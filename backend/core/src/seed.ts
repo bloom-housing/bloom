@@ -17,6 +17,7 @@ import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-defaul
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
 import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
+import { AuthContext } from "./auth/types/auth-context"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -25,7 +26,9 @@ const argv = yargs.scriptName("seed").options({
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
-    defaultLeasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+    defaultLeasingAgents.map(
+      async (leasingAgent) => await usersService.createUser(leasingAgent, new AuthContext(null))
+    )
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
@@ -80,7 +83,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user1.confirmationToken })
 
@@ -94,7 +98,8 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -108,7 +113,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
 
   for (let i = 0; i < 10; i++) {

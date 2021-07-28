@@ -19,9 +19,9 @@ import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
-import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { ApplicationMethodType } from "../../listings/types/application-method-type-enum"
+import { UnitStatus } from "../../units/types/unit-status-enum"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:

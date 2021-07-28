@@ -153,3 +153,12 @@ table.td-plain {
     @apply -my-1;
   }
 }
+
+.table__draggable-cell {
+  width: 60px;
+  padding: 0px;
+}
+
+.table__is-dragging {
+  display: table;
+}

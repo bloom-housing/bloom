@@ -2,6 +2,7 @@ p, admin, application, true, .*
 p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
+p, admin, user, true, .*
 p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
@@ -39,6 +40,18 @@ p, anonymous, amiChart, true, .*
 
 p, admin, reservedCommunityType, true, .*
 p, anonymous, reservedCommunityType, true, read
+
+p, admin, reservedCommunityType, true, .*
+p, anonymous, reservedCommunityType, true, read
+
+p, admin, unitType, true, .*
+p, anonymous, unitType, true, read
+
+p, admin, unitRentType, true, .*
+p, anonymous, unitRentType, true, read
+
+p, admin, unitAccessibilityPriorityType, true, .*
+p, anonymous, unitAccessibilityPriorityType, true, read
 
 p, admin, reservedCommunityType, true, .*
 p, anonymous, reservedCommunityType, true, read

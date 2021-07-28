@@ -1054,7 +1054,7 @@ export const ArcherListing: Listing = {
       minOccupancy: 1,
       monthlyRent: "719.0",
       sqFeet: "285",
-      status: UnitStatus.occupied,
+      status: UnitStatus.available,
       unitType: {
         id: "random_id_35edf",
         createdAt: new Date(),

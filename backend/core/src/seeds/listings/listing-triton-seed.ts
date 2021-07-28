@@ -13,9 +13,9 @@ import { ApplicationMethodType } from "../../listings/types/application-method-t
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
-import { UnitStatus } from "../../units/types/unit-status-enum"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
+import { UnitStatus } from "../../units/types/unit-status-enum"
 
 const tritonAmiChart: AmiChartCreateDto = {
   name: "San Jose TCAC 2019",
