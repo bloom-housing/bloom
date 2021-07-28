@@ -8,7 +8,8 @@ import { MultiLineAddress, Address } from "../../helpers/address"
 export interface ListingMapProps {
   address?: Address
   listingName?: string
-  customPinPositioning?: boolean
+  enableCustomPinPositioning?: boolean
+  setCustomMapPositionChosen?: (customMapPosition: boolean) => void
   setLatLong?: (latLong: LatitudeLongitude) => void
 }
 
@@ -49,22 +50,22 @@ const ListingMap = (props: ListingMapProps) => {
       latitude: props.address?.latitude,
       longitude: props.address?.longitude,
     })
-  }, [props.address?.latitude, props.address?.longitude])
+  }, [props.address?.latitude, props.address?.longitude, props.enableCustomPinPositioning])
 
   const onMarkerDragEnd = useCallback((event) => {
-    if (props.customPinPositioning) {
-      if (props.setLatLong) {
-        console.log("setting LAT LONG")
-        props.setLatLong({
-          latitude: event.lngLat[1],
-          longitude: event.lngLat[0],
-        })
-      }
-      setMarker({
+    if (props.setLatLong) {
+      props.setLatLong({
         latitude: event.lngLat[1],
         longitude: event.lngLat[0],
       })
     }
+    if (props.setCustomMapPositionChosen) {
+      props.setCustomMapPositionChosen(true)
+    }
+    setMarker({
+      latitude: event.lngLat[1],
+      longitude: event.lngLat[0],
+    })
   }, [])
 
   const onViewportChange = (viewport: Viewport) => {
@@ -91,7 +92,7 @@ const ListingMap = (props: ListingMapProps) => {
         onViewportChange={onViewportChange}
         {...viewport}
       >
-        {props.customPinPositioning ? (
+        {props.enableCustomPinPositioning ? (
           <Marker
             latitude={marker.latitude ?? 0}
             longitude={marker.longitude ?? 0}

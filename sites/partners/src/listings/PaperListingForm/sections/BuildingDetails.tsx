@@ -32,13 +32,21 @@ type BuildingDetailsProps = {
   listing?: FormListing
   latLong?: LatitudeLongitude
   setLatLong?: (latLong: LatitudeLongitude) => void
+  customMapPositionChosen?: boolean
+  setCustomMapPositionChosen?: (customMapPosition: boolean) => void
 }
 
-const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps) => {
+const BuildingDetails = ({
+  listing,
+  setLatLong,
+  latLong,
+  customMapPositionChosen,
+  setCustomMapPositionChosen,
+}: BuildingDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control } = formMethods
+  const { register, control, getValues } = formMethods
 
   interface BuildingAddress {
     city: string
@@ -86,7 +94,6 @@ const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps)
         })
         .send()
         .then((response: MapboxApiResponse) => {
-          console.log("SETTING LAT LONG FROM USE EFFECT")
           setLatLong({
             latitude: response.body.features[0].center[1],
             longitude: response.body.features[0].center[0],
@@ -95,8 +102,17 @@ const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps)
     }
   }
   useEffect(() => {
-    getNewLatLong()
+    if (!customMapPositionChosen) {
+      getNewLatLong()
+    }
   }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
+
+  useEffect(() => {
+    if (mapPinPosition === "automatic") {
+      getNewLatLong()
+      setCustomMapPositionChosen(false)
+    }
+  }, [mapPinPosition])
 
   //TODO: On switch to automatic, change lat/long back to address default
 
@@ -183,7 +199,8 @@ const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps)
                 latitude: latLong.latitude,
                 longitude: latLong.longitude,
               }}
-              customPinPositioning={mapPinPosition === "custom"}
+              enableCustomPinPositioning={getValues("mapPinPosition") === "custom"}
+              setCustomMapPositionChosen={setCustomMapPositionChosen}
               setLatLong={setLatLong}
             />
           ) : (
@@ -207,14 +224,14 @@ const BuildingDetails = ({ listing, setLatLong, latLong }: BuildingDetailsProps)
                   value: "automatic",
                   id: "automatic",
                   note: "Map pin position is based on the address provided",
-                  defaultChecked: !listing?.buildingAddress, // update me based on new backend field
+                  defaultChecked: !listing?.customMapPin,
                 },
                 {
                   label: "Custom",
                   value: "custom",
                   id: "custom",
                   note: "Drag the pin to update the marker location",
-                  defaultChecked: listing && listing.buildingAddress !== undefined, // update me based on new backend field
+                  defaultChecked: listing?.customMapPin,
                 },
               ]}
             />

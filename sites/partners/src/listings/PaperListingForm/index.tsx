@@ -219,7 +219,8 @@ const formatFormData = (
   units: TempUnit[],
   openHouseEvents: TempEvent[],
   preferences: Preference[],
-  saveLatLong: LatitudeLongitude
+  saveLatLong: LatitudeLongitude,
+  customPinPositionChosen: boolean
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -301,6 +302,7 @@ const formatFormData = (
       latitude: saveLatLong.latitude,
       longitude: saveLatLong.longitude,
     },
+    customMapPin: customPinPositionChosen,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -362,6 +364,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     latitude: listing?.buildingAddress.latitude,
     longitude: listing?.buildingAddress.longitude,
   })
+  const [customMapPositionChosen, setCustomMapPositionChosen] = useState(listing?.customMapPin)
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
@@ -433,7 +436,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           units,
           openHouseEvents,
           orderedPreferences,
-          latLong
+          latLong,
+          customMapPositionChosen
         )
         const result = editMode
           ? await listingsService.update({
@@ -456,7 +460,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router, preferences, latLong]
+    [
+      units,
+      openHouseEvents,
+      editMode,
+      listingsService,
+      listing,
+      router,
+      preferences,
+      latLong,
+      customMapPositionChosen,
+    ]
   )
 
   const onError = () => {
@@ -521,6 +535,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         listing={listing}
                         setLatLong={setLatitudeLongitude}
                         latLong={latLong}
+                        customMapPositionChosen={customMapPositionChosen}
+                        setCustomMapPositionChosen={setCustomMapPositionChosen}
                       />
                       <CommunityType listing={listing} />
                       <Units
