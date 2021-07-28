@@ -42,7 +42,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 
   try {
     response = await axios.get(
-      process.env.listingServiceUrl + "?filter[$comparison]=<>&filter[status]=pending"
+      process.env.listingServiceUrl + "?limit=all&filter[$comparison]=<>&filter[status]=pending"
     )
   } catch (e) {
     return {
@@ -53,7 +53,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 
   return {
     paths: context.locales.flatMap((locale: string) =>
-      response.data.map((listing) => ({
+      response.data.items.map((listing) => ({
         params: { id: listing.id, slug: listing.urlSlug },
         locale: locale,
       }))

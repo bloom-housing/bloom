@@ -32,33 +32,60 @@ describe("Listings", () => {
 
   it("should return all listings", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
+    expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
+  it("should return the first page of paginated listings", async () => {
+    // Make the limit 1 less than the full number of listings, so that the first page contains all
+    // but the last listing.
+    const page = "1"
+    const limit = (allSeeds.length - 1).toString()
+    const params = "/?page=" + page + "&limit=" + limit
+    const res = await supertest(app.getHttpServer())
+      .get("/listings" + params)
+      .expect(200)
+    expect(res.body.items.length).toEqual(allSeeds.length - 1)
+  })
+
+  it("should return the last page of paginated listings", async () => {
+    // Make the limit 1 less than the full number of listings, so that the second page contains
+    // only one listing.
+    const page = "2"
+    const limit = (allSeeds.length - 1).toString()
+    const params = "/?page=" + page + "&limit=" + limit
+    const res = await supertest(app.getHttpServer())
+      .get("/listings" + params)
+      .expect(200)
+    expect(res.body.items.length).toEqual(1)
+  })
+
+  // TODO: replace jsonpath with SQL-level filtering
   it("should return only the specified listings", async () => {
     const query =
       "/?jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(1)
-    expect(res.body[0].applicationAddress.city).toEqual("Foster City")
+    expect(res.body.items.length).toEqual(1)
+    expect(res.body.items[0].applicationAddress.city).toEqual("Foster City")
   })
 
+  // TODO: replace jsonpath with SQL-level filtering
   it("shouldn't return any listings for incorrect query", async () => {
     const query = "/?jsonpath=%24%5B%3F(%40.applicationNONSENSE.argh%3D%3D%22San+Jose%22)%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.length).toEqual(0)
+    expect(res.body.items.length).toEqual(0)
   })
 
+  // TODO: replace jsonpath with SQL-level filtering
   it("should return only active listings", async () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.map((listing) => listing.id).length).toBeGreaterThan(0)
+    expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingDto = { ...res.body[0] }
+    const listing: ListingDto = { ...res.body.items[0] }
 
     const amenitiesValue = "Random amenities value"
     expect(listing.amenities).not.toBe(amenitiesValue)
@@ -83,7 +110,7 @@ describe("Listings", () => {
   it("should add/overwrite image in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body[0] }
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
 
     const fileId = "fileId"
     const label = "label"
@@ -112,7 +139,7 @@ describe("Listings", () => {
   it("should add/overwrite listing events in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body[0] }
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
 
     const listingEvent: ListingEventCreateDto = {
       type: ListingEventType.openHouse,

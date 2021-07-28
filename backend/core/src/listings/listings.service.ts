@@ -66,27 +66,13 @@ export class ListingsService {
       )
     }
 
-    const paginationInfo = {
-      currentPage: params.page,
-      itemCount: undefined as number,
-      itemsPerPage: params.limit,
-      totalItems: undefined as number,
-      totalPages: undefined as number,
-    }
-
-    const paginate =
-      // CurrentPage and itemsPerPage are read in from the querystring, so we
-      // confirm the type before proceeding
-      typeof paginationInfo.currentPage === "number" &&
-      paginationInfo.currentPage > 0 &&
-      typeof paginationInfo.itemsPerPage === "number" &&
-      paginationInfo.itemsPerPage > 0
+    const paginate = params.limit !== "all" && params.limit > 0 && params.page > 0
     if (paginate) {
       // Calculate the number of listings to skip (because they belong to lower page numbers).
-      const offset = (paginationInfo.currentPage - 1) * paginationInfo.itemsPerPage
+      const offset = (params.page - 1) * (params.limit as number)
       // Add the limit and offset to the inner query, so we only do the full
       // join on the listings we want to show.
-      innerFilteredQuery.offset(offset).limit(paginationInfo.itemsPerPage)
+      innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
 
     let listings = await this.getFullyJoinedQueryBuilder()
@@ -103,14 +89,15 @@ export class ListingsService {
       .getMany()
 
     // Set pagination info
-    paginationInfo.currentPage = paginate ? paginationInfo.currentPage : 1
-    paginationInfo.itemCount = listings.length
-    paginationInfo.itemsPerPage = paginate ? paginationInfo.itemsPerPage : listings.length
-    // Get the total listings count, with filters applied. getCount() ignores any offsets and limits.
-    paginationInfo.totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
-    paginationInfo.totalPages = paginate
-      ? Math.ceil(paginationInfo.totalItems / paginationInfo.itemsPerPage)
-      : 1
+    const itemsPerPage = paginate ? (params.limit as number) : listings.length
+    const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
+    const paginationInfo = {
+      currentPage: paginate ? params.page : 1,
+      itemCount: listings.length,
+      itemsPerPage: itemsPerPage,
+      totalItems: totalItems,
+      totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
+    }
 
     // Get the application counts and map them to listings
     if (origin === process.env.PARTNERS_BASE_URL) {

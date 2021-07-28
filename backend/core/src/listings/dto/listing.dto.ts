@@ -22,7 +22,7 @@ import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
-import { PaginationFactory, PaginationQueryParams } from "../../shared/dto/pagination.dto"
+import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { transformUnits } from "../../shared/units-transformations"
@@ -738,7 +738,7 @@ export class ListingFilterParams extends BaseFilter {
   neighborhood?: string
 }
 
-export class ListingsQueryParams extends PaginationQueryParams {
+export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @Expose()
   @ApiProperty({
     name: "filter",

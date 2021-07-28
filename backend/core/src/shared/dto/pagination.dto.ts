@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
 import { Expose, Transform, Type } from "class-transformer"
-import { IsNumber, IsOptional } from "class-validator"
+import { IsNumber, IsOptional, Matches } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 import { ClassType } from "class-transformer/ClassTransformer"
 
@@ -63,4 +63,42 @@ export class PaginationQueryParams {
     toClassOnly: true,
   })
   limit?: number
+}
+
+export class PaginationAllowsAllQueryParams {
+  @Expose()
+  @ApiPropertyOptional({
+    type: Number,
+    example: 1,
+    required: false,
+    default: 1,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
+    toClassOnly: true,
+  })
+  page?: number
+
+  @Expose()
+  @ApiPropertyOptional({
+    type: "number | 'all'",
+    example: 10,
+    required: false,
+    default: 10,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @Matches(/^\d+$|^all$/, { groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value: string | undefined) => {
+      if (value === "all") {
+        return value
+      }
+      return value ? parseInt(value) : 10
+    },
+    {
+      toClassOnly: true,
+    }
+  )
+  limit?: number | "all"
 }
