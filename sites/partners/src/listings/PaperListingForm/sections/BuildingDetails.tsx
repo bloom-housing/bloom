@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -8,12 +8,16 @@ import {
   ViewItem,
   Select,
   stateKeys,
-  Viewport,
   FieldGroup,
+  ListingMap,
 } from "@bloom-housing/ui-components"
-import MapGL, { Marker } from "react-map-gl"
+import { FormListing } from "../index"
 
-const BuildingDetails = () => {
+type BuildingDetailsProps = {
+  listing?: FormListing
+}
+
+const BuildingDetails = ({ listing }: BuildingDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -31,51 +35,20 @@ const BuildingDetails = () => {
     name: "buildingAddress",
   })
 
-  console.log(buildingAddress)
-
   const mapPinPosition = useWatch({
     control,
     name: "mapPinPosition",
   })
 
-  const onViewportChange = (viewport: Viewport) => {
-    // width and height need to be set here to work properly with
-    // the responsive wrappers
-    viewport.width = "100%"
-    viewport.height = 400
-    setViewport({ ...viewport })
+  const displayMapPreview = () => {
+    return (
+      buildingAddress.city &&
+      buildingAddress.state &&
+      buildingAddress.street &&
+      buildingAddress.zipCode &&
+      buildingAddress.zipCode.length === 5
+    )
   }
-
-  const [viewport, setViewport] = useState({
-    latitude: null,
-    longitude: null,
-    zoom: 13,
-    width: "100%",
-    height: 400,
-  } as Viewport)
-
-  const [marker, setMarker] = useState({
-    latitude: null,
-    longitude: null,
-  })
-
-  const [events, logEvents] = useState({})
-
-  const onMarkerDragStart = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDragStart: event.lngLat }))
-  }, [])
-
-  const onMarkerDrag = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDrag: event.lngLat }))
-  }, [])
-
-  const onMarkerDragEnd = useCallback((event) => {
-    logEvents((_events) => ({ ..._events, onDragEnd: event.lngLat }))
-    setMarker({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
-    })
-  }, [])
 
   //TODO: On switch to automatic, change lat/long back to address default
 
@@ -147,65 +120,51 @@ const BuildingDetails = () => {
           />
         </GridCell>
       </GridSection>
-      {buildingAddress.city &&
-        buildingAddress.state &&
-        buildingAddress.street &&
-        buildingAddress.zipCode && (
-          <GridSection columns={3}>
-            <GridCell span={2}>
-              <ViewItem label={"Map Preview"} />
-              <MapGL
-                mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-                width="100%"
-                height="100%"
-                mapStyle="mapbox://styles/mapbox/streets-v11"
-                scrollZoom={false}
-                onViewportChange={onViewportChange}
-                {...viewport}
-              >
-                <Marker
-                  latitude={marker.latitude}
-                  longitude={marker.longitude}
-                  offsetTop={-20}
-                  draggable={mapPinPosition === "custom"}
-                  onDragStart={onMarkerDragStart}
-                  onDrag={onMarkerDrag}
-                  onDragEnd={onMarkerDragEnd}
-                >
-                  <div className="pin"></div>
-                </Marker>
-              </MapGL>
-            </GridCell>
-            <GridCell>
-              <GridCell>
-                <p className="field-label m-4 ml-0">{"Map Pin Position"}</p>
-                <FieldGroup
-                  name="mapPinPosition"
-                  type="radio"
-                  fieldGroupClassName={"flex-col"}
-                  fieldClassName={"ml-0"}
-                  register={register}
-                  fields={[
-                    {
-                      label: "Automatic",
-                      value: "automatic",
-                      id: "automatic",
-                      note: "Map pin position is based on the address provided",
-                      // defaultChecked: !lotteryEvent,
-                    },
-                    {
-                      label: "Custom",
-                      value: "custom",
-                      id: "custom",
-                      note: "Drag the pin to update the marker location",
-                      // defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
-                    },
-                  ]}
-                />
-              </GridCell>
-            </GridCell>
-          </GridSection>
-        )}
+
+      <GridSection columns={3}>
+        <GridCell span={2}>
+          <ViewItem label={"Map Preview"} />
+          {displayMapPreview() ? (
+            <ListingMap
+              listingName={listing?.name}
+              address={{ ...buildingAddress, latitude: 37.36537, longitude: -121.91071 }}
+              customPinPositioning={mapPinPosition === "custom"}
+            />
+          ) : (
+            <div className={"w-full h-64 bg-gray-400 p-3 flex items-center justify-center"}>
+              Enter an address to preview the map
+            </div>
+          )}
+        </GridCell>
+        <GridCell>
+          <GridCell>
+            <p className="field-label m-4 ml-0">{"Map Pin Position"}</p>
+            <FieldGroup
+              name="mapPinPosition"
+              type="radio"
+              fieldGroupClassName={"flex-col"}
+              fieldClassName={"ml-0"}
+              register={register}
+              fields={[
+                {
+                  label: "Automatic",
+                  value: "automatic",
+                  id: "automatic",
+                  note: "Map pin position is based on the address provided",
+                  defaultChecked: !listing?.buildingAddress, // update me based on new backend field
+                },
+                {
+                  label: "Custom",
+                  value: "custom",
+                  id: "custom",
+                  note: "Drag the pin to update the marker location",
+                  defaultChecked: listing && listing.buildingAddress !== undefined, // update me based on new backend field
+                },
+              ]}
+            />
+          </GridCell>
+        </GridCell>
+      </GridSection>
     </GridSection>
   )
 }

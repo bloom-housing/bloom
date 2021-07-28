@@ -490,7 +490,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <div className="info-card md:w-9/12">
                       <ListingIntro />
                       <ListingPhoto />
-                      <BuildingDetails />
+                      <BuildingDetails listing={listing} />
                       <CommunityType listing={listing} />
                       <Units
                         units={units}
