@@ -77,15 +77,17 @@ const DetailApplicationDates = () => {
           </GridCell>
         </GridSection>
 
-        <GridSection columns={1}>
-          <ViewItem label={t("listings.openHouseEvent.header")}>
-            <div className="mt-5">
-              <div className="mb-5">
-                <MinimalTable headers={openHouseHeaders} data={openHouseEvents} />
+        {!!openHouseEvents.length && (
+          <GridSection columns={1}>
+            <ViewItem label={t("listings.openHouseEvent.header")}>
+              <div className="mt-5">
+                <div className="mb-5">
+                  <MinimalTable headers={openHouseHeaders} data={openHouseEvents} />
+                </div>
               </div>
-            </div>
-          </ViewItem>
-        </GridSection>
+            </ViewItem>
+          </GridSection>
+        )}
 
         <Drawer
           open={!!drawer}

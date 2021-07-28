@@ -47,7 +47,7 @@ const ApplicationDates = ({
         date: startTime && getDetailFieldDate(startTime),
         startTime: startTime && getDetailFieldTime(startTime),
         endTime: endTime && getDetailFieldTime(endTime),
-        url: url ? url : "",
+        url: url ?? "",
         action: (
           <div className="flex">
             <Button
@@ -60,7 +60,7 @@ const ApplicationDates = ({
             </Button>
             <Button
               type="button"
-              className="front-semibold uppercase text-red-700"
+              className="font-semibold uppercase text-red-700"
               onClick={() => setModalDeleteOpenHouse(tempId)}
               unstyled
             >
@@ -88,11 +88,11 @@ const ApplicationDates = ({
   const onOpenHouseEventsSubmit = (event: TempEvent) => {
     setDrawerOpenHouse(false)
 
-    const eventsWitoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
+    const eventsWithoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
 
     // determine if event is currently edited
-    if (eventsWitoutEdited.length !== openHouseEvents.length) {
-      setOpenHouseEvents([...eventsWitoutEdited, event])
+    if (eventsWithoutEdited.length !== openHouseEvents.length) {
+      setOpenHouseEvents([...eventsWithoutEdited, event])
     } else {
       setOpenHouseEvents([...openHouseEvents, event])
     }

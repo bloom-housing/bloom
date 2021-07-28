@@ -130,7 +130,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 register={register}
                 watch={watch}
                 readerOnly
-                error={!!errors?.startTime}
+                error={!!errors?.endTime}
                 required
                 defaultValues={defaultValues?.endTime}
               />
@@ -157,6 +157,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 placeholder={t("t.notes")}
                 register={register}
                 readerOnly
+                note={t("t.optional")}
               />
             </ViewItem>
           </GridCell>

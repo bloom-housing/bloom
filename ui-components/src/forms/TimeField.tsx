@@ -30,26 +30,6 @@ export type TimeFieldProps = {
   seconds?: boolean
 }
 
-/**
- * Format TimeField values to the date object
- */
-export const formatTimeFieldToDate = (values: TimeFieldValues) => {
-  if (!values) return null
-
-  let hours = parseInt(values.hours)
-  if (values.period === "am" && hours === 12) {
-    hours = 0
-  }
-  if (values.period === "pm" && hours !== 12) {
-    hours = hours + 12
-  }
-
-  const date = new Date()
-  date.setHours(hours, parseInt(values.minutes), parseInt(values.seconds))
-
-  return date
-}
-
 export const formatDateToTimeField = (date: Date) => {
   const dateObj = moment(date)
 
