@@ -21,6 +21,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { ApplicationMethodType } from "../../listings/types/application-method-type-enum"
+import { UnitStatus } from "../../units/types/unit-status-enum"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
@@ -64,7 +65,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "486",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -83,7 +84,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -102,7 +103,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -121,7 +122,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "491",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -140,7 +141,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -159,7 +160,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -178,7 +179,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -197,7 +198,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -216,7 +217,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -235,7 +236,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -254,7 +255,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -273,7 +274,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -292,7 +293,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -311,7 +312,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "785",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -330,7 +331,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -349,7 +350,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -368,7 +369,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -387,7 +388,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -406,7 +407,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -425,7 +426,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -444,7 +445,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -463,7 +464,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -482,7 +483,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -501,7 +502,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -520,7 +521,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -539,7 +540,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -558,7 +559,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "748",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -577,7 +578,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -596,7 +597,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1080",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -615,7 +616,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -634,7 +635,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -653,7 +654,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -672,7 +673,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -691,7 +692,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -710,7 +711,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -729,7 +730,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -748,7 +749,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -767,7 +768,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -786,7 +787,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -805,7 +806,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -824,7 +825,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -843,7 +844,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -862,7 +863,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -881,7 +882,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -900,7 +901,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
   {
     amiChart: getDefaultAmiChart() as AmiChart,
@@ -919,7 +920,7 @@ const coliseumUnits: Array<UnitSeedType> = [
     number: null,
     reservedType: null,
     sqFeet: "1029",
-    status: "available",
+    status: UnitStatus.available,
   },
 ]
 const coliseumApplicationMethods: Array<ApplicationMethodSeedType> = [
