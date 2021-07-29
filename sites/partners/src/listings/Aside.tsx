@@ -55,7 +55,7 @@ const Aside = ({ type, setStatus, showCloseListingModal }: AsideProps) => {
       elements.push(
         <GridCell key="btn-submitNew">
           <LocalizedLink href={`/listings/${listingId}/edit`}>
-            <Button styleType={AppearanceStyleType.secondary} fullWidth onClick={() => false}>
+            <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
               {t("t.edit")}
             </Button>
           </LocalizedLink>

@@ -18,8 +18,8 @@ import { TempUnit } from "."
 import {
   AmiChart,
   UnitAccessibilityPriorityType,
-  UnitType,
   UnitStatus,
+  UnitType,
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
@@ -78,7 +78,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     reset({
       ...unit,
       rentType: getRentType(unit),
-      status: unit?.status,
+      status: UnitStatus.available,
     })
   }, [units, setCurrent, tempId, reset, options])
 

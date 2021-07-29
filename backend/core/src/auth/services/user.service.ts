@@ -53,6 +53,12 @@ export class UserService {
       ...dto,
     })
 
+    if (user.confirmedAt !== dto.confirmedAt) {
+      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
+        ...dto,
+      })
+    }
+
     let passwordHash
     if (dto.password) {
       if (!dto.currentPassword) {
@@ -120,7 +126,13 @@ export class UserService {
     }
   }
 
-  public async createUser(dto: UserCreateDto, sendWelcomeEmail = false) {
+  public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
+    if (dto.confirmedAt) {
+      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
+        ...dto,
+      })
+    }
+
     let user = await this.findByEmail(dto.email)
     if (user) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)

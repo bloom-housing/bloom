@@ -176,10 +176,12 @@ export default function ListingsList() {
             <div className="flex justify-between">
               <div className="w-56"></div>
               <div className="flex-row">
-                {profile.roles.includes(UserRole.admin) && process.env.showLMLinks && (
-                  <Button className="mx-1" onClick={() => void router.push("/listings/add")}>
-                    {t("listings.addListing")}
-                  </Button>
+                {process.env.showLMLinks && (
+                  <LocalizedLink href={`/listings/add`}>
+                    <Button className="mx-1" onClick={() => false}>
+                      {t("listings.addListing")}
+                    </Button>
+                  </LocalizedLink>
                 )}
               </div>
             </div>

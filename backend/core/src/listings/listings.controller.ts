@@ -17,7 +17,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
@@ -25,6 +25,7 @@ import {
   ListingUpdateDto,
   PaginatedListingsDto,
   ListingsQueryParams,
+  ListingFilterParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -37,6 +38,7 @@ import { clearCacheKeys } from "../libs/cacheLib"
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
+@ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class ListingsController {

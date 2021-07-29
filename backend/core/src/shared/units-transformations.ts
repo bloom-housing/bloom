@@ -5,6 +5,8 @@ import { MinMaxCurrency } from "../units/types/min-max-currency"
 import { UnitSummary } from "../units/types/unit-summary"
 import { UnitsSummarized } from "../units/types/units-summarized"
 import { UnitTypeDto } from "../unit-types/dto/unit-type.dto"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -277,15 +279,25 @@ const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: s
 
 export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
-  data.unitTypes = Array.from(
-    new Set(units.map((unit) => unit.unitType).filter((item) => item != null))
-  )
+
+  const unitTypes = new Map<string, UnitType>()
+  for (const unitType of units.map((unit) => unit.unitType).filter((item) => item != null)) {
+    unitTypes.set(unitType.id, unitType)
+  }
+  data.unitTypes = Array.from(unitTypes.values())
+
   data.reservedTypes = Array.from(
     new Set(units.map((unit) => unit.reservedType).filter((item) => item != null))
   )
-  data.priorityTypes = Array.from(
-    new Set(units.map((unit) => unit.priorityType).filter((item) => item != null))
-  )
+
+  const priorityTypes = new Map<string, UnitAccessibilityPriorityType>()
+  for (const priorityType of units
+    .map((unit) => unit.priorityType)
+    .filter((item) => item != null)) {
+    priorityTypes.set(priorityType.id, priorityType)
+  }
+  data.priorityTypes = Array.from(priorityTypes.values())
+
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
