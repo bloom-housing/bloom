@@ -23,6 +23,21 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const listingSeeds: any[] = [
+  ListingDefaultSeed,
+  ListingColiseumSeed,
+  ListingDefaultOnePreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultBmrChartSeed,
+  ListingTritonSeed,
+]
+
+export function getSeedListingsCount() {
+  return listingSeeds.length
+}
+
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
@@ -42,15 +57,7 @@ const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app)
 
-  const allSeeds = [
-    app.get<ListingDefaultSeed>(ListingDefaultSeed),
-    app.get<ListingDefaultSeed>(ListingColiseumSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
-    app.get<ListingDefaultSeed>(ListingTritonSeed),
-  ]
+  const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
 
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 

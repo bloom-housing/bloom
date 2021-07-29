@@ -23,7 +23,7 @@ import {
   ListingCreateDto,
   ListingDto,
   ListingUpdateDto,
-  PaginatedListingsDto,
+  PaginatedListingDto,
   ListingsQueryParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
@@ -55,8 +55,8 @@ export class ListingsController {
   public async getAll(
     @Headers("origin") origin: string,
     @Query() queryParams: ListingsQueryParams
-  ): Promise<PaginatedListingsDto> {
-    return await this.listingsService.list(origin, queryParams)
+  ): Promise<PaginatedListingDto> {
+    return mapTo(PaginatedListingDto, await this.listingsService.list(origin, queryParams))
   }
 
   @Post()

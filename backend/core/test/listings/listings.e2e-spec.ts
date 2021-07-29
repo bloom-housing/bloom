@@ -9,6 +9,7 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
+import { getSeedListingsCount } from "../../src/seed"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -39,19 +40,19 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the first page contains all
     // but the last listing.
     const page = "1"
-    const limit = (allSeeds.length - 1).toString()
+    const limit = (getSeedListingsCount() - 1).toString()
     const params = "/?page=" + page + "&limit=" + limit
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
       .expect(200)
-    expect(res.body.items.length).toEqual(allSeeds.length - 1)
+    expect(res.body.items.length).toEqual(getSeedListingsCount() - 1)
   })
 
   it("should return the last page of paginated listings", async () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const page = "2"
-    const limit = (allSeeds.length - 1).toString()
+    const limit = (getSeedListingsCount() - 1).toString()
     const params = "/?page=" + page + "&limit=" + limit
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)

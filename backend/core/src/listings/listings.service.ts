@@ -3,15 +3,14 @@ import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
 import {
-  ListingDto,
   ListingCreateDto,
   ListingUpdateDto,
-  PaginatedListingsDto,
   ListingFilterParams,
   filterTypeToFieldMap,
   ListingsQueryParams,
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
+import { Pagination } from "nestjs-typeorm-paginate"
 import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
@@ -48,7 +47,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
+  public async list(origin: string, params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -119,11 +118,23 @@ export class ListingsService {
       listings = jp.query(listings, params.jsonpath)
     }
 
-    const paginatedListings = {
-      items: mapTo<ListingDto, Listing>(ListingDto, listings),
+    // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
+    // queries (https://github.com/nestjsx/nestjs-typeorm-paginate/issues/6) so
+    // we build the pagination metadata manually. Additional details are in
+    // https://github.com/CityOfDetroit/bloom/issues/56#issuecomment-865202733
+    const paginatedListings: Pagination<Listing> = {
+      items: listings,
       meta: paginationInfo,
+      // nestjs-typeorm-paginate leaves these empty if no route is defined
+      // This matches what other paginated endpoints, such as the applications
+      // service, currently return.
+      links: {
+        first: "",
+        previous: "",
+        next: "",
+        last: "",
+      },
     }
-
     return paginatedListings
   }
 
