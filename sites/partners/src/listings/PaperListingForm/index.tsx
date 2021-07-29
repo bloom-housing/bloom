@@ -386,6 +386,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
+        console.info("*** sending the data!", data)
         const formattedData = formatFormData(data, units)
         const result = editMode
           ? await listingsService.update({
@@ -418,6 +419,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   useEffect(() => {
     if (submitData.ready === true && status !== null) {
+      console.info("*** useEffect", submitData.data)
       void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
