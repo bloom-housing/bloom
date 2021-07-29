@@ -5058,6 +5058,12 @@ export enum ListingEventType {
   "lotteryResults" = "lotteryResults",
 }
 
+export enum ListingFilterKeys {
+  "status" = "status",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
+}
+
 export enum UnitStatus {
   "unknown" = "unknown",
   "available" = "available",
