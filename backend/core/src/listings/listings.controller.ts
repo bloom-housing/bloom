@@ -25,6 +25,8 @@ import {
   ListingUpdateDto,
   PaginatedListingDto,
   ListingsQueryParams,
+  ListingFilterParams,
+  ListingsFilterKeysTransporter,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -50,6 +52,7 @@ export class ListingsController {
 
   // TODO: Limit requests to defined fields
   @Get()
+  @ApiExtraModels(ListingFilterParams, ListingsFilterKeysTransporter)
   @ApiOperation({ summary: "List listings", operationId: "list" })
   @UseInterceptors(CacheInterceptor)
   public async getAll(

@@ -865,12 +865,12 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      filter?: ListingFilterParams
+      filter?: ListingFilterParams[]
       /**  */
       jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<PaginatedListings> {
+  ): Promise<PaginatedListing> {
     return new Promise((resolve, reject) => {
       const url = basePath + "/listings"
 
@@ -3328,16 +3328,21 @@ export interface JurisdictionUpdate {
 
 export interface ListingFilterParams {
   /**  */
-  $comparison: EnumListingFilterParamsComparison;
+  $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  name?: string;
+  name?: string
 
   /**  */
-  status?: ListingStatus;
+  status?: EnumListingFilterParamsStatus
 
   /**  */
-  neighborhood?: string;
+  neighborhood?: string
+}
+
+export interface ListingsFilterKeysTransporter {
+  /**  */
+  listingFilterKey?: EnumListingsFilterKeysTransporterListingFilterKey
 }
 
 export interface UnitType {
@@ -3974,7 +3979,7 @@ export interface Listing {
   waitlistOpenSpots?: number
 }
 
-export interface PaginatedListings {
+export interface PaginatedListing {
   /**  */
   items: Listing[]
 
@@ -5018,13 +5023,18 @@ export enum UserRole {
   "admin" = "admin",
 }
 export enum EnumListingFilterParamsComparison {
-  '=' = '=',
-  '<>' = '<>'
+  "=" = "=",
+  "<>" = "<>",
 }
-export enum ListingFilterKeys {
-  'status' = 'status',
-  'name' = 'name',
-  'neighborhood' = 'neighborhood',
+export enum EnumListingFilterParamsStatus {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+}
+export enum EnumListingsFilterKeysTransporterListingFilterKey {
+  "status" = "status",
+  "name" = "name",
+  "neighborhood" = "neighborhood",
 }
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",

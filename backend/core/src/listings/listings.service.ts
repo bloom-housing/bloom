@@ -15,7 +15,6 @@ import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
-import { mapTo } from "../shared/mapTo"
 import { addFilters } from "../shared/filter"
 
 @Injectable()

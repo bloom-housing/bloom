@@ -711,6 +711,24 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   result?: AssetUpdateDto
 }
 
+// The names of supported filters on /listings
+export enum ListingFilterKeys {
+  status = "status",
+  name = "name",
+  neighborhood = "neighborhood",
+}
+
+// This is a hack: We wrap the enum in a class, so it can be included with
+// @ApiExtraModels and picked up into backend-swagger.ts
+export class ListingsFilterKeysTransporter {
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(ListingFilterKeys),
+    required: false,
+  })
+  listingFilterKey?: ListingFilterKeys
+}
+
 // add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
   @Expose()
@@ -719,7 +737,7 @@ export class ListingFilterParams extends BaseFilter {
     example: "Coliseum",
     required: false,
   })
-  name?: string
+  [ListingFilterKeys.name]?: string;
 
   @Expose()
   @ApiProperty({
@@ -727,7 +745,7 @@ export class ListingFilterParams extends BaseFilter {
     example: "active",
     required: false,
   })
-  status?: ListingStatus
+  [ListingFilterKeys.status]?: ListingStatus;
 
   @Expose()
   @ApiProperty({
@@ -735,7 +753,7 @@ export class ListingFilterParams extends BaseFilter {
     example: "Fox Creek",
     required: false,
   })
-  neighborhood?: string
+  [ListingFilterKeys.neighborhood]?: string
 }
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
@@ -760,12 +778,6 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   jsonpath?: string
-}
-
-export enum ListingFilterKeys {
-  status = "status",
-  name = "name",
-  neighborhood = "neighborhood",
 }
 
 // Using a record lets us enforce that all types are handled in addFilter
