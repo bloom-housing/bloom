@@ -33,6 +33,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { clearCacheKeys } from "../libs/cacheLib"
+import { Language } from "../shared/types/language-enum"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -79,11 +80,17 @@ export class ListingsController {
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   @UseInterceptors(CacheInterceptor)
-  async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
+  async retrieve(
+    @Headers("language") language: string,
+    @Param("listingId") listingId: string
+  ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    const result = mapTo(ListingDto, await this.listingsService.findOne(listingId))
+    const result = mapTo(
+      ListingDto,
+      await this.listingsService.findOne(listingId, Language[language])
+    )
 
     return result
   }
