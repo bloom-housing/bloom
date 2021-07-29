@@ -719,7 +719,7 @@ export enum ListingFilterKeys {
 }
 
 // This is a hack: We wrap the enum in a class, so it can be included with
-// @ApiExtraModels and picked up into backend-swagger.ts
+// @ApiExtraModels and picked by the backend-swagger.ts codegen.
 export class ListingsFilterKeysTransporter {
   @Expose()
   @ApiProperty({
