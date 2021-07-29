@@ -3326,6 +3326,20 @@ export interface JurisdictionUpdate {
   name: string
 }
 
+export interface ListingFilterParams {
+  /**  */
+  $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  name?: string
+
+  /**  */
+  status?: EnumListingFilterParamsStatus
+
+  /**  */
+  neighborhood?: string
+}
+
 export interface PreferenceLink {
   /**  */
   title: string
@@ -5006,7 +5020,15 @@ export enum UserRole {
   "user" = "user",
   "admin" = "admin",
 }
-
+export enum EnumListingFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+}
+export enum EnumListingFilterParamsStatus {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+}
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
   "mailingAddress" = "mailingAddress",
