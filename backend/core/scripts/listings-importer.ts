@@ -41,9 +41,7 @@ async function uploadAmiCharts(units) {
   for (const unit of units) {
     const chartFromUnit = unit.amiChart
     if (!chartFromUnit) {
-      console.log(unit)
-      console.log("Error: each unit must have an amiChart.")
-      process.exit(1)
+      continue
     }
 
     // Look for the chart by name.
@@ -143,7 +141,7 @@ export async function importListing(apiUrl, email, password, listing) {
   // Link the uploaded property to the listing by id.
   listing.property = property
 
-  // The ListinCreateDto expects to include units and buildingAddress
+  // The ListingCreateDto expects to include units and buildingAddress
   listing.units = property.units
   listing.buildingAddress = property.buildingAddress
 
