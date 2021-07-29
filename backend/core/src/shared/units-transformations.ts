@@ -145,7 +145,8 @@ const getDefaultSummaryRanges = (unit: Unit) => {
     },
     unitType: unit.unitType,
     totalAvailable: 0,
-  }
+    totalCount: 0,
+  } as UnitSummary
 }
 
 const getUnitsSummary = (unit: Unit, existingSummary?: UnitSummary) => {
@@ -211,6 +212,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
     finalSummary.totalAvailable = unitMap[key].filter(
       (unit) => unit.status === UnitStatus.available
     ).length
+    finalSummary.totalCount = unitMap[key].length
     summaries.push(finalSummary)
   }
 
