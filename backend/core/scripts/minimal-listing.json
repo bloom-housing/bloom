@@ -16,24 +16,12 @@
     "units": [
       {
         "unitType": "oneBdrm",
-        "amiPercentage": "30",
-        "status": "available",
-        "amiChart": {
-          "name": "Fake AMI Chart Name",
-          "items": []
-        }
+        "status": "available"
       }
     ]
   },
   "assets": [],
   "applicationMethods": [],
   "events": [],
-  "leasingAgentPhone": "(555) 555-5555",
-  "leasingAgentAddress": {
-    "city": "Fake City",
-    "state": "XX",
-    "street": "456 Not A Real St",
-    "zipCode": "12345"
-  },
   "displayWaitlistSize": false
 }

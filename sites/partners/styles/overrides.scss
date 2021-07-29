@@ -25,3 +25,8 @@
   // Table row hover background color
   --ag-row-hover-color: #f2f2f2;
 }
+
+Button.button.is-primary:hover {
+  @apply bg-primary-light;
+  @apply text-black;
+}

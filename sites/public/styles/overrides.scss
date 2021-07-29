@@ -31,3 +31,9 @@ h5.form-card__header_title {
 .field-note {
   @apply font-normal;
 }
+
+Button.button.is-primary:hover,
+a.button.is-primary:hover {
+  @apply bg-primary-light;
+  @apply text-black;
+}
