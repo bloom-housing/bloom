@@ -32,6 +32,7 @@ const TRANSLATION_KEYS = [
       "unitAmenities",
     ],
     whatToExpect: ["applicantsWillBeContacted", "allInfoWillBeVerified", "bePreparedIfChosen"],
+    preferences: ["title", "description"],
   },
 ]
 @Injectable()
@@ -194,9 +195,16 @@ export class ListingsService {
   private findData = (keys, object, results, parent = null) => {
     keys.forEach((key) => {
       if (typeof key === "string") {
-        if (object[key]) {
-          results.keys.push(parent ? [parent, key].join(".") : key)
-          results.values.push(object[key])
+        if (Array.isArray(object)) {
+          object.forEach((value, i) => {
+            results.keys.push(parent ? [parent, i, key].join(".") : key)
+            results.values.push(value[key])
+          })
+        } else {
+          if (object[key]) {
+            results.keys.push(parent ? [parent, key].join(".") : key)
+            results.values.push(object[key])
+          }
         }
         return
       } else {
