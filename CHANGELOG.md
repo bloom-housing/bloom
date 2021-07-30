@@ -6,6 +6,42 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+- Added:
+  - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
+
+### General
+
+### Backend
+
+- Fixed:
+
+  - optional fields not being marked as optional in frontend client (missing '?' indicator) ([#1470](https://github.com/bloom-housing/bloom/pull/1470))
+  - add duplicates to CSV export ([#1352](https://github.com/bloom-housing/bloom/issues/1352))
+
+- Changed:
+  - User module has been removed and incorporated into Auth module
+  - convert listing events jsonb column to separate listing_events table
+  - convert listing address jsonb columns to separate address tables
+  - removed unused inverse relations from entities
+  - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
+
+### Frontend
+
+- Fixed:
+
+  - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
+
+- Added:
+  - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
+  - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
+
+### UI Components
+
+- Added:
+  - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
+  - Automated a11y testing for ui-components ([#1450](https://github.com/bloom-housing/bloom/pull/1450))
+  - Add ActionBlock component ([#1404](https://github.com/bloom-housing/bloom/pull/1459)) (Marcin Jedras)
+
 ## 1.0.4 / 2021-07-07
 
 ### General
@@ -14,6 +50,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Added backend/proxy ([#1380](https://github.com/bloom-housing/bloom/pull/1380))
   - Added cache manager to lisitngs controller, added add listing button and cleanup ([#1422](https://github.com/bloom-housing/bloom/pull/1422))
+  - Added unit_accessibility_priority_types, unit_rent_types, unit_types table and corresponding API endpoints (also created a relation between Unit and mentioned tables) ([#1439](https://github.com/bloom-housing/bloom/pull/1439)
 
 ### Backend
 
@@ -85,6 +122,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fix multiple unit rows in summaries, sorting issues ([#1306](https://github.com/bloom-housing/bloom/pull/1306)) (Emily Jablonski)
   - Fix partners application submission ([#1340](https://github.com/bloom-housing/bloom/pull/1340)) (Dominik Barcikowski)
   - Hide Additional Eligibility header if no sections present ([#1457](https://github.com/bloom-housing/bloom/pull/1457)) (Emily Jablonski)
+  - Listings Management MVP visual QA round ([#1463](https://github.com/bloom-housing/bloom/pull/1463)) (Emily Jablonski)
 
 - Changed:
 
@@ -105,7 +143,6 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
-  - Fix aria reserved for future use warning ([#1378](https://github.com/bloom-housing/bloom/issues/1378)) (Andrea Egan)
 
 ## 1.0.0 / 2021-05-21
 

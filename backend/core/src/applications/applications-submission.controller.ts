@@ -7,10 +7,10 @@ import { ApplicationCreateDto, ApplicationDto } from "./dto/application.dto"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { ResourceAction } from "../auth/decorators/resource-action.decorator"
-import { authzActions } from "../auth/authz.service"
+import { authzActions } from "../auth/services/authz.service"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
-import { ThrottlerGuard, Throttle } from "@nestjs/throttler"
+import { ThrottlerGuard } from "@nestjs/throttler"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 
 @Controller("applications")

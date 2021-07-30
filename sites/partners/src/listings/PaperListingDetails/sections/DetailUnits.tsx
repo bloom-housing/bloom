@@ -25,11 +25,11 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     () =>
       listing?.units.map((unit) => ({
         number: unit.number,
-        unitType: t(`listings.unitTypes.${unit.unitType}`),
+        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
         amiPercentage: unit.amiPercentage,
         monthlyRent: unit.monthlyRent,
         sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType,
+        priorityType: unit.priorityType?.name,
         status: unit.status,
         action: (
           <Button
@@ -53,23 +53,22 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       tinted
       inset
     >
-      <GridSection title={t("listings.unit.details")} tinted={true} inset={true} grid={false}>
-        <GridSection grid columns={1}>
-          <ViewItem
-            label={t("listings.unitTypesOrIndividual")}
-            children={
-              listing.disableUnitsAccordion
-                ? t("listings.unit.unitTypes")
-                : t("listings.unit.individualUnits")
-            }
-          />
-        </GridSection>
-      </GridSection>
+      <ViewItem
+        label={t("listings.unitTypesOrIndividual")}
+        children={
+          listing.disableUnitsAccordion
+            ? t("listings.unit.unitTypes")
+            : t("listings.unit.individualUnits")
+        }
+      />
 
       {listing.units.length ? (
         <MinimalTable headers={unitTableHeaders} data={unitTableData} />
       ) : (
-        <span className="text-base font-semibold">{t("t.none")}</span>
+        <>
+          <hr className={"mt-4 mb-4"} />
+          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
+        </>
       )}
     </GridSection>
   )

@@ -33,16 +33,36 @@ import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 
-enum OrderByParam {
+export enum OrderByParam {
   firstName = "applicant.firstName",
   lastName = "applicant.lastName",
   submissionDate = "application.submissionDate",
   createdAt = "application.createdAt",
 }
 
-enum OrderParam {
+export enum OrderParam {
   ASC = "ASC",
   DESC = "DESC",
+}
+
+class ApplicationsApiExtraModel {
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(OrderByParam),
+    example: "createdAt",
+    default: "createdAt",
+    required: false,
+  })
+  orderBy?: OrderByParam
+
+  @Expose()
+  @ApiProperty({
+    enum: OrderParam,
+    example: "DESC",
+    default: "DESC",
+    required: false,
+  })
+  order?: OrderParam
 }
 
 export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
@@ -163,7 +183,7 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
     groups: [ValidationsGroupsEnum.default, ValidationsGroupsEnum.partners],
   })
 )
-@ApiExtraModels(...applicationPreferenceApiExtraModels)
+@ApiExtraModels(...applicationPreferenceApiExtraModels, ApplicationsApiExtraModel)
 export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
@@ -186,11 +206,7 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    if (queryParams.listingId === undefined || queryParams.listingId === "undefined") {
-      console.log("List applications as CSV - listingId undefined")
-      return ""
-    }
-    const applications = await this.applicationsService.list(queryParams)
+    const applications = await this.applicationsService.listWithFlagged(queryParams)
     const listing = await this.listingsService.findOne(queryParams.listingId)
     return this.applicationCsvExporter.export(
       applications,
