@@ -61,7 +61,8 @@ nav.navbar {
 }
 
 .navbar-image-only-container {
-  height: 50px;
+  // 75px - .25rem of container around it.
+  height: 67px;
   @screen md {
     height: 120px;
   }
