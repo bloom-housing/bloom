@@ -35,7 +35,6 @@ export class UserDto extends OmitType(User, [
 }
 
 export class UserBasicDto extends OmitType(User, [
-  "dob",
   "isAdmin",
   "leasingAgentInListings",
   "passwordHash",
@@ -63,7 +62,6 @@ export class EmailDto {
 
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
-  "confirmedAt",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
