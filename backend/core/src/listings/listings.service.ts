@@ -64,6 +64,9 @@ export class ListingsService {
       )
     }
 
+    // TODO(avaleske): Typesceipt doesn't realize that the `paginate` bool is a
+    // type guard, but it will in version 4.4. Once this codebase is upgraded to
+    // v4.4, remove the extra type assertions on `params.limit` below.
     const paginate = params.limit !== "all" && params.limit > 0 && params.page > 0
     if (paginate) {
       // Calculate the number of listings to skip (because they belong to lower page numbers).
