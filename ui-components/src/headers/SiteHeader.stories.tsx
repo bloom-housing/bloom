@@ -65,7 +65,7 @@ export const standardWide = () => (
 
 export const imageOnlySlim = () => (
   <SiteHeader
-    logoSrc="/images/DAHLIA-logo.svg"
+    logoSrc="/images/listing.jpg"
     imageOnly={true}
     title={"Image Alt Text"}
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -80,7 +80,7 @@ export const imageOnlySlim = () => (
 
 export const imageOnlyMedium = () => (
   <SiteHeader
-    logoSrc="/images/DAHLIA-logo.svg"
+    logoSrc="/images/listing.jpg"
     imageOnly={true}
     title={"Image Alt Text"}
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
@@ -95,7 +95,7 @@ export const imageOnlyMedium = () => (
 
 export const imageOnlyWide = () => (
   <SiteHeader
-    logoSrc="/images/DAHLIA-logo.svg"
+    logoSrc="/images/listing.jpg"
     imageOnly={true}
     title={"Image Alt Text"}
     notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
