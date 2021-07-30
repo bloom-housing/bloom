@@ -27,3 +27,4 @@ Bloom uses the Circle CI system to automatically run tests on any pull requests.
 We use the ESlint linting system and the automatic code formatter Prettier (which the linter also enforces). **All** pull requests must pass linting to be accepted, so they don't create fix work for future contributors. If you're not using an IDE that integrates with these tools, please run eslint + prettier from the cli on all added or changed code before you submit a pull request.
 
 As much as we'll try to keep current, the linting rules can become out of date, and in this case you should file an issue with the adjustments you're looking for. We'll be looking for a resulting PR with a minimum of two commits - one to adjust the rules or tooling, and another that updates the codebase to match. If the latter changes are complex, please discuss in advance and break up the work into reasonably reviewable commits.
+
