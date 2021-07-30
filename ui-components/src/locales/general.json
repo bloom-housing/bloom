@@ -770,6 +770,7 @@
     "availableUnitsAndWaitlistDesc": "Once applicants fill all available units, additional applicants will be placed on the waitlist for <span class='t-italic'>%{number} units</span>",
     "bath": "bath",
     "browseListings": "Browse Listings",
+    "buildingImageAltText": "A picture of the building",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -852,7 +853,15 @@
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
     "reservedCommunityBuilding": "%{type} Building",
+    "reservedCommunityDescription": "Reserved Community Description",
+    "reservedCommunitySeniorTitle": "Senior Building",
+    "reservedCommunityTypes": {
+      "senior55": "Seniors 55+",
+      "senior62": "Seniors 62+",
+      "specialNeeds": "Special Needs"
+    },
     "reservedFor": "Reserved for %{type}",
+    "reservedCommunityType": "Reserved Community Type",
     "reservedTypePlural": {
       "family": "families",
       "senior": "seniors",
@@ -881,6 +890,8 @@
       "buildingFeaturesTitle": "Building Features",
       "applicationDatesTitle": "Application Dates",
       "applicationDatesSubtitle": "Tell us about important dates related to this listing.",
+      "communityType": "Community Type",
+      "communityTypeSubtitle": "Are there any requirements that applicants need to meet?",
       "costsNotIncluded": "Costs Not Included",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "eligibilityTitle": "Eligibility",

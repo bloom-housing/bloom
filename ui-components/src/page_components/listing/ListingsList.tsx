@@ -2,7 +2,7 @@ import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { LinkButton } from "../../actions/LinkButton"
-import { groupNonReservedAndReservedSummaries } from "../../helpers/tableSummaries"
+import { getSummariesTable } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
 import { imageUrlFromListing } from "../../helpers/photos"
 import { t } from "../../helpers/translator"
@@ -29,10 +29,7 @@ const ListingsList = (props: ListingsProps) => {
 
     let unitSummaries = [] as GroupedTableGroup[]
     if (listing.unitsSummarized !== undefined) {
-      unitSummaries = groupNonReservedAndReservedSummaries(
-        listing.unitsSummarized.byNonReservedUnitType,
-        listing.unitsSummarized.byReservedType
-      )
+      unitSummaries = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
     }
 
     // address as subtitle
@@ -92,6 +89,11 @@ const ListingsList = (props: ListingsProps) => {
             href={`/listing/${listing.id}/${listing.urlSlug}`}
             appStatus={appStatus}
             appStatusContent={content}
+            tagLabel={
+              listing.reservedCommunityType
+                ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+                : undefined
+            }
           />
         </div>
         <div className="listings-row_content">

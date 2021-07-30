@@ -12,6 +12,7 @@ import { AmiChartsModule } from "../ami-charts/ami-charts.module"
 import { ListingDefaultSeed } from "../seeds/listings/listing-default-seed"
 import { Listing } from "../listings/entities/listing.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { ReservedCommunityType } from "../reserved-community-type/entities/reserved-community-type.entity"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../unit-rent-types/entities/unit-rent-type.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
@@ -22,7 +23,7 @@ import { ListingColiseumSeed } from "../seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOnePreferenceSeed } from "../seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-default-no-preference-seed"
 import { Preference } from "../preferences/entities/preference.entity"
-import { ListingDefaultFCFSPreferenceSeed } from "../seeds/listings/listing-default-fcfs-seed"
+import { ListingDefaultFCFSSeed } from "../seeds/listings/listing-default-fcfs-seed"
 import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
@@ -30,6 +31,7 @@ import { PaperApplication } from "../paper-applications/entities/paper-applicati
 import { ApplicationMethodsModule } from "../application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../paper-applications/paper-applications.module"
 import { AssetsModule } from "../assets/assets.module"
+import { ListingDefaultReservedSeed } from "../seeds/listings/listing-default-reserved-seed"
 
 @Module({})
 export class SeederModule {
@@ -48,6 +50,7 @@ export class SeederModule {
           Preference,
           UnitAccessibilityPriorityType,
           UnitType,
+          ReservedCommunityType,
           UnitRentType,
           AmiChart,
           Property,
@@ -73,9 +76,10 @@ export class SeederModule {
         ListingColiseumSeed,
         ListingDefaultOnePreferenceSeed,
         ListingDefaultNoPreferenceSeed,
-        ListingDefaultFCFSPreferenceSeed,
         ListingDefaultBmrChartSeed,
         ListingTritonSeed,
+        ListingDefaultReservedSeed,
+        ListingDefaultFCFSSeed,
       ],
     }
   }
