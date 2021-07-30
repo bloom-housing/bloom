@@ -5,13 +5,12 @@ import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   content: string
-  status: ApplicationStatusType
+  status?: ApplicationStatusType
   vivid?: boolean
 }
 
 const ApplicationStatus = (props: ApplicationStatusProps) => {
   let bgColor = ""
-
   // determine styling
   const vivid = props.vivid || false
   const textColor = vivid ? "text-white" : "text-gray-800"

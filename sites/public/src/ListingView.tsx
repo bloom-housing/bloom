@@ -36,6 +36,7 @@ import {
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
+import { useGetApplicationStatusProps } from "../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -45,6 +46,8 @@ interface ListingProps {
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
+
+  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
 
   if (!listing) {
     return <ErrorPage />
@@ -215,7 +218,7 @@ export const ListingView = (props: ListingProps) => {
         )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
-        <ApplicationStatus listing={listing} />
+        <ApplicationStatus content={appStatusContent} />
         <div className="mx-4">
           <DownloadLotteryResults event={lotteryResults} />
           {!isReferralApp ? (
@@ -307,7 +310,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
-              <ApplicationStatus listing={listing} />
+              <ApplicationStatus content={appStatusContent} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
               {!isReferralApp ? (
