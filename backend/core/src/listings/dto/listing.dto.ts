@@ -22,6 +22,7 @@ import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
+import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
@@ -731,24 +732,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   result?: AssetUpdateDto
-}
-
-// The names of supported filters on /listings
-export enum ListingFilterKeys {
-  status = "status",
-  name = "name",
-  neighborhood = "neighborhood",
-}
-
-// This is a hack: We wrap the enum in a class, so it can be included with
-// @ApiExtraModels and picked by the backend-swagger.ts codegen.
-export class ListingsFilterKeysTransporter {
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(ListingFilterKeys),
-    required: false,
-  })
-  listingFilterKey?: ListingFilterKeys
 }
 
 // add other listing filter params here

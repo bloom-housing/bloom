@@ -274,11 +274,11 @@ export class ApplicationMethodsService {
    */
   list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods"
+      const url = basePath + "/applicationMethods"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -295,11 +295,11 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethod> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods"
+      const url = basePath + "/applicationMethods"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body
+      const data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -316,11 +316,11 @@ export class ApplicationMethodsService {
     options: IRequestOptions = {}
   ): Promise<ApplicationMethod> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applicationMethods/{applicationMethodId}"
+      const url = basePath + "/applicationMethods/{applicationMethodId}"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body
+      const data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -342,7 +342,7 @@ export class ApplicationMethodsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -364,7 +364,7 @@ export class ApplicationMethodsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1088,11 +1088,11 @@ export class PaperApplicationsService {
    */
   list(options: IRequestOptions = {}): Promise<PaperApplication[]> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/paperApplications"
+      const url = basePath + "/paperApplications"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1109,11 +1109,11 @@ export class PaperApplicationsService {
     options: IRequestOptions = {}
   ): Promise<PaperApplication> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/paperApplications"
+      const url = basePath + "/paperApplications"
 
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
-      let data = params.body
+      const data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1130,11 +1130,11 @@ export class PaperApplicationsService {
     options: IRequestOptions = {}
   ): Promise<PaperApplication> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/paperApplications/{paperApplicationId}"
+      const url = basePath + "/paperApplications/{paperApplicationId}"
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
-      let data = params.body
+      const data = params.body
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1156,7 +1156,7 @@ export class PaperApplicationsService {
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1178,7 +1178,7 @@ export class PaperApplicationsService {
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
-      let data = null
+      const data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -3643,11 +3643,6 @@ export interface ListingFilterParams {
   neighborhood?: string
 }
 
-export interface ListingsFilterKeysTransporter {
-  /**  */
-  listingFilterKey?: EnumListingsFilterKeysTransporterListingFilterKey
-}
-
 export interface UnitType {
   /**  */
   id: string
@@ -5351,11 +5346,6 @@ export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
-}
-export enum EnumListingsFilterKeysTransporterListingFilterKey {
-  "status" = "status",
-  "name" = "name",
-  "neighborhood" = "neighborhood",
 }
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",

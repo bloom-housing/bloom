@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
 import { Expose, Transform, Type } from "class-transformer"
-import { IsNumber, IsOptional, Matches } from "class-validator"
+import { IsNumber, IsOptional, registerDecorator, ValidationOptions } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 import { ClassType } from "class-transformer/ClassTransformer"
 
@@ -88,7 +88,7 @@ export class PaginationAllowsAllQueryParams {
     default: 10,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @Matches(/^\d+$|^all$/, { groups: [ValidationsGroupsEnum.default] })
+  @IsNumberOrAll({ message: "test", groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value: string | undefined) => {
       if (value === "all") {
@@ -101,4 +101,24 @@ export class PaginationAllowsAllQueryParams {
     }
   )
   limit?: number | "all"
+}
+
+function IsNumberOrAll(validationOptions?: ValidationOptions) {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: "isNumberOrAll",
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: unknown) {
+          return (
+            (typeof value === "number" && !isNaN(value)) ||
+            (typeof value === "string" && value === "all")
+          )
+        },
+      },
+    })
+  }
 }
