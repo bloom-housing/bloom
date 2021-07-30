@@ -1,34 +1,23 @@
 import * as React from "react"
-import { Row } from "./StandardTable"
-import "./ResponsiveTable.scss"
+import { TableHeaders, StandardTable } from "./StandardTable"
 
 interface ResponsiveTableProps {
-  header: React.ReactNode
-  rows: React.ReactNode[]
+  headers: TableHeaders
+  data: Record<string, React.ReactNode>[]
+  className?: string
 }
 
 const ResponsiveTable = (props: ResponsiveTableProps) => {
-  const tableClasses = ["responsive-table"]
+  const tableClasses = ["base", props.className]
 
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table className={tableClasses.join(" ")}>
-        <thead>
-          <Row>{props.header}</Row>
-        </thead>
-        {props.rows &&
-          props.rows.map((row, index) => {
-            return (
-              <tbody className="responsive-table__row">
-                <Row className="responsive-table__inner-row" key={index}>
-                  {props.header}
-                </Row>
-                <Row className="responsive-table__inner-row">{row}</Row>
-              </tbody>
-            )
-          })}
-      </table>
-    </div>
+    <StandardTable
+      headers={props.headers}
+      data={props.data}
+      tableClassName={tableClasses.join(" ")}
+      cellClassName="px-5 py-3"
+      responsiveCollapse
+    />
   )
 }
 
