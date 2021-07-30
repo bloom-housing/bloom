@@ -272,7 +272,9 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     delete unit.tempId
   })
 
-  const events: ListingEventCreate[] = []
+  const events: ListingEventCreate[] = data.events.filter(
+    (event) => !(event?.type == ListingEventType.publicLottery)
+  )
   if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
     const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
@@ -371,9 +373,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
     setLoading(true)
-    const dataToSubmit = { ...submitData.data, ...data }
-    console.info("*** dataToSubmit", dataToSubmit)
-    setSubmitData({ ready: true, data: dataToSubmit })
+    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
   }
 
   /*
@@ -386,7 +386,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        console.info("*** sending the data!", data)
         const formattedData = formatFormData(data, units)
         const result = editMode
           ? await listingsService.update({
@@ -419,7 +418,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   useEffect(() => {
     if (submitData.ready === true && status !== null) {
-      console.info("*** useEffect", submitData.data)
       void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
@@ -487,9 +485,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <LotteryResults
                           submitCallback={(data) => {
                             setStatus(ListingStatus.closed)
-                            const saveData = { ...getValues(), ...data }
-                            console.info("*** saveData", saveData)
-                            triggerSubmit(saveData)
+                            triggerSubmit({ ...getValues(), ...data })
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
