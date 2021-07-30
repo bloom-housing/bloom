@@ -23,6 +23,7 @@
     "ag-grid-react": "^24.1.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
+    "electron": "^13.1.7",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "moment": "^2.29.1",
     "nanoid": "^3.1.12",

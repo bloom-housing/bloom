@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -13,8 +13,7 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
-import { useEffect } from "react"
-const GeocodeService = require("@mapbox/mapbox-sdk/services/geocoding")
+import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -99,12 +98,14 @@ const BuildingDetails = ({
             longitude: response.body.features[0].center[0],
           })
         })
+        .catch((err) => console.error(`Error calling Mapbox API: ${err}`))
     }
   }
   useEffect(() => {
     if (!customMapPositionChosen) {
       getNewLatLong()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
 
   useEffect(() => {
@@ -112,6 +113,7 @@ const BuildingDetails = ({
       getNewLatLong()
       setCustomMapPositionChosen(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
   //TODO: On switch to automatic, change lat/long back to address default
@@ -204,7 +206,10 @@ const BuildingDetails = ({
               setLatLong={setLatLong}
             />
           ) : (
-            <div className={"w-full h-64 bg-gray-400 p-3 flex items-center justify-center"}>
+            <div
+              className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
+              style={{ height: "400px" }}
+            >
               Enter an address to preview the map
             </div>
           )}
