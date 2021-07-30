@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Fix a11y language navigation ([#1528](https://github.com/bloom-housing/bloom/pull/1528)) (Dominik Barcikowski)
+  - Remove border from navbar\_\_wrapper and align border color on primary button
 
 - Added:
   - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)
