@@ -35,7 +35,7 @@ export default class extends Component<HousingCounselorsProps> {
           subtitle={t("housingCounselors.subtitle")}
         />
         <section>
-          {this.props.counselors.map((c) => {
+          {this.props.counselors?.map((c) => {
             return (
               <article
                 key={c.name}
@@ -46,7 +46,7 @@ export default class extends Component<HousingCounselorsProps> {
               </article>
             )
           })}
-          {this.props.counselors.length == 0 && (
+          {this.props.counselors?.length == 0 && (
             <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
               <p>{t("t.noneFound")}</p>
             </article>
