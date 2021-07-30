@@ -1,6 +1,6 @@
 import { PropertyCreateDto } from "../../property/dto/property.dto"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
-import { ApplicationMethodDto } from "../../listings/dto/application-method.dto"
+import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
 import { ListingCreateDto } from "../../listings/dto/listing.dto"
 import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
@@ -21,7 +21,7 @@ export type PropertySeedType = Omit<
 
 export type UnitSeedType = Omit<UnitCreateDto, "property">
 
-export type ApplicationMethodSeedType = ApplicationMethodDto
+export type ApplicationMethodSeedType = ApplicationMethodCreateDto
 
 export type ListingSeedType = Omit<
   ListingCreateDto,
