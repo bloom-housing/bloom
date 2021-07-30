@@ -45,6 +45,4 @@ const data = [
   },
 ]
 
-export const Default = () => (
-  <GroupedTable headers={headers} data={data} responsiveCollapse={true} />
-)
+export const Default = () => <GroupedTable headers={headers} data={data} />
