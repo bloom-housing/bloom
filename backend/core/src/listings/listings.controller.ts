@@ -79,7 +79,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(CacheInterceptor)
+  // @UseInterceptors(CacheInterceptor)
   async retrieve(
     @Headers("language") language: string,
     @Param("listingId") listingId: string
