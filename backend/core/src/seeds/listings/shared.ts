@@ -1,6 +1,5 @@
 // AMI Charts
 import {
-  ApplicationMethodSeedType,
   AssetDtoSeedType,
   ListingSeedType,
   PreferenceSeedType,
@@ -11,7 +10,6 @@ import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
-import { ApplicationMethodType } from "../../listings/types/application-method-type-enum"
 import { UserCreateDto } from "../../auth/dto/user.dto"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
@@ -424,24 +422,6 @@ export const defaultUnits: Array<UnitSeedType> = [
     status: UnitStatus.available,
   },
 ]
-// Application Method Sets
-export function getDefaultApplicationMethods() {
-  return JSON.parse(JSON.stringify(defaultApplicationMethods))
-}
-
-export const defaultApplicationMethods: Array<ApplicationMethodSeedType> = [
-  {
-    type: ApplicationMethodType.Internal,
-    acceptsPostmarkedApplications: false,
-    label: "Label",
-    externalReference: "",
-  },
-]
-
-// Leasing Agent Sets
-export function getDefaultLeasingAgents() {
-  return JSON.parse(JSON.stringify(defaultLeasingAgents))
-}
 
 export const defaultLeasingAgents: UserCreateDto[] = [
   {

@@ -11,7 +11,6 @@ import { User } from "../../auth/entities/user.entity"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import {
   getDefaultAmiChart,
-  getDefaultApplicationMethods,
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
@@ -20,6 +19,8 @@ import {
   getDisplaceePreference,
   getLiveWorkPreference,
 } from "./shared"
+import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export class ListingDefaultSeed {
   constructor(
@@ -32,7 +33,9 @@ export class ListingDefaultSeed {
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
     @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
-    @InjectRepository(User) protected readonly userRepository: Repository<User>
+    @InjectRepository(User) protected readonly userRepository: Repository<User>,
+    @InjectRepository(ApplicationMethod)
+    protected readonly applicationMethodRepository: Repository<ApplicationMethod>
   ) {}
 
   async seed() {
@@ -66,6 +69,9 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
 
     await this.unitsRepository.save(unitsToBeCreated)
+    const applicationMethods = await this.applicationMethodRepository.find({
+      type: ApplicationMethodType.Internal,
+    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -76,7 +82,7 @@ export class ListingDefaultSeed {
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
-      applicationMethods: getDefaultApplicationMethods(),
+      applicationMethods: applicationMethods,
       events: getDefaultListingEvents(),
     }
 
