@@ -85,7 +85,7 @@ export class ListingsController {
     @Query("filter") filter?: ListingFilterParams[]
     // TODO: Add options param here for paging and sorting
   ): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(origin, jsonpath, filter))
+    return (await this.listingsService.list(origin, jsonpath, filter)) as any
   }
 
   @Post()
