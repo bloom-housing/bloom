@@ -44,7 +44,6 @@
 
 .fixed-overlay__inner {
   transition-property: transform, opacity;
-  transform: translate(0px, 0px);
   margin: auto;
 
   @include transition-timing;

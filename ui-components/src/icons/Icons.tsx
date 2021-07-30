@@ -204,6 +204,17 @@ export const Download = (props: IconProps) => {
   )
 }
 
+export const Draggable = (props: IconProps) => {
+  return (
+    <svg viewBox={"0 0 16 8"} fill={props.fill ?? "currentColor"}>
+      <path
+        d="M1.14286 4.96428H14.8571C15.4857 4.96428 16 5.4625 16 6.04029C16 6.68036 15.4857 7.17857 14.8571 7.17857H1.14286C0.514288 7.17857 2.86102e-06 6.68036 2.86102e-06 6.10257C2.86102e-06 5.4625 0.514288 4.96428 1.14286 4.96428ZM1.14286 0.535713H14.8571C15.4857 0.535713 16 1.03393 16 1.61172C16 2.18951 15.4857 2.75 14.8571 2.75H1.14286C0.514288 2.75 2.86102e-06 2.25178 2.86102e-06 1.67399C2.86102e-06 1.0962 0.514288 0.535713 1.14286 0.535713Z"
+        fill="#999999"
+      />
+    </svg>
+  )
+}
+
 export const Edit = (props: IconProps) => {
   return (
     <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>

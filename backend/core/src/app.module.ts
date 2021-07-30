@@ -1,3 +1,11 @@
+// dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("dotenv").config()
+} catch {
+  // Pass
+}
+import "newrelic"
 import { ClassSerializerInterceptor, DynamicModule, INestApplication, Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
@@ -28,6 +36,8 @@ import { ReservedCommunityTypesModule } from "./reserved-community-type/reserved
 import { UnitTypesModule } from "./unit-types/unit-types.module"
 import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
 import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
+import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
+import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -69,11 +79,13 @@ export class AppModule {
       imports: [
         AmiChartsModule,
         ApplicationFlaggedSetsModule,
+        ApplicationMethodsModule,
         ApplicationsModule,
         AssetsModule,
         AuthModule,
         JurisdictionsModule,
         ListingsModule,
+        PaperApplicationsModule,
         PreferencesModule,
         PropertiesModule,
         PropertyGroupsModule,

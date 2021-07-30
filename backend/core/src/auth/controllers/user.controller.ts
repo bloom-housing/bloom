@@ -61,12 +61,17 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Create user", operationId: "create" })
   async create(
+    @Request() req: ExpressRequest,
     @Body() dto: UserCreateDto,
     @Query() queryParams: UserCreateQueryParams
   ): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.createUser(dto, queryParams.noWelcomeEmail !== true)
+      await this.userService.createUser(
+        dto,
+        new AuthContext(req.user as User),
+        queryParams.noWelcomeEmail !== true
+      )
     )
   }
 

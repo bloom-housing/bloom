@@ -17,6 +17,12 @@ import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-defaul
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
 import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
+import { ApplicationMethodsService } from "./application-methods/application-methods.service"
+import { ApplicationMethodType } from "./application-methods/types/application-method-type-enum"
+import { PaperApplicationsService } from "./paper-applications/paper-applications.service"
+import { Language } from "./shared/types/language-enum"
+import { AssetsService } from "./assets/services/assets.service"
+import { AuthContext } from "./auth/types/auth-context"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -25,7 +31,9 @@ const argv = yargs.scriptName("seed").options({
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
-    defaultLeasingAgents.map(async (leasingAgent) => await usersService.createUser(leasingAgent))
+    defaultLeasingAgents.map(
+      async (leasingAgent) => await usersService.createUser(leasingAgent, new AuthContext(null))
+    )
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
@@ -35,9 +43,44 @@ export async function createLeasingAgents(app: INestApplicationContext) {
   return leasingAgents
 }
 
+async function createApplicationMethods(app: INestApplicationContext) {
+  const assetsService = await app.resolve<AssetsService>(AssetsService)
+  const englishFileAsset = await assetsService.create({
+    fileId: "englishFileId",
+    label: "English paper application",
+  })
+  const paperApplicationsService = await app.resolve<PaperApplicationsService>(
+    PaperApplicationsService
+  )
+  const englishPaperApplication = await paperApplicationsService.create({
+    language: Language.en,
+    file: englishFileAsset,
+  })
+  const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
+    ApplicationMethodsService
+  )
+
+  await applicationMethodsService.create({
+    type: ApplicationMethodType.FileDownload,
+    acceptsPostmarkedApplications: false,
+    externalReference: "https://bit.ly/2wH6dLF",
+    label: "English",
+    paperApplications: [englishPaperApplication],
+  })
+
+  await applicationMethodsService.create({
+    type: ApplicationMethodType.Internal,
+    acceptsPostmarkedApplications: false,
+    externalReference: "",
+    label: "Label",
+    paperApplications: [],
+  })
+}
+
 const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app)
+  await createApplicationMethods(app)
 
   const allSeeds = [
     app.get<ListingDefaultSeed>(ListingDefaultSeed),
@@ -80,7 +123,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user1.confirmationToken })
 
@@ -94,7 +138,8 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
-    })
+    }),
+    new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
 
@@ -108,7 +153,8 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-    })
+    }),
+    new AuthContext(null)
   )
 
   for (let i = 0; i < 10; i++) {
