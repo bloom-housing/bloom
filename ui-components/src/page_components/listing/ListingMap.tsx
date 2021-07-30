@@ -43,12 +43,12 @@ const ListingMap = (props: ListingMapProps) => {
   useEffect(() => {
     onViewportChange({
       ...viewport,
-      latitude: props.address?.latitude,
-      longitude: props.address?.longitude,
+      latitude: props.address?.latitude ?? 0,
+      longitude: props.address?.longitude ?? 0,
     })
     setMarker({
-      latitude: props.address?.latitude,
-      longitude: props.address?.longitude,
+      latitude: props.address?.latitude ?? 0,
+      longitude: props.address?.longitude ?? 0,
     })
   }, [props.address?.latitude, props.address?.longitude, props.enableCustomPinPositioning])
 
@@ -68,6 +68,8 @@ const ListingMap = (props: ListingMapProps) => {
     })
   }, [])
 
+  if (!props.address || !props.address.latitude || !props.address.longitude) return null
+
   const onViewportChange = (viewport: Viewport) => {
     // width and height need to be set here to work properly with
     // the responsive wrappers
@@ -76,8 +78,6 @@ const ListingMap = (props: ListingMapProps) => {
     newViewport.height = 400
     setViewport(newViewport)
   }
-
-  if (!props.address || !viewport.latitude || !viewport.longitude) return null
 
   return (
     <div className="listing-map">
