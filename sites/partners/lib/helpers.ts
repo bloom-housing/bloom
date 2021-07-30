@@ -1,7 +1,11 @@
-import { t } from "@bloom-housing/ui-components"
+import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { ApplicationSubmissionType } from "@bloom-housing/backend-core/types"
-import { TempUnit } from "../src/listings/PaperListingForm"
+import {
+  ApplicationSubmissionType,
+  ListingEventType,
+  ListingEvent,
+} from "@bloom-housing/backend-core/types"
+import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
 
 type DateTimePST = {
   hour: string
@@ -101,10 +105,42 @@ export const isNullOrUndefined = (value: unknown): boolean => {
   return value === null || value === undefined
 }
 
+export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined => {
+  const lotteryEvents = listing?.events.filter(
+    (event) => event.type === ListingEventType.publicLottery
+  )
+  return lotteryEvents ? lotteryEvents[0] : null
+}
+
 // TODO memoize this function
 export function arrayToFormOptions<T>(arr: T[], label: string, value: string): FormOption[] {
   return arr.map((val: T) => ({
     label: val[label],
     value: val[value],
   }))
+}
+
+/**
+ * Create Date object with date and time which comes from the TimeField component
+ */
+export const createTime = (
+  date: Date,
+  formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
+) => {
+  let formattedHours = parseInt(formTime.hours)
+  if (formTime.period === "am" && formattedHours === 12) {
+    formattedHours = 0
+  }
+  if (formTime.period === "pm" && formattedHours !== 12) {
+    formattedHours = formattedHours + 12
+  }
+  date.setHours(formattedHours, parseInt(formTime.minutes), 0)
+  return date
+}
+
+/**
+ * Create Date object depending on DateField component
+ */
+export const createDate = (formDate: { year: string; month: string; day: string }) => {
+  return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
 }

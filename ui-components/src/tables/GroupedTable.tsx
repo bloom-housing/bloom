@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { HeaderCell, Row, Cell, StandardTableProps } from "./StandardTable"
+import { Cell, StandardTableProps } from "./StandardTable"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
@@ -17,7 +17,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
   const headerLabels = Object.values(headers).map((col, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <HeaderCell key={uniqKey}>{col}</HeaderCell>
+    return <th key={uniqKey}>{col}</th>
   })
 
   const body: React.ReactNode[] = []
@@ -31,7 +31,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
     if (groupHeader) {
       body.push(
-        <Row key={process.env.NODE_ENV === "test" ? "data-header" : nanoid()}>
+        <tr key={process.env.NODE_ENV === "test" ? "data-header" : nanoid()}>
           <Cell
             key={process.env.NODE_ENV === "test" ? "cell-header" : nanoid()}
             className={groupClassName}
@@ -39,7 +39,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
           >
             {groupHeader}
           </Cell>
-        </Row>
+        </tr>
       )
     }
 
@@ -61,9 +61,9 @@ export const GroupedTable = (props: GroupedTableProps) => {
       })
 
       body.push(
-        <Row id={rowKey} key={rowKey} className={`group-${groupClassName}`}>
+        <tr id={rowKey} key={rowKey} className={`group-${groupClassName}`}>
           {cols}
-        </Row>
+        </tr>
       )
     })
   })
@@ -77,7 +77,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
     <div style={{ overflowX: "auto" }}>
       <table className={tableClasses.join(" ")}>
         <thead>
-          <Row>{headerLabels}</Row>
+          <tr>{headerLabels}</tr>
         </thead>
         <tbody>{body}</tbody>
       </table>
