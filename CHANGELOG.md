@@ -63,6 +63,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
   - ability for an admin to confirm users by `/users` POST/PUT methods
+  - add google translations for GET listing API call
 
 ### Frontend
 
