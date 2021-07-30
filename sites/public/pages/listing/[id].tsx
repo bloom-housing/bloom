@@ -9,16 +9,11 @@ export default function ListingRedirect(props: Record<string, string>) {
   )
 }
 
-export async function getServerSideProps(context: {
-  params: Record<string, string>
-  locale: string
-}) {
+export async function getServerSideProps(context: { params: Record<string, string> }) {
   let response
 
   try {
-    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-      headers: { language: context.locale },
-    })
+    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`)
   } catch (e) {
     return { notFound: true }
   }

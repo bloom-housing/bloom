@@ -81,16 +81,13 @@ export class ListingsController {
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   // @UseInterceptors(CacheInterceptor)
   async retrieve(
-    @Headers("language") language: string,
+    @Headers("language") language: Language,
     @Param("listingId") listingId: string
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    const result = mapTo(
-      ListingDto,
-      await this.listingsService.findOne(listingId, Language[language])
-    )
+    const result = mapTo(ListingDto, await this.listingsService.findOne(listingId, language))
 
     return result
   }
