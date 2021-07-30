@@ -13,6 +13,7 @@ import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import { defaultLeasingAgents } from "./seeds/listings/shared"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
+import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
 import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
@@ -87,6 +88,7 @@ const seedListings = async (app: INestApplicationContext) => {
   const allSeeds = [
     app.get<ListingDefaultSeed>(ListingDefaultSeed),
     app.get<ListingDefaultSeed>(ListingColiseumSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultOpenSoonSeed),
     app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),

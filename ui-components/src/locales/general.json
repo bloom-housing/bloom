@@ -715,7 +715,6 @@
     "error": "There was an issue submitting the form.",
     "closeThisListing": "Do you really want to close this listing?",
     "active": "Accepting Applications",
-    "pending": "Coming Soon",
     "closed": "Closed",
     "actions": {
       "publish": "Publish",
@@ -772,7 +771,6 @@
     "browseListings": "Browse Listings",
     "buildingImageAltText": "A picture of the building",
     "closedListings": "Closed Listings",
-    "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
