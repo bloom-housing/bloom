@@ -7,6 +7,12 @@ import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
+import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
+import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
+import { Language } from "../../types"
+import { AssetsModule } from "../../src/assets/assets.module"
+import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
+import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { getSeedListingsCount } from "../../src/seed"
@@ -24,7 +30,13 @@ describe("Listings", () => {
   let app
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), ListingsModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        ListingsModule,
+        AssetsModule,
+        ApplicationMethodsModule,
+        PaperApplicationsModule,
+      ],
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
@@ -137,10 +149,59 @@ describe("Listings", () => {
     expect(modifiedListing.image).toHaveProperty("updatedAt")
   })
 
+  it("should add/overwrite application methods in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+
+    const listing: ListingUpdateDto = { ...res.body[0] }
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+    const assetCreateDto: AssetCreateDto = {
+      fileId: "testFileId2",
+      label: "testLabel2",
+    }
+
+    const file = await supertest(app.getHttpServer())
+      .post(`/assets`)
+      .send(assetCreateDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    const paperApplication = await supertest(app.getHttpServer())
+      .post(`/paperApplications`)
+      .send({ language: Language.en, file: file.body })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    const am: ApplicationMethodCreateDto = {
+      type: ApplicationMethodType.FileDownload,
+      paperApplications: [{ id: paperApplication.body.id }],
+    }
+
+    const applicationMethod = await supertest(app.getHttpServer())
+      .post(`/applicationMethods`)
+      .send(am)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    listing.applicationMethods = [applicationMethod.body]
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    const modifiedListing: ListingDto = putResponse.body
+
+    expect(modifiedListing.applicationMethods[0]).toHaveProperty("id")
+  })
+
   it("should add/overwrite listing events in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
+
+    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const listingEvent: ListingEventCreateDto = {
       type: ListingEventType.openHouse,
@@ -155,8 +216,6 @@ describe("Listings", () => {
       },
     }
     listing.events = [listingEvent]
-
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)

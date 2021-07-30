@@ -25,6 +25,11 @@ import { Preference } from "../preferences/entities/preference.entity"
 import { ListingDefaultFCFSPreferenceSeed } from "../seeds/listings/listing-default-fcfs-seed"
 import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
+import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
+import { PaperApplication } from "../paper-applications/entities/paper-application.entity"
+import { ApplicationMethodsModule } from "../application-methods/applications-methods.module"
+import { PaperApplicationsModule } from "../paper-applications/paper-applications.module"
+import { AssetsModule } from "../assets/assets.module"
 
 @Module({})
 export class SeederModule {
@@ -33,6 +38,7 @@ export class SeederModule {
     return {
       module: SeederModule,
       imports: [
+        AssetsModule,
         SharedModule,
         TypeOrmModule.forRoot({
           ...dbConfig,
@@ -47,6 +53,8 @@ export class SeederModule {
           Property,
           Unit,
           User,
+          ApplicationMethod,
+          PaperApplication,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,
@@ -54,6 +62,8 @@ export class SeederModule {
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
         ApplicationsModule,
+        ApplicationMethodsModule,
+        PaperApplicationsModule,
         AuthModule,
         ListingsModule,
         AmiChartsModule,

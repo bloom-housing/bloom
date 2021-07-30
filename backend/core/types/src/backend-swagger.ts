@@ -268,6 +268,110 @@ export class ApplicationFlaggedSetsService {
   }
 }
 
+export class ApplicationMethodsService {
+  /**
+   * List applicationMethods
+   */
+  list(options: IRequestOptions = {}): Promise<ApplicationMethod[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create applicationMethod
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update applicationMethod
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ApplicationMethodUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods/{applicationMethodId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get applicationMethod by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      applicationMethodId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ApplicationMethod> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods/{applicationMethodId}"
+      url = url.replace("{applicationMethodId}", params["applicationMethodId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete applicationMethod by id
+   */
+  delete(
+    params: {
+      /**  */
+      applicationMethodId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/applicationMethods/{applicationMethodId}"
+      url = url.replace("{applicationMethodId}", params["applicationMethodId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class ApplicationsService {
   /**
    * List applications
@@ -971,6 +1075,110 @@ export class ListingsService {
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
       const data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
+export class PaperApplicationsService {
+  /**
+   * List paperApplications
+   */
+  list(options: IRequestOptions = {}): Promise<PaperApplication[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create paperApplication
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: PaperApplicationCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update paperApplication
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: PaperApplicationUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications/{paperApplicationId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get paperApplication by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      paperApplicationId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaperApplication> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications/{paperApplicationId}"
+      url = url.replace("{paperApplicationId}", params["paperApplicationId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete paperApplication by id
+   */
+  delete(
+    params: {
+      /**  */
+      paperApplicationId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/paperApplications/{paperApplicationId}"
+      url = url.replace("{paperApplicationId}", params["paperApplicationId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -2400,6 +2608,118 @@ export interface ApplicationFlaggedSetResolve {
   applications: Id[]
 }
 
+export interface Asset {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplication {
+  /**  */
+  language: Language
+
+  /**  */
+  file?: CombinedFileTypes
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface ApplicationMethod {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  paperApplications?: PaperApplication[]
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface ApplicationMethodCreate {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  paperApplications?: Id[]
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface ApplicationMethodUpdate {
+  /**  */
+  type: ApplicationMethodType
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  paperApplications?: Id[]
+
+  /**  */
+  label?: string
+
+  /**  */
+  externalReference?: string
+
+  /**  */
+  acceptsPostmarkedApplications?: boolean
+
+  /**  */
+  phoneNumber?: string
+}
+
 export interface BooleanInput {
   /**  */
   type: InputType
@@ -3060,23 +3380,6 @@ export interface AssetCreate {
   label: string
 }
 
-export interface Asset {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-}
-
 export interface CreatePresignedUploadMetadata {
   /**  */
   parametersToSign: object
@@ -3718,20 +4021,6 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface ApplicationMethod {
-  /**  */
-  type: ApplicationMethodType
-
-  /**  */
-  label?: string
-
-  /**  */
-  externalReference?: string
-
-  /**  */
-  acceptsPostmarkedApplications?: boolean
-}
-
 export interface WhatToExpect {
   /**  */
   applicantsWillBeContacted?: string
@@ -3770,6 +4059,9 @@ export interface Listing {
 
   /**  */
   unitsSummarized: UnitsSummarized
+
+  /**  */
+  applicationMethods: ApplicationMethod[]
 
   /**  */
   preferences: Preference[]
@@ -3863,9 +4155,6 @@ export interface Listing {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
-
-  /**  */
-  applicationMethods: ApplicationMethod[]
 
   /**  */
   assets: AssetCreate[]
@@ -4112,6 +4401,9 @@ export interface ListingCreate {
   countyCode: CountyCode
 
   /**  */
+  applicationMethods: Id[]
+
+  /**  */
   preferences: PreferenceCreate[]
 
   /**  */
@@ -4194,9 +4486,6 @@ export interface ListingCreate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
-
-  /**  */
-  applicationMethods: ApplicationMethod[]
 
   /**  */
   assets: AssetCreate[]
@@ -4473,6 +4762,9 @@ export interface ListingUpdate {
   updatedAt?: Date
 
   /**  */
+  applicationMethods: Id[]
+
+  /**  */
   preferences: PreferenceUpdate[]
 
   /**  */
@@ -4555,9 +4847,6 @@ export interface ListingUpdate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
-
-  /**  */
-  applicationMethods: ApplicationMethod[]
 
   /**  */
   assets: AssetCreate[]
@@ -4666,6 +4955,31 @@ export interface ListingUpdate {
 
   /**  */
   waitlistOpenSpots?: number
+}
+
+export interface PaperApplicationCreate {
+  /**  */
+  language: Language
+
+  /**  */
+  file?: CombinedFileTypes
+}
+
+export interface PaperApplicationUpdate {
+  /**  */
+  language: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  file?: CombinedFileTypes
 }
 
 export interface Property {
@@ -5002,6 +5316,13 @@ export enum EnumApplicationFlaggedSetStatus {
   "flagged" = "flagged",
   "resolved" = "resolved",
 }
+export enum ApplicationMethodType {
+  "Internal" = "Internal",
+  "FileDownload" = "FileDownload",
+  "ExternalLink" = "ExternalLink",
+  "PaperPickup" = "PaperPickup",
+}
+export type CombinedFileTypes = Id
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",
@@ -5071,12 +5392,6 @@ export enum UnitStatus {
   "occupied" = "occupied",
 }
 export type CombinedAmiChartTypes = AmiChart
-export enum ApplicationMethodType {
-  "Internal" = "Internal",
-  "FileDownload" = "FileDownload",
-  "ExternalLink" = "ExternalLink",
-  "PaperPickup" = "PaperPickup",
-}
 export enum EnumListingReviewOrderType {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
