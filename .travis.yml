@@ -30,6 +30,8 @@ jobs:
       name: "Build public site"
     - script: yarn build:app:partners
       name: "Build partners site"
+    - script: yarn test:shared:ui:a11y
+      name: "Storybook a11y testing"
     - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
       name: "Backend unit tests"
 
