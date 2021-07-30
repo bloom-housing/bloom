@@ -7,6 +7,7 @@ export class ListingDefaultFCFSSeed extends ListingDefaultSeed {
       ...listing,
       name: "Test: Default, FCFS",
       applicationDueDate: null,
+      events: [],
     })
   }
 }

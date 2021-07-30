@@ -3701,14 +3701,6 @@ export interface UnitSummary {
   floorRange?: MinMax
 }
 
-export interface UnitSummaryByReservedType {
-  /**  */
-  reservedType: string
-
-  /**  */
-  byUnitTypeAndRent: UnitSummary[]
-}
-
 export interface UnitSummaryByAMI {
   /**  */
   percent: string

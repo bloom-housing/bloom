@@ -180,7 +180,7 @@ export const ListingView = (props: ListingProps) => {
           tagLabel={
             listing.reservedCommunityType
               ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
-              : null
+              : undefined
           }
         />
         <div className="p-3">

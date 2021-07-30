@@ -89,6 +89,11 @@ const ListingsList = (props: ListingsProps) => {
             href={`/listing/${listing.id}/${listing.urlSlug}`}
             appStatus={appStatus}
             appStatusContent={content}
+            tagLabel={
+              listing.reservedCommunityType
+                ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+                : undefined
+            }
           />
         </div>
         <div className="listings-row_content">
