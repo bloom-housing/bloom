@@ -406,6 +406,13 @@ class Listing extends BaseEntity {
     )
   }
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
+  reservedCommunityDescription?: string | null
+
   @ManyToOne(() => ReservedCommunityType, { eager: true, nullable: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })

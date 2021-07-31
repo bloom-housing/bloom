@@ -44,13 +44,15 @@ All notable changes to this project will be documented in this file. The format 
   - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
   - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
   - Add Preferences section to listing management ([#1564](https://github.com/bloom-housing/bloom/pull/1564)) (Emily Jablonski)
+  - Add Community Type to listing management ([#1540](https://github.com/bloom-housing/bloom/pull/1540)) (Emily Jablonski)
 
 ### UI Components
 
 - Fixed:
 
   - Fix a11y language navigation ([#1528](https://github.com/bloom-housing/bloom/pull/1528)) (Dominik Barcikowski)
-  - Update default mobile height for image-only navbar-logo ([#1466](https://github.com/bloom-housing/bloom/issues/1466))
+  - Update default mobile height for image-only navbar-logo ([#1466](https://github.com/bloom-housing/bloom/issues/1466))) (Andrea Egan)
+  - Remove border from navbar wrapper and align border color on primary button ([#1596](https://github.com/bloom-housing/bloom/pull/1596)) (Marcin Jedras)
 
 - Added:
   - Preview (disabled) state for Listings Application button ([#1502](https://github.com/bloom-housing/bloom/pull/1502)) (Jared White)

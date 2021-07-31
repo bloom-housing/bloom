@@ -28,11 +28,6 @@
   }
 }
 
-.navbar__wrapper {
-  @apply border-b;
-  @apply border-gray-400;
-}
-
 // Custom Navbar Styles
 nav.navbar {
   @apply max-w-5xl;
