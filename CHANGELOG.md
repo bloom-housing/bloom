@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Fix a11y language navigation ([#1528](https://github.com/bloom-housing/bloom/pull/1528)) (Dominik Barcikowski)
+  - Update default mobile height for image-only navbar-logo ([#1466](https://github.com/bloom-housing/bloom/issues/1466))) (Andrea Egan)
   - Remove border from navbar wrapper and align border color on primary button ([#1596](https://github.com/bloom-housing/bloom/pull/1596)) (Marcin Jedras)
 
 - Added:
