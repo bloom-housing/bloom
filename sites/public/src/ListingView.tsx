@@ -33,6 +33,7 @@ import {
   OpenHouseEvent,
   DownloadLotteryResults,
   ReferralApplication,
+  ListingUpdated,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
@@ -216,6 +217,7 @@ export const ListingView = (props: ListingProps) => {
         )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
+        <ListingUpdated listing={listing} />
         <ApplicationStatus listing={listing} />
         <div className="mx-4">
           <DownloadLotteryResults event={lotteryResults} />
@@ -308,6 +310,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
+              <ListingUpdated listing={listing} />
               <ApplicationStatus listing={listing} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
