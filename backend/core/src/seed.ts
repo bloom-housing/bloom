@@ -13,6 +13,7 @@ import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import { defaultLeasingAgents } from "./seeds/listings/shared"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
+import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
 import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
@@ -23,6 +24,8 @@ import { PaperApplicationsService } from "./paper-applications/paper-application
 import { Language } from "./shared/types/language-enum"
 import { AssetsService } from "./assets/services/assets.service"
 import { AuthContext } from "./auth/types/auth-context"
+import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
+import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -85,11 +88,14 @@ const seedListings = async (app: INestApplicationContext) => {
   const allSeeds = [
     app.get<ListingDefaultSeed>(ListingDefaultSeed),
     app.get<ListingDefaultSeed>(ListingColiseumSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultOpenSoonSeed),
     app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
     app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
     app.get<ListingDefaultSeed>(ListingTritonSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultReservedSeed),
+    app.get<ListingDefaultSeed>(ListingDefaultFCFSSeed),
   ]
 
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))

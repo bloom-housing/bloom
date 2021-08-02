@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
 export class seedReservedCommunityType1624542123483 implements MigrationInterface {
-  reservedCommunityTypes = ["specialNeeds", "senior"]
+  reservedCommunityTypes = ["specialNeeds", "senior55", "senior62"]
   public async up(queryRunner: QueryRunner): Promise<void> {
     for (const reservedCommunityType of this.reservedCommunityTypes) {
       await queryRunner.query(`INSERT INTO reserved_community_types (name) VALUES ($1)`, [
