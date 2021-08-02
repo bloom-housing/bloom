@@ -52,12 +52,12 @@ const ListingMap = (props: ListingMapProps) => {
   useEffect(() => {
     onViewportChange({
       ...viewport,
-      latitude: props.address?.latitude ?? 0,
-      longitude: props.address?.longitude ?? 0,
+      latitude: props.address?.latitude,
+      longitude: props.address?.longitude,
     })
     setMarker({
-      latitude: props.address?.latitude ?? 0,
-      longitude: props.address?.longitude ?? 0,
+      latitude: props.address?.latitude,
+      longitude: props.address?.longitude,
     })
   }, [props.address?.latitude, props.address?.longitude, props.enableCustomPinPositioning])
 
@@ -92,20 +92,24 @@ const ListingMap = (props: ListingMapProps) => {
         onViewportChange={onViewportChange}
         {...viewport}
       >
-        {props.enableCustomPinPositioning ? (
-          <Marker
-            latitude={marker.latitude ?? 0}
-            longitude={marker.longitude ?? 0}
-            offsetTop={-20}
-            draggable={true}
-            onDragEnd={onMarkerDragEnd}
-          >
-            <div className="pin"></div>
-          </Marker>
-        ) : (
-          <Marker latitude={marker.latitude ?? 0} longitude={marker.longitude ?? 0} offsetTop={-20}>
-            <div className="pin"></div>
-          </Marker>
+        {marker.latitude && marker.longitude && (
+          <>
+            {props.enableCustomPinPositioning ? (
+              <Marker
+                latitude={marker.latitude}
+                longitude={marker.longitude}
+                offsetTop={-20}
+                draggable={true}
+                onDragEnd={onMarkerDragEnd}
+              >
+                <div className="pin"></div>
+              </Marker>
+            ) : (
+              <Marker latitude={marker.latitude} longitude={marker.longitude} offsetTop={-20}>
+                <div className="pin"></div>
+              </Marker>
+            )}
+          </>
         )}
       </MapGL>
     </div>

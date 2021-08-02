@@ -226,14 +226,14 @@ const BuildingDetails = ({
                   label: t("t.automatic"),
                   value: "automatic",
                   id: "automatic",
-                  note: t("listings.mapPinCustomPosition"),
+                  note: t("listings.mapPinAutomaticDescription"),
                   defaultChecked: !listing?.customMapPin,
                 },
                 {
                   label: t("t.custom"),
                   value: "custom",
                   id: "custom",
-                  note: t("listings.mapPinAutomaticPosition"),
+                  note: t("listings.mapPinCustomDescription"),
                   defaultChecked: listing?.customMapPin,
                 },
               ]}

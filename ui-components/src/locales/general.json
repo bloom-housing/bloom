@@ -825,7 +825,7 @@
       "header": "Lottery Results"
     },
     "lotteryStartTime": "Lottery Start Time",
-    "mapPinAutomaticPosition": "Map pin position is based on the address provided",
+    "mapPinAutomaticDescription": "Map pin position is based on the address provided",
     "mapPinCustomDescription": "Drag the pin to update the marker location",
     "mapPinPosition": "Map Pin Position",
     "mapPreview": "Map Preview",
