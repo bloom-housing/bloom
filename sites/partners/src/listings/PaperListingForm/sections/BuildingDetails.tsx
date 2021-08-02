@@ -70,7 +70,7 @@ const BuildingDetails = ({
       buildingAddress.state &&
       buildingAddress.street &&
       buildingAddress.zipCode &&
-      buildingAddress.zipCode.length === 5
+      buildingAddress.zipCode.length >= 5
     )
   }
 
