@@ -12,7 +12,7 @@ import {
   getOccupancyDescription,
   GroupedTable,
   GroupedTableGroup,
-  groupNonReservedAndReservedSummaries,
+  getSummariesTable,
   ImageCard,
   imageUrlFromListing,
   InfoCard,
@@ -33,9 +33,11 @@ import {
   OpenHouseEvent,
   DownloadLotteryResults,
   ReferralApplication,
+  Message,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
+import { useGetApplicationStatusProps } from "../lib/hooks"
 
 interface ListingProps {
   listing: Listing
@@ -45,6 +47,8 @@ interface ListingProps {
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
+
+  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
 
   if (!listing) {
     return <ErrorPage />
@@ -79,10 +83,7 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: GroupedTableGroup[] = null
 
   if (amiValues.length == 1) {
-    groupedUnits = groupNonReservedAndReservedSummaries(
-      listing.unitsSummarized.byNonReservedUnitType,
-      listing.unitsSummarized.byReservedType
-    )
+    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -152,6 +153,15 @@ export const ListingView = (props: ListingProps) => {
     }
   }
 
+  const getReservedTitle = () => {
+    if (
+      listing.reservedCommunityType.name === "senior55" ||
+      listing.reservedCommunityType.name === "senior62"
+    ) {
+      return t("listings.reservedCommunitySeniorTitle")
+    }
+  }
+
   //TODO: Add isReferralApplication boolean field to avoid this logic
   const isReferralApp =
     !listing.applicationDropOffAddress &&
@@ -167,6 +177,11 @@ export const ListingView = (props: ListingProps) => {
         <ImageCard
           title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
+          tagLabel={
+            listing.reservedCommunityType
+              ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
+              : undefined
+          }
         />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
@@ -182,18 +197,20 @@ export const ListingView = (props: ListingProps) => {
       </header>
 
       <div className="w-full md:w-2/3 md:mt-6 md:mb-6 md:px-3 md:pr-8">
+        {listing.reservedCommunityType && (
+          <Message warning={true}>
+            {t("listings.reservedFor", {
+              type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+            })}
+          </Message>
+        )}
         {amiValues.length > 1 &&
           amiValues.map((percent) => {
             const byAMI = listing.unitsSummarized.byAMI.find((item) => {
               return parseInt(item.percent, 10) == percent
             })
 
-            groupedUnits = byAMI
-              ? groupNonReservedAndReservedSummaries(
-                  byAMI.byNonReservedUnitType,
-                  byAMI.byReservedType
-                )
-              : []
+            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
             return (
               <>
@@ -215,7 +232,7 @@ export const ListingView = (props: ListingProps) => {
         )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
-        <ApplicationStatus listing={listing} />
+        <ApplicationStatus content={appStatusContent} />
         <div className="mx-4">
           <DownloadLotteryResults event={lotteryResults} />
           {!isReferralApp ? (
@@ -238,6 +255,19 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <ul>
+            {listing.reservedCommunityType && (
+              <ListSection title={getReservedTitle()} subtitle={null}>
+                <InfoCard
+                  title={t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)}
+                  subtitle={t("listings.allUnits")}
+                >
+                  <ExpandableText className="text-sm text-gray-700">
+                    {listing.reservedCommunityDescription}
+                  </ExpandableText>
+                </InfoCard>
+              </ListSection>
+            )}
+
             <ListSection
               title={t("listings.householdMaximumIncome")}
               subtitle={householdMaximumIncomeSubheader}
@@ -307,7 +337,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
-              <ApplicationStatus listing={listing} />
+              <ApplicationStatus content={appStatusContent} />
               <DownloadLotteryResults event={lotteryResults} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
               {!isReferralApp ? (

@@ -189,10 +189,7 @@ type UnitMap = {
 const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
-const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitSummary[] => {
-  if (!reservedType) {
-    reservedType = null
-  }
+const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
   const summaries: UnitSummary[] = []
   const unitMap: UnitMap = {}
 
@@ -223,14 +220,7 @@ const summarizeUnitsByTypeAndRent = (units: Units, reservedType?: string): UnitS
 }
 
 // One row per unit type
-const summarizeUnitsByType = (
-  units: Units,
-  unitTypes: UnitTypeDto[],
-  reservedType?: string
-): UnitSummary[] => {
-  if (!reservedType) {
-    reservedType = null
-  }
+const summarizeUnitsByType = (units: Units, unitTypes: UnitTypeDto[]): UnitSummary[] => {
   const summaries = unitTypes.map(
     (unitType: UnitTypeDto): UnitSummary => {
       const summary = {} as UnitSummary
@@ -249,28 +239,12 @@ const summarizeUnitsByType = (
   })
 }
 
-const summarizeReservedTypes = (units: Units, reservedTypes: string[]) => {
-  return reservedTypes
-    .map((reservedType: string) => {
-      const unitsByReservedType = units.filter((unit: Unit) => unit.reservedType == reservedType)
-      return {
-        reservedType: reservedType,
-        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(unitsByReservedType),
-      }
-    })
-    .filter((item) => item.byUnitTypeAndRent.length > 0)
-}
-
-const summarizeByAmi = (units: Units, amiPercentages: string[], reservedTypes: string[]) => {
+const summarizeByAmi = (units: Units, amiPercentages: string[]) => {
   return amiPercentages.map((percent: string) => {
     const unitsByAmiPercentage = units.filter((unit: Unit) => unit.amiPercentage == percent)
-    const nonReservedUnitsByAmiPercentage = unitsByAmiPercentage.filter(
-      (unit: Unit) => unit.reservedType == null
-    )
     return {
       percent: percent,
-      byNonReservedUnitType: summarizeUnitsByTypeAndRent(nonReservedUnitsByAmiPercentage),
-      byReservedType: summarizeReservedTypes(unitsByAmiPercentage, reservedTypes),
+      byUnitType: summarizeUnitsByTypeAndRent(unitsByAmiPercentage),
     }
   })
 }
@@ -284,10 +258,6 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   }
   data.unitTypes = Array.from(unitTypes.values())
 
-  data.reservedTypes = Array.from(
-    new Set(units.map((unit) => unit.reservedType).filter((item) => item != null))
-  )
-
   const priorityTypes = new Map<string, UnitAccessibilityPriorityType>()
   for (const priorityType of units
     .map((unit) => unit.priorityType)
@@ -299,12 +269,9 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
-  const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
   data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units)
-  data.byNonReservedUnitType = summarizeUnitsByTypeAndRent(nonReservedUnits)
   data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
-  data.byReservedType = summarizeReservedTypes(units, data.reservedTypes)
-  data.byAMI = summarizeByAmi(units, data.amiPercentages, data.reservedTypes)
+  data.byAMI = summarizeByAmi(units, data.amiPercentages)
   data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
   return data
 }

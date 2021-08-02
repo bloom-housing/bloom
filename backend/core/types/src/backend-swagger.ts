@@ -3713,23 +3713,12 @@ export interface UnitSummary {
   floorRange?: MinMax
 }
 
-export interface UnitSummaryByReservedType {
-  /**  */
-  reservedType: string
-
-  /**  */
-  byUnitTypeAndRent: UnitSummary[]
-}
-
 export interface UnitSummaryByAMI {
   /**  */
   percent: string
 
   /**  */
-  byNonReservedUnitType: UnitSummary[]
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[]
+  byUnitType: UnitSummary[]
 }
 
 export interface HMI {
@@ -3745,9 +3734,6 @@ export interface UnitsSummarized {
   unitTypes: UnitType[]
 
   /**  */
-  reservedTypes: string[]
-
-  /**  */
   priorityTypes: UnitAccessibilityPriorityType[]
 
   /**  */
@@ -3758,12 +3744,6 @@ export interface UnitsSummarized {
 
   /**  */
   byUnitType: UnitSummary[]
-
-  /**  */
-  byNonReservedUnitType: UnitSummary[]
-
-  /**  */
-  byReservedType: UnitSummaryByReservedType[]
 
   /**  */
   byAMI: UnitSummaryByAMI[]
@@ -4251,6 +4231,9 @@ export interface Listing {
   displayWaitlistSize: boolean
 
   /**  */
+  reservedCommunityDescription?: string
+
+  /**  */
   reservedCommunityMinAge?: number
 
   /**  */
@@ -4580,6 +4563,9 @@ export interface ListingCreate {
 
   /**  */
   reservedCommunityMinAge?: number
+
+  /** */
+  reservedCommunityDescription?: string
 
   /**  */
   resultLink?: string
@@ -4938,6 +4924,9 @@ export interface ListingUpdate {
 
   /**  */
   displayWaitlistSize: boolean
+
+  /**  */
+  reservedCommunityDescription?: string
 
   /**  */
   reservedCommunityMinAge?: number

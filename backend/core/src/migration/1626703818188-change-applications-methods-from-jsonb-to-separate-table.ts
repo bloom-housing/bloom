@@ -10,7 +10,7 @@ export class changeApplicationsMethodsFromJsonbToSeparateTable1626703818188
       `ALTER TYPE "application_methods_type_enum" RENAME TO "application_methods_type_enum_old"`
     )
     await queryRunner.query(
-      `CREATE TYPE "application_methods_type_enum" AS ENUM('Internal', 'FileDownload', 'ExternalLink', 'PaperPickup')`
+      `CREATE TYPE "application_methods_type_enum" AS ENUM('Internal', 'FileDownload', 'ExternalLink', 'PaperPickup', 'POBox', 'LeasingAgent')`
     )
     await queryRunner.query(
       `ALTER TABLE "application_methods" ALTER COLUMN "type" TYPE "application_methods_type_enum" USING "type"::"text"::"application_methods_type_enum"`
