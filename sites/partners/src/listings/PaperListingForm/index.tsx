@@ -470,6 +470,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <Units
                         units={units}
                         setUnits={setUnits}
+                        unitsSummary={listing?.unitsSummarized}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
                       <Preferences preferences={preferences} setPreferences={setPreferences} />

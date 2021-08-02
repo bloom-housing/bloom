@@ -21,6 +21,7 @@ interface FieldGroupProps {
   validation?: Record<string, unknown>
   fieldGroupClassName?: string
   fieldClassName?: string
+  onChange?: () => unknown
 }
 
 const FieldGroup = ({
@@ -35,6 +36,7 @@ const FieldGroup = ({
   register,
   fieldGroupClassName,
   fieldClassName,
+  onChange,
 }: FieldGroupProps) => {
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
@@ -58,6 +60,7 @@ const FieldGroup = ({
               name={name}
               defaultChecked={item.defaultChecked || false}
               ref={register(validation)}
+              onChange={onChange}
             />
             <label htmlFor={item.id} className="font-semibold">
               {item.label}
