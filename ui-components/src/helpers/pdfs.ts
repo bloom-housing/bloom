@@ -10,4 +10,5 @@ export const pdfUrlFromListingEvents = (events: ListingEvent[], listingType: Lis
   if (event) {
     return event.file?.label == "cloudinaryPDF" ? cloudinaryPdfFromId(event.file.fileId) : event.url
   }
+  return null
 }
