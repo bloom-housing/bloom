@@ -85,33 +85,35 @@ const ListingMap = (props: ListingMapProps) => {
         {props.listingName && <h3 className="text-caps-tiny">{props.listingName}</h3>}
         <MultiLineAddress address={props.address} />
       </div>
-      <MapGL
-        mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
-        scrollZoom={false}
-        onViewportChange={onViewportChange}
-        {...viewport}
-      >
-        {marker.latitude && marker.longitude && (
-          <>
-            {props.enableCustomPinPositioning ? (
-              <Marker
-                latitude={marker.latitude}
-                longitude={marker.longitude}
-                offsetTop={-20}
-                draggable={true}
-                onDragEnd={onMarkerDragEnd}
-              >
-                <div className="pin"></div>
-              </Marker>
-            ) : (
-              <Marker latitude={marker.latitude} longitude={marker.longitude} offsetTop={-20}>
-                <div className="pin"></div>
-              </Marker>
-            )}
-          </>
-        )}
-      </MapGL>
+      {(process.env.mapBoxToken || process.env.MAPBOX_TOKEN) && (
+        <MapGL
+          mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
+          mapStyle="mapbox://styles/mapbox/streets-v11"
+          scrollZoom={false}
+          onViewportChange={onViewportChange}
+          {...viewport}
+        >
+          {marker.latitude && marker.longitude && (
+            <>
+              {props.enableCustomPinPositioning ? (
+                <Marker
+                  latitude={marker.latitude}
+                  longitude={marker.longitude}
+                  offsetTop={-20}
+                  draggable={true}
+                  onDragEnd={onMarkerDragEnd}
+                >
+                  <div className="pin"></div>
+                </Marker>
+              ) : (
+                <Marker latitude={marker.latitude} longitude={marker.longitude} offsetTop={-20}>
+                  <div className="pin"></div>
+                </Marker>
+              )}
+            </>
+          )}
+        </MapGL>
+      )}
     </div>
   )
 }
