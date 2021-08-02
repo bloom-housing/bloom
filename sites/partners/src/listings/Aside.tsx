@@ -143,7 +143,7 @@ const Aside = ({
         )
       }
 
-      if (listing.events.find((event) => event.type === ListingEventType.publicLottery)) {
+      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
         elements.push(
           <GridCell className="flex" key="btn-edit-lottery">
             <Button
@@ -155,7 +155,7 @@ const Aside = ({
             >
               {t("listings.actions.resultsPosted")}{" "}
               {moment(
-                listing.events.find((event) => event.type === ListingEventType.publicLottery)
+                listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}
               <Icon size="medium" symbol="edit" className="ml-2" />
@@ -189,8 +189,8 @@ const Aside = ({
         </GridCell>
       )
 
-      if (listing.events.find((event) => event.type === ListingEventType.publicLottery)) {
-        const eventUrl = pdfUrlFromListingEvents(listing.events, ListingEventType.publicLottery)
+      if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
+        const eventUrl = pdfUrlFromListingEvents(listing.events, ListingEventType.lotteryResults)
         elements.push(
           <GridCell className="flex" key="btn-preview-results">
             <a href={eventUrl} target="_blank" className="inline-flex w-full">

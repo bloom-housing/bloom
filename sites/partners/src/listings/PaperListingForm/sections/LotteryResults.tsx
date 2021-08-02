@@ -51,14 +51,14 @@ const LotteryResults = (props: LotteryResultsProps) => {
     const updatedEvents = [...listingEvents]
 
     const lotteryIndex = updatedEvents.findIndex(
-      (event) => event.type === ListingEventType.publicLottery
+      (event) => event.type === ListingEventType.lotteryResults
     )
     if (lotteryIndex > -1) {
       updatedEvents.splice(lotteryIndex, 1)
     }
 
     const newEvent: ListingEventCreate = {
-      type: ListingEventType.publicLottery,
+      type: ListingEventType.lotteryResults,
       startTime: new Date(),
       file: {
         fileId: cloudinaryData.id,
