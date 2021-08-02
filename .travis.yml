@@ -34,6 +34,8 @@ jobs:
       name: "Storybook a11y testing"
     - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
       name: "Backend unit tests"
+    - script: yarn db:reseed && yarn test:apps
+      name: "Cypress tests"
 
 addons:
   postgresql: "11"
