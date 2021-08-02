@@ -12,20 +12,27 @@ import {
   ViewItem,
   GridCell,
   FieldGroup,
+  GroupedTableGroup,
+  GroupedTable,
+  groupNonReservedAndReservedSummaries,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
 import { TempUnit } from "../"
+import { UnitsSummarized } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
   units: TempUnit[]
   setUnits: (units: TempUnit[]) => void
+  unitsSummary: UnitsSummarized
   disableUnitsAccordion: boolean
 }
 
-const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
+const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
+  const [unitsSummarized, setUnitsSummarized] = useState<GroupedTableGroup[]>()
+  const [showUnitsSummary, setShowUnitsSummary] = useState<boolean>(disableUnitsAccordion)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -46,12 +53,27 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
 
+  useEffect(() => {
+    if (unitsSummary !== undefined) {
+      setUnitsSummarized(
+        groupNonReservedAndReservedSummaries(
+          unitsSummary.byNonReservedUnitType,
+          unitsSummary.byReservedType
+        )
+      )
+    }
+  }, [setUnitsSummarized])
+
   const editUnit = useCallback(
     (tempId: number) => {
       setUnitDrawer(tempId)
     },
     [setUnitDrawer]
   )
+
+  const editUnitsView = useCallback(() => {
+    setShowUnitsSummary(!showUnitsSummary)
+  }, [showUnitsSummary, setShowUnitsSummary])
 
   const deleteUnit = useCallback(
     (tempId: number) => {
@@ -123,6 +145,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       value: "false",
     },
   ]
+  const unitSummariesHeaders = {
+    unitType: t("t.unitType"),
+    minimumIncome: t("t.minimumIncome"),
+    rent: t("t.rent"),
+  }
 
   return (
     <>
@@ -142,23 +169,41 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               fields={disableUnitsAccordionOptions}
               fieldClassName="m-0"
               fieldGroupClassName="flex h-12 items-center"
+              onChange={editUnitsView}
             />
           </GridCell>
         </GridSection>
-        <div className="bg-gray-300 px-4 py-5">
-          {!!units.length && (
-            <div className="mb-5">
-              <MinimalTable headers={unitTableHeaders} data={unitTableData} />
+        {showUnitsSummary && unitsSummarized !== undefined && (
+          <div className="listings-row_content w-full">
+            <div className="listings-row_table">
+              <GroupedTable
+                headers={unitSummariesHeaders}
+                data={unitsSummarized}
+                responsiveCollapse={true}
+                cellClassName="px-5 py-3"
+              />
             </div>
-          )}
-          <Button
-            type="button"
-            size={AppearanceSizeType.normal}
-            onClick={() => editUnit(units.length + 1)}
-          >
-            {t("listings.unit.add")}
-          </Button>
-        </div>
+            <Button type="button" size={AppearanceSizeType.normal} onClick={() => false}>
+              {t("t.edit")}
+            </Button>
+          </div>
+        )}
+        {!showUnitsSummary && (
+          <div className="bg-gray-300 px-4 py-5">
+            {!!units.length && (
+              <div className="mb-5">
+                <MinimalTable headers={unitTableHeaders} data={unitTableData} />
+              </div>
+            )}
+            <Button
+              type="button"
+              size={AppearanceSizeType.normal}
+              onClick={() => editUnit(units.length + 1)}
+            >
+              {t("listings.unit.add")}
+            </Button>
+          </div>
+        )}
       </GridSection>
 
       <Drawer
