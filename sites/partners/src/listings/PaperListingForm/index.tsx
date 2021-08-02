@@ -299,8 +299,8 @@ const formatFormData = (
     preferences: preferences,
     buildingAddress: {
       ...data.buildingAddress,
-      latitude: saveLatLong.latitude,
-      longitude: saveLatLong.longitude,
+      latitude: saveLatLong.latitude ?? null,
+      longitude: saveLatLong.longitude ?? null,
     },
     customMapPin: customPinPositionChosen,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
@@ -361,8 +361,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
-    latitude: listing?.buildingAddress.latitude,
-    longitude: listing?.buildingAddress.longitude,
+    latitude: listing?.buildingAddress?.latitude ?? null,
+    longitude: listing?.buildingAddress?.longitude ?? null,
   })
   const [customMapPositionChosen, setCustomMapPositionChosen] = useState(listing?.customMapPin)
 
@@ -421,8 +421,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   */
   const onSubmit = useCallback(
     async (data: FormListing, status: ListingStatus) => {
-      console.warn("onSubmit")
-
       try {
         data = {
           ...data,
@@ -483,8 +481,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       void onSubmit(submitData.data, status)
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
-
-  console.log("latLong from form", latLong)
 
   return (
     <>

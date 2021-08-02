@@ -40,6 +40,15 @@ const ListingMap = (props: ListingMapProps) => {
     zoom: 13,
   } as Viewport)
 
+  const onViewportChange = (viewport: Viewport) => {
+    // width and height need to be set here to work properly with
+    // the responsive wrappers
+    const newViewport = { ...viewport }
+    newViewport.width = "100%"
+    newViewport.height = 400
+    setViewport(newViewport)
+  }
+
   useEffect(() => {
     onViewportChange({
       ...viewport,
@@ -69,15 +78,6 @@ const ListingMap = (props: ListingMapProps) => {
   }, [])
 
   if (!props.address || !props.address.latitude || !props.address.longitude) return null
-
-  const onViewportChange = (viewport: Viewport) => {
-    // width and height need to be set here to work properly with
-    // the responsive wrappers
-    const newViewport = { ...viewport }
-    newViewport.width = "100%"
-    newViewport.height = 400
-    setViewport(newViewport)
-  }
 
   return (
     <div className="listing-map">

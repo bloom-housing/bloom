@@ -116,8 +116,6 @@ const BuildingDetails = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapPinPosition])
 
-  //TODO: On switch to automatic, change lat/long back to address default
-
   return (
     <GridSection
       grid={false}
@@ -189,7 +187,7 @@ const BuildingDetails = ({
 
       <GridSection columns={3}>
         <GridCell span={2}>
-          <ViewItem label={"Map Preview"} />
+          <ViewItem label={t("listings.mapPreview")} />
           {displayMapPreview() ? (
             <ListingMap
               listingName={listing?.name}
@@ -210,13 +208,13 @@ const BuildingDetails = ({
               className={"w-full bg-gray-400 p-3 flex items-center justify-center"}
               style={{ height: "400px" }}
             >
-              Enter an address to preview the map
+              {t("listings.mapPreviewNoAddress")}
             </div>
           )}
         </GridCell>
         <GridCell>
           <GridCell>
-            <p className="field-label m-4 ml-0">{"Map Pin Position"}</p>
+            <p className="field-label m-4 ml-0">{t("listings.mapPinPosition")}</p>
             <FieldGroup
               name="mapPinPosition"
               type="radio"
@@ -225,17 +223,17 @@ const BuildingDetails = ({
               register={register}
               fields={[
                 {
-                  label: "Automatic",
+                  label: t("t.automatic"),
                   value: "automatic",
                   id: "automatic",
-                  note: "Map pin position is based on the address provided",
+                  note: t("listings.mapPinCustomPosition"),
                   defaultChecked: !listing?.customMapPin,
                 },
                 {
-                  label: "Custom",
+                  label: t("t.custom"),
                   value: "custom",
                   id: "custom",
-                  note: "Drag the pin to update the marker location",
+                  note: t("listings.mapPinAutomaticPosition"),
                   defaultChecked: listing?.customMapPin,
                 },
               ]}
