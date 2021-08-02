@@ -4,6 +4,7 @@ import { BaseEntity, DeepPartial, Repository } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
@@ -11,7 +12,6 @@ import { User } from "../../auth/entities/user.entity"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import {
   getDefaultAmiChart,
-  getDefaultApplicationMethods,
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
@@ -20,6 +20,8 @@ import {
   getDisplaceePreference,
   getLiveWorkPreference,
 } from "./shared"
+import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export class ListingDefaultSeed {
   constructor(
@@ -29,10 +31,14 @@ export class ListingDefaultSeed {
       UnitAccessibilityPriorityType
     >,
     @InjectRepository(UnitType) protected readonly unitTypeRepository: Repository<UnitType>,
+    @InjectRepository(ReservedCommunityType)
+    protected readonly reservedTypeRepository: Repository<ReservedCommunityType>,
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
     @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
-    @InjectRepository(User) protected readonly userRepository: Repository<User>
+    @InjectRepository(User) protected readonly userRepository: Repository<User>,
+    @InjectRepository(ApplicationMethod)
+    protected readonly applicationMethodRepository: Repository<ApplicationMethod>
   ) {}
 
   async seed() {
@@ -41,7 +47,6 @@ export class ListingDefaultSeed {
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-
     const amiChart = await this.amiChartRepository.save(getDefaultAmiChart())
 
     const property = await this.propertyRepository.save({
@@ -66,6 +71,9 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
 
     await this.unitsRepository.save(unitsToBeCreated)
+    const applicationMethods = await this.applicationMethodRepository.find({
+      type: ApplicationMethodType.Internal,
+    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -76,7 +84,7 @@ export class ListingDefaultSeed {
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
-      applicationMethods: getDefaultApplicationMethods(),
+      applicationMethods: applicationMethods,
       events: getDefaultListingEvents(),
     }
 

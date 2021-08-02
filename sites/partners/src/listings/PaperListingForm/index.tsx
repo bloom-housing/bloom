@@ -22,11 +22,14 @@ import {
   ListingApplicationAddressType,
   Unit,
   Listing,
+  ListingEvent,
   ListingEventType,
   ListingEventCreate,
+  Preference,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
+import { nanoid } from "nanoid"
 
 import Aside from "../Aside"
 import AdditionalDetails from "./sections/AdditionalDetails"
@@ -34,7 +37,7 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber } from "../../../lib/helpers"
+import { stringToBoolean, stringToNumber, createDate, createTime } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -43,6 +46,8 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
+import Preferences from "./sections/Preferences"
+import CommunityType from "./sections/CommunityType"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -188,13 +193,10 @@ const defaults: FormListing = {
   reviewOrderType: null,
   unitsSummarized: {
     unitTypes: [],
-    reservedTypes: [],
     priorityTypes: [],
     amiPercentages: [],
     byUnitTypeAndRent: [],
     byUnitType: [],
-    byNonReservedUnitType: [],
-    byReservedType: [],
     byAMI: [],
     hmi: {
       columns: [],
@@ -207,28 +209,18 @@ export type TempUnit = Unit & {
   tempId?: number
 }
 
-const formatFormData = (data: FormListing, units: TempUnit[]) => {
+export type TempEvent = ListingEvent & {
+  tempId?: string
+}
+
+const formatFormData = (
+  data: FormListing,
+  units: TempUnit[],
+  openHouseEvents: TempEvent[],
+  preferences: Preference[]
+) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
-  const createDate = (formDate: { year: string; month: string; day: string }) => {
-    return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
-  }
-
-  const createTime = (
-    date: Date,
-    formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
-  ) => {
-    let formattedHours = parseInt(formTime.hours)
-    if (formTime.period === "am" && formattedHours === 12) {
-      formattedHours = 0
-    }
-    if (formTime.period === "pm" && formattedHours !== 12) {
-      formattedHours = formattedHours + 12
-    }
-    date.setHours(formattedHours, parseInt(formTime.minutes), 0)
-    return date
-  }
 
   const applicationDueDateFormatted = createDate(data.applicationDueDateField)
   const applicationDueTimeFormatted = createTime(
@@ -287,11 +279,21 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     })
   }
 
+  if (openHouseEvents) {
+    openHouseEvents.forEach((event) => {
+      events.push({
+        type: ListingEventType.openHouse,
+        ...event,
+      })
+    })
+  }
+
   return {
     ...data,
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
+    preferences: preferences,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -326,7 +328,8 @@ const formatFormData = (data: FormListing, units: TempUnit[]) => {
     applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
       ? data.applicationMailingAddress
       : null,
-    events: events,
+    events,
+    reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
   }
 }
 
@@ -346,6 +349,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [status, setStatus] = useState<ListingStatus>(null)
   const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
+  const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
+  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
 
   /**
    * Close modal
@@ -365,7 +370,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }))
       setUnits(tempUnits)
     }
-  }, [listing, setUnits])
+
+    if (listing?.events) {
+      const events = listing.events
+        .filter((event) => event.type === ListingEventType.openHouse)
+        .map((event) => ({
+          ...event,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          url: event.url,
+          note: event.note,
+          tempId: nanoid(),
+        }))
+
+      setOpenHouseEvents(events)
+    }
+  }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues } = formMethods
@@ -386,7 +406,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           ...data,
           status,
         }
-        const formattedData = formatFormData(data, units)
+        const orderedPreferences = preferences.map((pref, index) => {
+          return { ...pref, ordinal: index }
+        })
+        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -408,7 +431,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, editMode, listingsService, listing, router]
+    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
   )
 
   const onError = () => {
@@ -468,11 +491,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <ListingIntro />
                       <ListingPhoto />
                       <BuildingDetails />
+                      <CommunityType listing={listing} />
                       <Units
                         units={units}
                         setUnits={setUnits}
                         disableUnitsAccordion={listing?.disableUnitsAccordion}
                       />
+                      <Preferences preferences={preferences} setPreferences={setPreferences} />
                       <AdditionalFees />
                       <BuildingFeatures />
                       <AdditionalEligibility />
@@ -480,7 +505,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <RankingsAndResults listing={listing} />
                       <LeasingAgent />
                       <ApplicationAddress listing={listing} />
-                      <ApplicationDates listing={listing} />
+                      <ApplicationDates
+                        listing={listing}
+                        openHouseEvents={openHouseEvents}
+                        setOpenHouseEvents={setOpenHouseEvents}
+                      />
                       {listing.status === ListingStatus.closed && (
                         <LotteryResults
                           submitCallback={(data) => {

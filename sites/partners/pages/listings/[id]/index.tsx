@@ -32,6 +32,8 @@ import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/se
 import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
 import DetailApplicationDates from "../../../src/listings/PaperListingDetails/sections/DetailApplicationDates"
+import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
+import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -115,7 +117,9 @@ export default function ApplicationsList() {
                 <DetailListingIntro />
                 <DetailListingPhoto />
                 <DetailBuildingDetails />
+                <DetailCommunityType />
                 <DetailUnits setUnitDrawer={setUnitDrawer} />
+                <DetailPreferences />
                 <DetailAdditionalFees />
                 <DetailBuildingFeatures />
                 <DetailAdditionalEligibility />

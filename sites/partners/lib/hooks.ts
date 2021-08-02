@@ -193,3 +193,29 @@ export function useUnitTypeList() {
     error,
   }
 }
+
+export function usePreferenceList() {
+  const { preferencesService } = useContext(AuthContext)
+  const fetcher = () => preferencesService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useReservedCommunityTypeList() {
+  const { reservedCommunityTypeService } = useContext(AuthContext)
+  const fetcher = () => reservedCommunityTypeService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/reservedCommunityTypes`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
