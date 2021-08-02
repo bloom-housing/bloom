@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 import axios from "axios"
 import useSWR from "swr"
-import { isInternalLink } from "@bloom-housing/ui-components"
-import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
+import { isInternalLink, encodeToBackendFilterString } from "@bloom-housing/ui-components"
+import { ListingFilterParams } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 
@@ -34,23 +34,10 @@ export const useFormConductor = (stepName: string) => {
   return context
 }
 
-// TODO(abbiefarr): move this to a filters helper file
-function backendFilterParamsFromFilters(filters: ListingFilterParams) {
-  if (!filters) return ""
-  let filterString = ""
-  for (const filterKey in ListingFilterKeys) {
-    const value = filters[filterKey]
-    if (value && value != "") {
-      filterString += `&filter[$comparison]==&filter[${filterKey}]=${value}`
-    }
-  }
-  return filterString
-}
-
 const listingsFetcher = function () {
   return async (url: string, page: number, limit: number, filters: ListingFilterParams) => {
     const res = await axios.get(
-      `${url}?page=${page}&limit=${limit}${backendFilterParamsFromFilters(filters)}`
+      `${url}?page=${page}&limit=${limit}${encodeToBackendFilterString(filters)}`
     )
     return res.data
   }

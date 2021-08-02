@@ -11,6 +11,8 @@ import {
   Select,
   Form,
   SelectOption,
+  encodeToFrontendFilterString,
+  decodeFiltersFromFrontendUrl,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import Layout from "../layouts/application"
@@ -18,11 +20,7 @@ import { MetaTags } from "../src/MetaTags"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useListingsData } from "../lib/hooks"
-import {
-  EnumListingFilterParamsComparison,
-  ListingFilterKeys,
-  ListingFilterParams,
-} from "@bloom-housing/backend-core/types"
+import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
 
 const ListingsPage = () => {
   const router = useRouter()
@@ -62,21 +60,9 @@ const ListingsPage = () => {
   ]
 
   function setQueryString(page: number, filters = filterState) {
-    const query = { page: page }
-    for (const filterKey in filters) {
-      const filterValue = filters[filterKey]
-      if (filterValue) {
-        query[filterKey] = filterValue
-      }
-    }
-    void router.push(
-      {
-        pathname: "/listings",
-        query: query,
-      },
-      undefined,
-      { shallow: true }
-    )
+    void router.push(`/listings?page=${page}${encodeToFrontendFilterString(filters)}`, undefined, {
+      shallow: true,
+    })
   }
 
   // Checks for changes in url params.
@@ -85,16 +71,7 @@ const ListingsPage = () => {
       setCurrentPage(Number(router.query.page))
     }
 
-    const updatedFilters: ListingFilterParams = {
-      $comparison: EnumListingFilterParamsComparison["="],
-    }
-    for (const filterKey in ListingFilterKeys) {
-      const filterValue = router.query[filterKey]
-      if (filterValue) {
-        updatedFilters[filterKey] = filterValue
-      }
-    }
-    setFilterState(updatedFilters)
+    setFilterState(decodeFiltersFromFrontendUrl(router.query))
   }, [router.query])
 
   const { listingsData, listingsLoading } = useListingsData(currentPage, itemsPerPage, filterState)
