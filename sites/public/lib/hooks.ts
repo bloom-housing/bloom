@@ -48,7 +48,7 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     if (openDateState(listing)) {
       const date = listing.applicationOpenDate
       const openDate = moment(date)
-      formattedDate = openDate.format("MMMM D, YYYY")
+      formattedDate = openDate.format("MMM. D, YYYY")
       content = t("listings.applicationOpenPeriod")
     } else {
       if (listing.applicationDueDate) {

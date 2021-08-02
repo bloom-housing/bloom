@@ -75,14 +75,6 @@ export const openSoon = () => (
   />
 )
 
-export const openSoonVivid = () => (
-  <ApplicationStatus
-    content={t("listings.comingSoon") + ": " + formatDateTime(listing2.applicationDueDate)}
-    status={ApplicationStatusType.Open}
-    vivid
-  />
-)
-
 const listing3 = Object.assign({}, Archer) as any
 days = 10
 listing3.applicationDueDate = moment().add(days, "days").format()

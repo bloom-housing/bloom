@@ -40,11 +40,15 @@ All notable changes to this project will be documented in this file. The format 
   - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
 
 - Added:
+
   - A notice bar to the preview page of a listing ([#1532](https://github.com/bloom-housing/bloom/pull/1532)) (Jared White)
   - Photo upload and preview to the Partner Listing screens ([#1491](https://github.com/bloom-housing/bloom/pull/1491)) (Jared White)
   - AG-grid sorting now is connected with the backend sorting ([#1083](https://github.com/bloom-housing/bloom/issues/1083)) (Michał Plebański)
   - Add Preferences section to listing management ([#1564](https://github.com/bloom-housing/bloom/pull/1564)) (Emily Jablonski)
   - Add Community Type to listing management ([#1540](https://github.com/bloom-housing/bloom/pull/1540)) (Emily Jablonski)
+
+- Changed:
+  - Remove coming soon text, use application open text instead ([#1602](https://github.com/bloom-housing/bloom/pull/1602)) (Emily Jablonski)
 
 ### UI Components
 
