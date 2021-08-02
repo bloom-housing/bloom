@@ -74,9 +74,12 @@ const BuildingDetails = ({
     )
   }
 
-  const geocodingClient = GeocodeService({
-    accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
-  })
+  let geocodingClient
+  if (process.env.mapBoxToken || process.env.MAPBOX_TOKEN) {
+    geocodingClient = GeocodeService({
+      accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+    })
+  }
 
   const getNewLatLong = () => {
     if (
