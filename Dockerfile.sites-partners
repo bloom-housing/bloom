@@ -23,6 +23,7 @@ COPY sites/partners .
 # its own, use --build-arg BACKEND_API_BASE=<override>.
 ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.run.app
 ARG SHOW_LM_LINKS=TRUE
+ARG LANGUAGES=en,es,ar,bn
 
 RUN yarn build
 
