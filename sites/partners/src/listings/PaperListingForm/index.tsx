@@ -46,6 +46,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import Preferences from "./sections/Preferences"
+import CommunityType from "./sections/CommunityType"
 
 export type FormListing = Listing & {
   applicationDueDateField?: {
@@ -191,13 +192,10 @@ const defaults: FormListing = {
   reviewOrderType: null,
   unitsSummarized: {
     unitTypes: [],
-    reservedTypes: [],
     priorityTypes: [],
     amiPercentages: [],
     byUnitTypeAndRent: [],
     byUnitType: [],
-    byNonReservedUnitType: [],
-    byReservedType: [],
     byAMI: [],
     hmi: {
       columns: [],
@@ -328,6 +326,7 @@ const formatFormData = (
       ? data.applicationMailingAddress
       : null,
     events,
+    reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
   }
 }
 
@@ -484,6 +483,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <ListingIntro />
                       <ListingPhoto />
                       <BuildingDetails />
+                      <CommunityType listing={listing} />
                       <Units
                         units={units}
                         setUnits={setUnits}

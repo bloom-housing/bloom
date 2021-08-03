@@ -371,7 +371,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "¡Oops! Parece que algo salió mal. Por favor, inténtelo de nuevo. \n\nComuníquese con sfhousing.info@sfgov.org si sigue teniendo problemas.",
+      "badRequest": "¡Oops! Parece que algo salió mal. Por favor, inténtelo de nuevo. \n\nComuníquese con su departamento de vivienda si sigue teniendo problemas.",
       "timeoutPleaseTryAgain": "¡Oops! Parece que algo salió mal. Por favor, inténtelo de nuevo."
     },
     "notFound": {

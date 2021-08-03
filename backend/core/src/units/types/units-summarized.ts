@@ -2,7 +2,6 @@ import { Expose, Type } from "class-transformer"
 import { IsDefined, IsString, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitSummary } from "./unit-summary"
-import { UnitSummaryByReservedType } from "./unit-summary-by-reserved-type"
 import { UnitSummaryByAMI } from "./unit-summary-by-ami"
 import { HMI } from "./hmi"
 import { ApiProperty } from "@nestjs/swagger"
@@ -15,12 +14,6 @@ export class UnitsSummarized {
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
   @ApiProperty({ type: [UnitTypeDto] })
   unitTypes: UnitTypeDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ApiProperty()
-  reservedTypes: string[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -47,20 +40,6 @@ export class UnitsSummarized {
   @Type(() => UnitSummary)
   @ApiProperty({ type: [UnitSummary] })
   byUnitType: UnitSummary[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitSummary)
-  @ApiProperty({ type: [UnitSummary] })
-  byNonReservedUnitType: UnitSummary[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitSummaryByReservedType)
-  @ApiProperty({ type: [UnitSummaryByReservedType] })
-  byReservedType: UnitSummaryByReservedType[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
