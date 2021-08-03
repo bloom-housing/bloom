@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## v1.0.5 08/03/2021
+
 - Added:
   - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
 
