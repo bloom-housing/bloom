@@ -510,7 +510,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         openHouseEvents={openHouseEvents}
                         setOpenHouseEvents={setOpenHouseEvents}
                       />
-                      {listing.status === ListingStatus.closed && (
+                      {listing?.status === ListingStatus.closed && (
                         <LotteryResults
                           submitCallback={(data) => {
                             setStatus(ListingStatus.closed)
