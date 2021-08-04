@@ -371,7 +371,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "Ối! Có vẻ như đã có lỗi xảy ra. Vui lòng thử lại. \n\nLiên lạc với sfhousing.info@sfgov.org nếu quý vị vẫn gặp các sự cố.",
+      "badRequest": "Ối! Có vẻ như đã có lỗi xảy ra. Vui lòng thử lại. \n\nLiên hệ với bộ phận nhà ở của bạn nếu bạn vẫn gặp sự cố.",
       "timeoutPleaseTryAgain": "Ối! Có vẻ như đã có lỗi xảy ra. Vui lòng thử lại."
     },
     "notFound": {

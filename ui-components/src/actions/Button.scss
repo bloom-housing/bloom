@@ -20,6 +20,10 @@
     box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
   }
 
+  &:hover {
+    @apply border-primary-dark;
+  }
+
   &:disabled {
     pointer-events: none;
     @apply bg-white;

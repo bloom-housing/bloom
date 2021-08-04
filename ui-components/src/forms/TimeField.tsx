@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import moment from "moment"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { Field } from "./Field"
@@ -8,10 +9,10 @@ import { UseFormMethods } from "react-hook-form"
 export type TimeFieldPeriod = "am" | "pm"
 
 export type TimeFieldValues = {
-  hours?: string
-  minutes?: string
-  seconds?: string
-  period?: TimeFieldPeriod
+  hours: string
+  minutes: string
+  seconds: string
+  period: TimeFieldPeriod
 }
 
 export type TimeFieldProps = {
@@ -27,6 +28,17 @@ export type TimeFieldProps = {
   required?: boolean
   watch: UseFormMethods["watch"]
   seconds?: boolean
+}
+
+export const formatDateToTimeField = (date: Date) => {
+  const dateObj = moment(date)
+
+  return {
+    hours: dateObj.format("hh"),
+    minutes: dateObj.format("mm"),
+    seconds: dateObj.format("ss"),
+    period: new Date(date).getHours() >= 12 ? "pm" : "am",
+  }
 }
 
 const TimeField = ({

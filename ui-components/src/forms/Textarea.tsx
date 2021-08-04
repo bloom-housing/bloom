@@ -21,6 +21,7 @@ export interface TextareaProps {
   resize?: boolean
   rows?: number
   wrap?: WrapOptions
+  readerOnly?: boolean
 }
 
 export const Textarea = (props: TextareaProps) => {
@@ -31,6 +32,7 @@ export const Textarea = (props: TextareaProps) => {
   if (props.fullWidth) textareaClassnames.push("w-full")
   const labelClassnames = ["textarea-label"]
   if (props.errorMessage) labelClassnames.push("textarea-label-error")
+  if (props.readerOnly) labelClassnames.push("sr-only")
 
   return (
     <div>

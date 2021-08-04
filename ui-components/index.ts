@@ -143,4 +143,5 @@ export * from "./src/tables/MinimalTable"
 
 /* Text */
 export * from "./src/text/Description"
+export * from "./src/text/Message"
 export * from "./src/text/Tag"

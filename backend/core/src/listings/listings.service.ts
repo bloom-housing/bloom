@@ -26,6 +26,8 @@ export class ListingsService {
   private getFullyJoinedQueryBuilder() {
     return this.listingRepository
       .createQueryBuilder("listings")
+      .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
+      .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
       .leftJoinAndSelect("listings.image", "image")
       .leftJoinAndSelect("listings.events", "listingEvents")
       .leftJoinAndSelect("listingEvents.file", "listingEventFile")
