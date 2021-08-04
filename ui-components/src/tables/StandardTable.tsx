@@ -24,12 +24,16 @@ export const HeaderCell = (props: { children: React.ReactNode; className?: strin
 )
 
 export const Cell = (props: {
-  headerLabel?: string
+  headerLabel?: string | TableHeadersOptions
   className?: string
   colSpan?: number
   children: React.ReactNode
 }) => (
-  <td data-label={props.headerLabel} className={props.className || "p-5"} colSpan={props.colSpan}>
+  <td
+    data-label={props.headerLabel instanceof Object ? props.headerLabel?.name : props.headerLabel}
+    className={props.className || "p-5"}
+    colSpan={props.colSpan}
+  >
     {props.children}
   </td>
 )
