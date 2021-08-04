@@ -34,6 +34,8 @@ jobs:
       name: "Storybook a11y testing"
     - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
       name: "Backend unit tests"
+    - script: yarn test:e2e:backend:core
+      name: "Backend e2e tests"
 
 addons:
   postgresql: "11"
@@ -47,3 +49,5 @@ env:
     PGUSER=travis
     TEST_DATABASE_URL=postgres://localhost:5433/bloom_test
     REDIS_TLS_URL=redis://127.0.0.1:6379/0
+    NEW_RELIC_ENABLED=false
+    NEW_RELIC_LOG_ENABLED=false

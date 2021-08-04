@@ -22,7 +22,9 @@ COPY sites/partners .
 # In order to override it for local development when building the image on
 # its own, use --build-arg BACKEND_API_BASE=<override>.
 ARG BACKEND_API_BASE=https://backend-core-tj3gg4i5eq-uc.a.run.app
+ARG PUBLIC_BASE_URL=https://sites-public-tj3gg4i5eq-uc.a.run.app
 ARG SHOW_LM_LINKS=TRUE
+ARG LANGUAGES=en,es,ar,bn
 
 RUN yarn build
 

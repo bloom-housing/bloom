@@ -31,7 +31,12 @@ const AgPagination = ({
   }
 
   const onPrevClick = () => {
-    setCurrentPage(currentPage - 1)
+    let pageNumber = currentPage - 1
+    if (pageNumber > totalPages) {
+      // Go to the last page if we've gotten to a nonexistant page and click back.
+      pageNumber = totalPages
+    }
+    setCurrentPage(pageNumber)
     onPageChange && onPageChange(currentPage)
   }
 
@@ -75,7 +80,7 @@ const AgPagination = ({
         <Button
           className="data-pager__next data-pager__control"
           onClick={onNextClick}
-          disabled={totalPages === currentPage || totalPages === 0}
+          disabled={totalPages <= currentPage || totalPages === 0}
         >
           {t("t.next")}
         </Button>
