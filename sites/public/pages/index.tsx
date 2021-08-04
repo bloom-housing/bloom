@@ -64,9 +64,7 @@ export default function Home(props: IndexProps) {
         <MarkdownSection fullwidth={true}>
           <>
             <p>{t("welcome.seeMoreOpportunities")}</p>
-            <LinkButton href="/additional-resources">
-              {t("welcome.viewAdditionalHousing")}
-            </LinkButton>
+            <LinkButton href="/eligibility/welcome">{t("welcome.checkEligibility")}</LinkButton>
           </>
         </MarkdownSection>
       </div>
