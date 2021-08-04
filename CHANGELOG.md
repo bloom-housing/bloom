@@ -6,11 +6,18 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-### Frontend
+## Frontend
 
 - Added:
-
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+
+### UI Components
+
+- Added:
+  - Add ResponsiveTable for pricing
 
 ## v1.0.5 08/03/2021
 
