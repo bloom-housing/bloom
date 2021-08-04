@@ -2,12 +2,8 @@ import * as React from "react"
 
 import { UnitTables } from "./UnitTables"
 import { StandardTable } from "../../tables/StandardTable"
-import { GroupedTable } from "../../tables/GroupedTable"
 import Archer from "../../../__tests__/fixtures/archer.json"
-import {
-  unitSummariesTable,
-  groupNonReservedAndReservedSummaries,
-} from "../../helpers/tableSummaries"
+import { unitSummariesTable } from "../../helpers/tableSummaries"
 import { UnitSummary } from "@bloom-housing/backend-core/types"
 
 export default {
@@ -24,7 +20,6 @@ const summaries: {
   [key: string]: any
 } = {
   unitTypes: ["studio"],
-  reservedTypes: ["senior"],
   priorityTypes: [],
   amiPercentages: ["45.0", "30.0"],
   byUnitType: [
@@ -50,39 +45,10 @@ const summaries: {
       areaRange: { min: 285, max: 285 },
     },
   ],
-  byNonReservedUnitType: [
-    {
-      unitType: "studio",
-      totalAvailable: 40,
-      minIncomeRange: { min: "$1,438", max: "$2,208" },
-      occupancyRange: { min: 1, max: 2 },
-      rentAsPercentIncomeRange: { min: null, max: null },
-      rentRange: { min: "$719", max: "$1,104" },
-      floorRange: { min: 2, max: 3 },
-      areaRange: { min: 285, max: 285 },
-    },
-  ],
-  byReservedType: [
-    {
-      reservedType: "senior",
-      byUnitType: [
-        {
-          unitType: "studio",
-          totalAvailable: 1,
-          minIncomeRange: { min: "$2,208", max: "$2,208" },
-          occupancyRange: { min: 1, max: 2 },
-          rentAsPercentIncomeRange: { min: null, max: null },
-          rentRange: { min: "$1,104", max: "$1,104" },
-          floorRange: { min: 2, max: 2 },
-          areaRange: { min: 285, max: 285 },
-        },
-      ],
-    },
-  ],
   byAMI: [
     {
       percent: "45.0",
-      byNonReservedUnitType: [
+      byUnitType: [
         {
           unitType: "studio",
           totalAvailable: 24,
@@ -94,27 +60,10 @@ const summaries: {
           areaRange: { min: 285, max: 285 },
         },
       ],
-      byReservedType: [
-        {
-          reservedType: "senior",
-          byUnitType: [
-            {
-              unitType: "studio",
-              totalAvailable: 1,
-              minIncomeRange: { min: "$2,208", max: "$2,208" },
-              occupancyRange: { min: 1, max: 2 },
-              rentAsPercentIncomeRange: { min: null, max: null },
-              rentRange: { min: "$1,104", max: "$1,104" },
-              floorRange: { min: 2, max: 2 },
-              areaRange: { min: 285, max: 285 },
-            },
-          ],
-        },
-      ],
     },
     {
       percent: "30.0",
-      byNonReservedUnitType: [
+      byUnitType: [
         {
           unitType: "studio",
           totalAvailable: 16,
@@ -126,7 +75,6 @@ const summaries: {
           areaRange: { min: 285, max: 285 },
         },
       ],
-      byReservedType: [],
     },
   ],
   hmi: {
@@ -179,43 +127,11 @@ export const unitsSummaries = () => {
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <StandardTable
               headers={unitSummariesHeaders}
-              data={unitSummariesTable(byAMI.byNonReservedUnitType)}
+              data={unitSummariesTable(byAMI.byUnitTypeAndRent)}
               responsiveCollapse={true}
             />
           </div>
         )
-      })}
-    </div>
-  )
-}
-
-export const unitsSummariesGroupedByReservedTypes = () => {
-  return (
-    <div>
-      {amiValues.map((percent, index) => {
-        const byAMI = summaries.byAMI.find((item: { percent: string }) => {
-          return parseInt(item.percent, 10) == percent
-        })
-
-        if (byAMI) {
-          const groupedUnits = groupNonReservedAndReservedSummaries(
-            byAMI.byNonReservedUnitType,
-            byAMI.byReservedType
-          )
-
-          return (
-            <div key={index}>
-              <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
-              <GroupedTable
-                headers={unitSummariesHeaders}
-                data={groupedUnits}
-                responsiveCollapse={true}
-              />
-            </div>
-          )
-        } else {
-          return null
-        }
       })}
     </div>
   )

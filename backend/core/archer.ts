@@ -392,7 +392,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -420,7 +419,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -448,7 +446,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -476,7 +473,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -504,7 +500,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -532,7 +527,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -560,7 +554,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -588,7 +581,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -616,7 +608,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -644,7 +635,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -672,7 +662,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -700,7 +689,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -728,7 +716,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -756,7 +743,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -784,7 +770,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -812,7 +797,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -840,7 +824,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -868,7 +851,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -896,7 +878,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -924,7 +905,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -952,7 +932,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -980,7 +959,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1008,7 +986,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1036,7 +1013,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1064,7 +1040,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1092,7 +1067,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1120,7 +1094,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: "senior",
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1148,7 +1121,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1176,7 +1148,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1204,7 +1175,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1232,7 +1202,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1260,7 +1229,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1288,7 +1256,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1316,7 +1283,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1344,7 +1310,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1372,7 +1337,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1400,7 +1364,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1428,7 +1391,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1456,7 +1418,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1484,7 +1445,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {
@@ -1512,7 +1472,6 @@ export const ArcherListing: Listing = {
       numBedrooms: null,
       number: null,
       priorityType: null,
-      reservedType: null,
       sqFeet: "285",
       status: UnitStatus.occupied,
       unitType: {

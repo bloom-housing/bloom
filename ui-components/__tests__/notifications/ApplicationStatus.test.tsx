@@ -4,7 +4,6 @@ import {
   pastDueAndVivid,
   pastDue,
   openSoon,
-  openSoonVivid,
   openedAlready,
   openedWithFCFS,
   openedWithFCFSVivid,
@@ -28,10 +27,6 @@ describe("<ApplicationStatus>", () => {
   it("renders as open soon", () => {
     const { getByText } = render(openSoon())
     expect(getByText("Applications Open:", { exact: false })).toBeTruthy()
-  })
-  it("renders as open soon vivid", () => {
-    const { getByText } = render(openSoonVivid())
-    expect(getByText("Coming Soon:", { exact: false })).toBeTruthy()
   })
   it("renders as due soon", () => {
     const { getByText } = render(openedAlready())
