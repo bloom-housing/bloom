@@ -56,6 +56,7 @@ describe("applications/household/member", function () {
     cy.location("pathname").should("include", "/applications/household/add-members")
   })
 
+  /* TODO(#171): Fix the flakiness and re-enable this test.
   it("should save form values and redirect to the next step", function () {
     // initial fields
     cy.getByID("firstName").type(this.data["firstName"])
@@ -123,4 +124,5 @@ describe("applications/household/member", function () {
         workInRegion: "yes",
       })
   })
+  */
 })
