@@ -6,9 +6,16 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+
+
 ### UI Components
 
-- Add ResponsiveTable for pricing
+- Added:
+  - Add ResponsiveTable for pricing
 
 ## v1.0.5 08/03/2021
 
