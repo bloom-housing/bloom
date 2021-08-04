@@ -13,7 +13,7 @@ import {
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 import { useSingleListingData } from "../../../lib/hooks"
 
-import ListingGuard from '../../../src/ListingGuard'
+import ListingGuard from "../../../src/ListingGuard"
 import Layout from "../../../layouts"
 import Aside from "../../../src/listings/Aside"
 import { ListingContext } from "../../../src/listings/ListingContext"
@@ -73,78 +73,77 @@ export default function ApplicationsList() {
       <ListingGuard>
         <>
           <Layout>
-          <Head>
-            <title>{t("nav.siteTitlePartners")}</title>
-          </Head>
+            <Head>
+              <title>{t("nav.siteTitlePartners")}</title>
+            </Head>
 
-          <PageHeader
-            className="relative"
-            title={
-              <>
-                <p className="font-sans font-semibold uppercase text-3xl">{listingDto.name}</p>
+            <PageHeader
+              className="relative"
+              title={
+                <>
+                  <p className="font-sans font-semibold uppercase text-3xl">{listingDto.name}</p>
 
-                <p className="font-sans text-base mt-1">{listingDto.id}</p>
-              </>
-            }
-          >
-            <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-              <SiteAlert type="success" timeout={5000} dismissable />
-            </div>
-          </PageHeader>
-          <section className="border-t bg-white">
-            <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
-              <Button inlineIcon="left" icon="arrowBack" onClick={() => router.push("/")}>
-                {t("t.back")}
-              </Button>
+                  <p className="font-sans text-base mt-1">{listingDto.id}</p>
+                </>
+              }
+            >
+              <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+                <SiteAlert type="success" timeout={5000} dismissable />
+              </div>
+            </PageHeader>
+            <section className="border-t bg-white">
+              <div className="flex flex-row w-full mx-auto max-w-screen-xl justify-between px-5 items-center my-3">
+                <Button inlineIcon="left" icon="arrowBack" onClick={() => router.push("/")}>
+                  {t("t.back")}
+                </Button>
 
-              <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
-            </div>
-          </section>
+                <div className="status-bar__status md:pl-4 md:w-3/12">{listingStatus}</div>
+              </div>
+            </section>
 
-          <section className="bg-primary-lighter">
-            <div className="mx-auto px-5 mt-5 max-w-screen-xl">
-              {errorAlert && (
-                <AlertBox
-                  className="mb-5"
-                  onClose={() => setErrorAlert(false)}
-                  closeable
-                  type="alert"
-                >
-                  {t("authentication.signIn.errorGenericMessage")}
-                </AlertBox>
-              )}
+            <section className="bg-primary-lighter">
+              <div className="mx-auto px-5 mt-5 max-w-screen-xl">
+                {errorAlert && (
+                  <AlertBox
+                    className="mb-5"
+                    onClose={() => setErrorAlert(false)}
+                    closeable
+                    type="alert"
+                  >
+                    {t("authentication.signIn.errorGenericMessage")}
+                  </AlertBox>
+                )}
 
-              <div className="flex flex-row flex-wrap ">
-                <div className="info-card md:w-9/12">
-                  <DetailListingData />
-                  <DetailListingIntro />
-                  <DetailListingPhoto />
-                  <DetailBuildingDetails />
-                  <DetailCommunityType />
-                  <DetailUnits setUnitDrawer={setUnitDrawer} />
-                  <DetailPreferences />
-                  <DetailAdditionalFees />
-                  <DetailBuildingFeatures />
-                  <DetailAdditionalEligibility />
-                  <DetailAdditionalDetails />
-                  <DetailRankingsAndResults />
-                  <DetailLeasingAgent />
-                  <DetailApplicationAddress />
-                  <DetailApplicationDates />
-                </div>
+                <div className="flex flex-row flex-wrap ">
+                  <div className="info-card md:w-9/12">
+                    <DetailListingData />
+                    <DetailListingIntro />
+                    <DetailListingPhoto />
+                    <DetailBuildingDetails />
+                    <DetailCommunityType />
+                    <DetailUnits setUnitDrawer={setUnitDrawer} />
+                    <DetailPreferences />
+                    <DetailAdditionalFees />
+                    <DetailBuildingFeatures />
+                    <DetailAdditionalEligibility />
+                    <DetailAdditionalDetails />
+                    <DetailRankingsAndResults />
+                    <DetailLeasingAgent />
+                    <DetailApplicationAddress />
+                    <DetailApplicationDates />
+                  </div>
 
-                <div className="md:w-3/12 pl-6">
-                  <Aside type="details" />
+                  <div className="md:w-3/12 pl-6">
+                    <Aside type="details" />
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
-        </Layout>
+            </section>
+          </Layout>
 
-        <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
+          <DetailUnitDrawer unit={unitDrawer} setUnitDrawer={setUnitDrawer} />
         </>
       </ListingGuard>
-
     </ListingContext.Provider>
   )
 }

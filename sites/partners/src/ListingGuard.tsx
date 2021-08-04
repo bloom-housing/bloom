@@ -1,12 +1,10 @@
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import {
-  AuthContext,
-} from "@bloom-housing/ui-components"
+import { AuthContext } from "@bloom-housing/ui-components"
 import { UserRole } from "@bloom-housing/backend-core/types"
 
 type AuthGuardProps = {
-  children: React.ReactElement;
+  children: React.ReactElement
 }
 
 const ListingGuard = ({ children }: AuthGuardProps) => {
@@ -15,8 +13,9 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
 
   const { profile } = useContext(AuthContext)
 
-  const leasingAgentInListingsIds = profile.leasingAgentInListings.map(item => item.id)
-  const hasPrivileges = profile.roles.includes(UserRole.admin) || leasingAgentInListingsIds.includes(listingId)
+  const leasingAgentInListingsIds = profile.leasingAgentInListings.map((item) => item.id)
+  const hasPrivileges =
+    profile.roles.includes(UserRole.admin) || leasingAgentInListingsIds.includes(listingId)
 
   if (hasPrivileges) {
     return children

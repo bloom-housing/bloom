@@ -7,7 +7,7 @@ import PaperListingForm from "../../../src/listings/PaperListingForm"
 import { useSingleListingData } from "../../../lib/hooks"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import { MetaTags } from "../../../src/MetaTags"
-import ListingGuard from '../../../src/ListingGuard'
+import ListingGuard from "../../../src/ListingGuard"
 
 const EditListing = () => {
   const metaDescription = ""
