@@ -63,6 +63,13 @@ class Listing extends BaseEntity {
   @Type(() => Date)
   updatedAt: Date
 
+  // The HRD ID is a Detroit-specific ID.
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  hrdId?: string | null
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -450,6 +457,38 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistOpenSpots?: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  ownerCompany?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  managementCompany?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  managementWebsite?: string | null
+
+  // In the absence of AMI percentage information at the unit level, amiPercentageMin and
+  // amiPercentageMax will store the AMI percentage range for the listing as a whole.
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  amiPercentageMin?: number | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  amiPercentageMax?: number | null
 }
 
 export { Listing as default, Listing }
