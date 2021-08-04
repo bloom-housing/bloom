@@ -27,7 +27,7 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.appStatus !== undefined && props.appStatusContent !== undefined) {
     statusLabel = (
-      <aside className="image-card__status">
+      <aside className="image-card__status" aria-label={props.appStatusContent}>
         <ApplicationStatus status={props.appStatus} content={props.appStatusContent} vivid />
       </aside>
     )
@@ -35,7 +35,7 @@ const ImageCard = (props: ImageCardProps) => {
 
   if (props.lotteryStatus !== undefined && props.lotteryStatusContent !== undefined) {
     lotteryStatusLabel = (
-      <aside className="image-card__status">
+      <aside className="image-card__status" aria-label={props.lotteryStatusContent}>
         <ApplicationStatus
           status={props.lotteryStatus}
           content={props.lotteryStatusContent}
