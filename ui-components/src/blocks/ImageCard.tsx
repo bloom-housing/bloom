@@ -17,10 +17,13 @@ export interface ImageCardProps {
   appStatus?: ApplicationStatusType
   appStatusContent?: string
   appStatusSubContent?: string
+  lotteryStatus?: ApplicationStatusType
+  lotteryStatusContent?: string
 }
 
 const ImageCard = (props: ImageCardProps) => {
   let statusLabel
+  let lotteryStatusLabel
   let tag
 
   if (props.appStatus !== undefined && props.appStatusContent !== undefined) {
@@ -31,6 +34,18 @@ const ImageCard = (props: ImageCardProps) => {
           content={props.appStatusContent}
           subContent={props.appStatusSubContent}
           vivid
+        />
+      </aside>
+    )
+  }
+
+  if (props.lotteryStatus !== undefined && props.lotteryStatusContent !== undefined) {
+    lotteryStatusLabel = (
+      <aside className="image-card__status">
+        <ApplicationStatus
+          status={props.lotteryStatus}
+          content={props.lotteryStatusContent}
+          withIcon={false}
         />
       </aside>
     )
@@ -57,6 +72,7 @@ const ImageCard = (props: ImageCardProps) => {
         </figcaption>
       </figure>
       {statusLabel}
+      {lotteryStatusLabel}
     </div>
   )
 
