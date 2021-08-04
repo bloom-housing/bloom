@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+### UI Components
+
+- Add ResponsiveTable for pricing
+
 ## v1.0.5 08/03/2021
 
 - Added:
