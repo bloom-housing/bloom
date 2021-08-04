@@ -1,15 +1,18 @@
 import React, { useContext } from "react"
+import { useRouter } from "next/router"
 import {
   AuthContext,
 } from "@bloom-housing/ui-components"
 import { UserRole } from "@bloom-housing/backend-core/types"
 
 type AuthGuardProps = {
-  listingId?: string;
   children: React.ReactElement;
 }
 
-const ListingGuard = ({ listingId, children }: AuthGuardProps) => {
+const ListingGuard = ({ children }: AuthGuardProps) => {
+  const router = useRouter()
+  const listingId = router.query.id as string
+
   const { profile } = useContext(AuthContext)
 
   const leasingAgentInListingsIds = profile.leasingAgentInListings.map(item => item.id)

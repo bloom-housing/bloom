@@ -70,7 +70,7 @@ export default function ApplicationsList() {
 
   return (
     <ListingContext.Provider value={listingDto}>
-      <ListingGuard listingId={listingId}>
+      <ListingGuard>
         <>
           <Layout>
           <Head>

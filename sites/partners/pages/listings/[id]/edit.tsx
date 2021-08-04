@@ -31,7 +31,7 @@ const EditListing = () => {
 
   return (
     <ListingContext.Provider value={listingDto}>
-      <ListingGuard listingId={listingId}>
+      <ListingGuard>
         <Layout>
           <Head>
             <title>{t("nav.siteTitlePartners")}</title>
