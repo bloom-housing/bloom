@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+
 ## v1.0.5 08/03/2021
 
 - Added:
@@ -40,7 +45,6 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - refactors listing form submit to fix double submit issue ([#1501](https://github.com/bloom-housing/bloom/pull/1501))
-  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
 
 - Added:
 
