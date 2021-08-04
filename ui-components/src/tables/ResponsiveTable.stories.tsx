@@ -21,7 +21,7 @@ const pricingRows = [
     units: (
       <>
         <p className="font-semibold">Studio</p>
-        <p className="text-sm text-gray-700 hidden md:block">Waitlist</p>
+        <p className="text-sm text-gray-700 hidden md:block">1 available</p>
       </>
     ),
     availability: (
@@ -47,7 +47,7 @@ const pricingRows = [
     units: (
       <>
         <p className="font-semibold">Studio</p>
-        <p className="text-sm text-gray-700 hidden md:block">Waitlist</p>
+        <p className="text-sm text-gray-700 hidden md:block">1 available</p>
       </>
     ),
     availability: (
