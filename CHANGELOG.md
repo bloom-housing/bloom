@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+### Frontend
+
+- Added:
+
+  - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+
 ## v1.0.5 08/03/2021
 
 - Added:
