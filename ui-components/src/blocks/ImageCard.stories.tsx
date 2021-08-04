@@ -4,6 +4,7 @@ import { Listing } from "@bloom-housing/backend-core/types"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { t } from "../helpers/translator"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
+import { Application } from "icons/Icons"
 
 const listing = Object.assign({}, ArcherListing) as Listing
 
@@ -53,5 +54,19 @@ export const withListingAndTag = () => (
     tagLabel="Label"
     appStatus={ApplicationStatusType.Closed}
     appStatusContent={t("listings.applicationsClosed")}
+  />
+)
+
+export const withMultipleAppStatus = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+    tagLabel="Label"
+    appStatus={ApplicationStatusType.Closed}
+    appStatusContent={t("listings.applicationsClosed")}
+    lotteryStatus={ApplicationStatusType.PostLottery}
+    lotteryStatusContent={t("listings.applicationsClosed")}
   />
 )
