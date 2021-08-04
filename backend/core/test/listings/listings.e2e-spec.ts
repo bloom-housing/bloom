@@ -171,7 +171,7 @@ describe("Listings", () => {
   it("should add/overwrite listing events in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body[0] }
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
 
     const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
