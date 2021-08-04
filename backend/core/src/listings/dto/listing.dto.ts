@@ -30,6 +30,7 @@ import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
@@ -40,6 +41,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationDropOffAddress",
   "applicationMailingAddress",
   "applications",
+  "applicationMethods",
   "events",
   "image",
   "jurisdiction",
@@ -50,6 +52,12 @@ export class ListingDto extends OmitType(Listing, [
   "reservedCommunityType",
   "result",
 ] as const) {
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationMethodDto)
+  applicationMethods: ApplicationMethodDto[]
+
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -309,18 +317,26 @@ export class ListingDto extends OmitType(Listing, [
   yearBuilt?: number | null
 
   @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units as Unit[])
-    }
-  }
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitsSummarized)
+  @Transform(
+    (value, obj: Listing) => {
+      const units = obj.property.units
+      if (Array.isArray(units) && units.length > 0) {
+        return transformUnits(units)
+      }
+    },
+    { toClassOnly: true }
+  )
+  unitsSummarized: UnitsSummarized | undefined
 }
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
   "createdAt",
   "updatedAt",
+  "applicationMethods",
   "preferences",
   "events",
   "image",
@@ -350,6 +366,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "applicationCount",
   "result",
 ] as const) {
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  applicationMethods: IdDto[]
+
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
@@ -508,6 +530,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "id",
   "createdAt",
   "updatedAt",
+  "applicationMethods",
   "preferences",
   "image",
   "events",
@@ -553,6 +576,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  applicationMethods: IdDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

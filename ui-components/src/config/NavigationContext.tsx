@@ -1,11 +1,12 @@
-import React, { createContext, FunctionComponent } from "react"
+import React, { AriaAttributes, createContext, FunctionComponent } from "react"
 import { UrlObject } from "url"
 
 type Url = UrlObject | string
 
 export interface LinkProps {
   href: string
-  aria?: Record<string, string>
+  "aria-label"?: string
+  "aria-current"?: AriaAttributes["aria-current"]
   className?: string
   tabIndex?: number
 }
@@ -36,7 +37,8 @@ export const NavigationContext = createContext<NavigationContextProps>({
         e.preventDefault()
         alert(`You clicked: ${props.href}`)
       }}
-      {...props.aria}
+      {...(props["aria-label"] ? { "aria-label": props["aria-label"] } : {})}
+      {...(props["aria-current"] ? { "aria-current": props["aria-current"] } : {})}
     >
       {props.children}
     </a>

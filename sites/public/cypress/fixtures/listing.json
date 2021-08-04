@@ -68,7 +68,6 @@
   "status": "pending",
   "unitsSummarized": {
     "unitTypes": ["studio"],
-    "reservedTypes": ["senior"],
     "priorityTypes": [],
     "amiPercentages": ["30.0", "45.0"],
     "byUnitType": [
@@ -101,75 +100,10 @@
         }
       }
     ],
-    "byNonReservedUnitType": [
-      {
-        "unitType": "studio",
-        "totalAvailable": 0,
-        "minIncomeRange": {
-          "min": "$1,438",
-          "max": "$2,208"
-        },
-        "occupancyRange": {
-          "min": 1,
-          "max": 2
-        },
-        "rentAsPercentIncomeRange": {
-          "min": null,
-          "max": null
-        },
-        "rentRange": {
-          "min": "$719",
-          "max": "$1,104"
-        },
-        "floorRange": {
-          "min": 2,
-          "max": 3
-        },
-        "areaRange": {
-          "min": 285,
-          "max": 285
-        }
-      }
-    ],
-    "byReservedType": [
-      {
-        "reservedType": "senior",
-        "byUnitType": [
-          {
-            "unitType": "studio",
-            "totalAvailable": 0,
-            "minIncomeRange": {
-              "min": "$2,208",
-              "max": "$2,208"
-            },
-            "occupancyRange": {
-              "min": 1,
-              "max": 2
-            },
-            "rentAsPercentIncomeRange": {
-              "min": null,
-              "max": null
-            },
-            "rentRange": {
-              "min": "$1,104",
-              "max": "$1,104"
-            },
-            "floorRange": {
-              "min": 2,
-              "max": 2
-            },
-            "areaRange": {
-              "min": 285,
-              "max": 285
-            }
-          }
-        ]
-      }
-    ],
     "byAMI": [
       {
         "percent": "30.0",
-        "byNonReservedUnitType": [
+        "byUnitType": [
           {
             "unitType": "studio",
             "totalAvailable": 0,
@@ -198,12 +132,11 @@
               "max": 285
             }
           }
-        ],
-        "byReservedType": []
+        ]
       },
       {
         "percent": "45.0",
-        "byNonReservedUnitType": [
+        "byUnitType": [
           {
             "unitType": "studio",
             "totalAvailable": 0,
@@ -231,41 +164,6 @@
               "min": 285,
               "max": 285
             }
-          }
-        ],
-        "byReservedType": [
-          {
-            "reservedType": "senior",
-            "byUnitType": [
-              {
-                "unitType": "studio",
-                "totalAvailable": 0,
-                "minIncomeRange": {
-                  "min": "$2,208",
-                  "max": "$2,208"
-                },
-                "occupancyRange": {
-                  "min": 1,
-                  "max": 2
-                },
-                "rentAsPercentIncomeRange": {
-                  "min": null,
-                  "max": null
-                },
-                "rentRange": {
-                  "min": "$1,104",
-                  "max": "$1,104"
-                },
-                "floorRange": {
-                  "min": 2,
-                  "max": 2
-                },
-                "areaRange": {
-                  "min": 285,
-                  "max": 285
-                }
-              }
-            ]
           }
         ]
       }
@@ -378,7 +276,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -402,7 +299,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -426,7 +322,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -450,7 +345,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -474,7 +368,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": "senior",
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -498,7 +391,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -522,7 +414,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -546,7 +437,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -570,7 +460,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -594,7 +483,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -618,7 +506,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -642,7 +529,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -666,7 +552,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -690,7 +575,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -714,7 +598,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -738,7 +621,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -762,7 +644,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -786,7 +667,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -810,7 +690,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -834,7 +713,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -858,7 +736,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -882,7 +759,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -906,7 +782,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -930,7 +805,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -954,7 +828,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -978,7 +851,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1002,7 +874,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1026,7 +897,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1050,7 +920,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1074,7 +943,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1098,7 +966,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1122,7 +989,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1146,7 +1012,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1170,7 +1035,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1194,7 +1058,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1218,7 +1081,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1242,7 +1104,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1266,7 +1127,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1290,7 +1150,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1314,7 +1173,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",
@@ -1338,7 +1196,6 @@
       "numBedrooms": null,
       "number": null,
       "priorityType": null,
-      "reservedType": null,
       "sqFeet": "285.00",
       "status": "occupied",
       "unitType": "studio",

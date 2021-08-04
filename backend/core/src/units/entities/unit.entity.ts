@@ -116,12 +116,6 @@ class Unit {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   number?: string | null
 
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  reservedType?: string | null
-
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
