@@ -13,7 +13,7 @@ jest.setTimeout(30000)
 describe("Authz", () => {
   let app: INestApplication
   let userAccessToken: string
-  const adminOnlyEndpoints = ["/preferences", "/units", "/translations"]
+  const adminOnlyEndpoints = ["/units", "/translations"]
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
   const userEndpoint = "/user"

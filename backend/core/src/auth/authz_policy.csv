@@ -9,6 +9,7 @@ p, anonymous, user, true, create
 p, admin, asset, true, .*
 
 p, admin, preference, true, .*
+p, user, preference, true, .*
 
 p, admin, applicationMethod, true, .*
 
