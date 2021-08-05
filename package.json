@@ -1,6 +1,6 @@
 {
   "name": "bloom-housing",
-  "version": "0.2.12",
+  "version": "1.0.5",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
     "packages": [

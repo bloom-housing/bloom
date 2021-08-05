@@ -1,9 +1,20 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
+import moment from "moment"
 import { useRouter } from "next/router"
 import axios from "axios"
 import useSWR from "swr"
-import { isInternalLink, encodeToBackendFilterString } from "@bloom-housing/ui-components"
-import { ListingFilterParams } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationStatusProps,
+  isInternalLink,
+  openDateState,
+  t,
+  encodeToBackendFilterString,
+} from "@bloom-housing/ui-components"
+import {
+  EnumListingReviewOrderType,
+  Listing,
+  ListingFilterParams,
+} from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 
@@ -55,4 +66,42 @@ export function useListingsData(pageIndex: number, limit = 10, filters: ListingF
     listingsLoading: !error && !data,
     listingsError: error,
   }
+}
+
+export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatusProps => {
+  const [props, setProps] = useState({ content: "" })
+
+  useEffect(() => {
+    if (!listing) return
+    let content = ""
+    let formattedDate = ""
+    if (openDateState(listing)) {
+      const date = listing.applicationOpenDate
+      const openDate = moment(date)
+      formattedDate = openDate.format("MMM. D, YYYY")
+      content = t("listings.applicationOpenPeriod")
+    } else {
+      if (listing.applicationDueDate) {
+        const dueDate = moment(listing.applicationDueDate)
+        const dueTime = moment(listing.applicationDueTime)
+        formattedDate = dueDate.format("MMM. DD, YYYY")
+        if (listing.applicationDueTime) {
+          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
+        }
+        // if due date is in future, listing is open
+        if (moment() < dueDate) {
+          content = t("listings.applicationDeadline")
+        } else {
+          content = t("listings.applicationsClosed")
+        }
+      } else if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
+        content = t("listings.applicationFCFS")
+      }
+    }
+    content = formattedDate !== "" ? `${content}: ${formattedDate}` : content
+
+    setProps({ content })
+  }, [listing])
+
+  return props
 }

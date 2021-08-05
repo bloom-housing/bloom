@@ -19,6 +19,7 @@ import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
+import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
   const response = await axios.get(process.env.listingServiceUrl)
@@ -69,6 +70,8 @@ const ApplicationChooseLanguage = () => {
     })
   }
 
+  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
+
   return (
     <FormsLayout>
       <FormCard header={listing?.name}>
@@ -96,7 +99,11 @@ const ApplicationChooseLanguage = () => {
 
         {listing && (
           <div className="form-card__group p-0 m-0">
-            <ImageCard title={listing.name} imageUrl={imageUrl} listing={listing} />
+            <ImageCard
+              title={listing.name}
+              imageUrl={imageUrl}
+              appStatusContent={appStatusContent}
+            />
           </div>
         )}
 

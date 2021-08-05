@@ -14,7 +14,7 @@ import {
   FieldGroup,
   GroupedTableGroup,
   GroupedTable,
-  groupNonReservedAndReservedSummaries,
+  getSummariesTable,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
@@ -55,14 +55,9 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
 
   useEffect(() => {
     if (unitsSummary !== undefined) {
-      setUnitsSummarized(
-        groupNonReservedAndReservedSummaries(
-          unitsSummary.byNonReservedUnitType,
-          unitsSummary.byReservedType
-        )
-      )
+      setUnitsSummarized(getSummariesTable(unitsSummary.byUnitTypeAndRent))
     }
-  }, [setUnitsSummarized])
+  }, [setUnitsSummarized, unitsSummary])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -71,9 +66,13 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
     [setUnitDrawer]
   )
 
-  const editUnitsView = useCallback(() => {
-    setShowUnitsSummary(!showUnitsSummary)
-  }, [showUnitsSummary, setShowUnitsSummary])
+  const editUnitsView = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      // See below in disableUnitAccordionOptions for ids.
+      setShowUnitsSummary(e.target.id === "unitTypes")
+    },
+    [setShowUnitsSummary]
+  )
 
   const deleteUnit = useCallback(
     (tempId: number) => {

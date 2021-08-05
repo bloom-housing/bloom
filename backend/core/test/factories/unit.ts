@@ -21,7 +21,9 @@ export default Factory.define<NonDbUnit>(() => ({
   number: "265",
   priorityType: null,
   reservedType: null,
-  sqFeet: 750,
+  sqFeet: "750",
+  amiChart: null,
+  property: null,
   status: UnitStatus.available,
   unitType: {
     id: nanoid(),

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { t } from "./translator"
-import { UnitSummary, UnitSummaryByReservedType } from "@bloom-housing/backend-core/types"
+import { UnitSummary } from "@bloom-housing/backend-core/types"
 import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
@@ -71,37 +71,16 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
   return unitSummaries
 }
 
-export const groupNonReservedAndReservedSummaries = (
-  nonReservedSummaries: UnitSummary[],
-  reservedTypeSummaries: UnitSummaryByReservedType[]
-) => {
+export const getSummariesTable = (summaries: UnitSummary[]) => {
   let groupedUnits = [] as Array<GroupedTableGroup>
 
-  if (nonReservedSummaries.length > 0) {
-    const unitSummaries = unitSummariesTable(nonReservedSummaries)
+  if (summaries?.length > 0) {
+    const unitSummaries = unitSummariesTable(summaries)
     groupedUnits = [
       {
         data: unitSummaries,
       },
     ]
   }
-
-  if (reservedTypeSummaries.length > 0) {
-    reservedTypeSummaries.forEach((item: UnitSummaryByReservedType) => {
-      groupedUnits.push({
-        header: (
-          <>
-            <span className="reserved-icon">★</span>{" "}
-            {t("listings.reservedFor", {
-              type: t("listings.reservedTypePlural." + item.reservedType),
-            })}
-          </>
-        ),
-        className: "reserved",
-        data: unitSummariesTable(item.byUnitTypeAndRent),
-      })
-    })
-  }
-
   return groupedUnits
 }

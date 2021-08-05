@@ -207,3 +207,16 @@ export function usePreferenceList() {
     error,
   }
 }
+
+export function useReservedCommunityTypeList() {
+  const { reservedCommunityTypeService } = useContext(AuthContext)
+  const fetcher = () => reservedCommunityTypeService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/reservedCommunityTypes`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}

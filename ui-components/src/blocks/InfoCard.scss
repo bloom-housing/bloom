@@ -19,16 +19,18 @@
 }
 
 .info-card__title {
-  &:not([class*="mb-"]) {
-    @apply mb-4;
-  }
-
   @apply text-gray-800;
   @apply uppercase;
   @apply font-sans;
   @apply font-bold;
   @apply text-sm;
   @apply tracking-wide;
+}
+
+.info-card__header {
+  &:not([class*="mb-"]) {
+    @apply mb-4;
+  }
 }
 
 .info-card__columns {

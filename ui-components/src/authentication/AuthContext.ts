@@ -10,6 +10,7 @@ import {
   serviceOptions,
   Status,
   AmiChartsService,
+  ReservedCommunityTypesService,
   UnitAccessibilityPriorityTypesService,
   UnitTypesService,
   PreferencesService,
@@ -37,6 +38,7 @@ type ContextProps = {
   userService: UserService
   authService: AuthService
   preferencesService: PreferencesService
+  reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
   login: (email: string, password: string) => Promise<User | undefined>
@@ -217,6 +219,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     userService: new UserService(),
     authService: new AuthService(),
     preferencesService: new PreferencesService(),
+    reservedCommunityTypeService: new ReservedCommunityTypesService(),
     unitPriorityService: new UnitAccessibilityPriorityTypesService(),
     unitTypesService: new UnitTypesService(),
     loading: state.loading,
