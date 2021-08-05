@@ -6,7 +6,21 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-### Backend
+## Frontend
+
+- Added:
+
+  - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+
+### UI Components
+
+- Added:
+  - Add ResponsiveTable for pricing
+
+## v1.0.5 08/03/2021
 
 - Added:
   - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
