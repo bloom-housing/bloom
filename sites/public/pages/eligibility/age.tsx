@@ -20,11 +20,23 @@ import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 
 const EligibilityAge = () => {
   const router = useRouter()
+  // Check if they need to be 18 or older to apply?
+  const MIN_AGE = 0
+  const MAX_AGE = 120
 
   /* Form Handler */
-  const { handleSubmit, register } = useForm()
-  const onSubmit = () => {
-    // Not yet implemented.
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { handleSubmit, register, errors, setError } = useForm()
+  const onSubmit = (data) => {
+    if (isAgeValid(data.age)) {
+      void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[3]}`)
+    } else {
+      setError("age", { type: "manual", message: "" })
+    }
+  }
+
+  function isAgeValid(age: number) {
+    return age >= MIN_AGE && age <= MAX_AGE
   }
 
   return (
@@ -53,18 +65,16 @@ const EligibilityAge = () => {
               describedBy="age-description"
               isLabelAfterField={true}
               inputProps={{ maxLength: 3 }}
+              type={"number"}
               validation={{ required: true }}
+              error={errors.age}
+              errorMessage={t("eligibility.age.error")}
               register={register}
             />
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[3]}`)}
-              >
-                {t("t.next")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.next")}</Button>
             </div>
           </div>
         </Form>

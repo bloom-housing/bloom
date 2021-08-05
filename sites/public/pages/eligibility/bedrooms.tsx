@@ -21,9 +21,10 @@ const EligibilityBedrooms = () => {
   const router = useRouter()
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = () => {
-    // Not yet implemented.
+    void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[2]}`)
   }
 
   const preferredUnitOptions = [
@@ -64,12 +65,7 @@ const EligibilityBedrooms = () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[2]}`)}
-              >
-                {t("t.next")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.next")}</Button>
             </div>
           </div>
         </Form>

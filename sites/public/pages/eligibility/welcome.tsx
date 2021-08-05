@@ -22,7 +22,7 @@ const EligibilityWelcome = () => {
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
-    // Not implemented yet.
+    void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[1]}`)
   }
 
   return (
@@ -44,12 +44,7 @@ const EligibilityWelcome = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[1]}`)}
-              >
-                {t("t.next")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.next")}</Button>
             </div>
           </div>
         </Form>

@@ -1240,7 +1240,8 @@
         "age": {
             "prompt": "¿Cuántos años tienes?",
             "description": "Algunas propiedades solo aceptan personas mayores de 62 años.",
-            "label": "años"
+            "label": "años",
+            "error": "Ingrese una edad válida."
         },
         "disability": {
             "prompt": "¿Tienes alguna discapacidad?",

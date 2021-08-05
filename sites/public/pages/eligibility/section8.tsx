@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form"
 
 const EligibilitySection8 = () => {
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = () => {
     // Not yet implemented.
@@ -63,10 +64,7 @@ const EligibilitySection8 = () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              {/*TODO: Implement onClick method to display results.*/}
-              <Button styleType={AppearanceStyleType.primary} onClick={() => {}}>
-                {t("t.done")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.done")}</Button>
             </div>
           </div>
         </Form>

@@ -20,9 +20,10 @@ const EligibilityIncome = () => {
   const incomeRanges = ["below10k", "10kTo20k", "30kTo40k", "40kTo50k", "over50k"]
 
   /* Form Handler */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register } = useForm()
   const onSubmit = () => {
-    // Not yet implemented.
+    void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[5]}`)
   }
 
   return (
@@ -49,7 +50,7 @@ const EligibilityIncome = () => {
               label={t("eligibility.income.label")}
               describedBy="income-description"
               validation={{ required: true }}
-              defaultValue={t("eligibility.income.ranges")}
+              defaultValue={t("eligibility.income.ranges.below10k")}
               register={register}
               controlClassName="control"
               options={incomeRanges}
@@ -58,12 +59,7 @@ const EligibilityIncome = () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[5]}`)}
-              >
-                {t("t.next")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.next")}</Button>
             </div>
           </div>
         </Form>
