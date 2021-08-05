@@ -21,7 +21,7 @@ interface FieldGroupProps {
   validation?: Record<string, unknown>
   fieldGroupClassName?: string
   fieldClassName?: string
-  onChange?: () => unknown
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => unknown
 }
 
 const FieldGroup = ({

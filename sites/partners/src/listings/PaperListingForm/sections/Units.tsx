@@ -57,7 +57,7 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
     if (unitsSummary !== undefined) {
       setUnitsSummarized(getSummariesTable(unitsSummary.byUnitTypeAndRent))
     }
-  }, [setUnitsSummarized])
+  }, [setUnitsSummarized, unitsSummary])
 
   const editUnit = useCallback(
     (tempId: number) => {
@@ -66,9 +66,13 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
     [setUnitDrawer]
   )
 
-  const editUnitsView = useCallback(() => {
-    setShowUnitsSummary(!showUnitsSummary)
-  }, [showUnitsSummary, setShowUnitsSummary])
+  const editUnitsView = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      // See below in disableUnitAccordionOptions for ids.
+      setShowUnitsSummary(e.target.id === "unitTypes")
+    },
+    [setShowUnitsSummary]
+  )
 
   const deleteUnit = useCallback(
     (tempId: number) => {
