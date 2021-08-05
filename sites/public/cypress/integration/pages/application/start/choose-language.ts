@@ -9,7 +9,7 @@ describe("Form contact/name", function () {
   it("Should render language buttons and move to the next step", function () {
     // get the first listing id from the backend
     cy.request("GET", listingsUrl).then(({ body }) => {
-      const listingId = body[0].id
+      const listingId = body.items[0].id
 
       cy.visit(`/applications/start/choose-language?listingId=${listingId}`)
       cy.get(".language-select").first().click()
@@ -20,7 +20,7 @@ describe("Form contact/name", function () {
   it("Should select first language and check saved language in the context", function () {
     // get the first listing id from the backend
     cy.request("GET", listingsUrl).then(({ body }) => {
-      const listingId = body[0].id
+      const listingId = body.items[0].id
 
       cy.visit(`/applications/start/choose-language?listingId=${listingId}`)
       cy.get(".language-select").first().click()

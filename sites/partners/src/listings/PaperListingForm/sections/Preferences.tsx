@@ -87,16 +87,23 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   }, [dragOrder])
 
   // Fetch and filter all preferences
-  const { data: preferencesData = [] } = usePreferenceList()
+  const { data: preferencesData = [], error: preferencesError } = usePreferenceList()
   useEffect(() => {
-    setUniquePreferences(
-      preferencesData.reduce(
-        (items, item) =>
-          items.find((x) => x.description === item.description) ? [...items] : [...items, item],
-        []
+    if (!preferencesError) {
+      setUniquePreferences(
+        preferencesData.reduce(
+          (items, item) =>
+            items.find((x) => x.description === item.description) ? [...items] : [...items, item],
+          []
+        )
       )
-    )
+    }
   }, [preferencesData])
+
+  // Bail early if there's an error fetching preferenes.
+  if (preferencesError) {
+    return null
+  }
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method

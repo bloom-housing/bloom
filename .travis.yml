@@ -6,6 +6,9 @@ node_js:
 
 cache:
   yarn: true
+  directories:
+    - ~/.yarn
+    - ~/.cache
 
 services:
   - redis-server
@@ -20,7 +23,6 @@ before_script:
   - cp sites/public/.env.template sites/public/.env
   - cp sites/partners/.env.template sites/partners/.env
   - cp backend/core/.env.template backend/core/.env
-  - yarn install:all
 
 jobs:
   include:
@@ -36,6 +38,16 @@ jobs:
       name: "Backend unit tests"
     - script: yarn test:e2e:backend:core
       name: "Backend e2e tests"
+    - name: "Cypress tests"
+      script:
+        - yarn cypress install
+        - yarn db:reseed
+        - cd backend/core
+        - yarn nest start &
+        - cd ../../sites/public
+        - yarn dev &
+        - yarn wait-on "http-get://localhost:3000" && yarn cypress run
+        - kill $(jobs -p) || true
 
 addons:
   postgresql: "11"
@@ -43,6 +55,9 @@ addons:
     packages:
       - postgresql-11
       - postgresql-client-11
+      # if using Ubuntu 16 need this library
+      # # https://github.com/cypress-io/cypress-documentation/pull/1647
+      - libgconf-2-4
 
 env:
   global: PGPORT=5433
