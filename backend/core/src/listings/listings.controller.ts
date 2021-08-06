@@ -46,7 +46,10 @@ export class ListingsController {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly listingsService: ListingsService
   ) {
-    this.cacheKeys = ["/listings", "/listings?filter[$comparison]=%3C%3E&filter[status]=pending"]
+    this.cacheKeys = [
+      "/listings",
+      "/listings?limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
+    ]
   }
 
   // TODO: Limit requests to defined fields
