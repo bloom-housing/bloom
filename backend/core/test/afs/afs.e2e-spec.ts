@@ -77,7 +77,7 @@ describe("ApplicationFlaggedSets", () => {
 
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const listings = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    listing1Id = listings.body[0].id
+    listing1Id = listings.body.items[0].id
     await setupDb()
   })
 

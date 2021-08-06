@@ -6,12 +6,29 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
+- Added:
+
+  - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+
+### UI Components
+
+- Added:
+  - Add ResponsiveTable for pricing
+
+### Backend
+
+- Added:
+  - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
+
 ## v1.0.5 08/03/2021
 
 - Added:
   - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
-
-### General
 
 ### Backend
 
@@ -170,6 +187,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+  - Fix aria reserved for future use warning ([#1378](https://github.com/bloom-housing/bloom/issues/1378)) (Andrea Egan)
 
 ## 1.0.0 / 2021-05-21
 

@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
@@ -19,7 +19,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^1.0.3",
+    "@bloom-housing/ui-components": "^1.0.5",
     "@mdx-js/loader": "1.6.18",
     "@next/mdx": "^10.1.0",
     "axios": "^0.21.1",
