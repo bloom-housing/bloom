@@ -4,6 +4,7 @@ import {
   ArrayMaxSize,
   IsDate,
   IsDefined,
+  IsInstance,
   IsNumber,
   IsOptional,
   IsString,
@@ -780,6 +781,9 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsInstance(ListingFilterParams, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingFilterParams)
+  @ValidateNested()
   filter?: ListingFilterParams
 
   @Expose()
