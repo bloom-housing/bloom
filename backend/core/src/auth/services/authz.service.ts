@@ -3,6 +3,7 @@ import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
+import { UserRole } from "../enum/user-role-enum"
 
 export enum authzActions {
   create = "create",
@@ -39,7 +40,12 @@ export class AuthzService {
 
     // Get User roles and add them to our enforcer
     if (user) {
-      await Promise.all(user.roles.map((r) => e.addRoleForUser(user.id, r)))
+      if (user.roles?.isAdmin) {
+        await e.addRoleForUser(user.id, UserRole.admin)
+      }
+      if (user.roles.isPartner) {
+        await e.addRoleForUser(user.id, UserRole.partner)
+      }
     }
 
     if (user) {

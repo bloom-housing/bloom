@@ -172,7 +172,7 @@ async function seed() {
     }
   }
 
-  admin.isAdmin = true
+  // admin.roles.isAdmin = true
   await userRepo.save(admin)
   await userService.confirm({ token: admin.confirmationToken })
 
