@@ -16,12 +16,14 @@ import {
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
-import { ApiProperty, OmitType } from "@nestjs/swagger"
+import { ApiProperty, getSchemaPath, OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
+import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
+import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { transformUnits } from "../../shared/units-transformations"
@@ -331,6 +333,8 @@ export class ListingDto extends OmitType(Listing, [
   )
   unitsSummarized: UnitsSummarized | undefined
 }
+
+export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -745,7 +749,7 @@ export class ListingFilterParams extends BaseFilter {
     example: "Coliseum",
     required: false,
   })
-  name?: string
+  [ListingFilterKeys.name]?: string;
 
   @Expose()
   @ApiProperty({
@@ -753,5 +757,44 @@ export class ListingFilterParams extends BaseFilter {
     example: "active",
     required: false,
   })
-  status?: ListingStatus
+  [ListingFilterKeys.status]?: ListingStatus;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Fox Creek",
+    required: false,
+  })
+  [ListingFilterKeys.neighborhood]?: string
+}
+
+export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
+  @Expose()
+  @ApiProperty({
+    name: "filter",
+    required: false,
+    type: [String],
+    items: {
+      $ref: getSchemaPath(ListingFilterParams),
+    },
+    example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  filter?: ListingFilterParams
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  jsonpath?: string
+}
+
+// Using a record lets us enforce that all types are handled in addFilter
+export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
+  status: "listings.status",
+  name: "listings.name",
+  neighborhood: "property.neighborhood",
 }
