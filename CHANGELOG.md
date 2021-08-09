@@ -18,7 +18,11 @@ All notable changes to this project will be documented in this file. The format 
 ### UI Components
 
 - Added:
+
   - Add ResponsiveTable for pricing
+
+- Fixed:
+  - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
 
 ### Backend
 
