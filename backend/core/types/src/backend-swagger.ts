@@ -3411,10 +3411,18 @@ export interface LoginResponse {
   accessToken: string
 }
 
-export interface User {
+export interface UserRoles {
   /**  */
-  roles: UserRole[]
+  user: User
 
+  /**  */
+  isAdmin: boolean
+
+  /**  */
+  isPartner: boolean
+}
+
+export interface User {
   /**  */
   language?: Language
 
@@ -3447,6 +3455,9 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  roles?: CombinedUserRolesTypes
 }
 
 export interface UserCreate {
@@ -5382,5 +5393,6 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedUserRolesTypes = UserRoles
 export type CombinedWhatToExpectTypes = WhatToExpect
 export type CombinedJurisdictionTypes = Id
