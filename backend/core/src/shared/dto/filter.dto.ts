@@ -13,5 +13,5 @@ export class BaseFilter {
     example: "=",
     default: Compare["="],
   })
-  $comparison: Compare | Compare[]
+  $comparison?: Compare | Compare[]
 }
