@@ -47,6 +47,11 @@ All notable changes to this project will be documented in this file. The format 
   - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
   - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
 
+### General
+
+- Updated:
+  - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1587](https://github.com/bloom-housing/bloom/pull/1627)
+
 ## v1.0.5 08/03/2021
 
 - Added:
