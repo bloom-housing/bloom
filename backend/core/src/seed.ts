@@ -31,6 +31,24 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const listingSeeds: any[] = [
+  ListingDefaultSeed,
+  ListingColiseumSeed,
+  ListingDefaultOpenSoonSeed,
+  ListingDefaultOnePreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultBmrChartSeed,
+  ListingTritonSeed,
+  ListingDefaultReservedSeed,
+  ListingDefaultFCFSSeed,
+]
+
+export function getSeedListingsCount() {
+  return listingSeeds.length
+}
+
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
@@ -85,19 +103,7 @@ const seedListings = async (app: INestApplicationContext) => {
   const leasingAgents = await createLeasingAgents(app)
   await createApplicationMethods(app)
 
-  const allSeeds = [
-    app.get<ListingDefaultSeed>(ListingDefaultSeed),
-    app.get<ListingDefaultSeed>(ListingColiseumSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOpenSoonSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
-    app.get<ListingDefaultSeed>(ListingTritonSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultReservedSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultFCFSSeed),
-  ]
-
+  const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
   for (const [index, listingSeed] of allSeeds.entries()) {

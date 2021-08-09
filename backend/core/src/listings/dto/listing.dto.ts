@@ -16,17 +16,18 @@ import {
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
-import { ApiProperty, OmitType } from "@nestjs/swagger"
+import { ApiProperty, getSchemaPath, OmitType } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
+import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
+import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
 import { transformUnits } from "../../shared/units-transformations"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
-import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
@@ -134,13 +135,16 @@ export class ListingDto extends OmitType(Listing, [
   result?: AssetDto | null
 
   @Expose()
-  @Transform((_value, listing) => {
-    if (moment(listing.applicationDueDate).isBefore()) {
-      listing.status = ListingStatus.closed
-    }
+  @Transform(
+    (_value, listing) => {
+      if (moment(listing.applicationDueDate).isBefore()) {
+        listing.status = ListingStatus.closed
+      }
 
-    return listing.status
-  })
+      return listing.status
+    },
+    { toClassOnly: true }
+  )
   status: ListingStatus
 
   @Expose()
@@ -166,7 +170,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.accessibility
+      return obj.property?.accessibility
     },
     { toClassOnly: true }
   )
@@ -177,7 +181,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.amenities
+      return obj.property?.amenities
     },
     { toClassOnly: true }
   )
@@ -189,7 +193,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => AddressDto)
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.buildingAddress
+      return obj.property?.buildingAddress
     },
     { toClassOnly: true }
   )
@@ -200,7 +204,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.buildingTotalUnits
+      return obj.property?.buildingTotalUnits
     },
     { toClassOnly: true }
   )
@@ -211,7 +215,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.developer
+      return obj.property?.developer
     },
     { toClassOnly: true }
   )
@@ -222,7 +226,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.householdSizeMax
+      return obj.property?.householdSizeMax
     },
     { toClassOnly: true }
   )
@@ -233,7 +237,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.householdSizeMin
+      return obj.property?.householdSizeMin
     },
     { toClassOnly: true }
   )
@@ -244,7 +248,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.neighborhood
+      return obj.property?.neighborhood
     },
     { toClassOnly: true }
   )
@@ -255,7 +259,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.petPolicy
+      return obj.property?.petPolicy
     },
     { toClassOnly: true }
   )
@@ -266,7 +270,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.smokingPolicy
+      return obj.property?.smokingPolicy
     },
     { toClassOnly: true }
   )
@@ -277,7 +281,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.unitsAvailable
+      return obj.property?.unitsAvailable
     },
     { toClassOnly: true }
   )
@@ -288,7 +292,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.unitAmenities
+      return obj.property?.unitAmenities
     },
     { toClassOnly: true }
   )
@@ -299,7 +303,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.servicesOffered
+      return obj.property?.servicesOffered
     },
     { toClassOnly: true }
   )
@@ -310,7 +314,7 @@ export class ListingDto extends OmitType(Listing, [
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.property.yearBuilt
+      return obj.property?.yearBuilt
     },
     { toClassOnly: true }
   )
@@ -322,7 +326,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => UnitsSummarized)
   @Transform(
     (value, obj: Listing) => {
-      const units = obj.property.units
+      const units = obj.property?.units
       if (Array.isArray(units) && units.length > 0) {
         return transformUnits(units)
       }
@@ -331,6 +335,8 @@ export class ListingDto extends OmitType(Listing, [
   )
   unitsSummarized: UnitsSummarized | undefined
 }
+
+export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -745,7 +751,7 @@ export class ListingFilterParams extends BaseFilter {
     example: "Coliseum",
     required: false,
   })
-  name?: string
+  [ListingFilterKeys.name]?: string;
 
   @Expose()
   @ApiProperty({
@@ -753,5 +759,44 @@ export class ListingFilterParams extends BaseFilter {
     example: "active",
     required: false,
   })
-  status?: ListingStatus
+  [ListingFilterKeys.status]?: ListingStatus;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Fox Creek",
+    required: false,
+  })
+  [ListingFilterKeys.neighborhood]?: string
+}
+
+export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
+  @Expose()
+  @ApiProperty({
+    name: "filter",
+    required: false,
+    type: [String],
+    items: {
+      $ref: getSchemaPath(ListingFilterParams),
+    },
+    example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  filter?: ListingFilterParams
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  jsonpath?: string
+}
+
+// Using a record lets us enforce that all types are handled in addFilter
+export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
+  status: "listings.status",
+  name: "listings.name",
+  neighborhood: "property.neighborhood",
 }

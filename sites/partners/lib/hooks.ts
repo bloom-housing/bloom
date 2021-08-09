@@ -30,10 +30,10 @@ export function useListingsData() {
   const { listingsService } = useContext(AuthContext)
   const fetcher = () => listingsService.list()
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings`, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?limit=all`, fetcher)
 
   return {
-    listingDtos: data,
+    listingDtos: data ? data.items : [],
     listingsLoading: !error && !data,
     listingsError: error,
   }
