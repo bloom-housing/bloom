@@ -3,8 +3,7 @@ import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { Listing } from "./entities/listing.entity"
-import { mapTo } from "../shared/mapTo"
-import { ListingDto, ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
+import { ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -24,11 +23,6 @@ const mockListings = [
   { id: "asdf7", property: { id: "test-property7", units: [] }, preferences: [], status: "closed" },
 ]
 const mockFilteredListings = mockListings.slice(0, 2)
-const mockListingsDto = mapTo<ListingDto, Listing>(ListingDto, mockListings as Listing[])
-const mockFilteredListingsDto = mapTo<ListingDto, Listing>(
-  ListingDto,
-  mockFilteredListings as Listing[]
-)
 const mockInnerQueryBuilder = {
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
@@ -86,7 +80,7 @@ describe("ListingsService", () => {
 
       const listings = await service.list(origin, {})
 
-      expect(listings.items).toEqual(mockListingsDto)
+      expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
     })
 
@@ -105,7 +99,7 @@ describe("ListingsService", () => {
 
       const listings = await service.list(origin, queryParams)
 
-      expect(listings.items).toEqual(mockListingsDto)
+      expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
@@ -140,7 +134,7 @@ describe("ListingsService", () => {
       const params = {}
       const listings = await service.list(origin, params)
 
-      expect(listings.items).toEqual(mockListingsDto)
+      expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
       expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
     })
@@ -154,7 +148,7 @@ describe("ListingsService", () => {
       const params = { page: 3 }
       const listings = await service.list(origin, params)
 
-      expect(listings.items).toEqual(mockListingsDto)
+      expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
       expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
       expect(listings.meta).toEqual({
@@ -175,7 +169,7 @@ describe("ListingsService", () => {
       const params = { page: ("hello" as unknown) as number } // force the type for testing
       const listings = await service.list(origin, params)
 
-      expect(listings.items).toEqual(mockListingsDto)
+      expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
       expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
       expect(listings.meta).toEqual({
@@ -197,7 +191,7 @@ describe("ListingsService", () => {
       const params = { page: 3, limit: 2 }
       const listings = await service.list(origin, params)
 
-      expect(listings.items).toEqual(mockFilteredListingsDto)
+      expect(listings.items).toEqual(mockFilteredListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledWith(2)
       expect(mockInnerQueryBuilder.offset).toHaveBeenCalledWith(4)
       expect(mockInnerQueryBuilder.getCount).toHaveBeenCalledTimes(1)

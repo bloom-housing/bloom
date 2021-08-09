@@ -15,6 +15,7 @@ import { ApplicationMethodsModule } from "../../src/application-methods/applicat
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
+import { getSeedListingsCount } from "../../src/seed"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -47,6 +48,31 @@ describe("Listings", () => {
     expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
+  it("should return the first page of paginated listings", async () => {
+    // Make the limit 1 less than the full number of listings, so that the first page contains all
+    // but the last listing.
+    const page = "1"
+    const limit = (getSeedListingsCount() - 1).toString()
+    const params = "/?page=" + page + "&limit=" + limit
+    const res = await supertest(app.getHttpServer())
+      .get("/listings" + params)
+      .expect(200)
+    expect(res.body.items.length).toEqual(getSeedListingsCount() - 1)
+  })
+
+  it("should return the last page of paginated listings", async () => {
+    // Make the limit 1 less than the full number of listings, so that the second page contains
+    // only one listing.
+    const page = "2"
+    const limit = (getSeedListingsCount() - 1).toString()
+    const params = "/?page=" + page + "&limit=" + limit
+    const res = await supertest(app.getHttpServer())
+      .get("/listings" + params)
+      .expect(200)
+    expect(res.body.items.length).toEqual(1)
+  })
+
+  // TODO: replace jsonpath with SQL-level filtering
   it("should return only the specified listings", async () => {
     const query =
       "/?jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
@@ -55,12 +81,14 @@ describe("Listings", () => {
     expect(res.body.items[0].applicationAddress.city).toEqual("Foster City")
   })
 
+  // TODO: replace jsonpath with SQL-level filtering
   it("shouldn't return any listings for incorrect query", async () => {
     const query = "/?jsonpath=%24%5B%3F(%40.applicationNONSENSE.argh%3D%3D%22San+Jose%22)%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
     expect(res.body.items.length).toEqual(0)
   })
 
+  // TODO: replace jsonpath with SQL-level filtering
   it("should return only active listings", async () => {
     const query = "/?jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)

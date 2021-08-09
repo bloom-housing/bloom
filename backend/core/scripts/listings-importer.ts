@@ -112,6 +112,8 @@ export async function importListing(apiUrl, email, password, listing) {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+  const unitTypes = await unitTypesService.list()
+  const priorityTypes = await unitAccessibilityPriorityTypesService.list()
 
   // Tidy a few of the listing's fields.
   if (!("status" in listing)) {

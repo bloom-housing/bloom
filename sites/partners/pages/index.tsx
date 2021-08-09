@@ -21,7 +21,7 @@ import { Router, useRouter } from "next/router"
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
   const leasingAgentInListings = profile.leasingAgentInListings?.map((item) => item.id)
-  const router = useRouter()
+  const isAdmin = profile.roles.includes(UserRole.admin)
   class formatLinkCell {
     link: HTMLAnchorElement
 
@@ -81,8 +81,8 @@ export default function ListingsList() {
   const columnDefs = useMemo(() => {
     const columns = [
       {
-        headerName: t("name"),
-        field: "name",
+        headerName: t("listings.applications"),
+        field: isAdmin ? "applicationCount" : "name",
         sortable: false,
         filter: false,
         resizable: true,
@@ -128,7 +128,7 @@ export default function ListingsList() {
         valueFormatter: ({ value }) => t(`listings.${value}`),
       },
     ]
-    if (process.env.showLMLinks) {
+    if (isAdmin) {
       columns.unshift({
         headerName: t("listings.listingName"),
         field: "name",
@@ -139,7 +139,7 @@ export default function ListingsList() {
       })
     }
     return columns
-  }, [])
+  }, [isAdmin])
 
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
 
@@ -176,7 +176,7 @@ export default function ListingsList() {
             <div className="flex justify-between">
               <div className="w-56"></div>
               <div className="flex-row">
-                {process.env.showLMLinks && (
+                {isAdmin && (
                   <LocalizedLink href={`/listings/add`}>
                     <Button className="mx-1" onClick={() => false}>
                       {t("listings.addListing")}
