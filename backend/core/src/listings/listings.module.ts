@@ -15,8 +15,7 @@ import { Property } from "../property/entities/property.entity"
     CacheModule.register({
       ttl: 24 * 60 * 60,
       store: redisStore,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
+      url: process.env.REDIS_USE_TLS === "0" ? process.env.REDIS_URL : process.env.REDIS_TLS_URL,
     }),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
