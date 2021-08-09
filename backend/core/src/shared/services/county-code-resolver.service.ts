@@ -10,7 +10,7 @@ export class CountyCodeResolverService {
   getCountyCode(): CountyCode {
     const countyCode: CountyCode | undefined = CountyCode[this.req.get("county-code")]
     if (!countyCode) {
-      return CountyCode.alameda
+      return CountyCode.detroit
     }
     return countyCode
   }

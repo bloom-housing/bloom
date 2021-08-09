@@ -5417,6 +5417,7 @@ export enum CountyCode {
   "Alameda" = "Alameda",
   "San Mateo" = "San Mateo",
   "San Jose" = "San Jose",
+  "Detroit" = "Detroit",
 }
 
 export enum ListingEventType {

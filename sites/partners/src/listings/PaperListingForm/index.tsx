@@ -137,7 +137,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  countyCode: CountyCode.Alameda,
+  countyCode: CountyCode.Detroit,
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
