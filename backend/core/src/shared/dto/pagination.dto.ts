@@ -41,11 +41,11 @@ export class PaginationQueryParams {
     type: Number,
     example: 1,
     required: false,
-    default: -1,
+    default: 1,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : -1), {
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
   })
   page?: number
@@ -55,11 +55,11 @@ export class PaginationQueryParams {
     type: Number,
     example: 10,
     required: false,
-    default: -1,
+    default: 10,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : -1), {
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
     toClassOnly: true,
   })
   limit?: number

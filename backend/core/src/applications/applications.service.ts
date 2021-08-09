@@ -80,10 +80,7 @@ export class ApplicationsService {
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
     const qb = this._getQb(params)
-    const result = await paginate(qb, {
-      limit: params.limit > 0 ? params.limit : 10,
-      page: params.page > 0 ? params.page : 1,
-    })
+    const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
       result.items.map(async (application) => {
         await this.authorizeUserAction(this.req.user, application, authzActions.read)
