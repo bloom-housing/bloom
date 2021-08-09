@@ -79,6 +79,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
+  // TODO: Re-enable caching with support for multiple languages
   // @UseInterceptors(CacheInterceptor)
   async retrieve(
     @Headers("language") language: Language,

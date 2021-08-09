@@ -255,7 +255,12 @@ export class ListingsService {
   private setValue = (object, path, value) =>
     path
       .split(".")
-      .reduce((o, p, i) => (o[p] = path.split(".").length === ++i ? value : o[p] || {}), object)
+      .reduce(
+        (currentObject, currentPath, index) =>
+          (currentObject[currentPath] =
+            path.split(".").length === ++index ? value : currentObject[currentPath] || {}),
+        object
+      )
 
   // Returns not null key-values pairs also from nested properties
   private findData = (keys, object, results, parent = null) => {
