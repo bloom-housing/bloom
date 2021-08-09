@@ -1,0 +1,75 @@
+import { BaseView } from "./view"
+import { views } from "./config"
+
+const mockQueryBuilder = {
+  select: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
+}
+
+const mockListingsRepo = {
+  createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
+}
+
+const mockUnitTypes = [
+  { id: "unit-1", name: "oneBdrm" },
+  { id: "unit-2", name: "twoBdrm" },
+  { id: "unit-3", name: "threeBdrm" },
+]
+
+const mockListings = [
+  {
+    id: "listing-1",
+    property: {
+      units: [
+        { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
+        { unitType: mockUnitTypes[0], minimumIncome: "1", rent: "101" },
+        { unitType: mockUnitTypes[1], minimumIncome: "0", rent: "100" },
+      ],
+    },
+  },
+  {
+    id: "listing-2",
+    property: {
+      units: [
+        { unitType: mockUnitTypes[0], minimumIncome: "0", rent: "100" },
+        { unitType: mockUnitTypes[1], minimumIncome: "1", rent: "101" },
+        { unitType: mockUnitTypes[2], minimumIncome: "2", rent: "102" },
+      ],
+    },
+  },
+]
+
+describe("listing views", () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe("BaseView", () => {
+    it("should create a new BaseView with qb view properties", () => {
+      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+
+      expect(view.qb).toEqual(mockQueryBuilder)
+      expect(view.view).toEqual(views.base)
+    })
+
+    it("should call getView qb seclect and leftJoin", () => {
+      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+
+      view.getView()
+
+      expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(6)
+    })
+
+    it("should map unitSummary to listings", () => {
+      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+
+      const listings = view.mapUnitSummary(mockListings)
+
+      listings.forEach((listing) => {
+        expect(listing).toHaveProperty("unitsSummarized")
+        expect(listing.unitsSummarized).toHaveProperty("byUnitTypeAndRent")
+      })
+    })
+  })
+})

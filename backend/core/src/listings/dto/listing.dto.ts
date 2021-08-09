@@ -26,9 +26,7 @@ import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
-import { transformUnits } from "../../shared/units-transformations"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
-import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
@@ -150,6 +148,7 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @ApiProperty({ enum: ListingReviewOrder })
   get reviewOrderType() {
+    if (!this.events) return []
     return this.events.some((event) => event.type === ListingEventType.publicLottery)
       ? ListingReviewOrder.lottery
       : ListingReviewOrder.firstComeFirstServe
@@ -319,21 +318,6 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   yearBuilt?: number | null
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => UnitsSummarized)
-  @Transform(
-    (value, obj: Listing) => {
-      const units = obj.property?.units
-      if (Array.isArray(units) && units.length > 0) {
-        return transformUnits(units)
-      }
-    },
-    { toClassOnly: true }
-  )
-  unitsSummarized: UnitsSummarized | undefined
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}

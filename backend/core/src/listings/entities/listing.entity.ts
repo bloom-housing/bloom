@@ -42,6 +42,7 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummarized } from "../../units/types/units-summarized"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -457,6 +458,10 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistOpenSpots?: number | null
+
+  @Expose()
+  @ApiProperty({ type: UnitsSummarized })
+  unitsSummarized: UnitsSummarized | undefined
 }
 
 export { Listing as default, Listing }

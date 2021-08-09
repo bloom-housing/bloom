@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
-
 import { Listing } from "./entities/listing.entity"
 import {
   ListingCreateDto,
@@ -16,6 +15,8 @@ import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
 import { addFilters } from "../shared/filter"
+import { BaseView } from "./views/view"
+import { transformUnits } from "../shared/units-transformations"
 
 @Injectable()
 export class ListingsService {
@@ -78,12 +79,14 @@ export class ListingsService {
       // join on the listings we want to show.
       innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
-
-    let listings = await this.getFullyJoinedQueryBuilder()
+    const view = new BaseView(this.listingRepository.createQueryBuilder("listings"))
+    // let listings = await view
+    let listings = await view
+      .getView()
       .orderBy({
-        "listings.id": "DESC",
+        "listings.applicationDueDate": "ASC",
+        "listings.applicationOpenDate": "DESC",
         "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
       })
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
@@ -91,7 +94,8 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .getMany()
-
+    // get summarized units from view
+    listings = view.mapUnitSummary(listings)
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
@@ -199,6 +203,8 @@ export class ListingsService {
     if (!result) {
       throw new NotFoundException()
     }
+
+    result.unitsSummarized = transformUnits(result.property.units)
     return result
   }
 }
