@@ -52,7 +52,8 @@ describe("EmailService", () => {
           provide: REQUEST,
           useValue: {
             get: () => {
-              return { "county-code": CountyCode.alameda }
+              // This header must be the string value of the CountyCode key.
+              return "alameda"
             },
           },
         },

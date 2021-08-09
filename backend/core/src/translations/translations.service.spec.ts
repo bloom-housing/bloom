@@ -37,12 +37,12 @@ describe("TranslationsService", () => {
     it("Should return translations for given county code and language", async () => {
       const result = await service.getTranslationByLanguageAndCountyCodeOrDefaultEn(
         Language.en,
-        CountyCode.alameda
+        CountyCode.detroit
       )
       expect(result).toStrictEqual({})
       expect(translationRepositoryFindOneMock.mock.calls[0][0].where.language).toEqual(Language.en)
       expect(translationRepositoryFindOneMock.mock.calls[0][0].where.countyCode).toEqual(
-        CountyCode.alameda
+        CountyCode.detroit
       )
     })
   })

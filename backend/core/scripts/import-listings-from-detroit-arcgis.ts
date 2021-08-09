@@ -145,7 +145,7 @@ async function main() {
     listing.applicationMethods = []
     listing.events = []
     listing.CSVFormattingType = CSVFormattingType.basic
-    listing.countyCode = CountyCode.alameda
+    listing.countyCode = CountyCode.detroit
     listing.displayWaitlistSize = false
 
     try {

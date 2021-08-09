@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Cypress tests for `sites/public` ([#171](https://github.com/CityOfDetroit/bloom/issues/171))
+  - Change the COUNTY_CODE to Detroit ([#351](https://github.com/CityOfDetroit/bloom/pull/351))
 
 - Added:
   - Added fields to Listing and Property to accommodate Detroit listing data ([#311](https://github.com/CityOfDetroit/bloom/pull/311))
