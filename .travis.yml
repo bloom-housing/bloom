@@ -6,9 +6,6 @@ node_js:
 
 cache:
   yarn: true
-  directories:
-    - ~/.yarn
-    - ~/.cache
 
 services:
   - redis-server
@@ -32,13 +29,15 @@ jobs:
       name: "Build public site"
     - script: yarn build:app:partners
       name: "Build partners site"
-    - script: yarn test:shared:ui:a11y
-      name: "Storybook a11y testing"
     - script: yarn test:backend:core:testdbsetup && yarn test:backend:core
       name: "Backend unit tests"
     - script: yarn test:e2e:backend:core
       name: "Backend e2e tests"
-    - name: "Cypress tests"
+    - stage: longer tests
+      script: yarn test:shared:ui:a11y
+      name: "Storybook a11y testing"
+    - stage: longer tests
+      name: "Cypress tests"
       script:
         - yarn cypress install
         - yarn db:reseed
