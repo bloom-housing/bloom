@@ -13,6 +13,10 @@ import {
   TimeFieldPeriod,
   Modal,
   AppearanceBorderType,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -341,6 +345,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const { listingsService } = useContext(AuthContext)
 
+  const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [status, setStatus] = useState<ListingStatus>(null)
@@ -479,29 +484,71 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                 <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                   <div className="flex flex-row flex-wrap">
-                    <div className="info-card md:w-9/12">
-                      <ListingIntro />
-                      <ListingPhoto />
-                      <BuildingDetails />
-                      <CommunityType listing={listing} />
-                      <Units
-                        units={units}
-                        setUnits={setUnits}
-                        disableUnitsAccordion={listing?.disableUnitsAccordion}
-                      />
-                      <Preferences preferences={preferences} setPreferences={setPreferences} />
-                      <AdditionalFees />
-                      <BuildingFeatures />
-                      <AdditionalEligibility />
-                      <AdditionalDetails />
-                      <RankingsAndResults listing={listing} />
-                      <LeasingAgent />
-                      <ApplicationAddress listing={listing} />
-                      <ApplicationDates
-                        listing={listing}
-                        openHouseEvents={openHouseEvents}
-                        setOpenHouseEvents={setOpenHouseEvents}
-                      />
+                    <div className="md:w-9/12 pb-20">
+                      <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+                        <TabList>
+                          <Tab>Listing Details</Tab>
+                          <Tab>Application Process</Tab>
+                        </TabList>
+                        <TabPanel>
+                          <ListingIntro />
+                          <ListingPhoto />
+                          <BuildingDetails />
+                          <CommunityType listing={listing} />
+                          <Units
+                            units={units}
+                            setUnits={setUnits}
+                            disableUnitsAccordion={listing?.disableUnitsAccordion}
+                          />
+                          <Preferences preferences={preferences} setPreferences={setPreferences} />
+                          <AdditionalFees />
+                          <BuildingFeatures />
+                          <AdditionalEligibility />
+                          <AdditionalDetails />
+
+                          <div
+                            className="text-right"
+                            style={{ marginTop: "-2rem", position: "relative", top: "7rem" }}
+                          >
+                            <Button
+                              styleType={AppearanceStyleType.primary}
+                              type="button"
+                              onClick={() => {
+                                setTabIndex(1)
+                                window.scrollTo({ top: 0, behavior: "smooth" })
+                              }}
+                            >
+                              Application Process
+                            </Button>
+                          </div>
+                        </TabPanel>
+                        <TabPanel>
+                          <RankingsAndResults listing={listing} />
+                          <LeasingAgent />
+                          <ApplicationAddress listing={listing} />
+                          <ApplicationDates
+                            listing={listing}
+                            openHouseEvents={openHouseEvents}
+                            setOpenHouseEvents={setOpenHouseEvents}
+                          />
+
+                          <div
+                            className=""
+                            style={{ marginTop: "-2rem", position: "relative", top: "7rem" }}
+                          >
+                            <Button
+                              styleType={AppearanceStyleType.primary}
+                              type="button"
+                              onClick={() => {
+                                setTabIndex(0)
+                                window.scrollTo({ top: 0, behavior: "smooth" })
+                              }}
+                            >
+                              Listing Details
+                            </Button>
+                          </div>
+                        </TabPanel>
+                      </Tabs>
                     </div>
 
                     <aside className="md:w-3/12 md:pl-6">
