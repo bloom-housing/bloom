@@ -34,6 +34,8 @@ const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
 const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
+const unitTypesService = new client.UnitTypesService()
+const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -120,6 +122,10 @@ function reformatListing(listing, relationsKeys: string[]) {
   return listing
 }
 
+const findByName = (list, name) => {
+  return list.find((el) => el.name === name)
+}
+
 async function main() {
   const [email, password] = userAndPassword.split(":")
   const { accessToken } = await authService.login({
@@ -136,6 +142,8 @@ async function main() {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+  const unitTypes = await unitTypesService.list()
+  const priorityTypes = await unitAccessibilityPriorityTypesService.list()
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
   const relationsKeys = []
@@ -148,7 +156,11 @@ async function main() {
     chart = await uploadAmiChart(listing.amiChart)
   }
 
-  listing.units.forEach((unit) => (unit.amiChart = chart))
+  listing.units.forEach((unit) => {
+    unit.priorityType = findByName(priorityTypes, unit.priorityType)
+    unit.unitType = findByName(unitTypes, unit.unitType)
+    unit.amiChart = chart
+  })
 
   const newListing = await uploadListing(listing)
 

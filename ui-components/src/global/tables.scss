@@ -60,6 +60,31 @@ table {
       padding-right: 0 !important;
     }
   }
+
+  &.base {
+    thead tr {
+      background: transparent;
+    }
+
+    tr:nth-of-type(even) {
+      background: transparent;
+    }
+
+    thead tr th {
+      background: transparent;
+      @apply border-gray-450;
+    }
+
+    tbody td {
+      @apply border-b;
+      @apply border-gray-450;
+    }
+
+    td:last-child,
+    th:last-child {
+      text-align: right;
+    }
+  }
 }
 
 table tr:nth-of-type(even) {
@@ -131,6 +156,14 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
     td:last-child {
       @apply border-b-0;
+    }
+  }
+  table.base {
+    td:nth-of-type(even) {
+      background: transparent;
+    }
+    tbody td {
+      @apply border-0;
     }
   }
 
