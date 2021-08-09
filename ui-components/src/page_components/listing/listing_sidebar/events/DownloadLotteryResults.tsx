@@ -4,9 +4,11 @@ import { t } from "../../../../helpers/translator"
 import { pdfUrlFromListingEvents } from "../../../../helpers/pdfs"
 import moment from "moment"
 
-const DownloadLotteryResults = (props: { event: ListingEvent }) => {
-  const { event } = props
-  const eventUrl = event ? pdfUrlFromListingEvents([event], ListingEventType.lotteryResults) : null
+const DownloadLotteryResults = (props: { event: ListingEvent; cloudName: string }) => {
+  const { event, cloudName } = props
+  const eventUrl = event
+    ? pdfUrlFromListingEvents([event], ListingEventType.lotteryResults, cloudName)
+    : null
   return (
     <>
       {eventUrl && (

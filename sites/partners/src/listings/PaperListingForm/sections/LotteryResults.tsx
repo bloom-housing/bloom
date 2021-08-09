@@ -1,23 +1,21 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import {
-  cloudinaryUrlFromId,
   t,
   AppearanceBorderType,
   AppearanceStyleType,
   Button,
-  CloudinaryUpload,
   Drawer,
   Dropzone,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
 import {
-  AssetsService,
   ListingEvent,
   ListingEventCreate,
   ListingEventType,
 } from "@bloom-housing/backend-core/types"
+import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 interface LotteryResultsProps {
   submitCallback: (data: { events: ListingEvent[] }) => void
@@ -30,9 +28,6 @@ const LotteryResults = (props: LotteryResultsProps) => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { watch } = formMethods
-
-  const cloudName = process.env.cloudinaryCloudName
-  const uploadPreset = process.env.cloudinarySignedPreset
 
   const { submitCallback, drawerState, showDrawer } = props
   const [progressValue, setProgressValue] = React.useState(0)
@@ -108,46 +103,10 @@ const LotteryResults = (props: LotteryResultsProps) => {
   }
 
   /*
-    Uploader callback for the dropzone
+    Pass the file for the dropzone callback along to the uploader
   */
-  const fileUploader = async (file: File) => {
-    setProgressValue(1)
-
-    const timestamp = Math.round(new Date().getTime() / 1000)
-    const tag = "browser_upload"
-
-    const assetsService = new AssetsService()
-    const params = {
-      timestamp,
-      tags: tag,
-      upload_preset: uploadPreset,
-    }
-
-    const resp = await assetsService.createPresignedUploadMetadata({
-      body: { parametersToSign: params },
-    })
-    const signature = resp.signature
-
-    setProgressValue(3)
-
-    void CloudinaryUpload({
-      signature,
-      apiKey: process.env.cloudinaryKey,
-      timestamp,
-      file: file,
-      onUploadProgress: (progress) => {
-        setProgressValue(progress)
-      },
-      cloudName,
-      uploadPreset,
-      tag,
-    }).then((response) => {
-      setProgressValue(100)
-      setCloudinaryData({
-        id: response.data.public_id,
-        url: cloudinaryUrlFromId(response.data.public_id),
-      })
-    })
+  const pdfUploader = async (file: File) => {
+    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
   }
 
   return (
@@ -184,7 +143,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
           id="lottery-results-upload"
           label="Upload Results"
           helptext="Select PDF file"
-          uploader={fileUploader}
+          uploader={pdfUploader}
           accept="application/pdf"
           progress={progressValue}
         />

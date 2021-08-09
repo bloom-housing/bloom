@@ -265,7 +265,7 @@ const formatFormData = (
   })
 
   const events: ListingEventCreate[] = data.events.filter(
-    (event) => !(event?.type == ListingEventType.publicLottery)
+    (event) => !(event?.type === ListingEventType.publicLottery)
   )
   if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)

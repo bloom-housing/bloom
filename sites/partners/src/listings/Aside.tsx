@@ -190,7 +190,11 @@ const Aside = ({
       )
 
       if (listing.events.find((event) => event.type === ListingEventType.lotteryResults)) {
-        const eventUrl = pdfUrlFromListingEvents(listing.events, ListingEventType.lotteryResults)
+        const eventUrl = pdfUrlFromListingEvents(
+          listing.events,
+          ListingEventType.lotteryResults,
+          process.env.cloudinaryCloudName
+        )
         elements.push(
           <GridCell className="flex" key="btn-preview-results">
             <a href={eventUrl} target="_blank" className="inline-flex w-full">
