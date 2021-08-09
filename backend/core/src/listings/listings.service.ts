@@ -3,20 +3,18 @@ import jp from "jsonpath"
 
 import { Listing } from "./entities/listing.entity"
 import {
-  ListingDto,
   ListingCreateDto,
   ListingUpdateDto,
-  PaginatedListingsDto,
   ListingFilterParams,
   filterTypeToFieldMap,
   ListingsQueryParams,
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
+import { Pagination } from "nestjs-typeorm-paginate"
 import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { arrayIndex } from "../libs/arrayLib"
-import { mapTo } from "../shared/mapTo"
 import { addFilters } from "../shared/filter"
 
 @Injectable()
@@ -51,7 +49,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(origin: string, params: ListingsQueryParams): Promise<PaginatedListingsDto> {
+  public async list(origin: string, params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -69,27 +67,16 @@ export class ListingsService {
       )
     }
 
-    const paginationInfo = {
-      currentPage: params.page,
-      itemCount: undefined as number,
-      itemsPerPage: params.limit,
-      totalItems: undefined as number,
-      totalPages: undefined as number,
-    }
-
-    const paginate =
-      // CurrentPage and itemsPerPage are read in from the querystring, so we
-      // confirm the type before proceeding
-      typeof paginationInfo.currentPage === "number" &&
-      paginationInfo.currentPage > 0 &&
-      typeof paginationInfo.itemsPerPage === "number" &&
-      paginationInfo.itemsPerPage > 0
+    // TODO(avaleske): Typescript doesn't realize that the `paginate` bool is a
+    // type guard, but it will in version 4.4. Once this codebase is upgraded to
+    // v4.4, remove the extra type assertions on `params.limit` below.
+    const paginate = params.limit !== "all" && params.limit > 0 && params.page > 0
     if (paginate) {
       // Calculate the number of listings to skip (because they belong to lower page numbers).
-      const offset = (paginationInfo.currentPage - 1) * paginationInfo.itemsPerPage
+      const offset = (params.page - 1) * (params.limit as number)
       // Add the limit and offset to the inner query, so we only do the full
       // join on the listings we want to show.
-      innerFilteredQuery.offset(offset).limit(paginationInfo.itemsPerPage)
+      innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
 
     let listings = await this.getFullyJoinedQueryBuilder()
@@ -106,14 +93,15 @@ export class ListingsService {
       .getMany()
 
     // Set pagination info
-    paginationInfo.currentPage = paginate ? paginationInfo.currentPage : 1
-    paginationInfo.itemCount = listings.length
-    paginationInfo.itemsPerPage = paginate ? paginationInfo.itemsPerPage : listings.length
-    // Get the total listings count, with filters applied. getCount() ignores any offsets and limits.
-    paginationInfo.totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
-    paginationInfo.totalPages = paginate
-      ? Math.ceil(paginationInfo.totalItems / paginationInfo.itemsPerPage)
-      : 1
+    const itemsPerPage = paginate ? (params.limit as number) : listings.length
+    const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
+    const paginationInfo = {
+      currentPage: paginate ? params.page : 1,
+      itemCount: listings.length,
+      itemsPerPage: itemsPerPage,
+      totalItems: totalItems,
+      totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
+    }
 
     // Get the application counts and map them to listings
     if (origin === process.env.PARTNERS_BASE_URL) {
@@ -130,16 +118,28 @@ export class ListingsService {
       })
     }
 
-    // TODO(https://github.com/CityOfDetroit/bloom/issues/135): decide whether to remove jsonpath
+    // TODO(https://github.com/CityOfDetroit/bloom/issues/135): Decide whether to remove jsonpath
     if (params.jsonpath) {
       listings = jp.query(listings, params.jsonpath)
     }
 
-    const paginatedListings = {
-      items: mapTo<ListingDto, Listing>(ListingDto, listings),
+    // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
+    // queries (https://github.com/nestjsx/nestjs-typeorm-paginate/issues/6) so
+    // we build the pagination metadata manually. Additional details are in
+    // https://github.com/CityOfDetroit/bloom/issues/56#issuecomment-865202733
+    const paginatedListings: Pagination<Listing> = {
+      items: listings,
       meta: paginationInfo,
+      // nestjs-typeorm-paginate leaves these empty if no route is defined
+      // This matches what other paginated endpoints, such as the applications
+      // service, currently return.
+      links: {
+        first: "",
+        previous: "",
+        next: "",
+        last: "",
+      },
     }
-
     return paginatedListings
   }
 

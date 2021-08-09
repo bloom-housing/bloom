@@ -5,6 +5,7 @@ import { UserRole } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
 import { MetaTags } from "../../src/MetaTags"
+import ListingGuard from "../../src/ListingGuard"
 
 const NewListing = () => {
   const metaDescription = ""
@@ -14,24 +15,26 @@ const NewListing = () => {
   if (!profile.roles.includes(UserRole.admin)) return "An error has occurred."
 
   return (
-    <Layout>
-      <Head>
-        <title>{t("nav.siteTitlePartners")}</title>
-      </Head>
-      <MetaTags
-        title={t("nav.siteTitlePartners")}
-        image={metaImage}
-        description={metaDescription}
-      />
+    <ListingGuard>
+      <Layout>
+        <Head>
+          <title>{t("nav.siteTitlePartners")}</title>
+        </Head>
+        <MetaTags
+          title={t("nav.siteTitlePartners")}
+          image={metaImage}
+          description={metaDescription}
+        />
 
-      <PageHeader className="relative" title={t("listings.newListing")}>
-        <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
-          <SiteAlert type="success" timeout={5000} dismissable />
-        </div>
-      </PageHeader>
+        <PageHeader className="relative" title={t("listings.newListing")}>
+          <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
+            <SiteAlert type="success" timeout={5000} dismissable />
+          </div>
+        </PageHeader>
 
-      <PaperListingForm />
-    </Layout>
+        <PaperListingForm />
+      </Layout>
+    </ListingGuard>
   )
 }
 
