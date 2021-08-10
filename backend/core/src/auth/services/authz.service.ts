@@ -38,7 +38,7 @@ export class AuthzService {
       path.join(__dirname, "..", "authz_policy.csv")
     )
 
-    // Get user roles and add them to our enforcer
+    // Get User roles and add them to our enforcer
     const userRoles: UserRoleEnum[] = []
     if (user) {
       if (user.roles?.isAdmin) {
