@@ -49,6 +49,7 @@ import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
+import LotteryResults from "./sections/LotteryResults"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
@@ -267,7 +268,9 @@ const formatFormData = (
     delete unit.tempId
   })
 
-  const events: ListingEventCreate[] = []
+  const events: ListingEventCreate[] = data.events.filter(
+    (event) => !(event?.type === ListingEventType.publicLottery)
+  )
   if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
     const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
@@ -358,6 +361,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    * Close modal
    */
   const [closeModal, setCloseModal] = useState(false)
+
+  /**
+   * Lottery results drawer
+   */
+  const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -548,6 +556,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           </div>
                         </TabPanel>
                       </Tabs>
+
+                      {listing?.status === ListingStatus.closed && (
+                        <LotteryResults
+                          submitCallback={(data) => {
+                            setStatus(ListingStatus.closed)
+                            triggerSubmit({ ...getValues(), ...data })
+                          }}
+                          drawerState={lotteryResultsDrawer}
+                          showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
+                        />
+                      )}
                     </div>
 
                     <aside className="md:w-3/12 md:pl-6">
@@ -555,6 +574,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? "edit" : "add"}
                         setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
+                        showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                       />
                     </aside>
                   </div>

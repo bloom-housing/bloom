@@ -7,23 +7,19 @@ import {
   AppearanceBorderType,
   Button,
   Dropzone,
-  CloudinaryUpload,
   Drawer,
   GridSection,
   GridCell,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { AssetsService } from "@bloom-housing/backend-core/types"
+import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = formMethods
-
-  const cloudName = process.env.cloudinaryCloudName
-  const uploadPreset = process.env.cloudinarySignedPreset
 
   const listingFormPhoto = watch("image")
 
@@ -134,46 +130,10 @@ const ListingPhoto = () => {
   }
 
   /*
-    Uploader callback for the dropzone
+    Pass the file for the dropzone callback along to the uploader
   */
-  const fileUploader = async (file: File) => {
-    setProgressValue(1)
-
-    const timestamp = Math.round(new Date().getTime() / 1000)
-    const tag = "browser_upload"
-
-    const assetsService = new AssetsService()
-    const params = {
-      timestamp,
-      tags: tag,
-      upload_preset: uploadPreset,
-    }
-
-    const resp = await assetsService.createPresignedUploadMetadata({
-      body: { parametersToSign: params },
-    })
-    const signature = resp.signature
-
-    setProgressValue(3)
-
-    void CloudinaryUpload({
-      signature,
-      apiKey: process.env.cloudinaryKey,
-      timestamp,
-      file: file,
-      onUploadProgress: (progress) => {
-        setProgressValue(progress)
-      },
-      cloudName,
-      uploadPreset,
-      tag,
-    }).then((response) => {
-      setProgressValue(100)
-      setCloudinaryData({
-        id: response.data.public_id,
-        url: cloudinaryUrlFromId(response.data.public_id),
-      })
-    })
+  const photoUploader = async (file: File) => {
+    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
   }
 
   return (
@@ -234,7 +194,7 @@ const ListingPhoto = () => {
             id="listing-photo-upload"
             label="Upload File"
             helptext="Select JPEG or PNG files"
-            uploader={fileUploader}
+            uploader={photoUploader}
             accept="image/*"
             progress={progressValue}
           />
