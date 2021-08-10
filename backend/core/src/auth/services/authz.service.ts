@@ -3,7 +3,7 @@ import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UserRole } from "../enum/user-role-enum"
+import { UserRoleEnum } from "../enum/user-role-enum"
 
 export enum authzActions {
   create = "create",
@@ -38,14 +38,17 @@ export class AuthzService {
       path.join(__dirname, "..", "authz_policy.csv")
     )
 
-    // Get User roles and add them to our enforcer
+    // Get user roles and add them to our enforcer
+    const userRoles: UserRoleEnum[] = []
     if (user) {
+      userRoles.push(UserRoleEnum.anonymous)
       if (user.roles?.isAdmin) {
-        await e.addRoleForUser(user.id, UserRole.admin)
+        userRoles.push(UserRoleEnum.admin)
       }
       if (user.roles?.isPartner) {
-        await e.addRoleForUser(user.id, UserRole.partner)
+        userRoles.push(UserRoleEnum.partner)
       }
+      await Promise.all(userRoles.map((r) => e.addRoleForUser(user.id, r)))
     }
 
     if (user) {
@@ -65,7 +68,7 @@ export class AuthzService {
       )
     }
 
-    return e.enforce(user ? user.id : "anonymous", type, action, obj)
+    return e.enforce(userRoles.length > 0 ? user.id : "anonymous", type, action, obj)
   }
 
   /**

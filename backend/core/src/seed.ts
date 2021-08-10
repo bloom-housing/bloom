@@ -50,7 +50,10 @@ export function getSeedListingsCount() {
   return listingSeeds.length
 }
 
-export async function createLeasingAgents(app: INestApplicationContext) {
+export async function createLeasingAgents(
+  app: INestApplicationContext,
+  rolesRepo: Repository<UserRoles>
+) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
@@ -59,6 +62,8 @@ export async function createLeasingAgents(app: INestApplicationContext) {
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
+      const roles: UserRoles = { user: agent, isPartner: true }
+      await rolesRepo.save(roles)
       await usersService.confirm({ token: agent.confirmationToken })
     }),
   ])
@@ -99,9 +104,9 @@ async function createApplicationMethods(app: INestApplicationContext) {
   })
 }
 
-const seedListings = async (app: INestApplicationContext) => {
+const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<UserRoles>) => {
   const seeds = []
-  const leasingAgents = await createLeasingAgents(app)
+  const leasingAgents = await createLeasingAgents(app, rolesRepo)
   await createApplicationMethods(app)
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
@@ -124,8 +129,8 @@ async function seed() {
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
-  const userRolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
-  const listings = await seedListings(app)
+  const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
+  const listings = await seedListings(app, rolesRepo)
 
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
@@ -181,10 +186,10 @@ async function seed() {
   }
 
   await userRepo.save(admin)
-  await userService.confirm({ token: admin.confirmationToken })
-
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
-  await userRolesRepo.save(roles)
+  await rolesRepo.save(roles)
+
+  await userService.confirm({ token: admin.confirmationToken })
 
   await app.close()
 }

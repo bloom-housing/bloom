@@ -11,8 +11,8 @@ export class UserRoles {
   user: User
 
   @Column("boolean", { default: false })
-  isAdmin: boolean
+  isAdmin?: boolean
 
   @Column("boolean", { default: false })
-  isPartner: boolean
+  isPartner?: boolean
 }

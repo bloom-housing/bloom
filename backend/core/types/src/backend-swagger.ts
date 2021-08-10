@@ -5327,10 +5327,6 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export enum UserRole {
-  "user" = "user",
-  "admin" = "admin",
-}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

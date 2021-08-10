@@ -3,7 +3,7 @@ p, partner, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
-p, partner, user, !r.obj || (r.sub == r.obj.id), (read|update)
+p, anonymous, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
