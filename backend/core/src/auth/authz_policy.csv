@@ -1,5 +1,5 @@
 p, admin, application, true, .*
-p, partner, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
+p, anonymous, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*

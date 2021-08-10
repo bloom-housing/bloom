@@ -38,19 +38,16 @@ export class AuthzService {
       path.join(__dirname, "..", "authz_policy.csv")
     )
 
-    // Get user roles and add them to our enforcer
-    const userRoles: UserRoleEnum[] = []
+    // Get User roles and add them to our enforcer
     if (user) {
       if (user.roles?.isAdmin) {
-        userRoles.push(UserRoleEnum.admin)
+        await e.addRoleForUser(user.id, UserRoleEnum.admin)
       }
       if (user.roles?.isPartner) {
-        userRoles.push(UserRoleEnum.partner)
+        await e.addRoleForUser(user.id, UserRoleEnum.partner)
       }
-      await Promise.all(userRoles.map((r) => e.addRoleForUser(user.id, r)))
-    }
+      await e.addRoleForUser(user.id, "anonymous")
 
-    if (user) {
       // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
       //  Permissions for a leasing agent on applications are there defined here programatically.
       //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
@@ -67,7 +64,7 @@ export class AuthzService {
       )
     }
 
-    return e.enforce(userRoles.length > 0 ? user.id : "anonymous", type, action, obj)
+    return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
   /**
