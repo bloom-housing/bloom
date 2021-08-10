@@ -5331,6 +5331,7 @@ export enum CSVFormattingType {
   "basic" = "basic",
   "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
   "ohaFormat" = "ohaFormat",
+  "bhaFormat" = "bhaFormat",
 }
 
 export enum CountyCode {
