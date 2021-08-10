@@ -43,7 +43,7 @@ export class AuthzService {
       if (user.roles?.isAdmin) {
         await e.addRoleForUser(user.id, UserRole.admin)
       }
-      if (user.roles.isPartner) {
+      if (user.roles?.isPartner) {
         await e.addRoleForUser(user.id, UserRole.partner)
       }
     }

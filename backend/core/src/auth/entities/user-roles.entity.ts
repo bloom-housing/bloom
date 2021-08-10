@@ -3,7 +3,10 @@ import { User } from "./user.entity"
 
 @Entity({ name: "user_roles" })
 export class UserRoles {
-  @OneToOne(() => User, (user) => user.roles, { primary: true })
+  @OneToOne(() => User, (user) => user.roles, {
+    primary: true,
+    cascade: true,
+  })
   @JoinColumn()
   user: User
 

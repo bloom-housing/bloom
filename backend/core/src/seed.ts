@@ -26,6 +26,7 @@ import { AssetsService } from "./assets/services/assets.service"
 import { AuthContext } from "./auth/types/auth-context"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
+import { UserRoles } from "./auth/entities/user-roles.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -123,6 +124,7 @@ async function seed() {
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
+  const userRolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const listings = await seedListings(app)
 
   const user1 = await userService.createUser(
@@ -178,9 +180,11 @@ async function seed() {
     }
   }
 
-  // admin.roles.isAdmin = true
   await userRepo.save(admin)
   await userService.confirm({ token: admin.confirmationToken })
+
+  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  await userRolesRepo.save(roles)
 
   await app.close()
 }

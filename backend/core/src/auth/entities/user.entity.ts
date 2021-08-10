@@ -89,8 +89,6 @@ export class User {
 
   @OneToOne(() => UserRoles, (roles) => roles.user, {
     eager: true,
-    cascade: true,
-    onDelete: "CASCADE",
   })
   roles: UserRoles
 
