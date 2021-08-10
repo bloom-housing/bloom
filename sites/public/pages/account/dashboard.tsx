@@ -57,12 +57,6 @@ class Dashboard extends Component<DashboardProps> {
               <div className="flex flex-wrap relative">
                 <DashBlocks>
                   <DashBlock
-                    href="/account/applications"
-                    title={t("account.myApplications")}
-                    subtitle={t("account.myApplicationsSubtitle")}
-                    icon={<HeaderBadge />}
-                  ></DashBlock>
-                  <DashBlock
                     href="/account/edit"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}

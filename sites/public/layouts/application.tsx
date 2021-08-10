@@ -60,9 +60,6 @@ const Layout = (props) => {
             <Link href="/account/dashboard">
               <a className="navbar-item">{t("nav.myDashboard")}</a>
             </Link>
-            <Link href="/account/applications">
-              <a className="navbar-item">{t("nav.myApplications")}</a>
-            </Link>
             <Link href="/account/edit">
               <a className="navbar-item">{t("nav.accountSettings")}</a>
             </Link>
