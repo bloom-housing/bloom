@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
   - Added checks for property in listing.dto transforms
+  - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
 
 ## v1.0.5 08/03/2021
 
