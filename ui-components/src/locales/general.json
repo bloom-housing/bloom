@@ -723,7 +723,10 @@
       "preview": "Preview",
       "close": "Close",
       "viewListing": "View listing",
-      "unpublish": "Unpublish"
+      "unpublish": "Unpublish",
+      "postResults": "Post Results",
+      "resultsPosted": "Results Posted",
+      "previewLotteryResults": "Preview Lottery Results"
     },
     "activePreferences": "Active Preferences",
     "addListing": "Add Listing",
@@ -1190,6 +1193,7 @@
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
     "pm": "PM",
+    "post": "Post",
     "preferences": "Preferences",
     "preview": "Preview",
     "previous": "Previous",
