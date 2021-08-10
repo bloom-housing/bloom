@@ -41,7 +41,6 @@ export class AuthzService {
     // Get user roles and add them to our enforcer
     const userRoles: UserRoleEnum[] = []
     if (user) {
-      userRoles.push(UserRoleEnum.anonymous)
       if (user.roles?.isAdmin) {
         userRoles.push(UserRoleEnum.admin)
       }
