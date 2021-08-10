@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file. The format 
 - Changed:
 
   - updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
+  - removed roles for public users and assigned a "partner" role for leasing agents([#1628](https://github.com/bloom-housing/bloom/pull/1628))
 
 - Fixed:
   - Added checks for property in listing.dto transforms
