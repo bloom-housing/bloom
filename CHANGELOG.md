@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - /applicationMethods and /paperApplications endpoints and corresponding DB schema
+  - Added "bhaFormat" to CSV exporter ([#1640](https://github.com/bloom-housing/bloom/pull/1640)) (Emily Jablonski)
 
 - Fixed:
 
