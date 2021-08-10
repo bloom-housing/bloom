@@ -13,6 +13,7 @@ import "./ListingsList.scss"
 
 export interface ListingsProps {
   listings: Listing[]
+  hideApplicationStatus?: boolean
 }
 
 const ListingsList = (props: ListingsProps) => {
@@ -78,7 +79,7 @@ const ListingsList = (props: ListingsProps) => {
             subtitle={subtitle}
             imageUrl={imageUrl}
             href={`/listing/${listing.id}/${listing.urlSlug}`}
-            appStatus={appStatus}
+            appStatus={props.hideApplicationStatus ? undefined : appStatus}
             appStatusContent={content}
             tagLabel={
               listing.reservedCommunityType
