@@ -484,8 +484,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                 <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
                   <div className="flex flex-row flex-wrap">
-                    <div className="md:w-9/12 pb-20">
-                      <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+                    <div className="md:w-9/12 pb-24">
+                      <Tabs
+                        forceRenderTabPanel={true}
+                        selectedIndex={tabIndex}
+                        onSelect={(index) => setTabIndex(index)}
+                      >
                         <TabList>
                           <Tab>Listing Details</Tab>
                           <Tab>Application Process</Tab>
@@ -506,13 +510,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <AdditionalEligibility />
                           <AdditionalDetails />
 
-                          <div
-                            className="text-right"
-                            style={{ marginTop: "-2rem", position: "relative", top: "7rem" }}
-                          >
+                          <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
-                              styleType={AppearanceStyleType.primary}
                               type="button"
+                              icon="arrowForward"
                               onClick={() => {
                                 setTabIndex(1)
                                 window.scrollTo({ top: 0, behavior: "smooth" })
@@ -532,13 +533,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setOpenHouseEvents={setOpenHouseEvents}
                           />
 
-                          <div
-                            className=""
-                            style={{ marginTop: "-2rem", position: "relative", top: "7rem" }}
-                          >
+                          <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
-                              styleType={AppearanceStyleType.primary}
                               type="button"
+                              icon="arrowBack"
+                              iconPlacement="left"
                               onClick={() => {
                                 setTabIndex(0)
                                 window.scrollTo({ top: 0, behavior: "smooth" })
