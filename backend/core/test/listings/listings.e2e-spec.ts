@@ -15,7 +15,6 @@ import { ApplicationMethodsModule } from "../../src/application-methods/applicat
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
-import { getSeedListingsCount } from "../../src/seed"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -52,19 +51,20 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the first page contains all
     // but the last listing.
     const page = "1"
-    const limit = (getSeedListingsCount() - 1).toString()
-    const params = "/?page=" + page + "&limit=" + limit
+    // This is the number of listings in ../../src/seed.ts minus 1
+    const limit = 9
+    const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
       .expect(200)
-    expect(res.body.items.length).toEqual(getSeedListingsCount() - 1)
+    expect(res.body.items.length).toEqual(limit)
   })
 
   it("should return the last page of paginated listings", async () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const page = "2"
-    const limit = (getSeedListingsCount() - 1).toString()
+    const limit = "9"
     const params = "/?page=" + page + "&limit=" + limit
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)

@@ -31,6 +31,8 @@ const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+// Note: if changing this list of seeds, you must also change the
+// number in listings.e2e-spec.ts.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const listingSeeds: any[] = [
   ListingDefaultSeed,
