@@ -8,6 +8,7 @@ import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
+import { TranslationsModule } from "../translations/translations.module"
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { Property } from "../property/entities/property.entity"
     }),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
+    TranslationsModule,
   ],
   providers: [ListingsService],
   exports: [ListingsService],
