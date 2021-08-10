@@ -53,7 +53,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 
   return {
     paths: context.locales.flatMap((locale: string) =>
-      response.data.items.map((listing) => ({
+      response?.data?.items?.map((listing) => ({
         params: { id: listing.id, slug: listing.urlSlug },
         locale: locale,
       }))
