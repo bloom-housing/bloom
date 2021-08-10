@@ -1,4 +1,4 @@
-import { CacheModule, Module } from "@nestjs/common"
+import { CacheModule, CACHE_MANAGER, Inject, Module, OnModuleDestroy } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
 import { ListingsService } from "./listings.service"
@@ -9,6 +9,18 @@ import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
+import { Store } from "cache-manager"
+import Redis from "redis"
+
+interface RedisCache extends Cache {
+  store: RedisStore
+}
+
+interface RedisStore extends Store {
+  name: "redis"
+  getClient: () => Redis.RedisClient
+  isCacheableValue: (value: unknown) => boolean
+}
 
 @Module({
   imports: [
@@ -24,4 +36,17 @@ import { Property } from "../property/entities/property.entity"
   exports: [ListingsService],
   controllers: [ListingsController],
 })
-export class ListingsModule {}
+// We have to manually disconnect from redis on app close
+export class ListingsModule implements OnModuleDestroy {
+  redisClient: Redis.RedisClient
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: RedisCache) {
+    this.redisClient = this.cacheManager.store.getClient()
+
+    this.redisClient.on("error", (error) => {
+      console.log("redis error = ", error)
+    })
+  }
+  onModuleDestroy() {
+    this.redisClient.quit()
+  }
+}
