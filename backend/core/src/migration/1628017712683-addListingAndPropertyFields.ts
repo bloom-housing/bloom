@@ -10,8 +10,8 @@ export class addListingAndPropertyFields1628017712683 implements MigrationInterf
     await queryRunner.query(`ALTER TABLE "listings" ADD "owner_company" text`)
     await queryRunner.query(`ALTER TABLE "listings" ADD "management_company" text`)
     await queryRunner.query(`ALTER TABLE "listings" ADD "management_website" text`)
-    await queryRunner.query(`ALTER TABLE "listings" ADD "ami_percentage_min" text`)
-    await queryRunner.query(`ALTER TABLE "listings" ADD "ami_percentage_max" text`)
+    await queryRunner.query(`ALTER TABLE "listings" ADD "ami_percentage_min" integer`)
+    await queryRunner.query(`ALTER TABLE "listings" ADD "ami_percentage_max" integer`)
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

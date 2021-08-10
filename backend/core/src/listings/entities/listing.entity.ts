@@ -485,16 +485,16 @@ class Listing extends BaseEntity {
 
   // In the absence of AMI percentage information at the unit level, amiPercentageMin and
   // amiPercentageMax will store the AMI percentage range for the listing as a whole.
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   amiPercentageMin?: number | null
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   amiPercentageMax?: number | null
 }
 
