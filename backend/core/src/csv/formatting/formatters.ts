@@ -609,6 +609,23 @@ export const formatHOPWAPreference = {
   },
 }
 
+export const formatBHAPreference = {
+  label: "Berkeley Housing Authority",
+  discriminator: "",
+  formatter: (application: Application) => {
+    const bhaPreferences = application.preferences.filter((pref) => pref.key === "BHA")
+    if (bhaPreferences.length !== 1) {
+      return ""
+    }
+    return (
+      bhaPreferences[0].options
+        .filter((option) => option.checked)
+        .map((option) => option.key)
+        .join(",") || ""
+    )
+  },
+}
+
 export const formatMarkedAsDuplicate = {
   label: "Marked as duplicate",
   discriminator: "",

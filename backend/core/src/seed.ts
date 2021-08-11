@@ -120,6 +120,7 @@ const seedListings = async (app: INestApplicationContext) => {
 
 async function seed() {
   const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
@@ -181,7 +182,6 @@ async function seed() {
   admin.isAdmin = true
   await userRepo.save(admin)
   await userService.confirm({ token: admin.confirmationToken })
-
   await app.close()
 }
 

@@ -15,6 +15,7 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
+  ClassSerializerInterceptor,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -57,7 +58,8 @@ export class ListingsController {
   @Get()
   @ApiExtraModels(ListingFilterParams)
   @ApiOperation({ summary: "List listings", operationId: "list" })
-  @UseInterceptors(CacheInterceptor)
+  // ClassSerializerInterceptor has to come after CacheInterceptor
+  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
   public async getAll(
     @Headers("origin") origin: string,
     @Query() queryParams: ListingsQueryParams
@@ -80,7 +82,7 @@ export class ListingsController {
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
   // TODO: Re-enable caching with support for multiple languages
-  // @UseInterceptors(CacheInterceptor)
+  // @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
   async retrieve(
     @Headers("language") language: Language,
     @Param("listingId") listingId: string
