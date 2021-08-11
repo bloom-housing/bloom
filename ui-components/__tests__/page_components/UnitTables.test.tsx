@@ -21,6 +21,7 @@ const summaries: {
       createdAt: new Date(),
       updatedAt: new Date(),
       name: "studio",
+      numBedrooms: 0,
     },
   ],
   priorityTypes: [],
@@ -32,6 +33,7 @@ const summaries: {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "studio",
+        numBedrooms: 0,
       },
       totalAvailable: 0,
       totalCount: 41,
@@ -49,6 +51,7 @@ const summaries: {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "studio",
+        numBedrooms: 0,
       },
       totalAvailable: 0,
       totalCount: 40,
@@ -70,6 +73,7 @@ const summaries: {
             createdAt: new Date(),
             updatedAt: new Date(),
             name: "studio",
+            numBedrooms: 0,
           },
           totalAvailable: 0,
           totalCount: 24,
@@ -91,6 +95,7 @@ const summaries: {
             createdAt: new Date(),
             updatedAt: new Date(),
             name: "studio",
+            numBedrooms: 0,
           },
           totalAvailable: 0,
           totalCount: 16,
@@ -118,7 +123,7 @@ describe("<UnitTables>", () => {
     const { getAllByText, getByRole, container } = render(
       <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
     )
-    /* 
+    /*
       * TODO: this had to have been a result of a bad merge, this test doesn't make sense
       expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
       summaries.byUnitType[0].totalAvailable
@@ -135,7 +140,7 @@ describe("<UnitTables>", () => {
         disableAccordion={true}
       />
     )
-    /* 
+    /*
       * TODO: this had to have been a result of a bad merge, this test doesn't make sense
       expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
       summaries.byUnitType[0].totalAvailable

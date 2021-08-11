@@ -14,18 +14,21 @@ ArcherListing.unitsSummarized = {
       createdAt: new Date(),
       updatedAt: new Date(),
       name: "threeBdrm",
+      numBedrooms: 3,
     },
     {
       id: "",
       createdAt: new Date(),
       updatedAt: new Date(),
       name: "twoBdrm",
+      numBedrooms: 2,
     },
     {
       id: "",
       createdAt: new Date(),
       updatedAt: new Date(),
       name: "SRO",
+      numBedrooms: 1,
     },
   ],
   byUnitType: [
@@ -35,6 +38,7 @@ ArcherListing.unitsSummarized = {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "threeBdrm",
+        numBedrooms: 3,
       },
       minIncomeRange: {
         min: "10",
@@ -65,6 +69,7 @@ ArcherListing.unitsSummarized = {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "twoBdrm",
+        numBedrooms: 2,
       },
       minIncomeRange: {
         min: "10",
@@ -97,6 +102,7 @@ ArcherListing.unitsSummarized = {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "SRO",
+        numBedrooms: 1,
       },
       minIncomeRange: {
         min: "10",
@@ -154,12 +160,14 @@ describe("occupancy formatting helper", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "threeBdrm",
+        numBedrooms: 3,
       },
       {
         id: "",
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "twoBdrm",
+        numBedrooms: 2,
       },
     ]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionNoSro"))
@@ -172,6 +180,7 @@ describe("occupancy formatting helper", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "SRO",
+        numBedrooms: 1,
       },
     ]
     expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionAllSro"))

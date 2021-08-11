@@ -11,6 +11,8 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.neighborhood:
     case ListingFilterKeys.status:
       return EnumListingFilterParamsComparison["="]
+    case ListingFilterKeys.bedrooms:
+      return EnumListingFilterParamsComparison[">="]
     default: {
       const _exhaustiveCheck: never = filterKey
       return _exhaustiveCheck
