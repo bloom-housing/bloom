@@ -160,7 +160,7 @@ const ListingsPage = () => {
       </div>
       {!listingsLoading && (
         <div>
-          {listingsData && <ListingsList listings={listingsData.items} />}
+          {listingsData && <ListingsList listings={listingsData.items} hideApplicationStatus />}
           <AgPagination
             totalItems={listingsData?.meta.totalItems}
             totalPages={listingsData?.meta.totalPages}
