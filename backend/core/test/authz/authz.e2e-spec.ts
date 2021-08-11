@@ -101,7 +101,7 @@ describe("Authz", () => {
       await supertest(app.getHttpServer()).get(userEndpoint).expect(403)
     })
 
-    it(`should allow anonymous logged in user to GET to get any user profile`, async () => {
+    it(`should allow a logged in user to GET to get any user profile`, async () => {
       await supertest(app.getHttpServer())
         .get(userEndpoint)
         .set(...setAuthorization(userAccessToken))
@@ -116,6 +116,12 @@ describe("Authz", () => {
   describe("applications", () => {
     it("should not allow anonymous user to GET applications", async () => {
       await supertest(app.getHttpServer()).get(applicationsEndpoint).expect(403)
+    })
+    it("should allow logged in user to GET applications", async () => {
+      await supertest(app.getHttpServer())
+        .get(applicationsEndpoint)
+        .set(...setAuthorization(userAccessToken))
+        .expect(200)
     })
     it("should not allow anonymous user to GET CSV applications", async () => {
       await supertest(app.getHttpServer())
