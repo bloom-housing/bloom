@@ -26,6 +26,14 @@ export interface Viewport {
   zoom: number
 }
 
+const isValidLatitude = (latitude: number) => {
+  return latitude >= -90 && latitude <= 90
+}
+
+const isValidLongitude = (longitude: number) => {
+  return longitude >= -180 && longitude <= 180
+}
+
 const ListingMap = (props: ListingMapProps) => {
   const [marker, setMarker] = useState({
     latitude: props.address?.latitude,
@@ -93,25 +101,28 @@ const ListingMap = (props: ListingMapProps) => {
           onViewportChange={onViewportChange}
           {...viewport}
         >
-          {marker.latitude && marker.longitude && (
-            <>
-              {props.enableCustomPinPositioning ? (
-                <Marker
-                  latitude={marker.latitude}
-                  longitude={marker.longitude}
-                  offsetTop={-20}
-                  draggable={true}
-                  onDragEnd={onMarkerDragEnd}
-                >
-                  <div className="pin"></div>
-                </Marker>
-              ) : (
-                <Marker latitude={marker.latitude} longitude={marker.longitude} offsetTop={-20}>
-                  <div className="pin"></div>
-                </Marker>
-              )}
-            </>
-          )}
+          {marker.latitude &&
+            marker.longitude &&
+            isValidLatitude(marker.latitude) &&
+            isValidLongitude(marker.longitude) && (
+              <>
+                {props.enableCustomPinPositioning ? (
+                  <Marker
+                    latitude={marker.latitude}
+                    longitude={marker.longitude}
+                    offsetTop={-20}
+                    draggable={true}
+                    onDragEnd={onMarkerDragEnd}
+                  >
+                    <div className="pin"></div>
+                  </Marker>
+                ) : (
+                  <Marker latitude={marker.latitude} longitude={marker.longitude} offsetTop={-20}>
+                    <div className="pin"></div>
+                  </Marker>
+                )}
+              </>
+            )}
         </MapGL>
       )}
     </div>
