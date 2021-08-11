@@ -1,48 +1,13 @@
-import { importListing } from "./listings-importer"
+import { importListing, createUnitsArray } from "./listings-importer"
 import axios from "axios"
 import { Listing } from "../src/listings/entities/listing.entity"
 import { Property } from "../src/property/entities/property.entity"
 import { Address } from "../src/shared/entities/address.entity"
 import { CountyCode } from "../src/shared/types/county-code"
 import { CSVFormattingType } from "../src/csv/types/csv-formatting-type-enum"
-import { UnitStatus } from "../src/units/types/unit-status-enum"
 
 // Sample usage:
 // $ yarn ts-node scripts/import-listings-from-detroit-arcgis.ts http://localhost:3100 test@example.com:abcdef https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Affordable_Housing_Website_data_12_20/FeatureServer/0//query
-
-function createUnitsArray(type, number) {
-  const units = []
-  for (let unit_index = 0; unit_index < number; unit_index++) {
-    units.push({
-      unitType: type,
-
-      status: UnitStatus.unknown,
-
-      // This amiPercentage is made up.
-      amiPercentage: "30",
-
-      amiChart: {
-        name: "Fake AMI Chart Name",
-        items: [],
-
-        // Add null id, createdAt, etc. to avoid compilation errors.
-        // (These will be replaced by real values when the script uploads/de-dupes this amiChart.)
-        id: null,
-        createdAt: null,
-        updatedAt: null,
-        units: null,
-      },
-
-      // Add null id, createdAt, etc. to avoid compilation errors.
-      // (These will be replaced by real values when the script uploads this unit.)
-      id: null,
-      createdAt: null,
-      updatedAt: null,
-      property: null,
-    })
-  }
-  return units
-}
 
 async function main() {
   if (process.argv.length < 5) {
