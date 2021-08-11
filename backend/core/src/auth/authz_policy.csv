@@ -1,9 +1,9 @@
 p, admin, application, true, .*
-p, anonymous, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
+p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
-p, anonymous, user, !r.obj || (r.sub == r.obj.id), (read|update)
+p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
@@ -51,4 +51,5 @@ p, admin, paperApplication, true, .*
 p, anonymous, paperApplication, true, read
 
 g, admin, partner
-g, partner, anonymous
+g, partner, user
+g, user, anonymous

@@ -101,8 +101,11 @@ describe("Authz", () => {
       await supertest(app.getHttpServer()).get(userEndpoint).expect(403)
     })
 
-    it(`should not allow anonymous user to PUT user`, async () => {
-      await supertest(app.getHttpServer()).get(userEndpoint).expect(403)
+    it(`should allow anonymous logged in user to GET to get any user profile`, async () => {
+      await supertest(app.getHttpServer())
+        .get(userEndpoint)
+        .set(...setAuthorization(userAccessToken))
+        .expect(200)
     })
 
     it(`should allow anonymous user to CREATE a user`, async () => {

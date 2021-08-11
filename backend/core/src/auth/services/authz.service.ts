@@ -46,7 +46,7 @@ export class AuthzService {
       if (user.roles?.isPartner) {
         await e.addRoleForUser(user.id, UserRoleEnum.partner)
       }
-      await e.addRoleForUser(user.id, "anonymous")
+      await e.addRoleForUser(user.id, UserRoleEnum.user)
 
       // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
       //  Permissions for a leasing agent on applications are there defined here programatically.
