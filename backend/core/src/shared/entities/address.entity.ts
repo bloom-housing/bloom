@@ -55,14 +55,14 @@ export class Address {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   street?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(128, { groups: [ValidationsGroupsEnum.default] })
   street2?: string | null
 
   @Column({ type: "text", nullable: true })
