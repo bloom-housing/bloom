@@ -58,6 +58,7 @@ export default function Home(props: IndexProps) {
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings?page=1"
+        backgroundImage={"/images/hero.png"}
       >
         {t("welcome.subTitle")}
       </Hero>
