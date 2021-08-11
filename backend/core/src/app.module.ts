@@ -48,8 +48,6 @@ export function applicationSetup(app: INestApplication) {
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true })
   )
-  // Starts listening for shutdown hooks
-  app.enableShutdownHooks()
   return app
 }
 
