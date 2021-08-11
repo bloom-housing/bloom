@@ -42,9 +42,12 @@ const ImageCard = (props: ImageCardProps) => {
     <div className="image-card__wrapper">
       {tag}
       <figure className="image-card">
-        {props.imageUrl && (
-          <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
-        )}
+        {
+          <img
+            src={props.imageUrl || "/images/detroitDefault.png"}
+            alt={props.description || t("listings.buildingImageAltText")}
+          />
+        }
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>
           {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
