@@ -24,9 +24,7 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
-const MAPBOX_TOKEN =
-  process.env.MAPBOX_TOKEN ||
-  "pk.eyJ1Ijoic2Vhbi1hbGJlcnQtZXh5Z3kiLCJhIjoiY2tybnY5amlyMDNraDJubXc4c3ZhOGswYyJ9.KE5FGb_Tch8BPrOYMvshXw"
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN
 // Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
 const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(bloomTheme)
