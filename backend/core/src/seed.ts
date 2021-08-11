@@ -26,6 +26,12 @@ import { AssetsService } from "./assets/services/assets.service"
 import { AuthContext } from "./auth/types/auth-context"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
+import { Listing10158Seed } from "./seeds/listings/listing-detroit-10158"
+import { Listing10157Seed } from "./seeds/listings/listing-detroit-10157"
+import { Listing10147Seed } from "./seeds/listings/listing-detroit-10147"
+import { Listing10145Seed } from "./seeds/listings/listing-detroit-10145"
+import { CountyCode } from "./shared/types/county-code"
+import { ListingTreymoreSeed } from "./seeds/listings/listing-detroit-treymore"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -40,11 +46,13 @@ const listingSeeds: any[] = [
   ListingDefaultOpenSoonSeed,
   ListingDefaultOnePreferenceSeed,
   ListingDefaultNoPreferenceSeed,
-  ListingDefaultNoPreferenceSeed,
-  ListingDefaultBmrChartSeed,
   ListingTritonSeed,
   ListingDefaultReservedSeed,
-  ListingDefaultFCFSSeed,
+  Listing10145Seed,
+  Listing10147Seed,
+  Listing10157Seed,
+  Listing10158Seed,
+  ListingTreymoreSeed,
 ]
 
 export function getSeedListingsCount() {
@@ -109,11 +117,13 @@ const seedListings = async (app: INestApplicationContext) => {
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
   for (const [index, listingSeed] of allSeeds.entries()) {
-    const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
     const listing = await listingSeed.seed()
-    listing.leasingAgents = [everyOtherAgent]
-    await listingRepository.save(listing)
-
+    // Don't add leasing agent assignments for Detroit
+    if (listing.countyCode !== CountyCode.detroit) {
+      const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
+      listing.leasingAgents = [everyOtherAgent]
+      await listingRepository.save(listing)
+    }
     seeds.push(listing)
   }
 

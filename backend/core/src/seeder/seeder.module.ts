@@ -33,6 +33,11 @@ import { ApplicationMethodsModule } from "../application-methods/applications-me
 import { PaperApplicationsModule } from "../paper-applications/paper-applications.module"
 import { AssetsModule } from "../assets/assets.module"
 import { ListingDefaultReservedSeed } from "../seeds/listings/listing-default-reserved-seed"
+import { Listing10158Seed } from "../seeds/listings/listing-detroit-10158"
+import { Listing10157Seed } from "../seeds/listings/listing-detroit-10157"
+import { Listing10147Seed } from "../seeds/listings/listing-detroit-10147"
+import { Listing10145Seed } from "../seeds/listings/listing-detroit-10145"
+import { ListingTreymoreSeed } from "../seeds/listings/listing-detroit-treymore"
 
 @Module({})
 export class SeederModule {
@@ -83,6 +88,11 @@ export class SeederModule {
         ListingTritonSeed,
         ListingDefaultReservedSeed,
         ListingDefaultFCFSSeed,
+        Listing10158Seed,
+        Listing10157Seed,
+        Listing10147Seed,
+        Listing10145Seed,
+        ListingTreymoreSeed,
       ],
     }
   }
