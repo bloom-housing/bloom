@@ -3,6 +3,7 @@ import { basicFormattingMetadata } from "./metadata/basic-formatting-metadata"
 import { CSVFormattingType } from "../types/csv-formatting-type-enum"
 import { FormattingMetadataAggregateFactory } from "../types/formatting-metadata-aggregate-factory"
 import { ohaFormattingMetadata } from "./metadata/oha-formatting-metadata"
+import { bhaFormattingMetadata } from "./metadata/bha-formatting-metadata"
 
 export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAggregateFactory = (
   type: CSVFormattingType
@@ -14,5 +15,7 @@ export const applicationFormattingMetadataAggregateFactory: FormattingMetadataAg
       return haywardFormattingMetadata
     case CSVFormattingType.ohaFormat:
       return ohaFormattingMetadata
+    case CSVFormattingType.bhaFormat:
+      return bhaFormattingMetadata
   }
 }
