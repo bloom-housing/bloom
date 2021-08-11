@@ -85,7 +85,14 @@ const ListingMap = (props: ListingMapProps) => {
     })
   }, [])
 
-  if (!props.address || !props.address.latitude || !props.address.longitude) return null
+  if (
+    !props.address ||
+    !props.address.latitude ||
+    !props.address.longitude ||
+    !viewport.latitude ||
+    !viewport.longitude
+  )
+    return null
 
   return (
     <div className="listing-map">
