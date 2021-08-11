@@ -50,6 +50,10 @@ export class ListingsModule implements OnModuleDestroy {
     })
   }
   onModuleDestroy() {
-    this.redisClient.quit()
+    console.log("disconnecting from redis")
+    const quit = this.redisClient.quit()
+    if (quit === false) {
+      this.redisClient.end(true)
+    }
   }
 }
