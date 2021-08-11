@@ -94,6 +94,8 @@ const seedListings = async (app: INestApplicationContext) => {
 
 async function seed() {
   const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
