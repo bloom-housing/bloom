@@ -5,34 +5,48 @@ Prompts the user for the number of bedrooms they need.
 import {
   AppearanceStyleType,
   Button,
-  FormCard,
-  t,
-  Form,
   FieldGroup,
+  Form,
+  FormCard,
   ProgressNav,
+  t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
-import React from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { EligibilityContext } from "../../lib/EligibilityContext"
+import FormBackLink from "../../src/forms/applications/FormBackLink"
+import { eligibilityRoute } from "../../lib/helpers"
 
 const EligibilityBedrooms = () => {
   const router = useRouter()
+  const { eligibilityRequirements } = useContext(EligibilityContext)
+  const CURRENT_PAGE = 1
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors } = useForm()
+  const { handleSubmit, register, errors, getValues } = useForm({
+    defaultValues: {
+      bedrooms: eligibilityRequirements?.bedroomCounts,
+    },
+  })
+
   const onSubmit = () => {
-    void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[2]}`)
+    const data = getValues()
+    const { bedrooms } = data
+    eligibilityRequirements.setBedroomCounts(bedrooms)
+
+    void router.push(eligibilityRoute(CURRENT_PAGE + 1))
   }
 
-  const preferredUnitOptions = [
+  const bedroomsOptions = [
     { id: "studio", label: t("eligibility.bedrooms.studio") },
-    { id: "1", label: "1" },
-    { id: "2", label: "2" },
-    { id: "3", label: "3" },
-    { id: "4+", label: "4+" },
+    { id: "oneBdrm", label: "1" },
+    { id: "twoBdrm", label: "2" },
+    { id: "threeBdrm", label: "3" },
+    { id: "fourBdrm", label: "4+" },
   ]
 
   return (
@@ -45,6 +59,12 @@ const EligibilityBedrooms = () => {
         />
       </FormCard>
       <FormCard>
+        <FormBackLink
+          url={eligibilityRoute(CURRENT_PAGE - 1)}
+          onClick={() => {
+            // Not extra actions needed.
+          }}
+        />
         <div className="form-card__lead pb-0 pt-8">
           <h2 className="form-card__title is-borderless">{t("eligibility.bedrooms.prompt")}</h2>
         </div>
@@ -54,9 +74,9 @@ const EligibilityBedrooms = () => {
               <legend className="sr-only">{t("eligibility.bedrooms.prompt")}</legend>
               <FieldGroup
                 type="checkbox"
-                name="preferredUnit"
-                fields={preferredUnitOptions}
-                error={errors.preferredUnit}
+                name="bedrooms"
+                fields={bedroomsOptions}
+                error={errors.bedrooms != null}
                 errorMessage={t("errors.selectAtLeastOne")}
                 validation={{ required: true }}
                 register={register}

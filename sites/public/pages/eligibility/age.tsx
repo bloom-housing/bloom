@@ -14,22 +14,29 @@ import {
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import "./age.scss"
-import React from "react"
+import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { EligibilityContext } from "../../lib/EligibilityContext"
+import FormBackLink from "../../src/forms/applications/FormBackLink"
+import { eligibilityRoute } from "../../lib/helpers"
 
 const EligibilityAge = () => {
   const router = useRouter()
   // Check if they need to be 18 or older to apply?
   const MIN_AGE = 0
   const MAX_AGE = 120
+  const CURRENT_PAGE = 2
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors, setError } = useForm()
+  const { eligibilityRequirements } = useContext(EligibilityContext)
+
   const onSubmit = (data) => {
     if (isAgeValid(data.age)) {
-      void router.push(`/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[3]}`)
+      eligibilityRequirements.setAge(data.age)
+      void router.push(eligibilityRoute(CURRENT_PAGE + 1))
     } else {
       setError("age", { type: "manual", message: "" })
     }
@@ -49,6 +56,12 @@ const EligibilityAge = () => {
         />
       </FormCard>
       <FormCard>
+        <FormBackLink
+          url={eligibilityRoute(CURRENT_PAGE - 1)}
+          onClick={() => {
+            // Not extra actions needed.
+          }}
+        />
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__lead pb-0 pt-8">
             <h2 className="form-card__title is-borderless">{t("eligibility.age.prompt")}</h2>
@@ -64,6 +77,7 @@ const EligibilityAge = () => {
               label={t("eligibility.age.label")}
               describedBy="age-description"
               isLabelAfterField={true}
+              defaultValue={eligibilityRequirements.age}
               inputProps={{ maxLength: 3 }}
               type={"number"}
               validation={{ required: true }}

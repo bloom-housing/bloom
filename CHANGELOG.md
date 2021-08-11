@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added fields to Listing and Property to accommodate Detroit listing data ([#311](https://github.com/CityOfDetroit/bloom/pull/311))
   - Add eligibility questionnaire validation ([#327](https://github.com/CityOfDetroit/bloom/pull/327))
   - Add support for comma-separated lists to filters ([#356](https://github.com/CityOfDetroit/bloom/pull/356))
+  - Add eligibility questionnaire state management and back buttons ([#371](https://github.com/CityOfDetroit/bloom/pull/371))
   - Detroit seed properties ([#362](https://github.com/CityOfDetroit/bloom/pull/362))
 
 ## Detroit Team M8

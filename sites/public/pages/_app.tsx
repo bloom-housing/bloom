@@ -19,6 +19,7 @@ import ApplicationConductor, {
 } from "../lib/ApplicationConductor"
 import { translations, overrideTranslations } from "../src/translations"
 import LinkComponent from "../src/LinkComponent"
+import { blankEligibilityRequirements, EligibilityContext } from "../lib/EligibilityContext"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
@@ -28,6 +29,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   })
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()
+  })
+
+  const [eligibilityRequirements] = useState(() => {
+    return blankEligibilityRequirements()
   })
 
   const conductor = useMemo(() => {
@@ -81,12 +86,14 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
           syncListing: setSavedListing,
         }}
       >
-        <ConfigProvider apiUrl={process.env.backendApiBase}>
-          <AuthProvider>
-            <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
-            <Component {...pageProps} />
-          </AuthProvider>
-        </ConfigProvider>
+        <EligibilityContext.Provider value={{ eligibilityRequirements: eligibilityRequirements }}>
+          <ConfigProvider apiUrl={process.env.backendApiBase}>
+            <AuthProvider>
+              <LoggedInUserIdleTimeout onTimeout={() => conductor.reset()} />
+              <Component {...pageProps} />
+            </AuthProvider>
+          </ConfigProvider>
+        </EligibilityContext.Provider>
       </AppSubmissionContext.Provider>
     </NavigationContext.Provider>
   )
