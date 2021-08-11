@@ -28,6 +28,9 @@ interface RedisStore extends Store {
       ttl: 24 * 60 * 60,
       store: redisStore,
       url: process.env.REDIS_USE_TLS === "0" ? process.env.REDIS_URL : process.env.REDIS_TLS_URL,
+      tls: {
+        rejectUnauthorized: false,
+      },
     }),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
