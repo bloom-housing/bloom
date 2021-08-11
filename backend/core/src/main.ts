@@ -9,6 +9,8 @@ import dbOptions = require("../ormconfig")
 let app
 async function bootstrap() {
   app = await NestFactory.create(AppModule.register(dbOptions))
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks()
   app = applicationSetup(app)
   const conn = getConnection()
   // showMigrations returns true if there are pending migrations
