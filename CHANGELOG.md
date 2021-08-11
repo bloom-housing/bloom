@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file. The format 
   - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
   - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
   - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
+  - Add bedrooms/unit size filter to backend ([Detroit Team #368](https://github.com/CityOfDetroit/bloom/pull/368), [#1660](https://github.com/bloom-housing/bloom/pull/1660))
 
 - Changed:
 
