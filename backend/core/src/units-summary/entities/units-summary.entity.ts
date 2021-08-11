@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm"
 import { IsNumber, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Expose, Type } from "class-transformer"
-import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { Listing } from "../..//listings/entities/listing.entity"
 
 @Entity({ name: "units_summary" })
 class UnitsSummary {
@@ -15,8 +15,8 @@ class UnitsSummary {
   @Type(() => UnitType)
   unitType: UnitType
 
-  @ManyToOne(() => Property, { primary: true, eager: true })
-  property: Property
+  @ManyToOne(() => Listing, (listing) => listing.unitsSummary, { primary: true })
+  listing: Listing
 
   @PrimaryColumn()
   @Expose()

@@ -56,6 +56,7 @@ export class ListingsService {
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
+      .leftJoin("listings.units_summary", "units_summary")
       .groupBy("listings.id")
       .orderBy({ "listings.id": "DESC" })
 

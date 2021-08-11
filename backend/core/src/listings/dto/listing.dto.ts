@@ -35,6 +35,7 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
+import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -52,6 +53,7 @@ export class ListingDto extends OmitType(Listing, [
   "property",
   "reservedCommunityType",
   "result",
+  "unitsSummary",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -320,6 +322,13 @@ export class ListingDto extends OmitType(Listing, [
   )
   yearBuilt?: number | null
 
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummaryDto)
+  unitsSummary?: UnitsSummaryDto[] | null
+
+  // TO BE DEPRECATED
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
