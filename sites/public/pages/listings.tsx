@@ -62,12 +62,12 @@ export async function getStaticProps() {
       process.env.listingServiceUrl + "?limit=all&filter[$comparison]=<>&filter[status]=pending"
     )
 
-    openListings = response.data.items.filter(
-      (listing: Listing) => listing.status === ListingStatus.active
-    )
-    closedListings = response.data.items.filter(
-      (listing: Listing) => listing.status === ListingStatus.closed
-    )
+    openListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
+      : []
+    closedListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
+      : []
   } catch (error) {
     console.error(error)
   }
