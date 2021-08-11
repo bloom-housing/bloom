@@ -65,24 +65,22 @@ async function uploadAmiCharts(units) {
   }
 }
 
-async function uploadUnitTypes(units) {
+async function linkToUnitTypes(units) {
   const unitTypesService = new client.UnitTypesService()
   const unitTypes = await unitTypesService.list()
 
   for (const unit of units) {
     const unitTypeStr = unit.unitType
     if (!unitTypeStr) {
-      console.log(unit)
-      console.log("Error: each unit must have a unitType.")
-      process.exit(1)
+      throw new Error("Each unit must have a unitType.")
     }
 
     // Look for the unitType by name.
-    let unitType = unitTypes.filter((unitType) => unitType.name == unitTypeStr)[0]
+    const unitType = unitTypes.filter((unitType) => unitType.name == unitTypeStr)[0]
 
-    // If it doesn't exist, create it.
+    // If it doesn't exist, throw an error.
     if (!unitType) {
-      unitType = await unitTypesService.create({ body: { name: unitTypeStr } })
+      throw new Error(`No unit type with name "${unitTypeStr}" found`)
     }
     unit.unitType = unitType
   }
@@ -143,7 +141,10 @@ export async function importListing(apiUrl, email, password, listing) {
   delete listing.property
 
   await uploadAmiCharts(property.units)
-  await uploadUnitTypes(property.units)
+
+  // Replace each unit's unitType string with a foreign-key reference to the corresponding row in
+  // the unit_types table.
+  await linkToUnitTypes(property.units)
 
   property.listings = [listing]
   property = await uploadProperty(property)
