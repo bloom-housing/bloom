@@ -46,6 +46,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
+import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
@@ -504,6 +505,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <AdditionalDetails />
                       <RankingsAndResults listing={listing} />
                       <LeasingAgent />
+
+                      <ApplicationTypes listing={listing} />
+
                       <ApplicationAddress listing={listing} />
                       <ApplicationDates
                         listing={listing}
