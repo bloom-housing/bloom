@@ -15,5 +15,9 @@
     "headerLink": "Ciudad de Detroit - Departamento de Vivienda y Revitalización",
     "forGeneralInquiries": "Para consultas generales sobre el programa, puede llamar al Departamento de Recursos Humanos de la Ciudad de Detroit al (313) 224-6380.",
     "forListingQuestions": "Si tiene preguntas sobre el listado y la solicitud, comuníquese con el agente inmobiliario que se muestra en cada listado."
+  },
+  "leasingAgent": {
+    "contact": "Empresa de gestión",
+    "dueToHighCallVolume": ""
   }
 }

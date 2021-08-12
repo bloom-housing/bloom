@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, queryByText } from "@testing-library/react"
 import { LeasingAgent } from "../../src/page_components/listing/listing_sidebar/LeasingAgent"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -30,5 +30,32 @@ describe("<LeasingAgent>", () => {
     expect(
       listing.leasingAgentOfficeHours && queryByText(listing.leasingAgentOfficeHours)
     ).toBeNull()
+  })
+  it("shows management company details if managementCompany is present", () => {
+    const listing = Object.assign({}, ArcherListing) as Listing
+    const managementCompany = "Some Management Company"
+    const managementWebsite = "a fake management website url"
+
+    // No managementCompany prop
+    {
+      const { queryByText } = render(<LeasingAgent listing={listing} />)
+      expect(queryByText(managementCompany)).toBeNull()
+      expect(queryByText("Website")).toBeNull()
+    }
+
+    // With managementCompany prop --> management company info is displayed
+    {
+      const { getByText } = render(
+        <LeasingAgent
+          listing={listing}
+          managementCompany={{
+            name: managementCompany,
+            website: managementWebsite,
+          }}
+        />
+      )
+      expect(getByText(managementCompany)).toBeTruthy()
+      expect(getByText("Website")).toBeTruthy()
+    }
   })
 })
