@@ -15,7 +15,6 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 
 const coliseumProperty: PropertySeedType = {
@@ -1011,9 +1010,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
     }
 
     await this.unitsRepository.save(unitsToBeCreated)
-    const applicationMethods = await this.applicationMethodRepository.find({
-      type: ApplicationMethodType.Internal,
-    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -1027,7 +1023,6 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         { ...getPbvPreference(), ordinal: 2, page: 2 },
         { ...getHopwaPreference(), ordinal: 3, page: 3 },
       ],
-      applicationMethods: applicationMethods,
       events: [],
     }
 

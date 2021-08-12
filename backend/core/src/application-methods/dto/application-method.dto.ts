@@ -7,7 +7,6 @@ import { PaperApplicationDto } from "../../paper-applications/dto/paper-applicat
 import { IdDto } from "../../shared/dto/id.dto"
 
 export class ApplicationMethodDto extends OmitType(ApplicationMethod, [
-  "listing",
   "paperApplications",
 ] as const) {
   @Expose()
