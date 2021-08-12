@@ -370,7 +370,13 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            <LeasingAgent listing={listing} />
+            <LeasingAgent
+              listing={listing}
+              managementCompany={{
+                name: listing.managementCompany,
+                website: listing.managementWebsite,
+              }}
+            />
           </aside>
         </ListingDetailItem>
 
