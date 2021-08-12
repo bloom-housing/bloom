@@ -810,4 +810,5 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
+  zipcode: "buildingAddress.zipCode",
 }

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. The format 
 
 (_Note:_ it our intention to improve our release process going forward by using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).)
 
+## Detroit Team M10
+
+- Added:
+
+  - Zipcode filtering to backend ([#399](https://github.com/CityOfDetroit/bloom/pull/399))
+
 ## Detroit Team M9
 
 - Fixed:

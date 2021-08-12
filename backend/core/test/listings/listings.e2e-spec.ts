@@ -97,6 +97,12 @@ describe("Listings", () => {
     expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
+  it("should return listings with matching zipcodes", async () => {
+    const query = "/?limit=all&filter[$comparison]=IN&filter[zipcode]=48211,48201"
+    const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
+    expect(res.body.items.length).toBeGreaterThanOrEqual(2)
+  })
+
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
