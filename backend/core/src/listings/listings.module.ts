@@ -63,6 +63,8 @@ export class ListingsModule implements OnModuleDestroy {
 
   onModuleInit() {
     console.log("Reset Redis Cache")
-    this.redisClient.reset()
+    // this.redisClient.reset() doesn't seem to clear all keys
+    // below actually calls flushdb, so we may want to change this, if other modules use the cache
+    void this.cacheManager.store.reset()
   }
 }
