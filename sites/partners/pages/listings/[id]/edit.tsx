@@ -7,6 +7,7 @@ import PaperListingForm from "../../../src/listings/PaperListingForm"
 import { useSingleListingData } from "../../../lib/hooks"
 import { ListingContext } from "../../../src/listings/ListingContext"
 import { MetaTags } from "../../../src/MetaTags"
+import ListingGuard from "../../../src/ListingGuard"
 
 const EditListing = () => {
   const metaDescription = ""
@@ -30,31 +31,33 @@ const EditListing = () => {
 
   return (
     <ListingContext.Provider value={listingDto}>
-      <Layout>
-        <Head>
-          <title>{t("nav.siteTitlePartners")}</title>
-        </Head>
+      <ListingGuard>
+        <Layout>
+          <Head>
+            <title>{t("nav.siteTitlePartners")}</title>
+          </Head>
 
-        <MetaTags
-          title={t("nav.siteTitlePartners")}
-          image={metaImage}
-          description={metaDescription}
-        />
+          <MetaTags
+            title={t("nav.siteTitlePartners")}
+            image={metaImage}
+            description={metaDescription}
+          />
 
-        <PageHeader
-          title={
-            <>
-              <p className="font-sans font-semibold uppercase text-3xl">
-                {t("t.edit")}: {listingDto.name}
-              </p>
+          <PageHeader
+            title={
+              <>
+                <p className="font-sans font-semibold uppercase text-3xl">
+                  {t("t.edit")}: {listingDto.name}
+                </p>
 
-              <p className="font-sans text-base mt-1">{listingDto.id}</p>
-            </>
-          }
-        />
+                <p className="font-sans text-base mt-1">{listingDto.id}</p>
+              </>
+            }
+          />
 
-        <PaperListingForm listing={listingDto} editMode />
-      </Layout>
+          <PaperListingForm listing={listingDto} editMode />
+        </Layout>
+      </ListingGuard>
     </ListingContext.Provider>
   )
 }

@@ -109,6 +109,7 @@ const ApplicationTerms = () => {
                 validation={{ required: true }}
                 error={errors.agree}
                 errorMessage={t("errors.agreeError")}
+                fieldLabelClassName={"text-primary"}
               />
             </div>
           </div>

@@ -6,18 +6,56 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
+- Added:
+
+  - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
+  - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+  - Terms page checkbox text changed to blue ([#1645](https://github.com/bloom-housing/bloom/pull/1645)) (Emily Jablonski)
+
+- Fixed:
+  - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+  - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
+
+### UI Components
+
+- Added:
+
+  - Add ResponsiveTable for pricing
+
+- Fixed:
+  - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
+
+### Backend
+
+- Added:
+
+  - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
+  - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
+  - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
+
+- Changed:
+
+  - updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
+  - Sets cache manager to use Redis [#1589](https://github.com/bloom-housing/bloom/compare/dev...seanmalbert:1589/redis-cache-manager)
+
+- Fixed:
+  - Added checks for property in listing.dto transforms
+  - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
+  - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
+
 ## v1.0.5 08/03/2021
 
 - Added:
   - Debug flags for public and partner site ([Detroit Team #195](https://github.com/CityOfDetroit/bloom/pull/195), [#1519](https://github.com/bloom-housing/bloom/pull/1519))
-
-### General
 
 ### Backend
 
 - Added:
 
   - /applicationMethods and /paperApplications endpoints and corresponding DB schema
+  - Added "bhaFormat" to CSV exporter ([#1640](https://github.com/bloom-housing/bloom/pull/1640)) (Emily Jablonski)
 
 - Fixed:
 
@@ -26,12 +64,14 @@ All notable changes to this project will be documented in this file. The format 
   - unit summaries transformations after a regression coming from separating unitTypes from jsonb column into a table
 
 - Changed:
+
   - User module has been removed and incorporated into Auth module
   - convert listing events jsonb column to separate listing_events table
   - convert listing address jsonb columns to separate address tables
   - removed unused inverse relations from entities
   - recreated foreign keys constraints for `application_flagged_set_applications_applications`, `listings_leasing_agents_user_accounts`, `property_group_properties_property` and add missing `NOT NULL` migration for listing name column
   - Listing applicationMethods jsonb column has been converted to a separate table
+
 - Added:
   - ability for an admin to confirm users by `/users` POST/PUT methods
 
@@ -167,6 +207,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Correct LinkButton and other styles in Storybook ([#1309](https://github.com/bloom-housing/bloom/pull/1309)) (Jared White & Jesse James Arnold)
+  - Fix aria reserved for future use warning ([#1378](https://github.com/bloom-housing/bloom/issues/1378)) (Andrea Egan)
 
 ## 1.0.0 / 2021-05-21
 
