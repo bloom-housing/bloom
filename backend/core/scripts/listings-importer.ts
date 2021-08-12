@@ -36,6 +36,8 @@ const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
 const unitTypesService = new client.UnitTypesService()
 const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
+const applicationMethodsService = new client.ApplicationMethodsService()
+const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -144,11 +146,14 @@ async function main() {
   })
   const unitTypes = await unitTypesService.list()
   const priorityTypes = await unitAccessibilityPriorityTypesService.list()
+  const reservedCommunityTypes = await reservedCommunityTypesService.list()
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
   const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
   listing = await uploadEntity("preferences", preferencesService, listing)
+  listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
+  listing.reservedCommunityType = findByName(reservedCommunityTypes, listing.reservedCommunityType)
 
   const amiChartName = listing.amiChart.name
   let chart = await getAmiChart(amiChartName)
