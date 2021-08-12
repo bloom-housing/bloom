@@ -1215,7 +1215,15 @@
     "listingFilters": {
         "modalTitle": "ফিল্টার ফল",
         "modalHeader": "আপনার বৈশিষ্ট্যের তালিকা পরিমার্জন করতে এই বিকল্পগুলি ব্যবহার করুন।",
-        "neighborhood": "প্রতিবেশী:"
+        "neighborhood": "প্রতিবেশী",
+        "bedrooms": "একক পরিমান",
+        "bedroomsOptions": {
+          "studioPlus": "0 বা তার বেশি শয়নকক্ষ (স্টুডিও)",
+          "onePlus": "1 বা ততোধিক বেডরুম",
+          "twoPlus": "2 বা ততোধিক বেডরুম",
+          "threePlus": "3 বা ততোধিক বেডরুম",
+          "fourPlus": "4 বা ততোধিক বেডরুম"
+        }
     },
     "eligibility": {
         "progress": {

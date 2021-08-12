@@ -38,11 +38,11 @@ const ListingsPage = () => {
   const EMPTY_OPTION = { value: "", label: "" }
   const preferredUnitOptions: SelectOption[] = [
     EMPTY_OPTION,
-    { value: "one", label: "1 Bedroom" },
-    { value: "two", label: "2 Bedroom" },
-    { value: "three", label: "3 Bedroom" },
-    { value: "four", label: "4 Bedroom" },
-    { value: "studio", label: "Studio" },
+    { value: "0", label: t("listingFilters.bedroomsOptions.studioPlus") },
+    { value: "1", label: t("listingFilters.bedroomsOptions.onePlus") },
+    { value: "2", label: t("listingFilters.bedroomsOptions.twoPlus") },
+    { value: "3", label: t("listingFilters.bedroomsOptions.threePlus") },
+    { value: "4", label: t("listingFilters.bedroomsOptions.fourPlus") },
   ]
   const accessibilityOptions: SelectOption[] = [
     EMPTY_OPTION,
@@ -107,11 +107,12 @@ const ListingsPage = () => {
             <p className="field-note mb-4">{t("listingFilters.modalHeader")}</p>
             <Select
               id="unitOptions"
-              name="preferredUnit"
-              label="Unit Options"
+              name={ListingFilterKeys.bedrooms}
+              label={t("listingFilters.bedrooms")}
               register={register}
               controlClassName="control"
               options={preferredUnitOptions}
+              defaultValue={filterState?.bedrooms.toString()}
             />
             <Select
               id="accessibilityOptions"
