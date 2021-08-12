@@ -156,10 +156,11 @@ export const ListingView = (props: ListingProps) => {
   const getReservedTitle = () => {
     if (
       listing.reservedCommunityType.name === "senior55" ||
-      listing.reservedCommunityType.name === "senior62"
+      listing.reservedCommunityType.name === "senior62" ||
+      listing.reservedCommunityType.name === "senior"
     ) {
       return t("listings.reservedCommunitySeniorTitle")
-    }
+    } else return t("listings.reservedCommunityTitleDefault")
   }
 
   //TODO: Add isReferralApplication boolean field to avoid this logic
