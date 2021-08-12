@@ -12,14 +12,20 @@ All notable changes to this project will be documented in this file. The format 
 
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
+  - Terms page checkbox text changed to blue ([#1645](https://github.com/bloom-housing/bloom/pull/1645)) (Emily Jablonski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
+  - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
 
 ### UI Components
 
 - Added:
+
   - Add ResponsiveTable for pricing
+
+- Fixed:
+  - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
 
 ### Backend
 
@@ -27,14 +33,18 @@ All notable changes to this project will be documented in this file. The format 
 
   - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
   - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
+  - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
 
 - Changed:
 
   - updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
+  - Sets cache manager to use Redis [#1589](https://github.com/bloom-housing/bloom/compare/dev...seanmalbert:1589/redis-cache-manager)
   - removed roles for public users and assigned a "partner" role for leasing agents([#1628](https://github.com/bloom-housing/bloom/pull/1628))
 
 - Fixed:
   - Added checks for property in listing.dto transforms
+  - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
+  - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
 
 ## v1.0.5 08/03/2021
 
@@ -46,6 +56,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - /applicationMethods and /paperApplications endpoints and corresponding DB schema
+  - Added "bhaFormat" to CSV exporter ([#1640](https://github.com/bloom-housing/bloom/pull/1640)) (Emily Jablonski)
 
 - Fixed:
 

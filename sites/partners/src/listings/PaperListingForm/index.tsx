@@ -407,7 +407,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           status,
         }
         const orderedPreferences = preferences.map((pref, index) => {
-          return { ...pref, ordinal: index }
+          return { ...pref, ordinal: index + 1 }
         })
         const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
         const result = editMode

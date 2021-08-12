@@ -86,3 +86,6 @@ launch.json
 
 # Jest unit test coverage
 test-coverage/
+
+# redis dumps
+dump.rdb
