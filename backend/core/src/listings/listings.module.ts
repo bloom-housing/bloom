@@ -22,16 +22,23 @@ interface RedisStore extends Store {
   isCacheableValue: (value: unknown) => boolean
 }
 
+const cacheConfig = {
+  ttl: 24 * 60 * 60,
+  store: redisStore,
+  url: process.env.REDIS_URL,
+  tls: undefined,
+}
+
+if (process.env.REDIS_USE_TLS !== "0") {
+  cacheConfig.url = process.env.REDIS_TLS_URL
+  cacheConfig.tls = {
+    rejectUnauthorized: false,
+  }
+}
+
 @Module({
   imports: [
-    CacheModule.register({
-      ttl: 24 * 60 * 60,
-      store: redisStore,
-      url: process.env.REDIS_USE_TLS === "0" ? process.env.REDIS_URL : process.env.REDIS_TLS_URL,
-      tls: {
-        rejectUnauthorized: false,
-      },
-    }),
+    CacheModule.register(cacheConfig),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
   ],

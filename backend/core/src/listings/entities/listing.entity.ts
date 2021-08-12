@@ -460,14 +460,14 @@ class Listing extends BaseEntity {
   waitlistOpenSpots?: number | null
 
   @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+    nullable: false,
     eager: true,
-    nullable: true,
     cascade: true,
   })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
-  unitsSummary?: UnitsSummary[] | null
+  unitsSummary: UnitsSummary[]
 }
 
 export { Listing as default, Listing }
