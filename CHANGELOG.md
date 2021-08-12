@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add eligibility questionnaire state management and back buttons ([#371](https://github.com/CityOfDetroit/bloom/pull/371))
   - Detroit seed properties ([#362](https://github.com/CityOfDetroit/bloom/pull/362))
   - Add bedrooms/unit size filter to backend ([#368](https://github.com/CityOfDetroit/bloom/pull/368))
+  - Add bedrooms/unit size filter to frontend ([#391](https://github.com/CityOfDetroit/bloom/pull/391))
 
 ## Detroit Team M8
 
