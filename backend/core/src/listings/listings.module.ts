@@ -57,6 +57,12 @@ export class ListingsModule implements OnModuleDestroy {
     })
   }
   onModuleDestroy() {
+    console.log("Disconnect from Redis")
     this.redisClient.quit()
+  }
+
+  onModuleInit() {
+    console.log("Reset Redis Cache")
+    this.redisClient.reset()
   }
 }
