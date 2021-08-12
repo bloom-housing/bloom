@@ -1,8 +1,15 @@
-import { t, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { SetStateAction } from "react"
+import {
+  t,
+  cloudinaryUrlFromId,
+  CloudinaryUpload,
+  TimeFieldPeriod,
+} from "@bloom-housing/ui-components"
 import moment from "moment"
 import {
   AmiChart,
   ApplicationSubmissionType,
+  AssetsService,
   ListingEventType,
   ListingEvent,
 } from "@bloom-housing/backend-core/types"
@@ -151,4 +158,63 @@ export const createTime = (
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
   return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
+}
+
+interface FileUploaderParams {
+  file: File
+  setCloudinaryData: (data: SetStateAction<{ id: string; url: string }>) => void
+  setProgressValue: (value: SetStateAction<number>) => void
+}
+
+/**
+ * Accept a file from the Dropzone component along with data and progress state
+ * setters. It will then handle obtaining a signature from the backend and
+ * uploading the file to Cloudinary, setting progress along the way and the
+ * id/url of the file when the upload is complete.
+ */
+export const cloudinaryFileUploader = async ({
+  file,
+  setCloudinaryData,
+  setProgressValue,
+}: FileUploaderParams) => {
+  const cloudName = process.env.cloudinaryCloudName
+  const uploadPreset = process.env.cloudinarySignedPreset
+
+  setProgressValue(1)
+
+  const timestamp = Math.round(new Date().getTime() / 1000)
+  const tag = "browser_upload"
+
+  const assetsService = new AssetsService()
+  const params = {
+    timestamp,
+    tags: tag,
+    upload_preset: uploadPreset,
+  }
+
+  const resp = await assetsService.createPresignedUploadMetadata({
+    body: { parametersToSign: params },
+  })
+  const signature = resp.signature
+
+  setProgressValue(3)
+
+  void CloudinaryUpload({
+    signature,
+    apiKey: process.env.cloudinaryKey,
+    timestamp,
+    file,
+    onUploadProgress: (progress) => {
+      setProgressValue(progress)
+    },
+    cloudName,
+    uploadPreset,
+    tag,
+  }).then((response) => {
+    setProgressValue(100)
+    setCloudinaryData({
+      id: response.data.public_id,
+      url: cloudinaryUrlFromId(response.data.public_id),
+    })
+  })
 }

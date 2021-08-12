@@ -29,7 +29,7 @@ export function useSingleListingData(listingId: string) {
 /* TODO: move this function so it can be shared between public and partner sites.*/
 export function useListingsData() {
   const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.list()
+  const fetcher = () => listingsService.list({ limit: "all" })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings?limit=all`, fetcher)
 

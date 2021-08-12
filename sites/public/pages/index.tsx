@@ -84,7 +84,7 @@ export async function getStaticProps() {
     const response = await axios.get(
       process.env.listingServiceUrl + "?limit=all&filter[$comparison]=<>&filter[status]=pending"
     )
-    listings = response.data ? response.data.items : []
+    listings = response?.data?.items ? response.data.items : []
   } catch (error) {
     console.error(error)
   }

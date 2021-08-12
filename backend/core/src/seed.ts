@@ -193,7 +193,6 @@ async function seed() {
   admin.isAdmin = true
   await userRepo.save(admin)
   await userService.confirm({ token: admin.confirmationToken })
-
   await app.close()
 }
 
