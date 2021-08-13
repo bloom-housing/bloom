@@ -364,7 +364,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
   })
-  const [customMapPositionChosen, setCustomMapPositionChosen] = useState(listing?.customMapPin)
+  const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
+    listing?.customMapPin || false
+  )
 
   const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
     if (!loading) {
