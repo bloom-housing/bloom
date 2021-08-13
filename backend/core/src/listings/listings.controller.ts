@@ -50,6 +50,7 @@ export class ListingsController {
   ) {
     this.cacheKeys = [
       "/listings",
+      "/listings?limit=all",
       "/listings?limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
     ]
   }
