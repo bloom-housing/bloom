@@ -858,7 +858,9 @@
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
     "reservedCommunitySeniorTitle": "Senior Building",
+    "reservedCommunityTitleDefault": "Reserved Building",
     "reservedCommunityTypes": {
+      "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs"
