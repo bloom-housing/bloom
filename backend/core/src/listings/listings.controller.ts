@@ -35,6 +35,7 @@ import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { clearCacheKeys } from "../libs/cacheLib"
 import { Language } from "../shared/types/language-enum"
+import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -82,8 +83,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  // TODO: Re-enable caching with support for multiple languages
-  // @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ListingLangCacheInterceptor)
   async retrieve(
     @Headers("language") language: Language,
     @Param("listingId") listingId: string
@@ -91,9 +91,11 @@ export class ListingsController {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    const result = mapTo(ListingDto, await this.listingsService.findOne(listingId, language))
-
-    return result
+    const result = await this.listingsService.findOne(listingId, language)
+    // set item with language in cache
+    console.log("set cache")
+    await this.cacheManager.store.set(`${language}-${listingId}`, result)
+    return mapTo(ListingDto, result)
   }
 
   @Put(`:listingId`)
