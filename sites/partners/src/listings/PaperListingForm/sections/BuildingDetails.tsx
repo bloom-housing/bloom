@@ -117,7 +117,7 @@ const BuildingDetails = ({
     if (!customMapPositionChosen || mapPinPosition === "automatic") {
       timeout = setTimeout(() => {
         getNewLatLong()
-      }, 500)
+      }, 1000)
     }
     return () => {
       clearTimeout(timeout)
