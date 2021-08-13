@@ -5,6 +5,7 @@ import { Expose } from "class-transformer"
 export enum Compare {
   "=" = "=",
   "<>" = "<>",
+  "IN" = "IN",
 }
 
 export class BaseFilter {
@@ -14,5 +15,5 @@ export class BaseFilter {
     example: "=",
     default: Compare["="],
   })
-  $comparison: Compare
+  $comparison: Compare | Compare[]
 }

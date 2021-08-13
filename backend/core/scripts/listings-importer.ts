@@ -34,6 +34,10 @@ const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
 const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
+const unitTypesService = new client.UnitTypesService()
+const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
+const applicationMethodsService = new client.ApplicationMethodsService()
+const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -87,6 +91,27 @@ async function uploadAmiChart(data) {
   }
 }
 
+async function uploadReservedCommunityType(data) {
+  try {
+    return await reservedCommunityTypesService.create({
+      body: { name: data },
+    })
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function getReservedCommunityType(name) {
+  try {
+    const reservedTypes = await reservedCommunityTypesService.list()
+    return reservedTypes.filter((reservedType) => reservedType.name === name)[0]
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
 function reformatListing(listing, relationsKeys: string[]) {
   relationsKeys.forEach((relation) => {
     if (!(relation in listing) || listing[relation] === null) {
@@ -120,6 +145,10 @@ function reformatListing(listing, relationsKeys: string[]) {
   return listing
 }
 
+const findByName = (list, name) => {
+  return list.find((el) => el.name === name)
+}
+
 async function main() {
   const [email, password] = userAndPassword.split(":")
   const { accessToken } = await authService.login({
@@ -136,11 +165,22 @@ async function main() {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+  const unitTypes = await unitTypesService.list()
+  const priorityTypes = await unitAccessibilityPriorityTypesService.list()
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
   const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
   listing = await uploadEntity("preferences", preferencesService, listing)
+  listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
+  let reservedCommunityType
+  if (listing.reservedCommunityType) {
+    reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityType)
+    if (!reservedCommunityType) {
+      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityType)
+    }
+  }
+  listing.reservedCommunityType = reservedCommunityType
 
   const amiChartName = listing.amiChart.name
   let chart = await getAmiChart(amiChartName)
@@ -148,7 +188,11 @@ async function main() {
     chart = await uploadAmiChart(listing.amiChart)
   }
 
-  listing.units.forEach((unit) => (unit.amiChart = chart))
+  listing.units.forEach((unit) => {
+    unit.priorityType = findByName(priorityTypes, unit.priorityType)
+    unit.unitType = findByName(unitTypes, unit.unitType)
+    unit.amiChart = chart
+  })
 
   const newListing = await uploadListing(listing)
 

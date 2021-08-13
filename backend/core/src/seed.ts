@@ -20,9 +20,6 @@ import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethodsService } from "./application-methods/application-methods.service"
 import { ApplicationMethodType } from "./application-methods/types/application-method-type-enum"
-import { PaperApplicationsService } from "./paper-applications/paper-applications.service"
-import { Language } from "./shared/types/language-enum"
-import { AssetsService } from "./assets/services/assets.service"
 import { AuthContext } from "./auth/types/auth-context"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
@@ -30,6 +27,24 @@ import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-se
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const listingSeeds: any[] = [
+  ListingDefaultSeed,
+  ListingColiseumSeed,
+  ListingDefaultOpenSoonSeed,
+  ListingDefaultOnePreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultNoPreferenceSeed,
+  ListingDefaultBmrChartSeed,
+  ListingTritonSeed,
+  ListingDefaultReservedSeed,
+  ListingDefaultFCFSSeed,
+]
+
+export function getSeedListingsCount() {
+  return listingSeeds.length
+}
 
 export async function createLeasingAgents(app: INestApplicationContext) {
   const usersService = await app.resolve<UserService>(UserService)
@@ -46,64 +61,29 @@ export async function createLeasingAgents(app: INestApplicationContext) {
   return leasingAgents
 }
 
-async function createApplicationMethods(app: INestApplicationContext) {
-  const assetsService = await app.resolve<AssetsService>(AssetsService)
-  const englishFileAsset = await assetsService.create({
-    fileId: "englishFileId",
-    label: "English paper application",
-  })
-  const paperApplicationsService = await app.resolve<PaperApplicationsService>(
-    PaperApplicationsService
-  )
-  const englishPaperApplication = await paperApplicationsService.create({
-    language: Language.en,
-    file: englishFileAsset,
-  })
-  const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
-    ApplicationMethodsService
-  )
-
-  await applicationMethodsService.create({
-    type: ApplicationMethodType.FileDownload,
-    acceptsPostmarkedApplications: false,
-    externalReference: "https://bit.ly/2wH6dLF",
-    label: "English",
-    paperApplications: [englishPaperApplication],
-  })
-
-  await applicationMethodsService.create({
-    type: ApplicationMethodType.Internal,
-    acceptsPostmarkedApplications: false,
-    externalReference: "",
-    label: "Label",
-    paperApplications: [],
-  })
-}
-
 const seedListings = async (app: INestApplicationContext) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app)
-  await createApplicationMethods(app)
 
-  const allSeeds = [
-    app.get<ListingDefaultSeed>(ListingDefaultSeed),
-    app.get<ListingDefaultSeed>(ListingColiseumSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOpenSoonSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultOnePreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultNoPreferenceSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultBmrChartSeed),
-    app.get<ListingDefaultSeed>(ListingTritonSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultReservedSeed),
-    app.get<ListingDefaultSeed>(ListingDefaultFCFSSeed),
-  ]
-
+  const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+  const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
+    ApplicationMethodsService
+  )
 
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
     const listing = await listingSeed.seed()
     listing.leasingAgents = [everyOtherAgent]
+    const applicationMethods = await applicationMethodsService.create({
+      type: ApplicationMethodType.Internal,
+      acceptsPostmarkedApplications: false,
+      externalReference: "",
+      label: "Label",
+      paperApplications: [],
+      listing: listing,
+    })
+    listing.applicationMethods = [applicationMethods]
     await listingRepository.save(listing)
 
     seeds.push(listing)
@@ -114,6 +94,8 @@ const seedListings = async (app: INestApplicationContext) => {
 
 async function seed() {
   const app = await NestFactory.create(SeederModule.forRoot({ test: argv.test }))
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks()
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
@@ -175,7 +157,6 @@ async function seed() {
   admin.isAdmin = true
   await userRepo.save(admin)
   await userService.confirm({ token: admin.confirmationToken })
-
   await app.close()
 }
 

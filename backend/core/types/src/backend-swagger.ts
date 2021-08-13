@@ -965,17 +965,26 @@ export class ListingsService {
   list(
     params: {
       /**  */
-      jsonpath?: string
+      page?: number
+      /**  */
+      limit?: number | "all"
       /**  */
       filter?: ListingFilterParams[]
+      /**  */
+      jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<Listing[]> {
+  ): Promise<PaginatedListing> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/listings"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jsonpath: params["jsonpath"], filter: params["filter"] }
+      configs.params = {
+        page: params["page"],
+        limit: params["limit"],
+        filter: params["filter"],
+        jsonpath: params["jsonpath"],
+      }
       let data = null
 
       configs.data = data
@@ -3629,115 +3638,9 @@ export interface ListingFilterParams {
 
   /**  */
   status?: EnumListingFilterParamsStatus
-}
-
-export interface UnitType {
-  /**  */
-  id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityType {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
-export interface MinMaxCurrency {
-  /**  */
-  min: string
-
-  /**  */
-  max: string
-}
-
-export interface MinMax {
-  /**  */
-  min: number
-
-  /**  */
-  max: number
-}
-
-export interface UnitSummary {
-  /**  */
-  unitType: UnitType
-
-  /**  */
-  minIncomeRange: MinMaxCurrency
-
-  /**  */
-  occupancyRange: MinMax
-
-  /**  */
-  rentAsPercentIncomeRange: MinMax
-
-  /**  */
-  rentRange: MinMaxCurrency
-
-  /**  */
-  totalAvailable: number
-
-  /**  */
-  areaRange: MinMax
-
-  /**  */
-  floorRange?: MinMax
-}
-
-export interface UnitSummaryByAMI {
-  /**  */
-  percent: string
-
-  /**  */
-  byUnitType: UnitSummary[]
-}
-
-export interface HMI {
-  /**  */
-  columns: object
-
-  /**  */
-  rows: object[]
-}
-
-export interface UnitsSummarized {
-  /**  */
-  unitTypes: UnitType[]
-
-  /**  */
-  priorityTypes: UnitAccessibilityPriorityType[]
-
-  /**  */
-  amiPercentages: string[]
-
-  /**  */
-  byUnitTypeAndRent: UnitSummary[]
-
-  /**  */
-  byUnitType: UnitSummary[]
-
-  /**  */
-  byAMI: UnitSummaryByAMI[]
-
-  /**  */
-  hmi: HMI
+  neighborhood?: string
 }
 
 export interface PreferenceLink {
@@ -3885,6 +3788,20 @@ export interface ReservedCommunityType {
   description?: string
 }
 
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+}
+
 export interface UnitRentType {
   /**  */
   id: string
@@ -3972,9 +3889,6 @@ export interface Unit {
   number?: string
 
   /**  */
-  reservedType?: string
-
-  /**  */
   sqFeet?: string
 
   /**  */
@@ -3982,6 +3896,101 @@ export interface Unit {
 
   /**  */
   bmrProgramChart?: boolean
+}
+
+export interface UnitAccessibilityPriorityType {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface MinMaxCurrency {
+  /**  */
+  min: string
+
+  /**  */
+  max: string
+}
+
+export interface MinMax {
+  /**  */
+  min: number
+
+  /**  */
+  max: number
+}
+
+export interface UnitSummary {
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  minIncomeRange: MinMaxCurrency
+
+  /**  */
+  occupancyRange: MinMax
+
+  /**  */
+  rentAsPercentIncomeRange: MinMax
+
+  /**  */
+  rentRange: MinMaxCurrency
+
+  /**  */
+  totalAvailable: number
+
+  /**  */
+  areaRange: MinMax
+
+  /**  */
+  floorRange?: MinMax
+}
+
+export interface UnitSummaryByAMI {
+  /**  */
+  percent: string
+
+  /**  */
+  byUnitType: UnitSummary[]
+}
+
+export interface HMI {
+  /**  */
+  columns: object
+
+  /**  */
+  rows: object[]
+}
+
+export interface UnitsSummarized {
+  /**  */
+  unitTypes: UnitType[]
+
+  /**  */
+  priorityTypes: UnitAccessibilityPriorityType[]
+
+  /**  */
+  amiPercentages: string[]
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[]
+
+  /**  */
+  byUnitType: UnitSummary[]
+
+  /**  */
+  byAMI: UnitSummaryByAMI[]
+
+  /**  */
+  hmi: HMI
 }
 
 export interface WhatToExpect {
@@ -4019,9 +4028,6 @@ export interface Listing {
 
   /**  */
   reviewOrderType: EnumListingReviewOrderType
-
-  /**  */
-  unitsSummarized: UnitsSummarized
 
   /**  */
   applicationMethods: ApplicationMethod[]
@@ -4106,6 +4112,9 @@ export interface Listing {
 
   /**  */
   yearBuilt?: number
+
+  /**  */
+  unitsSummarized: UnitsSummarized
 
   /**  */
   id: string
@@ -4234,6 +4243,14 @@ export interface Listing {
   waitlistOpenSpots?: number
 }
 
+export interface PaginatedListing {
+  /**  */
+  items: Listing[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
 export interface PreferenceCreate {
   /**  */
   links?: PreferenceLink[]
@@ -4319,9 +4336,6 @@ export interface UnitCreate {
 
   /**  */
   number?: string
-
-  /**  */
-  reservedType?: string
 
   /**  */
   sqFeet?: string
@@ -4542,10 +4556,10 @@ export interface ListingCreate {
   displayWaitlistSize: boolean
 
   /**  */
-  reservedCommunityMinAge?: number
-
-  /** */
   reservedCommunityDescription?: string
+
+  /**  */
+  reservedCommunityMinAge?: number
 
   /**  */
   resultLink?: string
@@ -4671,9 +4685,6 @@ export interface UnitUpdate {
 
   /**  */
   number?: string
-
-  /**  */
-  reservedType?: string
 
   /**  */
   sqFeet?: string
@@ -5285,6 +5296,8 @@ export enum ApplicationMethodType {
   "FileDownload" = "FileDownload",
   "ExternalLink" = "ExternalLink",
   "PaperPickup" = "PaperPickup",
+  "POBox" = "POBox",
+  "LeasingAgent" = "LeasingAgent",
 }
 export type CombinedFileTypes = Id
 export enum InputType {
@@ -5331,12 +5344,14 @@ export enum CSVFormattingType {
   "basic" = "basic",
   "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
   "ohaFormat" = "ohaFormat",
+  "bhaFormat" = "bhaFormat",
 }
 
 export enum CountyCode {
   "Alameda" = "Alameda",
   "San Mateo" = "San Mateo",
   "San Jose" = "San Jose",
+  "Detroit" = "Detroit",
 }
 
 export enum ListingEventType {
@@ -5349,6 +5364,7 @@ export enum UnitStatus {
   "unknown" = "unknown",
   "available" = "available",
   "occupied" = "occupied",
+  "unavailable" = "unavailable",
 }
 export type CombinedAmiChartTypes = AmiChart
 export enum EnumListingReviewOrderType {

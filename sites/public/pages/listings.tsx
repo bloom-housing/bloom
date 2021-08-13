@@ -1,14 +1,7 @@
 import Head from "next/head"
 import axios from "axios"
-import moment from "moment"
-import {
-  ListingsGroup,
-  ListingsList,
-  PageHeader,
-  openDateState,
-  t,
-} from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { ListingsGroup, ListingsList, PageHeader, t } from "@bloom-housing/ui-components"
+import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 
@@ -66,19 +59,15 @@ export async function getStaticProps() {
 
   try {
     const response = await axios.get(
-      process.env.listingServiceUrl + "?filter[$comparison]=<>&filter[status]=pending"
+      process.env.listingServiceUrl + "?limit=all&filter[$comparison]=<>&filter[status]=pending"
     )
-    const nowTime = moment()
-    openListings = response.data.filter((listing: Listing) => {
-      return (
-        openDateState(listing) ||
-        nowTime <= moment(listing.applicationDueDate) ||
-        listing.applicationDueDate == null
-      )
-    })
-    closedListings = response.data.filter((listing: Listing) => {
-      return nowTime > moment(listing.applicationDueDate)
-    })
+
+    openListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
+      : []
+    closedListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
+      : []
   } catch (error) {
     console.error(error)
   }

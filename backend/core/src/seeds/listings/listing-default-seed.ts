@@ -21,7 +21,6 @@ import {
   getLiveWorkPreference,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export class ListingDefaultSeed {
   constructor(
@@ -69,11 +68,7 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].priorityType = priorityTypeMobilityAndHearing
     unitsToBeCreated[0].unitType = unitTypeOneBdrm
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
-
     await this.unitsRepository.save(unitsToBeCreated)
-    const applicationMethods = await this.applicationMethodRepository.find({
-      type: ApplicationMethodType.Internal,
-    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -84,7 +79,6 @@ export class ListingDefaultSeed {
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
-      applicationMethods: applicationMethods,
       events: getDefaultListingEvents(),
     }
 

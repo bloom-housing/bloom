@@ -15,27 +15,22 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
+  ClassSerializerInterceptor,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import {
-  ApiBearerAuth,
-  ApiExtraModels,
-  ApiOperation,
-  ApiQuery,
-  ApiTags,
-  getSchemaPath,
-} from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
   ListingDto,
   ListingUpdateDto,
+  PaginatedListingDto,
+  ListingsQueryParams,
   ListingFilterParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
-import { ApiImplicitQuery } from "@nestjs/swagger/dist/decorators/api-implicit-query.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { clearCacheKeys } from "../libs/cacheLib"
@@ -52,40 +47,24 @@ export class ListingsController {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly listingsService: ListingsService
   ) {
-    this.cacheKeys = ["/listings", "/listings?filter[$comparison]=%3C%3E&filter[status]=pending"]
+    this.cacheKeys = [
+      "/listings",
+      "/listings?limit=all",
+      "/listings?limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
+    ]
   }
 
+  // TODO: Limit requests to defined fields
   @Get()
-  @ApiOperation({ summary: "List listings", operationId: "list" })
-  @ApiImplicitQuery({
-    name: "jsonpath",
-    required: false,
-    type: String,
-  })
   @ApiExtraModels(ListingFilterParams)
-  @ApiQuery({
-    name: "filter",
-    required: false,
-    type: [String],
-    schema: {
-      type: "array",
-      example: [
-        { $comparison: "=", status: "active" },
-        { $comparison: "<>", name: "Coliseum" },
-      ],
-      items: {
-        $ref: getSchemaPath(ListingFilterParams),
-      },
-    },
-  })
-  @UseInterceptors(CacheInterceptor)
+  @ApiOperation({ summary: "List listings", operationId: "list" })
+  // ClassSerializerInterceptor has to come after CacheInterceptor
+  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
   public async getAll(
     @Headers("origin") origin: string,
-    @Query("jsonpath") jsonpath?: string,
-    @Query("filter") filter?: ListingFilterParams[]
-    // TODO: Add options param here for paging and sorting
-  ): Promise<ListingDto[]> {
-    return mapTo(ListingDto, await this.listingsService.list(origin, jsonpath, filter))
+    @Query() queryParams: ListingsQueryParams
+  ): Promise<PaginatedListingDto> {
+    return mapTo(PaginatedListingDto, await this.listingsService.list(origin, queryParams))
   }
 
   @Post()
@@ -102,7 +81,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(CacheInterceptor)
+  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
   async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})

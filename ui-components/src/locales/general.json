@@ -723,7 +723,10 @@
       "preview": "Preview",
       "close": "Close",
       "viewListing": "View listing",
-      "unpublish": "Unpublish"
+      "unpublish": "Unpublish",
+      "postResults": "Post Results",
+      "resultsPosted": "Results Posted",
+      "previewLotteryResults": "Preview Lottery Results"
     },
     "activePreferences": "Active Preferences",
     "addListing": "Add Listing",
@@ -855,7 +858,9 @@
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
     "reservedCommunitySeniorTitle": "Senior Building",
+    "reservedCommunityTitleDefault": "Reserved Building",
     "reservedCommunityTypes": {
+      "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs"
@@ -1190,6 +1195,7 @@
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
     "pm": "PM",
+    "post": "Post",
     "preferences": "Preferences",
     "preview": "Preview",
     "previous": "Previous",
