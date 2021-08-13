@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -13,7 +13,9 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { FormListing } from "../index"
-import GeocodeService from "@mapbox/mapbox-sdk/services/geocoding"
+import GeocodeService, {
+  GeocodeService as GeocodeServiceType,
+} from "@mapbox/mapbox-sdk/services/geocoding"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -47,6 +49,8 @@ const BuildingDetails = ({
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, control, getValues } = formMethods
 
+  const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
+
   interface BuildingAddress {
     city: string
     state: string
@@ -74,12 +78,15 @@ const BuildingDetails = ({
     )
   }
 
-  let geocodingClient
-  if (process.env.mapBoxToken || process.env.MAPBOX_TOKEN) {
-    geocodingClient = GeocodeService({
-      accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
-    })
-  }
+  useEffect(() => {
+    if (process.env.mapBoxToken || process.env.MAPBOX_TOKEN) {
+      setGeocodingClient(
+        GeocodeService({
+          accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
+        })
+      )
+    }
+  }, [])
 
   const getNewLatLong = () => {
     if (
@@ -104,9 +111,16 @@ const BuildingDetails = ({
         .catch((err) => console.error(`Error calling Mapbox API: ${err}`))
     }
   }
+
   useEffect(() => {
-    if (!customMapPositionChosen) {
-      getNewLatLong()
+    let timeout
+    if (!customMapPositionChosen || mapPinPosition === "automatic") {
+      timeout = setTimeout(() => {
+        getNewLatLong()
+      }, 500)
+    }
+    return () => {
+      clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
