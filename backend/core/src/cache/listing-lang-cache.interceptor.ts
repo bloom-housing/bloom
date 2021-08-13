@@ -7,27 +7,35 @@ import {
   CACHE_MANAGER,
 } from "@nestjs/common"
 import { Observable, of } from "rxjs"
-import { RedisCache } from "./types/redis-types"
-import { mapTo } from "../shared/mapTo"
-import { ListingDto } from "../listings/dto/listing.dto"
+import { tap } from "rxjs/operators"
+import { Cache } from "cache-manager"
 
 @Injectable()
 export class ListingLangCacheInterceptor implements NestInterceptor {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: RedisCache) {}
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<unknown>> {
-    const [
-      {
-        headers: { language },
-        params: { listingId },
-      },
-    ] = context.getArgs()
-    const cacheKey = language ? `${language}-${listingId}` : listingId
-    const cacheResult = await this.cacheManager.store.get(cacheKey)
-    if (cacheResult !== null) {
-      return of(mapTo(ListingDto, cacheResult))
+    try {
+      const [
+        {
+          headers: { language },
+          params: { listingId },
+        },
+      ] = context.getArgs()
+      const cacheKey = language ? `${language}-${listingId}` : listingId
+      const cacheResult = await this.cacheManager.get(cacheKey)
+      if (cacheResult !== null) {
+        return of(cacheResult)
+      } else {
+        return next.handle().pipe(
+          tap((response) => {
+            void this.cacheManager.set(cacheKey, response)
+          })
+        )
+      }
+    } catch (e) {
+      console.log("Get Cache Error = ", e)
+      return next.handle()
     }
-
-    return next.handle()
   }
 }

@@ -83,7 +83,7 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(ListingLangCacheInterceptor)
+  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
   async retrieve(
     @Headers("language") language: Language,
     @Param("listingId") listingId: string
@@ -91,11 +91,7 @@ export class ListingsController {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    const result = await this.listingsService.findOne(listingId, language)
-    // set item with language in cache
-    console.log("set cache")
-    await this.cacheManager.store.set(`${language}-${listingId}`, result)
-    return mapTo(ListingDto, result)
+    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language))
   }
 
   @Put(`:listingId`)
