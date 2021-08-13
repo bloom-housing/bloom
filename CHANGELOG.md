@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
   - Sets cache manager to use Redis [#1589](https://github.com/bloom-housing/bloom/compare/dev...seanmalbert:1589/redis-cache-manager)
+  - Updates redis reset call to flush all keys
 
 - Fixed:
   - Added checks for property in listing.dto transforms
