@@ -4084,6 +4084,9 @@ export interface Listing {
   buildingTotalUnits?: number
 
   /**  */
+  customMapPin?: boolean
+
+  /**  */
   developer?: string
 
   /**  */
@@ -4416,6 +4419,9 @@ export interface ListingCreate {
 
   /**  */
   buildingTotalUnits?: number
+
+  /**  */
+  customMapPin?: boolean
 
   /**  */
   developer?: string
@@ -4777,6 +4783,9 @@ export interface ListingUpdate {
 
   /**  */
   buildingTotalUnits?: number
+
+  /**  */
+  customMapPin?: boolean
 
   /**  */
   developer?: string
