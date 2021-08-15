@@ -3,6 +3,7 @@ import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
+import { UserRoleEnum } from "../enum/user-role-enum"
 
 export enum authzActions {
   create = "create",
@@ -39,10 +40,14 @@ export class AuthzService {
 
     // Get User roles and add them to our enforcer
     if (user) {
-      await Promise.all(user.roles.map((r) => e.addRoleForUser(user.id, r)))
-    }
+      if (user.roles?.isAdmin) {
+        await e.addRoleForUser(user.id, UserRoleEnum.admin)
+      }
+      if (user.roles?.isPartner) {
+        await e.addRoleForUser(user.id, UserRoleEnum.partner)
+      }
+      await e.addRoleForUser(user.id, UserRoleEnum.user)
 
-    if (user) {
       // NOTE This normally should be in authz_policy.csv, but casbin does not support expressions on arrays.
       //  Permissions for a leasing agent on applications are there defined here programatically.
       //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.

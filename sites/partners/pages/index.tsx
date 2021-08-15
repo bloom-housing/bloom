@@ -9,7 +9,7 @@ import {
   LocalizedLink,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { UserRole, Listing } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -20,7 +20,7 @@ import { MetaTags } from "../src/MetaTags"
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
   const leasingAgentInListings = profile.leasingAgentInListings?.map((item) => item.id)
-  const isAdmin = profile.roles.includes(UserRole.admin)
+  const isAdmin = profile.roles?.isAdmin || false
   class formatLinkCell {
     link: HTMLAnchorElement
 
@@ -136,7 +136,7 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData()
   // filter listings to show items depends on user role
   const filteredListings = useMemo(() => {
-    if (profile.roles.includes(UserRole.admin)) return listingDtos
+    if (isAdmin) return listingDtos
 
     return listingDtos?.reduce((acc, curr) => {
       if (leasingAgentInListings.includes(curr.id)) {
@@ -145,7 +145,7 @@ export default function ListingsList() {
 
       return acc
     }, []) as Listing[]
-  }, [leasingAgentInListings, listingDtos, profile.roles])
+  }, [leasingAgentInListings, listingDtos, isAdmin])
 
   if (listingsLoading) return "Loading..."
   if (listingsError) return "An error has occurred."
