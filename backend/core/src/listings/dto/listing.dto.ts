@@ -370,7 +370,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
-  "applicationCount",
   "result",
 ] as const) {
   @Expose()
@@ -564,7 +563,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
-  "applicationCount",
   "result",
 ] as const) {
   @Expose()

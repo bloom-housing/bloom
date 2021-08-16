@@ -1,13 +1,12 @@
 import * as React from "react"
 import ReactDOMServer from "react-dom/server"
 import { Icon, IconFillColors } from "../../../icons/Icon"
-import { Address } from "@bloom-housing/backend-core/types"
-import { OneLineAddress, MultiLineAddress } from "../../../helpers/address"
+import { OneLineAddress, MultiLineAddress, Address } from "../../../helpers/address"
 import { t } from "../../../helpers/translator"
 import Markdown from "markdown-to-jsx"
 
 export interface SidebarAddressProps {
-  address?: Omit<Address, "id" | "createdAt" | "updatedAt">
+  address?: Address
   officeHours?: string
 }
 

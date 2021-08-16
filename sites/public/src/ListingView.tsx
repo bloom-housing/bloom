@@ -30,6 +30,7 @@ import {
   Message,
 } from "@bloom-housing/ui-components"
 import { ErrorPage } from "../pages/_error"
+import { getGenericAddress } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
@@ -44,7 +45,7 @@ export const ListingView = (props: ListingProps) => {
     return <ErrorPage />
   }
 
-  const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
+  const oneLineAddress = <OneLineAddress address={getGenericAddress(listing.buildingAddress)} />
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -131,10 +132,11 @@ export const ListingView = (props: ListingProps) => {
   const getReservedTitle = () => {
     if (
       listing.reservedCommunityType.name === "senior55" ||
-      listing.reservedCommunityType.name === "senior62"
+      listing.reservedCommunityType.name === "senior62" ||
+      listing.reservedCommunityType.name === "senior"
     ) {
       return t("listings.reservedCommunitySeniorTitle")
-    }
+    } else return t("listings.reservedCommunityTitleDefault")
   }
 
   return (
@@ -360,7 +362,10 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingMap address={listing.buildingAddress} listing={listing} />
+            <ListingMap
+              address={getGenericAddress(listing.buildingAddress)}
+              listingName={listing.name}
+            />
           </div>
         </ListingDetailItem>
 

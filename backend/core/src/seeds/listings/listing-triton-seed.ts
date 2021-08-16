@@ -4,7 +4,6 @@ import { getDefaultAmiChart, getDate, getDefaultAssets, getLiveWorkPreference } 
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
@@ -782,9 +781,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     unitsToBeCreated[4].unitType = unitTypeOneBdrm
 
     await this.unitsRepository.save(unitsToBeCreated)
-    const applicationMethods = await this.applicationMethodRepository.find({
-      type: ApplicationMethodType.FileDownload,
-    })
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -794,7 +790,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference()],
-      applicationMethods: applicationMethods,
       events: [],
     }
 

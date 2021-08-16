@@ -1,18 +1,17 @@
 import React, { useContext } from "react"
 import Head from "next/head"
 import { PageHeader, SiteAlert, t, AuthContext } from "@bloom-housing/ui-components"
-import { UserRole } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
 import { MetaTags } from "../../src/MetaTags"
-import ListingGuard from "../../src/ListingGuard"
+import { ListingGuard } from "../../src/ListingGuard"
 
 const NewListing = () => {
   const metaDescription = ""
   const metaImage = "" // TODO: replace with hero image
   const { profile } = useContext(AuthContext)
 
-  if (!profile.roles.includes(UserRole.admin)) return "An error has occurred."
+  if (!profile?.roles.isAdmin) return "An error has occurred."
 
   return (
     <ListingGuard>

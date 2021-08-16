@@ -112,7 +112,7 @@ const ListingsPage = () => {
               register={register}
               controlClassName="control"
               options={preferredUnitOptions}
-              defaultValue={filterState?.bedrooms.toString()}
+              defaultValue={filterState?.bedrooms?.toString()}
             />
             <Select
               id="accessibilityOptions"

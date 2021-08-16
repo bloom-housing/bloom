@@ -1,8 +1,19 @@
 import * as React from "react"
-import { Address } from "@bloom-housing/backend-core/types"
 import Markdown from "markdown-to-jsx"
+
+export interface Address {
+  city?: string
+  latitude?: number
+  longitude?: number
+  placeName?: string
+  state?: string
+  street2?: string
+  street?: string
+  zipCode?: string
+}
+
 interface AddressProps {
-  address?: Omit<Address, "id" | "createdAt" | "updatedAt">
+  address: Address
 }
 
 export const OneLineAddress = (props: AddressProps) => {
