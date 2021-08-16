@@ -13,7 +13,6 @@ import { Pagination } from "nestjs-typeorm-paginate"
 import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
-import { arrayIndex } from "../libs/arrayLib"
 import { addFilters } from "../shared/filter"
 import { BaseView } from "./views/view"
 import { transformUnits } from "../shared/units-transformations"
@@ -50,7 +49,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(origin: string, params: ListingsQueryParams): Promise<Pagination<Listing>> {
+  public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -94,6 +93,7 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .getMany()
+
     // get summarized units from view
     listings = view.mapUnitSummary(listings)
     // Set pagination info
@@ -105,21 +105,6 @@ export class ListingsService {
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
       totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
-    }
-
-    // Get the application counts and map them to listings
-    if (origin === process.env.PARTNERS_BASE_URL) {
-      const counts = await this.listingRepository
-        .createQueryBuilder("listing")
-        .select("listing.id")
-        .loadRelationCountAndMap("listing.applicationCount", "listing.applications", "applications")
-        .getMany()
-
-      const countIndex = arrayIndex<Listing>(counts, "id")
-
-      listings.forEach((listing: Listing) => {
-        listing.applicationCount = countIndex[listing.id].applicationCount || 0
-      })
     }
 
     // TODO(https://github.com/CityOfDetroit/bloom/issues/135): Decide whether to remove jsonpath

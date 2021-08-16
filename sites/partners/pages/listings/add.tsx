@@ -4,7 +4,7 @@ import { PageHeader, SiteAlert, t } from "@bloom-housing/ui-components"
 import Layout from "../../layouts"
 import PaperListingForm from "../../src/listings/PaperListingForm"
 import { MetaTags } from "../../src/MetaTags"
-import ListingGuard from "../../src/ListingGuard"
+import { ListingGuard } from "../../src/ListingGuard"
 
 const NewListing = () => {
   const metaDescription = ""

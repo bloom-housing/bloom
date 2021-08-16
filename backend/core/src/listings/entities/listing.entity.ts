@@ -377,9 +377,6 @@ class Listing extends BaseEntity {
   @Expose()
   applicationConfig?: Record<string, unknown>
 
-  @Expose()
-  applicationCount?: number
-
   @Column({ type: "boolean" })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -462,6 +459,12 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiProperty({ type: UnitsSummarized })
   unitsSummarized: UnitsSummarized | undefined
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  customMapPin?: boolean | null
 }
 
 export { Listing as default, Listing }

@@ -13,6 +13,7 @@ import {
   TimeFieldPeriod,
   Modal,
   AppearanceBorderType,
+  LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -45,6 +46,7 @@ import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
+import LotteryResults from "./sections/LotteryResults"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
@@ -216,7 +218,9 @@ const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[]
+  preferences: Preference[],
+  saveLatLong: LatitudeLongitude,
+  customPinPositionChosen: boolean
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -263,7 +267,9 @@ const formatFormData = (
     delete unit.tempId
   })
 
-  const events: ListingEventCreate[] = []
+  const events: ListingEventCreate[] = data.events.filter(
+    (event) => !(event?.type === ListingEventType.publicLottery)
+  )
   if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
     const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
@@ -291,6 +297,12 @@ const formatFormData = (
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     preferences: preferences,
+    buildingAddress: {
+      ...data.buildingAddress,
+      latitude: saveLatLong.latitude ?? null,
+      longitude: saveLatLong.longitude ?? null,
+    },
+    customMapPin: customPinPositionChosen,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -348,11 +360,29 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [latLong, setLatLong] = useState<LatitudeLongitude>({
+    latitude: listing?.buildingAddress?.latitude ?? null,
+    longitude: listing?.buildingAddress?.longitude ?? null,
+  })
+  const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
+    listing?.customMapPin || false
+  )
+
+  const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
+    if (!loading) {
+      setLatLong(latlong)
+    }
+  }
 
   /**
    * Close modal
    */
   const [closeModal, setCloseModal] = useState(false)
+
+  /**
+   * Lottery results drawer
+   */
+  const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
 
   useEffect(() => {
     if (listing?.units) {
@@ -399,9 +429,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           status,
         }
         const orderedPreferences = preferences.map((pref, index) => {
-          return { ...pref, ordinal: index }
+          return { ...pref, ordinal: index + 1 }
         })
-        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
+        const formattedData = formatFormData(
+          data,
+          units,
+          openHouseEvents,
+          orderedPreferences,
+          latLong,
+          customMapPositionChosen
+        )
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -423,7 +460,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
+    [
+      units,
+      openHouseEvents,
+      editMode,
+      listingsService,
+      listing,
+      router,
+      preferences,
+      latLong,
+      customMapPositionChosen,
+    ]
   )
 
   const onError = () => {
@@ -446,7 +493,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <Button
                 inlineIcon="left"
                 icon="arrowBack"
-                onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+                onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
               >
                 {t("t.back")}
               </Button>
@@ -482,7 +529,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <div className="info-card md:w-9/12">
                       <ListingIntro />
                       <ListingPhoto />
-                      <BuildingDetails />
+                      <BuildingDetails
+                        listing={listing}
+                        setLatLong={setLatitudeLongitude}
+                        latLong={latLong}
+                        customMapPositionChosen={customMapPositionChosen}
+                        setCustomMapPositionChosen={setCustomMapPositionChosen}
+                      />
                       <CommunityType listing={listing} />
                       <Units
                         units={units}
@@ -502,6 +555,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         openHouseEvents={openHouseEvents}
                         setOpenHouseEvents={setOpenHouseEvents}
                       />
+                      {listing?.status === ListingStatus.closed && (
+                        <LotteryResults
+                          submitCallback={(data) => {
+                            setStatus(ListingStatus.closed)
+                            triggerSubmit({ ...getValues(), ...data })
+                          }}
+                          drawerState={lotteryResultsDrawer}
+                          showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
+                        />
+                      )}
                     </div>
 
                     <aside className="md:w-3/12 md:pl-6">
@@ -509,6 +572,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? "edit" : "add"}
                         setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
+                        showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                       />
                     </aside>
                   </div>
