@@ -17,6 +17,7 @@ import {
   TabList,
   Tab,
   TabPanel,
+  LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
 import {
@@ -221,7 +222,9 @@ const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[]
+  preferences: Preference[],
+  saveLatLong: LatitudeLongitude,
+  customPinPositionChosen: boolean
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -298,6 +301,12 @@ const formatFormData = (
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     preferences: preferences,
+    buildingAddress: {
+      ...data.buildingAddress,
+      latitude: saveLatLong.latitude ?? null,
+      longitude: saveLatLong.longitude ?? null,
+    },
+    customMapPin: customPinPositionChosen,
     isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
@@ -356,6 +365,19 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [latLong, setLatLong] = useState<LatitudeLongitude>({
+    latitude: listing?.buildingAddress?.latitude ?? null,
+    longitude: listing?.buildingAddress?.longitude ?? null,
+  })
+  const [customMapPositionChosen, setCustomMapPositionChosen] = useState(
+    listing?.customMapPin || false
+  )
+
+  const setLatitudeLongitude = (latlong: LatitudeLongitude) => {
+    if (!loading) {
+      setLatLong(latlong)
+    }
+  }
 
   /**
    * Close modal
@@ -412,9 +434,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           status,
         }
         const orderedPreferences = preferences.map((pref, index) => {
-          return { ...pref, ordinal: index }
+          return { ...pref, ordinal: index + 1 }
         })
-        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
+        const formattedData = formatFormData(
+          data,
+          units,
+          openHouseEvents,
+          orderedPreferences,
+          latLong,
+          customMapPositionChosen
+        )
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -436,7 +465,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
+    [
+      units,
+      openHouseEvents,
+      editMode,
+      listingsService,
+      listing,
+      router,
+      preferences,
+      latLong,
+      customMapPositionChosen,
+    ]
   )
 
   const onError = () => {
@@ -459,7 +498,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <Button
                 inlineIcon="left"
                 icon="arrowBack"
-                onClick={() => (editMode ? router.push(`/listing/${listing?.id}`) : router.back())}
+                onClick={() => (editMode ? router.push(`/listings/${listing?.id}`) : router.back())}
               >
                 {t("t.back")}
               </Button>
@@ -505,7 +544,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <TabPanel>
                           <ListingIntro />
                           <ListingPhoto />
-                          <BuildingDetails />
+                          <BuildingDetails
+                            listing={listing}
+                            setLatLong={setLatitudeLongitude}
+                            latLong={latLong}
+                            customMapPositionChosen={customMapPositionChosen}
+                            setCustomMapPositionChosen={setCustomMapPositionChosen}
+                          />
                           <CommunityType listing={listing} />
                           <Units
                             units={units}

@@ -12,7 +12,6 @@ import { Compare } from "../shared/dto/filter.dto"
 declare const expect: jest.Expect
 
 let service: ListingsService
-const origin = "localhost"
 const mockListings = [
   { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [], status: "closed" },
   { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [], status: "closed" },
@@ -78,7 +77,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      const listings = await service.list(origin, {})
+      const listings = await service.list({})
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
@@ -97,13 +96,39 @@ describe("ListingsService", () => {
         },
       }
 
-      const listings = await service.list(origin, queryParams)
+      const listings = await service.list(queryParams)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
           neighborhood_0: expectedNeighborhood,
+        }
+      )
+    })
+
+    it("should support filters with comma-separated arrays", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const expectedNeighborhoodString = "Fox Creek, , Coliseum," // intentional extra and trailing commas for test
+      // lowercased, trimmed spaces, filtered empty
+      const expectedNeighborhoodArray = ["fox creek", "coliseum"]
+
+      const queryParams: ListingsQueryParams = {
+        filter: {
+          $comparison: Compare["IN"],
+          neighborhood: expectedNeighborhoodString,
+        },
+      }
+
+      const listings = await service.list(queryParams)
+
+      expect(listings.items).toEqual(mockListings)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
+        "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
+        {
+          neighborhood_0: expectedNeighborhoodArray,
         }
       )
     })
@@ -116,12 +141,31 @@ describe("ListingsService", () => {
           $comparison: Compare["="],
           otherField: "otherField",
           // The querystring can contain unknown fields that aren't on the
-          // ListingFilterParams type, so we force it to the type for testing
+          // ListingFilterParams type, so we force it to the type for testing.
         } as ListingFilterParams,
       }
 
-      await expect(service.list(origin, queryParams)).rejects.toThrow(
+      await expect(service.list(queryParams)).rejects.toThrow(
         new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+      )
+    })
+
+    //TODO(avaleske): A lot of these tests should be moved to a spec file specific to the filters code.
+    it("should throw an exception if an unsupported comparison is used", async () => {
+      mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
+
+      const queryParams: ListingsQueryParams = {
+        filter: {
+          // The value of the filter[$comparison] query param is not validated,
+          // and the type system trusts that whatever is provided is correct,
+          // so we force it to an invalid type for testing.
+          $comparison: "); DROP TABLE Students;" as Compare,
+          name: "test name",
+        } as ListingFilterParams,
+      }
+
+      await expect(service.list(queryParams)).rejects.toThrow(
+        new HttpException("Comparison Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
 
@@ -132,7 +176,7 @@ describe("ListingsService", () => {
 
       // Empty params (no pagination) -> no limit/offset
       const params = {}
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -146,7 +190,7 @@ describe("ListingsService", () => {
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: 3 }
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -167,7 +211,7 @@ describe("ListingsService", () => {
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: ("hello" as unknown) as number } // force the type for testing
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -189,7 +233,7 @@ describe("ListingsService", () => {
 
       // Valid pagination params -> offset and limit called appropriately
       const params = { page: 3, limit: 2 }
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockFilteredListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledWith(2)
