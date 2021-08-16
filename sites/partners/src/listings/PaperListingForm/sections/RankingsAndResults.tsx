@@ -64,7 +64,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     <div>
       <GridSection
         grid={false}
-        separator
         title={t("listings.sections.rankingsResultsTitle")}
         description={t("listings.sections.rankingsResultsSubtitle")}
       >
