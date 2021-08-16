@@ -19,8 +19,7 @@ export class partnerRole1628543278484 implements MigrationInterface {
     await queryRunner.query(`UPDATE "user_roles" SET "is_partner" = TRUE`)
     // Testing already exists constraint error
     await queryRunner.query(`
-      ALTER TABLE "user_roles" DROP CONSTRAINT IF EXISTS "FK_87b8888186ca9769c960e926870"`
-    )
+      ALTER TABLE "user_roles" DROP CONSTRAINT IF EXISTS "FK_87b8888186ca9769c960e926870"`)
     await queryRunner.query(
       `ALTER TABLE "user_roles" ADD CONSTRAINT "FK_87b8888186ca9769c960e926870" FOREIGN KEY ("user_id") REFERENCES "user_accounts"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
