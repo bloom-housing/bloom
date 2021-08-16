@@ -1,3 +1,4 @@
+import { Expose } from "class-transformer"
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm"
 import { User } from "./user.entity"
 
@@ -11,8 +12,10 @@ export class UserRoles {
   user: User
 
   @Column("boolean", { default: false })
+  @Expose()
   isAdmin?: boolean
 
   @Column("boolean", { default: false })
+  @Expose()
   isPartner?: boolean
 }

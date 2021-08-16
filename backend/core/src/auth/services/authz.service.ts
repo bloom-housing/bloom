@@ -53,17 +53,22 @@ export class AuthzService {
       //  A User becomes a leasing agent for a given listing if he has a relation (M:N) with it.
       //  User side this is expressed by 'leasingAgentInListings' property.
       await Promise.all(
-        user?.leasingAgentInListings.map((listing: Listing) =>
-          e.addPermissionForUser(
+        user?.leasingAgentInListings.map((listing: Listing) => {
+          void e.addPermissionForUser(
             user.id,
             "application",
             `!r.obj || r.obj.listing_id == '${listing.id}'`,
             `(${authzActions.read}|${authzActions.create}|${authzActions.update}|${authzActions.delete})`
           )
-        )
+          void e.addPermissionForUser(
+            user.id,
+            "listing",
+            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            `(${authzActions.read}|${authzActions.update})`
+          )
+        })
       )
     }
-
     return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
@@ -77,7 +82,7 @@ export class AuthzService {
    * ABAC logic. Note that a limitation in casbin seems to only allows for property retrieval one level deep on this
    * object (e.g. obj.prop.value wouldn't work).
    */
-  public async canOrThrow(user: User | undefined, type: string, action: string, obj?: any) {
+  public async canOrThrow(user: User | undefined, type: string, action: string, obj?: unknown) {
     if (!(await this.can(user, type, action, obj))) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
     }

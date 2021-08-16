@@ -4236,9 +4236,6 @@ export interface Listing {
   applicationConfig?: object
 
   /**  */
-  applicationCount?: number
-
-  /**  */
   displayWaitlistSize: boolean
 
   /**  */

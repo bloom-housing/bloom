@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
   - Terms page checkbox text changed to blue ([#1645](https://github.com/bloom-housing/bloom/pull/1645)) (Emily Jablonski)
+  - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
@@ -47,6 +48,12 @@ All notable changes to this project will be documented in this file. The format 
   - Added checks for property in listing.dto transforms
   - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
   - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
+  - fixes issue with unexposed user roles ((#1627)[https://github.com/bloom-housing/bloom/pull/1627]))
+
+### General
+
+- Updated:
+  - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
 
 ## v1.0.5 08/03/2021
 
