@@ -50,5 +50,6 @@ p, anonymous, applicationMethod, true, read
 p, admin, paperApplication, true, .*
 p, anonymous, paperApplication, true, read
 
-g, admin, user
+g, admin, partner
+g, partner, user
 g, user, anonymous

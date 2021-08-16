@@ -14,7 +14,6 @@ describe("<Timeout>", () => {
       <AuthContext.Provider
         value={{
           profile: {
-            roles: [],
             id: "1234",
             email: "",
             firstName: "Waffle",

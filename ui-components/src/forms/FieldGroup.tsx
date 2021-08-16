@@ -7,6 +7,7 @@ interface FieldSingle {
   label: string
   value?: string
   defaultChecked?: boolean
+  note?: string
 }
 
 interface FieldGroupProps {
@@ -64,6 +65,7 @@ const FieldGroup = ({
             <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
               {item.label}
             </label>
+            {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
           </div>
         ))}
 
