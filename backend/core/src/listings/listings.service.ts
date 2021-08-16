@@ -48,7 +48,7 @@ export class ListingsService {
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
   }
 
-  public async list(origin: string, params: ListingsQueryParams): Promise<Pagination<Listing>> {
+  public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -90,7 +90,6 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .getMany()
-
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length

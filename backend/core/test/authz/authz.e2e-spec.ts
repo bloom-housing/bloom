@@ -30,8 +30,6 @@ describe("Authz", () => {
   })
 
   describe("admin endpoints", () => {
-    /* 
-    TODO: Separate normal/anonymous user. Issue #1616
     it(`should not allow normal/anonymous user to GET to admin only endpoints`, async () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous
@@ -55,7 +53,7 @@ describe("Authz", () => {
           .set(...setAuthorization(userAccessToken))
           .expect(403)
       }
-    }) */
+    })
     it(`should not allow normal/anonymous user to POST to admin only endpoints`, async () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous

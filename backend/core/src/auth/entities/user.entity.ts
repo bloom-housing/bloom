@@ -90,7 +90,8 @@ export class User {
   @OneToOne(() => UserRoles, (roles) => roles.user, {
     eager: true,
   })
-  roles: UserRoles
+  @Expose()
+  roles?: UserRoles
 
   @Column({ enum: Language, nullable: true })
   @Expose()

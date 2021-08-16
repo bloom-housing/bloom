@@ -69,7 +69,6 @@ export class AuthzService {
         })
       )
     }
-
     return e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
@@ -83,7 +82,7 @@ export class AuthzService {
    * ABAC logic. Note that a limitation in casbin seems to only allows for property retrieval one level deep on this
    * object (e.g. obj.prop.value wouldn't work).
    */
-  public async canOrThrow(user: User | undefined, type: string, action: string, obj?: any) {
+  public async canOrThrow(user: User | undefined, type: string, action: string, obj?: unknown) {
     if (!(await this.can(user, type, action, obj))) {
       throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
     }
