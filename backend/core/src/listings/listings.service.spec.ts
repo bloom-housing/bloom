@@ -12,7 +12,6 @@ import { Compare } from "../shared/dto/filter.dto"
 declare const expect: jest.Expect
 
 let service: ListingsService
-const origin = "localhost"
 const mockListings = [
   { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [], status: "closed" },
   { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [], status: "closed" },
@@ -78,7 +77,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      const listings = await service.list(origin, {})
+      const listings = await service.list({})
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
@@ -97,7 +96,7 @@ describe("ListingsService", () => {
         },
       }
 
-      const listings = await service.list(origin, queryParams)
+      const listings = await service.list(queryParams)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
@@ -123,7 +122,7 @@ describe("ListingsService", () => {
         },
       }
 
-      const listings = await service.list(origin, queryParams)
+      const listings = await service.list(queryParams)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
@@ -146,7 +145,7 @@ describe("ListingsService", () => {
         } as ListingFilterParams,
       }
 
-      await expect(service.list(origin, queryParams)).rejects.toThrow(
+      await expect(service.list(queryParams)).rejects.toThrow(
         new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
@@ -165,7 +164,7 @@ describe("ListingsService", () => {
         } as ListingFilterParams,
       }
 
-      await expect(service.list(origin, queryParams)).rejects.toThrow(
+      await expect(service.list(queryParams)).rejects.toThrow(
         new HttpException("Comparison Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
@@ -177,7 +176,7 @@ describe("ListingsService", () => {
 
       // Empty params (no pagination) -> no limit/offset
       const params = {}
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -191,7 +190,7 @@ describe("ListingsService", () => {
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: 3 }
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -212,7 +211,7 @@ describe("ListingsService", () => {
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
       const params = { page: ("hello" as unknown) as number } // force the type for testing
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
@@ -234,7 +233,7 @@ describe("ListingsService", () => {
 
       // Valid pagination params -> offset and limit called appropriately
       const params = { page: 3, limit: 2 }
-      const listings = await service.list(origin, params)
+      const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockFilteredListings)
       expect(mockInnerQueryBuilder.limit).toHaveBeenCalledWith(2)

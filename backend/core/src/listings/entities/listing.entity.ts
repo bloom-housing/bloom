@@ -376,9 +376,6 @@ class Listing extends BaseEntity {
   @Expose()
   applicationConfig?: Record<string, unknown>
 
-  @Expose()
-  applicationCount?: number
-
   @Column({ type: "boolean" })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

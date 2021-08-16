@@ -24,7 +24,6 @@ export class UserDto extends OmitType(User, [
   "passwordHash",
   "resetToken",
   "confirmationToken",
-  "roles",
 ] as const) {
   @Expose()
   @IsOptional()
