@@ -10,13 +10,15 @@ const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
 
   const lotteryEvent = getLotteryEvent(listing)
-
-  const getReviewOrderType = (): EnumListingReviewOrderType => {
-    return lotteryEvent
-      ? EnumListingReviewOrderType.lottery
-      : EnumListingReviewOrderType.firstComeFirstServe
+  const getReviewOrder = () => {
+    if (!listing.reviewOrderType) {
+      return lotteryEvent
+        ? EnumListingReviewOrderType.lottery
+        : EnumListingReviewOrderType.firstComeFirstServe
+    } else {
+      return listing.reviewOrderType
+    }
   }
-
   return (
     <GridSection
       className="bg-primary-lighter"
@@ -26,7 +28,7 @@ const DetailRankingsAndResults = () => {
     >
       <GridSection columns={2}>
         <ViewItem label={t("listings.reviewOrderQuestion")}>
-          {getReviewOrderType() === EnumListingReviewOrderType.firstComeFirstServe
+          {getReviewOrder() === EnumListingReviewOrderType.firstComeFirstServe
             ? t("listings.firstComeFirstServe")
             : t("listings.lottery")}
         </ViewItem>
@@ -49,7 +51,7 @@ const DetailRankingsAndResults = () => {
           </GridSection>
         </>
       )}
-      {getReviewOrderType() === EnumListingReviewOrderType.firstComeFirstServe && (
+      {listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe && (
         <GridSection columns={2}>
           <ViewItem label={t("listings.dueDateQuestion")}>
             {listing.applicationDueDate ? t("t.yes") : t("t.no")}

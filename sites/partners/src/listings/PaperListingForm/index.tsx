@@ -31,6 +31,7 @@ import {
   ListingEventType,
   ListingEventCreate,
   Preference,
+  EnumListingReviewOrderType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -192,8 +193,7 @@ const defaults: FormListing = {
   yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
-  reviewOrderType: null,
-  unitsSummary: [],
+  reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
   unitsSummarized: {
     unitTypes: [],
     priorityTypes: [],
@@ -272,7 +272,14 @@ const formatFormData = (
   const events: ListingEventCreate[] = data.events.filter(
     (event) => !(event?.type === ListingEventType.publicLottery)
   )
-  if (data.lotteryDate && data.reviewOrderQuestion === "reviewOrderLottery") {
+  console.log("data.lotteryDate", data.lotteryDate)
+  if (
+    data.lotteryDate &&
+    data.lotteryDate.day &&
+    data.lotteryDate.month &&
+    data.lotteryDate.year &&
+    data.reviewOrderQuestion === "reviewOrderLottery"
+  ) {
     const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
     const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
 
@@ -292,6 +299,11 @@ const formatFormData = (
       })
     })
   }
+  console.log(
+    data.reviewOrderQuestion === "reviewOrderLottery"
+      ? EnumListingReviewOrderType.lottery
+      : EnumListingReviewOrderType.firstComeFirstServe
+  )
 
   return {
     ...data,
@@ -341,6 +353,10 @@ const formatFormData = (
       : null,
     events,
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
+    reviewOrderType:
+      data.reviewOrderQuestion === "reviewOrderLottery"
+        ? EnumListingReviewOrderType.lottery
+        : EnumListingReviewOrderType.firstComeFirstServe,
   }
 }
 
