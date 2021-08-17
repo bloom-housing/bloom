@@ -47,9 +47,6 @@ export class ListingsService {
       .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
       .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
-      .leftJoinAndSelect("listings.unitsSummary", "unitsSummary")
-      .leftJoinAndSelect("unitsSummary.unitType", "unitTypeRefAgain")
-      .leftJoinAndSelect("unitsSummary.priorityType", "priorityTypeAgain")
   }
 
   public async list(origin: string, params: ListingsQueryParams): Promise<Pagination<Listing>> {
