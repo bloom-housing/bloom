@@ -33,6 +33,7 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
+import { listingUrlSlug } from "../../shared/url-helper"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -318,6 +319,16 @@ export class ListingDto extends OmitType(Listing, [
     { toClassOnly: true }
   )
   yearBuilt?: number | null
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value, obj: Listing) => {
+      return listingUrlSlug(obj)
+    },
+    { toClassOnly: true }
+  )
+  urlSlug: string
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}

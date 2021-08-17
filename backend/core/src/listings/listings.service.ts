@@ -14,7 +14,7 @@ import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
-import { BaseView } from "./views/view"
+import { BaseView, FullView } from "./views/view"
 import { transformUnits } from "../shared/units-transformations"
 
 @Injectable()
@@ -22,31 +22,7 @@ export class ListingsService {
   constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
 
   private getFullyJoinedQueryBuilder() {
-    return this.listingRepository
-      .createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
-      .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
-      .leftJoinAndSelect("listings.image", "image")
-      .leftJoinAndSelect("listings.events", "listingEvents")
-      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
-      .leftJoinAndSelect("listings.result", "result")
-      .leftJoinAndSelect("listings.applicationAddress", "applicationAddress")
-      .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")
-      .leftJoinAndSelect("listings.applicationPickUpAddress", "applicationPickUpAddress")
-      .leftJoinAndSelect("listings.applicationMailingAddress", "applicationMailingAddress")
-      .leftJoinAndSelect("listings.applicationDropOffAddress", "applicationDropOffAddress")
-      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-      .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.unitType", "unitTypeRef")
-      .leftJoinAndSelect("units.unitRentType", "unitRentType")
-      .leftJoinAndSelect("units.priorityType", "priorityType")
-      .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
-      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
+    return new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
@@ -179,7 +155,8 @@ export class ListingsService {
   }
 
   async findOne(listingId: string) {
-    const result = await this.getFullyJoinedQueryBuilder()
+    const view = new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
+    const result = await view
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",

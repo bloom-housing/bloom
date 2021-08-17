@@ -27,7 +27,6 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -367,12 +366,6 @@ class Listing extends BaseEntity {
   @IsEnum(ListingStatus, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
-
-  @Expose()
-  @ApiProperty()
-  get urlSlug(): string | undefined {
-    return listingUrlSlug(this)
-  }
 
   @Expose()
   applicationConfig?: Record<string, unknown>

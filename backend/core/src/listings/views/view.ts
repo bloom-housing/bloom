@@ -23,13 +23,31 @@ export class BaseView {
   }
 
   mapUnitSummary(listings) {
-    return listings.map((listing) => {
-      return {
-        ...listing,
-        unitsSummarized: {
-          byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
-        },
-      }
-    })
+    return listings.map((listing) => ({
+      ...listing,
+      unitsSummarized: {
+        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
+      },
+    }))
+  }
+}
+
+export class DetailView extends BaseView {
+  constructor(qb: SelectQueryBuilder<Listing>) {
+    super(qb)
+    this.view = views.detail
+  }
+}
+
+export class FullView extends BaseView {
+  constructor(qb: SelectQueryBuilder<Listing>) {
+    super(qb)
+    this.view = views.full
+  }
+
+  getView(): SelectQueryBuilder<Listing> {
+    this.view.leftJoinAndSelect.forEach((tuple) => this.qb.leftJoinAndSelect(...tuple))
+
+    return this.qb
   }
 }

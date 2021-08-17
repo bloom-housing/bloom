@@ -1,9 +1,10 @@
-import { BaseView } from "./view"
+import { BaseView, FullView } from "./view"
 import { views } from "./config"
 
 const mockQueryBuilder = {
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
+  leftJoinAndSelect: jest.fn().mockReturnThis(),
 }
 
 const mockListingsRepo = {
@@ -52,13 +53,21 @@ describe("listing views", () => {
       expect(view.view).toEqual(views.base)
     })
 
-    it("should call getView qb seclect and leftJoin", () => {
+    it("should call getView qb select and leftJoin", () => {
       const view = new BaseView(mockListingsRepo.createQueryBuilder())
 
       view.getView()
 
       expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(6)
+    })
+
+    it("should cal getView qb leftJoinAndSelect", () => {
+      const view = new FullView(mockListingsRepo.createQueryBuilder())
+
+      view.getView()
+
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(23)
     })
 
     it("should map unitSummary to listings", () => {
