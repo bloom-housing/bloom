@@ -461,7 +461,7 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   customMapPin?: boolean | null
-  
+
   @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
     nullable: false,
     eager: true,
@@ -471,7 +471,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
-
 }
 
 export { Listing as default, Listing }
