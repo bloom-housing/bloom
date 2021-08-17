@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe,
   ClassSerializerInterceptor,
+  Headers,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
