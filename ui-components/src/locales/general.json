@@ -574,7 +574,9 @@
   "users": {
     "confirmed": "Confirmed",
     "unconfirmed": "Unconfirmed",
-    "totalUsers": "total users"
+    "totalUsers": "total users",
+    "administrator": "Administrator",
+    "partner": "Partner"
   },
   "flags": {
     "flaggedSet": "Flagged Set",

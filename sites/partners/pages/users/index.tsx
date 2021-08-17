@@ -34,7 +34,22 @@ const Users = () => {
       },
       {
         headerName: t("t.role"),
-        field: "",
+        field: "roles",
+        valueFormatter: ({ value }) => {
+          const { isAdmin, isPartner } = value || {}
+
+          const roles = []
+
+          if (isAdmin) {
+            roles.push(t("users.administrator"))
+          }
+
+          if (isPartner) {
+            roles.push(t("users.partner"))
+          }
+
+          return roles.join(", ")
+        },
       },
       {
         headerName: t("listings.details.createdDate"),
