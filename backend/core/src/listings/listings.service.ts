@@ -15,10 +15,15 @@ import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
+import { Language } from "../../types"
+import { TranslationsService } from "../translations/translations.service"
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
+  constructor(
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    private readonly translationService: TranslationsService
+  ) {}
 
   private getFullyJoinedQueryBuilder() {
     return this.listingRepository
@@ -174,7 +179,7 @@ export class ListingsService {
     return await this.listingRepository.remove(listing)
   }
 
-  async findOne(listingId: string) {
+  async findOne(listingId: string, lang: Language = Language.en) {
     const result = await this.getFullyJoinedQueryBuilder()
       .where("listings.id = :id", { id: listingId })
       .orderBy({
@@ -184,6 +189,10 @@ export class ListingsService {
     if (!result) {
       throw new NotFoundException()
     }
+    if (lang !== Language.en) {
+      await this.translationService.translateListing(result, lang)
+    }
+
     return result
   }
 }
