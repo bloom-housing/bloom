@@ -35,7 +35,7 @@ class UnitsSummary {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRent?: string
+  monthlyRent?: number | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
