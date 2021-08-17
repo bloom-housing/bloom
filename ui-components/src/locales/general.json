@@ -571,6 +571,11 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "users": {
+    "confirmed": "Confirmed",
+    "unconfirmed": "Unconfirmed",
+    "totalUsers": "total users"
+  },
   "flags": {
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
@@ -1174,6 +1179,7 @@
     "letter": "Letter",
     "less": "Less",
     "link": "Link",
+    "listing": "Listings",
     "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
@@ -1215,6 +1221,7 @@
     "otherRelationShip": "Other Relationship",
     "rent": "Rent",
     "review": "Review",
+    "role": "Role",
     "secondPhone": "Second Phone",
     "seconds": "seconds",
     "seeDetails": "See Details",
