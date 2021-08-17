@@ -3652,6 +3652,9 @@ export interface ListingFilterParams {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  bedrooms?: number
 }
 
 export interface PreferenceLink {
@@ -3811,6 +3814,9 @@ export interface UnitType {
 
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitRentType {
@@ -5245,11 +5251,17 @@ export interface TranslationUpdate {
 export interface UnitTypeCreate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitTypeUpdate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 
   /**  */
   id: string
@@ -5336,6 +5348,9 @@ export enum EnumApplicationsApiExtraModelOrder {
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
