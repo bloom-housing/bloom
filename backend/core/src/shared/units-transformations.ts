@@ -7,6 +7,8 @@ import { UnitsSummarized } from "../units/types/units-summarized"
 import { UnitTypeDto } from "../unit-types/dto/unit-type.dto"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { AmiChartItem } from "../ami-charts/entities/ami-chart-item.entity"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -32,85 +34,130 @@ const minMaxCurrency = (baseValue: MinMaxCurrency, newValue: number): MinMaxCurr
   }
 }
 
-const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
+// Creates data used to display a table of household size/unit size by maximum income per the AMI charts on the units
+// Unit sets can have multiple AMI charts used, in which case the table displays ranges
+const hmiData = (units: Units, maxHouseholdSize: number) => {
+  // Currently, BMR chart is just toggling whether or not the first column shows Household Size or Unit Type
+  const showUnitType = units[0].bmrProgramChart
 
-const hmiData = (units: Units, byUnitType: UnitSummary[], amiPercentages: string[]) => {
-  const bmrProgramChart = units[0].bmrProgramChart
-  // TODO https://github.com/bloom-housing/bloom/issues/872
-  const amiChartItems = units[0].amiChart?.items || []
-  const hmiHeaders = {
-    householdSize: bmrProgramChart ? "t.unitType" : "listings.householdSize",
-  } as AnyDict
-  const amiValues = amiPercentages
-    .map((percent) => {
-      const percentInt = parseInt(percent, 10)
-      return percentInt
+  type ChartAndPercentage = {
+    percentage: number
+    chart: AmiChart
+  }
+
+  // All unique AMI percentages across all units
+  const allPercentages: number[] = [
+    ...new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null)),
+  ]
+    .map((percent) => parseInt(percent, 10))
+    .sort(function (a, b) {
+      return a - b
     })
-    .sort()
-  let maxHousehold = 0
-  maxHousehold = byUnitType.reduce((maxHousehold, summary) => {
-    return Math.max(maxHousehold, summary.occupancyRange.max)
-  }, maxHousehold)
 
+  // All unique combinations of an AMI percentage and an AMI chart across all units
+  const uniquePercentageChartSet: ChartAndPercentage[] = [
+    ...new Set(
+      units
+        .map((unit) => {
+          return { percentage: parseInt(unit.amiPercentage, 10), chart: unit.amiChart }
+        })
+        .map((item) => JSON.stringify(item))
+    ),
+  ].map((uniqueSetString) => JSON.parse(uniqueSetString))
+
+  const hmiHeaders = {
+    sizeColumn: showUnitType ? "t.unitType" : "listings.householdSize",
+  } as AnyDict
+  const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
   const hmiRows = [] as AnyDict[]
 
-  // There are two versions of this table:
-  // 1. If there is only one AMI level, it shows max income per month and per
-  //    year for each household size.
-  // 2. If there are multiple AMI levels, it shows each level (max income per
-  //    year) per household size.
-  if (amiValues.length > 1) {
-    amiValues.forEach((percent) => {
+  // 1. If there are multiple AMI levels, show each AMI level (max income per
+  //    year only) for each size (number of cols = # ami levels plus the size col)
+  // 2. If there is only one AMI level, show max income per month and per
+  //    year for each size (number of cols = 2 for each income style plus the size col)
+  if (allPercentages.length > 1) {
+    allPercentages.forEach((percent) => {
       // Pass translation with its respective argument with format `key,argumentName:argumentValue`
       hmiHeaders[`ami${percent}`] = `listings.percentAMIUnit,percent:${percent}`
-    })
-
-    new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
-      const columns = { householdSize: null }
-      columns["householdSize"] = i + 1
-
-      let pushRow = false // row is valid if at least one column is filled
-      amiValues.forEach((percent) => {
-        const amiInfo = amiChartItems.find((item) => {
-          return item.householdSize == columns.householdSize && item.percentOfAmi == percent
-        })
-        if (amiInfo) {
-          columns[`ami${percent}`] = usd.format(amiInfo.income)
-          pushRow = true
-        } else {
-          columns[`ami${percent}`] = ""
-        }
-      })
-
-      if (pushRow) {
-        if (bmrProgramChart) {
-          columns["householdSize"] = bmrHeaders[i]
-        }
-        hmiRows.push(columns)
-      }
     })
   } else {
     hmiHeaders["maxIncomeMonth"] = "listings.maxIncomeMonth"
     hmiHeaders["maxIncomeYear"] = "listings.maxIncomeYear"
+  }
 
-    new Array(maxHousehold).fill(maxHousehold).forEach((item, i) => {
-      const columns = { householdSize: null }
-      columns["householdSize"] = i + 1
+  const findAmiValueInChart = (
+    amiChart: AmiChartItem[],
+    householdSize: number,
+    percentOfAmi: number
+  ) => {
+    return amiChart.find((item) => {
+      return item.householdSize === householdSize && item.percentOfAmi === percentOfAmi
+    })?.income
+  }
 
-      const amiInfo = amiChartItems.find((item) => {
-        return item.householdSize == columns.householdSize && item.percentOfAmi == amiValues[0]
+  const getYearlyRangeValue = (incomeRange: MinMaxCurrency) => {
+    return incomeRange.min === incomeRange.max
+      ? incomeRange.min
+      : `${incomeRange.min} - ${incomeRange.max}`
+  }
+
+  const getMonthlyRangeValue = (incomeRange: MinMaxCurrency) => {
+    return incomeRange.min === incomeRange.max
+      ? usd.format(parseFloat(incomeRange.min.replace(/[^0-9.-]+/g, "")) / 12)
+      : `${usd.format(parseFloat(incomeRange.min.replace(/[^0-9.-]+/g, "")) / 12)} - ${usd.format(
+          parseFloat(incomeRange.max.replace(/[^0-9.-]+/g, "")) / 12
+        )}`
+  }
+
+  new Array(maxHouseholdSize).fill(maxHouseholdSize).forEach((_, index) => {
+    const currentHouseholdSize = index + 1
+    const rowData = {
+      sizeColumn: showUnitType ? bmrHeaders[index] : currentHouseholdSize,
+    }
+
+    let rowHasData = false // Row is valid if at least one column is filled, otherwise don't show the row
+    allPercentages.forEach((currentAmiPercent) => {
+      // Get all the charts that we're using with this percentage and size
+      const uniquePercentCharts = uniquePercentageChartSet.filter((uniqueChartAndPercentage) => {
+        return uniqueChartAndPercentage.percentage === currentAmiPercent
       })
-
-      if (amiInfo) {
-        columns["maxIncomeMonth"] = usd.format(amiInfo.income / 12)
-        columns["maxIncomeYear"] = usd.format(amiInfo.income)
-        if (bmrProgramChart) {
-          columns["householdSize"] = bmrHeaders[i]
+      // If we don't have data for this AMI percentage and household size, this cell is empty
+      if (uniquePercentCharts.length === 0) {
+        if (allPercentages.length === 1) {
+          rowData["maxIncomeMonth"] = ""
+          rowData["maxIncomeYear"] = ""
+        } else {
+          rowData[`ami${currentAmiPercent}`] = ""
         }
-        hmiRows.push(columns)
+      } else {
+        // If we have chart data, create a max income range string
+        const firstChartValue = findAmiValueInChart(
+          uniquePercentCharts[0].chart.items,
+          currentHouseholdSize,
+          currentAmiPercent
+        )
+        const maxIncomeRange = uniquePercentCharts.reduce(
+          (incomeRange, uniqueSet) => {
+            return minMaxCurrency(
+              incomeRange,
+              findAmiValueInChart(uniqueSet.chart.items, currentHouseholdSize, currentAmiPercent)
+            )
+          },
+          { min: usd.format(firstChartValue), max: usd.format(firstChartValue) } as MinMaxCurrency
+        )
+        if (allPercentages.length === 1) {
+          rowData["maxIncomeMonth"] = getMonthlyRangeValue(maxIncomeRange)
+          rowData["maxIncomeYear"] = getYearlyRangeValue(maxIncomeRange)
+        } else {
+          rowData[`ami${currentAmiPercent}`] = getYearlyRangeValue(maxIncomeRange)
+        }
+        rowHasData = true
       }
     })
-  }
+    if (rowHasData) {
+      hmiRows.push(rowData)
+    }
+  })
 
   return { columns: hmiHeaders, rows: hmiRows }
 }
@@ -281,6 +328,11 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   data.byUnitTypeAndRent = summarizeUnitsByTypeAndRent(units)
   data.byUnitType = summarizeUnitsByType(units, data.unitTypes)
   data.byAMI = summarizeByAmi(units, data.amiPercentages)
-  data.hmi = hmiData(units, data.byUnitType, data.amiPercentages)
+  data.hmi = hmiData(
+    units,
+    data.byUnitType.reduce((maxHousehold, summary) => {
+      return Math.max(maxHousehold, summary.occupancyRange.max)
+    }, 0)
+  )
   return data
 }

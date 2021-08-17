@@ -82,8 +82,9 @@ export const ListingView = (props: ListingProps) => {
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
   const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
-    return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
+    return { ...row, sizeColumn: <strong>{row["sizeColumn"]}</strong> }
   })
+  console.log(hmiData)
   let groupedUnits: GroupedTableGroup[] = null
 
   if (amiValues.length == 1) {

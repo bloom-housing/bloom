@@ -24,6 +24,7 @@ import { AuthContext } from "./auth/types/auth-context"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 import { UserRoles } from "./auth/entities/user-roles.entity"
+import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -43,6 +44,7 @@ const listingSeeds: any[] = [
   ListingTritonSeed,
   ListingDefaultReservedSeed,
   ListingDefaultFCFSSeed,
+  ListingDefaultMultipleAMI,
 ]
 
 export function getSeedListingsCount() {
