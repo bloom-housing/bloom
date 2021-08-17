@@ -4004,17 +4004,6 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
-export interface WhatToExpect {
-  /**  */
-  applicantsWillBeContacted?: string
-
-  /**  */
-  allInfoWillBeVerified?: string
-
-  /**  */
-  bePreparedIfChosen?: string
-}
-
 export interface Listing {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4230,7 +4219,7 @@ export interface Listing {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -4561,7 +4550,7 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -4925,7 +4914,7 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -5392,5 +5381,4 @@ export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedUserRolesTypes = UserRoles
-export type CombinedWhatToExpectTypes = WhatToExpect
 export type CombinedJurisdictionTypes = Id
