@@ -28,6 +28,7 @@ const views: Views = {
       "reservedCommunityType.id",
       "reservedCommunityType.name",
       "property.id",
+      "property.unitsAvailable",
       ...getBaseAddressSelect(["buildingAddress"]),
       "units.id",
       "units.floor",
