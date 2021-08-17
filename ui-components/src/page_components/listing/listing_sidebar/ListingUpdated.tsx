@@ -7,11 +7,11 @@ interface ListingUpdatedProps {
 }
 
 const ListingUpdated = (props: ListingUpdatedProps) => {
-  const listing = props.listingUpdated
+  const listingUpdated = props.listingUpdated
   return (
     <section className="aside-block">
       <p className="text-tiny text-gray-800">
-        {`${t("listings.listingUpdated")}: ${moment(listing).format("MMMM DD, YYYY")}`}
+        {`${t("listings.listingUpdated")}: ${moment(listingUpdated).format("MMMM DD, YYYY")}`}
       </p>
     </section>
   )
