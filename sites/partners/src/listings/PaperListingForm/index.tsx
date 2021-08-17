@@ -272,7 +272,6 @@ const formatFormData = (
   const events: ListingEventCreate[] = data.events.filter(
     (event) => !(event?.type === ListingEventType.publicLottery)
   )
-  console.log("data.lotteryDate", data.lotteryDate)
   if (
     data.lotteryDate &&
     data.lotteryDate.day &&
@@ -299,11 +298,6 @@ const formatFormData = (
       })
     })
   }
-  console.log(
-    data.reviewOrderQuestion === "reviewOrderLottery"
-      ? EnumListingReviewOrderType.lottery
-      : EnumListingReviewOrderType.firstComeFirstServe
-  )
 
   return {
     ...data,
