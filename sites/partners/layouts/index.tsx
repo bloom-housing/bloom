@@ -32,7 +32,7 @@ const Layout = (props) => {
             {t("nav.listings")}
           </LocalizedLink>
 
-          {profile?.roles.isAdmin && (
+          {profile?.roles?.isAdmin && (
             <LocalizedLink href="/users" className="navbar-item">
               {t("nav.users")}
             </LocalizedLink>
