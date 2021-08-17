@@ -7,20 +7,28 @@ p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
+p, partner, asset, true, read
 
 p, admin, preference, true, .*
+p, partner, preference, true, read
 
 p, admin, applicationMethod, true, .*
+p, partner, applicationMethod, true, read
 
 p, admin, unit, true, .*
+p, partner, unit, true, read
 
 p, admin, listingEvent, true, .*
+p, partner, listingEvent, true, read
 
 p, admin, property, true, .*
+p, partner, property, true, read
 
 p, admin, propertyGroup, true, .*
+p, partner, propertyGroup, true, read
 
 p, admin, amiChart, true, .*
+p, partner, amiChart, true, read
 
 p, admin, applicationFlaggedSet, true, .*
 
@@ -50,5 +58,6 @@ p, anonymous, applicationMethod, true, read
 p, admin, paperApplication, true, .*
 p, anonymous, paperApplication, true, read
 
-g, admin, user
+g, admin, partner
+g, partner, user
 g, user, anonymous

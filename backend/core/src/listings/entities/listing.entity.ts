@@ -377,9 +377,6 @@ class Listing extends BaseEntity {
   @Expose()
   applicationConfig?: Record<string, unknown>
 
-  @Expose()
-  applicationCount?: number
-
   @Column({ type: "boolean" })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -459,6 +456,12 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistOpenSpots?: number | null
 
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  customMapPin?: boolean | null
+  
   @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
     nullable: false,
     eager: true,
@@ -468,6 +471,7 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
+
 }
 
 export { Listing as default, Listing }

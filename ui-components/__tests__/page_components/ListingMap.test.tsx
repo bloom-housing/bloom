@@ -8,7 +8,9 @@ afterEach(cleanup)
 describe("<ListingMap>", () => {
   it("renders without error", () => {
     const listing = Object.assign({}, Archer) as any
-    const { getByText } = render(<ListingMap address={listing.buildingAddress} listing={listing} />)
+    const { getByText } = render(
+      <ListingMap address={listing.buildingAddress} listingName={listing.name} />
+    )
     expect(getByText(listing.name)).toBeTruthy()
     expect(getByText(listing.buildingAddress.street, { exact: false })).toBeTruthy()
   })
