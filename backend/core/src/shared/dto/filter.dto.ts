@@ -6,6 +6,8 @@ export enum Compare {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA", // For filters that don't use the comparison param
 }
 
 export class BaseFilter {
