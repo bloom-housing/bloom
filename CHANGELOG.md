@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Zipcode filtering to backend ([#399](https://github.com/CityOfDetroit/bloom/pull/399))
+  - CSV import script ([#404](https://github.com/CityOfDetroit/bloom/pull/404))
 
 ## Detroit Team M9
 
