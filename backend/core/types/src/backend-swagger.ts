@@ -3788,6 +3788,59 @@ export interface ReservedCommunityType {
   description?: string
 }
 
+export interface UnitsSummary {
+  /**  */
+  id: string
+
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  listing: Listing
+
+  /**  */
+  monthlyRent?: string
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+}
+
 export interface UnitType {
   /**  */
   id: string
@@ -4241,6 +4294,9 @@ export interface Listing {
 
   /**  */
   waitlistOpenSpots?: number
+
+  /** */
+  unitsSummary: UnitsSummary[]
 }
 
 export interface PaginatedListing {
