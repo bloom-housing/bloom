@@ -72,9 +72,9 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
   const hmiRows = [] as AnyDict[]
 
   // 1. If there are multiple AMI levels, show each AMI level (max income per
-  //    year only) for each size (number of cols = # ami levels plus the size col)
+  //    year only) for each size (number of cols = the size col + # ami levels)
   // 2. If there is only one AMI level, show max income per month and per
-  //    year for each size (number of cols = 2 for each income style plus the size col)
+  //    year for each size (number of cols = the size col + 2 for each income style)
   if (allPercentages.length > 1) {
     allPercentages.forEach((percent) => {
       // Pass translation with its respective argument with format `key,argumentName:argumentValue`
@@ -109,13 +109,14 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
         )}`
   }
 
+  // Build row data by household size
   new Array(maxHouseholdSize).fill(maxHouseholdSize).forEach((_, index) => {
     const currentHouseholdSize = index + 1
     const rowData = {
       sizeColumn: showUnitType ? bmrHeaders[index] : currentHouseholdSize,
     }
 
-    let rowHasData = false // Row is valid if at least one column is filled, otherwise don't show the row
+    let rowHasData = false // Row is valid if at least one column is filled, otherwise don't push the row
     allPercentages.forEach((currentAmiPercent) => {
       // Get all the charts that we're using with this percentage and size
       const uniquePercentCharts = uniquePercentageChartSet.filter((uniqueChartAndPercentage) => {

@@ -25,6 +25,7 @@ import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-res
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
+import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -45,6 +46,7 @@ const listingSeeds: any[] = [
   ListingDefaultReservedSeed,
   ListingDefaultFCFSSeed,
   ListingDefaultMultipleAMI,
+  ListingDefaultMultipleAMIAndPercentages,
 ]
 
 export function getSeedListingsCount() {
