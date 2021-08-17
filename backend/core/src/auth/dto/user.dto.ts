@@ -18,6 +18,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { IdDto } from "../../shared/dto/id.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
+import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 
 export class UserDto extends OmitType(User, [
   "leasingAgentInListings",
@@ -126,3 +127,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   currentPassword?: string
 }
+
+export class UserListQueryParams extends PaginationAllowsAllQueryParams {}
+
+export class PaginatedUserListDto extends PaginationFactory<UserDto>(UserDto) {}

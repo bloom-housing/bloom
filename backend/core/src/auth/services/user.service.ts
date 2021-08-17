@@ -9,9 +9,10 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindConditions, Repository } from "typeorm"
 import { decode, encode } from "jwt-simple"
+import { Pagination } from "nestjs-typeorm-paginate"
 import moment from "moment"
 import { User } from "../entities/user.entity"
-import { EmailDto, UserCreateDto, UserUpdateDto } from "../dto/user.dto"
+import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
 import { assignDefined } from "../../shared/assign-defined"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { USER_ERRORS } from "../user-errors"
@@ -20,6 +21,7 @@ import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
 import { authzActions, AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
+
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 
@@ -39,6 +41,11 @@ export class UserService {
 
   public async find(options: FindConditions<User>) {
     return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
+  }
+
+  public async list(params: UserListQueryParams): Promise<User[]> {
+    console.log(params)
+    return await this.repo.find()
   }
 
   async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
