@@ -11,6 +11,7 @@
 }
 
 .tabs__tab {
+  @apply bg-white;
   @apply text-gray-800;
   @apply px-6;
   @apply pt-3;
@@ -54,6 +55,7 @@
 
 .tabs__panel {
   @apply p-8;
+  @apply bg-white;
   @apply border;
   @apply border-gray-450;
 

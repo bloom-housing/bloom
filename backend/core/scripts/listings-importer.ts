@@ -91,6 +91,27 @@ async function uploadAmiChart(data) {
   }
 }
 
+async function uploadReservedCommunityType(data) {
+  try {
+    return await reservedCommunityTypesService.create({
+      body: { name: data },
+    })
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function getReservedCommunityType(name) {
+  try {
+    const reservedTypes = await reservedCommunityTypesService.list()
+    return reservedTypes.filter((reservedType) => reservedType.name === name)[0]
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
 function reformatListing(listing, relationsKeys: string[]) {
   relationsKeys.forEach((relation) => {
     if (!(relation in listing) || listing[relation] === null) {
@@ -146,14 +167,20 @@ async function main() {
   })
   const unitTypes = await unitTypesService.list()
   const priorityTypes = await unitAccessibilityPriorityTypesService.list()
-  const reservedCommunityTypes = await reservedCommunityTypesService.list()
 
   let listing = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
   const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
   listing = await uploadEntity("preferences", preferencesService, listing)
   listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
-  listing.reservedCommunityType = findByName(reservedCommunityTypes, listing.reservedCommunityType)
+  let reservedCommunityType
+  if (listing.reservedCommunityType) {
+    reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityType)
+    if (!reservedCommunityType) {
+      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityType)
+    }
+  }
+  listing.reservedCommunityType = reservedCommunityType
 
   const amiChartName = listing.amiChart.name
   let chart = await getAmiChart(amiChartName)

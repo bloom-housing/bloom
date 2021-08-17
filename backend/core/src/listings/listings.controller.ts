@@ -10,7 +10,6 @@ import {
   Post,
   Put,
   Query,
-  Headers,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -62,11 +61,8 @@ export class ListingsController {
   @ApiOperation({ summary: "List listings", operationId: "list" })
   // ClassSerializerInterceptor has to come after CacheInterceptor
   @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
-  public async getAll(
-    @Headers("origin") origin: string,
-    @Query() queryParams: ListingsQueryParams
-  ): Promise<PaginatedListingDto> {
-    return mapTo(PaginatedListingDto, await this.listingsService.list(origin, queryParams))
+  public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
+    return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
   }
 
   @Post()
