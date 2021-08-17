@@ -11,9 +11,7 @@ afterEach(cleanup)
 describe("<WhatToExpect>", () => {
   it("renders with default what-to-expects", () => {
     const { getByText } = render(<WhatToExpect listing={archer} />)
-    expect(getByText(t("whatToExpect.applicantsWillBeContacted"))).toBeTruthy()
-    expect(getByText(t("whatToExpect.allInfoWillBeVerified"))).toBeTruthy()
-    expect(getByText(t("whatToExpect.bePreparedIfChosen"))).toBeTruthy()
+    expect(getByText(t("whatToExpect.default"))).toBeTruthy()
   })
   it("renders with custom what-to-expects", () => {
     const newListing = archer
