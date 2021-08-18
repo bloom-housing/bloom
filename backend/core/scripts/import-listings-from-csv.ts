@@ -1,11 +1,13 @@
 import csv from "csv-parser"
 import fs from "fs"
 import { importListing, createUnitsArray } from "./listings-importer"
-import { Listing } from "../src/listings/entities/listing.entity"
-import { Property } from "../src/property/entities/property.entity"
-import { Address } from "../src/shared/entities/address.entity"
-import { CountyCode } from "../src/shared/types/county-code"
-import { CSVFormattingType } from "../src/csv/types/csv-formatting-type-enum"
+import {
+  ListingCreate,
+  AddressCreate,
+  CountyCode,
+  CSVFormattingType,
+  ListingStatus,
+} from "../types/src/backend-swagger"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
 // the corresponding Listings. A few notes:
@@ -60,102 +62,91 @@ async function main() {
   const uploadFailureMessages = []
   let numListingsSuccessfullyUploaded = 0
   for (const listingFields of rawListingFields) {
-    const listing = new Listing()
-    const property = new Property()
-    const address = new Address()
-
-    // Add property information
-    address.street = listingFields["Project Address"]
-    address.zipCode = listingFields["Zip Code"]
-    address.city = "Detroit"
-    address.state = "MI"
-    address.longitude = listingFields["Longitude"]
-    address.latitude = listingFields["Latitude"]
-
-    property.buildingAddress = address
-    property.neighborhood = listingFields["Neighborhood"]
-    property.region = listingFields["Region"]
-
-    property.phoneNumber = listingFields["Property Phone"]
+    const address: AddressCreate = {
+      street: listingFields["Project Address"],
+      zipCode: listingFields["Zip Code"],
+      city: "Detroit",
+      state: "MI",
+      longitude: listingFields["Longitude"],
+      latitude: listingFields["Latitude"],
+    }
 
     // Add data about units
-    property.units = []
+    let units = []
     if (listingFields["Number 0BR"]) {
-      property.units = property.units.concat(
-        createUnitsArray("studio", listingFields["Number 0BR"])
-      )
+      units = units.concat(createUnitsArray("studio", listingFields["Number 0BR"]))
     }
     if (listingFields["Number 1BR"]) {
-      property.units = property.units.concat(
-        createUnitsArray("oneBdrm", parseInt(listingFields["Number 1BR"]))
-      )
+      units = units.concat(createUnitsArray("oneBdrm", parseInt(listingFields["Number 1BR"])))
     }
     if (listingFields["Number 2BR"]) {
-      property.units = property.units.concat(
-        createUnitsArray("twoBdrm", parseInt(listingFields["Number 2BR"]))
-      )
+      units = units.concat(createUnitsArray("twoBdrm", parseInt(listingFields["Number 2BR"])))
     }
     if (listingFields["Number 3BR"]) {
-      property.units = property.units.concat(
-        createUnitsArray("threeBdrm", parseInt(listingFields["Number 3BR"]))
-      )
+      units = units.concat(createUnitsArray("threeBdrm", parseInt(listingFields["Number 3BR"])))
     }
     // Lump 4BR and 5BR together as "fourBdrm"
     const numberFourBdrm = listingFields["Number 4BR"] ? parseInt(listingFields["Number 4BR"]) : 0
     const numberFiveBdrm = listingFields["Number 5BR"] ? parseInt(listingFields["Number 5BR"]) : 0
     if (numberFourBdrm + numberFiveBdrm > 0) {
-      property.units = property.units.concat(
-        createUnitsArray("fourBdrm", numberFourBdrm + numberFiveBdrm)
-      )
+      units = units.concat(createUnitsArray("fourBdrm", numberFourBdrm + numberFiveBdrm))
     }
 
     // If we don't have any data per unit type, but we do have an overall count, create that many
     // "unknown" units
-    if (property.units.length == 0 && listingFields["Affordable Units"]) {
+    if (units.length == 0 && listingFields["Affordable Units"]) {
       createUnitsArray("unknown", parseInt(listingFields["Affordable Units"]))
     }
 
-    // Listing-level details
-    listing.property = property
-    listing.name = listingFields["Project Name"]
-    listing.hrdId = listingFields["HRDID"]
-
-    listing.ownerCompany = listingFields["Owner Company"]
-    listing.managementCompany = listingFields["Management Company"]
-    listing.leasingAgentName = listingFields["Manager Contact"]
-    listing.leasingAgentPhone = listingFields["Manager Phone"]
-    listing.managementWebsite = listingFields["Management Website"]
-
-    if (listingFields["Manager Email"]) {
-      listing.leasingAgentEmail = listingFields["Manager Email"]
-    }
-
-    listing.countyCode = CountyCode.detroit
-
     // Listing affordability details
+    let amiPercentageMin, amiPercentageMax
     const affordabilityMix: string = listingFields["Affordability Mix"]
     const amiRange: string[] = amiRangeRegex.exec(affordabilityMix)
     const amiValue: string[] = amiValueRegex.exec(affordabilityMix)
     const amiUpperLimit: string[] = amiUpperLimitRegex.exec(affordabilityMix)
     if (amiRange) {
-      listing.amiPercentageMin = parseInt(amiRange[1])
-      listing.amiPercentageMax = parseInt(amiRange[2])
+      amiPercentageMin = parseInt(amiRange[1])
+      amiPercentageMax = parseInt(amiRange[2])
     }
     if (amiValue) {
-      listing.amiPercentageMin = parseInt(amiValue[1])
-      listing.amiPercentageMax = parseInt(amiValue[1])
+      amiPercentageMin = parseInt(amiValue[1])
+      amiPercentageMax = parseInt(amiValue[1])
     }
     if (amiUpperLimit) {
-      listing.amiPercentageMax = parseInt(amiUpperLimit[1])
+      amiPercentageMax = parseInt(amiUpperLimit[1])
     }
 
-    // Other (required) listing fields
-    listing.preferences = []
-    listing.events = []
-    listing.applicationMethods = []
-    listing.assets = []
-    listing.displayWaitlistSize = false
-    listing.CSVFormattingType = CSVFormattingType.basic
+    let leasingAgentEmail = null
+    if (listingFields["Manager Email"]) {
+      leasingAgentEmail = listingFields["Manager Email"]
+    }
+
+    const listing: ListingCreate = {
+      name: listingFields["Project Name"],
+      hrdId: listingFields["HRDID"],
+      buildingAddress: address,
+      units: units,
+      ownerCompany: listingFields["Owner Company"],
+      managementCompany: listingFields["Management Company"],
+      leasingAgentName: listingFields["Manager Contact"],
+      leasingAgentPhone: listingFields["Manager Phone"],
+      managementWebsite: listingFields["Management Website"],
+      leasingAgentEmail: leasingAgentEmail,
+      countyCode: CountyCode.Detroit,
+      amiPercentageMin: amiPercentageMin,
+      amiPercentageMax: amiPercentageMax,
+      status: ListingStatus.active,
+
+      // The following fields are only set because they are required
+      CSVFormattingType: CSVFormattingType.basic,
+      applicationMethods: [],
+      preferences: [],
+      applicationDropOffAddress: null,
+      applicationMailingAddress: null,
+      events: [],
+      assets: [],
+      displayWaitlistSize: false,
+    }
 
     try {
       const newListing = await importListing(importApiUrl, email, password, listing)

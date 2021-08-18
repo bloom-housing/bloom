@@ -4,22 +4,20 @@
   "CSVFormattingType": "basic",
   "countyCode": "Detroit",
   "preferences": [],
-  "property": {
-    "buildingAddress": {
-      "city": "Detroit",
-      "state": "MI",
-      "street": "Main St",
-      "zipCode": "48127",
-      "latitude": "42.36",
-      "longitude": "-83.1"
-    },
-    "units": [
-      {
-        "unitType": "oneBdrm",
-        "status": "available"
-      }
-    ]
+  "buildingAddress": {
+    "city": "Detroit",
+    "state": "MI",
+    "street": "Main St",
+    "zipCode": "48127",
+    "latitude": "42.36",
+    "longitude": "-83.1"
   },
+  "units": [
+    {
+      "unitType": "oneBdrm",
+      "status": "available"
+    }
+  ],
   "assets": [],
   "applicationMethods": [],
   "events": [],
