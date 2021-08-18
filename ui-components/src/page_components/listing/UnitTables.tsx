@@ -78,6 +78,15 @@ const UnitTables = (props: UnitTablesProps) => {
           })
         })
 
+        let areaRangeSection
+        if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
+          areaRangeSection = (
+            <>
+              ,&nbsp;{formatRange(unitSummary.areaRange)} {t("t.squareFeet")}
+            </>
+          )
+        }
+
         if (unitSummary.floorRange && unitSummary.floorRange.min) {
           floorSection = (
             <>
@@ -94,8 +103,8 @@ const UnitTables = (props: UnitTablesProps) => {
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="toggle-header">
                 <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
-                {unitsLabel(units)},&nbsp;
-                {formatRange(unitSummary.areaRange)} {t("t.squareFeet")}
+                {unitsLabel(units)}
+                {areaRangeSection}
                 {floorSection}
               </h3>
             </button>
