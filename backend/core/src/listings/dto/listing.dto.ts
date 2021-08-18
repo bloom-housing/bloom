@@ -9,6 +9,7 @@ import {
   IsString,
   IsUUID,
   ValidateNested,
+  IsNumberString,
 } from "class-validator"
 import moment from "moment"
 import {
@@ -765,7 +766,16 @@ export class ListingFilterParams extends BaseFilter {
     example: "Fox Creek",
     required: false,
   })
-  [ListingFilterKeys.neighborhood]?: string
+  [ListingFilterKeys.neighborhood]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "3",
+    required: false,
+  })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bedrooms]?: number
 }
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
@@ -797,4 +807,5 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
+  bedrooms: "unitTypeRef.num_bedrooms",
 }

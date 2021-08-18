@@ -2386,7 +2386,7 @@ export interface HouseholdMember {
   address: Address
 
   /**  */
-  workAddress: Address
+  workAddress?: CombinedWorkAddressTypes
 
   /**  */
   id: string
@@ -2769,7 +2769,7 @@ export interface PaperApplication {
   language: Language
 
   /**  */
-  file: Asset
+  file?: CombinedFileTypes
 
   /**  */
   applicationMethod: ApplicationMethod
@@ -3027,7 +3027,7 @@ export interface Unit {
   updatedAt: Date
 
   /**  */
-  amiChart: CombinedAmiChartTypes
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -3098,7 +3098,7 @@ export interface PropertyGroup {
   name: string
 
   /**  */
-  properties: Property[]
+  properties: Id[]
 }
 
 export interface Address {
@@ -3253,7 +3253,7 @@ export interface User {
   updatedAt: Date
 
   /**  */
-  leasingAgentInListings?: Listing[]
+  leasingAgentInListings?: Id[]
 
   /**  */
   roles?: UserRoles
@@ -3478,13 +3478,13 @@ export interface Application {
   appUrl?: string
 
   /**  */
-  user: CombinedUserTypes
+  user?: Id
 
   /**  */
   userId?: string
 
   /**  */
-  listing: Listing
+  listing: Id
 
   /**  */
   listingId: string
@@ -3714,7 +3714,7 @@ export interface Listing {
   disableUnitsAccordion?: boolean
 
   /**  */
-  jurisdiction?: CombinedJurisdictionTypes
+  jurisdiction?: Jurisdiction
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -3726,7 +3726,7 @@ export interface Listing {
   leasingAgentName?: string
 
   /**  */
-  leasingAgents?: User[]
+  leasingAgents?: UserBasic[]
 
   /**  */
   leasingAgentOfficeHours?: string
@@ -4763,6 +4763,12 @@ export interface UserUpdate {
 
   /**  */
   roles?: UserRoles
+
+  /** */
+  neighborhood?: string
+
+  /**  */
+  bedrooms?: number
 }
 
 export interface Jurisdiction {
@@ -5027,10 +5033,10 @@ export interface Listing {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
 
   /**  */
-  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes
+  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes
 
   /**  */
-  applicationMailingAddress: CombinedApplicationMailingAddressTypes
+  applicationMailingAddress?: CombinedApplicationMailingAddressTypes
 
   /**  */
   events: ListingEvent[]
@@ -6219,11 +6225,17 @@ export interface TranslationUpdate {
 export interface UnitTypeCreate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitTypeUpdate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 
   /**  */
   id: string
