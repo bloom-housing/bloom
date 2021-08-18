@@ -16,10 +16,15 @@ import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.d
 import { addFilters } from "../shared/filter"
 import { BaseView, FullView } from "./views/view"
 import { transformUnits } from "../shared/units-transformations"
+import { Language } from "../../types"
+import { TranslationsService } from "../translations/translations.service"
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
+  constructor(
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    private readonly translationService: TranslationsService
+  ) {}
 
   private getFullyJoinedQueryBuilder() {
     return new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
@@ -32,6 +37,8 @@ export class ListingsService {
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
+      .leftJoin("property.units", "units")
+      .leftJoin("units.unitType", "unitTypeRef")
       .groupBy("listings.id")
       .orderBy({ "listings.id": "DESC" })
 
@@ -154,7 +161,7 @@ export class ListingsService {
     return await this.listingRepository.remove(listing)
   }
 
-  async findOne(listingId: string) {
+  async findOne(listingId: string, lang: Language = Language.en) {
     const view = new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
     const result = await view
       .where("listings.id = :id", { id: listingId })
@@ -167,6 +174,10 @@ export class ListingsService {
     }
 
     result.unitsSummarized = transformUnits(result.property.units)
+    if (lang !== Language.en) {
+      await this.translationService.translateListing(result, lang)
+    }
+
     return result
   }
 }

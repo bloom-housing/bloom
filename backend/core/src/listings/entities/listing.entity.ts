@@ -42,6 +42,7 @@ import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -458,6 +459,16 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   customMapPin?: boolean | null
+
+  @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+    nullable: false,
+    eager: true,
+    cascade: true,
+  })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummary)
+  unitsSummary: UnitsSummary[]
 }
 
 export { Listing as default, Listing }
