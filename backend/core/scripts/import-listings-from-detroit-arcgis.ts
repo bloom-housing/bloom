@@ -64,15 +64,6 @@ async function main() {
       units = createUnitsArray("studio", 1)
     }
 
-    let leasingAgentPhone
-    if (listingAttributes.Manager_Phone) {
-      leasingAgentPhone = listingAttributes.Manager_Phone
-    } else if (listingAttributes.Property_Phone) {
-      leasingAgentPhone = listingAttributes.Property_Phone
-    } else {
-      leasingAgentPhone = "(555) 555-5555"
-    }
-
     const leasingAgentAddress = {
       city: "Fake City",
       state: "XX",
@@ -91,8 +82,9 @@ async function main() {
       buildingAddress: address,
       units: units,
       leasingAgentName: listingAttributes.Manager_Contact,
-      leasingAgentPhone: leasingAgentPhone,
+      leasingAgentPhone: listingAttributes.Manager_Phone,
       leasingAgentAddress: leasingAgentAddress,
+      phoneNumber: listingAttributes.Property_Phone,
       status: ListingStatus.active,
       countyCode: CountyCode.Detroit,
 

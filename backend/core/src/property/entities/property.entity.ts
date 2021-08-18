@@ -107,12 +107,6 @@ export class Property {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  region?: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   petPolicy?: string | null
 
   @Column({ type: "text", nullable: true })
@@ -144,12 +138,6 @@ export class Property {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   yearBuilt?: number | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  phoneNumber?: string | null
 
   @Expose()
   @ApiProperty({ type: UnitsSummarized })

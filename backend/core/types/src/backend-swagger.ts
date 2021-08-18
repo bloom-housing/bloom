@@ -4279,6 +4279,12 @@ export interface Listing {
 
   /**  */
   amiPercentageMax?: number
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  region?: string
 }
 
 export interface PaginatedListing {
@@ -4628,6 +4634,12 @@ export interface ListingCreate {
 
   /**  */
   amiPercentageMax?: number
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  region?: string
 }
 
 export interface PreferenceUpdate {
@@ -5010,6 +5022,12 @@ export interface ListingUpdate {
 
   /**  */
   amiPercentageMax?: number
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  region?: string
 }
 
 export interface PaperApplicationCreate {
@@ -5078,9 +5096,6 @@ export interface Property {
   neighborhood?: string
 
   /**  */
-  region?: string
-
-  /**  */
   petPolicy?: string
 
   /**  */
@@ -5097,9 +5112,6 @@ export interface Property {
 
   /**  */
   yearBuilt?: number
-
-  /**  */
-  phoneNumber?: string
 }
 
 export interface PropertyCreate {
@@ -5131,9 +5143,6 @@ export interface PropertyCreate {
   neighborhood?: string
 
   /**  */
-  region?: string
-
-  /**  */
   petPolicy?: string
 
   /**  */
@@ -5150,9 +5159,6 @@ export interface PropertyCreate {
 
   /**  */
   yearBuilt?: number
-
-  /**  */
-  phoneNumber?: string
 }
 
 export interface PropertyUpdate {
@@ -5193,9 +5199,6 @@ export interface PropertyUpdate {
   neighborhood?: string
 
   /**  */
-  region?: string
-
-  /**  */
   petPolicy?: string
 
   /**  */
@@ -5212,9 +5215,6 @@ export interface PropertyUpdate {
 
   /**  */
   yearBuilt?: number
-
-  /**  */
-  phoneNumber?: string
 }
 
 export interface PropertyGroup {
