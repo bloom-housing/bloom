@@ -8,6 +8,7 @@ import { ReservedCommunityType } from "../../reserved-community-type/entities/re
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { User } from "../../auth/entities/user.entity"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import {
@@ -35,6 +36,8 @@ export class ListingDefaultSeed {
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
     @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
+    @InjectRepository(UnitsSummary)
+    protected readonly unitsSummaryRepository: Repository<UnitsSummary>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>

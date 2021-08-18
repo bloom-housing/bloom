@@ -39,6 +39,7 @@ import { Listing10157Seed } from "../seeds/listings/listing-detroit-10157"
 import { Listing10147Seed } from "../seeds/listings/listing-detroit-10147"
 import { Listing10145Seed } from "../seeds/listings/listing-detroit-10145"
 import { ListingTreymoreSeed } from "../seeds/listings/listing-detroit-treymore"
+import { UnitsSummary } from "../units-summary/entities/units-summary.entity"
 
 @Module({})
 export class SeederModule {
@@ -62,6 +63,7 @@ export class SeederModule {
           AmiChart,
           Property,
           Unit,
+          UnitsSummary,
           User,
           UserRoles,
           ApplicationMethod,

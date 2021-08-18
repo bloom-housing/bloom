@@ -9,6 +9,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const treymoreProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/457-Brainard-Street-Detroit-MI-48201
@@ -153,6 +154,20 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       property: property,
       preferences: [],
     }
+
+    const treymoreUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+
+    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeTwoBdrm,
+      totalCount: 4,
+      monthlyRent: "$707",
+      property: property,
+      sqFeetMin: "720",
+      sqFeetMax: "1003",
+    }
+    treymoreUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+
+    await this.unitsSummaryRepository.save(treymoreUnitsSummaryToBeCreated)
 
     return await this.listingRepository.save(listingCreateDto)
   }

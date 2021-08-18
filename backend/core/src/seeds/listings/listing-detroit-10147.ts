@@ -10,6 +10,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import assert from "assert"
+import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const mshProperty: PropertySeedType = {
   buildingAddress: {
@@ -117,6 +118,26 @@ export class Listing10147Seed extends ListingDefaultSeed {
       property: property,
       preferences: [],
     }
+
+    const mshUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+
+    const fourBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeFourBdrm,
+      totalCount: 15,
+      monthlyRent: "$0",
+      property: property,
+    }
+    mshUnitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
+
+    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeThreeBdrm,
+      totalCount: 9,
+      monthlyRent: "$0",
+      property: property,
+    }
+    mshUnitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
+
+    await this.unitsSummaryRepository.save(mshUnitsSummaryToBeCreated)
 
     return await this.listingRepository.save(listingCreateDto)
   }

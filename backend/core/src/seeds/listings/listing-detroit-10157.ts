@@ -9,6 +9,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const nccProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -176,6 +177,39 @@ export class Listing10157Seed extends ListingDefaultSeed {
       property: property,
       preferences: [],
     }
+
+    const nccUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+
+    const zeroBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeStudio,
+      totalCount: 1,
+      monthlyRent: "$470",
+      property: property,
+      sqFeetMax: "550",
+    }
+    nccUnitsSummaryToBeCreated.push(zeroBdrmUnitsSummary)
+
+    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeOneBdrm,
+      totalCount: 2,
+      monthlyRent: "$650",
+      property: property,
+      sqFeetMin: "800",
+      sqFeetMax: "1000",
+    }
+    nccUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+
+    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeTwoBdrm,
+      totalCount: 2,
+      monthlyRent: "$750",
+      property: property,
+      sqFeetMin: "900",
+      sqFeetMax: "1100",
+    }
+    nccUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+
+    await this.unitsSummaryRepository.save(nccUnitsSummaryToBeCreated)
 
     return await this.listingRepository.save(listingCreateDto)
   }
