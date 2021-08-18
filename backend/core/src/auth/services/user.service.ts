@@ -9,7 +9,6 @@ import {
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindConditions, Repository } from "typeorm"
 import { decode, encode } from "jwt-simple"
-import { Pagination } from "nestjs-typeorm-paginate"
 import moment from "moment"
 import { User } from "../entities/user.entity"
 import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
@@ -43,9 +42,18 @@ export class UserService {
     return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
-  public async list(params: UserListQueryParams): Promise<User[]> {
-    console.log(params)
-    return await this.repo.find()
+  public async list(params: UserListQueryParams, authContext: AuthContext): Promise<User[]> {
+    const result = await this.repo.find()
+    /**
+     * admin are the only ones that can access all users
+     * so this will throw on the first user that isn't their own (non admin users can access themselves)
+     */
+    await Promise.all(
+      result.map(async (user) => {
+        await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
+      })
+    )
+    return result
   }
 
   async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {

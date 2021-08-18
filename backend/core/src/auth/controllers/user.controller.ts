@@ -122,7 +122,7 @@ export class UserController {
   @Get("/list")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "List users", operationId: "list" })
-  async list(@Query() queryParams: UserListQueryParams) {
-    return this.userService.list(queryParams)
+  async list(@Query() queryParams: UserListQueryParams, @Request() req: ExpressRequest) {
+    return this.userService.list(queryParams, new AuthContext(req.user as User))
   }
 }
