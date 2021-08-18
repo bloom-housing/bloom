@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file. The format 
   - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
   - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
   - Add bedrooms/unit size filter to backend ([Detroit Team #368](https://github.com/CityOfDetroit/bloom/pull/368), [#1660](https://github.com/bloom-housing/bloom/pull/1660))
+  - Adds "view" parameter and "views" to specify selects and joins [#1626](https://github.com/bloom-housing/bloom/pull/1626)
 
 - Changed:
 
