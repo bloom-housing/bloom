@@ -17,7 +17,8 @@ export class partnerRole1628543278484 implements MigrationInterface {
     )
     // Give everyone partner permissions.
     await queryRunner.query(`UPDATE "user_roles" SET "is_partner" = TRUE`)
-    // Testing already exists constraint error
+    await queryRunner.query(`
+      ALTER TABLE "user_roles" DROP CONSTRAINT IF EXISTS "UQ_87b8888186ca9769c960e926870"`)
     await queryRunner.query(`
       ALTER TABLE "user_roles" DROP CONSTRAINT IF EXISTS "FK_87b8888186ca9769c960e926870"`)
     await queryRunner.query(
