@@ -62,7 +62,7 @@ export class ListingsService {
       innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
-    // let listings = await view
+
     let listings = await view
       .getViewQb()
       .orderBy({
