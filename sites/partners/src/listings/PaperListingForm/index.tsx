@@ -196,6 +196,7 @@ const defaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: null,
+  unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
     priorityTypes: [],

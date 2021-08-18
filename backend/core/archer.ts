@@ -354,6 +354,7 @@ export const ArcherListing: Listing = {
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",
   unitsAvailable: 0,
+  unitsSummary: [],
   unitsSummarized: undefined,
   unitAmenities: "Dishwasher",
   developer: "Charities Housing ",
