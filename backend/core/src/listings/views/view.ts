@@ -7,7 +7,6 @@ import { View } from "./types"
 export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   switch (views[view]) {
     case views.detail:
-      console.log("detail view")
       return new DetailView(qb)
     case views.full:
       return new FullView(qb)
