@@ -6,12 +6,13 @@ import { View } from "./types"
 
 export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   switch (views[view]) {
+    case views.base:
+      return new BaseView(qb)
     case views.detail:
       return new DetailView(qb)
     case views.full:
-      return new FullView(qb)
     default:
-      return new BaseView(qb)
+      return new FullView(qb)
   }
 }
 

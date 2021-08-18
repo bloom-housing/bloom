@@ -92,7 +92,7 @@ describe("listing views", () => {
       expect(listingView.view).toEqual(views.base)
     })
 
-    it("should create a new BaseView without view param", () => {
+    it("should create a new FullView without view param", () => {
       const listingView = getView(mockListingsRepo.createQueryBuilder())
 
       expect(listingView.qb).toEqual(mockQueryBuilder)
