@@ -7,6 +7,16 @@ export interface AdditionalFeesProps {
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
+  // If none of the relevant fields are provided, return an empty div.
+  if (
+    !props.listing.depositMin &&
+    !props.listing.depositMax &&
+    !props.listing.applicationFee &&
+    !props.listing.costsNotIncluded
+  ) {
+    return <></>
+  }
+
   const getDeposit = () => {
     const min = props.listing.depositMin
     const max = props.listing.depositMax
