@@ -1,7 +1,7 @@
 import { Views } from "./types"
 
 function getBaseAddressSelect(schemas: string[]): string[] {
-  const fields = ["city", "state", "street", "zipCode", "latitude", "longitude"]
+  const fields = ["city", "state", "street", "street2", "zipCode", "latitude", "longitude"]
 
   let select: string[] = []
   schemas.forEach((schema) => {
@@ -49,6 +49,7 @@ const views: Views = {
       { join: "property.units", alias: "units" },
       { join: "units.unitType", alias: "unitType" },
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
+      { join: "listings.preferences", alias: "preferences" },
     ],
   },
 }
@@ -145,7 +146,6 @@ views.detail = {
     { join: "listings.applicationMailingAddress", alias: "applicationMailingAddress" },
     { join: "listings.applicationDropOffAddress", alias: "applicationDropOffAddress" },
     { join: "listings.leasingAgents", alias: "leasingAgents" },
-    { join: "listings.preferences", alias: "preferences" },
   ],
 }
 

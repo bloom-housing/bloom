@@ -11,7 +11,7 @@ import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
-import { Listing } from "../..//listings/entities/listing.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "units_summary" })
 class UnitsSummary {

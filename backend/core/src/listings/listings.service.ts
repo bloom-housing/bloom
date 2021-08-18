@@ -14,7 +14,7 @@ import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
-import { BaseView, FullView } from "./views/view"
+import { getView } from "./views/view"
 import { transformUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
 import { TranslationsService } from "../translations/translations.service"
@@ -27,7 +27,7 @@ export class ListingsService {
   ) {}
 
   private getFullyJoinedQueryBuilder() {
-    return new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
+    return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
@@ -61,10 +61,10 @@ export class ListingsService {
       // join on the listings we want to show.
       innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
-    const view = new BaseView(this.listingRepository.createQueryBuilder("listings"))
+    const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
     // let listings = await view
     let listings = await view
-      .getView()
+      .getViewQb()
       .orderBy({
         "listings.applicationDueDate": "ASC",
         "listings.applicationOpenDate": "DESC",
@@ -161,9 +161,10 @@ export class ListingsService {
     return await this.listingRepository.remove(listing)
   }
 
-  async findOne(listingId: string, lang: Language = Language.en) {
-    const view = new FullView(this.listingRepository.createQueryBuilder("listings")).getView()
-    const result = await view
+  async findOne(listingId: string, lang: Language = Language.en, view = "full") {
+    console.log("view = ", view)
+    const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
+    const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",

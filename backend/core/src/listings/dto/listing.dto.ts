@@ -789,6 +789,16 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
+    name: "view",
+    required: false,
+    type: String,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  view?: string
+
+  @Expose()
+  @ApiProperty({
     type: String,
     required: false,
   })

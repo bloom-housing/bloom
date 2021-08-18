@@ -4,6 +4,18 @@ import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
 import { View } from "./types"
 
+export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
+  switch (views[view]) {
+    case views.detail:
+      console.log("detail view")
+      return new DetailView(qb)
+    case views.full:
+      return new FullView(qb)
+    default:
+      return new BaseView(qb)
+  }
+}
+
 export class BaseView {
   qb: SelectQueryBuilder<Listing>
   view: View
@@ -12,7 +24,7 @@ export class BaseView {
     this.view = views.base
   }
 
-  getView(): SelectQueryBuilder<Listing> {
+  getViewQb(): SelectQueryBuilder<Listing> {
     this.qb.select(this.view.select)
 
     this.view.leftJoins.forEach((join) => {
@@ -45,7 +57,7 @@ export class FullView extends BaseView {
     this.view = views.full
   }
 
-  getView(): SelectQueryBuilder<Listing> {
+  getViewQb(): SelectQueryBuilder<Listing> {
     this.view.leftJoinAndSelect.forEach((tuple) => this.qb.leftJoinAndSelect(...tuple))
 
     return this.qb

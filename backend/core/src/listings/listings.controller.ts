@@ -83,12 +83,14 @@ export class ListingsController {
   @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
   async retrieve(
     @Headers("language") language: Language,
-    @Param("listingId") listingId: string
+    @Param("listingId") listingId: string,
+    @Query("view") view?: string
   ): Promise<ListingDto> {
+    console.log("controller view = ", view)
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language))
+    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language, view))
   }
 
   @Put(`:listingId`)
