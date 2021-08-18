@@ -162,7 +162,6 @@ export class ListingsService {
   }
 
   async findOne(listingId: string, lang: Language = Language.en, view = "full") {
-    console.log("view = ", view)
     const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
     const result = await qb
       .where("listings.id = :id", { id: listingId })
