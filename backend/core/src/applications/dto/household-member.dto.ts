@@ -20,7 +20,7 @@ export class HouseholdMemberDto extends OmitType(HouseholdMember, [
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  workAddress: AddressDto
+  workAddress?: AddressDto
 }
 
 export class HouseholdMemberCreateDto extends OmitType(HouseholdMemberDto, [

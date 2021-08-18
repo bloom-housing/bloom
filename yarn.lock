@@ -13121,6 +13121,7 @@ google-p12-pem@^3.0.3:
   integrity sha512-e9CwdD2QYkpvJsktki3Bm8P8FSGIneF+/42a9F9QHcQvJ73C2RoYZdrwRl6BhwksWtzl65gT4OnBROhUIFw95Q==
   dependencies:
     node-forge "^0.10.0"
+
 got@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/got/-/got-8.3.2.tgz#1d23f64390e97f776cac52e5b936e5f514d2e937"
@@ -15364,6 +15365,7 @@ json-bigint@^1.0.0:
   integrity sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==
   dependencies:
     bignumber.js "^9.0.0"
+
 json-buffer@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.0.tgz#5b1f397afc75d677bde8bcfc0e47e1f9a3d9a898"
@@ -21767,10 +21769,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-swagger-axios-codegen@0.11.16:
-  version "0.11.16"
-  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.11.16.tgz#eae7dd2ad254eaac485db2dde558958f70437f46"
-  integrity sha512-OB5cvRSdfPsGaws/Y1YuNYG7/cGSp5PLc36294hUsFiP57cDdC5sxdXUnHcy00+6hpCe/1Y9vcGaouvevt4jeQ==
+swagger-axios-codegen@0.12.5:
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.12.5.tgz#8a47b893b273bed6ad202d4bad04ed4b5d7bc8a7"
+  integrity sha512-kT1hgN2dHEMgJBOiN0dxZp6E/UcliTGhzk1JosP7UXBwGQgJyE9GqdCKekJcIj5v+nEtH9fIshuLzmxz29sLCg==
   dependencies:
     axios "^0.21.1"
     camelcase "^5.0.0"

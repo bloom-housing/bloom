@@ -1,13 +1,13 @@
 /** Generate by swagger-axios-codegen */
-// tslint:disable
 /* eslint-disable */
-import axiosStatic, { AxiosInstance } from "axios"
+// @ts-nocheck
 
-export interface IRequestOptions {
-  headers?: any
-  baseURL?: string
-  responseType?: string
-}
+/** Generate by swagger-axios-codegen */
+/* eslint-disable */
+// @ts-nocheck
+import axiosStatic, { AxiosInstance, AxiosRequestConfig } from "axios"
+
+export interface IRequestOptions extends AxiosRequestConfig {}
 
 export interface IRequestConfig {
   method?: any
@@ -59,7 +59,7 @@ export function getConfigs(
   return configs
 }
 
-const basePath = ""
+export const basePath = ""
 
 export interface IList<T> extends Array<T> {}
 export interface List<T> extends Array<T> {}
@@ -2386,7 +2386,7 @@ export interface HouseholdMember {
   address: Address
 
   /**  */
-  workAddress?: CombinedWorkAddressTypes
+  workAddress?: Address
 
   /**  */
   id: string
@@ -2769,7 +2769,7 @@ export interface PaperApplication {
   language: Language
 
   /**  */
-  file?: CombinedFileTypes
+  file: Asset
 
   /**  */
   applicationMethod: ApplicationMethod
@@ -2871,6 +2871,9 @@ export interface UnitType {
 
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -2990,6 +2993,9 @@ export interface UnitType {
   name: string
 
   /**  */
+  numBedrooms: number
+
+  /**  */
   id: string
 
   /**  */
@@ -3027,7 +3033,7 @@ export interface Unit {
   updatedAt: Date
 
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  amiChart: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -3069,9 +3075,6 @@ export interface Unit {
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  property: Property
-
-  /**  */
   bmrProgramChart?: boolean
 
   /**  */
@@ -3098,7 +3101,7 @@ export interface PropertyGroup {
   name: string
 
   /**  */
-  properties: Id[]
+  properties: Property[]
 }
 
 export interface Address {
@@ -3253,7 +3256,7 @@ export interface User {
   updatedAt: Date
 
   /**  */
-  leasingAgentInListings?: Id[]
+  leasingAgentInListings?: Listing[]
 
   /**  */
   roles?: UserRoles
@@ -3478,13 +3481,13 @@ export interface Application {
   appUrl?: string
 
   /**  */
-  user?: Id
+  user: CombinedUserTypes
 
   /**  */
   userId?: string
 
   /**  */
-  listing: Id
+  listing: Listing
 
   /**  */
   listingId: string
@@ -3654,12 +3657,6 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  property: Property
-
-  /**  */
-  applications: Application[]
-
-  /**  */
   applicationDueDate?: Date
 
   /**  */
@@ -3714,7 +3711,7 @@ export interface Listing {
   disableUnitsAccordion?: boolean
 
   /**  */
-  jurisdiction?: Jurisdiction
+  jurisdiction?: CombinedJurisdictionTypes
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -3726,7 +3723,7 @@ export interface Listing {
   leasingAgentName?: string
 
   /**  */
-  leasingAgents?: UserBasic[]
+  leasingAgents?: User[]
 
   /**  */
   leasingAgentOfficeHours?: string
@@ -4763,12 +4760,6 @@ export interface UserUpdate {
 
   /**  */
   roles?: UserRoles
-
-  /** */
-  neighborhood?: string
-
-  /**  */
-  bedrooms?: number
 }
 
 export interface Jurisdiction {
@@ -4816,6 +4807,9 @@ export interface ListingFilterParams {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  bedrooms?: number
 }
 
 export interface Preference {
@@ -5033,10 +5027,10 @@ export interface Listing {
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
 
   /**  */
-  applicationDropOffAddress?: CombinedApplicationDropOffAddressTypes
+  applicationDropOffAddress: CombinedApplicationDropOffAddressTypes
 
   /**  */
-  applicationMailingAddress?: CombinedApplicationMailingAddressTypes
+  applicationMailingAddress: CombinedApplicationMailingAddressTypes
 
   /**  */
   events: ListingEvent[]
@@ -6376,6 +6370,8 @@ export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
