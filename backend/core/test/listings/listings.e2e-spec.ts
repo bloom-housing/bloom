@@ -15,6 +15,7 @@ import { ApplicationMethodsModule } from "../../src/application-methods/applicat
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
+import { Listing } from "../../src/listings/entities/listing.entity"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -152,7 +153,7 @@ describe("Listings", () => {
   it("should add/overwrite application methods in existing listing", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
-    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    const listing: Listing = { ...res.body.items[0] }
 
     const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
@@ -176,6 +177,7 @@ describe("Listings", () => {
     const am: ApplicationMethodCreateDto = {
       type: ApplicationMethodType.FileDownload,
       paperApplications: [{ id: paperApplication.body.id }],
+      listing: listing,
     }
 
     const applicationMethod = await supertest(app.getHttpServer())

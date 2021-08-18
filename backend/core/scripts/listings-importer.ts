@@ -36,6 +36,8 @@ const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
 const unitTypesService = new client.UnitTypesService()
 const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
+const applicationMethodsService = new client.ApplicationMethodsService()
+const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -83,6 +85,27 @@ async function uploadAmiChart(data) {
     return await amiChartService.create({
       body: data,
     })
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function uploadReservedCommunityType(data) {
+  try {
+    return await reservedCommunityTypesService.create({
+      body: { name: data },
+    })
+  } catch (e) {
+    console.log(e.response)
+    process.exit(1)
+  }
+}
+
+async function getReservedCommunityType(name) {
+  try {
+    const reservedTypes = await reservedCommunityTypesService.list()
+    return reservedTypes.filter((reservedType) => reservedType.name === name)[0]
   } catch (e) {
     console.log(e.response)
     process.exit(1)
@@ -149,6 +172,15 @@ async function main() {
   const relationsKeys = []
   listing = reformatListing(listing, relationsKeys)
   listing = await uploadEntity("preferences", preferencesService, listing)
+  listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
+  let reservedCommunityType
+  if (listing.reservedCommunityType) {
+    reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityType)
+    if (!reservedCommunityType) {
+      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityType)
+    }
+  }
+  listing.reservedCommunityType = reservedCommunityType
 
   const amiChartName = listing.amiChart.name
   let chart = await getAmiChart(amiChartName)

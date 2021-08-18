@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
+import { Compare } from "../dto/filter.dto"
 
 /**
  *
@@ -33,6 +34,10 @@ export function addFilters<FilterParams, FilterFieldMap>(
       } else if (typeof value === "string") {
         comparisons = [value]
       }
+      // Ensure none of the user provided comparisons are invalid
+      if (comparisons.some((c) => !Object.keys(Compare).includes(c))) {
+        throw new HttpException("Comparison Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+      }
     } else {
       if (value !== undefined) {
         let values: string[]
@@ -50,21 +55,49 @@ export function addFilters<FilterParams, FilterFieldMap>(
         comparisonCount += values.length
 
         // Throw if this is not a supported filter type
-        if (!(filterType.toLowerCase() in filterTypeToFieldMap)) {
+        if (!(filterType in filterTypeToFieldMap)) {
           throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
         }
 
-        values.forEach((val: string, i: number) => {
+        values.forEach((filterValue: string, i: number) => {
           // Each WHERE param must be unique across the entire QueryBuilder
           const whereParameterName = `${filterType}_${i}`
-          qb.andWhere(
-            `LOWER(CAST(${filterTypeToFieldMap[filterType.toLowerCase()]} as text)) ${
-              comparisonsForCurrentFilter[i]
-            } LOWER(:${whereParameterName})`,
-            {
-              [whereParameterName]: val,
-            }
-          )
+          const comparison = comparisonsForCurrentFilter[i]
+          const filterField = filterTypeToFieldMap[filterType as string]
+
+          // Handle custom filters here, before dropping into generic filter handler
+
+          // Generic filter handler
+          // Explicitly check for allowed comparisons, to prevent SQL injections
+          switch (comparison) {
+            case Compare.IN:
+              qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
+                [whereParameterName]: filterValue
+                  .split(",")
+                  .map((s) => s.trim().toLowerCase())
+                  .filter((s) => s.length !== 0),
+              })
+              break
+            case Compare["<>"]:
+            case Compare["="]:
+            case Compare[">="]:
+              qb.andWhere(
+                `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
+                {
+                  [whereParameterName]: filterValue,
+                }
+              )
+              break
+            case Compare.NA:
+              // If we're here, it's because we expected this filter to be handled by a custom filter handler
+              // that ignores the $comparison param, but it was not.
+              throw new HttpException(
+                `Filter "${filterType}" expected to be handled by a custom filter handler, but one was not implemented.`,
+                HttpStatus.NOT_IMPLEMENTED
+              )
+            default:
+              throw new HttpException("Comparison Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+          }
         })
       }
     }

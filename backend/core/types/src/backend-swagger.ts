@@ -3411,10 +3411,18 @@ export interface LoginResponse {
   accessToken: string
 }
 
-export interface User {
+export interface UserRoles {
   /**  */
-  roles: UserRole[]
+  user: User
 
+  /**  */
+  isAdmin: boolean
+
+  /**  */
+  isPartner: boolean
+}
+
+export interface User {
   /**  */
   language?: Language
 
@@ -3447,6 +3455,9 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  roles?: CombinedUserRolesTypes
 }
 
 export interface UserCreate {
@@ -3641,6 +3652,9 @@ export interface ListingFilterParams {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  bedrooms?: number
 }
 
 export interface PreferenceLink {
@@ -3800,6 +3814,9 @@ export interface UnitType {
 
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitRentType {
@@ -4084,6 +4101,9 @@ export interface Listing {
   buildingTotalUnits?: number
 
   /**  */
+  customMapPin?: boolean
+
+  /**  */
   developer?: string
 
   /**  */
@@ -4220,9 +4240,6 @@ export interface Listing {
 
   /**  */
   applicationConfig?: object
-
-  /**  */
-  applicationCount?: number
 
   /**  */
   displayWaitlistSize: boolean
@@ -4416,6 +4433,9 @@ export interface ListingCreate {
 
   /**  */
   buildingTotalUnits?: number
+
+  /**  */
+  customMapPin?: boolean
 
   /**  */
   developer?: string
@@ -4777,6 +4797,9 @@ export interface ListingUpdate {
 
   /**  */
   buildingTotalUnits?: number
+
+  /**  */
+  customMapPin?: boolean
 
   /**  */
   developer?: string
@@ -5228,11 +5251,17 @@ export interface TranslationUpdate {
 export interface UnitTypeCreate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitTypeUpdate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 
   /**  */
   id: string
@@ -5316,13 +5345,12 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export enum UserRole {
-  "user" = "user",
-  "admin" = "admin",
-}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
@@ -5344,6 +5372,7 @@ export enum CSVFormattingType {
   "basic" = "basic",
   "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
   "ohaFormat" = "ohaFormat",
+  "bhaFormat" = "bhaFormat",
 }
 
 export enum CountyCode {
@@ -5377,5 +5406,6 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedUserRolesTypes = UserRoles
 export type CombinedWhatToExpectTypes = WhatToExpect
 export type CombinedJurisdictionTypes = Id
