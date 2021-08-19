@@ -155,6 +155,8 @@ export class Listing10145Seed extends ListingDefaultSeed {
     }
     mcvUnitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
 
+    await this.unitsSummaryRepository.save(mcvUnitsSummaryToBeCreated)
+
     return listing
   }
 }

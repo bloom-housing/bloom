@@ -84,10 +84,7 @@ All notable changes to this project will be documented in this file. The format 
   - removed roles for public users and assigned a "partner" role for leasing agents([#1628](https://github.com/bloom-housing/bloom/pull/1628))
   - Updates redis reset call to flush all keys
   - Updated listing's importer to handle latest reserved community type changes ([#1667](https://github.com/bloom-housing/bloom/pull/1667)) (Emily Jablonski)
-    <<<<<<< HEAD
-    =======
   - Change whatToExpect to be a string instead of a json blob, make it editable in listings management ([#1681](https://github.com/bloom-housing/bloom/pull/1681)) (Emily Jablonski)
-    > > > > > > > 0c5618f5acb89c3459a8e330d0485163e3b8753c
 
 - Fixed:
   - Added checks for property in listing.dto transforms

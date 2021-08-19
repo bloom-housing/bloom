@@ -936,6 +936,7 @@
             "submitForWaitlist": "أرسل طلبًا للحصول على فتحة مفتوحة في قائمة الانتظار.",
             "unitsAndWaitlist": "الوحدات المتاحة وقائمة الانتظار"
         },
+        "whatToExpectLabel": "أخبر مقدم الطلب بما يمكن توقعه من العملية",
         "whereDropOffQuestion": "أين يتم تسليم الطلبات؟",
         "wherePickupQuestion": "من أين يتم استلام الطلبات؟",
         "yearBuilt": "بنيت عام",
