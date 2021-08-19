@@ -15,7 +15,7 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { IdDto } from "../../shared/dto/id.dto"
+import { IdNameDto } from "../../shared/dto/idName.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
@@ -30,8 +30,8 @@ export class UserDto extends OmitType(User, [
   @IsOptional()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  leasingAgentInListings?: IdDto[] | null
+  @Type(() => IdNameDto)
+  leasingAgentInListings?: IdNameDto[] | null
 }
 
 export class UserBasicDto extends OmitType(User, [

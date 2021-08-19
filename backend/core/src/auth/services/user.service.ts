@@ -51,9 +51,10 @@ export class UserService {
       limit: params.limit === "all" ? undefined : params.limit,
       page: params.page || 10,
     }
-
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
-    const result = await paginate<User>(this.repo, options)
+    const qb = this._getQb()
+
+    const result = await paginate<User>(qb, options)
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
@@ -221,5 +222,12 @@ export class UserService {
     user.resetToken = null
     await this.repo.save(user)
     return this.authService.generateAccessToken(user)
+  }
+
+  private _getQb() {
+    const qb = this.repo.createQueryBuilder("user")
+    qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+
+    return qb
   }
 }
