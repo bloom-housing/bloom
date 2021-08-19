@@ -30,7 +30,10 @@ const Users = () => {
       },
       {
         headerName: t("t.listing"),
-        field: "",
+        field: "leasingAgentInListings",
+        valueFormatter: ({ value }) => {
+          return value.map((item) => item.name).join(", ")
+        },
       },
       {
         headerName: t("t.role"),
@@ -91,7 +94,7 @@ const Users = () => {
               <AgGridReact
                 columnDefs={columns}
                 defaultColDef={defaultColDef}
-                rowData={userList}
+                rowData={userList.items}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}
@@ -100,10 +103,9 @@ const Users = () => {
                 suppressScrollOnNewData={true}
               ></AgGridReact>
 
-              {/* TODO: Update pagination to use data from the backend */}
               <AgPagination
-                totalItems={1}
-                totalPages={1}
+                totalItems={userList.meta.totalItems}
+                totalPages={userList.meta.totalPages}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 quantityLabel={t("users.totalUsers")}
