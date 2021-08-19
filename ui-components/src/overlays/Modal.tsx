@@ -6,7 +6,7 @@ import { Overlay, OverlayProps } from "./Overlay"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
   title: string
-  actions: React.ReactNode[]
+  actions?: React.ReactNode[]
   hideCloseIcon?: boolean
   children?: React.ReactNode
 }
@@ -48,7 +48,7 @@ export const Modal = (props: ModalProps) => {
           )}
         </section>
 
-        <ModalFooter actions={props.actions} />
+        {props.actions && <ModalFooter actions={props.actions} />}
 
         {!props.hideCloseIcon && (
           <button className="modal__close" aria-label="Close" onClick={props.onClose} tabIndex={0}>

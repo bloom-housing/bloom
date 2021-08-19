@@ -99,8 +99,7 @@ const ListingsPage = () => {
       <Modal
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
-        actions={[]}
-        hideCloseIcon
+        onClose={() => setFilterModalVisible(false)}
       >
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
@@ -141,12 +140,9 @@ const ListingsPage = () => {
             />
           </div>
           <div className="text-center mt-6">
-            <Button styleType={AppearanceStyleType.primary}>Apply Filters</Button>
-          </div>
-          <div className="text-center mt-6">
-            <a href="#" onClick={() => setFilterModalVisible(false)}>
-              {t("t.cancel")}
-            </a>
+            <Button type="submit" styleType={AppearanceStyleType.primary}>
+              Apply Filters
+            </Button>
           </div>
         </Form>
       </Modal>
