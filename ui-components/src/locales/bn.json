@@ -679,7 +679,8 @@
         "householdTooSmall": "আপনার পরিবারের আকার খুব ছোট।",
         "dateError": "একটি বৈধ তারিখ লিখুন দয়া করে",
         "rateLimitExceeded": "রেটের সীমা অতিক্রম করেছে, পরে আবার চেষ্টা করুন।",
-        "requiredFieldError": "ঘরটি অবশ্যই পূরণ করতে হবে."
+        "requiredFieldError": "ঘরটি অবশ্যই পূরণ করতে হবে.",
+        "noData": "কোন তথ্য নেই."
     },
     "footer": {
         "contact": "যোগাযোগ",

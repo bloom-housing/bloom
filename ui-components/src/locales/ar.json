@@ -679,7 +679,8 @@
         "householdTooSmall": "حجم أسرتك صغير جدًا.",
         "dateError": "ارجوك ادخل تاريخ صحيح",
         "rateLimitExceeded": "تم تجاوز حد المعدل ، حاول مرة أخرى لاحقًا.",
-        "requiredFieldError": "هذه الخانة مطلوبه."
+        "requiredFieldError": "هذه الخانة مطلوبه.",
+        "noData": "لا تتوافر بيانات"
     },
     "footer": {
         "contact": "اتصال",

@@ -396,7 +396,8 @@
     "selectAnOption": "Vui lòng chọn một lựa chọn.",
     "selectOption": "Vui lòng chọn một trong các lựa chọn ở trên.",
     "householdTooBig": "Quy mô hộ gia đình của quý vị quá lớn.",
-    "householdTooSmall": "Quy mô hộ gia đình của quý vị quá nhỏ."
+    "householdTooSmall": "Quy mô hộ gia đình của quý vị quá nhỏ.",
+    "noData": "Không có dữ liệu."
   },
   "footer": {
     "contact": "Liên lạc",

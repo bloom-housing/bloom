@@ -396,7 +396,8 @@
     "selectAnOption": "請選擇一個選項。",
     "selectOption": "請選擇以上其中一個選項。",
     "householdTooBig": "您的家庭人數過多。",
-    "householdTooSmall": "您的家庭人數過少。"
+    "householdTooSmall": "您的家庭人數過少。",
+    "noData": "沒有可用數據"
   },
   "footer": {
     "contact": "聯絡方式",
