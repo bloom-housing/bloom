@@ -12,3 +12,8 @@ export const getTranslationWithArguments = (translationKey: string) => {
     return t(key, argumentsObject)
   } else return t(translationKey)
 }
+
+// key is the json translation key in the form `parent.child`, e.g. `nav.getFeedback`.
+export const getTranslationMarkup = (key: string) => {
+  return { __html: t(key) }
+}

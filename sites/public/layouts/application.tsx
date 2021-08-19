@@ -12,6 +12,7 @@ import {
   t,
   AuthContext,
   setSiteAlertMessage,
+  getTranslationMarkup,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
@@ -33,7 +34,7 @@ const Layout = (props) => {
         <SiteHeader
           skip={t("nav.skip")}
           logoSrc="/images/detroit-logo.png"
-          notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+          notice={<div dangerouslySetInnerHTML={getTranslationMarkup("nav.getFeedback")}></div>}
           title={t("nav.siteTitle")}
           language={{
             list: languages,

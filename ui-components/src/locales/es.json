@@ -1001,7 +1001,7 @@
         "accountSettings": "Configuraciones de la cuenta",
         "browseProperties": "Buscar propiedades",
         "getAssistance": "Obtenga ayuda",
-        "getFeedback": "Esta es una vista previa de nuestro nuevo sitio web. Recién estamos comenzando. Nos encantaría recibir <a target='_blank' class='a-whitelined' href='%{feedbackUrl}'> sus comentarios </a>.",
+        "getFeedback": "Esta es una vista previa de nuestro nuevo sitio web. Nos encantaría recibir <a target='_blank' class='a-whitelined' href='%{feedbackUrl}'> sus comentarios </a>.",
         "listings": "Listados",
         "properties": "Propiedades",
         "applications": "Aplicaciones",
