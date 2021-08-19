@@ -1,11 +1,7 @@
-# Pull Request Template
-
 ## Issue
 
-Addresses # (issue)
-
-- [ ] This change addresses the issue in full
-- [ ] This change addresses only certain aspects of the issue
+- Closes # (issue)
+- Addresses # (issue)
 - [ ] This change is a dependency for another issue
 - [ ] This change has a dependency from another issue
 
