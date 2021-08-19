@@ -50,6 +50,7 @@ export type ListingSeedType = Omit<
   | "unitAmenities"
   | "servicesOffered"
   | "yearBuilt"
+  | "unitsSummary"
   | "unitsSummarized"
 >
 

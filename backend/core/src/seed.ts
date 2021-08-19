@@ -23,11 +23,14 @@ import { ApplicationMethodType } from "./application-methods/types/application-m
 import { AuthContext } from "./auth/types/auth-context"
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
+import { UserRoles } from "./auth/entities/user-roles.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
 }).argv
 
+// Note: if changing this list of seeds, you must also change the
+// number in listings.e2e-spec.ts.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const listingSeeds: any[] = [
   ListingDefaultSeed,
@@ -46,7 +49,10 @@ export function getSeedListingsCount() {
   return listingSeeds.length
 }
 
-export async function createLeasingAgents(app: INestApplicationContext) {
+export async function createLeasingAgents(
+  app: INestApplicationContext,
+  rolesRepo: Repository<UserRoles>
+) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
@@ -55,15 +61,17 @@ export async function createLeasingAgents(app: INestApplicationContext) {
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
+      const roles: UserRoles = { user: agent, isPartner: true }
+      await rolesRepo.save(roles)
       await usersService.confirm({ token: agent.confirmationToken })
     }),
   ])
   return leasingAgents
 }
 
-const seedListings = async (app: INestApplicationContext) => {
+const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<UserRoles>) => {
   const seeds = []
-  const leasingAgents = await createLeasingAgents(app)
+  const leasingAgents = await createLeasingAgents(app, rolesRepo)
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
@@ -99,7 +107,8 @@ async function seed() {
   const userService = await app.resolve<UserService>(UserService)
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
-  const listings = await seedListings(app)
+  const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
+  const listings = await seedListings(app, rolesRepo)
 
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
@@ -154,8 +163,10 @@ async function seed() {
     }
   }
 
-  admin.isAdmin = true
   await userRepo.save(admin)
+  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  await rolesRepo.save(roles)
+
   await userService.confirm({ token: admin.confirmationToken })
   await app.close()
 }

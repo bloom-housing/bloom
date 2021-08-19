@@ -1,9 +1,10 @@
 import React, { useContext } from "react"
 import moment from "moment"
-import { t, GridSection, ViewItem } from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "../../../../lib/helpers"
 import { EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
+import { getDetailFieldNumber, getDetailFieldString } from "./helpers"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
@@ -70,16 +71,23 @@ const DetailRankingsAndResults = () => {
       {listing.waitlistMaxSize && (
         <GridSection columns={3}>
           <ViewItem label={t("listings.waitlist.maxSize")}>
-            {listing.waitlistMaxSize.toString()}
+            {getDetailFieldNumber(listing.waitlistMaxSize)}
           </ViewItem>
           <ViewItem label={t("listings.waitlist.currentSize")}>
-            {listing.waitlistCurrentSize.toString()}
+            {getDetailFieldNumber(listing.waitlistCurrentSize)}
           </ViewItem>
           <ViewItem label={t("listings.waitlist.openSize")}>
-            {listing.waitlistOpenSpots.toString()}
+            {getDetailFieldNumber(listing.waitlistOpenSpots)}
           </ViewItem>
         </GridSection>
       )}
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("listings.whatToExpectLabel")}>
+            {getDetailFieldString(listing.whatToExpect)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
     </GridSection>
   )
 }

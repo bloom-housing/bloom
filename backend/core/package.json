@@ -19,7 +19,7 @@
     "db:migration:run": "yarn typeorm migration:run",
     "db:migration:generate": "yarn typeorm migration:generate",
     "db:reseed": "yarn db:drop && yarn db:create && yarn db:add-uuid-extension && yarn db:migration:run && yarn db:seed",
-    "test": "jest --config ./jest.json",
+    "test": "jest --config ./jest.json --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.3.25",
+    "@google-cloud/translate": "^6.2.6",
     "@nestjs/cli": "^7.5.1",
     "@nestjs/common": "^7.4.4",
     "@nestjs/config": "^0.5.0",
@@ -117,5 +118,6 @@
   "engines": {
     "node": "12",
     "yarn": "^1.22"
-  }
+  },
+  "gitHead": "5f7694e3f2baff2a1a7a22e0676e487dda781a3e"
 }

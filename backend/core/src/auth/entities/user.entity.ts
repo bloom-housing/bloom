@@ -4,6 +4,7 @@ import {
   Entity,
   Index,
   ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -14,7 +15,7 @@ import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
-import { UserRole } from "../enum/user-role-enum"
+import { UserRoles } from "./user-roles.entity"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -86,22 +87,11 @@ export class User {
   @ManyToMany(() => Listing, (listing) => listing.leasingAgents, { nullable: true })
   leasingAgentInListings?: Listing[] | null
 
-  @Column("boolean", { default: false })
-  isAdmin: boolean
-
-  /**
-   * Array of roles this user can become. Logic is simple right now, but in theory this will expand to take into
-   * account membership in a domain (company-level or admin area level for example).
-   *
-   * In that case, this logic will likely be based on joined entities (another table/entity that keeps track of
-   * group membership, for example), and these relations will need to be loaded in order for the list of roles to
-   * work properly.
-   */
+  @OneToOne(() => UserRoles, (roles) => roles.user, {
+    eager: true,
+  })
   @Expose()
-  @ApiProperty({ enum: UserRole, enumName: "UserRole", isArray: true })
-  get roles(): UserRole[] {
-    return [UserRole.user, ...(this.isAdmin ? [UserRole.admin] : [])]
-  }
+  roles?: UserRoles
 
   @Column({ enum: Language, nullable: true })
   @Expose()

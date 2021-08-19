@@ -1,6 +1,8 @@
 import { CacheModule, CACHE_MANAGER, Inject, Module, OnModuleDestroy } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
+import { Store } from "cache-manager"
+import Redis from "redis"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
 import { Listing } from "./entities/listing.entity"
@@ -9,8 +11,7 @@ import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
-import { Store } from "cache-manager"
-import Redis from "redis"
+import { TranslationsModule } from "../translations/translations.module"
 
 interface RedisCache extends Cache {
   store: RedisStore
@@ -41,6 +42,7 @@ if (process.env.REDIS_USE_TLS !== "0") {
     CacheModule.register(cacheConfig),
     TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
     AuthModule,
+    TranslationsModule,
   ],
   providers: [ListingsService],
   exports: [ListingsService],
@@ -63,6 +65,8 @@ export class ListingsModule implements OnModuleDestroy {
 
   onModuleInit() {
     console.log("Reset Redis Cache")
-    this.redisClient.reset()
+    // this.redisClient.reset() doesn't seem to clear all keys
+    // below actually calls flushdb, so we may want to change this, if other modules use the cache
+    void this.cacheManager.store.reset()
   }
 }

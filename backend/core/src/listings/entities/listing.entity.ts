@@ -12,7 +12,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
-import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
@@ -27,7 +26,6 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -42,6 +40,8 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummarized } from "../../units/types/units-summarized"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -350,12 +350,11 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistMaxSize?: number | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => WhatToExpect)
-  whatToExpect?: WhatToExpect | null
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  whatToExpect?: string | null
 
   @Column({
     type: "enum",
@@ -368,16 +367,7 @@ class Listing extends BaseEntity {
   status: ListingStatus
 
   @Expose()
-  @ApiProperty()
-  get urlSlug(): string | undefined {
-    return listingUrlSlug(this)
-  }
-
-  @Expose()
   applicationConfig?: Record<string, unknown>
-
-  @Expose()
-  applicationCount?: number
 
   @Column({ type: "boolean" })
   @Expose()
@@ -457,6 +447,26 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistOpenSpots?: number | null
+
+  @Expose()
+  @ApiProperty({ type: UnitsSummarized })
+  unitsSummarized: UnitsSummarized | undefined
+
+  @Column({ type: "boolean", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  customMapPin?: boolean | null
+
+  @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+    nullable: false,
+    eager: true,
+    cascade: true,
+  })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummary)
+  unitsSummary: UnitsSummary[]
 }
 
 export { Listing as default, Listing }

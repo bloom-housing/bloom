@@ -9,6 +9,7 @@ import {
   IsString,
   IsUUID,
   ValidateNested,
+  IsNumberString,
 } from "class-validator"
 import moment from "moment"
 import {
@@ -26,9 +27,7 @@ import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
-import { transformUnits } from "../../shared/units-transformations"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
-import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 import {
@@ -39,6 +38,7 @@ import {
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
+import { listingUrlSlug } from "../../shared/url-helper"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -154,6 +154,7 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @ApiProperty({ enum: ListingReviewOrder })
   get reviewOrderType() {
+    if (!this.events) return []
     return this.events.some((event) => event.type === ListingEventType.publicLottery)
       ? ListingReviewOrder.lottery
       : ListingReviewOrder.firstComeFirstServe
@@ -325,19 +326,14 @@ export class ListingDto extends OmitType(Listing, [
   yearBuilt?: number | null
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => UnitsSummarized)
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      const units = obj.property?.units
-      if (Array.isArray(units) && units.length > 0) {
-        return transformUnits(units)
-      }
+      return listingUrlSlug(obj)
     },
     { toClassOnly: true }
   )
-  unitsSummarized: UnitsSummarized | undefined
+  urlSlug: string
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
@@ -373,7 +369,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
-  "applicationCount",
   "result",
 ] as const) {
   @Expose()
@@ -567,7 +562,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "unitsSummarized",
   "jurisdiction",
   "reservedCommunityType",
-  "applicationCount",
   "result",
 ] as const) {
   @Expose()
@@ -771,7 +765,16 @@ export class ListingFilterParams extends BaseFilter {
     example: "Fox Creek",
     required: false,
   })
-  [ListingFilterKeys.neighborhood]?: string
+  [ListingFilterKeys.neighborhood]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "3",
+    required: false,
+  })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bedrooms]?: number
 }
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
@@ -790,6 +793,16 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
+    name: "view",
+    required: false,
+    type: String,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  view?: string
+
+  @Expose()
+  @ApiProperty({
     type: String,
     required: false,
   })
@@ -803,4 +816,5 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
+  bedrooms: "unitTypeRef.num_bedrooms",
 }

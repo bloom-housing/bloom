@@ -3411,10 +3411,18 @@ export interface LoginResponse {
   accessToken: string
 }
 
-export interface User {
+export interface UserRoles {
   /**  */
-  roles: UserRole[]
+  user: User
 
+  /**  */
+  isAdmin: boolean
+
+  /**  */
+  isPartner: boolean
+}
+
+export interface User {
   /**  */
   language?: Language
 
@@ -3447,6 +3455,9 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  roles?: CombinedUserRolesTypes
 }
 
 export interface UserCreate {
@@ -3641,6 +3652,9 @@ export interface ListingFilterParams {
 
   /**  */
   neighborhood?: string
+
+  /**  */
+  bedrooms?: number
 }
 
 export interface PreferenceLink {
@@ -3788,6 +3802,59 @@ export interface ReservedCommunityType {
   description?: string
 }
 
+export interface UnitsSummary {
+  /**  */
+  id: string
+
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  listing: Listing
+
+  /**  */
+  monthlyRent?: string
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+}
+
 export interface UnitType {
   /**  */
   id: string
@@ -3800,6 +3867,9 @@ export interface UnitType {
 
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitRentType {
@@ -3993,17 +4063,6 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
-export interface WhatToExpect {
-  /**  */
-  applicantsWillBeContacted?: string
-
-  /**  */
-  allInfoWillBeVerified?: string
-
-  /**  */
-  bePreparedIfChosen?: string
-}
-
 export interface Listing {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4082,6 +4141,9 @@ export interface Listing {
 
   /**  */
   buildingTotalUnits?: number
+
+  /**  */
+  customMapPin?: boolean
 
   /**  */
   developer?: string
@@ -4216,13 +4278,10 @@ export interface Listing {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
-
-  /**  */
-  applicationCount?: number
 
   /**  */
   displayWaitlistSize: boolean
@@ -4241,6 +4300,9 @@ export interface Listing {
 
   /**  */
   waitlistOpenSpots?: number
+
+  /** */
+  unitsSummary: UnitsSummary[]
 }
 
 export interface PaginatedListing {
@@ -4418,6 +4480,9 @@ export interface ListingCreate {
   buildingTotalUnits?: number
 
   /**  */
+  customMapPin?: boolean
+
+  /**  */
   developer?: string
 
   /**  */
@@ -4547,7 +4612,7 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -4779,6 +4844,9 @@ export interface ListingUpdate {
   buildingTotalUnits?: number
 
   /**  */
+  customMapPin?: boolean
+
+  /**  */
   developer?: string
 
   /**  */
@@ -4908,7 +4976,7 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -5228,11 +5296,17 @@ export interface TranslationUpdate {
 export interface UnitTypeCreate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface UnitTypeUpdate {
   /**  */
   name: string
+
+  /**  */
+  numBedrooms: number
 
   /**  */
   id: string
@@ -5317,13 +5391,12 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export enum UserRole {
-  "user" = "user",
-  "admin" = "admin",
-}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
@@ -5379,5 +5452,5 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
-export type CombinedWhatToExpectTypes = WhatToExpect
+export type CombinedUserRolesTypes = UserRoles
 export type CombinedJurisdictionTypes = Id

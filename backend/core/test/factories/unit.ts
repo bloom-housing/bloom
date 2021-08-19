@@ -30,6 +30,7 @@ export default Factory.define<NonDbUnit>(() => ({
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "oneBdrm",
+    numBedrooms: 1,
   },
   createdAt: new Date(),
   updatedAt: new Date(),
