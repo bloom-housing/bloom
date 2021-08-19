@@ -75,7 +75,7 @@ class Listing extends BaseEntity {
   @Type(() => Preference)
   preferences: Preference[]
 
-  @OneToMany(() => ApplicationMethod, (am) => am.listing, { eager: true })
+  @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethod)

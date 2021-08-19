@@ -5298,6 +5298,7 @@ export enum ApplicationMethodType {
   "PaperPickup" = "PaperPickup",
   "POBox" = "POBox",
   "LeasingAgent" = "LeasingAgent",
+  "Referral" = "Referral",
 }
 export type CombinedFileTypes = Id
 export enum InputType {

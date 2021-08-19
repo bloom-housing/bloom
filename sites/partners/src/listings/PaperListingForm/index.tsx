@@ -26,6 +26,10 @@ import {
   ListingEventType,
   ListingEventCreate,
   Preference,
+  PaperApplication,
+  PaperApplicationCreate,
+  ApplicationMethod,
+  ApplicationMethodType,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -65,6 +69,13 @@ export type FormListing = Listing & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
+  digitalApplicationChoice?: YesNoAnswer
+  commonDigitalApplicationChoice?: YesNoAnswer
+  customOnlineApplicationUrl?: string
+  paperApplicationChoice?: YesNoAnswer
+  referralOpportunityChoice?: YesNoAnswer
+  referralContactPhone?: string
+  referralSummary?: string
   dueDateQuestion?: boolean
   lotteryDate?: {
     month: string
@@ -214,11 +225,14 @@ export type TempEvent = ListingEvent & {
   tempId?: string
 }
 
+export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
+
 const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[]
+  preferences: Preference[],
+  paperApplications
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -289,6 +303,67 @@ const formatFormData = (
     })
   }
 
+  const digitalMethodIndex = data.applicationMethods.findIndex(
+    (method) =>
+      method.type === ApplicationMethodType.Internal ||
+      method.type === ApplicationMethodType.ExternalLink
+  )
+  if (data.digitalApplicationChoice == YesNoAnswer.Yes) {
+    if (data.commonDigitalApplicationChoice == YesNoAnswer.Yes) {
+      if (digitalMethodIndex > -1) {
+        data.applicationMethods[digitalMethodIndex].type = ApplicationMethodType.Internal
+        data.applicationMethods[digitalMethodIndex].externalReference = ""
+      } else {
+        data.applicationMethods.push({
+          type: ApplicationMethodType.Internal,
+        } as ApplicationMethod)
+      }
+    } else {
+      if (digitalMethodIndex > -1) {
+        data.applicationMethods[digitalMethodIndex].type = ApplicationMethodType.ExternalLink
+        data.applicationMethods[digitalMethodIndex].externalReference =
+          data.customOnlineApplicationUrl
+      } else {
+        data.applicationMethods.push({
+          type: ApplicationMethodType.ExternalLink,
+          externalReference: data.customOnlineApplicationUrl,
+        } as ApplicationMethod)
+      }
+    }
+  } else {
+    if (digitalMethodIndex > -1) {
+      data.applicationMethods.splice(digitalMethodIndex, 1)
+    }
+  }
+  const paperMethodIndex = data.applicationMethods.findIndex(
+    (method) => method.type === ApplicationMethodType.FileDownload
+  )
+  if (data.paperApplicationChoice == YesNoAnswer.Yes) {
+    if (paperMethodIndex > -1) {
+      data.applicationMethods[paperMethodIndex].paperApplications = paperApplications
+    } else {
+      data.applicationMethods.push({
+        type: ApplicationMethodType.FileDownload,
+        paperApplications: paperApplications,
+      } as ApplicationMethod)
+    }
+  }
+  const referralMethodIndex = data.applicationMethods.findIndex(
+    (method) => method.type === ApplicationMethodType.Referral
+  )
+  if (data.referralOpportunityChoice == YesNoAnswer.Yes) {
+    if (referralMethodIndex > -1) {
+      data.applicationMethods[referralMethodIndex].phoneNumber = data.referralContactPhone
+      data.applicationMethods[referralMethodIndex].externalReference = data.referralSummary
+    } else {
+      data.applicationMethods.push({
+        type: ApplicationMethodType.Referral,
+        phoneNumber: data.referralContactPhone,
+        externalReference: data.referralSummary,
+      } as ApplicationMethod)
+    }
+  }
+
   return {
     ...data,
     applicationDueTime: applicationDueTimeFormatted,
@@ -353,6 +428,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
 
+  const [digitalApplicationMethod, setDigitalApplicationMethod] = useState<ApplicationMethod>(null)
+  const [paperApplicationMethod, setPaperApplicationMethod] = useState<ApplicationMethod>(null)
+  const [paperApplications, setPaperApplications] = useState<PaperApplicationHybrid[]>([])
+  const [referralApplicationMethod, setReferralApplicationMethod] = useState<ApplicationMethod>(
+    null
+  )
+  const methodsState = {
+    digitalApplicationMethod,
+    setDigitalApplicationMethod,
+    paperApplicationMethod,
+    setPaperApplicationMethod,
+    paperApplications,
+    setPaperApplications,
+    referralApplicationMethod,
+    setReferralApplicationMethod,
+  }
+
   /**
    * Close modal
    */
@@ -386,7 +478,37 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       setOpenHouseEvents(events)
     }
-  }, [listing, setUnits, setOpenHouseEvents])
+
+    if (listing?.applicationMethods) {
+      const digitalMethod = listing.applicationMethods.find(
+        (method) =>
+          method.type === ApplicationMethodType.Internal ||
+          method.type === ApplicationMethodType.ExternalLink
+      )
+      if (digitalMethod) setDigitalApplicationMethod(digitalMethod)
+
+      const paperMethod = listing.applicationMethods.find(
+        (method) => method.type === ApplicationMethodType.FileDownload
+      )
+      if (paperMethod) {
+        setPaperApplicationMethod(paperMethod)
+        setPaperApplications(paperMethod.paperApplications)
+      }
+
+      const referralMethod = listing.applicationMethods.find(
+        (method) => method.type === ApplicationMethodType.Referral
+      )
+      if (referralMethod) {
+        setReferralApplicationMethod(referralMethod)
+      }
+    }
+  }, [
+    listing,
+    setUnits,
+    setOpenHouseEvents,
+    setDigitalApplicationMethod,
+    setPaperApplicationMethod,
+  ])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues } = formMethods
@@ -410,7 +532,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         const orderedPreferences = preferences.map((pref, index) => {
           return { ...pref, ordinal: index + 1 }
         })
-        const formattedData = formatFormData(data, units, openHouseEvents, orderedPreferences)
+        const formattedData = formatFormData(
+          data,
+          units,
+          openHouseEvents,
+          orderedPreferences,
+          paperApplications
+        )
+        console.info(formattedData)
+        //        throw new Error("whaaa!")
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
@@ -432,7 +562,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         setAlert("api")
       }
     },
-    [units, openHouseEvents, editMode, listingsService, listing, router, preferences]
+    [
+      units,
+      openHouseEvents,
+      editMode,
+      listingsService,
+      listing,
+      router,
+      preferences,
+      paperApplications,
+    ]
   )
 
   const onError = () => {
@@ -506,7 +645,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       <RankingsAndResults listing={listing} />
                       <LeasingAgent />
 
-                      <ApplicationTypes listing={listing} />
+                      <ApplicationTypes listing={listing} methodsState={methodsState} />
 
                       <ApplicationAddress listing={listing} />
                       <ApplicationDates

@@ -31,7 +31,11 @@ import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
-import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
+import {
+  ApplicationMethodCreateDto,
+  ApplicationMethodDto,
+  ApplicationMethodUpdateDto,
+} from "../../application-methods/dto/application-method.dto"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ListingEventType } from "../types/listing-event-type-enum"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
@@ -375,8 +379,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  applicationMethods: IdDto[]
+  @Type(() => ApplicationMethodCreateDto)
+  applicationMethods: ApplicationMethodCreateDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -586,8 +590,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  applicationMethods: IdDto[]
+  @Type(() => ApplicationMethodUpdateDto)
+  applicationMethods: ApplicationMethodUpdateDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
