@@ -47,12 +47,12 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
 
   // All unique AMI percentages across all units
   const allPercentages: number[] = [
-    ...new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null)),
-  ]
-    .map((percent) => parseInt(percent, 10))
-    .sort(function (a, b) {
-      return a - b
-    })
+    ...new Set(
+      units.map((unit) => parseInt(unit.amiPercentage, 10)).filter((item) => item != null)
+    ),
+  ].sort(function (a, b) {
+    return a - b
+  })
 
   // All unique combinations of an AMI percentage and an AMI chart across all units
   const uniquePercentageChartSet: ChartAndPercentage[] = [
