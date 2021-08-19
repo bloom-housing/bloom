@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
-  - More robust Features section for public listing view ([#1688]https://github.com/bloom-housing/bloom/pull/1688)
+  - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 ### Backend
 
