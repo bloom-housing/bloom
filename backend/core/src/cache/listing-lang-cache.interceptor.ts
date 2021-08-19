@@ -20,9 +20,13 @@ export class ListingLangCacheInterceptor implements NestInterceptor {
         {
           headers: { language },
           params: { listingId },
+          query: { view },
         },
       ] = context.getArgs()
-      const cacheKey = language ? `${language}-${listingId}` : listingId
+      let cacheKey = language ? `${language}-${listingId}` : listingId
+      if (view) {
+        cacheKey = `${cacheKey}-${view}`
+      }
       const cacheResult = await this.cacheManager.get(cacheKey)
       if (cacheResult !== null) {
         return of(cacheResult)
