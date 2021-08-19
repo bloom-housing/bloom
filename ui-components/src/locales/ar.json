@@ -669,6 +669,7 @@
         "cityError": "الرجاء إدخال مدينة",
         "stateError": "الرجاء إدخال الدولة",
         "zipCodeError": "الرجاء إدخال الرمز البريدي",
+        "multipleZipCodeError": "الرجاء إدخال رمز بريدي واحد أو أكثر مفصول بفواصل",
         "errorsToResolve": "هناك أخطاء ستحتاج إلى حلها قبل المضي قدمًا.",
         "numberError": "الرجاء إدخال رقم صالح أكبر من 0.",
         "selectAllThatApply": "يرجى اختيار كل ما ينطبق.",
@@ -1224,7 +1225,9 @@
           "twoPlus": "2 غرف نوم أو أكثر",
           "threePlus": "3 غرف نوم أو أكثر",
           "fourPlus": "4 غرف نوم أو أكثر"
-        }
+        },
+        "zipCode": "الرمز البريدي",
+        "zipCodeDescription": "أدخل الرمز البريدي"
     },
     "eligibility": {
         "progress": {

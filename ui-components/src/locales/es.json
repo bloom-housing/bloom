@@ -669,6 +669,7 @@
         "cityError": "Por favor ingrese una ciudad",
         "stateError": "Por favor, ingresa un estado",
         "zipCodeError": "Por favor introduzca un codigo postal",
+        "multipleZipCodeError": "Ingrese uno o más códigos postales separados por comas",
         "errorsToResolve": "Hay errores que deberá resolver antes de continuar.",
         "numberError": "Ingrese un número válido mayor que 0.",
         "selectAllThatApply": "Por favor seleccione todas las respuestas válidas.",
@@ -1224,7 +1225,9 @@
           "twoPlus": "2 o más recámaras",
           "threePlus": "3 o más recámaras",
           "fourPlus": "4 o más recámaras"
-        }
+        },
+        "zipCode": "Código postal",
+        "zipCodeDescription": "Ingresa tu código postal"
     },
     "eligibility": {
         "progress": {

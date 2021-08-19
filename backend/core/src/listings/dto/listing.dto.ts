@@ -770,7 +770,15 @@ export class ListingFilterParams extends BaseFilter {
     required: false,
   })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bedrooms]?: number
+  [ListingFilterKeys.bedrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "48211",
+    required: false,
+  })
+  [ListingFilterKeys.zipcode]?: string
 }
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {

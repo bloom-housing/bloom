@@ -389,6 +389,7 @@
     "cityError": "請輸入城市名稱",
     "stateError": "請輸入州名",
     "zipCodeError": "請輸入郵遞區號",
+    "multipleZipCodeError": "请输入一个或多个以逗号分隔的邮政编码",
     "errorsToResolve": "出現一些錯誤；您需要解決問題才能繼續操作。",
     "numberError": "請輸入一個大於 0 的有效數字。",
     "selectAllThatApply": "請選擇所有適用項目。",
@@ -745,5 +746,9 @@
   "whatToExpect": {
     "label": "預期事項",
     "default": "物業經紀人將按排名次序聯絡申請人，直到沒有空缺為止。您提供的所有資料都會受到查證，以確定您的資格。如果您作出任何不實陳述，則您的申請會從候補名單被刪除。如果我們無法證實您要求的住房優先權，您將不會獲得該優先權，但不會受到其他處罰。若您的申請被選中，請準備填寫一份更加詳盡的申請表，並提供所需的證明文件。"
+  },
+  "listingFilters": {
+    "zipCode": "邮政编码",
+    "zipCodeDescription": "输入邮政编号"
   }
 }

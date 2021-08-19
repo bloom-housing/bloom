@@ -389,6 +389,7 @@
     "cityError": "Vui lòng nhập thành phố",
     "stateError": "Vui lòng nhập tiểu bang",
     "zipCodeError": "Vui lòng nhập số zipcode",
+    "multipleZipCodeError": "Vui lòng nhập một hoặc nhiều mã zip được phân tách bằng dấu phẩy",
     "errorsToResolve": "Quý vị cần giải quyết những lỗi này trước khi chuyển sang bước tiếp.",
     "numberError": "Vui lòng nhập một số hợp lệ lớn hơn 0.",
     "selectAllThatApply": "Vui lòng chọn tất cả các câu trả lời phù hợp",
@@ -745,5 +746,9 @@
   "whatToExpect": {
     "label": "Những điều Sẽ xảy ra",
     "default": "Các ứng viên sẽ được nhân viên đại diện bất động sản liên lạc theo thứ tự xếp hạng cho đến khi hết chỗ trống. Tất cả thông tin quý vị đã cung cấp sẽ được xác nhận và xác nhận tình trạng điều kiện hội đủ của quý vị. Đơn ghi danh của quý vị sẽ bị xóa khỏi danh sách chờ nếu quý vị có bất kỳ tuyên bố sai sự thật nào. Nếu chúng tôi không thể xác nhận lựa chọn ưu tiên nhà ở mà quý vị đã yêu cầu, quý vị sẽ không nhận được lựa chọn ưu tiên đó nhưng sẽ không bị phạt. Nếu đơn ghi danh của quý vị được chọn, hãy chuẩn bị để điền vào mẫu đơn chi tiết hơn và cung cấp các tài liệu hỗ trợ cần thiết."
+  },
+  "listingFilters": {
+    "zipCode": "Mã Bưu Chính",
+    "zipCodeDescription": "Nhập mã zip"
   }
 }

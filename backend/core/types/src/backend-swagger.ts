@@ -3655,6 +3655,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  zipcode?: string
 }
 
 export interface PreferenceLink {

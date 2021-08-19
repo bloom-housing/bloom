@@ -669,6 +669,7 @@
     "cityError": "Please enter a city",
     "stateError": "Please enter a state",
     "zipCodeError": "Please enter a zipcode",
+    "multipleZipCodeError": "Please enter one or more comma separated zip codes",
     "errorsToResolve": "There are errors you'll need to resolve before moving on.",
     "numberError": "Please enter a valid number greater than 0.",
     "selectAllThatApply": "Please select all that apply.",
@@ -1285,7 +1286,9 @@
       "twoPlus": "2 or more bedrooms",
       "threePlus": "3 or more bedrooms",
       "fourPlus": "4 or more bedrooms"
-    }
+    },
+    "zipCode": "Zip code",
+    "zipCodeDescription": "Enter zip code"
   },
   "eligibility": {
     "progress": {
