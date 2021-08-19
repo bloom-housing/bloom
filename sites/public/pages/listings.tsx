@@ -59,7 +59,8 @@ export async function getStaticProps() {
 
   try {
     const response = await axios.get(
-      process.env.listingServiceUrl + "?limit=all&filter[$comparison]=<>&filter[status]=pending"
+      process.env.listingServiceUrl +
+        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
     )
 
     openListings = response?.data?.items

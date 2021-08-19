@@ -13,7 +13,6 @@ interface HousingCounselorsProps {
 export default class extends Component<HousingCounselorsProps> {
   public static async getInitialProps() {
     let counselors: Counselor[] = []
-
     if (process.env.housingCounselorServiceUrl) {
       try {
         const response = await axios.get(process.env.housingCounselorServiceUrl)
@@ -46,7 +45,7 @@ export default class extends Component<HousingCounselorsProps> {
               </article>
             )
           })}
-          {this.props.counselors?.length == 0 && (
+          {!this.props.counselors?.length && (
             <article className="flex-row flex-wrap max-w-5xl m-auto py-8 border-b-2">
               <p>{t("t.noneFound")}</p>
             </article>
