@@ -3080,9 +3080,6 @@ export interface Unit {
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  property: Property
-
-  /**  */
   bmrProgramChart?: boolean
 
   /**  */
@@ -3718,10 +3715,10 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  property: Property
+  property?: Property
 
   /**  */
-  applications: Application[]
+  applications?: Application[]
 
   /**  */
   applicationDueDate?: Date
