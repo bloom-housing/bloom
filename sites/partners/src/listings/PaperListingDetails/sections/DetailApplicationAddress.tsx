@@ -14,6 +14,8 @@ const DetailApplicationAddress = () => {
       return t("application.contact.mailingAddress")
   }
 
+  if (!listing.leasingAgentAddress) return <></>
+
   return (
     <GridSection
       className="bg-primary-lighter"

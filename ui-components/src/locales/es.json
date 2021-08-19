@@ -679,7 +679,8 @@
         "householdTooSmall": "El tamaño de su hogar es demasiado pequeño.",
         "dateError": "Por favor introduzca una fecha valida",
         "rateLimitExceeded": "Se superó el límite de frecuencia. Vuelve a intentarlo más tarde.",
-        "requiredFieldError": "Este campo es requerido."
+        "requiredFieldError": "Este campo es requerido.",
+        "noData": "Datos no disponibles"
     },
     "footer": {
         "contact": "Contacto",
