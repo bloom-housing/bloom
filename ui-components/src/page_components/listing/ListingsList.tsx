@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Listing, EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
 import { LinkButton } from "../../actions/LinkButton"
 import { getSummariesTable } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
@@ -36,6 +36,7 @@ const ListingsList = (props: ListingsProps) => {
     const { street, city, state, zipCode } = listing.buildingAddress || {}
     const subtitle = `${street}, ${city} ${state}, ${zipCode}`
     let content = ""
+    let subContent = ""
     let formattedDate = ""
     let appStatus = ApplicationStatusType.Open
 
@@ -61,13 +62,16 @@ const ListingsList = (props: ListingsProps) => {
           appStatus = ApplicationStatusType.Closed
           content = t("listings.applicationsClosed")
         }
-      } else {
-        content = t("listings.applicationFCFS")
       }
     }
 
     if (formattedDate != "") {
       content = content + `: ${formattedDate}`
+    }
+
+    if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
+      subContent = content
+      content = t("listings.applicationFCFS")
     }
 
     return (
@@ -80,6 +84,7 @@ const ListingsList = (props: ListingsProps) => {
             href={`/listing/${listing.id}/${listing.urlSlug}`}
             appStatus={appStatus}
             appStatusContent={content}
+            appStatusSubContent={subContent}
             tagLabel={
               listing.reservedCommunityType
                 ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)

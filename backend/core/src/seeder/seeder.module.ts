@@ -19,6 +19,7 @@ import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { Property } from "../property/entities/property.entity"
 import { Unit } from "../units/entities/unit.entity"
 import { User } from "../auth/entities/user.entity"
+import { UserRoles } from "../auth/entities/user-roles.entity"
 import { ListingColiseumSeed } from "../seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOnePreferenceSeed } from "../seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-default-no-preference-seed"
@@ -57,6 +58,7 @@ export class SeederModule {
           Property,
           Unit,
           User,
+          UserRoles,
           ApplicationMethod,
           PaperApplication,
         ]),

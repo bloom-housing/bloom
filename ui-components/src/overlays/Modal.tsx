@@ -6,7 +6,7 @@ import { Overlay, OverlayProps } from "./Overlay"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
   title: string
-  actions: React.ReactNode[]
+  actions?: React.ReactNode[]
   hideCloseIcon?: boolean
   children?: React.ReactNode
 }
@@ -18,7 +18,7 @@ const ModalHeader = (props: { title: string }) => (
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
-  <footer className="modal__footer bg-primary-lighter">
+  <footer className="modal__footer bg-primary-lighter" data-testid="footer">
     <GridSection columns={4} reverse={true} tightSpacing={true}>
       {props.actions &&
         props.actions.map((action: React.ReactNode, index: number) => (
@@ -48,7 +48,7 @@ export const Modal = (props: ModalProps) => {
           )}
         </section>
 
-        <ModalFooter actions={props.actions} />
+        {props.actions && <ModalFooter actions={props.actions} />}
 
         {!props.hideCloseIcon && (
           <button className="modal__close" aria-label="Close" onClick={props.onClose} tabIndex={0}>

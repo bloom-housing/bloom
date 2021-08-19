@@ -38,6 +38,7 @@ import {
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
+import { getGenericAddress } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
@@ -48,13 +49,16 @@ export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
 
-  const { content: appStatusContent } = useGetApplicationStatusProps(listing)
+  const {
+    content: appStatusContent,
+    subContent: appStatusSubContent,
+  } = useGetApplicationStatusProps(listing)
 
   if (!listing) {
     return <ErrorPage />
   }
 
-  const oneLineAddress = <OneLineAddress address={listing.buildingAddress} />
+  const oneLineAddress = <OneLineAddress address={getGenericAddress(listing.buildingAddress)} />
 
   const googleMapsHref =
     "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
@@ -233,7 +237,7 @@ export const ListingView = (props: ListingProps) => {
         )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
-        <ApplicationStatus content={appStatusContent} />
+        <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
         <div className="mx-4">
           <DownloadLotteryResults
             event={lotteryResults}
@@ -341,7 +345,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
-              <ApplicationStatus content={appStatusContent} />
+              <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
               <DownloadLotteryResults
                 event={lotteryResults}
                 cloudName={process.env.cloudinaryCloudName}
@@ -381,8 +385,12 @@ export const ListingView = (props: ListingProps) => {
         >
           <div className="listing-detail-panel">
             <dl className="column-definition-list">
-              <Description term={t("t.neighborhood")} description={listing.neighborhood} />
-              <Description term={t("t.built")} description={listing.yearBuilt} />
+              {listing.neighborhood && (
+                <Description term={t("t.neighborhood")} description={listing.neighborhood} />
+              )}
+              {listing.yearBuilt && (
+                <Description term={t("t.built")} description={listing.yearBuilt} />
+              )}
               {listing.smokingPolicy && (
                 <Description term={t("t.smokingPolicy")} description={listing.smokingPolicy} />
               )}
@@ -424,7 +432,10 @@ export const ListingView = (props: ListingProps) => {
           desktopClass="bg-primary-lighter"
         >
           <div className="listing-detail-panel">
-            <ListingMap address={listing.buildingAddress} listing={listing} />
+            <ListingMap
+              address={getGenericAddress(listing.buildingAddress)}
+              listingName={listing.name}
+            />
           </div>
         </ListingDetailItem>
 
