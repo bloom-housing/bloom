@@ -40,6 +40,8 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummarized } from "../../units/types/units-summarized"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 
 @Entity({ name: "listings" })
