@@ -580,11 +580,7 @@ export const ArcherListing: Listing = {
   countyCode: CountyCode.Alameda,
   events: [],
   urlSlug: "listing-slug-abcdef",
-  whatToExpect: {
-    allInfoWillBeVerified: "",
-    applicantsWillBeContacted: "",
-    bePreparedIfChosen: "",
-  },
+  whatToExpect: null,
   status: ListingStatus.active,
   applicationAddress: {
     id: "id",

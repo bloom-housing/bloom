@@ -12,7 +12,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
-import { WhatToExpect } from "../../shared/dto/whatToExpect.dto"
 import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
@@ -351,12 +350,11 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistMaxSize?: number | null
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => WhatToExpect)
-  whatToExpect?: WhatToExpect | null
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  whatToExpect?: string | null
 
   @Column({
     type: "enum",
