@@ -27,7 +27,6 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { listingUrlSlug } from "../../shared/url-helper"
 import { ApiProperty } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -42,6 +41,8 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitsSummarized } from "../../units/types/units-summarized"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -368,12 +369,6 @@ class Listing extends BaseEntity {
   status: ListingStatus
 
   @Expose()
-  @ApiProperty()
-  get urlSlug(): string | undefined {
-    return listingUrlSlug(this)
-  }
-
-  @Expose()
   applicationConfig?: Record<string, unknown>
 
   @Column({ type: "boolean" })
@@ -455,11 +450,25 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   waitlistOpenSpots?: number | null
 
+  @Expose()
+  @ApiProperty({ type: UnitsSummarized })
+  unitsSummarized: UnitsSummarized | undefined
+
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   customMapPin?: boolean | null
+
+  @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+    nullable: false,
+    eager: true,
+    cascade: true,
+  })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummary)
+  unitsSummary: UnitsSummary[]
 }
 
 export { Listing as default, Listing }
