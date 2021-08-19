@@ -96,7 +96,7 @@ describe("listing views", () => {
       const listingView = getView(mockListingsRepo.createQueryBuilder())
 
       expect(listingView.qb).toEqual(mockQueryBuilder)
-      expect(listingView.view).toEqual(views.base)
+      expect(listingView.view).toEqual(views.full)
     })
 
     it("should create a new FullView with view param", () => {
