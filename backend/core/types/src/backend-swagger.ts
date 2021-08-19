@@ -863,7 +863,7 @@ export class UserService {
       limit?: number | "all"
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<User[]> {
+  ): Promise<PaginatedUserList> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/user/list"
 
@@ -994,6 +994,8 @@ export class ListingsService {
       /**  */
       filter?: ListingFilterParams[]
       /**  */
+      view?: string
+      /**  */
       jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
@@ -1006,6 +1008,7 @@ export class ListingsService {
         page: params["page"],
         limit: params["limit"],
         filter: params["filter"],
+        view: params["view"],
         jsonpath: params["jsonpath"],
       }
       let data = null
@@ -1042,6 +1045,8 @@ export class ListingsService {
     params: {
       /**  */
       listingId: string
+      /**  */
+      view: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -1050,7 +1055,7 @@ export class ListingsService {
       url = url.replace("{listingId}", params["listingId"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { view: params["view"] }
       let data = null
 
       configs.data = data
@@ -2665,6 +2670,118 @@ export interface PaperApplication {
   updatedAt: Date
 }
 
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitAccessibilityPriorityType {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface MinMaxCurrency {
+  /**  */
+  min: string
+
+  /**  */
+  max: string
+}
+
+export interface MinMax {
+  /**  */
+  min: number
+
+  /**  */
+  max: number
+}
+
+export interface UnitSummary {
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  minIncomeRange: MinMaxCurrency
+
+  /**  */
+  occupancyRange: MinMax
+
+  /**  */
+  rentAsPercentIncomeRange: MinMax
+
+  /**  */
+  rentRange: MinMaxCurrency
+
+  /**  */
+  totalAvailable: number
+
+  /**  */
+  areaRange: MinMax
+
+  /**  */
+  floorRange?: MinMax
+}
+
+export interface UnitSummaryByAMI {
+  /**  */
+  percent: string
+
+  /**  */
+  byUnitType: UnitSummary[]
+}
+
+export interface HMI {
+  /**  */
+  columns: object
+
+  /**  */
+  rows: object[]
+}
+
+export interface UnitsSummarized {
+  /**  */
+  unitTypes: UnitType[]
+
+  /**  */
+  priorityTypes: UnitAccessibilityPriorityType[]
+
+  /**  */
+  amiPercentages: string[]
+
+  /**  */
+  byUnitTypeAndRent: UnitSummary[]
+
+  /**  */
+  byUnitType: UnitSummary[]
+
+  /**  */
+  byAMI: UnitSummaryByAMI[]
+
+  /**  */
+  hmi: HMI
+}
+
 export interface PreferenceLink {
   /**  */
   title: string
@@ -2859,118 +2976,6 @@ export interface ListingEvent {
   updatedAt: Date
 }
 
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitAccessibilityPriorityType {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
-export interface MinMaxCurrency {
-  /**  */
-  min: string
-
-  /**  */
-  max: string
-}
-
-export interface MinMax {
-  /**  */
-  min: number
-
-  /**  */
-  max: number
-}
-
-export interface UnitSummary {
-  /**  */
-  unitType: UnitType
-
-  /**  */
-  minIncomeRange: MinMaxCurrency
-
-  /**  */
-  occupancyRange: MinMax
-
-  /**  */
-  rentAsPercentIncomeRange: MinMax
-
-  /**  */
-  rentRange: MinMaxCurrency
-
-  /**  */
-  totalAvailable: number
-
-  /**  */
-  areaRange: MinMax
-
-  /**  */
-  floorRange?: MinMax
-}
-
-export interface UnitSummaryByAMI {
-  /**  */
-  percent: string
-
-  /**  */
-  byUnitType: UnitSummary[]
-}
-
-export interface HMI {
-  /**  */
-  columns: object
-
-  /**  */
-  rows: object[]
-}
-
-export interface UnitsSummarized {
-  /**  */
-  unitTypes: UnitType[]
-
-  /**  */
-  priorityTypes: UnitAccessibilityPriorityType[]
-
-  /**  */
-  amiPercentages: string[]
-
-  /**  */
-  byUnitTypeAndRent: UnitSummary[]
-
-  /**  */
-  byUnitType: UnitSummary[]
-
-  /**  */
-  byAMI: UnitSummaryByAMI[]
-
-  /**  */
-  hmi: HMI
-}
-
 export interface AmiChart {
   /**  */
   id: string
@@ -3073,6 +3078,9 @@ export interface Unit {
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  property: Property
 
   /**  */
   bmrProgramChart?: boolean
@@ -3610,6 +3618,59 @@ export interface ReservedCommunityType {
   updatedAt: Date
 }
 
+export interface UnitsSummary {
+  /**  */
+  id: string
+
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  listing: Listing
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  priorityType?: CombinedPriorityTypeTypes
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+}
+
 export interface Listing {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -3621,9 +3682,6 @@ export interface Listing {
   status: ListingStatus
 
   /**  */
-  urlSlug: string
-
-  /**  */
   CSVFormattingType: CSVFormattingType
 
   /**  */
@@ -3631,6 +3689,9 @@ export interface Listing {
 
   /**  */
   showWaitlist: boolean
+
+  /**  */
+  unitsSummarized: UnitsSummarized
 
   /**  */
   id: string
@@ -3655,6 +3716,12 @@ export interface Listing {
 
   /**  */
   events: ListingEvent[]
+
+  /**  */
+  property: Property
+
+  /**  */
+  applications: Application[]
 
   /**  */
   applicationDueDate?: Date
@@ -3796,6 +3863,9 @@ export interface Listing {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  unitsSummary: UnitsSummary[]
 }
 
 export interface ApplicationMethod {
@@ -4568,12 +4638,20 @@ export interface LoginResponse {
   accessToken: string
 }
 
+export interface IdName {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+}
+
 export interface User {
   /**  */
   language?: Language
 
   /**  */
-  leasingAgentInListings?: Id[]
+  leasingAgentInListings?: IdName[]
 
   /**  */
   id: string
@@ -4762,6 +4840,14 @@ export interface UserUpdate {
   roles?: UserRoles
 }
 
+export interface PaginatedUserList {
+  /**  */
+  items: User[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
 export interface Jurisdiction {
   /**  */
   id: string
@@ -4893,76 +4979,6 @@ export interface ReservedCommunityType {
   description?: string
 }
 
-export interface UnitsSummary {
-  /**  */
-  id: string
-
-  /**  */
-  unitType: UnitType
-
-  /**  */
-  listing: Listing
-
-  /**  */
-  monthlyRent?: string
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
-
-  /**  */
-  amiPercentage?: string
-
-  /**  */
-  minimumIncomeMin?: string
-
-  /**  */
-  minimumIncomeMax?: string
-
-  /**  */
-  maxOccupancy?: number
-
-  /**  */
-  minOccupancy?: number
-
-  /**  */
-  floorMin?: number
-
-  /**  */
-  floorMax?: number
-
-  /**  */
-  sqFeetMin?: string
-
-  /**  */
-  sqFeetMax?: string
-
-  /**  */
-  priorityType?: UnitAccessibilityPriorityType
-
-  /**  */
-  totalCount?: number
-
-  /**  */
-  totalAvailable?: number
-}
-
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
 export interface UnitRentType {
   /**  */
   id: string
@@ -5070,9 +5086,6 @@ export interface Listing {
   status: ListingStatus
 
   /**  */
-  urlSlug: string
-
-  /**  */
   CSVFormattingType: CSVFormattingType
 
   /**  */
@@ -5080,6 +5093,9 @@ export interface Listing {
 
   /**  */
   showWaitlist: boolean
+
+  /**  */
+  unitsSummarized: UnitsSummarized
 
   /**  */
   reviewOrderType: EnumListingReviewOrderType
@@ -5169,7 +5185,7 @@ export interface Listing {
   yearBuilt?: number
 
   /**  */
-  unitsSummarized: UnitsSummarized
+  urlSlug: string
 
   /**  */
   id: string
@@ -5296,7 +5312,8 @@ export interface Listing {
 
   /**  */
   customMapPin?: boolean
-  /** */
+
+  /**  */
   unitsSummary: UnitsSummary[]
 }
 
@@ -5629,6 +5646,9 @@ export interface ListingCreate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  unitsSummary: UnitsSummary[]
 }
 
 export interface PreferenceUpdate {
@@ -5993,6 +6013,9 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  unitsSummary: UnitsSummary[]
 }
 
 export interface PaperApplicationCreate {
