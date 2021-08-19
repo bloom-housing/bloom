@@ -190,7 +190,7 @@ type UnitMap = {
 const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm", "fiveBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
-const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
+export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
   const summaries: UnitSummary[] = []
   const unitMap: UnitMap = {}
 
@@ -222,7 +222,7 @@ const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
 }
 
 // One row per unit type
-const summarizeUnitsByType = (units: Units, unitTypes: UnitTypeDto[]): UnitSummary[] => {
+export const summarizeUnitsByType = (units: Units, unitTypes: UnitTypeDto[]): UnitSummary[] => {
   const summaries = unitTypes.map(
     (unitType: UnitTypeDto): UnitSummary => {
       const summary = {} as UnitSummary
@@ -251,6 +251,15 @@ const summarizeByAmi = (units: Units, amiPercentages: string[]) => {
   })
 }
 
+export const getUnitTypes = (units: Unit[]): UnitType[] => {
+  const unitTypes = new Map<string, UnitType>()
+  for (const unitType of units.map((unit) => unit.unitType).filter((item) => item != null)) {
+    unitTypes.set(unitType.id, unitType)
+  }
+
+  return Array.from(unitTypes.values())
+}
+
 export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
 
@@ -258,7 +267,7 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
   for (const unitType of units.map((unit) => unit.unitType).filter((item) => item != null)) {
     unitTypes.set(unitType.id, unitType)
   }
-  data.unitTypes = Array.from(unitTypes.values())
+  data.unitTypes = getUnitTypes(units)
 
   const priorityTypes = new Map<string, UnitAccessibilityPriorityType>()
   for (const priorityType of units

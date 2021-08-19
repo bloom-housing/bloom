@@ -11,19 +11,13 @@ afterEach(cleanup)
 describe("<WhatToExpect>", () => {
   it("renders with default what-to-expects", () => {
     const { getByText } = render(<WhatToExpect listing={archer} />)
-    expect(getByText(t("whatToExpect.applicantsWillBeContacted"))).toBeTruthy()
-    expect(getByText(t("whatToExpect.allInfoWillBeVerified"))).toBeTruthy()
-    expect(getByText(t("whatToExpect.bePreparedIfChosen"))).toBeTruthy()
+    expect(getByText(t("whatToExpect.default"))).toBeTruthy()
   })
   it("renders with custom what-to-expects", () => {
     const newListing = archer
-    newListing.whatToExpect = {}
-    newListing.whatToExpect.applicantsWillBeContacted = "Applicants Custom"
-    newListing.whatToExpect.allInfoWillBeVerified = "Info Verified Custom"
-    newListing.whatToExpect.bePreparedIfChosen = "Be Prepared Custom"
+    newListing.whatToExpect = "Custom what to expect text"
+
     const { getByText } = render(<WhatToExpect listing={archer} />)
-    expect(getByText("Applicants Custom")).toBeTruthy()
-    expect(getByText("Info Verified Custom")).toBeTruthy()
-    expect(getByText("Be Prepared Custom")).toBeTruthy()
+    expect(getByText("Custom what to expect text")).toBeTruthy()
   })
 })

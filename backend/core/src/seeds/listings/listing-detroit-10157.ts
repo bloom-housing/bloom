@@ -178,13 +178,15 @@ export class Listing10157Seed extends ListingDefaultSeed {
       preferences: [],
     }
 
+    const listing = await this.listingRepository.save(listingCreateDto)
+
     const nccUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
 
     const zeroBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeStudio,
       totalCount: 1,
-      monthlyRent: "$470",
-      property: property,
+      monthlyRent: 470,
+      listing: listing,
       sqFeetMax: "550",
     }
     nccUnitsSummaryToBeCreated.push(zeroBdrmUnitsSummary)
@@ -192,8 +194,8 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeOneBdrm,
       totalCount: 2,
-      monthlyRent: "$650",
-      property: property,
+      monthlyRent: 650,
+      listing: listing,
       sqFeetMin: "800",
       sqFeetMax: "1000",
     }
@@ -202,8 +204,8 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 2,
-      monthlyRent: "$750",
-      property: property,
+      monthlyRent: 750,
+      listing: listing,
       sqFeetMin: "900",
       sqFeetMax: "1100",
     }
@@ -211,6 +213,6 @@ export class Listing10157Seed extends ListingDefaultSeed {
 
     await this.unitsSummaryRepository.save(nccUnitsSummaryToBeCreated)
 
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }

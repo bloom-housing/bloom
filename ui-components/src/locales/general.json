@@ -976,6 +976,7 @@
       "submitForWaitlist": "Submit an application for an open slot on the waitlist.",
       "unitsAndWaitlist": "Available Units and Waitlist"
     },
+    "whatToExpectLabel": "Tell the applicant what to expect from the process",
     "whereDropOffQuestion": "Where are applications dropped off?",
     "wherePickupQuestion": "Where are applications picked up?",
     "yearBuilt": "Year Built",
@@ -1271,9 +1272,7 @@
   },
   "whatToExpect": {
     "label": "What to Expect",
-    "applicantsWillBeContacted": "Applicants will be contacted by the property agent in rank order until vacancies are filled.",
-    "allInfoWillBeVerified": "All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized.",
-    "bePreparedIfChosen": "Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
+    "default": "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
   },
   "listingFilters":{
     "modalTitle": "Filter Results",

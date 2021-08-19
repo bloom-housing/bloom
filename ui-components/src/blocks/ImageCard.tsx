@@ -16,6 +16,7 @@ export interface ImageCardProps {
   tagLabel?: string
   appStatus?: ApplicationStatusType
   appStatusContent?: string
+  appStatusSubContent?: string
 }
 
 const ImageCard = (props: ImageCardProps) => {
@@ -25,7 +26,12 @@ const ImageCard = (props: ImageCardProps) => {
   if (props.appStatus !== undefined && props.appStatusContent !== undefined) {
     statusLabel = (
       <aside className="image-card__status">
-        <ApplicationStatus status={props.appStatus} content={props.appStatusContent} vivid />
+        <ApplicationStatus
+          status={props.appStatus}
+          content={props.appStatusContent}
+          subContent={props.appStatusSubContent}
+          vivid
+        />
       </aside>
     )
   }
