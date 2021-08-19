@@ -513,11 +513,7 @@ export const defaultListing: ListingSeedType = {
   waitlistOpenSpots: null,
   isWaitlistOpen: false,
   waitlistMaxSize: null,
-  whatToExpect: {
-    allInfoWillBeVerified: "Custom all info will be verified text",
-    applicantsWillBeContacted: "Custom applicant will be contacted text",
-    bePreparedIfChosen: "Custom be prepared if chosen text",
-  },
+  whatToExpect: "Custom what to expect text",
 }
 
 // Preferences
