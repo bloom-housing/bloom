@@ -259,11 +259,7 @@ export const ArcherListing: Listing = {
   showWaitlist: false,
   reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
   urlSlug: "listing-slug-abcdef",
-  whatToExpect: {
-    applicantsWillBeContacted: "Applicant will be contacted.",
-    allInfoWillBeVerified: "All info will be verified.",
-    bePreparedIfChosen: "Be prepared if chosen.",
-  },
+  whatToExpect: "Applicant will be contacted. All info will be verified. Be prepared if chosen.",
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
   applicationAddress: {
@@ -354,6 +350,7 @@ export const ArcherListing: Listing = {
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",
   unitsAvailable: 0,
+  unitsSummary: [],
   unitsSummarized: undefined,
   unitAmenities: "Dishwasher",
   developer: "Charities Housing ",

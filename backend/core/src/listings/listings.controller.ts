@@ -15,6 +15,7 @@ import {
   UsePipes,
   ValidationPipe,
   ClassSerializerInterceptor,
+  Headers,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -33,6 +34,8 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { clearCacheKeys } from "../libs/cacheLib"
+import { Language } from "../shared/types/language-enum"
+import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -50,7 +53,9 @@ export class ListingsController {
     this.cacheKeys = [
       "/listings",
       "/listings?limit=all",
+      "/listings?view=base&limit=all",
       "/listings?limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
+      "/listings?view=base&limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
     ]
   }
 
@@ -78,14 +83,17 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
-  async retrieve(@Param("listingId") listingId: string): Promise<ListingDto> {
+  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
+  async retrieve(
+    @Headers("language") language: Language,
+    @Param("listingId") listingId: string,
+    @Query("view") view?: string
+  ): Promise<ListingDto> {
+    console.log("controller view = ", view)
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    const result = mapTo(ListingDto, await this.listingsService.findOne(listingId))
-
-    return result
+    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language, view))
   }
 
   @Put(`:listingId`)

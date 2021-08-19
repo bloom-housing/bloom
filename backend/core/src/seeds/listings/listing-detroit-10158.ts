@@ -125,26 +125,26 @@ export class Listing10158Seed extends ListingDefaultSeed {
       preferences: [],
     }
 
+    const listing = await this.listingRepository.save(listingCreateDto)
+
     const ncpUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
 
     const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeOneBdrm,
       totalCount: 40,
-      monthlyRent: "$0",
-      property: property,
+      listing: listing,
     }
     ncpUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
 
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 36,
-      monthlyRent: "$0",
-      property: property,
+      listing: listing,
     }
     ncpUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
 
     await this.unitsSummaryRepository.save(ncpUnitsSummaryToBeCreated)
 
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }

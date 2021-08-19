@@ -5,6 +5,7 @@ import { HttpException, HttpStatus } from "@nestjs/common"
 import { Listing } from "./entities/listing.entity"
 import { ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
+import { TranslationsService } from "../translations/translations.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -13,13 +14,55 @@ declare const expect: jest.Expect
 
 let service: ListingsService
 const mockListings = [
-  { id: "asdf1", property: { id: "test-property1", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf2", property: { id: "test-property2", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf3", property: { id: "test-property3", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf4", property: { id: "test-property4", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf5", property: { id: "test-property5", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf6", property: { id: "test-property6", units: [] }, preferences: [], status: "closed" },
-  { id: "asdf7", property: { id: "test-property7", units: [] }, preferences: [], status: "closed" },
+  {
+    id: "asdf1",
+    property: { id: "test-property1", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf2",
+    property: { id: "test-property2", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf3",
+    property: { id: "test-property3", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf4",
+    property: { id: "test-property4", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf5",
+    property: { id: "test-property5", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf6",
+    property: { id: "test-property6", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
+  {
+    id: "asdf7",
+    property: { id: "test-property7", units: [] },
+    preferences: [],
+    status: "closed",
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
 ]
 const mockFilteredListings = mockListings.slice(0, 2)
 const mockInnerQueryBuilder = {
@@ -35,6 +78,8 @@ const mockInnerQueryBuilder = {
   getCount: jest.fn().mockReturnValue(7),
 }
 const mockQueryBuilder = {
+  select: jest.fn().mockReturnThis(),
+  leftJoin: jest.fn().mockReturnThis(),
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
@@ -56,6 +101,10 @@ describe("ListingsService", () => {
         {
           provide: getRepositoryToken(Listing),
           useValue: mockListingsRepo,
+        },
+        {
+          provide: TranslationsService,
+          useValue: { translateListing: jest.fn() },
         },
       ],
     }).compile()

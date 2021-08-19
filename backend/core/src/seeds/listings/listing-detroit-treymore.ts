@@ -155,13 +155,15 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       preferences: [],
     }
 
+    const listing = await this.listingRepository.save(listingCreateDto)
+
     const treymoreUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
 
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 4,
-      monthlyRent: "$707",
-      property: property,
+      monthlyRent: 707,
+      listing: listing,
       sqFeetMin: "720",
       sqFeetMax: "1003",
     }
@@ -169,6 +171,6 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
 
     await this.unitsSummaryRepository.save(treymoreUnitsSummaryToBeCreated)
 
-    return await this.listingRepository.save(listingCreateDto)
+    return listing
   }
 }

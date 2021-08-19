@@ -200,7 +200,7 @@ export const ListingView = (props: ListingProps) => {
         )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
-        <ListingUpdated listing={listing} />
+        <ListingUpdated listingUpdated={listing.updatedAt} />
       </div>
       <ListingDetails>
         <ListingDetailItem
@@ -293,7 +293,7 @@ export const ListingView = (props: ListingProps) => {
         >
           <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
             <div className="hidden md:block">
-              <ListingUpdated listing={listing} />
+              <ListingUpdated listingUpdated={listing.updatedAt} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
             </div>
             {openHouseEvents && (
