@@ -37,3 +37,10 @@ a.button.is-primary:hover {
   @apply bg-primary-light;
   @apply text-black;
 }
+
+// Constrain the height of modals to 80% of the viewport
+// and make them scrollable once that is exceeded.
+.modal {
+  max-height: 80vh;
+  overflow-y: auto;
+}
