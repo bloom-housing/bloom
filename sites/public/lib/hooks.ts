@@ -39,11 +39,12 @@ export const useFormConductor = (stepName: string) => {
 }
 
 export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatusProps => {
-  const [props, setProps] = useState({ content: "" })
+  const [props, setProps] = useState({ content: "", subContent: "" })
 
   useEffect(() => {
     if (!listing) return
     let content = ""
+    let subContent = ""
     let formattedDate = ""
     if (openDateState(listing)) {
       const date = listing.applicationOpenDate
@@ -64,13 +65,15 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
         } else {
           content = t("listings.applicationsClosed")
         }
-      } else if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
-        content = t("listings.applicationFCFS")
       }
     }
     content = formattedDate !== "" ? `${content}: ${formattedDate}` : content
+    if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
+      subContent = content
+      content = t("listings.applicationFCFS")
+    }
 
-    setProps({ content })
+    setProps({ content, subContent })
   }, [listing])
 
   return props

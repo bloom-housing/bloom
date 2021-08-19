@@ -52,16 +52,19 @@ describe("UnitTypes", () => {
 
   it(`should create and return a new unit type`, async () => {
     const unitTypeName = "new unit type"
+    const numBedrooms = 7
     const res = await supertest(app.getHttpServer())
       .post(`/unitTypes`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: unitTypeName })
+      .send({ name: unitTypeName, numBedrooms: numBedrooms })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("name")
     expect(res.body.name).toBe(unitTypeName)
+    expect(res.body).toHaveProperty("numBedrooms")
+    expect(res.body.numBedrooms).toBe(numBedrooms)
 
     const getById = await supertest(app.getHttpServer())
       .get(`/unitTypes/${res.body.id}`)

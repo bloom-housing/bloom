@@ -5,6 +5,7 @@ import "./ApplicationStatus.scss"
 
 export interface ApplicationStatusProps {
   content: string
+  subContent?: string
   status?: ApplicationStatusType
   vivid?: boolean
 }
@@ -34,6 +35,12 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
       <Icon size="medium" symbol="clock" fill={vivid ? IconFillColors.white : undefined} /> &nbsp;
       {content}
+      {props.subContent && (
+        <>
+          <br />
+          <span className={"application-status__sub-content"}>{props.subContent}</span>
+        </>
+      )}
     </div>
   )
 }

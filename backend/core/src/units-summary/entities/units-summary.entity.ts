@@ -1,28 +1,41 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm"
-import { IsNumber, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import {
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from "class-validator"
 import { Expose, Type } from "class-transformer"
-import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "units_summary" })
 class UnitsSummary {
-  @ManyToOne(() => UnitType, { primary: true, eager: true })
+  @PrimaryGeneratedColumn("uuid")
+  @Expose()
+  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  id: string
+
+  @ManyToOne(() => UnitType, { eager: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitType)
   unitType: UnitType
 
-  @ManyToOne(() => Property, { primary: true, eager: true })
-  property: Property
+  @ManyToOne(() => Listing, (listing) => listing.unitsSummary, {})
+  listing: Listing
 
-  @PrimaryColumn()
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRent: string
+  monthlyRent?: number | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()

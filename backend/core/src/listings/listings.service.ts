@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
-
 import { Listing } from "./entities/listing.entity"
 import {
   ListingCreateDto,
@@ -15,37 +14,20 @@ import { Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
+import { getView } from "./views/view"
+import { transformUnits } from "../shared/units-transformations"
+import { Language } from "../../types"
+import { TranslationsService } from "../translations/translations.service"
 
 @Injectable()
 export class ListingsService {
-  constructor(@InjectRepository(Listing) private readonly listingRepository: Repository<Listing>) {}
+  constructor(
+    @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    private readonly translationService: TranslationsService
+  ) {}
 
   private getFullyJoinedQueryBuilder() {
-    return this.listingRepository
-      .createQueryBuilder("listings")
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
-      .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
-      .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
-      .leftJoinAndSelect("listings.image", "image")
-      .leftJoinAndSelect("listings.events", "listingEvents")
-      .leftJoinAndSelect("listingEvents.file", "listingEventFile")
-      .leftJoinAndSelect("listings.result", "result")
-      .leftJoinAndSelect("listings.applicationAddress", "applicationAddress")
-      .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")
-      .leftJoinAndSelect("listings.applicationPickUpAddress", "applicationPickUpAddress")
-      .leftJoinAndSelect("listings.applicationMailingAddress", "applicationMailingAddress")
-      .leftJoinAndSelect("listings.applicationDropOffAddress", "applicationDropOffAddress")
-      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
-      .leftJoinAndSelect("listings.preferences", "preferences")
-      .leftJoinAndSelect("listings.property", "property")
-      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-      .leftJoinAndSelect("property.units", "units")
-      .leftJoinAndSelect("units.unitType", "unitTypeRef")
-      .leftJoinAndSelect("units.unitRentType", "unitRentType")
-      .leftJoinAndSelect("units.priorityType", "priorityType")
-      .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
-      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
+    return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
@@ -55,6 +37,8 @@ export class ListingsService {
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
+      .leftJoin("property.units", "units")
+      .leftJoin("units.unitType", "unitTypeRef")
       .groupBy("listings.id")
       .orderBy({ "listings.id": "DESC" })
 
@@ -77,12 +61,14 @@ export class ListingsService {
       // join on the listings we want to show.
       innerFilteredQuery.offset(offset).limit(params.limit as number)
     }
+    const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await this.getFullyJoinedQueryBuilder()
+    let listings = await view
+      .getViewQb()
       .orderBy({
-        "listings.id": "DESC",
+        "listings.applicationDueDate": "ASC",
+        "listings.applicationOpenDate": "DESC",
         "units.max_occupancy": "ASC",
-        "preferences.ordinal": "ASC",
       })
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
@@ -90,6 +76,9 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .getMany()
+
+    // get summarized units from view
+    listings = view.mapUnitSummary(listings)
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
@@ -172,8 +161,9 @@ export class ListingsService {
     return await this.listingRepository.remove(listing)
   }
 
-  async findOne(listingId: string) {
-    const result = await this.getFullyJoinedQueryBuilder()
+  async findOne(listingId: string, lang: Language = Language.en, view = "full") {
+    const qb = getView(this.listingRepository.createQueryBuilder("listings"), view).getViewQb()
+    const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
         "preferences.ordinal": "ASC",
@@ -182,6 +172,12 @@ export class ListingsService {
     if (!result) {
       throw new NotFoundException()
     }
+
+    result.unitsSummarized = transformUnits(result.property.units)
+    if (lang !== Language.en) {
+      await this.translationService.translateListing(result, lang)
+    }
+
     return result
   }
 }
