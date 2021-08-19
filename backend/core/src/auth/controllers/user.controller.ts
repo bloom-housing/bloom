@@ -27,6 +27,7 @@ import {
   UserDto,
   UserUpdateDto,
   UserListQueryParams,
+  PaginatedUserListDto,
 } from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
@@ -122,7 +123,13 @@ export class UserController {
   @Get("/list")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "List users", operationId: "list" })
-  async list(@Query() queryParams: UserListQueryParams, @Request() req: ExpressRequest) {
-    return this.userService.list(queryParams, new AuthContext(req.user as User))
+  async list(
+    @Query() queryParams: UserListQueryParams,
+    @Request() req: ExpressRequest
+  ): Promise<PaginatedUserListDto> {
+    return mapTo(
+      PaginatedUserListDto,
+      await this.userService.list(queryParams, new AuthContext(req.user as User))
+    )
   }
 }

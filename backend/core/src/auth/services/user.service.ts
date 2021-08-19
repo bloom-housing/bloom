@@ -8,6 +8,7 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindConditions, Repository } from "typeorm"
+import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
 import { User } from "../entities/user.entity"
@@ -42,17 +43,27 @@ export class UserService {
     return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
-  public async list(params: UserListQueryParams, authContext: AuthContext): Promise<User[]> {
-    const result = await this.repo.find()
+  public async list(
+    params: UserListQueryParams,
+    authContext: AuthContext
+  ): Promise<Pagination<User>> {
+    const options = {
+      limit: params.limit === "all" ? undefined : params.limit,
+      page: params.page || 10,
+    }
+
+    // https://www.npmjs.com/package/nestjs-typeorm-paginate
+    const result = await paginate<User>(this.repo, options)
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
      */
     await Promise.all(
-      result.map(async (user) => {
+      result.items.map(async (user) => {
         await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
       })
     )
+
     return result
   }
 
