@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add ResponsiveTable for pricing
   - Ability to have multiple statuses under the ImageCard ([#1700](https://github.com/bloom-housing/bloom/pull/1700)) (Emily Jablonski)
     - **Breaking Change**: Removed three props (appStatus, appStatusContent, and appStatusSubContent) in favor of an array that contains that data - will need to transition any status information to the new array format
+  - Add Heading component and numbered-list styles ([#1405](https://github.com/bloom-housing/bloom/pull/1405)) (Marcin Jedras)
 
 - Fixed:
 
