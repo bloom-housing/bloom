@@ -11,7 +11,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 
-const tritonAmiChart: AmiChartCreateDto = {
+export const tritonAmiChart: AmiChartCreateDto = {
   name: "San Jose TCAC 2019",
   items: [
     {
