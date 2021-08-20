@@ -65,6 +65,12 @@ export class TranslationsService extends AbstractServiceFactory<
   }
 
   public async translateListing(listing: Listing, language: Language) {
+    /**
+     * check for necessary keys before continuing
+     */
+    const { GOOGLE_API_ID, GOOGLE_API_EMAIL, GOOGLE_API_KEY } = process.env
+    if (!GOOGLE_API_ID || !GOOGLE_API_EMAIL || !GOOGLE_API_KEY) return
+
     // Get key-value pairs from listing to be translated
     const translations = this.getTranslations(listing)
 
