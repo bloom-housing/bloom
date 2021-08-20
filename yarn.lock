@@ -21769,10 +21769,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-swagger-axios-codegen@0.12.5:
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.12.5.tgz#8a47b893b273bed6ad202d4bad04ed4b5d7bc8a7"
-  integrity sha512-kT1hgN2dHEMgJBOiN0dxZp6E/UcliTGhzk1JosP7UXBwGQgJyE9GqdCKekJcIj5v+nEtH9fIshuLzmxz29sLCg==
+swagger-axios-codegen@0.11.16:
+  version "0.11.16"
+  resolved "https://registry.yarnpkg.com/swagger-axios-codegen/-/swagger-axios-codegen-0.11.16.tgz#eae7dd2ad254eaac485db2dde558958f70437f46"
+  integrity sha512-OB5cvRSdfPsGaws/Y1YuNYG7/cGSp5PLc36294hUsFiP57cDdC5sxdXUnHcy00+6hpCe/1Y9vcGaouvevt4jeQ==
   dependencies:
     axios "^0.21.1"
     camelcase "^5.0.0"
