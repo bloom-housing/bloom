@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Add ResponsiveTable for pricing
+  - Ability to have multiple statuses under the ImageCard ([#1700](https://github.com/bloom-housing/bloom/pull/1700)) (Emily Jablonski)
 
 - Fixed:
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
