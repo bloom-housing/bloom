@@ -76,13 +76,15 @@ export const ListingView = (props: ListingProps) => {
           const percentInt = parseInt(percent, 10)
           return percentInt
         })
-        .sort()
+        .sort(function (a, b) {
+          return a - b
+        })
     : []
 
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
   const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
-    return { ...row, householdSize: <strong>{row["householdSize"]}</strong> }
+    return { ...row, sizeColumn: <strong>{row["sizeColumn"]}</strong> }
   })
   let groupedUnits: GroupedTableGroup[] = null
 

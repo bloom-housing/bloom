@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file. The format 
   - Updated listing's importer to handle latest reserved community type changes ([#1667](https://github.com/bloom-housing/bloom/pull/1667)) (Emily Jablonski)
   - Change whatToExpect to be a string instead of a json blob, make it editable in listings management ([#1681](https://github.com/bloom-housing/bloom/pull/1681)) (Emily Jablonski)
   - Updates listing post/put/delete endpoints to call cacheManager.reset instead of clearing and maintaining a growing set of keys. Updates transformUnits to check for units and length before continuing ([#1698](https://github.com/bloom-housing/bloom/pull/1698))
+  - Allow for unit sets to have multiple ami charts ([#1678](https://github.com/bloom-housing/bloom/pull/1678)) (Emily Jablonski)
 
 - Fixed:
   - Added checks for property in listing.dto transforms
