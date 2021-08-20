@@ -39,10 +39,26 @@ describe("<ImageCard>", () => {
         imageUrl={"/images/listing.jpg"}
         title={"My Building"}
         subtitle={"The Address"}
-        appStatus={ApplicationStatusType.Closed}
-        appStatusContent={t("listings.applicationsClosed")}
+        statuses={[
+          { status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") },
+        ]}
       />
     )
     expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
+  })
+  it("renders with multiple applications status bars", () => {
+    const { getByText } = render(
+      <ImageCard
+        imageUrl={"/images/listing.jpg"}
+        title={"My Building"}
+        subtitle={"The Address"}
+        statuses={[
+          { status: ApplicationStatusType.Closed, content: "Applications Closed" },
+          { status: ApplicationStatusType.PreLottery, content: "Lottery Results Posted Tomorrow" },
+        ]}
+      />
+    )
+    expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
+    expect(getByText("Lottery Results Posted Tomorrow", { exact: false })).not.toBeNull()
   })
 })
