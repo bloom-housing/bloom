@@ -40,10 +40,8 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
     setPaperApplications,
   } = methodsState
 
-  //  const [paperApplications, setPaperApplications] = useState([])
-
   /*
-    Set state for the drawer, upload progress, drawer, and more
+    Set state for the drawer, upload progress, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -117,7 +115,7 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
   }
 
   /*
-    Show a preview of the uploaded file within the photo drawer
+    Show a preview of the uploaded file within the drawer
   */
   const previewPaperApplicationsTableRows = []
   if (cloudinaryData.url != "") {
