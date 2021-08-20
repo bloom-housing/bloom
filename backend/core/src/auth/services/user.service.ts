@@ -227,6 +227,7 @@ export class UserService {
   private _getQb() {
     const qb = this.repo.createQueryBuilder("user")
     qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+    qb.leftJoinAndSelect("user.roles", "user_roles")
 
     return qb
   }
