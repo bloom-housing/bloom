@@ -38,6 +38,9 @@ const minMaxCurrency = (baseValue: MinMaxCurrency, newValue: number): MinMaxCurr
 // Unit sets can have multiple AMI charts used, in which case the table displays ranges
 const hmiData = (units: Units, maxHouseholdSize: number) => {
   // Currently, BMR chart is just toggling whether or not the first column shows Household Size or Unit Type
+  if (!units || units.length === 0) {
+    return null
+  }
   const showUnitType = units[0].bmrProgramChart
 
   type ChartAndPercentage = {
