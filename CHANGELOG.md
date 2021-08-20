@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file. The format 
   - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
   - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
   - fixes issue with unexposed user roles ((#1627)[https://github.com/bloom-housing/bloom/pull/1627]))
+  - updates translations to check for values before sending to service ((#1699)[https://github.com/bloom-housing/bloom/pull/1699])
 
 ### General
 
