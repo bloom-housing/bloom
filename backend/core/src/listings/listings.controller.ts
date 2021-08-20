@@ -75,7 +75,6 @@ export class ListingsController {
     @Param("listingId") listingId: string,
     @Query("view") view?: string
   ): Promise<ListingDto> {
-    console.log("controller view = ", view)
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
