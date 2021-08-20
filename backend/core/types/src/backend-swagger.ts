@@ -1046,7 +1046,7 @@ export class ListingsService {
       /**  */
       listingId: string
       /**  */
-      view: string
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
@@ -2386,68 +2386,6 @@ export interface Demographics {
   race?: string
 }
 
-export interface HouseholdMember {
-  /**  */
-  address: Address
-
-  /**  */
-  workAddress?: Address
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  orderId?: number
-
-  /**  */
-  firstName?: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName?: string
-
-  /**  */
-  birthMonth?: string
-
-  /**  */
-  birthDay?: string
-
-  /**  */
-  birthYear?: string
-
-  /**  */
-  emailAddress?: string
-
-  /**  */
-  noEmail?: boolean
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  phoneNumberType?: string
-
-  /**  */
-  noPhone?: boolean
-
-  /**  */
-  sameAddress?: string
-
-  /**  */
-  relationship?: string
-
-  /**  */
-  workInRegion?: string
-}
-
 export interface ApplicationPreferenceOption {
   /**  */
   key: string
@@ -3251,10 +3189,22 @@ export interface Demographics {
 
 export interface HouseholdMember {
   /**  */
-  orderId?: number
+  address: Address
 
   /**  */
-  address: Address
+  workAddress: Address
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  orderId?: number
 
   /**  */
   firstName?: string
@@ -3297,21 +3247,6 @@ export interface HouseholdMember {
 
   /**  */
   workInRegion?: string
-
-  /**  */
-  workAddress?: CombinedWorkAddressTypes
-
-  /**  */
-  application: Application
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 }
 
 export interface Jurisdiction {
