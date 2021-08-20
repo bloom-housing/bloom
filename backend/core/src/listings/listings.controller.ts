@@ -33,7 +33,6 @@ import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { clearCacheKeys } from "../libs/cacheLib"
 import { Language } from "../shared/types/language-enum"
 import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 
@@ -49,15 +48,7 @@ export class ListingsController {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly listingsService: ListingsService
-  ) {
-    this.cacheKeys = [
-      "/listings",
-      "/listings?limit=all",
-      "/listings?view=base&limit=all",
-      "/listings?limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
-      "/listings?view=base&limit=all&filter[$comparison]=%3C%3E&filter[status]=pending",
-    ]
-  }
+  ) {}
 
   // TODO: Limit requests to defined fields
   @Get()
@@ -73,11 +64,7 @@ export class ListingsController {
   @ApiOperation({ summary: "Create listing", operationId: "create" })
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     const listing = await this.listingsService.create(listingDto)
-    /**
-     * clear list caches
-     * As we get more listings we'll want to update this to be more selective in clearing entries
-     */
-    await clearCacheKeys(this.cacheManager, this.cacheKeys)
+    await this.cacheManager.reset()
     return mapTo(ListingDto, listing)
   }
 
@@ -89,7 +76,6 @@ export class ListingsController {
     @Param("listingId") listingId: string,
     @Query("view") view?: string
   ): Promise<ListingDto> {
-    console.log("controller view = ", view)
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
@@ -103,11 +89,7 @@ export class ListingsController {
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
-    /**
-     * clear list caches
-     * As we get more listings we'll want to update this to be more selective in clearing entries
-     */
-    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
+    await this.cacheManager.reset()
     return mapTo(ListingDto, listing)
   }
 
@@ -115,6 +97,6 @@ export class ListingsController {
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)
-    await clearCacheKeys(this.cacheManager, [...this.cacheKeys, `/listings/${listingId}`])
+    await this.cacheManager.reset()
   }
 }
