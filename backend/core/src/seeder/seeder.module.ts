@@ -34,6 +34,8 @@ import { ApplicationMethodsModule } from "../application-methods/applications-me
 import { PaperApplicationsModule } from "../paper-applications/paper-applications.module"
 import { AssetsModule } from "../assets/assets.module"
 import { ListingDefaultReservedSeed } from "../seeds/listings/listing-default-reserved-seed"
+import { ListingDefaultMultipleAMI } from "../seeds/listings/listing-default-multiple-ami"
+import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listing-default-multiple-ami-and-percentages"
 
 @Module({})
 export class SeederModule {
@@ -85,6 +87,8 @@ export class SeederModule {
         ListingTritonSeed,
         ListingDefaultReservedSeed,
         ListingDefaultFCFSSeed,
+        ListingDefaultMultipleAMI,
+        ListingDefaultMultipleAMIAndPercentages,
       ],
     }
   }
