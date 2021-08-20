@@ -7,6 +7,7 @@ export class AddNumBedroomsFieldToUnitType1628631437422 implements MigrationInte
     queryRunner.query(`ALTER TABLE "unit_types" ADD "num_bedrooms" integer`)
     queryRunner.query(`UPDATE "unit_types" SET "num_bedrooms" = CASE
   WHEN "name" = 'studio' THEN 0
+  WHEN "name" = 'SRO' THEN 0
   WHEN "name" = 'oneBdrm' THEN 1
   WHEN "name" = 'twoBdrm' THEN 2
   WHEN "name" = 'threeBdrm' THEN 3
