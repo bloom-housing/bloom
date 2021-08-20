@@ -1,6 +1,6 @@
 /** Generate by swagger-axios-codegen */
-/* eslint-disable */
 // @ts-nocheck
+/* eslint-disable */
 
 /** Generate by swagger-axios-codegen */
 /* eslint-disable */
@@ -3080,6 +3080,9 @@ export interface Unit {
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
+  property: Property
+
+  /**  */
   bmrProgramChart?: boolean
 
   /**  */
@@ -3587,17 +3590,6 @@ export interface Jurisdiction {
   updatedAt: Date
 }
 
-export interface WhatToExpect {
-  /**  */
-  applicantsWillBeContacted?: string
-
-  /**  */
-  allInfoWillBeVerified?: string
-
-  /**  */
-  bePreparedIfChosen?: string
-}
-
 export interface ReservedCommunityType {
   /**  */
   name: string
@@ -3715,10 +3707,10 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  property?: Property
+  property: Property
 
   /**  */
-  applications?: Application[]
+  applications: Application[]
 
   /**  */
   applicationDueDate?: Date
@@ -3826,7 +3818,7 @@ export interface Listing {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -5284,7 +5276,7 @@ export interface Listing {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -5618,7 +5610,7 @@ export interface ListingCreate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -5985,7 +5977,7 @@ export interface ListingUpdate {
   waitlistMaxSize?: number
 
   /**  */
-  whatToExpect?: CombinedWhatToExpectTypes
+  whatToExpect?: string
 
   /**  */
   applicationConfig?: object
@@ -6445,7 +6437,6 @@ export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedJurisdictionTypes = Id
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
-export type CombinedWhatToExpectTypes = WhatToExpect
 export type CombinedImageTypes = AssetCreate
 export type CombinedResultTypes = AssetCreate
 export enum EnumApplicationsApiExtraModelOrderBy {

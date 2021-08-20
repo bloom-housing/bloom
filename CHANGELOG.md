@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
   - Terms page checkbox text changed to blue ([#1645](https://github.com/bloom-housing/bloom/pull/1645)) (Emily Jablonski)
   - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
+  - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
@@ -28,6 +29,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
+  - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 ### Backend
 
@@ -46,6 +48,7 @@ All notable changes to this project will be documented in this file. The format 
   - removed roles for public users and assigned a "partner" role for leasing agents([#1628](https://github.com/bloom-housing/bloom/pull/1628))
   - Updates redis reset call to flush all keys
   - Updated listing's importer to handle latest reserved community type changes ([#1667](https://github.com/bloom-housing/bloom/pull/1667)) (Emily Jablonski)
+  - Change whatToExpect to be a string instead of a json blob, make it editable in listings management ([#1681](https://github.com/bloom-housing/bloom/pull/1681)) (Emily Jablonski)
 
 - Fixed:
   - Added checks for property in listing.dto transforms
