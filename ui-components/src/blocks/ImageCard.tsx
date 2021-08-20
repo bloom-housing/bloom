@@ -8,7 +8,7 @@ import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
 
 export interface StatusBar {
-  status: ApplicationStatusType
+  status?: ApplicationStatusType
   content: string
   subContent?: string
   hideIcon?: boolean
