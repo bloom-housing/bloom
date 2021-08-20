@@ -34,6 +34,7 @@ export const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
   if (
     unitsSummarized &&
+    unitsSummarized.unitTypes &&
     unitsSummarized.unitTypes.map((unitType) => unitType.name).includes("SRO")
   ) {
     return unitsSummarized.unitTypes.length == 1
