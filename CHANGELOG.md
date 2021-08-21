@@ -15,6 +15,8 @@ All notable changes to this project will be documented in this file. The format 
 - Removed:
   - Eligibility section of detailed listing view
     ([#422](https://github.com/CityOfDetroit/bloom/pull/422))
+  - Application section of partner portal
+    ([#438](https://github.com/CityOfDetroit/bloom/pull/438))
 
 ## Detroit Team M9
 

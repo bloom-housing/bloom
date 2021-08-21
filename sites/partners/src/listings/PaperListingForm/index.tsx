@@ -49,7 +49,6 @@ import ListingPhoto from "./sections/ListingPhoto"
 import BuildingFeatures from "./sections/BuildingFeatures"
 import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
-import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
@@ -579,11 +578,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <RankingsAndResults listing={listing} />
                           <LeasingAgent />
                           <ApplicationAddress listing={listing} />
-                          <ApplicationDates
-                            listing={listing}
-                            openHouseEvents={openHouseEvents}
-                            setOpenHouseEvents={setOpenHouseEvents}
-                          />
 
                           <div className="-ml-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
