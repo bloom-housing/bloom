@@ -31,7 +31,6 @@ import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { CountyCode } from "../../shared/types/county-code"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
@@ -242,12 +241,12 @@ class Listing extends BaseEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   disableUnitsAccordion?: boolean | null
 
-  @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
+  @ManyToOne(() => Jurisdiction, { eager: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
-  jurisdiction?: Jurisdiction | null
+  jurisdiction: Jurisdiction
 
   @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
@@ -379,12 +378,6 @@ class Listing extends BaseEntity {
   @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
   CSVFormattingType: CSVFormattingType
-
-  @Column({ enum: CountyCode, default: CountyCode.alameda })
-  @Expose()
-  @IsEnum(CountyCode, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: CountyCode, enumName: "CountyCode" })
-  countyCode: CountyCode
 
   @Expose()
   @ApiProperty()

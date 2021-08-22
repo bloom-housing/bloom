@@ -26,6 +26,9 @@ import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-se
 import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
+import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
+import { JurisdictionsService } from "./jurisdictions/jurisdictions.service"
+import { defaultJurisdictions } from "./seeds/jurisdictions"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -53,9 +56,19 @@ export function getSeedListingsCount() {
   return listingSeeds.length
 }
 
+export async function createJurisdictions(app: INestApplicationContext) {
+  const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
+  const jurisdictions = await Promise.all(
+    defaultJurisdictions.map(async (jurisdiction) => await jurisdictionService.create(jurisdiction))
+  )
+
+  return jurisdictions
+}
+
 export async function createLeasingAgents(
   app: INestApplicationContext,
-  rolesRepo: Repository<UserRoles>
+  rolesRepo: Repository<UserRoles>,
+  jurisdictions: Jurisdiction[]
 ) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
@@ -65,7 +78,7 @@ export async function createLeasingAgents(
   )
   await Promise.all([
     leasingAgents.map(async (agent: User) => {
-      const roles: UserRoles = { user: agent, isPartner: true }
+      const roles: UserRoles = { user: agent, isPartner: true, jurisdictions: [jurisdictions[0]] }
       await rolesRepo.save(roles)
       await usersService.confirm({ token: agent.confirmationToken })
     }),
@@ -73,9 +86,13 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
-const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<UserRoles>) => {
+const seedListings = async (
+  app: INestApplicationContext,
+  rolesRepo: Repository<UserRoles>,
+  jurisdictions: Jurisdiction[]
+) => {
   const seeds = []
-  const leasingAgents = await createLeasingAgents(app, rolesRepo)
+  const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
@@ -86,6 +103,7 @@ const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
     const listing = await listingSeed.seed()
+    listing.jurisdiction = jurisdictions[0]
     listing.leasingAgents = [everyOtherAgent]
     const applicationMethods = await applicationMethodsService.create({
       type: ApplicationMethodType.Internal,
@@ -112,7 +130,8 @@ async function seed() {
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
-  const listings = await seedListings(app, rolesRepo)
+  const jurisdictions = await createJurisdictions(app)
+  const listings = await seedListings(app, rolesRepo, jurisdictions)
 
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
@@ -168,7 +187,7 @@ async function seed() {
   }
 
   await userRepo.save(admin)
-  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true, jurisdictions }
   await rolesRepo.save(roles)
 
   await userService.confirm({ token: admin.confirmationToken })

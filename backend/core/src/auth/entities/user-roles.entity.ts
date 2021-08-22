@@ -1,5 +1,6 @@
 import { Expose } from "class-transformer"
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm"
 import { User } from "./user.entity"
 
 @Entity({ name: "user_roles" })
@@ -18,4 +19,8 @@ export class UserRoles {
   @Column("boolean", { default: false })
   @Expose()
   isPartner?: boolean
+
+  @ManyToMany(() => Jurisdiction)
+  @JoinTable()
+  jurisdictions: Jurisdiction[]
 }

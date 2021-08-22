@@ -507,11 +507,10 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   yearBuilt?: number | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
-  jurisdiction?: IdDto | null
+  jurisdiction: IdDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
