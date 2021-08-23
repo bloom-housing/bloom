@@ -18,7 +18,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   const textSize = vivid ? "text-xs" : "text-sm"
 
   const status = props.status || ApplicationStatusType.Open
-  const content = props.content || "Application status content"
+  const content = props.content
 
   switch (status) {
     case ApplicationStatusType.Open:
