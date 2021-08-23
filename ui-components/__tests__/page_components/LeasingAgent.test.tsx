@@ -55,6 +55,5 @@ describe("<LeasingAgent>", () => {
     )
     expect(getByText(managementCompany)).toBeTruthy()
     expect(getByText("Website")).toBeTruthy()
-
   })
 })
