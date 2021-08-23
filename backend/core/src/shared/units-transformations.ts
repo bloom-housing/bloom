@@ -71,7 +71,13 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
   const hmiHeaders = {
     sizeColumn: showUnitType ? "t.unitType" : "listings.householdSize",
   } as AnyDict
-  const bmrHeaders = ["Studio", "1 BR", "2 BR", "3 BR", "4 BR"]
+  const bmrHeaders = [
+    "listings.unitTypes.studio",
+    "listings.unitTypes.oneBdrm",
+    "listings.unitTypes.twoBdrm",
+    "listings.unitTypes.threeBdrm",
+    "listings.unitTypes.fourBdrm",
+  ]
   const hmiRows = [] as AnyDict[]
 
   // 1. If there are multiple AMI levels, show each AMI level (max income per
@@ -80,8 +86,8 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
   //    year for each size (number of cols = the size col + 2 for each income style)
   if (allPercentages.length > 1) {
     allPercentages.forEach((percent) => {
-      // Pass translation with its respective argument with format `key,argumentName:argumentValue`
-      hmiHeaders[`ami${percent}`] = `listings.percentAMIUnit,percent:${percent}`
+      // Pass translation with its respective argument with format `key*argumentName:argumentValue`
+      hmiHeaders[`ami${percent}`] = `listings.percentAMIUnit*percent:${percent}`
     })
   } else {
     hmiHeaders["maxIncomeMonth"] = "listings.maxIncomeMonth"
@@ -100,16 +106,20 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
 
   const getYearlyRangeValue = (incomeRange: MinMaxCurrency) => {
     return incomeRange.min === incomeRange.max
-      ? incomeRange.min
-      : `${incomeRange.min} - ${incomeRange.max}`
+      ? `listings.annualIncome*income:${incomeRange.min}`
+      : `listings.annualIncomeRange*from:${incomeRange.min}*to:${incomeRange.max}`
+  }
+
+  const yearlyCurrencyStringToMonthly = (minimum: string) => {
+    return usd.format(parseFloat(minimum.replace(/[^0-9.-]+/g, "")) / 12)
   }
 
   const getMonthlyRangeValue = (incomeRange: MinMaxCurrency) => {
+    const incomeMin = yearlyCurrencyStringToMonthly(incomeRange.min)
+    const incomeMax = yearlyCurrencyStringToMonthly(incomeRange.max)
     return incomeRange.min === incomeRange.max
-      ? usd.format(parseFloat(incomeRange.min.replace(/[^0-9.-]+/g, "")) / 12)
-      : `${usd.format(parseFloat(incomeRange.min.replace(/[^0-9.-]+/g, "")) / 12)} - ${usd.format(
-          parseFloat(incomeRange.max.replace(/[^0-9.-]+/g, "")) / 12
-        )}`
+      ? `listings.monthlyIncome*income:${incomeMin}`
+      : `listings.monthlyIncomeRange*from:${incomeMin}*to:${incomeMax}`
   }
 
   // Build row data by household size
