@@ -7,7 +7,7 @@ import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
 
-export interface StatusBar {
+export interface StatusBarType {
   status?: ApplicationStatusType
   content: string
   subContent?: string
@@ -21,7 +21,7 @@ export interface ImageCardProps {
   href?: string
   description?: string
   tagLabel?: string
-  statuses?: StatusBar[]
+  statuses?: StatusBarType[]
 }
 
 const ImageCard = (props: ImageCardProps) => {
