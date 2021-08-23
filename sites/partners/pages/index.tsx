@@ -8,7 +8,6 @@ import {
   Button,
   LocalizedLink,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
@@ -16,7 +15,6 @@ import { GridOptions } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
-import { Router, useRouter } from "next/router"
 
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
@@ -83,7 +81,8 @@ export default function ListingsList() {
       {
         headerName: t("listings.listingName"),
         field: "name",
-        sortable: false,
+        sortable: true,
+        sort: "asc",
         filter: false,
         resizable: true,
         cellRenderer: "ListingsLink",
@@ -99,19 +98,12 @@ export default function ListingsList() {
         cellRenderer: "ApplicationsLink",
       },
       {
-        headerName: t("listings.property.buildingAddress"),
-        field: "property.buildingAddress.street",
-        sortable: false,
+        headerName: t("listings.buildingAddress"),
+        field: "buildingAddress.street",
+        sortable: true,
         filter: false,
         resizable: true,
-      },
-      {
-        headerName: t("listings.applicationDeadline"),
-        field: "applicationDueDate",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
+        flex: 1,
       },
       {
         headerName: t("listings.availableUnits"),

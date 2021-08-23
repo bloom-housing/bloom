@@ -169,10 +169,12 @@ async function seed() {
 
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
-      await Promise.all([
-        await makeNewApplication(app, listing, user1),
-        await makeNewApplication(app, listing, user2),
-      ])
+      if (listing.countyCode !== CountyCode.detroit) {
+        await Promise.all([
+          await makeNewApplication(app, listing, user1),
+          await makeNewApplication(app, listing, user2),
+        ])
+      }
     }
   }
 
