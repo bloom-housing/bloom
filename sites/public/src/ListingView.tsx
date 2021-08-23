@@ -55,7 +55,9 @@ export const ListingView = (props: ListingProps) => {
           const percentInt = parseInt(percent, 10)
           return percentInt
         })
-        .sort()
+        .sort(function (a, b) {
+          return a - b
+        })
     : []
 
   let groupedUnits: GroupedTableGroup[] = null

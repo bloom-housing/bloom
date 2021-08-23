@@ -18,7 +18,7 @@ const ModalHeader = (props: { title: string }) => (
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
-  <footer className="modal__footer bg-primary-lighter">
+  <footer className="modal__footer bg-primary-lighter" data-testid="footer">
     <GridSection columns={4} reverse={true} tightSpacing={true}>
       {props.actions &&
         props.actions.map((action: React.ReactNode, index: number) => (
