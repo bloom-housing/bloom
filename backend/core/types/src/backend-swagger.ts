@@ -4912,6 +4912,9 @@ export interface ListingCreate {
   countyCode: CountyCode
 
   /**  */
+  reviewOrderType?: EnumListingReviewOrderType
+
+  /**  */
   applicationMethods: Id[]
 
   /**  */
@@ -5277,6 +5280,9 @@ export interface ListingUpdate {
 
   /**  */
   updatedAt?: Date
+
+  /**  */
+  reviewOrderType?: EnumListingReviewOrderType
 
   /**  */
   applicationMethods: Id[]

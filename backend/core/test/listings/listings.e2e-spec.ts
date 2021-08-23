@@ -65,7 +65,7 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const page = "2"
-    const limit = "9"
+    const limit = "11"
     const params = "/?page=" + page + "&limit=" + limit
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)

@@ -312,6 +312,10 @@ export const getUnitTypes = (units: Unit[]): UnitType[] => {
 export const transformUnits = (units: Unit[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
 
+  if (!units || (units && units.length === 0)) {
+    return data
+  }
+
   const unitTypes = new Map<string, UnitType>()
   for (const unitType of units.map((unit) => unit.unitType).filter((item) => item != null)) {
     unitTypes.set(unitType.id, unitType)
