@@ -194,6 +194,7 @@ const defaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
+  unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
     priorityTypes: [],
