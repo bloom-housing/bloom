@@ -56,14 +56,12 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         </p>
       )}
 
-      {props.managementCompany?.website && (
-        <div className="my-5">
-          {managementWebsite && (
-            <a href={managementWebsite} target="_blank" rel="noreferrer noopener">
-              <Icon symbol="globe" size="medium" fill={IconFillColors.primary} /> {t("t.website")}
-            </a>
-          )}
-        </div>
+      {managementWebsite && (
+        <p className="my-5">
+          <a href={managementWebsite} target="_blank" rel="noreferrer noopener">
+            <Icon symbol="globe" size="medium" fill={IconFillColors.primary} /> {t("t.website")}
+          </a>
+        </p>
       )}
 
       {listing.leasingAgentAddress && (
