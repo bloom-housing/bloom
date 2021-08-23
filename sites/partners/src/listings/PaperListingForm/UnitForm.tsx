@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import {
   t,
   GridSection,
@@ -12,6 +12,8 @@ import {
   Button,
   Form,
   numberOptions,
+  MinimalTable,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { TempUnit } from "."
@@ -32,6 +34,8 @@ type UnitFormProps = {
 }
 
 const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
+  const { amiChartsService } = useContext(AuthContext)
+
   const [current, setCurrent] = useState<TempUnit>(null)
   const [tempId, setTempId] = useState<number | null>(null)
   const [options, setOptions] = useState({
@@ -39,6 +43,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     unitPriorities: [],
     unitTypes: [],
   })
+  const [amiChartData, setAmiChartData] = useState([])
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -88,6 +93,38 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }, [units, setCurrent, tempId, reset, options])
 
   const rentType = watch("rentType")
+  const amiChart: string = watch("amiChart.id")
+  const amiPercentage: string = watch("amiPercentage")
+
+  useEffect(() => {
+    const fetchAmiChart = async () => {
+      try {
+        const selectedAmiChart = await amiChartsService.retrieve({
+          amiChartId: amiChart,
+        })
+        const tableData = selectedAmiChart.items.reduce((acc, current) => {
+          if (current.percentOfAmi === parseInt(amiPercentage)) {
+            acc.push({ householdSize: current.householdSize, maxIncome: current.income })
+          }
+          return acc
+        }, [])
+        tableData.sort(function (a, b) {
+          return a.householdSize - b.householdSize
+        })
+        setAmiChartData(tableData)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    if (amiChart && amiPercentage) {
+      void fetchAmiChart()
+    }
+  }, [amiChart, amiPercentage, amiChartsService])
+
+  const amiChartTableHeaders = {
+    householdSize: "listings.householdSize",
+    maxIncome: "listings.maxAnnualIncome",
+  }
 
   async function onFormSubmit(action?: string) {
     const validation = await trigger()
@@ -320,6 +357,15 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
               />
             </ViewItem>
           </GridCell>
+        </GridSection>
+        {amiChart && amiPercentage && amiChartData && amiChartData.length > 0 && (
+          <GridSection columns={2} className="pt-6">
+            <GridCell>
+              <MinimalTable headers={amiChartTableHeaders} data={amiChartData} />
+            </GridCell>
+          </GridSection>
+        )}
+        <GridSection columns={4} className="pt-6">
           <GridCell>
             <ViewItem label={t("listings.unit.rentType")}>
               <FieldGroup
@@ -332,8 +378,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
               />
             </ViewItem>
           </GridCell>
-        </GridSection>
-        <GridSection columns={4} className="pt-6">
           {rentType === "fixed" && (
             <>
               <GridCell>
