@@ -32,6 +32,9 @@ const LeasingAgent = (props: LeasingAgentProps) => {
 
       {listing.leasingAgentName && <p className="text-xl">{listing.leasingAgentName}</p>}
       {listing.leasingAgentTitle && <p className="text-gray-700">{listing.leasingAgentTitle}</p>}
+      {props.managementCompany?.name && (
+        <p className="text-gray-700">{props.managementCompany.name}</p>
+      )}
 
       {listing.leasingAgentPhone && (
         <>
@@ -60,10 +63,9 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         />
       )}
 
-      {props.managementCompany && (
+      {props.managementCompany?.website && (
         <>
           <div className="mt-5">
-            <p>{props.managementCompany.name}</p>
             {managementWebsite && (
               <a href={managementWebsite} target="_blank" rel="noreferrer noopener">
                 <Icon symbol="globe" size="medium" fill={IconFillColors.primary} /> {t("t.website")}
