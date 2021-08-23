@@ -28,8 +28,12 @@ All notable changes to this project will be documented in this file. The format 
   - Add ResponsiveTable for pricing
 
 - Fixed:
+
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
+
+- Changed:
+  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
 
 ### Backend
 
