@@ -1,6 +1,7 @@
 export * from "./AlamedaCountyLIHTC2020"
 export * from "./AlamedaCountyTCAC2019"
 export * from "./AlamedaCountyTCAC2020"
+export * from "./WayneCountyMSHDA2021"
 export * from "./OaklandFremontHUD2020"
 export * from "./SanJoseTCAC2019"
 export * from "./SanMateoCountyTCAC2019"

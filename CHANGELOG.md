@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file. The format 
   - Zipcode filtering to backend ([#399](https://github.com/CityOfDetroit/bloom/pull/399))
   - CSV import script ([#404](https://github.com/CityOfDetroit/bloom/pull/404))
   - Zipcode filtering to frontend ([#417](https://github.com/CityOfDetroit/bloom/pull/417))
+  - Detroit AMI data and import script
+    ([#443](https://github.com/CityOfDetroit/bloom/pull/443))
 
 - Removed:
   - Eligibility section of detailed listing view
