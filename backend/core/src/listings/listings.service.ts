@@ -17,6 +17,8 @@ import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.d
 import { addFilters } from "../shared/filter"
 import { Language } from "../../types"
 import { TranslationsService } from "../translations/translations.service"
+import { transitionState, ListingContext } from "./listing.states"
+import { ListingStatus } from "./types/listing-status-enum"
 
 @Injectable()
 export class ListingsService {
@@ -134,11 +136,19 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    const listing = this.listingRepository.create({
+    const newListing = {
       ...listingDto,
-      property: plainToClass(PropertyCreateDto, listingDto),
-    })
-    return await listing.save()
+      property: plainToClass(PropertyCreateDto, listingDto.status),
+    }
+    const listingContext = { listing: newListing, error: null } as ListingContext
+    const result = transitionState(listingContext, ListingStatus.pending)
+
+    if (!result.errors) {
+      const listing = this.listingRepository.create(newListing)
+      return await listing.save()
+    } else {
+      return result.errors
+    }
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -154,6 +164,9 @@ export class ListingsService {
         delete unit.id
       }
     })
+    // Don't assign status, state machine will handle it
+    const newStatus = listingDto.status
+    listingDto.status = listing.status
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
       property: plainToClass(
@@ -168,8 +181,13 @@ export class ListingsService {
         { excludeExtraneousValues: true }
       ),
     })
-
-    return await this.listingRepository.save(listing)
+    const listingContext = { listing: listing, error: null } as ListingContext
+    const result = transitionState(listingContext, newStatus)
+    if (!result.errors) {
+      return await this.listingRepository.save(listing)
+    } else {
+      return result.errors
+    }
   }
 
   async delete(listingId: string) {

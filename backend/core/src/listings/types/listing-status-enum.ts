@@ -1,5 +1,6 @@
 export enum ListingStatus {
   active = "active",
-  pending = "pending",
   closed = "closed",
+  new = "new",
+  pending = "pending",
 }
