@@ -4,7 +4,7 @@ import { TranslationsModule } from "../../translations/translations.module"
 import { EmailService } from "./email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { SharedModule } from "../shared.module"
-import { CountyCodeResolverService } from "../services/county-code-resolver.service"
+import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { CountyCodeResolverService } from "../services/county-code-resolver.serv
       }),
     }),
   ],
-  providers: [EmailService, CountyCodeResolverService],
+  providers: [EmailService, JurisdictionResolverService],
   exports: [EmailService],
 })
 export class EmailModule {}

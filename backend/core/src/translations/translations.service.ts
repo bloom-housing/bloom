@@ -3,7 +3,6 @@ import { Injectable, NotFoundException } from "@nestjs/common"
 import { Translation } from "./entities/translation.entity"
 import { Translate } from "@google-cloud/translate/build/src/v2"
 import { TranslationCreateDto, TranslationUpdateDto } from "./dto/translation.dto"
-import { CountyCode } from "../shared/types/county-code"
 import { Language } from "../shared/types/language-enum"
 import { Listing } from "../listings/entities/listing.entity"
 import { isEmpty } from "../libs/miscLib"
@@ -39,15 +38,15 @@ export class TranslationsService extends AbstractServiceFactory<
   TranslationCreateDto,
   TranslationUpdateDto
 >(Translation) {
-  public async getTranslationByLanguageAndCountyCodeOrDefaultEn(
+  public async getTranslationByLanguageAndJurisdictionOrDefaultEn(
     language: Language,
-    countyCode: CountyCode
+    jurisdictionId: string
   ) {
     try {
       return await this.findOne({
         where: {
           language,
-          countyCode,
+          jurisdictionId,
         },
       })
     } catch (e) {
@@ -56,7 +55,7 @@ export class TranslationsService extends AbstractServiceFactory<
         return this.findOne({
           where: {
             language: Language.en,
-            countyCode,
+            jurisdictionId,
           },
         })
       } else {

@@ -4080,7 +4080,7 @@ export interface Listing {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
+  countyCode: string
 
   /**  */
   showWaitlist: boolean
@@ -4119,7 +4119,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  jurisdiction?: Jurisdiction
+  jurisdiction: Jurisdiction
 
   /**  */
   reservedCommunityType?: ReservedCommunityType
@@ -4432,9 +4432,6 @@ export interface ListingCreate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   applicationMethods: Id[]
 
   /**  */
@@ -4513,7 +4510,7 @@ export interface ListingCreate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: CombinedJurisdictionTypes
+  jurisdiction: CombinedJurisdictionTypes
 
   /**  */
   reservedCommunityType?: Id
@@ -4787,9 +4784,6 @@ export interface ListingUpdate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   id?: string
 
   /**  */
@@ -4877,7 +4871,7 @@ export interface ListingUpdate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: Id
+  jurisdiction: Id
 
   /**  */
   reservedCommunityType?: Id
@@ -5244,7 +5238,7 @@ export interface ReservedCommunityTypeUpdate {
 
 export interface Translation {
   /**  */
-  countyCode: CountyCode
+  jurisdiction: Jurisdiction
 
   /**  */
   language: Language
@@ -5264,7 +5258,7 @@ export interface Translation {
 
 export interface TranslationCreate {
   /**  */
-  countyCode: CountyCode
+  jurisdiction: Id
 
   /**  */
   language: Language
@@ -5275,7 +5269,7 @@ export interface TranslationCreate {
 
 export interface TranslationUpdate {
   /**  */
-  countyCode: CountyCode
+  jurisdiction: Id
 
   /**  */
   language: Language
@@ -5418,13 +5412,6 @@ export enum CSVFormattingType {
   "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
   "ohaFormat" = "ohaFormat",
   "bhaFormat" = "bhaFormat",
-}
-
-export enum CountyCode {
-  "Alameda" = "Alameda",
-  "San Mateo" = "San Mateo",
-  "San Jose" = "San Jose",
-  "Detroit" = "Detroit",
 }
 
 export enum ListingEventType {

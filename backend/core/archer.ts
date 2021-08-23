@@ -1,6 +1,5 @@
 import {
   AmiChart,
-  CountyCode,
   CSVFormattingType,
   EnumListingReviewOrderType,
   Listing,
@@ -244,6 +243,13 @@ export const SanMateoHUD2019: AmiChart = {
 
 export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
+  countyCode: "Alameda",
+  jurisdiction: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "Alameda",
+  },
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationDueTime: new Date(),
@@ -252,7 +258,6 @@ export const ArcherListing: Listing = {
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
-  countyCode: CountyCode["San Jose"],
   depositMax: "",
   disableUnitsAccordion: false,
   events: [],

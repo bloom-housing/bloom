@@ -6,7 +6,6 @@ import {
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
-import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
@@ -479,7 +478,6 @@ export const defaultListing: ListingSeedType = {
   applicationPickUpAddressOfficeHours: "Custom pick up address office hours text",
   buildingSelectionCriteria: "example.com",
   costsNotIncluded: "Custom costs not included text",
-  countyCode: CountyCode.alameda,
   creditHistory: "Custom credit history text",
   criminalBackground: "Custom criminal background text",
   CSVFormattingType: CSVFormattingType.basic,

@@ -27,7 +27,7 @@ import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
-import { JurisdictionsService } from "./jurisdictions/jurisdictions.service"
+import { JurisdictionsService } from "./jurisdictions/services/jurisdictions.service"
 import { defaultJurisdictions } from "./seeds/jurisdictions"
 
 const argv = yargs.scriptName("seed").options({

@@ -10,9 +10,9 @@ import fs from "fs"
 import { ConfigService } from "@nestjs/config"
 import { Application } from "../../applications/entities/application.entity"
 import { TranslationsService } from "../../translations/translations.service"
-import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
-import { CountyCodeResolverService } from "../services/county-code-resolver.service"
+import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -22,7 +22,7 @@ export class EmailService {
     private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
     private readonly translationService: TranslationsService,
-    private readonly countyCodeResolverService: CountyCodeResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService
   ) {
     this.polyglot = new Polyglot({
       phrases: {},
@@ -40,8 +40,10 @@ export class EmailService {
 
   public async welcome(user: User, appUrl: string) {
     const language = user.language || Language.en
-    // NOTE What to do when user has no countyCode e.g. an admin?
-    void (await this.loadTranslations(this.countyCodeResolverService.getCountyCode(), language))
+    void (await this.loadTranslations(
+      await this.jurisdictionResolverService.getJurisdiction(),
+      language
+    ))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
@@ -62,7 +64,7 @@ export class EmailService {
   }
 
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
-    void (await this.loadTranslations(listing.countyCode, application.language || Language.en))
+    void (await this.loadTranslations(listing.jurisdiction, application.language || Language.en))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
@@ -108,7 +110,7 @@ export class EmailService {
 
   public async forgotPassword(user: User, appUrl: string) {
     void (await this.loadTranslations(
-      this.countyCodeResolverService.getCountyCode(),
+      await this.jurisdictionResolverService.getJurisdiction(),
       user.language
     ))
     const compiledTemplate = this.template("forgot-password")
@@ -133,10 +135,10 @@ export class EmailService {
     )
   }
 
-  private async loadTranslations(countyCode: CountyCode, language: Language) {
-    const translation = await this.translationService.getTranslationByLanguageAndCountyCodeOrDefaultEn(
+  private async loadTranslations(jurisdiction: Jurisdiction, language: Language) {
+    const translation = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
       language,
-      countyCode
+      jurisdiction.id
     )
     this.polyglot.replace(translation.translations)
   }
