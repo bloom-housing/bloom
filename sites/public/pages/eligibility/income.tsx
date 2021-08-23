@@ -7,7 +7,7 @@ import React, { useContext } from "react"
 import { FormCard } from "@bloom-housing/ui-components/src/blocks/FormCard"
 import { t } from "@bloom-housing/ui-components/src/helpers/translator"
 import { ProgressNav } from "@bloom-housing/ui-components/src/navigation/ProgressNav"
-import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { Form } from "@bloom-housing/ui-components/src/forms/Form"
 import { Button } from "@bloom-housing/ui-components/src/actions/Button"
 import { AppearanceStyleType, Select } from "@bloom-housing/ui-components"
@@ -39,13 +39,18 @@ const EligibilityIncome = () => {
     void router.push(eligibilityRoute(CURRENT_PAGE + 1))
   }
 
+  if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
+    eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
+  }
+
   return (
     <FormsLayout>
       <FormCard header={t("eligibility.progress.header")}>
         <ProgressNav
           currentPageSection={5}
-          completedSections={4}
+          completedSections={eligibilityRequirements.completedSections}
           labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
+          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
         />
       </FormCard>
       <FormCard>

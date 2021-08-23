@@ -46,13 +46,18 @@ const EligibilityAge = () => {
     return age >= MIN_AGE && age <= MAX_AGE
   }
 
+  if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
+    eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
+  }
+
   return (
     <FormsLayout>
       <FormCard header={t("eligibility.progress.header")}>
         <ProgressNav
           currentPageSection={3}
-          completedSections={2}
+          completedSections={eligibilityRequirements.completedSections}
           labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
+          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
         />
       </FormCard>
       <FormCard>
