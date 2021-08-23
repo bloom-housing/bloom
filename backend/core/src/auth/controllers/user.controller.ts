@@ -119,7 +119,6 @@ export class UserController {
     return mapTo(UserDto, await this.userService.update(dto, new AuthContext(req.user as User)))
   }
 
-  // TODO: only admin should be able to fetch user list
   @Get("/list")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "List users", operationId: "list" })
