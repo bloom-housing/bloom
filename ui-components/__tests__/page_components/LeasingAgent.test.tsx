@@ -31,4 +31,29 @@ describe("<LeasingAgent>", () => {
       listing.leasingAgentOfficeHours && queryByText(listing.leasingAgentOfficeHours)
     ).toBeNull()
   })
+  it("does not show management company details if managementCompany prop is absent", () => {
+    const listing = Object.assign({}, ArcherListing) as Listing
+    const managementCompany = "Some Management Company"
+
+    const { queryByText } = render(<LeasingAgent listing={listing} />)
+    expect(queryByText(managementCompany)).toBeNull()
+    expect(queryByText("Website")).toBeNull()
+  })
+  it("shows management company details if managementCompany prop is present", () => {
+    const listing = Object.assign({}, ArcherListing) as Listing
+    const managementCompany = "Some Management Company"
+    const managementWebsite = "a fake management website url"
+
+    const { getByText } = render(
+      <LeasingAgent
+        listing={listing}
+        managementCompany={{
+          name: managementCompany,
+          website: managementWebsite,
+        }}
+      />
+    )
+    expect(getByText(managementCompany)).toBeTruthy()
+    expect(getByText("Website")).toBeTruthy()
+  })
 })

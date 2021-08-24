@@ -79,13 +79,15 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   label: t("listings.firstComeFirstServe"),
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
-                  defaultChecked: !lotteryEvent,
+                  defaultChecked:
+                    !listing ||
+                    listing?.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe,
                 },
                 {
                   label: t("listings.lottery"),
                   value: "reviewOrderLottery",
                   id: "reviewOrderLottery",
-                  defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
+                  defaultChecked: listing?.reviewOrderType === EnumListingReviewOrderType.lottery,
                 },
               ]}
             />
