@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Zipcode filtering to frontend ([#417](https://github.com/CityOfDetroit/bloom/pull/417))
   - Detroit AMI data and import script
     ([#443](https://github.com/CityOfDetroit/bloom/pull/443))
+  - Fetch UnitsSummary data in listing query ([#441](https://github.com/CityOfDetroit/bloom/pull/441))
 
 - Removed:
   - Eligibility section of detailed listing view
