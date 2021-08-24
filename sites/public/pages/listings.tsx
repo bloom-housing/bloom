@@ -24,7 +24,11 @@ import { useRouter } from "next/router"
 import { useListingsData } from "../lib/hooks"
 import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
 
-const isValidZipCode = (value: string) => {
+const isValidZipCodeOrEmpty = (value: string) => {
+  // Empty strings or whitespace are valid and will reset the filter.
+  if (!value.trim()) {
+    return true
+  }
   let returnValue = true
   value.split(",").forEach((element) => {
     if (!/^[0-9]{5}$/.test(element.trim())) {
@@ -132,7 +136,7 @@ const ListingsPage = () => {
               controlClassName="control"
               placeholder={t("listingFilters.zipCodeDescription")}
               validation={{
-                validate: (value) => isValidZipCode(value),
+                validate: (value) => isValidZipCodeOrEmpty(value),
               }}
               error={errors.zipCodeField}
               errorMessage={t("errors.multipleZipCodeError")}
