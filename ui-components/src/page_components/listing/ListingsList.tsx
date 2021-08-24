@@ -82,9 +82,7 @@ const ListingsList = (props: ListingsProps) => {
             subtitle={subtitle}
             imageUrl={imageUrl}
             href={`/listing/${listing.id}/${listing.urlSlug}`}
-            appStatus={appStatus}
-            appStatusContent={content}
-            appStatusSubContent={subContent}
+            statuses={[{ status: appStatus, content: content, subContent: subContent }]}
             tagLabel={
               listing.reservedCommunityType
                 ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
