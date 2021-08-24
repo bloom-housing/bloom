@@ -55,7 +55,7 @@ All notable changes to this project will be documented in this file. The format 
   - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
     - **Breaking Change**
   - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
-    - **Breaking Change**: Removed existing props except for editMode and replaced with a set no dependent on data model
+    - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
 
 ### Backend
 
