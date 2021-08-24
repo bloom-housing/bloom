@@ -9,7 +9,6 @@ interface AppStatusItemProps {
   applicationURL: string
   applicationUpdatedAt: Date
   confirmationNumber?: string
-  listingId: string
   listingName: string
   listingURL: string
 }

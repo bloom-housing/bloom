@@ -11,7 +11,6 @@ export const AppStatusItemSubmitted = () => (
     applicationURL={"application/1234abcd"}
     applicationUpdatedAt={new Date()}
     confirmationNumber={"1234abcd"}
-    listingId={"abcd1234"}
     listingName={"Listing Name"}
     listingURL={"/listing/abcd1234/listing-name"}
   />
@@ -21,7 +20,6 @@ export const AppStatusItemNoConfirmationNumberOrDueDate = () => (
   <AppStatusItem
     applicationURL={"application/1234abcd"}
     applicationUpdatedAt={new Date()}
-    listingId={"abcd1234"}
     listingName={"Listing Name"}
     listingURL={"/listing/abcd1234/listing-name"}
   />
