@@ -83,8 +83,8 @@ const ApplicationAddMembers = () => {
               clearErrors={clearErrors}
               error={errors.householdSize}
               householdSize={householdSize}
-              householdSizeMax={listing.householdSizeMax}
-              householdSizeMin={listing.householdSizeMin}
+              householdSizeMax={listing?.householdSizeMax}
+              householdSizeMin={listing?.householdSizeMin}
               register={register}
               validate={true}
             />
