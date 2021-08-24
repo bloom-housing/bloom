@@ -41,12 +41,26 @@ const ApplicationAddMembers = () => {
 
   const applicant = application.applicant
 
+  const editMember = (orderId: number) => {
+    if (orderId != undefined && orderId >= 0) {
+      void router.push({
+        pathname: "/applications/household/member",
+        query: { memberId: orderId },
+      })
+    } else {
+      void router.push("/applications/contact/name")
+    }
+  }
+
   const membersSection = application.householdMembers.map((member) => {
     return (
       <HouseholdMemberForm
-        member={member}
+        editMember={editMember}
         key={member}
-        type={t("application.household.householdMember")}
+        memberFirstName={member.firstName}
+        memberId={member.orderId}
+        memberLastName={member.lastName}
+        subtitle={t("application.household.householdMember")}
       />
     )
   })
@@ -91,9 +105,11 @@ const ApplicationAddMembers = () => {
           </div>
           <div className="form-card__group my-0 mx-0 pb-4 pt-4">
             <HouseholdMemberForm
-              member={applicant}
-              type={t("application.household.primaryApplicant")}
+              editMember={editMember}
               editMode={!application.autofilled}
+              memberFirstName={applicant.firstName}
+              memberLastName={applicant.lastName}
+              subtitle={t("application.household.primaryApplicant")}
             />
             {membersSection}
           </div>
