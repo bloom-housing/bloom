@@ -100,3 +100,11 @@ export const openedWithFCFSVivid = () => (
     vivid
   />
 )
+
+export const postLottery = () => (
+  <ApplicationStatus
+    content={"Post-lottery content: " + moment().format("MMMM Do, Y")}
+    status={ApplicationStatusType.PostLottery}
+    withIcon={false}
+  />
+)
