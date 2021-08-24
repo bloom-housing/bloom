@@ -31,6 +31,6 @@ describe("<HousingCounselor>", () => {
     expect(getByText("123 Main St", { exact: false })).not.toBeNull()
     expect(getByText("San Francisco, CA", { exact: false })).not.toBeNull()
     expect(getByText("123-456-7890", { exact: false })).not.toBeNull()
-    expect(getByText("Counselor Name").closest("a")?.getAttribute("href")).toBe("www.counselor.org")
+    expect(getByText("Website").closest("a")?.getAttribute("href")).toBe("www.counselor.org")
   })
 })
