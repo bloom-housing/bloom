@@ -7,6 +7,13 @@ import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
 
+export interface StatusBarType {
+  status?: ApplicationStatusType
+  content: string
+  subContent?: string
+  hideIcon?: boolean
+}
+
 export interface ImageCardProps {
   imageUrl: string
   subtitle?: string
@@ -14,39 +21,33 @@ export interface ImageCardProps {
   href?: string
   description?: string
   tagLabel?: string
-  appStatus?: ApplicationStatusType
-  appStatusContent?: string
-  appStatusSubContent?: string
+  statuses?: StatusBarType[]
 }
 
 const ImageCard = (props: ImageCardProps) => {
-  let statusLabel
-  let tag
-
-  if (props.appStatus !== undefined && props.appStatusContent !== undefined) {
-    statusLabel = (
-      <aside className="image-card__status">
-        <ApplicationStatus
-          status={props.appStatus}
-          content={props.appStatusContent}
-          subContent={props.appStatusSubContent}
-          vivid
-        />
-      </aside>
-    )
-  }
-
-  if (props.tagLabel) {
-    tag = (
-      <div className="image-card-tag__wrapper">
-        <Tag styleType={AppearanceStyleType.warning}>{props.tagLabel}</Tag>
-      </div>
-    )
+  const getStatuses = () => {
+    return props.statuses?.map((status, index) => {
+      return (
+        <aside className="image-card__status" aria-label={status.content} key={index}>
+          <ApplicationStatus
+            status={status.status}
+            content={status.content}
+            subContent={status.subContent}
+            withIcon={!status.hideIcon}
+            vivid
+          />
+        </aside>
+      )
+    })
   }
 
   const image = (
     <div className="image-card__wrapper">
-      {tag}
+      {props.tagLabel && (
+        <div className="image-card-tag__wrapper">
+          <Tag styleType={AppearanceStyleType.warning}>{props.tagLabel}</Tag>
+        </div>
+      )}
       <figure className="image-card">
         {props.imageUrl && (
           <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />
@@ -56,7 +57,7 @@ const ImageCard = (props: ImageCardProps) => {
           {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
         </figcaption>
       </figure>
-      {statusLabel}
+      {getStatuses()}
     </div>
   )
 

@@ -7,6 +7,7 @@ import { openDateState } from "../../../helpers/state"
 
 interface LeasingAgentProps {
   listing: Listing
+  managementCompany?: { name: string; website: string }
 }
 
 const LeasingAgent = (props: LeasingAgentProps) => {
@@ -20,12 +21,20 @@ const LeasingAgent = (props: LeasingAgentProps) => {
     ? `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
     : ""
 
+  let managementWebsite = props.managementCompany?.website
+  if (managementWebsite && !managementWebsite.startsWith("http")) {
+    managementWebsite = `http://${managementWebsite}`
+  }
+
   return (
     <section className="aside-block">
       <h4 className="text-caps-underline">{t("leasingAgent.contact")}</h4>
 
       {listing.leasingAgentName && <p className="text-xl">{listing.leasingAgentName}</p>}
       {listing.leasingAgentTitle && <p className="text-gray-700">{listing.leasingAgentTitle}</p>}
+      {props.managementCompany?.name && (
+        <p className="text-gray-700">{props.managementCompany.name}</p>
+      )}
 
       {listing.leasingAgentPhone && (
         <>
@@ -43,6 +52,14 @@ const LeasingAgent = (props: LeasingAgentProps) => {
         <p className="my-5">
           <a href={`mailto:${listing.leasingAgentEmail}`}>
             <Icon symbol="mail" size="medium" fill={IconFillColors.primary} /> {t("t.email")}
+          </a>
+        </p>
+      )}
+
+      {managementWebsite && (
+        <p className="my-5">
+          <a href={managementWebsite} target="_blank" rel="noreferrer noopener">
+            <Icon symbol="globe" size="medium" fill={IconFillColors.primary} /> {t("t.website")}
           </a>
         </p>
       )}
