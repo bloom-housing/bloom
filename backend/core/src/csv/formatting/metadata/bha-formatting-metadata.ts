@@ -45,6 +45,8 @@ import {
   formatRequestUnitType,
   formatVouchersOrSubsidies,
   formatWorkPreference,
+  formatMarkedAsDuplicate,
+  formatFlagged,
 } from "../formatters"
 
 export const bhaFormattingMetadata = [
@@ -94,4 +96,6 @@ export const bhaFormattingMetadata = [
   formatBHAPreference,
   formatHouseholdSize,
   formatHoueholdMembers,
+  formatMarkedAsDuplicate,
+  formatFlagged,
 ]
