@@ -41,8 +41,10 @@ const views: Views = {
       "units.status",
       "unitType.id",
       "unitType.name",
+      "jurisdiction.name",
     ],
     leftJoins: [
+      { join: "listings.jurisdiction", alias: "jurisdiction" },
       { join: "listings.image", alias: "image" },
       { join: "listings.property", alias: "property" },
       { join: "property.buildingAddress", alias: "buildingAddress" },

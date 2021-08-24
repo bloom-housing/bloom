@@ -331,11 +331,12 @@ export class ListingDto extends OmitType(Listing, [
   )
   urlSlug: string
 
+  // Keep countyCode so we don't have to update frontend apps yet
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
-      return obj.jurisdiction.name
+      return obj.jurisdiction?.name
     },
     { toClassOnly: true }
   )

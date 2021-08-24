@@ -20,8 +20,8 @@ export class addsJurisdictionsTranslations1629744413542 implements MigrationInte
                 SET jurisdiction_id = j.id
                 FROM translations AS t
                     INNER JOIN jurisdictions AS j
-                    ON ${translation.county_code} = j.name
-                WHERE t.id = ${translation.id}
+                    ON '${translation.county_code}' = j.name
+                WHERE t.id = '${translation.id}'
                 
             `)
         }

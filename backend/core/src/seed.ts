@@ -58,11 +58,16 @@ export function getSeedListingsCount() {
 
 export async function createJurisdictions(app: INestApplicationContext) {
   const jurisdictionService = await app.resolve<JurisdictionsService>(JurisdictionsService)
-  const jurisdictions = await Promise.all(
-    defaultJurisdictions.map(async (jurisdiction) => await jurisdictionService.create(jurisdiction))
+  // some jurisdictions are added via previous migrations
+  const jurisdictions = await jurisdictionService.list()
+  const toInsert = defaultJurisdictions.filter(
+    (rec) => jurisdictions.findIndex((item) => item.name === rec.name) === -1
+  )
+  const inserted = await Promise.all(
+    toInsert.map(async (jurisdiction) => await jurisdictionService.create(jurisdiction))
   )
 
-  return jurisdictions
+  return inserted
 }
 
 export async function createLeasingAgents(

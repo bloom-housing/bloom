@@ -4,11 +4,12 @@ import { TranslationsModule } from "../../translations/translations.module"
 import { EmailService } from "./email.service"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { SharedModule } from "../shared.module"
-import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { JurisdictionsModule } from "../../jurisdictions/jurisdictions.module"
 
 @Module({
   imports: [
     SharedModule,
+    JurisdictionsModule,
     TranslationsModule,
     SendGridModule.forRootAsync({
       imports: [ConfigModule],
@@ -18,7 +19,7 @@ import { JurisdictionResolverService } from "../../jurisdictions/services/jurisd
       }),
     }),
   ],
-  providers: [EmailService, JurisdictionResolverService],
+  providers: [EmailService],
   exports: [EmailService],
 })
 export class EmailModule {}
