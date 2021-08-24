@@ -24,10 +24,9 @@ describe("<AppStatusItem>", () => {
     expect(getByText(t("listings.applicationDeadline"), { exact: false })).not.toBeNull()
     expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
   })
-  it("renders without a confirmation number if not provided", () => {
+  it("renders without a confirmation number or due date if not provided", () => {
     const { getByText, queryByText } = render(
       <AppStatusItem
-        applicationDueDate={new Date()}
         applicationURL={"application/1234abcd"}
         applicationUpdatedAt={new Date()}
         listingId={"abcd1234"}
@@ -37,7 +36,7 @@ describe("<AppStatusItem>", () => {
     )
 
     expect(getByText("Listing Name")).not.toBeNull()
-    expect(getByText(t("listings.applicationDeadline"), { exact: false })).not.toBeNull()
+    expect(queryByText(t("listings.applicationDeadline"), { exact: false })).toBeNull()
     expect(queryByText(t("application.yourLotteryNumber"))).toBeNull()
   })
 })

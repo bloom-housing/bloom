@@ -17,9 +17,8 @@ export const AppStatusItemSubmitted = () => (
   />
 )
 
-export const AppStatusItemNoConfirmationNumber = () => (
+export const AppStatusItemNoConfirmationNumberOrDueDate = () => (
   <AppStatusItem
-    applicationDueDate={new Date()}
     applicationURL={"application/1234abcd"}
     applicationUpdatedAt={new Date()}
     listingId={"abcd1234"}

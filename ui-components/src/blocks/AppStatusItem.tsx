@@ -5,7 +5,7 @@ import { LocalizedLink } from "../actions/LocalizedLink"
 import { t } from "../helpers/translator"
 
 interface AppStatusItemProps {
-  applicationDueDate: Date
+  applicationDueDate?: Date
   applicationURL: string
   applicationUpdatedAt: Date
   confirmationNumber?: string
@@ -23,9 +23,11 @@ const AppStatusItem = (props: AppStatusItemProps) => {
       <div className="status-item__inner">
         <header className="status-item__header">
           <h3 className="status-item__title">{props.listingName}</h3>
-          <p className="status-item__due">
-            {t("listings.applicationDeadline")}: {applicationDueDate.format("MMMM D, YYYY")}
-          </p>
+          {props.applicationDueDate && (
+            <p className="status-item__due">
+              {t("listings.applicationDeadline")}: {applicationDueDate.format("MMMM D, YYYY")}
+            </p>
+          )}
         </header>
 
         <section className="status-item__content">
