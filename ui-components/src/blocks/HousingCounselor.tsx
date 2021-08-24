@@ -33,20 +33,16 @@ const HousingCounselor = (props: HousingCounselorProps) => {
         </p>
       )}
       {props.phone && (
-        <>
-          <a className="icon-item pb-1" href={`tel:+1${props.phone}`}>
-            <Icon symbol="phone" size="medium" fill={IconFillColors.primary} />
-            {` ${t("housingCounselors.call", { number: props.phone })}`}
-          </a>
-        </>
+        <a className="icon-item pb-1" href={`tel:+1${props.phone}`}>
+          <Icon symbol="phone" size="medium" fill={IconFillColors.primary} />
+          {` ${t("housingCounselors.call", { number: props.phone })}`}
+        </a>
       )}
       {props.website && (
-        <>
-          <a className="icon-item" href={props.website}>
-            <Icon symbol="globe" size="medium" fill={IconFillColors.primary} />
-            {` ${t("t.website")}`}
-          </a>
-        </>
+        <a className="icon-item" href={props.website}>
+          <Icon symbol="globe" size="medium" fill={IconFillColors.primary} />
+          {` ${t("t.website")}`}
+        </a>
       )}
     </div>
   )
