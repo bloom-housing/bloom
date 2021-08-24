@@ -1208,6 +1208,7 @@
         "title": "Solicite una vivienda asequible en",
         "seeMoreOpportunities": "Ver más oportunidades de alquiler y propiedad de viviendas",
         "viewAdditionalHousing": "Ver recursos y oportunidades de vivienda adicionales",
+        "checkEligibility": "Verifique mi elegibilidad",
         "subTitle": "Haga clic en el botón a continuación para encontrar una vivienda de alquiler según sus ingresos y las necesidades de su hogar."
     },
     "whatToExpect": {
@@ -1215,6 +1216,7 @@
         "default": "El agente de la propiedad se pondrá en contacto con los solicitantes en orden de clasificación hasta que se llenen las vacantes. Se verificará toda la información que haya proporcionado y se confirmará su elegibilidad. Su solicitud será eliminada de la lista de espera si ha realizado declaraciones fraudulentas. Si no podemos verificar una preferencia de vivienda que ha reclamado, no recibirá la preferencia, pero no será penalizado de otra manera. Si se elige su solicitud, esté preparado para completar una solicitud más detallada y proporcionar los documentos de respaldo requeridos."
     },
     "listingFilters": {
+        "buttonTitle": "Filtrar listados",
         "modalTitle": "Filtrar Resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
         "neighborhood": "Vecindario",
@@ -1227,7 +1229,9 @@
           "fourPlus": "4 o más recámaras"
         },
         "zipCode": "Código postal",
-        "zipCodeDescription": "Ingresa tu código postal"
+        "zipCodeDescription": "Ingresa tu código postal",
+        "noResults": "No hay resultados",
+        "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados."
     },
     "eligibility": {
         "progress": {

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Detroit Team M10
 
+- Fixed:
+
+  - Display a message when there are no results after applying filters
+    ([#456](https://github.com/CityOfDetroit/bloom/pull/456))
+
 - Added:
 
   - Zipcode filtering to backend ([#399](https://github.com/CityOfDetroit/bloom/pull/399))
