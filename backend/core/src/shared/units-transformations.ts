@@ -110,8 +110,8 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
       : `listings.annualIncomeRange*from:${incomeRange.min}*to:${incomeRange.max}`
   }
 
-  const yearlyCurrencyStringToMonthly = (minimum: string) => {
-    return usd.format(parseFloat(minimum.replace(/[^0-9.-]+/g, "")) / 12)
+  const yearlyCurrencyStringToMonthly = (currency: string) => {
+    return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, "")) / 12)
   }
 
   const getMonthlyRangeValue = (incomeRange: MinMaxCurrency) => {
