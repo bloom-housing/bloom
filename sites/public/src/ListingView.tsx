@@ -83,6 +83,7 @@ export const ListingView = (props: ListingProps) => {
   const shouldShowFeaturesDetail = () => {
     return (
       listing.neighborhood ||
+      listing.region ||
       listing.yearBuilt ||
       listing.smokingPolicy ||
       listing.petPolicy ||
@@ -207,6 +208,9 @@ export const ListingView = (props: ListingProps) => {
               <dl className="column-definition-list">
                 {listing.neighborhood && (
                   <Description term={t("t.neighborhood")} description={listing.neighborhood} />
+                )}
+                {listing.region && (
+                  <Description term={t("t.region")} description={listing.region} />
                 )}
                 {listing.yearBuilt && (
                   <Description term={t("t.built")} description={listing.yearBuilt} />

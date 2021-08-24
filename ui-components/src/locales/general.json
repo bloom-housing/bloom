@@ -1216,6 +1216,7 @@
     "range": "%{from} to %{to}",
     "readLess": "read less",
     "readMore": "read more",
+    "region":"Region",
     "relationship": "Relationship",
     "otherRelationShip": "Other Relationship",
     "rent": "Rent",

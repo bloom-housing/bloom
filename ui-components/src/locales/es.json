@@ -1161,6 +1161,7 @@
         "range": "% {from} a% {to}",
         "readLess": "Leer menos",
         "readMore": "Lee mas",
+        "region":"Región",
         "relationship": "Relación",
         "otherRelationShip": "Otra relación",
         "rent": "Alquiler",
