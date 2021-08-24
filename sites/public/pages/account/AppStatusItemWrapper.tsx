@@ -20,7 +20,16 @@ const AppStatusItemWrapper = (props: AppStatusItemWrapperProps) => {
   }, [listingsService, props.application])
 
   return listing ? (
-    <AppStatusItem application={props.application} listing={listing} key={props.application.id} />
+    <AppStatusItem
+      applicationDueDate={listing.applicationDueDate}
+      applicationURL={`application/${props.application.id}`}
+      applicationUpdatedAt={props.application.updatedAt}
+      confirmationNumber={props.application.id}
+      listingId={listing.id}
+      listingName={listing.name}
+      listingURL={`/listing/${listing.id}/${listing.urlSlug}`}
+      key={props.application.id}
+    />
   ) : (
     // Potential for a loading state here
     <></>

@@ -15,7 +15,7 @@ import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { AppStatusItemWrapper } from "./AppStatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 
-export default () => {
+const Applications = () => {
   const { applicationsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
   const [error, setError] = useState(null)
@@ -79,3 +79,5 @@ export default () => {
     </RequireLogin>
   )
 }
+
+export default Applications

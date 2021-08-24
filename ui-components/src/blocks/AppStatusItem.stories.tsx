@@ -1,20 +1,29 @@
 import React from "react"
 import { AppStatusItem } from "./AppStatusItem"
-import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
-import moment from "moment"
-import { Application, Listing } from "@bloom-housing/backend-core/types"
-const listing = Object.assign({}, ArcherListing) as Listing
 
 export default {
   title: "Blocks/Application Status Item",
 }
 
-const application = {} as Application
-let days = 10
-listing.applicationDueDate = new Date(moment().add(days, "days").format())
-application.listing = listing
-application.updatedAt = new Date()
-
 export const AppStatusItemSubmitted = () => (
-  <AppStatusItem application={application} listing={listing}></AppStatusItem>
+  <AppStatusItem
+    applicationDueDate={new Date()}
+    applicationURL={"application/1234abcd"}
+    applicationUpdatedAt={new Date()}
+    confirmationNumber={"1234abcd"}
+    listingId={"abcd1234"}
+    listingName={"Listing Name"}
+    listingURL={"/listing/abcd1234/listing-name"}
+  />
+)
+
+export const AppStatusItemNoConfirmationNumber = () => (
+  <AppStatusItem
+    applicationDueDate={new Date()}
+    applicationURL={"application/1234abcd"}
+    applicationUpdatedAt={new Date()}
+    listingId={"abcd1234"}
+    listingName={"Listing Name"}
+    listingURL={"/listing/abcd1234/listing-name"}
+  />
 )

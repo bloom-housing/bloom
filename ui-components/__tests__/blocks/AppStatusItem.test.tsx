@@ -1,27 +1,43 @@
 import React from "react"
-import { render, cleanup, fireEvent } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { AppStatusItem } from "../../src/blocks/AppStatusItem"
-import { Application, Listing } from "@bloom-housing/backend-core/types"
-import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import moment from "moment"
 import { t } from "../../src/helpers/translator"
-
-const listing = Object.assign({}, ArcherListing) as Listing
-const application = {} as Application
 
 afterEach(cleanup)
 
 describe("<AppStatusItem>", () => {
-  it("renders properly for an in progress application", () => {
-    listing.applicationDueDate = new Date(moment().add(10, "days").format())
+  it("renders without error", () => {
     const { getByText, queryByText } = render(
-      <AppStatusItem application={application} listing={listing} />
+      <AppStatusItem
+        applicationDueDate={new Date()}
+        applicationURL={"application/1234abcd"}
+        applicationUpdatedAt={new Date()}
+        confirmationNumber={"1234abcd"}
+        listingId={"abcd1234"}
+        listingName={"Listing Name"}
+        listingURL={"/listing/abcd1234/listing-name"}
+      />
     )
 
-    expect(getByText(listing.name)).not.toBeNull()
+    expect(getByText("Listing Name")).not.toBeNull()
     expect(getByText(t("listings.applicationDeadline"), { exact: false })).not.toBeNull()
+    expect(getByText(t("application.yourLotteryNumber"), { exact: false })).not.toBeNull()
+  })
+  it("renders without a confirmation number if not provided", () => {
+    const { getByText, queryByText } = render(
+      <AppStatusItem
+        applicationDueDate={new Date()}
+        applicationURL={"application/1234abcd"}
+        applicationUpdatedAt={new Date()}
+        listingId={"abcd1234"}
+        listingName={"Listing Name"}
+        listingURL={"/listing/abcd1234/listing-name"}
+      />
+    )
 
-    // Don't show confirmation number if a lottery number wasn't given
+    expect(getByText("Listing Name")).not.toBeNull()
+    expect(getByText(t("listings.applicationDeadline"), { exact: false })).not.toBeNull()
     expect(queryByText(t("application.yourLotteryNumber"))).toBeNull()
   })
 })
