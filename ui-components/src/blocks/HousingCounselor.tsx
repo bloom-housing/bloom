@@ -1,8 +1,15 @@
 import * as React from "react"
-
-import { HousingCounselor as Counselor } from "@bloom-housing/backend-core/types"
-
+import { Icon, IconFillColors } from "../icons/Icon"
 import { t } from "../helpers/translator"
+
+export interface HousingCounselorProps {
+  addressCityState?: string
+  addressStreet?: string
+  languages: string[]
+  name: string
+  phone?: string
+  website?: string
+}
 
 const LanguageLabel = (language: string) => {
   return (
@@ -11,34 +18,33 @@ const LanguageLabel = (language: string) => {
     </span>
   )
 }
-// TODO: Add icons for address, phone, link to better match original
-const HousingCounselor = (props: { counselor: Counselor }) => {
-  const counselor = props.counselor
+
+const HousingCounselor = (props: HousingCounselorProps) => {
   return (
     <div className="resource-item text-base">
-      <h3 className="font-sans text-lg">
-        <a href={counselor.website} target="_blank">
-          {counselor.name}
-        </a>
-      </h3>
+      <h3 className="font-sans text-lg">{props.name}</h3>
       <p className="text-sm text-gray-800 pb-2">
         {t("housingCounselors.languageServices")}
-        {counselor.languages.map((language) => LanguageLabel(language))}
+        {props.languages.map((language) => LanguageLabel(language))}
       </p>
-      {counselor.address && (
+      {props.addressStreet && (
         <p className="icon-item pb-2">
-          {counselor.address} <br /> {counselor.citystate}
+          {props.addressStreet} <br /> {props.addressCityState}
         </p>
       )}
-      {counselor.phone && (
-        <a className="icon-item pb-1" href={`tel:+1${counselor.phone}`}>
-          {t("housingCounselors.call", { number: counselor.phone })}
-        </a>
-      )}
-      {counselor.website && (
+      {props.phone && (
         <>
-          <a className="icon-item" href={counselor.website}>
-            {t("housingCounselors.visitWebsite", { name: counselor.name })}
+          <a className="icon-item pb-1" href={`tel:+1${props.phone}`}>
+            <Icon symbol="phone" size="medium" fill={IconFillColors.primary} />
+            {` ${t("housingCounselors.call", { number: props.phone })}`}
+          </a>
+        </>
+      )}
+      {props.website && (
+        <>
+          <a className="icon-item" href={props.website}>
+            <Icon symbol="globe" size="medium" fill={IconFillColors.primary} />
+            {` ${t("t.website")}`}
           </a>
         </>
       )}
