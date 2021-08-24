@@ -79,13 +79,14 @@ const ApplicationAddMembers = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <HouseholdSizeField
-              listing={listing}
-              householdSize={householdSize}
-              validate={true}
-              register={register}
-              error={errors.householdSize}
-              clearErrors={clearErrors}
               assistanceUrl={t("application.household.assistanceUrl")}
+              clearErrors={clearErrors}
+              error={errors.householdSize}
+              householdSize={householdSize}
+              householdSizeMax={listing.householdSizeMax}
+              householdSizeMin={listing.householdSizeMin}
+              register={register}
+              validate={true}
             />
           </div>
           <div className="form-card__group my-0 mx-0 pb-4 pt-4">
