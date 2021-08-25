@@ -1046,7 +1046,7 @@ export class ListingsService {
       /**  */
       listingId: string
       /**  */
-      view: string
+      view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
