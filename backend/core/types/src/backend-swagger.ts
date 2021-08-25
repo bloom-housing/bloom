@@ -3538,9 +3538,6 @@ export interface UserCreate {
 
   /**  */
   dob: Date
-
-  /**  */
-  roles?: CombinedRolesTypes
 }
 
 export interface UserBasic {
@@ -3653,9 +3650,6 @@ export interface UserUpdate {
 
   /**  */
   dob: Date
-
-  /**  */
-  roles?: CombinedRolesTypes
 }
 
 export interface PaginatedUserList {
