@@ -84,7 +84,14 @@ export const ListingView = (props: ListingProps) => {
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
   const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
-    return { ...row, sizeColumn: <strong>{row["sizeColumn"]}</strong> }
+    return {
+      ...row,
+      sizeColumn: (
+        <strong>
+          {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+        </strong>
+      ),
+    }
   })
   let groupedUnits: GroupedTableGroup[] = null
 
@@ -282,7 +289,12 @@ export const ListingView = (props: ListingProps) => {
               title={t("listings.householdMaximumIncome")}
               subtitle={householdMaximumIncomeSubheader}
             >
-              <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={true} />
+              <StandardTable
+                headers={hmiHeaders}
+                data={hmiData}
+                responsiveCollapse={true}
+                translateData={true}
+              />
             </ListSection>
 
             <ListSection title={t("t.occupancy")} subtitle={occupancyDescription}>
