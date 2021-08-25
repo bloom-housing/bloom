@@ -150,6 +150,9 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
           currentHouseholdSize,
           currentAmiPercent
         )
+        if (!firstChartValue) {
+          return
+        }
         const maxIncomeRange = uniquePercentCharts.reduce(
           (incomeRange, uniqueSet) => {
             return minMaxCurrency(
