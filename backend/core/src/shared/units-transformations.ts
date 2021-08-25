@@ -39,10 +39,10 @@ const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
   return amiChartItem.householdSize.toString() + "-" + amiChartItem.percentOfAmi.toString()
 }
 
-const mergeAmiChartWithOverrides = (amiChart: AmiChart, override: UnitAmiChartOverride) => {
+export const mergeAmiChartWithOverrides = (amiChart: AmiChart, override: UnitAmiChartOverride) => {
   const householdAmiPercentageOverrideMap: Map<string, AmiChartItem> = override.items.reduce(
     (acc, amiChartItem) => {
-      acc[getAmiChartItemUniqueKey(amiChartItem)] = amiChartItem
+      acc.set(getAmiChartItemUniqueKey(amiChartItem), amiChartItem)
       return acc
     },
     new Map()

@@ -177,7 +177,6 @@ describe("Listings", () => {
     const am: ApplicationMethodCreateDto = {
       type: ApplicationMethodType.FileDownload,
       paperApplications: [{ id: paperApplication.body.id }],
-      listing: listing,
     }
 
     const applicationMethod = await supertest(app.getHttpServer())
