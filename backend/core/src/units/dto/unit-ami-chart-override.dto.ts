@@ -1,28 +1,18 @@
 import { OmitType } from "@nestjs/swagger"
-import { ListingAmiChartOverride } from "../entities/listing-ami-chart-override.entity"
+import { UnitAmiChartOverride } from "../entities/unit-ami-chart-override.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsOptional, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { IdDto } from "../../shared/dto/id.dto"
 
-export class ListingAmiChartOverrideDto extends OmitType(ListingAmiChartOverride, [
-  "listing",
-  "unit",
-] as const) {
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  unit: IdDto
-}
+export class UnitAmiChartOverrideDto extends OmitType(UnitAmiChartOverride, [] as const) {}
 
-export class ListingAmiChartOverrideCreateDto extends OmitType(ListingAmiChartOverrideDto, [
+export class UnitAmiChartOverrideCreateDto extends OmitType(UnitAmiChartOverrideDto, [
   "id",
   "createdAt",
   "updatedAt",
 ] as const) {}
 
-export class ListingAmiChartOverrideUpdateDto extends OmitType(ListingAmiChartOverrideDto, [
+export class UnitAmiChartOverrideUpdateDto extends OmitType(UnitAmiChartOverrideDto, [
   "id",
   "createdAt",
   "updatedAt",

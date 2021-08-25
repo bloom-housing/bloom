@@ -43,7 +43,6 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
-import { ListingAmiChartOverride } from "./listing-ami-chart-override.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -479,16 +478,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
-
-  @OneToMany(
-    () => ListingAmiChartOverride,
-    (listingAmiChartOverride) => listingAmiChartOverride.listing,
-    { eager: true, cascade: true }
-  )
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingAmiChartOverride)
-  amiChartOverrides: ListingAmiChartOverride[]
 }
 
 export { Listing as default, Listing }

@@ -2652,9 +2652,6 @@ export interface ApplicationMethod {
   type: ApplicationMethodType
 
   /**  */
-  listing: CombinedListingTypes
-
-  /**  */
   paperApplications?: PaperApplication[]
 
   /**  */
@@ -2697,9 +2694,6 @@ export interface ApplicationMethodCreate {
 
   /**  */
   phoneNumber?: string
-
-  /**  */
-  listing: CombinedListingTypes
 }
 
 export interface ApplicationMethodUpdate {
@@ -2729,9 +2723,6 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   phoneNumber?: string
-
-  /**  */
-  listing: CombinedListingTypes
 }
 
 export interface BooleanInput {
@@ -3950,6 +3941,20 @@ export interface UnitAccessibilityPriorityType {
   name: string
 }
 
+export interface UnitAmiChartOverride {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface Unit {
   /**  */
   status: UnitStatus
@@ -3965,6 +3970,9 @@ export interface Unit {
 
   /**  */
   priorityType?: UnitAccessibilityPriorityType
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverride
 
   /**  */
   id: string
@@ -4016,23 +4024,6 @@ export interface Unit {
 
   /**  */
   bmrProgramChart?: boolean
-}
-
-export interface ListingAmiChartOverride {
-  /**  */
-  unit: Id
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  items: AmiChartItem[]
 }
 
 export interface UnitsSummary {
@@ -4190,9 +4181,6 @@ export interface Listing {
 
   /**  */
   urlSlug: string
-
-  /**  */
-  amiChartOverrides?: ListingAmiChartOverride[]
 
   /**  */
   unitsSummary: UnitsSummary[]
@@ -4396,6 +4384,11 @@ export interface UnitAccessibilityPriorityTypeCreate {
   name: string
 }
 
+export interface UnitAmiChartOverrideCreate {
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface UnitCreate {
   /**  */
   status: UnitStatus
@@ -4411,6 +4404,9 @@ export interface UnitCreate {
 
   /**  */
   priorityType?: UnitAccessibilityPriorityTypeCreate
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverrideCreate
 
   /**  */
   amiPercentage?: string
@@ -4453,14 +4449,6 @@ export interface UnitCreate {
 
   /**  */
   bmrProgramChart?: boolean
-}
-
-export interface ListingAmiChartOverrideCreate {
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  unit: Id
 }
 
 export interface ListingCreate {
@@ -4565,9 +4553,6 @@ export interface ListingCreate {
 
   /**  */
   result?: CombinedResultTypes
-
-  /**  */
-  amiChartOverrides?: ListingAmiChartOverrideCreate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -4792,6 +4777,20 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   id: string
 }
 
+export interface UnitAmiChartOverrideUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface UnitUpdate {
   /**  */
   status: UnitStatus
@@ -4816,6 +4815,9 @@ export interface UnitUpdate {
 
   /**  */
   priorityType?: UnitAccessibilityPriorityTypeUpdate
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverrideUpdate
 
   /**  */
   amiPercentage?: string
@@ -4858,23 +4860,6 @@ export interface UnitUpdate {
 
   /**  */
   bmrProgramChart?: boolean
-}
-
-export interface ListingAmiChartOverrideUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-
-  /**  */
-  unit: Id
 }
 
 export interface ListingUpdate {
@@ -4988,9 +4973,6 @@ export interface ListingUpdate {
 
   /**  */
   result?: AssetUpdate
-
-  /**  */
-  amiChartOverrides?: ListingAmiChartOverrideUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5439,7 +5421,6 @@ export enum ApplicationMethodType {
   "LeasingAgent" = "LeasingAgent",
 }
 export type CombinedFileTypes = Id
-export type CombinedListingTypes = Id
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",

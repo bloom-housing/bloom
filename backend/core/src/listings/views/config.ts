@@ -49,6 +49,7 @@ const views: Views = {
       { join: "property.buildingAddress", alias: "buildingAddress" },
       { join: "property.units", alias: "units" },
       { join: "units.unitType", alias: "unitType" },
+      { join: "units.amiChartOverride", alias: "amiChartOverride" },
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
       { join: "listings.preferences", alias: "preferences" },
     ],

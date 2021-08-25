@@ -19,6 +19,11 @@ import {
   UnitAccessibilityPriorityTypeDto,
   UnitAccessibilityPriorityTypeUpdateDto,
 } from "../../unit-accessbility-priority-types/dto/unit-accessibility-priority-type.dto"
+import {
+  UnitAmiChartOverrideCreateDto,
+  UnitAmiChartOverrideDto,
+  UnitAmiChartOverrideUpdateDto,
+} from "./unit-ami-chart-override.dto"
 
 export class UnitDto extends OmitType(Unit, [
   "property",
@@ -27,6 +32,7 @@ export class UnitDto extends OmitType(Unit, [
   "unitType",
   "unitRentType",
   "priorityType",
+  "amiChartOverride",
 ] as const) {
   @Exclude()
   @ApiHideProperty()
@@ -64,6 +70,12 @@ export class UnitDto extends OmitType(Unit, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityTypeDto)
   priorityType?: UnitAccessibilityPriorityTypeDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAmiChartOverrideDto)
+  amiChartOverride?: UnitAmiChartOverrideDto
 }
 
 export class UnitCreateDto extends OmitType(UnitDto, [
@@ -74,6 +86,7 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   "unitType",
   "unitRentType",
   "priorityType",
+  "amiChartOverride",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -101,6 +114,12 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityTypeCreateDto)
   priorityType?: UnitAccessibilityPriorityTypeCreateDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAmiChartOverrideCreateDto)
+  amiChartOverride?: UnitAmiChartOverrideCreateDto
 }
 
 export class UnitUpdateDto extends OmitType(UnitDto, [
@@ -111,6 +130,7 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
   "unitType",
   "unitRentType",
   "priorityType",
+  "amiChartOverride",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -155,4 +175,10 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityTypeUpdateDto)
   priorityType?: UnitAccessibilityPriorityTypeUpdateDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAmiChartOverrideUpdateDto)
+  amiChartOverride?: UnitAmiChartOverrideUpdateDto
 }
