@@ -29,7 +29,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
 
   return (
     <>
-      {householdSizeMin && householdSizeMax && validate && (
+      {householdSizeMax && validate && (
         <>
           <span className="hidden">
             <input
