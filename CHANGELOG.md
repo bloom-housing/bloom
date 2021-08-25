@@ -43,7 +43,7 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 - Changed:
-  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
+  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
   - Removed business logic from HouseholdSizeField component ([#1724](https://github.com/bloom-housing/bloom/pull/1724)) (Emily Jablonski)
@@ -52,6 +52,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed existing prop and replaced with a set not dependent on data model
   - Removed business logic from ListingsList component ([#1773](https://github.com/bloom-housing/bloom/pull/1773)) (Emily Jablonski)
     - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
+  - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
+    - **Breaking Change**
 
 ### Backend
 
