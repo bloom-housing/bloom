@@ -19,12 +19,14 @@ import { IdNameDto } from "../../shared/dto/idName.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
+import { UserRolesDto } from "./user-roles.dto"
 
 export class UserDto extends OmitType(User, [
   "leasingAgentInListings",
   "passwordHash",
   "resetToken",
   "confirmationToken",
+  "roles",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -32,6 +34,13 @@ export class UserDto extends OmitType(User, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdNameDto)
   leasingAgentInListings?: IdNameDto[] | null
+
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UserRolesDto)
+  roles?: UserRolesDto[] | null
 }
 
 export class UserBasicDto extends OmitType(User, [
@@ -39,6 +48,7 @@ export class UserBasicDto extends OmitType(User, [
   "passwordHash",
   "confirmationToken",
   "resetToken",
+  "roles",
 ] as const) {}
 
 export class UserDtoWithAccessToken extends UserDto {

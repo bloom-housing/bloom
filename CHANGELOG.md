@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
+  - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
 
 ### UI Components
 
@@ -61,6 +62,7 @@ All notable changes to this project will be documented in this file. The format 
   - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
   - fixes issue with unexposed user roles ((#1627)[https://github.com/bloom-housing/bloom/pull/1627]))
   - updates translations to check for values before sending to service ((#1699)[https://github.com/bloom-housing/bloom/pull/1699])
+  - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
 
 ### General
 
