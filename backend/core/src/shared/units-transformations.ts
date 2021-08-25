@@ -120,6 +120,7 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
     return incomeRange.min === incomeRange.max
       ? `listings.monthlyIncome*income:${incomeMin}`
       : `listings.monthlyIncomeRange*from:${incomeMin}*to:${incomeMax}`
+
   }
 
   // Build row data by household size
