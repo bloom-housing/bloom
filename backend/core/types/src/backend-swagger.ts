@@ -2391,7 +2391,7 @@ export interface HouseholdMember {
   address: Address
 
   /**  */
-  workAddress?: Address
+  workAddress: Address
 
   /**  */
   id: string
@@ -3458,6 +3458,9 @@ export interface IdName {
 
 export interface UserRoles {
   /**  */
+  user: Id
+
+  /**  */
   isAdmin?: boolean
 
   /**  */
@@ -3472,7 +3475,7 @@ export interface User {
   leasingAgentInListings?: IdName[]
 
   /**  */
-  roles?: UserRoles[]
+  roles?: CombinedRolesTypes
 
   /**  */
   id: string
@@ -3537,7 +3540,7 @@ export interface UserCreate {
   dob: Date
 
   /**  */
-  roles?: UserRoles[]
+  roles?: CombinedRolesTypes
 }
 
 export interface UserBasic {
@@ -3652,7 +3655,7 @@ export interface UserUpdate {
   dob: Date
 
   /**  */
-  roles?: UserRoles[]
+  roles?: CombinedRolesTypes
 }
 
 export interface PaginatedUserList {
@@ -5578,6 +5581,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export type CombinedRolesTypes = UserRoles
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

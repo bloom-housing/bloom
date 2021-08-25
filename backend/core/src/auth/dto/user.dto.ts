@@ -38,9 +38,8 @@ export class UserDto extends OmitType(User, [
   @Expose()
   @IsOptional()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UserRolesDto)
-  roles?: UserRolesDto[] | null
+  roles?: UserRolesDto | null
 }
 
 export class UserBasicDto extends OmitType(User, [
