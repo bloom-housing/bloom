@@ -48,7 +48,13 @@ export class UserBasicDto extends OmitType(User, [
   "confirmationToken",
   "resetToken",
   "roles",
-] as const) {}
+] as const) {
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UserRolesDto)
+  roles: UserRolesDto
+}
 
 export class UserDtoWithAccessToken extends UserDto {
   @Expose()

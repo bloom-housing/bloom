@@ -3545,6 +3545,9 @@ export interface UserBasic {
   language?: Language
 
   /**  */
+  roles: UserRoles
+
+  /**  */
   id: string
 
   /**  */
