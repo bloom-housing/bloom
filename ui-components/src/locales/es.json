@@ -1231,6 +1231,14 @@
         },
         "zipCode": "Código postal",
         "zipCodeDescription": "Ingresa tu código postal",
+        "adaCompliant": "Cumple con la ADA",
+        "communityType": "Tipo de comunidad",
+        "communityTypeOptions": {
+            "all": "Todos",
+            "senior": "Vivienda para personas mayores (62+)",
+            "specialNeeds": "Necesidades especiales y discapacidad"
+        },
+        "applyFilters": "Aplicar filtros",
         "noResults": "No hay resultados",
         "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados."
     },

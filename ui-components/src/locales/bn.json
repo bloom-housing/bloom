@@ -1231,6 +1231,14 @@
         },
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",
+        "adaCompliant": "ADA অনুগত",
+        "communityType": "সম্প্রদায়ের ধরন",
+        "communityTypeOptions": {
+            "all": "সব",
+            "senior": "সিনিয়র হাউজিং (62+)",
+            "specialNeeds": "বিশেষ চাহিদা এবং অক্ষমতা"
+        },
+        "applyFilters": "ফিল্টার প্রয়োগ করুন",
         "noResults": "কোন ফলাফল নেই",
         "noResultsSubtitle": "সেরা ফলাফলের জন্য ফিল্টার সম্পাদনা বা অপসারণ করুন।"
     },

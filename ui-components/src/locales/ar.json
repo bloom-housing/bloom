@@ -1231,6 +1231,14 @@
         },
         "zipCode": "الرمز البريدي",
         "zipCodeDescription": "أدخل الرمز البريدي",
+        "adaCompliant": "متوافق مع ADA",
+        "communityType": "نوع المجتمع",
+        "communityTypeOptions": {
+            "all": "الجميع",
+            "senior": "مساكن كبار السن (62+)",
+            "specialNeeds": "ذوي الاحتياجات الخاصة والإعاقة"
+        },
+        "applyFilters": "تطبيق المرشحات",
         "noResults": "لا نتائج",
         "noResultsSubtitle": "تحرير أو إزالة عوامل التصفية للحصول على أفضل النتائج."
     },

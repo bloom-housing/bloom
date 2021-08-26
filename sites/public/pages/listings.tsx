@@ -59,16 +59,19 @@ const ListingsPage = () => {
     { value: "3", label: t("listingFilters.bedroomsOptions.threePlus") },
     { value: "4", label: t("listingFilters.bedroomsOptions.fourPlus") },
   ]
-  const accessibilityOptions: SelectOption[] = [
+  const adaCompliantOptions: SelectOption[] = [
     EMPTY_OPTION,
-    { value: "n", label: "No" },
-    { value: "y", label: "Yes" },
+    { value: "n", label: t("t.no") },
+    { value: "y", label: t("t.yes") },
   ]
-  const communityOptions: SelectOption[] = [
+  const communityTypeOptions: SelectOption[] = [
     EMPTY_OPTION,
-    { value: "general", label: "General" },
-    { value: "senior", label: "Senior" },
-    { value: "assisted", label: "Assisted" },
+    { value: "all", label: t("listingFilters.communityTypeOptions.all") },
+    { value: "senior", label: t("listingFilters.communityTypeOptions.senior") },
+    {
+      value: "specialNeedsAndDisability",
+      label: t("listingFilters.communityTypeOptions.specialNeeds"),
+    },
   ]
   const neighborhoodOptions: SelectOption[] = [
     EMPTY_OPTION,
@@ -156,25 +159,25 @@ const ListingsPage = () => {
               defaultValue={filterState?.neighborhood}
             />
             <Select
-              id="accessibilityOptions"
-              name="accessibility"
-              label="Accessibility"
+              id="adaCompliant"
+              name="adaCompliant"
+              label={t("listingFilters.adaCompliant")}
               register={register}
               controlClassName="control"
-              options={accessibilityOptions}
+              options={adaCompliantOptions}
             />
             <Select
-              id="communityOptions"
-              name="community"
-              label="Community Type"
+              id="communityType"
+              name="communityType"
+              label={t("listingFilters.communityType")}
               register={register}
               controlClassName="control"
-              options={communityOptions}
+              options={communityTypeOptions}
             />
           </div>
           <div className="text-center mt-6">
             <Button type="submit" styleType={AppearanceStyleType.primary}>
-              Apply Filters
+              {t("listingFilters.applyFilters")}
             </Button>
           </div>
         </Form>
