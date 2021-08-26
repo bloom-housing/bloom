@@ -3998,12 +3998,26 @@ export interface UnitAccessibilityPriorityType {
   name: string
 }
 
+export interface UnitAmiChartOverride {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface Unit {
   /**  */
   status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  amiChart?: Id
 
   /**  */
   unitType?: UnitType
@@ -4013,6 +4027,9 @@ export interface Unit {
 
   /**  */
   priorityType?: UnitAccessibilityPriorityType
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverride
 
   /**  */
   id: string
@@ -4432,12 +4449,47 @@ export interface ListingEventCreate {
   label?: string
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAmiChartOverrideCreate {
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface UnitCreate {
   /**  */
   status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  amiChart?: Id
+
+  /**  */
+  unitType?: UnitTypeCreate
+
+  /**  */
+  unitRentType?: UnitRentTypeCreate
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityTypeCreate
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverrideCreate
 
   /**  */
   amiPercentage?: string
@@ -4480,15 +4532,6 @@ export interface UnitCreate {
 
   /**  */
   bmrProgramChart?: boolean
-
-  /**  */
-  unitType?: UnitType
-
-  /**  */
-  unitRentType?: UnitRentType
-
-  /**  */
-  priorityType?: UnitAccessibilityPriorityType
 }
 
 export interface UnitsSummaryCreate {
@@ -4840,12 +4883,74 @@ export interface ListingEventUpdate {
   label?: string
 }
 
+export interface UnitTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAmiChartOverrideUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  items: AmiChartItem[]
+}
+
 export interface UnitUpdate {
   /**  */
   status: UnitStatus
 
   /**  */
-  amiChart?: CombinedAmiChartTypes
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  amiChart?: Id
+
+  /**  */
+  unitType?: UnitTypeUpdate
+
+  /**  */
+  unitRentType?: UnitRentTypeUpdate
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityTypeUpdate
+
+  /**  */
+  amiChartOverride?: UnitAmiChartOverrideUpdate
 
   /**  */
   amiPercentage?: string
@@ -4888,18 +4993,6 @@ export interface UnitUpdate {
 
   /**  */
   bmrProgramChart?: boolean
-
-  /**  */
-  unitType?: UnitType
-
-  /**  */
-  unitRentType?: UnitRentType
-
-  /**  */
-  priorityType?: UnitAccessibilityPriorityType
-
-  /**  */
-  id: string
 }
 
 export interface UnitsSummaryUpdate {
@@ -5215,9 +5308,6 @@ export interface PaperApplicationUpdate {
 
 export interface Property {
   /**  */
-  unitsSummarized: UnitsSummarized
-
-  /**  */
   units: Unit[]
 
   /**  */
@@ -5481,51 +5571,6 @@ export interface TranslationUpdate {
   translations: object
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5633,7 +5678,6 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
-export type CombinedAmiChartTypes = AmiChart
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
