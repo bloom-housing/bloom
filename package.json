@@ -38,6 +38,7 @@
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e:local",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
+    "test:public:unit-tests": "cd sites/public && yarn test:unit-tests",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
     "db:reseed": "cd backend/core && yarn db:reseed",
     "install:all": "yarn install && cd backend/core && yarn install",

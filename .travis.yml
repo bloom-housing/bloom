@@ -33,6 +33,8 @@ jobs:
       name: "Backend unit tests"
     - script: yarn test:e2e:backend:core
       name: "Backend e2e tests"
+    - script: yarn test:public:unit-tests
+      name: "Public site unit tests"
     - stage: longer tests
       script: yarn test:shared:ui:a11y
       name: "Storybook a11y testing"
