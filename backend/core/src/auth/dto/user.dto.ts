@@ -15,9 +15,10 @@ import {
   ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { IdDto } from "../../shared/dto/id.dto"
+import { IdNameDto } from "../../shared/dto/idName.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
+import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { UserRolesDto } from "./user-roles.dto"
 
 export class UserDto extends OmitType(User, [
@@ -31,14 +32,14 @@ export class UserDto extends OmitType(User, [
   @IsOptional()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => IdDto)
-  leasingAgentInListings?: IdDto[] | null
+  @Type(() => IdNameDto)
+  leasingAgentInListings?: IdNameDto[] | null
 
   @Expose()
+  @IsOptional()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UserRolesDto)
-  roles: UserRolesDto
+  roles?: UserRolesDto | null
 }
 
 export class UserBasicDto extends OmitType(User, [
@@ -143,3 +144,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   currentPassword?: string
 }
+
+export class UserListQueryParams extends PaginationAllowsAllQueryParams {}
+
+export class PaginatedUserListDto extends PaginationFactory<UserDto>(UserDto) {}

@@ -852,6 +852,29 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * List users
+   */
+  list(
+    params: {
+      /**  */
+      page?: number
+      /**  */
+      limit?: number | "all"
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<PaginatedUserList> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/list"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { page: params["page"], limit: params["limit"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JurisdictionsService {
@@ -2655,6 +2678,9 @@ export interface ApplicationMethod {
   paperApplications?: PaperApplication[]
 
   /**  */
+  listing: Id
+
+  /**  */
   id: string
 
   /**  */
@@ -2694,6 +2720,9 @@ export interface ApplicationMethodCreate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  listing: Id
 }
 
 export interface ApplicationMethodUpdate {
@@ -2723,6 +2752,9 @@ export interface ApplicationMethodUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  listing: Id
 }
 
 export interface BooleanInput {
@@ -3416,7 +3448,18 @@ export interface LoginResponse {
   accessToken: string
 }
 
+export interface IdName {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+}
+
 export interface UserRoles {
+  /**  */
+  user: Id
+
   /**  */
   isAdmin?: boolean
 
@@ -3429,10 +3472,10 @@ export interface User {
   language?: Language
 
   /**  */
-  leasingAgentInListings?: Id[]
+  leasingAgentInListings?: IdName[]
 
   /**  */
-  roles: UserRoles
+  roles?: CombinedRolesTypes
 
   /**  */
   id: string
@@ -3610,6 +3653,14 @@ export interface UserUpdate {
 
   /**  */
   dob: Date
+}
+
+export interface PaginatedUserList {
+  /**  */
+  items: User[]
+
+  /**  */
+  meta: PaginationMeta
 }
 
 export interface Jurisdiction {
@@ -3947,26 +3998,12 @@ export interface UnitAccessibilityPriorityType {
   name: string
 }
 
-export interface UnitAmiChartOverride {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  items: AmiChartItem[]
-}
-
 export interface Unit {
   /**  */
   status: UnitStatus
 
   /**  */
-  amiChart?: Id
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   unitType?: UnitType
@@ -3976,9 +4013,6 @@ export interface Unit {
 
   /**  */
   priorityType?: UnitAccessibilityPriorityType
-
-  /**  */
-  amiChartOverride?: UnitAmiChartOverride
 
   /**  */
   id: string
@@ -4032,9 +4066,32 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitsSummary {
+export interface UnitType {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
   /**  */
   id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface UnitsSummary {
+  /**  */
+  listing: Id
+
+  /**  */
+  id: string
+
+  /**  */
+  unitType: UnitType
 
   /**  */
   monthlyRent?: number
@@ -4068,6 +4125,9 @@ export interface UnitsSummary {
 
   /**  */
   sqFeetMax?: string
+
+  /**  */
+  priorityType?: CombinedPriorityTypeTypes
 
   /**  */
   totalCount?: number
@@ -4189,7 +4249,7 @@ export interface Listing {
   urlSlug: string
 
   /**  */
-  unitsSummary: UnitsSummary[]
+  unitsSummary?: UnitsSummary[]
 
   /**  */
   id: string
@@ -4372,47 +4432,12 @@ export interface ListingEventCreate {
   label?: string
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAmiChartOverrideCreate {
-  /**  */
-  items: AmiChartItem[]
-}
-
 export interface UnitCreate {
   /**  */
   status: UnitStatus
 
   /**  */
-  amiChart?: Id
-
-  /**  */
-  unitType?: UnitTypeCreate
-
-  /**  */
-  unitRentType?: UnitRentTypeCreate
-
-  /**  */
-  priorityType?: UnitAccessibilityPriorityTypeCreate
-
-  /**  */
-  amiChartOverride?: UnitAmiChartOverrideCreate
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -4455,6 +4480,65 @@ export interface UnitCreate {
 
   /**  */
   bmrProgramChart?: boolean
+
+  /**  */
+  unitType?: UnitType
+
+  /**  */
+  unitRentType?: UnitRentType
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType
+}
+
+export interface UnitsSummaryCreate {
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  priorityType?: CombinedPriorityTypeTypes
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  listing: Id
 }
 
 export interface ListingCreate {
@@ -4559,6 +4643,9 @@ export interface ListingCreate {
 
   /**  */
   result?: CombinedResultTypes
+
+  /**  */
+  unitsSummary?: UnitsSummaryCreate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -4676,9 +4763,6 @@ export interface ListingCreate {
 
   /**  */
   customMapPin?: boolean
-
-  /**  */
-  unitsSummary: UnitsSummary[]
 }
 
 export interface PreferenceUpdate {
@@ -4756,74 +4840,12 @@ export interface ListingEventUpdate {
   label?: string
 }
 
-export interface UnitTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAmiChartOverrideUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  items: AmiChartItem[]
-}
-
 export interface UnitUpdate {
   /**  */
   status: UnitStatus
 
   /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  amiChart?: Id
-
-  /**  */
-  unitType?: UnitTypeUpdate
-
-  /**  */
-  unitRentType?: UnitRentTypeUpdate
-
-  /**  */
-  priorityType?: UnitAccessibilityPriorityTypeUpdate
-
-  /**  */
-  amiChartOverride?: UnitAmiChartOverrideUpdate
+  amiChart?: CombinedAmiChartTypes
 
   /**  */
   amiPercentage?: string
@@ -4866,6 +4888,71 @@ export interface UnitUpdate {
 
   /**  */
   bmrProgramChart?: boolean
+
+  /**  */
+  unitType?: UnitType
+
+  /**  */
+  unitRentType?: UnitRentType
+
+  /**  */
+  priorityType?: UnitAccessibilityPriorityType
+
+  /**  */
+  id: string
+}
+
+export interface UnitsSummaryUpdate {
+  /**  */
+  id: string
+
+  /**  */
+  unitType: UnitType
+
+  /**  */
+  monthlyRent?: number
+
+  /**  */
+  monthlyRentAsPercentOfIncome?: string
+
+  /**  */
+  amiPercentage?: string
+
+  /**  */
+  minimumIncomeMin?: string
+
+  /**  */
+  minimumIncomeMax?: string
+
+  /**  */
+  maxOccupancy?: number
+
+  /**  */
+  minOccupancy?: number
+
+  /**  */
+  floorMin?: number
+
+  /**  */
+  floorMax?: number
+
+  /**  */
+  sqFeetMin?: string
+
+  /**  */
+  sqFeetMax?: string
+
+  /**  */
+  priorityType?: CombinedPriorityTypeTypes
+
+  /**  */
+  totalCount?: number
+
+  /**  */
+  totalAvailable?: number
+
+  /**  */
+  listing: Id
 }
 
 export interface ListingUpdate {
@@ -4981,6 +5068,9 @@ export interface ListingUpdate {
   result?: AssetUpdate
 
   /**  */
+  unitsSummary?: UnitsSummaryUpdate[]
+
+  /**  */
   additionalApplicationSubmissionNotes?: string
 
   /**  */
@@ -5096,9 +5186,6 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
-
-  /**  */
-  unitsSummary: UnitsSummary[]
 }
 
 export interface PaperApplicationCreate {
@@ -5127,6 +5214,9 @@ export interface PaperApplicationUpdate {
 }
 
 export interface Property {
+  /**  */
+  unitsSummarized: UnitsSummarized
+
   /**  */
   units: Unit[]
 
@@ -5391,6 +5481,51 @@ export interface TranslationUpdate {
   translations: object
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5443,6 +5578,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export type CombinedRolesTypes = UserRoles
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -5497,6 +5633,8 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
+export type CombinedAmiChartTypes = AmiChart
+export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate

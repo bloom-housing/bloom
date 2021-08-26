@@ -1,12 +1,11 @@
 import React, { useState } from "react"
-import { Listing } from "@bloom-housing/backend-core/types"
-import { ListingsList } from "./ListingsList"
 import { Button } from "../../actions/Button"
 import { Icon } from "../../icons/Icon"
 import "./ListingsGroup.scss"
 
 export interface ListingsGroupProps {
-  listings: Listing[]
+  children?: React.ReactNode
+  listingsCount: number
   header: string
   info?: string
   showButtonText: string
@@ -17,11 +16,9 @@ const ListingsGroup = (props: ListingsGroupProps) => {
   const [showListings, setShowListings] = useState(false)
   const toggleListings = () => setShowListings(!showListings)
 
-  let listingsSection, buttonText
-  if (showListings) {
-    listingsSection = <ListingsList listings={props.listings} />
-  }
-  const listingsCount = ` (${props.listings.length})`
+  let buttonText
+
+  const listingsCount = ` (${props.listingsCount})`
   if (showListings) {
     buttonText = props.hideButtonText + listingsCount
   } else {
@@ -44,7 +41,7 @@ const ListingsGroup = (props: ListingsGroupProps) => {
           </Button>
         </div>
       </div>
-      {listingsSection}
+      {showListings && props.children}
     </div>
   )
 }

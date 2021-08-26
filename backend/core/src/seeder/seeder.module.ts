@@ -36,6 +36,7 @@ import { AssetsModule } from "../assets/assets.module"
 import { ListingDefaultReservedSeed } from "../seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultMultipleAMI } from "../seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listing-default-multiple-ami-and-percentages"
+import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-missing-ami"
 
 @Module({})
 export class SeederModule {
@@ -89,6 +90,7 @@ export class SeederModule {
         ListingDefaultFCFSSeed,
         ListingDefaultMultipleAMI,
         ListingDefaultMultipleAMIAndPercentages,
+        ListingDefaultMissingAMI,
       ],
     }
   }

@@ -33,7 +33,11 @@ import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ListingEventCreateDto, ListingEventDto, ListingEventUpdateDto } from "./listing-event.dto"
 import { listingUrlSlug } from "../../shared/url-helper"
-import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import {
+  UnitsSummaryCreateDto,
+  UnitsSummaryDto,
+  UnitsSummaryUpdateDto,
+} from "../../units-summary/dto/units-summary.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -323,9 +327,10 @@ export class ListingDto extends OmitType(Listing, [
   urlSlug: string
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryDto)
-  unitsSummary: UnitsSummaryDto[]
+  unitsSummary?: UnitsSummaryDto[]
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
@@ -361,6 +366,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "jurisdiction",
   "reservedCommunityType",
   "result",
+  "unitsSummary",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -520,6 +526,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreateDto)
   result?: AssetCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummaryCreateDto)
+  unitsSummary?: UnitsSummaryCreateDto[]
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -553,6 +565,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "jurisdiction",
   "reservedCommunityType",
   "result",
+  "unitsSummary",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -729,6 +742,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   result?: AssetUpdateDto
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitsSummaryUpdateDto)
+  unitsSummary?: UnitsSummaryUpdateDto[]
 }
 
 // add other listing filter params here
