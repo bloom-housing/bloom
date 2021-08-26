@@ -49,22 +49,9 @@ export const ListingView = (props: ListingProps) => {
     totalCount: t("t.totalCount"),
   }
 
-  const amiValues = listing?.unitsSummarized?.amiPercentages
-    ? listing.unitsSummarized.amiPercentages
-        .map((percent) => {
-          const percentInt = parseInt(percent, 10)
-          return percentInt
-        })
-        .sort(function (a, b) {
-          return a - b
-        })
-    : []
-
-  let groupedUnits: GroupedTableGroup[] = null
-
-  if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
-  } // else condition is handled inline below
+  const groupedUnits: GroupedTableGroup[] = getSummariesTable(
+    listing.unitsSummarized.byUnitTypeAndRent
+  )
 
   let openHouseEvents: ListingEvent[] | null = null
   if (Array.isArray(listing.events)) {
@@ -135,32 +122,12 @@ export const ListingView = (props: ListingProps) => {
             })}
           </Message>
         )}
-        {amiValues.length > 1 &&
-          amiValues.map((percent) => {
-            const byAMI = listing.unitsSummarized.byAMI.find((item) => {
-              return parseInt(item.percent, 10) == percent
-            })
 
-            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
-
-            return (
-              <>
-                <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
-                <GroupedTable
-                  headers={unitSummariesHeaders}
-                  data={groupedUnits}
-                  responsiveCollapse={true}
-                />
-              </>
-            )
-          })}
-        {amiValues.length == 1 && (
-          <GroupedTable
-            headers={unitSummariesHeaders}
-            data={groupedUnits}
-            responsiveCollapse={true}
-          />
-        )}
+        <GroupedTable
+          headers={unitSummariesHeaders}
+          data={groupedUnits}
+          responsiveCollapse={true}
+        />
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ListingUpdated listingUpdated={listing.updatedAt} />
