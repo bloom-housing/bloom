@@ -3416,7 +3416,13 @@ export interface LoginResponse {
   accessToken: string
 }
 
-export interface UserRoles {}
+export interface UserRoles {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
 
 export interface User {
   /**  */
