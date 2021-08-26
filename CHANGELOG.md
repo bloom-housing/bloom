@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
+  - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
