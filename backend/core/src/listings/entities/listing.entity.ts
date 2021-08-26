@@ -42,6 +42,7 @@ import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { ListingReviewOrder } from "../types/listing-review-order-enum"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -372,6 +373,16 @@ class Listing extends BaseEntity {
   @IsEnum(ListingStatus, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: ListingStatus, enumName: "ListingStatus" })
   status: ListingStatus
+
+  @Column({ type: "enum", enum: ListingReviewOrder, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingReviewOrder, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingReviewOrder,
+    enumName: "ListingReviewOrder",
+  })
+  reviewOrderType?: ListingReviewOrder | null
 
   @Expose()
   applicationConfig?: Record<string, unknown>

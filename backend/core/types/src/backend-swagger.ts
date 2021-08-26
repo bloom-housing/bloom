@@ -4092,7 +4092,7 @@ export interface Listing {
   showWaitlist: boolean
 
   /**  */
-  reviewOrderType: EnumListingReviewOrderType
+  reviewOrderType?: EnumListingReviewOrderType
 
   /**  */
   applicationMethods: ApplicationMethod[]
@@ -4463,6 +4463,9 @@ export interface ListingCreate {
 
   /**  */
   countyCode: CountyCode
+
+  /**  */
+  reviewOrderType?: EnumListingReviewOrderType
 
   /**  */
   applicationMethods: Id[]
@@ -4851,6 +4854,9 @@ export interface ListingUpdate {
 
   /**  */
   updatedAt?: Date
+
+  /**  */
+  reviewOrderType?: EnumListingReviewOrderType
 
   /**  */
   applicationMethods: Id[]

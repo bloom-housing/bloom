@@ -16,6 +16,7 @@ import { ListingEventType } from "../../listings/types/listing-event-type-enum"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { UnitStatus } from "../../units/types/unit-status-enum"
+import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -507,6 +508,7 @@ export const defaultListing: ListingSeedType = {
   rentalAssistance: "Custom rental assistance text",
   rentalHistory: "Custom rental history text",
   requiredDocuments: "Custom required documents text",
+  reviewOrderType: "lottery" as ListingReviewOrder,
   specialNotes: "Custom special notes text",
   status: ListingStatus.active,
   waitlistCurrentSize: null,

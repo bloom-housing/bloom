@@ -72,16 +72,23 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
+  - Routing to individual application ([#1715](https://github.com/bloom-housing/bloom/pull/1715)) (Emily Jablonski)
 
 ### UI Components
 
 - Added:
 
   - Add ResponsiveTable for pricing
+  - Ability to have multiple statuses under the ImageCard ([#1700](https://github.com/bloom-housing/bloom/pull/1700)) (Emily Jablonski)
+    - **Breaking Change**: Removed three props (appStatus, appStatusContent, and appStatusSubContent) in favor of an array that contains that data - will need to transition any status information to the new array format
 
 - Fixed:
+
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
+
+- Changed:
+  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
 
 ### Backend
 
@@ -109,6 +116,7 @@ All notable changes to this project will be documented in this file. The format 
   - Display all listings on partners with `limit=all` ([#1635](https://github.com/bloom-housing/bloom/issues/1635)) (Marcin Jędras)
   - Seed data should create unique application methods ([#1662](https://github.com/bloom-housing/bloom/issues/1662)) (Emily Jablonski)
   - fixes issue with unexposed user roles ((#1627)[https://github.com/bloom-housing/bloom/pull/1627]))
+  - updates translations to check for values before sending to service ((#1699)[https://github.com/bloom-housing/bloom/pull/1699])
 
 ### General
 

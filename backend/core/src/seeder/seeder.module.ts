@@ -42,6 +42,7 @@ import { ListingTreymoreSeed } from "../seeds/listings/listing-detroit-treymore"
 import { UnitsSummary } from "../units-summary/entities/units-summary.entity"
 import { ListingDefaultMultipleAMI } from "../seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listing-default-multiple-ami-and-percentages"
+import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-missing-ami"
 
 @Module({})
 export class SeederModule {
@@ -101,6 +102,7 @@ export class SeederModule {
         ListingTreymoreSeed,
         ListingDefaultMultipleAMI,
         ListingDefaultMultipleAMIAndPercentages,
+        ListingDefaultMissingAMI,
       ],
     }
   }

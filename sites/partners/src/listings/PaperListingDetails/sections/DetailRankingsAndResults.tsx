@@ -10,13 +10,15 @@ const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
 
   const lotteryEvent = getLotteryEvent(listing)
-
-  const getReviewOrderType = (): EnumListingReviewOrderType => {
-    return lotteryEvent
-      ? EnumListingReviewOrderType.lottery
-      : EnumListingReviewOrderType.firstComeFirstServe
+  const getReviewOrderType = () => {
+    if (!listing.reviewOrderType) {
+      return lotteryEvent
+        ? EnumListingReviewOrderType.lottery
+        : EnumListingReviewOrderType.firstComeFirstServe
+    } else {
+      return listing.reviewOrderType
+    }
   }
-
   return (
     <GridSection
       className="bg-primary-lighter"
