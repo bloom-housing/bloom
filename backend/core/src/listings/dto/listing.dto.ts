@@ -1,5 +1,5 @@
 import { Listing } from "../entities/listing.entity"
-import { Expose, Transform, Type } from "class-transformer"
+import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import {
   ArrayMaxSize,
   IsDate,
@@ -155,7 +155,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => UnitDto)
   @Transform(
     (value, obj: Listing) => {
-      return obj.property?.units
+      return plainToClass(UnitDto, obj.property?.units)
     },
     { toClassOnly: true }
   )
@@ -189,7 +189,7 @@ export class ListingDto extends OmitType(Listing, [
   @Type(() => AddressDto)
   @Transform(
     (value, obj: Listing) => {
-      return obj.property?.buildingAddress
+      return plainToClass(AddressDto, obj.property.buildingAddress)
     },
     { toClassOnly: true }
   )
@@ -327,10 +327,10 @@ export class ListingDto extends OmitType(Listing, [
   urlSlug: string
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryDto)
-  unitsSummary: UnitsSummaryDto[]
+  unitsSummary?: UnitsSummaryDto[]
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
@@ -528,10 +528,10 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   result?: AssetCreateDto | null
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryCreateDto)
-  unitsSummary: UnitsSummaryCreateDto[]
+  unitsSummary?: UnitsSummaryCreateDto[]
 }
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
@@ -744,10 +744,10 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   result?: AssetUpdateDto
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryUpdateDto)
-  unitsSummary: UnitsSummaryUpdateDto[]
+  unitsSummary?: UnitsSummaryUpdateDto[]
 }
 
 // add other listing filter params here

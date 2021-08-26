@@ -4249,7 +4249,7 @@ export interface Listing {
   urlSlug: string
 
   /**  */
-  unitsSummary: UnitsSummary[]
+  unitsSummary?: UnitsSummary[]
 
   /**  */
   id: string
@@ -4645,7 +4645,7 @@ export interface ListingCreate {
   result?: CombinedResultTypes
 
   /**  */
-  unitsSummary: UnitsSummaryCreate[]
+  unitsSummary?: UnitsSummaryCreate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5068,7 +5068,7 @@ export interface ListingUpdate {
   result?: AssetUpdate
 
   /**  */
-  unitsSummary: UnitsSummaryUpdate[]
+  unitsSummary?: UnitsSummaryUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string

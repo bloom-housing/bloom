@@ -470,11 +470,12 @@ class Listing extends BaseEntity {
   customMapPin?: boolean | null
 
   @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
-    nullable: false,
+    nullable: true,
     eager: true,
     cascade: true,
   })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
