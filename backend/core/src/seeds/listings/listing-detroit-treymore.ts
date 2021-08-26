@@ -162,7 +162,7 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 4,
-      monthlyRent: 707,
+      monthlyRentMin: 707,
       listing: listing,
       sqFeetMin: "720",
       sqFeetMax: "1003",

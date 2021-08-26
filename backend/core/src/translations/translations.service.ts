@@ -117,7 +117,6 @@ export class TranslationsService extends AbstractServiceFactory<
             }
           })
         } else {
-          console.log("object[key] = ", object[key])
           if (object[key] && isEmpty(object[key]) === false) {
             results.keys.push(parent ? [parent, key].join(".") : key)
             results.values.push(object[key])

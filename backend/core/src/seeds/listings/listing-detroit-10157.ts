@@ -185,7 +185,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const zeroBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeStudio,
       totalCount: 1,
-      monthlyRent: 470,
+      monthlyRentMin: 470,
       listing: listing,
       sqFeetMax: "550",
     }
@@ -194,7 +194,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeOneBdrm,
       totalCount: 2,
-      monthlyRent: 650,
+      monthlyRentMin: 650,
       listing: listing,
       sqFeetMin: "800",
       sqFeetMax: "1000",
@@ -204,7 +204,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 2,
-      monthlyRent: 750,
+      monthlyRentMin: 750,
       listing: listing,
       sqFeetMin: "900",
       sqFeetMax: "1100",
