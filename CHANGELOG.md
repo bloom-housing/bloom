@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
+  - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
+    - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
 
 ### Backend
 
