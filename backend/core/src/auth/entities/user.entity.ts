@@ -89,6 +89,8 @@ export class User {
 
   @OneToOne(() => UserRoles, (roles) => roles.user, {
     eager: true,
+    cascade: true,
+    nullable: true,
   })
   @Expose()
   roles?: UserRoles

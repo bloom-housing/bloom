@@ -7,7 +7,7 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
-import { EnumListingReviewOrderType, Listing } from "@bloom-housing/backend-core/types"
+import { ListingReviewOrder, Listing } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 
@@ -68,7 +68,7 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
       }
     }
     content = formattedDate !== "" ? `${content}: ${formattedDate}` : content
-    if (listing.reviewOrderType === EnumListingReviewOrderType.firstComeFirstServe) {
+    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
       subContent = content
       content = t("listings.applicationFCFS")
     }

@@ -37,6 +37,7 @@ export const previewState = () => {
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
+    listing,
   }
   const testMethod2: ApplicationMethod = {
     id: "2",
@@ -46,6 +47,7 @@ export const previewState = () => {
     label: "Spanish",
     externalReference: "#spanish",
     type: ApplicationMethodType.FileDownload,
+    listing,
   }
 
   listing.applicationMethods = listing.applicationMethods.concat([testMethod1, testMethod2])
@@ -66,6 +68,7 @@ export const previewStateExternalLink = () => {
     updatedAt: new Date(),
     externalReference: "https://www.exygy.com",
     type: ApplicationMethodType.ExternalLink,
+    listing,
   }
 
   listing.applicationMethods = listing.applicationMethods.concat([linkMethod])
