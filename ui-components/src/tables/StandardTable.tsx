@@ -50,6 +50,7 @@ export interface StandardTableProps {
   tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
+  translateData?: boolean
 }
 
 export type StandardTableData = Record<string, React.ReactNode>[] | undefined
@@ -120,7 +121,9 @@ export const StandardTable = (props: StandardTableProps) => {
           headerLabel={getTranslationWithArguments(headerName(headers[colKey]))}
           className={cellClass !== " " ? cellClass : undefined}
         >
-          {cell}
+          {props.translateData && typeof cell === "string"
+            ? getTranslationWithArguments(cell)
+            : cell}
         </Cell>
       )
     })

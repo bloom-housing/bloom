@@ -32,6 +32,7 @@ import { AmiChart } from "./ami-charts/entities/ami-chart.entity"
 import { WayneCountyMSHDA2021 } from "./seeds/ami-charts"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
+import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -55,6 +56,7 @@ const listingSeeds: any[] = [
   ListingTreymoreSeed,
   ListingDefaultMultipleAMI,
   ListingDefaultMultipleAMIAndPercentages,
+  ListingDefaultMissingAMI,
 ]
 
 export function getSeedListingsCount() {

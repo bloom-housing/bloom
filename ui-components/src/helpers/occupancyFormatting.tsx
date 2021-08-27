@@ -4,7 +4,7 @@ import { Listing } from "@bloom-housing/backend-core/types"
 
 export const occupancyTable = (listing: Listing) => {
   let occupancyData = [] as any
-  if (listing.unitsSummarized) {
+  if (listing.unitsSummarized && listing.unitsSummarized.byUnitType) {
     occupancyData = listing.unitsSummarized.byUnitType.map((unitSummary) => {
       let occupancy = ""
 
@@ -34,6 +34,7 @@ export const getOccupancyDescription = (listing: Listing) => {
   const unitsSummarized = listing.unitsSummarized
   if (
     unitsSummarized &&
+    unitsSummarized.unitTypes &&
     unitsSummarized.unitTypes.map((unitType) => unitType.name).includes("SRO")
   ) {
     return unitsSummarized.unitTypes.length == 1

@@ -18,6 +18,7 @@ const views: Views = {
       "listings.applicationDueDate",
       "listings.applicationDueTime",
       "listings.applicationOpenDate",
+      "listings.reviewOrderType",
       "listings.status",
       "listings.waitlistMaxSize",
       "listings.waitlistCurrentSize",

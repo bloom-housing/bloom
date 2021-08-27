@@ -6,6 +6,7 @@ import { TranslationCreateDto, TranslationUpdateDto } from "./dto/translation.dt
 import { CountyCode } from "../shared/types/county-code"
 import { Language } from "../shared/types/language-enum"
 import { Listing } from "../listings/entities/listing.entity"
+import { isEmpty } from "../libs/miscLib"
 
 const TRANSLATION_KEYS = [
   "applicationPickUpAddressOfficeHours",
@@ -73,7 +74,7 @@ export class TranslationsService extends AbstractServiceFactory<
 
     // Get key-value pairs from listing to be translated
     const translations = this.getTranslations(listing)
-
+    if (!translations?.values || (translations?.values && translations.values.length === 0)) return
     const translatedValues = await this.translateService().translate(translations.values, {
       from: Language.en,
       to: language,
@@ -110,11 +111,13 @@ export class TranslationsService extends AbstractServiceFactory<
       if (typeof key === "string") {
         if (Array.isArray(object)) {
           object.forEach((value, i) => {
-            results.keys.push(parent ? [parent, i, key].join(".") : key)
-            results.values.push(value[key])
+            if (isEmpty(value[key]) === false) {
+              results.keys.push(parent ? [parent, i, key].join(".") : key)
+              results.values.push(value[key])
+            }
           })
         } else {
-          if (object[key]) {
+          if (object[key] && isEmpty(object[key]) === false) {
             results.keys.push(parent ? [parent, key].join(".") : key)
             results.values.push(object[key])
           }

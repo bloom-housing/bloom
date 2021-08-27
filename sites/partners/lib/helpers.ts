@@ -124,7 +124,9 @@ export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined 
   const lotteryEvents = listing?.events.filter(
     (event) => event.type === ListingEventType.publicLottery
   )
-  return lotteryEvents ? lotteryEvents[0] : null
+  return lotteryEvents && lotteryEvents.length && lotteryEvents[0].startTime
+    ? lotteryEvents[0]
+    : null
 }
 
 // TODO memoize this function
