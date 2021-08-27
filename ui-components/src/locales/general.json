@@ -1032,7 +1032,14 @@
       "individualUnits": "Individual Units",
       "delete": "Delete this Unit",
       "deleteConf": "Do you really want to delete this unit?",
-      "eligibility": "Eligibility"
+      "eligibility": "Eligibility",
+      "typeOptions": {
+        "studio": "Studio",
+        "oneBdrm": "One Bedroom",
+        "twoBdrm": "Two Bedroom",
+        "threeBdrm": "Three Bedroom",
+        "fourBdrm": "Four Bedroom"
+      }
     },
     "events": {
       "deleteThisEvent": "Delete this event",
