@@ -6,6 +6,7 @@ import { Listing } from "./entities/listing.entity"
 import { ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
 import { TranslationsService } from "../translations/translations.service"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -101,6 +102,10 @@ describe("ListingsService", () => {
         {
           provide: getRepositoryToken(Listing),
           useValue: mockListingsRepo,
+        },
+        {
+          provide: getRepositoryToken(AmiChart),
+          useValue: jest.fn(),
         },
         {
           provide: TranslationsService,

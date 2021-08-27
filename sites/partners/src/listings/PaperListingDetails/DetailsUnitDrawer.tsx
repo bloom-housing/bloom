@@ -9,6 +9,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { Unit } from "@bloom-housing/backend-core/types"
 import { getRentType } from "../../../lib/helpers"
+import { useSingleAmiChartData } from "../../../lib/hooks"
 
 export type UnitDrawer = Unit | null
 
@@ -17,8 +18,15 @@ type UnitDrawerProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
 }
 
+const AmiChartWrapper = (amiChartId) => {
+  const { data } = useSingleAmiChartData(amiChartId)
+
+  return data ? data.name : t("t.n/a")
+}
+
 const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
   const rentType = getRentType(unit)
+
   return (
     <Drawer
       open={!!unit}
@@ -65,7 +73,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
           <GridSection grid columns={4}>
             <ViewItem
               label={t("listings.unit.amiChart")}
-              children={unit?.amiChart?.name || t("t.n/a")}
+              children={unit?.amiChart?.id ? AmiChartWrapper(unit.amiChart.id) : t("t.n/a")}
             />
 
             <ViewItem

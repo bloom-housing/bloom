@@ -157,6 +157,18 @@ export function useSingleFlaggedApplication(afsId: string) {
   }
 }
 
+export function useSingleAmiChartData(amiChartId: string) {
+  const { amiChartsService } = useContext(AuthContext)
+  const fetcher = () => amiChartsService.retrieve({ amiChartId })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}
+
 export function useAmiChartList() {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list()

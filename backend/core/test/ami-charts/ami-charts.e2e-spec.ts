@@ -10,8 +10,8 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
-import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
-import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
+import { AmiChartsModule } from "../../src/ami-charts/ami-charts.module"
+import { AmiChartCreateDto } from "../../src/ami-charts/dto/ami-chart.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -19,7 +19,7 @@ import { ApplicationMethodType } from "../../src/application-methods/types/appli
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("ApplicationMethods", () => {
+describe("AmiCharts", () => {
   let app: INestApplication
   let adminAccesstoken: string
   beforeAll(async () => {
@@ -27,7 +27,7 @@ describe("ApplicationMethods", () => {
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, ApplicationMethodsModule],
+      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, AmiChartsModule],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -38,32 +38,44 @@ describe("ApplicationMethods", () => {
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
 
-  it(`should return applicationMethods`, async () => {
+  it(`should return amiCharts`, async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/applicationMethods`)
+      .get(`/amiCharts`)
       .set(...setAuthorization(adminAccesstoken))
       .expect(200)
     expect(Array.isArray(res.body)).toBe(true)
+    expect(Array.isArray(res.body[0].items)).toBe(true)
+    expect(res.body[0].items.length).toBeGreaterThan(0)
   })
 
-  it(`should create and return a new application method`, async () => {
+  it(`should create and return a new ami chart`, async () => {
+    const amiChartCreateDto: AmiChartCreateDto = {
+      items: [
+        {
+          percentOfAmi: 50,
+          householdSize: 5,
+          income: 5000,
+        },
+      ],
+      name: "testAmiChart",
+    }
     const res = await supertest(app.getHttpServer())
-      .post(`/applicationMethods`)
+      .post(`/amiCharts`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ type: ApplicationMethodType.ExternalLink })
+      .send(amiChartCreateDto)
       .expect(201)
-
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
-    expect(res.body).toHaveProperty("type")
-    expect(res.body.type).toBe(ApplicationMethodType.ExternalLink)
+    expect(res.body.name).toBe(amiChartCreateDto.name)
 
     const getById = await supertest(app.getHttpServer())
-      .get(`/applicationMethods/${res.body.id}`)
+      .get(`/amiCharts/${res.body.id}`)
       .set(...setAuthorization(adminAccesstoken))
       .expect(200)
-    expect(getById.body.type).toBe(ApplicationMethodType.ExternalLink)
+    expect(getById.body.name).toBe(amiChartCreateDto.name)
+    expect(res.body.items.length).toBe(1)
+    expect(res.body.items[0].percentOfAmi).toBe(amiChartCreateDto.items[0].percentOfAmi)
   })
 
   afterEach(() => {

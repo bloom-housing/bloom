@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
-import { ListingReviewOrder, Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { LinkButton } from "../../actions/LinkButton"
 import { getSummariesTable } from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"

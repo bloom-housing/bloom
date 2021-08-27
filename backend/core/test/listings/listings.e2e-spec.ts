@@ -105,7 +105,7 @@ describe("Listings", () => {
     expect(listing.amenities).not.toBe(amenitiesValue)
     listing.amenities = amenitiesValue
 
-    const oldOccupancy = listing.units[0].maxOccupancy
+    const oldOccupancy = Number(listing.units[0].maxOccupancy)
     listing.units[0].maxOccupancy = oldOccupancy + 1
 
     const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
@@ -175,7 +175,7 @@ describe("Listings", () => {
     const am: ApplicationMethodCreateDto = {
       type: ApplicationMethodType.FileDownload,
       paperApplications: [{ id: paperApplication.body.id }],
-      listing: listing,
+      listing,
     }
 
     const applicationMethod = await supertest(app.getHttpServer())
