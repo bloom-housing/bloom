@@ -52,13 +52,13 @@ const ApplicationAddMembers = () => {
     }
   }
 
-  const membersSection = application.householdMembers.map((member) => {
+  const membersSection = application.householdMembers.map((member, index) => {
     return (
       <HouseholdMemberForm
         editMember={editMember}
         key={member}
         memberFirstName={member.firstName}
-        memberId={member.orderId}
+        memberId={index}
         memberLastName={member.lastName}
         subtitle={t("application.household.householdMember")}
       />
