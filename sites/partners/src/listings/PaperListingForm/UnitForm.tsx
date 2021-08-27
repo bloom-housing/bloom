@@ -75,6 +75,13 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
       priorityType: current?.priorityType,
       rentType: getRentType(current),
+      maxIncomeHouseholdSize1: 0,
+      maxIncomeHouseholdSize2: 0,
+      maxIncomeHouseholdSize3: 0,
+      maxIncomeHouseholdSize4: 0,
+      maxIncomeHouseholdSize5: 0,
+      maxIncomeHouseholdSize6: 0,
+      maxIncomeHouseholdSize7: 0,
     },
   })
 
@@ -93,18 +100,30 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }, [units, setCurrent, tempId, reset, options])
 
   const rentType = watch("rentType")
-  const amiChart: string = watch("amiChart.id")
+  const amiChartID: string = watch("amiChart.id")
   const amiPercentage: string = watch("amiPercentage")
 
   useEffect(() => {
     const fetchAmiChart = async () => {
       try {
-        const selectedAmiChart = await amiChartsService.retrieve({
-          amiChartId: amiChart,
+        const thisAmiChart = await amiChartsService.retrieve({
+          amiChartId: amiChartID,
         })
-        const tableData = selectedAmiChart.items.reduce((acc, current) => {
+        const tableData = thisAmiChart.items.reduce((acc, current) => {
           if (current.percentOfAmi === parseInt(amiPercentage)) {
-            acc.push({ householdSize: current.householdSize, maxIncome: current.income })
+            const incomeCell = (
+              <Field
+                id={`maxIncomeHouseholdSize${current.householdSize}`}
+                name={`maxIncomeHouseholdSize${current.householdSize}`}
+                label={t("t.minimumIncome")}
+                defaultValue={current.income.toString()}
+                register={register}
+                type="number"
+                prepend="$"
+                readerOnly
+              />
+            )
+            acc.push({ householdSize: current.householdSize, maxIncome: incomeCell })
           }
           return acc
         }, [])
@@ -116,10 +135,10 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
         console.error(e)
       }
     }
-    if (amiChart && amiPercentage) {
+    if (amiChartID && amiPercentage) {
       void fetchAmiChart()
     }
-  }, [amiChart, amiPercentage, amiChartsService])
+  }, [amiChartID, amiPercentage, amiChartsService])
 
   const amiChartTableHeaders = {
     householdSize: "listings.householdSize",
@@ -138,6 +157,23 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       data.amiChart = chart
     } else {
       delete data.amiChart
+    }
+
+    console.log(data)
+
+    for (const key in data) {
+      if (key.slice(0, -1) === "maxIncomeHouseholdSize") {
+        console.log(data[key])
+        console.log(amiChartData[parseInt(key[key.length - 1]) - 1].maxIncome.props.defaultValue)
+        if (
+          data[key] !== amiChartData[parseInt(key[key.length - 1]) - 1].maxIncome.props.defaultValue
+        ) {
+          // we have an override!
+          console.log("we have an override!!!")
+          console.log(data[key])
+          console.log(amiChartData[parseInt(key[key.length - 1]) - 1])
+        }
+      }
     }
 
     if (data.rentType === "fixed") {
@@ -358,7 +394,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
             </ViewItem>
           </GridCell>
         </GridSection>
-        {amiChart && amiPercentage && amiChartData && amiChartData.length > 0 && (
+        {amiChartID && amiPercentage && amiChartData && amiChartData.length > 0 && (
           <GridSection columns={2} className="pt-6">
             <GridCell>
               <MinimalTable headers={amiChartTableHeaders} data={amiChartData} />
