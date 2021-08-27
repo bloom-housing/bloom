@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file. The format 
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - Routing to individual application ([#1715](https://github.com/bloom-housing/bloom/pull/1715)) (Emily Jablonski)
+  - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
 
 ### UI Components
 
