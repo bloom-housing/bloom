@@ -27,6 +27,7 @@ import {
   PaginatedListingDto,
   ListingsQueryParams,
   ListingFilterParams,
+  ListingsRetrieveQueryParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -73,12 +74,15 @@ export class ListingsController {
   async retrieve(
     @Headers("language") language: Language,
     @Param("listingId") listingId: string,
-    @Query("view") view?: string
+    @Query() queryParams: ListingsRetrieveQueryParams
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language, view))
+    return mapTo(
+      ListingDto,
+      await this.listingsService.findOne(listingId, language, queryParams.view)
+    )
   }
 
   @Put(`:listingId`)
