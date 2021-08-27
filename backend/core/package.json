@@ -29,6 +29,7 @@
     "herokusetup": "node heroku.setup.js",
     "heroku-postbuild": "rimraf dist && nest build && yarn run db:migration:run",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w types/src/backend-swagger.ts",
+    "generate:leasing-agent": "ts-node scripts/add-new-leasing-agent.ts",
     "migrator": "ts-node migrator.ts"
   },
   "dependencies": {
