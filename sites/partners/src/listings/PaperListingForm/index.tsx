@@ -31,7 +31,7 @@ import {
   ListingEventType,
   ListingEventCreate,
   Preference,
-  EnumListingReviewOrderType,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -192,7 +192,7 @@ const defaults: FormListing = {
   yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
-  reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
+  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -349,8 +349,8 @@ const formatFormData = (
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
       data.reviewOrderQuestion === "reviewOrderLottery"
-        ? EnumListingReviewOrderType.lottery
-        : EnumListingReviewOrderType.firstComeFirstServe,
+        ? ListingReviewOrder.lottery
+        : ListingReviewOrder.firstComeFirstServe,
   }
 }
 

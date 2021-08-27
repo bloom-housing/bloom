@@ -9,6 +9,7 @@ import { UnitType } from "../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { AmiChartItem } from "../ami-charts/entities/ami-chart-item.entity"
+import { UnitAmiChartOverride } from "../units/entities/unit-ami-chart-override.entity"
 
 export type AnyDict = { [key: string]: unknown }
 type Units = Unit[]
@@ -34,9 +35,33 @@ const minMaxCurrency = (baseValue: MinMaxCurrency, newValue: number): MinMaxCurr
   }
 }
 
+const getAmiChartItemUniqueKey = (amiChartItem: AmiChartItem) => {
+  return amiChartItem.householdSize.toString() + "-" + amiChartItem.percentOfAmi.toString()
+}
+
+export const mergeAmiChartWithOverrides = (amiChart: AmiChart, override: UnitAmiChartOverride) => {
+  const householdAmiPercentageOverrideMap: Map<string, AmiChartItem> = override.items.reduce(
+    (acc, amiChartItem) => {
+      acc.set(getAmiChartItemUniqueKey(amiChartItem), amiChartItem)
+      return acc
+    },
+    new Map()
+  )
+
+  for (const amiChartItem of amiChart.items) {
+    const amiChartItemOverride = householdAmiPercentageOverrideMap.get(
+      getAmiChartItemUniqueKey(amiChartItem)
+    )
+    if (amiChartItemOverride) {
+      amiChartItem.income = amiChartItemOverride.income
+    }
+  }
+  return amiChart
+}
+
 // Creates data used to display a table of household size/unit size by maximum income per the AMI charts on the units
 // Unit sets can have multiple AMI charts used, in which case the table displays ranges
-const hmiData = (units: Units, maxHouseholdSize: number) => {
+const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) => {
   // Currently, BMR chart is just toggling whether or not the first column shows Household Size or Unit Type
   if (!units || units.length === 0) {
     return null
@@ -57,12 +82,24 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
     return a - b
   })
 
+  const amiChartMap: Record<string, AmiChart> = amiCharts.reduce((acc, amiChart) => {
+    acc[amiChart.id] = amiChart
+    return acc
+  }, {})
+
   // All unique combinations of an AMI percentage and an AMI chart across all units
   const uniquePercentageChartSet: ChartAndPercentage[] = [
     ...new Set(
       units
         .map((unit) => {
-          return { percentage: parseInt(unit.amiPercentage, 10), chart: unit.amiChart }
+          let amiChart = amiChartMap[unit.amiChartId]
+          if (unit.amiChartOverride) {
+            amiChart = mergeAmiChartWithOverrides(amiChart, unit.amiChartOverride)
+          }
+          return {
+            percentage: parseInt(unit.amiPercentage, 10),
+            chart: amiChart,
+          }
         })
         .map((item) => JSON.stringify(item))
     ),
@@ -324,7 +361,7 @@ export const getUnitTypes = (units: Unit[]): UnitType[] => {
   return Array.from(unitTypes.values())
 }
 
-export const transformUnits = (units: Unit[]): UnitsSummarized => {
+export const summarizeUnits = (units: Unit[], amiCharts: AmiChart[]): UnitsSummarized => {
   const data = {} as UnitsSummarized
 
   if (!units || (units && units.length === 0)) {
@@ -355,7 +392,8 @@ export const transformUnits = (units: Unit[]): UnitsSummarized => {
     units,
     data.byUnitType.reduce((maxHousehold, summary) => {
       return Math.max(maxHousehold, summary.occupancyRange.max)
-    }, 0)
+    }, 0),
+    amiCharts
   )
   return data
 }

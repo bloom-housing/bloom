@@ -8,10 +8,11 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindConditions, Repository } from "typeorm"
+import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
 import { User } from "../entities/user.entity"
-import { EmailDto, UserCreateDto, UserUpdateDto } from "../dto/user.dto"
+import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
 import { assignDefined } from "../../shared/assign-defined"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { USER_ERRORS } from "../user-errors"
@@ -20,6 +21,7 @@ import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
 import { authzActions, AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
+
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 
@@ -41,6 +43,31 @@ export class UserService {
     return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
+  public async list(
+    params: UserListQueryParams,
+    authContext: AuthContext
+  ): Promise<Pagination<User>> {
+    const options = {
+      limit: params.limit === "all" ? undefined : params.limit,
+      page: params.page || 10,
+    }
+    // https://www.npmjs.com/package/nestjs-typeorm-paginate
+    const qb = this._getQb()
+
+    const result = await paginate<User>(qb, options)
+    /**
+     * admin are the only ones that can access all users
+     * so this will throw on the first user that isn't their own (non admin users can access themselves)
+     */
+    await Promise.all(
+      result.items.map(async (user) => {
+        await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
+      })
+    )
+
+    return result
+  }
+
   async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
     const user = await this.find({
       id: dto.id,
@@ -53,7 +80,7 @@ export class UserService {
       ...dto,
     })
 
-    if (user.confirmedAt !== dto.confirmedAt) {
+    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
       })
@@ -195,5 +222,13 @@ export class UserService {
     user.resetToken = null
     await this.repo.save(user)
     return this.authService.generateAccessToken(user)
+  }
+
+  private _getQb() {
+    const qb = this.repo.createQueryBuilder("user")
+    qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+    qb.leftJoinAndSelect("user.roles", "user_roles")
+
+    return qb
   }
 }

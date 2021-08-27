@@ -105,7 +105,7 @@ const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<
         externalReference: "",
         label: "Label",
         paperApplications: [],
-        listing: listing,
+        listing,
       })
       listing.applicationMethods = [applicationMethods]
       await listingRepository.save(listing)

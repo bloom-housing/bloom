@@ -50,7 +50,7 @@ export const ListingView = (props: ListingProps) => {
   }
 
   const groupedUnits: GroupedTableGroup[] = getSummariesTable(
-    listing.unitsSummarized.byUnitTypeAndRent
+    listing.unitsSummarized?.byUnitTypeAndRent
   )
 
   let openHouseEvents: ListingEvent[] | null = null
@@ -123,11 +123,13 @@ export const ListingView = (props: ListingProps) => {
           </Message>
         )}
 
-        <GroupedTable
-          headers={unitSummariesHeaders}
-          data={groupedUnits}
-          responsiveCollapse={true}
-        />
+        {groupedUnits?.length > 0 && (
+          <GroupedTable
+            headers={unitSummariesHeaders}
+            data={groupedUnits}
+            responsiveCollapse={true}
+          />
+        )}
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ListingUpdated listingUpdated={listing.updatedAt} />

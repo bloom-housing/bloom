@@ -19,13 +19,10 @@ import {
   IsUUID,
   ValidateNested,
 } from "class-validator"
-import { ApiProperty } from "@nestjs/swagger"
 import { Unit } from "../../units/entities/unit.entity"
-import { transformUnits } from "../../shared/units-transformations"
 import { PropertyGroup } from "../../property-groups/entities/property-group.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UnitsSummarized } from "../../units/types/units-summarized"
 
 @Entity()
 export class Property {
@@ -138,12 +135,4 @@ export class Property {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   yearBuilt?: number | null
-
-  @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  get unitsSummarized(): UnitsSummarized | undefined {
-    if (Array.isArray(this.units) && this.units.length > 0) {
-      return transformUnits(this.units)
-    }
-  }
 }

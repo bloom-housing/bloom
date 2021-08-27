@@ -521,11 +521,12 @@ class Listing extends BaseEntity {
   region?: string | null
 
   @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
-    nullable: false,
+    nullable: true,
     eager: true,
     cascade: true,
   })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]

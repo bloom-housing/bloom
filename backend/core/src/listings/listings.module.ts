@@ -12,6 +12,7 @@ import { AuthModule } from "../auth/auth.module"
 import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
 import { TranslationsModule } from "../translations/translations.module"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 
 interface RedisCache extends Cache {
   store: RedisStore
@@ -40,7 +41,7 @@ if (process.env.REDIS_USE_TLS !== "0") {
 @Module({
   imports: [
     CacheModule.register(cacheConfig),
-    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property]),
+    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property, AmiChart]),
     AuthModule,
     TranslationsModule,
   ],

@@ -10,19 +10,21 @@ import {
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { Repository } from "typeorm"
+import { In, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
 import { getView } from "./views/view"
-import { transformUnits } from "../shared/units-transformations"
+import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
 import { TranslationsService } from "../translations/translations.service"
+import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 
 @Injectable()
 export class ListingsService {
   constructor(
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
+    @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService
   ) {}
 
@@ -121,7 +123,8 @@ export class ListingsService {
       ...listingDto,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
-    return await listing.save()
+    const saveResult = await listing.save()
+    return saveResult
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -174,11 +177,21 @@ export class ListingsService {
       throw new NotFoundException()
     }
 
-    result.unitsSummarized = transformUnits(result.property.units)
     if (lang !== Language.en) {
       await this.translationService.translateListing(result, lang)
     }
 
+    await this.addUnitsSummarized(result)
     return result
+  }
+
+  private async addUnitsSummarized(listing: Listing) {
+    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
+      const amiCharts = await this.amiChartsRepository.find({
+        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
+      })
+      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+    }
+    return listing
   }
 }
