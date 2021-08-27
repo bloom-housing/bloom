@@ -135,6 +135,7 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
+  console.log(listing)
   let openHouseEvents: ListingEvent[] | null = null
   let publicLottery: ListingEvent | null = null
   let lotteryResults: ListingEvent | null = null
