@@ -43,6 +43,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
   - Removed business logic from HouseholdSizeField component ([#1724](https://github.com/bloom-housing/bloom/pull/1724)) (Emily Jablonski)
     - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from HousingCounselor component ([#1717](https://github.com/bloom-housing/bloom/pull/1717)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing prop and replaced with a set not dependent on data model
 
 ### Backend
 
