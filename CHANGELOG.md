@@ -45,6 +45,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
   - Removed business logic from HousingCounselor component ([#1717](https://github.com/bloom-housing/bloom/pull/1717)) (Emily Jablonski)
     - **Breaking Change**: Removed existing prop and replaced with a set not dependent on data model
+  - Removed business logic from ListingsList component ([#1773](https://github.com/bloom-housing/bloom/pull/1773)) (Emily Jablonski)
+    - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
 
 ### Backend
 
