@@ -18,7 +18,7 @@ import {
   Headers,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
@@ -70,7 +70,6 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @ApiQuery({ name: "view", required: false })
   @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
   async retrieve(
     @Headers("language") language: Language,
