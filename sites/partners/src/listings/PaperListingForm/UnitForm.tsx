@@ -377,7 +377,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
             </>
           )}
         </GridSection>
-        <GridSection title={t("t.accessibility")} columns={4} separator>
+        <GridSection title={t("t.accessibility")} columns={2} separator>
           <GridCell>
             <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
               <Select
