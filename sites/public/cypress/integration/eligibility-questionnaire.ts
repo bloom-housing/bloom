@@ -2,8 +2,8 @@ describe("Verifying the eligibility questionnaire flow", () => {
   it("Clicks the button on the homepage to launch the eligibility questionnaire", () => {
     cy.visit("/")
 
-    // Find and click the button that says "Check My Eligibility"
-    const checkEligibilityButton = cy.contains("Check My Eligibility")
+    // Find and click the button that says "Do I Qualify"
+    const checkEligibilityButton = cy.contains("Do I Qualify")
 
     // Click the eligibility button and verify it takes us to the questionnaire welcome page
     checkEligibilityButton.click()

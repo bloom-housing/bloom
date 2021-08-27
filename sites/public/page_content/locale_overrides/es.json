@@ -1,9 +1,9 @@
 {
   "welcome": {
-    "seeRentalListings": "Explorar alquileres"
+    "title": "Encuentra viviendas asequibles en"
   },
   "nav": {
-    "siteTitle": "Portal de vivienda de Detroit"
+    "siteTitle": "Detroit Home Connect"
   },
   "region": {
     "name": "Detroit"

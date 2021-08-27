@@ -3,14 +3,7 @@ describe("Navigating around the site", () => {
     cy.visit("/")
 
     // Check that the homepage banner text is present on the page
-    cy.contains("Apply for affordable housing")
-  })
-
-  it("Loads the listings page directly", () => {
-    cy.visit("/listings")
-
-    // Check that the listings page banner text is present on the page
-    cy.contains("Rent affordable housing")
+    cy.contains("Find affordable housing")
   })
 
   it("Loads the listings page directly", () => {
@@ -53,6 +46,6 @@ describe("Navigating around the site", () => {
 
     // Check that the homepage banner text is present on the page
     cy.url().should("eq", `${Cypress.config("baseUrl")}/`)
-    cy.contains("Apply for affordable housing")
+    cy.contains("Find affordable housing")
   })
 })

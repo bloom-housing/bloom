@@ -1209,7 +1209,8 @@
         "title": "تقدم بطلب للحصول على سكن ميسور التكلفة في",
         "seeMoreOpportunities": "شاهد المزيد من فرص الإسكان الإيجاري والملكية",
         "viewAdditionalHousing": "عرض فرص وموارد الإسكان الإضافية",
-        "checkEligibility": "تحقق من أهليتي",
+        "checkEligibility": "هل أنا مؤهل؟",
+        "checkEligibilityDescription": "تحقق في دقائق إذا كنت مؤهلاً!",
         "subTitle": "انقر فوق الزر أدناه للعثور على سكن مستأجر بناءً على دخلك واحتياجات أسرتك"
     },
     "whatToExpect": {
