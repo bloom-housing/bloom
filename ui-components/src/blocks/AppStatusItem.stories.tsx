@@ -7,9 +7,9 @@ export default {
 
 export const AppStatusItemSubmitted = () => (
   <AppStatusItem
-    applicationDueDate={new Date()}
+    applicationDueDate={"March 10th, 2022"}
     applicationURL={"application/1234abcd"}
-    applicationUpdatedAt={new Date()}
+    applicationUpdatedAt={"March 8th, 2022"}
     confirmationNumber={"1234abcd"}
     listingName={"Listing Name"}
     listingURL={"/listing/abcd1234/listing-name"}
@@ -19,7 +19,7 @@ export const AppStatusItemSubmitted = () => (
 export const AppStatusItemNoConfirmationNumberOrDueDate = () => (
   <AppStatusItem
     applicationURL={"application/1234abcd"}
-    applicationUpdatedAt={new Date()}
+    applicationUpdatedAt={"March 8th, 2022"}
     listingName={"Listing Name"}
     listingURL={"/listing/abcd1234/listing-name"}
   />

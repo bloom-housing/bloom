@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { AppStatusItem, AuthContext } from "@bloom-housing/ui-components"
+import moment from "moment"
 
 interface AppStatusItemWrapperProps {
   application: Application
@@ -21,9 +22,9 @@ const AppStatusItemWrapper = (props: AppStatusItemWrapperProps) => {
 
   return listing ? (
     <AppStatusItem
-      applicationDueDate={listing.applicationDueDate}
+      applicationDueDate={moment(listing.applicationDueDate).format("MMMM D, YYYY")}
       applicationURL={`application/${props.application.id}`}
-      applicationUpdatedAt={props.application.updatedAt}
+      applicationUpdatedAt={moment(props.application.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application.id}
       listingName={listing.name}
       listingURL={`/listing/${listing.id}/${listing.urlSlug}`}

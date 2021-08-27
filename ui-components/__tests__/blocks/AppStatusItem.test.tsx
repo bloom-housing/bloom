@@ -1,7 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { AppStatusItem } from "../../src/blocks/AppStatusItem"
-import moment from "moment"
 import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
@@ -10,9 +9,9 @@ describe("<AppStatusItem>", () => {
   it("renders without error", () => {
     const { getByText, queryByText } = render(
       <AppStatusItem
-        applicationDueDate={new Date()}
+        applicationDueDate={"March 10th, 2022"}
         applicationURL={"application/1234abcd"}
-        applicationUpdatedAt={new Date()}
+        applicationUpdatedAt={"March 8th, 2022"}
         confirmationNumber={"1234abcd"}
         listingName={"Listing Name"}
         listingURL={"/listing/abcd1234/listing-name"}
@@ -27,7 +26,7 @@ describe("<AppStatusItem>", () => {
     const { getByText, queryByText } = render(
       <AppStatusItem
         applicationURL={"application/1234abcd"}
-        applicationUpdatedAt={new Date()}
+        applicationUpdatedAt={"March 8th, 2022"}
         listingName={"Listing Name"}
         listingURL={"/listing/abcd1234/listing-name"}
       />

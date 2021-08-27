@@ -1,22 +1,18 @@
 import React from "react"
 import "./AppStatusItem.scss"
-import moment from "moment"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { t } from "../helpers/translator"
 
 interface AppStatusItemProps {
-  applicationDueDate?: Date
+  applicationDueDate?: string
   applicationURL: string
-  applicationUpdatedAt: Date
+  applicationUpdatedAt: string
   confirmationNumber?: string
   listingName: string
   listingURL: string
 }
 
 const AppStatusItem = (props: AppStatusItemProps) => {
-  const applicationDueDate = moment(props.applicationDueDate)
-  const editDate = moment(props.applicationUpdatedAt)
-
   return (
     <article className="status-item is-editable animated-fade">
       <div className="status-item__inner">
@@ -24,7 +20,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
           <h3 className="status-item__title">{props.listingName}</h3>
           {props.applicationDueDate && (
             <p className="status-item__due">
-              {t("listings.applicationDeadline")}: {applicationDueDate.format("MMMM D, YYYY")}
+              {t("listings.applicationDeadline")}: {props.applicationDueDate}
             </p>
           )}
         </header>
@@ -63,7 +59,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
           <div className="status-item__meta">
             <p className="status-item__date">
-              {t("application.edited")}: {editDate.format("MMMM D, YYYY")}
+              {t("application.edited")}: {props.applicationUpdatedAt}
             </p>
           </div>
         </footer>
