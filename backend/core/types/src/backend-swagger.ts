@@ -2678,7 +2678,7 @@ export interface ApplicationMethod {
   paperApplications?: PaperApplication[]
 
   /**  */
-  listing: object
+  listing: Id
 
   /**  */
   id: string
@@ -2738,7 +2738,7 @@ export interface ApplicationMethodCreate {
   phoneNumber?: string
 
   /**  */
-  listing: object
+  listing: Id
 }
 
 export interface AssetUpdate {
@@ -2804,7 +2804,7 @@ export interface ApplicationMethodUpdate {
   phoneNumber?: string
 
   /**  */
-  listing: object
+  listing: Id
 }
 
 export interface BooleanInput {
