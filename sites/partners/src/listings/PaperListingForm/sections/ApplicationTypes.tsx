@@ -223,14 +223,14 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
                     defaultChecked:
-                      listing && digitalApplicationMethod?.type == ApplicationMethodType.Internal,
+                      listing && digitalApplicationMethod?.type === ApplicationMethodType.Internal,
                   },
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked:
                       listing &&
-                      digitalApplicationMethod?.type == ApplicationMethodType.ExternalLink,
+                      digitalApplicationMethod?.type === ApplicationMethodType.ExternalLink,
                   },
                 ]}
               />
@@ -238,7 +238,7 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
           )}
         </GridSection>
         {((typeof commonDigitalApplicationChoice === "undefined" &&
-          digitalApplicationMethod?.type == ApplicationMethodType.ExternalLink) ||
+          digitalApplicationMethod?.type === ApplicationMethodType.ExternalLink) ||
           commonDigitalApplicationChoice === YesNoAnswer.No) && (
           <GridSection columns={1}>
             <GridCell>
