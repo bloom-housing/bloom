@@ -50,12 +50,16 @@ const DetailApplicationTypes = () => {
             {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
           </ViewItem>
         </GridCell>
-
+        {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
+          <ViewItem label={t("listings.customOnlineApplicationUrl")}>
+            {digitalMethod.externalReference}
+          </ViewItem>
+        )}
+      </GridSection>
+      <GridSection columns={1}>
         <GridCell>
           <ViewItem label={"Paper Applications"}>{paperMethod ? "Yes" : "No"}</ViewItem>
         </GridCell>
-      </GridSection>
-      <GridSection columns={1}>
         <GridCell>
           <ViewItem label={"Paper Applications"}>
             <MinimalTable
@@ -67,10 +71,20 @@ const DetailApplicationTypes = () => {
         </GridCell>
       </GridSection>
 
-      <GridSection columns={1}>
+      <GridSection columns={2}>
         <GridCell>
           <ViewItem label={"Referral"}>{referralMethod ? "Yes" : "No"}</ViewItem>
         </GridCell>
+        {referralMethod && (
+          <>
+            <ViewItem label={t("listings.referralContactPhone")}>
+              {referralMethod.phoneNumber}
+            </ViewItem>
+            <ViewItem label={t("listings.referralSummary")}>
+              {referralMethod.externalReference}
+            </ViewItem>
+          </>
+        )}
       </GridSection>
     </GridSection>
   )
