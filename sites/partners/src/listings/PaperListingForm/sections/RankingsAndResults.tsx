@@ -15,7 +15,7 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
 import { getLotteryEvent } from "../../../../lib/helpers"
-import { EnumListingReviewOrderType } from "@bloom-housing/backend-core/types"
+import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
   listing?: FormListing
@@ -45,7 +45,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
     control,
     name: "reviewOrderQuestion",
     defaultValue:
-      listing?.reviewOrderType === EnumListingReviewOrderType.lottery
+      listing?.reviewOrderType === ListingReviewOrder.lottery
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })
@@ -79,13 +79,14 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   label: t("listings.firstComeFirstServe"),
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
-                  defaultChecked: !lotteryEvent,
+                  defaultChecked:
+                    !listing || listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
                 },
                 {
                   label: t("listings.lottery"),
                   value: "reviewOrderLottery",
                   id: "reviewOrderLottery",
-                  defaultChecked: lotteryEvent !== null && lotteryEvent !== undefined,
+                  defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
                 },
               ]}
             />

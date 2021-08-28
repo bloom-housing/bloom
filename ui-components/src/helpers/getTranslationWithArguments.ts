@@ -1,10 +1,10 @@
 import { t } from "./translator"
 
-// translationKey must be in the format `key,argumentName:argumentValue,argumentName:argumentValue`
+// translationKey must be in the format `key*argumentName:argumentValue*argumentName:argumentValue`
 // any number of arguments can be passed, returns a fully translated string
 export const getTranslationWithArguments = (translationKey: string) => {
-  if (translationKey.indexOf(",") >= 0) {
-    const [key, ...stringArguments] = translationKey.split(",")
+  if (translationKey.indexOf("*") >= 0) {
+    const [key, ...stringArguments] = translationKey.split("*")
     const argumentsObject = stringArguments.reduce((obj, arg) => {
       const [key, value] = arg.split(":")
       return { ...obj, [key]: value }

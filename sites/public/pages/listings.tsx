@@ -24,11 +24,13 @@ const closedListings = (listings) => {
   return (
     listings.length > 0 && (
       <ListingsGroup
-        listings={listings}
+        listingsCount={listings.length}
         header={t("listings.closedListings")}
         hideButtonText={t("listings.hideClosedListings")}
         showButtonText={t("listings.showClosedListings")}
-      />
+      >
+        <ListingsList listings={listings} />
+      </ListingsGroup>
     )
   )
 }
