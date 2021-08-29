@@ -3478,6 +3478,9 @@ export interface User {
   roles?: CombinedRolesTypes
 
   /**  */
+  jurisdictions: IdName[]
+
+  /**  */
   id: string
 
   /**  */
@@ -3522,6 +3525,9 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
+  jurisdictions: Id[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3546,6 +3552,9 @@ export interface UserBasic {
 
   /**  */
   roles: UserRoles
+
+  /**  */
+  jurisdictions: IdName[]
 
   /**  */
   id: string
@@ -3635,6 +3644,9 @@ export interface UserUpdate {
 
   /**  */
   currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -4170,9 +4182,6 @@ export interface Listing {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -4209,7 +4218,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  jurisdiction?: Jurisdiction
+  jurisdiction: IdName
 
   /**  */
   reservedCommunityType?: ReservedCommunityType
@@ -4267,6 +4276,9 @@ export interface Listing {
 
   /**  */
   unitsSummary?: UnitsSummary[]
+
+  /**  */
+  countyCode: string
 
   /**  */
   id: string
@@ -4601,9 +4613,6 @@ export interface ListingCreate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   applicationMethods: Id[]
 
   /**  */
@@ -4679,7 +4688,7 @@ export interface ListingCreate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: CombinedJurisdictionTypes
+  jurisdiction: Id
 
   /**  */
   reservedCommunityType?: Id
@@ -4806,6 +4815,9 @@ export interface ListingCreate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  countyCode: string
 }
 
 export interface PreferenceUpdate {
@@ -5065,9 +5077,6 @@ export interface ListingUpdate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   id?: string
 
   /**  */
@@ -5152,7 +5161,7 @@ export interface ListingUpdate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: Id
+  jurisdiction: Id
 
   /**  */
   reservedCommunityType?: Id
@@ -5279,6 +5288,9 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  countyCode: string
 }
 
 export interface PaperApplicationCreate {
@@ -5520,10 +5532,21 @@ export interface ReservedCommunityTypeUpdate {
   id: string
 }
 
-export interface Translation {
+export interface Jurisdiction {
   /**  */
-  countyCode: CountyCode
+  name: string
 
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface Translation {
   /**  */
   language: Language
 
@@ -5537,24 +5560,24 @@ export interface Translation {
   updatedAt: Date
 
   /**  */
+  jurisdiction: Jurisdiction
+
+  /**  */
   translations: object
 }
 
 export interface TranslationCreate {
   /**  */
-  countyCode: CountyCode
+  language: Language
 
   /**  */
-  language: Language
+  jurisdiction: Id
 
   /**  */
   translations: object
 }
 
 export interface TranslationUpdate {
-  /**  */
-  countyCode: CountyCode
-
   /**  */
   language: Language
 
@@ -5566,6 +5589,9 @@ export interface TranslationUpdate {
 
   /**  */
   updatedAt?: Date
+
+  /**  */
+  jurisdiction: Jurisdiction
 
   /**  */
   translations: object
@@ -5659,13 +5685,6 @@ export enum CSVFormattingType {
   "bhaFormat" = "bhaFormat",
 }
 
-export enum CountyCode {
-  "Alameda" = "Alameda",
-  "San Mateo" = "San Mateo",
-  "San Jose" = "San Jose",
-  "Detroit" = "Detroit",
-}
-
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -5686,4 +5705,3 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
-export type CombinedJurisdictionTypes = Id

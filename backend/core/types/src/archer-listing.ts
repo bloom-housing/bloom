@@ -1,4 +1,4 @@
-import { AmiChart, CountyCode, Listing, ListingStatus, UnitStatus } from "./backend-swagger"
+import { AmiChart, Listing, ListingStatus, UnitStatus } from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
@@ -577,7 +577,12 @@ export const ArcherListing: Listing = {
   applicationPickUpAddressOfficeHours: "",
   depositMax: "",
   disableUnitsAccordion: false,
-  countyCode: CountyCode.Alameda,
+  jurisdiction: {
+    id: "id",
+    name: "Alameda",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   events: [],
   urlSlug: "listing-slug-abcdef",
   status: ListingStatus.active,

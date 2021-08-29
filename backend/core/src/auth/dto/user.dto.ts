@@ -16,6 +16,7 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdNameDto } from "../../shared/dto/idName.dto"
+import { IdDto } from "../../shared/dto/id.dto"
 import { Match } from "../../shared/decorators/match.decorator"
 import { passwordRegex } from "../../shared/password-regex"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
@@ -27,6 +28,7 @@ export class UserDto extends OmitType(User, [
   "resetToken",
   "confirmationToken",
   "roles",
+  "jurisdictions",
 ] as const) {
   @Expose()
   @IsOptional()
@@ -40,6 +42,12 @@ export class UserDto extends OmitType(User, [
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UserRolesDto)
   roles?: UserRolesDto | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdNameDto)
+  jurisdictions: IdNameDto[]
 }
 
 export class UserBasicDto extends OmitType(User, [
@@ -48,12 +56,19 @@ export class UserBasicDto extends OmitType(User, [
   "confirmationToken",
   "resetToken",
   "roles",
+  "jurisdictions",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UserRolesDto)
   roles: UserRolesDto
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdNameDto)
+  jurisdictions: IdNameDto[]
 }
 
 export class UserDtoWithAccessToken extends UserDto {
@@ -79,6 +94,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   "updatedAt",
   "leasingAgentInListings",
   "roles",
+  "jurisdictions",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -104,6 +120,12 @@ export class UserCreateDto extends OmitType(UserDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdictions: IdDto[]
 }
 
 export class UserUpdateDto extends OmitType(UserDto, [
@@ -112,6 +134,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "updatedAt",
   "leasingAgentInListings",
   "roles",
+  "jurisdictions",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -143,6 +166,12 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateIf((o) => o.password, { groups: [ValidationsGroupsEnum.default] })
   @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   currentPassword?: string
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  jurisdictions: IdDto[]
 }
 
 export class UserListQueryParams extends PaginationAllowsAllQueryParams {}

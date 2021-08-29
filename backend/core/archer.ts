@@ -253,6 +253,12 @@ export const ArcherListing: Listing = {
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
   countyCode: CountyCode["San Jose"],
+  jurisdiction: {
+    id: "id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "San Jose",
+  },
   depositMax: "",
   disableUnitsAccordion: false,
   events: [],

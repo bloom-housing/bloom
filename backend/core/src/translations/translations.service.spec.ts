@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
+import { nanoid } from "nanoid"
 import { Translation } from "./entities/translation.entity"
 import { TranslationsService } from "./translations.service"
 import { Language } from "../shared/types/language-enum"
-import { CountyCode } from "../shared/types/county-code"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -35,14 +35,15 @@ describe("TranslationsService", () => {
 
   describe("Translations queries", () => {
     it("Should return translations for given county code and language", async () => {
-      const result = await service.getTranslationByLanguageAndCountyCodeOrDefaultEn(
+      const jurisdictionId = nanoid()
+      const result = await service.getTranslationByLanguageAndJurisdictionOrDefaultEn(
         Language.en,
-        CountyCode.alameda
+        jurisdictionId
       )
       expect(result).toStrictEqual({})
       expect(translationRepositoryFindOneMock.mock.calls[0][0].where.language).toEqual(Language.en)
-      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.countyCode).toEqual(
-        CountyCode.alameda
+      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.jurisdictionId).toEqual(
+        jurisdictionId
       )
     })
   })

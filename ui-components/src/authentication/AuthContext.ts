@@ -129,7 +129,7 @@ const reducer = createReducer(
         baseURL: apiUrl,
         headers: {
           language: state.language,
-          countyCode: process.env.countyCode,
+          jurisdictionName: process.env.jurisdictionName,
           ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
         },
       })
@@ -170,7 +170,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       baseURL: apiUrl,
       headers: {
         language: router.locale,
-        countyCode: process.env.countyCode,
+        jurisdictionName: process.env.jurisdictionName,
         appUrl: window.location.origin,
         ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
       },
