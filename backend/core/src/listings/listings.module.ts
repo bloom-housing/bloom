@@ -1,4 +1,11 @@
-import { CacheModule, CACHE_MANAGER, Inject, Module, OnModuleDestroy } from "@nestjs/common"
+import {
+  CacheModule,
+  CACHE_MANAGER,
+  Inject,
+  Module,
+  OnModuleDestroy,
+  ValidationPipe,
+} from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
 import { Store } from "cache-manager"
@@ -45,7 +52,7 @@ if (process.env.REDIS_USE_TLS !== "0") {
     AuthModule,
     TranslationsModule,
   ],
-  providers: [ListingsService],
+  providers: [ListingsService, ValidationPipe],
   exports: [ListingsService],
   controllers: [ListingsController],
 })
