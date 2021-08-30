@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file. The format 
   - Application due date label in the listings table ([#1764](https://github.com/bloom-housing/bloom/pull/1764)) (Dominik Barcikowski)
   - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
+
 ### UI Components
 
 - Added:
