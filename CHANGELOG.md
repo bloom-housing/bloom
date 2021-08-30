@@ -23,6 +23,9 @@ All notable changes to this project will be documented in this file. The format 
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - Routing to individual application ([#1715](https://github.com/bloom-housing/bloom/pull/1715)) (Emily Jablonski)
+  - Application due date label in the listings table ([#1764](https://github.com/bloom-housing/bloom/pull/1764)) (Dominik Barcikowski)
+  - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
+  - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
 
 ### UI Components
@@ -42,6 +45,10 @@ All notable changes to this project will be documented in this file. The format 
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
+  - Removed business logic from HouseholdSizeField component ([#1724](https://github.com/bloom-housing/bloom/pull/1724)) (Emily Jablonski)
+    - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from HousingCounselor component ([#1717](https://github.com/bloom-housing/bloom/pull/1717)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing prop and replaced with a set not dependent on data model
 
 ### Backend
 

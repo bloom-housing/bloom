@@ -7,27 +7,20 @@ export default {
 }
 
 export const withOnlyRequiredFields = () => (
-  <HousingCounselor counselor={{ name: "Counselor Name", languages: ["English"] }} />
+  <HousingCounselor name={"Counselor Name"} languages={["English"]} />
 )
 
 export const withMultipleLanguages = () => (
-  <HousingCounselor
-    counselor={{
-      name: "Counselor Name",
-      languages: ["English", "Spanish", "Chinese"],
-    }}
-  />
+  <HousingCounselor name={"Counselor Name"} languages={["English", "Spanish", "Chinese"]} />
 )
 
 export const withAllFields = () => (
   <HousingCounselor
-    counselor={{
-      name: "Counselor Name",
-      languages: ["English"],
-      address: "123 Main St",
-      citystate: "San Francisco, CA",
-      website: "www.counselor.org",
-      phone: "123-456-7890",
-    }}
+    name={"Counselor Name"}
+    languages={["English"]}
+    addressStreet={"123 Main St"}
+    addressCityState={"San Francisco, CA"}
+    website={"www.counselor.org"}
+    phone={"123-456-7890"}
   />
 )
