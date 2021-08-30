@@ -10,9 +10,7 @@ export default () => {
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <Hero title={pageTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings">
-        {t("errors.unauthorized.message")}
-      </Hero>
+      <Hero title={pageTitle}>{t("errors.unauthorized.message")}</Hero>
     </Layout>
   )
 }
