@@ -1293,6 +1293,8 @@
   },
   "listingFilters": {
     "buttonTitle": "Filter Listings",
+    "buttonTitleWithNumber": "Filter Listings (%{number})",
+    "resetButton": "Reset",
     "modalTitle": "Filter Results",
     "modalHeader": "Use these options to refine your list of properties.",
     "neighborhood": "Neighborhood",

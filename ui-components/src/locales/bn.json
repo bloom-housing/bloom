@@ -1219,6 +1219,8 @@
     },
     "listingFilters": {
         "buttonTitle": "ফিল্টার তালিকা",
+        "buttonTitleWithNumber": "ফিল্টার তালিকা (%{number})",
+        "resetButton": "রিসেট",
         "modalTitle": "ফিল্টার ফল",
         "modalHeader": "আপনার বৈশিষ্ট্যের তালিকা পরিমার্জন করতে এই বিকল্পগুলি ব্যবহার করুন।",
         "neighborhood": "প্রতিবেশী",

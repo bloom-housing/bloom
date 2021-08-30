@@ -1219,6 +1219,8 @@
     },
     "listingFilters": {
         "buttonTitle": "قوائم التصفية",
+        "buttonTitleWithNumber": "قوائم التصفية (%{number})",
+        "resetButton": "إعادة ضبط",
         "modalTitle": "تصفية النتائج",
         "modalHeader": "استخدم هذه الخيارات لتحسين قائمة الخصائص الخاصة بك.",
         "neighborhood": "حي",

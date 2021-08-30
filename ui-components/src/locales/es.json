@@ -1219,6 +1219,8 @@
     },
     "listingFilters": {
         "buttonTitle": "Filtrar listados",
+        "buttonTitleWithNumber": "Filtrar listados (%{number})",
+        "resetButton": "Reiniciar",
         "modalTitle": "Filtrar Resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
         "neighborhood": "Vecindario",
