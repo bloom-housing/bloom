@@ -58,7 +58,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, reset } = useForm({
+  const { register, watch, errors, trigger, getValues, reset, setValue } = useForm({
     defaultValues: {
       number: current?.number,
       unitType: current?.unitType,
@@ -75,13 +75,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
       priorityType: current?.priorityType,
       rentType: getRentType(current),
-      maxIncomeHouseholdSize1: 0,
-      maxIncomeHouseholdSize2: 0,
-      maxIncomeHouseholdSize3: 0,
-      maxIncomeHouseholdSize4: 0,
-      maxIncomeHouseholdSize5: 0,
-      maxIncomeHouseholdSize6: 0,
-      maxIncomeHouseholdSize7: 0,
     },
   })
 
@@ -103,34 +96,47 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   const amiChartID: string = watch("amiChart.id")
   const amiPercentage: string = watch("amiPercentage")
 
+  const maxAmiHouseholdSize = 8
+  const getAmiChartTableData = () => {
+    console.log("getAmiChartTableData")
+    return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
+      const incomeCell = (
+        <Field
+          id={`maxIncomeHouseholdSize${index + 1}`}
+          name={`maxIncomeHouseholdSize${index + 1}`}
+          label={t("t.minimumIncome")}
+          defaultValue={0}
+          register={register}
+          type="number"
+          prepend="$"
+          readerOnly
+        />
+      )
+      acc.push({ householdSize: index + 1, maxIncome: incomeCell })
+      return acc
+    }, [])
+  }
+
+  useEffect(() => {
+    console.log("in set ami chart data use effect")
+    setAmiChartData(getAmiChartTableData())
+  }, [])
+
   useEffect(() => {
     const fetchAmiChart = async () => {
       try {
         const thisAmiChart = await amiChartsService.retrieve({
           amiChartId: amiChartID,
         })
-        const tableData = thisAmiChart.items.reduce((acc, current) => {
-          if (current.percentOfAmi === parseInt(amiPercentage)) {
-            const incomeCell = (
-              <Field
-                id={`maxIncomeHouseholdSize${current.householdSize}`}
-                name={`maxIncomeHouseholdSize${current.householdSize}`}
-                label={t("t.minimumIncome")}
-                defaultValue={current.income.toString()}
-                register={register}
-                type="number"
-                prepend="$"
-                readerOnly
-              />
-            )
-            acc.push({ householdSize: current.householdSize, maxIncome: incomeCell })
-          }
-          return acc
-        }, [])
-        tableData.sort(function (a, b) {
-          return a.householdSize - b.householdSize
-        })
-        setAmiChartData(tableData)
+        console.log("in fetchAmiChart")
+        thisAmiChart.items
+          .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
+          .sort(function (a, b) {
+            return a.householdSize - b.householdSize
+          })
+          .forEach((amiItem) => {
+            setValue(`maxIncomeHouseholdSize${amiItem.householdSize}`, amiItem.income)
+          })
       } catch (e) {
         console.error(e)
       }
@@ -138,7 +144,9 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     if (amiChartID && amiPercentage) {
       void fetchAmiChart()
     }
-  }, [amiChartID, amiPercentage, amiChartsService])
+  }, [amiChartID, amiPercentage])
+
+  console.log("rendering form")
 
   const amiChartTableHeaders = {
     householdSize: "listings.householdSize",
@@ -394,7 +402,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
             </ViewItem>
           </GridCell>
         </GridSection>
-        {amiChartID && amiPercentage && amiChartData && amiChartData.length > 0 && (
+        {amiChartID && amiPercentage && (
           <GridSection columns={2} className="pt-6">
             <GridCell>
               <MinimalTable headers={amiChartTableHeaders} data={amiChartData} />
