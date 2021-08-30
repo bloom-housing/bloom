@@ -580,8 +580,6 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "Alameda",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   events: [],
   urlSlug: "listing-slug-abcdef",

@@ -46,7 +46,9 @@ export class TranslationsService extends AbstractServiceFactory<
       return await this.findOne({
         where: {
           language,
-          jurisdictionId,
+          jurisdiction: {
+            id: jurisdictionId,
+          },
         },
       })
     } catch (e) {
@@ -55,7 +57,9 @@ export class TranslationsService extends AbstractServiceFactory<
         return this.findOne({
           where: {
             language: Language.en,
-            jurisdictionId,
+            jurisdiction: {
+              id: jurisdictionId,
+            },
           },
         })
       } else {

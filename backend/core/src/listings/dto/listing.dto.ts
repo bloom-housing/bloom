@@ -333,6 +333,7 @@ export class ListingDto extends OmitType(Listing, [
 
   // Keep countyCode so we don't have to update frontend apps yet
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value, obj: Listing) => {
@@ -340,7 +341,7 @@ export class ListingDto extends OmitType(Listing, [
     },
     { toClassOnly: true }
   )
-  countyCode: string
+  countyCode?: string
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}

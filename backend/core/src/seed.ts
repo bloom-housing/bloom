@@ -67,7 +67,10 @@ export async function createLeasingAgents(
     defaultLeasingAgents.map(
       async (leasingAgent) =>
         await usersService.createUser(
-          { ...leasingAgent, jurisdictions: [{ id: jurisdictions[0].id }] },
+          plainToClass(UserCreateDto, {
+            ...leasingAgent,
+            jurisdictions: [jurisdictions[0]],
+          }),
           new AuthContext(null)
         )
     )
@@ -139,11 +142,7 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-      jurisdictions: [
-        {
-          id: jurisdictions[0].id,
-        },
-      ],
+      jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
@@ -159,11 +158,7 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
-      jurisdictions: [
-        {
-          id: jurisdictions[0].id,
-        },
-      ],
+      jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
@@ -179,7 +174,7 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
-      jurisdictions: jurisdictions.map((jurisdiction) => ({ id: jurisdiction.id })),
+      jurisdictions,
     }),
     new AuthContext(null)
   )

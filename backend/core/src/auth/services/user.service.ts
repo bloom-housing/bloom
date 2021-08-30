@@ -24,6 +24,7 @@ import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
+import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -32,7 +33,8 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
-    private readonly passwordService: PasswordService
+    private readonly passwordService: PasswordService,
+    private readonly jurisdictionResolverService: JurisdictionResolverService
   ) {}
 
   public async findByEmail(email: string) {
@@ -159,7 +161,6 @@ export class UserService {
         ...dto,
       })
     }
-
     let user = await this.findByEmail(dto.email)
     if (user) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
@@ -172,6 +173,10 @@ export class UserService {
     user.dob = dto.dob
     user.email = dto.email
     user.language = dto.language
+    // if coming from partners dto.jurisdictions can be set
+    user.jurisdictions = dto.jurisdictions
+      ? dto.jurisdictions
+      : [await this.jurisdictionResolverService.getJurisdiction()]
     try {
       user.passwordHash = await this.passwordService.passwordToHash(password)
       user = await this.repo.save(user)

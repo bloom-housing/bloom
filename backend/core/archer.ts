@@ -1,12 +1,13 @@
 import {
   AmiChart,
-  CountyCode,
   CSVFormattingType,
   Listing,
   ListingReviewOrder,
   ListingStatus,
   UnitStatus,
 } from "./types"
+
+import { CountyCode } from "./src/shared/types/county-code"
 
 export const SanMateoHUD2019: AmiChart = {
   id: "ami_chart_id",
@@ -255,8 +256,6 @@ export const ArcherListing: Listing = {
   countyCode: CountyCode["San Jose"],
   jurisdiction: {
     id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
     name: "San Jose",
   },
   depositMax: "",

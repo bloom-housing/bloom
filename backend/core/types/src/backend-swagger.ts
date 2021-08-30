@@ -3467,6 +3467,20 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+}
+
 export interface User {
   /**  */
   language?: Language
@@ -3478,7 +3492,7 @@ export interface User {
   roles?: CombinedRolesTypes
 
   /**  */
-  jurisdictions: IdName[]
+  jurisdictions: Jurisdiction[]
 
   /**  */
   id: string
@@ -3525,7 +3539,7 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions: Id[]
+  jurisdictions?: Jurisdiction[]
 
   /**  */
   confirmedAt?: Date
@@ -3554,7 +3568,7 @@ export interface UserBasic {
   roles: UserRoles
 
   /**  */
-  jurisdictions: IdName[]
+  jurisdictions: Jurisdiction[]
 
   /**  */
   id: string
@@ -3673,20 +3687,6 @@ export interface PaginatedUserList {
 
   /**  */
   meta: PaginationMeta
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
 }
 
 export interface JurisdictionCreate {
@@ -4278,7 +4278,7 @@ export interface Listing {
   unitsSummary?: UnitsSummary[]
 
   /**  */
-  countyCode: string
+  countyCode?: string
 
   /**  */
   id: string
@@ -4817,7 +4817,7 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
-  countyCode: string
+  countyCode?: string
 }
 
 export interface PreferenceUpdate {
@@ -5290,7 +5290,7 @@ export interface ListingUpdate {
   customMapPin?: boolean
 
   /**  */
-  countyCode: string
+  countyCode?: string
 }
 
 export interface PaperApplicationCreate {
