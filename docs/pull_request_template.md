@@ -42,3 +42,4 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] I have assigned reviewers
 - [ ] I have updated the changelog to include a description of my changes
+- [ ] I have run `yarn generate:client` if I made backend changes

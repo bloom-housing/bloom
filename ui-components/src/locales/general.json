@@ -571,6 +571,13 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "users": {
+    "confirmed": "Confirmed",
+    "unconfirmed": "Unconfirmed",
+    "totalUsers": "total users",
+    "administrator": "Administrator",
+    "partner": "Partner"
+  },
   "flags": {
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
@@ -1062,7 +1069,8 @@
     "siteTitle": "Housing Portal",
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
-    "flags": "Flags"
+    "flags": "Flags",
+    "users": "Users"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
@@ -1183,6 +1191,7 @@
     "letter": "Letter",
     "less": "Less",
     "link": "Link",
+    "listing": "Listings",
     "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
@@ -1225,6 +1234,7 @@
     "otherRelationShip": "Other Relationship",
     "rent": "Rent",
     "review": "Review",
+    "role": "Role",
     "secondPhone": "Second Phone",
     "seconds": "seconds",
     "seeDetails": "See Details",

@@ -7,11 +7,16 @@ import {
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
 
-type UseSingleApplicationDataProps = {
-  listingId: string
+interface PaginationProps {
   page: number
   limit: number
 }
+
+interface UseSingleApplicationDataProps extends PaginationProps {
+  listingId: string
+}
+
+type UseUserListProps = PaginationProps
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
@@ -153,6 +158,18 @@ export function useSingleFlaggedApplication(afsId: string) {
   }
 }
 
+export function useSingleAmiChartData(amiChartId: string) {
+  const { amiChartsService } = useContext(AuthContext)
+  const fetcher = () => amiChartsService.retrieve({ amiChartId })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}
+
 export function useAmiChartList() {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list()
@@ -213,6 +230,31 @@ export function useReservedCommunityTypeList() {
   const fetcher = () => reservedCommunityTypeService.list()
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/reservedCommunityTypes`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useUserList({ page, limit }: UseUserListProps) {
+  const queryParams = new URLSearchParams()
+  queryParams.append("page", page.toString())
+  queryParams.append("limit", limit.toString())
+
+  const { userService } = useContext(AuthContext)
+
+  const fetcher = () =>
+    userService.list({
+      page,
+      limit,
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/user/list?${queryParams.toString()}`,
+    fetcher
+  )
 
   return {
     data,

@@ -55,6 +55,7 @@ export const showsMultipleDownloadURLs = () => {
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
+    listing,
   }
   const testMethod2: ApplicationMethod = {
     id: "2",
@@ -64,6 +65,7 @@ export const showsMultipleDownloadURLs = () => {
     label: "Spanish",
     externalReference: "#spanish",
     type: ApplicationMethodType.FileDownload,
+    listing,
   }
 
   listingWithDownloadMethods.applicationMethods = listingWithDownloadMethods.applicationMethods.concat(
@@ -84,6 +86,7 @@ export const linkDirectlyToInternalApplication = () => {
     externalReference: "",
     label: "",
     type: ApplicationMethodType.Internal,
+    listing,
   }
 
   listingWithInternalLink.applicationMethods = listingWithInternalLink.applicationMethods.concat([
@@ -104,6 +107,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     externalReference: "",
     label: "",
     type: ApplicationMethodType.Internal,
+    listing,
   }
 
   const downloadMethod: ApplicationMethod = {
@@ -114,6 +118,7 @@ export const linkToInternalApplicationAndDownloads = () => {
     label: "English",
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
+    listing,
   }
 
   listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(
@@ -134,6 +139,7 @@ export const linkDirectlyToExternalApplication = () => {
     label: "External",
     externalReference: "https://icann.org",
     type: ApplicationMethodType.ExternalLink,
+    listing,
   }
 
   listingWithMethodLinks.applicationMethods = listingWithMethodLinks.applicationMethods.concat([

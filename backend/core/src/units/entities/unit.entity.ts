@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from "typeorm"
 import {
@@ -26,6 +29,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { UnitAmiChartOverride } from "../../units/entities/unit-ami-chart-override.entity"
 
 @Entity({ name: "units" })
 class Unit {
@@ -47,8 +51,12 @@ class Unit {
   @Type(() => Date)
   updatedAt: Date
 
-  @ManyToOne(() => AmiChart, { eager: true, nullable: true })
-  amiChart: AmiChart | null
+  @ManyToOne(() => AmiChart, { eager: false, nullable: true })
+  amiChart?: AmiChart | null
+
+  @RelationId((unit: Unit) => unit.amiChart)
+  @Expose()
+  amiChartId?: string
 
   @Column({ nullable: true, type: "text" })
   @Expose()
@@ -170,6 +178,14 @@ class Unit {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitAccessibilityPriorityType)
   priorityType?: UnitAccessibilityPriorityType | null
+
+  @OneToOne(() => UnitAmiChartOverride, { eager: true, cascade: true })
+  @JoinColumn()
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitAmiChartOverride)
+  amiChartOverride?: UnitAmiChartOverride
 }
 
 export { Unit as default, Unit }

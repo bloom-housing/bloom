@@ -20,7 +20,15 @@ import { defaultValidationPipeOptions } from "../../shared/default-validation-pi
 import { UserService } from "../services/user.service"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 import { AuthzGuard } from "../guards/authz.guard"
-import { EmailDto, UserBasicDto, UserCreateDto, UserDto, UserUpdateDto } from "../dto/user.dto"
+import {
+  EmailDto,
+  UserBasicDto,
+  UserCreateDto,
+  UserDto,
+  UserUpdateDto,
+  UserListQueryParams,
+  PaginatedUserListDto,
+} from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
 import { ConfirmDto } from "../dto/confirm.dto"
@@ -109,5 +117,18 @@ export class UserController {
   @ApiOperation({ summary: "Update user", operationId: "update" })
   async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.update(dto, new AuthContext(req.user as User)))
+  }
+
+  @Get("/list")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "List users", operationId: "list" })
+  async list(
+    @Query() queryParams: UserListQueryParams,
+    @Request() req: ExpressRequest
+  ): Promise<PaginatedUserListDto> {
+    return mapTo(
+      PaginatedUserListDto,
+      await this.userService.list(queryParams, new AuthContext(req.user as User))
+    )
   }
 }
