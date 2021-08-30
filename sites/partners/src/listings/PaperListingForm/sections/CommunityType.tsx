@@ -26,7 +26,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
     })
     setOptions(["", ...arrayToFormOptions<ReservedCommunityType>(optionsTranslated, "name", "id")])
     reset()
-  }, [reservedCommunityTypes])
+  }, [reservedCommunityTypes, reset])
 
   return (
     <GridSection

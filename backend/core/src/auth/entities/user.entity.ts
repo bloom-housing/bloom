@@ -104,7 +104,7 @@ export class User {
   @ApiProperty({ enum: Language, enumName: "Language" })
   language?: Language | null
 
-  @ManyToMany(() => Jurisdiction, { cascade: true })
+  @ManyToMany(() => Jurisdiction, { cascade: true, eager: true })
   @JoinTable()
   jurisdictions: Jurisdiction[]
 }

@@ -26,6 +26,7 @@ const views: Views = {
       "image.id",
       "image.fileId",
       "image.label",
+      "jurisdiction.id",
       "jurisdiction.name",
       "reservedCommunityType.id",
       "reservedCommunityType.name",
