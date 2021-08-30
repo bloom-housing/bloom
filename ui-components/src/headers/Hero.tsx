@@ -9,7 +9,7 @@ import "./Hero.scss"
 export interface HeroProps {
   title: React.ReactNode
   backgroundImage?: string
-  buttonTitle: string
+  buttonTitle?: string
   buttonLink?: string
   secondaryButtonTitle?: string
   secondaryButtonLink?: string
@@ -49,7 +49,7 @@ const Hero = (props: HeroProps) => {
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
 
-      {props.buttonLink && (
+      {props.buttonTitle && props.buttonLink && (
         <>
           {props.secondaryButtonTitle && props.secondaryButtonLink ? (
             <div className="grid md:grid-cols-6 gap-5 ">
