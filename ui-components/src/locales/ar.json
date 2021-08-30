@@ -759,7 +759,8 @@
             "pickUpAnApplication": "التقط طلبًا",
             "postmarkedApplicationsMustBeReceivedByDate": "يجب استلام الطلبات قبل الموعد النهائي. في حالة الإرسال عن طريق بريد الولايات المتحدة ، يجب ختم الطلب بختم بريد٪ {applicationDueDate} واستلامه بالبريد في موعد لا يتجاوز٪ {postmarkReceivedByDate}. لن يتم قبول الطلبات التي يتم استلامها بعد٪ {postmarkReceivedByDate} عبر البريد حتى إذا تم ختمها بواسطة٪ {applicationDueDate}. ٪ {developer} غير مسئول عن البريد المفقود أو المتأخر.",
             "sendByUsMail": "أرسل الطلب عن طريق البريد الأمريكي",
-            "submitAPaperApplication": "تقديم طلب ورقي"
+            "submitAPaperApplication": "تقديم طلب ورقي",
+            "contactManagment":"شركة إدارة الاتصال"
         },
         "atAnotherAddress": "في عنوان آخر",
         "atLeasingAgentAddress": "في عنوان وكيل التأجير",

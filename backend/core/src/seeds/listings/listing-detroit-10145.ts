@@ -108,11 +108,6 @@ export class Listing10145Seed extends ListingDefaultSeed {
     })
 
     await this.unitsRepository.save(unitsToBeCreated)
-    const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
-      type: ApplicationMethodType.ExternalLink,
-      acceptsPostmarkedApplications: false,
-      externalReference: mcvListing.managementWebsite,
-    })
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "senior62" })
 
     const listingCreateDto: Omit<
@@ -120,7 +115,7 @@ export class Listing10145Seed extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...mcvListing,
-      applicationMethods: [applicationMethod],
+      applicationMethods: [],
       assets: [],
       events: [],
       property: property,

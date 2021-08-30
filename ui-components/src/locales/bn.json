@@ -759,7 +759,8 @@
             "pickUpAnApplication": "একটি আবেদন সংগ্রহ করুন",
             "postmarkedApplicationsMustBeReceivedByDate": "নির্দিষ্ট সময়সীমার মধ্যে আবেদনপত্র গ্রহণ করতে হবে। যদি ইউএস মেইল ​​দ্বারা প্রেরণ করা হয়, তাহলে আবেদনটি অবশ্যই %{applicationDueDate} দ্বারা পোস্টমার্ক করা এবং %{postmarkReceivedByDate} এর পরে মেইলে প্রাপ্ত হতে হবে। মেইলের মাধ্যমে %{postmarkReceivedByDate} এর পরে প্রাপ্ত আবেদনপত্রগুলি %{applicationDueDate} দ্বারা পোস্টমার্ক করা হলেও গ্রহণ করা হবে না। %{developer} হারিয়ে যাওয়া বা বিলম্বিত মেইলের জন্য দায়ী নয়।",
             "sendByUsMail": "ইউএস মেইলের মাধ্যমে আবেদন পাঠান",
-            "submitAPaperApplication": "একটি কাগজ আবেদন জমা দিন"
+            "submitAPaperApplication": "একটি কাগজ আবেদন জমা দিন",
+            "contactManagment":"ম্যানেজমেন্ট কোম্পানির সাথে যোগাযোগ করুন"
         },
         "atAnotherAddress": "অন্য ঠিকানায়",
         "atLeasingAgentAddress": "লিজিং এজেন্টের ঠিকানায়",

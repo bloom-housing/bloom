@@ -775,7 +775,8 @@
       "pickUpAnApplication": "Pick up an application",
       "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
-      "submitAPaperApplication": "Submit a Paper Application"
+      "submitAPaperApplication": "Submit a Paper Application",
+      "contactManagment":"Contact Management Company"
     },
     "atAnotherAddress": "At another address",
     "atLeasingAgentAddress": "At the leasing agent address",

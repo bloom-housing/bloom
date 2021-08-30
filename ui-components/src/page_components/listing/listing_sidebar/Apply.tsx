@@ -12,6 +12,7 @@ import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
+import { Icon, IconFillColors } from "../../../icons/Icon"
 
 export interface ApplyProps {
   listing: Listing
@@ -83,6 +84,10 @@ const Apply = (props: ApplyProps) => {
     }
   }
 
+  const phoneNumber = listing.leasingAgentPhone
+    ? `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`
+    : ""
+
   return (
     <>
       <section className="aside-block">
@@ -137,7 +142,9 @@ const Apply = (props: ApplyProps) => {
               </a>
             </p>
           ))}
-        {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
+        {(listing.applicationPickUpAddress ||
+          listing.applicationPickUpAddressType ||
+          listing.applicationAddress) && (
           <>
             {!openDateState(listing) &&
               (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
@@ -145,9 +152,27 @@ const Apply = (props: ApplyProps) => {
               )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
-              address={getAddress(listing.applicationPickUpAddressType, "pickUp")}
+              address={
+                getAddress(listing.applicationPickUpAddressType, "pickUp") ||
+                listing.applicationAddress
+              }
               officeHours={listing.applicationPickUpAddressOfficeHours}
             />
+          </>
+        )}
+        {!listing.applicationAddress && !listing.applicationPickUpAddress && (
+          <>
+            {!openDateState(listing) &&
+              (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
+                <OrDivider bgColor="white" />
+              )}
+            <SubHeader text={t("listings.apply.contactManagment")} />
+            <p className="mt-5">
+              <a href={phoneNumber}>
+                <Icon symbol="phone" size="medium" fill={IconFillColors.primary} /> {t("t.call")}{" "}
+                {listing.leasingAgentPhone}
+              </a>
+            </p>
           </>
         )}
       </section>

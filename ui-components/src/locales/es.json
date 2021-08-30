@@ -759,7 +759,8 @@
             "pickUpAnApplication": "Recoger una aplicación",
             "postmarkedApplicationsMustBeReceivedByDate": "Las solicitudes deben recibirse antes de la fecha límite. Si se envía por correo de EE. UU., La solicitud debe tener matasellos de% {applicationDueDate} y recibirse por correo a más tardar el% {postmarkReceivedByDate}. Las solicitudes recibidas después del% {postmarkReceivedByDate} por correo no serán aceptadas incluso si tienen el matasellos de% {applicationDueDate}. % {developer} no se hace responsable por el correo perdido o retrasado.",
             "sendByUsMail": "Enviar solicitud por correo de EE. UU.",
-            "submitAPaperApplication": "Presentar una solicitud en papel"
+            "submitAPaperApplication": "Presentar una solicitud en papel",
+            "contactManagment":"Comuníquese con la empresa de gestión"
         },
         "atAnotherAddress": "En otra direccion",
         "atLeasingAgentAddress": "En la dirección del agente de arrendamiento",

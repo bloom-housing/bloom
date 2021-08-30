@@ -2,13 +2,11 @@ import { AssetDtoSeedType, ListingSeedType, PropertySeedType, UnitSeedType } fro
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const treymoreProperty: PropertySeedType = {
@@ -130,11 +128,6 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       }
     )
     await this.unitsRepository.save(unitsToBeCreated)
-    const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
-      type: ApplicationMethodType.ExternalLink,
-      acceptsPostmarkedApplications: false,
-      externalReference: treymoreListing.managementWebsite,
-    })
 
     const assets: Array<AssetDtoSeedType> = [
       {
@@ -148,7 +141,7 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...treymoreListing,
-      applicationMethods: [applicationMethod],
+      applicationMethods: [],
       assets: JSON.parse(JSON.stringify(assets)),
       events: [],
       property: property,
