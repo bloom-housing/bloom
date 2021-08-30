@@ -42,13 +42,6 @@ describe("Verifying the eligibility questionnaire flow", () => {
     // Select "$30k to $40k"
     cy.get("select").select("30kTo40k")
 
-    // Click "Next" to go to the "Section 8" section
-    cy.contains("Next").click()
-    cy.url().should("include", "/eligibility/section8")
-
-    // Click "no" to indicate no Section 8 voucher.
-    cy.get("#section8No").click()
-
     // Click "Done"
     cy.contains("Done").click()
 
