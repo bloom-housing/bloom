@@ -45,11 +45,13 @@ const DetailApplicationTypes = () => {
         <GridCell>
           <ViewItem label={"Online Applications"}>{digitalMethod ? "Yes" : "No"}</ViewItem>
         </GridCell>
-        <GridCell>
-          <ViewItem label={"Common Digital Application"}>
-            {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
-          </ViewItem>
-        </GridCell>
+        {digitalMethod && (
+          <GridCell>
+            <ViewItem label={"Common Digital Application"}>
+              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
+            </ViewItem>
+          </GridCell>
+        )}
         {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
           <ViewItem label={t("listings.customOnlineApplicationUrl")}>
             {digitalMethod.externalReference}
@@ -57,18 +59,21 @@ const DetailApplicationTypes = () => {
         )}
       </GridSection>
       <GridSection columns={1}>
-        <GridCell>
-          <ViewItem label={"Paper Applications"}>{paperMethod ? "Yes" : "No"}</ViewItem>
-        </GridCell>
-        <GridCell>
-          <ViewItem label={"Paper Applications"}>
-            <MinimalTable
-              headers={paperApplicationsTableHeaders}
-              data={paperApplicationsTableRows}
-              flushLeft={true}
-            ></MinimalTable>
-          </ViewItem>
-        </GridCell>
+        {paperApplicationsTableRows.length == 0 ? (
+          <GridCell>
+            <ViewItem label={"Paper Applications"}>No</ViewItem>
+          </GridCell>
+        ) : (
+          <GridCell>
+            <ViewItem label={"Paper Applications"}>
+              <MinimalTable
+                headers={paperApplicationsTableHeaders}
+                data={paperApplicationsTableRows}
+                flushLeft={true}
+              ></MinimalTable>
+            </ViewItem>
+          </GridCell>
+        )}
       </GridSection>
 
       <GridSection columns={2}>
@@ -77,12 +82,16 @@ const DetailApplicationTypes = () => {
         </GridCell>
         {referralMethod && (
           <>
-            <ViewItem label={t("listings.referralContactPhone")}>
-              {referralMethod.phoneNumber}
-            </ViewItem>
-            <ViewItem label={t("listings.referralSummary")}>
-              {referralMethod.externalReference}
-            </ViewItem>
+            <GridCell>
+              <ViewItem label={t("listings.referralContactPhone")}>
+                {referralMethod.phoneNumber}
+              </ViewItem>
+            </GridCell>
+            <GridCell>
+              <ViewItem label={t("listings.referralSummary")}>
+                {referralMethod.externalReference}
+              </ViewItem>
+            </GridCell>
           </>
         )}
       </GridSection>
