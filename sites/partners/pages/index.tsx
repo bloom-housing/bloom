@@ -103,7 +103,7 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
+        valueFormatter: ({ value }) => (value ? moment(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {
         headerName: t("listings.availableUnits"),
