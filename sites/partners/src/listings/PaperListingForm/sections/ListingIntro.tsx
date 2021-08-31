@@ -14,12 +14,11 @@ const ListingIntro = () => {
   const formMethods = useFormContext()
 
   const { profile } = useContext(AuthContext)
-  console.log("profile = ", profile)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register } = formMethods
 
-  const JuriWrap = useCallback(() => {
+  const JurisdictionWrapper = useCallback(() => {
     if (profile.jurisdictions.length === 1) {
       return (
         <input
@@ -63,7 +62,7 @@ const ListingIntro = () => {
         title={t("listings.sections.introTitle")}
         description={t("listings.sections.introSubtitle")}
       >
-        <JuriWrap />
+        <JurisdictionWrapper />
         <GridCell span={2}>
           <Field
             id="name"
