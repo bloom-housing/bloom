@@ -40,6 +40,11 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     unitTypes: [],
   })
 
+  const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
+    label: t(`listings.unit.statusOptions.${status}`),
+    value: status,
+  }))
+
   /**
    * fetch form options
    */
@@ -245,13 +250,15 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.unitStatus")}>
-              <Field
+              <Select
                 id="status"
                 name="status"
                 label={t("listings.unit.unitStatus")}
                 placeholder={t("listings.unit.unitStatus")}
+                labelClassName="sr-only"
                 register={register}
-                readerOnly
+                controlClassName="control"
+                options={unitStatusOptions}
                 disabled
               />
             </ViewItem>
