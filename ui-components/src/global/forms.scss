@@ -39,11 +39,19 @@
       @apply rounded;
       @apply w-full;
       @apply py-3;
-      @apply px-3;
       @apply text-gray-900;
       font-family: inherit;
       font-size: 1rem;
       line-height: normal;
+    }
+
+    select.input {
+      @apply pl-3;
+      @apply pr-8;
+    }
+
+    input.input {
+      @apply px-3;
     }
 
     .prepend {
