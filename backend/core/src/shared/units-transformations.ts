@@ -144,6 +144,9 @@ const hmiData = (units: Units, maxHouseholdSize: number) => {
           rowData[`ami${currentAmiPercent}`] = ""
         }
       } else {
+        if (!uniquePercentCharts[0].chart) {
+          return
+        }
         // If we have chart data, create a max income range string
         const firstChartValue = findAmiValueInChart(
           uniquePercentCharts[0].chart.items,
