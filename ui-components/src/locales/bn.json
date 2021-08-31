@@ -1,5 +1,4 @@
 {
-    "": "",
     "account": {
         "accountSettings": "অ্যাকাউন্ট সেটিংস",
         "errorFetchingApplications": "অ্যাপ্লিকেশন আনতে ত্রুটি",
@@ -571,6 +570,13 @@
         "viewApplication": "আবেদন দেখুন",
         "yourLotteryNumber": "আপনার কনফার্মেশন নম্বর হল"
     },
+    "users": {
+        "confirmed": "নিশ্চিত করা হয়েছে",
+        "unconfirmed": "অনিশ্চিত",
+        "totalUsers": "মোট ব্যবহারকারী",
+        "administrator": "প্রশাসক",
+        "partner": "অংশীদার"
+    },
     "flags": {
         "flaggedSet": "পতাকাযুক্ত সেট",
         "ruleName": "নিয়মের নাম",
@@ -630,7 +636,6 @@
             "resendAnEmailTo": "একটি ইমেল পুনরায় পাঠান",
             "errors": {
                 "accountConfirmed": "আপনার অ্যাকাউন্ট ইতিমধ্যে নিশ্চিত করা হয়.",
-                "errorSaving": "উফ! মনে হচ্ছে কিছু ভুল হয়েছে। অনুগ্রহপূর্বক আবার চেষ্টা করুন.\n\nআপনি এখনও সমস্যার সম্মুখীন হলে sfhousing.info@sfgov.org এ যোগাযোগ করুন।",
                 "emailInUse": "ইমেইল ইতোমধ্যে ব্যবহৃত হচ্ছে",
                 "emailMismatch": "ইমেল মেলে না",
                 "emailNotFound": "ইমেল পাওয়া যায়নি। দয়া করে প্রথমে নিবন্ধন করুন।",
@@ -644,12 +649,9 @@
             "success": "আপনি আপনার অ্যাকাউন্ট থেকে সফলভাবে লগ আউট করেছেন।"
         }
     },
-    "config": {
-        "routePrefix": ""
-    },
+    "config": {},
     "errors": {
         "alert": {
-            "badRequest": "উফ! মনে হচ্ছে কিছু ভুল হয়েছে। অনুগ্রহপূর্বক আবার চেষ্টা করুন.\n\nআপনি এখনও সমস্যার সম্মুখীন হলে sfhousing.info@sfgov.org এ যোগাযোগ করুন।",
             "timeoutPleaseTryAgain": "উফ! মনে হচ্ছে কিছু ভুল হয়েছে। অনুগ্রহপূর্বক আবার চেষ্টা করুন."
         },
         "notFound": {
@@ -676,6 +678,7 @@
         "selectAtLeastOne": "কমপক্ষে একটি বিকল্প নির্বাচন করুন।",
         "selectAnOption": "একটি বিকল্প নির্বাচন করুন.",
         "selectOption": "দয়া করে উপরের বিকল্পগুলির মধ্যে একটি নির্বাচন করুন।",
+        "urlError": "একটি বৈধ URL প্রবেশ করুন",
         "householdTooBig": "আপনার পরিবারের আকার অনেক বড়।",
         "householdTooSmall": "আপনার পরিবারের আকার খুব ছোট।",
         "dateError": "একটি বৈধ তারিখ লিখুন দয়া করে",
@@ -726,14 +729,22 @@
             "preview": "প্রিভিউ",
             "close": "বন্ধ",
             "viewListing": "তালিকা দেখুন",
-            "unpublish": "অপ্রকাশিত"
+            "unpublish": "অপ্রকাশিত",
+            "postResults": "ফলাফল পোস্ট করুন",
+            "resultsPosted": "ফলাফল পোস্ট করা হয়েছে",
+            "previewLotteryResults": "লটারি ফলাফলের পূর্বরূপ দেখুন"
         },
+        "activePreferences": "সক্রিয় পছন্দ",
         "addListing": "তালিকা যোগ করুন",
         "addPhoto": "ছবি জগকরুন",
+        "addPreference": "পছন্দ যোগ করুন",
+        "addPreferences": "পছন্দ যোগ করুন",
         "additionalApplicationSubmissionNotes": "অতিরিক্ত আবেদন জমা নোট",
         "additionalInformation": "অতিরিক্ত তথ্য",
         "allUnits": "সব ইউনিট",
         "allUnitsReservedFor": "সমস্ত ইউনিট %{type} এর জন্য সংরক্ষিত",
+        "annualIncome": "%{আয়} প্রতি বছর",
+        "annualIncomeRange": "%{থেকে} থেকে %{থেকে} প্রতি বছর",
         "applicationTitle": "আবেদনের উপাত্ত",
         "applicationAddress": "ঠিকানা",
         "applicationDeadline": "আবেদনের শেষ তারিখ",
@@ -760,7 +771,7 @@
             "postmarkedApplicationsMustBeReceivedByDate": "নির্দিষ্ট সময়সীমার মধ্যে আবেদনপত্র গ্রহণ করতে হবে। যদি ইউএস মেইল ​​দ্বারা প্রেরণ করা হয়, তাহলে আবেদনটি অবশ্যই %{applicationDueDate} দ্বারা পোস্টমার্ক করা এবং %{postmarkReceivedByDate} এর পরে মেইলে প্রাপ্ত হতে হবে। মেইলের মাধ্যমে %{postmarkReceivedByDate} এর পরে প্রাপ্ত আবেদনপত্রগুলি %{applicationDueDate} দ্বারা পোস্টমার্ক করা হলেও গ্রহণ করা হবে না। %{developer} হারিয়ে যাওয়া বা বিলম্বিত মেইলের জন্য দায়ী নয়।",
             "sendByUsMail": "ইউএস মেইলের মাধ্যমে আবেদন পাঠান",
             "submitAPaperApplication": "একটি কাগজ আবেদন জমা দিন",
-            "contactManagment":"ম্যানেজমেন্ট কোম্পানির সাথে যোগাযোগ করুন"
+            "contactManagment": "ম্যানেজমেন্ট কোম্পানির সাথে যোগাযোগ করুন"
         },
         "atAnotherAddress": "অন্য ঠিকানায়",
         "atLeasingAgentAddress": "লিজিং এজেন্টের ঠিকানায়",
@@ -771,6 +782,7 @@
         "availableUnitsAndWaitlistDesc": "একবার আবেদনকারীরা সমস্ত উপলব্ধ ইউনিট পূরণ করলে, অতিরিক্ত আবেদনকারীদের <span class = 't-italic'>%{number} ইউনিট </span> এর অপেক্ষার তালিকায় রাখা হবে",
         "bath": "স্নান",
         "browseListings": "তালিকা ব্রাউজ করুন",
+        "buildingImageAltText": "ভবনের একটি ছবি",
         "closedListings": "বন্ধ তালিকা",
         "comingSoon": "শীঘ্রই আসছে",
         "confirmedPreferenceList": "%{Preference} তালিকা নিশ্চিত করা হয়েছে",
@@ -790,7 +802,10 @@
         "developmentalDisabilities": "বিকাশের অক্ষম ব্যক্তিরা",
         "developmentalDisabilitiesDescription": "এই ভবনের একক সংখ্যক ইউনিট উন্নয়নশীল প্রতিবন্ধীদের জন্য আলাদা রাখা হয়েছে। যোগ্যতা, প্রয়োজনীয়তা, কিভাবে আবেদন পেতে হয় এবং অন্য কোন প্রশ্নের উত্তরের জন্য তথ্যের জন্য দয়া করে <a href='http://www.housingchoices.org/' target='_blank'>housechoices.org </a> দেখুন আপনি প্রক্রিয়া সম্পর্কে থাকতে পারে।",
         "dropOffAddress": "ঠিকানা বন্ধ করুন",
+        "dueDateQuestion": "আবেদনের শেষ তারিখ আছে কি?",
+        "editPreferences": "সম্পাদনা করুন পছন্দ",
         "enterLotteryForWaitlist": "%{Units} ইউনিটের অপেক্ষার তালিকায় একটি খোলা স্লটের জন্য একটি আবেদন জমা দিন।",
+        "firstComeFirstServe": "আগে আসলে আগে পাবেন",
         "forIncomeCalculations": "আয়ের হিসাবের জন্য, পরিবারের আকারে ইউনিটে বসবাসকারী সবাই (সব বয়সী) অন্তর্ভুক্ত।",
         "forIncomeCalculationsBMR": "আয়ের হিসাব ইউনিটের প্রকারভিত্তিক",
         "hideClosedListings": "বন্ধ তালিকা লুকান",
@@ -800,6 +815,7 @@
         "includesPriorityUnits": "%{Priorities} এর জন্য অগ্রাধিকার ইউনিট অন্তর্ভুক্ত",
         "latitude": "অক্ষাংশ",
         "leasingAgentAddress": "লিজিং এজেন্টের ঠিকানা",
+        "listingPreviewOnly": "এটি শুধুমাত্র একটি তালিকা পূর্বরূপ।",
         "listingStatus": {
             "active": "খোলা",
             "pending": "খসড়া",
@@ -808,13 +824,25 @@
         "listingSubmitted": "তালিকা জমা দেওয়া হয়েছে",
         "listingUpdated": "তালিকা আপডেট করা হয়েছে",
         "longitude": "দ্রাঘিমাংশ",
+        "lottery": "লটারি",
+        "lotteryDateNotes": "লটারির তারিখের নোট",
+        "lotteryDateQuestion": "কবে লটারি চালানো হবে?",
+        "lotteryEndTime": "লটারির শেষ সময়",
         "lotteryResults": {
             "completeResultsWillBePosted": "সম্পূর্ণ লটারির ফলাফল শীঘ্রই পোস্ট করা হবে।",
             "downloadResults": "ফলাফল ডাউনলোড করুন",
             "header": "লটারির ফলাফল"
         },
+        "lotteryStartTime": "লটারি শুরুর সময়",
+        "mapPinAutomaticDescription": "ম্যাপ পিনের অবস্থান প্রদান করা ঠিকানার উপর ভিত্তি করে",
+        "mapPinCustomDescription": "মার্কারের অবস্থান আপডেট করতে পিনটি টেনে আনুন",
+        "mapPinPosition": "ম্যাপ পিন অবস্থান",
+        "mapPreview": "মানচিত্রের পূর্বরূপ",
+        "mapPreviewNoAddress": "মানচিত্রের পূর্বরূপ দেখতে একটি ঠিকানা লিখুন",
         "maxIncomeMonth": "সর্বোচ্চ আয় / মাস",
         "maxIncomeYear": "সর্বোচ্চ আয় / বছর",
+        "monthlyIncome": "%{আয়} প্রতি মাসে",
+        "monthlyIncomeRange": "%{থেকে} থেকে %{থেকে} প্রতি মাসে",
         "moreBuildingSelectionCriteria": "বিল্ডিং নির্বাচনের মানদণ্ড সম্পর্কে আরও জানুন",
         "newListing": "নতুন তালিকীকরণ",
         "noAvailableUnits": "এই সময়ে কোন উপলব্ধ ইউনিট নেই।",
@@ -844,7 +872,17 @@
         "rentalHistory": "ভাড়ার ইতিহাস",
         "requiredDocuments": "প্রয়োজনীয় কাগজপত্র",
         "reservedCommunityBuilding": "%{type} বিল্ডিং",
+        "reservedCommunityDescription": "সংরক্ষিত সম্প্রদায়ের বর্ণনা",
+        "reservedCommunitySeniorTitle": "সিনিয়র বিল্ডিং",
+        "reservedCommunityTitleDefault": "সংরক্ষিত ভবন",
+        "reservedCommunityTypes": {
+            "senior": "সিনিয়র",
+            "senior55": "বয়স্ক 55+",
+            "senior62": "সিনিয়র 62+",
+            "specialNeeds": "বিশেষ প্রয়োজন"
+        },
         "reservedFor": "%{Type} এর জন্য সংরক্ষিত",
+        "reservedCommunityType": "সংরক্ষিত সম্প্রদায়ের ধরন",
         "reservedTypePlural": {
             "family": "পরিবার",
             "senior": "প্রবীণরা",
@@ -854,6 +892,7 @@
         "reservedUnits": "সংরক্ষিত ইউনিট",
         "reservedUnitsDescription": "এই ইউনিটগুলির জন্য যোগ্যতা অর্জনের জন্য নিম্নলিখিতগুলির মধ্যে একটি আপনার বা আপনার পরিবারের কারো জন্য আবেদন করতে হবে:",
         "reservedUnitsForWhoAre": "%{CommunityType} এর জন্য সংরক্ষিত যারা %{ReserveType}",
+        "reviewOrderQuestion": "কিভাবে আবেদন পর্যালোচনা আদেশ নির্ধারিত হয়?",
         "sections": {
             "additionalDetails": "অতিরিক্ত তথ্য",
             "additionalDetailsSubtitle": "অন্য কোন প্রয়োজনীয় কাগজপত্র এবং নির্বাচনের মানদণ্ড আছে?",
@@ -872,12 +911,15 @@
             "buildingFeaturesTitle": "বিল্ডিং বৈশিষ্ট্য",
             "applicationDatesTitle": "আবেদনের তারিখ",
             "applicationDatesSubtitle": "এই তালিকা সম্পর্কিত গুরুত্বপূর্ণ তারিখগুলি সম্পর্কে আমাদের বলুন।",
+            "communityType": "সম্প্রদায়ের ধরন",
+            "communityTypeSubtitle": "আবেদনকারীদের কোন প্রয়োজনীয়তা পূরণ করতে হবে?",
             "costsNotIncluded": "খরচ অন্তর্ভুক্ত নয়",
             "eligibilitySubtitle": "আয়, দখল, পছন্দ এবং ভর্তুকি",
             "eligibilityTitle": "যোগ্যতা",
             "featuresSubtitle": "সুবিধা, ইউনিটের বিবরণ এবং অতিরিক্ত ফি",
             "featuresTitle": "বৈশিষ্ট্য",
             "housingPreferencesSubtitle": "অগ্রাধিকারীদের সর্বোচ্চ র ranking্যাঙ্কিং দেওয়া হবে।",
+            "housingPreferencesSubtext": "যোগ্যতা সম্পন্ন আবেদনকারীদের র rank্যাঙ্ক করতে ব্যবহার করা হবে এমন কোন পছন্দ সম্পর্কে আমাদের বলুন।",
             "housingPreferencesTitle": "আবাসন পছন্দ",
             "introSubtitle": "আপনার তালিকা সম্পর্কে কিছু প্রাথমিক তথ্য দিয়ে শুরু করা যাক।",
             "introTitle": "তালিকা ভূমিকা",
@@ -892,11 +934,14 @@
             "rankingsResultsTitle": "র R্যাঙ্কিং এবং ফলাফল",
             "rankingsResultsSubtitle": "একবার আবেদন জমা দিলে কি হয় সে সম্পর্কে বিস্তারিত তথ্য প্রদান করুন।",
             "rentalAssistanceSubtitle": "এই সম্পত্তির জন্য হাউজিং চয়েস ভাউচার, বিভাগ 8 এবং অন্যান্য বৈধ ভাড়া সহায়তা প্রোগ্রাম বিবেচনা করা হবে। বৈধ ভাড়া ভর্তুকির ক্ষেত্রে, প্রয়োজনীয় ন্যূনতম আয় ভাড়ার অংশের উপর ভিত্তি করে হবে যা ভাড়াটিয়া ভর্তুকি ব্যবহারের পরে পরিশোধ করে।",
-            "rentalAssistanceTitle": "ভাড়া সহায়তা"
+            "rentalAssistanceTitle": "ভাড়া সহায়তা",
+            "addOpenHouse": "ওপেন হাউস যোগ করুন",
+            "openHouse": "খোলা বাড়ি"
         },
         "seeMaximumIncomeInformation": "সর্বোচ্চ আয়ের তথ্য দেখুন",
         "seePreferenceInformation": "পছন্দ তথ্য দেখুন",
         "seeUnitInformation": "ইউনিটের তথ্য দেখুন",
+        "selectPreferences": "পছন্দগুলি নির্বাচন করুন",
         "showClosedListings": "বন্ধ তালিকা দেখান",
         "singleRoomOccupancy": "একক কক্ষ দখল",
         "singleRoomOccupancyDescription": "এই সম্পত্তি শুধুমাত্র এক ব্যক্তির জন্য একক কক্ষ উপলব্ধ করা হয়। ভাড়াটেরা বাথরুম, এবং কখনও কখনও রান্নাঘরের সুবিধা ভাগ করে নিতে পারে।",
@@ -990,6 +1035,11 @@
             "deleteConf": "আপনি কি সত্যিই এই ইউনিটটি মুছে ফেলতে চান?",
             "eligibility": "যোগ্যতা"
         },
+        "events": {
+            "deleteThisEvent": "এই ইভেন্টটি মুছুন",
+            "deleteConf": "আপনি কি সত্যিই এই ইভেন্টটি মুছে ফেলতে চান?",
+            "openHouseNotes": "ওপেন হাউস নোট"
+        },
         "units": "তালিকা ইউনিট",
         "unitsDescription": "তালিকার মাধ্যমে যে বিল্ডিং ইউনিটগুলি পাওয়া যায় তা নির্বাচন করুন।",
         "unitTypesOrIndividual": "আপনি কি ইউনিটের ধরন বা স্বতন্ত্র ইউনিট দেখাতে চান?"
@@ -1015,7 +1065,8 @@
         "siteTitle": "হাউজিং পোর্টাল",
         "siteTitlePartners": "অংশীদারদের পোর্টাল",
         "skip": "স্কিপ করে মূল কন্টেন্ট এ যাও",
-        "flags": "পতাকা"
+        "flags": "পতাকা",
+        "users": "ব্যবহারকারীরা"
     },
     "pageTitle": {
         "additionalResources": "আরও আবাসন সুযোগ",
@@ -1099,18 +1150,23 @@
         "accessibility": "সহজলভ্যতা",
         "am": "এএম",
         "availability": "উপস্থিতি",
+        "automatic": "স্বয়ংক্রিয়",
         "back": "পেছনে",
         "built": "নির্মিত",
         "call": "ডাক",
         "cancel": "বাতিল করুন",
         "confirm": "নিশ্চিত করুন",
         "chooseFromFolder": "ফোল্ডার থেকে বেছে নিন",
+        "custom": "কাস্টম",
         "day": "দিন",
+        "date": "তারিখ",
         "delete": "মুছে ফেলা",
         "deposit": "আমানত",
         "done": "সম্পন্ন",
+        "descriptionTitle": "বর্ণনা",
         "description": "বিবরণ লিখুন",
         "emailAddressPlaceholder": "ইউ@মেয়েমাঈল.কম",
+        "end": "শেষ",
         "dragFilesHere": "ফাইলগুলি এখানে টেনে আনুন",
         "dropFilesHere": "ফাইলগুলো এখানে ফেলে দিন ...",
         "export": "রপ্তানি",
@@ -1126,9 +1182,12 @@
         "household": "গৃহস্থালি",
         "income": "আয়",
         "jumpTo": "লাফ দাও",
+        "label": "লেবেল",
         "lastUpdated": "সর্বশেষ সংষ্করণ",
         "letter": "চিঠি",
         "less": "কম",
+        "link": "লিঙ্ক",
+        "listing": "তালিকা",
         "loginIsRequired": "এই পৃষ্ঠাটি দেখতে লগইন প্রয়োজন।",
         "menu": "তালিকা",
         "minimumIncome": "ন্যূনতম আয়",
@@ -1142,9 +1201,12 @@
         "no": "না",
         "none": "কোনটিই নয়",
         "noneFound": "কোন পাওয়া যায়নি।",
+        "notes": "মন্তব্য",
         "occupancy": "দখল",
         "ok": "ঠিক আছে",
+        "optional": "চ্ছিক",
         "or": "অথবা",
+        "order": "আদেশ",
         "pageXofY": "%{Total} এর %{number} পৃষ্ঠা",
         "people": "মানুষ",
         "person": "ব্যক্তি",
@@ -1155,6 +1217,7 @@
         "phoneNumberPlaceholder": "(৫৫৫) ৫৫৫-৫৫৫৫",
         "pleaseSelectOne": "অনুগ্রহপূর্বক একটা নির্বাচন করুন.",
         "pm": "PM",
+        "post": "পোস্ট",
         "preferences": "পছন্দ",
         "preview": "প্রিভিউ",
         "previous": "আগে",
@@ -1162,11 +1225,12 @@
         "range": "%{থেকে} থেকে %{থেকে}",
         "readLess": "কম পড়ুন",
         "readMore": "আরো পড়ুন",
-        "region":"অঞ্চল",
+        "region": "অঞ্চল",
         "relationship": "সম্পর্ক",
         "otherRelationShip": "অন্যান্য সম্পর্ক",
         "rent": "ভাড়া",
         "review": "পুনঃমূল্যায়ন",
+        "role": "ভূমিকা",
         "secondPhone": "দ্বিতীয় ফোন",
         "seconds": "সেকেন্ড",
         "seeDetails": "বিস্তারিত দেখুন",
@@ -1178,13 +1242,17 @@
         "showMore": "আরো দেখুন",
         "skipToMainContent": "স্কিপ করে মূল কন্টেন্ট এ যাও",
         "smokingPolicy": "ধূমপান নীতি",
+        "sort": "সাজান",
         "sqFeet": "বর্গফুট",
         "squareFeet": "বর্গফুট",
         "statusHistory": "স্থিতির ইতিহাস",
+        "startTime": "সময় শুরু",
+        "endTime": "শেষ সময়",
         "street": "রাস্তা",
         "submit": "জমা দিন",
         "submitNew": "জমা দিন এবং নতুন",
         "copyNew": "কপি এবং নতুন",
+        "save": "সংরক্ষণ",
         "saveNew": "সেভ করুন এবং নতুন",
         "saveExit": "সংরক্ষণ করুন এবং প্রস্থান করুন",
         "time": "সময়",
@@ -1196,6 +1264,7 @@
         "unitAmenities": "ইউনিট সুবিধা",
         "unitFeatures": "ইউনিটের বৈশিষ্ট্য",
         "unitType": "ইউনিটের প্রকার",
+        "url": "URL",
         "view": "দেখুন",
         "viewMap": "মানচিত্র দেখুন",
         "viewOnMap": "মানচিত্রে দেখুন",
@@ -1212,11 +1281,11 @@
         "viewAdditionalHousing": "অতিরিক্ত আবাসন সুযোগ এবং সম্পদ দেখুন",
         "checkEligibility": "আমি কি যোগ্যতা অর্জন করি?",
         "checkEligibilityDescription": "আপনি যোগ্য হলে মিনিট চেক করুন!",
-        "subTitle": "আপনার আয় এবং পারিবারিক চাহিদার উপর ভিত্তি করে ভাড়া আবাসন খুঁজে পেতে নীচের বোতামে ক্লিক করুন"
+        "subTitle": "আপনার আয় এবং গৃহস্থালি চাহিদার উপর ভিত্তি করে ভাড়া আবাসন খুঁজে পেতে নীচের বোতামে ক্লিক করুন"
     },
     "whatToExpect": {
         "label": "কি আশা করছ",
-        "default": "শূন্যপদ পূরণ না হওয়া পর্যন্ত আবেদনকারীরা র agent্যাঙ্ক ক্রমে সম্পত্তি এজেন্টের সাথে যোগাযোগ করবে। আপনার দেওয়া সমস্ত তথ্য যাচাই করা হবে এবং আপনার যোগ্যতা নিশ্চিত করা হবে। যদি আপনি কোন প্রতারণামূলক বিবৃতি দিয়ে থাকেন তাহলে আপনার আবেদনটি প্রতীক্ষার তালিকা থেকে সরিয়ে দেওয়া হবে। আপনি দাবি করেছেন এমন আবাসন পছন্দ আমরা যদি যাচাই করতে না পারি, তাহলে আপনি অগ্রাধিকার পাবেন না কিন্তু অন্যথায় শাস্তি পাবেন না। আপনার আবেদন নির্বাচন করা উচিত, আরো বিস্তারিত আবেদন পূরণ এবং প্রয়োজনীয় সহায়ক নথি প্রদান করার জন্য প্রস্তুত থাকুন।"
+        "default": "শূন্যপদ পূরণ না হওয়া পর্যন্ত আবেদনকারীরা র agent্যাঙ্ক ক্রমে সম্পত্তি এজেন্টের সাথে যোগাযোগ করবে। আপনার দেওয়া সমস্ত তথ্য যাচাই করা হবে এবং আপনার যোগ্যতা নিশ্চিত করা হবে। যদি আপনি কোন প্রতারণামূলক বিবৃতি দিয়ে থাকেন তাহলে আপনার আবেদনটি প্রতীক্ষার তালিকা থেকে সরিয়ে দেওয়া হবে। যদি আমরা আপনার দাবি করা আবাসন পছন্দ যাচাই করতে না পারি, তাহলে আপনি অগ্রাধিকার পাবেন না কিন্তু অন্যথায় শাস্তি পাবেন না। আপনার আবেদন নির্বাচন করা উচিত, আরো বিস্তারিত আবেদন পূরণ এবং প্রয়োজনীয় সহায়ক নথি প্রদান করার জন্য প্রস্তুত থাকুন।"
     },
     "listingFilters": {
         "buttonTitle": "ফিল্টার তালিকা",
@@ -1224,14 +1293,14 @@
         "resetButton": "রিসেট",
         "modalTitle": "ফিল্টার ফল",
         "modalHeader": "আপনার বৈশিষ্ট্যের তালিকা পরিমার্জন করতে এই বিকল্পগুলি ব্যবহার করুন।",
-        "neighborhood": "প্রতিবেশী",
+        "neighborhood": "প্রতিবেশ",
         "bedrooms": "একক পরিমান",
         "bedroomsOptions": {
-          "studioPlus": "0 বা তার বেশি শয়নকক্ষ (স্টুডিও)",
-          "onePlus": "1 বা ততোধিক বেডরুম",
-          "twoPlus": "2 বা ততোধিক বেডরুম",
-          "threePlus": "3 বা ততোধিক বেডরুম",
-          "fourPlus": "4 বা ততোধিক বেডরুম"
+            "studioPlus": "0 বা তার বেশি শয়নকক্ষ (স্টুডিও)",
+            "onePlus": "1 বা ততোধিক বেডরুম",
+            "twoPlus": "2 বা ততোধিক বেডরুম",
+            "threePlus": "3 বা ততোধিক বেডরুম",
+            "fourPlus": "4 বা ততোধিক বেডরুম"
         },
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",
@@ -1271,7 +1340,7 @@
             "prompt": "আপনার বয়স কত?",
             "description": "কিছু বৈশিষ্ট্য শুধুমাত্র 62 বছরের বেশি বয়সী ব্যক্তিদের গ্রহণ করে।",
             "label": "বছর পুরনো",
-            "error": "দয়া করে একটি বৈধ বয়স লিখুন"
+            "error": "দয়া করে একটি বৈধ বয়স লিখুন।"
         },
         "disability": {
             "prompt": "আপনি একটি অক্ষমতা আছে?",

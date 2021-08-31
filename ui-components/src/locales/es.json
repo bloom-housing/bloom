@@ -1,5 +1,4 @@
 {
-    "": "",
     "account": {
         "accountSettings": "Configuraciones de la cuenta",
         "errorFetchingApplications": "Error al recuperar aplicaciones",
@@ -571,6 +570,13 @@
         "viewApplication": "Ver solicitud",
         "yourLotteryNumber": "tu numero de confirmación es"
     },
+    "users": {
+        "confirmed": "Confirmado",
+        "unconfirmed": "Inconfirmado",
+        "totalUsers": "usuarios totales",
+        "administrator": "Administrador",
+        "partner": "Pareja"
+    },
     "flags": {
         "flaggedSet": "Conjunto marcado",
         "ruleName": "Nombre de la regla",
@@ -630,7 +636,6 @@
             "resendAnEmailTo": "Reenviar un correo electrónico a",
             "errors": {
                 "accountConfirmed": "Tu cuenta ya está confirmada.",
-                "errorSaving": "¡UPS! Parece que algo salió mal. Inténtalo de nuevo.\n\nComuníquese con sfhousing.info@sfgov.org si aún tiene problemas.",
                 "emailInUse": "Correo electrónico ya está en uso",
                 "emailMismatch": "Los correos electrónicos no coinciden",
                 "emailNotFound": "El correo electrónico no encontrado. Regístrese primero.",
@@ -644,12 +649,9 @@
             "success": "Ha cerrado la sesión con éxito de su cuenta."
         }
     },
-    "config": {
-        "routePrefix": ""
-    },
+    "config": {},
     "errors": {
         "alert": {
-            "badRequest": "¡UPS! Parece que algo salió mal. Inténtalo de nuevo.\n\nComuníquese con sfhousing.info@sfgov.org si aún tiene problemas.",
             "timeoutPleaseTryAgain": "¡UPS! Parece que algo salió mal. Inténtalo de nuevo."
         },
         "notFound": {
@@ -676,12 +678,13 @@
         "selectAtLeastOne": "Seleccione al menos una opción.",
         "selectAnOption": "Por favor seleccione una opción.",
         "selectOption": "Seleccione una de las opciones anteriores.",
+        "urlError": "Por favor introduzca un URL válido",
         "householdTooBig": "El tamaño de su hogar es demasiado grande.",
         "householdTooSmall": "El tamaño de su hogar es demasiado pequeño.",
         "dateError": "Por favor introduzca una fecha valida",
         "rateLimitExceeded": "Se superó el límite de frecuencia. Vuelve a intentarlo más tarde.",
         "requiredFieldError": "Este campo es requerido.",
-        "noData": "Datos no disponibles"
+        "noData": "Datos no disponibles."
     },
     "footer": {
         "contact": "Contacto",
@@ -726,14 +729,22 @@
             "preview": "Avance",
             "close": "Cerrar",
             "viewListing": "Ver listado",
-            "unpublish": "Anular publicación"
+            "unpublish": "Anular publicación",
+            "postResults": "Publicar resultados",
+            "resultsPosted": "Resultados publicados",
+            "previewLotteryResults": "Vista previa de los resultados de la lotería"
         },
+        "activePreferences": "Preferencias activas",
         "addListing": "Agregar listado",
         "addPhoto": "Añadir foto",
+        "addPreference": "Agregar preferencia",
+        "addPreferences": "Agregar preferencias",
         "additionalApplicationSubmissionNotes": "Notas adicionales para el envío de solicitudes",
         "additionalInformation": "Información Adicional",
         "allUnits": "Todas las unidades",
         "allUnitsReservedFor": "Todas las unidades reservadas para% {type}",
+        "annualIncome": "% {ingresos} por año",
+        "annualIncomeRange": "% {from} a% {to} por año",
         "applicationTitle": "Datos de la aplicación",
         "applicationAddress": "Dirección",
         "applicationDeadline": "Fecha de vencimiento de la solicitud",
@@ -760,7 +771,7 @@
             "postmarkedApplicationsMustBeReceivedByDate": "Las solicitudes deben recibirse antes de la fecha límite. Si se envía por correo de EE. UU., La solicitud debe tener matasellos de% {applicationDueDate} y recibirse por correo a más tardar el% {postmarkReceivedByDate}. Las solicitudes recibidas después del% {postmarkReceivedByDate} por correo no serán aceptadas incluso si tienen el matasellos de% {applicationDueDate}. % {developer} no se hace responsable por el correo perdido o retrasado.",
             "sendByUsMail": "Enviar solicitud por correo de EE. UU.",
             "submitAPaperApplication": "Presentar una solicitud en papel",
-            "contactManagment":"Comuníquese con la empresa de gestión"
+            "contactManagment": "Comuníquese con la empresa de gestión"
         },
         "atAnotherAddress": "En otra direccion",
         "atLeasingAgentAddress": "En la dirección del agente de arrendamiento",
@@ -771,6 +782,7 @@
         "availableUnitsAndWaitlistDesc": "Una vez que los solicitantes llenen todas las unidades disponibles, se colocarán solicitantes adicionales en la lista de espera para <span class = 't-italic'>% {number} unidades </span>",
         "bath": "baño",
         "browseListings": "Examinar listados",
+        "buildingImageAltText": "Una foto del edificio.",
         "closedListings": "Listados cerrados",
         "comingSoon": "Próximamente, en breve, pronto",
         "confirmedPreferenceList": "Lista de% {preferencia} confirmada",
@@ -790,7 +802,10 @@
         "developmentalDisabilities": "Personas con discapacidades del desarrollo",
         "developmentalDisabilitiesDescription": "Una parte de las unidades de este edificio están reservadas para personas con discapacidades del desarrollo. Visite <a href='http://www.housingchoices.org/' target='_blank'> housingchoices.org </a> para obtener información sobre elegibilidad, requisitos, cómo obtener una solicitud y respuestas a cualquier otra pregunta. que pueda tener sobre el proceso.",
         "dropOffAddress": "Dirección de entrega",
+        "dueDateQuestion": "¿Existe una fecha límite para la solicitud?",
+        "editPreferences": "Editar preferencias",
         "enterLotteryForWaitlist": "Envíe una solicitud para un espacio abierto en la lista de espera para% {unidades} unidades.",
+        "firstComeFirstServe": "Se le sirve en orden de llegada",
         "forIncomeCalculations": "Para los cálculos de ingresos, el tamaño del hogar incluye a todos (todas las edades) que viven en la unidad.",
         "forIncomeCalculationsBMR": "Los cálculos de ingresos se basan en el tipo de unidad",
         "hideClosedListings": "Ocultar anuncios cerrados",
@@ -800,6 +815,7 @@
         "includesPriorityUnits": "Incluye unidades de prioridad para% {priority}",
         "latitude": "Latitud",
         "leasingAgentAddress": "Dirección del agente de arrendamiento",
+        "listingPreviewOnly": "Esta es solo una vista previa de la lista.",
         "listingStatus": {
             "active": "Abierto",
             "pending": "Borrador",
@@ -808,13 +824,25 @@
         "listingSubmitted": "Listado enviado",
         "listingUpdated": "Listado actualizado",
         "longitude": "Longitud",
+        "lottery": "Lotería",
+        "lotteryDateNotes": "Notas de fecha de lotería",
+        "lotteryDateQuestion": "¿Cuándo se ejecutará la lotería?",
+        "lotteryEndTime": "Hora de finalización de la lotería",
         "lotteryResults": {
             "completeResultsWillBePosted": "Pronto se publicarán los resultados completos de la lotería.",
             "downloadResults": "Descargar resultados",
             "header": "Resultados de lotería"
         },
+        "lotteryStartTime": "Hora de inicio de la lotería",
+        "mapPinAutomaticDescription": "La posición del pin del mapa se basa en la dirección proporcionada",
+        "mapPinCustomDescription": "Arrastra la chincheta para actualizar la ubicación del marcador",
+        "mapPinPosition": "Posición del pin del mapa",
+        "mapPreview": "Vista previa del mapa",
+        "mapPreviewNoAddress": "Ingrese una dirección para obtener una vista previa del mapa",
         "maxIncomeMonth": "Ingreso máximo / mes",
         "maxIncomeYear": "Ingreso máximo / año",
+        "monthlyIncome": "% {ingresos} por mes",
+        "monthlyIncomeRange": "% {from} a% {to} por mes",
         "moreBuildingSelectionCriteria": "Obtenga más información sobre los criterios de selección de edificios",
         "newListing": "Nuevo listado",
         "noAvailableUnits": "No hay unidades disponibles en este momento.",
@@ -844,7 +872,17 @@
         "rentalHistory": "Historial de alquiler",
         "requiredDocuments": "Documentos requeridos",
         "reservedCommunityBuilding": "Edificio% {type}",
+        "reservedCommunityDescription": "Descripción de la comunidad reservada",
+        "reservedCommunitySeniorTitle": "Edificio Senior",
+        "reservedCommunityTitleDefault": "Edificio reservado",
+        "reservedCommunityTypes": {
+            "senior": "Personas mayores",
+            "senior55": "Mayores de 55 años",
+            "senior62": "Mayores 62+",
+            "specialNeeds": "Necesidades especiales"
+        },
         "reservedFor": "Reservado para% {type}",
+        "reservedCommunityType": "Tipo de comunidad reservada",
         "reservedTypePlural": {
             "family": "familias",
             "senior": "ancianos",
@@ -854,6 +892,7 @@
         "reservedUnits": "Unidades reservadas",
         "reservedUnitsDescription": "Para calificar para estas unidades, uno de los siguientes debe aplicarse a usted oa alguien en su hogar:",
         "reservedUnitsForWhoAre": "Reservado para% {communityType} que son% {reservedType}",
+        "reviewOrderQuestion": "¿Cómo se determina la orden de revisión de la solicitud?",
         "sections": {
             "additionalDetails": "Detalles adicionales",
             "additionalDetailsSubtitle": "¿Existen otros documentos requeridos y criterios de selección?",
@@ -872,12 +911,15 @@
             "buildingFeaturesTitle": "Características del edificio",
             "applicationDatesTitle": "Fechas de solicitud",
             "applicationDatesSubtitle": "Cuéntenos sobre fechas importantes relacionadas con este listado.",
+            "communityType": "Tipo de comunidad",
+            "communityTypeSubtitle": "¿Existe algún requisito que los solicitantes deben cumplir?",
             "costsNotIncluded": "Costos no incluidos",
             "eligibilitySubtitle": "Ingresos, ocupación, preferencias y subsidios",
             "eligibilityTitle": "Elegibilidad",
             "featuresSubtitle": "Servicios, detalles de la unidad y tarifas adicionales",
             "featuresTitle": "Características",
             "housingPreferencesSubtitle": "Los titulares de preferencias recibirán la clasificación más alta.",
+            "housingPreferencesSubtext": "Cuéntenos sobre las preferencias que se utilizarán para clasificar a los solicitantes que califiquen.",
             "housingPreferencesTitle": "Preferencias de vivienda",
             "introSubtitle": "Comencemos con información básica sobre su listado.",
             "introTitle": "Introducción al listado",
@@ -892,11 +934,14 @@
             "rankingsResultsTitle": "Clasificaciones y resultados",
             "rankingsResultsSubtitle": "Proporcione detalles sobre lo que sucede con las solicitudes una vez enviadas.",
             "rentalAssistanceSubtitle": "Los vales de elección de vivienda, la Sección 8 y otros programas válidos de asistencia para el alquiler se considerarán para esta propiedad. En el caso de un subsidio de alquiler válido, el ingreso mínimo requerido se basará en la parte del alquiler que el inquilino paga después de usar el subsidio.",
-            "rentalAssistanceTitle": "Asistencia de alquiler"
+            "rentalAssistanceTitle": "Asistencia de alquiler",
+            "addOpenHouse": "Agregar jornada de puertas abiertas",
+            "openHouse": "Casa abierta"
         },
         "seeMaximumIncomeInformation": "Ver información de ingresos máximos",
         "seePreferenceInformation": "Ver información de preferencias",
         "seeUnitInformation": "Ver información de la unidad",
+        "selectPreferences": "Seleccionar preferencias",
         "showClosedListings": "Mostrar anuncios cerrados",
         "singleRoomOccupancy": "Ocupación de habitación individual",
         "singleRoomOccupancyDescription": "Esta propiedad ofrece habitaciones individuales para una sola persona. Los inquilinos pueden compartir baños y, a veces, instalaciones de cocina.",
@@ -990,6 +1035,11 @@
             "deleteConf": "¿Realmente desea eliminar esta unidad?",
             "eligibility": "Elegibilidad"
         },
+        "events": {
+            "deleteThisEvent": "Eliminar este evento",
+            "deleteConf": "¿Realmente quieres eliminar este evento?",
+            "openHouseNotes": "Notas de la jornada de puertas abiertas"
+        },
         "units": "Listado de unidades",
         "unitsDescription": "Seleccione las unidades de construcción que están disponibles a través de la lista.",
         "unitTypesOrIndividual": "¿Quiere mostrar tipos de unidades o unidades individuales?"
@@ -1002,7 +1052,7 @@
         "accountSettings": "Configuraciones de la cuenta",
         "browseProperties": "Buscar propiedades",
         "getAssistance": "Obtenga ayuda",
-        "getFeedback": "Esta es una vista previa de nuestro nuevo sitio web. Nos encantaría recibir <a target='_blank' class='a-whitelined' href='%{feedbackUrl}'> sus comentarios </a>.",
+        "getFeedback": "Esta es una vista previa de nuestro nuevo sitio web. Recién estamos comenzando. Nos encantaría recibir <a target='_blank' class='a-whitelined' href='%{feedbackUrl}'> sus comentarios </a>.",
         "listings": "Listados",
         "properties": "Propiedades",
         "applications": "Aplicaciones",
@@ -1015,7 +1065,8 @@
         "siteTitle": "Portal de vivienda",
         "siteTitlePartners": "Portal de socios",
         "skip": "Saltar al contenido principal",
-        "flags": "Banderas"
+        "flags": "Banderas",
+        "users": "Usuarios"
     },
     "pageTitle": {
         "additionalResources": "Más oportunidades de vivienda",
@@ -1099,18 +1150,23 @@
         "accessibility": "Accesibilidad",
         "am": "SOY",
         "availability": "Disponibilidad",
+        "automatic": "Automático",
         "back": "Atrás",
         "built": "Construido",
         "call": "Llamada",
         "cancel": "Cancelar",
         "confirm": "Confirmar",
         "chooseFromFolder": "Elija de la carpeta",
+        "custom": "Personalizado",
         "day": "Día",
+        "date": "Fecha",
         "delete": "Borrar",
         "deposit": "Depositar",
         "done": "Hecho",
+        "descriptionTitle": "Descripción",
         "description": "Ingrese descripción",
         "emailAddressPlaceholder": "you@myemail.com",
+        "end": "Fin",
         "dragFilesHere": "Arrastre los archivos aquí",
         "dropFilesHere": "Suelta los archivos aquí…",
         "export": "Exportar",
@@ -1126,9 +1182,12 @@
         "household": "Familiar",
         "income": "Ingreso",
         "jumpTo": "Salta a",
+        "label": "Etiqueta",
         "lastUpdated": "Última actualización",
         "letter": "Carta",
         "less": "Menos",
+        "link": "Enlace",
+        "listing": "Listados",
         "loginIsRequired": "Es necesario iniciar sesión para ver esta página.",
         "menu": "Menú",
         "minimumIncome": "Renta mínima",
@@ -1142,9 +1201,12 @@
         "no": "No",
         "none": "Ninguno",
         "noneFound": "Nada encontrado.",
+        "notes": "Notas",
         "occupancy": "Ocupación",
         "ok": "OK",
+        "optional": "Opcional",
         "or": "o",
+        "order": "Pedido",
         "pageXofY": "Página% {number} de% {total}",
         "people": "gente",
         "person": "persona",
@@ -1155,6 +1217,7 @@
         "phoneNumberPlaceholder": "(555) 555-5555",
         "pleaseSelectOne": "Por favor, seleccione uno.",
         "pm": "PM",
+        "post": "Correo",
         "preferences": "Preferencias",
         "preview": "Avance",
         "previous": "Anterior",
@@ -1162,11 +1225,12 @@
         "range": "% {from} a% {to}",
         "readLess": "Leer menos",
         "readMore": "Lee mas",
-        "region":"Región",
+        "region": "Región",
         "relationship": "Relación",
         "otherRelationShip": "Otra relación",
         "rent": "Alquiler",
         "review": "Revisar",
+        "role": "Papel",
         "secondPhone": "Segundo teléfono",
         "seconds": "segundos",
         "seeDetails": "Ver detalles",
@@ -1178,13 +1242,17 @@
         "showMore": "mostrar más",
         "skipToMainContent": "Saltar al contenido principal",
         "smokingPolicy": "Política de fumar",
+        "sort": "Clasificar",
         "sqFeet": "pies cuadrados",
         "squareFeet": "pies cuadrados",
         "statusHistory": "Historial de estado",
+        "startTime": "Hora de inicio",
+        "endTime": "Hora de finalización",
         "street": "calle",
         "submit": "Entregar",
         "submitNew": "Enviar y nuevo",
         "copyNew": "Copiar y nuevo",
+        "save": "Ahorrar",
         "saveNew": "Guardar y nuevo",
         "saveExit": "Guardar la salida",
         "time": "tiempo",
@@ -1196,6 +1264,7 @@
         "unitAmenities": "Servicios de la unidad",
         "unitFeatures": "Características de la unidad",
         "unitType": "Tipo de unidad",
+        "url": "URL",
         "view": "Vista",
         "viewMap": "Ver el mapa",
         "viewOnMap": "Ver en el mapa",
@@ -1212,7 +1281,7 @@
         "viewAdditionalHousing": "Ver recursos y oportunidades de vivienda adicionales",
         "checkEligibility": "¿Califico?",
         "checkEligibilityDescription": "¡Verifique en minutos si califica!",
-        "subTitle": "Haga clic en el botón a continuación para encontrar una vivienda de alquiler según sus ingresos y las necesidades de su hogar."
+        "subTitle": "Haga clic en el botón a continuación para encontrar viviendas de alquiler según sus ingresos y las necesidades de su hogar."
     },
     "whatToExpect": {
         "label": "Que esperar",
@@ -1220,21 +1289,21 @@
     },
     "listingFilters": {
         "buttonTitle": "Filtrar listados",
-        "buttonTitleWithNumber": "Filtrar listados (%{number})",
+        "buttonTitleWithNumber": "Filtrar listados (% {number})",
         "resetButton": "Reiniciar",
         "modalTitle": "Filtrar Resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
         "neighborhood": "Vecindario",
         "bedrooms": "Tamaño de la unidad",
         "bedroomsOptions": {
-          "studioPlus": "0 o más habitaciones (estudio)",
-          "onePlus": "1 o más dormitorios",
-          "twoPlus": "2 o más recámaras",
-          "threePlus": "3 o más recámaras",
-          "fourPlus": "4 o más recámaras"
+            "studioPlus": "0 o más habitaciones (estudio)",
+            "onePlus": "1 o más dormitorios",
+            "twoPlus": "2 o más recámaras",
+            "threePlus": "3 o más recámaras",
+            "fourPlus": "4 o más recámaras"
         },
         "zipCode": "Código postal",
-        "zipCodeDescription": "Ingresa tu código postal",
+        "zipCodeDescription": "Introduzca código postal",
         "adaCompliant": "Cumple con la ADA",
         "communityType": "Tipo de comunidad",
         "communityTypeOptions": {

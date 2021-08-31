@@ -1,5 +1,4 @@
 {
-    "": "",
     "account": {
         "accountSettings": "إعدادت الحساب",
         "errorFetchingApplications": "خطأ في جلب التطبيقات",
@@ -571,6 +570,13 @@
         "viewApplication": "مشاهدة التطبيق",
         "yourLotteryNumber": "رقم التأكيد الخاص بك هو"
     },
+    "users": {
+        "confirmed": "مؤكد",
+        "unconfirmed": "غير مؤكد",
+        "totalUsers": "إجمالي المستخدمين",
+        "administrator": "مدير",
+        "partner": "شريك"
+    },
     "flags": {
         "flaggedSet": "مجموعة مميزة",
         "ruleName": "اسم القاعدة",
@@ -630,7 +636,6 @@
             "resendAnEmailTo": "إعادة إرسال بريد إلكتروني إلى",
             "errors": {
                 "accountConfirmed": "تم تأكيد حسابك بالفعل.",
-                "errorSaving": "وجه الفتاة! يبدو أنه حدث خطأ ما. حاول مرة اخرى.\n\nاتصل بـ sfhousing.info@sfgov.org إذا كنت لا تزال تواجه مشكلات.",
                 "emailInUse": "البريد الالكتروني قيد الاستخدام بالفعل",
                 "emailMismatch": "رسائل البريد الإلكتروني لا تتطابق",
                 "emailNotFound": "البريد الإلكتروني غير موجود. الرجاء التسجيل أولا.",
@@ -644,12 +649,9 @@
             "success": "لقد قمت بتسجيل الخروج بنجاح من حسابك."
         }
     },
-    "config": {
-        "routePrefix": ""
-    },
+    "config": {},
     "errors": {
         "alert": {
-            "badRequest": "وجه الفتاة! يبدو أنه حدث خطأ ما. حاول مرة اخرى.\n\nاتصل بـ sfhousing.info@sfgov.org إذا كنت لا تزال تواجه مشكلات.",
             "timeoutPleaseTryAgain": "وجه الفتاة! يبدو أنه حدث خطأ ما. حاول مرة اخرى."
         },
         "notFound": {
@@ -676,12 +678,13 @@
         "selectAtLeastOne": "الرجاء تحديد خيار واحد على الأقل.",
         "selectAnOption": "الرجاء تحديد خيار.",
         "selectOption": "الرجاء تحديد أحد الخيارات أعلاه.",
+        "urlError": "أدخل رابط صحيح من فضلك",
         "householdTooBig": "حجم أسرتك كبير جدًا.",
         "householdTooSmall": "حجم أسرتك صغير جدًا.",
         "dateError": "ارجوك ادخل تاريخ صحيح",
         "rateLimitExceeded": "تم تجاوز حد المعدل ، حاول مرة أخرى لاحقًا.",
         "requiredFieldError": "هذه الخانة مطلوبه.",
-        "noData": "لا تتوافر بيانات"
+        "noData": "لا تتوافر بيانات."
     },
     "footer": {
         "contact": "اتصال",
@@ -726,14 +729,22 @@
             "preview": "معاينة",
             "close": "يغلق",
             "viewListing": "عرض القائمة",
-            "unpublish": "إلغاء النشر"
+            "unpublish": "إلغاء النشر",
+            "postResults": "نتائج ما بعد",
+            "resultsPosted": "تم نشر النتائج",
+            "previewLotteryResults": "معاينة نتائج اليانصيب"
         },
+        "activePreferences": "التفضيلات النشطة",
         "addListing": "إضافة قائمة",
         "addPhoto": "إضافة صورة",
+        "addPreference": "إضافة تفضيل",
+        "addPreferences": "إضافة التفضيلات",
         "additionalApplicationSubmissionNotes": "ملاحظات إضافية حول تقديم الطلب",
         "additionalInformation": "معلومة اضافية",
         "allUnits": "جميع الوحدات",
         "allUnitsReservedFor": "جميع الوحدات محجوزة لـ٪ {type}",
+        "annualIncome": "٪ {الدخل} في السنة",
+        "annualIncomeRange": "٪ {from} إلى٪ {to} سنويًا",
         "applicationTitle": "بيانات الطلب",
         "applicationAddress": "تبوك",
         "applicationDeadline": "تاريخ استحقاق الطلب",
@@ -760,7 +771,7 @@
             "postmarkedApplicationsMustBeReceivedByDate": "يجب استلام الطلبات قبل الموعد النهائي. في حالة الإرسال عن طريق بريد الولايات المتحدة ، يجب ختم الطلب بختم بريد٪ {applicationDueDate} واستلامه بالبريد في موعد لا يتجاوز٪ {postmarkReceivedByDate}. لن يتم قبول الطلبات التي يتم استلامها بعد٪ {postmarkReceivedByDate} عبر البريد حتى إذا تم ختمها بواسطة٪ {applicationDueDate}. ٪ {developer} غير مسئول عن البريد المفقود أو المتأخر.",
             "sendByUsMail": "أرسل الطلب عن طريق البريد الأمريكي",
             "submitAPaperApplication": "تقديم طلب ورقي",
-            "contactManagment":"شركة إدارة الاتصال"
+            "contactManagment": "شركة إدارة الاتصال"
         },
         "atAnotherAddress": "في عنوان آخر",
         "atLeasingAgentAddress": "في عنوان وكيل التأجير",
@@ -771,6 +782,7 @@
         "availableUnitsAndWaitlistDesc": "بمجرد ملء المتقدمين لجميع الوحدات المتاحة ، سيتم وضع المتقدمين الإضافيين في قائمة الانتظار لـ <span class = 't-italic'>٪ {number} من الوحدات </ span>",
         "bath": "بث",
         "browseListings": "تصفح القوائم",
+        "buildingImageAltText": "صورة المبنى",
         "closedListings": "القوائم المغلقة",
         "comingSoon": "قريبا",
         "confirmedPreferenceList": "تم تأكيد قائمة٪ {preference}",
@@ -790,7 +802,10 @@
         "developmentalDisabilities": "الأشخاص الذين يعانون من إعاقات في النمو",
         "developmentalDisabilitiesDescription": "تم تخصيص عدد من الوحدات في هذا المبنى للأشخاص الذين يعانون من إعاقات في النمو. يرجى زيارة <a href='http://www.housingchoices.org/' target='_blank'> Housingchoices.org </a> للحصول على معلومات حول الأهلية والمتطلبات وكيفية الحصول على طلب وللحصول على إجابات لأية أسئلة أخرى قد يكون لديك حول هذه العملية.",
         "dropOffAddress": "عنوان التسليم",
+        "dueDateQuestion": "هل يوجد موعد لتقديم الطلب؟",
+        "editPreferences": "تعديل التفضيلات",
         "enterLotteryForWaitlist": "قم بإرسال طلب للحصول على خانة مفتوحة في قائمة الانتظار لـ٪ {Units} من الوحدات.",
+        "firstComeFirstServe": "الخدمة بأسبقية الوصول",
         "forIncomeCalculations": "بالنسبة لحسابات الدخل ، يشمل حجم الأسرة جميع (جميع الأعمار) الذين يعيشون في الوحدة.",
         "forIncomeCalculationsBMR": "تعتمد حسابات الدخل على نوع الوحدة",
         "hideClosedListings": "إخفاء القوائم المغلقة",
@@ -800,6 +815,7 @@
         "includesPriorityUnits": "يتضمن وحدات ذات أولوية بالنسبة لـ٪ {أولويات}",
         "latitude": "خط العرض",
         "leasingAgentAddress": "عنوان وكيل التأجير",
+        "listingPreviewOnly": "هذه معاينة القائمة فقط.",
         "listingStatus": {
             "active": "يفتح",
             "pending": "مسودة",
@@ -808,13 +824,25 @@
         "listingSubmitted": "تم إرسال القائمة",
         "listingUpdated": "تم تحديث القائمة",
         "longitude": "خط الطول",
+        "lottery": "اليانصيب",
+        "lotteryDateNotes": "ملاحظات تاريخ اليانصيب",
+        "lotteryDateQuestion": "متى سيتم تشغيل اليانصيب؟",
+        "lotteryEndTime": "وقت انتهاء اليانصيب",
         "lotteryResults": {
             "completeResultsWillBePosted": "سيتم نشر نتائج اليانصيب الكاملة قريبًا.",
             "downloadResults": "تحميل النتائج",
             "header": "نتائج اليانصيب"
         },
+        "lotteryStartTime": "وقت بدء اليانصيب",
+        "mapPinAutomaticDescription": "يعتمد موضع دبوس الخريطة على العنوان المقدم",
+        "mapPinCustomDescription": "اسحب الدبوس لتحديث موقع العلامة",
+        "mapPinPosition": "خريطة الموقع",
+        "mapPreview": "معاينة الخريطة",
+        "mapPreviewNoAddress": "أدخل عنوانًا لمعاينة الخريطة",
         "maxIncomeMonth": "الحد الأقصى للدخل / الشهر",
         "maxIncomeYear": "الحد الأقصى للدخل / السنة",
+        "monthlyIncome": "٪ {الدخل} شهريًا",
+        "monthlyIncomeRange": "٪ {from} إلى٪ {to} شهريًا",
         "moreBuildingSelectionCriteria": "اكتشف المزيد حول معايير اختيار المبنى",
         "newListing": "قائمة جديدة",
         "noAvailableUnits": "لا توجد وحدات متاحة في هذا الوقت.",
@@ -844,7 +872,17 @@
         "rentalHistory": "تاريخ الإيجار",
         "requiredDocuments": "الوتائق المطلوبة",
         "reservedCommunityBuilding": "٪ {type} مبنى",
+        "reservedCommunityDescription": "وصف المجتمع المحجوز",
+        "reservedCommunitySeniorTitle": "مبنى كبير",
+        "reservedCommunityTitleDefault": "مبنى محجوز",
+        "reservedCommunityTypes": {
+            "senior": "كبار السن",
+            "senior55": "كبار السن 55+",
+            "senior62": "كبار السن 62+",
+            "specialNeeds": "الاحتياجات الخاصة"
+        },
         "reservedFor": "محجوز لـ٪ {type}",
+        "reservedCommunityType": "نوع المجتمع المحجوز",
         "reservedTypePlural": {
             "family": "العائلات",
             "senior": "كبار السن",
@@ -854,6 +892,7 @@
         "reservedUnits": "الوحدات المحجوزة",
         "reservedUnitsDescription": "من أجل التأهل لهذه الوحدات ، يجب أن ينطبق أحد ما يلي عليك أو على أحد أفراد أسرتك:",
         "reservedUnitsForWhoAre": "محجوز لـ٪ {communityType} من٪ {reservedType}",
+        "reviewOrderQuestion": "كيف يتم تحديد أمر مراجعة الطلب؟",
         "sections": {
             "additionalDetails": "تفاصيل اضافية",
             "additionalDetailsSubtitle": "هل هناك أي مستندات ومعايير اختيار أخرى مطلوبة؟",
@@ -872,12 +911,15 @@
             "buildingFeaturesTitle": "ميزات المبنى",
             "applicationDatesTitle": "مواعيد التقديم",
             "applicationDatesSubtitle": "أخبرنا عن التواريخ المهمة المتعلقة بهذه القائمة.",
+            "communityType": "نوع المجتمع",
+            "communityTypeSubtitle": "هل هناك أي متطلبات يجب على المتقدمين الوفاء بها؟",
             "costsNotIncluded": "التكاليف غير مشمولة",
             "eligibilitySubtitle": "الدخل والإشغال والتفضيلات والإعانات",
             "eligibilityTitle": "جدارة - أهلية",
             "featuresSubtitle": "وسائل الراحة وتفاصيل الوحدة والرسوم الإضافية",
             "featuresTitle": "سمات",
             "housingPreferencesSubtitle": "سيتم منح أصحاب الأفضلية أعلى مرتبة.",
+            "housingPreferencesSubtext": "أخبرنا عن أي تفضيلات سيتم استخدامها لتصنيف المتقدمين المؤهلين.",
             "housingPreferencesTitle": "تفضيلات السكن",
             "introSubtitle": "لنبدأ ببعض المعلومات الأساسية حول قائمتك.",
             "introTitle": "سرد مقدمة",
@@ -892,11 +934,14 @@
             "rankingsResultsTitle": "الترتيب والنتائج",
             "rankingsResultsSubtitle": "قدم تفاصيل حول ما يحدث للطلبات بمجرد تقديمها.",
             "rentalAssistanceSubtitle": "سيتم النظر في قسائم اختيار السكن ، والقسم 8 وبرامج مساعدة الإيجار السارية الأخرى لهذه المنشأة. في حالة وجود دعم إيجار ساري المفعول ، سيعتمد الحد الأدنى المطلوب للدخل على جزء من الإيجار الذي يدفعه المستأجر بعد استخدام الدعم.",
-            "rentalAssistanceTitle": "المساعدة في التأجير"
+            "rentalAssistanceTitle": "المساعدة في التأجير",
+            "addOpenHouse": "أضف البيت المفتوح",
+            "openHouse": "بيت مفتوح"
         },
         "seeMaximumIncomeInformation": "انظر معلومات الحد الأقصى للدخل",
         "seePreferenceInformation": "انظر معلومات التفضيل",
         "seeUnitInformation": "انظر معلومات الوحدة",
+        "selectPreferences": "حدد التفضيلات",
         "showClosedListings": "إظهار القوائم المغلقة",
         "singleRoomOccupancy": "إشغال غرفة مفردة",
         "singleRoomOccupancyDescription": "يوفر هذا العقار غرفًا فردية لشخص واحد فقط. يمكن للمستأجرين مشاركة الحمامات وأحيانًا مرافق المطبخ.",
@@ -990,6 +1035,11 @@
             "deleteConf": "هل تريد حقًا حذف هذه الوحدة؟",
             "eligibility": "جدارة - أهلية"
         },
+        "events": {
+            "deleteThisEvent": "احذف هذا الحدث",
+            "deleteConf": "هل تريد حقًا حذف هذا الحدث؟",
+            "openHouseNotes": "ملاحظات البيت المفتوح"
+        },
         "units": "وحدات القيد",
         "unitsDescription": "حدد وحدات البناء المتوفرة من خلال القائمة.",
         "unitTypesOrIndividual": "هل تريد إظهار أنواع الوحدات أم الوحدات الفردية؟"
@@ -1015,7 +1065,8 @@
         "siteTitle": "بوابة الإسكان",
         "siteTitlePartners": "بوابة الشركاء",
         "skip": "تخطي إلى المحتوى الرئيسي",
-        "flags": "أعلام"
+        "flags": "أعلام",
+        "users": "المستخدمون"
     },
     "pageTitle": {
         "additionalResources": "المزيد من فرص السكن",
@@ -1099,18 +1150,23 @@
         "accessibility": "إمكانية الوصول",
         "am": "صباحا",
         "availability": "التوفر",
+        "automatic": "تلقائي",
         "back": "عودة",
         "built": "مبني",
         "call": "مكالمة",
         "cancel": "يلغي",
         "confirm": "يتأكد",
         "chooseFromFolder": "اختر من المجلد",
+        "custom": "مخصص",
         "day": "يوم",
+        "date": "تاريخ",
         "delete": "حذف",
         "deposit": "إيداع",
         "done": "فعله",
+        "descriptionTitle": "وصف",
         "description": "أدخل الوصف",
         "emailAddressPlaceholder": "يو@ميعمل.كوم",
+        "end": "نهاية",
         "dragFilesHere": "اسحب الملفات هنا",
         "dropFilesHere": "قم بوضع الملفات هنا…",
         "export": "يصدر",
@@ -1126,9 +1182,12 @@
         "household": "أسرة",
         "income": "دخل",
         "jumpTo": "اقفز إلى",
+        "label": "ملصق",
         "lastUpdated": "آخر تحديث",
         "letter": "رسالة",
         "less": "أقل",
+        "link": "وصلة",
+        "listing": "القوائم",
         "loginIsRequired": "مطلوب تسجيل الدخول لمشاهدة هذه الصفحة.",
         "menu": "قائمة الطعام",
         "minimumIncome": "الحد الأدنى للدخل",
@@ -1142,9 +1201,12 @@
         "no": "رقم",
         "none": "لا أحد",
         "noneFound": "لا شيء وجد.",
+        "notes": "ملحوظات",
         "occupancy": "شغل",
         "ok": "حسنا",
+        "optional": "اختياري",
         "or": "أو",
+        "order": "ترتيب",
         "pageXofY": "الصفحة٪ {number} من٪ {total}",
         "people": "اشخاص",
         "person": "شخص",
@@ -1155,6 +1217,7 @@
         "phoneNumberPlaceholder": "(خخخ) خخخخ",
         "pleaseSelectOne": "رجاءا اختر واحدة.",
         "pm": "مساء",
+        "post": "بريد",
         "preferences": "التفضيلات",
         "preview": "معاينة",
         "previous": "سابق",
@@ -1162,11 +1225,12 @@
         "range": "٪ {from} إلى٪ {to}",
         "readLess": "أقرأ أقل",
         "readMore": "قراءة المزيد",
-        "region":"منطقة",
+        "region": "منطقة",
         "relationship": "صلة",
         "otherRelationShip": "علاقة أخرى",
         "rent": "إيجار",
         "review": "إعادة النظر",
+        "role": "دور",
         "secondPhone": "الهاتف الثاني",
         "seconds": "ثواني",
         "seeDetails": "انظر التفاصيل",
@@ -1178,13 +1242,17 @@
         "showMore": "أظهر المزيد",
         "skipToMainContent": "تخطي إلى المحتوى الرئيسي",
         "smokingPolicy": "سياسة التدخين",
+        "sort": "نوع",
         "sqFeet": "قدم مربع",
         "squareFeet": "قدم مربع",
         "statusHistory": "محفوظات الحالة",
+        "startTime": "وقت البدء",
+        "endTime": "وقت النهاية",
         "street": "شارع",
         "submit": "يقدم",
         "submitNew": "إرسال & جديد",
         "copyNew": "نسخ & جديد",
+        "save": "يحفظ",
         "saveNew": "حفظ & جديد",
         "saveExit": "احفظ المخرج",
         "time": "الوقت",
@@ -1196,6 +1264,7 @@
         "unitAmenities": "مرافق الوحدة",
         "unitFeatures": "ميزات الوحدة",
         "unitType": "نوع الوحدة",
+        "url": "URL",
         "view": "رأي",
         "viewMap": "إعرض الخريطة",
         "viewOnMap": "عرض على الخريطة",
@@ -1216,22 +1285,22 @@
     },
     "whatToExpect": {
         "label": "ماذا تتوقع",
-        "default": "سيتم الاتصال بالمتقدمين من قبل وكيل العقارات بترتيب الترتيب حتى يتم ملء الشواغر. سيتم التحقق من جميع المعلومات التي قدمتها وتأكيد أهليتك. ستتم إزالة طلبك من قائمة الانتظار إذا قدمت أي بيانات احتيالية. إذا لم نتمكن من التحقق من تفضيل السكن الذي طالبت به ، فلن تحصل على الأفضلية ولكن لن يتم معاقبتك بطريقة أخرى. إذا تم اختيار طلبك ، فكن مستعدًا لملء طلب أكثر تفصيلاً وتقديم المستندات الداعمة المطلوبة."
+        "default": "سيتم الاتصال بالمتقدمين من قبل وكيل الملكية بترتيب الترتيب حتى يتم ملء الشواغر. سيتم التحقق من جميع المعلومات التي قدمتها وتأكيد أهليتك. ستتم إزالة طلبك من قائمة الانتظار إذا قدمت أي بيانات احتيالية. إذا لم نتمكن من التحقق من تفضيل السكن الذي طالبت به ، فلن تحصل على الأفضلية ولكن لن يتم معاقبتك بطريقة أخرى. إذا تم اختيار طلبك ، فكن مستعدًا لملء طلب أكثر تفصيلاً وتقديم المستندات الداعمة المطلوبة."
     },
     "listingFilters": {
         "buttonTitle": "قوائم التصفية",
-        "buttonTitleWithNumber": "قوائم التصفية (%{number})",
+        "buttonTitleWithNumber": "قوائم التصفية (٪ {number})",
         "resetButton": "إعادة ضبط",
         "modalTitle": "تصفية النتائج",
         "modalHeader": "استخدم هذه الخيارات لتحسين قائمة الخصائص الخاصة بك.",
         "neighborhood": "حي",
         "bedrooms": "حجم الوحدة",
         "bedroomsOptions": {
-          "studioPlus": "0 أو أكثر من غرف النوم (استوديو)",
-          "onePlus": "غرفة نوم واحدة أو أكثر",
-          "twoPlus": "2 غرف نوم أو أكثر",
-          "threePlus": "3 غرف نوم أو أكثر",
-          "fourPlus": "4 غرف نوم أو أكثر"
+            "studioPlus": "0 أو أكثر من غرف النوم (استوديو)",
+            "onePlus": "غرفة نوم واحدة أو أكثر",
+            "twoPlus": "2 غرف نوم أو أكثر",
+            "threePlus": "3 غرف نوم أو أكثر",
+            "fourPlus": "4 غرف نوم أو أكثر"
         },
         "zipCode": "الرمز البريدي",
         "zipCodeDescription": "أدخل الرمز البريدي",
