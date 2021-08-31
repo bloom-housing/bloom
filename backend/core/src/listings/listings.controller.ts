@@ -18,7 +18,7 @@ import {
   Headers,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
-import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Cache } from "cache-manager"
 import {
   ListingCreateDto,
@@ -27,6 +27,7 @@ import {
   PaginatedListingDto,
   ListingsQueryParams,
   ListingFilterParams,
+  ListingsRetrieveQueryParams,
 } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -69,17 +70,19 @@ export class ListingsController {
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @ApiQuery({ name: "view", required: false })
   @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
   async retrieve(
     @Headers("language") language: Language,
     @Param("listingId") listingId: string,
-    @Query("view") view?: string
+    @Query() queryParams: ListingsRetrieveQueryParams
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language, view))
+    return mapTo(
+      ListingDto,
+      await this.listingsService.findOne(listingId, language, queryParams.view)
+    )
   }
 
   @Put(`:listingId`)

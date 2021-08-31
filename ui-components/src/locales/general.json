@@ -1036,7 +1036,13 @@
       "individualUnits": "Individual Units",
       "delete": "Delete this Unit",
       "deleteConf": "Do you really want to delete this unit?",
-      "eligibility": "Eligibility"
+      "eligibility": "Eligibility",
+      "statusOptions": {
+        "unknown": "Unknown",
+        "available": "Available",
+        "occupied": "Occupied",
+        "unavailable": "Unavailable"
+      }
     },
     "events": {
       "deleteThisEvent": "Delete this event",

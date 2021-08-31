@@ -8,11 +8,13 @@ import supertest from "supertest"
 import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
+import { UserDto } from "../../src/auth/dto/user.dto"
 jest.setTimeout(30000)
 
 describe("Authz", () => {
   let app: INestApplication
   let userAccessToken: string
+  let userProfile: UserDto
   const adminOnlyEndpoints = ["/preferences", "/units", "/translations"]
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
@@ -26,7 +28,13 @@ describe("Authz", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
+
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
+    userProfile = (
+      await supertest(app.getHttpServer())
+        .get("/user")
+        .set(...setAuthorization(userAccessToken))
+    ).body
   })
 
   describe("admin endpoints", () => {
@@ -119,7 +127,7 @@ describe("Authz", () => {
     })
     it("should allow logged in user to GET applications", async () => {
       await supertest(app.getHttpServer())
-        .get(applicationsEndpoint)
+        .get(applicationsEndpoint + `?userId=${userProfile.id}`)
         .set(...setAuthorization(userAccessToken))
         .expect(200)
     })
@@ -199,7 +207,7 @@ describe("Authz", () => {
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
-    it(`should allow normal/anonymous user to POST listings`, async () => {
+    it(`should not allow normal/anonymous user to POST listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer()).post(listingsEndpoint).expect(403)
       // logged in normal user
@@ -207,6 +215,27 @@ describe("Authz", () => {
         .post(listingsEndpoint)
         .set(...setAuthorization(userAccessToken))
         .expect(403)
+    })
+
+    it(`should not allow normal user to change it's role`, async () => {
+      let profileRes = await supertest(app.getHttpServer())
+        .get("/user")
+        .set(...setAuthorization(userAccessToken))
+        .expect(200)
+
+      expect(profileRes.body.roles).toBe(null)
+      await supertest(app.getHttpServer())
+        .put(`/user/${profileRes.body.id}`)
+        .send({ ...profileRes.body, roles: { isAdmin: true, isPartner: false } })
+        .set(...setAuthorization(userAccessToken))
+        .expect(200)
+
+      profileRes = await supertest(app.getHttpServer())
+        .get("/user")
+        .set(...setAuthorization(userAccessToken))
+        .expect(200)
+
+      expect(profileRes.body.roles).toBe(null)
     })
   })
 

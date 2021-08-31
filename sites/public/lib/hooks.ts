@@ -7,7 +7,7 @@ import {
   openDateState,
   t,
 } from "@bloom-housing/ui-components"
-import { ListingReviewOrder, Listing } from "@bloom-housing/backend-core/types"
+import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 

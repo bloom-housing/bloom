@@ -80,7 +80,7 @@ export class UserService {
       ...dto,
     })
 
-    if (user.confirmedAt !== dto.confirmedAt) {
+    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
       })

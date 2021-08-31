@@ -820,6 +820,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   jsonpath?: string
 }
 
+export class ListingsRetrieveQueryParams {
+  @Expose()
+  @ApiProperty({
+    name: "view",
+    required: false,
+    type: String,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  view?: string
+}
+
 // Using a record lets us enforce that all types are handled in addFilter
 export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
   status: "listings.status",

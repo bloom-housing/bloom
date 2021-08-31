@@ -1,12 +1,8 @@
 import React from "react"
 import { render, cleanup, fireEvent } from "@testing-library/react"
 import { HouseholdSizeField } from "../../src/forms/HouseholdSizeField"
-import { Listing } from "@bloom-housing/backend-core/types"
-import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { useForm } from "react-hook-form"
 import { t } from "../../src/helpers/translator"
-
-const listing = Object.assign({}, ArcherListing) as Listing
 
 afterEach(cleanup)
 
@@ -14,13 +10,14 @@ const DefaultHouseholdSize = () => {
   const { register } = useForm({ mode: "onChange" })
   return (
     <HouseholdSizeField
-      listing={listing}
-      householdSize={3}
-      validate={true}
-      register={register}
-      error={null}
-      clearErrors={() => {}}
       assistanceUrl={""}
+      clearErrors={() => {}}
+      error={null}
+      householdSize={3}
+      householdSizeMax={3}
+      householdSizeMin={2}
+      register={register}
+      validate={true}
     />
   )
 }
@@ -33,13 +30,14 @@ const ErrorHouseholdSize = (props: ErrorHouseholdSizeProps) => {
   const { register } = useForm({ mode: "onChange" })
   return (
     <HouseholdSizeField
-      listing={listing}
-      householdSize={3}
-      validate={true}
-      register={register}
-      error={{ message: "Uh oh!" }}
-      clearErrors={props.clearErrorsSpy}
       assistanceUrl={""}
+      clearErrors={props.clearErrorsSpy}
+      error={{ message: "Uh oh!" }}
+      householdSize={1}
+      householdSizeMax={3}
+      householdSizeMin={2}
+      register={register}
+      validate={true}
     />
   )
 }
