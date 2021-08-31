@@ -14,6 +14,7 @@ import { REQUEST } from "@nestjs/core"
 import dbOptions = require("../../../ormconfig.test")
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 declare const expect: jest.Expect
 const user = new User()
@@ -38,7 +39,7 @@ describe("EmailService", () => {
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Translation]),
+        TypeOrmModule.forFeature([Translation, Jurisdiction]),
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
@@ -47,12 +48,13 @@ describe("EmailService", () => {
       providers: [
         EmailService,
         TranslationsService,
+        JurisdictionsService,
         JurisdictionResolverService,
         {
           provide: REQUEST,
           useValue: {
             get: () => {
-              return { jurisdictionName: "Alameda" }
+              return "Alameda"
             },
           },
         },
@@ -129,6 +131,7 @@ describe("EmailService", () => {
   })
 
   beforeEach(async () => {
+    jest.useFakeTimers()
     sendGridService = module.get<SendGridService>(SendGridService)
     sendMock = jest.fn()
     sendGridService.send = sendMock

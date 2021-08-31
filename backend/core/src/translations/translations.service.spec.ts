@@ -42,7 +42,7 @@ describe("TranslationsService", () => {
       )
       expect(result).toStrictEqual({})
       expect(translationRepositoryFindOneMock.mock.calls[0][0].where.language).toEqual(Language.en)
-      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.jurisdictionId).toEqual(
+      expect(translationRepositoryFindOneMock.mock.calls[0][0].where.jurisdiction.id).toEqual(
         jurisdictionId
       )
     })

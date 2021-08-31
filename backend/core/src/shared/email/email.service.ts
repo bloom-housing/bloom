@@ -40,11 +40,8 @@ export class EmailService {
 
   public async welcome(user: User, appUrl: string) {
     const language = user.language || Language.en
-    // NOTE What to do when user has no countyCode e.g. an admin?
-    void (await this.loadTranslations(
-      await this.jurisdictionResolverService.getJurisdiction(),
-      language
-    ))
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, language))
     const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
@@ -65,10 +62,8 @@ export class EmailService {
   }
 
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
-    void (await this.loadTranslations(
-      await this.jurisdictionResolverService.getJurisdiction(),
-      application.language || Language.en
-    ))
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, application.language || Language.en))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
     const compiledTemplate = this.template("confirmation")
@@ -113,10 +108,8 @@ export class EmailService {
   }
 
   public async forgotPassword(user: User, appUrl: string) {
-    void (await this.loadTranslations(
-      await this.jurisdictionResolverService.getJurisdiction(),
-      user.language
-    ))
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, user.language))
     const compiledTemplate = this.template("forgot-password")
     const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
 

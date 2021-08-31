@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { SendGridModule } from "@anchan828/nest-sendgrid"
 import { TranslationsModule } from "../../translations/translations.module"
 import { EmailService } from "./email.service"
@@ -9,7 +9,7 @@ import { JurisdictionsModule } from "../../jurisdictions/jurisdictions.module"
 @Module({
   imports: [
     SharedModule,
-    JurisdictionsModule,
+    forwardRef(() => JurisdictionsModule),
     TranslationsModule,
     SendGridModule.forRootAsync({
       imports: [ConfigModule],
