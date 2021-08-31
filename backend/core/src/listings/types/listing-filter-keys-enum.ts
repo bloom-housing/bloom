@@ -5,4 +5,5 @@ export enum ListingFilterKeys {
   neighborhood = "neighborhood",
   bedrooms = "bedrooms",
   zipcode = "zipcode",
+  seniorHousing = "seniorHousing",
 }

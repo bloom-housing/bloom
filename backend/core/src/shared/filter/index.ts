@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
+import { ListingFilterKeys } from "../../listings/types/listing-filter-keys-enum"
+import { addSeniorHousingQuery } from "./custom_filters"
 
 /**
  *
@@ -66,6 +68,10 @@ export function addFilters<FilterParams, FilterFieldMap>(
           const filterField = filterTypeToFieldMap[filterType as string]
 
           // Handle custom filters here, before dropping into generic filter handler
+          if (filterType == ListingFilterKeys.seniorHousing) {
+            addSeniorHousingQuery(qb, filterValue)
+            return
+          }
 
           // Generic filter handler
           // Explicitly check for allowed comparisons, to prevent SQL injections

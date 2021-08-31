@@ -1,7 +1,7 @@
 import {
-  ListingFilterParams,
-  ListingFilterKeys,
   EnumListingFilterParamsComparison,
+  ListingFilterKeys,
+  ListingFilterParams,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 
@@ -15,6 +15,8 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
       return EnumListingFilterParamsComparison[">="]
     case ListingFilterKeys.zipcode:
       return EnumListingFilterParamsComparison["IN"]
+    case ListingFilterKeys.seniorHousing:
+      return EnumListingFilterParamsComparison["NA"]
     default: {
       const _exhaustiveCheck: never = filterKey
       return _exhaustiveCheck
@@ -37,7 +39,8 @@ export function encodeToFrontendFilterString(filterParams: ListingFilterParams) 
   let queryString = ""
   for (const filterType in filterParams) {
     const value = filterParams[filterType]
-    if (filterType in ListingFilterKeys && value !== undefined && value != "") {
+
+    if (filterType in ListingFilterKeys && value !== undefined && value !== "") {
       queryString += `&${filterType}=${value}`
     }
   }

@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file. The format 
   - Detroit AMI data and import script
     ([#443](https://github.com/CityOfDetroit/bloom/pull/443))
   - Fetch UnitsSummary data in listing query ([#441](https://github.com/CityOfDetroit/bloom/pull/441))
+  - Senior housing filtering for the eligibility questionnaire ([#446](https://github.com/CityOfDetroit/bloom/issues/446)]
 
 - Removed:
   - Eligibility section of detailed listing view
