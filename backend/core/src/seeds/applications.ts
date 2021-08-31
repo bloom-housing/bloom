@@ -10,8 +10,12 @@ import { ApplicationSubmissionType } from "../applications/types/application-sub
 import { IncomePeriod } from "../applications/types/income-period-enum"
 import { Listing } from "../listings/entities/listing.entity"
 import { User } from "../auth/entities/user.entity"
+import { UnitType } from "../unit-types/entities/unit-type.entity"
 
-const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing" | "listingId"> = {
+const applicationCreateDtoTemplate: Omit<
+  ApplicationCreateDto,
+  "user" | "listing" | "listingId" | "preferredUnit"
+> = {
   acceptedTerms: true,
   accessibility: {
     hearing: false,
@@ -209,7 +213,6 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
       ],
     },
   ],
-  preferredUnit: ["studio"],
   sendMailToMailingAddress: true,
   status: ApplicationStatus.submitted,
   submissionDate: new Date(),
@@ -219,10 +222,12 @@ const applicationCreateDtoTemplate: Omit<ApplicationCreateDto, "user" | "listing
 export const makeNewApplication = async (
   app: INestApplicationContext,
   listing: Listing,
+  unitTypes: UnitType[],
   user?: User
 ) => {
   const dto: ApplicationCreateDto = JSON.parse(JSON.stringify(applicationCreateDtoTemplate))
   dto.listing = listing
+  dto.preferredUnit = unitTypes
   const applicationRepo = app.get<Repository<Application>>(getRepositoryToken(Application))
   return await applicationRepo.save({
     ...dto,

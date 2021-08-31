@@ -2448,6 +2448,23 @@ export interface HouseholdMember {
   workInRegion?: string
 }
 
+export interface UnitType {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
 export interface ApplicationPreferenceOption {
   /**  */
   key: string
@@ -2511,6 +2528,9 @@ export interface Application {
   householdMembers: HouseholdMember[]
 
   /**  */
+  preferredUnit: UnitType[]
+
+  /**  */
   id: string
 
   /**  */
@@ -2551,9 +2571,6 @@ export interface Application {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3041,6 +3058,9 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3069,9 +3089,6 @@ export interface ApplicationCreate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3367,6 +3384,9 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3395,9 +3415,6 @@ export interface ApplicationUpdate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -4081,23 +4098,6 @@ export interface Unit {
 
   /**  */
   bmrProgramChart?: boolean
-}
-
-export interface UnitType {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
 }
 
 export interface UnitsSummary {

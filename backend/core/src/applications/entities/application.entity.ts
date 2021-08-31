@@ -3,6 +3,8 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -37,6 +39,7 @@ import { Language } from "../../shared/types/language-enum"
 import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
+import { UnitType } from "../../unit-types/entities/unit-type.entity"
 
 @Entity({ name: "applications" })
 export class Application extends AbstractEntity {
@@ -191,12 +194,10 @@ export class Application extends AbstractEntity {
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
-  @Column({ type: "text", array: true })
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
-  preferredUnit: string[]
+  @ManyToMany(() => UnitType, { eager: true, cascade: true })
+  @JoinTable()
+  @Type(() => UnitType)
+  preferredUnit: UnitType[]
 
   @Column({ type: "jsonb" })
   @Expose()

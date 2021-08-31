@@ -27,6 +27,7 @@ import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
+import { UnitTypesService } from "./unit-types/unit-types.service"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -160,11 +161,15 @@ async function seed() {
     new AuthContext(null)
   )
 
+  const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
+
+  const unitTypes = await unitTypesService.list()
+
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, user1),
-        await makeNewApplication(app, listing, user2),
+        await makeNewApplication(app, listing, unitTypes, user1),
+        await makeNewApplication(app, listing, unitTypes, user2),
       ])
     }
   }
