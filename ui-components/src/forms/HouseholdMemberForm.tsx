@@ -19,14 +19,13 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
     <ViewItem helper={props.subtitle} className="pb-4 border-b text-left">
       {props.memberFirstName} {props.memberLastName}
       {editMode ? (
-        <a
+        <button
           id="edit-member"
           className="edit-link"
-          href="#"
           onClick={() => props.editMember && props.editMember(props.memberId)}
         >
           {t("t.edit")}
-        </a>
+        </button>
       ) : (
         <Icon
           className="ml-2 absolute top-0 right-0"

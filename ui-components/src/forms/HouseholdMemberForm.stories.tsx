@@ -12,6 +12,7 @@ export const editable = () => (
     memberLastName={"Lastname"}
     key={"FirstnameLastname"}
     subtitle={"Household Member"}
+    editMember={() => {}}
   />
 )
 
