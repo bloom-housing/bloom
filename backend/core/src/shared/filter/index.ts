@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus } from "@nestjs/common"
+import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
 
@@ -39,11 +39,9 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       const filterValue = filter[filterKey]
       switch (comparison) {
         case Compare.IN:
-          if (!Array.isArray(filterValue)) {
-            throw new BadRequestException(`${filterValue} should be an array`)
-          }
           qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
             [whereParameterName]: filterValue
+              .split(",")
               .map((s) => s.trim().toLowerCase())
               .filter((s) => s.length !== 0),
           })
