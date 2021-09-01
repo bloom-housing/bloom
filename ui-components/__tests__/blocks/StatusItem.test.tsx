@@ -1,6 +1,6 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { StatusItem } from "blocks/StatusItem"
+import { StatusItem } from "../../src/blocks/StatusItem"
 import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
