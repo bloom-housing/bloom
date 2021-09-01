@@ -1,4 +1,5 @@
 import React from "react"
+import qs from "qs"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -41,10 +42,17 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
   let response
 
   try {
-    response = await axios.get(
-      process.env.listingServiceUrl +
-        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
-    )
+    response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        $comparison: "<>",
+        status: "pending",
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
   } catch (e) {
     return {
       paths: [],

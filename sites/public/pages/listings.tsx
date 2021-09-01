@@ -1,4 +1,5 @@
 import Head from "next/head"
+import qs from "qs"
 import axios from "axios"
 import { ListingsGroup, ListingsList, PageHeader, t } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
@@ -60,10 +61,17 @@ export async function getStaticProps() {
   let closedListings = []
 
   try {
-    const response = await axios.get(
-      process.env.listingServiceUrl +
-        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
-    )
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        $comparison: "<>",
+        status: "pending",
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
 
     openListings = response?.data?.items
       ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
