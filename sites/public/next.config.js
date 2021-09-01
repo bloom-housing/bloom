@@ -1,9 +1,10 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const withTM = require("next-transpile-modules")(["@bloom-housing"])
-const withSass = require("@zeit/next-sass")
-const withCSS = require("@zeit/next-css")
+const withTM = require("next-transpile-modules")([
+  "@bloom-housing/ui-components",
+  "@bloom-housing/backend-core",
+])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
@@ -31,35 +32,29 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
-module.exports = withCSS(
-  withBundleAnalyzer(
-    withMDX(
-      withSass(
-        withTM({
-          target: "serverless",
-          env: {
-            backendApiBase: BACKEND_API_BASE,
-            listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-            listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
-            mapBoxToken: MAPBOX_TOKEN,
-            housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-            gtmKey: process.env.GTM_KEY || null,
-            idleTimeout: process.env.IDLE_TIMEOUT,
-            countyCode: process.env.COUNTY_CODE,
-            cacheRevalidate: process.env.CACHE_REVALIDATE
-              ? Number(process.env.CACHE_REVALIDATE)
-              : 60,
-            cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-          },
-          i18n: {
-            locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
-            defaultLocale: "en",
-          },
-          sassLoaderOptions: {
-            additionalData: tailwindVars,
-          },
-        })
-      )
-    )
+module.exports = withBundleAnalyzer(
+  withMDX(
+    withTM({
+      target: "serverless",
+      env: {
+        backendApiBase: BACKEND_API_BASE,
+        listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+        listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
+        mapBoxToken: MAPBOX_TOKEN,
+        housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
+        gtmKey: process.env.GTM_KEY || null,
+        idleTimeout: process.env.IDLE_TIMEOUT,
+        countyCode: process.env.COUNTY_CODE,
+        cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
+        cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      },
+      i18n: {
+        locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
+        defaultLocale: "en",
+      },
+      sassOptions: {
+        additionalData: tailwindVars,
+      },
+    })
   )
 )
