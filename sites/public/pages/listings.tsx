@@ -22,7 +22,11 @@ import { MetaTags } from "../src/MetaTags"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useListingsData } from "../lib/hooks"
-import { ListingFilterKeys, ListingFilterParams } from "@bloom-housing/backend-core/types"
+import {
+  ListingFilterKeys,
+  AvailabilityFilterEnum,
+  ListingFilterParams,
+} from "@bloom-housing/backend-core/types"
 
 const isValidZipCodeOrEmpty = (value: string) => {
   // Empty strings or whitespace are valid and will reset the filter.
@@ -76,6 +80,12 @@ const ListingsPage = () => {
   const neighborhoodOptions: SelectOption[] = [
     EMPTY_OPTION,
     { value: "Foster City", label: "Foster City" },
+  ]
+  const availabilityOptions: SelectOption[] = [
+    EMPTY_OPTION,
+    { value: AvailabilityFilterEnum.hasAvailability, label: t("listingFilters.hasAvailability") },
+    { value: AvailabilityFilterEnum.noAvailability, label: t("listingFilters.noAvailability") },
+    { value: AvailabilityFilterEnum.waitlist, label: t("listingFilters.waitlist") },
   ]
 
   function setQueryString(page: number, filters = filterState) {
@@ -133,6 +143,15 @@ const ListingsPage = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
             <p className="field-note mb-4">{t("listingFilters.modalHeader")}</p>
+            <Select
+              id={"availability"}
+              name={"availability"}
+              label={t("listingFilters.availability")}
+              register={register}
+              controlClassName="control"
+              options={availabilityOptions}
+              defaultValue={filterState?.availability}
+            />
             <Select
               id="unitOptions"
               name={ListingFilterKeys.bedrooms}

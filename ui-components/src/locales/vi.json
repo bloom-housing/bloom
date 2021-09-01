@@ -749,6 +749,10 @@
   },
   "listingFilters": {
     "zipCode": "Mã Bưu Chính",
-    "zipCodeDescription": "Nhập mã zip"
+    "zipCodeDescription": "Nhập mã zip",
+    "availability": "Tính khả dụng của đơn vị",
+    "hasAvailability": "Có sẵn",
+    "noAvailability": "Không có sẵn",
+    "waitlist": "Danh sách chờ"
   }
 }

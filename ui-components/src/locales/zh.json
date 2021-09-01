@@ -749,6 +749,10 @@
   },
   "listingFilters": {
     "zipCode": "邮政编码",
-    "zipCodeDescription": "输入邮政编号"
+    "zipCodeDescription": "输入邮政编号",
+    "availability": "單位可用性",
+    "hasAvailability": "有空房",
+    "noAvailability": "沒有空房",
+    "waitlist": "候補名單"
   }
 }

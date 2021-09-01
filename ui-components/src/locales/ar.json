@@ -1311,6 +1311,10 @@
             "senior": "مساكن كبار السن (62+)",
             "specialNeeds": "ذوي الاحتياجات الخاصة والإعاقة"
         },
+        "availability": "توفر الوحدة",
+        "hasAvailability": "لديها توافر",
+        "noAvailability": "لا يوجد توافر",
+        "waitlist": "قائمة الانتظار",
         "applyFilters": "تطبيق المرشحات",
         "noResults": "لا نتائج",
         "noResultsSubtitle": "تحرير أو إزالة عوامل التصفية للحصول على أفضل النتائج."

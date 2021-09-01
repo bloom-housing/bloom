@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. The format 
     ([#489](https://github.com/CityOfDetroit/bloom/pull/489))
   - Number of filters in filter button
     ([#489](https://github.com/CityOfDetroit/bloom/pull/489))
+  - Filtering by availability ([#501](https://github.com/CityOfDetroit/bloom/pull/501))
 
 ## Detroit Team M10
 
