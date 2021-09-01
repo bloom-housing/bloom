@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from "@nestjs/common"
+import { BadRequestException, HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
 
@@ -14,7 +14,8 @@ import { Compare } from "../dto/filter.dto"
  * - A $comparison must be first.
  * - Comparisons in $comparison will be applied to each filter in order.
  */
-export function addFilters<FilterParams extends Array<{ [key: string]: string }>, FilterFieldMap>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
   filters: FilterParams,
   filterTypeToFieldMap: FilterFieldMap,
   qb: WhereExpression
@@ -38,9 +39,11 @@ export function addFilters<FilterParams extends Array<{ [key: string]: string }>
       const filterValue = filter[filterKey]
       switch (comparison) {
         case Compare.IN:
+          if (!Array.isArray(filterValue)) {
+            throw new BadRequestException(`${filterValue} should be an array`)
+          }
           qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
             [whereParameterName]: filterValue
-              .split(",")
               .map((s) => s.trim().toLowerCase())
               .filter((s) => s.length !== 0),
           })
