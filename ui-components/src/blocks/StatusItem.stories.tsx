@@ -1,12 +1,12 @@
 import React from "react"
-import { AppStatusItem } from "./AppStatusItem"
+import { StatusItem } from "./StatusItem"
 
 export default {
-  title: "Blocks/Application Status Item",
+  title: "Blocks/Status Item",
 }
 
-export const AppStatusItemSubmitted = () => (
-  <AppStatusItem
+export const StatusItemSubmitted = () => (
+  <StatusItem
     applicationDueDate={"March 10th, 2022"}
     applicationURL={"application/1234abcd"}
     applicationUpdatedAt={"March 8th, 2022"}
@@ -16,8 +16,8 @@ export const AppStatusItemSubmitted = () => (
   />
 )
 
-export const AppStatusItemNoConfirmationNumberOrDueDate = () => (
-  <AppStatusItem
+export const StatusItemNoConfirmationNumberOrDueDate = () => (
+  <StatusItem
     applicationURL={"application/1234abcd"}
     applicationUpdatedAt={"March 8th, 2022"}
     listingName={"Listing Name"}

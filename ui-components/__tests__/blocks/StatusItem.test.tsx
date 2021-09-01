@@ -1,14 +1,14 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
-import { AppStatusItem } from "../../src/blocks/AppStatusItem"
+import { StatusItem } from "blocks/StatusItem"
 import { t } from "../../src/helpers/translator"
 
 afterEach(cleanup)
 
-describe("<AppStatusItem>", () => {
+describe("<StatusItem>", () => {
   it("renders without error", () => {
     const { getByText, queryByText } = render(
-      <AppStatusItem
+      <StatusItem
         applicationDueDate={"March 10th, 2022"}
         applicationURL={"application/1234abcd"}
         applicationUpdatedAt={"March 8th, 2022"}
@@ -24,7 +24,7 @@ describe("<AppStatusItem>", () => {
   })
   it("renders without a confirmation number or due date if not provided", () => {
     const { getByText, queryByText } = render(
-      <AppStatusItem
+      <StatusItem
         applicationURL={"application/1234abcd"}
         applicationUpdatedAt={"March 8th, 2022"}
         listingName={"Listing Name"}

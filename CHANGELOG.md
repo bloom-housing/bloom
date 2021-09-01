@@ -62,7 +62,7 @@ All notable changes to this project will be documented in this file. The format 
   - Removed business logic from Hero component ([#1816](https://github.com/bloom-housing/bloom/pull/1816)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
   - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
-    - **Breaking Change**: Removed both existing props and replaced with a set not dependent on data model
+    - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
 
 ### Backend
 

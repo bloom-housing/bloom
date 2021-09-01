@@ -1,9 +1,9 @@
-import React from "react"
-import "./AppStatusItem.scss"
-import { LocalizedLink } from "../actions/LocalizedLink"
+import React, { useContext } from "react"
+import "./StatusItem.scss"
 import { t } from "../helpers/translator"
+import { NavigationContext } from "../config/NavigationContext"
 
-interface AppStatusItemProps {
+interface StatusItemProps {
   applicationDueDate?: string
   applicationURL: string
   applicationUpdatedAt: string
@@ -12,7 +12,9 @@ interface AppStatusItemProps {
   listingURL: string
 }
 
-const AppStatusItem = (props: AppStatusItemProps) => {
+const StatusItem = (props: StatusItemProps) => {
+  const { LinkComponent } = useContext(NavigationContext)
+
   return (
     <article className="status-item is-editable animated-fade">
       <div className="status-item__inner">
@@ -52,9 +54,9 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
         <footer className="status-item__footer">
           <div className="status-item_links">
-            <LocalizedLink className="status-item__link lined" href={props.listingURL}>
+            <LinkComponent className="status-item__link lined" href={props.listingURL}>
               {t("t.seeListing")}
-            </LocalizedLink>
+            </LinkComponent>
           </div>
 
           <div className="status-item__meta">
@@ -68,4 +70,4 @@ const AppStatusItem = (props: AppStatusItemProps) => {
   )
 }
 
-export { AppStatusItem as default, AppStatusItem }
+export { StatusItem as default, StatusItem }
