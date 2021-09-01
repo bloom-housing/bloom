@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState, useContext, useMemo } from "react"
 import {
   t,
   GridSection,
@@ -98,7 +98,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
 
   const maxAmiHouseholdSize = 8
 
-  const getAmiChartTableData = () => {
+  const getAmiChartTableData = useMemo(() => {
     console.log("getAmiChartTableData")
     return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
       const incomeCell = (
@@ -106,7 +106,9 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           id={`maxIncomeHouseholdSize${index + 1}`}
           name={`maxIncomeHouseholdSize${index + 1}`}
           label={t("t.minimumIncome")}
-          defaultValue={fetchedAmiChart ? fetchedAmiChart[index].income : 0}
+          defaultValue={
+            fetchedAmiChart && fetchedAmiChart.length ? fetchedAmiChart[index].income : 0
+          }
           register={register}
           type="number"
           prepend="$"
@@ -116,7 +118,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       acc.push({ householdSize: index + 1, maxIncome: incomeCell })
       return acc
     }, [])
-  }
+  }, [fetchedAmiChart])
 
   useEffect(() => {
     const fetchAmiChart = async () => {
@@ -391,7 +393,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
         {amiChartID && amiPercentage && fetchedAmiChart && fetchedAmiChart.length > 0 && (
           <GridSection columns={2} className="pt-6">
             <GridCell>
-              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
+              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData} />
             </GridCell>
           </GridSection>
         )}
