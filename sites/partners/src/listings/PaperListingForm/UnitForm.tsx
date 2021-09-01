@@ -43,7 +43,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     unitPriorities: [],
     unitTypes: [],
   })
-  const [amiChartData, setAmiChartData] = useState([])
+  const [fetchedAmiChart, setFetchedAmiChart] = useState(null)
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -97,6 +97,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   const amiPercentage: string = watch("amiPercentage")
 
   const maxAmiHouseholdSize = 8
+
   const getAmiChartTableData = () => {
     console.log("getAmiChartTableData")
     return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
@@ -105,7 +106,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           id={`maxIncomeHouseholdSize${index + 1}`}
           name={`maxIncomeHouseholdSize${index + 1}`}
           label={t("t.minimumIncome")}
-          defaultValue={0}
+          defaultValue={fetchedAmiChart ? fetchedAmiChart[index].income : 0}
           register={register}
           type="number"
           prepend="$"
@@ -118,25 +119,19 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }
 
   useEffect(() => {
-    console.log("in set ami chart data use effect")
-    setAmiChartData(getAmiChartTableData())
-  }, [])
-
-  useEffect(() => {
     const fetchAmiChart = async () => {
       try {
         const thisAmiChart = await amiChartsService.retrieve({
           amiChartId: amiChartID,
         })
         console.log("in fetchAmiChart")
-        thisAmiChart.items
-          .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
-          .sort(function (a, b) {
-            return a.householdSize - b.householdSize
-          })
-          .forEach((amiItem) => {
-            setValue(`maxIncomeHouseholdSize${amiItem.householdSize}`, amiItem.income)
-          })
+        setFetchedAmiChart(
+          thisAmiChart.items
+            .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
+            .sort(function (a, b) {
+              return a.householdSize - b.householdSize
+            })
+        )
       } catch (e) {
         console.error(e)
       }
@@ -154,11 +149,9 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }
 
   async function onFormSubmit(action?: string) {
-    const validation = await trigger()
-
-    if (!validation) return
-
     const data = getValues()
+    const validation = await trigger()
+    if (!validation) return
 
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
@@ -171,15 +164,8 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
 
     for (const key in data) {
       if (key.slice(0, -1) === "maxIncomeHouseholdSize") {
-        console.log(data[key])
-        console.log(amiChartData[parseInt(key[key.length - 1]) - 1].maxIncome.props.defaultValue)
-        if (
-          data[key] !== amiChartData[parseInt(key[key.length - 1]) - 1].maxIncome.props.defaultValue
-        ) {
-          // we have an override!
-          console.log("we have an override!!!")
-          console.log(data[key])
-          console.log(amiChartData[parseInt(key[key.length - 1]) - 1])
+        if (data[key] !== fetchedAmiChart[parseInt(key[key.length - 1]) - 1]) {
+          console.log("we have an override!")
         }
       }
     }
@@ -402,10 +388,10 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
             </ViewItem>
           </GridCell>
         </GridSection>
-        {amiChartID && amiPercentage && (
+        {amiChartID && amiPercentage && fetchedAmiChart && fetchedAmiChart.length > 0 && (
           <GridSection columns={2} className="pt-6">
             <GridCell>
-              <MinimalTable headers={amiChartTableHeaders} data={amiChartData} />
+              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
             </GridCell>
           </GridSection>
         )}

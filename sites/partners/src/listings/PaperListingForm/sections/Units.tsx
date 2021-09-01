@@ -163,7 +163,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       </GridSection>
 
       <Drawer
-        open={!!unitDrawer}
+        open={unitDrawer !== null && unitDrawer !== undefined}
         title={t("listings.unit.add")}
         ariaDescription={t("listings.unit.add")}
         onClose={() => setUnitDrawer(null)}
