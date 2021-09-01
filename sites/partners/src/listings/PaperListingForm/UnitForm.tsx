@@ -34,6 +34,7 @@ type UnitFormProps = {
 }
 
 const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
+  console.log("Re-render")
   const { amiChartsService } = useContext(AuthContext)
 
   const [current, setCurrent] = useState<TempUnit>(null)
@@ -58,7 +59,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, reset, setValue } = useForm({
+  const { register, watch, errors, trigger, getValues, reset } = useForm({
     defaultValues: {
       number: current?.number,
       unitType: current?.unitType,
@@ -85,6 +86,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
+    console.log("reset 3")
     reset({
       ...unit,
       rentType: getRentType(unit),
@@ -98,13 +100,16 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
 
   const maxAmiHouseholdSize = 8
 
+  // could keep updated values in state, check for state value before setting default
+
   const getAmiChartTableData = useMemo(() => {
     console.log("getAmiChartTableData")
     return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
+      const fieldName = `maxIncomeHouseholdSize${index + 1}`
       const incomeCell = (
         <Field
-          id={`maxIncomeHouseholdSize${index + 1}`}
-          name={`maxIncomeHouseholdSize${index + 1}`}
+          id={fieldName}
+          name={fieldName}
           label={t("t.minimumIncome")}
           defaultValue={
             fetchedAmiChart && fetchedAmiChart.length ? fetchedAmiChart[index].income : 0
@@ -143,16 +148,18 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     }
   }, [amiChartID, amiPercentage])
 
-  console.log("rendering form")
-
   const amiChartTableHeaders = {
     householdSize: "listings.householdSize",
     maxIncome: "listings.maxAnnualIncome",
   }
 
   async function onFormSubmit(action?: string) {
+    console.log("onFormSubmit")
     const data = getValues()
+    console.log(data)
+    console.log("getting values")
     const validation = await trigger()
+    console.log("validation trigger")
     if (!validation) return
 
     if (data.amiChart?.id) {
@@ -160,16 +167,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       data.amiChart = chart
     } else {
       delete data.amiChart
-    }
-
-    console.log(data)
-
-    for (const key in data) {
-      if (key.slice(0, -1) === "maxIncomeHouseholdSize") {
-        if (data[key] !== fetchedAmiChart[parseInt(key[key.length - 1]) - 1]) {
-          console.log("we have an override!")
-        }
-      }
     }
 
     if (data.rentType === "fixed") {
@@ -208,9 +205,11 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     setTempId(null)
     if (action === "copyNew") {
       setCurrent({ ...formData, id: current?.id, tempId: units.length + 1 })
+      console.log("reset 1")
       reset({ ...formData })
     } else if (action === "saveNew") {
       setCurrent(null)
+      console.log("reset 2")
       reset()
     } else {
       onClose()
@@ -242,6 +241,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     })
   }, [amiCharts, unitPriorities, unitTypes])
 
+  console.log("in component", getValues())
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
