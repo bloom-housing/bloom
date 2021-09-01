@@ -51,7 +51,7 @@ export const ListingView = (props: ListingProps) => {
   }
 
   const groupedUnits: GroupedTableGroup[] = getSummariesTableFromUnitSummary(
-    listing.unitsSummarized.byUnitTypeAndRent
+    listing.unitsSummarized?.byUnitTypeAndRent
   )
 
   let openHouseEvents: ListingEvent[] | null = null
