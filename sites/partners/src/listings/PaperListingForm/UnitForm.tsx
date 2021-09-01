@@ -118,7 +118,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       acc.push({ householdSize: index + 1, maxIncome: incomeCell })
       return acc
     }, [])
-  }, [fetchedAmiChart])
+  }, [fetchedAmiChart, register])
 
   useEffect(() => {
     const fetchAmiChart = async () => {
