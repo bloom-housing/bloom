@@ -19,7 +19,7 @@ import {
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
-import { ApiProperty, OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType, getSchemaPath } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -810,8 +810,10 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @ApiProperty({
     name: "filter",
     required: false,
-    type: ListingFilterParams,
-    isArray: true,
+    type: [String],
+    items: {
+      $ref: getSchemaPath(ListingFilterParams),
+    },
     example: { $comparison: "=", status: "active", name: "Coliseum" },
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

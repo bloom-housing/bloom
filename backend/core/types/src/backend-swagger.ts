@@ -3711,6 +3711,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  leasingAgents?: string
 }
 
 export interface UnitType {
