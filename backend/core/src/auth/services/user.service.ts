@@ -102,6 +102,20 @@ export class UserService {
       delete dto.password
     }
 
+    /**
+     * jurisdictions should be filtered based off of what the authContext user has
+     */
+    if (authContext.user.jurisdictions) {
+      if (dto.jurisdictions) {
+        dto.jurisdictions = dto.jurisdictions.filter(
+          (jurisdiction) =>
+            authContext.user.jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
+        )
+      }
+    } else {
+      delete dto.jurisdictions
+    }
+
     assignDefined(user, {
       ...dto,
       passwordHash,

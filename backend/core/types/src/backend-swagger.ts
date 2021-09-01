@@ -5532,25 +5532,14 @@ export interface ReservedCommunityTypeUpdate {
   id: string
 }
 
-export interface Jurisdiction {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
 export interface Translation {
   /**  */
   language: Language
 
   /**  */
+  jurisdiction: Id
+
+  /**  */
   id: string
 
   /**  */
@@ -5558,9 +5547,6 @@ export interface Translation {
 
   /**  */
   updatedAt: Date
-
-  /**  */
-  jurisdiction: Jurisdiction
 
   /**  */
   translations: object
@@ -5571,10 +5557,10 @@ export interface TranslationCreate {
   language: Language
 
   /**  */
-  jurisdiction: Id
+  translations: object
 
   /**  */
-  translations: object
+  jurisdiction: Id
 }
 
 export interface TranslationUpdate {
@@ -5591,10 +5577,10 @@ export interface TranslationUpdate {
   updatedAt?: Date
 
   /**  */
-  jurisdiction: Jurisdiction
+  translations: object
 
   /**  */
-  translations: object
+  jurisdiction: Id
 }
 
 export enum IncomePeriod {
