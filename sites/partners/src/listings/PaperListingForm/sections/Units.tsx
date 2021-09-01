@@ -14,7 +14,7 @@ import {
   FieldGroup,
   GroupedTableGroup,
   GroupedTable,
-  getSummariesTable,
+  getSummariesTableFromUnitSummary,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
@@ -55,7 +55,7 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
 
   useEffect(() => {
     if (unitsSummary !== undefined) {
-      setUnitsSummarized(getSummariesTable(unitsSummary.byUnitTypeAndRent))
+      setUnitsSummarized(getSummariesTableFromUnitSummary(unitsSummary.byUnitTypeAndRent))
     }
   }, [setUnitsSummarized, unitsSummary])
 

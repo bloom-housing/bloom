@@ -2,7 +2,10 @@ import * as React from "react"
 import { ImageCard } from "../../blocks/ImageCard"
 import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { LinkButton } from "../../actions/LinkButton"
-import { getSummariesTable } from "../../helpers/tableSummaries"
+import {
+  getSummariesTableFromUnitSummary,
+  getSummariesTableFromUnitsSummary,
+} from "../../helpers/tableSummaries"
 import { GroupedTable, GroupedTableGroup } from "../../tables/GroupedTable"
 import { imageUrlFromListing } from "../../helpers/photos"
 import { t } from "../../helpers/translator"
@@ -29,8 +32,10 @@ const ListingsList = (props: ListingsProps) => {
     }
 
     let unitSummaries = [] as GroupedTableGroup[]
-    if (listing.unitsSummarized !== undefined) {
-      unitSummaries = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
+    if (listing.unitsSummary !== undefined && listing.unitsSummary.length > 0) {
+      unitSummaries = getSummariesTableFromUnitsSummary(listing.unitsSummary)
+    } else if (listing.unitsSummarized !== undefined) {
+      unitSummaries = getSummariesTableFromUnitSummary(listing.unitsSummarized.byUnitTypeAndRent)
     }
 
     // address as subtitle

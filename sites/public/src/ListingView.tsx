@@ -7,7 +7,7 @@ import {
   Description,
   GroupedTable,
   GroupedTableGroup,
-  getSummariesTable,
+  getSummariesTableFromUnitSummary,
   ImageCard,
   imageUrlFromListing,
   LeasingAgent,
@@ -50,8 +50,8 @@ export const ListingView = (props: ListingProps) => {
     totalCount: t("t.totalCount"),
   }
 
-  const groupedUnits: GroupedTableGroup[] = getSummariesTable(
-    listing.unitsSummarized?.byUnitTypeAndRent
+  const groupedUnits: GroupedTableGroup[] = getSummariesTableFromUnitSummary(
+    listing.unitsSummarized.byUnitTypeAndRent
   )
 
   let openHouseEvents: ListingEvent[] | null = null
