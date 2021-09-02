@@ -49,9 +49,9 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
         filter: [
           {
             $comparison: "<>",
-            status: "pending"
-          }
-        ]
+            status: "pending",
+          },
+        ],
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
