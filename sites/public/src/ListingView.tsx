@@ -8,6 +8,7 @@ import {
   GroupedTable,
   GroupedTableGroup,
   getSummariesTableFromUnitSummary,
+  getSummariesTableFromUnitsSummary,
   ImageCard,
   imageUrlFromListing,
   LeasingAgent,
@@ -50,9 +51,12 @@ export const ListingView = (props: ListingProps) => {
     totalCount: t("t.totalCount"),
   }
 
-  const groupedUnits: GroupedTableGroup[] = getSummariesTableFromUnitSummary(
-    listing.unitsSummarized?.byUnitTypeAndRent
-  )
+  let groupedUnits: GroupedTableGroup[] = []
+  if (listing.unitsSummary !== undefined && listing.unitsSummary.length > 0) {
+    groupedUnits = getSummariesTableFromUnitsSummary(listing.unitsSummary)
+  } else if (listing.unitsSummarized !== undefined) {
+    groupedUnits = getSummariesTableFromUnitSummary(listing.unitsSummarized.byUnitTypeAndRent)
+  }
 
   let openHouseEvents: ListingEvent[] | null = null
   if (Array.isArray(listing.events)) {
