@@ -801,7 +801,7 @@ export class ListingFilterParams extends BaseFilter {
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.leasingAgents]?: string
 }
 
