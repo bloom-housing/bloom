@@ -44,7 +44,7 @@ export function useListingsData({ page, limit, leasingAgents }: UseListingsDataP
   }
 
   // filter if logged user is an agent
-  if (leasingAgents) {
+  if (typeof leasingAgents !== undefined) {
     Object.assign(params, {
       filter: [
         {
