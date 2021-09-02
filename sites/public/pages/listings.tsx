@@ -69,9 +69,9 @@ export async function getStaticProps() {
         filter: [
           {
             $comparison: "<>",
-            status: "pending"
-          }
-        ]
+            status: "pending",
+          },
+        ],
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
