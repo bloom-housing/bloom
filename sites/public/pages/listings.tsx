@@ -46,6 +46,7 @@ export default function ListingsPage(props: ListingsProps) {
       <Head>
         <title>{pageTitle}</title>
       </Head>
+
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
       <div>
@@ -65,8 +66,12 @@ export async function getStaticProps() {
       params: {
         view: "base",
         limit: "all",
-        $comparison: "<>",
-        status: "pending",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending"
+          }
+        ]
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
