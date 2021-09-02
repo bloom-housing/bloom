@@ -1,12 +1,12 @@
 import { useContext } from "react"
 import useSWR, { mutate } from "swr"
-import qs from 'qs'
+import qs from "qs"
 
 import { AuthContext } from "@bloom-housing/ui-components"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
-  EnumListingFilterParamsComparison
+  EnumListingFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -19,7 +19,6 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 }
 
 type UseUserListProps = PaginationProps
-
 
 type UseListingsDataProps = PaginationProps & {
   leasingAgents?: string
@@ -41,7 +40,7 @@ export function useSingleListingData(listingId: string) {
 export function useListingsData({ page, limit, leasingAgents }: UseListingsDataProps) {
   const params = {
     page,
-    limit
+    limit,
   }
 
   // filter if logged user is an agent
@@ -50,9 +49,9 @@ export function useListingsData({ page, limit, leasingAgents }: UseListingsDataP
       filter: [
         {
           $comparison: EnumListingFilterParamsComparison["="],
-          leasingAgents
-        }
-      ]
+          leasingAgents,
+        },
+      ],
     })
   }
 

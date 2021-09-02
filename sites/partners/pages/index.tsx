@@ -49,7 +49,9 @@ class ListingsLink extends formatLinkCell {
 
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
-  const leasingAgentInListings = profile.leasingAgentInListings?.map((leasingAgent) => leasingAgent.id).join(',')
+  const leasingAgentInListings = profile.leasingAgentInListings
+    ?.map((leasingAgent) => leasingAgent.id)
+    .join(",")
   const isAdmin = profile.roles?.isAdmin || false
 
   /* Pagination */
@@ -133,7 +135,7 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData({
     page: currentPage,
     limit: itemsPerPage,
-    leasingAgents: !isAdmin ? leasingAgentInListings : undefined
+    leasingAgents: !isAdmin ? leasingAgentInListings : undefined,
   })
 
   if (listingsLoading) return "Loading..."
