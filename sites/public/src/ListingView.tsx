@@ -48,7 +48,6 @@ export const ListingView = (props: ListingProps) => {
     minimumIncome: t("t.minimumIncome"),
     rent: t("t.rent"),
     availability: t("t.availability"),
-    totalCount: t("t.totalCount"),
   }
 
   let groupedUnits: GroupedTableGroup[] = []

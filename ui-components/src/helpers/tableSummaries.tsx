@@ -5,7 +5,6 @@ import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const getSummaryRow = (
   totalAvailable: number,
-  totalCount: number,
   minIncomeRangeMin?: string,
   minIncomeRangeMax?: string,
   rentRangeMin?: string,
@@ -90,11 +89,6 @@ export const getSummaryRow = (
         )}
       </>
     ),
-    totalCount: (
-      <>
-        <strong>{totalCount}</strong> {totalCount == 1 ? t("t.unit") : t("t.units")}
-      </>
-    ),
   }
 }
 
@@ -105,7 +99,6 @@ export const getSummariesTableFromUnitSummary = (summaries: UnitSummary[]) => {
     const unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
         unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
-        unitSummary.totalCount ? unitSummary.totalCount : 0,
         unitSummary.minIncomeRange.min,
         unitSummary.minIncomeRange.max,
         unitSummary.rentRange.min,
@@ -135,7 +128,6 @@ export const getSummariesTableFromUnitsSummary = (summaries: UnitsSummary[]) => 
     const unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
         unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
-        unitSummary.totalCount ? unitSummary.totalCount : 0,
         unitSummary.minimumIncomeMin,
         unitSummary.minimumIncomeMax,
         unitSummary.monthlyRentMin?.toString(),
