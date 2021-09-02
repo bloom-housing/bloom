@@ -24,7 +24,7 @@ import {
   useMemo,
   useReducer,
 } from "react"
-import qs from 'qs'
+import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "../config/ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
