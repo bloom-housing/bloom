@@ -1341,21 +1341,29 @@
       "header" : "Let's find your next home",
       "sections": {
         "welcome" : "Welcome",
-        "bedrooms" : "Bedrooms",
+        "householdSize" : "Household Size",
         "age" : "Age",
         "disability" : "Disability",
-        "income" : "Income",
-        "section8": "Section 8"
+        "income" : "Income"
       }
     },
     "welcome": {
       "header": "Welcome",
       "description": "To find you a home that best fits your needs, let's answer a few questions first. Some properties only accept people with certain ages, incomes, etc."
     },
-    "bedrooms": {
-      "prompt": "How many bedrooms do you need?",
-      "studio": "Studio",
-      "srCountLabel": "Bedroom count"
+    "householdSize": {
+      "prompt": "How many people will be living in this property?",
+      "srCountLabel": "Household Size",
+      "ranges" : {
+        "one": "1 Member",
+        "two": "2 Members",
+        "three": "3 Members",
+        "four": "4 Members",
+        "five": "5 Members",
+        "six": "6 Members",
+        "seven": "7 Members",
+        "eight": "8+ Members"
+      }
     },
     "age" : {
       "prompt": "How old are you?",
@@ -1379,9 +1387,6 @@
         "40kTo50k": "$40,000 - $50,000",
         "over50k": "Over $50,000"
       }
-    },
-    "section8" : {
-      "prompt": "Do you have a Section 8 voucher?"
     }
   }
 }

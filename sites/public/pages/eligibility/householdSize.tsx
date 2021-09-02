@@ -1,14 +1,14 @@
 /*
-Bedroom Count
-Prompts the user for the number of bedrooms they need.
+Household Size Count
+Prompts the user for the number of members in their household.
 */
 import {
   AppearanceStyleType,
   Button,
-  FieldGroup,
   Form,
   FormCard,
   ProgressNav,
+  Select,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
@@ -20,23 +20,23 @@ import { EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
 
-const EligibilityBedrooms = () => {
+const EligibilityHouseholdSize = () => {
   const router = useRouter()
   const { eligibilityRequirements } = useContext(EligibilityContext)
   const CURRENT_PAGE = 1
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors, getValues } = useForm({
+  const { handleSubmit, register, getValues } = useForm({
     defaultValues: {
-      bedrooms: eligibilityRequirements?.bedroomCounts,
+      householdSize: eligibilityRequirements?.householdSizeCount,
     },
   })
 
   const onSubmit = () => {
     const data = getValues()
-    const { bedrooms } = data
-    eligibilityRequirements.setBedroomCounts(bedrooms)
+    const { householdSize } = data
+    eligibilityRequirements.setHouseholdSizeCount(householdSize)
 
     void router.push(eligibilityRoute(CURRENT_PAGE + 1))
   }
@@ -45,13 +45,7 @@ const EligibilityBedrooms = () => {
     eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
   }
 
-  const bedroomsOptions = [
-    { id: "studio", label: t("eligibility.bedrooms.studio") },
-    { id: "oneBdrm", label: "1" },
-    { id: "twoBdrm", label: "2" },
-    { id: "threeBdrm", label: "3" },
-    { id: "fourBdrm", label: "4+" },
-  ]
+  const householdSizeRanges = ["one", "two", "three", "four", "five", "six", "seven", "eight"]
 
   return (
     <FormsLayout>
@@ -71,22 +65,24 @@ const EligibilityBedrooms = () => {
           }}
         />
         <div className="form-card__lead pb-0 pt-8">
-          <h2 className="form-card__title is-borderless">{t("eligibility.bedrooms.prompt")}</h2>
+          <h2 className="form-card__title is-borderless">
+            {t("eligibility.householdSize.prompt")}
+          </h2>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group">
-            <fieldset>
-              <legend className="sr-only">{t("eligibility.bedrooms.prompt")}</legend>
-              <FieldGroup
-                type="checkbox"
-                name="bedrooms"
-                fields={bedroomsOptions}
-                error={errors.bedrooms != null}
-                errorMessage={t("errors.selectAtLeastOne")}
-                validation={{ required: true }}
-                register={register}
-              />
-            </fieldset>
+            <legend className="sr-only">{t("eligibility.householdSize.prompt")}</legend>
+            <Select
+              id="householdSize"
+              name="householdSize"
+              label={t("eligibility.householdSize.srCountLabel")}
+              describedBy="householdSize-description"
+              validation={{ required: true }}
+              register={register}
+              controlClassName="control"
+              options={householdSizeRanges}
+              keyPrefix="eligibility.householdSize.ranges"
+            />
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
@@ -99,4 +95,4 @@ const EligibilityBedrooms = () => {
   )
 }
 
-export default EligibilityBedrooms
+export default EligibilityHouseholdSize

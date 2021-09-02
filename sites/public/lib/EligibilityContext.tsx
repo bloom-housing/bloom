@@ -2,22 +2,14 @@ import React from "react"
 
 class EligibilityRequirements {
   age: number
-  bedroomCounts: string[]
-  personCount: number
+  householdSizeCount: number
   income: string
   disability: string
   completedSections: number
 
-  constructor(
-    age: number,
-    bedroomCounts: string[],
-    personCount: number,
-    income: string,
-    disability: string
-  ) {
+  constructor(age: number, householdSizeCount: number, income: string, disability: string) {
     this.age = age
-    this.bedroomCounts = bedroomCounts
-    this.personCount = personCount
+    this.householdSizeCount = householdSizeCount
     this.income = income
     this.disability = disability
     this.completedSections = 0
@@ -27,12 +19,8 @@ class EligibilityRequirements {
     this.age = age
   }
 
-  setBedroomCounts(bedroomCounts: string[]) {
-    this.bedroomCounts = bedroomCounts
-  }
-
-  setPersonCount(personCount: number) {
-    this.personCount = personCount
+  setHouseholdSizeCount(householdSizeCount: number) {
+    this.householdSizeCount = householdSizeCount
   }
   setIncome(income: string) {
     this.income = income
@@ -47,7 +35,7 @@ class EligibilityRequirements {
 }
 
 export const blankEligibilityRequirements = () => {
-  return new EligibilityRequirements(null, null, null, null, null)
+  return new EligibilityRequirements(null, null, null, null)
 }
 
 export const EligibilityContext = React.createContext({
