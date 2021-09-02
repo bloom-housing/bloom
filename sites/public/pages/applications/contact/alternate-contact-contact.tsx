@@ -2,7 +2,6 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import React from "react"
 import {
   AppearanceStyleType,
   AlertBox,

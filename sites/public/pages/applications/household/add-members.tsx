@@ -2,7 +2,6 @@
 2.2 - Add Members
 Add household members
 */
-import React from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,

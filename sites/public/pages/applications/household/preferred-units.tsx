@@ -2,7 +2,6 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
-import React from "react"
 import {
   AppearanceStyleType,
   AlertBox,

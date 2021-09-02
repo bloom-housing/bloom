@@ -1,6 +1,7 @@
 import { MarkdownSection, PageHeader, t } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
 import Layout from "../layouts/application"
-import PageContent from "../page_content/privacy_policy.mdx"
+import pageContent from "../page_content/privacy_policy.md"
 
 export default () => {
   const pageTitle = <>{t("pageTitle.privacy")}</>
@@ -9,7 +10,7 @@ export default () => {
     <Layout>
       <PageHeader title={pageTitle} inverse />
       <MarkdownSection>
-        <PageContent />
+        <Markdown>{pageContent}</Markdown>
       </MarkdownSection>
     </Layout>
   )

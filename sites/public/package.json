@@ -20,8 +20,6 @@
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^1.0.5",
-    "@mdx-js/loader": "1.6.18",
-    "@next/mdx": "^10.1.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "moment": "^2.29.1",

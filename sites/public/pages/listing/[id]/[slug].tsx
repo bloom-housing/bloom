@@ -1,4 +1,3 @@
-import React from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"

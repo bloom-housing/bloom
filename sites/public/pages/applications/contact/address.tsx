@@ -3,7 +3,6 @@
 Primary applicant contact information
 https://github.com/bloom-housing/bloom/issues/256
 */
-import React from "react"
 import {
   AppearanceStyleType,
   AlertBox,
