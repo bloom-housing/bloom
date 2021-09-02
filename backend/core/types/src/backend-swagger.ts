@@ -992,17 +992,7 @@ export class ListingsService {
       /**  */
       limit?: number | "all"
       /**  */
-      $comparison: string
-      /**  */
-      name?: string
-      /**  */
-      status?: string
-      /**  */
-      neighborhood?: string
-      /**  */
-      bedrooms?: number
-      /**  */
-      leasingAgents?: string
+      filter?: ListingFilterParams[]
       /**  */
       view?: string
       /**  */
@@ -1017,12 +1007,7 @@ export class ListingsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        $comparison: params["$comparison"],
-        name: params["name"],
-        status: params["status"],
-        neighborhood: params["neighborhood"],
-        bedrooms: params["bedrooms"],
-        leasingAgents: params["leasingAgents"],
+        filter: params["filter"],
         view: params["view"],
         jsonpath: params["jsonpath"],
       }
