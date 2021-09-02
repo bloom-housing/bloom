@@ -208,9 +208,10 @@ export const ListingView = (props: ListingProps) => {
                     description={listing.servicesOffered}
                   />
                 )}
-                {listing.accessibility && (
-                  <Description term={t("t.accessibility")} description={listing.accessibility} />
-                )}
+                <Description
+                  term={t("t.accessibility")}
+                  description={listing.accessibility || t("t.contactPropertyManagement")}
+                />
                 <Description
                   term={t("t.unitFeatures")}
                   description={
