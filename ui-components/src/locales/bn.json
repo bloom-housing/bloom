@@ -687,6 +687,10 @@
         "noData": "কোন তথ্য নেই."
     },
     "footer": {
+        "srHeading": "পাদলেখ",
+        "srProjectInformation": "প্রকল্প সম্পর্কিত তথ্য",
+        "srContactInformation": "যোগাযোগের তথ্য",
+        "srLegalInformation": "আইনি তথ্য",
         "contact": "যোগাযোগ",
         "disclaimer": "অস্বীকৃতি",
         "forGeneralQuestions": "সাধারণ প্রোগ্রাম অনুসন্ধানের জন্য, আপনি আমাদের 000-000-0000 এ কল করতে পারেন।",
@@ -701,6 +705,8 @@
         "visitWebsite": "%{Name} এ যান"
     },
     "languages": {
+        "srHeading": "ভাষা",
+        "srNavigation": "ভাষা",
         "en": "English",
         "es": "Español",
         "zh": "中文",
@@ -1049,6 +1055,8 @@
         "viewPreferenceList": "পছন্দ তালিকা দেখুন"
     },
     "nav": {
+        "srHeading": "ন্যাভিগেশন মেনু",
+        "srNavigation": "প্রধান",
         "accountSettings": "অ্যাকাউন্ট সেটিংস",
         "browseProperties": "বৈশিষ্ট্য ব্রাউজ করুন",
         "getAssistance": "সহায়তা পান",
@@ -1086,6 +1094,9 @@
     },
     "region": {
         "name": "স্থানীয় অঞ্চল"
+    },
+    "progressNav": {
+        "srHeading": "অগ্রগতি"
     },
     "states": {
         "AL": "আলাবামা",

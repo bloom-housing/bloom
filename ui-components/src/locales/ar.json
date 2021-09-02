@@ -687,6 +687,10 @@
         "noData": "لا تتوافر بيانات."
     },
     "footer": {
+        "srHeading": "تذييل",
+        "srProjectInformation": "معلومات المشروع",
+        "srContactInformation": "معلومات للتواصل",
+        "srLegalInformation": "المعلومات القانونية",
         "contact": "اتصال",
         "disclaimer": "تنصل",
         "forGeneralQuestions": "للاستفسارات العامة عن البرنامج ، يمكنك الاتصال بنا على 000-000-0000.",
@@ -701,6 +705,8 @@
         "visitWebsite": "قم بزيارة٪ {name}"
     },
     "languages": {
+        "srHeading": "اللغات",
+        "srNavigation": "لغة",
         "en": "English",
         "es": "Español",
         "zh": "中文",
@@ -1049,6 +1055,8 @@
         "viewPreferenceList": "عرض قائمة التفضيلات"
     },
     "nav": {
+        "srHeading": "قائمة الإبحار",
+        "srNavigation": "الأساسية",
         "accountSettings": "إعدادت الحساب",
         "browseProperties": "تصفح الخصائص",
         "getAssistance": "احصل على المساعدة",
@@ -1086,6 +1094,9 @@
     },
     "region": {
         "name": "المنطقة المحلية"
+    },
+    "progressNav": {
+        "srHeading": "تقدم"
     },
     "states": {
         "AL": "ألاباما",

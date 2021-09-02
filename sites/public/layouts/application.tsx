@@ -70,10 +70,12 @@ const Layout = (props) => {
       </div>
 
       <SiteFooter>
+        <h2 className="sr-only">{t("footer.srHeading")}</h2>
         <FooterSection>
           <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
         </FooterSection>
         <FooterSection>
+          <h3 className="sr-only">{t("footer.srProjectInformation")}</h3>
           <p>
             {t("footer.header")}
             <br />
@@ -81,6 +83,7 @@ const Layout = (props) => {
               {t("footer.headerLink")}
             </a>
           </p>
+          <h3 className="sr-only">{t("footer.srContactInformation")}</h3>
           <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
           <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
         </FooterSection>

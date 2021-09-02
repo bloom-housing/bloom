@@ -2,6 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import { OnClientSide } from "../helpers/nextjs"
 import "./ProgressNav.scss"
+import { t } from "../helpers/translator"
 
 const ProgressNavItem = (props: {
   section: number
@@ -41,19 +42,22 @@ const ProgressNav = (props: {
   routes?: string[]
 }) => {
   return (
-    <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
-      {props.labels.map((label, i) => (
-        <ProgressNavItem
-          key={label}
-          // Sections are 1-indexed
-          section={i + 1}
-          currentPageSection={props.currentPageSection}
-          completedSections={props.completedSections}
-          label={label}
-          route={props.routes ? props.routes[i] : "#"}
-        />
-      ))}
-    </ul>
+    <div>
+      <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
+      <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
+        {props.labels.map((label, i) => (
+          <ProgressNavItem
+            key={label}
+            // Sections are 1-indexed
+            section={i + 1}
+            currentPageSection={props.currentPageSection}
+            completedSections={props.completedSections}
+            label={label}
+            route={props.routes ? props.routes[i] : "#"}
+          />
+        ))}
+      </ul>
+    </div>
   )
 }
 

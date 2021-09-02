@@ -687,6 +687,10 @@
         "noData": "Datos no disponibles."
     },
     "footer": {
+        "srHeading": "Pie de página",
+        "srProjectInformation": "Información del proyecto",
+        "srContactInformation": "Información del contacto",
+        "srLegalInformation": "Información legal",
         "contact": "Contacto",
         "disclaimer": "Descargo de responsabilidad",
         "forGeneralQuestions": "Para consultas generales sobre el programa, puede llamarnos al 000-000-0000.",
@@ -701,6 +705,8 @@
         "visitWebsite": "Visita% {name}"
     },
     "languages": {
+        "srHeading": "Idiomas",
+        "srNavigation": "Idioma",
         "en": "English",
         "es": "Español",
         "zh": "中文",
@@ -1049,6 +1055,8 @@
         "viewPreferenceList": "Ver lista de preferencias"
     },
     "nav": {
+        "srHeading": "Menú de Navegación",
+        "srNavigation": "Principal",
         "accountSettings": "Configuraciones de la cuenta",
         "browseProperties": "Buscar propiedades",
         "getAssistance": "Obtenga ayuda",
@@ -1086,6 +1094,9 @@
     },
     "region": {
         "name": "Región local"
+    },
+    "progressNav": {
+        "srHeading": "Progreso"
     },
     "states": {
         "AL": "Alabama",

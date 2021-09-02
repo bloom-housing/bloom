@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
+import { t } from "../helpers/translator"
 
 export interface SiteHeaderLanguage {
   list: LangItem[]
@@ -66,24 +67,26 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   const logo = (logoClass = "") => {
     return (
-      <LocalizedLink
-        className={`navbar-item logo ${logoClass} ${getLogoWidthClass()}`}
-        href="/"
-        aria-label="homepage"
-      >
-        <div
-          className={`logo__lockup ${getLogoWidthClass()} ${
-            props.logoWidth && "navbar-custom-width"
-          } ${props.imageOnly && "navbar-image-only-container"}`}
+      <h2>
+        <LocalizedLink
+          className={`navbar-item logo ${logoClass} ${getLogoWidthClass()}`}
+          href="/"
+          aria-label={props.title}
         >
-          <img
-            className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
-            src={props.logoSrc}
-            alt={"Site logo"}
-          />
-          {!props.imageOnly && <div className="logo__title">{props.title}</div>}
-        </div>
-      </LocalizedLink>
+          <div
+            className={`logo__lockup ${getLogoWidthClass()} ${
+              props.logoWidth && "navbar-custom-width"
+            } ${props.imageOnly && "navbar-image-only-container"}`}
+          >
+            <img
+              className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
+              src={props.logoSrc}
+              alt="Site logo"
+            />
+            {!props.imageOnly && <div className="logo__title">{props.title}</div>}
+          </div>
+        </LocalizedLink>
+      </h2>
     )
   }
 
@@ -115,12 +118,13 @@ const SiteHeader = (props: SiteHeaderProps) => {
       {skipLink()}
       {noticeBar()}
       <div className="navbar__wrapper">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
+        <nav className="navbar" role="navigation" aria-label={t("nav.srNavigation")}>
           <div className="navbar-brand">
             {logo(props.logoClass)}
             {hamburgerMenu()}
           </div>
 
+          <h2 className="sr-only">{t("nav.srHeading")}</h2>
           <div
             id="navbarMenuLinks"
             className={"navbar-menu md:mt-0" + (active ? " is-active" : "")}

@@ -24,7 +24,8 @@ const LanguageNav = ({ language }: LanguageNavProps) => {
   return (
     <div className="language-bar">
       <div className="language-bar__inner">
-        <nav className="language-nav">
+        <h2 className="sr-only">{t("languages.srHeading")}</h2>
+        <nav className="language-nav" aria-label={t("languages.srNavigation")}>
           <ul className="language-nav__list">
             {language.list?.map((item) => (
               <li key={item.prefix}>

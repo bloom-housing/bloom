@@ -692,6 +692,10 @@
     "noData": "No data available."
   },
   "footer": {
+    "srHeading": "Footer",
+    "srProjectInformation": "Project information",
+    "srContactInformation": "Contact information",
+    "srLegalInformation": "Legal information",
     "contact": "Contact",
     "disclaimer": "Disclaimer",
     "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
@@ -706,6 +710,8 @@
     "visitWebsite": "Visit %{name}"
   },
   "languages": {
+    "srHeading": "Languages",
+    "srNavigation": "Language",
     "en": "English",
     "es": "Español",
     "zh": "中文",
@@ -1054,6 +1060,8 @@
     "viewPreferenceList": "View Preference List"
   },
   "nav": {
+    "srHeading": "Navigation Menu",
+    "srNavigation": "Main",
     "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
@@ -1091,6 +1099,9 @@
   },
   "region": {
     "name": "Local Region"
+  },
+  "progressNav": {
+    "srHeading": "Progress"
   },
   "states": {
     "AL": "Alabama",
