@@ -135,7 +135,7 @@ export default function ListingsList() {
   const { listingDtos, listingsLoading, listingsError } = useListingsData({
     page: currentPage,
     limit: itemsPerPage,
-    leasingAgents: !isAdmin ? leasingAgentInListings : undefined,
+    userId: !isAdmin ? profile?.id : undefined,
   })
 
   if (listingsLoading) return "Loading..."
