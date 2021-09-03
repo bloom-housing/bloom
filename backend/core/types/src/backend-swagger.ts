@@ -3720,6 +3720,12 @@ export interface ListingFilterParams {
 
   /**  */
   seniorHousing?: boolean
+
+  /**  */
+  minRent?: number
+
+  /**  */
+  maxRent?: number
 }
 
 export interface UnitType {
@@ -5722,6 +5728,7 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
