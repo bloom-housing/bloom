@@ -8,7 +8,6 @@ import {
   getPbvPreference,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
-import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -17,6 +16,7 @@ import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
+import { CountyCode } from "../../shared/types/county-code"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
@@ -883,6 +883,7 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
@@ -904,7 +905,6 @@ const coliseumListing: ListingSeedType = {
   buildingSelectionCriteria: null,
   costsNotIncluded:
     "Electricity, phone, TV, internet, and cable not included. For the PBV units, deposit is one month of the tenant-paid portion of rent (30% of income).",
-  countyCode: CountyCode.alameda,
   creditHistory:
     "Management staff will request credit histories on each adult member of each applicant household. It is the applicant’s responsibility that at least one household member can demonstrate utilities can be put in their name. For this to be demonstrated, at least one household member must have a credit report that shows no utility accounts in default. Applicants who cannot have utilities put in their name will be considered ineligible. Any currently open bankruptcy proceeding of any of the household members will be considered a disqualifying condition. Applicants will not be considered to have a poor credit history when they were delinquent in rent because they were withholding rent due to substandard housing conditions in a manner consistent with local ordinance; or had a poor rent paying history clearly related to an excessive rent relative to their income, and responsible efforts were made to resolve the non-payment problem. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
   criminalBackground: null,

@@ -1,18 +1,126 @@
 import Head from "next/head"
+import qs from "qs"
 import axios from "axios"
-import { ListingsGroup, ListingsList, PageHeader, t } from "@bloom-housing/ui-components"
-import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
+import {
+  ListingsGroup,
+  PageHeader,
+  t,
+  StatusBarType,
+  ApplicationStatusType,
+  openDateState,
+  ListingCard,
+  imageUrlFromListing,
+  getSummariesTable,
+} from "@bloom-housing/ui-components"
+import {
+  Listing,
+  ListingStatus,
+  ListingReviewOrder,
+  Address,
+  UnitsSummarized,
+} from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
+import moment from "moment"
 
 export interface ListingsProps {
   openListings: Listing[]
   closedListings: Listing[]
 }
 
+const getListingImageCardStatus = (listing: Listing): StatusBarType => {
+  let content = ""
+  let subContent = ""
+  let formattedDate = ""
+  let appStatus = ApplicationStatusType.Open
+
+  if (openDateState(listing)) {
+    const date = listing.applicationOpenDate
+    const openDate = moment(date)
+    formattedDate = openDate.format("MMM. D, YYYY")
+    content = t("listings.applicationOpenPeriod")
+  } else {
+    if (listing.applicationDueDate) {
+      const dueDate = moment(listing.applicationDueDate)
+      const dueTime = moment(listing.applicationDueTime)
+      formattedDate = dueDate.format("MMM. DD, YYYY")
+
+      if (listing.applicationDueTime) {
+        formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
+      }
+
+      // if due date is in future, listing is open
+      if (moment() < dueDate) {
+        content = t("listings.applicationDeadline")
+      } else {
+        appStatus = ApplicationStatusType.Closed
+        content = t("listings.applicationsClosed")
+      }
+    }
+  }
+
+  if (formattedDate != "") {
+    content = content + `: ${formattedDate}`
+  }
+
+  if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
+    subContent = content
+    content = t("listings.applicationFCFS")
+  }
+
+  return {
+    status: appStatus,
+    content,
+    subContent,
+  }
+}
+
+const getListingCardSubtitle = (address: Address) => {
+  const { street, city, state, zipCode } = address || {}
+  return address ? `${street}, ${city} ${state}, ${zipCode}` : null
+}
+
+const getListingTableData = (unitsSummarized: UnitsSummarized) => {
+  return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
+}
+
+const getListings = (listings) => {
+  const unitSummariesHeaders = {
+    unitType: t("t.unitType"),
+    minimumIncome: t("t.minimumIncome"),
+    rent: t("t.rent"),
+  }
+  return listings.map((listing: Listing, index) => {
+    return (
+      <ListingCard
+        key={index}
+        imageCardProps={{
+          imageUrl:
+            imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
+          subtitle: getListingCardSubtitle(listing.buildingAddress),
+          title: listing.name,
+          href: `/listing/${listing.id}/${listing.urlSlug}`,
+          tagLabel: listing.reservedCommunityType
+            ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+            : undefined,
+          statuses: [getListingImageCardStatus(listing)],
+        }}
+        tableProps={{
+          headers: unitSummariesHeaders,
+          data: getListingTableData(listing.unitsSummarized),
+          responsiveCollapse: true,
+          cellClassName: "px-5 py-3",
+        }}
+        seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
+        tableHeader={listing.showWaitlist ? t("listings.waitlist.open") : null}
+      />
+    )
+  })
+}
+
 const openListings = (listings) => {
   return listings.length > 0 ? (
-    <ListingsList listings={listings} />
+    <>{getListings(listings)}</>
   ) : (
     <div className="notice-block">
       <h3 className="m-auto text-gray-800">{t("listings.noOpenListings")}</h3>
@@ -29,7 +137,7 @@ const closedListings = (listings) => {
         hideButtonText={t("listings.hideClosedListings")}
         showButtonText={t("listings.showClosedListings")}
       >
-        <ListingsList listings={listings} />
+        {getListings(listings)}
       </ListingsGroup>
     )
   )
@@ -45,6 +153,7 @@ export default function ListingsPage(props: ListingsProps) {
       <Head>
         <title>{pageTitle}</title>
       </Head>
+
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
       <div>
@@ -60,10 +169,21 @@ export async function getStaticProps() {
   let closedListings = []
 
   try {
-    const response = await axios.get(
-      process.env.listingServiceUrl +
-        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
-    )
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
 
     openListings = response?.data?.items
       ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)

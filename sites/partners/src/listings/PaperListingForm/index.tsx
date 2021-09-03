@@ -23,7 +23,6 @@ import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
   CSVFormattingType,
-  CountyCode,
   ListingApplicationAddressType,
   Unit,
   Listing,
@@ -60,7 +59,7 @@ import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
-export type FormListing = Listing & {
+export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -156,7 +155,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  countyCode: CountyCode.Alameda,
+  jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",

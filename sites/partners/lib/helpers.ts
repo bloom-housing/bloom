@@ -11,6 +11,7 @@ import {
   AssetsService,
   ListingEventType,
   ListingEvent,
+  IncomePeriod,
 } from "@bloom-housing/backend-core/types"
 import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
 
@@ -211,4 +212,21 @@ export const cloudinaryFileUploader = async ({
       url: cloudinaryUrlFromId(response.data.public_id),
     })
   })
+}
+
+export function formatIncome(value: number, currentType: IncomePeriod, returnType: IncomePeriod) {
+  const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+
+  if (returnType === "perMonth") {
+    const monthIncomeNumber = currentType === "perYear" ? value / 12 : value
+    return usd.format(monthIncomeNumber)
+  } else {
+    const yearIncomeNumber = currentType === "perMonth" ? value * 12 : value
+    return usd.format(yearIncomeNumber)
+  }
 }

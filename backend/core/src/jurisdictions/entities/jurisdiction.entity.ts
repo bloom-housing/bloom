@@ -6,7 +6,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 
 @Entity({ name: "jurisdictions" })
 export class Jurisdiction extends AbstractEntity {
-  @Column({ type: "text" })
+  @Column({ type: "text", unique: true })
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
