@@ -10,20 +10,22 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
       English: "en",
       Spanish: "es",
       Vietnamese: "vi",
-      Chinese: "zh"
+      Chinese: "zh",
     }
 
     /**
      * moves applicable application methods to paper applications
      * I checked the live DB and the data was reliably consistent
      */
-    const paperApplications = await queryRunner.query(`SELECT id, type, label, external_reference, listing_id FROM application_methods WHERE type = 'FileDownload'`)
+    const paperApplications = await queryRunner.query(
+      `SELECT id, type, label, external_reference, listing_id FROM application_methods WHERE type = 'FileDownload'`
+    )
 
     // create application index by listing_id
     const appIndex = paperApplications.reduce((obj, app) => {
       const paperApp = {
         language: languageMap[app.label],
-        file_id: app.external_reference
+        file_id: app.external_reference,
       }
       if (obj[app.listing_id] === undefined) {
         obj[app.listing_id] = [paperApp]
@@ -36,10 +38,14 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
     for (const app in appIndex) {
       await queryRunner.query(`DELETE FROM application_methods WHERE listing_id = '${app}'`)
       // insert one application method per group
-      const newMethod = await queryRunner.query(`INSERT INTO application_methods (type, label, listing_id)) VALUES ('FileDownload', 'Paper Application', '${app}') RETURNING id`)
+      const newMethod = await queryRunner.query(
+        `INSERT INTO application_methods (type, label, listing_id)) VALUES ('FileDownload', 'Paper Application', '${app}') RETURNING id`
+      )
       // insert paper applications
       for (const paper of appIndex[app]) {
-        await queryRunner.query(`INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${paper.file_id}', '${newMethod.id}')`)
+        await queryRunner.query(
+          `INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${paper.file_id}', '${newMethod.id}')`
+        )
       }
     }
   }
