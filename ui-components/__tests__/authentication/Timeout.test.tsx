@@ -21,7 +21,7 @@ describe("<Timeout>", () => {
             dob: new Date(),
             createdAt: new Date(),
             updatedAt: new Date(),
-            jurisdictions: []
+            jurisdictions: [],
           },
           signOut: () => {},
         }}
