@@ -27,7 +27,6 @@ import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
@@ -38,6 +37,7 @@ import {
   UnitsSummaryDto,
   UnitsSummaryUpdateDto,
 } from "../../units-summary/dto/units-summary.dto"
+import { IdNameDto } from "../../shared/dto/idName.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -119,16 +119,15 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => JurisdictionDto)
-  jurisdiction?: JurisdictionDto
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdNameDto)
+  jurisdiction: IdNameDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => ReservedCommunityTypeDto)
   reservedCommunityType?: ReservedCommunityTypeDto
 
@@ -331,6 +330,18 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryDto)
   unitsSummary?: UnitsSummaryDto[]
+
+  // Keep countyCode so we don't have to update frontend apps yet
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @Transform(
+    (value, obj: Listing) => {
+      return obj.jurisdiction?.name
+    },
+    { toClassOnly: true }
+  )
+  countyCode?: string
 }
 
 export class PaginatedListingDto extends PaginationFactory<ListingDto>(ListingDto) {}
@@ -508,16 +519,15 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   yearBuilt?: number | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  jurisdiction?: IdDto | null
+  jurisdiction: IdDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
 
@@ -724,16 +734,15 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   yearBuilt?: number | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  jurisdiction?: IdDto
+  jurisdiction: IdDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
 
