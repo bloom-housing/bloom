@@ -856,11 +856,8 @@ export class ListingsRetrieveQueryParams {
   view?: string
 }
 
-const FilterKeysList = { ...ListingFilterKeys, ...AvailabilityFilterEnum }
-type FilterKeysList = typeof FilterKeysList
-
 // Using a record lets us enforce that all types are handled in addFilter
-export const filterTypeToFieldMap: Record<keyof typeof FilterKeysList, string> = {
+export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
@@ -870,7 +867,4 @@ export const filterTypeToFieldMap: Record<keyof typeof FilterKeysList, string> =
   // Fields for the availability are determined based on the value of the filter, not the
   // key. Keep this bogus value to prevent the filter from being rejected.
   availability: "",
-  hasAvailability: "unitsSummary.total_available",
-  noAvailability: "unitsSummary.total_available",
-  waitlist: "listings.is_waitlist_open",
 }

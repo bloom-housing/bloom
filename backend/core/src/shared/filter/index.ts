@@ -61,7 +61,10 @@ export function addFilters<FilterParams, FilterFieldMap>(
 
         // Throw if this is not a supported filter type
         if (!(filterType in filterTypeToFieldMap)) {
-          throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
+          throw new HttpException(
+            `Filter "${filterType}" Not Implemented`,
+            HttpStatus.NOT_IMPLEMENTED
+          )
         }
 
         values.forEach((filterValue: string, i: number) => {
@@ -93,13 +96,17 @@ export function addFilters<FilterParams, FilterFieldMap>(
               break
             case Compare["<>"]:
             case Compare["="]:
-            case Compare[">="]:
               qb.andWhere(
                 `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
                 {
                   [whereParameterName]: filterValue,
                 }
               )
+              break
+            case Compare[">="]:
+              qb.andWhere(`${filterField} ${comparison} :${whereParameterName}`, {
+                [whereParameterName]: filterValue,
+              })
               break
             case Compare.NA:
               // If we're here, it's because we expected this filter to be handled by a custom filter handler
