@@ -69,6 +69,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   )
 
   function saveUnit(newUnit: TempUnit) {
+    console.log(newUnit)
     const exists = units.some((unit) => unit.tempId === newUnit.tempId)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))

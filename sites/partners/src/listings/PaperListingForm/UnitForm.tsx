@@ -34,7 +34,6 @@ type UnitFormProps = {
 }
 
 const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
-  console.log("Re-render")
   const { amiChartsService } = useContext(AuthContext)
 
   const [current, setCurrent] = useState<TempUnit>(null)
@@ -45,6 +44,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     unitTypes: [],
   })
   const [fetchedAmiChart, setFetchedAmiChart] = useState(null)
+  const [amiOverrides, setAmiOverrides] = useState({})
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -86,7 +86,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   useEffect(() => {
     const unit = units.filter((unit) => unit.tempId === tempId)[0]
     setCurrent(unit)
-    console.log("reset 3")
     reset({
       ...unit,
       rentType: getRentType(unit),
@@ -100,10 +99,10 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
 
   const maxAmiHouseholdSize = 8
 
-  // could keep updated values in state, check for state value before setting default
-
-  const getAmiChartTableData = useMemo(() => {
+  const getAmiChartTableData = () => {
     console.log("getAmiChartTableData")
+    console.log(amiOverrides)
+    console.log(fetchedAmiChart)
     return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
       const fieldName = `maxIncomeHouseholdSize${index + 1}`
       const incomeCell = (
@@ -112,18 +111,30 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           name={fieldName}
           label={t("t.minimumIncome")}
           defaultValue={
-            fetchedAmiChart && fetchedAmiChart.length ? fetchedAmiChart[index].income : 0
+            amiOverrides[fieldName]
+              ? amiOverrides[fieldName]
+              : fetchedAmiChart && fetchedAmiChart.length
+              ? fetchedAmiChart[index]?.income
+              : 0
           }
           register={register}
           type="number"
           prepend="$"
           readerOnly
+          inputProps={{
+            onChange: (e) => {
+              const { id, value } = e.target
+              const overrides = amiOverrides
+              overrides[id] = value
+              setAmiOverrides(overrides)
+            },
+          }}
         />
       )
       acc.push({ householdSize: index + 1, maxIncome: incomeCell })
       return acc
     }, [])
-  }, [fetchedAmiChart, register])
+  }
 
   useEffect(() => {
     const fetchAmiChart = async () => {
@@ -131,18 +142,17 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
         const thisAmiChart = await amiChartsService.retrieve({
           amiChartId: amiChartID,
         })
-        console.log("in fetchAmiChart")
-        setFetchedAmiChart(
-          thisAmiChart.items
-            .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
-            .sort(function (a, b) {
-              return a.householdSize - b.householdSize
-            })
-        )
+        const amiChartData = thisAmiChart.items
+          .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
+          .sort(function (a, b) {
+            return a.householdSize - b.householdSize
+          })
+        setFetchedAmiChart(amiChartData)
       } catch (e) {
         console.error(e)
       }
     }
+    setAmiOverrides({})
     if (amiChartID && amiPercentage) {
       void fetchAmiChart()
     }
@@ -154,12 +164,8 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }
 
   async function onFormSubmit(action?: string) {
-    console.log("onFormSubmit")
     const data = getValues()
-    console.log(data)
-    console.log("getting values")
     const validation = await trigger()
-    console.log("validation trigger")
     if (!validation) return
 
     if (data.amiChart?.id) {
@@ -205,11 +211,9 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     setTempId(null)
     if (action === "copyNew") {
       setCurrent({ ...formData, id: current?.id, tempId: units.length + 1 })
-      console.log("reset 1")
       reset({ ...formData })
     } else if (action === "saveNew") {
       setCurrent(null)
-      console.log("reset 2")
       reset()
     } else {
       onClose()
@@ -241,7 +245,6 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
     })
   }, [amiCharts, unitPriorities, unitTypes])
 
-  console.log("in component", getValues())
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
@@ -393,7 +396,7 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
         {amiChartID && amiPercentage && fetchedAmiChart && fetchedAmiChart.length > 0 && (
           <GridSection columns={2} className="pt-6">
             <GridCell>
-              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData} />
+              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
             </GridCell>
           </GridSection>
         )}
