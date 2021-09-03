@@ -1,4 +1,5 @@
 import Head from "next/head"
+import qs from "qs"
 import axios from "axios"
 import {
   ListingsGroup,
@@ -152,6 +153,7 @@ export default function ListingsPage(props: ListingsProps) {
       <Head>
         <title>{pageTitle}</title>
       </Head>
+
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
       <PageHeader title={t("pageTitle.rent")} />
       <div>
@@ -167,10 +169,21 @@ export async function getStaticProps() {
   let closedListings = []
 
   try {
-    const response = await axios.get(
-      process.env.listingServiceUrl +
-        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
-    )
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
 
     openListings = response?.data?.items
       ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)

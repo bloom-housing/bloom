@@ -10,6 +10,8 @@ import {
   IsUUID,
   ValidateNested,
   IsNumberString,
+  IsEnum,
+  IsArray,
 } from "class-validator"
 import moment from "moment"
 import {
@@ -17,7 +19,7 @@ import {
   PreferenceDto,
   PreferenceUpdateDto,
 } from "../../preferences/dto/preference.dto"
-import { ApiProperty, getSchemaPath, OmitType } from "@nestjs/swagger"
+import { ApiProperty, OmitType, getSchemaPath } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -767,6 +769,8 @@ export class ListingFilterParams extends BaseFilter {
     example: "Coliseum",
     required: false,
   })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.name]?: string;
 
   @Expose()
@@ -775,6 +779,8 @@ export class ListingFilterParams extends BaseFilter {
     example: "active",
     required: false,
   })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingStatus, { groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.status]?: ListingStatus;
 
   @Expose()
@@ -783,6 +789,8 @@ export class ListingFilterParams extends BaseFilter {
     example: "Fox Creek",
     required: false,
   })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.neighborhood]?: string;
 
   @Expose()
@@ -791,8 +799,19 @@ export class ListingFilterParams extends BaseFilter {
     example: "3",
     required: false,
   })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bedrooms]?: number
+  [ListingFilterKeys.bedrooms]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "FAB1A3C6-965E-4054-9A48-A282E92E9426",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.leasingAgents]?: string
 }
 
 export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
@@ -804,10 +823,14 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     items: {
       $ref: getSchemaPath(ListingFilterParams),
     },
-    example: { $comparison: ["=", "<>"], status: "active", name: "Coliseum" },
+    example: { $comparison: "=", status: "active", name: "Coliseum" },
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  filter?: ListingFilterParams
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(16, { groups: [ValidationsGroupsEnum.default] })
+  @Type(() => ListingFilterParams)
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  filter?: ListingFilterParams[]
 
   @Expose()
   @ApiProperty({
@@ -847,4 +870,5 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
+  leasingAgents: "leasingAgents.id",
 }

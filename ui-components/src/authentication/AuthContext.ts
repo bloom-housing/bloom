@@ -24,6 +24,7 @@ import {
   useMemo,
   useReducer,
 } from "react"
+import qs from "qs"
 import axiosStatic from "axios"
 import { ConfigContext } from "../config/ConfigContext"
 import { createAction, createReducer } from "typesafe-actions"
@@ -173,6 +174,9 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         jurisdictionName: process.env.jurisdictionName,
         appUrl: window.location.origin,
         ...(state.accessToken && { Authorization: `Bearer ${state.accessToken}` }),
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
       },
     })
   }, [router, apiUrl, state.accessToken, router.locale])
