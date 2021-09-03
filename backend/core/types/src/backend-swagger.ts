@@ -4658,7 +4658,7 @@ export interface ListingCreate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  applicationMethods: Id[]
+  applicationMethods: ApplicationMethodCreate[]
 
   /**  */
   preferences: PreferenceCreate[]
