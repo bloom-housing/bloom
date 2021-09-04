@@ -81,6 +81,33 @@ class Listing extends BaseEntity {
   @Type(() => ApplicationMethod)
   applicationMethods: ApplicationMethod[]
 
+  // booleans to make dealing with different application methods easier to parse
+  @Column({ type: "boolean", default: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  digitalApplication?: boolean
+
+  @Column({ type: "boolean", default: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  commonDigital?: boolean
+
+  @Column({ type: "boolean", default: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  paperApplication?: boolean
+
+  @Column({ type: "boolean", default: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  referralOpportunity?: boolean
+
+  // end application method booleans
+
   @Column("jsonb")
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

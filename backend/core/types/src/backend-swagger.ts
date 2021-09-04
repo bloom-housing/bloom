@@ -4338,6 +4338,18 @@ export interface Listing {
   additionalApplicationSubmissionNotes?: string
 
   /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigital?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
+
+  /**  */
   assets: AssetCreate[]
 
   /**  */
@@ -4746,6 +4758,18 @@ export interface ListingCreate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigital?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
 
   /**  */
   assets: AssetCreate[]
@@ -5202,6 +5226,18 @@ export interface ListingUpdate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigital?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
 
   /**  */
   assets: AssetCreate[]
