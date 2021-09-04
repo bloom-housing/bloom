@@ -140,9 +140,12 @@ const ListingPhoto = () => {
     <>
       <input type="hidden" {...register("image.fileId")} />
       <input type="hidden" {...register("image.label")} />
-      <GridSection grid={false} separator>
-        <span className="form-section__title">{t("listings.sections.photoTitle")}</span>
-        <span className="form-section__description">{t("listings.sections.photoSubtitle")}</span>
+      <GridSection
+        grid={false}
+        separator
+        title={t("listings.sections.photoTitle")}
+        description={t("listings.sections.photoSubtitle")}
+      >
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhoto?.fileId && listingFormPhoto.fileId != "" ? (
