@@ -43,7 +43,7 @@ module.exports = withBundleAnalyzer(
       housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
       gtmKey: process.env.GTM_KEY || null,
       idleTimeout: process.env.IDLE_TIMEOUT,
-      countyCode: process.env.COUNTY_CODE,
+      jurisdictionName: process.env.JURISDICTION_NAME,
       cacheRevalidate: process.env.CACHE_REVALIDATE ? Number(process.env.CACHE_REVALIDATE) : 60,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
     },

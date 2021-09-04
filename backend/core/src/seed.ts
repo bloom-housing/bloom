@@ -27,6 +27,8 @@ import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
+import { createJurisdictions } from "./seeds/jurisdictions"
+import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -57,12 +59,20 @@ export function getSeedListingsCount() {
 
 export async function createLeasingAgents(
   app: INestApplicationContext,
-  rolesRepo: Repository<UserRoles>
+  rolesRepo: Repository<UserRoles>,
+  jurisdictions: Jurisdiction[]
 ) {
   const usersService = await app.resolve<UserService>(UserService)
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
-      async (leasingAgent) => await usersService.createUser(leasingAgent, new AuthContext(null))
+      async (leasingAgent) =>
+        await usersService.createUser(
+          plainToClass(UserCreateDto, {
+            ...leasingAgent,
+            jurisdictions: [jurisdictions[0]],
+          }),
+          new AuthContext(null)
+        )
     )
   )
   await Promise.all([
@@ -75,9 +85,13 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
-const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<UserRoles>) => {
+const seedListings = async (
+  app: INestApplicationContext,
+  rolesRepo: Repository<UserRoles>,
+  jurisdictions: Jurisdiction[]
+) => {
   const seeds = []
-  const leasingAgents = await createLeasingAgents(app, rolesRepo)
+  const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
@@ -88,6 +102,7 @@ const seedListings = async (app: INestApplicationContext, rolesRepo: Repository<
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
     const listing = await listingSeed.seed()
+    listing.jurisdiction = jurisdictions[0]
     listing.leasingAgents = [everyOtherAgent]
     const applicationMethods = await applicationMethodsService.create({
       type: ApplicationMethodType.Internal,
@@ -114,7 +129,8 @@ async function seed() {
 
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
-  const listings = await seedListings(app, rolesRepo)
+  const jurisdictions = await createJurisdictions(app)
+  const listings = await seedListings(app, rolesRepo, jurisdictions)
 
   const user1 = await userService.createUser(
     plainToClass(UserCreateDto, {
@@ -126,6 +142,7 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
+      jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
@@ -141,6 +158,7 @@ async function seed() {
       dob: new Date(),
       password: "ghijkl",
       passwordConfirmation: "Ghijkl1!",
+      jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
@@ -156,6 +174,7 @@ async function seed() {
       dob: new Date(),
       password: "abcdef",
       passwordConfirmation: "Abcdef1!",
+      jurisdictions,
     }),
     new AuthContext(null)
   )
