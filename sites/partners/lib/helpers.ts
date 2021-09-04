@@ -144,6 +144,7 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
+  if (!date || !formTime) return null
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -159,6 +160,7 @@ export const createTime = (
  * Create Date object depending on DateField component
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
+  if (!formDate) return null
   return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
 }
 
