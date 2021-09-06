@@ -103,8 +103,8 @@ const FormSummaryDetails = ({
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
 
   const preferredUnits = application.preferredUnit?.map((unit) => {
-    const unitDetails = allListingUnitTypes.find((unitType) => unitType.id === unit.id)
-    return unitDetails.name
+    const unitDetails = allListingUnitTypes?.find((unitType) => unitType.id === unit.id)
+    return unitDetails?.name
   })
 
   return (
@@ -262,13 +262,13 @@ const FormSummaryDetails = ({
         </h3>
 
         <div className="form-card__group mx-0">
-          {application.preferredUnit && (
+          {preferredUnits && (
             <ViewItem
               id="householdUnitType"
               label={t("application.household.preferredUnit.preferredUnitType")}
             >
               {preferredUnits
-                .map((item) => t(`application.household.preferredUnit.options.${item}`))
+                ?.map((item) => t(`application.household.preferredUnit.options.${item}`))
                 .join(", ")}
             </ViewItem>
           )}
