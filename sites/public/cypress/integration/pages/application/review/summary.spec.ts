@@ -7,9 +7,7 @@ describe("applications/review/summary", function () {
   })
 
   it("Should render 'You' section and check values", function () {
-    cy.loadConfig(
-      {},
-      "applicationConfigFilled.json")
+    cy.loadConfig({}, "applicationConfigFilled.json")
     cy.visit(route)
 
     cy.getByID("applicantName").should("include.text", this.data.you.name)
@@ -108,9 +106,10 @@ describe("applications/review/summary", function () {
   it("Should render 'Household Details' section and display values", function () {
     cy.loadConfig(
       {
-        units: [this.unit]
+        units: [this.unit],
       },
-      "applicationConfigFilled.json")
+      "applicationConfigFilled.json"
+    )
 
     cy.visit(route)
 
