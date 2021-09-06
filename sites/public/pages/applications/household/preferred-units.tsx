@@ -15,7 +15,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/getUniqueUnitTypes"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -29,7 +29,12 @@ const ApplicationPreferredUnits = () => {
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    application.preferredUnit = preferredUnit
+    // save units always as an array (when is only one option, react-hook-form storesa aj option as string)
+    if (Array.isArray(preferredUnit)) {
+      application.preferredUnit = preferredUnit
+    } else {
+      application.preferredUnit = [preferredUnit]
+    }
 
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
@@ -38,10 +43,12 @@ const ApplicationPreferredUnits = () => {
     window.scrollTo(0, 0)
   }
 
-  const preferredUnitOptions = preferredUnit?.map((item) => ({
+  const unitTypes = getUniqueUnitTypes(listing?.units)
+
+  const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
-    label: t(`application.household.preferredUnit.options.${item.id}`),
-    defaultChecked: item.checked || application.preferredUnit.includes(item.id),
+    label: t(`application.household.preferredUnit.options.${item.name}`),
+    defaultChecked: application.preferredUnit.includes(item.id),
   }))
 
   return (
