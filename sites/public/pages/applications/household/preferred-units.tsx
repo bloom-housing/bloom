@@ -2,7 +2,7 @@
 2.3.2 - Preferred Unit Size
 Applicant can designate which unit sizes they prefer
 */
-import React from "react"
+import React, { useMemo } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -25,12 +25,7 @@ const ApplicationPreferredUnits = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm({
-    defaultValues: {
-      // extract id from the object
-      preferredUnit: application.preferredUnit?.map(unit => unit.id) ?? []
-    }
-  })
+  const { register, handleSubmit, errors } = useForm()
 
   const onSubmit = (data) => {
     const { preferredUnit } = data
@@ -54,7 +49,8 @@ const ApplicationPreferredUnits = () => {
   const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.name}`),
-    defaultChecked: application.preferredUnit.find(unit => unit.id === item.id)
+    value: item.id,
+    defaultChecked: !!application.preferredUnit?.find(unit => unit.id === item.id)
   }))
 
   return (
@@ -95,7 +91,7 @@ const ApplicationPreferredUnits = () => {
                 name="preferredUnit"
                 groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fields={preferredUnitOptions}
-                error={errors.preferredUnit}
+                error={!!errors.preferredUnit}
                 errorMessage={t("errors.selectAtLeastOne")}
                 validation={{ required: true }}
                 register={register}
