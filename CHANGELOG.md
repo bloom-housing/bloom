@@ -102,6 +102,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds `authz.e2e-spec.ts` test cover for preventing user from voluntarily changing his associated `roles` object [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
+  - Adds Listings managment validations required for publishing a Listing [#1796](https://github.com/bloom-housing/bloom/pull/1796)
 
 - Changed:
 
