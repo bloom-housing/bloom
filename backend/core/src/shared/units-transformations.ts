@@ -300,7 +300,7 @@ export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
   units.forEach((unit) => {
     const currentUnitType = unit.unitType
     const currentUnitRent = unit.monthlyRentAsPercentOfIncome
-    const thisKey = currentUnitType.name.concat(currentUnitRent)
+    const thisKey = currentUnitType?.name.concat(currentUnitRent)
     if (!(thisKey in unitMap)) unitMap[thisKey] = []
     unitMap[thisKey].push(unit)
   })
