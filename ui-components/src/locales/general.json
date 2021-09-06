@@ -301,10 +301,10 @@
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
-          "oneBedroom": "1 Bedroom",
-          "twoBedroom": "2 Bedroom",
-          "threeBedroom": "3 Bedroom",
-          "moreThanThreeBedroom": "3+ Bedroom"
+          "oneBdrm": "1 Bedroom",
+          "twoBdrm": "2 Bedroom",
+          "threeBdrm": "3 Bedroom",
+          "fourBdrm": "3+ Bedroom"
         }
       },
       "member": {
