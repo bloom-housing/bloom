@@ -8,6 +8,8 @@ type GetUnitTypeNamesReturn = {
 }
 
 export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
+  if (!units) return []
+
   const unitTypes = units.reduce((acc, curr) => {
     const { id, name } = curr.unitType || {}
 
@@ -25,5 +27,8 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
     return acc
   }, [] as GetUnitTypeNamesReturn[])
 
-  return unitTypes || []
+  return unitTypes
 }
+
+// It creates array of objects with the id property
+export const createUnitTypeId = (unitIds: string[]) => unitIds?.map(id => ({ id }) ?? [])
