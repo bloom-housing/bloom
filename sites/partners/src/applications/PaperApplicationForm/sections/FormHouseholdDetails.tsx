@@ -10,17 +10,17 @@ import {
   preferredUnit,
 } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
-import {
-  Unit,
-  UnitType
-} from "@bloom-housing/backend-core/types"
+import { Unit, UnitType } from "@bloom-housing/backend-core/types"
 
 type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
 }
 
-const FormHouseholdDetails = ({ listingUnits, applicationUnitTypes }: FormHouseholdDetailsProps) => {
+const FormHouseholdDetails = ({
+  listingUnits,
+  applicationUnitTypes,
+}: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -31,7 +31,7 @@ const FormHouseholdDetails = ({ listingUnits, applicationUnitTypes }: FormHouseh
   const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.name}`),
-    defaultChecked: !!applicationUnitTypes?.find(unit => unit.id === item.id) ?? false
+    defaultChecked: !!applicationUnitTypes?.find((unit) => unit.id === item.id) ?? false,
   }))
 
   return (

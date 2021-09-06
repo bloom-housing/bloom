@@ -162,7 +162,9 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
 
-  const preferredUnit = data.application.preferredUnit ? data.application.preferredUnit.map(id => ({ id })) : []
+  const preferredUnit = data.application.preferredUnit
+    ? data.application.preferredUnit.map((id) => ({ id }))
+    : []
 
   const result: ApplicationUpdate = {
     submissionDate,
@@ -285,7 +287,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       workInRegion,
     }
 
-    const preferredUnit = applicationData.preferredUnit?.map(unit => unit.id)
+    const preferredUnit = applicationData.preferredUnit?.map((unit) => unit.id)
 
     const result = {
       applicant,

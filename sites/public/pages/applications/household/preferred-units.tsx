@@ -15,7 +15,10 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { createUnitTypeId, getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
+import {
+  createUnitTypeId,
+  getUniqueUnitTypes,
+} from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -50,7 +53,7 @@ const ApplicationPreferredUnits = () => {
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.name}`),
     value: item.id,
-    defaultChecked: !!application.preferredUnit?.find(unit => unit.id === item.id)
+    defaultChecked: !!application.preferredUnit?.find((unit) => unit.id === item.id),
   }))
 
   return (

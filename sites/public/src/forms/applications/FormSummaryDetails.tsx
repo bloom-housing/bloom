@@ -102,8 +102,8 @@ const FormSummaryDetails = ({
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
 
-  const preferredUnits = application.preferredUnit?.map(unit => {
-    const unitDetails = allListingUnitTypes.find(unitType => unitType.id === unit.id)
+  const preferredUnits = application.preferredUnit?.map((unit) => {
+    const unitDetails = allListingUnitTypes.find((unitType) => unitType.id === unit.id)
     return unitDetails.name
   })
 

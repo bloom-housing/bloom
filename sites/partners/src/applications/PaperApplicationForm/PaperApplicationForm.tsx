@@ -197,7 +197,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                     />
 
-                    <FormHouseholdDetails listingUnits={units} applicationUnitTypes={application?.preferredUnit} />
+                    <FormHouseholdDetails
+                      listingUnits={units}
+                      applicationUnitTypes={application?.preferredUnit}
+                    />
 
                     <FormPreferences preferences={preferences} county={countyCode} />
 
