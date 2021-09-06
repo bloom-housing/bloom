@@ -28,8 +28,8 @@ const DetailsHouseholdDetails = () => {
             if (!application?.preferredUnit?.length) return t("t.n/a")
 
             return application?.preferredUnit?.map((item) => (
-              <Fragment key={item}>
-                {t(`application.household.preferredUnit.options.${item}`)}
+              <Fragment key={item.id}>
+                {t(`application.household.preferredUnit.options.${item.name}`)}
                 <br />
               </Fragment>
             ))

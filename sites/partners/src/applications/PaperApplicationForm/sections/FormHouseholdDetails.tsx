@@ -9,16 +9,29 @@ import {
   FieldGroup,
   preferredUnit,
 } from "@bloom-housing/ui-components"
+import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
+import {
+  Unit,
+  UnitType
+} from "@bloom-housing/backend-core/types"
 
-const FormHouseholdDetails = () => {
+type FormHouseholdDetailsProps = {
+  listingUnits: Unit[]
+  applicationUnitTypes: UnitType[]
+}
+
+const FormHouseholdDetails = ({ listingUnits, applicationUnitTypes }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = formMethods
 
-  const preferredUnitOptions = preferredUnit?.map((item) => ({
+  const unitTypes = getUniqueUnitTypes(listingUnits)
+
+  const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
-    label: t(`application.household.preferredUnit.options.${item.id}`),
+    label: t(`application.household.preferredUnit.options.${item.name}`),
+    defaultChecked: !!applicationUnitTypes?.find(unit => unit.id === item.id) ?? false
   }))
 
   return (
@@ -31,6 +44,7 @@ const FormHouseholdDetails = () => {
             fields={preferredUnitOptions}
             register={register}
             fieldGroupClassName="grid grid-cols-1 mt-4"
+            fieldClassName="ml-0"
           />
         </ViewItem>
       </GridCell>
