@@ -15,7 +15,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/getUniqueUnitTypes"
+import { createUnitTypeId, getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -25,15 +25,21 @@ const ApplicationPreferredUnits = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: {
+      // extract id from the object
+      preferredUnit: application.preferredUnit?.map(unit => unit.id) ?? []
+    }
+  })
+
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    // save units always as an array (when is only one option, react-hook-form storesa aj option as string)
+    // save units always as an array (when is only one option, react-hook-form stores an option as string)
     if (Array.isArray(preferredUnit)) {
-      application.preferredUnit = preferredUnit
+      application.preferredUnit = createUnitTypeId(preferredUnit)
     } else {
-      application.preferredUnit = [preferredUnit]
+      application.preferredUnit = createUnitTypeId([preferredUnit])
     }
 
     conductor.sync()
@@ -48,7 +54,7 @@ const ApplicationPreferredUnits = () => {
   const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
     label: t(`application.household.preferredUnit.options.${item.name}`),
-    defaultChecked: application.preferredUnit.includes(item.id),
+    defaultChecked: application.preferredUnit.find(unit => unit.id === item.id)
   }))
 
   return (

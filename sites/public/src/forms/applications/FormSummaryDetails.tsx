@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/getUniqueUnitTypes"
+import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
 
 type FormSummaryDetailsProps = {
@@ -102,9 +102,9 @@ const FormSummaryDetails = ({
 
   const allListingUnitTypes = getUniqueUnitTypes(listing?.units)
 
-  const preferredUnits = application.preferredUnit.map(unitId => {
-    const unit = allListingUnitTypes.find(unitType => unitType.id === unitId)
-    return unit.name
+  const preferredUnits = application.preferredUnit.map(unit => {
+    const unitDetails = allListingUnitTypes.find(unitType => unitType.id === unit.id)
+    return unitDetails.name
   })
 
   return (
