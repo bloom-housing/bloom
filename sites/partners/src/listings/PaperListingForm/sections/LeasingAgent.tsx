@@ -6,7 +6,7 @@ const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control } = formMethods
+  const { register, control, errors } = formMethods
 
   return (
     <div>
@@ -30,6 +30,9 @@ const LeasingAgent = () => {
             id={"leasingAgentEmail"}
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
+            error={errors?.leasingAgentEmail !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
+            validation={{ required: true }}
           />
           <PhoneField
             label={t("t.phone")}
@@ -38,6 +41,9 @@ const LeasingAgent = () => {
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}
+            error={errors?.leasingAgentPhone !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
+            required={true}
           />
         </GridSection>
         <GridSection columns={2}>

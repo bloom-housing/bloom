@@ -59,6 +59,8 @@ const UnitsSummaryForm = ({
       minimumIncomeMin: current?.minimumIncomeMin,
       monthlyRentMin: current?.monthlyRentMin,
       monthlyRentMax: current?.monthlyRentMax,
+      totalCount: current?.totalCount,
+      totalAvailable: current?.totalAvailable,
       monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
       priorityType: current?.priorityType,
       rentType: getRentTypeFromUnitsSummary(current),
@@ -275,6 +277,9 @@ const UnitsSummaryForm = ({
                 register={register}
                 readerOnly
                 type="number"
+                error={errors?.totalCount !== undefined}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
               />
             </ViewItem>
           </GridCell>
@@ -288,6 +293,9 @@ const UnitsSummaryForm = ({
                 register={register}
                 readerOnly
                 type="number"
+                error={errors?.totalAvailable !== undefined}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
               />
             </ViewItem>
           </GridCell>
@@ -303,6 +311,9 @@ const UnitsSummaryForm = ({
                 register={register}
                 type="number"
                 readerOnly
+                error={errors?.amiPercentage !== undefined}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
               />
             </ViewItem>
           </GridCell>
@@ -315,6 +326,9 @@ const UnitsSummaryForm = ({
                 fields={rentTypeOptions}
                 fieldClassName="m-0"
                 fieldGroupClassName="flex h-12 items-center"
+                error={errors?.rentType !== undefined}
+                errorMessage={t("errors.requiredFieldError")}
+                validation={{ required: true }}
               />
             </ViewItem>
           </GridCell>
@@ -347,6 +361,9 @@ const UnitsSummaryForm = ({
                     type="number"
                     prepend="$"
                     readerOnly
+                    error={errors?.monthlyRentMin !== undefined}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
                   />
                 </ViewItem>
                 <ViewItem label={t("listings.unitsSummary.monthlyRentMax")}>
@@ -376,6 +393,9 @@ const UnitsSummaryForm = ({
                     register={register}
                     type="number"
                     readerOnly
+                    error={errors?.monthlyRentAsPercentOfIncome !== undefined}
+                    errorMessage={t("errors.requiredFieldError")}
+                    validation={{ required: true }}
                   />
                 </ViewItem>
               </GridCell>

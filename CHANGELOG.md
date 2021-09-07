@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
   - Filtering by availability ([#501](https://github.com/CityOfDetroit/bloom/pull/501))
   - Filtering by rent price ([#531](https://github.com/CityOfDetroit/bloom/pull/531))
   - UI for adding / editing units summaries ([#475](https://github.com/CityOfDetroit/bloom/pull/475))
+  - Validate listing edit form ([#535](https://github.com/CityOfDetroit/bloom/pull/535))
 
 ## Detroit Team M10
 
