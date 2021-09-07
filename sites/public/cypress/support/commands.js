@@ -27,7 +27,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import * as routes from "../fixtures/routes.json"
 import * as listingConfig from "../fixtures/listingConfig.json"
-import { setProperty, listingsUrl } from "./helpers"
+import { setProperty, listingsUrl, applyConfigUpdates } from "./helpers"
 
 Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
@@ -44,21 +44,6 @@ Cypress.Commands.add("goToReview", () => {
 Cypress.Commands.add(
   "loadConfig",
   (listingOverrides, configFile = "applicationConfigBlank.json", configOverrides) => {
-    cy.fixture(configFile).then((applicationConfig) => {
-      const config = applicationConfig
-
-      if (configOverrides) {
-        Object.keys(configOverrides).forEach((item) => {
-          setProperty(config, item, configOverrides[item])
-        })
-      }
-
-      const values = JSON.stringify(config)
-
-      sessionStorage.setItem("bloom-app-autosave", values)
-    })
-
-    // find listing with 2 preferences (to test all existing steps) and merge with custom configuration (not required)
     cy.request("GET", listingsUrl).then((res) => {
       const listing = res.body.items.find((item) => item.name === "Test: Triton")
 
@@ -70,14 +55,30 @@ Cypress.Commands.add(
 
       const completeListingData = { ...listing, ...listingConfig }
       sessionStorage.setItem("bloom-app-listing", JSON.stringify(completeListingData))
+
+      // update application values
+      cy.fixture(configFile).then((applicationConfig) => {
+        const config = applicationConfig
+
+        // apply updates and custom overrides
+        applyConfigUpdates(
+          {
+            config,
+            listing
+          }
+        )
+
+        if (configOverrides) {
+          Object.keys(configOverrides).forEach((item) => {
+            setProperty(config, item, configOverrides[item])
+          })
+        }
+
+        sessionStorage.setItem("bloom-app-autosave", JSON.stringify(config))
+      })
     })
   }
 )
-
-Cypress.Commands.add("getSubmissionContext", () => {
-  const config = sessionStorage.getItem("bloom-app-autosave")
-  return JSON.parse(config)
-})
 
 Cypress.Commands.add("checkErrorAlert", (command) => {
   cy.get(".alert-box").should(command)
