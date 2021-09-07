@@ -78,6 +78,11 @@ Cypress.Commands.add(
   }
 )
 
+Cypress.Commands.add("getSubmissionContext", () => {
+  const config = sessionStorage.getItem("bloom-app-autosave")
+  return JSON.parse(config)
+})
+
 Cypress.Commands.add("checkErrorAlert", (command) => {
   cy.get(".alert-box").should(command)
 })
