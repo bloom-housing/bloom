@@ -32,8 +32,6 @@ import {
   Preference,
   PaperApplication,
   PaperApplicationCreate,
-  ApplicationMethod,
-  ApplicationMethodType,
   ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
@@ -55,7 +53,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
-import ApplicationTypes from "./sections/ApplicationTypes"
+import ApplicationTypes from "./sections/ApplicationTypes_v2"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
@@ -74,13 +72,10 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
-  digitalApplicationChoice?: YesNoAnswer
-  commonDigitalApplicationChoice?: YesNoAnswer
-  customOnlineApplicationUrl?: string
-  paperApplicationChoice?: YesNoAnswer
-  referralOpportunityChoice?: YesNoAnswer
-  referralContactPhone?: string
-  referralSummary?: string
+  digitalApplication?: YesNoAnswer
+  commonDigitalApplication?: YesNoAnswer
+  paperApplication?: YesNoAnswer
+  referralOpportunity?: YesNoAnswer
   dueDateQuestion?: boolean
   lotteryDate?: {
     month: string
@@ -235,7 +230,6 @@ const formatFormData = (
   units: TempUnit[],
   openHouseEvents: TempEvent[],
   preferences: Preference[],
-  paperApplications,
   saveLatLong: LatitudeLongitude,
   customPinPositionChosen: boolean
 ) => {
@@ -314,67 +308,6 @@ const formatFormData = (
     })
   }
 
-  const digitalMethodIndex = data.applicationMethods.findIndex(
-    (method) =>
-      method.type === ApplicationMethodType.Internal ||
-      method.type === ApplicationMethodType.ExternalLink
-  )
-  if (data.digitalApplicationChoice == YesNoAnswer.Yes) {
-    if (data.commonDigitalApplicationChoice == YesNoAnswer.Yes) {
-      if (digitalMethodIndex > -1) {
-        data.applicationMethods[digitalMethodIndex].type = ApplicationMethodType.Internal
-        data.applicationMethods[digitalMethodIndex].externalReference = ""
-      } else {
-        data.applicationMethods.push({
-          type: ApplicationMethodType.Internal,
-        } as ApplicationMethod)
-      }
-    } else {
-      if (digitalMethodIndex > -1) {
-        data.applicationMethods[digitalMethodIndex].type = ApplicationMethodType.ExternalLink
-        data.applicationMethods[digitalMethodIndex].externalReference =
-          data.customOnlineApplicationUrl
-      } else {
-        data.applicationMethods.push({
-          type: ApplicationMethodType.ExternalLink,
-          externalReference: data.customOnlineApplicationUrl,
-        } as ApplicationMethod)
-      }
-    }
-  } else {
-    if (digitalMethodIndex > -1) {
-      data.applicationMethods.splice(digitalMethodIndex, 1)
-    }
-  }
-  const paperMethodIndex = data.applicationMethods.findIndex(
-    (method) => method.type === ApplicationMethodType.FileDownload
-  )
-  if (data.paperApplicationChoice == YesNoAnswer.Yes) {
-    if (paperMethodIndex > -1) {
-      data.applicationMethods[paperMethodIndex].paperApplications = paperApplications
-    } else {
-      data.applicationMethods.push({
-        type: ApplicationMethodType.FileDownload,
-        paperApplications: paperApplications,
-      } as ApplicationMethod)
-    }
-  }
-  const referralMethodIndex = data.applicationMethods.findIndex(
-    (method) => method.type === ApplicationMethodType.Referral
-  )
-  if (data.referralOpportunityChoice == YesNoAnswer.Yes) {
-    if (referralMethodIndex > -1) {
-      data.applicationMethods[referralMethodIndex].phoneNumber = data.referralContactPhone
-      data.applicationMethods[referralMethodIndex].externalReference = data.referralSummary
-    } else {
-      data.applicationMethods.push({
-        type: ApplicationMethodType.Referral,
-        phoneNumber: data.referralContactPhone,
-        externalReference: data.referralSummary,
-      } as ApplicationMethod)
-    }
-  }
-
   return {
     ...data,
     applicationDueTime: applicationDueTimeFormatted,
@@ -427,6 +360,10 @@ const formatFormData = (
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
+    digitalApplication: data.digitalApplication === YesNoAnswer.Yes,
+    commonDigitalApplication: data.commonDigitalApplication === YesNoAnswer.Yes,
+    paperApplication: data.paperApplication === YesNoAnswer.Yes,
+    referralOpportunity: data.referralOpportunity === YesNoAnswer.Yes,
   }
 }
 
@@ -463,23 +400,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }
 
-  const [digitalApplicationMethod, setDigitalApplicationMethod] = useState<ApplicationMethod>(null)
-  const [paperApplicationMethod, setPaperApplicationMethod] = useState<ApplicationMethod>(null)
-  const [paperApplications, setPaperApplications] = useState<PaperApplicationHybrid[]>([])
-  const [referralApplicationMethod, setReferralApplicationMethod] = useState<ApplicationMethod>(
-    null
-  )
-  const methodsState = {
-    digitalApplicationMethod,
-    setDigitalApplicationMethod,
-    paperApplicationMethod,
-    setPaperApplicationMethod,
-    paperApplications,
-    setPaperApplications,
-    referralApplicationMethod,
-    setReferralApplicationMethod,
-  }
-
   /**
    * Close modal
    */
@@ -513,37 +433,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
       setOpenHouseEvents(events)
     }
-
-    if (listing?.applicationMethods) {
-      const digitalMethod = listing.applicationMethods.find(
-        (method) =>
-          method.type === ApplicationMethodType.Internal ||
-          method.type === ApplicationMethodType.ExternalLink
-      )
-      if (digitalMethod) setDigitalApplicationMethod(digitalMethod)
-
-      const paperMethod = listing.applicationMethods.find(
-        (method) => method.type === ApplicationMethodType.FileDownload
-      )
-      if (paperMethod) {
-        setPaperApplicationMethod(paperMethod)
-        setPaperApplications(paperMethod.paperApplications)
-      }
-
-      const referralMethod = listing.applicationMethods.find(
-        (method) => method.type === ApplicationMethodType.Referral
-      )
-      if (referralMethod) {
-        setReferralApplicationMethod(referralMethod)
-      }
-    }
-  }, [
-    listing,
-    setUnits,
-    setOpenHouseEvents,
-    setDigitalApplicationMethod,
-    setPaperApplicationMethod,
-  ])
+  }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, getValues } = formMethods
@@ -572,7 +462,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           units,
           openHouseEvents,
           orderedPreferences,
-          paperApplications,
           latLong,
           customMapPositionChosen
         )
@@ -605,7 +494,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing,
       router,
       preferences,
-      paperApplications,
       latLong,
       customMapPositionChosen,
     ]
@@ -712,7 +600,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <TabPanel>
                           <RankingsAndResults listing={listing} />
                           <LeasingAgent />
-                          <ApplicationTypes listing={listing} methodsState={methodsState} />
+                          <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
                           <ApplicationDates
                             listing={listing}

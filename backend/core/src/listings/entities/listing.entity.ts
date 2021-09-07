@@ -92,7 +92,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  commonDigital?: boolean
+  commonDigitalApplication?: boolean
 
   @Column({ type: "boolean", default: false })
   @Expose()

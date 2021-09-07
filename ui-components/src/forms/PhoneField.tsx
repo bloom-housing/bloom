@@ -14,14 +14,14 @@ export const PhoneField = (props: {
   readerOnly?: boolean
   placeholder?: string
   defaultValue?: string
-  control: UseFormMethods["control"]
+  control?: UseFormMethods["control"]
   disabled?: boolean
   required?: boolean
+  mask?: (args: any) => JSX.Element
 }) => {
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
   if (props.readerOnly) labelClasses.push("sr-only")
-
   return (
     <div className={"field " + (props.error ? "error" : "")}>
       {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
@@ -33,7 +33,7 @@ export const PhoneField = (props: {
           placeholder={props.placeholder}
           defaultValue={props.defaultValue || ""}
           disabled={props.disabled}
-          as={PhoneMask}
+          render={props.mask ? props.mask : PhoneMask}
           control={props.control}
           rules={{
             validate: {

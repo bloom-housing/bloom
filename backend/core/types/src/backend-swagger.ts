@@ -4341,7 +4341,7 @@ export interface Listing {
   digitalApplication?: boolean
 
   /**  */
-  commonDigital?: boolean
+  commonDigitalApplication?: boolean
 
   /**  */
   paperApplication?: boolean
@@ -4763,7 +4763,7 @@ export interface ListingCreate {
   digitalApplication?: boolean
 
   /**  */
-  commonDigital?: boolean
+  commonDigitalApplication?: boolean
 
   /**  */
   paperApplication?: boolean
@@ -5231,7 +5231,7 @@ export interface ListingUpdate {
   digitalApplication?: boolean
 
   /**  */
-  commonDigital?: boolean
+  commonDigitalApplication?: boolean
 
   /**  */
   paperApplication?: boolean
