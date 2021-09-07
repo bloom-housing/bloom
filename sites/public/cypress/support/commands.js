@@ -61,12 +61,10 @@ Cypress.Commands.add(
         const config = applicationConfig
 
         // apply updates and custom overrides
-        applyConfigUpdates(
-          {
-            config,
-            listing
-          }
-        )
+        applyConfigUpdates({
+          config,
+          listing,
+        })
 
         if (configOverrides) {
           Object.keys(configOverrides).forEach((item) => {

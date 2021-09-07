@@ -71,9 +71,7 @@ export const getListingIncome = (): GetIncomeReturn => {
 
 export const updatePreferredUnits = ({ config, listing }: UpdatePreferredUnitsProps) => {
   const firstUnitType = listing.units[0].unitType
-  config.preferredUnit = [
-    { id: firstUnitType?.id }
-  ]
+  config.preferredUnit = [{ id: firstUnitType?.id }]
 
   return config
 }
@@ -82,6 +80,6 @@ export const applyConfigUpdates = ({ config, listing }: ApplyConfigUpdatesProps)
   // unit types are related to the listing preferred_unit using Id, to test submission it needs to be updated
   updatePreferredUnits({
     config,
-    listing
+    listing,
   })
 }
