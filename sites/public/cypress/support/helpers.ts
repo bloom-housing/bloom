@@ -79,6 +79,7 @@ export const updatePreferredUnits = ({ config, listing }: UpdatePreferredUnitsPr
 }
 
 export const applyConfigUpdates = ({ config, listing }: ApplyConfigUpdatesProps) => {
+  // unit types are related to the listing preferred_unit using Id, to test submission it needs to be updated
   updatePreferredUnits({
     config,
     listing

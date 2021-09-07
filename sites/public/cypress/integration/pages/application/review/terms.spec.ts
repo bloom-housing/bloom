@@ -24,10 +24,6 @@ describe("applications/review/terms", function () {
   it("Should redirect to the next step", function () {
     cy.getByID("agree").check()
 
-    // const listingJson = sessionStorage.getItem("bloom-app-listing")
-    // const listing = listingJson ? JSON.parse(listingJson) : null
-    // console.log('listing', listing)
-
     submitApplication()
 
     cy.checkErrorAlert("not.exist")
