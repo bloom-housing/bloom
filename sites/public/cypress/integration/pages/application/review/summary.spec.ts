@@ -103,10 +103,7 @@ describe("applications/review/summary", function () {
   })
 
   it("Should render 'Household Details' section and display values", function () {
-    cy.loadConfig(
-      {},
-      "applicationConfigFilled.json"
-    )
+    cy.loadConfig({}, "applicationConfigFilled.json")
 
     cy.visit(route)
 

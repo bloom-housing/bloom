@@ -2,11 +2,7 @@ describe("applications/household/preferred-units", function () {
   const route = "/applications/household/preferred-units"
 
   it("Should render form", function () {
-    cy.loadConfig(
-      {},
-      "applicationConfigBlank.json",
-      {}
-    )
+    cy.loadConfig({}, "applicationConfigBlank.json", {})
     cy.visit(route)
 
     cy.get("form").should("be.visible")
@@ -14,13 +10,9 @@ describe("applications/household/preferred-units", function () {
   })
 
   it("Should display initial form errors", function () {
-    cy.loadConfig(
-      {},
-      "applicationConfigBlank.json",
-      {
-        preferredUnit: []
-      }
-    )
+    cy.loadConfig({}, "applicationConfigBlank.json", {
+      preferredUnit: [],
+    })
     cy.visit(route)
 
     cy.goNext()
@@ -31,11 +23,7 @@ describe("applications/household/preferred-units", function () {
   })
 
   it("Should save form values and redirect to the next step", function () {
-    cy.loadConfig(
-      {},
-      "applicationConfigBlank.json",
-      {}
-    )
+    cy.loadConfig({}, "applicationConfigBlank.json", {})
     cy.visit(route)
 
     const listingJson = sessionStorage.getItem("bloom-app-listing")
