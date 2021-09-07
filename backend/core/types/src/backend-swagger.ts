@@ -4120,9 +4120,6 @@ export interface UnitType {
 
 export interface UnitsSummary {
   /**  */
-  listing: Id
-
-  /**  */
   id: string
 
   /**  */
@@ -4627,9 +4624,6 @@ export interface UnitsSummaryCreate {
 
   /**  */
   totalAvailable?: number
-
-  /**  */
-  listing: Id
 }
 
 export interface ListingCreate {
@@ -5069,7 +5063,7 @@ export interface UnitUpdate {
 
 export interface UnitsSummaryUpdate {
   /**  */
-  id: string
+  id?: string
 
   /**  */
   unitType: UnitType
@@ -5118,9 +5112,6 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   totalAvailable?: number
-
-  /**  */
-  listing: Id
 }
 
 export interface ListingUpdate {

@@ -12,26 +12,42 @@ import {
   ViewItem,
   GridCell,
   FieldGroup,
-  GroupedTableGroup,
-  GroupedTable,
-  getSummariesTableFromUnitSummary,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
-import { TempUnit } from "../"
-import { UnitsSummarized } from "@bloom-housing/backend-core/types"
+import { TempUnit, TempUnitsSummary } from "../"
+import UnitsSummaryForm from "../UnitsSummaryForm"
 
 type UnitProps = {
   units: TempUnit[]
+  unitsSummaries: TempUnitsSummary[]
   setUnits: (units: TempUnit[]) => void
-  unitsSummary: UnitsSummarized
+  setSummaries: (summaries: TempUnitsSummary[]) => void
   disableUnitsAccordion: boolean
 }
 
-const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: UnitProps) => {
+function isDefined(item: number | string) {
+  return item !== null && item !== undefined && item !== ""
+}
+
+function formatRange(min: string | number, max: string | number, prefix: string) {
+  if (!isDefined(min) && !isDefined(max)) return ""
+  if (min == max || !isDefined(max)) return `${prefix}${min}`
+  if (!isDefined(min)) return `${prefix}${max}`
+  return `${prefix}${min} - ${prefix}${max}`
+}
+
+const FormUnits = ({
+  units,
+  setUnits,
+  unitsSummaries,
+  setSummaries,
+  disableUnitsAccordion,
+}: UnitProps) => {
   const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
-  const [unitsSummarized, setUnitsSummarized] = useState<GroupedTableGroup[]>()
+  const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
+  const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
   const [showUnitsSummary, setShowUnitsSummary] = useState<boolean>(disableUnitsAccordion)
 
   const formMethods = useFormContext()
@@ -49,21 +65,34 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
     action: "",
   }
 
+  const unitSummariesHeaders = {
+    unitType: "listings.unit.type",
+    amiPercentage: "listings.unit.ami",
+    monthlyRent: "listings.unit.rent",
+    sqFeet: "listings.unit.sqft",
+    priorityType: "listings.unit.priorityType",
+    occupancy: "listings.unitsSummary.occupancy",
+    totalAvailable: "listings.unitsSummary.available",
+    totalCount: "listings.unitsSummary.count",
+    action: "",
+  }
+
   useEffect(() => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
-
-  useEffect(() => {
-    if (unitsSummary !== undefined) {
-      setUnitsSummarized(getSummariesTableFromUnitSummary(unitsSummary.byUnitTypeAndRent))
-    }
-  }, [setUnitsSummarized, unitsSummary])
 
   const editUnit = useCallback(
     (tempId: number) => {
       setUnitDrawer(tempId)
     },
     [setUnitDrawer]
+  )
+
+  const editSummary = useCallback(
+    (tempId: number) => {
+      setSummaryDrawer(tempId)
+    },
+    [setSummaryDrawer]
   )
 
   const editUnitsView = useCallback(
@@ -87,6 +116,21 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
       setUnitDeleteModal(null)
     },
     [setUnitDeleteModal, setUnits, units]
+  )
+
+  const deleteSummary = useCallback(
+    (tempId: number) => {
+      const updatedSummaries = unitsSummaries
+        .filter((summary) => summary.tempId !== tempId)
+        .map((updatedUnit, index) => ({
+          ...updatedUnit,
+          tempId: index + 1,
+        }))
+
+      setSummaries(updatedSummaries)
+      setSummaryDeleteModal(null)
+    },
+    [setSummaryDeleteModal, setSummaries, unitsSummaries]
   )
 
   function saveUnit(newUnit: TempUnit) {
@@ -132,6 +176,52 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
     [editUnit, units]
   )
 
+  function saveUnitsSummary(newSummary: TempUnitsSummary) {
+    const exists = unitsSummaries.some((summary) => summary.tempId === newSummary.tempId)
+    if (exists) {
+      const updateSummaries = unitsSummaries.map((summary) =>
+        summary.tempId === newSummary.tempId ? newSummary : summary
+      )
+      setSummaries(updateSummaries)
+    } else {
+      setSummaries([...unitsSummaries, newSummary])
+    }
+  }
+  const unitsSummaryTableData = useMemo(
+    () =>
+      unitsSummaries?.map((summary) => ({
+        unitType: summary.unitType && t(`listings.unitTypes.${summary.unitType.name}`),
+        amiPercentage: isDefined(summary.amiPercentage) ? `${summary.amiPercentage}%` : "",
+        monthlyRent: formatRange(summary.monthlyRentMin, summary.monthlyRentMax, "$"),
+        sqFeet: formatRange(summary.sqFeetMin, summary.sqFeetMax, "$"),
+        priorityType: summary.priorityType?.name,
+        occupancy: formatRange(summary.minOccupancy, summary.maxOccupancy, ""),
+        totalAvailable: summary.totalAvailable,
+        totalCount: summary.totalCount,
+        action: (
+          <div className="flex">
+            <Button
+              type="button"
+              className="front-semibold uppercase"
+              onClick={() => editSummary(summary.tempId)}
+              unstyled
+            >
+              {t("t.edit")}
+            </Button>
+            <Button
+              type="button"
+              className="front-semibold uppercase text-red-700"
+              onClick={() => setSummaryDeleteModal(summary.tempId)}
+              unstyled
+            >
+              {t("t.delete")}
+            </Button>
+          </div>
+        ),
+      })),
+    [unitsSummaries, editSummary]
+  )
+
   const disableUnitsAccordionOptions = [
     {
       id: "unitTypes",
@@ -144,11 +234,6 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
       value: "false",
     },
   ]
-  const unitSummariesHeaders = {
-    unitType: t("t.unitType"),
-    minimumIncome: t("t.minimumIncome"),
-    rent: t("t.rent"),
-  }
 
   return (
     <>
@@ -172,18 +257,21 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
             />
           </GridCell>
         </GridSection>
-        {showUnitsSummary && unitsSummarized !== undefined && (
-          <div className="listings-row_content w-full">
-            <div className="listings-row_table">
-              <GroupedTable
+        {showUnitsSummary && (
+          <div className="bg-gray-300 px-4 py-5">
+            <div className="mb-5">
+              <MinimalTable
                 headers={unitSummariesHeaders}
-                data={unitsSummarized}
+                data={unitsSummaryTableData}
                 responsiveCollapse={true}
-                cellClassName="px-5 py-3"
               />
             </div>
-            <Button type="button" size={AppearanceSizeType.normal} onClick={() => false}>
-              {t("t.edit")}
+            <Button
+              type="button"
+              size={AppearanceSizeType.normal}
+              onClick={() => editSummary(unitsSummaries.length + 1)}
+            >
+              {t("listings.unitsSummary.add")}
             </Button>
           </div>
         )}
@@ -240,6 +328,46 @@ const FormUnits = ({ units, setUnits, unitsSummary, disableUnitsAccordion }: Uni
         ]}
       >
         {t("listings.unit.deleteConf")}
+      </Modal>
+
+      <Drawer
+        open={!!summaryDrawer}
+        title={t("listings.unitsSummary.add")}
+        ariaDescription={t("listings.unitsSummary.add")}
+        onClose={() => setSummaryDrawer(null)}
+      >
+        <UnitsSummaryForm
+          onSubmit={(summary) => saveUnitsSummary(summary)}
+          onClose={() => setSummaryDrawer(null)}
+          summaries={unitsSummaries}
+          currentTempId={summaryDrawer}
+        />
+      </Drawer>
+
+      <Modal
+        open={!!summaryDeleteModal}
+        title={t("listings.unitsSummary.delete")}
+        ariaDescription={t("listings.unitsSummary.deleteConf")}
+        onClose={() => setUnitDeleteModal(null)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.alert}
+            onClick={() => deleteSummary(summaryDeleteModal)}
+          >
+            {t("t.delete")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setSummaryDeleteModal(null)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.unitsSummary.deleteConf")}
       </Modal>
     </>
   )

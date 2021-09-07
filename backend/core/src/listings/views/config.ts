@@ -15,9 +15,6 @@ const views: Views = {
     select: [
       "listings.id",
       "listings.name",
-      "listings.applicationDueDate",
-      "listings.applicationDueTime",
-      "listings.applicationOpenDate",
       "listings.reviewOrderType",
       "listings.status",
       "listings.waitlistMaxSize",

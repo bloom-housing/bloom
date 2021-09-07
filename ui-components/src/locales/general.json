@@ -1046,6 +1046,21 @@
       "deleteConf": "Do you really want to delete this unit?",
       "eligibility": "Eligibility"
     },
+    "unitsSummary": {
+      "add": "Add Summary",
+      "occupancy": "Occupancy",
+      "floorMin": "Minimum Floor",
+      "floorMax": "Max Floor",
+      "monthlyRentMin": "Minimum Monthly Rent",
+      "monthlyRentMax": "Max Monthly Rent",
+      "sqFeetMin": "Minimum Square Footage",
+      "sqFeetMax": "Max Square Footage",
+      "availability": "Availability",
+      "count": "Total Count",
+      "available": "Total Available",
+      "delete": "Delete this Summary",
+      "deleteConf": "Do you really want to delete this summary?"
+    },
     "events": {
       "deleteThisEvent": "Delete this event",
       "deleteConf": "Do you really want to delete this event?",

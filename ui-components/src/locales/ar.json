@@ -1041,6 +1041,21 @@
             "deleteConf": "هل تريد حقًا حذف هذه الوحدة؟",
             "eligibility": "جدارة - أهلية"
         },
+        "unitsSummary": {
+            "add": "أضف الملخص",
+            "occupancy": "شغل",
+            "floorMin": "الحد الأدنى من الطابق",
+            "floorMax": "أقصى حد",
+            "monthlyRentMin": "الحد الأدنى للإيجار الشهري",
+            "monthlyRentMax": "ايجار شهري كحد أقصى",
+            "sqFeetMin": "الحد الأدنى من اللقطات المربعة",
+            "sqFeetMax": "أقصى حد بالقدم المربع",
+            "availability": "التوفر",
+            "count": "العدد الإجمالي",
+            "available": "مجموعه متاحة",
+            "delete": "احذف هذا الملخص",
+            "deleteConf": "هل تريد حقًا حذف هذا الملخص؟"
+        },
         "events": {
             "deleteThisEvent": "احذف هذا الحدث",
             "deleteConf": "هل تريد حقًا حذف هذا الحدث؟",

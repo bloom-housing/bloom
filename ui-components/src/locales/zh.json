@@ -537,6 +537,21 @@
       "studio": "套房",
       "SRO": "單人房"
     },
+    "unitsSummary": {
+      "add": "添加摘要",
+      "occupancy": "占用",
+      "floorMin": "最低楼层",
+      "floorMax": "最大楼层",
+      "monthlyRentMin": "最低月租",
+      "monthlyRentMax": "最高月租金",
+      "sqFeetMin": "最小平方英尺",
+      "sqFeetMax": "最大平方英尺",
+      "availability": "可用性",
+      "count": "总数",
+      "available": "可用总数",
+      "delete": "删除此摘要",
+      "deleteConf": "您确定要删除此摘要吗？"
+    },
     "unitsAreFor": "這些單位供 %{type} 申請。",
     "unitsHaveAccessibilityFeaturesFor": "這些單位提供無障礙設施，供 %{type} 人士申請。",
     "upcomingLotteries": {

@@ -1041,6 +1041,21 @@
             "deleteConf": "¿Realmente desea eliminar esta unidad?",
             "eligibility": "Elegibilidad"
         },
+        "unitsSummary": {
+            "add": "Agregar resumen",
+            "occupancy": "Ocupación",
+            "floorMin": "Piso Mínimo",
+            "floorMax": "Piso máximo",
+            "monthlyRentMin": "Renta mensual mínima",
+            "monthlyRentMax": "Alquiler mensual máximo",
+            "sqFeetMin": "Pies cuadrados mínimos",
+            "sqFeetMax": "Pies cuadrados máximos",
+            "availability": "Disponibilidad",
+            "count": "Cuenta total",
+            "available": "Total disponible",
+            "delete": "Eliminar este resumen",
+            "deleteConf": "¿Realmente desea eliminar este resumen?"
+        },
         "events": {
             "deleteThisEvent": "Eliminar este evento",
             "deleteConf": "¿Realmente quieres eliminar este evento?",

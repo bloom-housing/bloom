@@ -142,6 +142,11 @@ export class ListingsService {
         delete unit.id
       }
     })
+    listingDto.unitsSummary.forEach((summary) => {
+      if (!summary.id) {
+        delete summary.id
+      }
+    })
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
       property: plainToClass(

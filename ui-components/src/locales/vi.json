@@ -545,6 +545,21 @@
       "show": "Hiển thị Các Danh sách đã Đóng",
       "title": "Các Danh sách nhà đã Đóng"
     },
+    "unitsSummary": {
+      "add": "Thêm tóm tắt",
+      "occupancy": "Người ở",
+      "floorMin": "Tầng tối thiểu",
+      "floorMax": "Tầng tối đa",
+      "monthlyRentMin": "Tiền thuê hàng tháng tối thiểu",
+      "monthlyRentMax": "Tiền thuê hàng tháng tối đa",
+      "sqFeetMin": "Đoạn Phim Hình vuông Tối thiểu",
+      "sqFeetMax": "Đoạn Phim Hình vuông Tối đa",
+      "availability": "khả dụng",
+      "count": "Tổng số",
+      "available": "Tổng số có sẵn",
+      "delete": "Xóa bản tóm tắt này",
+      "deleteConf": "Bạn có thực sự muốn xóa phần tóm tắt này không?"
+    },
     "waitlist": {
       "closed": "Danh sách chờ Đã đóng",
       "label": "Danh sách chờ",
