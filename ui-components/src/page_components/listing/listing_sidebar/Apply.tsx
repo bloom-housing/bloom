@@ -150,10 +150,14 @@ const Apply = (props: ApplyProps) => {
           sortedPaperApplications?.map((paperApplication: PaperApplication) => (
             <p key={paperApplication?.file?.fileId} className="text-center mt-2 mb-4 text-sm">
               <a
-                href={cloudinaryPdfFromId(
-                  paperApplication?.file?.fileId || "",
-                  props.cloudName || ""
-                )}
+                href={
+                  paperApplication?.file?.fileId.includes("https")
+                    ? paperApplication?.file?.fileId
+                    : cloudinaryPdfFromId(
+                        paperApplication?.file?.fileId || "",
+                        props.cloudName || ""
+                      )
+                }
                 title={t("listings.apply.downloadApplication")}
                 target="_blank"
               >

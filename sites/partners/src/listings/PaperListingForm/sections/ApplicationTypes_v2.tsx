@@ -36,10 +36,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch } = useFormContext()
   // watch fields
-  const digitalApplication = watch("digitalApplication")
-  const commonDigitalApplication = watch("commonDigitalApplication")
-  const paperApplication = watch("paperApplication")
-  const referralOpportunity = watch("referralOpportunity")
+  const digitalApplicationChoice = watch("digitalApplicationChoice")
+  const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
+  const paperApplicationChoice = watch("paperApplicationChoice")
+  const referralOpportunityChoice = watch("referralOpportunityChoice")
   /*
     Set state for methods, drawer, upload progress, and more
   */
@@ -133,17 +133,19 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     })
   }
 
-  // set initial methods
+  /**
+   * set initial data
+   */
   useEffect(() => {
-    // set yesno fields
+    if (!listing) return
     ;[
       "digitalApplication",
       "commonDigitalApplication",
       "paperApplication",
       "referralOpportunity",
-    ].forEach((field) => {
-      setValue(field, listing[field] === true ? YesNoAnswer.Yes : YesNoAnswer.No)
-    })
+    ].forEach((field) =>
+      setValue(`${field}Choice`, listing[field] === true ? YesNoAnswer.Yes : YesNoAnswer.No)
+    )
 
     // set methods here
     const temp: Methods = {
@@ -171,16 +173,19 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     register("applicationMethods")
   }, [listing, register, setValue])
 
+  // ensure that commonDigitalApplicationChoice is set after it's registered
   useEffect(() => {
-    if (typeof commonDigitalApplication === "boolean") {
+    if (commonDigitalApplicationChoice === undefined || commonDigitalApplicationChoice === "") {
       setValue(
-        "commonDigitalApplication",
-        commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
+        "commonDigitalApplicationChoice",
+        listing.commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
       )
     }
-  }, [commonDigitalApplication, digitalApplication, setValue])
+  }, [commonDigitalApplicationChoice, listing.commonDigitalApplication, setValue])
 
-  // set application methods value when any of the methods change
+  /**
+   * set application methods value when any of the methods change
+   */
   useEffect(() => {
     const applicationMethods = []
     for (const key in methods) {
@@ -189,7 +194,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       switch (key) {
         case "digital":
           method.type =
-            commonDigitalApplication === YesNoAnswer.Yes
+            commonDigitalApplicationChoice === YesNoAnswer.Yes
               ? ApplicationMethodType.Internal
               : ApplicationMethodType.ExternalLink
           break
@@ -205,7 +210,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       applicationMethods.push(method)
     }
     setValue("applicationMethods", applicationMethods)
-  }, [commonDigitalApplication, methods, setValue])
+  }, [commonDigitalApplicationChoice, methods, setValue])
   return (
     <>
       <GridSection
@@ -219,44 +224,44 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             <p className="field-label m-4 ml-0">{t("listings.isDigitalApplication")}</p>
 
             <FieldGroup
-              name="digitalApplication"
+              name="digitalApplicationChoice"
               type="radio"
               register={register}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
-                  id: "digitalApplicationYes",
+                  id: "digitalApplicationChoiceYes",
                 },
                 {
                   ...yesNoRadioOptions[1],
-                  id: "digitalApplicationNo",
+                  id: "digitalApplicationChoiceNo",
                 },
               ]}
             />
           </GridCell>
-          {digitalApplication === YesNoAnswer.Yes && (
+          {digitalApplicationChoice === YesNoAnswer.Yes && (
             <GridCell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
               <FieldGroup
-                name="commonDigitalApplication"
+                name="commonDigitalApplicationChoice"
                 type="radio"
                 register={register}
                 fields={[
                   {
                     ...yesNoRadioOptions[0],
-                    id: "commonDigitalApplicationYes",
+                    id: "commonDigitalApplicationChoiceYes",
                   },
                   {
                     ...yesNoRadioOptions[1],
-                    id: "commonDigitalApplicationNo",
+                    id: "commonDigitalApplicationChoiceNo",
                   },
                 ]}
               />
             </GridCell>
           )}
         </GridSection>
-        {commonDigitalApplication === YesNoAnswer.No && (
+        {commonDigitalApplicationChoice === YesNoAnswer.No && (
           <GridSection columns={1}>
             <GridCell>
               <Field
@@ -286,7 +291,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             <p className="field-label m-4 ml-0">{t("listings.isPaperApplication")}</p>
 
             <FieldGroup
-              name="paperApplication"
+              name="paperApplicationChoice"
               type="radio"
               register={register}
               fields={[
@@ -302,7 +307,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </GridCell>
         </GridSection>
-        {paperApplication === YesNoAnswer.Yes && (
+        {paperApplicationChoice === YesNoAnswer.Yes && (
           <GridSection columns={1} tinted inset>
             <GridCell>
               {methods.paper?.paperApplications.length > 0 && (
@@ -358,7 +363,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             <p className="field-label m-4 ml-0">{t("listings.isReferralOpportunity")}</p>
 
             <FieldGroup
-              name="referralOpportunity"
+              name="referralOpportunityChoice"
               type="radio"
               register={register}
               fields={[
@@ -374,7 +379,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             />
           </GridCell>
         </GridSection>
-        {referralOpportunity === YesNoAnswer.Yes && (
+        {referralOpportunityChoice === YesNoAnswer.Yes && (
           <GridSection columns={3}>
             <GridCell>
               <PhoneField

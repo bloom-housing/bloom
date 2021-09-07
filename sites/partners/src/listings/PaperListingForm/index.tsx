@@ -72,11 +72,11 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
-  digitalApplication?: YesNoAnswer
-  commonDigitalApplication?: YesNoAnswer
-  paperApplication?: YesNoAnswer
-  referralOpportunity?: YesNoAnswer
-  dueDateQuestion?: boolean
+  digitalApplicationChoice?: YesNoAnswer
+  commonDigitalApplicationChoice?: YesNoAnswer
+  paperApplicationChoice?: YesNoAnswer
+  referralOpportunityChoice?: YesNoAnswer
+  dueDateQuestionChoice?: boolean
   lotteryDate?: {
     month: string
     day: string
@@ -360,10 +360,10 @@ const formatFormData = (
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
-    digitalApplication: data.digitalApplication === YesNoAnswer.Yes,
-    commonDigitalApplication: data.commonDigitalApplication === YesNoAnswer.Yes,
-    paperApplication: data.paperApplication === YesNoAnswer.Yes,
-    referralOpportunity: data.referralOpportunity === YesNoAnswer.Yes,
+    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
+    commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
+    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
+    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
   }
 }
 
