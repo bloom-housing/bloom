@@ -8,13 +8,15 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect=9231' next -p ${NEXTJS_PORT:-3001}",
     "build": "next build",
-    "test": "concurrently \"yarn dev\" \"cypress open\"",
-    "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
+    "cypress:open": "wait-on --interval 10000 \"http-get://localhost:${PORT:-3100}/docs\" \"http-get://localhost:${PORT:-3001}\" && cypress open",
+    "cypress:run": "wait-on --interval 10000 \"http-get://localhost:${PORT:-3100}/docs\" \"http-get://localhost:${PORT:-3001}\" && cypress run",
+    "test": "concurrently \"yarn dev:all\" \"yarn cypress:open\"",
+    "test:headless": "concurrently \"yarn dev:all\" \"yarn cypress:run\"",
     "export": "next export",
     "start": "next start",
-    "dev:listings": "cd ../../backend/core && yarn dev",
-    "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
-    "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
+    "dev:reseed-and-run-backend": "cd ../../backend/core && yarn db:reseed && yarn dev",
+    "dev:server-wait": "wait-on --interval 10000 \"http-get://localhost:${PORT:-3100}/docs\" && yarn dev",
+    "dev:all": "concurrently \"yarn dev:reseed-and-run-backend\" \"yarn dev:server-wait\""
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^1.0.5",

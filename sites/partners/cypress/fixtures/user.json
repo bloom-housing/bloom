@@ -1,7 +1,4 @@
 {
-  "email": "test@example.com",
-  "password": "abcdef",
-  "firstName": "Test",
-  "lastName": "User",
-  "dob": "1980-01-01"
+  "email": "admin@example.com",
+  "password": "abcdef"
 }

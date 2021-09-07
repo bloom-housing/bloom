@@ -1,6 +1,6 @@
 import Layout from "."
 
-export default (props) => {
+export default function Forms(props) {
   return (
     <Layout>
       <section className="p-px bg-gray-300">
