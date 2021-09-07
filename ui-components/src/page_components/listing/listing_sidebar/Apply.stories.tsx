@@ -120,7 +120,15 @@ export const linkToInternalApplicationAndDownloads = () => {
     externalReference: "#english",
     type: ApplicationMethodType.FileDownload,
     listing,
-    paperApplications: [{ id: "1", createdAt: new Date(), updatedAt: new Date(), file: { id: "1", fileId: "1", label: "English" }, language: Language.en }],
+    paperApplications: [
+      {
+        id: "1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        file: { id: "1", fileId: "1", label: "English" },
+        language: Language.en,
+      },
+    ],
   }
 
   listingWithInternalAndDownload.applicationMethods = listingWithInternalAndDownload.applicationMethods.concat(
