@@ -32,7 +32,6 @@ export const Select = ({
   id,
   name,
   label,
-  defaultValue = "",
   placeholder,
   register,
   validation,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   AppearanceBorderType,
@@ -20,7 +20,6 @@ import {
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 import {
-  ApplicationMethod,
   ApplicationMethodCreate,
   ApplicationMethodType,
   Language,
