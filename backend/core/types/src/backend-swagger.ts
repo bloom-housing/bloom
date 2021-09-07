@@ -4126,7 +4126,10 @@ export interface UnitsSummary {
   unitType: UnitType
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
@@ -4554,7 +4557,10 @@ export interface UnitsSummaryCreate {
   unitType: UnitType
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
@@ -5018,7 +5024,10 @@ export interface UnitsSummaryUpdate {
   unitType: UnitType
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
