@@ -171,6 +171,15 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     register("applicationMethods")
   }, [listing, register, setValue])
 
+  useEffect(() => {
+    if (typeof commonDigitalApplication === "boolean") {
+      setValue(
+        "commonDigitalApplication",
+        commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
+      )
+    }
+  }, [commonDigitalApplication, digitalApplication, setValue])
+
   // set application methods value when any of the methods change
   useEffect(() => {
     const applicationMethods = []
