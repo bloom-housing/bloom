@@ -1,15 +1,9 @@
 describe("applications/household/preferred-units", function () {
   const route = "/applications/household/preferred-units"
 
-  beforeEach(() => {
-    cy.fixture("applications/unit.json").as("unit")
-  })
-
   it("Should render form", function () {
     cy.loadConfig(
-      {
-        units: [this.unit],
-      },
+      {},
       "applicationConfigBlank.json",
       {}
     )
@@ -21,11 +15,11 @@ describe("applications/household/preferred-units", function () {
 
   it("Should display initial form errors", function () {
     cy.loadConfig(
-      {
-        units: [this.unit],
-      },
+      {},
       "applicationConfigBlank.json",
-      {}
+      {
+        preferredUnit: []
+      }
     )
     cy.visit(route)
 
@@ -38,15 +32,17 @@ describe("applications/household/preferred-units", function () {
 
   it("Should save form values and redirect to the next step", function () {
     cy.loadConfig(
-      {
-        units: [this.unit],
-      },
+      {},
       "applicationConfigBlank.json",
       {}
     )
     cy.visit(route)
 
-    cy.getByID(this.unit.unitType.id).check()
+    const listingJson = sessionStorage.getItem("bloom-app-listing")
+    const listing = listingJson ? JSON.parse(listingJson) : null
+    const unitId = listing?.units[0].unitType.id
+
+    cy.getByID(unitId).check()
 
     cy.goNext()
 
@@ -57,7 +53,7 @@ describe("applications/household/preferred-units", function () {
 
     // check context values
     cy.getSubmissionContext().should("deep.nested.include", {
-      preferredUnit: [{ id: this.unit.unitType.id }],
+      preferredUnit: [{ id: unitId }],
     })
   })
 })

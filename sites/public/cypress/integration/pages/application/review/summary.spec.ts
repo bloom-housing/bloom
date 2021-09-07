@@ -3,7 +3,6 @@ describe("applications/review/summary", function () {
 
   beforeEach(() => {
     cy.fixture("applications/summary.json").as("data")
-    cy.fixture("applications/unit.json").as("unit")
   })
 
   it("Should render 'You' section and check values", function () {
@@ -105,9 +104,7 @@ describe("applications/review/summary", function () {
 
   it("Should render 'Household Details' section and display values", function () {
     cy.loadConfig(
-      {
-        units: [this.unit],
-      },
+      {},
       "applicationConfigFilled.json"
     )
 
