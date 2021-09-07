@@ -53,7 +53,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
-import ApplicationTypes from "./sections/ApplicationTypes_v2"
+import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 

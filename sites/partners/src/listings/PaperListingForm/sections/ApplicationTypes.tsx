@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { useFormContext, useWatch } from "react-hook-form"
+import React, { useEffect, useState } from "react"
+import { useFormContext } from "react-hook-form"
 import {
   t,
   AppearanceBorderType,
@@ -15,34 +15,40 @@ import {
   Select,
   Textarea,
   PhoneField,
+  PhoneMask,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
-import { ApplicationMethodType, Language } from "@bloom-housing/backend-core/types"
+import {
+  ApplicationMethodCreate,
+  ApplicationMethodType,
+  Language,
+} from "@bloom-housing/backend-core/types"
 import { FormListing } from "../index"
 
-interface ApplicationTypesProps {
-  listing: FormListing
-  methodsState: any
+interface Methods {
+  digital: ApplicationMethodCreate
+  paper: ApplicationMethodCreate
+  referral: ApplicationMethodCreate
 }
 
-const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
-  const formMethods = useFormContext()
-
+const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control } = formMethods
-
-  const {
-    digitalApplicationMethod,
-    paperApplicationMethod,
-    referralApplicationMethod,
-    paperApplications,
-    setPaperApplications,
-  } = methodsState
-
+  const { register, setValue, watch } = useFormContext()
+  // watch fields
+  const digitalApplicationChoice = watch("digitalApplicationChoice")
+  const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
+  const paperApplicationChoice = watch("paperApplicationChoice")
+  const referralOpportunityChoice = watch("referralOpportunityChoice")
   /*
-    Set state for the drawer, upload progress, and more
+    Set state for methods, drawer, upload progress, and more
   */
+  const [methods, setMethods] = useState<Methods>({
+    digital: null,
+    paper: null,
+    referral: null,
+  })
+  const [selectedLanguage, setSelectedLanguage] = useState(Language.en)
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
   const [cloudinaryData, setCloudinaryData] = useState({
@@ -69,49 +75,35 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
     },
   ]
 
-  const digitalApplicationChoice = useWatch({
-    control,
-    name: "digitalApplicationChoice",
-  })
-
-  const commonDigitalApplicationChoice = useWatch({
-    control,
-    name: "commonDigitalApplicationChoice",
-  })
-
-  const paperApplicationChoice = useWatch({
-    control,
-    name: "paperApplicationChoice",
-  })
-
-  const selectedPaperApplicationLanguage = useWatch({
-    control,
-    name: "paperApplicationLanguage",
-    defaultValue: Language.en,
-  })
-
-  const referralOpportunityChoice = useWatch({
-    control,
-    name: "referralOpportunityChoice",
-  })
-
-  const savePaperApplication = () => {
-    setPaperApplications([
-      ...paperApplications,
-      {
-        file: {
-          fileId: cloudinaryData.id,
-          label: selectedPaperApplicationLanguage,
-        },
-        language: selectedPaperApplicationLanguage,
-      },
-    ])
-  }
-
   const paperApplicationsTableHeaders = {
     fileName: "t.fileName",
     language: "t.language",
     actions: "",
+  }
+
+  const savePaperApplication = () => {
+    const paperApplications = methods.paper ? methods.paper.paperApplications : []
+    paperApplications.push({
+      file: {
+        fileId: cloudinaryData.id,
+        label: selectedLanguage,
+      },
+      language: selectedLanguage,
+    })
+    setMethods({
+      ...methods,
+      paper: {
+        ...methods.paper,
+        paperApplications,
+      },
+    })
+  }
+
+  /*
+    Pass the file for the dropzone callback along to the uploader
+  */
+  const pdfUploader = async (file: File) => {
+    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
   }
 
   /*
@@ -121,7 +113,7 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
   if (cloudinaryData.url != "") {
     previewPaperApplicationsTableRows.push({
       fileName: `${cloudinaryData.id.split("/").slice(-1).join()}.pdf`,
-      language: t(`languages.${selectedPaperApplicationLanguage}`),
+      language: t(`languages.${selectedLanguage}`),
       actions: (
         <Button
           type="button"
@@ -141,43 +133,84 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
     })
   }
 
-  /*
-    Show the paper applications in the listing form if they're present
-  */
-  const paperApplicationsTableRows = []
-  if (
-    (typeof paperApplicationChoice === "undefined" && paperApplicationMethod !== null) ||
-    paperApplicationChoice === YesNoAnswer.Yes
-  ) {
-    paperApplications.forEach((item) => {
-      paperApplicationsTableRows.push({
-        fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
-        language: t(`languages.${item.language}`),
-        actions: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => {
-                setPaperApplications(paperApplications.filter((paperApp) => item !== paperApp))
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      })
+  /**
+   * set initial data
+   */
+  useEffect(() => {
+    if (!listing) return
+    ;[
+      "digitalApplication",
+      "commonDigitalApplication",
+      "paperApplication",
+      "referralOpportunity",
+    ].forEach((field) =>
+      setValue(`${field}Choice`, listing[field] === true ? YesNoAnswer.Yes : YesNoAnswer.No)
+    )
+
+    // set methods here
+    const temp: Methods = {
+      digital: null,
+      paper: null,
+      referral: null,
+    }
+    listing?.applicationMethods?.forEach((method) => {
+      switch (method.type) {
+        case ApplicationMethodType.ExternalLink:
+          temp["digital"] = method
+          break
+        case ApplicationMethodType.FileDownload:
+          temp["paper"] = method
+          break
+        case ApplicationMethodType.Referral:
+          temp["referral"] = method
+          break
+        default:
+          break
+      }
     })
-  }
+    setMethods(temp)
+    // register field
+    register("applicationMethods")
+  }, [listing, register, setValue])
 
-  /*
-    Pass the file for the dropzone callback along to the uploader
-  */
-  const pdfUploader = async (file: File) => {
-    void (await cloudinaryFileUploader({ file, setCloudinaryData, setProgressValue }))
-  }
+  // ensure that commonDigitalApplicationChoice is set after it's registered
+  useEffect(() => {
+    if (commonDigitalApplicationChoice === undefined || commonDigitalApplicationChoice === "") {
+      setValue(
+        "commonDigitalApplicationChoice",
+        listing.commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
+      )
+    }
+  }, [commonDigitalApplicationChoice, listing.commonDigitalApplication, setValue])
 
+  /**
+   * set application methods value when any of the methods change
+   */
+  useEffect(() => {
+    const applicationMethods = []
+    for (const key in methods) {
+      const method = methods[key]
+      if (!method) continue
+      switch (key) {
+        case "digital":
+          method.type =
+            commonDigitalApplicationChoice === YesNoAnswer.Yes
+              ? ApplicationMethodType.Internal
+              : ApplicationMethodType.ExternalLink
+          break
+        case "paper":
+          method.type = ApplicationMethodType.FileDownload
+          break
+        case "referral":
+          method.type = ApplicationMethodType.Referral
+          break
+        default:
+          break
+      }
+      applicationMethods.push(method)
+    }
+    setValue("applicationMethods", applicationMethods)
+  }, [commonDigitalApplicationChoice, methods, setValue])
   return (
     <>
       <GridSection
@@ -198,19 +231,15 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
-                  defaultChecked: digitalApplicationMethod !== null,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
-                  defaultChecked: listing && digitalApplicationMethod === null,
                 },
               ]}
             />
           </GridCell>
-          {((typeof digitalApplicationChoice === "undefined" &&
-            digitalApplicationMethod !== null) ||
-            digitalApplicationChoice === YesNoAnswer.Yes) && (
+          {digitalApplicationChoice === YesNoAnswer.Yes && (
             <GridCell>
               <p className="field-label m-4 ml-0">{t("listings.usingCommonDigitalApplication")}</p>
 
@@ -222,33 +251,36 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked:
-                      listing && digitalApplicationMethod?.type === ApplicationMethodType.Internal,
                   },
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
-                    defaultChecked:
-                      listing &&
-                      digitalApplicationMethod?.type === ApplicationMethodType.ExternalLink,
                   },
                 ]}
               />
             </GridCell>
           )}
         </GridSection>
-        {((typeof commonDigitalApplicationChoice === "undefined" &&
-          digitalApplicationMethod?.type === ApplicationMethodType.ExternalLink) ||
-          commonDigitalApplicationChoice === YesNoAnswer.No) && (
+        {commonDigitalApplicationChoice === YesNoAnswer.No && (
           <GridSection columns={1}>
             <GridCell>
               <Field
                 label={t("listings.customOnlineApplicationUrl")}
                 name="customOnlineApplicationUrl"
                 id="customOnlineApplicationUrl"
-                defaultValue={digitalApplicationMethod?.externalReference}
                 placeholder="https://"
-                register={register}
+                inputProps={{
+                  value: methods.digital ? methods.digital.externalReference : "",
+                  onChange: (e) => {
+                    setMethods({
+                      ...methods,
+                      digital: {
+                        ...methods.digital,
+                        externalReference: e.target.value,
+                      },
+                    })
+                  },
+                }}
               />
             </GridCell>
           </GridSection>
@@ -265,34 +297,58 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
               fields={[
                 {
                   ...yesNoRadioOptions[0],
-                  id: "paperApplicationChoiceYes",
-                  defaultChecked: paperApplicationMethod !== null,
+                  id: "paperApplicationYes",
                 },
                 {
                   ...yesNoRadioOptions[1],
-                  id: "paperApplicationChoiceNo",
-                  defaultChecked: listing && paperApplicationMethod === null,
+                  id: "paperApplicationNo",
                 },
               ]}
             />
           </GridCell>
         </GridSection>
-        {((typeof paperApplicationChoice === "undefined" && paperApplicationMethod !== null) ||
-          paperApplicationChoice === YesNoAnswer.Yes) && (
+        {paperApplicationChoice === YesNoAnswer.Yes && (
           <GridSection columns={1} tinted inset>
             <GridCell>
-              {paperApplications.length > 0 && (
+              {methods.paper?.paperApplications.length > 0 && (
                 <MinimalTable
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
-                  data={paperApplicationsTableRows}
+                  data={methods.paper.paperApplications.map((item) => ({
+                    fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
+                    langauge: t(`languages.${item.language}`),
+                    actions: (
+                      <div className="flex">
+                        <Button
+                          type="button"
+                          className="font-semibold uppercase text-red-700"
+                          onClick={() => {
+                            const items = methods.paper.paperApplications.filter(
+                              (paperApp) => item !== paperApp
+                            )
+
+                            setMethods({
+                              ...methods,
+                              paper: {
+                                ...methods.paper,
+                                paperApplications: items,
+                              },
+                            })
+                          }}
+                          unstyled
+                        >
+                          {t("t.delete")}
+                        </Button>
+                      </div>
+                    ),
+                  }))}
                 ></MinimalTable>
               )}
               <Button
                 type="button"
                 onClick={() => {
                   // default the application to English:
-                  control.setValue("paperApplicationLanguage", Language.en)
+                  setSelectedLanguage(Language.en)
                   setDrawerState(true)
                 }}
               >
@@ -313,30 +369,40 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
               fields={[
                 {
                   ...yesNoRadioOptions[0],
-                  id: "referralOpportunityChoiceYes",
-                  defaultChecked: referralApplicationMethod !== null,
+                  id: "referralOpportunityYes",
                 },
                 {
                   ...yesNoRadioOptions[1],
-                  id: "referralOpportunityChoiceNo",
-                  defaultChecked: listing && referralApplicationMethod === null,
+                  id: "referralOpportunityNo",
                 },
               ]}
             />
           </GridCell>
         </GridSection>
-        {((typeof referralOpportunityChoice === "undefined" &&
-          referralApplicationMethod !== null) ||
-          referralOpportunityChoice === YesNoAnswer.Yes) && (
+        {referralOpportunityChoice === YesNoAnswer.Yes && (
           <GridSection columns={3}>
             <GridCell>
               <PhoneField
                 label={t("listings.referralContactPhone")}
                 name="referralContactPhone"
                 id="referralContactPhone"
-                defaultValue={referralApplicationMethod?.phoneNumber}
                 placeholder={t("t.phoneNumberPlaceholder")}
-                control={control}
+                mask={() => (
+                  <PhoneMask
+                    name="referralContactPhone"
+                    value={methods.referral ? methods.referral.phoneNumber : ""}
+                    placeholder={t("t.phoneNumberPlaceholder")}
+                    onChange={(e) => {
+                      setMethods({
+                        ...methods,
+                        referral: {
+                          ...methods.referral,
+                          phoneNumber: e.target.value,
+                        },
+                      })
+                    }}
+                  />
+                )}
                 controlClassName={"control"}
               />
             </GridCell>
@@ -349,8 +415,18 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
                 name="referralSummary"
                 id="referralSummary"
                 maxLength={500}
-                defaultValue={referralApplicationMethod?.externalReference}
-                register={register}
+                inputProps={{
+                  value: methods.referral ? methods.referral.externalReference : "",
+                  onChange: (e) => {
+                    setMethods({
+                      ...methods,
+                      referral: {
+                        ...methods.referral,
+                        externalReference: e.target.value,
+                      },
+                    })
+                  },
+                }}
               />
             </GridCell>
           </GridSection>
@@ -393,11 +469,17 @@ const ApplicationTypes = ({ listing, methodsState }: ApplicationTypesProps) => {
               </p>
               <Select
                 name="paperApplicationLanguage"
-                register={register}
                 options={Object.values(Language).map((item) => ({
                   label: t(`languages.${item}`),
                   value: item,
                 }))}
+                noDefault={true}
+                inputProps={{
+                  value: selectedLanguage,
+                  onChange: (e) => {
+                    setSelectedLanguage(e.target.value)
+                  },
+                }}
               />
             </div>
           )}
