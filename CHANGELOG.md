@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
   - Upgraded React to v17
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
