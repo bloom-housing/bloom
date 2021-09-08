@@ -8,6 +8,7 @@ export interface ApplicationSectionProps {
   listing: Listing
   internalFormRoute: string
   preview?: boolean
+  cloudName?: string
 }
 
 const showWaitlist = (listing: Listing) => {
@@ -35,7 +36,12 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
           <Waitlist listing={listing} />
         </section>
       )}
-      <Apply listing={listing} preview={preview} internalFormRoute={props.internalFormRoute} />
+      <Apply
+        listing={listing}
+        preview={preview}
+        internalFormRoute={props.internalFormRoute}
+        cloudName={props.cloudName}
+      />
     </>
   )
 }
