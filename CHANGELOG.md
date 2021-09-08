@@ -85,7 +85,7 @@ All notable changes to this project will be documented in this file. The format 
   - Allow for unit sets to have multiple ami charts ([#1678](https://github.com/bloom-housing/bloom/pull/1678)) (Emily Jablonski)
   - UnitDto now only contains an AMI chart ID instead of the entire object AmiChart. AmiCharts must now be fetched separately from `/amiCharts` ([#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - `GET /listings` filters query param has been changed to support a querystring serialized array of filters, it's a breaking change because comparison property can no longer be an array. Also a property ordering problem has been resolved. Now the strict requirement for every client using the API is to use `qs` serialization format for query params. ([#1782](https://github.com/bloom-housing/bloom/pull/1782))
-  - Change preferredUnit property to store unitType ids  ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
+  - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
 
 - Fixed:
   - Added checks for property in listing.dto transforms
