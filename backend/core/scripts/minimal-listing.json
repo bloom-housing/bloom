@@ -14,12 +14,18 @@
   },
   "units": [
     {
-      "unitType": "oneBdrm",
+      "unitType": {
+        "name": "oneBdrm",
+        "numBedrooms": 1
+      },
       "status": "available"
     }
   ],
   "assets": [],
   "applicationMethods": [],
   "events": [],
-  "displayWaitlistSize": false
+  "displayWaitlistSize": false,
+  "jurisdiction": {
+    "id": "651b272c-aeaa-4808-a581-1c761e52cb53"
+  }
 }

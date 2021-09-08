@@ -28,15 +28,19 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
   }
 }
 
-export function encodeToBackendFilterString(filterParams: ListingFilterParams) {
-  let queryString = ""
+export function encodeToBackendFilterArray(filterParams: ListingFilterParams) {
+  const filterArray = []
   for (const filterType in filterParams) {
     if (filterType in ListingFilterKeys) {
       const comparison = getComparisonForFilter(ListingFilterKeys[filterType])
-      queryString += `&filter[$comparison]=${comparison}&filter[${filterType}]=${filterParams[filterType]}`
+      filterArray.push({
+        $comparison: comparison,
+        [filterType]: filterParams[filterType],
+      })
     }
   }
-  return queryString
+  console.log(JSON.stringify(filterArray))
+  return filterArray
 }
 
 export function encodeToFrontendFilterString(filterParams: ListingFilterParams) {
@@ -51,7 +55,10 @@ export function encodeToFrontendFilterString(filterParams: ListingFilterParams) 
 }
 
 export function decodeFiltersFromFrontendUrl(query: ParsedUrlQuery) {
-  const filters: ListingFilterParams = {}
+  // ListingFilterParams must have a comparison, so set one here even though it's unused.
+  const filters: ListingFilterParams = {
+    $comparison: EnumListingFilterParamsComparison.NA,
+  }
   let foundFilterKey = false
   for (const queryKey in query) {
     if (queryKey in ListingFilterKeys) {

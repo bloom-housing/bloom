@@ -1,31 +1,48 @@
 import { cleanup } from "@testing-library/react"
 import {
-  encodeToBackendFilterString,
+  encodeToBackendFilterArray,
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,
 } from "../../src/helpers/filters"
 import { parse } from "querystring"
-import { ListingFilterParams } from "@bloom-housing/backend-core/types"
+import {
+  EnumListingFilterParamsComparison,
+  ListingFilterParams,
+} from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)
 
-describe("encode backend filter string", () => {
+describe("encode backend filter array", () => {
   it("should handle single filter", () => {
     const filter: ListingFilterParams = {
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
-    expect(encodeToBackendFilterString(filter)).toBe(
-      "&filter[$comparison]==&filter[neighborhood]=Neighborhood"
-    )
+    expect(encodeToBackendFilterArray(filter)).toBe([
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        neighborhood: "Neighborhood",
+      },
+    ])
   })
   it("should handle multiple filters", () => {
     const filter: ListingFilterParams = {
       name: "Name",
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
-    expect(encodeToBackendFilterString(filter)).toBe(
-      "&filter[$comparison]==&filter[name]=Name&filter[$comparison]==&filter[neighborhood]=Neighborhood"
-    )
+    expect(encodeToBackendFilterArray(filter)).toBe([
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        name: "Name",
+      },
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        neighborhood: "Neighborhood",
+      },
+    ])
   })
 })
 

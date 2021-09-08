@@ -7,13 +7,14 @@ import { ArcherListing } from "../../../types"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { TranslationsService } from "../../translations/translations.service"
 import { Translation } from "../../translations/entities/translation.entity"
-import { CountyCode } from "../types/county-code"
 import { Language } from "../types/language-enum"
 import { Repository } from "typeorm"
+import { REQUEST } from "@nestjs/core"
 
 import dbOptions = require("../../../ormconfig.test")
-import { CountyCodeResolverService } from "../services/county-code-resolver.service"
-import { REQUEST } from "@nestjs/core"
+import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 declare const expect: jest.Expect
 const user = new User()
@@ -38,7 +39,7 @@ describe("EmailService", () => {
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Translation]),
+        TypeOrmModule.forFeature([Translation, Jurisdiction]),
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
@@ -47,18 +48,21 @@ describe("EmailService", () => {
       providers: [
         EmailService,
         TranslationsService,
-        CountyCodeResolverService,
+        JurisdictionsService,
+        JurisdictionResolverService,
         {
           provide: REQUEST,
           useValue: {
             get: () => {
-              // This header must be the string value of the CountyCode key.
-              return "alameda"
+              return "Alameda"
             },
           },
         },
       ],
     }).compile()
+
+    const jurisdictionService = await module.resolve<JurisdictionsService>(JurisdictionsService)
+    const jurisdiction = await jurisdictionService.findOne({ where: { name: "Alameda" } })
 
     const translationsRepository = module.get<Repository<Translation>>(
       getRepositoryToken(Translation)
@@ -66,7 +70,9 @@ describe("EmailService", () => {
     await translationsRepository.createQueryBuilder().delete().execute()
     const translationsService = await module.resolve<TranslationsService>(TranslationsService)
     await translationsService.create({
-      countyCode: CountyCode.alameda,
+      jurisdiction: {
+        id: jurisdiction.id,
+      },
       language: Language.en,
       translations: {
         confirmation: {
@@ -125,6 +131,7 @@ describe("EmailService", () => {
   })
 
   beforeEach(async () => {
+    jest.useFakeTimers()
     sendGridService = module.get<SendGridService>(SendGridService)
     sendMock = jest.fn()
     sendGridService.send = sendMock

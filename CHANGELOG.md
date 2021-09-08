@@ -82,12 +82,17 @@ All notable changes to this project will be documented in this file. The format 
   - Add FCFS and Lottery section to listing management ([#1485](https://github.com/bloom-housing/bloom/pull/1485)) (Emily Jablonski)
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
+  - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
 
 - Fixed:
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - Routing to individual application ([#1715](https://github.com/bloom-housing/bloom/pull/1715)) (Emily Jablonski)
+  - Application due date label in the listings table ([#1764](https://github.com/bloom-housing/bloom/pull/1764)) (Dominik Barcikowski)
+  - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
+  - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
+  - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
 
 ### UI Components
 
@@ -103,9 +108,17 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 - Changed:
-  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707ß)) (Emily Jablonski)
+  - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
+  - Removed business logic from HouseholdSizeField component ([#1724](https://github.com/bloom-housing/bloom/pull/1724)) (Emily Jablonski)
+    - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from HousingCounselor component ([#1717](https://github.com/bloom-housing/bloom/pull/1717)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing prop and replaced with a set not dependent on data model
+  - Removed business logic from ListingsList component ([#1773](https://github.com/bloom-housing/bloom/pull/1773)) (Emily Jablonski)
+    - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
+  - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
+    - **Breaking Change**
 
 ### Backend
 
@@ -119,6 +132,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds `roles` property to `UserDto [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds UnitAmiChartOverride entity and implements ami chart overriding at Unit level [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds `authz.e2e-spec.ts` test cover for preventing user from voluntarily changing his associated `roles` object [#1575](https://github.com/bloom-housing/bloom/pull/1575)
+  - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
 
 - Changed:
 
@@ -131,6 +145,7 @@ All notable changes to this project will be documented in this file. The format 
   - Updates listing post/put/delete endpoints to call cacheManager.reset instead of clearing and maintaining a growing set of keys. Updates transformUnits to check for units and length before continuing ([#1698](https://github.com/bloom-housing/bloom/pull/1698))
   - Allow for unit sets to have multiple ami charts ([#1678](https://github.com/bloom-housing/bloom/pull/1678)) (Emily Jablonski)
   - UnitDto now only contains an AMI chart ID instead of the entire object AmiChart. AmiCharts must now be fetched separately from `/amiCharts` ([#1575](https://github.com/bloom-housing/bloom/pull/1575)
+  - `GET /listings` filters query param has been changed to support a querystring serialized array of filters, it's a breaking change because comparison property can no longer be an array. Also a property ordering problem has been resolved. Now the strict requirement for every client using the API is to use `qs` serialization format for query params. ([#1782](https://github.com/bloom-housing/bloom/pull/1782))
 
 - Fixed:
   - Added checks for property in listing.dto transforms

@@ -9,6 +9,7 @@ export enum ListingFilterKeys {
   seniorHousing = "seniorHousing",
   minRent = "minRent",
   maxRent = "maxRent",
+  leasingAgents = "leasingAgents",
 }
 
 export enum AvailabilityFilterEnum {

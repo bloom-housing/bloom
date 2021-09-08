@@ -84,11 +84,16 @@ describe("Users", () => {
       dob: new Date(),
       confirmedAt: new Date(),
     }
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(403)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(403)
 
     delete userCreateDto.confirmedAt
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
 
@@ -139,7 +144,10 @@ describe("Users", () => {
       dob: new Date(),
     }
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
-    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
+    const res = await supertest(app.getHttpServer())
+      .post(`/user`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
@@ -156,7 +164,11 @@ describe("Users", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
     await supertest(app.getHttpServer())
       .post("/auth/login")
       .send({ email: userCreateDto.email, password: userCreateDto.password })
@@ -188,7 +200,11 @@ describe("Users", () => {
     userCreateDto.emailConfirmation = "a1@b.com"
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
     userCreateDto.emailConfirmation = "a2@b.com"
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
   })
 
   it("should not allow to create a new account with duplicate email", async () => {
@@ -202,7 +218,11 @@ describe("Users", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    const res = await supertest(app.getHttpServer()).post(`/user`).send(userCreateDto).expect(201)
+    const res = await supertest(app.getHttpServer())
+      .post(`/user`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
     expect(res.body).toHaveProperty("id")
     await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
   })
@@ -214,6 +234,9 @@ describe("Users", () => {
       firstName: "First",
       lastName: "Last",
       email: "test2@example.com",
+      jurisdictions: user2Profile.jurisdictions.map((jurisdiction) => ({
+        id: jurisdiction.id,
+      })),
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
@@ -237,7 +260,11 @@ describe("Users", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
     await supertest(app.getHttpServer())
       .post("/user/resend-confirmation")
       .send({ email: userCreateDto.email })
@@ -255,7 +282,11 @@ describe("Users", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(201)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
     const userService = await app.resolve<UserService>(UserService)
     const user = await userService.findByEmail(userCreateDto.email)
 
@@ -290,6 +321,7 @@ describe("Users", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
       .post(`/user?noWelcomeEmail=true`)
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)
