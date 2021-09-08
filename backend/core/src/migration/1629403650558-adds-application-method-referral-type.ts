@@ -32,6 +32,7 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
       } else {
         obj[app.listing_id].push(paperApp)
       }
+      return obj
     }, {})
 
     // loop over the index, remove the application methods, add a new one and add corresponding paper applications
