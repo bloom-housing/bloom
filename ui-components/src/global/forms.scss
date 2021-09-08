@@ -228,6 +228,12 @@
   }
 }
 
+/* Restore previous Tailwind v1 color */
+input::placeholder,
+textarea::placeholder {
+  color: #a0aec0;
+}
+
 input[type],
 textarea,
 select {

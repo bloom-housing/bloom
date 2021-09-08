@@ -44,6 +44,7 @@
     "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^8.0.0",
+    "postcss": "^8.3.6",
     "sass-loader": "^10.0.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.2"
