@@ -4,6 +4,7 @@ import {
   ApplicationMethod,
   ApplicationMethodType,
   ListingApplicationAddressType,
+  PaperApplication,
 } from "@bloom-housing/backend-core/types"
 import moment from "moment"
 import { t } from "../../../helpers/translator"
@@ -12,11 +13,13 @@ import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
 import { openDateState } from "../../../helpers/state"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
+import { cloudinaryPdfFromId } from "../../../helpers/pdfs"
 
 export interface ApplyProps {
   listing: Listing
   internalFormRoute: string
   preview?: boolean
+  cloudName?: string
 }
 
 const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
@@ -60,8 +63,26 @@ const Apply = (props: ApplyProps) => {
         ?.externalReference || ""
   }
 
-  const downloadMethods = listing.applicationMethods.filter((method: ApplicationMethod) => {
-    return method.type == ApplicationMethodType.FileDownload
+  const paperMethod = getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)
+  const sortedPaperApplications = paperMethod?.paperApplications?.sort((a, b) => {
+    // Ensure English is always first
+    if (a.language == "en") {
+      return -1
+    }
+    if (b.language == "en") {
+      return 1
+    }
+
+    // Otherwise, do regular string sort
+    const aLang = t(`languages.${a.language}`)
+    const bLang = t(`languages.${b.language}`)
+    if (aLang < bLang) {
+      return -1
+    }
+    if (aLang > bLang) {
+      return 1
+    }
+    return 0
   })
 
   type AddressLocation = "dropOff" | "pickUp"
@@ -109,7 +130,7 @@ const Apply = (props: ApplyProps) => {
             )}
           </>
         )}
-        {!openDateState(listing) && downloadMethods.length > 0 && (
+        {!openDateState(listing) && paperMethod && (
           <>
             {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
             <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
@@ -126,23 +147,29 @@ const Apply = (props: ApplyProps) => {
           </>
         )}
         {showDownload &&
-          downloadMethods.map((method: ApplicationMethod) => (
-            <p key={method.externalReference} className="text-center mt-2 mb-4 text-sm">
+          sortedPaperApplications?.map((paperApplication: PaperApplication) => (
+            <p key={paperApplication?.file?.fileId} className="text-center mt-2 mb-4 text-sm">
               <a
-                href={method.externalReference}
+                href={
+                  paperApplication?.file?.fileId.includes("https")
+                    ? paperApplication?.file?.fileId
+                    : cloudinaryPdfFromId(
+                        paperApplication?.file?.fileId || "",
+                        props.cloudName || ""
+                      )
+                }
                 title={t("listings.apply.downloadApplication")}
                 target="_blank"
               >
-                {method.label}
+                {t(`languages.${paperApplication.language}`)}
               </a>
             </p>
           ))}
         {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
           <>
-            {!openDateState(listing) &&
-              (onlineApplicationUrl !== "" || downloadMethods.length > 0) && (
-                <OrDivider bgColor="white" />
-              )}
+            {!openDateState(listing) && (onlineApplicationUrl !== "" || paperMethod) && (
+              <OrDivider bgColor="white" />
+            )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />
             <SidebarAddress
               address={getAddress(listing.applicationPickUpAddressType, "pickUp")}

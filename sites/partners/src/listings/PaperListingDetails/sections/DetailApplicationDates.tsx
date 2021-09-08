@@ -21,10 +21,10 @@ const DetailApplicationDates = () => {
   const [drawer, setDrawer] = useState<ListingEvent | null>(null)
 
   const openHouseHeaders = {
-    date: t("t.date"),
-    startTime: t("t.startTime"),
-    endTime: t("t.endTime"),
-    url: t("t.link"),
+    date: "t.date",
+    startTime: "t.startTime",
+    endTime: "t.endTime",
+    url: "t.link",
     view: "",
   }
 

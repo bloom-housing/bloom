@@ -45,6 +45,7 @@ export class ApplicationMethod extends AbstractEntity {
   phoneNumber?: string | null
 
   @OneToMany(() => PaperApplication, (paperApplication) => paperApplication.applicationMethod, {
+    cascade: true,
     eager: true,
   })
   @Expose()
