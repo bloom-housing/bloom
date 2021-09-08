@@ -42,11 +42,11 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
       const newMethod = await queryRunner.query(
         `INSERT INTO application_methods (type, label, listing_id) VALUES ('FileDownload', 'Paper Application', '${app}') RETURNING id`
       )
-      console.log("newMethod = ", newMethod)
+
       // insert paper applications
       for (const paper of appIndex[app]) {
         await queryRunner.query(
-          `INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${paper.file_id}', '${newMethod}')`
+          `INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${paper.file_id}', '${newMethod[0].id}')`
         )
       }
     }
