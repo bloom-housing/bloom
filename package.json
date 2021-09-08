@@ -18,8 +18,8 @@
   "private": true,
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
-    "test:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test",
-    "test:app:public:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn test:headless",
+    "test:app:public": "cd sites/public && yarn test",
+    "test:app:public:headless": "cd sites/public && yarn test:headless",
     "build:app:public": "cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
     "test:app:partners": "cd sites/partners && yarn test",
