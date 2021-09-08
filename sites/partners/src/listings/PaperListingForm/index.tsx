@@ -23,7 +23,6 @@ import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
   CSVFormattingType,
-  CountyCode,
   ListingApplicationAddressType,
   Unit,
   Listing,
@@ -31,7 +30,9 @@ import {
   ListingEventType,
   ListingEventCreate,
   Preference,
-  EnumListingReviewOrderType,
+  PaperApplication,
+  PaperApplicationCreate,
+  ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -52,10 +53,11 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
+import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
-export type FormListing = Listing & {
+export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -70,7 +72,11 @@ export type FormListing = Listing & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
-  dueDateQuestion?: boolean
+  digitalApplicationChoice?: YesNoAnswer
+  commonDigitalApplicationChoice?: YesNoAnswer
+  paperApplicationChoice?: YesNoAnswer
+  referralOpportunityChoice?: YesNoAnswer
+  dueDateQuestionChoice?: boolean
   lotteryDate?: {
     month: string
     day: string
@@ -144,7 +150,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  countyCode: CountyCode.Alameda,
+  jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
@@ -193,7 +199,7 @@ const defaults: FormListing = {
   yearBuilt: 2021,
   urlSlug: undefined,
   showWaitlist: false,
-  reviewOrderType: EnumListingReviewOrderType.firstComeFirstServe,
+  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -216,6 +222,8 @@ export type TempUnit = Unit & {
 export type TempEvent = ListingEvent & {
   tempId?: string
 }
+
+export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 const formatFormData = (
   data: FormListing,
@@ -257,14 +265,8 @@ const formatFormData = (
     unit.minOccupancy = stringToNumber(unit.minOccupancy)
     unit.numBathrooms = stringToNumber(unit.numBathrooms)
 
-    if (!unit.sqFeet || (unit.sqFeet && unit.sqFeet.length === 0)) {
+    if (!unit.sqFeet) {
       delete unit.sqFeet
-    }
-
-    if (unit.id === undefined) {
-      unit.id = ""
-      delete unit.updatedAt
-      delete unit.createdAt
     }
 
     delete unit.tempId
@@ -350,8 +352,12 @@ const formatFormData = (
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
       data.reviewOrderQuestion === "reviewOrderLottery"
-        ? EnumListingReviewOrderType.lottery
-        : EnumListingReviewOrderType.firstComeFirstServe,
+        ? ListingReviewOrder.lottery
+        : ListingReviewOrder.firstComeFirstServe,
+    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
+    commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
+    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
+    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
   }
 }
 
@@ -588,6 +594,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <TabPanel>
                           <RankingsAndResults listing={listing} />
                           <LeasingAgent />
+                          <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
                           <ApplicationDates
                             listing={listing}

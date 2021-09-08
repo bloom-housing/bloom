@@ -571,6 +571,13 @@
     "viewApplication": "View Application",
     "yourLotteryNumber": "Your confirmation number is"
   },
+  "users": {
+    "confirmed": "Confirmed",
+    "unconfirmed": "Unconfirmed",
+    "totalUsers": "total users",
+    "administrator": "Administrator",
+    "partner": "Partner"
+  },
   "flags": {
     "flaggedSet": "Flagged Set",
     "ruleName": "Rule Name",
@@ -656,6 +663,10 @@
       "title": "Page Not Found",
       "message": "Uh oh, we can’t seem to find the page you’re looking for. Try going back to the previous page or click below to browse listings."
     },
+    "unauthorized": {
+      "title": "Unauthorized",
+      "message": "Uh oh, you are not allowed to access this page."
+    },
     "agreeError": "You must agree to the terms in order to continue",
     "firstNameError": "Please enter a First Name",
     "lastNameError": "Please enter a Last Name",
@@ -730,6 +741,7 @@
     },
     "activePreferences": "Active Preferences",
     "addListing": "Add Listing",
+    "addPaperApplication": "Add Paper Application",
     "addPhoto": "Add Photo",
     "addPreference": "Add Preference",
     "addPreferences": "Add Preferences",
@@ -781,6 +793,7 @@
     "confirmedPreferenceList": "Confirmed %{preference} List",
     "creditHistory": "Credit History",
     "criminalBackground": "Criminal Background",
+    "customOnlineApplicationUrl": "Custom Online Application URL",
     "deleteListingDescription": "Deleting this listing means you will lose all the information you've entered.",
     "depositMax": "Deposit Max",
     "depositMin": "Deposit Min",
@@ -806,6 +819,9 @@
     "householdSize": "Household Size",
     "importantProgramRules": "Important Program Rules",
     "includesPriorityUnits": "Includes Priority Units for %{priorities}",
+    "isDigitalApplication": "Is there a digital application?",
+    "isPaperApplication": "Is there a paper application?",
+    "isReferralOpportunity": "Is there a referral opportunity?",
     "latitude": "Latitude",
     "leasingAgentAddress": "Leasing Agent Address",
     "listingPreviewOnly": "This is a listing preview only.",
@@ -861,6 +877,8 @@
       "header": "Public Lottery",
       "seeVideo": "See Video"
     },
+    "referralContactPhone": "Referral Contact Phone",
+    "referralSummary": "Referral Summary",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
@@ -898,6 +916,8 @@
       "additionalInformationTitle": "Additional Information",
       "applicationAddressSubtitle": "In the event of paper applications, where do you want applications dropped off or mailed?",
       "applicationAddressTitle": "Application Address",
+      "applicationTypesTitle": "Application Types",
+      "applicationTypesSubtitle": "Configure the online application and upload paper application forms.",
       "buildingDetailsSubtitle": "Tell us where the building is located.",
       "buildingDetailsTitle": "Building Details",
       "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
@@ -957,6 +977,8 @@
       "show": "Show Closed Listings",
       "title": "Closed Listings"
     },
+    "usingCommonDigitalApplication": "Are you using the common digital application?",
+    "usingCommonPaperApplication": "Are you using the common paper application?",
     "waitlist": {
       "closed": "Waitlist Closed",
       "currentSizeQuestion": "How many people are on the current list?",
@@ -1025,7 +1047,13 @@
       "individualUnits": "Individual Units",
       "delete": "Delete this Unit",
       "deleteConf": "Do you really want to delete this unit?",
-      "eligibility": "Eligibility"
+      "eligibility": "Eligibility",
+      "statusOptions": {
+        "unknown": "Unknown",
+        "available": "Available",
+        "occupied": "Occupied",
+        "unavailable": "Unavailable"
+      }
     },
     "events": {
       "deleteThisEvent": "Delete this event",
@@ -1057,7 +1085,8 @@
     "siteTitle": "Housing Portal",
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
-    "flags": "Flags"
+    "flags": "Flags",
+    "users": "Users"
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
@@ -1173,11 +1202,14 @@
     "household": "Household",
     "income": "Income",
     "jumpTo": "Jump to",
+    "jurisdiction": "Jurisdiction",
     "label": "Label",
+    "language": "Language",
     "lastUpdated": "Last Updated",
     "letter": "Letter",
     "less": "Less",
     "link": "Link",
+    "listing": "Listings",
     "loginIsRequired": "Login is required to view this page.",
     "menu": "Menu",
     "minimumIncome": "Minimum Income",
@@ -1219,6 +1251,7 @@
     "otherRelationShip": "Other Relationship",
     "rent": "Rent",
     "review": "Review",
+    "role": "Role",
     "secondPhone": "Second Phone",
     "seconds": "seconds",
     "seeDetails": "See Details",

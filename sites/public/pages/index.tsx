@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import qs from "qs"
 import Head from "next/head"
 import { Listing } from "@bloom-housing/backend-core/types"
 import {
@@ -80,11 +81,22 @@ export default function Home(props: IndexProps) {
 export async function getStaticProps() {
   let listings = []
   try {
-    // const response = await axios.get(process.env.listingServiceUrl)
-    const response = await axios.get(
-      process.env.listingServiceUrl +
-        "?view=base&limit=all&filter[$comparison]=<>&filter[status]=pending"
-    )
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
+
     listings = response?.data?.items ? response.data.items : []
   } catch (error) {
     console.error(error)

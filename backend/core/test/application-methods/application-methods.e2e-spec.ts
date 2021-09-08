@@ -52,6 +52,7 @@ describe("ApplicationMethods", () => {
       .set(...setAuthorization(adminAccesstoken))
       .send({ type: ApplicationMethodType.ExternalLink })
       .expect(201)
+
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")

@@ -8,10 +8,11 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { FindConditions, Repository } from "typeorm"
+import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
 import { User } from "../entities/user.entity"
-import { EmailDto, UserCreateDto, UserUpdateDto } from "../dto/user.dto"
+import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
 import { assignDefined } from "../../shared/assign-defined"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { USER_ERRORS } from "../user-errors"
@@ -20,8 +21,10 @@ import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
 import { authzActions, AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
+
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
+import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -30,7 +33,8 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
-    private readonly passwordService: PasswordService
+    private readonly passwordService: PasswordService,
+    private readonly jurisdictionResolverService: JurisdictionResolverService
   ) {}
 
   public async findByEmail(email: string) {
@@ -39,6 +43,31 @@ export class UserService {
 
   public async find(options: FindConditions<User>) {
     return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
+  }
+
+  public async list(
+    params: UserListQueryParams,
+    authContext: AuthContext
+  ): Promise<Pagination<User>> {
+    const options = {
+      limit: params.limit === "all" ? undefined : params.limit,
+      page: params.page || 10,
+    }
+    // https://www.npmjs.com/package/nestjs-typeorm-paginate
+    const qb = this._getQb()
+
+    const result = await paginate<User>(qb, options)
+    /**
+     * admin are the only ones that can access all users
+     * so this will throw on the first user that isn't their own (non admin users can access themselves)
+     */
+    await Promise.all(
+      result.items.map(async (user) => {
+        await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
+      })
+    )
+
+    return result
   }
 
   async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
@@ -53,7 +82,7 @@ export class UserService {
       ...dto,
     })
 
-    if (user.confirmedAt !== dto.confirmedAt) {
+    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
       })
@@ -71,6 +100,20 @@ export class UserService {
 
       passwordHash = await this.passwordService.passwordToHash(dto.password)
       delete dto.password
+    }
+
+    /**
+     * jurisdictions should be filtered based off of what the authContext user has
+     */
+    if (authContext.user.jurisdictions) {
+      if (dto.jurisdictions) {
+        dto.jurisdictions = dto.jurisdictions.filter(
+          (jurisdiction) =>
+            authContext.user.jurisdictions.findIndex((val) => val.id === jurisdiction.id) > -1
+        )
+      }
+    } else {
+      delete dto.jurisdictions
     }
 
     assignDefined(user, {
@@ -132,7 +175,6 @@ export class UserService {
         ...dto,
       })
     }
-
     let user = await this.findByEmail(dto.email)
     if (user) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
@@ -145,6 +187,10 @@ export class UserService {
     user.dob = dto.dob
     user.email = dto.email
     user.language = dto.language
+    // if coming from partners dto.jurisdictions can be set
+    user.jurisdictions = dto.jurisdictions
+      ? dto.jurisdictions
+      : [await this.jurisdictionResolverService.getJurisdiction()]
     try {
       user.passwordHash = await this.passwordService.passwordToHash(password)
       user = await this.repo.save(user)
@@ -195,5 +241,13 @@ export class UserService {
     user.resetToken = null
     await this.repo.save(user)
     return this.authService.generateAccessToken(user)
+  }
+
+  private _getQb() {
+    const qb = this.repo.createQueryBuilder("user")
+    qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+    qb.leftJoinAndSelect("user.roles", "user_roles")
+
+    return qb
   }
 }

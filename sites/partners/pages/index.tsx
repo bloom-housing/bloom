@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from "react"
+import React, { useMemo, useContext, useState } from "react"
 import Head from "next/head"
 import {
   PageHeader,
@@ -7,9 +7,10 @@ import {
   AuthContext,
   Button,
   LocalizedLink,
+  AgPagination,
+  AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
-import { Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -17,38 +18,48 @@ import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
 
+class formatLinkCell {
+  link: HTMLAnchorElement
+
+  init(params) {
+    this.link = document.createElement("a")
+    this.link.classList.add("text-blue-700")
+    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    this.link.innerText = params.valueFormatted || params.value
+  }
+
+  getGui() {
+    return this.link
+  }
+}
+
+class ApplicationsLink extends formatLinkCell {
+  init(params) {
+    super.init(params)
+    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+  }
+}
+
+class ListingsLink extends formatLinkCell {
+  init(params) {
+    super.init(params)
+    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
+  }
+}
+
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
-  const leasingAgentInListings = profile.leasingAgentInListings?.map((item) => item.id)
+  const leasingAgentInListings = profile.leasingAgentInListings
+    ?.map((leasingAgent) => leasingAgent.id)
+    .join(",")
   const isAdmin = profile.roles?.isAdmin || false
-  class formatLinkCell {
-    link: HTMLAnchorElement
 
-    init(params) {
-      this.link = document.createElement("a")
-      this.link.classList.add("text-blue-700")
-      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
-      this.link.innerText = params.valueFormatted || params.value
-    }
+  /* Pagination */
+  const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
+  const [currentPage, setCurrentPage] = useState<number>(1)
 
-    getGui() {
-      return this.link
-    }
-  }
-
-  class ApplicationsLink extends formatLinkCell {
-    init(params) {
-      super.init(params)
-      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
-    }
-  }
-
-  class ListingsLink extends formatLinkCell {
-    init(params) {
-      super.init(params)
-      this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
-    }
-  }
+  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
+  const metaImage = "" // TODO: replace with hero image
 
   class formatWaitlistStatus {
     text: HTMLSpanElement
@@ -73,9 +84,6 @@ export default function ListingsList() {
       ListingsLink,
     },
   }
-
-  const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
-  const metaImage = "" // TODO: replace with hero image
 
   const columnDefs = useMemo(() => {
     const columns = [
@@ -103,7 +111,7 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
+        valueFormatter: ({ value }) => (value ? moment(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {
         headerName: t("listings.availableUnits"),
@@ -124,19 +132,11 @@ export default function ListingsList() {
     return columns
   }, [])
 
-  const { listingDtos, listingsLoading, listingsError } = useListingsData()
-  // filter listings to show items depends on user role
-  const filteredListings = useMemo(() => {
-    if (isAdmin) return listingDtos
-
-    return listingDtos?.reduce((acc, curr) => {
-      if (leasingAgentInListings.includes(curr.id)) {
-        acc.push(curr)
-      }
-
-      return acc
-    }, []) as Listing[]
-  }, [leasingAgentInListings, listingDtos, isAdmin])
+  const { listingDtos, listingsLoading, listingsError } = useListingsData({
+    page: currentPage,
+    limit: itemsPerPage,
+    userId: !isAdmin ? profile?.id : undefined,
+  })
 
   if (listingsLoading) return "Loading..."
   if (listingsError) return "An error has occurred."
@@ -167,27 +167,29 @@ export default function ListingsList() {
                 )}
               </div>
             </div>
+
             <div className="applications-table mt-5">
               <AgGridReact
                 gridOptions={gridOptions}
                 columnDefs={columnDefs}
-                rowData={filteredListings}
+                rowData={listingDtos.items}
                 domLayout={"autoHeight"}
                 headerHeight={83}
                 rowHeight={58}
+                suppressPaginationPanel={true}
+                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
                 suppressScrollOnNewData={true}
               ></AgGridReact>
 
-              <div className="data-pager">
-                <div className="data-pager__control-group">
-                  <span className="data-pager__control">
-                    <span className="field-label" id="lbTotalPages">
-                      {filteredListings?.length}
-                    </span>
-                    <span className="field-label">{t("listings.totalListings")}</span>
-                  </span>
-                </div>
-              </div>
+              <AgPagination
+                totalItems={listingDtos.meta.totalItems}
+                totalPages={listingDtos.meta.totalPages}
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                quantityLabel={t("listings.totalListings")}
+                setCurrentPage={setCurrentPage}
+                setItemsPerPage={setItemsPerPage}
+              />
             </div>
           </div>
         </article>

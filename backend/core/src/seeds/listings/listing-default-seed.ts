@@ -68,13 +68,25 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].priorityType = priorityTypeMobilityAndHearing
     unitsToBeCreated[0].unitType = unitTypeOneBdrm
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
-    await this.unitsRepository.save(unitsToBeCreated)
+    const newUnits = await this.unitsRepository.save(unitsToBeCreated)
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...getDefaultListing(),
+      amiChartOverrides: [
+        {
+          unit: { id: newUnits[0].id },
+          items: [
+            {
+              percentOfAmi: 80,
+              householdSize: 1,
+              income: 777777,
+            },
+          ],
+        },
+      ],
       name: "Test: Default, Two Preferences",
       property: property,
       assets: getDefaultAssets(),

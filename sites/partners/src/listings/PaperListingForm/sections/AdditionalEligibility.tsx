@@ -23,6 +23,7 @@ const AdditionalEligibility = () => {
             id={"creditHistory"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
           <Textarea
             label={t("listings.rentalHistory")}
@@ -30,6 +31,7 @@ const AdditionalEligibility = () => {
             id={"rentalHistory"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -39,6 +41,7 @@ const AdditionalEligibility = () => {
             id={"criminalBackground"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
           <Textarea
             label={t("listings.sections.rentalAssistanceTitle")}
@@ -46,6 +49,7 @@ const AdditionalEligibility = () => {
             id={"rentalAssistance"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
       </GridSection>

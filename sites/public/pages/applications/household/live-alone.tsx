@@ -55,13 +55,14 @@ const ApplicationLiveAlone = () => {
         <Form className="mb-4" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <HouseholdSizeField
-              listing={listing}
-              householdSize={application.householdSize}
-              validate={validateHousehold}
-              register={register}
-              error={errors.householdSize}
-              clearErrors={clearErrors}
               assistanceUrl={t("application.household.assistanceUrl")}
+              clearErrors={clearErrors}
+              error={errors.householdSize}
+              householdSize={application.householdSize}
+              householdSizeMax={listing?.householdSizeMax}
+              householdSizeMin={listing?.householdSizeMin}
+              register={register}
+              validate={validateHousehold}
             />
           </div>
 
