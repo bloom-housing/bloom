@@ -114,7 +114,7 @@ const ListingsList = (props: ListingsProps) => {
               />
             )}
           </div>
-          <LinkButton href={`/listing/${listing.id}/${listing.urlSlug}`}>
+          <LinkButton className="float-right" href={`/listing/${listing.id}/${listing.urlSlug}`}>
             {t("t.seeDetails")}
           </LinkButton>
         </div>
