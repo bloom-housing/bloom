@@ -40,7 +40,7 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
       await queryRunner.query(`DELETE FROM application_methods WHERE listing_id = '${app}'`)
       // insert one application method per group
       const newMethod = await queryRunner.query(
-        `INSERT INTO application_methods (type, label, listing_id)) VALUES ('FileDownload', 'Paper Application', '${app}') RETURNING id`
+        `INSERT INTO application_methods (type, label, listing_id) VALUES ('FileDownload', 'Paper Application', '${app}') RETURNING id`
       )
       // insert paper applications
       for (const paper of appIndex[app]) {
