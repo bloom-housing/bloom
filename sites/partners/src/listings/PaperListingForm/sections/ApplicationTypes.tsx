@@ -175,13 +175,16 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
   // ensure that commonDigitalApplicationChoice is set after it's registered
   useEffect(() => {
-    if (commonDigitalApplicationChoice === undefined || commonDigitalApplicationChoice === "") {
+    if (
+      listing?.commonDigitalApplication &&
+      (commonDigitalApplicationChoice === undefined || commonDigitalApplicationChoice === "")
+    ) {
       setValue(
         "commonDigitalApplicationChoice",
         listing.commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
       )
     }
-  }, [commonDigitalApplicationChoice, listing.commonDigitalApplication, setValue])
+  }, [commonDigitalApplicationChoice, listing?.commonDigitalApplication, setValue])
 
   /**
    * set application methods value when any of the methods change
