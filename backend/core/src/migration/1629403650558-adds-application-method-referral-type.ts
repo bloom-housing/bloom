@@ -45,8 +45,12 @@ export class addsApplicationMethodReferralType1629403650558 implements Migration
 
       // insert paper applications
       for (const paper of appIndex[app]) {
+
+        // insert new asset, since there's so few we can manually upload to Cloudinary if necessary
+        const asset = await queryRunner.query(`INSERT INTO assets (label, file_id) VALUES ('${paper.language} Application', '${paper.file_id}') RETURNING id`)
+
         await queryRunner.query(
-          `INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${paper.file_id}', '${newMethod[0].id}')`
+          `INSERT INTO paper_applications (language, file_id, application_method_id) VALUES ('${paper.language}', '${asset[0].id}', '${newMethod[0].id}')`
         )
       }
     }
