@@ -6,10 +6,11 @@ import {
   AlertBox,
   LinkButton,
   Hero,
-  MarkdownSection,
   t,
   SiteAlert,
   openDateState,
+  ActionBlock,
+  Icon,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
@@ -19,6 +20,7 @@ import moment from "moment"
 
 interface IndexProps {
   listings: Listing[]
+  notificationsSignUpURL?: string
 }
 
 export default function Home(props: IndexProps) {
@@ -70,14 +72,29 @@ export default function Home(props: IndexProps) {
         }
       />
       <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>
-          <>
-            <p>{t("welcome.seeMoreOpportunities")}</p>
-            <LinkButton href="/additional-resources">
+        {props.notificationsSignUpURL && (
+          <ActionBlock
+            header={t("welcome.signUp")}
+            icon={<Icon size="3xl" symbol="mail" />}
+            actions={[
+              <LinkButton
+                key={"sign-up"}
+                href={"https://github.com/bloom-housing/bloom/pull/1800/files"}
+              >
+                {t("welcome.signUpToday")}
+              </LinkButton>,
+            ]}
+          />
+        )}
+        <ActionBlock
+          header={t("welcome.seeMoreOpportunities")}
+          icon={<Icon size="3xl" symbol="building" />}
+          actions={[
+            <LinkButton href="/additional-resources" key={"additional-resources"}>
               {t("welcome.viewAdditionalHousing")}
-            </LinkButton>
-          </>
-        </MarkdownSection>
+            </LinkButton>,
+          ]}
+        />
       </div>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
@@ -88,8 +105,9 @@ export default function Home(props: IndexProps) {
 
 export async function getStaticProps() {
   let listings = []
+  let notificationsSignUpURL = null
   try {
-    const response = await axios.get(process.env.listingServiceUrl, {
+    const listingsResponse = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
         limit: "all",
@@ -104,11 +122,14 @@ export async function getStaticProps() {
         return qs.stringify(params)
       },
     })
-
-    listings = response?.data?.items ? response.data.items : []
+    const jurisdictions = await axios.get(`${process.env.backendApiBase}/jurisdictions/list`)
+    const jurisdiction = process.env.jurisdictionName
+    const thisJurisdiction = jurisdictions?.data?.find((juris) => juris.name === jurisdiction)
+    notificationsSignUpURL = thisJurisdiction.notificationsSignUpURL
+    listings = listingsResponse?.data?.items ? listingsResponse.data.items : []
   } catch (error) {
     console.error(error)
   }
 
-  return { props: { listings }, revalidate: process.env.cacheRevalidate }
+  return { props: { listings, notificationsSignUpURL }, revalidate: process.env.cacheRevalidate }
 }

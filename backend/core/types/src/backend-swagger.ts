@@ -3562,6 +3562,9 @@ export interface Jurisdiction {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface User {
@@ -3821,6 +3824,9 @@ export interface UserInvite {
 export interface JurisdictionCreate {
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface JurisdictionUpdate {
@@ -3835,6 +3841,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface ListingFilterParams {
