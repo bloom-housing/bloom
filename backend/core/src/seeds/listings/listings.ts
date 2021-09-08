@@ -6,8 +6,8 @@ import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
-import { UserCreateDto } from "../../auth/dto/user.dto"
 import { BaseEntity } from "typeorm"
+import { UserCreateDto } from "../../auth/dto/user-create.dto"
 
 export type PropertySeedType = Omit<
   PropertyCreateDto,

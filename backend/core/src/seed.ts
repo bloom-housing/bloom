@@ -3,7 +3,6 @@ import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
 import { UserService } from "./auth/services/user.service"
 import { plainToClass } from "class-transformer"
-import { UserCreateDto } from "./auth/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./auth/entities/user.entity"
@@ -29,6 +28,7 @@ import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listin
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
+import { UserCreateDto } from "./auth/dto/user-create.dto"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },

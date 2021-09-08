@@ -12,6 +12,7 @@ export enum authzActions {
   delete = "delete",
   submit = "submit",
   confirm = "confirm",
+  invite = "invite",
 }
 
 @Injectable()
