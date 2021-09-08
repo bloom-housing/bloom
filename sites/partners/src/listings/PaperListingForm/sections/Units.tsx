@@ -24,7 +24,7 @@ type UnitProps = {
 }
 
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
-  const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
+  const [unitDrawerId, setUnitDrawerId] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
 
   const formMethods = useFormContext()
@@ -48,9 +48,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const editUnit = useCallback(
     (tempId: number) => {
-      setUnitDrawer(tempId)
+      setUnitDrawerId(tempId)
     },
-    [setUnitDrawer]
+    [setUnitDrawerId]
   )
 
   const deleteUnit = useCallback(
@@ -69,7 +69,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   )
 
   function saveUnit(newUnit: TempUnit) {
-    console.log(newUnit)
     const exists = units.some((unit) => unit.tempId === newUnit.tempId)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
@@ -164,16 +163,16 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       </GridSection>
 
       <Drawer
-        open={unitDrawer !== null && unitDrawer !== undefined}
+        open={unitDrawerId !== null && unitDrawerId !== undefined}
         title={t("listings.unit.add")}
         ariaDescription={t("listings.unit.add")}
-        onClose={() => setUnitDrawer(null)}
+        onClose={() => setUnitDrawerId(null)}
       >
         <UnitForm
           onSubmit={(unit) => saveUnit(unit)}
-          onClose={() => setUnitDrawer(null)}
-          units={units}
-          currentTempId={unitDrawer}
+          onClose={() => setUnitDrawerId(null)}
+          defaultUnit={units.filter((unit) => unit.tempId === unitDrawerId)[0]}
+          tempId={unitDrawerId}
         />
       </Drawer>
 

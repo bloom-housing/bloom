@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from "react"
+import React, { useEffect, useState, useContext, useCallback } from "react"
 import {
   t,
   GridSection,
@@ -15,7 +15,7 @@ import {
   MinimalTable,
   AuthContext,
 } from "@bloom-housing/ui-components"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { TempUnit } from "."
 import {
   AmiChart,
@@ -27,23 +27,21 @@ import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../
 import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
-  onSubmit: (unit: TempUnit) => void
+  onSubmit: (unit: any) => void
   onClose: () => void
-  units: TempUnit[]
-  currentTempId: number
+  defaultUnit: TempUnit | undefined
+  tempId: number
 }
 
-const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  const [current, setCurrent] = useState<TempUnit>(null)
-  const [tempId, setTempId] = useState<number | null>(null)
+  // const [tempId, setTempId] = useState<number | null>(null)
   const [options, setOptions] = useState({
     amiCharts: [],
     unitPriorities: [],
     unitTypes: [],
   })
-  const [fetchedAmiChart, setFetchedAmiChart] = useState(null)
   const [amiOverrides, setAmiOverrides] = useState({})
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
@@ -59,64 +57,32 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, reset } = useForm({
-    defaultValues: {
-      number: current?.number,
-      unitType: current?.unitType,
-      numBathrooms: current?.numBathrooms,
-      floor: current?.floor,
-      sqFeet: current?.sqFeet,
-      status: UnitStatus.unknown,
-      minOccupancy: current?.minOccupancy,
-      maxOccupancy: current?.maxOccupancy,
-      amiChart: current?.amiChart,
-      amiPercentage: current?.amiPercentage,
-      monthlyIncomeMin: current?.monthlyIncomeMin,
-      monthlyRent: current?.monthlyRent,
-      monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
-      priorityType: current?.priorityType,
-      rentType: getRentType(current),
-    },
-  })
-
-  useEffect(() => {
-    setTempId(currentTempId)
-  }, [currentTempId])
-
-  useEffect(() => {
-    const unit = units.filter((unit) => unit.tempId === tempId)[0]
-    setCurrent(unit)
-    reset({
-      ...unit,
-      rentType: getRentType(unit),
-      status: UnitStatus.available,
-    })
-  }, [units, setCurrent, tempId, reset, options])
+  const { register, watch, errors, trigger, getValues, setValue, control } = useForm()
 
   const rentType = watch("rentType")
-  const amiChartID: string = watch("amiChart.id")
-  const amiPercentage: string = watch("amiPercentage")
+
+  const amiPercentage: string = useWatch({
+    control,
+    name: "amiPercentage",
+  })
+
+  const amiChartID: string = useWatch({
+    control,
+    name: "amiChart.id",
+  })
 
   const maxAmiHouseholdSize = 8
 
   const getAmiChartTableData = () => {
-    console.log("getAmiChartTableData")
-    console.log(amiOverrides)
-    console.log(fetchedAmiChart)
-    return [...Array(maxAmiHouseholdSize)].reduce((acc, current, index) => {
+    console.log("getamiChartTableData")
+    return [...Array(maxAmiHouseholdSize)].reduce((acc, _, index) => {
       const fieldName = `maxIncomeHouseholdSize${index + 1}`
       const incomeCell = (
         <Field
+          key={fieldName}
           id={fieldName}
           name={fieldName}
           label={t("t.minimumIncome")}
-          defaultValue={
-            amiOverrides[fieldName]
-              ? amiOverrides[fieldName]
-              : fetchedAmiChart && fetchedAmiChart.length
-              ? fetchedAmiChart[index]?.income
-              : 0
-          }
           register={register}
           type="number"
           prepend="$"
@@ -137,6 +103,16 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   }
 
   useEffect(() => {
+    // On initial load, populate with default values if we have any
+    if (defaultUnit) {
+      Object.keys(defaultUnit).forEach((key) => {
+        setValue(key, defaultUnit[key])
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log("use effect 4")
     const fetchAmiChart = async () => {
       try {
         const thisAmiChart = await amiChartsService.retrieve({
@@ -147,12 +123,14 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
           .sort(function (a, b) {
             return a.householdSize - b.householdSize
           })
-        setFetchedAmiChart(amiChartData)
+        console.log("fetched ami chart", amiChartData)
+        amiChartData.forEach((amiValue, index) => {
+          setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
+        })
       } catch (e) {
         console.error(e)
       }
     }
-    setAmiOverrides({})
     if (amiChartID && amiPercentage) {
       void fetchAmiChart()
     }
@@ -166,7 +144,14 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   async function onFormSubmit(action?: string) {
     const data = getValues()
     const validation = await trigger()
-    if (!validation) return
+    if (!validation) {
+      console.log({ data })
+      ;[...Array(maxAmiHouseholdSize)].forEach((index) => {
+        const fieldName = `maxIncomeHouseholdSize${index + 1}`
+        setValue(fieldName, data[fieldName])
+      })
+      return
+    }
 
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
@@ -202,22 +187,8 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
       ...data,
     }
 
-    const current = units.find((unit) => unit.tempId === tempId)
-    if (current) {
-      onSubmit({ ...formData, id: current.id, tempId: current.tempId })
-    } else {
-      onSubmit({ ...formData, id: undefined, tempId: units.length + 1 })
-    }
-    setTempId(null)
-    if (action === "copyNew") {
-      setCurrent({ ...formData, id: current?.id, tempId: units.length + 1 })
-      reset({ ...formData })
-    } else if (action === "saveNew") {
-      setCurrent(null)
-      reset()
-    } else {
-      onClose()
-    }
+    onSubmit({ ...formData, tempId })
+    onClose()
   }
 
   const rentTypeOptions = [
@@ -234,6 +205,8 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
   ]
 
   useEffect(() => {
+    console.log("use effect 5")
+    // hm this seems to be running a lot
     setOptions({
       amiCharts: arrayToFormOptions<AmiChart>(amiCharts, "name", "id"),
       unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
@@ -393,13 +366,11 @@ const UnitForm = ({ onSubmit, onClose, units, currentTempId }: UnitFormProps) =>
             </ViewItem>
           </GridCell>
         </GridSection>
-        {amiChartID && amiPercentage && fetchedAmiChart && fetchedAmiChart.length > 0 && (
-          <GridSection columns={2} className="pt-6">
-            <GridCell>
-              <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
-            </GridCell>
-          </GridSection>
-        )}
+        <GridSection columns={2} className="pt-6">
+          <GridCell>
+            <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
+          </GridCell>
+        </GridSection>
         <GridSection columns={4} className="pt-6">
           <GridCell>
             <ViewItem label={t("listings.unit.rentType")}>
