@@ -2450,12 +2450,6 @@ export interface HouseholdMember {
 
 export interface UnitType {
   /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
   id: string
 
   /**  */
@@ -2463,6 +2457,12 @@ export interface UnitType {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
 }
 
 export interface ApplicationPreferenceOption {
@@ -3787,23 +3787,6 @@ export interface ListingFilterParams {
   leasingAgents?: string
 }
 
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
 export interface UnitAccessibilityPriorityType {
   /**  */
   name: string
@@ -4162,10 +4145,10 @@ export interface UnitsSummary {
   listing: Id
 
   /**  */
-  id: string
+  unitType: Id
 
   /**  */
-  unitType: UnitType
+  id: string
 
   /**  */
   monthlyRent?: number
@@ -4605,9 +4588,6 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -4651,6 +4631,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingCreate {
@@ -5064,9 +5047,6 @@ export interface UnitsSummaryUpdate {
   id: string
 
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -5110,6 +5090,9 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingUpdate {

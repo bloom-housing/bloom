@@ -30,7 +30,7 @@ import {
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
@@ -116,8 +116,8 @@ export class ApplicationDto extends OmitType(Application, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitType)
-  preferredUnit: UnitType[]
+  @Type(() => UnitTypeDto)
+  preferredUnit: UnitTypeDto[]
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
