@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
-import {
-  t,
-  GridSection,
-  ViewItem,
-  GridCell,
-  Field,
-  FieldGroup,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import { Unit, UnitType } from "@bloom-housing/backend-core/types"
 
