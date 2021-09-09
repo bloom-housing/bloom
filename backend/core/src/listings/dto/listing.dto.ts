@@ -916,7 +916,7 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
-  bedrooms: "unitTypeRef.num_bedrooms",
+  bedrooms: "summaryUnitType.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
   seniorHousing: "reservedCommunityType.name",
   // Fields for the availability are determined based on the value of the filter, not the
