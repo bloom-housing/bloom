@@ -24,7 +24,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   @Type(() => Date)
   resolvedTime?: Date | null
 
-  @ManyToOne(() => User, { eager: true, nullable: true, cascade: true })
+  @ManyToOne(() => User, { eager: true, nullable: true, cascade: false })
   @JoinColumn()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
