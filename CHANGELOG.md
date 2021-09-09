@@ -55,6 +55,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
   - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
     - **Breaking Change**
+  - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
 
 ### Backend
 
