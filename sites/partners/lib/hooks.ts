@@ -1,16 +1,27 @@
 import { useContext } from "react"
 import useSWR, { mutate } from "swr"
+import qs from "qs"
 
 import { AuthContext } from "@bloom-housing/ui-components"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
+  EnumListingFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
-type UseSingleApplicationDataProps = {
-  listingId: string
+interface PaginationProps {
   page: number
   limit: number
+}
+
+interface UseSingleApplicationDataProps extends PaginationProps {
+  listingId: string
+}
+
+type UseUserListProps = PaginationProps
+
+type UseListingsDataProps = PaginationProps & {
+  userId?: string
 }
 
 export function useSingleListingData(listingId: string) {
@@ -26,14 +37,32 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-export function useListingsData() {
-  const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.list({ limit: "all" })
+export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+  const params = {
+    page,
+    limit,
+  }
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?limit=all`, fetcher)
+  // filter if logged user is an agent
+  if (typeof userId !== undefined) {
+    Object.assign(params, {
+      filter: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          leasingAgents: userId,
+        },
+      ],
+    })
+  }
+
+  const { listingsService } = useContext(AuthContext)
+  const fetcher = () => listingsService.list(params)
+
+  const paramsString = qs.stringify(params)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
-    listingDtos: data ? data.items : [],
+    listingDtos: data,
     listingsLoading: !error && !data,
     listingsError: error,
   }
@@ -152,6 +181,18 @@ export function useSingleFlaggedApplication(afsId: string) {
   }
 }
 
+export function useSingleAmiChartData(amiChartId: string) {
+  const { amiChartsService } = useContext(AuthContext)
+  const fetcher = () => amiChartsService.retrieve({ amiChartId })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+
+  return {
+    data,
+    error,
+  }
+}
+
 export function useAmiChartList() {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list()
@@ -212,6 +253,31 @@ export function useReservedCommunityTypeList() {
   const fetcher = () => reservedCommunityTypeService.list()
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/reservedCommunityTypes`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useUserList({ page, limit }: UseUserListProps) {
+  const queryParams = new URLSearchParams()
+  queryParams.append("page", page.toString())
+  queryParams.append("limit", limit.toString())
+
+  const { userService } = useContext(AuthContext)
+
+  const fetcher = () =>
+    userService.list({
+      page,
+      limit,
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/user/list?${queryParams.toString()}`,
+    fetcher
+  )
 
   return {
     data,

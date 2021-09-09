@@ -33,7 +33,6 @@ export class PropertyCreateDto extends OmitType(PropertyDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "unitsSummarized",
   "buildingAddress",
   "units",
 ] as const) {
@@ -54,7 +53,6 @@ export class PropertyUpdateDto extends OmitType(PropertyDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "unitsSummarized",
   "buildingAddress",
   "units",
 ] as const) {

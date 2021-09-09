@@ -1,26 +1,35 @@
 import React from "react"
-import { Listing } from "@bloom-housing/backend-core/types"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { AlertBox, AlertNotice } from "../notifications"
 import { UseFormMethods } from "react-hook-form"
 
 export interface HouseholdSizeFieldProps {
-  listing: Listing
-  householdSize: number
-  validate: boolean
-  register: UseFormMethods["register"]
-  error: any
-  clearErrors: () => void
   assistanceUrl: string
+  clearErrors: () => void
+  error: any
+  householdSize: number
+  householdSizeMax: number
+  householdSizeMin: number
+  register: UseFormMethods["register"]
+  validate: boolean
 }
 
 const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
-  const { listing, householdSize, validate, register, clearErrors, error, assistanceUrl } = props
+  const {
+    householdSize,
+    householdSizeMax,
+    householdSizeMin,
+    validate,
+    register,
+    clearErrors,
+    error,
+    assistanceUrl,
+  } = props
 
   return (
     <>
-      {listing && validate && (
+      {householdSizeMax && validate && (
         <>
           <span className="hidden">
             <input
@@ -30,14 +39,14 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
               name="householdSize"
               defaultValue={householdSize}
               ref={
-                listing.householdSizeMax
+                householdSizeMax
                   ? register({
                       min: {
-                        value: listing.householdSizeMin || 0,
+                        value: householdSizeMin || 0,
                         message: t("errors.householdTooSmall"),
                       },
                       max: {
-                        value: listing.householdSizeMax,
+                        value: householdSizeMax,
                         message: t("errors.householdTooBig"),
                       },
                     })

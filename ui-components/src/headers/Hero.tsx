@@ -9,8 +9,8 @@ import "./Hero.scss"
 export interface HeroProps {
   title: React.ReactNode
   backgroundImage?: string
-  buttonTitle: string
-  buttonLink: string
+  buttonTitle?: string
+  buttonLink?: string
   secondaryButtonTitle?: string
   secondaryButtonLink?: string
   listings?: Listing[]
@@ -49,21 +49,25 @@ const Hero = (props: HeroProps) => {
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
 
-      {props.secondaryButtonTitle && props.secondaryButtonLink ? (
-        <div className="grid md:grid-cols-6 gap-5 ">
-          <HeroButton
-            className={"md:col-start-3 with_secondary"}
-            href={props.buttonLink}
-            title={props.buttonTitle}
-          />
-          <HeroButton
-            className={"with_secondary"}
-            href={props.secondaryButtonLink}
-            title={props.secondaryButtonTitle}
-          />
-        </div>
-      ) : (
-        <HeroButton className={"px-5"} href={props.buttonLink} title={props.buttonTitle} />
+      {props.buttonTitle && props.buttonLink && (
+        <>
+          {props.secondaryButtonTitle && props.secondaryButtonLink ? (
+            <div className="grid md:grid-cols-6 gap-5 ">
+              <HeroButton
+                className={"md:col-start-3 with_secondary"}
+                href={props.buttonLink}
+                title={props.buttonTitle}
+              />
+              <HeroButton
+                className={"with_secondary"}
+                href={props.secondaryButtonLink}
+                title={props.secondaryButtonTitle}
+              />
+            </div>
+          ) : (
+            <HeroButton className={"px-5"} href={props.buttonLink} title={props.buttonTitle} />
+          )}
+        </>
       )}
     </div>
   )

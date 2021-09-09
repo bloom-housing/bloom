@@ -11,6 +11,7 @@ import {
   AssetsService,
   ListingEventType,
   ListingEvent,
+  IncomePeriod,
 } from "@bloom-housing/backend-core/types"
 import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
 
@@ -136,6 +137,7 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
+  if (!date || !formTime) return null
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -151,6 +153,7 @@ export const createTime = (
  * Create Date object depending on DateField component
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
+  if (!formDate) return null
   return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
 }
 
@@ -211,4 +214,21 @@ export const cloudinaryFileUploader = async ({
       url: cloudinaryUrlFromId(response.data.public_id),
     })
   })
+}
+
+export function formatIncome(value: number, currentType: IncomePeriod, returnType: IncomePeriod) {
+  const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+
+  if (returnType === "perMonth") {
+    const monthIncomeNumber = currentType === "perYear" ? value / 12 : value
+    return usd.format(monthIncomeNumber)
+  } else {
+    const yearIncomeNumber = currentType === "perMonth" ? value * 12 : value
+    return usd.format(yearIncomeNumber)
+  }
 }

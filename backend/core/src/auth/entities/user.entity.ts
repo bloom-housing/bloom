@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinTable,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -16,6 +17,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
 import { UserRoles } from "./user-roles.entity"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -89,6 +91,8 @@ export class User {
 
   @OneToOne(() => UserRoles, (roles) => roles.user, {
     eager: true,
+    cascade: true,
+    nullable: true,
   })
   @Expose()
   roles?: UserRoles
@@ -99,4 +103,8 @@ export class User {
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({ enum: Language, enumName: "Language" })
   language?: Language | null
+
+  @ManyToMany(() => Jurisdiction, { cascade: true, eager: true })
+  @JoinTable()
+  jurisdictions: Jurisdiction[]
 }
