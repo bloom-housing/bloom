@@ -70,6 +70,7 @@ const mockInnerQueryBuilder = {
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
+  addOrderBy: jest.fn().mockReturnThis(),
   groupBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   offset: jest.fn().mockReturnThis(),
@@ -85,6 +86,7 @@ const mockQueryBuilder = {
   andWhere: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
+  addOrderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
 }
 const mockListingsRepo = {
@@ -312,7 +314,7 @@ describe("ListingsService", () => {
   })
 
   describe("ListingsService.list sorting", () => {
-    it("orderBy should be called on both query builders with the same argument", async () => {
+    it("verify both queries have correct ORDER BY clauses", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
@@ -328,6 +330,14 @@ describe("ListingsService", () => {
       // The full query must be ordered so that the ordering is applied within a page (if pagination is requested)
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
+
+      // The full query is additionally ordered by listing.unitsSummary.unitType.numBedrooms
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
+      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+        "summaryUnitType.num_bedrooms",
+        "ASC",
+        "NULLS LAST"
+      )
     })
   })
 })
