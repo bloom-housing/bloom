@@ -59,7 +59,10 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
   const fetcher = () => listingsService.list(params)
 
   const paramsString = qs.stringify(params)
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/listings?${paramsString}?view=partnerList`,
+    fetcher
+  )
 
   return {
     listingDtos: data,

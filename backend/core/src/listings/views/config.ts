@@ -61,6 +61,20 @@ const views: Views = {
   },
 }
 
+views.partnerList = {
+  select: [
+    "listings.id",
+    "listings.name",
+    "listings.applicationDueDate",
+    "listings.applicationDueTime",
+    "listings.status",
+    "listings.waitlistMaxSize",
+    "listings.waitlistCurrentSize",
+    "property.unitsAvailable",
+  ],
+  leftJoins: [{ join: "listings.property", alias: "property" }],
+}
+
 views.detail = {
   select: [
     ...views.base.select,
