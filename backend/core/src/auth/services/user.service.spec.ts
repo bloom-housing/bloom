@@ -9,6 +9,7 @@ import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { ConfigService } from "@nestjs/config"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -46,6 +47,10 @@ describe("UserService", () => {
         },
         AuthzService,
         PasswordService,
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn() },
+        },
       ],
     }).compile()
 

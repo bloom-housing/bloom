@@ -145,7 +145,7 @@ describe("EmailService", () => {
 
   describe("welcome", () => {
     it("should generate html body", async () => {
-      await service.welcome(user, "http://localhost:3000")
+      await service.welcome(user, "http://localhost:3000", "http://localhost:3000/?token=")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
