@@ -75,11 +75,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
         >
           <div
             className={`logo__lockup ${getLogoWidthClass()} ${
-              props.logoWidth && "navbar-custom-width"
-            } ${props.imageOnly && "navbar-image-only-container"}`}
+              props.logoWidth ? "navbar-custom-width" : ""
+            } ${props.imageOnly ? "navbar-image-only-container" : ""}`}
           >
             <img
-              className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
+              className={`logo__image ${props.imageOnly ? "navbar-image-only" : ""}`}
               src={props.logoSrc}
               alt="Site logo"
             />

@@ -9,8 +9,8 @@
 // The header logo should allow for a larger maximum height than the default
 // logo.
 .navbar-brand .logo .logo__image {
-  min-height: 6rem;
-  max-height: 7rem;
+  min-height: 4rem;
+  max-height: 5rem;
   @screen md {
     min-height: 6rem;
     max-height: 7rem;
@@ -19,7 +19,11 @@
 
 .navbar-brand .logo {
   max-height: 15rem;
-  width: 35rem;
+  max-width: 100%;
+
+  .logo__title {
+    @apply text-sm;
+  }
 }
 
 li.progress-nav__item,

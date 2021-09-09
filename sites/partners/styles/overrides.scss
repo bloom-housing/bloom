@@ -3,8 +3,8 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
 
 .navbar-brand .logo .logo__image {
-  min-height: 6rem;
-  max-height: 7rem;
+  min-height: 4rem;
+  max-height: 5rem;
   @screen md {
     min-height: 6rem;
     max-height: 7rem;
@@ -13,7 +13,11 @@
 
 .navbar-brand .logo {
   max-height: 15rem;
-  width: 35rem;
+  max-width: 100%;
+
+  .logo__title {
+    @apply text-sm;
+  }
 }
 
 // Listing table Detroit styles
