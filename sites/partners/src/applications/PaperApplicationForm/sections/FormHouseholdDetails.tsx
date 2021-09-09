@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -7,7 +7,6 @@ import {
   GridCell,
   Field,
   FieldGroup,
-  preferredUnit,
 } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import { Unit, UnitType } from "@bloom-housing/backend-core/types"
@@ -28,11 +27,16 @@ const FormHouseholdDetails = ({
 
   const unitTypes = getUniqueUnitTypes(listingUnits)
 
-  const preferredUnitOptions = unitTypes?.map((item) => ({
-    id: item.id,
-    label: t(`application.household.preferredUnit.options.${item.name}`),
-    defaultChecked: !!applicationUnitTypes?.find((unit) => unit.id === item.id) ?? false,
-  }))
+  const preferredUnitOptions = unitTypes?.map((item) => {
+    const isChecked = !!applicationUnitTypes?.find((unit) => unit.id === item.id) ?? false
+
+    return {
+      id: item.id,
+      label: t(`application.household.preferredUnit.options.${item.name}`),
+      value: item.id,
+      defaultChecked: isChecked,
+    }
+  })
 
   return (
     <GridSection title={t("application.review.householdDetails")} columns={3} separator>

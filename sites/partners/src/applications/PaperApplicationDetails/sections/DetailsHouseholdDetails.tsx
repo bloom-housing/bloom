@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell, sortUnitTypes } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsHouseholdDetails = () => {
@@ -15,6 +15,8 @@ const DetailsHouseholdDetails = () => {
     return labels
   }
 
+  const preferredUnits = sortUnitTypes(application?.preferredUnit)
+
   return (
     <GridSection
       className="bg-primary-lighter"
@@ -25,9 +27,9 @@ const DetailsHouseholdDetails = () => {
       <GridCell>
         <ViewItem label={t("application.details.preferredUnitSizes")}>
           {(() => {
-            if (!application?.preferredUnit?.length) return t("t.n/a")
+            if (!preferredUnits.length) return t("t.n/a")
 
-            return application?.preferredUnit?.map((item) => (
+            return preferredUnits?.map((item) => (
               <Fragment key={item.id}>
                 {t(`application.household.preferredUnit.options.${item.name}`)}
                 <br />

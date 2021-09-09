@@ -1,8 +1,16 @@
-import { Unit } from "@bloom-housing/backend-core/types"
+import { Unit, UnitType } from "@bloom-housing/backend-core/types"
 
 type GetUnitTypeNamesReturn = {
   id: string
   name: string
+}
+
+export const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
+
+export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
+  if (!units) return []
+
+  return units.sort((a, b) => UnitTypeSort.indexOf(a.name) - UnitTypeSort.indexOf(b.name))
 }
 
 export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
@@ -25,7 +33,9 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
     return acc
   }, [] as GetUnitTypeNamesReturn[])
 
-  return unitTypes
+  const sorted = sortUnitTypes(unitTypes)
+
+  return sorted
 }
 
 // It creates array of objects with the id property
