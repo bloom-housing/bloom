@@ -206,7 +206,7 @@ describe("ListingsService", () => {
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
-        new HttpException('Filter "otherField" Not Implemented', HttpStatus.NOT_IMPLEMENTED)
+        new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
 

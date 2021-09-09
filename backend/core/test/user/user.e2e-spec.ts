@@ -86,14 +86,14 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(403)
 
     delete userCreateDto.confirmedAt
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
 
@@ -146,7 +146,7 @@ describe("Users", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
@@ -166,7 +166,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -202,7 +202,7 @@ describe("Users", () => {
     userCreateDto.emailConfirmation = "a2@b.com"
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
   })
@@ -220,7 +220,7 @@ describe("Users", () => {
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
     expect(res.body).toHaveProperty("id")
@@ -262,7 +262,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -284,7 +284,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
     const userService = await app.resolve<UserService>(UserService)
@@ -321,7 +321,7 @@ describe("Users", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
       .post(`/user?noWelcomeEmail=true`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)

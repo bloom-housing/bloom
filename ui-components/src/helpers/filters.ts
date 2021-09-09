@@ -10,6 +10,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.name:
     case ListingFilterKeys.neighborhood:
     case ListingFilterKeys.status:
+    case ListingFilterKeys.leasingAgents:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.bedrooms:
     case ListingFilterKeys.minRent:
@@ -39,7 +40,6 @@ export function encodeToBackendFilterArray(filterParams: ListingFilterParams) {
       })
     }
   }
-  console.log(JSON.stringify(filterArray))
   return filterArray
 }
 

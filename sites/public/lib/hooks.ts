@@ -9,7 +9,6 @@ import {
   isInternalLink,
   openDateState,
   t,
-  encodeToBackendFilterString,
   encodeToBackendFilterArray,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingReviewOrder, ListingFilterParams } from "@bloom-housing/backend-core/types"

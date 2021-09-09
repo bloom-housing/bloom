@@ -66,22 +66,10 @@ const seedListings = async (
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
-  const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
-    ApplicationMethodsService
-  )
 
   for (const [index, listingSeed] of allSeeds.entries()) {
     const listing = await listingSeed.seed()
     listing.jurisdiction = jurisdictions[0]
-    const applicationMethods = await applicationMethodsService.create({
-      type: ApplicationMethodType.Internal,
-      acceptsPostmarkedApplications: false,
-      externalReference: "",
-      label: "Label",
-      paperApplications: [],
-      listing,
-    })
-    listing.applicationMethods = [applicationMethods]
     await listingRepository.save(listing)
 
     seeds.push(listing)

@@ -54,7 +54,7 @@ describe("EmailService", () => {
           provide: REQUEST,
           useValue: {
             get: () => {
-              return "Alameda"
+              return "Detroit"
             },
           },
         },
@@ -62,7 +62,7 @@ describe("EmailService", () => {
     }).compile()
 
     const jurisdictionService = await module.resolve<JurisdictionsService>(JurisdictionsService)
-    const jurisdiction = await jurisdictionService.findOne({ where: { name: "Alameda" } })
+    const jurisdiction = await jurisdictionService.findOne({ where: { name: "Detroit" } })
 
     const translationsRepository = module.get<Repository<Translation>>(
       getRepositoryToken(Translation)

@@ -16,6 +16,7 @@ import { PaperApplicationsModule } from "../../src/paper-applications/paper-appl
 import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { Listing } from "../../src/listings/entities/listing.entity"
+import qs from "qs"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -99,8 +100,17 @@ describe("Listings", () => {
   })
 
   it("should return listings with matching zipcodes", async () => {
-    const query = "/?limit=all&filter[$comparison]=IN&filter[zipcode]=48211,48201"
-    const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "IN",
+          zipcode: "48211,48201",
+        },
+      ],
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toBeGreaterThanOrEqual(2)
   })
 

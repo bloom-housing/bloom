@@ -14,9 +14,6 @@ import {
   decodeFiltersFromFrontendUrl,
   LinkButton,
   Field,
-  StatusBarType,
-  ApplicationStatusType,
-  openDateState,
   ListingCard,
   imageUrlFromListing,
   getSummariesTableFromUnitsSummary,
@@ -33,10 +30,8 @@ import {
   AvailabilityFilterEnum,
   ListingFilterParams,
   Listing,
-  ListingReviewOrder,
   Address,
 } from "@bloom-housing/backend-core/types"
-import moment from "moment"
 
 const isValidZipCodeOrEmpty = (value: string) => {
   // Empty strings or whitespace are valid and will reset the filter.
@@ -50,53 +45,6 @@ const isValidZipCodeOrEmpty = (value: string) => {
     }
   })
   return returnValue
-}
-
-const getListingImageCardStatus = (listing: Listing): StatusBarType => {
-  let content = ""
-  let subContent = ""
-  let formattedDate = ""
-  let appStatus = ApplicationStatusType.Open
-
-  if (openDateState(listing)) {
-    const date = listing.applicationOpenDate
-    const openDate = moment(date)
-    formattedDate = openDate.format("MMM. D, YYYY")
-    content = t("listings.applicationOpenPeriod")
-  } else {
-    if (listing.applicationDueDate) {
-      const dueDate = moment(listing.applicationDueDate)
-      const dueTime = moment(listing.applicationDueTime)
-      formattedDate = dueDate.format("MMM. DD, YYYY")
-
-      if (listing.applicationDueTime) {
-        formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
-      }
-
-      // if due date is in future, listing is open
-      if (moment() < dueDate) {
-        content = t("listings.applicationDeadline")
-      } else {
-        appStatus = ApplicationStatusType.Closed
-        content = t("listings.applicationsClosed")
-      }
-    }
-  }
-
-  if (formattedDate != "") {
-    content = content + `: ${formattedDate}`
-  }
-
-  if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
-    subContent = content
-    content = t("listings.applicationFCFS")
-  }
-
-  return {
-    status: appStatus,
-    content,
-    subContent,
-  }
 }
 
 const getListingCardSubtitle = (address: Address) => {
@@ -132,7 +80,6 @@ const getListings = (listings: Listing[]) => {
           tagLabel: listing.reservedCommunityType
             ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
             : undefined,
-          statuses: [getListingImageCardStatus(listing)],
         }}
         tableProps={{
           headers: unitSummariesHeaders,
@@ -141,6 +88,7 @@ const getListings = (listings: Listing[]) => {
           cellClassName: "px-5 py-3",
         }}
         seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
+        detailsLinkClass="float-right"
         tableHeader={listing.showWaitlist ? t("listings.waitlist.open") : null}
       />
     )
@@ -363,7 +311,7 @@ const ListingsPage = () => {
             size={AppearanceSizeType.small}
             styleType={AppearanceStyleType.secondary}
             // "Submit" the form with no params to trigger a reset.
-            onClick={() => setQueryString(1, null)}
+            onClick={() => onSubmit(null)}
             icon="close"
             iconPlacement="left"
           >
