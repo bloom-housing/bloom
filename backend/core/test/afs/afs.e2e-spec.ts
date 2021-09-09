@@ -20,6 +20,7 @@ import { ApplicationFlaggedSet } from "../../src/application-flagged-sets/entiti
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { FlaggedSetStatus } from "../../src/application-flagged-sets/types/flagged-set-status-enum"
 import { Rule } from "../../src/application-flagged-sets/types/rule-enum"
+import { ApplicationDto } from "../../src/applications/dto/application.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -34,6 +35,8 @@ describe("ApplicationFlaggedSets", () => {
   let afsRepository: Repository<ApplicationFlaggedSet>
   let householdMembersRepository: Repository<HouseholdMember>
   let listing1Id: string
+  let updateApplication
+  let getAfsesForListingId
 
   const setupDb = async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
@@ -79,6 +82,24 @@ describe("ApplicationFlaggedSets", () => {
     const listings = await supertest(app.getHttpServer()).get("/listings").expect(200)
     listing1Id = listings.body.items[0].id
     await setupDb()
+
+    updateApplication = async (application: ApplicationDto) => {
+      return (
+        await supertest(app.getHttpServer())
+          .put(`/applications/${application.id}`)
+          .send(application)
+          .set(...setAuthorization(adminAccessToken))
+          .expect(200)
+      ).body
+    }
+
+    getAfsesForListingId = async (listingId) => {
+      return (
+        await supertest(app.getHttpServer())
+          .get(`/applicationFlaggedSets?listingId=${listingId}`)
+          .set(...setAuthorization(adminAccessToken))
+      ).body
+    }
   })
 
   it(`should mark two similar application as flagged`, async () => {
@@ -182,6 +203,166 @@ describe("ApplicationFlaggedSets", () => {
     expect(resolvedAfs.status).toBe(FlaggedSetStatus.resolved)
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === true).length).toBe(1)
     expect(resolvedAfs.applications.filter((app) => app.markedAsDuplicate === false).length).toBe(1)
+  })
+
+  it(`should take application edits into account (application toggles between conflicting and non conflicting in an AFS of 2 apps)`, async () => {
+    const app1Seed = getTestAppBody(listing1Id)
+    const app2Seed = getTestAppBody(listing1Id)
+
+    // Two applications do not conflict by any rule at this point
+    app2Seed.applicant.emailAddress = "another@email.com"
+    app2Seed.applicant.firstName = "AnotherFirstName"
+    const apps = []
+
+    await Promise.all(
+      [app1Seed, app2Seed].map(async (payload) => {
+        const appRes = await supertest(app.getHttpServer())
+          .post("/applications/submit")
+          .send(payload)
+          .expect(201)
+        apps.push(appRes.body)
+      })
+    )
+
+    let afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(0)
+    expect(afses.body.items.length).toBe(0)
+
+    const [app1, app2] = apps
+
+    // Applications conflict by email rule
+    app2.applicant.emailAddress = app1Seed.applicant.emailAddress
+    await updateApplication(app2)
+
+    afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(1)
+    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app2.id)
+    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app1.id)
+
+    // Applications do not conflict by any rule
+    app2.applicant.emailAddress = app2Seed.applicant.emailAddress
+    await updateApplication(app2)
+
+    afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(0)
+    expect(afses.body.items.length).toBe(0)
+  })
+
+  it(`should take application edits into account (application toggles between conflicting and non conflicting in an AFS of 3 apps)`, async () => {
+    const app1Seed = getTestAppBody(listing1Id)
+    const app2Seed = getTestAppBody(listing1Id)
+    const app3Seed = getTestAppBody(listing1Id)
+
+    // Three applications do not conflict by any rule at this point
+    app2Seed.applicant.emailAddress = "another@email.com"
+    app2Seed.applicant.firstName = "AnotherFirstName"
+    app3Seed.applicant.emailAddress = "third@email.com"
+    app3Seed.applicant.firstName = "ThirdFirstName"
+    const apps = []
+
+    await Promise.all(
+      [app1Seed, app2Seed, app3Seed].map(async (payload) => {
+        const appRes = await supertest(app.getHttpServer())
+          .post("/applications/submit")
+          .send(payload)
+          .expect(201)
+        apps.push(appRes.body)
+      })
+    )
+
+    let afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(0)
+    expect(afses.body.items.length).toBe(0)
+
+    // eslint-disable-next-line
+    let [app1, app2, app3] = apps
+
+    // Applications conflict by email rule
+    app2.applicant.emailAddress = app1Seed.applicant.emailAddress
+    app3.applicant.emailAddress = app1Seed.applicant.emailAddress
+    await updateApplication(app2)
+    app3 = await updateApplication(app3)
+    expect(app3.flagged).toBe(true)
+
+    afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(1)
+    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app1.id)
+    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app2.id)
+    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app3.id)
+
+    // Application 3 do not conflict with others now
+    app3.applicant.emailAddress = app3Seed.applicant.emailAddress
+    app3 = await updateApplication(app3)
+    expect(app3.flagged).toBe(false)
+
+    afses = await getAfsesForListingId(listing1Id)
+
+    expect(afses.body.meta.totalFlagged).toBe(1)
+    expect(afses.body.items.length).toBe(1)
+    expect(afses.body.items[0].applications.map((app) => app.id)).not.toContain(app3.id)
+  })
+
+  it(`should take application edits into account (application toggles between conflicting and non conflicting in an AFS of 3 apps, AFS already resolved)`, async () => {
+    const app1Seed = getTestAppBody(listing1Id)
+    const app2Seed = getTestAppBody(listing1Id)
+    const app3Seed = getTestAppBody(listing1Id)
+
+    // Three applications conflict by email rule
+    app2Seed.applicant.firstName = "AnotherFirstName"
+    app3Seed.applicant.firstName = "ThirdFirstName"
+    const apps = []
+
+    await Promise.all(
+      [app1Seed, app2Seed, app3Seed].map(async (payload) => {
+        const appRes = await supertest(app.getHttpServer())
+          .post("/applications/submit")
+          .send(payload)
+          .expect(201)
+        apps.push(appRes.body)
+      })
+    )
+
+    // eslint-disable-next-line
+    let [app1, app2, app3] = apps
+    expect(app3.markedAsDuplicate).toBe(false)
+
+    const afses = await getAfsesForListingId(listing1Id)
+    const afsToBeResolved = afses.items[0]
+
+    const resolveRes = await supertest(app.getHttpServer())
+      .post(`/applicationFlaggedSets/resolve`)
+      .send({ afsId: afsToBeResolved.id, applications: [{ id: app3.id }] })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+    expect(resolveRes.body.resolvedTime).not.toBe(null)
+    expect(resolveRes.body.resolvingUser).not.toBe(null)
+    expect(resolveRes.body.status).toBe(FlaggedSetStatus.resolved)
+
+    app3 = await updateApplication(app3)
+    expect(app3.markedAsDuplicate).toBe(true)
+
+    // App3 now does not conflict with any other applications
+    app3.applicant.emailAddress = "third@email.com"
+    app3 = await updateApplication(app3)
+    expect(app3.markedAsDuplicate).toBe(false)
+    expect(app3.flagged).toBe(false)
+
+    const previouslyResolvedAfs = (
+      await supertest(app.getHttpServer())
+        .get(`/applicationFlaggedSets/${afsToBeResolved.id}`)
+        .set(...setAuthorization(adminAccessToken))
+    ).body
+    expect(resolveRes.body.resolvedTime).toBe(null)
+    expect(resolveRes.body.resolvingUser).toBe(null)
+    expect(previouslyResolvedAfs.status).toBe(FlaggedSetStatus.flagged)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id)).toContain(app1.id)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id)).toContain(app2.id)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id)).not.toContain(app3.id)
   })
 
   afterEach(async () => {
