@@ -134,19 +134,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }
 
   /**
-   * set initial data
+   * set initial methods
    */
   useEffect(() => {
-    if (!listing) return
-    ;[
-      "digitalApplication",
-      "commonDigitalApplication",
-      "paperApplication",
-      "referralOpportunity",
-    ].forEach((field) =>
-      setValue(`${field}Choice`, listing[field] === true ? YesNoAnswer.Yes : YesNoAnswer.No)
-    )
-
+    // if any of these are already not null then don't set from initial listing
+    if (methods.digital || methods.paper || methods.referral) return
     // set methods here
     const temp: Methods = {
       digital: null,
@@ -169,22 +161,16 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       }
     })
     setMethods(temp)
-    // register field
+    // register applicationMethods so we can set a value for it
     register("applicationMethods")
-  }, [listing, register, setValue])
-
-  // ensure that commonDigitalApplicationChoice is set after it's registered
-  useEffect(() => {
-    if (
-      listing?.commonDigitalApplication &&
-      (commonDigitalApplicationChoice === undefined || commonDigitalApplicationChoice === "")
-    ) {
-      setValue(
-        "commonDigitalApplicationChoice",
-        listing.commonDigitalApplication === true ? YesNoAnswer.Yes : YesNoAnswer.No
-      )
-    }
-  }, [commonDigitalApplicationChoice, listing?.commonDigitalApplication, setValue])
+  }, [
+    listing?.applicationMethods,
+    methods.digital,
+    methods.paper,
+    methods.referral,
+    register,
+    setValue,
+  ])
 
   /**
    * set application methods value when any of the methods change
@@ -234,10 +220,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
+                  defaultChecked: listing?.digitalApplication === true,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
+                  defaultChecked: listing?.digitalApplication === false,
                 },
               ]}
             />
@@ -254,40 +242,43 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
+                    defaultChecked: listing?.commonDigitalApplication === true,
                   },
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
+                    defaultChecked: listing?.commonDigitalApplication === false,
                   },
                 ]}
               />
             </GridCell>
           )}
         </GridSection>
-        {commonDigitalApplicationChoice === YesNoAnswer.No && (
-          <GridSection columns={1}>
-            <GridCell>
-              <Field
-                label={t("listings.customOnlineApplicationUrl")}
-                name="customOnlineApplicationUrl"
-                id="customOnlineApplicationUrl"
-                placeholder="https://"
-                inputProps={{
-                  value: methods.digital ? methods.digital.externalReference : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      digital: {
-                        ...methods.digital,
-                        externalReference: e.target.value,
-                      },
-                    })
-                  },
-                }}
-              />
-            </GridCell>
-          </GridSection>
-        )}
+        {digitalApplicationChoice === YesNoAnswer.Yes &&
+          commonDigitalApplicationChoice === YesNoAnswer.No && (
+            <GridSection columns={1}>
+              <GridCell>
+                <Field
+                  label={t("listings.customOnlineApplicationUrl")}
+                  name="customOnlineApplicationUrl"
+                  id="customOnlineApplicationUrl"
+                  placeholder="https://"
+                  inputProps={{
+                    value: methods.digital ? methods.digital.externalReference : "",
+                    onChange: (e) => {
+                      setMethods({
+                        ...methods,
+                        digital: {
+                          ...methods.digital,
+                          externalReference: e.target.value,
+                        },
+                      })
+                    },
+                  }}
+                />
+              </GridCell>
+            </GridSection>
+          )}
 
         <GridSection columns={2}>
           <GridCell>
@@ -301,10 +292,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "paperApplicationYes",
+                  defaultChecked: listing?.paperApplication === true,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "paperApplicationNo",
+                  defaultChecked: listing?.paperApplication === false,
                 },
               ]}
             />
@@ -373,10 +366,12 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "referralOpportunityYes",
+                  defaultChecked: listing?.referralOpportunity === true,
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "referralOpportunityNo",
+                  defaultChecked: listing?.referralOpportunity === false,
                 },
               ]}
             />
