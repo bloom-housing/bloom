@@ -16,7 +16,6 @@ import {
   Textarea,
   PhoneField,
   PhoneMask,
-  ListingDetailItem,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
@@ -258,7 +257,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
           (digitalApplicationChoice === YesNoAnswer.Yes &&
             !commonDigitalApplicationChoice &&
-            listing.commonDigitalApplication === false)) && (
+            listing?.commonDigitalApplication === false)) && (
           <GridSection columns={1}>
             <GridCell>
               <Field
