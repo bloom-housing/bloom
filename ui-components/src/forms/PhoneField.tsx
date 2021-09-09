@@ -55,7 +55,11 @@ export const PhoneField = (props: {
     <div className={"field " + (props.error ? "error" : "")}>
       {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
       <div className={props.controlClassName}>
-        <Controller {...controllerProps} render={props.mask || PhoneMask} />
+        {props.mask ? (
+          <Controller {...controllerProps} render={props.mask} />
+        ) : (
+          <Controller {...controllerProps} as={PhoneMask} />
+        )}
         <ErrorMessage id={`${props.id}-error`} error={props.error}>
           {props.errorMessage}
         </ErrorMessage>
