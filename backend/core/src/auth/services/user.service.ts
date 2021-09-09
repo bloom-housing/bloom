@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindConditions, Repository } from "typeorm"
+import { FindConditions, getManager, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
@@ -32,6 +32,7 @@ import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
+import { Application } from "../../applications/entities/application.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -210,21 +211,44 @@ export class UserService {
       : [await this.jurisdictionResolverService.getJurisdiction()]
     try {
       user.passwordHash = await this.passwordService.passwordToHash(password)
-      user = await this.repo.save(user)
 
-      const payload = {
-        id: user.id,
-        expiresAt: Number.parseInt(moment().add(24, "hours").format("X")),
-      }
-      user.confirmationToken = encode(payload, process.env.APP_SECRET)
-      user = await this.repo.save(user)
+      const newUser = await getManager().transaction(
+        "SERIALIZABLE",
+        async (transactionalEntityManager) => {
+          const userRepository = transactionalEntityManager.getRepository(User)
+          let newUser = await userRepository.save(user)
+
+          const payload = {
+            id: user.id,
+            expiresAt: Number.parseInt(moment().add(24, "hours").format("X")),
+          }
+          newUser.confirmationToken = encode(payload, process.env.APP_SECRET)
+          newUser = await userRepository.save(newUser)
+
+          const applicationsRepository = transactionalEntityManager.getRepository(Application)
+          const applications = await applicationsRepository
+            .createQueryBuilder("applications")
+            .leftJoinAndSelect("applications.applicant", "applicant")
+            .where("applications.user IS NULL")
+            .andWhere("applicant.emailAddress = :email", { email: newUser.email })
+            .getMany()
+
+          for (const application of applications) {
+            application.user = newUser
+          }
+
+          await applicationsRepository.save(applications)
+
+          return newUser
+        }
+      )
 
       if (sendWelcomeEmail) {
         const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, user)
         await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
       }
 
-      return user
+      return newUser
     } catch (err) {
       throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
