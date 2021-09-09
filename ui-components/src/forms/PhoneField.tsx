@@ -1,7 +1,7 @@
 import React from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { PhoneMask } from "./PhoneMask"
-import { Controller, UseFormMethods } from "react-hook-form"
+import { Controller } from "react-hook-form"
 
 export const PhoneField = (props: {
   error?: boolean
@@ -14,7 +14,7 @@ export const PhoneField = (props: {
   readerOnly?: boolean
   placeholder?: string
   defaultValue?: string
-  control?: UseFormMethods["control"]
+  control?: any
   disabled?: boolean
   required?: boolean
   mask?: (args: any) => JSX.Element
