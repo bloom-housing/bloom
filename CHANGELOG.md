@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file. The format 
   - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
+  - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
 
 ### UI Components
 

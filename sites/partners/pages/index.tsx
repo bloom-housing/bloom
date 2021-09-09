@@ -189,6 +189,7 @@ export default function ListingsList() {
                 quantityLabel={t("listings.totalListings")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
+                onPerPageChange={() => setCurrentPage(1)}
               />
             </div>
           </div>
