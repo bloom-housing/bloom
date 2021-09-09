@@ -43,7 +43,7 @@ export class ListingsService {
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
       .groupBy("listings.id")
-      .orderBy({ "listings.id": "DESC" })
+      .orderBy({ "listings.createdAt": "DESC" })
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
