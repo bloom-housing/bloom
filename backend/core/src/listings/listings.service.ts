@@ -10,7 +10,7 @@ import {
 } from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
-import { In, Repository } from "typeorm"
+import { In, OrderByCondition, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/filter"
@@ -26,13 +26,17 @@ export class ListingsService {
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService
-  ) {}
+  ) { }
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
+    const getOrderByCondition = (): OrderByCondition => {
+      return { "listings.updated_at": "DESC" }
+    }
+
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
@@ -43,7 +47,7 @@ export class ListingsService {
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
       .groupBy("listings.id")
-      .orderBy({ "listings.id": "DESC" })
+      .orderBy(getOrderByCondition())
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -68,16 +72,12 @@ export class ListingsService {
 
     let listings = await view
       .getViewQb()
-      .orderBy({
-        "listings.applicationDueDate": "ASC",
-        "listings.applicationOpenDate": "DESC",
-        "units.max_occupancy": "ASC",
-      })
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
+      .orderBy(getOrderByCondition())
       .getMany()
 
     // get summarized units from view
