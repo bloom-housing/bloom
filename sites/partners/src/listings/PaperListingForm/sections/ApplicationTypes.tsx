@@ -16,6 +16,7 @@ import {
   Textarea,
   PhoneField,
   PhoneMask,
+  ListingDetailItem,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
@@ -254,31 +255,33 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             </GridCell>
           )}
         </GridSection>
-        {digitalApplicationChoice === YesNoAnswer.Yes &&
-          commonDigitalApplicationChoice === YesNoAnswer.No && (
-            <GridSection columns={1}>
-              <GridCell>
-                <Field
-                  label={t("listings.customOnlineApplicationUrl")}
-                  name="customOnlineApplicationUrl"
-                  id="customOnlineApplicationUrl"
-                  placeholder="https://"
-                  inputProps={{
-                    value: methods.digital ? methods.digital.externalReference : "",
-                    onChange: (e) => {
-                      setMethods({
-                        ...methods,
-                        digital: {
-                          ...methods.digital,
-                          externalReference: e.target.value,
-                        },
-                      })
-                    },
-                  }}
-                />
-              </GridCell>
-            </GridSection>
-          )}
+        {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
+          (digitalApplicationChoice === YesNoAnswer.Yes &&
+            !commonDigitalApplicationChoice &&
+            listing.commonDigitalApplication === false)) && (
+          <GridSection columns={1}>
+            <GridCell>
+              <Field
+                label={t("listings.customOnlineApplicationUrl")}
+                name="customOnlineApplicationUrl"
+                id="customOnlineApplicationUrl"
+                placeholder="https://"
+                inputProps={{
+                  value: methods.digital ? methods.digital.externalReference : "",
+                  onChange: (e) => {
+                    setMethods({
+                      ...methods,
+                      digital: {
+                        ...methods.digital,
+                        externalReference: e.target.value,
+                      },
+                    })
+                  },
+                }}
+              />
+            </GridCell>
+          </GridSection>
+        )}
 
         <GridSection columns={2}>
           <GridCell>
