@@ -307,22 +307,6 @@ describe("Listings", () => {
     }
   })
 
-  it("sorts listing.unitsSummary by number of bedrooms (ascending)", async () => {
-    const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
-
-    for (const listing of listings.body.items) {
-      if (listing.unitsSummary.length > 1) {
-        for (let i = 0; i < listing.unitsSummary.length - 1; ++i) {
-          const currentUnitsSummary = listing.unitsSummary[i]
-          const nextUnitsSummary = listing.unitsSummary[i + 1]
-          expect(currentUnitsSummary.unitType.numBedrooms).toBeLessThanOrEqual(
-            nextUnitsSummary.unitType.numBedrooms
-          )
-        }
-      }
-    }
-  })
-
   afterEach(() => {
     jest.clearAllMocks()
   })

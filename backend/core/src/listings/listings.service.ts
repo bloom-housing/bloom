@@ -96,10 +96,9 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .orderBy(getOrderByCondition(params))
-      // Order by unitSummary.unitType.numBedrooms and units.maxOccupancy so that, for a
-      // given listing, its unitSummaries or units are sorted from lowest to highest
-      // bedroom count.
-      .addOrderBy("summaryUnitType.num_bedrooms", "ASC", "NULLS LAST")
+      // Order by units.maxOccupancy so that (this ORDER BY is applied last so that
+      // it affects the order of units _within_ a listing, rather than the overall 
+      // listing order)
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 
