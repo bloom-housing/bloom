@@ -41,6 +41,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     unitTypes: [],
   })
   const [loading, setLoading] = useState(true)
+  const [currentAmiChart, setCurrentAmiChart] = useState(null)
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -122,6 +123,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
         .sort(function (a, b) {
           return a.householdSize - b.householdSize
         })
+      setCurrentAmiChart(amiChartData)
       amiChartData.forEach((amiValue, index) => {
         setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
       })
@@ -163,6 +165,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     } else {
       delete data.unitType
     }
+
+    // Only keep overrides so we're not duplicating existing ami data
+    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+      if (
+        data[`maxIncomeHouseholdSize${index + 1}`] &&
+        parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === currentAmiChart[index].income
+      ) {
+        delete data[`maxIncomeHouseholdSize${index + 1}`]
+      }
+    })
 
     const formData: TempUnit = {
       createdAt: undefined,
