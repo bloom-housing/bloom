@@ -19,6 +19,8 @@ import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
 import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { HttpException, HttpStatus } from "@nestjs/common"
+import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 
 @Injectable()
 export class ListingsService {
@@ -33,8 +35,24 @@ export class ListingsService {
   }
 
   public async list(params: ListingsQueryParams): Promise<Pagination<Listing>> {
-    const getOrderByCondition = (): OrderByCondition => {
-      return { "listings.updated_at": "DESC" }
+    const getOrderByCondition = (params: ListingsQueryParams): OrderByCondition => {
+      switch (params.orderBy) {
+        case OrderByFieldsEnum.mostRecentlyUpdated:
+          return { "listings.updated_at": "DESC" }
+        case OrderByFieldsEnum.applicationDates:
+        case undefined:
+          // Default to ordering by applicationDates (i.e. applicationDueDate
+          // and applicationOpenDate) if no orderBy param is specified.
+          return {
+            "listings.applicationDueDate": "ASC",
+            "listings.applicationOpenDate": "DESC",
+          }
+        default:
+          throw new HttpException(
+            `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
+            HttpStatus.NOT_IMPLEMENTED
+          )
+      }
     }
 
     // Inner query to get the sorted listing ids of the listings to display
@@ -49,7 +67,7 @@ export class ListingsService {
       .leftJoin("unitsSummary.unitType", "summaryUnitType")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .groupBy("listings.id")
-      .orderBy(getOrderByCondition())
+      .orderBy(getOrderByCondition(params))
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -79,8 +97,12 @@ export class ListingsService {
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(getOrderByCondition())
+      .orderBy(getOrderByCondition(params))
+      // Order by unitSummary.unitType.numBedrooms and units.maxOccupancy so that, for a
+      // given listing, its unitSummaries or units are sorted from lowest to highest
+      // bedroom count.
       .addOrderBy("summaryUnitType.num_bedrooms", "ASC", "NULLS LAST")
+      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 
     // get summarized units from view

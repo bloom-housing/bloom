@@ -29,6 +29,7 @@ import {
   ListingFilterKeys,
   AvailabilityFilterEnum,
   ListingFilterParams,
+  OrderByFieldsEnum,
   Listing,
   Address,
 } from "@bloom-housing/backend-core/types"
@@ -159,7 +160,8 @@ const ListingsPage = () => {
   const { listingsData, listingsLoading, listingsError } = useListingsData(
     currentPage,
     itemsPerPage,
-    filterState
+    filterState,
+    OrderByFieldsEnum.mostRecentlyUpdated
   )
 
   let numberOfFilters = 0
