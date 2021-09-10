@@ -104,6 +104,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       })
     }
     setValue("status", "available")
+    setValue("rentType", getRentType(defaultUnit))
     setLoading(false)
   }
 
