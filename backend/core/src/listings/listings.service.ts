@@ -136,7 +136,7 @@ export class ListingsService {
       throw new NotFoundException()
     }
     listingDto.units.forEach((unit) => {
-      if (unit.id.length === 0 || unit.id === "undefined") {
+      if (!unit.id) {
         delete unit.id
       }
     })

@@ -256,6 +256,7 @@ export const ListingView = (props: ListingProps) => {
               listing={listing}
               preview={props.preview}
               internalFormRoute="/applications/start/choose-language"
+              cloudName={process.env.cloudinaryCloudName}
             />
           ) : (
             <></>
@@ -369,6 +370,7 @@ export const ListingView = (props: ListingProps) => {
                   listing={listing}
                   preview={props.preview}
                   internalFormRoute="/applications/start/choose-language"
+                  cloudName={process.env.cloudinaryCloudName}
                 />
               ) : (
                 <ReferralApplication

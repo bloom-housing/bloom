@@ -42,6 +42,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
   const preferences = listingDto?.preferences
   const countyCode = listingDto?.countyCode
+  const units = listingDto?.units
 
   const defaultValues = editMode ? mapApiToForm(application) : {}
 
@@ -196,7 +197,10 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                       setHouseholdMembers={setHouseholdMembers}
                     />
 
-                    <FormHouseholdDetails />
+                    <FormHouseholdDetails
+                      listingUnits={units}
+                      applicationUnitTypes={application?.preferredUnit}
+                    />
 
                     <FormPreferences preferences={preferences} county={countyCode} />
 

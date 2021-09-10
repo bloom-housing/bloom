@@ -27,8 +27,8 @@ const ListingPhoto = () => {
     Set state for the drawer, upload progress, drawer, and more
   */
   const [drawerState, setDrawerState] = useState(false)
-  const [progressValue, setProgressValue] = React.useState(0)
-  const [cloudinaryData, setCloudinaryData] = React.useState({
+  const [progressValue, setProgressValue] = useState(0)
+  const [cloudinaryData, setCloudinaryData] = useState({
     id: "",
     url: "",
   })
@@ -201,7 +201,7 @@ const ListingPhoto = () => {
             accept="image/*"
             progress={progressValue}
           />
-          {cloudinaryData.url != "" && (
+          {cloudinaryData.url !== "" && (
             <MinimalTable headers={photoTableHeaders} data={previewTableRows}></MinimalTable>
           )}
         </section>

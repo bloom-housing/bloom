@@ -51,8 +51,8 @@ describe("PaperApplications", () => {
       .expect(200)
     expect(Array.isArray(res.body)).toBe(true)
   })
-
-  it(`should create and return a new paper application`, async () => {
+  // TODO: paper applications are only creatable through a listing
+  it.skip(`should create and return a new paper application`, async () => {
     const asset = await supertest(app.getHttpServer())
       .post(`/assets`)
       .set(...setAuthorization(adminAccesstoken))
