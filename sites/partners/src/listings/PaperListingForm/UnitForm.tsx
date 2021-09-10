@@ -128,12 +128,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     }
   }
 
-  useEffect(() => {
-    if (amiChartID && amiPercentage && !loading && options) {
-      void fetchAmiChart()
-    }
-  }, [amiChartID, amiPercentage])
-
   async function onFormSubmit(action?: string) {
     setLoading(true)
     const data = getValues()
@@ -228,13 +222,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     })
   }, [amiCharts, unitPriorities, unitTypes])
 
-  // useEffect(() => {
-  //   if (defaultUnit) {
-  //     setValue("amiChart.id", defaultUnit.amiChart?.id)
-  //     setValue("priorityType.id", defaultUnit.priorityType?.id)
-  //     setValue("unitType.id", defaultUnit.unitType?.id)
-  //   }
-  // }, [options])
+  useEffect(() => {
+    if (defaultUnit) {
+      setValue("amiChart.id", defaultUnit.amiChart?.id)
+      setValue("priorityType.id", defaultUnit.priorityType?.id)
+      setValue("unitType.id", defaultUnit.unitType?.id)
+    }
+  }, [options])
 
   return (
     <Form onSubmit={() => false}>
@@ -367,6 +361,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
                 register={register}
                 controlClassName="control"
                 options={options.amiCharts}
+                inputProps={{
+                  onChange: (e) => {
+                    console.log("chart on change")
+                    if (amiChartID && amiPercentage && !loading && options) {
+                      void fetchAmiChart()
+                    }
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
@@ -380,6 +382,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
                 register={register}
                 type="number"
                 readerOnly
+                inputProps={{
+                  onChange: (e) => {
+                    console.log("percentage on change")
+                    if (amiChartID && amiPercentage && !loading && options) {
+                      void fetchAmiChart()
+                    }
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
