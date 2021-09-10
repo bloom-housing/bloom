@@ -228,8 +228,40 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
-  it("should sort results from most recently updated to least", async () => {
+  it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
     const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
+    const listings = res.body.items
+
+    // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
+    expect(listings[0].name).toBe("Test: Coliseum")
+
+    // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
+    // (5 days in the future). Between the two, Triton appears first because it has
+    // the earlier applicationOpenDate.
+    const secondListing = listings[1]
+    expect(secondListing.name).toBe("Test: Triton")
+    const thirdListing = listings[2]
+    expect(thirdListing.name).toBe("Test: Default, No Preferences")
+
+    const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
+    const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
+    expect(secondListingAppDueDate.getDate()).toEqual(thirdListingAppDueDate.getDate())
+
+    const secondListingAppOpenDate = new Date(secondListing.applicationOpenDate)
+    const thirdListingAppOpenDate = new Date(thirdListing.applicationOpenDate)
+    expect(secondListingAppOpenDate.getTime()).toBeLessThanOrEqual(
+      thirdListingAppOpenDate.getTime()
+    )
+
+    // Verify that listings with null applicationDueDate's appear at the end.
+    const lastListing = listings[listings.length - 1]
+    expect(lastListing.applicationDueDate).toBeNull()
+  })
+
+  it("sorts listings by most recently updated when that orderBy param is set", async () => {
+    const res = await supertest(app.getHttpServer())
+      .get(`/listings?orderBy=mostRecentlyUpdated&limit=all`)
+      .expect(200)
     for (let i = 0; i < res.body.items.length - 1; ++i) {
       const currentUpdatedAt = new Date(res.body.items[i].updatedAt)
       const nextUpdatedAt = new Date(res.body.items[i + 1].updatedAt)
@@ -239,10 +271,14 @@ describe("Listings", () => {
     }
   })
 
-  it("should sort results within a page, and across sequential pages", async () => {
+  it("fails if orderBy param doesn't conform to one of the enum values", async () => {
+    await supertest(app.getHttpServer()).get(`/listings?orderBy=notAValidOrderByParam`).expect(400)
+  })
+
+  it("sorts results within a page, and across sequential pages", async () => {
     // Get the first page of 5 results.
     const firstPage = await supertest(app.getHttpServer())
-      .get(`/listings?limit=5&page=1`)
+      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=1`)
       .expect(200)
 
     // Verify that listings on the first page are ordered from most to least recently updated.
@@ -258,7 +294,7 @@ describe("Listings", () => {
 
     // Get the second page of 5 results
     const secondPage = await supertest(app.getHttpServer())
-      .get(`/listings?limit=5&page=2`)
+      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=2`)
       .expect(200)
 
     // Verify that each of the listings on the second page was less recently updated than the last
@@ -271,7 +307,7 @@ describe("Listings", () => {
     }
   })
 
-  it("listing.unitsSummary should be sorted by number of bedrooms (ascending)", async () => {
+  it("sorts listing.unitsSummary by number of bedrooms (ascending)", async () => {
     const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
 
     for (const listing of listings.body.items) {
