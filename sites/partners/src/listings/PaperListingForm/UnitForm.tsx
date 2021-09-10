@@ -44,6 +44,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     unitTypes: [],
   })
   const [amiOverrides, setAmiOverrides] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -106,38 +107,44 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     })
   }
 
-  useEffect(() => {
-    // On initial load, populate with default values if we have any
-    console.warn(defaultUnit)
+  const resetDefaultValues = () => {
     if (defaultUnit) {
       Object.keys(defaultUnit).forEach((key) => {
+        console.log("setting value", key, defaultUnit[key])
         setValue(key, defaultUnit[key])
       })
     }
     setValue("status", "available")
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    resetDefaultValues()
   }, [])
+
+  const fetchAmiChart = async () => {
+    try {
+      const thisAmiChart = await amiChartsService.retrieve({
+        amiChartId: amiChartID,
+      })
+      const amiChartData = thisAmiChart.items
+        .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
+        .sort(function (a, b) {
+          return a.householdSize - b.householdSize
+        })
+      console.log("fetched ami chart", amiChartData)
+      amiChartData.forEach((amiValue, index) => {
+        setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   useEffect(() => {
     console.log("use effect 4")
-    const fetchAmiChart = async () => {
-      try {
-        const thisAmiChart = await amiChartsService.retrieve({
-          amiChartId: amiChartID,
-        })
-        const amiChartData = thisAmiChart.items
-          .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
-          .sort(function (a, b) {
-            return a.householdSize - b.householdSize
-          })
-        console.log("fetched ami chart", amiChartData)
-        amiChartData.forEach((amiValue, index) => {
-          setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
-        })
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    if (amiChartID && amiPercentage) {
+    console.log(amiChartID && amiPercentage && loading)
+    if (amiChartID && amiPercentage && !loading) {
       void fetchAmiChart()
     }
   }, [amiChartID, amiPercentage])
@@ -148,6 +155,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   }
 
   async function onFormSubmit(action?: string) {
+    setLoading(true)
     const data = getValues()
     const validation = await trigger()
     if (!validation) {
@@ -212,6 +220,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
         tempId: nextId,
       })
       onClose(true, { ...formData, tempId: nextId + 1 })
+      resetDefaultValues()
     } else if (action === "saveNew") {
       onSubmit({
         ...formData,
