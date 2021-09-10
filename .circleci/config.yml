@@ -15,7 +15,7 @@ executors:
           POSTGRES_DB: bloom
   cypress-node:
     docker:
-      - image: "cypress/base:14.17.6"
+      - image: "cypress/base:14.17.0"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
