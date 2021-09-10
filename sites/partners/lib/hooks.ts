@@ -1,10 +1,12 @@
 import { useContext } from "react"
 import useSWR, { mutate } from "swr"
+import qs from "qs"
 
 import { AuthContext } from "@bloom-housing/ui-components"
 import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
+  EnumListingFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -17,6 +19,10 @@ interface UseSingleApplicationDataProps extends PaginationProps {
 }
 
 type UseUserListProps = PaginationProps
+
+type UseListingsDataProps = PaginationProps & {
+  userId?: string
+}
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
@@ -31,15 +37,32 @@ export function useSingleListingData(listingId: string) {
   }
 }
 
-/* TODO: move this function so it can be shared between public and partner sites.*/
-export function useListingsData() {
-  const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.list({ limit: "all" })
+export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
+  const params = {
+    page,
+    limit,
+  }
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?limit=all`, fetcher)
+  // filter if logged user is an agent
+  if (typeof userId !== undefined) {
+    Object.assign(params, {
+      filter: [
+        {
+          $comparison: EnumListingFilterParamsComparison["="],
+          leasingAgents: userId,
+        },
+      ],
+    })
+  }
+
+  const { listingsService } = useContext(AuthContext)
+  const fetcher = () => listingsService.list(params)
+
+  const paramsString = qs.stringify(params)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/listings?${paramsString}`, fetcher)
 
   return {
-    listingDtos: data ? data.items : [],
+    listingDtos: data,
     listingsLoading: !error && !data,
     listingsError: error,
   }

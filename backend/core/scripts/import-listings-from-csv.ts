@@ -1,10 +1,9 @@
 import csv from "csv-parser"
 import fs from "fs"
-import { importListing, createUnitsArray } from "./listings-importer"
+import { importListing, createUnitsArray, getDetroitJurisdiction } from "./listings-importer"
 import {
   ListingCreate,
   AddressCreate,
-  CountyCode,
   CSVFormattingType,
   ListingStatus,
 } from "../types/src/backend-swagger"
@@ -58,6 +57,8 @@ async function main() {
   await promise
 
   console.log(`CSV file successfully read in; ${rawListingFields.length} listings to upload`)
+
+  const jurisdiction = await getDetroitJurisdiction(importApiUrl, email, password)
 
   const uploadFailureMessages = []
   let numListingsSuccessfullyUploaded = 0
@@ -134,10 +135,10 @@ async function main() {
       managementWebsite: listingFields["Management Website"],
       leasingAgentEmail: leasingAgentEmail,
       phoneNumber: listingFields["Property Phone"],
-      countyCode: CountyCode.Detroit,
       amiPercentageMin: amiPercentageMin,
       amiPercentageMax: amiPercentageMax,
       status: ListingStatus.active,
+      jurisdiction: jurisdiction,
 
       // The following fields are only set because they are required
       CSVFormattingType: CSVFormattingType.basic,

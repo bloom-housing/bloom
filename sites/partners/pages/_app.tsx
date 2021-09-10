@@ -1,4 +1,5 @@
 import React, { useMemo } from "react"
+import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 import "@bloom-housing/ui-components/src/global/index.scss"
 import "../styles/overrides.scss"
@@ -36,26 +37,36 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   }, [locale])
 
   return (
-    <NavigationContext.Provider
+    <SWRConfig
       value={{
-        LinkComponent: LinkComponent,
-        router: router as GenericRouter,
+        onError: (error) => {
+          if (error.response.status === 403) {
+            window.location.href = "/unauthorized"
+          }
+        },
       }}
     >
-      <ConfigProvider apiUrl={process.env.backendApiBase}>
-        <AuthProvider>
-          <RequireLogin
-            signInPath="/sign-in"
-            signInMessage={signInMessage}
-            skipForRoutes={skipLoginRoutes}
-          >
-            <div suppressHydrationWarning>
-              {typeof window === "undefined" ? null : <Component {...pageProps} />}
-            </div>
-          </RequireLogin>
-        </AuthProvider>
-      </ConfigProvider>
-    </NavigationContext.Provider>
+      <NavigationContext.Provider
+        value={{
+          LinkComponent: LinkComponent,
+          router: router as GenericRouter,
+        }}
+      >
+        <ConfigProvider apiUrl={process.env.backendApiBase}>
+          <AuthProvider>
+            <RequireLogin
+              signInPath="/sign-in"
+              signInMessage={signInMessage}
+              skipForRoutes={skipLoginRoutes}
+            >
+              <div suppressHydrationWarning>
+                {typeof window === "undefined" ? null : <Component {...pageProps} />}
+              </div>
+            </RequireLogin>
+          </AuthProvider>
+        </ConfigProvider>
+      </NavigationContext.Provider>
+    </SWRConfig>
   )
 }
 

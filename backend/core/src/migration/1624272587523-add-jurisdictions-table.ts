@@ -18,11 +18,7 @@ export class addJurisdictionsTable1624272587523 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "listings" ADD CONSTRAINT "FK_ba0026e02ecfe91791aed1a4818" FOREIGN KEY ("jurisdiction_id") REFERENCES "jurisdictions"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
-    for (const jurisdictionName of [
-      CountyCode.alameda,
-      CountyCode.san_jose,
-      CountyCode.san_mateo,
-    ]) {
+    for (const jurisdictionName of [CountyCode.detroit]) {
       const jurisdiction = await queryRunner.query(
         `INSERT INTO "jurisdictions" (name) VALUES ($1)`,
         [jurisdictionName]

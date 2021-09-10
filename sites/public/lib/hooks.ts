@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react"
+import qs from "qs"
 import moment from "moment"
 import { useRouter } from "next/router"
 import axios from "axios"
@@ -8,7 +9,7 @@ import {
   isInternalLink,
   openDateState,
   t,
-  encodeToBackendFilterString,
+  encodeToBackendFilterArray,
 } from "@bloom-housing/ui-components"
 import { Listing, ListingReviewOrder, ListingFilterParams } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -43,9 +44,16 @@ export const useFormConductor = (stepName: string) => {
 
 const listingsFetcher = function () {
   return async (url: string, page: number, limit: number, filters: ListingFilterParams) => {
-    const res = await axios.get(
-      `${url}?page=${page}&limit=${limit}${encodeToBackendFilterString(filters)}`
-    )
+    const res = await axios.get(url, {
+      params: {
+        page: page,
+        limit: limit,
+        filter: encodeToBackendFilterArray(filters),
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
     return res.data
   }
 }

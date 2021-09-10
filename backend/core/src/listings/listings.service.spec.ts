@@ -146,10 +146,12 @@ describe("ListingsService", () => {
       const expectedNeighborhood = "Fox Creek"
 
       const queryParams: ListingsQueryParams = {
-        filter: {
-          $comparison: Compare["="],
-          neighborhood: expectedNeighborhood,
-        },
+        filter: [
+          {
+            $comparison: Compare["="],
+            neighborhood: expectedNeighborhood,
+          },
+        ],
       }
 
       const listings = await service.list(queryParams)
@@ -172,10 +174,12 @@ describe("ListingsService", () => {
       const expectedNeighborhoodArray = ["fox creek", "coliseum"]
 
       const queryParams: ListingsQueryParams = {
-        filter: {
-          $comparison: Compare["IN"],
-          neighborhood: expectedNeighborhoodString,
-        },
+        filter: [
+          {
+            $comparison: Compare["IN"],
+            neighborhood: expectedNeighborhoodString,
+          },
+        ],
       }
 
       const listings = await service.list(queryParams)
@@ -193,16 +197,18 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
 
       const queryParams: ListingsQueryParams = {
-        filter: {
-          $comparison: Compare["="],
-          otherField: "otherField",
-          // The querystring can contain unknown fields that aren't on the
-          // ListingFilterParams type, so we force it to the type for testing.
-        } as ListingFilterParams,
+        filter: [
+          {
+            $comparison: Compare["="],
+            otherField: "otherField",
+            // The querystring can contain unknown fields that aren't on the
+            // ListingFilterParams type, so we force it to the type for testing.
+          } as ListingFilterParams,
+        ],
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
-        new HttpException('Filter "otherField" Not Implemented', HttpStatus.NOT_IMPLEMENTED)
+        new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
 
@@ -211,13 +217,15 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder.mockReturnValueOnce(mockInnerQueryBuilder)
 
       const queryParams: ListingsQueryParams = {
-        filter: {
-          // The value of the filter[$comparison] query param is not validated,
-          // and the type system trusts that whatever is provided is correct,
-          // so we force it to an invalid type for testing.
-          $comparison: "); DROP TABLE Students;" as Compare,
-          name: "test name",
-        } as ListingFilterParams,
+        filter: [
+          {
+            // The value of the filter[$comparison] query param is not validated,
+            // and the type system trusts that whatever is provided is correct,
+            // so we force it to an invalid type for testing.
+            $comparison: "); DROP TABLE Students;" as Compare,
+            name: "test name",
+          } as ListingFilterParams,
+        ],
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(

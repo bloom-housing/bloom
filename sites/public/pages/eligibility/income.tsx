@@ -20,7 +20,10 @@ import { EligibilityContext } from "../../lib/EligibilityContext"
 import { eligibilityRoute } from "../../lib/helpers"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { useRouter } from "next/router"
-import { ListingFilterParams } from "@bloom-housing/backend-core/types"
+import {
+  EnumListingFilterParamsComparison,
+  ListingFilterParams,
+} from "@bloom-housing/backend-core/types"
 
 const EligibilityIncome = () => {
   const router = useRouter()
@@ -49,7 +52,10 @@ const EligibilityIncome = () => {
   }
 
   function getFilterUrl() {
-    const params: ListingFilterParams = {}
+    const params: ListingFilterParams = {
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
+    }
 
     if (eligibilityRequirements.age < SENIOR_AGE) {
       params.seniorHousing = false

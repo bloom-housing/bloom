@@ -53,6 +53,7 @@ export type ListingSeedType = Omit<
   | "unitsSummary"
   | "unitsSummarized"
   | "amiChartOverrides"
+  | "jurisdiction"
 >
 
 export type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">

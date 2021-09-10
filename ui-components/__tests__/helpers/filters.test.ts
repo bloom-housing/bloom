@@ -1,31 +1,48 @@
 import { cleanup } from "@testing-library/react"
 import {
-  encodeToBackendFilterString,
+  encodeToBackendFilterArray,
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,
 } from "../../src/helpers/filters"
 import { parse } from "querystring"
-import { ListingFilterParams } from "@bloom-housing/backend-core/types"
+import {
+  EnumListingFilterParamsComparison,
+  ListingFilterParams,
+} from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)
 
-describe("encode backend filter string", () => {
+describe("encode backend filter array", () => {
   it("should handle single filter", () => {
     const filter: ListingFilterParams = {
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
-    expect(encodeToBackendFilterString(filter)).toBe(
-      "&filter[$comparison]==&filter[neighborhood]=Neighborhood"
-    )
+    expect(encodeToBackendFilterArray(filter)).toEqual([
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        neighborhood: "Neighborhood",
+      },
+    ])
   })
   it("should handle multiple filters", () => {
     const filter: ListingFilterParams = {
       name: "Name",
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
-    expect(encodeToBackendFilterString(filter)).toBe(
-      "&filter[$comparison]==&filter[name]=Name&filter[$comparison]==&filter[neighborhood]=Neighborhood"
-    )
+    expect(encodeToBackendFilterArray(filter)).toEqual([
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        name: "Name",
+      },
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        neighborhood: "Neighborhood",
+      },
+    ])
   })
 })
 
@@ -33,6 +50,8 @@ describe("encode frontend filter string", () => {
   it("should handle single filter", () => {
     const filter: ListingFilterParams = {
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(encodeToFrontendFilterString(filter)).toBe("&neighborhood=Neighborhood")
   })
@@ -40,6 +59,8 @@ describe("encode frontend filter string", () => {
     const filter: ListingFilterParams = {
       name: "Name",
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(encodeToFrontendFilterString(filter)).toBe("&name=Name&neighborhood=Neighborhood")
   })
@@ -47,6 +68,8 @@ describe("encode frontend filter string", () => {
     const filter: ListingFilterParams = {
       name: "Name",
       neighborhood: "",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(encodeToFrontendFilterString(filter)).toBe("&name=Name")
   })
@@ -57,6 +80,8 @@ describe("get filter from parsed url", () => {
     const filterString = parse("localhost:3000/listings?page=1&neighborhood=Neighborhood")
     const expected: ListingFilterParams = {
       neighborhood: "Neighborhood",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })
@@ -65,6 +90,8 @@ describe("get filter from parsed url", () => {
     const expected: ListingFilterParams = {
       neighborhood: "Neighborhood",
       name: "Name",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })
@@ -80,6 +107,8 @@ describe("get filter from parsed url", () => {
     const filterString = parse("localhost:3000/listings?page=1&unknown=blah&name=Name")
     const expected: ListingFilterParams = {
       name: "Name",
+      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
+      $comparison: EnumListingFilterParamsComparison.NA,
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })
