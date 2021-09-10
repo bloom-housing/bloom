@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import qs from "qs"
 import Head from "next/head"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import {
   AlertBox,
   LinkButton,
@@ -20,7 +20,7 @@ import moment from "moment"
 
 interface IndexProps {
   listings: Listing[]
-  notificationsSignUpURL?: string
+  jurisdiction: Jurisdiction
 }
 
 export default function Home(props: IndexProps) {
@@ -72,15 +72,12 @@ export default function Home(props: IndexProps) {
         }
       />
       <div className="homepage-extra">
-        {props.notificationsSignUpURL && (
+        {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
           <ActionBlock
             header={t("welcome.signUp")}
             icon={<Icon size="3xl" symbol="mail" />}
             actions={[
-              <LinkButton
-                key={"sign-up"}
-                href={"https://github.com/bloom-housing/bloom/pull/1800/files"}
-              >
+              <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
                 {t("welcome.signUpToday")}
               </LinkButton>,
             ]}
@@ -105,7 +102,7 @@ export default function Home(props: IndexProps) {
 
 export async function getStaticProps() {
   let listings = []
-  let notificationsSignUpURL = null
+  let thisJurisdiction = null
   try {
     const listingsResponse = await axios.get(process.env.listingServiceUrl, {
       params: {
@@ -122,14 +119,18 @@ export async function getStaticProps() {
         return qs.stringify(params)
       },
     })
-    const jurisdictions = await axios.get(`${process.env.backendApiBase}/jurisdictions/list`)
-    const jurisdiction = process.env.jurisdictionName
-    const thisJurisdiction = jurisdictions?.data?.find((juris) => juris.name === jurisdiction)
-    notificationsSignUpURL = thisJurisdiction.notificationsSignUpURL
+    const jurisdictionName = process.env.jurisdictionName
+    const jurisdiction = await axios.get(
+      `${process.env.backendApiBase}/jurisdictions/${jurisdictionName}`
+    )
+    thisJurisdiction = jurisdiction?.data ? jurisdiction.data : null
     listings = listingsResponse?.data?.items ? listingsResponse.data.items : []
   } catch (error) {
     console.error(error)
   }
 
-  return { props: { listings, notificationsSignUpURL }, revalidate: process.env.cacheRevalidate }
+  return {
+    props: { listings, jurisdiction: thisJurisdiction },
+    revalidate: process.env.cacheRevalidate,
+  }
 }
