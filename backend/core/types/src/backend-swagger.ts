@@ -2448,6 +2448,23 @@ export interface HouseholdMember {
   workInRegion?: string
 }
 
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
 export interface ApplicationPreferenceOption {
   /**  */
   key: string
@@ -2511,6 +2528,9 @@ export interface Application {
   householdMembers: HouseholdMember[]
 
   /**  */
+  preferredUnit: UnitType[]
+
+  /**  */
   id: string
 
   /**  */
@@ -2551,9 +2571,6 @@ export interface Application {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3091,6 +3108,9 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3119,9 +3139,6 @@ export interface ApplicationCreate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3417,6 +3434,9 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3445,9 +3465,6 @@ export interface ApplicationUpdate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3768,23 +3785,6 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
-}
-
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4140,32 +4140,15 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitType {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
 export interface UnitsSummary {
   /**  */
   listing: Id
 
   /**  */
-  id: string
+  unitType: Id
 
   /**  */
-  unitType: UnitType
+  id: string
 
   /**  */
   monthlyRent?: number
@@ -4605,9 +4588,6 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -4651,6 +4631,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingCreate {
@@ -5064,9 +5047,6 @@ export interface UnitsSummaryUpdate {
   id: string
 
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -5110,6 +5090,9 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingUpdate {

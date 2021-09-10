@@ -15,7 +15,10 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { preferredUnit } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import {
+  createUnitTypeId,
+  getUniqueUnitTypes,
+} from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -26,10 +29,16 @@ const ApplicationPreferredUnits = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
+
   const onSubmit = (data) => {
     const { preferredUnit } = data
 
-    application.preferredUnit = preferredUnit
+    // save units always as an array (when is only one option, react-hook-form stores an option as string)
+    if (Array.isArray(preferredUnit)) {
+      application.preferredUnit = createUnitTypeId(preferredUnit)
+    } else {
+      application.preferredUnit = createUnitTypeId([preferredUnit])
+    }
 
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
@@ -38,10 +47,13 @@ const ApplicationPreferredUnits = () => {
     window.scrollTo(0, 0)
   }
 
-  const preferredUnitOptions = preferredUnit?.map((item) => ({
+  const unitTypes = getUniqueUnitTypes(listing?.units)
+
+  const preferredUnitOptions = unitTypes?.map((item) => ({
     id: item.id,
-    label: t(`application.household.preferredUnit.options.${item.id}`),
-    defaultChecked: item.checked || application.preferredUnit.includes(item.id),
+    label: t(`application.household.preferredUnit.options.${item.name}`),
+    value: item.id,
+    defaultChecked: !!application.preferredUnit?.find((unit) => unit.id === item.id),
   }))
 
   return (
@@ -82,7 +94,7 @@ const ApplicationPreferredUnits = () => {
                 name="preferredUnit"
                 groupNote={t("application.household.preferredUnit.optionsLabel")}
                 fields={preferredUnitOptions}
-                error={errors.preferredUnit}
+                error={!!errors.preferredUnit}
                 errorMessage={t("errors.selectAtLeastOne")}
                 validation={{ required: true }}
                 register={register}

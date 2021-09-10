@@ -1,14 +1,21 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Listing } from "@bloom-housing/backend-core/types"
 
-export const listingsUrl = "http://localhost:3100/listings"
+export const listingsUrl = "http://localhost:3100/listings?limit=all"
 
-type getIncomeReturn = {
+type GetIncomeReturn = {
   monthlyMin: number
   monthlyMax: number
   annualMin: number
   annualMax: number
 } | null
+
+type ApplyConfigUpdatesProps = {
+  config: Record<string, any>
+  listing: Listing
+}
+
+type UpdatePreferredUnitsProps = ApplyConfigUpdatesProps
 
 export const setProperty = (
   obj: Record<string, any>,
@@ -33,7 +40,7 @@ export const setProperty = (
   return obj
 }
 
-export const getListingIncome = (): getIncomeReturn => {
+export const getListingIncome = (): GetIncomeReturn => {
   const listing = sessionStorage.getItem("bloom-app-listing")
 
   if (!listing) return null
@@ -60,4 +67,19 @@ export const getListingIncome = (): getIncomeReturn => {
     annualMin: parseFloat(annualMin.toFixed(2)),
     annualMax: parseFloat(annualMax.toFixed(2)),
   }
+}
+
+export const updatePreferredUnits = ({ config, listing }: UpdatePreferredUnitsProps) => {
+  const firstUnitType = listing.units[0].unitType
+  config.preferredUnit = [{ id: firstUnitType?.id }]
+
+  return config
+}
+
+export const applyConfigUpdates = ({ config, listing }: ApplyConfigUpdatesProps) => {
+  // unit types are related to the listing preferred_unit using Id, to test submission it needs to be updated
+  updatePreferredUnits({
+    config,
+    listing,
+  })
 }
