@@ -60,7 +60,7 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
 
   const paramsString = qs.stringify(params)
   const { data, error } = useSWR(
-    `${process.env.backendApiBase}/listings?${paramsString}?view=partnerList`,
+    `${process.env.backendApiBase}/listings?${paramsString}?view=base`,
     fetcher
   )
 
