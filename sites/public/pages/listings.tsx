@@ -21,17 +21,7 @@ import {
 } from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
-import React, { useEffect, useState } from "react"
-import { useRouter } from "next/router"
-import { useListingsData } from "../lib/hooks"
-import {
-  ListingFilterKeys,
-  AvailabilityFilterEnum,
-  ListingFilterParams,
-  OrderByFieldsEnum,
-  Listing,
-  Address,
-} from "@bloom-housing/backend-core/types"
+import moment from "moment"
 
 export interface ListingsProps {
   openListings: Listing[]
