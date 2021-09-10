@@ -230,6 +230,17 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     }
   }, [options])
 
+  useEffect(() => {
+    if (defaultUnit) {
+      if (rentType === "fixed") {
+        setValue("monthlyIncomeMin", defaultUnit.monthlyIncomeMin)
+        setValue("monthlyRent", defaultUnit.monthlyRent)
+      } else {
+        setValue("monthlyRentAsPercentOfIncome", defaultUnit.monthlyRentAsPercentOfIncome)
+      }
+    }
+  }, [rentType])
+
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
@@ -362,8 +373,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
                 controlClassName="control"
                 options={options.amiCharts}
                 inputProps={{
-                  onChange: (e) => {
-                    console.log("chart on change")
+                  onChange: () => {
                     if (amiChartID && amiPercentage && !loading && options) {
                       void fetchAmiChart()
                     }
@@ -383,8 +393,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
                 type="number"
                 readerOnly
                 inputProps={{
-                  onChange: (e) => {
-                    console.log("percentage on change")
+                  onChange: () => {
                     if (amiChartID && amiPercentage && !loading && options) {
                       void fetchAmiChart()
                     }
