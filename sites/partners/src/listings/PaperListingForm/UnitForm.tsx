@@ -74,8 +74,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
   const maxAmiHouseholdSize = 8
 
   const getAmiChartTableData = () => {
-    console.log("getamiChartTableData")
-    return [...Array(maxAmiHouseholdSize)].reduce((acc, _, index) => {
+    return [...Array(maxAmiHouseholdSize)].map((_, index) => {
       const fieldName = `maxIncomeHouseholdSize${index + 1}`
       const incomeCell = (
         <Field
@@ -97,9 +96,13 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
           }}
         />
       )
-      acc.push({ householdSize: index + 1, maxIncome: incomeCell })
-      return acc
-    }, [])
+      return (
+        <tr>
+          <td>{index + 1}</td>
+          <td>{incomeCell}</td>
+        </tr>
+      )
+    })
   }
 
   useEffect(() => {
@@ -109,6 +112,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
         setValue(key, defaultUnit[key])
       })
     }
+    setValue("status", "available")
   }, [])
 
   useEffect(() => {
@@ -368,7 +372,14 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
         </GridSection>
         <GridSection columns={2} className="pt-6">
           <GridCell>
-            <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} />
+            <table>
+              <tr>
+                <th>{t("listings.householdSize")}</th>
+                <th>{t("listings.maxAnnualIncome")}</th>
+              </tr>
+              {getAmiChartTableData()}
+            </table>
+            {/* <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} /> */}
           </GridCell>
         </GridSection>
         <GridSection columns={4} className="pt-6">
