@@ -96,9 +96,8 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .orderBy(getOrderByCondition(params))
-      // Order by units.maxOccupancy so that (this ORDER BY is applied last so that
-      // it affects the order of units _within_ a listing, rather than the overall 
-      // listing order)
+      // Order by units.maxOccupancy is applied last so that it affects the order
+      // of units _within_ a listing, rather than the overall listing order)
       .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 
