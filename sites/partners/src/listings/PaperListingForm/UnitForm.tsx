@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import {
   t,
   GridSection,
@@ -12,7 +12,6 @@ import {
   Button,
   Form,
   numberOptions,
-  MinimalTable,
   AuthContext,
 } from "@bloom-housing/ui-components"
 import { useForm, useWatch } from "react-hook-form"
@@ -90,7 +89,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       )
       return (
         <tr key={index}>
-          <td>{index + 1}</td>
+          <td className={"pl-4"}>{index + 1}</td>
           <td>{incomeCell}</td>
         </tr>
       )
@@ -130,7 +129,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   }
 
   useEffect(() => {
-    if (amiChartID && amiPercentage && !loading) {
+    if (amiChartID && amiPercentage && !loading && options) {
       void fetchAmiChart()
     }
   }, [amiChartID, amiPercentage])
@@ -228,6 +227,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id"),
     })
   }, [amiCharts, unitPriorities, unitTypes])
+
+  // useEffect(() => {
+  //   if (defaultUnit) {
+  //     setValue("amiChart.id", defaultUnit.amiChart?.id)
+  //     setValue("priorityType.id", defaultUnit.priorityType?.id)
+  //     setValue("unitType.id", defaultUnit.unitType?.id)
+  //   }
+  // }, [options])
 
   return (
     <Form onSubmit={() => false}>
