@@ -96,8 +96,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     })
   }
 
-  const resetDefaultValues = () => {
+  const resetDefaultValues = async () => {
     if (defaultUnit) {
+      await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
@@ -110,13 +111,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     resetDefaultValues()
   }, [])
 
-  const fetchAmiChart = async () => {
+  const fetchAmiChart = async (defaultChartID?: string, defaultAmiPercentage?: string) => {
     try {
       const thisAmiChart = await amiChartsService.retrieve({
-        amiChartId: amiChartID,
+        amiChartId: defaultChartID ?? amiChartID,
       })
       const amiChartData = thisAmiChart.items
-        .filter((item) => item.percentOfAmi === parseInt(amiPercentage))
+        .filter((item) => item.percentOfAmi === parseInt(defaultAmiPercentage ?? amiPercentage))
         .sort(function (a, b) {
           return a.householdSize - b.householdSize
         })
