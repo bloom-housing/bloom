@@ -99,10 +99,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
+      console.log({ defaultUnit })
       await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
+      if (defaultUnit.amiChartOverride) {
+        defaultUnit.amiChartOverride.items.forEach((override) => {
+          setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
+        })
+      }
     }
     setValue("status", "available")
     setValue("rentType", getRentType(defaultUnit))
