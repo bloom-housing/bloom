@@ -27,7 +27,7 @@ import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../
 import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
 
 type UnitFormProps = {
-  onSubmit: (unit: any) => void
+  onSubmit: (unit: TempUnit) => void
   onClose: (reopen: boolean, defaultUnit?: TempUnit) => void
   defaultUnit: TempUnit | undefined
   units: TempUnit[]
@@ -41,7 +41,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     unitPriorities: [],
     unitTypes: [],
   })
-  const [amiOverrides, setAmiOverrides] = useState({})
   const [loading, setLoading] = useState(true)
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
@@ -57,15 +56,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, setValue, control, reset } = useForm()
+  const { register, errors, trigger, getValues, setValue, control, reset } = useForm()
 
-  const rentType = watch("rentType")
-
+  const rentType: string = useWatch({
+    control,
+    name: "rentType",
+  })
   const amiPercentage: string = useWatch({
     control,
     name: "amiPercentage",
   })
-
   const amiChartID: string = useWatch({
     control,
     name: "amiChart.id",
@@ -86,14 +86,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
           type="number"
           prepend="$"
           readerOnly
-          inputProps={{
-            onChange: (e) => {
-              const { id, value } = e.target
-              const overrides = amiOverrides
-              overrides[id] = value
-              setAmiOverrides(overrides)
-            },
-          }}
         />
       )
       return (
@@ -147,13 +139,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
     setLoading(true)
     const data = getValues()
     const validation = await trigger()
-    if (!validation) {
-      ;[...Array(maxAmiHouseholdSize)].forEach((index) => {
-        const fieldName = `maxIncomeHouseholdSize${index + 1}`
-        setValue(fieldName, data[fieldName])
-      })
-      return
-    }
+    if (!validation) return
 
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)

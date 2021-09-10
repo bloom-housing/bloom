@@ -162,15 +162,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       </GridSection>
 
       <Drawer
-        open={unitDrawerId !== null && unitDrawerId !== undefined}
+        open={!!unitDrawerId}
         title={t("listings.unit.add")}
         ariaDescription={t("listings.unit.add")}
         onClose={() => setUnitDrawerId(null)}
       >
         <UnitForm
-          onSubmit={(unit) => {
-            saveUnit(unit)
-          }}
+          onSubmit={(unit) => saveUnit(unit)}
           onClose={(reopen: boolean, defaultUnit: TempUnit) => {
             if (reopen) {
               if (defaultUnit) {

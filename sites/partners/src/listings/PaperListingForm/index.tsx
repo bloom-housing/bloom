@@ -217,14 +217,6 @@ const defaults: FormListing = {
 
 export type TempUnit = Unit & {
   tempId?: number
-  maxIncomeHouseholdSize1?: string
-  maxIncomeHouseholdSize2?: string
-  maxIncomeHouseholdSize3?: string
-  maxIncomeHouseholdSize4?: string
-  maxIncomeHouseholdSize5?: string
-  maxIncomeHouseholdSize6?: string
-  maxIncomeHouseholdSize7?: string
-  maxIncomeHouseholdSize8?: string
 }
 
 export type TempEvent = ListingEvent & {
