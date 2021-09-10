@@ -61,12 +61,12 @@ export function getConfigs(
 
 const basePath = ""
 
-export interface IList<T> extends Array<T> { }
-export interface List<T> extends Array<T> { }
+export interface IList<T> extends Array<T> {}
+export interface List<T> extends Array<T> {}
 export interface IDictionary<TValue> {
   [key: string]: TValue
 }
-export interface Dictionary<TValue> extends IDictionary<TValue> { }
+export interface Dictionary<TValue> extends IDictionary<TValue> {}
 
 export interface IListResult<T> {
   items?: T[]
