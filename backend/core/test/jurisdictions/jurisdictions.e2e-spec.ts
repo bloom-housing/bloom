@@ -58,7 +58,7 @@ describe("Jurisdictions", () => {
     expect(res.body.name).toBe("test")
 
     const getById = await supertest(app.getHttpServer())
-      .get(`/jurisdictions/${res.body.id}`)
+      .get(`/jurisdictions/${res.body.name}`)
       .set(...setAuthorization(adminAccesstoken))
       .expect(200)
     expect(getById.body.name).toBe("test")
