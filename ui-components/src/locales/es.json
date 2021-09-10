@@ -658,6 +658,10 @@
             "title": "Página no encontrada",
             "message": "Oh, oh, parece que no podemos encontrar la página que estás buscando. Intente volver a la página anterior o haga clic a continuación para buscar listados."
         },
+        "unauthorized": {
+            "title": "No autorizado",
+            "message": "Uh oh, no tienes permiso para acceder a esta página."
+        },
         "agreeError": "Debe aceptar los términos para continuar",
         "firstNameError": "Por favor ingrese un nombre",
         "lastNameError": "Por favor ingrese un apellido",
@@ -1039,7 +1043,13 @@
             "individualUnits": "Unidades individuales",
             "delete": "Eliminar esta unidad",
             "deleteConf": "¿Realmente desea eliminar esta unidad?",
-            "eligibility": "Elegibilidad"
+            "eligibility": "Elegibilidad",
+            "statusOptions": {
+                "unknown": "Desconocido",
+                "available": "Disponible",
+                "occupied": "Ocupado",
+                "unavailable": "Indisponible"
+            }
         },
         "unitsSummary": {
             "add": "Agregar resumen",
@@ -1209,6 +1219,7 @@
         "household": "Familiar",
         "income": "Ingreso",
         "jumpTo": "Salta a",
+        "jurisdiction": "Jurisdicción",
         "label": "Etiqueta",
         "lastUpdated": "Última actualización",
         "letter": "Carta",
