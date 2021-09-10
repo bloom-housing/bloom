@@ -25,15 +25,16 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
+import ResetPassword from "../../../pages/reset-password"
 
 type UnitFormProps = {
   onSubmit: (unit: any) => void
-  onClose: () => void
+  onClose: (reopen: boolean, defaultUnit?: TempUnit) => void
   defaultUnit: TempUnit | undefined
-  tempId: number
+  units: TempUnit[]
 }
 
-const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   // const [tempId, setTempId] = useState<number | null>(null)
@@ -57,7 +58,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
   const { data: unitTypes = [] } = useUnitTypeList()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, setValue, control } = useForm()
+  const { register, watch, errors, trigger, getValues, setValue, control, reset } = useForm()
 
   const rentType = watch("rentType")
 
@@ -97,7 +98,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
         />
       )
       return (
-        <tr>
+        <tr key={index}>
           <td>{index + 1}</td>
           <td>{incomeCell}</td>
         </tr>
@@ -107,6 +108,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
 
   useEffect(() => {
     // On initial load, populate with default values if we have any
+    console.warn(defaultUnit)
     if (defaultUnit) {
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
@@ -185,14 +187,45 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
       delete data.unitType
     }
 
-    const formData = {
+    const formData: TempUnit = {
       createdAt: undefined,
       updatedAt: undefined,
+      status: UnitStatus.available,
+      id: null,
       ...data,
     }
 
-    onSubmit({ ...formData, tempId })
-    onClose()
+    // open fresh, save with tempId
+    // open from edited, save with tempId
+    // open fresh, copy and new, save with tempId, open again with new id and default
+    // open from edited, copy and new, DONT save current one just open with new ID and default
+
+    const existingId = units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId
+    const nextId = units.length + 1
+
+    console.log({ existingId })
+    console.log({ nextId })
+
+    if (action === "copyNew") {
+      onSubmit({
+        ...formData,
+        tempId: nextId,
+      })
+      onClose(true, { ...formData, tempId: nextId + 1 })
+    } else if (action === "saveNew") {
+      onSubmit({
+        ...formData,
+        tempId: nextId,
+      })
+      onClose(true, null)
+      reset()
+    } else {
+      onSubmit({
+        ...formData,
+        tempId: existingId ?? nextId,
+      })
+      onClose(false)
+    }
   }
 
   const rentTypeOptions = [
@@ -373,11 +406,13 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
         <GridSection columns={2} className="pt-6">
           <GridCell>
             <table>
-              <tr>
-                <th>{t("listings.householdSize")}</th>
-                <th>{t("listings.maxAnnualIncome")}</th>
-              </tr>
-              {getAmiChartTableData()}
+              <thead>
+                <tr>
+                  <th>{t("listings.householdSize")}</th>
+                  <th>{t("listings.maxAnnualIncome")}</th>
+                </tr>
+              </thead>
+              <tbody>{getAmiChartTableData()}</tbody>
             </table>
             {/* <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} /> */}
           </GridCell>
@@ -491,7 +526,7 @@ const UnitForm = ({ onSubmit, onClose, tempId, defaultUnit }: UnitFormProps) => 
 
         <Button
           type="button"
-          onClick={onClose}
+          onClick={() => onClose(false)}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >

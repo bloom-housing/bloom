@@ -26,6 +26,7 @@ type UnitProps = {
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawerId, setUnitDrawerId] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
+  const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -46,12 +47,11 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
 
-  const editUnit = useCallback(
-    (tempId: number) => {
-      setUnitDrawerId(tempId)
-    },
-    [setUnitDrawerId]
-  )
+  const editUnit = (tempId: number) => {
+    console.log({ units })
+    setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
+    setUnitDrawerId(tempId)
+  }
 
   const deleteUnit = useCallback(
     (tempId: number) => {
@@ -68,8 +68,12 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     [setUnitDeleteModal, setUnits, units]
   )
 
+  console.log({ units })
   function saveUnit(newUnit: TempUnit) {
+    console.log("in the save unit")
+    console.log({ newUnit })
     const exists = units.some((unit) => unit.tempId === newUnit.tempId)
+    console.log("exists", exists)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
       setUnits(updateUnits)
@@ -169,10 +173,28 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         onClose={() => setUnitDrawerId(null)}
       >
         <UnitForm
-          onSubmit={(unit) => saveUnit(unit)}
-          onClose={() => setUnitDrawerId(null)}
-          defaultUnit={units.filter((unit) => unit.tempId === unitDrawerId)[0]}
-          tempId={unitDrawerId}
+          onSubmit={(unit) => {
+            console.log("on submit")
+            saveUnit(unit)
+          }}
+          onClose={(reopen: boolean, defaultUnit: TempUnit) => {
+            console.log("in the on close")
+            console.log(reopen, defaultUnit)
+            if (reopen) {
+              if (defaultUnit) {
+                setDefaultUnit(defaultUnit)
+                editUnit(units.length + 1)
+              } else {
+                setDefaultUnit(null)
+                setUnitDrawerId(units.length + 1)
+              }
+            } else {
+              setDefaultUnit(null)
+              setUnitDrawerId(null)
+            }
+          }}
+          defaultUnit={defaultUnit}
+          units={units}
         />
       </Drawer>
 
