@@ -251,8 +251,6 @@ const formatFormData = (
     data.applicationDueTimeField
   )
 
-  console.log("onSubmit units", units)
-
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":
@@ -300,8 +298,6 @@ const formatFormData = (
 
     delete unit.tempId
   })
-
-  console.log("onSubmit after massaging", units)
 
   const events: ListingEventCreate[] = data.events.filter(
     (event) => !(event?.type === ListingEventType.publicLottery)

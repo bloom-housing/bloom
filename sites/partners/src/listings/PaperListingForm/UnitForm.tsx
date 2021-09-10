@@ -99,7 +99,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
-      console.log({ defaultUnit })
       await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
