@@ -252,6 +252,65 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
+  it("should sort results from most recently updated to least", async () => {
+    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
+    for (let i = 0; i < res.body.items.length - 1; ++i) {
+      const currentUpdatedAt = new Date(res.body.items[i].updatedAt)
+      const nextUpdatedAt = new Date(res.body.items[i + 1].updatedAt)
+
+      // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
+      expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
+    }
+  })
+
+  it("should sort results within a page, and across sequential pages", async () => {
+    // Get the first page of 5 results.
+    const firstPage = await supertest(app.getHttpServer())
+      .get(`/listings?limit=5&page=1`)
+      .expect(200)
+
+    // Verify that listings on the first page are ordered from most to least recently updated.
+    for (let i = 0; i < 4; ++i) {
+      const currentUpdatedAt = new Date(firstPage.body.items[i].updatedAt)
+      const nextUpdatedAt = new Date(firstPage.body.items[i + 1].updatedAt)
+
+      // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
+      expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
+    }
+
+    const lastListingOnFirstPageUpdateTimestamp = new Date(firstPage.body.items[4].updatedAt)
+
+    // Get the second page of 5 results
+    const secondPage = await supertest(app.getHttpServer())
+      .get(`/listings?limit=5&page=2`)
+      .expect(200)
+
+    // Verify that each of the listings on the second page was less recently updated than the last
+    // first-page listing.
+    for (const secondPageListing of secondPage.body.items) {
+      const secondPageListingUpdateTimestamp = new Date(secondPageListing.updatedAt)
+      expect(lastListingOnFirstPageUpdateTimestamp.getTime()).toBeGreaterThan(
+        secondPageListingUpdateTimestamp.getTime()
+      )
+    }
+  })
+
+  it("listing.unitsSummary should be sorted by number of bedrooms (ascending)", async () => {
+    const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
+
+    for (const listing of listings.body.items) {
+      if (listing.unitsSummary.length > 1) {
+        for (let i = 0; i < listing.unitsSummary.length - 1; ++i) {
+          const currentUnitsSummary = listing.unitsSummary[i]
+          const nextUnitsSummary = listing.unitsSummary[i + 1]
+          expect(currentUnitsSummary.unitType.numBedrooms).toBeLessThanOrEqual(
+            nextUnitsSummary.unitType.numBedrooms
+          )
+        }
+      }
+    }
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })

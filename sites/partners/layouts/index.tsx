@@ -26,7 +26,6 @@ const Layout = (props) => {
           logoSrc="/images/detroit-logo.png"
           notice=""
           title={t("nav.siteTitlePartners")}
-          logoWidth={"medium"}
         >
           <LocalizedLink href="/" className="navbar-item">
             {t("nav.listings")}
