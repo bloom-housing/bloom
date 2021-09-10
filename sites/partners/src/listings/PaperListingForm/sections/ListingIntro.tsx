@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from "react"
-import { useFormContext } from "react-hook-form"
+import { Controller, useFormContext } from "react-hook-form"
 import {
   t,
   GridSection,
@@ -21,10 +21,11 @@ const ListingIntro = () => {
   const JurisdictionWrapper = useCallback(() => {
     if (profile.jurisdictions.length === 1) {
       return (
-        <input
+        <Controller
           type="hidden"
-          {...register("jurisdiction.id")}
           defaultValue={profile.jurisdictions[0].id}
+          name="jurisdiction.id"
+          as={<input />}
         />
       )
     } else {
