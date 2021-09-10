@@ -176,6 +176,7 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
     qb.leftJoinAndSelect("householdMembers.address", "householdMembers_address")
     qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembers_workAddress")
+    qb.leftJoinAndSelect("application.preferredUnit", "preferredUnit")
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts

@@ -3,8 +3,7 @@ import { IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { OmitType } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { PaperApplication } from "../entities/paper-application.entity"
-import { AssetDto } from "../../assets/dto/asset.dto"
-import { IdDto } from "../../shared/dto/id.dto"
+import { AssetCreateDto, AssetDto, AssetUpdateDto } from "../../assets/dto/asset.dto"
 
 export class PaperApplicationDto extends OmitType(PaperApplication, [
   "applicationMethod",
@@ -26,8 +25,8 @@ export class PaperApplicationCreateDto extends OmitType(PaperApplicationDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  file?: IdDto | null
+  @Type(() => AssetCreateDto)
+  file?: AssetCreateDto | null
 }
 
 export class PaperApplicationUpdateDto extends OmitType(PaperApplicationDto, [
@@ -56,6 +55,6 @@ export class PaperApplicationUpdateDto extends OmitType(PaperApplicationDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  file?: IdDto | null
+  @Type(() => AssetUpdateDto)
+  file?: AssetUpdateDto | null
 }

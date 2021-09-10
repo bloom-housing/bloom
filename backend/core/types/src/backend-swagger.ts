@@ -2448,6 +2448,23 @@ export interface HouseholdMember {
   workInRegion?: string
 }
 
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
 export interface ApplicationPreferenceOption {
   /**  */
   key: string
@@ -2511,6 +2528,9 @@ export interface Application {
   householdMembers: HouseholdMember[]
 
   /**  */
+  preferredUnit: UnitType[]
+
+  /**  */
   id: string
 
   /**  */
@@ -2551,9 +2571,6 @@ export interface Application {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -2702,12 +2719,28 @@ export interface ApplicationMethod {
   phoneNumber?: string
 }
 
+export interface AssetCreate {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplicationCreate {
+  /**  */
+  language: Language
+
+  /**  */
+  file?: CombinedFileTypes
+}
+
 export interface ApplicationMethodCreate {
   /**  */
   type: ApplicationMethodType
 
   /**  */
-  paperApplications?: Id[]
+  paperApplications?: PaperApplicationCreate[]
 
   /**  */
   label?: string
@@ -2725,6 +2758,40 @@ export interface ApplicationMethodCreate {
   listing: Id
 }
 
+export interface AssetUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+}
+
+export interface PaperApplicationUpdate {
+  /**  */
+  language: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  file?: CombinedFileTypes
+}
+
 export interface ApplicationMethodUpdate {
   /**  */
   type: ApplicationMethodType
@@ -2739,7 +2806,7 @@ export interface ApplicationMethodUpdate {
   updatedAt?: Date
 
   /**  */
-  paperApplications?: Id[]
+  paperApplications?: PaperApplicationUpdate[]
 
   /**  */
   label?: string
@@ -3041,6 +3108,9 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3069,9 +3139,6 @@ export interface ApplicationCreate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3367,6 +3434,9 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3397,9 +3467,6 @@ export interface ApplicationUpdate {
   income?: string
 
   /**  */
-  preferredUnit: string[]
-
-  /**  */
   preferences: ApplicationPreference[]
 
   /**  */
@@ -3407,14 +3474,6 @@ export interface ApplicationUpdate {
 
   /**  */
   submissionDate?: Date
-}
-
-export interface AssetCreate {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
 }
 
 export interface CreatePresignedUploadMetadata {
@@ -3467,6 +3526,20 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+}
+
 export interface User {
   /**  */
   language?: Language
@@ -3476,6 +3549,9 @@ export interface User {
 
   /**  */
   roles?: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Jurisdiction[]
 
   /**  */
   id: string
@@ -3522,6 +3598,9 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
+  jurisdictions?: Jurisdiction[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3546,6 +3625,9 @@ export interface UserBasic {
 
   /**  */
   roles: UserRoles
+
+  /**  */
+  jurisdictions: Jurisdiction[]
 
   /**  */
   id: string
@@ -3637,6 +3719,9 @@ export interface UserUpdate {
   currentPassword?: string
 
   /**  */
+  jurisdictions: Id[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3661,20 +3746,6 @@ export interface PaginatedUserList {
 
   /**  */
   meta: PaginationMeta
-}
-
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
 }
 
 export interface JurisdictionCreate {
@@ -3711,23 +3782,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
-}
-
-export interface UnitType {
-  /**  */
-  id: string
 
   /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
+  leasingAgents?: string
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4083,32 +4140,15 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitType {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
 export interface UnitsSummary {
   /**  */
   listing: Id
 
   /**  */
-  id: string
+  unitType: Id
 
   /**  */
-  unitType: UnitType
+  id: string
 
   /**  */
   monthlyRent?: number
@@ -4170,9 +4210,6 @@ export interface Listing {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -4209,7 +4246,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  jurisdiction?: Jurisdiction
+  jurisdiction: IdName
 
   /**  */
   reservedCommunityType?: ReservedCommunityType
@@ -4269,6 +4306,9 @@ export interface Listing {
   unitsSummary?: UnitsSummary[]
 
   /**  */
+  countyCode?: string
+
+  /**  */
   id: string
 
   /**  */
@@ -4279,6 +4319,18 @@ export interface Listing {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
 
   /**  */
   assets: AssetCreate[]
@@ -4536,9 +4588,6 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -4582,6 +4631,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingCreate {
@@ -4601,10 +4653,7 @@ export interface ListingCreate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
-  applicationMethods: Id[]
+  applicationMethods: ApplicationMethodCreate[]
 
   /**  */
   preferences: PreferenceCreate[]
@@ -4679,7 +4728,7 @@ export interface ListingCreate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: CombinedJurisdictionTypes
+  jurisdiction: Id
 
   /**  */
   reservedCommunityType?: Id
@@ -4692,6 +4741,18 @@ export interface ListingCreate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
 
   /**  */
   assets: AssetCreate[]
@@ -4806,6 +4867,9 @@ export interface ListingCreate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  countyCode?: string
 }
 
 export interface PreferenceUpdate {
@@ -4832,23 +4896,6 @@ export interface PreferenceUpdate {
 
   /**  */
   id: string
-}
-
-export interface AssetUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
 }
 
 export interface ListingEventUpdate {
@@ -5000,9 +5047,6 @@ export interface UnitsSummaryUpdate {
   id: string
 
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRent?: number
 
   /**  */
@@ -5046,6 +5090,9 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   listing: Id
+
+  /**  */
+  unitType: Id
 }
 
 export interface ListingUpdate {
@@ -5065,9 +5112,6 @@ export interface ListingUpdate {
   CSVFormattingType: CSVFormattingType
 
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   id?: string
 
   /**  */
@@ -5077,7 +5121,7 @@ export interface ListingUpdate {
   updatedAt?: Date
 
   /**  */
-  applicationMethods: Id[]
+  applicationMethods: ApplicationMethodUpdate[]
 
   /**  */
   preferences: PreferenceUpdate[]
@@ -5152,7 +5196,7 @@ export interface ListingUpdate {
   yearBuilt?: number
 
   /**  */
-  jurisdiction?: Id
+  jurisdiction: Id
 
   /**  */
   reservedCommunityType?: Id
@@ -5165,6 +5209,18 @@ export interface ListingUpdate {
 
   /**  */
   additionalApplicationSubmissionNotes?: string
+
+  /**  */
+  digitalApplication?: boolean
+
+  /**  */
+  commonDigitalApplication?: boolean
+
+  /**  */
+  paperApplication?: boolean
+
+  /**  */
+  referralOpportunity?: boolean
 
   /**  */
   assets: AssetCreate[]
@@ -5279,31 +5335,9 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
-}
-
-export interface PaperApplicationCreate {
-  /**  */
-  language: Language
 
   /**  */
-  file?: CombinedFileTypes
-}
-
-export interface PaperApplicationUpdate {
-  /**  */
-  language: Language
-
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  file?: CombinedFileTypes
+  countyCode?: string
 }
 
 export interface Property {
@@ -5522,10 +5556,10 @@ export interface ReservedCommunityTypeUpdate {
 
 export interface Translation {
   /**  */
-  countyCode: CountyCode
+  language: Language
 
   /**  */
-  language: Language
+  jurisdiction: Id
 
   /**  */
   id: string
@@ -5542,19 +5576,16 @@ export interface Translation {
 
 export interface TranslationCreate {
   /**  */
-  countyCode: CountyCode
-
-  /**  */
   language: Language
 
   /**  */
   translations: object
+
+  /**  */
+  jurisdiction: Id
 }
 
 export interface TranslationUpdate {
-  /**  */
-  countyCode: CountyCode
-
   /**  */
   language: Language
 
@@ -5569,6 +5600,9 @@ export interface TranslationUpdate {
 
   /**  */
   translations: object
+
+  /**  */
+  jurisdiction: Id
 }
 
 export enum IncomePeriod {
@@ -5605,8 +5639,9 @@ export enum ApplicationMethodType {
   "PaperPickup" = "PaperPickup",
   "POBox" = "POBox",
   "LeasingAgent" = "LeasingAgent",
+  "Referral" = "Referral",
 }
-export type CombinedFileTypes = Id
+export type CombinedFileTypes = AssetUpdate
 export enum InputType {
   "boolean" = "boolean",
   "text" = "text",
@@ -5659,13 +5694,6 @@ export enum CSVFormattingType {
   "bhaFormat" = "bhaFormat",
 }
 
-export enum CountyCode {
-  "Alameda" = "Alameda",
-  "San Mateo" = "San Mateo",
-  "San Jose" = "San Jose",
-  "Detroit" = "Detroit",
-}
-
 export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
@@ -5686,4 +5714,3 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
-export type CombinedJurisdictionTypes = Id
