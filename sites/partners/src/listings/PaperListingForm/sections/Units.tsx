@@ -48,7 +48,6 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   }, [disableUnitsAccordion, setValue])
 
   const editUnit = (tempId: number) => {
-    console.log({ units })
     setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
     setUnitDrawerId(tempId)
   }
@@ -68,12 +67,8 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     [setUnitDeleteModal, setUnits, units]
   )
 
-  console.log({ units })
   function saveUnit(newUnit: TempUnit) {
-    console.log("in the save unit")
-    console.log({ newUnit })
     const exists = units.some((unit) => unit.tempId === newUnit.tempId)
-    console.log("exists", exists)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
       setUnits(updateUnits)
@@ -174,12 +169,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       >
         <UnitForm
           onSubmit={(unit) => {
-            console.log("on submit")
             saveUnit(unit)
           }}
           onClose={(reopen: boolean, defaultUnit: TempUnit) => {
-            console.log("in the on close")
-            console.log(reopen, defaultUnit)
             if (reopen) {
               if (defaultUnit) {
                 setDefaultUnit(defaultUnit)

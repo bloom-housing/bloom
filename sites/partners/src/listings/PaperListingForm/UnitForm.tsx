@@ -25,7 +25,6 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
-import ResetPassword from "../../../pages/reset-password"
 
 type UnitFormProps = {
   onSubmit: (unit: any) => void
@@ -37,7 +36,6 @@ type UnitFormProps = {
 const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
-  // const [tempId, setTempId] = useState<number | null>(null)
   const [options, setOptions] = useState({
     amiCharts: [],
     unitPriorities: [],
@@ -110,7 +108,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   const resetDefaultValues = () => {
     if (defaultUnit) {
       Object.keys(defaultUnit).forEach((key) => {
-        console.log("setting value", key, defaultUnit[key])
         setValue(key, defaultUnit[key])
       })
     }
@@ -132,7 +129,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
         .sort(function (a, b) {
           return a.householdSize - b.householdSize
         })
-      console.log("fetched ami chart", amiChartData)
       amiChartData.forEach((amiValue, index) => {
         setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
       })
@@ -142,24 +138,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   }
 
   useEffect(() => {
-    console.log("use effect 4")
-    console.log(amiChartID && amiPercentage && loading)
     if (amiChartID && amiPercentage && !loading) {
       void fetchAmiChart()
     }
   }, [amiChartID, amiPercentage])
-
-  const amiChartTableHeaders = {
-    householdSize: "listings.householdSize",
-    maxIncome: "listings.maxAnnualIncome",
-  }
 
   async function onFormSubmit(action?: string) {
     setLoading(true)
     const data = getValues()
     const validation = await trigger()
     if (!validation) {
-      console.log({ data })
       ;[...Array(maxAmiHouseholdSize)].forEach((index) => {
         const fieldName = `maxIncomeHouseholdSize${index + 1}`
         setValue(fieldName, data[fieldName])
@@ -203,16 +191,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       ...data,
     }
 
-    // open fresh, save with tempId
-    // open from edited, save with tempId
-    // open fresh, copy and new, save with tempId, open again with new id and default
-    // open from edited, copy and new, DONT save current one just open with new ID and default
-
     const existingId = units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId
     const nextId = units.length + 1
-
-    console.log({ existingId })
-    console.log({ nextId })
 
     if (action === "copyNew") {
       onSubmit({
@@ -228,6 +208,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       })
       onClose(true, null)
       reset()
+      setValue("status", "available")
     } else {
       onSubmit({
         ...formData,
@@ -251,8 +232,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   ]
 
   useEffect(() => {
-    console.log("use effect 5")
-    // hm this seems to be running a lot
     setOptions({
       amiCharts: arrayToFormOptions<AmiChart>(amiCharts, "name", "id"),
       unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
@@ -423,7 +402,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
               </thead>
               <tbody>{getAmiChartTableData()}</tbody>
             </table>
-            {/* <MinimalTable headers={amiChartTableHeaders} data={getAmiChartTableData()} /> */}
           </GridCell>
         </GridSection>
         <GridSection columns={4} className="pt-6">
