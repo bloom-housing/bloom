@@ -3784,6 +3784,9 @@ export interface ListingFilterParams {
   bedrooms?: number
 
   /**  */
+  zipcode?: string
+
+  /**  */
   leasingAgents?: string
 }
 
