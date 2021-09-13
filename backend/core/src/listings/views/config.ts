@@ -19,6 +19,7 @@ const views: Views = {
       "listings.status",
       "listings.waitlistMaxSize",
       "listings.waitlistCurrentSize",
+      "listings.amiPercentageMax",
       "listings.assets",
       "image.id",
       "image.fileId",

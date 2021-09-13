@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsNumberString,
   IsEnum,
+  IsBooleanString,
   IsArray,
 } from "class-validator"
 import moment from "moment"
@@ -807,10 +808,11 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
-    example: "48211",
+    example: "48211, 48212",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.zipcode]?: string;
 
   @Expose()
@@ -820,6 +822,7 @@ export class ListingFilterParams extends BaseFilter {
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(AvailabilityFilterEnum, { groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.availability]?: AvailabilityFilterEnum;
 
   @Expose()
@@ -829,6 +832,7 @@ export class ListingFilterParams extends BaseFilter {
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.seniorHousing]?: boolean;
 
   @Expose()
@@ -850,6 +854,16 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.maxRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "40",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.ami]?: number;
 
   @Expose()
   @ApiProperty({
@@ -924,17 +938,19 @@ export class ListingsRetrieveQueryParams {
   view?: string
 }
 
+// Fields for the Availability and AMI filters are determined based on the value
+// of the filter or by checking multiple columns. Since we can't specify a single
+// field the filters correspond to, we remove them from the filterTypeToFieldMap.
+type keysWithMappedField = Exclude<keyof typeof ListingFilterKeys, "ami" | "availability">
+
 // Using a record lets us enforce that all types are handled in addFilter
-export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
+export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "summaryUnitType.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
   seniorHousing: "reservedCommunityType.name",
-  // Fields for the availability are determined based on the value of the filter, not the
-  // key. Keep this bogus value to prevent the filter from being rejected.
-  availability: "",
   minRent: "unitsSummary.monthly_rent_max",
   maxRent: "unitsSummary.monthly_rent_min",
   leasingAgents: "leasingAgents.id",

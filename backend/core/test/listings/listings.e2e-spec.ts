@@ -44,7 +44,7 @@ describe("Listings", () => {
     await app.init()
   })
 
-  it("should return all listings", async () => {
+  it("should return listings", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
@@ -55,7 +55,7 @@ describe("Listings", () => {
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
     // TODO(#374): get this number programmatically
-    const limit = 14
+    const limit = 18
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
@@ -67,8 +67,10 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const page = "2"
-    const limit = "14"
-    const params = "/?page=" + page + "&limit=" + limit
+    // This is the number of listings in ../../src/seed.ts minus 1
+    // TODO(#374): get this number programmatically
+    const limit = 18
+    const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
       .expect(200)
@@ -252,99 +254,235 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
-  it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
-    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
-    const listings = res.body.items
-
-    // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
-    expect(listings[0].name).toBe("Test: Coliseum")
-
-    // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
-    // (5 days in the future). Between the two, Triton appears first because it has
-    // the earlier applicationOpenDate.
-    const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton")
-    const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Default, No Preferences")
-
-    const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
-    const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
-    expect(secondListingAppDueDate.getDate()).toEqual(thirdListingAppDueDate.getDate())
-
-    const secondListingAppOpenDate = new Date(secondListing.applicationOpenDate)
-    const thirdListingAppOpenDate = new Date(thirdListing.applicationOpenDate)
-    expect(secondListingAppOpenDate.getTime()).toBeLessThanOrEqual(
-      thirdListingAppOpenDate.getTime()
-    )
-
-    // Verify that listings with null applicationDueDate's appear at the end.
-    const lastListing = listings[listings.length - 1]
-    expect(lastListing.applicationDueDate).toBeNull()
-  })
-
-  it("sorts listings by most recently updated when that orderBy param is set", async () => {
-    const res = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=all`)
-      .expect(200)
-    for (let i = 0; i < res.body.items.length - 1; ++i) {
-      const currentUpdatedAt = new Date(res.body.items[i].updatedAt)
-      const nextUpdatedAt = new Date(res.body.items[i + 1].updatedAt)
-
-      // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
-      expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
-    }
-  })
-
-  it("fails if orderBy param doesn't conform to one of the enum values", async () => {
-    await supertest(app.getHttpServer()).get(`/listings?orderBy=notAValidOrderByParam`).expect(400)
-  })
-
-  it("sorts results within a page, and across sequential pages", async () => {
-    // Get the first page of 5 results.
-    const firstPage = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=1`)
-      .expect(200)
-
-    // Verify that listings on the first page are ordered from most to least recently updated.
-    for (let i = 0; i < 4; ++i) {
-      const currentUpdatedAt = new Date(firstPage.body.items[i].updatedAt)
-      const nextUpdatedAt = new Date(firstPage.body.items[i + 1].updatedAt)
-
-      // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
-      expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
-    }
-
-    const lastListingOnFirstPageUpdateTimestamp = new Date(firstPage.body.items[4].updatedAt)
-
-    // Get the second page of 5 results
-    const secondPage = await supertest(app.getHttpServer())
-      .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=2`)
-      .expect(200)
-
-    // Verify that each of the listings on the second page was less recently updated than the last
-    // first-page listing.
-    for (const secondPageListing of secondPage.body.items) {
-      const secondPageListingUpdateTimestamp = new Date(secondPageListing.updatedAt)
-      expect(lastListingOnFirstPageUpdateTimestamp.getTime()).toBeGreaterThan(
-        secondPageListingUpdateTimestamp.getTime()
+  describe("AMI Filter", () => {
+    it("should return listings with AMI >= the filter value", async () => {
+      const paramsWithEqualAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "60",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithEqualAmi))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
       )
-    }
+
+      const paramsWithLessAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "59",
+          },
+        ],
+      }
+      const res2 = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithLessAmi))
+        .expect(200)
+      expect(res2.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should not return listings with AMI < the filter value", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "61",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in Units Summary, even if Listings.amiPercentageMax field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 30 Listing With 10 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should not return listings with matching AMI in Listings.amiPercentageMax field, if Unit Summary field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 10 Listing With 30 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in the Listings.amiPercentageMax field, if the Unit Summary field is empty", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            ami: "19",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary Without And Listing With 20 Ami Percentage",
+          }),
+        ])
+      )
+    })
   })
 
-  it("sorts listing.unitsSummary by number of bedrooms (ascending)", async () => {
-    const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
+  describe("Listing Sorting", () => {
+    it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
+      const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
+      const listings = res.body.items
 
-    for (const listing of listings.body.items) {
-      if (listing.unitsSummary.length > 1) {
-        for (let i = 0; i < listing.unitsSummary.length - 1; ++i) {
-          const currentUnitsSummary = listing.unitsSummary[i]
-          const nextUnitsSummary = listing.unitsSummary[i + 1]
-          expect(currentUnitsSummary.unitType.numBedrooms).toBeLessThanOrEqual(
-            nextUnitsSummary.unitType.numBedrooms
-          )
+      // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
+      expect(listings[0].name).toBe("Test: Coliseum")
+
+      // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
+      // (5 days in the future). Between the two, Triton appears first because it has
+      // the earlier applicationOpenDate.
+      const secondListing = listings[1]
+      expect(secondListing.name).toBe("Test: Triton")
+      const thirdListing = listings[2]
+      expect(thirdListing.name).toBe("Test: Default, No Preferences")
+
+      const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
+      const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
+      expect(secondListingAppDueDate.getDate()).toEqual(thirdListingAppDueDate.getDate())
+
+      const secondListingAppOpenDate = new Date(secondListing.applicationOpenDate)
+      const thirdListingAppOpenDate = new Date(thirdListing.applicationOpenDate)
+      expect(secondListingAppOpenDate.getTime()).toBeLessThanOrEqual(
+        thirdListingAppOpenDate.getTime()
+      )
+
+      // Verify that listings with null applicationDueDate's appear at the end.
+      const lastListing = listings[listings.length - 1]
+      expect(lastListing.applicationDueDate).toBeNull()
+    })
+
+    it("sorts listings by most recently updated when that orderBy param is set", async () => {
+      const res = await supertest(app.getHttpServer())
+        .get(`/listings?orderBy=mostRecentlyUpdated&limit=all`)
+        .expect(200)
+      for (let i = 0; i < res.body.items.length - 1; ++i) {
+        const currentUpdatedAt = new Date(res.body.items[i].updatedAt)
+        const nextUpdatedAt = new Date(res.body.items[i + 1].updatedAt)
+
+        // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
+        expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
+      }
+    })
+
+    it("fails if orderBy param doesn't conform to one of the enum values", async () => {
+      await supertest(app.getHttpServer())
+        .get(`/listings?orderBy=notAValidOrderByParam`)
+        .expect(400)
+    })
+
+    it("sorts results within a page, and across sequential pages", async () => {
+      // Get the first page of 5 results.
+      const firstPage = await supertest(app.getHttpServer())
+        .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=1`)
+        .expect(200)
+
+      // Verify that listings on the first page are ordered from most to least recently updated.
+      for (let i = 0; i < 4; ++i) {
+        const currentUpdatedAt = new Date(firstPage.body.items[i].updatedAt)
+        const nextUpdatedAt = new Date(firstPage.body.items[i + 1].updatedAt)
+
+        // Verify that each listing's updatedAt timestamp is more recent than the next listing's.
+        expect(currentUpdatedAt.getTime()).toBeGreaterThan(nextUpdatedAt.getTime())
+      }
+
+      const lastListingOnFirstPageUpdateTimestamp = new Date(firstPage.body.items[4].updatedAt)
+
+      // Get the second page of 5 results
+      const secondPage = await supertest(app.getHttpServer())
+        .get(`/listings?orderBy=mostRecentlyUpdated&limit=5&page=2`)
+        .expect(200)
+
+      // Verify that each of the listings on the second page was less recently updated than the last
+      // first-page listing.
+      for (const secondPageListing of secondPage.body.items) {
+        const secondPageListingUpdateTimestamp = new Date(secondPageListing.updatedAt)
+        expect(lastListingOnFirstPageUpdateTimestamp.getTime()).toBeGreaterThan(
+          secondPageListingUpdateTimestamp.getTime()
+        )
+      }
+    })
+
+    it("sorts listing.unitsSummary by number of bedrooms (ascending)", async () => {
+      const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
+
+      for (const listing of listings.body.items) {
+        if (listing.unitsSummary.length > 1) {
+          for (let i = 0; i < listing.unitsSummary.length - 1; ++i) {
+            const currentUnitsSummary = listing.unitsSummary[i]
+            const nextUnitsSummary = listing.unitsSummary[i + 1]
+            expect(currentUnitsSummary.unitType.numBedrooms).toBeLessThanOrEqual(
+              nextUnitsSummary.unitType.numBedrooms
+            )
+          }
         }
       }
-    }
+    })
   })
 
   afterEach(() => {

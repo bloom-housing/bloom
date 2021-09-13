@@ -5,7 +5,11 @@ import {
   AvailabilityFilterEnum,
   ListingFilterKeys,
 } from "../../listings/types/listing-filter-keys-enum"
-import { addSeniorHousingQuery, addAvailabilityQuery } from "./custom_filters"
+import {
+  addSeniorHousingQuery,
+  addAvailabilityQuery,
+  addAmiPercentageFilter,
+} from "./custom_filters"
 
 /**
  *
@@ -36,23 +40,26 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
         continue
       }
       // Throw if this is not a supported filter type
-      if (!(filterKey in filterTypeToFieldMap)) {
+      if (!(filterKey in ListingFilterKeys)) {
         throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       }
+
+      const filterValue = filter[filterKey]
+      // Handle custom filters here, before dropping into generic filter handler
+      switch (filterKey) {
+        case ListingFilterKeys.seniorHousing:
+          addSeniorHousingQuery(qb, filterValue)
+          return
+        case ListingFilterKeys.availability:
+          addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum)
+          return
+        case ListingFilterKeys.ami:
+          addAmiPercentageFilter(qb, parseInt(filterValue))
+          return
+      }
+
       const whereParameterName = `${filterKey}_${index}`
       const filterField = filterTypeToFieldMap[filterKey]
-      const filterValue = filter[filterKey]
-
-      // Handle custom filters here, before dropping into generic filter handler
-      if (filterKey == ListingFilterKeys.seniorHousing) {
-        addSeniorHousingQuery(qb, filterValue)
-        return
-      }
-      if (filterKey == ListingFilterKeys.availability) {
-        addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum)
-        return
-      }
-
       switch (comparison) {
         case Compare.IN:
           qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {

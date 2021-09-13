@@ -47,3 +47,19 @@ export function addAvailabilityQuery(qb: WhereExpression, filterValue: Availabil
       return
   }
 }
+
+export function addAmiPercentageFilter(qb: WhereExpression, filterValue: number) {
+  const whereParameterName = "amiPercentage_unitsSummary"
+  const whereParameterName2 = "amiPercentage_listings"
+
+  // Check the listing.ami_percentage field iff the field is not set on the Units Summary table.
+  qb.andWhere(
+    `((unitsSummary.ami_percentage IS NOT NULL AND unitsSummary.ami_percentage >= :${whereParameterName}) ` +
+      `OR (unitsSummary.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2}))`,
+    {
+      [whereParameterName]: filterValue,
+      [whereParameterName2]: filterValue,
+    }
+  )
+  return
+}

@@ -3743,6 +3743,9 @@ export interface ListingFilterParams {
   maxRent?: number
 
   /**  */
+  ami?: number
+
+  /**  */
   leasingAgents?: string
 }
 
