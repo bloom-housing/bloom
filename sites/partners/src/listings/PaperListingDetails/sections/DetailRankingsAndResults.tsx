@@ -28,7 +28,7 @@ const DetailRankingsAndResults = () => {
         <ViewItem label={t("listings.reviewOrderQuestion")}>
           {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
             ? t("listings.firstComeFirstServe")
-            : t("listings.lottery")}
+            : t("listings.lotteryTitle")}
         </ViewItem>
       </GridSection>
       {lotteryEvent && (
