@@ -28,7 +28,7 @@ export class ListingsService {
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService
-  ) {}
+  ) { }
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
@@ -49,7 +49,7 @@ export class ListingsService {
           }
         default:
           throw new HttpException(
-            `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
+            `OrderBy parameter not recognized or not yet implemented.`,
             HttpStatus.NOT_IMPLEMENTED
           )
       }
