@@ -72,31 +72,40 @@ async function main() {
       latitude: listingFields["Latitude"],
     }
 
-    // Add data about units
-    let units = []
+    // Add data about unitsSummaries
+    const unitsSummaries = []
     if (listingFields["Number 0BR"]) {
-      units = units.concat(createUnitsArray("studio", listingFields["Number 0BR"]))
+      unitsSummaries.push({
+        unitType: "studio",
+        totalCount: Number(listingFields["Number 0BR"]),
+      })
     }
     if (listingFields["Number 1BR"]) {
-      units = units.concat(createUnitsArray("oneBdrm", parseInt(listingFields["Number 1BR"])))
+      unitsSummaries.push({
+        unitType: "oneBdrm",
+        totalCount: Number(listingFields["Number 1BR"]),
+      })
     }
     if (listingFields["Number 2BR"]) {
-      units = units.concat(createUnitsArray("twoBdrm", parseInt(listingFields["Number 2BR"])))
+      unitsSummaries.push({
+        unitType: "twoBdrm",
+        totalCount: Number(listingFields["Number 2BR"]),
+      })
     }
     if (listingFields["Number 3BR"]) {
-      units = units.concat(createUnitsArray("threeBdrm", parseInt(listingFields["Number 3BR"])))
+      unitsSummaries.push({
+        unitType: "threeBdrm",
+        totalCount: Number(listingFields["Number 3BR"]),
+      })
     }
     // Lump 4BR and 5BR together as "fourBdrm"
     const numberFourBdrm = listingFields["Number 4BR"] ? parseInt(listingFields["Number 4BR"]) : 0
     const numberFiveBdrm = listingFields["Number 5BR"] ? parseInt(listingFields["Number 5BR"]) : 0
     if (numberFourBdrm + numberFiveBdrm > 0) {
-      units = units.concat(createUnitsArray("fourBdrm", numberFourBdrm + numberFiveBdrm))
-    }
-
-    // If we don't have any data per unit type, but we do have an overall count, create that many
-    // "unknown" units
-    if (units.length == 0 && listingFields["Affordable Units"]) {
-      createUnitsArray("unknown", parseInt(listingFields["Affordable Units"]))
+      unitsSummaries.push({
+        unitType: "fourBdrm",
+        totalCount: numberFourBdrm + numberFiveBdrm,
+      })
     }
 
     // Listing affordability details
@@ -127,7 +136,6 @@ async function main() {
       hrdId: listingFields["HRDID"],
       buildingAddress: address,
       region: listingFields["Region"],
-      units: units,
       ownerCompany: listingFields["Owner Company"],
       managementCompany: listingFields["Management Company"],
       leasingAgentName: listingFields["Manager Contact"],
@@ -138,9 +146,11 @@ async function main() {
       amiPercentageMin: amiPercentageMin,
       amiPercentageMax: amiPercentageMax,
       status: ListingStatus.active,
+      unitsSummary: unitsSummaries,
       jurisdiction: jurisdiction,
 
       // The following fields are only set because they are required
+      units: [],
       CSVFormattingType: CSVFormattingType.basic,
       applicationMethods: [],
       preferences: [],
