@@ -7,7 +7,7 @@ export * from "./src/actions/ExpandableContent"
 
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
-export * from "./src/blocks/AppStatusItem"
+export * from "./src/blocks/StatusItem"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"
 export * from "./src/blocks/FormCard"
