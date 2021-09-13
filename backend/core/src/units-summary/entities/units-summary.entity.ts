@@ -43,11 +43,11 @@ class UnitsSummary {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   monthlyRentAsPercentOfIncome?: string | null
 
-  @Column({ nullable: true, type: "text" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amiPercentage?: string | null
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  amiPercentage?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()

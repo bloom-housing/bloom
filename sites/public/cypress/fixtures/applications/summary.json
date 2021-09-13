@@ -44,7 +44,7 @@
     }
   },
   "householdDetails": {
-    "preferredUnitType": "Studio, 1 Bedroom, 2 Bedroom",
+    "preferredUnitType": "1 Bedroom",
     "ada": "For Mobility Impairments"
   },
   "income": {

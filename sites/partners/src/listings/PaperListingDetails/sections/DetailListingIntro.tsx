@@ -15,6 +15,11 @@ const DetailListingIntro = () => {
     >
       <GridSection columns={3}>
         <GridCell span={2}>
+          <ViewItem label={t("t.jurisdiction")}>
+            {getDetailFieldString(listing.jurisdiction.name)}
+          </ViewItem>
+        </GridCell>
+        <GridCell span={2}>
           <ViewItem label={t("listings.listingName")}>
             {getDetailFieldString(listing.name)}
           </ViewItem>

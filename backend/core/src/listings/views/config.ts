@@ -22,10 +22,12 @@ const views: Views = {
       "listings.status",
       "listings.waitlistMaxSize",
       "listings.waitlistCurrentSize",
+      "listings.assets",
       "image.id",
       "image.fileId",
       "image.label",
-      "listings.assets",
+      "jurisdiction.id",
+      "jurisdiction.name",
       "reservedCommunityType.id",
       "reservedCommunityType.name",
       "property.id",
@@ -46,6 +48,7 @@ const views: Views = {
       "unitType.name",
     ],
     leftJoins: [
+      { join: "listings.jurisdiction", alias: "jurisdiction" },
       { join: "listings.image", alias: "image" },
       { join: "listings.property", alias: "property" },
       { join: "property.buildingAddress", alias: "buildingAddress" },
@@ -56,6 +59,20 @@ const views: Views = {
       { join: "listings.preferences", alias: "preferences" },
     ],
   },
+}
+
+views.partnerList = {
+  select: [
+    "listings.id",
+    "listings.name",
+    "listings.applicationDueDate",
+    "listings.applicationDueTime",
+    "listings.status",
+    "listings.waitlistMaxSize",
+    "listings.waitlistCurrentSize",
+    "property.unitsAvailable",
+  ],
+  leftJoins: [{ join: "listings.property", alias: "property" }],
 }
 
 views.detail = {

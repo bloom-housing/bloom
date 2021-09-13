@@ -120,6 +120,8 @@ h1.title {
   @apply text-tiny;
   @apply uppercase;
   @apply block;
+  @apply text-primary;
+  @apply font-semibold;
 }
 
 .pill {

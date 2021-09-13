@@ -102,7 +102,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     income: "100.00",
     incomePeriod: IncomePeriod.perMonth,
     householdMembers: [],
-    preferredUnit: ["a", "b"],
+    preferredUnit: [],
     preferences: [],
   }
 }

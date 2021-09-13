@@ -30,6 +30,7 @@ import {
   AccessibilityUpdateDto,
 } from "./accessibility.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 
 export class ApplicationDto extends OmitType(Application, [
   "listing",
@@ -44,6 +45,7 @@ export class ApplicationDto extends OmitType(Application, [
   "demographics",
   "householdMembers",
   "flagged",
+  "preferredUnit",
 ] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -110,6 +112,12 @@ export class ApplicationDto extends OmitType(Application, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberDto)
   householdMembers: HouseholdMemberDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitTypeDto)
+  preferredUnit: UnitTypeDto[]
 }
 
 export class PaginatedApplicationDto extends PaginationFactory<ApplicationDto>(ApplicationDto) {}
@@ -129,6 +137,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "preferredUnit",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -178,6 +187,12 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberCreateDto)
   householdMembers: HouseholdMemberCreateDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  preferredUnit: IdDto[]
 }
 
 export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
@@ -195,6 +210,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "demographics",
   "householdMembers",
   "markedAsDuplicate",
+  "preferredUnit",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -266,4 +282,10 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => HouseholdMemberUpdateDto)
   householdMembers: HouseholdMemberUpdateDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  preferredUnit: IdDto[]
 }
