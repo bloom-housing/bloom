@@ -16,7 +16,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { JurisdictionsService } from "./jurisdictions.service"
+import { JurisdictionsService } from "./services/jurisdictions.service"
 import {
   JurisdictionCreateDto,
   JurisdictionDto,

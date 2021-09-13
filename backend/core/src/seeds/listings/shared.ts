@@ -6,7 +6,6 @@ import {
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
-import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
@@ -17,6 +16,7 @@ import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
+import { CountyCode } from "../../shared/types/county-code"
 
 export const getDate = (days: number) => {
   const someDate = new Date()
@@ -422,7 +422,7 @@ export const defaultUnits: Array<UnitSeedType> = [
   },
 ]
 
-export const defaultLeasingAgents: UserCreateDto[] = [
+export const defaultLeasingAgents: Omit<UserCreateDto, "jurisdictions">[] = [
   {
     firstName: "First",
     lastName: "Last",
@@ -460,6 +460,7 @@ export const defaultListing: ListingSeedType = {
     latitude: 37.789673,
     longitude: -122.40151,
   },
+  countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
@@ -480,7 +481,6 @@ export const defaultListing: ListingSeedType = {
   applicationPickUpAddressOfficeHours: "Custom pick up address office hours text",
   buildingSelectionCriteria: "example.com",
   costsNotIncluded: "Custom costs not included text",
-  countyCode: CountyCode.alameda,
   creditHistory: "Custom credit history text",
   criminalBackground: "Custom criminal background text",
   CSVFormattingType: CSVFormattingType.basic,
