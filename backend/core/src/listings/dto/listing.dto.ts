@@ -43,6 +43,7 @@ import {
   UnitsSummaryDto,
   UnitsSummaryUpdateDto,
 } from "../../units-summary/dto/units-summary.dto"
+import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { IdNameDto } from "../../shared/dto/idName.dto"
 
 export class ListingDto extends OmitType(Listing, [
@@ -845,6 +846,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   view?: string
+
+  @Expose()
+  @ApiProperty({
+    name: "orderBy",
+    required: false,
+    enum: OrderByFieldsEnum,
+    enumName: "OrderByFieldsEnum",
+    example: "updatedAt",
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })
+  orderBy?: OrderByFieldsEnum
 
   @Expose()
   @ApiProperty({
