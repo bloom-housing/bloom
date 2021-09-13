@@ -1,6 +1,6 @@
-import { Address } from "helpers/address"
 import * as React from "react"
 import { t } from "../../../helpers/translator"
+import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
 import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
