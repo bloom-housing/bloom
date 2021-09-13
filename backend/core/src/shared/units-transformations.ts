@@ -181,6 +181,9 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
           rowData[`ami${currentAmiPercent}`] = ""
         }
       } else {
+        if (!uniquePercentCharts[0].chart) {
+          return
+        }
         // If we have chart data, create a max income range string
         const firstChartValue = findAmiValueInChart(
           uniquePercentCharts[0].chart.items,
@@ -297,7 +300,7 @@ export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
   units.forEach((unit) => {
     const currentUnitType = unit.unitType
     const currentUnitRent = unit.monthlyRentAsPercentOfIncome
-    const thisKey = currentUnitType.name.concat(currentUnitRent)
+    const thisKey = currentUnitType?.name.concat(currentUnitRent)
     if (!(thisKey in unitMap)) unitMap[thisKey] = []
     unitMap[thisKey].push(unit)
   })

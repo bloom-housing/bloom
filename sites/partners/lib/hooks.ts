@@ -52,6 +52,7 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
           leasingAgents: userId,
         },
       ],
+      view: "base",
     })
   }
 

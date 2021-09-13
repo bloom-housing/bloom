@@ -14,12 +14,14 @@ interface SelectProps {
   label?: string
   defaultValue?: string
   placeholder?: string
-  register: UseFormMethods["register"]
+  register?: UseFormMethods["register"]
   validation?: Record<string, unknown>
   disabled?: boolean
   options: (string | SelectOption)[]
   keyPrefix?: string
   describedBy?: string
+  inputProps?: Record<string, unknown>
+  noDefault?: boolean
 }
 
 export const Select = ({
@@ -30,7 +32,6 @@ export const Select = ({
   id,
   name,
   label,
-  defaultValue = "",
   placeholder,
   register,
   validation,
@@ -38,7 +39,13 @@ export const Select = ({
   options,
   keyPrefix,
   describedBy,
+  inputProps,
+  noDefault = false,
 }: SelectProps) => {
+  if (noDefault === false) {
+    inputProps = inputProps ? { ...inputProps } : {}
+    inputProps.defaultValue = ""
+  }
   return (
     <div className={"field " + (error ? "error" : "")}>
       <label className={labelClassName} htmlFor={id}>
@@ -51,9 +58,9 @@ export const Select = ({
           name={name}
           aria-describedby={describedBy ? describedBy : `${id}-error`}
           aria-invalid={!!error || false}
-          defaultValue={defaultValue}
-          ref={register(validation)}
+          ref={register && register(validation)}
           disabled={disabled}
+          {...inputProps}
         >
           {placeholder && (
             <option value="" disabled>
