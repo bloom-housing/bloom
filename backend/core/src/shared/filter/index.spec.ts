@@ -20,7 +20,7 @@ describe("FilterAdder", () => {
     it("should not call where when no filters are passed", () => {
       const filter = {}
 
-      addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+      addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
 
       expect(mockQueryBuilder.where).not.toHaveBeenCalled()
       expect(mockQueryBuilder.andWhere).not.toHaveBeenCalled()
@@ -33,7 +33,7 @@ describe("FilterAdder", () => {
         name: "Coliseum",
       }
 
-      addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+      addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
 
       expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(expect.stringContaining("="), {
         name_0: expect.stringContaining("Coliseum"),
@@ -48,25 +48,25 @@ describe("FilterAdder", () => {
 
       // This extra function wrapper is needed to catch the exception.
       expect(() => {
-        addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+        addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
       }).toThrow(HttpException)
       expect(() => {
-        addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+        addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
       }).toThrow("Filter Not Implemented")
     })
 
     it("should throw an exception when comparison is not supported", () => {
       const filter = {
         $comparison: "abc",
-        abc: "Test",
+        name: "Test",
       }
 
       // This extra function wrapper is needed to catch the exception.
       expect(() => {
-        addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+        addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
       }).toThrow(HttpException)
       expect(() => {
-        addFilters(filter, filterTypeToFieldMap, mockQueryBuilder)
+        addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
       }).toThrow("Comparison Not Implemented")
     })
   })
