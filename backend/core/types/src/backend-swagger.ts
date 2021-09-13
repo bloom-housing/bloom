@@ -996,6 +996,8 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
+      orderBy?: OrderByFieldsEnum
+      /**  */
       jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
@@ -1009,6 +1011,7 @@ export class ListingsService {
         limit: params["limit"],
         filter: params["filter"],
         view: params["view"],
+        orderBy: params["orderBy"],
         jsonpath: params["jsonpath"],
       }
       let data = null
@@ -5671,6 +5674,11 @@ export enum EnumListingFilterParamsStatus {
   "pending" = "pending",
   "closed" = "closed",
 }
+export enum OrderByFieldsEnum {
+  "mostRecentlyUpdated" = "mostRecentlyUpdated",
+  "applicationDates" = "applicationDates",
+}
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
   "mailingAddress" = "mailingAddress",
