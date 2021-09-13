@@ -5,17 +5,21 @@ import { SidebarAddress } from "./SidebarAddress"
 import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
 
-export interface ApplicationAddressesProps {
-  applicationMailingAddress: Address
-  applicationDropOffAddress: Address
-  applicationDropOffAddressOfficeHours: string
-  applicationOrganization: string
+export interface PostmarkedApplication {
   postmarkedApplicationsReceivedByDate: string
   developer: string
   applicationsDueDate: string
 }
 
-const ApplicationAddresses = (props: ApplicationAddressesProps) => {
+export interface ApplicationAddressesProps {
+  applicationMailingAddress?: Address
+  applicationDropOffAddress?: Address
+  applicationDropOffAddressOfficeHours?: string
+  applicationOrganization?: string
+  postmarkedApplicationData?: PostmarkedApplication
+}
+
+const SubmitApplication = (props: ApplicationAddressesProps) => {
   return (
     <>
       {(props.applicationMailingAddress || props.applicationDropOffAddress) && (
@@ -27,11 +31,12 @@ const ApplicationAddresses = (props: ApplicationAddressesProps) => {
               <p className="text-gray-700">{props.applicationOrganization}</p>
               <SidebarAddress address={props.applicationMailingAddress} />
               <p className="mt-4 text-tiny text-gray-750">
-                {props.postmarkedApplicationsReceivedByDate
+                {props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
-                      applicationDueDate: props.applicationsDueDate,
-                      postmarkReceivedByDate: props.postmarkedApplicationsReceivedByDate,
-                      developer: props.developer,
+                      applicationDueDate: props.postmarkedApplicationData?.applicationsDueDate,
+                      postmarkReceivedByDate:
+                        props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate,
+                      developer: props.postmarkedApplicationData?.developer,
                     })
                   : t("listings.apply.applicationsMustBeReceivedByDeadline")}
               </p>
@@ -55,4 +60,4 @@ const ApplicationAddresses = (props: ApplicationAddressesProps) => {
   )
 }
 
-export { ApplicationAddresses as default, ApplicationAddresses }
+export { SubmitApplication as default, SubmitApplication }

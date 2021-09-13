@@ -10,12 +10,11 @@ import {
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
-  ApplicationAddresses,
   ApplicationStatus,
-  Applications,
   Description,
   DownloadLotteryResults,
   ExpandableText,
+  GetApplication,
   GroupedTable,
   GroupedTableGroup,
   ImageCard,
@@ -33,6 +32,7 @@ import {
   PublicLotteryEvent,
   ReferralApplication,
   StandardTable,
+  SubmitApplication,
   TableHeaders,
   UnitTables,
   Waitlist,
@@ -41,8 +41,8 @@ import {
   getSummariesTable,
   imageUrlFromListing,
   occupancyTable,
-  t,
   openDateState,
+  t,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
@@ -266,7 +266,7 @@ export const ListingView = (props: ListingProps) => {
         waitlistOpenSpots={listing.waitlistOpenSpots}
         unitsAvailable={listing.unitsAvailable}
       />
-      <Applications
+      <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
         applicationsDueDate={moment(listing.applicationDueDate).format(
           `MMM. DD, YYYY [${t("t.at")}] h A`
@@ -282,21 +282,25 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
       />
-      <ApplicationAddresses
+      <SubmitApplication
         applicationMailingAddress={listing.applicationMailingAddress}
         applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}
-        postmarkedApplicationsReceivedByDate={moment(
-          listing.postmarkedApplicationsReceivedByDate
-        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
-        developer={listing.developer}
-        applicationsDueDate={moment(listing.applicationDueDate).format(
-          `MMM. DD, YYYY [${t("t.at")}] h A`
-        )}
+        postmarkedApplicationData={{
+          postmarkedApplicationsReceivedByDate: moment(
+            listing.postmarkedApplicationsReceivedByDate
+          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          developer: listing.developer,
+          applicationsDueDate: moment(listing.applicationDueDate).format(
+            `MMM. DD, YYYY [${t("t.at")}] h A`
+          ),
+        }}
       />
     </>
   )
+
+  const applicationsClosed = moment() > moment(listing.applicationDueDate)
 
   //TODO: Add isReferralApplication boolean field to avoid this logic
   const isReferralApp =
@@ -374,7 +378,7 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
-          {!isReferralApp ? <>{applySidebar()}</> : <></>}
+          {!isReferralApp && !applicationsClosed ? <>{applySidebar()}</> : <></>}
         </div>
       </div>
       <ListingDetails>
@@ -479,7 +483,7 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!isReferralApp ? (
+              {!isReferralApp && !applicationsClosed ? (
                 applySidebar()
               ) : (
                 <ReferralApplication

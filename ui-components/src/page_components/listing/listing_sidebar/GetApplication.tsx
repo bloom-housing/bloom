@@ -26,7 +26,7 @@ export interface ApplicationsProps {
   preview?: boolean
 }
 
-const Applications = (props: ApplicationsProps) => {
+const GetApplication = (props: ApplicationsProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
@@ -101,4 +101,4 @@ const Applications = (props: ApplicationsProps) => {
   )
 }
 
-export { Applications as default, Applications }
+export { GetApplication as default, GetApplication }
