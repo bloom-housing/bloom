@@ -59,6 +59,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**
   - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
     - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
+  - Removed business logic from Hero component ([#1816](https://github.com/bloom-housing/bloom/pull/1816)) (Emily Jablonski)
+    - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
 
 ### Backend
 

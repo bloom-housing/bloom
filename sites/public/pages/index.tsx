@@ -9,11 +9,13 @@ import {
   MarkdownSection,
   t,
   SiteAlert,
+  openDateState,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
+import moment from "moment"
 
 interface IndexProps {
   listings: Listing[]
@@ -32,6 +34,10 @@ export default function Home(props: IndexProps) {
       {t("welcome.title")} <em>{t("region.name")}</em>
     </>
   )
+
+  const listingOpen = (listing: Listing) => {
+    return moment() < moment(listing.applicationDueDate)
+  }
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
@@ -59,7 +65,9 @@ export default function Home(props: IndexProps) {
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings"
-        listings={props.listings}
+        allApplicationsClosed={
+          !props.listings.some(listingOpen) && !props.listings.some(openDateState)
+        }
       />
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>
