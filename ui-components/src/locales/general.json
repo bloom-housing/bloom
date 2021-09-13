@@ -1060,6 +1060,7 @@
         "twoBdrm": "Two Bedroom",
         "threeBdrm": "Three Bedroom",
         "fourBdrm": "Four Bedroom"
+      }
     },
     "events": {
       "deleteThisEvent": "Delete this event",
