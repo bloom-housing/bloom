@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
 
 - Fixed:
+
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
@@ -36,6 +37,11 @@ All notable changes to this project will be documented in this file. The format 
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
+
+- Changed:
+
+  - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
+    - **Breaking Change**
 
 ### UI Components
 
@@ -52,6 +58,9 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 - Changed:
+
+  - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
+  - Upgraded React to v17
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop

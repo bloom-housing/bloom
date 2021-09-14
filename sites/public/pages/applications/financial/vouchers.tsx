@@ -2,7 +2,6 @@
 3.1 Vouchers Subsidies
 Question asks if anyone on the application receives a housing voucher or subsidy.
 */
-import React from "react"
 import {
   AppearanceStyleType,
   AlertBox,

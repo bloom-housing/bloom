@@ -1,4 +1,4 @@
-import React from "react"
+import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -73,7 +73,7 @@ export const retrieveApplicationConfig = () => {
   }
 }
 
-export const AppSubmissionContext = React.createContext({
+export const AppSubmissionContext = createContext({
   conductor: {} as ApplicationConductor,
   application: blankApplication(),
   listing: null as Listing,
