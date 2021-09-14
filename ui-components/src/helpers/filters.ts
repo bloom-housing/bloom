@@ -8,7 +8,6 @@ import { ParsedUrlQuery } from "querystring"
 function getComparisonForFilter(filterKey: ListingFilterKeys) {
   switch (filterKey) {
     case ListingFilterKeys.name:
-    case ListingFilterKeys.neighborhood:
     case ListingFilterKeys.status:
     case ListingFilterKeys.leasingAgents:
       return EnumListingFilterParamsComparison["="]

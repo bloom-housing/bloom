@@ -3722,9 +3722,6 @@ export interface ListingFilterParams {
   status?: EnumListingFilterParamsStatus
 
   /**  */
-  neighborhood?: string
-
-  /**  */
   bedrooms?: number
 
   /**  */

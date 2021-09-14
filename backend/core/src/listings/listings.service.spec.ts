@@ -8,6 +8,7 @@ import { Compare } from "../shared/dto/filter.dto"
 import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
+import { ListingStatus } from "./types/listing-status-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -140,17 +141,17 @@ describe("ListingsService", () => {
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledTimes(0)
     })
 
-    it("should add a WHERE clause if the neighborhood filter is applied", async () => {
+    it("should add a WHERE clause if the status filter is applied", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const expectedNeighborhood = "Fox Creek"
+      const expectedStatus = ListingStatus.active
 
       const queryParams: ListingsQueryParams = {
         filter: [
           {
             $comparison: Compare["="],
-            neighborhood: expectedNeighborhood,
+            status: expectedStatus,
           },
         ],
       }
@@ -159,9 +160,9 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
+        "LOWER(CAST(listings.status as text)) = LOWER(:status_0)",
         {
-          neighborhood_0: expectedNeighborhood,
+          status_0: expectedStatus,
         }
       )
     })
@@ -170,15 +171,15 @@ describe("ListingsService", () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
-      const expectedNeighborhoodString = "Fox Creek, , Coliseum," // intentional extra and trailing commas for test
+      const zipCodeString = "10011, , 10014," // intentional extra and trailing commas for test
       // lowercased, trimmed spaces, filtered empty
-      const expectedNeighborhoodArray = ["fox creek", "coliseum"]
+      const expectedZipCodeArray = ["10011", "10014"]
 
       const queryParams: ListingsQueryParams = {
         filter: [
           {
             $comparison: Compare["IN"],
-            neighborhood: expectedNeighborhoodString,
+            zipcode: zipCodeString,
           },
         ],
       }
@@ -187,9 +188,9 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
+        "LOWER(CAST(buildingAddress.zipCode as text)) IN (:...zipcode_0)",
         {
-          neighborhood_0: expectedNeighborhoodArray,
+          zipcode_0: expectedZipCodeArray,
         }
       )
     })

@@ -787,16 +787,6 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: String,
-    example: "Fox Creek",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.neighborhood]?: string;
-
-  @Expose()
-  @ApiProperty({
     type: Number,
     example: "3",
     required: false,
@@ -947,7 +937,6 @@ type keysWithMappedField = Exclude<keyof typeof ListingFilterKeys, "ami" | "avai
 export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   status: "listings.status",
   name: "listings.name",
-  neighborhood: "property.neighborhood",
   bedrooms: "summaryUnitType.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
   seniorHousing: "reservedCommunityType.name",

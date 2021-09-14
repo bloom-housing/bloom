@@ -131,10 +131,6 @@ const ListingsPage = () => {
       label: t("listingFilters.communityTypeOptions.specialNeeds"),
     },
   ]
-  const neighborhoodOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "Foster City", label: "Foster City" },
-  ]
   const availabilityOptions: SelectOption[] = [
     EMPTY_OPTION,
     { value: AvailabilityFilterEnum.hasAvailability, label: t("listingFilters.hasAvailability") },
@@ -259,15 +255,6 @@ const ListingsPage = () => {
                 defaultValue={filterState?.maxRent}
               />
             </div>
-            <Select
-              id="neighborhoodOptions"
-              name={ListingFilterKeys.neighborhood}
-              label={t("listingFilters.neighborhood")}
-              register={register}
-              controlClassName="control"
-              options={neighborhoodOptions}
-              defaultValue={filterState?.neighborhood}
-            />
             <Select
               id="adaCompliant"
               name="adaCompliant"
