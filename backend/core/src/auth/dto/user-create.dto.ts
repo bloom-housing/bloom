@@ -4,8 +4,8 @@ import { IsEmail, IsOptional, IsString, Matches, MaxLength, ValidateNested } fro
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
 import { Match } from "../../shared/decorators/match.decorator"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserDto } from "./user.dto"
+import { IdDto } from "../../shared/dto/id.dto"
 
 export class UserCreateDto extends OmitType(UserDto, [
   "id",
@@ -43,6 +43,6 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => JurisdictionDto)
-  jurisdictions?: JurisdictionDto[]
+  @Type(() => IdDto)
+  jurisdictions?: IdDto[]
 }

@@ -18,6 +18,7 @@ import { UserUpdateDto } from "../../src/auth/dto/user-update.dto"
 import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import { Repository } from "typeorm"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -31,6 +32,7 @@ describe("Applications", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
   let userAccessToken: string
 
@@ -48,7 +50,11 @@ describe("Applications", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), TypeOrmModule.forFeature([Listing]), AuthModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        TypeOrmModule.forFeature([Listing, Jurisdiction]),
+        AuthModule,
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -66,6 +72,9 @@ describe("Applications", () => {
         .set(...setAuthorization(user2AccessToken))
     ).body
     listingRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
+    jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
+      getRepositoryToken(Jurisdiction)
+    )
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
@@ -340,6 +349,7 @@ describe("Applications", () => {
 
   it("should invite a user to the partners portal", async () => {
     const listing = (await listingRepository.find({ take: 1 }))[0]
+    const jurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
     const userInviteDto: UserInviteDto = {
       email: "b4@b.com",
       firstName: "First",
@@ -348,7 +358,7 @@ describe("Applications", () => {
       dob: new Date(),
       leasingAgentInListings: [{ id: listing.id }],
       roles: { isPartner: true },
-      jurisdictions: [],
+      jurisdictions: [{ id: jurisdiction.id }],
     }
 
     const mockInvite = jest.spyOn(testEmailService, "invite")

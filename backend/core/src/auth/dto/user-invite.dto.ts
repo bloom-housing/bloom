@@ -5,7 +5,6 @@ import { ArrayMinSize, IsArray, IsDefined, IsOptional, ValidateNested } from "cl
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UserRolesCreateDto } from "./user-roles.dto"
 import { IdDto } from "../../shared/dto/id.dto"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 
 export class UserInviteDto extends OmitType(UserDto, [
   "id",
@@ -24,8 +23,8 @@ export class UserInviteDto extends OmitType(UserDto, [
   @IsArray({ groups: [ValidationsGroupsEnum.default] })
   @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => JurisdictionDto)
-  jurisdictions: JurisdictionDto[]
+  @Type(() => IdDto)
+  jurisdictions: IdDto[]
 
   @Expose()
   @IsOptional()

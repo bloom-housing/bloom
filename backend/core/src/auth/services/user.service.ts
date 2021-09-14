@@ -31,6 +31,7 @@ import { UserUpdateDto } from "../dto/user-update.dto"
 import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
+import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -205,7 +206,7 @@ export class UserService {
     user.language = dto.language
     // if coming from partners dto.jurisdictions can be set
     user.jurisdictions = dto.jurisdictions
-      ? dto.jurisdictions
+      ? (dto.jurisdictions as JurisdictionDto[])
       : [await this.jurisdictionResolverService.getJurisdiction()]
     try {
       user.passwordHash = await this.passwordService.passwordToHash(password)
