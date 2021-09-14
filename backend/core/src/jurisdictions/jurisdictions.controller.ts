@@ -50,9 +50,20 @@ export class JurisdictionsController {
     return mapTo(JurisdictionDto, await this.jurisdictionsService.update(jurisdiction))
   }
 
-  @Get(`:jurisdictionName`)
-  @ApiOperation({ summary: "Get jurisdiction by name", operationId: "retrieve" })
-  async retrieve(@Param("jurisdictionName") jurisdictionName: string): Promise<JurisdictionDto> {
+  @Get(`:jurisdictionId`)
+  @ApiOperation({ summary: "Get jurisdiction by id", operationId: "retrieve" })
+  async retrieve(@Param("jurisdictionId") jurisdictionId: string): Promise<JurisdictionDto> {
+    return mapTo(
+      JurisdictionDto,
+      await this.jurisdictionsService.findOne({ where: { id: jurisdictionId } })
+    )
+  }
+
+  @Get(`byName/:jurisdictionName`)
+  @ApiOperation({ summary: "Get jurisdiction by name", operationId: "retrieveByName" })
+  async retrieveByName(
+    @Param("jurisdictionName") jurisdictionName: string
+  ): Promise<JurisdictionDto> {
     return mapTo(
       JurisdictionDto,
       await this.jurisdictionsService.findOne({ where: { name: jurisdictionName } })

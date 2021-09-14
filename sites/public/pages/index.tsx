@@ -121,7 +121,7 @@ export async function getStaticProps() {
     })
     const jurisdictionName = process.env.jurisdictionName
     const jurisdiction = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/${jurisdictionName}`
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
     )
     thisJurisdiction = jurisdiction?.data ? jurisdiction.data : null
     listings = listingsResponse?.data?.items ? listingsResponse.data.items : []
