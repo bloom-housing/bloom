@@ -9,7 +9,6 @@ import {
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
-import { UserCreateDto } from "../../auth/dto/user.dto"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
@@ -17,6 +16,7 @@ import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 import { CountyCode } from "../../shared/types/county-code"
+import { UserCreateDto } from "../../auth/dto/user-create.dto"
 
 export const getDate = (days: number) => {
   const someDate = new Date()
