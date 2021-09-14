@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file. The format 
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
+  - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
 
 - Fixed:
 
