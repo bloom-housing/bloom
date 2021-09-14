@@ -182,8 +182,7 @@ export class UserService {
   }
 
   private static getConfirmationUrl(appUrl: string, user: User) {
-    const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
-    return confirmationUrl
+    return `${appUrl}?token=${user.confirmationToken}`
   }
 
   public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
