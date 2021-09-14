@@ -3622,7 +3622,7 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions?: Jurisdiction[]
+  jurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -3791,7 +3791,10 @@ export interface UserInvite {
   language?: Language
 
   /**  */
-  roles?: CombinedRolesTypes
+  roles: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
 
   /**  */
   leasingAgentInListings?: Id[]
@@ -3813,9 +3816,6 @@ export interface UserInvite {
 
   /**  */
   dob: Date
-
-  /**  */
-  jurisdictions: Jurisdiction[]
 }
 
 export interface JurisdictionCreate {
