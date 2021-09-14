@@ -875,6 +875,27 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Invite user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/invite"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JurisdictionsService {
@@ -3633,6 +3654,9 @@ export interface UserBasic {
   jurisdictions: Jurisdiction[]
 
   /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
   id: string
 
   /**  */
@@ -3676,6 +3700,9 @@ export interface Status {
 export interface Confirm {
   /**  */
   token: string
+
+  /**  */
+  password?: string
 }
 
 export interface ForgotPassword {
@@ -3749,6 +3776,46 @@ export interface PaginatedUserList {
 
   /**  */
   meta: PaginationMeta
+}
+
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles?: CombinedRolesTypes
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+
+  /**  */
+  jurisdictions: Jurisdiction[]
 }
 
 export interface JurisdictionCreate {
@@ -5661,7 +5728,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export type CombinedRolesTypes = UserRoles
+export type CombinedRolesTypes = UserRolesCreate
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
