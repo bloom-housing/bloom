@@ -102,7 +102,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
-      await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
+      const chartData = await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
+      resetAmiTableValues(chartData, defaultUnit.amiPercentage)
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
@@ -141,21 +142,28 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
           }
         })
       )
+      return amiChartData
     } catch (e) {
       console.error(e)
     }
   }
 
+  const resetAmiTableValues = (defaultAmiChart?: AmiChartItem[], defaultAmiPercentage?: string) => {
+    const chart = defaultAmiChart ?? currentAmiChart
+    const percentage = defaultAmiPercentage ?? amiPercentage
+    const newPercentages = chart
+      .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(percentage))
+      .sort(function (a: AmiChartItem, b: AmiChartItem) {
+        return a.householdSize - b.householdSize
+      })
+    newPercentages.forEach((amiValue, index) => {
+      setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
+    })
+  }
+
   useEffect(() => {
     if (amiPercentage && !loading && options) {
-      const newPercentages = currentAmiChart
-        .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(amiPercentage))
-        .sort(function (a: AmiChartItem, b: AmiChartItem) {
-          return a.householdSize - b.householdSize
-        })
-      newPercentages.forEach((amiValue, index) => {
-        setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
-      })
+      resetAmiTableValues()
     }
   }, [amiPercentage])
 

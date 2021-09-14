@@ -81,9 +81,10 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             />
           </GridSection>
           <GridSection columns={1}>
-            {unit?.amiChartOverride?.items.map((override) => {
+            {unit?.amiChartOverride?.items.map((override, index) => {
               return (
                 <ViewItem
+                  key={index}
                   label={t("listings.amiOverrideTitle", { householdSize: override.householdSize })}
                   children={`$${override.income}`}
                 />
