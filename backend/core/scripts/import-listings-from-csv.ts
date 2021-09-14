@@ -31,10 +31,8 @@ async function main() {
   const [importApiUrl, userAndPassword, csvFilePath] = process.argv.slice(2)
   const [email, password] = userAndPassword.split(":")
 
-  // Regexes used to parse the "Affordability Mix" field
-  const amiRangeRegex = /(\d+)-(\d+)% AMI/ // e.g. 30-60% AMI
-  const amiValueRegex = /^(\d+)% AMI/ // e.g. 40% AMI
-  const amiUpperLimitRegex = /^Up to (\d+)% AMI/ // e.g. Up to 80% AMI
+  // Regex used to parse the AMI from an AMI column name
+  const amiColumnRegex = /(\d+) Pct AMI/ // e.g. 30 Pct AMI
 
   // Read raw CSV data into memory.
   // Note: createReadStream creates ReadStream's whose on("data", ...) methods are called
@@ -46,7 +44,7 @@ async function main() {
       .pipe(csv())
       .on("data", (listingFields) => {
         // Include only listings that are "regulated" affordable housing
-        const affordabilityStatus: string = listingFields["Affordability status [Regulated Only]"]
+        const affordabilityStatus: string = listingFields["Affordability status"]
         if (affordabilityStatus.toLowerCase() === "regulated") {
           rawListingFields.push(listingFields)
         }
@@ -110,20 +108,15 @@ async function main() {
 
     // Listing affordability details
     let amiPercentageMin, amiPercentageMax
-    const affordabilityMix: string = listingFields["Affordability Mix"]
-    const amiRange: string[] = amiRangeRegex.exec(affordabilityMix)
-    const amiValue: string[] = amiValueRegex.exec(affordabilityMix)
-    const amiUpperLimit: string[] = amiUpperLimitRegex.exec(affordabilityMix)
-    if (amiRange) {
-      amiPercentageMin = parseInt(amiRange[1])
-      amiPercentageMax = parseInt(amiRange[2])
-    }
-    if (amiValue) {
-      amiPercentageMin = parseInt(amiValue[1])
-      amiPercentageMax = parseInt(amiValue[1])
-    }
-    if (amiUpperLimit) {
-      amiPercentageMax = parseInt(amiUpperLimit[1])
+    const listingFieldsArray = Object.entries(listingFields)
+    const colStart = listingFieldsArray.findIndex((element) => element[0] === "15 Pct AMI")
+    const colEnd = listingFieldsArray.findIndex((element) => element[0] === "80 Pct AMI")
+    for (const [key, value] of listingFieldsArray.slice(colStart, colEnd + 1)) {
+      if (!value) continue
+      if (!amiPercentageMin) {
+        amiPercentageMin = parseInt(amiColumnRegex.exec(key)[1])
+      }
+      amiPercentageMax = parseInt(amiColumnRegex.exec(key)[1])
     }
 
     let leasingAgentEmail = null
