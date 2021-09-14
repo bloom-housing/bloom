@@ -30,6 +30,8 @@ import {
   ListingEventType,
   ListingEventCreate,
   Preference,
+  PaperApplication,
+  PaperApplicationCreate,
   ListingReviewOrder,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
@@ -51,6 +53,7 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
+import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
 
@@ -69,7 +72,11 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
-  dueDateQuestion?: boolean
+  digitalApplicationChoice?: YesNoAnswer
+  commonDigitalApplicationChoice?: YesNoAnswer
+  paperApplicationChoice?: YesNoAnswer
+  referralOpportunityChoice?: YesNoAnswer
+  dueDateQuestionChoice?: boolean
   lotteryDate?: {
     month: string
     day: string
@@ -216,6 +223,8 @@ export type TempEvent = ListingEvent & {
   tempId?: string
 }
 
+export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
+
 const formatFormData = (
   data: FormListing,
   units: TempUnit[],
@@ -256,14 +265,8 @@ const formatFormData = (
     unit.minOccupancy = stringToNumber(unit.minOccupancy)
     unit.numBathrooms = stringToNumber(unit.numBathrooms)
 
-    if (unit.sqFeet.length === 0) {
+    if (!unit.sqFeet) {
       delete unit.sqFeet
-    }
-
-    if (unit.id === undefined) {
-      unit.id = ""
-      delete unit.updatedAt
-      delete unit.createdAt
     }
 
     delete unit.tempId
@@ -351,6 +354,10 @@ const formatFormData = (
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
+    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
+    commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
+    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
+    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
   }
 }
 
@@ -587,6 +594,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         <TabPanel>
                           <RankingsAndResults listing={listing} />
                           <LeasingAgent />
+                          <ApplicationTypes listing={listing} />
                           <ApplicationAddress listing={listing} />
                           <ApplicationDates
                             listing={listing}

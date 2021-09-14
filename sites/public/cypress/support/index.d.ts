@@ -8,6 +8,7 @@ declare namespace Cypress {
     goNext(): Chainable<Element>
     goToReview(): Chainable<Element>
     getSubmissionContext(): Chainable
+    getListing(): Record<string, any>
     loadConfig(
       initialValues?: Record<string, any>,
       configFile?: string,

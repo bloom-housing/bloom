@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file. The format 
   - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
+  - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
+  - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
 
 ### UI Components
 
@@ -42,6 +44,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add ResponsiveTable for pricing
   - Ability to have multiple statuses under the ImageCard ([#1700](https://github.com/bloom-housing/bloom/pull/1700)) (Emily Jablonski)
     - **Breaking Change**: Removed three props (appStatus, appStatusContent, and appStatusSubContent) in favor of an array that contains that data - will need to transition any status information to the new array format
+  - Add Heading component and numbered-list styles ([#1405](https://github.com/bloom-housing/bloom/pull/1405)) (Marcin Jedras)
 
 - Fixed:
 
@@ -60,6 +63,12 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
   - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
     - **Breaking Change**
+  - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
+  - Removed business logic from Hero component ([#1816](https://github.com/bloom-housing/bloom/pull/1816)) (Emily Jablonski)
+    - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
+  - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
+    - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
 
 ### Backend
 
@@ -87,6 +96,8 @@ All notable changes to this project will be documented in this file. The format 
   - Allow for unit sets to have multiple ami charts ([#1678](https://github.com/bloom-housing/bloom/pull/1678)) (Emily Jablonski)
   - UnitDto now only contains an AMI chart ID instead of the entire object AmiChart. AmiCharts must now be fetched separately from `/amiCharts` ([#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - `GET /listings` filters query param has been changed to support a querystring serialized array of filters, it's a breaking change because comparison property can no longer be an array. Also a property ordering problem has been resolved. Now the strict requirement for every client using the API is to use `qs` serialization format for query params. ([#1782](https://github.com/bloom-housing/bloom/pull/1782))
+  - `amiPercentage` field on UnitsSummary is migrated to an integer instead of a string. ((#1797)[https://github.com/bloom-housing/bloom/pull/1797])
+  - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
 
 - Fixed:
   - Added checks for property in listing.dto transforms

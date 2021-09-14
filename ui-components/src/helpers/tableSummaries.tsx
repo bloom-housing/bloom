@@ -41,7 +41,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     return {
-      unitType: <strong>{t(`listings.unitTypes.${unitSummary.unitType.name}`)}</strong>,
+      unitType: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
       minimumIncome: (
         <>
           {minIncome} {t("t.perMonth")}

@@ -5,4 +5,5 @@ export enum ApplicationMethodType {
   PaperPickup = "PaperPickup",
   POBox = "POBox",
   LeasingAgent = "LeasingAgent",
+  Referral = "Referral",
 }

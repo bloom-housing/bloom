@@ -8,6 +8,7 @@ import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { PasswordService } from "./password.service"
+import { UserCreateDto } from "../dto/user.dto"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { ConfigService } from "@nestjs/config"
 
@@ -59,6 +60,43 @@ describe("UserService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined()
+  })
+
+  describe("createUser", () => {
+    it("should return EMAIL_IN_USE error if email is already in use", async () => {
+      const user: UserCreateDto = {
+        email: "abc@xyz.com",
+        emailConfirmation: "abc@xyz.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      await expect(service.createUser(user, null, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      )
+    })
+
+    it("should return ERROR_SAVING if new user fails to save", async () => {
+      const user: UserCreateDto = {
+        email: "new@email.com",
+        emailConfirmation: "new@email.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
+      mockUserRepo.save = jest.fn().mockRejectedValue(new Error("failed to save"))
+      await expect(service.createUser(user, null, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      )
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
   })
 
   describe("forgotPassword", () => {

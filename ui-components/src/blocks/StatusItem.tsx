@@ -1,40 +1,41 @@
-import React from "react"
-import "./AppStatusItem.scss"
-import moment from "moment"
-import { Application, Listing } from "@bloom-housing/backend-core/types"
-import { LocalizedLink } from "../actions/LocalizedLink"
+import React, { useContext } from "react"
+import "./StatusItem.scss"
 import { t } from "../helpers/translator"
+import { NavigationContext } from "../config/NavigationContext"
 
-interface AppStatusItemProps {
-  application: Application
-  listing: Listing
+interface StatusItemProps {
+  applicationDueDate?: string
+  applicationURL: string
+  applicationUpdatedAt: string
+  confirmationNumber?: string
+  listingName: string
+  listingURL: string
 }
 
-const AppStatusItem = (props: AppStatusItemProps) => {
-  const { application, listing } = props
-
-  const applicationDueDate = moment(listing.applicationDueDate)
-  const editDate = moment(application.updatedAt)
+const StatusItem = (props: StatusItemProps) => {
+  const { LinkComponent } = useContext(NavigationContext)
 
   return (
     <article className="status-item is-editable animated-fade">
       <div className="status-item__inner">
         <header className="status-item__header">
-          <h3 className="status-item__title">{listing.name}</h3>
-          <p className="status-item__due">
-            {t("listings.applicationDeadline")}: {applicationDueDate.format("MMMM D, YYYY")}
-          </p>
+          <h3 className="status-item__title">{props.listingName}</h3>
+          {props.applicationDueDate && (
+            <p className="status-item__due">
+              {t("listings.applicationDeadline")}: {props.applicationDueDate}
+            </p>
+          )}
         </header>
 
         <section className="status-item__content">
           <div className="status-item__details">
-            {application.id && (
+            {props.confirmationNumber && (
               <>
                 <span className="status-item__confirm-text">
                   {t("application.yourLotteryNumber")}:
                 </span>
                 <br />
-                <span className="status-item__confirm-number">{application.id}</span>
+                <span className="status-item__confirm-number">{props.confirmationNumber}</span>
               </>
             )}
           </div>
@@ -45,7 +46,7 @@ const AppStatusItem = (props: AppStatusItemProps) => {
                 {t("application.status")}: {t("application.statuses.submitted")}
               </span>
             </p>
-            <a href={`application/${application.id}`} className="button is-small">
+            <a href={props.applicationURL} className="button is-small">
               {t("application.viewApplication")}
             </a>
           </div>
@@ -53,17 +54,14 @@ const AppStatusItem = (props: AppStatusItemProps) => {
 
         <footer className="status-item__footer">
           <div className="status-item_links">
-            <LocalizedLink
-              className="status-item__link lined"
-              href={`/listing/${listing.id}/${listing.urlSlug}`}
-            >
+            <LinkComponent className="status-item__link lined" href={props.listingURL}>
               {t("t.seeListing")}
-            </LocalizedLink>
+            </LinkComponent>
           </div>
 
           <div className="status-item__meta">
             <p className="status-item__date">
-              {t("application.edited")}: {editDate.format("MMMM D, YYYY")}
+              {t("application.edited")}: {props.applicationUpdatedAt}
             </p>
           </div>
         </footer>
@@ -72,4 +70,4 @@ const AppStatusItem = (props: AppStatusItemProps) => {
   )
 }
 
-export { AppStatusItem as default, AppStatusItem }
+export { StatusItem as default, StatusItem }

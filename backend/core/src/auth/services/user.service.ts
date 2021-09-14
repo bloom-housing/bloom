@@ -226,7 +226,7 @@ export class UserService {
 
       return user
     } catch (err) {
-      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
   }
 
