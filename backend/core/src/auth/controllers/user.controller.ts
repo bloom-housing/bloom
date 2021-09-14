@@ -20,15 +20,7 @@ import { defaultValidationPipeOptions } from "../../shared/default-validation-pi
 import { UserService } from "../services/user.service"
 import { OptionalAuthGuard } from "../guards/optional-auth.guard"
 import { AuthzGuard } from "../guards/authz.guard"
-import {
-  EmailDto,
-  UserBasicDto,
-  UserCreateDto,
-  UserDto,
-  UserUpdateDto,
-  UserListQueryParams,
-  PaginatedUserListDto,
-} from "../dto/user.dto"
+import { UserDto } from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
 import { ConfirmDto } from "../dto/confirm.dto"
@@ -37,6 +29,15 @@ import { ForgotPasswordDto, ForgotPasswordResponseDto } from "../dto/forgot-pass
 import { UpdatePasswordDto } from "../dto/update-password.dto"
 import { AuthContext } from "../types/auth-context"
 import { User } from "../entities/user.entity"
+import { ResourceAction } from "../decorators/resource-action.decorator"
+import { authzActions } from "../services/authz.service"
+import { UserBasicDto } from "../dto/user-basic.dto"
+import { EmailDto } from "../dto/email.dto"
+import { UserCreateDto } from "../dto/user-create.dto"
+import { UserUpdateDto } from "../dto/user-update.dto"
+import { UserListQueryParams } from "../dto/user-list-query-params"
+import { PaginatedUserListDto } from "../dto/paginated-user-list.dto"
+import { UserInviteDto } from "../dto/user-invite.dto"
 
 export class UserCreateQueryParams {
   @Expose()
@@ -129,6 +130,17 @@ export class UserController {
     return mapTo(
       PaginatedUserListDto,
       await this.userService.list(queryParams, new AuthContext(req.user as User))
+    )
+  }
+
+  @Post("/invite")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Invite user", operationId: "invite" })
+  @ResourceAction(authzActions.invite)
+  async invite(@Request() req: ExpressRequest, @Body() dto: UserInviteDto): Promise<UserBasicDto> {
+    return mapTo(
+      UserBasicDto,
+      await this.userService.invite(dto, new AuthContext(req.user as User))
     )
   }
 }

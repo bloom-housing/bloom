@@ -39,7 +39,7 @@ export class UnitDto extends OmitType(Unit, [
   property
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   @Transform(
@@ -89,7 +89,7 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   "amiChartOverride",
 ] as const) {
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   amiChart?: IdDto
@@ -150,7 +150,7 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
   updatedAt?: Date
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   amiChart?: IdDto

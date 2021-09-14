@@ -2,6 +2,7 @@ export enum ListingViewEnum {
   base = "base",
   detail = "detail",
   full = "full",
+  partnerList = "partnerList",
 }
 
 export interface View {

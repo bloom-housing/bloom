@@ -149,10 +149,10 @@
         "optionsLabel": "Marque todas las opciones que correspondan:",
         "options": {
           "studio": "Estudio",
-          "oneBedroom": "1 dormitorio",
-          "twoBedroom": "2 dormitorios",
-          "threeBedroom": "3 dormitorios",
-          "moreThanThreeBedroom": "+ de 3 dormitorios"
+          "oneBdrm": "1 dormitorio",
+          "twoBdrm": "2 dormitorios",
+          "threeBdrm": "3 dormitorios",
+          "fourBdrm": "+ de 3 dormitorios"
         }
       },
       "member": {

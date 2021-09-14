@@ -697,7 +697,7 @@ const tritonListing: ListingSeedType = {
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
-  applicationDueDate: getDate(10),
+  applicationDueDate: getDate(5),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
   applicationDueTime: null,
