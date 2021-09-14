@@ -233,7 +233,7 @@ const ListingsPage = () => {
               validation={{
                 validate: (value) => isValidZipCodeOrEmpty(value),
               }}
-              error={errors.zipCodeField}
+              error={errors?.[ListingFilterKeys.zipcode]}
               errorMessage={t("errors.multipleZipCodeError")}
               defaultValue={filterState?.zipcode}
             />
