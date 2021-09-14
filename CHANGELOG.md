@@ -112,7 +112,12 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 - Updated:
+
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
+
+- Fixed:
+
+  - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
 
 ## v1.0.5 08/03/2021
 
