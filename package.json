@@ -39,6 +39,9 @@
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
   },
+  "dependencies": {
+    "tailwindcss": "2.2.10"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.5.0",

@@ -2,6 +2,7 @@
 
 module.exports = {
   important: true,
+  plugins: [],
   purge: false,
   theme: {
     screens: {

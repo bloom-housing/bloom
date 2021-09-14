@@ -7,5 +7,7 @@ const bloomTheme = cloneDeep(require("@bloom-housing/ui-components/tailwind.conf
 // Modify bloomTheme to override any Tailwind vars
 // For example:
 // bloomTheme.theme.colors.white = "#f0f0e9"
+// bloomTheme.push(require("tailwindcss-rtl"))
+bloomTheme.plugins.push(require("tailwindcss-rtl"))
 
 module.exports = bloomTheme

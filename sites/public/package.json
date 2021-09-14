@@ -47,6 +47,7 @@
     "next-transpile-modules": "^8.0.0",
     "postcss": "^8.3.6",
     "sass-loader": "^10.0.3",
+    "tailwindcss-rtl": "^0.7.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.2"
   }

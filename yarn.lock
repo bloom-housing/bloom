@@ -20718,6 +20718,11 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
+tailwindcss-rtl@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/tailwindcss-rtl/-/tailwindcss-rtl-0.7.3.tgz#d8d3236e446fd7504d9240366aea8a5987e66c12"
+  integrity sha512-4lOuA5HJj/a9qBmnPmzdxJybqmQUKhA4/iDBiGs7YZqJ7eqSziKR035er3ZhGOl08s3FaKwlgNPlgQ13vMs/Tw==
+
 tailwindcss@2.2.10:
   version "2.2.10"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.2.10.tgz#2bfd01bd566a078da82865d4b72b95d75a4ae7fc"

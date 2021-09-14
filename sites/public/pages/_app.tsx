@@ -62,6 +62,10 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
       document.body.dataset.customScriptsLoaded = "true"
     }
+    // depending on the locale, set direction (https://www.npmjs.com/package/tailwindcss-rtl)
+    /* if (!document.body.getAttribute("dir")) {
+      document.body.setAttribute("dir", "rtl")
+    } */
   })
 
   return (
