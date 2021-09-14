@@ -1,14 +1,14 @@
-import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
+import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import {
   Brackets,
   DeepPartial,
+  EntityManager,
+  getManager,
   Repository,
   SelectQueryBuilder,
-  getManager,
-  EntityManager,
 } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
@@ -19,6 +19,7 @@ import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { Rule } from "./types/rule-enum"
 import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
 import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
+import { ListingStatus } from "../listings/types/listing-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -71,11 +72,16 @@ export class ApplicationFlaggedSetsService {
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
       const afs = await transAfsRepository.findOne({
         where: { id: dto.afsId },
-        relations: ["applications"],
+        relations: ["applications", "listing"],
       })
       if (!afs) {
         throw new NotFoundException()
       }
+
+      if (afs.listing.status !== ListingStatus.closed) {
+        throw new BadRequestException("Listing must be closed before resolving any duplicates.")
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       afs.resolvingUser = this.request.user as User
       afs.resolvedTime = new Date()
