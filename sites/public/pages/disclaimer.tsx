@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx"
 import Layout from "../layouts/application"
 import pageContent from "../page_content/disclaimer.md"
 
-export default () => {
+const Disclaimer = () => {
   const pageTitle = <>{t("pageTitle.disclaimer")}</>
 
   return (
@@ -15,3 +15,5 @@ export default () => {
     </Layout>
   )
 }
+
+export default Disclaimer

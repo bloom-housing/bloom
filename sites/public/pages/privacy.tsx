@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx"
 import Layout from "../layouts/application"
 import pageContent from "../page_content/privacy_policy.md"
 
-export default () => {
+const Privacy = () => {
   const pageTitle = <>{t("pageTitle.privacy")}</>
 
   return (
@@ -15,3 +15,5 @@ export default () => {
     </Layout>
   )
 }
+
+export default Privacy
