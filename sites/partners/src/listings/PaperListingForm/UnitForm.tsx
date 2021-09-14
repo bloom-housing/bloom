@@ -113,13 +113,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         })
       }
     }
+    setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
     setValue("status", "available")
     setValue("rentType", getRentType(defaultUnit))
     setLoading(false)
   }
 
   useEffect(() => {
-    resetDefaultValues()
+    void resetDefaultValues()
   }, [])
 
   const fetchAmiChart = async (defaultChartID?: string, defaultAmiPercentage?: string) => {
@@ -156,7 +157,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       .sort(function (a: AmiChartItem, b: AmiChartItem) {
         return a.householdSize - b.householdSize
       })
-    newPercentages.forEach((amiValue, index) => {
+    newPercentages.forEach((amiValue: AmiChartItem, index: number) => {
       setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
     })
   }
@@ -228,7 +229,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         tempId: nextId,
       })
       onClose(true, { ...formData, tempId: nextId + 1 })
-      resetDefaultValues()
+      void resetDefaultValues()
     } else if (action === "saveNew") {
       onSubmit({
         ...formData,
