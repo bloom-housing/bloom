@@ -18,6 +18,7 @@ import { useForm, useWatch } from "react-hook-form"
 import { TempUnit } from "."
 import {
   AmiChart,
+  AmiChartItem,
   UnitAccessibilityPriorityType,
   UnitStatus,
   UnitType,
@@ -29,10 +30,11 @@ type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
   onClose: (reopen: boolean, defaultUnit?: TempUnit) => void
   defaultUnit: TempUnit | undefined
-  units: TempUnit[]
+  existingId: number
+  nextId: number
 }
 
-const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [options, setOptions] = useState({
@@ -42,6 +44,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
   })
   const [loading, setLoading] = useState(true)
   const [currentAmiChart, setCurrentAmiChart] = useState(null)
+  const [amiChartPercentageOptions, setAmiChartPercentageOptions] = useState([])
 
   const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
     label: t(`listings.unit.statusOptions.${status}`),
@@ -124,18 +127,37 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
         amiChartId: defaultChartID ?? amiChartID,
       })
       const amiChartData = thisAmiChart.items
-        .filter((item) => item.percentOfAmi === parseInt(defaultAmiPercentage ?? amiPercentage))
-        .sort(function (a, b) {
-          return a.householdSize - b.householdSize
-        })
       setCurrentAmiChart(amiChartData)
-      amiChartData.forEach((amiValue, index) => {
-        setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
+      const uniquePercentages = Array.from(
+        new Set(amiChartData.map((item: AmiChartItem) => item.percentOfAmi))
+      ).sort(function (a: number, b: number) {
+        return a - b
       })
+      setAmiChartPercentageOptions(
+        uniquePercentages.map((percentage) => {
+          return {
+            label: percentage.toString(),
+            value: percentage,
+          }
+        })
+      )
     } catch (e) {
       console.error(e)
     }
   }
+
+  useEffect(() => {
+    if (amiPercentage && !loading && options) {
+      const newPercentages = currentAmiChart
+        .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(amiPercentage))
+        .sort(function (a: AmiChartItem, b: AmiChartItem) {
+          return a.householdSize - b.householdSize
+        })
+      newPercentages.forEach((amiValue, index) => {
+        setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
+      })
+    }
+  }, [amiPercentage])
 
   async function onFormSubmit(action?: string) {
     setLoading(true)
@@ -173,9 +195,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
 
     // Only keep overrides so we're not duplicating existing ami data
     ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+      const existingChartValue = currentAmiChart
+        .filter((item: AmiChartItem) => item.householdSize === index + 1)
+        .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(amiPercentage))[0]
       if (
         data[`maxIncomeHouseholdSize${index + 1}`] &&
-        parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === currentAmiChart[index].income
+        parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
       ) {
         delete data[`maxIncomeHouseholdSize${index + 1}`]
       }
@@ -188,9 +213,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
       id: null,
       ...data,
     }
-
-    const existingId = units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId
-    const nextId = units.length + 1
 
     if (action === "copyNew") {
       onSubmit({
@@ -393,7 +415,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
                 options={options.amiCharts}
                 inputProps={{
                   onChange: () => {
-                    if (amiChartID && amiPercentage && !loading && options) {
+                    if (amiChartID && !loading && options) {
                       void fetchAmiChart()
                     }
                   },
@@ -403,28 +425,21 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, units }: UnitFormProps) => {
           </GridCell>
           <GridCell>
             <ViewItem label={t("listings.unit.amiPercentage")}>
-              <Field
-                id="amiPercentage"
+              <Select
                 name="amiPercentage"
                 label={t("listings.unit.amiPercentage")}
                 placeholder={t("listings.unit.amiPercentage")}
+                labelClassName="sr-only"
                 register={register}
-                type="number"
-                readerOnly
-                inputProps={{
-                  onChange: () => {
-                    if (amiChartID && amiPercentage && !loading && options) {
-                      void fetchAmiChart()
-                    }
-                  },
-                }}
+                controlClassName="control"
+                options={amiChartPercentageOptions}
               />
             </ViewItem>
           </GridCell>
         </GridSection>
         <GridSection columns={2} className="pt-6">
           <GridCell>
-            <table>
+            <table className={"w-full text-sm td-plain th-plain"}>
               <thead>
                 <tr>
                   <th>{t("listings.householdSize")}</th>

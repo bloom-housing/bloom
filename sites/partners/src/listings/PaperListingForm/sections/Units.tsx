@@ -184,7 +184,8 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             }
           }}
           defaultUnit={defaultUnit}
-          units={units}
+          existingId={units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId}
+          nextId={units.length + 1}
         />
       </Drawer>
 
