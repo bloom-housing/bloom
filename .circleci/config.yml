@@ -37,6 +37,7 @@ executors:
       REDIS_USE_TLS: "0"
       CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
+      PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
       - image: "cimg/node:14.17.6-browsers"
@@ -100,6 +101,7 @@ jobs:
             REDIS_USE_TLS: "0"
             CLOUDINARY_SECRET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
+            PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
     steps:
