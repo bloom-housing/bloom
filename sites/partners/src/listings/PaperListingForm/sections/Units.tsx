@@ -97,8 +97,8 @@ const FormUnits = ({
 
   const editUnitsView = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      // See below in disableUnitAccordionOptions for ids.
-      setShowUnitsSummary(e.target.id === "unitTypes")
+      // See below in showUnitsSummaryOptions for ids.
+      setShowUnitsSummary(e.target.id === "summaries")
     },
     [setShowUnitsSummary]
   )
@@ -222,16 +222,18 @@ const FormUnits = ({
     [unitsSummaries, editSummary]
   )
 
-  const disableUnitsAccordionOptions = [
+  const showUnitsSummaryOptions = [
     {
-      id: "unitTypes",
+      id: "summaries",
       label: t("listings.unit.unitTypes"),
       value: "true",
+      defaultChecked: showUnitsSummary,
     },
     {
-      id: "individualUnits",
+      id: "units",
       label: t("listings.unit.individualUnits"),
       value: "false",
+      defaultChecked: !showUnitsSummary,
     },
   ]
 
@@ -247,10 +249,10 @@ const FormUnits = ({
           <GridCell>
             <ViewItem label={t("listings.unitTypesOrIndividual")} className="mb-1" />
             <FieldGroup
-              name="disableUnitsAccordion"
+              name="displaySummaryData"
               type="radio"
               register={register}
-              fields={disableUnitsAccordionOptions}
+              fields={showUnitsSummaryOptions}
               fieldClassName="m-0"
               fieldGroupClassName="flex h-12 items-center"
               onChange={editUnitsView}

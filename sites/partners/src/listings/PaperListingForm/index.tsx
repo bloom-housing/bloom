@@ -75,6 +75,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   arePostmarksConsidered?: boolean
   canApplicationsBeDroppedOff?: boolean
   canPaperApplicationsBePickedUp?: boolean
+  displaySummaryData?: string
   dueDateQuestion?: boolean
   lotteryDate?: {
     month: string
@@ -328,7 +329,7 @@ const formatFormData = (
 
   return {
     ...data,
-    disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
+    disableUnitsAccordion: stringToBoolean(data.displaySummaryData),
     units: units,
     preferences: preferences,
     buildingAddress: {
