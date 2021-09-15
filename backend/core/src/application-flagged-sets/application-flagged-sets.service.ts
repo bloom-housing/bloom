@@ -121,6 +121,46 @@ export class ApplicationFlaggedSetsService {
     }
   }
 
+  async onApplicationUpdate(
+    newApplication: Application,
+    transactionalEntityManager: EntityManager
+  ) {
+    const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
+    newApplication.markedAsDuplicate = false
+    await transApplicationsRepository.save(newApplication)
+
+    const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
+    let afses = await transAfsRepository
+      .createQueryBuilder("afs")
+      .leftJoinAndSelect("afs.applications", "applications")
+      .leftJoinAndSelect("afs.listing", "listing")
+      .where("listing.id = :listingId", { listingId: newApplication.listing.id })
+      .getMany()
+    afses = afses.filter(
+      (afs) => afs.applications.findIndex((app) => app.id === newApplication.id) !== -1
+    )
+    const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
+    const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
+    for (const afs of afses) {
+      afs.status = FlaggedSetStatus.flagged
+      afs.resolvedTime = null
+      afs.resolvingUser = null
+      const applicationIndex = afs.applications.findIndex(
+        (application) => application.id === newApplication.id
+      )
+      afs.applications.splice(applicationIndex, 1)
+      if (afs.applications.length > 1) {
+        afsesToBeSaved.push(afs)
+      } else {
+        afsesToBeRemoved.push(afs)
+      }
+    }
+    await transAfsRepository.save(afsesToBeSaved)
+    await transAfsRepository.remove(afsesToBeRemoved)
+
+    await this.onApplicationSave(newApplication, transactionalEntityManager)
+  }
+
   async fetchDuplicatesMatchingRule(
     transactionalEntityManager: EntityManager,
     application: Application,

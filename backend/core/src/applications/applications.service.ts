@@ -9,7 +9,7 @@ import {
 import { Application } from "./entities/application.entity"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "./dto/application.dto"
 import { InjectRepository } from "@nestjs/typeorm"
-import { getManager, QueryFailedError, Repository } from "typeorm"
+import { QueryFailedError, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
@@ -99,8 +99,7 @@ export class ApplicationsService {
       throw new BadRequestException("Listing is not open for application submission.")
     }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    const application = await this._create(applicationCreateDto)
-    return application
+    return await this._create(applicationCreateDto)
   }
 
   async create(applicationCreateDto: ApplicationCreateDto) {
@@ -130,8 +129,19 @@ export class ApplicationsService {
       id: application.id,
     })
 
-    await this.repository.save(application)
-    return application
+    return await this.repository.manager.transaction(
+      "SERIALIZABLE",
+      async (transactionalEntityManager) => {
+        const applicationsRepository = transactionalEntityManager.getRepository(Application)
+        const newApplication = await applicationsRepository.save(application)
+        await this.applicationFlaggedSetsService.onApplicationUpdate(
+          application,
+          transactionalEntityManager
+        )
+
+        return await applicationsRepository.findOne({ id: newApplication.id })
+      }
+    )
   }
 
   async delete(applicationId: string) {
@@ -190,18 +200,22 @@ export class ApplicationsService {
   }
 
   private async _createApplication(applicationCreateDto: ApplicationUpdateDto) {
-    return await getManager().transaction("SERIALIZABLE", async (transactionalEntityManager) => {
-      const applicationsRepository = transactionalEntityManager.getRepository(Application)
-      const application = await applicationsRepository.save({
-        ...applicationCreateDto,
-        user: this.req.user,
-      })
-      await this.applicationFlaggedSetsService.onApplicationSave(
-        application,
-        transactionalEntityManager
-      )
-      return application
-    })
+    return await this.repository.manager.transaction(
+      "SERIALIZABLE",
+      async (transactionalEntityManager) => {
+        const applicationsRepository = transactionalEntityManager.getRepository(Application)
+        const application = await applicationsRepository.save({
+          ...applicationCreateDto,
+          user: this.req.user,
+        })
+        await this.applicationFlaggedSetsService.onApplicationSave(
+          application,
+          transactionalEntityManager
+        )
+
+        return await applicationsRepository.findOne({ id: application.id })
+      }
+    )
   }
 
   private async _create(applicationCreateDto: ApplicationUpdateDto) {
@@ -240,7 +254,9 @@ export class ApplicationsService {
       }
     }
 
-    const listing = await this.listingsService.findOne(application.listing.id)
+    // Listing is not eagerly joined on application entity so let's use the one provided with
+    // create dto
+    const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
     if (application.applicant.emailAddress) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }

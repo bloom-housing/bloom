@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+  - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
 
 ## Frontend
 

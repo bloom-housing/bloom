@@ -9,9 +9,6 @@ import { ListingsModule } from "../../src/listings/listings.module"
 import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-// Use require because of the CommonJS/AMD style export.
-// See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
-import dbOptions = require("../../ormconfig.test")
 import { Repository } from "typeorm"
 import { Application } from "../../src/applications/entities/application.entity"
 import { HouseholdMember } from "../../src/applications/entities/household-member.entity"
@@ -21,6 +18,11 @@ import { getTestAppBody } from "../lib/get-test-app-body"
 import { FlaggedSetStatus } from "../../src/application-flagged-sets/types/flagged-set-status-enum"
 import { Rule } from "../../src/application-flagged-sets/types/rule-enum"
 import { ApplicationDto } from "../../src/applications/dto/application.dto"
+import { Listing } from "../../src/listings/entities/listing.entity"
+import { ListingStatus } from "../../src/listings/types/listing-status-enum"
+// Use require because of the CommonJS/AMD style export.
+// See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
+import dbOptions = require("../../ormconfig.test")
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -34,8 +36,10 @@ describe("ApplicationFlaggedSets", () => {
   let applicationsRepository: Repository<Application>
   let afsRepository: Repository<ApplicationFlaggedSet>
   let householdMembersRepository: Repository<HouseholdMember>
+  let listingsRepository: Repository<Listing>
   let listing1Id: string
   let updateApplication
+  let getApplication
   let getAfsesForListingId
 
   const setupDb = async () => {
@@ -56,7 +60,7 @@ describe("ApplicationFlaggedSets", () => {
         AuthModule,
         ListingsModule,
         ApplicationsModule,
-        TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember]),
+        TypeOrmModule.forFeature([ApplicationFlaggedSet, Application, HouseholdMember, Listing]),
         ThrottlerModule.forRoot({
           ttl: 60,
           limit: 5,
@@ -77,10 +81,15 @@ describe("ApplicationFlaggedSets", () => {
     householdMembersRepository = app.get<Repository<HouseholdMember>>(
       getRepositoryToken(HouseholdMember)
     )
+    listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+    const listing = (await listingsRepository.find({ take: 1 }))[0]
+    await listingsRepository.save({
+      ...listing,
+      status: ListingStatus.closed,
+    })
 
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-    const listings = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    listing1Id = listings.body.items[0].id
+    listing1Id = listing.id
     await setupDb()
 
     updateApplication = async (application: ApplicationDto) => {
@@ -93,11 +102,21 @@ describe("ApplicationFlaggedSets", () => {
       ).body
     }
 
+    getApplication = async (id: string) => {
+      return (
+        await supertest(app.getHttpServer())
+          .get(`/applications/${id}`)
+          .set(...setAuthorization(adminAccessToken))
+          .expect(200)
+      ).body
+    }
+
     getAfsesForListingId = async (listingId) => {
       return (
         await supertest(app.getHttpServer())
           .get(`/applicationFlaggedSets?listingId=${listingId}`)
           .set(...setAuthorization(adminAccessToken))
+          .expect(200)
       ).body
     }
   })
@@ -214,20 +233,18 @@ describe("ApplicationFlaggedSets", () => {
     app2Seed.applicant.firstName = "AnotherFirstName"
     const apps = []
 
-    await Promise.all(
-      [app1Seed, app2Seed].map(async (payload) => {
-        const appRes = await supertest(app.getHttpServer())
-          .post("/applications/submit")
-          .send(payload)
-          .expect(201)
-        apps.push(appRes.body)
-      })
-    )
+    for (const payload of [app1Seed, app2Seed]) {
+      const appRes = await supertest(app.getHttpServer())
+        .post("/applications/submit")
+        .send(payload)
+        .expect(201)
+      apps.push(appRes.body)
+    }
 
     let afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(0)
-    expect(afses.body.items.length).toBe(0)
+    expect(afses.meta.totalFlagged).toBe(0)
+    expect(afses.items.length).toBe(0)
 
     const [app1, app2] = apps
 
@@ -237,9 +254,9 @@ describe("ApplicationFlaggedSets", () => {
 
     afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(1)
-    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app2.id)
-    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app1.id)
+    expect(afses.meta.totalFlagged).toBe(1)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app1.id)).toBe(true)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app2.id)).toBe(true)
 
     // Applications do not conflict by any rule
     app2.applicant.emailAddress = app2Seed.applicant.emailAddress
@@ -247,8 +264,8 @@ describe("ApplicationFlaggedSets", () => {
 
     afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(0)
-    expect(afses.body.items.length).toBe(0)
+    expect(afses.meta.totalFlagged).toBe(0)
+    expect(afses.items.length).toBe(0)
   })
 
   it(`should take application edits into account (application toggles between conflicting and non conflicting in an AFS of 3 apps)`, async () => {
@@ -263,20 +280,18 @@ describe("ApplicationFlaggedSets", () => {
     app3Seed.applicant.firstName = "ThirdFirstName"
     const apps = []
 
-    await Promise.all(
-      [app1Seed, app2Seed, app3Seed].map(async (payload) => {
-        const appRes = await supertest(app.getHttpServer())
-          .post("/applications/submit")
-          .send(payload)
-          .expect(201)
-        apps.push(appRes.body)
-      })
-    )
+    for (const payload of [app1Seed, app2Seed, app3Seed]) {
+      const appRes = await supertest(app.getHttpServer())
+        .post("/applications/submit")
+        .send(payload)
+        .expect(201)
+      apps.push(appRes.body)
+    }
 
     let afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(0)
-    expect(afses.body.items.length).toBe(0)
+    expect(afses.meta.totalFlagged).toBe(0)
+    expect(afses.items.length).toBe(0)
 
     // eslint-disable-next-line
     let [app1, app2, app3] = apps
@@ -286,25 +301,23 @@ describe("ApplicationFlaggedSets", () => {
     app3.applicant.emailAddress = app1Seed.applicant.emailAddress
     await updateApplication(app2)
     app3 = await updateApplication(app3)
-    expect(app3.flagged).toBe(true)
 
     afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(1)
-    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app1.id)
-    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app2.id)
-    expect(afses.body.items[0].applications.map((app) => app.id)).toContain(app3.id)
+    expect(afses.meta.totalFlagged).toBe(1)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app1.id)).toBe(true)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app2.id)).toBe(true)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app3.id)).toBe(true)
 
     // Application 3 do not conflict with others now
     app3.applicant.emailAddress = app3Seed.applicant.emailAddress
     app3 = await updateApplication(app3)
-    expect(app3.flagged).toBe(false)
 
     afses = await getAfsesForListingId(listing1Id)
 
-    expect(afses.body.meta.totalFlagged).toBe(1)
-    expect(afses.body.items.length).toBe(1)
-    expect(afses.body.items[0].applications.map((app) => app.id)).not.toContain(app3.id)
+    expect(afses.meta.totalFlagged).toBe(1)
+    expect(afses.items.length).toBe(1)
+    expect(afses.items[0].applications.map((app) => app.id).includes(app3.id)).toBe(false)
   })
 
   it(`should take application edits into account (application toggles between conflicting and non conflicting in an AFS of 3 apps, AFS already resolved)`, async () => {
@@ -317,15 +330,13 @@ describe("ApplicationFlaggedSets", () => {
     app3Seed.applicant.firstName = "ThirdFirstName"
     const apps = []
 
-    await Promise.all(
-      [app1Seed, app2Seed, app3Seed].map(async (payload) => {
-        const appRes = await supertest(app.getHttpServer())
-          .post("/applications/submit")
-          .send(payload)
-          .expect(201)
-        apps.push(appRes.body)
-      })
-    )
+    for (const payload of [app1Seed, app2Seed, app3Seed]) {
+      const appRes = await supertest(app.getHttpServer())
+        .post("/applications/submit")
+        .send(payload)
+        .expect(201)
+      apps.push(appRes.body)
+    }
 
     // eslint-disable-next-line
     let [app1, app2, app3] = apps
@@ -343,26 +354,26 @@ describe("ApplicationFlaggedSets", () => {
     expect(resolveRes.body.resolvingUser).not.toBe(null)
     expect(resolveRes.body.status).toBe(FlaggedSetStatus.resolved)
 
-    app3 = await updateApplication(app3)
+    app3 = await getApplication(app3.id)
     expect(app3.markedAsDuplicate).toBe(true)
 
     // App3 now does not conflict with any other applications
     app3.applicant.emailAddress = "third@email.com"
     app3 = await updateApplication(app3)
     expect(app3.markedAsDuplicate).toBe(false)
-    expect(app3.flagged).toBe(false)
 
     const previouslyResolvedAfs = (
       await supertest(app.getHttpServer())
         .get(`/applicationFlaggedSets/${afsToBeResolved.id}`)
         .set(...setAuthorization(adminAccessToken))
+        .expect(200)
     ).body
-    expect(resolveRes.body.resolvedTime).toBe(null)
-    expect(resolveRes.body.resolvingUser).toBe(null)
+    expect(previouslyResolvedAfs.resolvedTime).toBe(null)
+    expect(previouslyResolvedAfs.resolvingUser).toBe(null)
     expect(previouslyResolvedAfs.status).toBe(FlaggedSetStatus.flagged)
-    expect(previouslyResolvedAfs.applications.map((app) => app.id)).toContain(app1.id)
-    expect(previouslyResolvedAfs.applications.map((app) => app.id)).toContain(app2.id)
-    expect(previouslyResolvedAfs.applications.map((app) => app.id)).not.toContain(app3.id)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id).includes(app1.id)).toBe(true)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id).includes(app2.id)).toBe(true)
+    expect(previouslyResolvedAfs.applications.map((app) => app.id).includes(app3.id)).toBe(false)
   })
 
   afterEach(async () => {
@@ -371,6 +382,11 @@ describe("ApplicationFlaggedSets", () => {
   })
 
   afterAll(async () => {
+    const modifiedListing = await listingsRepository.findOne({ id: listing1Id })
+    await listingsRepository.save({
+      ...modifiedListing,
+      status: ListingStatus.active,
+    })
     await app.close()
   })
 })
