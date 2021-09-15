@@ -4,7 +4,7 @@ const spanishTranslations = require("./es.json")
 const chineseTranslations = require("./zh.json")
 const vietnameseTranslations = require("./vi.json")
 
- function main() {
+function main() {
   type TranslationsType = {
     [key: string]: string | TranslationsType
   }
@@ -22,16 +22,11 @@ const vietnameseTranslations = require("./vi.json")
     missingTranslations: { [key: string]: string[] },
     language: string
   ) => {
-    if (
-      !missingTranslations[`${parentKey}.${translationKey}, "${baseTranslations[translationKey]}"`]
-    ) {
-      missingTranslations[
-        `${parentKey}.${translationKey}, "${baseTranslations[translationKey]}"`
-      ] = []
+    const mapKey = `${parentKey}.${translationKey}, "${baseTranslations[translationKey]}"`
+    if (!missingTranslations[mapKey]) {
+      missingTranslations[mapKey] = []
     }
-    missingTranslations[
-      `${parentKey}.${translationKey}, "${baseTranslations[translationKey]}"`
-    ].push(language)
+    missingTranslations[mapKey].push(language)
   }
 
   const checkTranslations = (
