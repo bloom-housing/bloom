@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const englishTranslations = require("./general.json")
 const spanishTranslations = require("./es.json")
 const chineseTranslations = require("./zh.json")
 const vietnameseTranslations = require("./vi.json")
 
-async function main() {
+ function main() {
   type TranslationsType = {
     [key: string]: string | TranslationsType
   }
