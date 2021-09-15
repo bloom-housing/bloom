@@ -14,12 +14,13 @@ import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { PaginatedApplicationListQueryParams } from "./applications.controller"
 import { ApplicationFlaggedSetsService } from "../application-flagged-sets/application-flagged-sets.service"
 import { assignDefined } from "../shared/assign-defined"
-import { authzActions, AuthzService } from "../auth/services/authz.service"
+import { AuthzService } from "../auth/services/authz.service"
 import { Request as ExpressRequest } from "express"
 import { ListingsService } from "../listings/listings.service"
 import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
+import { authzActions } from "../auth/enum/authz-actions.enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
