@@ -58,10 +58,37 @@ describe("Jurisdictions", () => {
     expect(res.body.name).toBe("test")
 
     const getById = await supertest(app.getHttpServer())
-      .get(`/jurisdictions/${res.body.name}`)
+      .get(`/jurisdictions/${res.body.id}`)
       .set(...setAuthorization(adminAccesstoken))
       .expect(200)
     expect(getById.body.name).toBe("test")
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
+  it(`should create and return a new jurisdiction by name`, async () => {
+    const res = await supertest(app.getHttpServer())
+      .post(`/jurisdictions`)
+      .set(...setAuthorization(adminAccesstoken))
+      .send({ name: "test2" })
+      .expect(201)
+    expect(res.body).toHaveProperty("id")
+    expect(res.body).toHaveProperty("createdAt")
+    expect(res.body).toHaveProperty("updatedAt")
+    expect(res.body).toHaveProperty("name")
+    expect(res.body.name).toBe("test2")
+
+    const getById = await supertest(app.getHttpServer())
+      .get(`/jurisdictions/byName/${res.body.name}`)
+      .set(...setAuthorization(adminAccesstoken))
+      .expect(200)
+    expect(getById.body.name).toBe("test2")
   })
 
   afterEach(() => {
