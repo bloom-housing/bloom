@@ -7,6 +7,7 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
+  EnumUserFilterParamsComparison
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -273,6 +274,12 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
+      filter: [
+        {
+          isPartner: true,
+          $comparison: EnumUserFilterParamsComparison["="]
+        }
+      ]
     })
 
   const { data, error } = useSWR(
