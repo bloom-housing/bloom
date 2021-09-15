@@ -34,26 +34,6 @@ const vietnameseTranslations = require("./vi.json")
     ].push(language)
   }
 
-  const addMissingBlock = (
-    baseTranslations: TranslationsType | string,
-    missingTranslations: { [key: string]: string[] },
-    language: string,
-    parentKey?: string
-  ) => {
-    Object.keys(baseTranslations).forEach((translationKey) => {
-      if (typeof baseTranslations[translationKey] === "string") {
-        addEntry(translationKey, parentKey || "", baseTranslations, missingTranslations, language)
-      } else {
-        addMissingBlock(
-          baseTranslations[translationKey],
-          missingTranslations,
-          language,
-          parentKey ? `${parentKey}.${translationKey}` : translationKey
-        )
-      }
-    })
-  }
-
   const checkTranslations = (
     baseTranslations: TranslationsType | string,
     checkedTranslations: TranslationsType | string,
@@ -62,28 +42,16 @@ const vietnameseTranslations = require("./vi.json")
     parentKey?: string
   ) => {
     Object.keys(baseTranslations).forEach((translationKey) => {
-      // Missing translation block entirely, add by mapping over english strings
-      if (typeof baseTranslations[translationKey] !== "string" && !checkedTranslations[translationKey]) {
-        addMissingBlock(
-          baseTranslations[translationKey],
-          missingTranslations,
-          language,
-          parentKey ? `${parentKey}.${translationKey}` : translationKey
-        )
-        return
-      }
-      // Missing individual translation key
       if (
         typeof baseTranslations[translationKey] === "string" &&
         !checkedTranslations[translationKey]
       ) {
         addEntry(translationKey, parentKey || "", baseTranslations, missingTranslations, language)
       }
-      // If this is just a block, continue with that block
       if (typeof baseTranslations[translationKey] !== "string") {
         checkTranslations(
           baseTranslations[translationKey],
-          checkedTranslations[translationKey],
+          !checkedTranslations[translationKey] ? {} : checkedTranslations[translationKey],
           missingTranslations,
           language,
           parentKey ? `${parentKey}.${translationKey}` : translationKey
