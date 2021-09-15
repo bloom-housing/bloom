@@ -102,7 +102,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
-      const chartData = await fetchAmiChart(defaultUnit.amiChart.id, defaultUnit.amiPercentage)
+      const chartData = await fetchAmiChart(defaultUnit.amiChart.id)
       resetAmiTableValues(chartData, defaultUnit.amiPercentage)
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
@@ -123,7 +123,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     void resetDefaultValues()
   }, [])
 
-  const fetchAmiChart = async (defaultChartID?: string, defaultAmiPercentage?: string) => {
+  const fetchAmiChart = async (defaultChartID?: string) => {
     try {
       const thisAmiChart = await amiChartsService.retrieve({
         amiChartId: defaultChartID ?? amiChartID,
@@ -204,9 +204,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
     // Only keep overrides so we're not duplicating existing ami data
     ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
-      const existingChartValue = currentAmiChart
-        .filter((item: AmiChartItem) => item.householdSize === index + 1)
-        .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(amiPercentage))[0]
+      const existingChartValue = currentAmiChart.filter(
+        (item: AmiChartItem) =>
+          item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
+      )[0]
       if (
         data[`maxIncomeHouseholdSize${index + 1}`] &&
         parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income

@@ -33,7 +33,6 @@ import {
   PaperApplication,
   PaperApplicationCreate,
   ListingReviewOrder,
-  UnitAmiChartOverrideCreate,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
