@@ -96,6 +96,7 @@ All notable changes to this project will be documented in this file. The format 
   - Update textarea character limit ([#1751](https://github.com/bloom-housing/bloom/pull/1751)) (Dominik Barcikowski)
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
+  - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
 
 ### UI Components
 
@@ -122,6 +123,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed ListingsList component and replaced with more generalizable ListingCard component which represents the image and table for one listing
   - Remove formatIncome helper from ui-components ([#1744](https://github.com/bloom-housing/bloom/pull/1744)) (Emily Jablonski)
     - **Breaking Change**
+  - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
 
 ### Backend
 

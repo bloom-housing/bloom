@@ -186,15 +186,9 @@ describe("Listings", () => {
       .set(...setAuthorization(adminAccessToken))
       .expect(201)
 
-    const paperApplication = await supertest(app.getHttpServer())
-      .post(`/paperApplications`)
-      .send({ language: Language.en, file: file.body })
-      .set(...setAuthorization(adminAccessToken))
-      .expect(201)
-
     const am: ApplicationMethodCreateDto = {
       type: ApplicationMethodType.FileDownload,
-      paperApplications: [{ id: paperApplication.body.id }],
+      paperApplications: [{ file: file.body, language: Language.en }],
       listing,
     }
 
