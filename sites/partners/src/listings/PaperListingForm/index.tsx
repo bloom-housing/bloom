@@ -217,6 +217,14 @@ const defaults: FormListing = {
 
 export type TempUnit = Unit & {
   tempId?: number
+  maxIncomeHouseholdSize1?: string
+  maxIncomeHouseholdSize2?: string
+  maxIncomeHouseholdSize3?: string
+  maxIncomeHouseholdSize4?: string
+  maxIncomeHouseholdSize5?: string
+  maxIncomeHouseholdSize6?: string
+  maxIncomeHouseholdSize7?: string
+  maxIncomeHouseholdSize8?: string
 }
 
 export type TempEvent = ListingEvent & {
@@ -259,6 +267,24 @@ const formatFormData = (
       default:
         unit.numBedrooms = null
     }
+
+    Object.keys(unit).forEach((key) => {
+      if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
+        if (!unit.amiChartOverride) {
+          unit.amiChartOverride = {
+            id: undefined,
+            createdAt: undefined,
+            updatedAt: undefined,
+            items: [],
+          }
+        }
+        unit.amiChartOverride.items.push({
+          percentOfAmi: parseInt(unit.amiPercentage),
+          householdSize: parseInt(key[key.length - 1]),
+          income: parseInt(unit[key]),
+        })
+      }
+    })
 
     unit.floor = stringToNumber(unit.floor)
     unit.maxOccupancy = stringToNumber(unit.maxOccupancy)

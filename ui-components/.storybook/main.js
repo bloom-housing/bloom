@@ -14,7 +14,13 @@ module.exports = {
     "@storybook/addon-knobs",
   ],
   typescript: {
-    reactDocgen: "react-docgen",
+    check: false,
+    checkOptions: {},
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+    },
   },
   // In trouble? try https://storybook.js.org/docs/configurations/custom-webpack-config/#debug-the-default-webpack-config
   webpackFinal: async (config, { configType }) => {
@@ -27,11 +33,14 @@ module.exports = {
       test: /\.scss$/,
       use: [
         "style-loader",
+        "css-loader",
         {
           loader: "postcss-loader",
           options: {
-            ident: "postcss",
-            plugins: [require("tailwindcss"), require("autoprefixer")],
+            postcssOptions: {
+              ident: "postcss",
+              plugins: [require("tailwindcss"), require("autoprefixer")],
+            },
           },
         },
         {

@@ -5,7 +5,7 @@ ignore = "/bin/false"
 
 [build.environment]
 
-NODE_VERSION = "12.18.4"
+NODE_VERSION = "14.17.6"
 YARN_VERSION = "1.22.4"
 NEXT_TELEMETRY_DISABLED = "1"
 

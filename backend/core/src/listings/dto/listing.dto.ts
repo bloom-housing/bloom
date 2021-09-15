@@ -23,7 +23,6 @@ import { ApiProperty, OmitType, getSchemaPath } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
@@ -43,7 +42,9 @@ import {
   UnitsSummaryDto,
   UnitsSummaryUpdateDto,
 } from "../../units-summary/dto/units-summary.dto"
+import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { IdNameDto } from "../../shared/dto/idName.dto"
+import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -854,6 +855,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   view?: string
+
+  @Expose()
+  @ApiProperty({
+    name: "orderBy",
+    required: false,
+    enum: OrderByFieldsEnum,
+    enumName: "OrderByFieldsEnum",
+    example: "updatedAt",
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })
+  orderBy?: OrderByFieldsEnum
 
   @Expose()
   @ApiProperty({

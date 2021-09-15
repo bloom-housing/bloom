@@ -27,15 +27,16 @@
     "electron": "^13.1.7",
     "moment": "^2.29.1",
     "nanoid": "^3.1.12",
-    "next": "^10.1.0",
+    "next": "^11.1.1",
     "next-plugin-custom-babel-config": "^1.0.2",
     "node-polyglot": "^2.4.0",
     "node-sass": "^4.14.1",
     "qs": "^6.10.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-hook-form": "^6.15.5",
-    "swr": "^0.3.5"
+    "swr": "^0.3.5",
+    "tailwindcss": "2.2.10"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -49,7 +50,8 @@
     "concurrently": "^5.3.0",
     "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
-    "next-transpile-modules": "^4.1.0",
+    "next-transpile-modules": "^8.0.0",
+    "postcss": "^8.3.6",
     "sass-loader": "^10.0.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.2"

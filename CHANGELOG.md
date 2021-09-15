@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+### Backend
+
+- Added:
+
+  - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+
 ## Frontend
 
 - Added:
@@ -18,8 +24,10 @@ All notable changes to this project will be documented in this file. The format 
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
+  - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
 
 - Fixed:
+
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
@@ -30,6 +38,11 @@ All notable changes to this project will be documented in this file. The format 
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
+
+- Changed:
+
+  - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
+    - **Breaking Change**
 
 ### UI Components
 
@@ -46,6 +59,9 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
 
 - Changed:
+
+  - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
+  - Upgraded React to v17
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
@@ -59,6 +75,10 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**
   - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
     - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
+  - Removed business logic from Hero component ([#1816](https://github.com/bloom-housing/bloom/pull/1816)) (Emily Jablonski)
+    - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
+  - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
+    - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
 
 ### Backend
 
@@ -102,7 +122,12 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 - Updated:
+
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
+
+- Fixed:
+
+  - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
 
 ## v1.0.5 08/03/2021
 
