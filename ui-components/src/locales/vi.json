@@ -500,6 +500,13 @@
       "senior": "người cao niên",
       "veteran": "cựu chiến binh"
     },
+    "reservedCommunityTypes": {
+      "senior": "Người lớn tuổi",
+      "senior55": "Người lớn tuổi 55+",
+      "senior62": "Người lớn tuổi 62+",
+      "partiallySenior": "Một phần người cao niên",
+      "specialNeeds": "Nhu cầu đặc biệt"
+    },
     "reservedUnits": "Các căn nhà Được dành riêng",
     "reservedUnitsDescription": "Để hội đủ điều kiện được nhận các căn nhà này, một trong những điều sau đây phải đúng với quý vị hoặc một người nào đó trong hộ gia đình của quý vị:",
     "reservedUnitsForWhoAre": "Dành riêng cho %{communityType} những người %{reservedType}",

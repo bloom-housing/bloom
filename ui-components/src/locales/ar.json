@@ -889,6 +889,7 @@
             "senior": "كبار السن",
             "senior55": "كبار السن 55+",
             "senior62": "كبار السن 62+",
+            "partiallySenior": "كبار السن جزئيا",
             "specialNeeds": "الاحتياجات الخاصة"
         },
         "reservedFor": "محجوز لـ٪ {type}",
