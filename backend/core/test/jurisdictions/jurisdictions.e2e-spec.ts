@@ -59,7 +59,6 @@ describe("Jurisdictions", () => {
 
     const getById = await supertest(app.getHttpServer())
       .get(`/jurisdictions/${res.body.id}`)
-      .set(...setAuthorization(adminAccesstoken))
       .expect(200)
     expect(getById.body.name).toBe("test")
   })
@@ -84,11 +83,10 @@ describe("Jurisdictions", () => {
     expect(res.body).toHaveProperty("name")
     expect(res.body.name).toBe("test2")
 
-    const getById = await supertest(app.getHttpServer())
+    const getByName = await supertest(app.getHttpServer())
       .get(`/jurisdictions/byName/${res.body.name}`)
-      .set(...setAuthorization(adminAccesstoken))
       .expect(200)
-    expect(getById.body.name).toBe("test2")
+    expect(getByName.body.name).toBe("test2")
   })
 
   afterEach(() => {
