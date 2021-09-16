@@ -21,6 +21,7 @@ type AsideProps = {
   setStatus?: (status: ListingStatus) => void
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
+  showPublishModal?: () => void
 }
 
 type AsideType = "add" | "edit" | "details"
@@ -30,6 +31,7 @@ const Aside = ({
   setStatus,
   showCloseListingModal,
   showLotteryResultsDrawer,
+  showPublishModal,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
 
@@ -77,7 +79,7 @@ const Aside = ({
           <Button
             styleType={AppearanceStyleType.success}
             fullWidth
-            onClick={() => setStatus(ListingStatus.active)}
+            onClick={() => showPublishModal && showPublishModal()}
           >
             {t("listings.actions.publish")}
           </Button>
@@ -109,9 +111,10 @@ const Aside = ({
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
-              onClick={() => setStatus(ListingStatus.active)}
+              onClick={() => showPublishModal && showPublishModal()}
             >
               {t("listings.actions.publish")}
             </Button>
@@ -213,7 +216,15 @@ const Aside = ({
     }
 
     return elements
-  }, [listing, listingId, setStatus, showCloseListingModal, showLotteryResultsDrawer, type])
+  }, [
+    listing,
+    listingId,
+    setStatus,
+    showCloseListingModal,
+    showLotteryResultsDrawer,
+    showPublishModal,
+    type,
+  ])
 
   return (
     <>
