@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## v2.0.0-pre-tailwind 09/16/2021
+
 ## Frontend
 
 - Added:

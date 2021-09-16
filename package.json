@@ -1,6 +1,6 @@
 {
   "name": "bloom-housing",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
     "packages": [
