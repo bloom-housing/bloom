@@ -31,11 +31,13 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
 ): void {
   for (const [index, filter] of filters.entries()) {
     const comparison = filter["$comparison"]
+    const includeNulls = filter["$include_nulls"]
     for (const filterKey in filter) {
       if (
         filter[filterKey] === undefined ||
         filter[filterKey] === null ||
-        filterKey === "$comparison"
+        filterKey === "$comparison" ||
+        filterKey === "$include_nulls"
       ) {
         continue
       }
@@ -48,13 +50,13 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       // Handle custom filters here, before dropping into generic filter handler
       switch (filterKey) {
         case ListingFilterKeys.seniorHousing:
-          addSeniorHousingQuery(qb, filterValue)
+          addSeniorHousingQuery(qb, filterValue, includeNulls)
           return
         case ListingFilterKeys.availability:
-          addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum)
+          addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
           return
         case ListingFilterKeys.ami:
-          addAmiPercentageFilter(qb, parseInt(filterValue))
+          addAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
           return
       }
 
@@ -62,17 +64,24 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       const filterField = filterTypeToFieldMap[filterKey]
       switch (comparison) {
         case Compare.IN:
-          qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
-            [whereParameterName]: filterValue
-              .split(",")
-              .map((s) => s.trim().toLowerCase())
-              .filter((s) => s.length !== 0),
-          })
+          qb.andWhere(
+            `(LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
+            {
+              [whereParameterName]: filterValue
+                .split(",")
+                .map((s) => s.trim().toLowerCase())
+                .filter((s) => s.length !== 0),
+            }
+          )
           break
         case Compare["<>"]:
         case Compare["="]:
           qb.andWhere(
-            `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
+            `(LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
             {
               [whereParameterName]: filterValue,
             }
@@ -80,9 +89,14 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
           break
         case Compare[">="]:
         case Compare["<="]:
-          qb.andWhere(`${filterField} ${comparison} :${whereParameterName}`, {
-            [whereParameterName]: filterValue,
-          })
+          qb.andWhere(
+            `(${filterField} ${comparison} :${whereParameterName}${
+              includeNulls ? ` OR ${filterField} IS NULL` : ""
+            })`,
+            {
+              [whereParameterName]: filterValue,
+            }
+          )
           break
         case Compare.NA:
           // If we're here, it's because we expected this filter to be handled by a custom filter handler
