@@ -811,6 +811,15 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
+    example: "48211",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.zipcode]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
     example: "FAB1A3C6-965E-4054-9A48-A282E92E9426",
     required: false,
   })
@@ -887,5 +896,6 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
+  zipcode: "buildingAddress.zipCode",
   leasingAgents: "leasingAgents.id",
 }
