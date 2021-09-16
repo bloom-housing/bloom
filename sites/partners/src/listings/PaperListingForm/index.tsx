@@ -277,6 +277,7 @@ const formatFormData = (
     summary.totalCount = toNumberOrNull(summary.totalCount)
     summary.monthlyRentMin = toNumberOrNull(summary.monthlyRentMin)
     summary.monthlyRentMax = toNumberOrNull(summary.monthlyRentMax)
+    summary.amiPercentage = toNumberOrNull(summary.amiPercentage)
 
     if (!summary.sqFeetMin) {
       delete summary.sqFeetMin
