@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^1.0.5",
+    "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "moment": "^2.29.1",
