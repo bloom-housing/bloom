@@ -48,3 +48,7 @@ a.button.is-primary:hover {
   max-height: 80vh;
   overflow-y: auto;
 }
+
+.loading-overlay__spinner circle {
+  stroke: $tailwind-primary;
+}
