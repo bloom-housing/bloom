@@ -11,6 +11,7 @@ import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { ConfigService } from "@nestjs/config"
 import { UserCreateDto } from "../dto/user-create.dto"
+import { Application } from "../../applications/entities/application.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -19,6 +20,10 @@ declare const expect: jest.Expect
 
 const mockedUser = { id: "123", email: "abc@xyz.com" }
 const mockUserRepo = { findOne: jest.fn().mockResolvedValue(mockedUser), save: jest.fn() }
+const mockApplicationRepo = {
+  createQueryBuilder: jest.fn().mockResolvedValue(mockedUser),
+  save: jest.fn(),
+}
 
 describe("UserService", () => {
   let service: UserService
@@ -31,6 +36,10 @@ describe("UserService", () => {
         {
           provide: getRepositoryToken(User),
           useValue: mockUserRepo,
+        },
+        {
+          provide: getRepositoryToken(Application),
+          useValue: mockApplicationRepo,
         },
         {
           provide: EmailService,
