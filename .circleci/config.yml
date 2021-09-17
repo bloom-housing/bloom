@@ -5,7 +5,7 @@ orbs:
 executors:
   standard-node:
     docker:
-      - image: "cimg/node:12.18.4"
+      - image: "cimg/node:14.17.6"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -15,7 +15,7 @@ executors:
           POSTGRES_DB: bloom
   cypress-node:
     docker:
-      - image: "cypress/base:12.18.2"
+      - image: "cypress/base:14.17.0"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -40,7 +40,7 @@ executors:
       PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
-      - image: "cimg/node:12.18.4-browsers"
+      - image: "cimg/node:14.17.6-browsers"
 
 jobs:
   setup:
