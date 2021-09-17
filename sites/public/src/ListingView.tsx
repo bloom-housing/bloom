@@ -45,7 +45,6 @@ export const ListingView = (props: ListingProps) => {
 
   const unitSummariesHeaders = {
     unitType: t("t.unitType"),
-    minimumIncome: t("t.minimumIncome"),
     rent: t("t.rent"),
     availability: t("t.availability"),
   }

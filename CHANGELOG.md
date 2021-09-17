@@ -25,6 +25,10 @@ All notable changes to this project will be documented in this file. The format 
   - Backend Filtering by AMI ([#532](https://github.com/CityOfDetroit/bloom/pull/532))
   - Add backend listing sorting ([#542](https://github.com/CityOfDetroit/bloom/pull/542) and [#548](https://github.com/CityOfDetroit/bloom/pull/548))
 
+- Removed:
+
+  - Removed minimum income from frontend forms and tables ([#578](https://github.com/CityOfDetroit/bloom/pull/578))
+
 ## Detroit Team M10
 
 - Fixed:
