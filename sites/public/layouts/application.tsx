@@ -34,7 +34,7 @@ const Layout = (props) => {
         <SiteHeader
           skip={t("nav.skip")}
           logoSrc="/images/detroit-logo.png"
-          notice={<div dangerouslySetInnerHTML={getTranslationMarkup("nav.getFeedback")}></div>}
+          notice=""
           title={t("nav.siteTitle")}
           language={{
             list: languages,
