@@ -141,7 +141,7 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
-  if (!date || !formTime) return null
+  if (!date || (!formTime.hours && !formTime.minutes)) return null
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0

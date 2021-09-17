@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
+  IsEmail,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
@@ -29,6 +30,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "image",
   "leasingAgentAddress",
   "leasingAgents",
+  "leasingAgentEmail",
   "urlSlug",
   "showWaitlist",
   "units",
@@ -114,6 +116,11 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgents?: IdDto[] | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default], always: false })
+  leasingAgentEmail?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -79,6 +79,7 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   leasingAgentAddress?: AddressCreateDto | null
 
   @Expose()

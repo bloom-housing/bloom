@@ -319,10 +319,6 @@ const formatFormData = (
     })
   }
 
-  if (data.leasingAgentEmail === "") {
-    delete data.leasingAgentEmail
-  }
-
   return {
     ...data,
     applicationDueTime: applicationDueTimeFormatted,
@@ -485,8 +481,24 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           latLong,
           customMapPositionChosen
         )
-        //
-        console.log({ formattedData })
+        const removeEmptyFields = (obj) => {
+          Object.keys(obj).forEach(function (key) {
+            if (obj[key] && typeof obj[key] === "object") {
+              removeEmptyFields(obj[key])
+            }
+            if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+              delete obj[key]
+            }
+            if (
+              typeof obj[key] === "object" &&
+              !Array.isArray(obj[key]) &&
+              Object.keys(obj[key]).length === 0
+            ) {
+              delete obj[key]
+            }
+          })
+        }
+        removeEmptyFields(formattedData)
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,
