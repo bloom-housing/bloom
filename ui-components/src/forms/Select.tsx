@@ -40,12 +40,23 @@ export const Select = ({
   keyPrefix,
   describedBy,
   inputProps,
+  defaultValue,
   noDefault = false,
 }: SelectProps) => {
+  // noDefault here means that the underlying form select does NOT want to have a defaultValue
+  // By default, this will set a defaultValue on the form select.
+  inputProps = inputProps ? { ...inputProps } : {}
   if (noDefault === false) {
-    inputProps = inputProps ? { ...inputProps } : {}
-    inputProps.defaultValue = ""
+    // The defaultValue will be set to (in order of precedence):
+    // defaultValue, inputProps.defaultValue, ""
+    if (defaultValue) {
+      inputProps.defaultValue = defaultValue
+    }
+    if (!inputProps.defaultValue) {
+      inputProps.defaultValue = ""
+    }
   }
+
   return (
     <div className={"field " + (error ? "error" : "")}>
       <label className={labelClassName} htmlFor={id}>
