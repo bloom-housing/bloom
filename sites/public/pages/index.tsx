@@ -27,10 +27,6 @@ export default function Home() {
     </>
   )
 
-  const listingOpen = (listing: Listing) => {
-    return moment() < moment(listing.applicationDueDate)
-  }
-
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
