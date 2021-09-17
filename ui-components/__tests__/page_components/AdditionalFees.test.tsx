@@ -8,9 +8,9 @@ describe("<Additional Fees>", () => {
   it("renders without error", () => {
     const { getByText } = render(
       <AdditionalFees
-        applicationFee={30}
-        depositMin={1140}
-        depositMax={1500}
+        applicationFee={"30"}
+        depositMin={"1140"}
+        depositMax={"1500"}
         costsNotIncluded={"Resident responsible for PG&E, internet and phone."}
       />
     )

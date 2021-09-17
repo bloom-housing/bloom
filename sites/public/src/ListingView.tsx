@@ -435,7 +435,12 @@ export const ListingView = (props: ListingProps) => {
                 }
               />
             </dl>
-            <AdditionalFees listing={listing} />
+            <AdditionalFees
+              depositMin={listing.depositMin}
+              depositMax={listing.depositMax}
+              applicationFee={listing.applicationFee}
+              costsNotIncluded={listing.costsNotIncluded}
+            />
           </div>
         </ListingDetailItem>
 

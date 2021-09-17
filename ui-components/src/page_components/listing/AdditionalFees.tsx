@@ -2,9 +2,9 @@ import * as React from "react"
 import { t } from "../../helpers/translator"
 
 export interface AdditionalFeesProps {
-  depositMin?: number
-  depositMax?: number
-  applicationFee?: number
+  depositMin?: string
+  depositMax?: string
+  applicationFee?: string
   costsNotIncluded?: string
 }
 
