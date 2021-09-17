@@ -834,7 +834,7 @@
     "listingSubmitted": "Listing Submitted",
     "listingUpdated": "Listing Updated",
     "longitude": "Longitude",
-    "lottery": "Lottery",
+    "lotteryTitle": "Lottery",
     "lotteryDateNotes": "Lottery Date Notes",
     "lotteryDateQuestion": "When will the lottery be run?",
     "lotteryEndTime": "Lottery End Time",
@@ -1055,6 +1055,14 @@
         "available": "Available",
         "occupied": "Occupied",
         "unavailable": "Unavailable"
+      },
+      "typeOptions": {
+        "studio": "Studio",
+        "oneBdrm": "One Bedroom",
+        "twoBdrm": "Two Bedroom",
+        "threeBdrm": "Three Bedroom",
+        "fourBdrm": "Four Bedroom",
+        "SRO": "Single Room Occupancy"
       }
     },
     "events": {

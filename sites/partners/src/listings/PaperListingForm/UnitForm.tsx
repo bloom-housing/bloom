@@ -112,8 +112,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
           setValue(`maxIncomeHouseholdSize${override.householdSize}`, override.income)
         })
       }
+      setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
     }
-    setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
     setValue("status", "available")
     setValue("rentType", getRentType(defaultUnit))
     setLoading(false)
@@ -269,7 +269,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         "name",
         "id"
       ),
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id"),
+      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions"),
     })
   }, [amiCharts, unitPriorities, unitTypes])
 

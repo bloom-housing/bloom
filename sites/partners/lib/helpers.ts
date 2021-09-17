@@ -122,10 +122,14 @@ export const getLotteryEvent = (listing: FormListing): ListingEvent | undefined 
     : null
 }
 
-// TODO memoize this function
-export function arrayToFormOptions<T>(arr: T[], label: string, value: string): FormOption[] {
+export function arrayToFormOptions<T>(
+  arr: T[],
+  label: string,
+  value: string,
+  translateLabel?: string
+): FormOption[] {
   return arr.map((val: T) => ({
-    label: val[label],
+    label: translateLabel ? t(`${translateLabel}.${val[label]}`) : val[label],
     value: val[value],
   }))
 }
