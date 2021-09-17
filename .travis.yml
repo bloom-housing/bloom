@@ -2,7 +2,7 @@ language: node_js
 
 node_js:
   # Node version
-  - 12
+  - 14
 
 cache:
   yarn: true
