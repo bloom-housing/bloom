@@ -269,7 +269,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         "name",
         "id"
       ),
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id"),
+      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id", "listings.unit.typeOptions"),
     })
   }, [amiCharts, unitPriorities, unitTypes])
 
