@@ -31,7 +31,7 @@ const listingSeed: ListingSeedType = {
   applicationMailingAddress: null,
   countyCode: CountyCode.detroit,
   CSVFormattingType: CSVFormattingType.basic,
-  disableUnitsAccordion: false,
+  disableUnitsAccordion: true,
   displayWaitlistSize: false,
   hrdId: "HRD10168",
   leasingAgentName: "Chris Garland",

@@ -1,12 +1,10 @@
-import { AssetDtoSeedType, ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitStatus } from "../../units/types/unit-status-enum"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const treymoreProperty: PropertySeedType = {
@@ -25,45 +23,8 @@ const treymoreProperty: PropertySeedType = {
     "Air Conditioning(Central Air Conditioning) Garbage Disposal Range Refrigerator (Coin Laundry Room in building)",
   unitsAvailable: 4,
   yearBuilt: 1916,
+  accessibility: "2 units are barrier free; 2 units are bi-level 1.5 bath",
 }
-
-const treymoreUnits: Array<UnitSeedType> = [
-  {
-    numBathrooms: 1,
-    numBedrooms: 0,
-    status: UnitStatus.occupied,
-  },
-  {
-    numBathrooms: 1,
-    numBedrooms: 1,
-    status: UnitStatus.occupied,
-  },
-  {
-    // Monthly rent is actually represented as a range, but must be a number for an individual unit.
-    monthlyRent: "707",
-    numBathrooms: 1,
-    numBedrooms: 2,
-    status: UnitStatus.available,
-  },
-  {
-    monthlyRent: "819",
-    numBathrooms: 1,
-    numBedrooms: 2,
-    status: UnitStatus.available,
-  },
-  {
-    monthlyRent: "707",
-    numBathrooms: 1,
-    numBedrooms: 2,
-    status: UnitStatus.available,
-  },
-  {
-    monthlyRent: "819",
-    numBathrooms: 1,
-    numBedrooms: 2,
-    status: UnitStatus.available,
-  },
-]
 
 const treymoreListing: ListingSeedType = {
   applicationAddress: {
@@ -79,7 +40,7 @@ const treymoreListing: ListingSeedType = {
   CSVFormattingType: CSVFormattingType.basic,
   disableUnitsAccordion: true,
   displayWaitlistSize: false,
-  isWaitlistOpen: true,
+  isWaitlistOpen: false,
   leasingAgentPhone: "313-462-4123",
   managementCompany: "KMG Prestige",
   managementWebsite: "http://rentlinx.kmgprestige.com/Company.aspx?CompanyID=107",
@@ -90,44 +51,11 @@ const treymoreListing: ListingSeedType = {
 export class ListingTreymoreSeed extends ListingDefaultSeed {
   async seed() {
     const unitTypeStudio = await this.unitTypeRepository.findOneOrFail({ name: "studio" })
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
-    const unitTypeFourBdrm = await this.unitTypeRepository.findOneOrFail({ name: "fourBdrm" })
 
     const property = await this.propertyRepository.save({
       ...treymoreProperty,
     })
-
-    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = treymoreUnits.map(
-      (unit) => {
-        let unitType
-        switch (unit.numBedrooms) {
-          case 4:
-            unitType = unitTypeFourBdrm
-            break
-          case 3:
-            unitType = unitTypeThreeBdrm
-            break
-          case 2:
-            unitType = unitTypeTwoBdrm
-            break
-          case 1:
-            unitType = unitTypeOneBdrm
-            break
-          default:
-            unitType = unitTypeStudio
-        }
-        return {
-          ...unit,
-          unitType: unitType,
-          property: {
-            id: property.id,
-          },
-        }
-      }
-    )
-    await this.unitsRepository.save(unitsToBeCreated)
 
     const assets: Array<AssetDtoSeedType> = [
       {
@@ -152,6 +80,14 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
 
     const treymoreUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
 
+    const studioUnitsSummary: UnitsSummaryCreateDto = {
+      unitType: unitTypeStudio,
+      totalCount: 2,
+      listing: listing,
+      totalAvailable: 0,
+    }
+    treymoreUnitsSummaryToBeCreated.push(studioUnitsSummary)
+
     const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
       unitType: unitTypeTwoBdrm,
       totalCount: 4,
@@ -159,6 +95,7 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       listing: listing,
       sqFeetMin: "720",
       sqFeetMax: "1003",
+      totalAvailable: 4,
     }
     treymoreUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
 

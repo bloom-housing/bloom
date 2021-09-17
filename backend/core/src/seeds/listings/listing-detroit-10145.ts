@@ -1,15 +1,10 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitStatus } from "../../units/types/unit-status-enum"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import assert from "assert"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const mcvProperty: PropertySeedType = {
@@ -24,37 +19,6 @@ const mcvProperty: PropertySeedType = {
   buildingTotalUnits: 194,
   neighborhood: "Forest Park",
 }
-
-const mcvUnits: Array<UnitSeedType> = []
-
-const oneBdrmUnit: UnitSeedType = {
-  numBedrooms: 1,
-  status: UnitStatus.occupied,
-}
-
-for (let i = 0; i < 28; i++) {
-  mcvUnits.push(oneBdrmUnit)
-}
-
-const twoBdrmUnit = {
-  numBedrooms: 2,
-  status: UnitStatus.occupied,
-}
-
-for (let i = 0; i < 142; i++) {
-  mcvUnits.push(twoBdrmUnit)
-}
-
-const threeBdrmUnit = {
-  numBedrooms: 3,
-  status: UnitStatus.occupied,
-}
-
-for (let i = 0; i < 24; i++) {
-  mcvUnits.push(threeBdrmUnit)
-}
-
-assert(mcvUnits.length === mcvProperty.buildingTotalUnits)
 
 const mcvListing: ListingSeedType = {
   amiPercentageMax: 60,
@@ -84,30 +48,6 @@ export class Listing10145Seed extends ListingDefaultSeed {
       ...mcvProperty,
     })
 
-    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = mcvUnits.map((unit) => {
-      let unitType
-      switch (unit.numBedrooms) {
-        case 3:
-          unitType = unitTypeThreeBdrm
-          break
-        case 2:
-          unitType = unitTypeTwoBdrm
-          break
-        case 1:
-        // falls through
-        default:
-          unitType = unitTypeOneBdrm
-      }
-      return {
-        ...unit,
-        unitType: unitType,
-        property: {
-          id: property.id,
-        },
-      }
-    })
-
-    await this.unitsRepository.save(unitsToBeCreated)
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "senior62" })
 
     const listingCreateDto: Omit<

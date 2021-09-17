@@ -1,15 +1,12 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import assert from "assert"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const mshProperty: PropertySeedType = {
@@ -24,28 +21,6 @@ const mshProperty: PropertySeedType = {
   buildingTotalUnits: 24,
   neighborhood: "North End",
 }
-
-const mshUnits: Array<UnitSeedType> = []
-
-const threeBdrmUnit = {
-  numBedrooms: 3,
-  status: UnitStatus.occupied,
-}
-
-for (let i = 0; i < 9; i++) {
-  mshUnits.push(threeBdrmUnit)
-}
-
-const fourBdrmUnit = {
-  numBedrooms: 4,
-  status: UnitStatus.occupied,
-}
-
-for (let i = 0; i < 15; i++) {
-  mshUnits.push(fourBdrmUnit)
-}
-
-assert(mshUnits.length === mshProperty.buildingTotalUnits)
 
 const mshListing: ListingSeedType = {
   applicationDropOffAddress: null,
@@ -65,8 +40,6 @@ const mshListing: ListingSeedType = {
 
 export class Listing10147Seed extends ListingDefaultSeed {
   async seed() {
-    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
-    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
     const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
     const unitTypeFourBdrm = await this.unitTypeRepository.findOneOrFail({ name: "fourBdrm" })
 
@@ -74,33 +47,6 @@ export class Listing10147Seed extends ListingDefaultSeed {
       ...mshProperty,
     })
 
-    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = mshUnits.map((unit) => {
-      let unitType
-      switch (unit.numBedrooms) {
-        case 4:
-          unitType = unitTypeFourBdrm
-          break
-        case 3:
-          unitType = unitTypeThreeBdrm
-          break
-        case 2:
-          unitType = unitTypeTwoBdrm
-          break
-        case 1:
-        // falls through
-        default:
-          unitType = unitTypeOneBdrm
-      }
-      return {
-        ...unit,
-        unitType: unitType,
-        property: {
-          id: property.id,
-        },
-      }
-    })
-
-    await this.unitsRepository.save(unitsToBeCreated)
     const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
       type: ApplicationMethodType.ExternalLink,
       acceptsPostmarkedApplications: false,
