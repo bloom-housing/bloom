@@ -31,6 +31,7 @@ import DetailUnitDrawer, {
 } from "../../../src/listings/PaperListingDetails/DetailsUnitDrawer"
 import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/sections/DetailBuildingFeatures"
 import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
+import DetailApplicationTypes from "../../../src/listings/PaperListingDetails/sections/DetailApplicationTypes"
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
 import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
@@ -128,6 +129,7 @@ export default function ApplicationsList() {
                     <DetailAdditionalDetails />
                     <DetailRankingsAndResults />
                     <DetailLeasingAgent />
+                    <DetailApplicationTypes />
                     <DetailApplicationAddress />
                   </div>
 

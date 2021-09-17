@@ -19,7 +19,7 @@ const ListingIntro = () => {
   const { errors, register } = formMethods
 
   const JurisdictionWrapper = useCallback(() => {
-    if (profile.jurisdictions.length === 0) {
+    if (profile.jurisdictions.length === 1) {
       return (
         <Controller
           type="hidden"

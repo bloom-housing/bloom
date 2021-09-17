@@ -19,7 +19,7 @@ export interface FieldProps {
   onDrop?: (e: any) => boolean
   onPaste?: (e: any) => boolean
   placeholder?: string
-  register: UseFormMethods["register"]
+  register?: UseFormMethods["register"]
   validation?: Record<string, any>
   disabled?: boolean
   prepend?: string
@@ -99,7 +99,7 @@ const Field = (props: FieldProps) => {
           name={props.name}
           defaultValue={props.defaultValue}
           placeholder={props.placeholder}
-          ref={props.register(props.validation)}
+          ref={props.register && props.register(props.validation)}
           disabled={props.disabled}
           onPaste={props.onPaste}
           onDrop={props.onDrop}

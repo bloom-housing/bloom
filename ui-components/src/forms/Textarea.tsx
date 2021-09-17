@@ -17,11 +17,12 @@ export interface TextareaProps {
   name: string
   note?: string
   placeholder?: string
-  register: UseFormMethods["register"]
+  register?: UseFormMethods["register"]
   resize?: boolean
   rows?: number
   wrap?: WrapOptions
   readerOnly?: boolean
+  inputProps?: Record<string, unknown>
 }
 
 export const Textarea = (props: TextareaProps) => {
@@ -33,6 +34,8 @@ export const Textarea = (props: TextareaProps) => {
   const labelClassnames = ["textarea-label"]
   if (props.errorMessage) labelClassnames.push("textarea-label-error")
   if (props.readerOnly) labelClassnames.push("sr-only")
+
+  const inputProps = { ...props.inputProps }
 
   return (
     <div>
@@ -52,6 +55,7 @@ export const Textarea = (props: TextareaProps) => {
         rows={props.rows ?? 4}
         wrap={props.wrap ?? "soft"}
         title={props.label}
+        {...inputProps}
       />
       {props.note && <p className="field-note font-normal mb-2">{props.note}</p>}
       {props.errorMessage && <span className="textarea-error-message">{props.errorMessage}</span>}
