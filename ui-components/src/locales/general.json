@@ -963,14 +963,6 @@
     "specialNotes": "Special Notes",
     "streetAddressOrPOBox": "Street Address or PO Box",
     "totalListings": "Total Listings",
-    "unitTypes": {
-      "oneBdrm": "1 BR",
-      "twoBdrm": "2 BR",
-      "threeBdrm": "3 BR",
-      "fourBdrm": "4 BR",
-      "studio": "Studio",
-      "SRO": "Single Room Occupancy"
-    },
     "unitsAreFor": "These units are for %{type}.",
     "unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
     "upcomingLotteries": {
@@ -1061,7 +1053,8 @@
         "oneBdrm": "One Bedroom",
         "twoBdrm": "Two Bedroom",
         "threeBdrm": "Three Bedroom",
-        "fourBdrm": "Four Bedroom"
+        "fourBdrm": "Four Bedroom",
+        "SRO": "Single Room Occupancy"
       }
     },
     "events": {
