@@ -16,6 +16,11 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     status: ApplicationStatus.submitted,
     submissionType: ApplicationSubmissionType.electronical,
     acceptedTerms: false,
+    image: {
+      fileId: "",
+      label: "label",
+    },
+    rentalAssistance: "",
     applicant: {
       firstName: "Applicant",
       middleName: "Middlename",
