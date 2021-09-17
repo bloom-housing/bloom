@@ -75,10 +75,6 @@ export const StandardTable = (props: StandardTableProps) => {
 
   const [tableData, setTableData] = useState<StandardTableData>()
 
-  useEffect(() => {
-    setTableData(props.data)
-  }, [props.data])
-
   const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return (

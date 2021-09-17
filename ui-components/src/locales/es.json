@@ -46,6 +46,7 @@
             "zh": "Comienzo",
             "vi": "Comenzar"
         },
+<<<<<<< HEAD
         "totalApplications": "Aplicaciones totales",
         "totalSets": "Conjuntos totales",
         "addApplication": "Agregar aplicación",
@@ -93,6 +94,55 @@
             "householdState": "Estado del hogar",
             "householdZip": "Código postal del hogar",
             "applicationType": "tipo de aplicacion"
+=======
+        "otherTypeFormPlaceholder": "¿Cuál es su parentesco o relación?",
+        "otherTypeValidationErrorMessage": "Por favor ingrese el tipo de parentesco o relación",
+        "validationErrorMessage": "Por favor seleccione un contacto alternativo"
+      },
+      "name": {
+        "title": "¿Quién es su contacto alternativo?",
+        "alternateContactFormLabel": "Nombre del contacto alternativo",
+        "caseManagerAgencyFormLabel": "¿En dónde trabaja su administrador(a) de casos o asesor(a) sobre vivienda?",
+        "caseManagerAgencyFormPlaceHolder": "Agencia",
+        "caseManagerAgencyValidationErrorMessage": "Por favor ingrese una agencia"
+      },
+      "contact": {
+        "title": "Díganos cómo comunicarnos con su contacto alternativo",
+        "description": "Solo utilizaremos esta información para ponernos en contacto con él o ella en relación con su solicitud.",
+        "phoneNumberFormLabel": "Número telefónico del contacto",
+        "emailAddressFormLabel": "Dirección de email del contacto",
+        "contactMailingAddressLabel": "Dirección postal del contacto",
+        "contactMailingAddressHelperText": "Elija una dirección en donde su contacto pueda recibir información actualizada y materiales relacionados con su solicitud"
+      }
+    },
+    "household": {
+      "assistanceUrl": "https://exygy.com/",
+      "dontQualifyHeader": "Desafortunadamente, parece que usted no reúne los requisitos de este listado.",
+      "dontQualifyInfo": "Por favor haga cambios si usted cree haber cometido algún error. Tenga presente que si usted falsifica cualquier tipo de información en su solicitud será descalificado(a). Si la información que usted ingresó es correcta, lo invitamos a visitarnos en el futuro a medida que otras propiedades están disponibles.",
+      "addMembers": {
+        "addHouseholdMember": "+ Añadir a un miembro del hogar",
+        "done": "Ya terminó de añadir personas",
+        "title": "Háblenos un poco acerca de su hogar."
+      },
+      "householdMember": "Miembro del hogar",
+      "householdMembers": "Miembros del hogar",
+      "liveAlone": {
+        "title": "Ahora nos gustaría obtener información acerca de las otras personas que residirán con usted en la vivienda",
+        "willLiveAlone": "Viviré solo(a)",
+        "liveWithOtherPeople": "Otras personas vivirán conmigo"
+      },
+      "preferredUnit": {
+        "preferredUnitType": "Tipo de vivienda preferida",
+        "title": "¿Cuáles son los tamaños de vivienda que le interesan?",
+        "subTitle": "El tipo de vivienda seleccionado estará sujeto a disponibilidad.",
+        "optionsLabel": "Marque todas las opciones que correspondan:",
+        "options": {
+          "studio": "Estudio",
+          "oneBdrm": "1 dormitorio",
+          "twoBdrm": "2 dormitorios",
+          "threeBdrm": "3 dormitorios",
+          "fourBdrm": "+ de 3 dormitorios"
+>>>>>>> upstream/dev
         }
     },
     "application": {

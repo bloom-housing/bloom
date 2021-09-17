@@ -7,7 +7,7 @@ p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
-p, partner, asset, true, read
+p, partner, asset, true, .*
 
 p, admin, preference, true, .*
 p, partner, preference, true, read

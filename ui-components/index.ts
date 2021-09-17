@@ -7,7 +7,7 @@ export * from "./src/actions/ExpandableContent"
 
 /* Blocks */
 export * from "./src/blocks/ActionBlock"
-export * from "./src/blocks/AppStatusItem"
+export * from "./src/blocks/StatusItem"
 export * from "./src/blocks/DashBlock"
 export * from "./src/blocks/DashBlocks"
 export * from "./src/blocks/FormCard"
@@ -75,6 +75,7 @@ export * from "./src/helpers/translationHelpers"
 export * from "./src/helpers/preferences"
 export * from "./src/helpers/resolveObject"
 export * from "./src/helpers/useMutate"
+export * from "./src/helpers/unitTypes"
 
 /* Icons */
 export * from "./src/icons/HeaderBadge"

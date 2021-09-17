@@ -38,11 +38,10 @@ export class EmailService {
     Handlebars.registerPartial(parts)
   }
 
-  public async welcome(user: User, appUrl: string) {
+  public async welcome(user: User, appUrl: string, confirmationUrl: string) {
     const language = user.language || Language.en
     const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     void (await this.loadTranslations(jurisdiction, language))
-    const confirmationUrl = `${appUrl}?token=${user.confirmationToken}`
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -132,10 +131,10 @@ export class EmailService {
     )
   }
 
-  private async loadTranslations(jurisdction: Jurisdiction, language: Language) {
+  private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
     const translation = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
       language,
-      jurisdction.id
+      jurisdiction ? jurisdiction.id : null
     )
     this.polyglot.replace(translation.translations)
   }
@@ -188,6 +187,19 @@ export class EmailService {
           void this.send(to, subject, body, retry - 1)
         }
       }
+    )
+  }
+
+  async invite(user: User, appUrl: string, confirmationUrl: string) {
+    void (await this.loadTranslations(null, user.language || Language.en))
+    await this.send(
+      user.email,
+      "Welcome to Bloom",
+      this.template("invite")({
+        user: user,
+        confirmationUrl: confirmationUrl,
+        appOptions: { appUrl },
+      })
     )
   }
 }

@@ -146,10 +146,10 @@
         "optionsLabel": "請勾選所有適用的單位：",
         "options": {
           "studio": "套房",
-          "oneBedroom": "1 間臥室",
-          "twoBedroom": "2 間臥室",
-          "threeBedroom": "3 間臥室",
-          "moreThanThreeBedroom": "3+ 間卧室"
+          "oneBdrm": "1 間臥室",
+          "twoBdrm": "2 間臥室",
+          "threeBdrm": "3 間臥室",
+          "fourBdrm": "3+ 間卧室"
         }
       },
       "member": {

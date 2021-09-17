@@ -116,7 +116,6 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     sendMailToMailingAddress,
     accessibility,
     demographics,
-    preferredUnit,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
@@ -162,6 +161,10 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
+
+  const preferredUnit = data.application?.preferredUnit
+    ? data.application.preferredUnit?.map((id) => ({ id }))
+    : []
 
   const result: ApplicationUpdate = {
     submissionDate,
@@ -256,7 +259,6 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       contactPreferences,
       sendMailToMailingAddress,
       mailingAddress,
-      preferredUnit,
       accessibility,
       incomePeriod,
       demographics,
@@ -284,6 +286,8 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       ...applicationData.applicant,
       workInRegion,
     }
+
+    const preferredUnit = applicationData?.preferredUnit?.map((unit) => unit.id)
 
     const result = {
       applicant,

@@ -122,7 +122,7 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": "12",
+    "node": "14",
     "yarn": "^1.22"
   }
 }
