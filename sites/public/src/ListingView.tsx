@@ -110,7 +110,7 @@ export const ListingView = (props: ListingProps) => {
             {oneLineAddress}
           </p>
           <p className="text-gray-700 text-base">{listing.developer}</p>
-          <p className="text-xs">
+          <p className="text-xl">
             <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
               {t("t.viewOnMap")}
             </a>
