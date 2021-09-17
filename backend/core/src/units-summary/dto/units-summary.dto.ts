@@ -1,8 +1,7 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Exclude, Expose, Type } from "class-transformer"
 import { IsOptional, IsUUID, ValidateNested } from "class-validator"
-import { UnitTypeDto } from "src/unit-types/dto/unit-type.dto"
-import { IdDto } from "../../shared/dto/id.dto"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitsSummary } from "../entities/units-summary.entity"
 

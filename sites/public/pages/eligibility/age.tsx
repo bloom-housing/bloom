@@ -13,7 +13,6 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
-import "./age.scss"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
