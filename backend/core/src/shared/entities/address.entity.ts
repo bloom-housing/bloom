@@ -1,14 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import {
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  IsNotEmpty,
-} from "class-validator"
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
 @Entity()
@@ -40,7 +32,6 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   city: string | null
@@ -54,14 +45,12 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   state: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   street: string | null
@@ -75,7 +64,6 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   zipCode: string | null

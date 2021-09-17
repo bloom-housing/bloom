@@ -12,8 +12,6 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
-  IsNotEmpty,
-  IsOptional,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
@@ -36,7 +34,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
-  "leasingAgentAddress",
   "name",
   "rentalAssistance",
   "reviewOrderType",
@@ -66,7 +63,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   developer: string
 
@@ -77,37 +73,26 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   image: AssetCreateDto
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressCreateDto)
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  leasingAgentAddress?: AddressCreateDto | null
-
-  @Expose()
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentEmail: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentName: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentPhone: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   name: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   rentalAssistance: string
 
