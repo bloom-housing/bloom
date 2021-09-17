@@ -87,7 +87,7 @@ const Field = (props: FieldProps) => {
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
-          aria-describedby={props.describedBy ? props.describedBy : `${idOrName}-error`}
+          aria-describedby={props.describedBy ? props.describedBy : `${idOrName}`}
           aria-invalid={!!props.error || false}
           className="input"
           type={type}

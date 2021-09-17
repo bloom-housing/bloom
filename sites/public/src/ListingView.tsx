@@ -1,4 +1,3 @@
-import React from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"

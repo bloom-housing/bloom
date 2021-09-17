@@ -23,7 +23,6 @@ import { ApiProperty, OmitType, getSchemaPath } from "@nestjs/swagger"
 import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UserBasicDto } from "../../auth/dto/user.dto"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
@@ -43,7 +42,9 @@ import {
   UnitsSummaryDto,
   UnitsSummaryUpdateDto,
 } from "../../units-summary/dto/units-summary.dto"
+import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { IdNameDto } from "../../shared/dto/idName.dto"
+import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -810,6 +811,15 @@ export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
+    example: "48211",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.zipcode]?: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
     example: "FAB1A3C6-965E-4054-9A48-A282E92E9426",
     required: false,
   })
@@ -848,6 +858,18 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiProperty({
+    name: "orderBy",
+    required: false,
+    enum: OrderByFieldsEnum,
+    enumName: "OrderByFieldsEnum",
+    example: "updatedAt",
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })
+  orderBy?: OrderByFieldsEnum
+
+  @Expose()
+  @ApiProperty({
     type: String,
     required: false,
   })
@@ -874,5 +896,6 @@ export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
+  zipcode: "buildingAddress.zipCode",
   leasingAgents: "leasingAgents.id",
 }

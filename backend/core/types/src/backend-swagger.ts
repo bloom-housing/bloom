@@ -875,6 +875,27 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Invite user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/invite"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JurisdictionsService {
@@ -996,6 +1017,8 @@ export class ListingsService {
       /**  */
       view?: string
       /**  */
+      orderBy?: OrderByFieldsEnum
+      /**  */
       jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
@@ -1009,6 +1032,7 @@ export class ListingsService {
         limit: params["limit"],
         filter: params["filter"],
         view: params["view"],
+        orderBy: params["orderBy"],
         jsonpath: params["jsonpath"],
       }
       let data = null
@@ -3538,6 +3562,9 @@ export interface Jurisdiction {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface User {
@@ -3598,7 +3625,7 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions?: Jurisdiction[]
+  jurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -3628,6 +3655,9 @@ export interface UserBasic {
 
   /**  */
   jurisdictions: Jurisdiction[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
 
   /**  */
   id: string
@@ -3673,6 +3703,9 @@ export interface Status {
 export interface Confirm {
   /**  */
   token: string
+
+  /**  */
+  password?: string
 }
 
 export interface ForgotPassword {
@@ -3748,9 +3781,52 @@ export interface PaginatedUserList {
   meta: PaginationMeta
 }
 
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface JurisdictionUpdate {
@@ -3765,6 +3841,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface ListingFilterParams {
@@ -3782,6 +3861,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  zipcode?: string
 
   /**  */
   leasingAgents?: string
@@ -4151,13 +4233,16 @@ export interface UnitsSummary {
   id: string
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  amiPercentage?: string
+  amiPercentage?: number
 
   /**  */
   minimumIncomeMin?: string
@@ -4588,13 +4673,16 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  amiPercentage?: string
+  amiPercentage?: number
 
   /**  */
   minimumIncomeMin?: string
@@ -5047,13 +5135,16 @@ export interface UnitsSummaryUpdate {
   id: string
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
 
   /**  */
-  amiPercentage?: string
+  amiPercentage?: number
 
   /**  */
   minimumIncomeMin?: string
@@ -5658,7 +5749,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export type CombinedRolesTypes = UserRoles
+export type CombinedRolesTypes = UserRolesCreate
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -5671,6 +5762,11 @@ export enum EnumListingFilterParamsStatus {
   "pending" = "pending",
   "closed" = "closed",
 }
+export enum OrderByFieldsEnum {
+  "mostRecentlyUpdated" = "mostRecentlyUpdated",
+  "applicationDates" = "applicationDates",
+}
+
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
   "mailingAddress" = "mailingAddress",

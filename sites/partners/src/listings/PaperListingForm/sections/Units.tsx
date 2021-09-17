@@ -24,8 +24,9 @@ type UnitProps = {
 }
 
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
-  const [unitDrawer, setUnitDrawer] = useState<number | null>(null)
+  const [unitDrawerId, setUnitDrawerId] = useState<number | null>(null)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
+  const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -46,12 +47,10 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
 
-  const editUnit = useCallback(
-    (tempId: number) => {
-      setUnitDrawer(tempId)
-    },
-    [setUnitDrawer]
-  )
+  const editUnit = (tempId: number) => {
+    setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
+    setUnitDrawerId(tempId)
+  }
 
   const deleteUnit = useCallback(
     (tempId: number) => {
@@ -163,16 +162,30 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       </GridSection>
 
       <Drawer
-        open={!!unitDrawer}
+        open={!!unitDrawerId}
         title={t("listings.unit.add")}
         ariaDescription={t("listings.unit.add")}
-        onClose={() => setUnitDrawer(null)}
+        onClose={() => setUnitDrawerId(null)}
       >
         <UnitForm
           onSubmit={(unit) => saveUnit(unit)}
-          onClose={() => setUnitDrawer(null)}
-          units={units}
-          currentTempId={unitDrawer}
+          onClose={(reopen: boolean, defaultUnit: TempUnit) => {
+            if (reopen) {
+              if (defaultUnit) {
+                setDefaultUnit(defaultUnit)
+                editUnit(units.length + 1)
+              } else {
+                setDefaultUnit(null)
+                setUnitDrawerId(units.length + 1)
+              }
+            } else {
+              setDefaultUnit(null)
+              setUnitDrawerId(null)
+            }
+          }}
+          defaultUnit={defaultUnit}
+          existingId={units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId}
+          nextId={units.length + 1}
         />
       </Drawer>
 

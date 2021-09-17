@@ -887,7 +887,7 @@ const coliseumListing: ListingSeedType = {
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
-  applicationDueDate: getDate(10),
+  applicationDueDate: getDate(1),
   applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),

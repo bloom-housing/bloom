@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { EmailService } from "../../src/shared/email/email.service"
@@ -11,8 +11,14 @@ import { getUserAccessToken } from "../utils/get-user-access-token"
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/auth/dto/user.dto"
+import { UserDto } from "../../src/auth/dto/user.dto"
 import { UserService } from "../../src/auth/services/user.service"
+import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
+import { UserUpdateDto } from "../../src/auth/dto/user-update.dto"
+import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
+import { Listing } from "../../src/listings/entities/listing.entity"
+import { Repository } from "typeorm"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,11 +31,16 @@ describe("Applications", () => {
   let user1AccessToken: string
   let user2AccessToken: string
   let user2Profile: UserDto
+  let listingRepository: Repository<Listing>
+  let jurisdictionsRepository: Repository<Jurisdiction>
+  let adminAccessToken: string
+  let userAccessToken: string
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
     confirmation: async () => {},
     welcome: async () => {},
+    invite: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -39,7 +50,11 @@ describe("Applications", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        TypeOrmModule.forFeature([Listing, Jurisdiction]),
+        AuthModule,
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -56,6 +71,12 @@ describe("Applications", () => {
         .get("/user")
         .set(...setAuthorization(user2AccessToken))
     ).body
+    listingRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
+    jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
+      getRepositoryToken(Jurisdiction)
+    )
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
 
   it("should not allow user to create an account with weak password", async () => {
@@ -105,7 +126,6 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const userModifyResponse = await supertest(app.getHttpServer())
       .put(`/user/${userCreateResponse.body.id}`)
       .set(...setAuthorization(adminAccessToken))
@@ -325,5 +345,53 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)
+  })
+
+  it("should invite a user to the partners portal", async () => {
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const jurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+    const userInviteDto: UserInviteDto = {
+      email: "b4@b.com",
+      firstName: "First",
+      middleName: "Partner",
+      lastName: "Partner",
+      dob: new Date(),
+      leasingAgentInListings: [{ id: listing.id }],
+      roles: { isPartner: true },
+      jurisdictions: [{ id: jurisdiction.id }],
+    }
+
+    const mockInvite = jest.spyOn(testEmailService, "invite")
+
+    await supertest(app.getHttpServer())
+      .post(`/user/invite`)
+      .set(...setAuthorization(userAccessToken))
+      .send(userInviteDto)
+      .expect(403)
+
+    const response = await supertest(app.getHttpServer())
+      .post(`/user/invite`)
+      .send(userInviteDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    const newUser = response.body
+
+    expect(newUser.roles.isPartner).toBe(true)
+    expect(newUser.roles.isAdmin).toBe(false)
+    expect(newUser.leasingAgentInListings.length).toBe(1)
+    expect(newUser.leasingAgentInListings[0].id).toBe(listing.id)
+    expect(mockInvite.mock.calls.length).toBe(1)
+
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByEmail(newUser.email)
+
+    const password = "Abcdef1!"
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken, password })
+      .expect(200)
+    const token = await getUserAccessToken(app, newUser.email, password)
+    expect(token).toBeDefined()
   })
 })

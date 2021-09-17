@@ -41,6 +41,7 @@ import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interce
 @ApiTags("listings")
 @ApiBearerAuth()
 @ResourceType("listing")
+@ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class ListingsController {

@@ -1,22 +1,26 @@
 import React, { useState } from "react"
 import qs from "qs"
 import Head from "next/head"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
 import {
   AlertBox,
   LinkButton,
   Hero,
-  MarkdownSection,
   t,
   SiteAlert,
+  openDateState,
+  ActionBlock,
+  Icon,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import axios from "axios"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
+import moment from "moment"
 
 interface IndexProps {
   listings: Listing[]
+  jurisdiction: Jurisdiction
 }
 
 export default function Home(props: IndexProps) {
@@ -32,6 +36,10 @@ export default function Home(props: IndexProps) {
       {t("welcome.title")} <em>{t("region.name")}</em>
     </>
   )
+
+  const listingOpen = (listing: Listing) => {
+    return moment() < moment(listing.applicationDueDate)
+  }
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
@@ -59,17 +67,31 @@ export default function Home(props: IndexProps) {
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings"
-        listings={props.listings}
+        allApplicationsClosed={
+          !props.listings.some(listingOpen) && !props.listings.some(openDateState)
+        }
       />
       <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>
-          <>
-            <p>{t("welcome.seeMoreOpportunities")}</p>
-            <LinkButton href="/additional-resources">
+        {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+          <ActionBlock
+            header={t("welcome.signUp")}
+            icon={<Icon size="3xl" symbol="mail" />}
+            actions={[
+              <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
+                {t("welcome.signUpToday")}
+              </LinkButton>,
+            ]}
+          />
+        )}
+        <ActionBlock
+          header={t("welcome.seeMoreOpportunities")}
+          icon={<Icon size="3xl" symbol="building" />}
+          actions={[
+            <LinkButton href="/additional-resources" key={"additional-resources"}>
               {t("welcome.viewAdditionalHousing")}
-            </LinkButton>
-          </>
-        </MarkdownSection>
+            </LinkButton>,
+          ]}
+        />
       </div>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
@@ -80,8 +102,9 @@ export default function Home(props: IndexProps) {
 
 export async function getStaticProps() {
   let listings = []
+  let thisJurisdiction = null
   try {
-    const response = await axios.get(process.env.listingServiceUrl, {
+    const listingsResponse = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
         limit: "all",
@@ -96,11 +119,18 @@ export async function getStaticProps() {
         return qs.stringify(params)
       },
     })
-
-    listings = response?.data?.items ? response.data.items : []
+    const jurisdictionName = process.env.jurisdictionName
+    const jurisdiction = await axios.get(
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+    )
+    thisJurisdiction = jurisdiction?.data ? jurisdiction.data : null
+    listings = listingsResponse?.data?.items ? listingsResponse.data.items : []
   } catch (error) {
     console.error(error)
   }
 
-  return { props: { listings }, revalidate: process.env.cacheRevalidate }
+  return {
+    props: { listings, jurisdiction: thisJurisdiction },
+    revalidate: process.env.cacheRevalidate,
+  }
 }
