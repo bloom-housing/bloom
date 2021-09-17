@@ -70,11 +70,11 @@ const BuildingDetails = ({
 
   const displayMapPreview = () => {
     return (
-      buildingAddress.city &&
-      buildingAddress.state &&
-      buildingAddress.street &&
-      buildingAddress.zipCode &&
-      buildingAddress.zipCode.length >= 5
+      buildingAddress?.city &&
+      buildingAddress?.state &&
+      buildingAddress?.street &&
+      buildingAddress?.zipCode &&
+      buildingAddress?.zipCode.length >= 5
     )
   }
 
@@ -90,10 +90,10 @@ const BuildingDetails = ({
 
   const getNewLatLong = () => {
     if (
-      buildingAddress.city &&
-      buildingAddress.state &&
-      buildingAddress.street &&
-      buildingAddress.zipCode &&
+      buildingAddress?.city &&
+      buildingAddress?.state &&
+      buildingAddress?.street &&
+      buildingAddress?.zipCode &&
       geocodingClient
     ) {
       geocodingClient
@@ -123,7 +123,12 @@ const BuildingDetails = ({
       clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
+  }, [
+    buildingAddress?.city,
+    buildingAddress?.state,
+    buildingAddress?.street,
+    buildingAddress?.zipCode,
+  ])
 
   useEffect(() => {
     if (mapPinPosition === "automatic") {

@@ -122,21 +122,11 @@ interface SubmitData {
   data: FormListing
 }
 
-const defaultAddress = {
-  id: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
-  city: "",
-  state: "",
-  street: "",
-  zipCode: "",
-}
-
 const defaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationAddress: defaultAddress,
+  applicationAddress: null,
   applicationDueDate: new Date(),
   applicationDueTime: null,
   applicationFee: null,
@@ -161,11 +151,11 @@ const defaults: FormListing = {
   displayWaitlistSize: false,
   events: [],
   image: { fileId: "", label: "" },
-  leasingAgentAddress: defaultAddress,
+  leasingAgentAddress: null,
   leasingAgentEmail: null,
-  leasingAgentName: "",
+  leasingAgentName: null,
   leasingAgentOfficeHours: "",
-  leasingAgentPhone: "",
+  leasingAgentPhone: null,
   leasingAgentTitle: "",
   name: null,
   postMarkDate: null,
@@ -186,9 +176,9 @@ const defaults: FormListing = {
   units: [],
   accessibility: "",
   amenities: "",
-  buildingAddress: defaultAddress,
+  buildingAddress: null,
   buildingTotalUnits: 0,
-  developer: "",
+  developer: null,
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: "",
@@ -200,7 +190,7 @@ const defaults: FormListing = {
   yearBuilt: null,
   urlSlug: undefined,
   showWaitlist: false,
-  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+  reviewOrderType: null,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -331,10 +321,6 @@ const formatFormData = (
 
   if (data.leasingAgentEmail === "") {
     delete data.leasingAgentEmail
-  }
-
-  if (data.name === "") {
-    delete data.name
   }
 
   return {
@@ -499,6 +485,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           latLong,
           customMapPositionChosen
         )
+        //
         console.log({ formattedData })
         const result = editMode
           ? await listingsService.update({

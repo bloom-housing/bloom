@@ -19,6 +19,7 @@ import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -324,6 +325,7 @@ class Listing extends BaseEntity {
 
   @Column({ type: "text" })
   @Expose()
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   name: string
 

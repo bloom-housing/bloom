@@ -9,6 +9,7 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
+  IsNotEmpty,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitUpdateDto } from "../../units/dto/unit.dto"
@@ -18,6 +19,7 @@ import { OmitType } from "@nestjs/swagger"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
+  "assets",
   "buildingAddress",
   "depositMin",
   "depositMax",
@@ -26,10 +28,17 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
+  "name",
   "rentalAssistance",
   "reviewOrderType",
   "units",
 ] as const) {
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => AssetUpdateDto)
+  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
+  assets: AssetUpdateDto[]
+
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -38,16 +47,19 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   depositMin: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   depositMax: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   developer: string
 
@@ -58,21 +70,31 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   image: AssetUpdateDto
 
   @Expose()
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentEmail: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentName: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentPhone: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  name: string
+
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(4096, { groups: [ValidationsGroupsEnum.default] })
   rentalAssistance: string
 

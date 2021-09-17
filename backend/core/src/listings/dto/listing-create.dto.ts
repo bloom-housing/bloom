@@ -51,6 +51,9 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "applicationDropOffAddress",
+  "applicationMailingAddress",
+  "applicationAddress",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -80,13 +83,13 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  applicationDropOffAddress: AddressCreateDto | null
+  applicationDropOffAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  applicationMailingAddress: AddressCreateDto | null
+  applicationMailingAddress?: AddressCreateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -102,7 +105,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   leasingAgentAddress?: AddressCreateDto | null
 
@@ -131,10 +133,10 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   amenities?: string | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
-  buildingAddress: AddressCreateDto
+  buildingAddress?: AddressCreateDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
