@@ -426,10 +426,12 @@ export const ListingView = (props: ListingProps) => {
               />
             </ListSection>
 
-            <ListSection
-              title={t("listings.sections.rentalAssistanceTitle")}
-              subtitle={listing.rentalAssistance || t("listings.sections.rentalAssistanceSubtitle")}
-            />
+            {listing.rentalAssistance && (
+              <ListSection
+                title={t("listings.sections.rentalAssistanceTitle")}
+                subtitle={listing.rentalAssistance}
+              />
+            )}
 
             {preferencesSection}
 

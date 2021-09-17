@@ -46,7 +46,11 @@ const DetailListingPhoto = () => {
     >
       <GridSection>
         <GridCell span={2}>
-          <MinimalTable headers={photoTableHeaders} data={photoTableData}></MinimalTable>
+          {photoTableData ? (
+            <MinimalTable headers={photoTableHeaders} data={photoTableData} />
+          ) : (
+            t("t.none")
+          )}
         </GridCell>
       </GridSection>
     </GridSection>

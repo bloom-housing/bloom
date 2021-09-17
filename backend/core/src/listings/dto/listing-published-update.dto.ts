@@ -26,7 +26,6 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
-  "name",
   "rentalAssistance",
   "reviewOrderType",
   "units",
@@ -71,11 +70,6 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentPhone: string
-
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  name: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

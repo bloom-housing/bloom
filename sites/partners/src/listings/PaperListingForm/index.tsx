@@ -139,7 +139,7 @@ const defaults: FormListing = {
   applicationAddress: defaultAddress,
   applicationDueDate: new Date(),
   applicationDueTime: null,
-  applicationFee: "0",
+  applicationFee: null,
   applicationMethods: [],
   applicationOpenDate: new Date(moment().subtract(10).format()),
   applicationOrganization: "",
@@ -155,24 +155,25 @@ const defaults: FormListing = {
   creditHistory: "",
   criminalBackground: "",
   CSVFormattingType: CSVFormattingType.basic,
-  depositMax: "",
-  depositMin: "",
+  depositMax: "0",
+  depositMin: "0",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
   image: { fileId: "", label: "" },
   leasingAgentAddress: defaultAddress,
-  leasingAgentEmail: "test@email.com",
+  leasingAgentEmail: null,
   leasingAgentName: "",
   leasingAgentOfficeHours: "",
   leasingAgentPhone: "",
   leasingAgentTitle: "",
-  name: "",
+  name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
-  rentalAssistance: "",
+  rentalAssistance:
+    "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
   rentalHistory: "",
   requiredDocuments: "",
   status: ListingStatus.pending,
@@ -196,7 +197,7 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: 2021,
+  yearBuilt: null,
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: ListingReviewOrder.firstComeFirstServe,
@@ -326,6 +327,14 @@ const formatFormData = (
         ...event,
       })
     })
+  }
+
+  if (data.leasingAgentEmail === "") {
+    delete data.leasingAgentEmail
+  }
+
+  if (data.name === "") {
+    delete data.name
   }
 
   return {
@@ -490,6 +499,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           latLong,
           customMapPositionChosen
         )
+        console.log({ formattedData })
         const result = editMode
           ? await listingsService.update({
               listingId: listing.id,

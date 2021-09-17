@@ -30,10 +30,8 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "depositMax",
   "developer",
   "image",
-  "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
-  "name",
   "rentalAssistance",
   "reviewOrderType",
   "units",
@@ -78,11 +76,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentPhone: string
-
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
-  name: string
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

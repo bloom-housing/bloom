@@ -41,7 +41,6 @@ const ListingIntro = () => {
               controlClassName="control"
               error={errors?.jurisdiction?.id !== undefined}
               errorMessage={t("errors.requiredFieldError")}
-              validation={{ required: true }}
               options={[
                 "",
                 ...profile.jurisdictions.map((jurisdiction) => ({
@@ -73,7 +72,6 @@ const ListingIntro = () => {
             register={register}
             error={errors?.name !== undefined}
             errorMessage={t("errors.requiredFieldError")}
-            validation={{ required: true }}
           />
         </GridCell>
         <Field
