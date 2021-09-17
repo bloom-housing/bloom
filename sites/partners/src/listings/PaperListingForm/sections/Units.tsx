@@ -50,7 +50,6 @@ const FormUnits = ({
   const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
   const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
   const [showUnitsSummary, setShowUnitsSummary] = useState<boolean>(disableUnitsAccordion)
-  
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
