@@ -79,6 +79,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
   - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
     - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
+  - Removed business logic from AdditionalFees component ([#1844](https://github.com/bloom-housing/bloom/pull/1844)) (Emily Jablonski)
+    - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
 
 ### Backend
 
