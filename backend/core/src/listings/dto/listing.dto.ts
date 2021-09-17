@@ -321,4 +321,3 @@ export class ListingDto extends OmitType(Listing, [
   )
   countyCode?: string
 }
-
