@@ -500,6 +500,13 @@
       "senior": "長者",
       "veteran": "退伍軍人"
     },
+    "reservedCommunityTypes": {
+      "senior": "老年人",
+      "senior55": "55歲以上的老年人",
+      "senior62": "62歲以上的老年人",
+      "partiallySenior": "部分老年人",
+      "specialNeeds": "特殊需求"
+    },
     "reservedUnits": "保留單位",
     "reservedUnitsDescription": "您或您的家庭成員必須符合以下其中一項條件，才符合這些單位的申請資格：",
     "reservedUnitsForWhoAre": "保留給是 %{reservedType} 的 %{communityType}",

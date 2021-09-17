@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { Expose } from "class-transformer"
-import { IsEnum } from "class-validator"
+import { Expose, Transform, Type } from "class-transformer"
+import { IsEnum, IsOptional, IsBoolean } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
 // Add other comparisons as needed (>, <, etc)
@@ -21,4 +21,20 @@ export class BaseFilter {
   })
   @IsEnum(Compare, { groups: [ValidationsGroupsEnum.default] })
   $comparison: Compare
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @Transform(
+    (value?: string) => {
+      return value === "true"
+    },
+    { toClassOnly: true }
+  )
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  $include_nulls?: boolean
 }

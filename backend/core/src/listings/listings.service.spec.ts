@@ -8,6 +8,7 @@ import { Compare } from "../shared/dto/filter.dto"
 import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
+import { AvailabilityFilterEnum } from "./types/listing-filter-keys-enum"
 import { ListingStatus } from "./types/listing-status-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -160,7 +161,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(listings.status as text)) = LOWER(:status_0)",
+        "(LOWER(CAST(listings.status as text)) = LOWER(:status_0))",
         {
           status_0: expectedStatus,
         }
@@ -188,9 +189,59 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(buildingAddress.zipCode as text)) IN (:...zipcode_0)",
+        "(LOWER(CAST(buildingAddress.zipCode as text)) IN (:...zipcode_0))",
         {
           zipcode_0: expectedZipCodeArray,
+        }
+      )
+    })
+
+    it("should include listings with missing data if $include_nulls is true", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const queryParams: ListingsQueryParams = {
+        filter: [
+          {
+            $comparison: Compare["="],
+            name: "minRent",
+            $include_nulls: true,
+          },
+        ],
+      }
+
+      const listings = await service.list(queryParams)
+
+      expect(listings.items).toEqual(mockListings)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
+        "(LOWER(CAST(listings.name as text)) = LOWER(:name_0) OR listings.name IS NULL)",
+        {
+          name_0: "minRent",
+        }
+      )
+    })
+
+    it("should include listings with missing data if $include_nulls is true for custom filters", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const queryParams: ListingsQueryParams = {
+        filter: [
+          {
+            $comparison: Compare["NA"],
+            availability: AvailabilityFilterEnum.waitlist,
+            $include_nulls: true,
+          },
+        ],
+      }
+
+      const listings = await service.list(queryParams)
+
+      expect(listings.items).toEqual(mockListings)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
+        "(listings.is_waitlist_open = :availability OR listings.is_waitlist_open is NULL)",
+        {
+          availability: true,
         }
       )
     })

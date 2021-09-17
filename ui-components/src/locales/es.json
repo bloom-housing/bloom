@@ -889,6 +889,7 @@
             "senior": "Personas mayores",
             "senior55": "Mayores de 55 años",
             "senior62": "Mayores 62+",
+            "partiallySenior": "Parcialmente Mayores",
             "specialNeeds": "Necesidades especiales"
         },
         "reservedFor": "Reservado para% {type}",

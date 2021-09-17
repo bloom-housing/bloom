@@ -889,6 +889,7 @@
             "senior": "সিনিয়র",
             "senior55": "বয়স্ক 55+",
             "senior62": "সিনিয়র 62+",
+            "partiallySenior": "আংশিক সিনিয়র",
             "specialNeeds": "বিশেষ প্রয়োজন"
         },
         "reservedFor": "%{Type} এর জন্য সংরক্ষিত",

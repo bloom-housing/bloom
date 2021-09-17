@@ -34,13 +34,13 @@ class UnitsSummary {
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   monthlyRentMin?: number | null
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   monthlyRentMax?: number | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })

@@ -901,6 +901,7 @@
       "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
+      "partiallySenior": "Partially Seniors",
       "specialNeeds": "Special Needs"
     },
     "reservedFor": "Reserved for %{type}",
