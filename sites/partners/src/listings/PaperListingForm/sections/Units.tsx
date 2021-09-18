@@ -30,7 +30,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue } = formMethods
+  const { register, setValue, errors } = formMethods
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -154,12 +154,17 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
           <Button
             type="button"
             size={AppearanceSizeType.normal}
+            styleType={errors?.units ? AppearanceStyleType.alert : null}
             onClick={() => editUnit(units.length + 1)}
           >
             {t("listings.unit.add")}
           </Button>
         </div>
       </GridSection>
+
+      {errors?.units && (
+        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+      )}
 
       <Drawer
         open={!!unitDrawerId}

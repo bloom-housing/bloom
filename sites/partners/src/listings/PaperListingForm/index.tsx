@@ -452,7 +452,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues } = formMethods
+  const { handleSubmit, getValues, setError, clearErrors } = formMethods
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
@@ -466,6 +466,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const onSubmit = useCallback(
     async (data: FormListing, status: ListingStatus) => {
       try {
+        clearErrors()
         data = {
           ...data,
           status,
@@ -515,9 +516,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           await router.push(`/listings/${result.id}`)
         }
       } catch (err) {
-        console.log(err)
+        clearErrors()
         setLoading(false)
         setAlert("api")
+        const { data } = err.response || {}
+        data.message.forEach((errorMessage) => {
+          const fieldName = errorMessage.split(" ")[0]
+          setError(fieldName, errorMessage)
+        })
       }
     },
     [

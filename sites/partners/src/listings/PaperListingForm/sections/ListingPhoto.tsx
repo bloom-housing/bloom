@@ -19,7 +19,7 @@ const ListingPhoto = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
+  const { register, setValue, watch, errors } = formMethods
 
   const listingFormPhoto = watch("image")
 
@@ -153,6 +153,7 @@ const ListingPhoto = () => {
             ) : (
               <Button
                 type="button"
+                styleType={errors?.assets ? AppearanceStyleType.alert : null}
                 onClick={() => {
                   setDrawerState(true)
                 }}
@@ -163,6 +164,9 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
+      {errors?.assets && (
+        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+      )}
 
       <Drawer
         open={drawerState}

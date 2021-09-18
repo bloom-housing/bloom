@@ -47,7 +47,7 @@ const BuildingDetails = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, getValues } = formMethods
+  const { register, control, getValues, errors } = formMethods
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
@@ -152,6 +152,8 @@ const BuildingDetails = ({
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
+            error={errors?.buildingAddress !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
             placeholder={t("application.contact.streetAddress")}
             register={register}
           />
@@ -170,14 +172,21 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
+            error={errors?.buildingAddress !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
             placeholder={t("application.contact.city")}
             register={register}
           />
         </GridCell>
-        <ViewItem label={t("application.contact.state")} className="mb-0">
+        <ViewItem
+          label={t("application.contact.state")}
+          className={"mb-0"}
+          error={errors?.buildingAddress !== undefined}
+        >
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
+            error={errors?.buildingAddress !== undefined}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
@@ -190,6 +199,7 @@ const BuildingDetails = ({
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
+          error={errors?.buildingAddress !== undefined}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
           errorMessage={t("errors.zipCodeError")}

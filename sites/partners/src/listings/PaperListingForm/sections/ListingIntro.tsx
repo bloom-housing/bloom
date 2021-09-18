@@ -17,6 +17,7 @@ const ListingIntro = () => {
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { errors, register } = formMethods
+  console.log(errors)
 
   const JurisdictionWrapper = useCallback(() => {
     if (profile.jurisdictions.length === 1) {
@@ -31,7 +32,7 @@ const ListingIntro = () => {
     } else {
       return (
         <GridCell span={2}>
-          <ViewItem label={t("t.jurisdiction")}>
+          <ViewItem label={t("t.jurisdiction")} error={errors?.jurisdiction !== undefined}>
             <Select
               id={"jurisdiction.id"}
               name={"jurisdiction.id"}
@@ -39,7 +40,7 @@ const ListingIntro = () => {
               labelClassName="sr-only"
               register={register}
               controlClassName="control"
-              error={errors?.jurisdiction?.id !== undefined}
+              error={errors?.jurisdiction !== undefined}
               errorMessage={t("errors.requiredFieldError")}
               options={[
                 "",
@@ -79,6 +80,8 @@ const ListingIntro = () => {
           name="developer"
           label={t("listings.developer")}
           placeholder={t("listings.developer")}
+          error={errors?.developer !== undefined}
+          errorMessage={t("errors.requiredFieldError")}
           register={register}
         />
       </GridSection>
