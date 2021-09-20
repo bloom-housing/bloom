@@ -1,6 +1,5 @@
 import "@bloom-housing/ui-components/src/global/index.scss"
 import "../styles/overrides.scss"
-import "./eligibility/age.scss"
 import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import {

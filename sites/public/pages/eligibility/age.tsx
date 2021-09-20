@@ -13,6 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
+import styles from "./EligibilityAge.module.scss"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
@@ -75,7 +76,7 @@ const EligibilityAge = () => {
               {t("eligibility.age.description")}
             </p>
             <Field
-              className="age-field"
+              className={styles.age_field}
               id="age"
               name="age"
               label={t("eligibility.age.label")}
