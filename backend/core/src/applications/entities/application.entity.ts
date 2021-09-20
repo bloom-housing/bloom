@@ -58,7 +58,7 @@ export class Application extends AbstractEntity {
   appUrl?: string | null
 
   @ManyToOne(() => User, { nullable: true })
-  user: User | null
+  user?: User | null
 
   @RelationId((application: Application) => application.user)
   @Expose()
