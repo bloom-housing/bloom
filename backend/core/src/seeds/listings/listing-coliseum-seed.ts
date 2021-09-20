@@ -901,6 +901,10 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  image: {
+    label: "test_label",
+    fileId: "fileid",
+  },
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:
@@ -931,7 +935,7 @@ const coliseumListing: ListingSeedType = {
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
-  rentalAssistance: null,
+  rentalAssistance: "",
   rentalHistory: "Two years' landlord history or homeless verification",
   requiredDocuments:
     "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",
