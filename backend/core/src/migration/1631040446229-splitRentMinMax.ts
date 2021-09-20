@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class splitMonthlyRentMinMax1629923421444 implements MigrationInterface {
-  name = "splitMonthlyRentMinMax1629923421444"
+export class splitRentMinMax1631040446229 implements MigrationInterface {
+  name = "splitRentMinMax1631040446229"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "units_summary" DROP COLUMN "monthly_rent"`)

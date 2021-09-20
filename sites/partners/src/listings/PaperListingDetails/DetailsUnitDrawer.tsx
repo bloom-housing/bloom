@@ -75,11 +75,21 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
               label={t("listings.unit.amiChart")}
               children={unit?.amiChart?.id ? AmiChartWrapper(unit.amiChart.id) : t("t.n/a")}
             />
-
             <ViewItem
               label={t("listings.unit.amiPercentage")}
               children={unit?.amiPercentage || t("t.n/a")}
             />
+          </GridSection>
+          <GridSection columns={1}>
+            {unit?.amiChartOverride?.items.map((override, index) => {
+              return (
+                <ViewItem
+                  key={index}
+                  label={t("listings.amiOverrideTitle", { householdSize: override.householdSize })}
+                  children={`$${override.income}`}
+                />
+              )
+            })}
           </GridSection>
           <GridSection columns={4} className="pt-6">
             {rentType === "fixed" && (

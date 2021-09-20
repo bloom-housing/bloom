@@ -146,10 +146,10 @@
         "optionsLabel": "Đánh dấu tất cả các lựa chọn phù hợp:",
         "options": {
           "studio": "Một phòng kiểu studio",
-          "oneBedroom": "1 Phòng ngủ",
-          "twoBedroom": "2 Phòng ngủ",
-          "threeBedroom": "3 Phòng ngủ",
-          "moreThanThreeBedroom": "3 Phòng ngủ trở lên"
+          "oneBdrm": "1 Phòng ngủ",
+          "twoBdrm": "2 Phòng ngủ",
+          "threeBdrm": "3 Phòng ngủ",
+          "fourBdrm": "3 Phòng ngủ trở lên"
         }
       },
       "member": {

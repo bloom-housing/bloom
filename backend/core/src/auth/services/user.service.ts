@@ -11,8 +11,8 @@ import { FindConditions, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
+import crypto from "crypto"
 import { User } from "../entities/user.entity"
-import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
 import { assignDefined } from "../../shared/assign-defined"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { USER_ERRORS } from "../user-errors"
@@ -25,12 +25,20 @@ import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { EmailDto } from "../dto/email.dto"
+import { UserCreateDto } from "../dto/user-create.dto"
+import { UserUpdateDto } from "../dto/user-update.dto"
+import { UserListQueryParams } from "../dto/user-list-query-params"
+import { UserInviteDto } from "../dto/user-invite.dto"
+import { ConfigService } from "@nestjs/config"
+import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly repo: Repository<User>,
     private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
@@ -138,6 +146,10 @@ export class UserService {
     user.confirmedAt = new Date()
     user.confirmationToken = null
 
+    if (dto.password) {
+      user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+    }
+
     try {
       await this.repo.save(user)
       return this.authService.generateAccessToken(user)
@@ -161,12 +173,17 @@ export class UserService {
       user.confirmationToken = encode(payload, process.env.APP_SECRET)
       try {
         await this.repo.save(user)
-        await this.emailService.welcome(user, dto.appUrl)
+        const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, user)
+        await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       }
     }
+  }
+
+  private static getConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
   }
 
   public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
@@ -189,7 +206,7 @@ export class UserService {
     user.language = dto.language
     // if coming from partners dto.jurisdictions can be set
     user.jurisdictions = dto.jurisdictions
-      ? dto.jurisdictions
+      ? (dto.jurisdictions as JurisdictionDto[])
       : [await this.jurisdictionResolverService.getJurisdiction()]
     try {
       user.passwordHash = await this.passwordService.passwordToHash(password)
@@ -203,12 +220,13 @@ export class UserService {
       user = await this.repo.save(user)
 
       if (sendWelcomeEmail) {
-        await this.emailService.welcome(user, dto.appUrl)
+        const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, user)
+        await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
       }
 
       return user
     } catch (err) {
-      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
   }
 
@@ -249,5 +267,32 @@ export class UserService {
     qb.leftJoinAndSelect("user.roles", "user_roles")
 
     return qb
+  }
+
+  async invite(dto: UserInviteDto, authContext: AuthContext) {
+    const password = crypto.randomBytes(8).toString("hex")
+    let user = await this.createUser(
+      {
+        ...dto,
+        password,
+        passwordConfirmation: password,
+        emailConfirmation: dto.email,
+      },
+      authContext,
+      false
+    )
+
+    user = await this.repo.save({
+      ...user,
+      roles: dto.roles,
+      leasingAgentInListings: dto.leasingAgentInListings,
+    })
+
+    await this.emailService.invite(
+      user,
+      this.configService.get("PARTNERS_PORTAL_URL"),
+      UserService.getConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+    )
+    return user
   }
 }

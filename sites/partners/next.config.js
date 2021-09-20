@@ -1,13 +1,13 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const withTM = require("next-transpile-modules")(["@bloom-housing"])
-const withSass = require("@zeit/next-sass")
-const withCSS = require("@zeit/next-css")
+const withTM = require("next-transpile-modules")([
+  "@bloom-housing/ui-components",
+  "@bloom-housing/backend-core",
+])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 })
-const withMDX = require("@next/mdx")()
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
@@ -31,32 +31,33 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
-module.exports = withCSS(
-  withBundleAnalyzer(
-    withMDX(
-      withSass(
-        withTM({
-          target: "serverless",
-          env: {
-            backendApiBase: BACKEND_API_BASE,
-            listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-            idleTimeout: process.env.IDLE_TIMEOUT,
-            showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
-            publicBaseUrl: process.env.PUBLIC_BASE_URL,
-            cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-            cloudinaryKey: process.env.CLOUDINARY_KEY,
-            cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
-            mapBoxToken: MAPBOX_TOKEN,
-          },
-          i18n: {
-            locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
-            defaultLocale: "en",
-          },
-          sassLoaderOptions: {
-            additionalData: tailwindVars,
-          },
-        })
-      )
-    )
-  )
+module.exports = withBundleAnalyzer(
+  withTM({
+    target: "serverless",
+    env: {
+      backendApiBase: BACKEND_API_BASE,
+      listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
+      idleTimeout: process.env.IDLE_TIMEOUT,
+      showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
+      publicBaseUrl: process.env.PUBLIC_BASE_URL,
+      cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      cloudinaryKey: process.env.CLOUDINARY_KEY,
+      cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,
+      mapBoxToken: MAPBOX_TOKEN,
+    },
+    i18n: {
+      locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
+      defaultLocale: "en",
+    },
+    sassOptions: {
+      additionalData: tailwindVars,
+    },
+    webpack: (config) => {
+      config.module.rules.push({
+        test: /\.md$/,
+        type: "asset/source",
+      })
+      return config
+    },
+  })
 )

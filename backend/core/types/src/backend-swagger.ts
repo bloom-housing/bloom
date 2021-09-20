@@ -875,6 +875,27 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Invite user
+   */
+  invite(
+    params: {
+      /** requestBody */
+      body?: UserInvite
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserBasic> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/invite"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class JurisdictionsService {
@@ -972,6 +993,28 @@ export class JurisdictionsService {
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       let data = null
 
@@ -2451,6 +2494,23 @@ export interface HouseholdMember {
   workInRegion?: string
 }
 
+export interface UnitType {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
 export interface ApplicationPreferenceOption {
   /**  */
   key: string
@@ -2514,6 +2574,9 @@ export interface Application {
   householdMembers: HouseholdMember[]
 
   /**  */
+  preferredUnit: UnitType[]
+
+  /**  */
   id: string
 
   /**  */
@@ -2554,9 +2617,6 @@ export interface Application {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3094,6 +3154,9 @@ export interface ApplicationCreate {
   householdMembers: HouseholdMemberCreate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3122,9 +3185,6 @@ export interface ApplicationCreate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3420,6 +3480,9 @@ export interface ApplicationUpdate {
   householdMembers: HouseholdMemberUpdate[]
 
   /**  */
+  preferredUnit: Id[]
+
+  /**  */
   appUrl?: string
 
   /**  */
@@ -3448,9 +3511,6 @@ export interface ApplicationUpdate {
 
   /**  */
   income?: string
-
-  /**  */
-  preferredUnit: string[]
 
   /**  */
   preferences: ApplicationPreference[]
@@ -3524,6 +3584,9 @@ export interface Jurisdiction {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface User {
@@ -3584,7 +3647,7 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions?: Jurisdiction[]
+  jurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -3614,6 +3677,9 @@ export interface UserBasic {
 
   /**  */
   jurisdictions: Jurisdiction[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
 
   /**  */
   id: string
@@ -3659,6 +3725,9 @@ export interface Status {
 export interface Confirm {
   /**  */
   token: string
+
+  /**  */
+  password?: string
 }
 
 export interface ForgotPassword {
@@ -3734,9 +3803,52 @@ export interface PaginatedUserList {
   meta: PaginationMeta
 }
 
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface JurisdictionUpdate {
@@ -3751,11 +3863,17 @@ export interface JurisdictionUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   name?: string
@@ -3786,23 +3904,6 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
-}
-
-export interface UnitType {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4161,29 +4262,12 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitType {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
 export interface UnitsSummary {
   /**  */
-  id: string
+  unitType: UnitType
 
   /**  */
-  unitType: UnitType
+  id: string
 
   /**  */
   monthlyRentMin?: number
@@ -4650,9 +4734,6 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRentMin?: number
 
   /**  */
@@ -4696,6 +4777,9 @@ export interface UnitsSummaryCreate {
 
   /**  */
   totalAvailable?: number
+
+  /**  */
+  unitType: UnitType
 }
 
 export interface ListingCreate {
@@ -5133,9 +5217,6 @@ export interface UnitsSummaryUpdate {
   id?: string
 
   /**  */
-  unitType: UnitType
-
-  /**  */
   monthlyRentMin?: number
 
   /**  */
@@ -5179,6 +5260,9 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   totalAvailable?: number
+
+  /**  */
+  unitType: UnitType
 }
 
 export interface ListingUpdate {
@@ -5768,7 +5852,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export type CombinedRolesTypes = UserRoles
+export type CombinedRolesTypes = UserRolesCreate
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

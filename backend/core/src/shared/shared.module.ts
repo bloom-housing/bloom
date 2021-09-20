@@ -20,6 +20,7 @@ import Joi from "joi"
         APP_SECRET: Joi.string().required().min(16),
         CLOUDINARY_SECRET: Joi.string().required(),
         CLOUDINARY_KEY: Joi.string().required(),
+        PARTNERS_PORTAL_URL: Joi.string().required(),
       }),
     }),
   ],

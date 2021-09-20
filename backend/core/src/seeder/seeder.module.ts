@@ -53,6 +53,7 @@ import { ListingDefaultSummaryWith30And60AmiPercentageSeed } from "../seeds/list
 import { ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed } from "../seeds/listings/listing-default-summary-without-and-listing-with-20-ami-percentage-seed"
 import { ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed } from "../seeds/listings/listing-default-summary-with-30-listing-with-10-ami-percentage-seed"
 import { ListingDefaultSummaryWith10ListingWith30AmiPercentageSeed } from "../seeds/listings/listing-default-summary-with-10-listing-with-30-ami-percentage-seed"
+import { UnitTypesModule } from "../unit-types/unit-types.module"
 
 @Module({})
 export class SeederModule {
@@ -93,6 +94,7 @@ export class SeederModule {
         AuthModule,
         ListingsModule,
         AmiChartsModule,
+        UnitTypesModule,
       ],
       providers: [
         ListingDefaultSeed,

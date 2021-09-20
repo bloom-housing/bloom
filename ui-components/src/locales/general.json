@@ -301,10 +301,10 @@
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
-          "oneBedroom": "1 Bedroom",
-          "twoBedroom": "2 Bedroom",
-          "threeBedroom": "3 Bedroom",
-          "moreThanThreeBedroom": "3+ Bedroom"
+          "oneBdrm": "1 Bedroom",
+          "twoBdrm": "2 Bedroom",
+          "threeBdrm": "3 Bedroom",
+          "fourBdrm": "3+ Bedroom"
         }
       },
       "member": {
@@ -759,6 +759,7 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
+    "amiOverrideTitle": "Override for household size of %{householdSize}",
     "annualIncome": "%{income} per year",
     "annualIncomeRange": "%{from} to %{to} per year",
     "applicationTitle": "Application Data",
@@ -859,6 +860,7 @@
     "mapPinPosition": "Map Pin Position",
     "mapPreview": "Map Preview",
     "mapPreviewNoAddress": "Enter an address to preview the map",
+    "maxAnnualIncome": "Maximum Annual Income",
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
     "monthlyIncome": "%{income} per month",
@@ -1336,10 +1338,12 @@
     "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in",
     "seeMoreOpportunities": "See more rental and ownership housing opportunities",
-    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources",
     "checkEligibility": "Do I Qualify?",
     "checkEligibilityDescription": "Check in Minutes if You Qualify!",
-    "subTitle": "Click the button below to find rental housing based on your income and household needs"
+    "subTitle": "Click the button below to find rental housing based on your income and household needs",
+    "signUp": "Get emailed whenever a new listing is posted",
+    "signUpToday": "Sign up today",
+    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
   },
   "whatToExpect": {
     "label": "What to Expect",

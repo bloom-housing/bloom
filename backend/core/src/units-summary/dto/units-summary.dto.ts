@@ -1,14 +1,19 @@
 import { ApiHideProperty, OmitType } from "@nestjs/swagger"
 import { Exclude, Expose, Type } from "class-transformer"
-import { IsOptional, IsUUID } from "class-validator"
-import { IdDto } from "../../shared/dto/id.dto"
+import { IsOptional, IsUUID, ValidateNested } from "class-validator"
+import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitsSummary } from "../entities/units-summary.entity"
 
-export class UnitsSummaryDto extends OmitType(UnitsSummary, ["listing"] as const) {
+export class UnitsSummaryDto extends OmitType(UnitsSummary, ["listing", "unitType"] as const) {
   @Exclude()
   @ApiHideProperty()
   listing
+
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UnitTypeDto)
+  unitType: UnitTypeDto
 }
 
 export class UnitsSummaryCreateDto extends OmitType(UnitsSummaryDto, ["id"] as const) {}

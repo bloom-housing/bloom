@@ -5,7 +5,7 @@ orbs:
 executors:
   standard-node:
     docker:
-      - image: "cimg/node:12.18.4"
+      - image: "cimg/node:14.17.6"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -15,7 +15,7 @@ executors:
           POSTGRES_DB: bloom
   cypress-node:
     docker:
-      - image: "cypress/base:12.18.2"
+      - image: "cypress/base:14.17.0"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -37,9 +37,10 @@ executors:
       REDIS_USE_TLS: "0"
       CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
+      PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
-      - image: "cimg/node:12.18.4-browsers"
+      - image: "cimg/node:14.17.6-browsers"
 
 jobs:
   setup:
@@ -100,6 +101,7 @@ jobs:
             REDIS_USE_TLS: "0"
             CLOUDINARY_SECRET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
+            PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
     steps:

@@ -107,7 +107,7 @@ describe("Listings", () => {
       filter: [
         {
           $comparison: "IN",
-          zipcode: "48211,48201",
+          zipcode: "94621,94404",
         },
       ],
     }
