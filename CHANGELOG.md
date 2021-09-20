@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
   - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
+  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
 
 ## Frontend
 
@@ -25,6 +26,7 @@ All notable changes to this project will be documented in this file. The format 
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
+  - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
 
 - Fixed:
 
@@ -38,6 +40,7 @@ All notable changes to this project will be documented in this file. The format 
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
+  - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
 
 - Changed:
 
@@ -93,6 +96,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds UnitAmiChartOverride entity and implements ami chart overriding at Unit level [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds `authz.e2e-spec.ts` test cover for preventing user from voluntarily changing his associated `roles` object [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
+  - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
 
 - Changed:
 
@@ -122,7 +126,12 @@ All notable changes to this project will be documented in this file. The format 
 ### General
 
 - Updated:
+
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
+
+- Fixed:
+
+  - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
 
 ## v1.0.5 08/03/2021
 

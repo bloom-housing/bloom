@@ -208,6 +208,19 @@ export function useAmiChartList() {
   }
 }
 
+export function useSingleAmiChart(amiChartId: string) {
+  const { amiChartsService } = useContext(AuthContext)
+  const fetcher = () => amiChartsService.retrieve({ amiChartId })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useUnitPriorityList() {
   const { unitPriorityService } = useContext(AuthContext)
   const fetcher = () => unitPriorityService.list()
