@@ -62,6 +62,7 @@ export class ListingsService {
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
+      .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
       .groupBy("listings.id")

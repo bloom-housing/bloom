@@ -2,7 +2,7 @@ name: Lint
 
 on:
   # Trigger the workflow on push or pull request,
-  # but only for the main branch
+  # but only for the dev branch
   push:
     branches:
       - dev
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
 
       # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies

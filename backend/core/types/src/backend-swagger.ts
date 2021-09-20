@@ -3562,6 +3562,9 @@ export interface Jurisdiction {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface User {
@@ -3622,7 +3625,7 @@ export interface UserCreate {
   appUrl?: string
 
   /**  */
-  jurisdictions?: Jurisdiction[]
+  jurisdictions?: Id[]
 
   /**  */
   confirmedAt?: Date
@@ -3791,7 +3794,10 @@ export interface UserInvite {
   language?: Language
 
   /**  */
-  roles?: CombinedRolesTypes
+  roles: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
 
   /**  */
   leasingAgentInListings?: Id[]
@@ -3813,14 +3819,14 @@ export interface UserInvite {
 
   /**  */
   dob: Date
-
-  /**  */
-  jurisdictions: Jurisdiction[]
 }
 
 export interface JurisdictionCreate {
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface JurisdictionUpdate {
@@ -3835,6 +3841,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   name: string
+
+  /**  */
+  notificationsSignUpURL?: string
 }
 
 export interface ListingFilterParams {
@@ -3852,6 +3861,9 @@ export interface ListingFilterParams {
 
   /**  */
   bedrooms?: number
+
+  /**  */
+  zipcode?: string
 
   /**  */
   leasingAgents?: string
@@ -4221,7 +4233,10 @@ export interface UnitsSummary {
   id: string
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
@@ -4658,7 +4673,10 @@ export interface UnitCreate {
 
 export interface UnitsSummaryCreate {
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
@@ -5117,7 +5135,10 @@ export interface UnitsSummaryUpdate {
   id: string
 
   /**  */
-  monthlyRent?: number
+  monthlyRentMin?: number
+
+  /**  */
+  monthlyRentMax?: number
 
   /**  */
   monthlyRentAsPercentOfIncome?: string
