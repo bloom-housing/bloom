@@ -6,7 +6,7 @@ const AdditionalFees = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors } = formMethods
+  const { register, errors, clearErrors } = formMethods
   return (
     <div>
       <GridSection
@@ -35,6 +35,9 @@ const AdditionalFees = () => {
             placeholder={"0.00"}
             error={errors?.depositMin !== undefined}
             errorMessage={errors?.depositMin?.message}
+            inputProps={{
+              onChange: () => clearErrors("depositMin"),
+            }}
           />
           <Field
             label={t("listings.depositMax")}
@@ -46,6 +49,9 @@ const AdditionalFees = () => {
             placeholder={"0.00"}
             error={errors?.depositMax !== undefined}
             errorMessage={errors?.depositMax?.message}
+            inputProps={{
+              onChange: () => clearErrors("depositMax"),
+            }}
           />
         </GridSection>
         <GridSection columns={2}>
