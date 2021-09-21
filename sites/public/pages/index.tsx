@@ -72,26 +72,28 @@ export default function Home(props: IndexProps) {
         }
       />
       <div className="homepage-extra">
-        {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+        <div className="action-blocks">
+          {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+            <ActionBlock
+              header={t("welcome.signUp")}
+              icon={<Icon size="3xl" symbol="mailThin" />}
+              actions={[
+                <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
+                  {t("welcome.signUpToday")}
+                </LinkButton>,
+              ]}
+            />
+          )}
           <ActionBlock
-            header={t("welcome.signUp")}
-            icon={<Icon size="3xl" symbol="mail" />}
+            header={t("welcome.seeMoreOpportunities")}
+            icon={<Icon size="3xl" symbol="building" />}
             actions={[
-              <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
-                {t("welcome.signUpToday")}
+              <LinkButton href="/additional-resources" key={"additional-resources"}>
+                {t("welcome.viewAdditionalHousing")}
               </LinkButton>,
             ]}
           />
-        )}
-        <ActionBlock
-          header={t("welcome.seeMoreOpportunities")}
-          icon={<Icon size="3xl" symbol="building" />}
-          actions={[
-            <LinkButton href="/additional-resources" key={"additional-resources"}>
-              {t("welcome.viewAdditionalHousing")}
-            </LinkButton>,
-          ]}
-        />
+        </div>
       </div>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}

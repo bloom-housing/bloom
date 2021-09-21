@@ -123,14 +123,43 @@ export const Browse = (props: IconProps) => {
 
 export const Building = (props: IconProps) => {
   return (
-    <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>
-      <path d="M8.68 24.053c0.173 0 0.347-0.080 0.48-0.213 0.12-0.12 0.187-0.28 0.187-0.467 0-0.16-0.067-0.333-0.187-0.469-0.253-0.251-0.707-0.24-0.947 0-0.12 0.122-0.2 0.294-0.2 0.469 0 0.187 0.080 0.347 0.2 0.478 0.12 0.122 0.293 0.202 0.467 0.202z"></path>
-      <path d="M18.019 22.714h1.384c0.368 0 0.667-0.299 0.667-0.667s-0.299-0.667-0.667-0.667h-1.384c-0.368 0-0.667 0.299-0.667 0.667s0.298 0.667 0.667 0.667z"></path>
-      <path d="M18.019 18.714h1.384c0.368 0 0.667-0.299 0.667-0.667s-0.299-0.667-0.667-0.667h-1.384c-0.368 0-0.667 0.299-0.667 0.667s0.298 0.667 0.667 0.667z"></path>
-      <path d="M23.354 22.714h1.333c0.368 0 0.667-0.299 0.667-0.667s-0.299-0.667-0.667-0.667h-1.333c-0.368 0-0.667 0.299-0.667 0.667s0.298 0.667 0.667 0.667z"></path>
-      <path d="M23.354 26.715h1.333c0.368 0 0.667-0.299 0.667-0.667s-0.299-0.667-0.667-0.667h-1.333c-0.368 0-0.667 0.299-0.667 0.667s0.298 0.667 0.667 0.667z"></path>
-      <path d="M23.354 18.714h1.333c0.368 0 0.667-0.299 0.667-0.667s-0.299-0.667-0.667-0.667h-1.333c-0.368 0-0.667 0.299-0.667 0.667s0.298 0.667 0.667 0.667z"></path>
-      <path d="M31.51 15.406l-19.499-7.253c-0.342-0.128-0.728 0.046-0.858 0.392s0.048 0.73 0.394 0.858l1.805 0.672v6.784l-10.166 2.629c0 0 0 0-0.002 0l-2.618 0.675c-0.357 0.091-0.571 0.456-0.478 0.813 0.077 0.301 0.347 0.501 0.643 0.501 0.056 0 0.11-0.006 0.166-0.021l1.784-0.461v10.387c0 0.368 0.299 0.667 0.667 0.667h25.333c0.368 0 0.667-0.299 0.667-0.667v-15.354l1.693 0.629c0.077 0.027 0.157 0.042 0.234 0.042 0.27 0 0.525-0.166 0.626-0.435 0.128-0.344-0.045-0.728-0.39-0.856zM4.019 20.65l9.333-2.414v12.478h-1.333v-4.667c0-0.368-0.299-0.667-0.667-0.667h-5.333c-0.368 0-0.667 0.299-0.667 0.667v4.667h-1.333v-10.064zM6.685 30.715v-4h4v4h-4zM18.686 30.715v-4h1.333v4h-1.333zM28.019 30.715h-6.667v-4.667c0-0.368-0.299-0.667-0.667-0.667h-2.667c-0.368 0-0.667 0.299-0.667 0.667v4.667h-2.667v-20.144l13.333 4.962v15.182z"></path>
+    <svg
+      width="81"
+      height="47"
+      viewBox="0 0 81 47"
+      xmlns="http://www.w3.org/2000/svg"
+      fill={props.fill ?? "white"}
+    >
+      <path
+        d="M65.83 29.603V63.0002H17.396V29.603"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M35.2405 41.2188H27.593V48.479H35.2405V41.2188Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M55.6338 41.2188H42.6331V62.9995H55.6338V41.2188Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.2981 33.4748L41.6134 10L70.9287 33.4748"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
@@ -374,6 +403,60 @@ export const Mail = (props: IconProps) => {
   return (
     <svg viewBox={"0 0 32 32"} fill={props.fill ?? "currentColor"}>
       <path d="M29.091 27.637h-26.182c-1.606 0-2.909-1.304-2.909-2.909v-17.454c0-1.606 1.304-2.909 2.909-2.909h26.182c1.606 0 2.909 1.304 2.909 2.909v17.454c0 1.606-1.304 2.909-2.909 2.909zM27.637 24.728l-8.338-7.296-3.299 2.933-3.299-2.933-8.338 7.296h23.272zM2.909 23.272l8.182-7.272-8.182-7.272v14.546zM4.363 7.272l11.637 10.182 11.637-10.182h-23.272zM29.091 8.728l-8.182 7.272 8.182 7.272v-14.546z"></path>
+    </svg>
+  )
+}
+
+export const MailThin = (props: IconProps) => {
+  return (
+    <svg
+      width="80"
+      height="35"
+      viewBox="0 0 80 35"
+      fill={props.fill ?? "none"}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="80" height="75" fill="#E5E5E5" />
+      <g clip-path="url(#clip0)">
+        <rect width="1280" height="1390" transform="translate(-284 -530)" fill="white" />
+        <path
+          d="M61.3749 24.2402L43.2061 39.7424C41.8262 40.8341 39.7563 40.8341 38.3764 39.7424L19.9775 24.2402"
+          stroke="black"
+          strokeWidth="2"
+          strokeMiterlimit="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M49.1858 41.271L61.375 50.878"
+          stroke="black"
+          strokeWidth="2"
+          strokeMiterlimit="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M32.1668 41.271L19.9775 50.878"
+          stroke="black"
+          strokeWidth="2"
+          strokeMiterlimit="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M14.458 24.0218V51.0961C14.458 53.9345 16.7579 56.1179 19.7477 56.1179H61.835C64.8248 56.1179 67.1247 53.9345 67.1247 51.0961V24.0218C67.1247 21.1834 64.8248 19 61.835 19H19.7477C16.7579 19 14.458 21.1834 14.458 24.0218Z"
+          stroke="black"
+          strokeWidth="2"
+          strokeMiterlimit="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0">
+          <rect width="1280" height="1390" fill="white" transform="translate(-284 -530)" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }
