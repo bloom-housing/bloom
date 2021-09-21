@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
+  - The cache revalidation piece doesn't actually change here, the main changes are is so that errors aren't swallowed on builds and fails them (should cover #1618) and I removed the export script, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
 
 ### UI Components
 
