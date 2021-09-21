@@ -114,12 +114,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       }
       setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
       setValue("rentType", getRentType(defaultUnit))
-    }
-    setValue("status", "available")
-    if (defaultUnit) {
       setValue("amiPercentage", parseInt(defaultUnit["amiPercentage"]))
       setValue("rentType", getRentType(defaultUnit))
     }
+    setValue("status", "available")
     setLoading(false)
   }
 
