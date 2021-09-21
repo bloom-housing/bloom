@@ -2,8 +2,6 @@ import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -51,18 +49,12 @@ export class Listing10158Seed extends ListingDefaultSeed {
       ...ncpProperty,
     })
 
-    const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
-      type: ApplicationMethodType.ExternalLink,
-      acceptsPostmarkedApplications: false,
-      externalReference: ncpListing.managementWebsite,
-    })
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...ncpListing,
-      applicationMethods: [applicationMethod],
+      applicationMethods: [],
       assets: [],
       events: [],
       property: property,

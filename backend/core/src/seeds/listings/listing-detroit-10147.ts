@@ -2,11 +2,9 @@ import { ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const mshProperty: PropertySeedType = {
@@ -47,18 +45,12 @@ export class Listing10147Seed extends ListingDefaultSeed {
       ...mshProperty,
     })
 
-    const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
-      type: ApplicationMethodType.ExternalLink,
-      acceptsPostmarkedApplications: false,
-      externalReference: mshListing.managementWebsite,
-    })
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...mshListing,
-      applicationMethods: [applicationMethod],
+      applicationMethods: [],
       assets: [],
       events: [],
       property: property,

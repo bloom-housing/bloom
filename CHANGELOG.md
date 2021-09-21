@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Detroit Team M12
 
+- Fixed:
+
+  - Removed units and application methods from seed listings
+    ([#590](https://github.com/CityOfDetroit/bloom/pull/590))
+
 - Added:
 
   - Partially Senior reserved community type ([#572](https://github.com/CityOfDetroit/bloom/pull/572))
