@@ -1,6 +1,7 @@
 import csv from "csv-parser"
 import fs from "fs"
-import { importListing, createUnitsArray, getDetroitJurisdiction } from "./listings-importer"
+import { importListing } from "./import-helpers"
+import { getDetroitJurisdiction } from "./detroit-helpers"
 import {
   ListingCreate,
   AddressCreate,

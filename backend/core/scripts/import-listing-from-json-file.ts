@@ -1,4 +1,4 @@
-import { importListing } from "./listings-importer"
+import { importListing } from "./import-helpers"
 import fs from "fs"
 import { ListingCreate } from "../types/src/backend-swagger"
 
