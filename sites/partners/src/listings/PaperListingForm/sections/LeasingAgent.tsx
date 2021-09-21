@@ -57,14 +57,6 @@ const LeasingAgent = () => {
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}
-            mask={() => (
-              <PhoneMask
-                name="leasingAgentPhone"
-                placeholder={t("t.phoneNumberPlaceholder")}
-                onChange={() => clearErrors("leasingAgentPhone")}
-                controlClassName={"control"}
-              />
-            )}
           />
         </GridSection>
         <GridSection columns={2}>
