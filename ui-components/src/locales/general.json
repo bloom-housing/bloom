@@ -576,7 +576,11 @@
     "unconfirmed": "Unconfirmed",
     "totalUsers": "total users",
     "administrator": "Administrator",
-    "partner": "Partner"
+    "partner": "Partner",
+    "addUser": "Add User",
+    "userDetails": "User Details",
+    "allListings": "All listings",
+    "inviteSent": "Invite sent"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -1211,6 +1215,7 @@
     "hour": "Hour",
     "household": "Household",
     "income": "Income",
+    "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",
     "label": "Label",
