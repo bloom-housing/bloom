@@ -18,6 +18,7 @@ export interface FieldProps {
   defaultValue?: string | number
   onDrop?: (e: any) => boolean
   onPaste?: (e: any) => boolean
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   register?: UseFormMethods["register"]
   validation?: Record<string, any>
@@ -39,7 +40,12 @@ const Field = (props: FieldProps) => {
     classes.push(props.className)
   }
 
-  const controlClasses = ["control"]
+  const controlClasses = []
+
+  if (props.type !== "checkbox") {
+    controlClasses.push("control")
+  }
+
   if (props.controlClassName) {
     controlClasses.push(props.controlClassName)
   }
@@ -99,6 +105,7 @@ const Field = (props: FieldProps) => {
           disabled={props.disabled}
           onPaste={props.onPaste}
           onDrop={props.onDrop}
+          onChange={props.onChange}
           {...inputProps}
         />
         {isRadioOrCheckbox && label}
