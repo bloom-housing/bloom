@@ -107,6 +107,10 @@ export async function importListing(
   password: string,
   listing: ListingCreate
 ) {
+  serviceOptions.axios = axios.create({
+    baseURL: apiUrl,
+    timeout: 10000,
+  })
   // Log in to retrieve an access token.
   const { accessToken } = await authService.login({
     body: {
@@ -146,9 +150,11 @@ export async function importListing(
     unit.priorityType = findByName(priorityTypes, unit.priorityType)
     unit.unitType = findByName(unitTypes, unit.unitType)
   })
-  listing.unitsSummary.forEach((summary) => {
-    summary.unitType = findByName(unitTypes, summary.unitType)
-  })
+  if (listing.unitsSummary) {
+    listing.unitsSummary.forEach((summary) => {
+      summary.unitType = findByName(unitTypes, summary.unitType)
+    })
+  }
 
   // Upload the listing, and then return it.
   return await uploadListing(listing)
