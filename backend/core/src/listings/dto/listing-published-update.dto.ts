@@ -9,6 +9,7 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
+  IsBoolean,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitUpdateDto } from "../../units/dto/unit.dto"
@@ -20,14 +21,18 @@ import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "assets",
   "buildingAddress",
-  "depositMin",
   "depositMax",
+  "depositMin",
   "developer",
+  "digitalApplication",
   "image",
+  "isWaitlistOpen",
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
   "name",
+  "paperApplication",
+  "referralOpportunity",
   "rentalAssistance",
   "reviewOrderType",
   "units",
@@ -59,10 +64,18 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   developer: string
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  digitalApplication: boolean
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   image: AssetUpdateDto
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isWaitlistOpen: boolean
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
@@ -82,6 +95,14 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   name: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  paperApplication: boolean
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  referralOpportunity: boolean
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

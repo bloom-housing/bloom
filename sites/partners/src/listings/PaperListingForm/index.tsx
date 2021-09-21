@@ -496,6 +496,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
           }
           removeEmptyFields(formattedData)
+          console.log({ formattedData })
+
           const result = editMode
             ? await listingsService.update({
                 listingId: listing.id,
@@ -521,7 +523,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             data?.message?.forEach((errorMessage: string) => {
               const fieldName = errorMessage.split(" ")[0]
               const readableError = getReadableErrorMessage(errorMessage)
-              console.log(readableError)
               if (readableError) {
                 setError(fieldName, { message: readableError })
               }

@@ -12,29 +12,27 @@ import {
   IsString,
   MaxLength,
   ValidateNested,
+  IsBoolean,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { OmitType } from "@nestjs/swagger"
 
-// TODO blocked by:
-//   missing - Is there a digital application? - boolean
-//   missing - Is there a paper application? - boolean
-//   missing - Is this a referral opportunity? - boolean
-//   what exactly is - Is the waitlist open?
-//   replace assets validator with Custom validator checking what kind of asset should exactly be passed
-
 export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "assets",
   "buildingAddress",
-  "depositMin",
   "depositMax",
+  "depositMin",
   "developer",
+  "digitalApplication",
   "image",
+  "isWaitlistOpen",
   "leasingAgentEmail",
   "leasingAgentName",
   "leasingAgentPhone",
   "name",
+  "paperApplication",
+  "referralOpportunity",
   "rentalAssistance",
   "reviewOrderType",
   "units",
@@ -66,10 +64,18 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   developer: string
 
   @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  digitalApplication: boolean
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetCreateDto)
   image: AssetCreateDto
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isWaitlistOpen: boolean
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
@@ -89,6 +95,14 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   name: string
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  paperApplication: boolean
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  referralOpportunity: boolean
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
