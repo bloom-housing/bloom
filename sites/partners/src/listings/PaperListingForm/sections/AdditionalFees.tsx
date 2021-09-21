@@ -34,7 +34,7 @@ const AdditionalFees = () => {
             prepend={"$"}
             placeholder={"0.00"}
             error={errors?.depositMin !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
+            errorMessage={errors?.depositMin?.message}
           />
           <Field
             label={t("listings.depositMax")}
@@ -45,7 +45,7 @@ const AdditionalFees = () => {
             prepend={"$"}
             placeholder={"0.00"}
             error={errors?.depositMax !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
+            errorMessage={errors?.depositMax?.message}
           />
         </GridSection>
         <GridSection columns={2}>

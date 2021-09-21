@@ -496,7 +496,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             })
           }
           removeEmptyFields(formattedData)
-          console.log({ formattedData })
 
           const result = editMode
             ? await listingsService.update({
