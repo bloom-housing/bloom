@@ -47,7 +47,7 @@ const BuildingDetails = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, getValues, errors } = formMethods
+  const { register, control, getValues, errors, clearErrors } = formMethods
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
@@ -155,6 +155,9 @@ const BuildingDetails = ({
             error={errors?.buildingAddress !== undefined}
             errorMessage={t("errors.requiredFieldError")}
             placeholder={t("application.contact.streetAddress")}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress"),
+            }}
             register={register}
           />
         </GridCell>
@@ -175,6 +178,9 @@ const BuildingDetails = ({
             error={errors?.buildingAddress !== undefined}
             errorMessage={t("errors.requiredFieldError")}
             placeholder={t("application.contact.city")}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress"),
+            }}
             register={register}
           />
         </GridCell>
@@ -194,6 +200,9 @@ const BuildingDetails = ({
             options={stateKeys}
             keyPrefix="states"
             errorMessage={t("errors.stateError")}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress"),
+            }}
           />
         </ViewItem>
         <Field
@@ -203,6 +212,9 @@ const BuildingDetails = ({
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
           errorMessage={t("errors.zipCodeError")}
+          inputProps={{
+            onChange: () => clearErrors("buildingAddress"),
+          }}
           register={register}
         />
         <GridCell span={2}>

@@ -16,3 +16,7 @@ export const getDetailFieldDate = (listingDate: Date) => {
 export const getDetailFieldTime = (listingTime: Date) => {
   return listingTime ? moment(new Date(listingTime)).format("hh:mm:ss A") : t("t.none")
 }
+
+export const getReadableErrorMessage = (errorMessage: string | undefined, fieldName: string) => {
+  return errorMessage ? fieldName.concat(errorMessage.substr(errorMessage.indexOf(" ") + 1)) : null
+}

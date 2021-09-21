@@ -289,7 +289,7 @@ const formatFormData = (
     delete unit.tempId
   })
 
-  const events: ListingEventCreate[] = data.events.filter(
+  const events: ListingEventCreate[] = data.events?.filter(
     (event) => !(event?.type === ListingEventType.publicLottery)
   )
   if (
@@ -383,6 +383,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : defaults
   const formMethods = useForm<FormListing>({
     defaultValues,
+    shouldUnregister: false,
   })
 
   const router = useRouter()
@@ -392,8 +393,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [status, setStatus] = useState<ListingStatus>(null)
-  const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
@@ -452,78 +451,83 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues, setError, clearErrors } = formMethods
+  const { handleSubmit, getValues, setError, clearErrors, reset } = formMethods
+
+  const triggerSubmitWithStatus = (status: ListingStatus) => {
+    triggerSubmit({ ...getValues(), status })
+  }
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
     setLoading(true)
-    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
+    void onSubmit({ ...defaultValues, ...data })
   }
 
   /*
     @data: form data comes from the react-hook-form
   */
   const onSubmit = useCallback(
-    async (data: FormListing, status: ListingStatus) => {
-      try {
-        clearErrors()
-        data = {
-          ...data,
-          status,
-        }
-        const orderedPreferences = preferences.map((pref, index) => {
-          return { ...pref, ordinal: index + 1 }
-        })
-        const formattedData = formatFormData(
-          data,
-          units,
-          openHouseEvents,
-          orderedPreferences,
-          latLong,
-          customMapPositionChosen
-        )
-        const removeEmptyFields = (obj) => {
-          Object.keys(obj).forEach(function (key) {
-            if (obj[key] && typeof obj[key] === "object") {
-              removeEmptyFields(obj[key])
-            }
-            if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
-              delete obj[key]
-            }
-            if (
-              typeof obj[key] === "object" &&
-              !Array.isArray(obj[key]) &&
-              Object.keys(obj[key]).length === 0
-            ) {
-              delete obj[key]
-            }
+    async (formData: FormListing) => {
+      if (!loading) {
+        try {
+          clearErrors()
+          const orderedPreferences = preferences.map((pref, index) => {
+            return { ...pref, ordinal: index + 1 }
           })
-        }
-        removeEmptyFields(formattedData)
-        const result = editMode
-          ? await listingsService.update({
-              listingId: listing.id,
-              body: { id: listing.id, ...formattedData },
-            })
-          : await listingsService.create({ body: formattedData })
-        setLoading(false)
-        if (result) {
-          setSiteAlertMessage(
-            editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
-            "success"
+          const formattedData = formatFormData(
+            formData,
+            units,
+            openHouseEvents,
+            orderedPreferences,
+            latLong,
+            customMapPositionChosen
           )
+          const removeEmptyFields = (obj) => {
+            Object.keys(obj).forEach(function (key) {
+              if (obj[key] && typeof obj[key] === "object") {
+                removeEmptyFields(obj[key])
+              }
+              if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+                delete obj[key]
+              }
+              if (
+                typeof obj[key] === "object" &&
+                !Array.isArray(obj[key]) &&
+                Object.keys(obj[key]).length === 0
+              ) {
+                delete obj[key]
+              }
+            })
+          }
+          removeEmptyFields(formattedData)
+          const result = editMode
+            ? await listingsService.update({
+                listingId: listing.id,
+                body: { id: listing.id, ...formattedData },
+              })
+            : await listingsService.create({ body: formattedData })
+          setLoading(false)
+          reset(formData)
+          if (result) {
+            setSiteAlertMessage(
+              editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+              "success"
+            )
 
-          await router.push(`/listings/${result.id}`)
+            await router.push(`/listings/${result.id}`)
+          }
+        } catch (err) {
+          reset(formData)
+          setLoading(false)
+          setAlert("api")
+          const { data } = err.response || {}
+          if (data.statusCode === 400) {
+            data?.message?.forEach((errorMessage: string) => {
+              const fieldName = errorMessage.split(" ")[0]
+              setError(fieldName, { message: errorMessage })
+            })
+          }
         }
-      } catch (err) {
-        clearErrors()
-        setLoading(false)
-        setAlert("api")
-        const { data } = err.response || {}
-        data.message.forEach((errorMessage) => {
-          const fieldName = errorMessage.split(" ")[0]
-          setError(fieldName, errorMessage)
-        })
       }
     },
     [
@@ -540,15 +544,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   )
 
   const onError = () => {
-    setLoading(false)
     setAlert("form")
   }
-
-  useEffect(() => {
-    if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data, status)
-    }
-  }, [submitData.ready, submitData.data, onSubmit, status])
 
   return (
     <>
@@ -667,8 +664,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
                           submitCallback={(data) => {
-                            setStatus(ListingStatus.closed)
-                            triggerSubmit({ ...getValues(), ...data })
+                            triggerSubmit({ ...getValues(), ...data, status: ListingStatus.closed })
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -679,10 +675,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <aside className="md:w-3/12 md:pl-6">
                       <Aside
                         type={editMode ? "edit" : "add"}
-                        setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
                         showPublishModal={() => setPublishModal(true)}
+                        submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
                   </div>
@@ -702,8 +698,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              setStatus(ListingStatus.closed)
-              triggerSubmit(getValues())
+              triggerSubmit({ ...getValues(), status: ListingStatus.closed })
               setCloseModal(false)
             }}
           >

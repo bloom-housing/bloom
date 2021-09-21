@@ -18,20 +18,20 @@ import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/typ
 
 type AsideProps = {
   type: AsideType
-  setStatus?: (status: ListingStatus) => void
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
   showPublishModal?: () => void
+  submitFormWithStatus?: (status: ListingStatus) => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
 const Aside = ({
   type,
-  setStatus,
   showCloseListingModal,
   showLotteryResultsDrawer,
   showPublishModal,
+  submitFormWithStatus,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
 
@@ -79,13 +79,18 @@ const Aside = ({
           <Button
             styleType={AppearanceStyleType.success}
             fullWidth
-            onClick={() => showPublishModal && showPublishModal()}
+            onClick={() => {
+              submitFormWithStatus(ListingStatus.active)
+              if (showPublishModal) {
+                showPublishModal()
+              }
+            }}
           >
             {t("listings.actions.publish")}
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button fullWidth onClick={() => setStatus(ListingStatus.pending)}>
+          <Button fullWidth onClick={() => submitFormWithStatus(ListingStatus.pending)}>
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
@@ -99,7 +104,7 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             fullWidth
             onClick={() => {
-              setStatus(listing.status)
+              submitFormWithStatus(listing.status)
             }}
           >
             {t("t.saveExit")}
@@ -114,7 +119,12 @@ const Aside = ({
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
-              onClick={() => showPublishModal && showPublishModal()}
+              onClick={() => {
+                submitFormWithStatus(ListingStatus.active)
+                if (showPublishModal) {
+                  showPublishModal()
+                }
+              }}
             >
               {t("listings.actions.publish")}
             </Button>
@@ -137,7 +147,7 @@ const Aside = ({
             <Button
               styleType={AppearanceStyleType.alert}
               fullWidth
-              onClick={() => setStatus(ListingStatus.pending)}
+              onClick={() => submitFormWithStatus(ListingStatus.pending)}
               border={AppearanceBorderType.outlined}
             >
               {t("listings.actions.unpublish")}
@@ -219,10 +229,12 @@ const Aside = ({
   }, [
     listing,
     listingId,
-    setStatus,
     showCloseListingModal,
     showLotteryResultsDrawer,
     showPublishModal,
+    submitFormWithStatus,
+    showCloseListingModal,
+    showLotteryResultsDrawer,
     type,
   ])
 

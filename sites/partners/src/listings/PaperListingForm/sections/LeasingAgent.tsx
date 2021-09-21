@@ -1,12 +1,19 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  Textarea,
+  Field,
+  PhoneField,
+  PhoneMask,
+} from "@bloom-housing/ui-components"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors } = formMethods
+  const { register, control, errors, clearErrors } = formMethods
 
   return (
     <div>
@@ -25,6 +32,9 @@ const LeasingAgent = () => {
             errorMessage={t("errors.requiredFieldError")}
             placeholder={t("leasingAgent.namePlaceholder")}
             register={register}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentName"),
+            }}
           />
           <Field
             label={t("t.email")}
@@ -34,6 +44,9 @@ const LeasingAgent = () => {
             errorMessage={t("errors.requiredFieldError")}
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentEmail"),
+            }}
           />
           <PhoneField
             label={t("t.phone")}
@@ -44,6 +57,14 @@ const LeasingAgent = () => {
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}
+            mask={() => (
+              <PhoneMask
+                name="leasingAgentPhone"
+                placeholder={t("t.phoneNumberPlaceholder")}
+                onChange={() => clearErrors("leasingAgentPhone")}
+                controlClassName={"control"}
+              />
+            )}
           />
         </GridSection>
         <GridSection columns={2}>

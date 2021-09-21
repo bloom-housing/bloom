@@ -30,7 +30,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors } = formMethods
+  const { register, setValue, errors, clearErrors } = formMethods
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -155,7 +155,10 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             type="button"
             size={AppearanceSizeType.normal}
             styleType={errors?.units ? AppearanceStyleType.alert : null}
-            onClick={() => editUnit(units.length + 1)}
+            onClick={() => {
+              editUnit(units.length + 1)
+              clearErrors("units")
+            }}
           >
             {t("listings.unit.add")}
           </Button>

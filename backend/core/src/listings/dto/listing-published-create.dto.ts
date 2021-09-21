@@ -42,7 +42,6 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetCreateDto)
-  @ArrayMinSize(1, { groups: [ValidationsGroupsEnum.default] })
   assets: AssetCreateDto[]
 
   @Expose()

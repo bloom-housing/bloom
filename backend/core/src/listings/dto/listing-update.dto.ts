@@ -149,10 +149,9 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   amenities?: string | null
 
   @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  buildingAddress: AddressUpdateDto
+  buildingAddress?: AddressUpdateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

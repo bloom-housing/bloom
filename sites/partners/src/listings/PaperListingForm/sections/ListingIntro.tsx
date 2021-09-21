@@ -16,8 +16,7 @@ const ListingIntro = () => {
   const { profile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, register } = formMethods
-  console.log(errors)
+  const { errors, register, clearErrors } = formMethods
 
   const JurisdictionWrapper = useCallback(() => {
     if (profile.jurisdictions.length === 1) {
@@ -49,6 +48,9 @@ const ListingIntro = () => {
                   value: jurisdiction.id,
                 })),
               ]}
+              inputProps={{
+                onChange: () => clearErrors("jurisdiction"),
+              }}
             />
           </ViewItem>
         </GridCell>
@@ -70,6 +72,9 @@ const ListingIntro = () => {
             name="name"
             label={t("listings.listingName")}
             placeholder={t("listings.listingName")}
+            inputProps={{
+              onChange: () => clearErrors("name"),
+            }}
             register={register}
             error={errors?.name !== undefined}
             errorMessage={t("errors.requiredFieldError")}
@@ -82,6 +87,9 @@ const ListingIntro = () => {
           placeholder={t("listings.developer")}
           error={errors?.developer !== undefined}
           errorMessage={t("errors.requiredFieldError")}
+          inputProps={{
+            onChange: () => clearErrors("developer"),
+          }}
           register={register}
         />
       </GridSection>

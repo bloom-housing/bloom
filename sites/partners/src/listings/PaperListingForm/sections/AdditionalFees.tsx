@@ -1,13 +1,13 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Field, Textarea } from "@bloom-housing/ui-components"
+import { getReadableErrorMessage } from "../../PaperListingDetails/sections/helpers"
 
 const AdditionalFees = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
-
+  const { register, errors } = formMethods
   return (
     <div>
       <GridSection
@@ -34,6 +34,8 @@ const AdditionalFees = () => {
             type={"currency"}
             prepend={"$"}
             placeholder={"0.00"}
+            error={errors?.depositMin !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
           />
           <Field
             label={t("listings.depositMax")}
@@ -43,6 +45,8 @@ const AdditionalFees = () => {
             type={"currency"}
             prepend={"$"}
             placeholder={"0.00"}
+            error={errors?.depositMax !== undefined}
+            errorMessage={t("errors.requiredFieldError")}
           />
         </GridSection>
         <GridSection columns={2}>
