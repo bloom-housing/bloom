@@ -44,11 +44,32 @@ async function main() {
     fs.createReadStream(csvFilePath)
       .pipe(csv())
       .on("data", (listingFields) => {
-        // Include only listings that are "regulated" affordable housing
+        const listingName: string = listingFields["Project Name"]
+        // Exclude listings that are not "regulated" affordable housing
         const affordabilityStatus: string = listingFields["Affordability status"]
-        if (affordabilityStatus.toLowerCase() === "regulated") {
-          rawListingFields.push(listingFields)
+        if (affordabilityStatus.toLowerCase() !== "regulated") {
+          console.log(
+            `Skipping listing because it is not *regulated* affordable housing: ${listingName}`
+          )
+          return
         }
+
+        // Exclude listings that are not at the stage of housing people.
+        // Some listings are in the "development pipeline" and should not yet be shown to
+        // housing seekers. The "Development Pipeline Bucket" below is a code that is meaningful
+        // within HRD.
+        const projectType: string = listingFields["Project Type"]
+        const developmentPipelineBucket: number = parseInt(
+          listingFields["Development Pipeline Bucket"]
+        )
+        if (projectType?.toLowerCase() !== "existing occupied" && developmentPipelineBucket < 3) {
+          console.log(
+            `Skipping listing because it is not far enough along in the development pipeline: ${listingName}`
+          )
+          return
+        }
+
+        rawListingFields.push(listingFields)
       })
       .on("end", resolve)
       .on("error", reject)
