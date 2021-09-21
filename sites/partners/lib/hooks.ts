@@ -11,8 +11,8 @@ import {
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
-  page: number
-  limit: number
+  page?: number
+  limit: number | "all"
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
