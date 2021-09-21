@@ -1000,6 +1000,28 @@ export class JurisdictionsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ListingsService {
@@ -4304,6 +4326,9 @@ export interface Listing {
   applicationMethods: ApplicationMethod[]
 
   /**  */
+  referralApplication?: CombinedReferralApplicationTypes
+
+  /**  */
   preferences: Preference[]
 
   /**  */
@@ -5803,6 +5828,7 @@ export enum UnitStatus {
   "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
+export type CombinedReferralApplicationTypes = ApplicationMethod
 export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate

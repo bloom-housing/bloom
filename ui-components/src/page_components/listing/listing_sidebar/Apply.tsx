@@ -11,7 +11,6 @@ import { t } from "../../../helpers/translator"
 import { Button } from "../../../actions/Button"
 import { LinkButton } from "../../../actions/LinkButton"
 import { SidebarAddress } from "./SidebarAddress"
-import { openDateState } from "../../../helpers/state"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { cloudinaryPdfFromId } from "../../../helpers/pdfs"
 
@@ -20,6 +19,7 @@ export interface ApplyProps {
   internalFormRoute: string
   preview?: boolean
   cloudName?: string
+  openInFuture?: boolean
 }
 
 const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
@@ -47,14 +47,13 @@ const NumberedHeader = (props: { num: number; text: string }) => (
 
 const Apply = (props: ApplyProps) => {
   // /applications/start/choose-language
-  const { listing, internalFormRoute, preview } = props
+  const { listing, internalFormRoute, preview, openInFuture = false } = props
   let onlineApplicationUrl = ""
 
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
 
   const openDate = moment(listing.applicationOpenDate).format("MMMM D, YYYY")
-
   if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
     onlineApplicationUrl = `${internalFormRoute}?listingId=${listing.id}`
   } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
@@ -103,17 +102,16 @@ const Apply = (props: ApplyProps) => {
       return listing.applicationPickUpAddress
     }
   }
-
   return (
     <>
       <section className="aside-block">
         <h2 className="text-caps-underline">{t("listings.apply.howToApply")}</h2>
-        {openDateState(listing) && (
+        {openInFuture && (
           <p className="mb-5 text-gray-700">
             {t("listings.apply.applicationWillBeAvailableOn", { openDate: openDate })}
           </p>
         )}
-        {!openDateState(listing) && onlineApplicationUrl !== "" && (
+        {!openInFuture && onlineApplicationUrl !== "" && (
           <>
             {preview ? (
               <Button disabled className="w-full mb-2">
@@ -130,7 +128,7 @@ const Apply = (props: ApplyProps) => {
             )}
           </>
         )}
-        {!openDateState(listing) && paperMethod && (
+        {!openInFuture && paperMethod && (
           <>
             {onlineApplicationUrl !== "" && <OrDivider bgColor="white" />}
             <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
@@ -167,7 +165,7 @@ const Apply = (props: ApplyProps) => {
           ))}
         {(listing.applicationPickUpAddress || listing.applicationPickUpAddressType) && (
           <>
-            {!openDateState(listing) && (onlineApplicationUrl !== "" || paperMethod) && (
+            {!openInFuture && (onlineApplicationUrl !== "" || paperMethod) && (
               <OrDivider bgColor="white" />
             )}
             <SubHeader text={t("listings.apply.pickUpAnApplication")} />

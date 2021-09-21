@@ -37,7 +37,8 @@ import {
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
-import { getGenericAddress } from "../lib/helpers"
+import { getGenericAddress, openInFuture } from "../lib/helpers"
+import React from "react"
 
 interface ListingProps {
   listing: Listing
@@ -48,10 +49,10 @@ export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
 
-  const {
-    content: appStatusContent,
-    subContent: appStatusSubContent,
-  } = useGetApplicationStatusProps(listing)
+  const { content: appStatusContent, subContent: appStatusSubContent } =
+    useGetApplicationStatusProps(listing)
+
+  const appOpenInFuture = openInFuture(listing)
 
   if (!listing) {
     return <ErrorPage />
@@ -175,15 +176,6 @@ export const ListingView = (props: ListingProps) => {
     } else return t("listings.reservedCommunityTitleDefault")
   }
 
-  //TODO: Add isReferralApplication boolean field to avoid this logic
-  const isReferralApp =
-    !listing.applicationDropOffAddress &&
-    !listing.applicationDropOffAddressType &&
-    !listing.applicationMailingAddress &&
-    !listing.applicationPickUpAddress &&
-    !listing.applicationPickUpAddressType &&
-    listing.applicationMethods?.length === 0
-
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -226,14 +218,14 @@ export const ListingView = (props: ListingProps) => {
             groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
             return (
-              <>
+              <React.Fragment key={percent}>
                 <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
                 <GroupedTable
                   headers={unitSummariesHeaders}
                   data={groupedUnits}
                   responsiveCollapse={true}
                 />
-              </>
+              </React.Fragment>
             )
           })}
         {amiValues.length == 1 && (
@@ -251,16 +243,13 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
-          {!isReferralApp ? (
-            <ApplicationSection
-              listing={listing}
-              preview={props.preview}
-              internalFormRoute="/applications/start/choose-language"
-              cloudName={process.env.cloudinaryCloudName}
-            />
-          ) : (
-            <></>
-          )}
+          <ApplicationSection
+            listing={listing}
+            preview={props.preview}
+            internalFormRoute="/applications/start/choose-language"
+            cloudName={process.env.cloudinaryCloudName}
+            openInFuture={appOpenInFuture}
+          />
         </div>
       </div>
       <ListingDetails>
@@ -365,17 +354,23 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              {!isReferralApp ? (
-                <ApplicationSection
-                  listing={listing}
-                  preview={props.preview}
-                  internalFormRoute="/applications/start/choose-language"
-                  cloudName={process.env.cloudinaryCloudName}
-                />
-              ) : (
+              <ApplicationSection
+                listing={listing}
+                preview={props.preview}
+                internalFormRoute="/applications/start/choose-language"
+                cloudName={process.env.cloudinaryCloudName}
+                openInFuture={appOpenInFuture}
+              />
+              {listing?.referralApplication && (
                 <ReferralApplication
-                  phoneNumber={t("application.referralApplication.phoneNumber")}
-                  description={t("application.referralApplication.instructions")}
+                  phoneNumber={
+                    listing.referralApplication.phoneNumber ||
+                    t("application.referralApplication.phoneNumber")
+                  }
+                  description={
+                    listing.referralApplication.externalReference ||
+                    t("application.referralApplication.instructions")
+                  }
                   title={t("application.referralApplication.furtherInformation")}
                 />
               )}
@@ -388,7 +383,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            <LeasingAgent listing={listing} />
+            {!openInFuture && <LeasingAgent listing={listing} />}
           </aside>
         </ListingDetailItem>
 

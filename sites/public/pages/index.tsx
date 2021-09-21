@@ -8,7 +8,6 @@ import {
   Hero,
   t,
   SiteAlert,
-  openDateState,
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
@@ -17,6 +16,7 @@ import axios from "axios"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import moment from "moment"
+import { openInFuture } from "../lib/helpers"
 
 interface IndexProps {
   listings: Listing[]
@@ -68,7 +68,7 @@ export default function Home(props: IndexProps) {
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings"
         allApplicationsClosed={
-          !props.listings.some(listingOpen) && !props.listings.some(openDateState)
+          !props.listings.some(listingOpen) && !props.listings.some(openInFuture)
         }
       />
       <div className="homepage-extra">

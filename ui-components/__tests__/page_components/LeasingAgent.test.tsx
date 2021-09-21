@@ -19,7 +19,7 @@ describe("<LeasingAgent>", () => {
       listing.leasingAgentOfficeHours && getByText(listing.leasingAgentOfficeHours)
     ).toBeTruthy()
   })
-  it("renders nothing if application is not open", () => {
+  it("still renders if application is not open, because it's now up to the parent component", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
     listing.applicationOpenDate = new Date(moment().add(10, "days").format())
     const { queryByText } = render(<LeasingAgent listing={listing} />)
