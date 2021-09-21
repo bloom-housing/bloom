@@ -10,9 +10,17 @@ import {
   t,
   AuthContext,
 } from "@bloom-housing/ui-components"
+import { useRouter } from "next/router"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const router = useRouter()
+
+  const languages =
+    router?.locales?.map((item) => ({
+      prefix: item === "en" ? "" : item,
+      label: t(`languages.${item}`),
+    })) || []
 
   return (
     <div className="site-wrapper">
@@ -26,6 +34,10 @@ const Layout = (props) => {
           logoSrc="/images/detroit-logo.png"
           notice=""
           title={t("nav.siteTitlePartners")}
+          language={{
+            list: languages,
+            codes: router?.locales,
+          }}
         >
           <LocalizedLink href="/" className="navbar-item">
             {t("nav.listings")}
