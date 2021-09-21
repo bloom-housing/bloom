@@ -165,35 +165,28 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 export async function getStaticProps() {
-  let openListings = []
-  let closedListings = []
+  const response = await axios.get(process.env.listingServiceUrl, {
+    params: {
+      view: "base",
+      limit: "all",
+      filter: [
+        {
+          $comparison: "<>",
+          status: "pending",
+        },
+      ],
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params)
+    },
+  })
 
-  try {
-    const response = await axios.get(process.env.listingServiceUrl, {
-      params: {
-        view: "base",
-        limit: "all",
-        filter: [
-          {
-            $comparison: "<>",
-            status: "pending",
-          },
-        ],
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
-    })
-
-    openListings = response?.data?.items
-      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
-      : []
-    closedListings = response?.data?.items
-      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
-      : []
-  } catch (error) {
-    console.error(error)
-  }
+  const openListings = response?.data?.items
+    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
+    : []
+  const closedListings = response?.data?.items
+    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
+    : []
 
   return { props: { openListings, closedListings }, revalidate: process.env.cacheRevalidate }
 }
