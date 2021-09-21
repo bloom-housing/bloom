@@ -6,7 +6,6 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter,
   t,
   AuthContext,
 } from "@bloom-housing/ui-components"
@@ -74,9 +73,6 @@ const Layout = (props) => {
             <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
             <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
           </FooterNav>
-          <FooterSection className="bg-black" small>
-            <ExygyFooter />
-          </FooterSection>
         </SiteFooter>
       </div>
     </div>

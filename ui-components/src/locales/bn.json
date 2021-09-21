@@ -1112,7 +1112,8 @@
         "privacy": "গোপনীয়তা নীতি",
         "welcomeEnglish": "স্বাগত",
         "welcomeSpanish": "স্বাগত",
-        "welcomeVietnamese": "ভিয়েতনামী"
+        "welcomeVietnamese": "ভিয়েতনামী",
+        "about": "আমাদের সম্পর্কে"
     },
     "pageDescription": {
         "welcome": "%{RegionName} এর হাউজিং পোর্টালে সাশ্রয়ী মূল্যের আবাসনের জন্য অনুসন্ধান করুন এবং আবেদন করুন",

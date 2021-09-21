@@ -987,7 +987,8 @@
         "privacy": "Política de privacidad",
         "welcomeEnglish": "Bienvenidos",
         "welcomeSpanish": "Bienvenido",
-        "welcomeVietnamese": "vietnamita"
+        "welcomeVietnamese": "vietnamita",
+        "about": "Sobre nosotras"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",
