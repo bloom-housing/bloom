@@ -3,8 +3,8 @@ import { UserDto } from "./user.dto"
 import { Expose, Type } from "class-transformer"
 import { ArrayMinSize, IsArray, IsDefined, IsOptional, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UserRolesCreateDto } from "./user-roles.dto"
 import { IdDto } from "../../shared/dto/id.dto"
+import { UserRolesCreateDto } from "./user-roles-create.dto"
 
 export class UserInviteDto extends OmitType(UserDto, [
   "id",

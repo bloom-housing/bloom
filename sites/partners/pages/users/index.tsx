@@ -77,6 +77,10 @@ const Users = () => {
     limit: itemsPerPage,
   })
 
+  const resetPagination = () => {
+    setCurrentPage(1)
+  }
+
   if (!userList) return null
 
   return (
@@ -111,6 +115,7 @@ const Users = () => {
                 quantityLabel={t("users.totalUsers")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
+                onPerPageChange={resetPagination}
               />
             </div>
           </div>

@@ -861,6 +861,8 @@ export class UserService {
       page?: number
       /**  */
       limit?: number | "all"
+      /**  */
+      filter?: UserFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -868,7 +870,7 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"] }
+      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
       let data = null
 
       configs.data = data
@@ -3773,6 +3775,14 @@ export interface UserUpdate {
   dob: Date
 }
 
+export interface UserFilterParams {
+  /**  */
+  $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  isPartner?: boolean
+}
+
 export interface PaginatedUserList {
   /**  */
   items: User[]
@@ -5750,6 +5760,13 @@ export enum EnumApplicationsApiExtraModelOrder {
   "DESC" = "DESC",
 }
 export type CombinedRolesTypes = UserRolesCreate
+export enum EnumUserFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
