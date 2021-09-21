@@ -185,6 +185,7 @@ export const ListingView = (props: ListingProps) => {
     } else return t("listings.reservedCommunityTitleDefault")
   }
 
+  // TODO: Move the below methods into our shared helper library when setup
   const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
     return applicationMethods.some((method) => method.type == type)
   }
@@ -256,6 +257,8 @@ export const ListingView = (props: ListingProps) => {
         }) ?? null
     )
   }
+
+  // Move the above methods into our shared helper library when setup
 
   const applySidebar = () => (
     <>
