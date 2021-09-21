@@ -17,7 +17,6 @@ export const PhoneField = (props: {
   control?: any
   disabled?: boolean
   required?: boolean
-  inputProps?: Record<string, unknown>
   mask?: (args: any) => JSX.Element
 }) => {
   const labelClasses = ["label"]
@@ -57,7 +56,7 @@ export const PhoneField = (props: {
       {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
       <div className={props.controlClassName}>
         {props.mask ? (
-          <Controller {...controllerProps} {...props.inputProps} render={props.mask} />
+          <Controller {...controllerProps} render={props.mask} />
         ) : (
           <Controller {...controllerProps} as={PhoneMask} />
         )}

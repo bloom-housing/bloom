@@ -51,6 +51,13 @@ const BuildingDetails = ({
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
+  const genericBuildingAddressError =
+    errors?.buildingAddress &&
+    !errors?.buildingAddress?.street &&
+    !errors?.buildingAddress?.state &&
+    !errors?.buildingAddress?.city &&
+    !errors?.buildingAddress?.zipCode
+
   interface BuildingAddress {
     city: string
     state: string
@@ -152,8 +159,8 @@ const BuildingDetails = ({
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
-            error={errors?.buildingAddress !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
+            error={errors?.buildingAddress?.street !== undefined || genericBuildingAddressError}
+            errorMessage={errors?.buildingAddress?.street?.message}
             placeholder={t("application.contact.streetAddress")}
             inputProps={{
               onChange: () => clearErrors("buildingAddress"),
@@ -175,8 +182,8 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
-            error={errors?.buildingAddress !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
+            error={errors?.buildingAddress?.city !== undefined || genericBuildingAddressError}
+            errorMessage={errors?.buildingAddress?.city?.message}
             placeholder={t("application.contact.city")}
             inputProps={{
               onChange: () => clearErrors("buildingAddress"),
@@ -192,14 +199,14 @@ const BuildingDetails = ({
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
-            error={errors?.buildingAddress !== undefined}
+            error={errors?.buildingAddress?.state !== undefined || genericBuildingAddressError}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={stateKeys}
             keyPrefix="states"
-            errorMessage={t("errors.stateError")}
+            errorMessage={errors?.buildingAddress?.state?.message}
             inputProps={{
               onChange: () => clearErrors("buildingAddress"),
             }}
@@ -208,10 +215,10 @@ const BuildingDetails = ({
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
-          error={errors?.buildingAddress !== undefined}
+          error={errors?.buildingAddress?.zipCode !== undefined || genericBuildingAddressError}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
-          errorMessage={t("errors.zipCodeError")}
+          errorMessage={errors?.buildingAddress?.zipCode?.message}
           inputProps={{
             onChange: () => clearErrors("buildingAddress"),
           }}
@@ -228,6 +235,10 @@ const BuildingDetails = ({
           />
         </GridCell>
       </GridSection>
+
+      {genericBuildingAddressError && (
+        <div className={"text-sm text-alert pb-4"}>{t("errors.requiredFieldsError")}</div>
+      )}
 
       <GridSection columns={3}>
         <GridCell span={2}>

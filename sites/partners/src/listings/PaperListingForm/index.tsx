@@ -56,6 +56,7 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
+import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -116,11 +117,6 @@ type ListingFormProps = {
 }
 
 type AlertErrorType = "api" | "form"
-
-interface SubmitData {
-  ready: boolean
-  data: FormListing
-}
 
 const defaults: FormListing = {
   id: undefined,
@@ -459,7 +455,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const triggerSubmit = (data: FormListing) => {
     setAlert(null)
-    setLoading(true)
     void onSubmit({ ...defaultValues, ...data })
   }
 
@@ -470,6 +465,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     async (formData: FormListing) => {
       if (!loading) {
         try {
+          setLoading(true)
           clearErrors()
           const orderedPreferences = preferences.map((pref, index) => {
             return { ...pref, ordinal: index + 1 }
@@ -506,7 +502,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 body: { id: listing.id, ...formattedData },
               })
             : await listingsService.create({ body: formattedData })
-          setLoading(false)
           reset(formData)
           if (result) {
             setSiteAlertMessage(
@@ -516,6 +511,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
             await router.push(`/listings/${result.id}`)
           }
+          setLoading(false)
         } catch (err) {
           reset(formData)
           setLoading(false)
@@ -524,7 +520,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           if (data.statusCode === 400) {
             data?.message?.forEach((errorMessage: string) => {
               const fieldName = errorMessage.split(" ")[0]
-              setError(fieldName, { message: errorMessage })
+              const readableError = getReadableErrorMessage(errorMessage)
+              console.log(readableError)
+              if (readableError) {
+                setError(fieldName, { message: readableError })
+              }
             })
           }
         }
@@ -540,6 +540,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       preferences,
       latLong,
       customMapPositionChosen,
+      clearErrors,
+      loading,
+      reset,
+      setError,
     ]
   )
 
@@ -547,7 +551,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     setAlert("form")
   }
 
-  return (
+  return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
         <>

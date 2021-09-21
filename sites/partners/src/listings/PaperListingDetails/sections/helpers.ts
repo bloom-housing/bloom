@@ -17,6 +17,18 @@ export const getDetailFieldTime = (listingTime: Date) => {
   return listingTime ? moment(new Date(listingTime)).format("hh:mm:ss A") : t("t.none")
 }
 
-export const getReadableErrorMessage = (errorMessage: string | undefined, fieldName: string) => {
-  return errorMessage ? fieldName.concat(errorMessage.substr(errorMessage.indexOf(" ") + 1)) : null
+export const getReadableErrorMessage = (errorMessage: string | undefined) => {
+  const errorDetails = errorMessage.substr(errorMessage.indexOf(" ") + 1)
+  let readableMessage = null
+  switch (errorDetails) {
+    case "should not be null or undefined":
+    case "must be a string":
+    case "must contain at least 1 elements":
+      readableMessage = t("errors.requiredFieldError")
+      break
+    case "must be an email":
+      readableMessage = t("errors.emailAddressError")
+      break
+  }
+  return readableMessage
 }

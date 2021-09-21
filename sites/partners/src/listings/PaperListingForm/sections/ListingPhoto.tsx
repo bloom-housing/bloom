@@ -165,9 +165,7 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
-      {errors?.image && (
-        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
-      )}
+      {errors?.image && <span className={"text-sm text-alert"}>{errors?.image?.message}</span>}
 
       <Drawer
         open={drawerState}

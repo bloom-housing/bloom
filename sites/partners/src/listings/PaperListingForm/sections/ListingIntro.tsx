@@ -40,7 +40,7 @@ const ListingIntro = () => {
               register={register}
               controlClassName="control"
               error={errors?.jurisdiction !== undefined}
-              errorMessage={t("errors.requiredFieldError")}
+              errorMessage={errors?.jurisdiction?.message}
               options={[
                 "",
                 ...profile.jurisdictions.map((jurisdiction) => ({
@@ -56,7 +56,7 @@ const ListingIntro = () => {
         </GridCell>
       )
     }
-  }, [errors?.jurisdiction?.id, profile.jurisdictions, register])
+  }, [profile.jurisdictions, register, clearErrors, errors?.jurisdiction])
 
   return (
     <>
@@ -77,7 +77,7 @@ const ListingIntro = () => {
             }}
             register={register}
             error={errors?.name !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
+            errorMessage={errors?.name?.message}
           />
         </GridCell>
         <Field
@@ -86,7 +86,7 @@ const ListingIntro = () => {
           label={t("listings.developer")}
           placeholder={t("listings.developer")}
           error={errors?.developer !== undefined}
-          errorMessage={t("errors.requiredFieldError")}
+          errorMessage={errors?.developer?.message}
           inputProps={{
             onChange: () => clearErrors("developer"),
           }}
