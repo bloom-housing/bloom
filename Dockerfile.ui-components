@@ -1,5 +1,5 @@
 # Here we're using a non alpine image because it includes python
-FROM node:12.16 AS build
+FROM node:14.17 AS build
 
 WORKDIR /usr/src/app/
 

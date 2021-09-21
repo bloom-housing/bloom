@@ -1,4 +1,4 @@
-FROM node:12.16-alpine AS development
+FROM node:14.17-alpine AS development
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
@@ -28,7 +28,7 @@ ARG LANGUAGES=en,es,ar,bn
 
 RUN yarn build
 
-FROM node:12.16-alpine AS production
+FROM node:14.17-alpine AS production
 
 # Use the NEXTJS_PORT variable as the PORT if defined, otherwise use PORT.
 ENV NEXTJS_PORT=3001

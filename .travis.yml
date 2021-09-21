@@ -57,7 +57,8 @@ jobs:
         - cd backend/core
         - yarn nest start &
         - cd ../../sites/partners
-        - yarn dev &
+        - yarn build
+        - yarn start -p 3001 &
         - yarn wait-on "http-get://localhost:3001" && yarn cypress run
         - kill $(jobs -p) || true
 
