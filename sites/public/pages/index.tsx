@@ -58,7 +58,7 @@ export default function Home() {
       <div className="homepage-extra">
         <MarkdownSection fullwidth={true}>
           <>
-            <h2>{t("welcome.checkEligibilityDescription")}</h2>
+            <h2 className="text-xl">{t("welcome.checkEligibilityDescription")}</h2>
             <LinkButton href="/eligibility/welcome">{t("welcome.checkEligibility")}</LinkButton>
           </>
         </MarkdownSection>
