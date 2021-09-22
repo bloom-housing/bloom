@@ -9,7 +9,7 @@ const ProgressNavItem = (props: {
   currentPageSection: number
   completedSections: number
   label: string
-  route: string
+  route: string | null
 }) => {
   const router = useRouter()
 
@@ -27,7 +27,13 @@ const ProgressNavItem = (props: {
       <a
         aria-disabled={bgColor == "is-disabled"}
         href={"#"}
-        onClick={() => router.push(props.route)}
+        onClick={(e) => {
+          // Prevent default event behavior, which would route using href and not onClick.
+          e.preventDefault()
+          if (props.route) {
+            router.push(props.route)
+          }
+        }}
       >
         {props.label}
       </a>
@@ -53,7 +59,7 @@ const ProgressNav = (props: {
             currentPageSection={props.currentPageSection}
             completedSections={props.completedSections}
             label={label}
-            route={props.routes ? props.routes[i] : "#"}
+            route={props.routes ? props.routes[i] : null}
           />
         ))}
       </ul>
