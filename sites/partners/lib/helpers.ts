@@ -236,3 +236,21 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
     return usd.format(yearIncomeNumber)
   }
 }
+
+export const removeEmptyFields = (obj) => {
+  Object.keys(obj).forEach(function (key) {
+    if (obj[key] && typeof obj[key] === "object") {
+      removeEmptyFields(obj[key])
+    }
+    if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+      delete obj[key]
+    }
+    if (
+      typeof obj[key] === "object" &&
+      !Array.isArray(obj[key]) &&
+      Object.keys(obj[key]).length === 0
+    ) {
+      delete obj[key]
+    }
+  })
+}

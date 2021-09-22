@@ -44,7 +44,13 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber, createDate, createTime } from "../../../lib/helpers"
+import {
+  stringToBoolean,
+  stringToNumber,
+  createDate,
+  createTime,
+  removeEmptyFields,
+} from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -478,25 +484,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             latLong,
             customMapPositionChosen
           )
-          const removeEmptyFields = (obj) => {
-            Object.keys(obj).forEach(function (key) {
-              if (obj[key] && typeof obj[key] === "object") {
-                removeEmptyFields(obj[key])
-              }
-              if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
-                delete obj[key]
-              }
-              if (
-                typeof obj[key] === "object" &&
-                !Array.isArray(obj[key]) &&
-                Object.keys(obj[key]).length === 0
-              ) {
-                delete obj[key]
-              }
-            })
-          }
           removeEmptyFields(formattedData)
-
           const result = editMode
             ? await listingsService.update({
                 listingId: listing.id,
