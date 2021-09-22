@@ -31,6 +31,13 @@ h1.form-card__header_title {
   text-transform: capitalize;
 }
 
+// For the eligibility questionnaire, there are five headers, so give each 20% of the full navbar
+// width. (If we reuse this class for other navigation UI elements, with a different number of
+// navbar items, we'll need to refactor this.)
+li.progress-nav__item {
+  width: 20%;
+}
+
 // Body text should have normal font weight
 .field-note {
   @apply font-normal;
