@@ -11,12 +11,14 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
   - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
 
 ## Frontend
 
 - Added:
 
+  - Show confirmation modal when publishing listings ([#1772](https://github.com/bloom-housing/bloom/pull/1772)) (Jared White)
   - Split Listing form up into two main tabs ([#1644](https://github.com/bloom-housing/bloom/pull/1644)) (Jared White)
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
@@ -83,6 +85,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
   - Removed business logic from AdditionalFees component ([#1844](https://github.com/bloom-housing/bloom/pull/1844)) (Emily Jablonski)
     - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from Apply, Waitlist components ([#1819](https://github.com/bloom-housing/bloom/pull/1819)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props from both components and replaced with a set not dependent on data model, split "Apply" component into two new components GetApplication and Submit Application, removed ApplicationSection components
 
 ### Backend
 

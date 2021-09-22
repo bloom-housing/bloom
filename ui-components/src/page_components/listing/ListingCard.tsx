@@ -10,10 +10,11 @@ export interface ListingCardProps {
   seeDetailsLink: string
   tableHeader: string
   tableProps: GroupedTableProps
+  detailsLinkClass?: string
 }
 
 const ListingCard = (props: ListingCardProps) => {
-  const { imageCardProps, tableProps } = props
+  const { imageCardProps, tableProps, detailsLinkClass } = props
 
   return (
     <article className="listings-row">
@@ -25,7 +26,9 @@ const ListingCard = (props: ListingCardProps) => {
         <div className="listings-row_table">
           {tableProps.data && <GroupedTable {...tableProps} />}
         </div>
-        <LinkButton href={props.seeDetailsLink}>{t("t.seeDetails")}</LinkButton>
+        <LinkButton className={detailsLinkClass} href={props.seeDetailsLink}>
+          {t("t.seeDetails")}
+        </LinkButton>
       </div>
     </article>
   )

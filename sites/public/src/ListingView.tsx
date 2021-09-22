@@ -1,44 +1,53 @@
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
-import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import {
+  Listing,
+  ListingEvent,
+  ListingEventType,
+  ListingApplicationAddressType,
+  ApplicationMethod,
+  ApplicationMethodType,
+} from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
-  ApplicationSection,
   ApplicationStatus,
-  StandardTable,
   Description,
+  DownloadLotteryResults,
   ExpandableText,
-  getOccupancyDescription,
+  GetApplication,
   GroupedTable,
   GroupedTableGroup,
-  getSummariesTable,
   ImageCard,
-  imageUrlFromListing,
   InfoCard,
   LeasingAgent,
+  ListSection,
   ListingDetailItem,
   ListingDetails,
   ListingMap,
-  ListSection,
-  occupancyTable,
-  OneLineAddress,
-  PreferencesList,
-  TableHeaders,
-  t,
-  UnitTables,
-  WhatToExpect,
-  PublicLotteryEvent,
   LotteryResultsEvent,
-  OpenHouseEvent,
-  DownloadLotteryResults,
-  ReferralApplication,
   Message,
+  OneLineAddress,
+  OpenHouseEvent,
+  PreferencesList,
+  PublicLotteryEvent,
+  ReferralApplication,
+  StandardTable,
+  SubmitApplication,
+  TableHeaders,
+  UnitTables,
+  Waitlist,
+  WhatToExpect,
+  getOccupancyDescription,
+  getSummariesTable,
+  imageUrlFromListing,
+  occupancyTable,
+  openDateState,
+  t,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
-import { getGenericAddress, openInFuture } from "../lib/helpers"
-import React from "react"
+import { getGenericAddress } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
@@ -53,8 +62,6 @@ export const ListingView = (props: ListingProps) => {
     content: appStatusContent,
     subContent: appStatusSubContent,
   } = useGetApplicationStatusProps(listing)
-
-  const appOpenInFuture = openInFuture(listing)
 
   if (!listing) {
     return <ErrorPage />
@@ -178,6 +185,135 @@ export const ListingView = (props: ListingProps) => {
     } else return t("listings.reservedCommunityTitleDefault")
   }
 
+  // TODO: Move the below methods into our shared helper library when setup
+  const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+    return applicationMethods.some((method) => method.type == type)
+  }
+
+  const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+    return applicationMethods.find((method) => method.type == type)
+  }
+
+  type AddressLocation = "dropOff" | "pickUp"
+
+  const getAddress = (
+    addressType: ListingApplicationAddressType | undefined,
+    location: AddressLocation
+  ) => {
+    if (addressType === ListingApplicationAddressType.leasingAgent) {
+      return listing.leasingAgentAddress
+    }
+    if (addressType === ListingApplicationAddressType.mailingAddress) {
+      return listing.applicationMailingAddress
+    }
+    if (location === "dropOff") {
+      return listing.applicationDropOffAddress
+    } else {
+      return listing.applicationPickUpAddress
+    }
+  }
+
+  const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
+  }
+
+  const getOnlineApplicationURL = () => {
+    let onlineApplicationURL
+    if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
+      onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+    } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
+      onlineApplicationURL =
+        getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
+          ?.externalReference || ""
+    }
+    return onlineApplicationURL
+  }
+
+  const getPaperApplications = () => {
+    return (
+      getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)
+        ?.paperApplications.sort((a, b) => {
+          // Ensure English is always first
+          if (a.language == "en") return -1
+          if (b.language == "en") return 1
+
+          // Otherwise, do regular string sort
+          const aLang = t(`languages.${a.language}`)
+          const bLang = t(`languages.${b.language}`)
+          if (aLang < bLang) return -1
+          if (aLang > bLang) return 1
+          return 0
+        })
+        .map((paperApp) => {
+          return {
+            fileURL: paperApp?.file?.fileId.includes("https")
+              ? paperApp?.file?.fileId
+              : cloudinaryPdfFromId(
+                  paperApp?.file?.fileId || "",
+                  process.env.cloudinaryCloudName || ""
+                ),
+            languageString: t(`languages.${paperApp.language}`),
+          }
+        }) ?? null
+    )
+  }
+
+  // Move the above methods into our shared helper library when setup
+
+  const applySidebar = () => (
+    <>
+      <Waitlist
+        isWaitlistOpen={listing.isWaitlistOpen}
+        waitlistMaxSize={listing.waitlistMaxSize}
+        waitlistCurrentSize={listing.waitlistCurrentSize}
+        waitlistOpenSpots={listing.waitlistOpenSpots}
+        unitsAvailable={listing.unitsAvailable}
+      />
+      <GetApplication
+        onlineApplicationURL={getOnlineApplicationURL()}
+        applicationsDueDate={moment(listing.applicationDueDate).format(
+          `MMM. DD, YYYY [${t("t.at")}] h A`
+        )}
+        applicationsOpen={!openDateState(listing)}
+        applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        paperApplications={getPaperApplications()}
+        paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
+        postmarkedApplicationsReceivedByDate={moment(
+          listing.postmarkedApplicationsReceivedByDate
+        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
+        applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
+        applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
+        preview={props.preview}
+      />
+      <SubmitApplication
+        applicationMailingAddress={listing.applicationMailingAddress}
+        applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+        applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
+        applicationOrganization={listing.applicationOrganization}
+        postmarkedApplicationData={{
+          postmarkedApplicationsReceivedByDate: moment(
+            listing.postmarkedApplicationsReceivedByDate
+          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          developer: listing.developer,
+          applicationsDueDate: moment(listing.applicationDueDate).format(
+            `MMM. DD, YYYY [${t("t.at")}] h A`
+          ),
+        }}
+      />
+    </>
+  )
+
+  const applicationsClosed = moment() > moment(listing.applicationDueDate)
+
+  //TODO: Add isReferralApplication boolean field to avoid this logic
+  const isReferralApp =
+    !listing.applicationDropOffAddress &&
+    !listing.applicationDropOffAddressType &&
+    !listing.applicationMailingAddress &&
+    !listing.applicationPickUpAddress &&
+    !listing.applicationPickUpAddressType &&
+    listing.applicationMethods?.length === 0
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -220,14 +356,14 @@ export const ListingView = (props: ListingProps) => {
             groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
             return (
-              <React.Fragment key={percent}>
+              <>
                 <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
                 <GroupedTable
                   headers={unitSummariesHeaders}
                   data={groupedUnits}
                   responsiveCollapse={true}
                 />
-              </React.Fragment>
+              </>
             )
           })}
         {amiValues.length == 1 && (
@@ -245,13 +381,7 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
-          <ApplicationSection
-            listing={listing}
-            preview={props.preview}
-            internalFormRoute="/applications/start/choose-language"
-            cloudName={process.env.cloudinaryCloudName}
-            openInFuture={appOpenInFuture}
-          />
+          {!isReferralApp && !applicationsClosed ? <>{applySidebar()}</> : <></>}
         </div>
       </div>
       <ListingDetails>
@@ -356,23 +486,12 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              <ApplicationSection
-                listing={listing}
-                preview={props.preview}
-                internalFormRoute="/applications/start/choose-language"
-                cloudName={process.env.cloudinaryCloudName}
-                openInFuture={appOpenInFuture}
-              />
-              {listing?.referralApplication && (
+              {!isReferralApp && !applicationsClosed ? (
+                applySidebar()
+              ) : (
                 <ReferralApplication
-                  phoneNumber={
-                    listing.referralApplication.phoneNumber ||
-                    t("application.referralApplication.phoneNumber")
-                  }
-                  description={
-                    listing.referralApplication.externalReference ||
-                    t("application.referralApplication.instructions")
-                  }
+                  phoneNumber={t("application.referralApplication.phoneNumber")}
+                  description={t("application.referralApplication.instructions")}
                   title={t("application.referralApplication.furtherInformation")}
                 />
               )}
@@ -385,7 +504,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-            {!openInFuture && <LeasingAgent listing={listing} />}
+            <LeasingAgent listing={listing} />
           </aside>
         </ListingDetailItem>
 

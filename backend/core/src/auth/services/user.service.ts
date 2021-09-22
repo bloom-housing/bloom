@@ -19,7 +19,7 @@ import { USER_ERRORS } from "../user-errors"
 import { UpdatePasswordDto } from "../dto/update-password.dto"
 import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
-import { authzActions, AuthzService } from "./authz.service"
+import { AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 
 import { AuthContext } from "../types/auth-context"
@@ -32,6 +32,10 @@ import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
+import { authzActions } from "../enum/authz-actions.enum"
+import { addFilters } from "../../shared/filter"
+import { UserFilterParams } from "../dto/user-filter-params"
+import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
@@ -67,6 +71,14 @@ export class UserService {
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
     const qb = this._getQb()
+
+    if (params.filter) {
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        qb
+      )
+    }
 
     const result = await paginate<User>(qb, options)
     /**

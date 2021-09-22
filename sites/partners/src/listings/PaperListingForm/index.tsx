@@ -426,6 +426,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [closeModal, setCloseModal] = useState(false)
 
   /**
+   * Publish modal
+   */
+  const [publishModal, setPublishModal] = useState(false)
+
+  /**
    * Lottery results drawer
    */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
@@ -662,6 +667,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
+                        showPublishModal={() => setPublishModal(true)}
                       />
                     </aside>
                   </div>
@@ -700,6 +706,36 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.closeThisListing")}
+      </Modal>
+
+      <Modal
+        open={!!publishModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.publishThisListing")}
+        onClose={() => setPublishModal(false)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setStatus(ListingStatus.active)
+              triggerSubmit(getValues())
+              setPublishModal(false)
+            }}
+          >
+            {t("listings.actions.publish")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setPublishModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.publishThisListing")}
       </Modal>
     </>
   )
