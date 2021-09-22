@@ -1,13 +1,11 @@
-import { OmitType } from "@nestjs/swagger"
+import { PickType } from "@nestjs/swagger"
+import { User } from "../entities/user.entity"
 import { Expose, Type } from "class-transformer"
 import {
-  IsDate,
   IsDefined,
-  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
   Matches,
   ValidateIf,
   ValidateNested,
@@ -15,39 +13,17 @@ import {
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
-import { UserDto } from "./user.dto"
 
-export class UserUpdateDto extends OmitType(UserDto, [
+export class UserProfileUpdateDto extends PickType(User, [
   "id",
-  "email",
+  "firstName",
+  "middleName",
+  "lastName",
+  "dob",
   "createdAt",
   "updatedAt",
-  "leasingAgentInListings",
-  "roles",
-  "jurisdictions",
+  "language",
 ] as const) {
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  id?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  email?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
-
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })

@@ -900,6 +900,30 @@ export class UserService {
   }
 }
 
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -995,6 +1019,28 @@ export class JurisdictionsService {
       url = url.replace("{jurisdictionId}", params["jurisdictionId"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
       let data = null
 
@@ -3742,6 +3788,9 @@ export interface UserUpdate {
   id?: string
 
   /**  */
+  email?: string
+
+  /**  */
   createdAt?: Date
 
   /**  */
@@ -3758,9 +3807,6 @@ export interface UserUpdate {
 
   /**  */
   confirmedAt?: Date
-
-  /**  */
-  email: string
 
   /**  */
   firstName: string
@@ -3829,6 +3875,41 @@ export interface UserInvite {
 
   /**  */
   dob: Date
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
 }
 
 export interface JurisdictionCreate {
