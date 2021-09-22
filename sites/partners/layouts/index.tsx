@@ -70,8 +70,12 @@ const Layout = (props) => {
             </p>
           </FooterSection>
           <FooterNav copyright={t("footer.copyright")}>
-            <LocalizedLink href="/privacy">{t("pageTitle.privacy")}</LocalizedLink>
-            <LocalizedLink href="/disclaimer">{t("pageTitle.disclaimer")}</LocalizedLink>
+            <LocalizedLink href={`${process.env.publicBaseUrl}/privacy`}>
+              {t("pageTitle.privacy")}
+            </LocalizedLink>{" "}
+            <LocalizedLink href={`${process.env.publicBaseUrl}/disclaimer`}>
+              {t("pageTitle.disclaimer")}
+            </LocalizedLink>
           </FooterNav>
         </SiteFooter>
       </div>
