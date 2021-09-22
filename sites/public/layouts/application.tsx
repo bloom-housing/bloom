@@ -7,12 +7,10 @@ import {
   SiteFooter,
   FooterNav,
   FooterSection,
-  ExygyFooter,
   UserNav,
   t,
   AuthContext,
   setSiteAlertMessage,
-  getTranslationMarkup,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
@@ -95,9 +93,6 @@ const Layout = (props) => {
             <a>{t("pageTitle.disclaimer")}</a>
           </Link>
         </FooterNav>
-        <FooterSection className="bg-black" small>
-          <ExygyFooter />
-        </FooterSection>
       </SiteFooter>
     </div>
   )

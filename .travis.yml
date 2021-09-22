@@ -46,7 +46,8 @@ jobs:
         - cd backend/core
         - yarn nest start &
         - cd ../../sites/public
-        - yarn dev &
+        - yarn build
+        - yarn start &
         - yarn wait-on "http-get://localhost:3000" && yarn cypress run
         - kill $(jobs -p) || true
     - stage: longer tests

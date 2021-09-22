@@ -52,3 +52,8 @@ a.button.is-primary:hover {
 .loading-overlay__spinner circle {
   stroke: $tailwind-primary;
 }
+
+// Increase the font size of markdown sections.
+.markdown-section__inner {
+  @apply text-xl;
+}

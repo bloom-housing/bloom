@@ -2,11 +2,9 @@ import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
 const nccProperty: PropertySeedType = {
@@ -51,17 +49,9 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const unitTypeStudio = await this.unitTypeRepository.findOneOrFail({ name: "studio" })
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
-    const unitTypeFourBdrm = await this.unitTypeRepository.findOneOrFail({ name: "fourBdrm" })
 
     const property = await this.propertyRepository.save({
       ...nccProperty,
-    })
-
-    const applicationMethod: ApplicationMethod = await this.applicationMethodRepository.save({
-      type: ApplicationMethodType.ExternalLink,
-      acceptsPostmarkedApplications: false,
-      externalReference: nccListing.managementWebsite,
     })
 
     const assets: Array<AssetDtoSeedType> = [
@@ -76,7 +66,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...nccListing,
-      applicationMethods: [applicationMethod],
+      applicationMethods: [],
       assets: JSON.parse(JSON.stringify(assets)),
       events: [],
       property: property,

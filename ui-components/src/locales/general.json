@@ -1130,7 +1130,8 @@
     "privacy": "Privacy Policy",
     "welcomeEnglish": "Welcome",
     "welcomeSpanish": "Bienvenido",
-    "welcomeVietnamese": "Tiếng Việt"
+    "welcomeVietnamese": "Tiếng Việt",
+    "about": "About Us"
   },
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
