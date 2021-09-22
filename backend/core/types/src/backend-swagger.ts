@@ -1002,6 +1002,28 @@ export class JurisdictionsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ListingsService {
@@ -3601,7 +3623,7 @@ export interface User {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3645,7 +3667,7 @@ export interface UserCreate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserBasic {
@@ -3680,7 +3702,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3772,7 +3794,7 @@ export interface UserUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserFilterParams {
@@ -3828,7 +3850,7 @@ export interface UserInvite {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface JurisdictionCreate {

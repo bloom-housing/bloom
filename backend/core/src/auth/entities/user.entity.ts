@@ -70,9 +70,10 @@ export class User {
 
   @Column("timestamp without time zone")
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  dob: Date
+  dob?: Date | null
 
   @CreateDateColumn()
   @Expose()
