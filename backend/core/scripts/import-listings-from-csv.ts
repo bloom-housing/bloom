@@ -1,6 +1,7 @@
 import csv from "csv-parser"
 import fs from "fs"
-import { importListing, getDetroitJurisdiction } from "./listings-importer"
+import { importListing } from "./import-helpers"
+import { getDetroitJurisdiction } from "./detroit-helpers"
 import {
   ListingCreate,
   AddressCreate,
@@ -61,7 +62,7 @@ async function main() {
         const developmentPipelineBucket: number = parseInt(
           listingFields["Development Pipeline Bucket"]
         )
-        if (projectType.toLowerCase() !== "existing occupied" && developmentPipelineBucket < 3) {
+        if (projectType?.toLowerCase() !== "existing occupied" && developmentPipelineBucket < 3) {
           console.log(
             `Skipping listing because it is not far enough along in the development pipeline: ${listingName}`
           )

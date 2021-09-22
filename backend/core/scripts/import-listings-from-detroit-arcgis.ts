@@ -1,4 +1,5 @@
-import { importListing, createUnitsArray, getDetroitJurisdiction } from "./listings-importer"
+import { importListing } from "./import-helpers"
+import { createUnitsArray, getDetroitJurisdiction } from "./detroit-helpers"
 import axios from "axios"
 import {
   AddressCreate,
