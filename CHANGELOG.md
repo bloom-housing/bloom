@@ -133,6 +133,7 @@ All notable changes to this project will be documented in this file. The format 
 - Updated:
 
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
+  - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 - Fixed:
 

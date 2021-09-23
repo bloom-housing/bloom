@@ -82,9 +82,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }
 
   const savePaperApplication = () => {
-    const paperApplications = methods.paper?.paperApplications
-      ? methods.paper.paperApplications
-      : []
+    const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       file: {
         fileId: cloudinaryData.id,
