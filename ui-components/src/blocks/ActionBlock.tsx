@@ -14,6 +14,7 @@ export enum ActionBlockBackground {
 interface ActionBlockProps {
   actions: React.ReactNode[]
   background?: string
+  className?: string
   header: string
   icon?: React.ReactNode
   layout?: ActionBlockLayout
@@ -22,12 +23,13 @@ interface ActionBlockProps {
 const ActionBlock = ({
   actions,
   background = ActionBlockBackground.none,
+  className,
   header,
   icon,
   layout = ActionBlockLayout.block,
   subheader,
 }: ActionBlockProps) => {
-  const actionBlockClasses = ["action-block"]
+  const actionBlockClasses = ["action-block", `${className ? className : ""}`]
   if (background) actionBlockClasses.push(background)
   if (layout === "block") {
     actionBlockClasses.push("action-block__block")
