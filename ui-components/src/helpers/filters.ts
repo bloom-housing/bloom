@@ -1,10 +1,21 @@
 import {
   EnumListingFilterParamsComparison,
+  AvailabilityFilterEnum,
   ListingFilterKeys,
-  ListingFilterParams,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 
+// TODO(#629): Refactor filter state storage strategy
+// Currently, the knowledge of "what a filter is" is spread across multiple
+// places: getComparisonForFilter(), ListingFilterState, FrontendListingFilterStateKeys,
+// ListingFilterKeys, the encode/decode methods, and the various enums with options
+// for the filters. It could be worth unifying this into a ListingFilterStateManager
+// class that can hold all this in one place. Work toward this is in
+// https://github.com/CityOfDetroit/bloom/pull/484, but was set aside.
+
+// On the frontend, we assume a filter will always use the same comparison. (For
+// example, that minRent will always use a >= comparison.) The backend doesn't
+// make this assumption, so we need to tell it what comparison to use.
 function getComparisonForFilter(filterKey: ListingFilterKeys) {
   switch (filterKey) {
     case ListingFilterKeys.name:
@@ -29,42 +40,57 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
   }
 }
 
-export function encodeToBackendFilterArray(filterParams: ListingFilterParams) {
+// Define the keys we expect to see in the frontend URL. These are also used for
+// the filter state object, ListingFilterState.
+export const FrontendListingFilterStateKeys = { ...ListingFilterKeys }
+export interface ListingFilterState {
+  [FrontendListingFilterStateKeys.availability]?: string | AvailabilityFilterEnum
+  [FrontendListingFilterStateKeys.bedrooms]?: string | number
+  [FrontendListingFilterStateKeys.zipcode]?: string
+  [FrontendListingFilterStateKeys.minRent]?: string | number
+  [FrontendListingFilterStateKeys.maxRent]?: string | number
+  [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
+}
+
+export function encodeToBackendFilterArray(filterState: ListingFilterState) {
   const filterArray = []
-  for (const filterType in filterParams) {
+  for (const filterType in filterState) {
+    // Only include things that are a backend filter type. The keys of
+    // ListingFilterState are a superset of ListingFilterKeys that may include
+    // keys not recognized by the backend, so we check against ListingFilterKeys
+    // here.
     if (filterType in ListingFilterKeys) {
       const comparison = getComparisonForFilter(ListingFilterKeys[filterType])
       filterArray.push({
         $comparison: comparison,
-        [filterType]: filterParams[filterType],
+        [filterType]: filterState[filterType],
       })
     }
   }
   return filterArray
 }
 
-export function encodeToFrontendFilterString(filterParams: ListingFilterParams) {
+export function encodeToFrontendFilterString(filterState: ListingFilterState) {
   let queryString = ""
-  for (const filterType in filterParams) {
-    const value = filterParams[filterType]
-    if (filterType in ListingFilterKeys && value !== undefined && value !== "") {
+  for (const filterType in filterState) {
+    const value = filterState[filterType]
+    if (filterType in FrontendListingFilterStateKeys && value !== undefined && value !== "") {
       queryString += `&${filterType}=${value}`
     }
   }
   return queryString
 }
 
-export function decodeFiltersFromFrontendUrl(query: ParsedUrlQuery) {
-  // ListingFilterParams must have a comparison, so set one here even though it's unused.
-  const filters: ListingFilterParams = {
-    $comparison: EnumListingFilterParamsComparison.NA,
-  }
+export function decodeFiltersFromFrontendUrl(
+  query: ParsedUrlQuery
+): ListingFilterState | undefined {
+  const filterState: ListingFilterState = {}
   let foundFilterKey = false
   for (const queryKey in query) {
-    if (queryKey in ListingFilterKeys) {
-      filters[queryKey] = query[queryKey]
+    if (queryKey in FrontendListingFilterStateKeys) {
+      filterState[queryKey] = query[queryKey]
       foundFilterKey = true
     }
   }
-  return foundFilterKey ? filters : undefined
+  return foundFilterKey ? filterState : undefined
 }

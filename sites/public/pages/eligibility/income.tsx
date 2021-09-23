@@ -14,16 +14,13 @@ import {
   AppearanceStyleType,
   encodeToFrontendFilterString,
   Select,
+  ListingFilterState,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import { eligibilityRoute } from "../../lib/helpers"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { useRouter } from "next/router"
-import {
-  EnumListingFilterParamsComparison,
-  ListingFilterParams,
-} from "@bloom-housing/backend-core/types"
 
 const EligibilityIncome = () => {
   const router = useRouter()
@@ -52,10 +49,7 @@ const EligibilityIncome = () => {
   }
 
   function getFilterUrl() {
-    const params: ListingFilterParams = {
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
-    }
+    const params: ListingFilterState = {}
 
     if (eligibilityRequirements.age < SENIOR_AGE) {
       params.seniorHousing = false

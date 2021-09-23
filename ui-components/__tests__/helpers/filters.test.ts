@@ -3,6 +3,7 @@ import {
   encodeToBackendFilterArray,
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,
+  ListingFilterState,
 } from "../../src/helpers/filters"
 import { parse } from "querystring"
 import {
@@ -15,102 +16,92 @@ afterEach(cleanup)
 
 describe("encode backend filter array", () => {
   it("should handle single filter", () => {
-    const filter: ListingFilterParams = {
-      status: EnumListingFilterParamsStatus.active,
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filter: ListingFilterState = {
+      zipcode: "48226",
     }
     expect(encodeToBackendFilterArray(filter)).toEqual([
       {
-        $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.active,
+        $comparison: EnumListingFilterParamsComparison["IN"],
+        zipcode: "48226",
       },
     ])
   })
+
   it("should handle multiple filters", () => {
-    const filter: ListingFilterParams = {
-      name: "Name",
-      status: EnumListingFilterParamsStatus.active,
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filter: ListingFilterState = {
+      bedrooms: "3",
+      zipcode: "48226",
     }
     expect(encodeToBackendFilterArray(filter)).toEqual([
       {
-        $comparison: EnumListingFilterParamsComparison["="],
-        name: "Name",
+        $comparison: EnumListingFilterParamsComparison[">="],
+        bedrooms: "3",
       },
       {
-        $comparison: EnumListingFilterParamsComparison["="],
-        status: EnumListingFilterParamsStatus.active,
+        $comparison: EnumListingFilterParamsComparison["IN"],
+        zipcode: "48226",
       },
     ])
   })
 })
 
-describe("encode frontend filter string", () => {
+describe("encode filter state as frontend querystring", () => {
   it("should handle single filter", () => {
-    const filter: ListingFilterParams = {
-      status: EnumListingFilterParamsStatus.active,
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filter: ListingFilterState = {
+      zipcode: "48226",
     }
-    expect(encodeToFrontendFilterString(filter)).toBe("&status=active")
+    expect(encodeToFrontendFilterString(filter)).toBe("&zipcode=48226")
   })
+
   it("should handle multiple filters", () => {
-    const filter: ListingFilterParams = {
-      name: "Name",
-      status: EnumListingFilterParamsStatus.active,
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filter: ListingFilterState = {
+      bedrooms: "3",
+      zipcode: "48226",
     }
-    expect(encodeToFrontendFilterString(filter)).toBe("&name=Name&status=active")
+    expect(encodeToFrontendFilterString(filter)).toBe("&bedrooms=3&zipcode=48226")
   })
+
   it("should exclude empty filters", () => {
-    const filter: ListingFilterParams = {
-      name: "Name",
-      status: undefined,
+    const filter: ListingFilterState = {
+      bedrooms: "3",
       zipcode: "",
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
     }
-    expect(encodeToFrontendFilterString(filter)).toBe("&name=Name")
+    expect(encodeToFrontendFilterString(filter)).toBe("&bedrooms=3")
   })
 })
 
-describe("get filter from parsed url", () => {
+describe("get filter state from parsed url", () => {
   it("should handle single filter", () => {
-    const filterString = parse("localhost:3000/listings?page=1&status=active")
-    const expected: ListingFilterParams = {
-      status: EnumListingFilterParamsStatus.active,
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filterString = parse("localhost:3000/listings?page=1&zipcode=48226")
+    const expected: ListingFilterState = {
+      zipcode: "48226",
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })
+
   it("should handle multiple filters", () => {
-    const filterString = parse("localhost:3000/listings?page=1&status=active&name=Name")
-    const expected: ListingFilterParams = {
-      status: EnumListingFilterParamsStatus.active,
-      name: "Name",
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filterString = parse("localhost:3000/listings?page=1&bedrooms=3&zipcode=48226")
+    const expected: ListingFilterState = {
+      bedrooms: "3",
+      zipcode: "48226",
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })
+
   it("should handle no filters", () => {
     const filterString = parse("localhost:3000/listings?page=1")
     expect(decodeFiltersFromFrontendUrl(filterString)).toBe(undefined)
   })
+
   it("should handle no known filter keys", () => {
     const filterString = parse("localhost:3000/listings?page=1&unknown=blah")
     expect(decodeFiltersFromFrontendUrl(filterString)).toBe(undefined)
   })
+
   it("should handle some known filters", () => {
-    const filterString = parse("localhost:3000/listings?page=1&unknown=blah&name=Name")
-    const expected: ListingFilterParams = {
-      name: "Name",
-      // $comparison is a required field even though it won't be used on the frontend. Will be fixed in #484.
-      $comparison: EnumListingFilterParamsComparison.NA,
+    const filterString = parse("localhost:3000/listings?page=1&unknown=blah&zipcode=48226")
+    const expected: ListingFilterState = {
+      zipcode: "48226",
     }
     expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
   })

@@ -10,13 +10,9 @@ import {
   openDateState,
   t,
   encodeToBackendFilterArray,
+  ListingFilterState,
 } from "@bloom-housing/ui-components"
-import {
-  Listing,
-  ListingReviewOrder,
-  ListingFilterParams,
-  OrderByFieldsEnum,
-} from "@bloom-housing/backend-core/types"
+import { Listing, ListingReviewOrder, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
 
@@ -52,7 +48,7 @@ const listingsFetcher = function () {
     url: string,
     page: number,
     limit: number,
-    filters: ListingFilterParams,
+    filters: ListingFilterState,
     orderBy: OrderByFieldsEnum
   ) => {
     const res = await axios.get(url, {
@@ -74,7 +70,7 @@ const listingsFetcher = function () {
 export function useListingsData(
   pageIndex: number,
   limit = 10,
-  filters: ListingFilterParams,
+  filters: ListingFilterState,
   orderBy: OrderByFieldsEnum
 ) {
   const { data, error } = useSWR(
