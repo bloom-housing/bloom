@@ -15,7 +15,7 @@ describe("Verifying the eligibility questionnaire flow", () => {
 
     // Click the "Next" button to go to the "Household Size" section.
     cy.contains("Next").click()
-    cy.url().should("include", "/eligibility/householdSize")
+    cy.url().should("include", "/eligibility/household")
 
     // Select "Household Size 2"
     cy.get("select").select("two")

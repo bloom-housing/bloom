@@ -788,7 +788,7 @@
       "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
       "submitAPaperApplication": "Submit a Paper Application",
-      "contactManagment":"Contact Management Company"
+      "contactManagment": "Contact Management Company"
     },
     "atAnotherAddress": "At another address",
     "atLeasingAgentAddress": "At the leasing agent address",
@@ -1286,7 +1286,7 @@
     "range": "%{from} to %{to}",
     "readLess": "read less",
     "readMore": "read more",
-    "region":"Region",
+    "region": "Region",
     "relationship": "Relationship",
     "otherRelationShip": "Other Relationship",
     "rent": "Rent",
@@ -1384,23 +1384,23 @@
   },
   "eligibility": {
     "progress": {
-      "header" : "Let's find your next home",
+      "header": "Let's find your next home",
       "sections": {
-        "welcome" : "Welcome",
-        "householdSize" : "Household Size",
-        "age" : "Age",
-        "disability" : "Disability",
-        "income" : "Income"
+        "welcome": "Welcome",
+        "household": "Household",
+        "age": "Age",
+        "disability": "Disability",
+        "income": "Income"
       }
     },
     "welcome": {
       "header": "Welcome",
       "description": "To find you a home that best fits your needs, let's answer a few questions first. Some properties only accept people with certain ages, incomes, etc."
     },
-    "householdSize": {
+    "household": {
       "prompt": "How many people will be living in this property?",
       "srCountLabel": "Household Size",
-      "ranges" : {
+      "ranges": {
         "one": "1 Member",
         "two": "2 Members",
         "three": "3 Members",
@@ -1411,22 +1411,22 @@
         "eight": "8+ Members"
       }
     },
-    "age" : {
+    "age": {
       "prompt": "How old are you?",
       "description": "Some properties only accept individuals over 62 years of age.",
       "label": "years old",
       "error": "Please enter a valid age."
     },
-    "disability" : {
-      "prompt" : "Do you have a disability?",
-      "description" : "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application.",
+    "disability": {
+      "prompt": "Do you have a disability?",
+      "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application.",
       "preferNotToSay": "Prefer not to say"
     },
-    "income" : {
+    "income": {
       "prompt": "What is your total household annual income?",
       "description": "Include income for everyone who will be living in your household including yourself. Income includes social security, retirement accounts and wages.",
-      "label" : "Income range",
-      "ranges" : {
+      "label": "Income range",
+      "ranges": {
         "below10k": "Below $10,000",
         "10kTo20k": "$10,000 - $20,000",
         "30kTo40k": "$30,000 - $40,000",

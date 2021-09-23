@@ -28,6 +28,6 @@ describe("<EligibilityWelcome>", () => {
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/householdSize")
+    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/household")
   })
 })
