@@ -1,6 +1,12 @@
 import * as client from "../types/src/backend-swagger"
 import axios from "axios"
-import { ListingCreate, ListingStatus, serviceOptions } from "../types/src/backend-swagger"
+import {
+  ListingCreate,
+  ListingStatus,
+  serviceOptions,
+  UnitsSummaryCreate,
+  UnitCreate,
+} from "../types/src/backend-swagger"
 
 // NOTE: This script relies on any logged-in users having permission to create
 // listings and properties (defined in backend/core/src/auth/authz_policy.csv)
@@ -12,6 +18,22 @@ const unitTypesService = new client.UnitTypesService()
 const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
 const applicationMethodsService = new client.ApplicationMethodsService()
 const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
+
+// Create these import interfaces to mimic the format defined in backend-swagger.ts, but allow
+// certain fields to have a simpler type. For example: allow listing.units.unitType to be a
+// string (e.g. "oneBdrm"), and then the importListing function will look up the corresponding
+// unitType object by name and use that unitType object to construct the UnitCreate.
+export interface ListingImport extends Omit<ListingCreate, "unitsSummary" | "units"> {
+  unitsSummary?: UnitsSummaryImport[]
+  units?: UnitImport[]
+}
+export interface UnitsSummaryImport extends Omit<UnitsSummaryCreate, "unitType"> {
+  unitType?: string
+}
+export interface UnitImport extends Omit<UnitCreate, "unitType" | "priorityType"> {
+  priorityType?: string
+  unitType?: string
+}
 
 async function uploadEntity(entityKey, entityService, listing) {
   const newRecordsIds = await Promise.all(
@@ -105,7 +127,7 @@ export async function importListing(
   apiUrl: string,
   email: string,
   password: string,
-  listing: ListingCreate
+  listing: ListingImport
 ) {
   serviceOptions.axios = axios.create({
     baseURL: apiUrl,
@@ -145,18 +167,32 @@ export async function importListing(
       reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityType)
     }
   }
-  listing.reservedCommunityType = reservedCommunityType
 
+  // Construct the units and unitsSummary arrays expected by the backend, by looking up the
+  // unitTypes and priorityTypes referenced by name.
+  const unitsCreate: UnitCreate[] = []
   listing.units.forEach((unit) => {
-    unit.priorityType = findByName(priorityTypes, unit.priorityType)
-    unit.unitType = findByName(unitTypes, unit.unitType)
+    const priorityType = findByName(priorityTypes, unit.priorityType)
+    const unitType = findByName(unitTypes, unit.unitType)
+    unitsCreate.push({ ...unit, priorityType: priorityType, unitType: unitType })
   })
+  const unitsSummaryCreate: UnitsSummaryCreate[] = []
   if (listing.unitsSummary) {
     listing.unitsSummary.forEach((summary) => {
-      summary.unitType = findByName(unitTypes, summary.unitType)
+      const unitType = findByName(unitTypes, summary.unitType)
+      unitsSummaryCreate.push({ ...summary, unitType: unitType })
     })
   }
 
+  // Construct the ListingCreate to be sent to the backend. Its structure mostly mimics that of the
+  // input ListingImport, with the exception of the fields for which we had to look up referenced
+  // types.
+  const listingCreate: ListingCreate = {
+    ...listing,
+    unitsSummary: unitsSummaryCreate,
+    units: unitsCreate,
+  }
+
   // Upload the listing, and then return it.
-  return await uploadListing(listing)
+  return await uploadListing(listingCreate)
 }

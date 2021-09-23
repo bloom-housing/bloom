@@ -1,13 +1,8 @@
 import csv from "csv-parser"
 import fs from "fs"
-import { importListing } from "./import-helpers"
+import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
 import { getDetroitJurisdiction } from "./detroit-helpers"
-import {
-  ListingCreate,
-  AddressCreate,
-  CSVFormattingType,
-  ListingStatus,
-} from "../types/src/backend-swagger"
+import { AddressCreate, CSVFormattingType, ListingStatus } from "../types/src/backend-swagger"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
 // the corresponding Listings. A few notes:
@@ -93,7 +88,7 @@ async function main() {
     }
 
     // Add data about unitsSummaries
-    const unitsSummaries = []
+    const unitsSummaries: UnitsSummaryImport[] = []
     if (listingFields["Number 0BR"]) {
       unitsSummaries.push({
         unitType: "studio",
@@ -146,7 +141,7 @@ async function main() {
       leasingAgentEmail = listingFields["Manager Email"]
     }
 
-    const listing: ListingCreate = {
+    const listing: ListingImport = {
       name: listingFields["Project Name"],
       hrdId: listingFields["HRDID"],
       buildingAddress: address,

@@ -1,6 +1,5 @@
-import { importListing } from "./import-helpers"
+import { importListing, ListingImport } from "./import-helpers"
 import fs from "fs"
-import { ListingCreate } from "../types/src/backend-swagger"
 import { getDetroitJurisdiction } from "./detroit-helpers"
 
 // Example usage (from within /backend/core):
@@ -19,7 +18,7 @@ async function main() {
 
   const jurisdiction = await getDetroitJurisdiction(apiUrl, email, password)
 
-  const listing: ListingCreate = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
+  const listing: ListingImport = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
   listing.jurisdiction = jurisdiction
 
   let newListing
