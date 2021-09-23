@@ -767,8 +767,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             styleType={AppearanceStyleType.success}
             onClick={() => {
-              setStatus(ListingStatus.active)
-              triggerSubmit(getValues())
+              triggerSubmitWithStatus(ListingStatus.active)
               setPublishModal(false)
             }}
           >
