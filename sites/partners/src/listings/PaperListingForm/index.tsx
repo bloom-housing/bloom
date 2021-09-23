@@ -535,7 +535,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         } catch (err) {
           reset(formData)
           setLoading(false)
-          setAlert("api")
           const { data } = err.response || {}
           if (data.statusCode === 400) {
             data?.message?.forEach((errorMessage: string) => {
@@ -551,6 +550,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                 }
               }
             })
+            setAlert("form")
+          } else {
+            setAlert("api")
           }
         }
       }
@@ -613,7 +615,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                    {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
+                    {alert === "form" ? t("listings.fieldError") : t("errors.alert.badRequest")}
                   </AlertBox>
                 )}
 
