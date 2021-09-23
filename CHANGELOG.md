@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. The format 
   - Partially Senior reserved community type ([#572](https://github.com/CityOfDetroit/bloom/pull/572))
   - "About" page ([#589](https://github.com/CityOfDetroit/bloom/pull/589))
   - RTL support ([#627](https://github.com/CityOfDetroit/bloom/pull/627))
+  - Add senior housing filtering to the filter modal ([#631](https://github.com/CityOfDetroit/bloom/pull/631))
 
 ## Detroit Team M11
 

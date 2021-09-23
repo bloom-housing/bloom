@@ -123,20 +123,18 @@ const ListingsPage = () => {
     { value: "n", label: t("t.no") },
     { value: "y", label: t("t.yes") },
   ]
-  const communityTypeOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "all", label: t("listingFilters.communityTypeOptions.all") },
-    { value: "senior", label: t("listingFilters.communityTypeOptions.senior") },
-    {
-      value: "specialNeedsAndDisability",
-      label: t("listingFilters.communityTypeOptions.specialNeeds"),
-    },
-  ]
+
   const availabilityOptions: SelectOption[] = [
     EMPTY_OPTION,
     { value: AvailabilityFilterEnum.hasAvailability, label: t("listingFilters.hasAvailability") },
     { value: AvailabilityFilterEnum.noAvailability, label: t("listingFilters.noAvailability") },
     { value: AvailabilityFilterEnum.waitlist, label: t("listingFilters.waitlist") },
+  ]
+
+  const seniorHousingOptions: SelectOption[] = [
+    EMPTY_OPTION,
+    { value: "true", label: t("t.yes") },
+    { value: "false", label: t("t.no") },
   ]
 
   function setQueryString(page: number, filters = filterState) {
@@ -263,14 +261,15 @@ const ListingsPage = () => {
               register={register}
               controlClassName="control"
               options={adaCompliantOptions}
+              defaultValue={filterState?.seniorHousing?.toString()}
             />
             <Select
-              id="communityType"
-              name="communityType"
-              label={t("listingFilters.communityType")}
+              id="seniorHousing"
+              name={FrontendListingFilterStateKeys.seniorHousing}
+              label={t("listingFilters.senior")}
               register={register}
               controlClassName="control"
-              options={communityTypeOptions}
+              options={seniorHousingOptions}
             />
           </div>
           <div className="text-center mt-6">

@@ -1347,19 +1347,15 @@
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",
         "adaCompliant": "ADA অনুগত",
-        "communityType": "সম্প্রদায়ের ধরন",
-        "communityTypeOptions": {
-            "all": "সব",
-            "senior": "সিনিয়র হাউজিং (62+)",
-            "specialNeeds": "বিশেষ চাহিদা এবং অক্ষমতা"
-        },
         "availability": "ইউনিট প্রাপ্যতা",
         "hasAvailability": "প্রাপ্যতা আছে",
         "noAvailability": "সক্ষমতা নেই",
         "waitlist": "প্রতীক্ষার তালিকা",
         "applyFilters": "ফিল্টার প্রয়োগ করুন",
         "noResults": "কোন ফলাফল নেই",
-        "noResultsSubtitle": "সেরা ফলাফলের জন্য ফিল্টার সম্পাদনা বা অপসারণ করুন।"
+        "noResultsSubtitle": "সেরা ফলাফলের জন্য ফিল্টার সম্পাদনা বা অপসারণ করুন।",
+        "senior": "সিনিয়র হাউজিং (62+)",
+        "specialNeeds": "বিশেষ চাহিদা এবং অক্ষমতা"
     },
     "eligibility": {
         "progress": {

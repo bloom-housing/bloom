@@ -1222,19 +1222,15 @@
         "zipCode": "Código postal",
         "zipCodeDescription": "Introduzca código postal",
         "adaCompliant": "Cumple con la ADA",
-        "communityType": "Tipo de comunidad",
-        "communityTypeOptions": {
-            "all": "Todos",
-            "senior": "Vivienda para personas mayores (62+)",
-            "specialNeeds": "Necesidades especiales y discapacidad"
-        },
         "availability": "Disponibilidad de la unidad",
         "hasAvailability": "Tiene disponibilidad",
         "noAvailability": "No disponible",
         "waitlist": "Lista de espera",
         "applyFilters": "Aplicar filtros",
         "noResults": "No hay resultados",
-        "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados."
+        "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados.",
+        "senior": "Vivienda para personas mayores (62+)",
+        "specialNeeds": "Necesidades especiales y discapacidad"
     },
     "eligibility": {
         "progress": {

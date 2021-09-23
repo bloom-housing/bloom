@@ -1368,19 +1368,15 @@
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",
     "adaCompliant": "ADA Compliant",
-    "communityType": "Community Type",
-    "communityTypeOptions": {
-      "all": "All",
-      "senior": "Senior housing (62+)",
-      "specialNeeds": "Special needs and disability"
-    },
     "availability": "Unit Availability",
     "hasAvailability": "Has Availability",
     "noAvailability": "No Availability",
     "waitlist": "Waitlist",
     "applyFilters": "Apply Filters",
     "noResults": "No results",
-    "noResultsSubtitle": "Edit or remove filters for best results."
+    "noResultsSubtitle": "Edit or remove filters for best results.",
+    "senior": "Senior housing (62+)",
+    "specialNeeds": "Special needs and disability"
   },
   "eligibility": {
     "progress": {
