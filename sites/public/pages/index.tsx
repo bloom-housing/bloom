@@ -72,9 +72,10 @@ export default function Home(props: IndexProps) {
         }
       />
       <div className="homepage-extra">
-        <div className="action-blocks">
+        <div className="action-blocks mt-4">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
             <ActionBlock
+              className="flex-1"
               header={t("welcome.signUp")}
               icon={<Icon size="3xl" symbol="mailThin" />}
               actions={[
@@ -85,11 +86,12 @@ export default function Home(props: IndexProps) {
             />
           )}
           <ActionBlock
-            header={t("welcome.seeMoreOpportunities")}
+            className="flex-1"
+            header={t("welcome.seeMoreOpportunitiesTruncated")}
             icon={<Icon size="3xl" symbol="building" />}
             actions={[
               <LinkButton href="/additional-resources" key={"additional-resources"}>
-                {t("welcome.viewAdditionalHousing")}
+                {t("welcome.viewAdditionalHousingTruncated")}
               </LinkButton>,
             ]}
           />

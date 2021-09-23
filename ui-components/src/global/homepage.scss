@@ -18,6 +18,10 @@
       @apply text-lg;
       @apply flex-row;
       @apply justify-around;
+      > :nth-child(2) {
+        @apply border-l;
+        @apply border-gray-450;
+      }
     }
   }
 }
