@@ -141,19 +141,23 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
+  const params = {
+    listingId,
+    page,
+  }
+
   const queryParams = new URLSearchParams()
   queryParams.append("listingId", listingId)
   queryParams.append("page", page.toString())
-  queryParams.append("limit", limit.toString())
+
+  if (typeof limit === "number") {
+    queryParams.append("limit", limit.toString())
+    Object.assign(params, limit)
+  }
 
   const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
-  const fetcher = () =>
-    applicationFlaggedSetsService.list({
-      listingId,
-      page,
-      limit,
-    })
+  const fetcher = () => applicationFlaggedSetsService.list(params)
 
   const { data, error } = useSWR(endpoint, fetcher)
 
