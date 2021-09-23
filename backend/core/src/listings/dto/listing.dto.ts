@@ -45,7 +45,6 @@ import {
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 import { IdNameDto } from "../../shared/dto/idName.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
-import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -70,22 +69,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (_value, listing) => {
-      if (!Array.isArray(listing?.applicationMethods)) return null
-      const referralApplicationIndex = listing.applicationMethods.findIndex(
-        (method) => method.type === ApplicationMethodType.Referral
-      )
-      return referralApplicationIndex > -1
-        ? listing.applicationMethods[referralApplicationIndex]
-        : null
-    },
-    { toClassOnly: true }
-  )
-  referralApplication?: ApplicationMethodDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
