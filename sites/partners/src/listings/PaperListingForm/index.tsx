@@ -265,19 +265,21 @@ const formatFormData = (
 
     Object.keys(unit).forEach((key) => {
       if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
-        if (!unit.amiChartOverride) {
-          unit.amiChartOverride = {
-            id: undefined,
-            createdAt: undefined,
-            updatedAt: undefined,
-            items: [],
+        if (parseInt(unit[key])) {
+          if (!unit.amiChartOverride) {
+            unit.amiChartOverride = {
+              id: undefined,
+              createdAt: undefined,
+              updatedAt: undefined,
+              items: [],
+            }
           }
+          unit.amiChartOverride.items.push({
+            percentOfAmi: parseInt(unit.amiPercentage),
+            householdSize: parseInt(key[key.length - 1]),
+            income: parseInt(unit[key]),
+          })
         }
-        unit.amiChartOverride.items.push({
-          percentOfAmi: parseInt(unit.amiPercentage),
-          householdSize: parseInt(key[key.length - 1]),
-          income: parseInt(unit[key]),
-        })
       }
     })
 
