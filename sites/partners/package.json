@@ -40,7 +40,7 @@
     "react-dom": "^17.0.2",
     "react-hook-form": "^6.15.5",
     "swr": "^0.3.5",
-    "tailwindcss": "2.2.10"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -55,7 +55,7 @@
     "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^8.0.0",
-    "postcss": "^8.3.6",
+    "postcss": "^7.0.35",
     "sass-loader": "^10.0.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.2"

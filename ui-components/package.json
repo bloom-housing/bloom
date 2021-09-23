@@ -37,7 +37,7 @@
     "@types/react-tabs": "^2.3.2",
     "@types/react-test-renderer": "^16.9.3",
     "@types/webpack": "^4.41.22",
-    "autoprefixer": "^10.3.4",
+    "autoprefixer": "^9.8.6",
     "babel-loader": "^8.2.2",
     "babel-plugin-require-context-hook": "^1.0.0",
     "dotenv": "^8.2.0",
@@ -48,7 +48,7 @@
     "jest": "^26.5.3",
     "mockdate": "^3.0.2",
     "node-sass": "^4.14.1",
-    "postcss": "^8.3.6",
+    "postcss": "^7.0.35",
     "postcss-loader": "^4.3",
     "preact": "^10.5.14",
     "puppeteer": "^10.1.0",
@@ -93,7 +93,7 @@
     "react-tabs": "^3.2.2",
     "react-text-mask": "^5.4.3",
     "react-transition-group": "^4.4.1",
-    "tailwindcss": "2.2.10",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10",
     "typesafe-actions": "^5.1.0"
   }
 }

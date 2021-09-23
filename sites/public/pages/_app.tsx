@@ -68,7 +68,15 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
 
       document.body.dataset.customScriptsLoaded = "true"
     }
-  })
+
+    if (locale && locale === "ar") {
+      if (document.body.getAttribute("dir") !== "rtl") {
+        document.body.setAttribute("dir", "rtl")
+      }
+    } else {
+      document.body.removeAttribute("dir")
+    }
+  }, [locale, router.events])
 
   return (
     <NavigationContext.Provider

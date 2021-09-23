@@ -36,5 +36,6 @@ bloomTheme.theme.fontFamily["alt-sans"] = [
   "Verdana",
   "sans-serif",
 ]
+bloomTheme.plugins.push(require("tailwindcss-rtl"))
 
 module.exports = bloomTheme

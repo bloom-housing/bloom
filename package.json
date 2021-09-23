@@ -45,6 +45,9 @@
     "setup": "yarn install:all && yarn db:reseed",
     "clean": "rm -rf backend/core/dist/ backend/core/node_modules/ node_modules/ sites/partners/.next/ sites/partners/node_modules/ sites/public/.next/ sites/public/node_modules/ ui-components/node_modules/"
   },
+  "dependencies": {
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
