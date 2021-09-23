@@ -53,6 +53,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationMailingAddress",
   "applications",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "events",
   "image",
   "jurisdiction",
@@ -99,6 +100,12 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   applicationMailingAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetDto)
+  buildingSelectionCriteriaFile?: AssetDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -358,6 +365,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "preferences",
   "events",
   "image",
@@ -421,6 +429,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreateDto)
+  buildingSelectionCriteriaFile?: AssetCreateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -556,6 +570,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "preferences",
   "image",
   "events",
@@ -636,6 +651,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationMailingAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetUpdateDto)
+  buildingSelectionCriteriaFile?: AssetUpdateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -56,6 +56,7 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
+import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -150,6 +151,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
+  buildingSelectionCriteriaFile: { fileId: "", label: "" },
   jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",
@@ -602,6 +604,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <AdditionalFees />
                           <BuildingFeatures />
                           <AdditionalEligibility />
+                          <BuildingSelectionCriteria />
                           <AdditionalDetails />
 
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>

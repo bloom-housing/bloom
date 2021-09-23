@@ -740,6 +740,7 @@
       "previewLotteryResults": "Preview Lottery Results"
     },
     "activePreferences": "Active Preferences",
+    "addBuildingSelectionCriteria": "Add Building Selection Criteria",
     "addListing": "Add Listing",
     "addPaperApplication": "Add Paper Application",
     "addPhoto": "Add Photo",
@@ -789,6 +790,7 @@
     "bath": "bath",
     "browseListings": "Browse Listings",
     "buildingImageAltText": "A picture of the building",
+    "buildingSelectionCriteria": "Building Criteria Selection",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",

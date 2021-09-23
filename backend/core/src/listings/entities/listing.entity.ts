@@ -233,6 +233,13 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   buildingSelectionCriteria?: string | null
 
+  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Asset)
+  buildingSelectionCriteriaFile?: Asset | null
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

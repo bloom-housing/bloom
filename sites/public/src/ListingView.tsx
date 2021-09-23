@@ -33,6 +33,7 @@ import {
   DownloadLotteryResults,
   ReferralApplication,
   Message,
+  cloudinaryPdfFromId,
 } from "@bloom-housing/ui-components"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
@@ -109,7 +110,20 @@ export const ListingView = (props: ListingProps) => {
     ? t("listings.forIncomeCalculationsBMR")
     : t("listings.forIncomeCalculations")
 
-  if (listing.buildingSelectionCriteria) {
+  if (listing.buildingSelectionCriteriaFile) {
+    buildingSelectionCriteria = (
+      <p>
+        <a
+          href={cloudinaryPdfFromId(
+            listing.buildingSelectionCriteriaFile.fileId,
+            process.env.cloudinaryCloudName
+          )}
+        >
+          {t("listings.moreBuildingSelectionCriteria")}
+        </a>
+      </p>
+    )
+  } else if (listing.buildingSelectionCriteria) {
     buildingSelectionCriteria = (
       <p>
         <a href={listing.buildingSelectionCriteria}>

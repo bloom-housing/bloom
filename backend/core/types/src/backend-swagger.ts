@@ -1002,6 +1002,28 @@ export class JurisdictionsService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get jurisdiction by name
+   */
+  retrieveByName(
+    params: {
+      /**  */
+      jurisdictionName: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Jurisdiction> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/jurisdictions/byName/{jurisdictionName}"
+      url = url.replace("{jurisdictionName}", params["jurisdictionName"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class ListingsService {
@@ -4329,6 +4351,9 @@ export interface Listing {
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
 
   /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
+
+  /**  */
   events: ListingEvent[]
 
   /**  */
@@ -4767,6 +4792,9 @@ export interface ListingCreate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEventCreate[]
@@ -5238,6 +5266,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEventUpdate[]
@@ -5824,6 +5855,7 @@ export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
+export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
