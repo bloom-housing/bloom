@@ -388,10 +388,25 @@ const formatFormData = (
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
-    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
+    digitalApplication:
+      data.digitalApplicationChoice === YesNoAnswer.Yes
+        ? true
+        : data.digitalApplicationChoice === YesNoAnswer.No
+        ? false
+        : null,
     commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
-    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
-    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
+    paperApplication:
+      data.paperApplicationChoice === YesNoAnswer.Yes
+        ? true
+        : data.paperApplicationChoice === YesNoAnswer.No
+        ? false
+        : null,
+    referralOpportunity:
+      data.referralOpportunityChoice === YesNoAnswer.Yes
+        ? true
+        : data.referralOpportunityChoice === YesNoAnswer.No
+        ? false
+        : null,
   }
 }
 

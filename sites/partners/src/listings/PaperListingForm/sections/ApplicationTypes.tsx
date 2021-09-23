@@ -34,7 +34,7 @@ interface Methods {
 
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = useFormContext()
+  const { register, setValue, watch, errors } = useFormContext()
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
@@ -210,12 +210,22 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       >
         <GridSection columns={2}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isDigitalApplication")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                errors?.digitalApplication !== undefined &&
+                digitalApplicationChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isDigitalApplication")}
+            </p>
 
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+              error={errors?.digitalApplication !== undefined && digitalApplicationChoice === null}
+              errorMessage={errors?.digitalApplication?.message}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -284,11 +294,21 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={2}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isPaperApplication")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                errors?.paperApplication !== undefined &&
+                paperApplicationChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isPaperApplication")}
+            </p>
 
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
+              error={errors?.paperApplication !== undefined && paperApplicationChoice === null}
+              errorMessage={errors?.paperApplication?.message}
               register={register}
               fields={[
                 {
@@ -358,12 +378,24 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={1}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isReferralOpportunity")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                errors?.referralOpportunity !== undefined &&
+                referralOpportunityChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isReferralOpportunity")}
+            </p>
 
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
+              error={
+                errors?.referralOpportunity !== undefined && referralOpportunityChoice === null
+              }
+              errorMessage={errors?.referralOpportunity?.message}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
