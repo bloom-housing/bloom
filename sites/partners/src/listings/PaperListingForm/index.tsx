@@ -528,6 +528,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               const readableError = getReadableErrorMessage(errorMessage)
               if (readableError) {
                 setError(fieldName, { message: readableError })
+                if (fieldName === "buildingAddress") {
+                  setError(`${fieldName}.city`, { message: readableError })
+                  setError(`${fieldName}.state`, { message: readableError })
+                  setError(`${fieldName}.street`, { message: readableError })
+                  setError(`${fieldName}.zipCode`, { message: readableError })
+                }
               }
             })
           }

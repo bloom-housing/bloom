@@ -51,13 +51,6 @@ const BuildingDetails = ({
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
-  const genericBuildingAddressError =
-    errors?.buildingAddress &&
-    !errors?.buildingAddress?.street &&
-    !errors?.buildingAddress?.state &&
-    !errors?.buildingAddress?.city &&
-    !errors?.buildingAddress?.zipCode
-
   interface BuildingAddress {
     city: string
     state: string
@@ -159,11 +152,11 @@ const BuildingDetails = ({
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
-            error={errors?.buildingAddress?.street !== undefined || genericBuildingAddressError}
+            error={errors?.buildingAddress?.street !== undefined}
             errorMessage={errors?.buildingAddress?.street?.message}
             placeholder={t("application.contact.streetAddress")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () => clearErrors("buildingAddress.street"),
             }}
             register={register}
           />
@@ -182,11 +175,11 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
-            error={errors?.buildingAddress?.city !== undefined || genericBuildingAddressError}
+            error={errors?.buildingAddress?.city !== undefined}
             errorMessage={errors?.buildingAddress?.city?.message}
             placeholder={t("application.contact.city")}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () => clearErrors("buildingAddress.city"),
             }}
             register={register}
           />
@@ -199,7 +192,7 @@ const BuildingDetails = ({
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
-            error={errors?.buildingAddress?.state !== undefined || genericBuildingAddressError}
+            error={errors?.buildingAddress?.state !== undefined}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
@@ -208,19 +201,19 @@ const BuildingDetails = ({
             keyPrefix="states"
             errorMessage={errors?.buildingAddress?.state?.message}
             inputProps={{
-              onChange: () => clearErrors("buildingAddress"),
+              onChange: () => clearErrors("buildingAddress.state"),
             }}
           />
         </ViewItem>
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
-          error={errors?.buildingAddress?.zipCode !== undefined || genericBuildingAddressError}
+          error={errors?.buildingAddress?.zipCode !== undefined}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
           errorMessage={errors?.buildingAddress?.zipCode?.message}
           inputProps={{
-            onChange: () => clearErrors("buildingAddress"),
+            onChange: () => clearErrors("buildingAddress.zipCode"),
           }}
           register={register}
         />
@@ -235,11 +228,6 @@ const BuildingDetails = ({
           />
         </GridCell>
       </GridSection>
-
-      {genericBuildingAddressError && (
-        <div className={"text-sm text-alert pb-4"}>{t("errors.requiredFieldsError")}</div>
-      )}
-
       <GridSection columns={3}>
         <GridCell span={2}>
           <ViewItem label={t("listings.mapPreview")} />
