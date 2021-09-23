@@ -68,7 +68,7 @@ export class User {
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   lastName: string
 
-  @Column("timestamp without time zone")
+  @Column("timestamp without time zone", { nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
