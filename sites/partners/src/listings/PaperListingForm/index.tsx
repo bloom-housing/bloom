@@ -33,6 +33,7 @@ import {
   PaperApplication,
   PaperApplicationCreate,
   ListingReviewOrder,
+  User,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -232,7 +233,8 @@ const formatFormData = (
   openHouseEvents: TempEvent[],
   preferences: Preference[],
   saveLatLong: LatitudeLongitude,
-  customPinPositionChosen: boolean
+  customPinPositionChosen: boolean,
+  profile: User
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -321,8 +323,14 @@ const formatFormData = (
     })
   }
 
+  const jurisdiction =
+    !data.jurisdiction?.name && profile.jurisdictions.length === 1
+      ? profile.jurisdictions[0]
+      : data.jurisdiction
+
   return {
     ...data,
+    jurisdiction,
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
@@ -390,7 +398,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
   const router = useRouter()
 
-  const { listingsService } = useContext(AuthContext)
+  const { listingsService, profile } = useContext(AuthContext)
 
   const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
@@ -482,7 +490,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             openHouseEvents,
             orderedPreferences,
             latLong,
-            customMapPositionChosen
+            customMapPositionChosen,
+            profile
           )
           removeEmptyFields(formattedData)
           const result = editMode
@@ -532,6 +541,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       loading,
       reset,
       setError,
+      profile,
     ]
   )
 
@@ -592,7 +602,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro />
+                          <ListingIntro
+                            jurisdictionOptions={[
+                              { label: "", value: "" },
+                              ...profile.jurisdictions.map((jurisdiction) => ({
+                                label: jurisdiction.name,
+                                value: jurisdiction.id,
+                              })),
+                            ]}
+                          />
                           <ListingPhoto />
                           <BuildingDetails
                             listing={listing}
