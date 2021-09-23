@@ -1,3 +1,4 @@
+import React from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import {
@@ -47,7 +48,6 @@ import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
 import { getGenericAddress, openInFuture } from "../lib/helpers"
-import React from "react"
 
 interface ListingProps {
   listing: Listing
