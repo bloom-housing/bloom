@@ -25,7 +25,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
+  const { register, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 
@@ -49,6 +49,9 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         ? "reviewOrderLottery"
         : "reviewOrderFCFS",
   })
+
+  console.log({ errors })
+  console.log({ waitlistOpen })
 
   const yesNoRadioOptions = [
     {
@@ -200,11 +203,19 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         )}
         <GridSection columns={2} className={"flex items-center"}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.waitlist.openQuestion")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                errors?.isWaitlistOpen !== undefined && waitlistOpen === null && "text-alert"
+              }`}
+            >
+              {t("listings.waitlist.openQuestion")}
+            </p>
             <FieldGroup
               name="waitlistOpenQuestion"
               type="radio"
               register={register}
+              error={errors?.isWaitlistOpen !== undefined && waitlistOpen === null}
+              errorMessage={errors?.isWaitlistOpen?.message}
               fields={[
                 {
                   ...yesNoRadioOptions[0],

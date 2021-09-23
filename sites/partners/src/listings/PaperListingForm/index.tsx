@@ -341,7 +341,12 @@ const formatFormData = (
       longitude: saveLatLong.longitude ?? null,
     },
     customMapPin: customPinPositionChosen,
-    isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+    isWaitlistOpen:
+      data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? true
+        : data.waitlistOpenQuestion === YesNoAnswer.No
+        ? false
+        : null,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:

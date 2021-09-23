@@ -24,11 +24,14 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
     case "should not be null or undefined":
     case "must be a string":
     case "must contain at least 1 elements":
+    case "must be a boolean value":
       readableMessage = t("errors.requiredFieldError")
       break
     case "must be an email":
       readableMessage = t("errors.emailAddressError")
       break
+    case "must be a valid phone number":
+      readableMessage = t("errors.phoneNumberError")
   }
   return readableMessage
 }

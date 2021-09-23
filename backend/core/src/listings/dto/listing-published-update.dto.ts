@@ -10,6 +10,7 @@ import {
   MaxLength,
   ValidateNested,
   IsBoolean,
+  IsPhoneNumber,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitUpdateDto } from "../../units/dto/unit.dto"
@@ -88,6 +89,7 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
 
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber("US", { groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
   leasingAgentPhone: string
 
