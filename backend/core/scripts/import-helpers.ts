@@ -23,9 +23,11 @@ const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
 // certain fields to have a simpler type. For example: allow listing.units.unitType to be a
 // string (e.g. "oneBdrm"), and then the importListing function will look up the corresponding
 // unitType object by name and use that unitType object to construct the UnitCreate.
-export interface ListingImport extends Omit<ListingCreate, "unitsSummary" | "units"> {
+export interface ListingImport
+  extends Omit<ListingCreate, "unitsSummary" | "units" | "reservedCommunityType"> {
   unitsSummary?: UnitsSummaryImport[]
   units?: UnitImport[]
+  reservedCommunityTypeName?: string
 }
 export interface UnitsSummaryImport extends Omit<UnitsSummaryCreate, "unitType"> {
   unitType?: string
@@ -65,10 +67,10 @@ async function uploadListing(listing: ListingCreate) {
   }
 }
 
-async function uploadReservedCommunityType(data) {
+async function uploadReservedCommunityType(name: string) {
   try {
     return await reservedCommunityTypesService.create({
-      body: { name: data },
+      body: { name: name },
     })
   } catch (e) {
     console.log(e.response)
@@ -76,7 +78,7 @@ async function uploadReservedCommunityType(data) {
   }
 }
 
-async function getReservedCommunityType(name) {
+async function getReservedCommunityType(name: string) {
   try {
     const reservedTypes = await reservedCommunityTypesService.list()
     return reservedTypes.filter((reservedType) => reservedType.name === name)[0]
@@ -160,11 +162,13 @@ export async function importListing(
   // Upload new entities.
   listing = await uploadEntity("preferences", preferencesService, listing)
   listing = await uploadEntity("applicationMethods", applicationMethodsService, listing)
-  let reservedCommunityType
-  if (listing.reservedCommunityType) {
-    reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityType)
+
+  // Look up the reserved community type by name, or create it if it doesn't yet exist.
+  let reservedCommunityType: client.ReservedCommunityType
+  if (listing.reservedCommunityTypeName) {
+    reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityTypeName)
     if (!reservedCommunityType) {
-      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityType)
+      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityTypeName)
     }
   }
 
@@ -191,6 +195,7 @@ export async function importListing(
     ...listing,
     unitsSummary: unitsSummaryCreate,
     units: unitsCreate,
+    reservedCommunityType: reservedCommunityType,
   }
 
   // Upload the listing, and then return it.
