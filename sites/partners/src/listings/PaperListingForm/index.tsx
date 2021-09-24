@@ -483,7 +483,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues, setError, clearErrors, reset, errors } = formMethods
+  const { getValues, setError, clearErrors, reset } = formMethods
 
   const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
     if (confirm) {
@@ -535,6 +535,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         } catch (err) {
           reset(formData)
           setLoading(false)
+          clearErrors()
           const { data } = err.response || {}
           if (data.statusCode === 400) {
             data?.message?.forEach((errorMessage: string) => {
@@ -765,6 +766,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             type="button"
             styleType={AppearanceStyleType.success}
             onClick={async () => {
+              // If we don't await here, the scroll block stays in place on modal close
+              /* eslint-disable-next-line @typescript-eslint/await-thenable */
               await setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}

@@ -17,7 +17,7 @@ const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { errors, register, clearErrors } = formMethods
+  const { register, clearErrors, errors } = formMethods
 
   const hideSelect = props.jurisdictionOptions.length <= 2
   return (
