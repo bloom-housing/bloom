@@ -17,7 +17,6 @@ async function main() {
   const [email, password] = userAndPassword.split(":")
 
   const listing: ListingImport = JSON.parse(fs.readFileSync(listingFilePath, "utf-8"))
-  listing.jurisdictionName = "Alameda"
 
   let newListing: Listing
   try {
