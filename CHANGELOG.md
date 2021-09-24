@@ -137,6 +137,8 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
+  - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
+  - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 ## v1.0.5 08/03/2021
 

@@ -535,7 +535,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }, [submitData.ready, submitData.data, onSubmit, status])
 
-  return (
+  return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
         <>
