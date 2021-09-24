@@ -14,8 +14,8 @@ import {
 } from "@bloom-housing/ui-components"
 
 // TODO: Make these not-global
-/* import "ag-grid-community/dist/styles/ag-grid.css"
-import "ag-grid-community/dist/styles/ag-theme-alpine.css" */
+import "ag-grid-community/dist/styles/ag-grid.css"
+import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../src/LinkComponent"
 import { translations, overrideTranslations } from "../src/translations"
