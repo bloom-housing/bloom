@@ -21,6 +21,7 @@ import {
   LoadingOverlay,
   ListingFilterState,
   FrontendListingFilterStateKeys,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import Layout from "../layouts/application"
@@ -270,6 +271,12 @@ const ListingsPage = () => {
               register={register}
               controlClassName="control"
               options={seniorHousingOptions}
+            />
+            <FieldGroup
+              type="checkbox"
+              name={FrontendListingFilterStateKeys.includeNulls}
+              fields={[{ id: "true", label: t("listingFilters.includeUnknowns") }]}
+              register={register}
             />
           </div>
           <div className="text-center mt-6">
