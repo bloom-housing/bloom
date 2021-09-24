@@ -51,13 +51,13 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       switch (filterKey) {
         case ListingFilterKeys.seniorHousing:
           addSeniorHousingQuery(qb, filterValue, includeNulls)
-          return
+          continue
         case ListingFilterKeys.availability:
           addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
-          return
+          continue
         case ListingFilterKeys.ami:
           addAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
-          return
+          continue
       }
 
       const whereParameterName = `${filterKey}_${index}`

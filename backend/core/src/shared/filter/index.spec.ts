@@ -69,5 +69,31 @@ describe("FilterAdder", () => {
         addFilters([filter], filterTypeToFieldMap, mockQueryBuilder)
       }).toThrow("Comparison Not Implemented")
     })
+
+    it("should add both custom and standard filters", () => {
+      const filters = [
+        {
+          $comparison: "NA",
+          ami: "40",
+        },
+        {
+          $comparison: "=",
+          name: "Coliseum",
+        },
+      ]
+
+      addFilters(filters, filterTypeToFieldMap, mockQueryBuilder)
+
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(
+        expect.stringContaining("ami_percentage"),
+        {
+          amiPercentage_unitsSummary: 40,
+          amiPercentage_listings: 40,
+        }
+      )
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledWith(expect.stringContaining("="), {
+        name_1: expect.stringContaining("Coliseum"),
+      })
+    })
   })
 })
