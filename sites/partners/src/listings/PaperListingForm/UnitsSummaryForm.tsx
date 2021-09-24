@@ -56,7 +56,6 @@ const UnitsSummaryForm = ({
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
       amiPercentage: current?.amiPercentage,
-      minimumIncomeMin: current?.minimumIncomeMin,
       monthlyRentMin: current?.monthlyRentMin,
       monthlyRentMax: current?.monthlyRentMax,
       totalCount: current?.totalCount,
@@ -93,7 +92,6 @@ const UnitsSummaryForm = ({
     if (data.rentType === "fixed") {
       delete data.monthlyRentAsPercentOfIncome
     } else if (data.rentType === "percentage") {
-      data.minimumIncomeMin = "0"
       delete data.monthlyRentMin
       delete data.monthlyRentMax
     }

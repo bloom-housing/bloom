@@ -17,6 +17,7 @@ import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
 import { TempUnit, TempUnitsSummary } from "../"
 import UnitsSummaryForm from "../UnitsSummaryForm"
+import { UnitsSummary } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
   units: TempUnit[]
@@ -175,6 +176,15 @@ const FormUnits = ({
     [editUnit, units]
   )
 
+  const getRentFromSummary = (summary: UnitsSummary) => {
+    if (summary.monthlyRentMin || summary.monthlyRentMax) {
+      return formatRange(summary.monthlyRentMin, summary.monthlyRentMax, "$")
+    }
+    if (summary.monthlyRentAsPercentOfIncome) {
+      return `${summary.monthlyRentAsPercentOfIncome}%`
+    }
+  }
+
   function saveUnitsSummary(newSummary: TempUnitsSummary) {
     const exists = unitsSummaries.some((summary) => summary.tempId === newSummary.tempId)
     if (exists) {
@@ -191,7 +201,7 @@ const FormUnits = ({
       unitsSummaries?.map((summary) => ({
         unitType: summary.unitType && t(`listings.unitTypes.${summary.unitType.name}`),
         amiPercentage: isDefined(summary.amiPercentage) ? `${summary.amiPercentage}%` : "",
-        monthlyRent: formatRange(summary.monthlyRentMin, summary.monthlyRentMax, "$"),
+        monthlyRent: getRentFromSummary(summary),
         sqFeet: formatRange(summary.sqFeetMin, summary.sqFeetMax, ""),
         priorityType: summary.priorityType?.name,
         occupancy: formatRange(summary.minOccupancy, summary.maxOccupancy, ""),
