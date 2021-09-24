@@ -32,7 +32,11 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const waitlistOpen = useWatch({
     control,
     name: "waitlistOpenQuestion",
-    defaultValue: listing?.isWaitlistOpen ? YesNoAnswer.Yes : YesNoAnswer.No,
+    defaultValue: listing?.isWaitlistOpen
+      ? YesNoAnswer.Yes
+      : listing?.isWaitlistOpen === false
+      ? YesNoAnswer.No
+      : null,
   })
 
   const showWaitlistSize = useWatch({
@@ -80,7 +84,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
                   defaultChecked:
-                    !listing || listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                    listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
                 },
                 {
                   label: t("listings.lotteryTitle"),
@@ -217,13 +221,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "waitlistOpenYes",
-                  defaultChecked: listing && listing.isWaitlistOpen,
+                  defaultChecked: listing && listing.isWaitlistOpen === true,
                 },
 
                 {
                   ...yesNoRadioOptions[1],
                   id: "waitlistOpenNo",
-                  defaultChecked: listing && !listing.isWaitlistOpen,
+                  defaultChecked: listing && listing.isWaitlistOpen === false,
                 },
               ]}
             />

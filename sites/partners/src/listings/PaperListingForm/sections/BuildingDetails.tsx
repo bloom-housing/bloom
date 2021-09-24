@@ -187,7 +187,7 @@ const BuildingDetails = ({
         <ViewItem
           label={t("application.contact.state")}
           className={"mb-0"}
-          error={errors?.buildingAddress !== undefined}
+          error={errors?.buildingAddress?.state !== undefined}
         >
           <Select
             id={`buildingAddress.state`}
