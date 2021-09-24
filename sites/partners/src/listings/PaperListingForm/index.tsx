@@ -483,20 +483,20 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues, setError, clearErrors, reset } = formMethods
+  const { getValues, setError, clearErrors, reset, errors } = formMethods
 
-  const triggerSubmitWithStatus = (status: ListingStatus) => {
-    triggerSubmit({ ...getValues(), status })
+  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
+    if (confirm) {
+      setPublishModal(true)
+      return
+    }
+    let formData = { ...defaultValues, ...getValues() }
+    if (status) {
+      formData = { ...formData, status }
+    }
+    void onSubmit(formData)
   }
 
-  const triggerSubmit = (data: FormListing) => {
-    setAlert(null)
-    void onSubmit({ ...defaultValues, ...data })
-  }
-
-  /*
-    @data: form data comes from the react-hook-form
-  */
   const onSubmit = useCallback(
     async (formData: FormListing) => {
       if (!loading) {
@@ -575,10 +575,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     ]
   )
 
-  const onError = () => {
-    setAlert("form")
-  }
-
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>
@@ -619,7 +615,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   </AlertBox>
                 )}
 
-                <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                <Form id="listing-form">
                   <div className="flex flex-row flex-wrap">
                     <div className="md:w-9/12 pb-24">
                       <Tabs
@@ -703,8 +699,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={(data) => {
-                            triggerSubmit({ ...getValues(), ...data, status: ListingStatus.closed })
+                          submitCallback={() => {
+                            triggerSubmitWithStatus(false, ListingStatus.closed)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -717,7 +713,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         type={editMode ? "edit" : "add"}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
-                        showPublishModal={() => setPublishModal(true)}
                         submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
@@ -736,15 +731,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setCloseModal(false)}
         actions={[
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              triggerSubmit({ ...getValues(), status: ListingStatus.closed })
+              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
             }}
           >
             {t("listings.actions.close")}
           </Button>,
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
@@ -765,15 +762,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            type="button"
             styleType={AppearanceStyleType.success}
-            onClick={() => {
-              triggerSubmitWithStatus(ListingStatus.active)
-              setPublishModal(false)
+            onClick={async () => {
+              await setPublishModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >
             {t("listings.actions.publish")}
           </Button>,
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {

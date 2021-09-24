@@ -23,6 +23,7 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
   switch (errorDetails) {
     case "should not be null or undefined":
     case "must be a string":
+    case "must be an UUID":
     case "must contain at least 1 elements":
     case "must be a boolean value":
       readableMessage = t("errors.requiredFieldError")

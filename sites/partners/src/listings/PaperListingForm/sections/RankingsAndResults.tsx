@@ -50,9 +50,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         : "reviewOrderFCFS",
   })
 
-  console.log({ errors })
-  console.log({ waitlistOpen })
-
   const yesNoRadioOptions = [
     {
       label: t("t.yes"),

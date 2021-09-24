@@ -27,7 +27,10 @@ const ListingIntro = (props: ListingIntroProps) => {
       description={t("listings.sections.introSubtitle")}
     >
       <GridCell span={2} className={`${hideSelect ? "hidden" : ""}`}>
-        <ViewItem label={t("t.jurisdiction")} error={errors?.jurisdiction !== undefined}>
+        <ViewItem
+          label={t("t.jurisdiction")}
+          error={errors?.jurisdiction !== undefined || errors?.["jurisdiction.id"] !== undefined}
+        >
           <Select
             id={"jurisdiction.id"}
             name={"jurisdiction.id"}
@@ -35,8 +38,10 @@ const ListingIntro = (props: ListingIntroProps) => {
             labelClassName="sr-only"
             register={register}
             controlClassName={`control ${hideSelect ? "hidden" : ""}`}
-            error={errors?.jurisdiction !== undefined}
-            errorMessage={errors?.jurisdiction?.message}
+            error={errors?.jurisdiction !== undefined || errors?.["jurisdiction.id"] !== undefined}
+            errorMessage={
+              errors?.jurisdiction?.message ?? errors?.["jurisdiction.id"]?.message ?? undefined
+            }
             keyPrefix={"jurisdictions"}
             options={props.jurisdictionOptions}
             inputProps={{

@@ -4,7 +4,7 @@ interface FormProps {
   children: React.ReactNode
   id?: string
   className?: string
-  onSubmit: () => unknown
+  onSubmit?: () => unknown
 }
 
 const Form = ({ id, children, className, onSubmit }: FormProps) => {
