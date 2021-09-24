@@ -18,5 +18,6 @@ module.exports = {
       "./layouts/**/*.tsx",
       "../../ui-components/src/**/*.tsx",
     ],
+    safelist: [/grid-cols-/],
   },
 }
