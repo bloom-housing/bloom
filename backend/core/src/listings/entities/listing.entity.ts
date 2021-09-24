@@ -26,7 +26,7 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
@@ -84,7 +84,7 @@ class Listing extends BaseEntity {
   applicationMethods: ApplicationMethod[]
 
   @Expose()
-  @ApiProperty()
+  @ApiPropertyOptional()
   get referralApplication(): ApplicationMethodDto | undefined {
     return this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
   }

@@ -4312,6 +4312,9 @@ export interface UnitsSummary {
 
 export interface Listing {
   /**  */
+  referralApplication?: ApplicationMethod
+
+  /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
 
   /**  */
@@ -4334,9 +4337,6 @@ export interface Listing {
 
   /**  */
   applicationMethods: ApplicationMethod[]
-
-  /**  */
-  referralApplication?: CombinedReferralApplicationTypes
 
   /**  */
   preferences: Preference[]
@@ -5845,7 +5845,6 @@ export enum UnitStatus {
   "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
-export type CombinedReferralApplicationTypes = ApplicationMethod
 export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
