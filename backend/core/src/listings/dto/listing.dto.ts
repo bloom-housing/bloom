@@ -12,6 +12,7 @@ import {
   IsNumberString,
   IsEnum,
   IsArray,
+  IsBooleanString,
 } from "class-validator"
 import moment from "moment"
 import {
@@ -24,7 +25,7 @@ import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto, AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
-import { ListingFilterKeys } from "../types/listing-filter-keys-enum"
+import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
@@ -821,6 +822,56 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
+    enum: Object.keys(AvailabilityFilterEnum),
+    example: "hasAvailability",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(AvailabilityFilterEnum, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.availability]?: AvailabilityFilterEnum;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.seniorHousing]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "300",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.minRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "700",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.maxRent]?: number;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: "40",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.ami]?: number;
+
+  @Expose()
+  @ApiProperty({
     type: String,
     example: "FAB1A3C6-965E-4054-9A48-A282E92E9426",
     required: false,
@@ -892,12 +943,37 @@ export class ListingsRetrieveQueryParams {
   view?: string
 }
 
+// Fields for the Availability and AMI filters are determined based on the value
+// of the filter or by checking multiple columns. Since we can't specify a single
+// field the filters correspond to, we remove them from the filterTypeToFieldMap.
+type keysWithMappedField = Exclude<keyof typeof ListingFilterKeys, "ami" | "availability">
+
 // Using a record lets us enforce that all types are handled in addFilter
-export const filterTypeToFieldMap: Record<keyof typeof ListingFilterKeys, string> = {
+export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   status: "listings.status",
   name: "listings.name",
   neighborhood: "property.neighborhood",
   bedrooms: "unitTypeRef.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
+  seniorHousing: "reservedCommunityType.name",
+  // This is the inverse of the explanation for maxRent below.
+  minRent: "unitsSummary.monthly_rent_max",
+  // The maxRent filter uses the monthly_rent_min field to avoid missing units
+  // in the unitsSummary's rent range. For example, if there's a unitsSummary with
+  // monthly_rent_min of $300 and monthly_rent_max of $800, we could have a
+  // real unit with rent $500, which would look like:
+  //
+  // $300 ---------------- $500 ------ $600 ----------- $800
+  //  ^                     ^           ^                ^
+  //  |                     |           |                unitsSummary.monthly_rent_max
+  //  |                     |           maxRent filter value
+  //  |                     actual unit's rent
+  //  unitsSummary.monthly_rent_min
+  //
+  // If a user sets the maxRent filter to $600 we should show this potential unit.
+  // To make sure we show this potential unit in results, we want to search for
+  // listings with a monthly_rent_min that's <= $600. If we used the
+  // monthly_rent_max field, we'd miss it.
+  maxRent: "unitsSummary.monthly_rent_min",
   leasingAgents: "leasingAgents.id",
 }
