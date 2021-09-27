@@ -1,4 +1,5 @@
-import "@bloom-housing/ui-components/src/global/index.scss"
+import "@bloom-housing/ui-components/src/global/css-imports.scss"
+import "@bloom-housing/ui-components/src/global/app-css.scss"
 import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import {
