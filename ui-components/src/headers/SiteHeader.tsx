@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 
@@ -8,13 +8,18 @@ export interface SiteHeaderLanguage {
 }
 type LogoWidth = "slim" | "medium" | "wide"
 
+export interface MenuLink {
+  title: string
+  href?: string
+  subMenuLinks?: MenuLink[]
+}
+
 export interface SiteHeaderProps {
   logoSrc: string
   title: string
   imageOnly?: boolean
-  skip: string
   notice: string | React.ReactNode
-  children: React.ReactNode
+  menuLinks: MenuLink[]
   language?: SiteHeaderLanguage
   logoClass?: string
   logoWidth?: LogoWidth
@@ -39,23 +44,7 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
 }
 
 const SiteHeader = (props: SiteHeaderProps) => {
-  const [active, setActive] = useState(false)
-
-  const skipLink = () => {
-    return (
-      <a href="#main-content" className="navbar__skip-link">
-        {props.skip}
-      </a>
-    )
-  }
-
-  const noticeBar = () => {
-    return (
-      <div className="navbar-notice">
-        <div className="navbar-notice__text">{props.notice}</div>
-      </div>
-    )
-  }
+  // const [active, setActive] = useState(false)
 
   const getLogoWidthClass = () => {
     if (props.logoWidth === "slim") return "navbar-width-slim"
@@ -64,72 +53,50 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
-  const logo = (logoClass = "") => {
-    return (
-      <LocalizedLink
-        className={`navbar-item logo ${logoClass} ${getLogoWidthClass()}`}
-        href="/"
-        aria-label="homepage"
-      >
-        <div
-          className={`logo__lockup ${getLogoWidthClass()} ${
-            props.logoWidth && "navbar-custom-width"
-          } ${props.imageOnly && "navbar-image-only-container"}`}
-        >
-          <img
-            className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
-            src={props.logoSrc}
-            alt={"Site logo"}
-          />
-          {!props.imageOnly && <div className="logo__title">{props.title}</div>}
-        </div>
-      </LocalizedLink>
-    )
-  }
-
-  const handleMenuToggle = () => {
-    setActive(!active)
-  }
-
-  const hamburgerMenu = () => {
-    return (
-      <a
-        role="button"
-        className={"navbar-burger burger" + (active ? " is-active" : "")}
-        aria-label="menu"
-        aria-expanded={active ? "true" : "false"}
-        data-target="navbarMenuLinks"
-        onClick={handleMenuToggle}
-      >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    )
-  }
+  // const handleMenuToggle = () => {
+  //   setActive(!active)
+  // }
 
   return (
-    <>
+    <div className={"site-header"}>
       {props.language && <LanguageNav language={props.language} />}
 
-      {skipLink()}
-      {noticeBar()}
-      <div className="navbar__wrapper">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand">
-            {logo(props.logoClass)}
-            {hamburgerMenu()}
+      <div className="navbar-notice">
+        <div className="navbar-notice__text">{props.notice}</div>
+      </div>
+      <nav className="navbar-container" role="navigation" aria-label="main navigation">
+        <div className="navbar">
+          <div className="navbar-logo">
+            <LocalizedLink
+              className={`navbar-item logo ${
+                props.logoClass && props.logoClass
+              } ${getLogoWidthClass()}`}
+              href="/"
+              aria-label="homepage"
+            >
+              <div
+                className={`${getLogoWidthClass()} ${props.logoWidth && "navbar-custom-width"} ${
+                  props.imageOnly && "navbar-image-only-container"
+                }`}
+              >
+                <img
+                  className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
+                  src={props.logoSrc}
+                  alt={"Site logo"}
+                />
+                {!props.imageOnly && <div className="logo__title">{props.title}</div>}
+              </div>
+            </LocalizedLink>
           </div>
 
-          <div
-            id="navbarMenuLinks"
-            className={"navbar-menu md:mt-0" + (active ? " is-active" : "")}
-          >
-            <div className="navbar-end">{props.children}</div>
+          <div className="navbar-menu">
+            {props.menuLinks.map((menuLink) => {
+              return <span className={"navbar-link"}>{menuLink.title}</span>
+            })}
           </div>
-        </nav>
-      </div>
-    </>
+        </div>
+      </nav>
+    </div>
   )
 }
 

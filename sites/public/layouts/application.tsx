@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Head from "next/head"
@@ -8,14 +8,14 @@ import {
   FooterNav,
   FooterSection,
   ExygyFooter,
-  UserNav,
+  // UserNav,
   t,
-  AuthContext,
-  setSiteAlertMessage,
+  // AuthContext,
+  // setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
-  const { profile, signOut } = useContext(AuthContext)
+  // const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
 
   const languages =
@@ -31,20 +31,53 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
-          skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
-          notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
+          notice={
+            <>
+              {`${t("nav.getFeedback")} `}
+              <a href="" target="_blank" className={"cursor-pointer"}>
+                {t("nav.getFeedbackLink")}
+              </a>
+            </>
+          }
           title={t("nav.siteTitle")}
           language={{
             list: languages,
             codes: router?.locales,
           }}
-        >
-          <Link href="/listings">
+          menuLinks={[
+            {
+              title: t("nav.listings"),
+              href: "/listings",
+            },
+            {
+              title: t("nav.getAssistance"),
+              href: "/housing-counselors",
+            },
+            {
+              title: "My account",
+              subMenuLinks: [
+                {
+                  title: t("nav.myDashboard"),
+                  href: "/account/dashboard",
+                },
+                {
+                  title: t("nav.myApplications"),
+                  href: "/account/dashboard",
+                },
+                {
+                  title: t("nav.accountSettings"),
+                  href: "/account/edit",
+                },
+              ],
+            },
+          ]}
+        />
+        {/* <Link href="/listings">
             <a className="navbar-item">{t("nav.listings")}</a>
           </Link>
-          {/* Only show Get Assistance if housing counselor data is available */}
-          {process.env.housingCounselorServiceUrl && (
+
+          {process.env.housingCounselorServiceUrl && ( // Only show Get Assistance if housing counselor data is available
             <Link href="/housing-counselors">
               <a className="navbar-item">{t("nav.getAssistance")}</a>
             </Link>
@@ -66,8 +99,7 @@ const Layout = (props) => {
             <Link href="/account/edit">
               <a className="navbar-item">{t("nav.accountSettings")}</a>
             </Link>
-          </UserNav>
-        </SiteHeader>
+          </UserNav> */}
         <main id="main-content">{props.children}</main>
       </div>
 

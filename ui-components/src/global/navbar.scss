@@ -1,280 +1,291 @@
-@import "vendor/setup_bulma";
-@import "~bulma/sass/components/navbar.sass";
+.site-header {
+  // Feedback header
 
-.navbar-notice {
-  @apply hidden;
-  @apply w-full;
-  @apply bg-primary;
-  @apply text-right;
-  @apply text-white;
+  .navbar-container {
+    display: flex;
+    @apply w-full;
+    align-items: center;
+    justify-content: center;
 
-  @screen md {
+    .navbar {
+      max-width: 1000px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .navbar-logo {
+      }
+
+      .navbar-menu {
+        .navbar-link {
+          @apply pr-4;
+        }
+      }
+    }
+  }
+
+  .navbar-notice {
+    @apply w-full;
+    @apply bg-primary;
+    @apply text-right;
+    @apply text-white;
     @apply block;
   }
-}
 
-.navbar-notice__text {
-  @apply max-w-5xl;
-  @apply m-auto;
-  @apply text-sm;
-  @apply pt-2;
-  @apply pb-2;
-  @apply pr-1;
-
-  a,
-  a:hover {
-    @apply underline;
-    color: inherit;
-  }
-}
-
-// Custom Navbar Styles
-nav.navbar {
-  @apply max-w-5xl;
-  @apply m-auto;
-}
-
-.navbar-brand {
-  @apply relative;
-  @apply justify-start;
-
-  @screen print {
-    @apply justify-center;
-  }
-}
-
-.navbar-image-only {
-  max-height: 80% !important; // Unfortunately we need this to overrwrite Bulma, reccomend removing Bulma #1345
-  max-width: 100%;
-}
-
-.navbar-custom-width {
-  @apply flex;
-  @apply items-center;
-  @apply justify-center;
-  @apply flex-col;
-}
-
-.navbar-image-only-container {
-  // 75px - .5rem of padding from the container around it.
-  height: 67px;
-  @screen md {
-    height: 120px;
-  }
-}
-
-.navbar-width-slim {
-  width: 200px;
-}
-
-.navbar-width-med {
-  width: 450px;
-}
-
-.navbar-width-wide {
-  width: 600px;
-}
-
-.navbar-brand .logo {
-  @apply text-black;
-  @apply block;
-  @apply text-center;
-  @apply z-10;
-  @apply items-center;
-  @apply justify-center;
-  max-width: 60%;
-  max-height: 120px;
-
-  @screen md {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-    margin-bottom: -0.75rem;
-    margin-top: -2.75em;
-    padding-top: 1em;
-
-    &:focus {
-      box-shadow: 0 0 3px 4px $tailwind-accent-cool;
-    }
-  }
-
-  @screen print {
-    margin-top: 0;
-  }
-
-  &.navbar-item,
-  &.navbar-item:hover,
-  &.navbar-item:focus {
-    @apply bg-white;
-    @apply border-b-0;
-    @apply pt-1;
-    @apply pb-1;
-    @apply pl-4;
-    @apply pr-4;
-    @apply flex;
-  }
-
-  .logo__image {
-    @apply inline-block;
-    @apply mt-1;
-    @apply mb-1;
-    max-height: 1.5rem;
-
-    @screen md {
-      @apply mt-3;
-      @apply mb-2;
-      max-height: 2rem;
-    }
-  }
-
-  .logo__title {
-    @apply uppercase;
-    @apply font-bold;
-    @apply text-gray-900;
-    @apply font-alt-sans;
-    @apply tracking-wider;
+  .navbar-notice__text {
+    @apply max-w-5xl;
+    @apply m-auto;
     @apply text-sm;
+    @apply pt-2;
+    @apply pb-2;
+    @apply pr-1;
 
-    @screen md {
-      @apply text-tiny;
-    }
-  }
-}
-
-.navbar-item,
-.navbar-link {
-  @apply pt-1;
-  @apply pb-1;
-}
-
-a.navbar-link,
-a.navbar-item {
-  @apply text-base;
-  @apply text-gray-800;
-  @apply py-4;
-  @apply border-b;
-  @apply border-gray-400;
-
-  &:hover {
-    @apply bg-primary-lighter;
-  }
-
-  &:focus {
-    @apply bg-white;
-  }
-
-  @screen md {
-    @apply text-sm;
-    @apply border-b-2;
-    @apply uppercase;
-    @apply pt-10;
-    @apply pb-3;
-    border-color: transparent;
-
-    &:hover {
-      @apply bg-white;
-      @apply border-primary;
-      @apply text-gray-800;
-    }
-  }
-}
-
-.navbar-dropdown {
-  @apply py-0;
-  @apply rounded-b-none;
-
-  a.navbar-item {
-    @apply text-base;
-    @apply normal-case;
-    @apply py-4;
-    @apply px-4;
-    @apply border-b;
-    @apply border-gray-400;
-
-    &:hover {
-      @apply bg-primary-lighter;
-    }
-
-    @screen md {
-      @apply text-tiny;
-    }
-  }
-}
-
-.navbar-divider {
-  @apply my-0;
-}
-
-.navbar-link:not(.is-arrowless)::after {
-  @apply border-gray-600;
-  bottom: 1.25rem;
-  top: auto;
-}
-
-.navbar-item.has-dropdown {
-  &:hover {
-    .navbar-link {
-      background-color: transparent;
+    a,
+    a:hover {
+      @apply underline;
+      color: inherit;
     }
   }
 
-  > .navbar-link {
-    @apply hidden;
+  // nav.navbar {
+  //   @apply m-auto;
+  // }
 
-    @screen md {
+  // .navbar-logo {
+  //   @apply relative;
+  //   @apply justify-start;
+
+  //   @screen print {
+  //     @apply justify-center;
+  //   }
+  // }
+
+  // .navbar-image-only {
+  //   // max-height: 80% !important; // Unfortunately we need this to overrwrite Bulma, reccomend removing Bulma #1345
+  //   max-width: 100%;
+  // }
+
+  // .navbar-custom-width {
+  //   @apply flex;
+  //   @apply items-center;
+  //   @apply justify-center;
+  //   @apply flex-col;
+  // }
+
+  // .navbar-image-only-container {
+  //   // 75px - .5rem of padding from the container around it.
+  //   height: 67px;
+  //   @screen md {
+  //     height: 120px;
+  //   }
+  // }
+
+  // .navbar-width-slim {
+  //   width: 200px;
+  // }
+
+  // .navbar-width-med {
+  //   width: 450px;
+  // }
+
+  // .navbar-width-wide {
+  //   width: 600px;
+  // }
+
+  // Logo
+  .navbar-logo {
+    .logo {
+      @apply text-black;
       @apply block;
+      @apply text-center;
+      @apply z-10;
+      @apply items-center;
+      @apply justify-center;
+      max-width: 60%;
+      max-height: 120px;
+
+      @screen md {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+        margin-bottom: -0.75rem;
+        margin-top: -2.2rem;
+        padding-top: 1em;
+
+        &:focus {
+          box-shadow: 0 0 3px 4px $tailwind-accent-cool;
+        }
+      }
+
+      @screen print {
+        margin-top: 0;
+      }
+
+      &.navbar-item,
+      &.navbar-item:hover,
+      &.navbar-item:focus {
+        @apply bg-white;
+        @apply border-b-0;
+        @apply pt-1;
+        @apply pb-1;
+        @apply pl-4;
+        @apply pr-4;
+        @apply flex;
+      }
+
+      .logo__image {
+        @apply inline-block;
+        @apply mt-1;
+        @apply mb-1;
+        max-height: 1.5rem;
+
+        @screen md {
+          @apply mt-3;
+          @apply mb-2;
+          max-height: 2rem;
+        }
+      }
+
+      .logo__title {
+        @apply uppercase;
+        @apply font-bold;
+        @apply text-gray-900;
+        @apply font-alt-sans;
+        @apply tracking-wider;
+        @apply text-sm;
+
+        @screen md {
+          @apply text-tiny;
+        }
+      }
     }
   }
-}
 
-.navbar-burger {
-  &:hover {
-    background: transparent;
-  }
-}
+  // .navbar-item,
+  // .navbar-link {
+  //   @apply pt-1;
+  //   @apply pb-1;
+  // }
 
-.navbar-burger {
-  @apply absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
+  // a.navbar-link,
+  // a.navbar-item {
+  //   @apply text-base;
+  //   @apply text-gray-800;
+  //   @apply py-4;
+  //   @apply border-b;
+  //   @apply border-gray-400;
 
-  &:before {
-    @apply absolute;
-    content: "Menu";
-    left: -22px;
-    top: calc(50% + 1px);
-    transform: translateY(-50%);
-    @apply uppercase;
-    @apply text-xs;
-  }
+  //   &:hover {
+  //     @apply bg-primary-lighter;
+  //   }
 
-  span {
-    height: 2px;
-  }
-}
+  //   &:focus {
+  //     @apply bg-white;
+  //   }
 
-.navbar-menu {
-  @apply p-0;
-}
+  //   @screen md {
+  //     @apply text-sm;
+  //     @apply border-b-2;
+  //     @apply uppercase;
+  //     @apply pt-10;
+  //     @apply pb-3;
+  //     border-color: transparent;
 
-.navbar-end {
-  @apply border-t;
-  @apply border-gray-400;
-}
+  //     &:hover {
+  //       @apply bg-white;
+  //       @apply border-primary;
+  //       @apply text-gray-800;
+  //     }
+  //   }
+  // }
 
-.navbar__skip-link {
-  @apply sr-only;
-  @apply text-white;
+  // .navbar-dropdown {
+  //   @apply py-0;
+  //   @apply rounded-b-none;
 
-  &:hover {
-    @apply text-white;
-  }
+  //   a.navbar-item {
+  //     @apply text-base;
+  //     @apply normal-case;
+  //     @apply py-4;
+  //     @apply px-4;
+  //     @apply border-b;
+  //     @apply border-gray-400;
 
-  &:focus {
-    @apply not-sr-only;
-    @apply absolute;
-    @apply p-1;
-    @apply text-white;
-    top: 0;
-    left: 0;
-  }
+  //     &:hover {
+  //       @apply bg-primary-lighter;
+  //     }
+
+  //     @screen md {
+  //       @apply text-tiny;
+  //     }
+  //   }
+  // }
+
+  // .navbar-divider {
+  //   @apply my-0;
+  // }
+
+  // .navbar-link:not(.is-arrowless)::after {
+  //   @apply border-gray-600;
+  //   bottom: 1.25rem;
+  //   top: auto;
+  // }
+
+  // .navbar-item.has-dropdown {
+  //   &:hover {
+  //     .navbar-link {
+  //       background-color: transparent;
+  //     }
+  //   }
+
+  //   > .navbar-link {
+  //     @apply hidden;
+
+  //     @screen md {
+  //       @apply block;
+  //     }
+  //   }
+  // }
+
+  // .navbar-burger {
+  //   &:hover {
+  //     background: transparent;
+  //   }
+  // }
+
+  // .navbar-burger {
+  //   @apply absolute;
+  //   top: 50%;
+  //   right: 0;
+  //   transform: translateY(-50%);
+
+  //   span {
+  //     height: 2px;
+  //   }
+  // }
+
+  // .navbar-menu {
+  //   @apply p-0;
+  // }
+
+  // .navbar-end {
+  //   @apply border-t;
+  //   @apply border-gray-400;
+  // }
+
+  // .navbar__skip-link {
+  //   @apply sr-only;
+  //   @apply text-white;
+
+  //   &:hover {
+  //     @apply text-white;
+  //   }
+
+  //   &:focus {
+  //     @apply not-sr-only;
+  //     @apply absolute;
+  //     @apply p-1;
+  //     @apply text-white;
+  //     top: 0;
+  //     left: 0;
+  //   }
+  // }
 }
