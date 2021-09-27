@@ -77,6 +77,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
+  criteriaAttachType: string
   dueDateQuestionChoice?: boolean
   lotteryDate?: {
     month: string
@@ -152,6 +153,7 @@ const defaults: FormListing = {
   assets: [],
   buildingSelectionCriteria: "",
   buildingSelectionCriteriaFile: { fileId: "", label: "" },
+  criteriaAttachType: "",
   jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",

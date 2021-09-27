@@ -41,6 +41,17 @@ const DetailAdditionalEligibility = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
+      <GridSection columns={1}>
+        <GridCell>
+          <ViewItem label={t("listings.buildingSelectionCriteria")}>
+            {listing.buildingSelectionCriteriaFile?.fileId
+              ? getDetailFieldString(
+                  `${listing.buildingSelectionCriteriaFile.fileId.split("/").slice(-1).join()}.pdf`
+                )
+              : getDetailFieldString(listing.buildingSelectionCriteria)}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
     </GridSection>
   )
 }
