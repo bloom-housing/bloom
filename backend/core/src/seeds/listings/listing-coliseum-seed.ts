@@ -953,7 +953,9 @@ const coliseumListing: ListingSeedType = {
 export class ListingColiseumSeed extends ListingDefaultSeed {
   async seed() {
     const priorityTypeMobilityAndHearingWithVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: "Mobility and Hearing & Visual" }
+      {
+        name: "Mobility and Hearing & Visual",
+      }
     )
     const priorityTypeMobilityAndMobilityWithHearingAndVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {

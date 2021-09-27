@@ -20,6 +20,7 @@ import { UnitUpdateDto } from "../../units/dto/unit.dto"
 import { UnitsSummaryUpdateDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodUpdateDto } from "../../application-methods/dto/application-method.dto"
+
 export class ListingUpdateDto extends OmitType(ListingDto, [
   "id",
   "createdAt",
@@ -52,6 +53,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "referralApplication",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -149,9 +151,10 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   amenities?: string | null
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
-  buildingAddress?: AddressUpdateDto | null
+  buildingAddress: AddressUpdateDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

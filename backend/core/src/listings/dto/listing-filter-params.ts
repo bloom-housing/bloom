@@ -7,6 +7,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { ListingFilterKeys } from "../../.."
 import { ListingStatus } from "../types/listing-status-enum"
 
+// add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
