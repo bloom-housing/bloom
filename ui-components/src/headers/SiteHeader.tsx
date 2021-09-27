@@ -1,6 +1,7 @@
 import React from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
+import "./SiteHeader.scss"
 
 export interface SiteHeaderLanguage {
   list: LangItem[]
@@ -91,7 +92,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
           <div className="navbar-menu">
             {props.menuLinks.map((menuLink) => {
-              return <span className={"navbar-link"}>{menuLink.title}</span>
+              return (
+                <a className={"navbar-link"} aria-role={"button"} href={menuLink.href}>
+                  {menuLink.title}
+                </a>
+              )
             })}
           </div>
         </div>

@@ -55,7 +55,7 @@ const Layout = (props) => {
               href: "/housing-counselors",
             },
             {
-              title: "My account",
+              title: "Sign In",
               subMenuLinks: [
                 {
                   title: t("nav.myDashboard"),
