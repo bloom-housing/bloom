@@ -7,7 +7,7 @@ type AgPaginationProps = {
   currentPage: number
   itemsPerPage: number
   sticky?: boolean
-  quantityLabel?: string
+  quantityLabel: string
   setCurrentPage: React.Dispatch<React.SetStateAction<number>> | ((page: number) => void)
   setItemsPerPage?: React.Dispatch<React.SetStateAction<number>>
   onPageChange?: (page: number) => void
@@ -59,10 +59,14 @@ const AgPagination = ({
 
       <div className="data-pager__control-group ml-0 md:ml-auto w-full md:w-auto md:flex md:items-center">
         <div className="data-pager__control">
-          <span className="field-label" id="lbTotalPages">
-            {totalItems}
+          <span className="field-label">
+            <strong>
+              Page {currentPage} of {totalPages}
+            </strong>
           </span>
-          {quantityLabel && <span className="field-label">{quantityLabel}</span>}
+          <span className="field-label">
+            ({totalItems} {quantityLabel})
+          </span>
         </div>
       </div>
 
