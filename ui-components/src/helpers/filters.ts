@@ -53,7 +53,7 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.minRent]?: string | number
   [FrontendListingFilterStateKeys.maxRent]?: string | number
   [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
-  [FrontendListingFilterStateKeys.includeNulls]?: string | boolean
+  [FrontendListingFilterStateKeys.includeNulls]?: boolean
 }
 
 export function encodeToBackendFilterArray(filterState: ListingFilterState) {
@@ -92,7 +92,7 @@ export function decodeFiltersFromFrontendUrl(
   const filterState: ListingFilterState = {}
   let foundFilterKey = false
   for (const queryKey in query) {
-    if (queryKey in FrontendListingFilterStateKeys) {
+    if (queryKey in FrontendListingFilterStateKeys && query[queryKey] !== "") {
       filterState[queryKey] = query[queryKey]
       foundFilterKey = true
     }

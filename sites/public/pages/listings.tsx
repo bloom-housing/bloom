@@ -120,8 +120,8 @@ const ListingsPage = () => {
   ]
   const adaCompliantOptions: SelectOption[] = [
     EMPTY_OPTION,
-    { value: "n", label: t("t.no") },
     { value: "y", label: t("t.yes") },
+    { value: "n", label: t("t.no") },
   ]
 
   const availabilityOptions: SelectOption[] = [
@@ -161,12 +161,11 @@ const ListingsPage = () => {
 
   let numberOfFilters = 0
   if (filterState) {
-    numberOfFilters = Object.keys(filterState).filter((p) => p !== "$comparison").length
+    numberOfFilters = Object.keys(filterState).filter(
+      (p) => p !== "$comparison" && p !== "includeNulls"
+    ).length
     // We want to consider rent as a single filter, so if both min and max are defined, reduce the count.
     if (filterState.minRent !== undefined && filterState.maxRent != undefined) {
-      numberOfFilters -= 1
-    }
-    if (filterState.includeNulls) {
       numberOfFilters -= 1
     }
   }
@@ -267,7 +266,6 @@ const ListingsPage = () => {
               register={register}
               controlClassName="control"
               options={adaCompliantOptions}
-              defaultValue={filterState?.seniorHousing?.toString()}
             />
             <Select
               id="seniorHousing"
@@ -276,6 +274,7 @@ const ListingsPage = () => {
               register={register}
               controlClassName="control"
               options={seniorHousingOptions}
+              defaultValue={filterState?.seniorHousing?.toString()}
             />
             <Field
               id="includeNulls"
@@ -316,7 +315,7 @@ const ListingsPage = () => {
             size={AppearanceSizeType.small}
             styleType={AppearanceStyleType.secondary}
             // "Submit" the form with no params to trigger a reset.
-            onClick={() => onSubmit(null)}
+            onClick={() => onSubmit({})}
             icon="close"
             iconPlacement="left"
           >
