@@ -38,21 +38,33 @@ export default function ListingPage(props: ListingProps) {
 }
 
 export async function getStaticPaths(context: { locales: Array<string> }) {
-  const response = await axios.get(process.env.listingServiceUrl, {
-    params: {
-      view: "base",
-      limit: "all",
-      filter: [
-        {
-          $comparison: "<>",
-          status: "pending",
-        },
-      ],
-    },
-    paramsSerializer: (params) => {
-      return qs.stringify(params)
-    },
-  })
+  let response
+
+  try {
+    response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
+  } catch (e) {
+    if (process.env.NODE_ENV !== "test") {
+      throw e
+    }
+    return {
+      paths: [],
+      fallback: false,
+    }
+  }
 
   return {
     paths: response?.data?.items
