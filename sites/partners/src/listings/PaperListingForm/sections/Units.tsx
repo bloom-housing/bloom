@@ -47,6 +47,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
 
+  useEffect(() => {
+    if (units && units.length > 0 && !units[0].tempId) {
+      units.forEach((unit, index) => {
+        unit.tempId = index + 1
+      })
+    }
+  }, [units])
+
   const editUnit = (tempId: number) => {
     setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
     setUnitDrawerId(tempId)
