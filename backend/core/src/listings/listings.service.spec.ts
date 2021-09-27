@@ -188,7 +188,7 @@ describe("ListingsService", () => {
 
       expect(listings.items).toEqual(mockListings)
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
-        "LOWER(CAST(buildingAddress.zipCode as text)) IN (:...zipcode_0))",
+        "(LOWER(CAST(buildingAddress.zipCode as text)) IN (:...zipcode_0))",
         {
           zipcode_0: expectedZipCodeArray,
         }
