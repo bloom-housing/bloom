@@ -1,15 +1,11 @@
 import { useContext, useEffect, useState } from "react"
 import moment from "moment"
 import { useRouter } from "next/router"
-import {
-  ApplicationStatusProps,
-  isInternalLink,
-  openDateState,
-  t,
-} from "@bloom-housing/ui-components"
+import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
 import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
+import { AppSubmissionContext } from "./AppSubmissionContext"
+import { openInFuture } from "../lib/helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -46,7 +42,7 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     let content = ""
     let subContent = ""
     let formattedDate = ""
-    if (openDateState(listing)) {
+    if (openInFuture(listing)) {
       const date = listing.applicationOpenDate
       const openDate = moment(date)
       formattedDate = openDate.format("MMM. D, YYYY")

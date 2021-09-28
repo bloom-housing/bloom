@@ -1,4 +1,5 @@
-import "@bloom-housing/ui-components/src/global/index.scss"
+import "@bloom-housing/ui-components/src/global/css-imports.scss"
+import "@bloom-housing/ui-components/src/global/app-css.scss"
 
 // Set up translation file
 import { addTranslation } from "../src/helpers/translator"

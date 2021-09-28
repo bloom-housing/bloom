@@ -82,7 +82,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   }
 
   const savePaperApplication = () => {
-    const paperApplications = methods.paper ? methods.paper.paperApplications : []
+    const paperApplications = methods.paper?.paperApplications ?? []
     paperApplications.push({
       file: {
         fileId: cloudinaryData.id,
@@ -137,8 +137,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
    * set initial methods
    */
   useEffect(() => {
-    // if any of these are already not null then don't set from initial listing
-    if (methods.digital || methods.paper || methods.referral) return
     // set methods here
     const temp: Methods = {
       digital: null,
@@ -147,6 +145,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
     }
     listing?.applicationMethods?.forEach((method) => {
       switch (method.type) {
+        case ApplicationMethodType.Internal:
         case ApplicationMethodType.ExternalLink:
           temp["digital"] = method
           break
@@ -161,16 +160,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       }
     })
     setMethods(temp)
-    // register applicationMethods so we can set a value for it
-    register("applicationMethods")
-  }, [
-    listing?.applicationMethods,
-    methods.digital,
-    methods.paper,
-    methods.referral,
-    register,
-    setValue,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /**
    * set application methods value when any of the methods change
@@ -178,28 +169,14 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   useEffect(() => {
     const applicationMethods = []
     for (const key in methods) {
-      const method = methods[key]
-      if (!method) continue
-      switch (key) {
-        case "digital":
-          method.type =
-            commonDigitalApplicationChoice === YesNoAnswer.Yes
-              ? ApplicationMethodType.Internal
-              : ApplicationMethodType.ExternalLink
-          break
-        case "paper":
-          method.type = ApplicationMethodType.FileDownload
-          break
-        case "referral":
-          method.type = ApplicationMethodType.Referral
-          break
-        default:
-          break
+      if (methods[key]) {
+        applicationMethods.push(methods[key])
       }
-      applicationMethods.push(method)
     }
     setValue("applicationMethods", applicationMethods)
-  }, [commonDigitalApplicationChoice, methods, setValue])
+  }, [methods, setValue])
+  // register applicationMethods so we can set a value for it
+  register("applicationMethods")
   return (
     <>
       <GridSection
@@ -221,11 +198,30 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
                   defaultChecked: listing?.digitalApplication === true,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        digital: {
+                          ...methods.digital,
+                          type: ApplicationMethodType.Internal,
+                        },
+                      })
+                    },
+                  },
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
                   defaultChecked: listing?.digitalApplication === false,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        digital: null,
+                      })
+                    },
+                  },
                 },
               ]}
             />
@@ -243,11 +239,33 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
                     defaultChecked: listing?.commonDigitalApplication === true,
+                    inputProps: {
+                      onChange: () => {
+                        setMethods({
+                          ...methods,
+                          digital: {
+                            ...methods.digital,
+                            type: ApplicationMethodType.Internal,
+                          },
+                        })
+                      },
+                    },
                   },
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
                     defaultChecked: listing?.commonDigitalApplication === false,
+                    inputProps: {
+                      onChange: () => {
+                        setMethods({
+                          ...methods,
+                          digital: {
+                            ...methods.digital,
+                            type: ApplicationMethodType.ExternalLink,
+                          },
+                        })
+                      },
+                    },
                   },
                 ]}
               />
@@ -266,7 +284,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 id="customOnlineApplicationUrl"
                 placeholder="https://"
                 inputProps={{
-                  value: methods.digital ? methods.digital.externalReference : "",
+                  value: methods.digital?.externalReference
+                    ? methods.digital.externalReference
+                    : "",
                   onChange: (e) => {
                     setMethods({
                       ...methods,
@@ -295,11 +315,30 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   ...yesNoRadioOptions[0],
                   id: "paperApplicationYes",
                   defaultChecked: listing?.paperApplication === true,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        paper: {
+                          ...methods.paper,
+                          type: ApplicationMethodType.FileDownload,
+                        },
+                      })
+                    },
+                  },
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "paperApplicationNo",
                   defaultChecked: listing?.paperApplication === false,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        paper: null,
+                      })
+                    },
+                  },
                 },
               ]}
             />
@@ -308,7 +347,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         {paperApplicationChoice === YesNoAnswer.Yes && (
           <GridSection columns={1} tinted inset>
             <GridCell>
-              {methods.paper?.paperApplications.length > 0 && (
+              {methods.paper?.paperApplications?.length > 0 && (
                 <MinimalTable
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
@@ -369,11 +408,30 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   ...yesNoRadioOptions[0],
                   id: "referralOpportunityYes",
                   defaultChecked: listing?.referralOpportunity === true,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        referral: {
+                          ...methods.referral,
+                          type: ApplicationMethodType.Referral,
+                        },
+                      })
+                    },
+                  },
                 },
                 {
                   ...yesNoRadioOptions[1],
                   id: "referralOpportunityNo",
                   defaultChecked: listing?.referralOpportunity === false,
+                  inputProps: {
+                    onChange: () => {
+                      setMethods({
+                        ...methods,
+                        referral: null,
+                      })
+                    },
+                  },
                 },
               ]}
             />
@@ -473,9 +531,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   label: t(`languages.${item}`),
                   value: item,
                 }))}
-                noDefault={true}
+                defaultValue={selectedLanguage}
                 inputProps={{
-                  value: selectedLanguage,
                   onChange: (e) => {
                     setSelectedLanguage(e.target.value)
                   },

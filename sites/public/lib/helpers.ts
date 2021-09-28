@@ -1,4 +1,5 @@
-import { Address } from "@bloom-housing/backend-core/types"
+import moment from "moment"
+import { Address, Listing } from "@bloom-housing/backend-core/types"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -13,4 +14,9 @@ export const getGenericAddress = (bloomAddress: Address) => {
     longitude: bloomAddress.longitude,
     placeName: bloomAddress.placeName,
   }
+}
+
+export const openInFuture = (listing: Listing) => {
+  const nowTime = moment()
+  return listing.applicationOpenDate && nowTime < moment(listing.applicationOpenDate)
 }

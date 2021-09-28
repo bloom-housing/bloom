@@ -1,7 +1,6 @@
-import React, { useState, useEffect, createRef } from "react"
+import React, { useState, useEffect } from "react"
 import "./Overlay.scss"
 import useKeyPress from "../helpers/useKeyPress"
-import { useOutsideClick } from "../helpers/useOutsideClick"
 import { createPortal } from "react-dom"
 import FocusLock from "react-focus-lock"
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock"
@@ -18,18 +17,11 @@ export type OverlayProps = {
 }
 
 const OverlayInner = (props: OverlayProps) => {
-  // close overlay on click outside overlay content
-  const overlayInnerRef = createRef<HTMLDivElement>()
-  useOutsideClick({
-    ref: overlayInnerRef,
-    callback: () => {
-      if (props.onClose) props.onClose()
-    },
-  })
-
-  useKeyPress("Escape", () => {
+  const closeHandler = () => {
     if (props.onClose) props.onClose()
-  })
+  }
+
+  useKeyPress("Escape", () => closeHandler())
 
   const classNames = ["fixed-overlay"]
   if (typeof props.backdrop === "undefined" || props.backdrop) classNames.push("is-backdrop")
@@ -41,8 +33,11 @@ const OverlayInner = (props: OverlayProps) => {
       role="dialog"
       aria-labelledby={props.ariaLabel}
       aria-describedby={props.ariaDescription}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) closeHandler()
+      }}
     >
-      <div className="fixed-overlay__inner" ref={overlayInnerRef}>
+      <div className="fixed-overlay__inner">
         <FocusLock>{props.children}</FocusLock>
       </div>
     </div>
