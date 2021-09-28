@@ -32,6 +32,7 @@ serviceOptions.axios = instance
 
 const preferencesService = new client.PreferencesService()
 const listingsService = new client.ListingsService()
+const jurisdictionsService = new client.JurisdictionsService()
 const authService = new client.AuthService()
 const amiChartService = new client.AmiChartsService()
 const unitTypesService = new client.UnitTypesService()
@@ -93,8 +94,9 @@ async function uploadAmiChart(data) {
 
 async function uploadReservedCommunityType(data) {
   try {
+    const jurisdictions = await jurisdictionsService.list()
     return await reservedCommunityTypesService.create({
-      body: { name: data },
+      body: { name: data, jurisdiction: jurisdictions[0] },
     })
   } catch (e) {
     console.log(e.response)
