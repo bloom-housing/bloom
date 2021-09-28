@@ -232,10 +232,6 @@ export const ListingView = (props: ListingProps) => {
     }
   }
 
-  const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
-    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
-  }
-
   const getOnlineApplicationURL = () => {
     let onlineApplicationURL
     if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
