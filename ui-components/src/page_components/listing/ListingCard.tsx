@@ -29,22 +29,22 @@ const ListingCard = (props: ListingCardProps) => {
       </div>
       <div className="listings-row_content">
         {tableHeaderProps?.tableHeader && (
-          <h4
+          <h3
             className={`listings-row_title ${
               tableHeaderProps.tableHeaderClass && tableHeaderProps.tableHeaderClass
             }`}
           >
             {tableHeaderProps?.tableHeader}
-          </h4>
+          </h3>
         )}
         {tableHeaderProps?.tableSubHeader && (
-          <h5
+          <h4
             className={`listings-row_subtitle ${
               tableHeaderProps.tableSubHeaderClass && tableHeaderProps.tableSubHeaderClass
             }`}
           >
             {tableHeaderProps?.tableSubHeader}
-          </h5>
+          </h4>
         )}
         <div className="listings-row_table">
           {tableProps.data && <GroupedTable {...tableProps} />}
