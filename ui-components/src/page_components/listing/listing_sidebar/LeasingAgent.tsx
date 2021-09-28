@@ -3,7 +3,6 @@ import { SidebarAddress } from "./SidebarAddress"
 import { t } from "../../../helpers/translator"
 import { Icon, IconFillColors } from "../../../icons/Icon"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { openDateState } from "../../../helpers/state"
 
 interface LeasingAgentProps {
   listing: Listing
@@ -12,10 +11,6 @@ interface LeasingAgentProps {
 
 const LeasingAgent = (props: LeasingAgentProps) => {
   const listing = props.listing
-
-  if (openDateState(listing)) {
-    return null
-  }
 
   const phoneNumber = listing.leasingAgentPhone
     ? `tel:${listing.leasingAgentPhone.replace(/[-()]/g, "")}`

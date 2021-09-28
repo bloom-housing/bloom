@@ -101,8 +101,9 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
       id: listing.id,
       label: listing.name,
       value: listing.id,
+      onChange: () => setValue("listings_all", false),
     }))
-  }, [listings])
+  }, [listings, setValue])
 
   /**
    * Control listing checkboxes on select/deselect all listings option
@@ -200,7 +201,9 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
                 label={t("users.allListings")}
                 register={register}
                 type="checkbox"
-                onChange={(e) => updateAllCheckboxes(e)}
+                inputProps={{
+                  onChange: (e) => updateAllCheckboxes(e),
+                }}
               />
 
               <FieldGroup
@@ -211,7 +214,6 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
                 error={!!errors?.user_listings}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
-                onChange={() => setValue("listings_all", false)}
               />
             </ViewItem>
           </GridCell>

@@ -19,18 +19,6 @@ describe("<LeasingAgent>", () => {
       listing.leasingAgentOfficeHours && getByText(listing.leasingAgentOfficeHours)
     ).toBeTruthy()
   })
-  it("renders nothing if application is not open", () => {
-    const listing = Object.assign({}, ArcherListing) as Listing
-    listing.applicationOpenDate = new Date(moment().add(10, "days").format())
-    const { queryByText } = render(<LeasingAgent listing={listing} />)
-    expect(listing.leasingAgentName && queryByText(listing.leasingAgentName)).toBeNull()
-    expect(
-      listing.leasingAgentPhone && queryByText(listing.leasingAgentPhone, { exact: false })
-    ).toBeNull()
-    expect(
-      listing.leasingAgentOfficeHours && queryByText(listing.leasingAgentOfficeHours)
-    ).toBeNull()
-  })
   it("does not show management company details if managementCompany prop is absent", () => {
     const listing = Object.assign({}, ArcherListing) as Listing
     const managementCompany = "Some Management Company"

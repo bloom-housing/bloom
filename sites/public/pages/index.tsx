@@ -8,7 +8,6 @@ import {
   Hero,
   t,
   SiteAlert,
-  openDateState,
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
@@ -17,6 +16,7 @@ import axios from "axios"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import moment from "moment"
+import { openInFuture } from "../lib/helpers"
 
 interface IndexProps {
   listings: Listing[]
@@ -68,30 +68,34 @@ export default function Home(props: IndexProps) {
         buttonTitle={t("welcome.seeRentalListings")}
         buttonLink="/listings"
         allApplicationsClosed={
-          !props.listings.some(listingOpen) && !props.listings.some(openDateState)
+          !props.listings.some(listingOpen) && !props.listings.some(openInFuture)
         }
       />
       <div className="homepage-extra">
-        {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+        <div className="action-blocks mt-4">
+          {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
+            <ActionBlock
+              className="flex-1"
+              header={t("welcome.signUp")}
+              icon={<Icon size="3xl" symbol="mailThin" />}
+              actions={[
+                <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
+                  {t("welcome.signUpToday")}
+                </LinkButton>,
+              ]}
+            />
+          )}
           <ActionBlock
-            header={t("welcome.signUp")}
-            icon={<Icon size="3xl" symbol="mail" />}
+            className="flex-1"
+            header={t("welcome.seeMoreOpportunitiesTruncated")}
+            icon={<Icon size="3xl" symbol="building" />}
             actions={[
-              <LinkButton key={"sign-up"} href={props.jurisdiction.notificationsSignUpURL}>
-                {t("welcome.signUpToday")}
+              <LinkButton href="/additional-resources" key={"additional-resources"}>
+                {t("welcome.viewAdditionalHousingTruncated")}
               </LinkButton>,
             ]}
           />
-        )}
-        <ActionBlock
-          header={t("welcome.seeMoreOpportunities")}
-          icon={<Icon size="3xl" symbol="building" />}
-          actions={[
-            <LinkButton href="/additional-resources" key={"additional-resources"}>
-              {t("welcome.viewAdditionalHousing")}
-            </LinkButton>,
-          ]}
-        />
+        </div>
       </div>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
