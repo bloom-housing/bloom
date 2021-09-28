@@ -7,6 +7,9 @@ import {
   DeepPartial,
   EntityManager,
   getManager,
+  getMetadataArgsStorage,
+  In,
+  QueryRunner,
   Repository,
   SelectQueryBuilder,
 } from "typeorm"
@@ -121,6 +124,29 @@ export class ApplicationFlaggedSetsService {
     }
   }
 
+  private async _getAfsesContainingApplicationId(
+    queryRunnery: QueryRunner,
+    applicationId: string
+  ): Promise<Array<{ id: string }>> {
+    const metadataArgsStorage = getMetadataArgsStorage().findJoinTable(
+      ApplicationFlaggedSet,
+      "applications"
+    )
+    const applicationsJunctionTableName = metadataArgsStorage.name
+    const afsMetadata = queryRunnery.connection.getMetadata(ApplicationFlaggedSet)
+    const applicationsMetadata = queryRunnery.connection.getMetadata(Application)
+    const query = `
+      SELECT DISTINCT afs.id FROM ${afsMetadata.tableName} afs 
+      INNER JOIN ( 
+          SELECT DISTINCT application_flagged_set_id, applications_id FROM ${applicationsJunctionTableName} 
+          WHERE ${applicationsJunctionTableName}.applications_id = $1
+      ) matching_afs ON afs.id = matching_afs.application_flagged_set_id
+      LEFT JOIN ${applicationsJunctionTableName} ON matching_afs.application_flagged_set_id = ${applicationsJunctionTableName}.application_flagged_set_id
+      LEFT JOIN ${applicationsMetadata.tableName} applications ON applications.id = ${applicationsJunctionTableName}.applications_id
+  `
+    return await queryRunnery.query(query, [applicationId])
+  }
+
   async onApplicationUpdate(
     newApplication: Application,
     transactionalEntityManager: EntityManager
@@ -130,15 +156,15 @@ export class ApplicationFlaggedSetsService {
     await transApplicationsRepository.save(newApplication)
 
     const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
-    let afses = await transAfsRepository
-      .createQueryBuilder("afs")
-      .leftJoinAndSelect("afs.applications", "applications")
-      .leftJoinAndSelect("afs.listing", "listing")
-      .where("listing.id = :listingId", { listingId: newApplication.listing.id })
-      .getMany()
-    afses = afses.filter(
-      (afs) => afs.applications.findIndex((app) => app.id === newApplication.id) !== -1
+
+    const afsIds = await this._getAfsesContainingApplicationId(
+      transAfsRepository.queryRunner,
+      newApplication.id
     )
+    const afses = await transAfsRepository.find({
+      where: { id: In(afsIds.map((afs) => afs.id)) },
+      relations: ["applications"],
+    })
     const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
     const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
     for (const afs of afses) {

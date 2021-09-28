@@ -37,7 +37,7 @@ export class ApplicationFlaggedSet extends AbstractEntity {
   status: FlaggedSetStatus
 
   @ManyToMany(() => Application)
-  @JoinTable()
+  @JoinTable({ name: "application_flagged_set_applications_applications" })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   applications: Application[]
