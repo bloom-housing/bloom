@@ -165,28 +165,38 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 export async function getStaticProps() {
-  const response = await axios.get(process.env.listingServiceUrl, {
-    params: {
-      view: "base",
-      limit: "all",
-      filter: [
-        {
-          $comparison: "<>",
-          status: "pending",
-        },
-      ],
-    },
-    paramsSerializer: (params) => {
-      return qs.stringify(params)
-    },
-  })
+  let openListings = []
+  let closedListings = []
 
-  const openListings = response?.data?.items
-    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
-    : []
-  const closedListings = response?.data?.items
-    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
-    : []
+  try {
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
+
+    openListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
+      : []
+    closedListings = response?.data?.items
+      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
+      : []
+  } catch (error) {
+    console.error("listings getStaticProps error = ", error)
+    if (process.env.NODE_ENV !== "test") {
+      throw error
+    }
+  }
 
   return { props: { openListings, closedListings }, revalidate: process.env.cacheRevalidate }
 }

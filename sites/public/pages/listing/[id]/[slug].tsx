@@ -57,6 +57,7 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
       },
     })
   } catch (e) {
+    console.log("listing/[id]/[slug] getStaticPaths error = ", e)
     if (process.env.NODE_ENV !== "test") {
       throw e
     }
