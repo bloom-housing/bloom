@@ -112,7 +112,9 @@ const getListings = (listings) => {
           cellClassName: "px-5 py-3",
         }}
         seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
-        tableHeader={listing.showWaitlist ? t("listings.waitlist.open") : null}
+        tableHeaderProps={{
+          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+        }}
       />
     )
   })
