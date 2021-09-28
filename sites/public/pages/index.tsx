@@ -11,7 +11,6 @@ import {
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
-import moment from "moment"
 
 export default function Home() {
   const blankAlertInfo = {
@@ -52,7 +51,7 @@ export default function Home() {
       <Hero
         title={heroTitle}
         buttonTitle={t("welcome.seeRentalListings")}
-        buttonLink="/listings?page=1"
+        buttonLink="/listings"
         backgroundImage={"/images/hero.png"}
       />
       <div className="homepage-extra">
