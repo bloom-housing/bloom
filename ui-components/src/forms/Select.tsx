@@ -21,7 +21,6 @@ interface SelectProps {
   keyPrefix?: string
   describedBy?: string
   inputProps?: Record<string, unknown>
-  noDefault?: boolean
 }
 
 export const Select = ({
@@ -40,12 +39,8 @@ export const Select = ({
   keyPrefix,
   describedBy,
   inputProps,
-  noDefault = false,
+  defaultValue,
 }: SelectProps) => {
-  if (noDefault === false) {
-    inputProps = inputProps ? { ...inputProps } : {}
-    inputProps.defaultValue = ""
-  }
   return (
     <div className={"field " + (error ? "error" : "")}>
       <label className={labelClassName} htmlFor={id}>
@@ -60,6 +55,7 @@ export const Select = ({
           aria-invalid={!!error || false}
           ref={register && register(validation)}
           disabled={disabled}
+          defaultValue={defaultValue ?? ""}
           {...inputProps}
         >
           {placeholder && (

@@ -4312,6 +4312,9 @@ export interface UnitsSummary {
 
 export interface Listing {
   /**  */
+  referralApplication?: ApplicationMethod
+
+  /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
 
   /**  */
