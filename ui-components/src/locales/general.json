@@ -656,7 +656,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
+      "badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
       "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
     },
     "notFound": {
