@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Responsive Tailwind grid classes and nested drawer overlays now work ([#1881](https://github.com/bloom-housing/bloom/pull/1881)) (Jared White)
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
