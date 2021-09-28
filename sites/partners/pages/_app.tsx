@@ -2,7 +2,8 @@ import React, { useMemo } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 
-import "@bloom-housing/ui-components/src/global/index.scss"
+import "@bloom-housing/ui-components/src/global/css-imports.scss"
+import "@bloom-housing/ui-components/src/global/app-css.scss"
 import {
   addTranslation,
   ConfigProvider,

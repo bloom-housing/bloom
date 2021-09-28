@@ -121,6 +121,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
   useEffect(() => {
     void resetDefaultValues()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchAmiChart = async (defaultChartID?: string) => {
@@ -166,6 +167,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     if (amiPercentage && !loading && options) {
       resetAmiTableValues()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amiPercentage])
 
   async function onFormSubmit(action?: string) {
@@ -279,6 +281,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       setValue("priorityType.id", defaultUnit.priorityType?.id)
       setValue("unitType.id", defaultUnit.unitType?.id)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options])
 
   useEffect(() => {
@@ -290,6 +293,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         setValue("monthlyRentAsPercentOfIncome", defaultUnit.monthlyRentAsPercentOfIncome)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rentType])
 
   return (

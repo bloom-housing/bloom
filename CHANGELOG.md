@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Show confirmation modal when publishing listings ([#1772](https://github.com/bloom-housing/bloom/pull/1772)) (Jared White)
   - Split Listing form up into two main tabs ([#1644](https://github.com/bloom-housing/bloom/pull/1644)) (Jared White)
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
@@ -32,6 +33,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Responsive Tailwind grid classes and nested drawer overlays now work ([#1881](https://github.com/bloom-housing/bloom/pull/1881)) (Jared White)
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
@@ -86,6 +88,10 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
   - Removed business logic from AdditionalFees component ([#1844](https://github.com/bloom-housing/bloom/pull/1844)) (Emily Jablonski)
     - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from Apply, Waitlist components ([#1819](https://github.com/bloom-housing/bloom/pull/1819)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props from both components and replaced with a set not dependent on data model, split "Apply" component into two new components GetApplication and Submit Application, removed ApplicationSection components
+  - Allow for a style-able subheader to be added to ListingCard ([#1880](https://github.com/bloom-housing/bloom/pull/1880)) (Emily Jablonski)
+    - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
 
 ### Backend
 
@@ -137,6 +143,8 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
+  - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
+  - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 ## v1.0.5 08/03/2021
 

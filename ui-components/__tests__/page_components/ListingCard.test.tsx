@@ -27,7 +27,10 @@ describe("<ListingCard>", () => {
           cellClassName: "px-5 py-3",
         }}
         seeDetailsLink={`see-details-link`}
-        tableHeader={"optional table header"}
+        tableHeaderProps={{
+          tableHeader: "optional table header",
+          tableSubHeader: "optional table subheader",
+        }}
       />
     )
     expect(getByText("subtitle")).toBeTruthy()
@@ -41,5 +44,6 @@ describe("<ListingCard>", () => {
     expect(getAllByText("cellB")).toBeTruthy()
     expect(getAllByText("cellC")).toBeTruthy()
     expect(getAllByText("optional table header")).toBeTruthy()
+    expect(getAllByText("optional table subheader")).toBeTruthy()
   })
 })

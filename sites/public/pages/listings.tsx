@@ -7,7 +7,6 @@ import {
   t,
   StatusBarType,
   ApplicationStatusType,
-  openDateState,
   ListingCard,
   imageUrlFromListing,
   getSummariesTable,
@@ -22,6 +21,7 @@ import {
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import moment from "moment"
+import { openInFuture } from "../lib/helpers"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -34,7 +34,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
   let formattedDate = ""
   let appStatus = ApplicationStatusType.Open
 
-  if (openDateState(listing)) {
+  if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
     const openDate = moment(date)
     formattedDate = openDate.format("MMM. D, YYYY")
@@ -112,7 +112,9 @@ const getListings = (listings) => {
           cellClassName: "px-5 py-3",
         }}
         seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
-        tableHeader={listing.showWaitlist ? t("listings.waitlist.open") : null}
+        tableHeaderProps={{
+          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+        }}
       />
     )
   })
