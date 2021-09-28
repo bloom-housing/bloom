@@ -1356,7 +1356,26 @@
         "noResultsSubtitle": "تحرير أو إزالة عوامل التصفية للحصول على أفضل النتائج.",
         "includeUnknowns": "قم بتضمين النتائج بمعلومات غير كاملة",
         "senior": "مساكن كبار السن (62+)",
-        "specialNeeds": "ذوي الاحتياجات الخاصة والإعاقة"
+        "specialNeeds": "ذوي الاحتياجات الخاصة والإعاقة",
+        "minAmiPercentageLabel": "الوحدات المخصصة لذوي الدخل",
+        "minAmiPercentageOptions": {
+          "amiOption20": "20٪ من AMI أو أكثر",
+          "amiOption25": "25٪ من AMI أو أكثر",
+          "amiOption30": "30٪ من AMI أو أكثر",
+          "amiOption35": "35٪ من AMI أو أكثر",
+          "amiOption40": "40٪ من AMI أو أكثر",
+          "amiOption45": "45٪ من AMI أو أكثر",
+          "amiOption50": "50٪ من AMI أو أكثر",
+          "amiOption55": "55٪ من AMI أو أكثر",
+          "amiOption60": "60٪ من AMI أو أكثر",
+          "amiOption70": "70٪ من AMI أو أكثر",
+          "amiOption80": "80٪ من AMI أو أكثر",
+          "amiOption100": "100٪ من AMI أو أكثر",
+          "amiOption120": "120٪ من AMI أو أكثر",
+          "amiOption125": "125٪ من AMI أو أكثر",
+          "amiOption140": "140٪ من AMI أو أكثر",
+          "amiOption150": "150٪ من AMI أو أكثر"
+        }
     },
     "eligibility": {
         "progress": {

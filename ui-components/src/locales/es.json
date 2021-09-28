@@ -1231,7 +1231,26 @@
         "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados.",
         "includeUnknowns": "Incluir resultados con información incompleta",
         "senior": "Vivienda para personas mayores (62+)",
-        "specialNeeds": "Necesidades especiales y discapacidad"
+        "specialNeeds": "Necesidades especiales y discapacidad",
+        "minAmiPercentageLabel": "Unidades reservadas para personas con ingresos de",
+        "minAmiPercentageOptions": {
+          "amiOption20": "20% de AMI o más",
+          "amiOption25": "25% de AMI o más",
+          "amiOption30": "30% de IAM o más",
+          "amiOption35": "35% de IAM o más",
+          "amiOption40": "40% de IAM o más",
+          "amiOption45": "45% de IAM o más",
+          "amiOption50": "50% de AMI o más",
+          "amiOption55": "55% de IAM o más",
+          "amiOption60": "60% de IAM o más",
+          "amiOption70": "70% de IAM o más",
+          "amiOption80": "80% de AMI o más",
+          "amiOption100": "100% de AMI o más",
+          "amiOption120": "120% de AMI o más",
+          "amiOption125": "125% de IAM o más",
+          "amiOption140": "140% de IAM o más",
+          "amiOption150": "150% de AMI o más"
+        }
     },
     "eligibility": {
         "progress": {

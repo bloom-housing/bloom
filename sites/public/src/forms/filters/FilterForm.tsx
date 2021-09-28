@@ -69,6 +69,26 @@ const FilterForm = (props: FilterFormProps) => {
     { value: "false", label: t("t.no") },
   ]
 
+  const amiOptions: SelectOption[] = [
+    EMPTY_OPTION,
+    { value: "20", label: t("listingFilters.minAmiPercentageOptions.amiOption20") },
+    { value: "25", label: t("listingFilters.minAmiPercentageOptions.amiOption25") },
+    { value: "30", label: t("listingFilters.minAmiPercentageOptions.amiOption30") },
+    { value: "35", label: t("listingFilters.minAmiPercentageOptions.amiOption35") },
+    { value: "40", label: t("listingFilters.minAmiPercentageOptions.amiOption40") },
+    { value: "45", label: t("listingFilters.minAmiPercentageOptions.amiOption45") },
+    { value: "50", label: t("listingFilters.minAmiPercentageOptions.amiOption50") },
+    { value: "55", label: t("listingFilters.minAmiPercentageOptions.amiOption55") },
+    { value: "60", label: t("listingFilters.minAmiPercentageOptions.amiOption60") },
+    { value: "70", label: t("listingFilters.minAmiPercentageOptions.amiOption70") },
+    { value: "80", label: t("listingFilters.minAmiPercentageOptions.amiOption80") },
+    { value: "100", label: t("listingFilters.minAmiPercentageOptions.amiOption100") },
+    { value: "120", label: t("listingFilters.minAmiPercentageOptions.amiOption120") },
+    { value: "125", label: t("listingFilters.minAmiPercentageOptions.amiOption125") },
+    { value: "140", label: t("listingFilters.minAmiPercentageOptions.amiOption140") },
+    { value: "150", label: t("listingFilters.minAmiPercentageOptions.amiOption150") },
+  ]
+
   const { handleSubmit, register, errors } = useForm()
   return (
     <Form onSubmit={handleSubmit(props.onSubmit)}>
@@ -144,6 +164,17 @@ const FilterForm = (props: FilterFormProps) => {
           controlClassName="control"
           options={seniorHousingOptions}
           defaultValue={props.filterState?.seniorHousing?.toString()}
+        />
+        {/* TODO(#515): Add more explanation and an ami percentage
+        calculator to this filter */}
+        <Select
+          id="amiSelect"
+          name={FrontendListingFilterStateKeys.minAmiPercentage}
+          label={t("listingFilters.minAmiPercentageLabel")}
+          register={register}
+          controlClassName="control"
+          options={amiOptions}
+          defaultValue={props.filterState?.minAmiPercentage?.toString()}
         />
         <Field
           id="includeNulls"

@@ -1377,7 +1377,26 @@
     "noResultsSubtitle": "Edit or remove filters for best results.",
     "includeUnknowns": "Include Results with Incomplete Information",
     "senior": "Senior housing (62+)",
-    "specialNeeds": "Special needs and disability"
+    "specialNeeds": "Special needs and disability",
+    "minAmiPercentageLabel": "Units set aside for people with incomes of",
+    "minAmiPercentageOptions": {
+      "amiOption20": "20% of AMI or more",
+      "amiOption25": "25% of AMI or more",
+      "amiOption30": "30% of AMI or more",
+      "amiOption35": "35% of AMI or more",
+      "amiOption40": "40% of AMI or more",
+      "amiOption45": "45% of AMI or more",
+      "amiOption50": "50% of AMI or more",
+      "amiOption55": "55% of AMI or more",
+      "amiOption60": "60% of AMI or more",
+      "amiOption70": "70% of AMI or more",
+      "amiOption80": "80% of AMI or more",
+      "amiOption100": "100% of AMI or more",
+      "amiOption120": "120% of AMI or more",
+      "amiOption125": "125% of AMI or more",
+      "amiOption140": "140% of AMI or more",
+      "amiOption150": "150% of AMI or more"
+    }
   },
   "eligibility": {
     "progress": {

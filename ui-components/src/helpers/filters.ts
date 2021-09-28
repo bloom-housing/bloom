@@ -31,7 +31,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
       return EnumListingFilterParamsComparison["IN"]
     case ListingFilterKeys.seniorHousing:
     case ListingFilterKeys.availability:
-    case ListingFilterKeys.ami:
+    case ListingFilterKeys.minAmiPercentage:
       return EnumListingFilterParamsComparison["NA"]
     default: {
       const _exhaustiveCheck: never = filterKey
@@ -54,6 +54,7 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.maxRent]?: string | number
   [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
   [FrontendListingFilterStateKeys.includeNulls]?: boolean
+  [FrontendListingFilterStateKeys.minAmiPercentage]?: string | number
 }
 
 export function encodeToBackendFilterArray(filterState: ListingFilterState) {

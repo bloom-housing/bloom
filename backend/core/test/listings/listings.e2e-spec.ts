@@ -256,7 +256,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "60",
+            minAmiPercentage: "60",
           },
         ],
       }
@@ -275,7 +275,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "59",
+            minAmiPercentage: "59",
           },
         ],
       }
@@ -296,7 +296,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "61",
+            minAmiPercentage: "61",
           },
         ],
       }
@@ -317,7 +317,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "30",
+            minAmiPercentage: "30",
           },
         ],
       }
@@ -340,7 +340,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "30",
+            minAmiPercentage: "30",
           },
         ],
       }
@@ -363,7 +363,7 @@ describe("Listings", () => {
         filter: [
           {
             $comparison: "NA",
-            ami: "19",
+            minAmiPercentage: "19",
           },
         ],
       }
