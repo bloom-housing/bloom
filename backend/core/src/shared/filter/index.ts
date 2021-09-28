@@ -50,7 +50,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       // Handle custom filters here, before dropping into generic filter handler
       switch (filterKey) {
         case ListingFilterKeys.seniorHousing:
-          addSeniorHousingQuery(qb, filterValue, includeNulls)
+          addSeniorHousingQuery(qb, filterValue)
           continue
         case ListingFilterKeys.availability:
           addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
