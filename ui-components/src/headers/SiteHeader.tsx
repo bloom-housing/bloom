@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
+import { Icon } from "../icons/Icon"
 import "./SiteHeader.scss"
+import { act } from "react-dom/test-utils"
 
 export interface SiteHeaderLanguage {
   list: LangItem[]
@@ -9,9 +11,11 @@ export interface SiteHeaderLanguage {
 }
 type LogoWidth = "slim" | "medium" | "wide"
 
+// Each MenuLink must contain either an href or an onClick
 export interface MenuLink {
   title: string
   href?: string
+  onClick?: () => void
   subMenuLinks?: MenuLink[]
 }
 
@@ -37,7 +41,7 @@ export interface NavbarDropdownProps {
 
 export const NavbarDropdown = (props: NavbarDropdownProps) => {
   return (
-    <div className="navbar-item has-dropdown is-hoverable" tabIndex={0}>
+    <div className="has-dropdown is-hoverable" tabIndex={0}>
       <a className="navbar-link">{props.menuTitle}</a>
       <div className="navbar-dropdown">{props.children}</div>
     </div>
@@ -54,9 +58,27 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
-  // const handleMenuToggle = () => {
-  //   setActive(!active)
-  // }
+  const [activeMenus, setActiveMenus] = useState<string[]>([])
+
+  console.log("activeMenus", activeMenus)
+  const getDropdown = (menuTitle: string) => {
+    return (
+      <span>
+        {menuTitle}
+        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />{" "}
+        {/* gray-750 */}
+        {activeMenus.indexOf(menuTitle) >= 0 && "dropdown"}
+      </span>
+    )
+  }
+  const menuOnClick = (menuTitle: string) => {
+    const indexOfTitle = activeMenus.indexOf(menuTitle)
+    console.log(indexOfTitle)
+    console.log(activeMenus.splice(indexOfTitle, 1))
+    const newMenus =
+      indexOfTitle >= 0 ? [...activeMenus.splice(indexOfTitle, 1)] : [...activeMenus, menuTitle]
+    setActiveMenus(newMenus)
+  }
 
   return (
     <div className={"site-header"}>
@@ -69,9 +91,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
         <div className="navbar">
           <div className="navbar-logo">
             <LocalizedLink
-              className={`navbar-item logo ${
-                props.logoClass && props.logoClass
-              } ${getLogoWidthClass()}`}
+              className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()}`}
               href="/"
               aria-label="homepage"
             >
@@ -91,10 +111,26 @@ const SiteHeader = (props: SiteHeaderProps) => {
           </div>
 
           <div className="navbar-menu">
-            {props.menuLinks.map((menuLink) => {
-              return (
+            {props.menuLinks.map((menuLink, index) => {
+              let menuTitle: JSX.Element
+              // Dropdown exists
+              if (menuLink.subMenuLinks) {
+                menuTitle = getDropdown(menuLink.title)
+              } else {
+                menuTitle = <>{menuLink.title}</>
+              }
+
+              return menuLink.href ? (
                 <a className={"navbar-link"} aria-role={"button"} href={menuLink.href}>
-                  {menuLink.title}
+                  {menuTitle}
+                </a>
+              ) : (
+                <a
+                  className={"navbar-link"}
+                  aria-role={"button"}
+                  onClick={() => menuOnClick(menuLink.title)}
+                >
+                  {menuTitle}
                 </a>
               )
             })}

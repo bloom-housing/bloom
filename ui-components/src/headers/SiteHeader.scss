@@ -38,17 +38,13 @@
             margin-top: 0;
           }
 
-          &.navbar-item,
-          &.navbar-item:hover,
-          &.navbar-item:focus {
-            @apply bg-white;
-            @apply border-b-0;
-            @apply pt-4;
-            @apply pb-4;
-            @apply pl-4;
-            @apply pr-4;
-            @apply flex;
-          }
+          @apply bg-white;
+          @apply border-b-0;
+          @apply pt-4;
+          @apply pb-4;
+          @apply pl-4;
+          @apply pr-4;
+          @apply flex;
 
           .logo__image {
             @apply inline-block;
@@ -90,8 +86,8 @@
           @apply pr-4;
           text-transform: uppercase;
           @apply text-sm;
-          @apply pl-2;
-          @apply text-gray-900;
+          @apply pl-3;
+          @apply text-gray-750;
           @apply h-full;
           @apply pt-10;
 
@@ -173,14 +169,7 @@
   //   width: 600px;
   // }
 
-  // .navbar-item,
-  // .navbar-link {
-  //   @apply pt-1;
-  //   @apply pb-1;
-  // }
-
-  // a.navbar-link,
-  // a.navbar-item {
+  // a.navbar-link{
   //   @apply text-base;
   //   @apply text-gray-800;
   //   @apply py-4;
@@ -214,14 +203,6 @@
   // .navbar-dropdown {
   //   @apply py-0;
   //   @apply rounded-b-none;
-
-  //   a.navbar-item {
-  //     @apply text-base;
-  //     @apply normal-case;
-  //     @apply py-4;
-  //     @apply px-4;
-  //     @apply border-b;
-  //     @apply border-gray-400;
 
   //     &:hover {
   //       @apply bg-primary-lighter;
