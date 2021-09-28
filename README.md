@@ -12,7 +12,7 @@ The backend can be simultaenously deployed to PaaS-style hosts such as Heroku. I
 
 ### Structure
 
-Bloom uses a monorepo-style repository, containing multiple user-facing applications and back-end services. The three main high-level packagesare `backend/core`, `sites`, and `ui-components`.
+Bloom uses a monorepo-style repository, containing multiple user-facing applications and back-end services. The three main high-level packages are `backend/core`, `sites`, and `ui-components`.
 
 The sites package contains reference implementations for each of the two main user-facing applications in the system:
 
