@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Responsive Tailwind grid classes and nested drawer overlays now work ([#1881](https://github.com/bloom-housing/bloom/pull/1881)) (Jared White)
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
@@ -87,6 +88,8 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
   - Removed business logic from Apply, Waitlist components ([#1819](https://github.com/bloom-housing/bloom/pull/1819)) (Emily Jablonski)
     - **Breaking Change**: Removed existing props from both components and replaced with a set not dependent on data model, split "Apply" component into two new components GetApplication and Submit Application, removed ApplicationSection components
+  - Allow for a style-able subheader to be added to ListingCard ([#1880](https://github.com/bloom-housing/bloom/pull/1880)) (Emily Jablonski)
+    - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
 
 ### Backend
 
