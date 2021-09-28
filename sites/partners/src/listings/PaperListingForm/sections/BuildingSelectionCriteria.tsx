@@ -28,7 +28,7 @@ const LotteryResults = () => {
   const criteriaAttachType = watch("criteriaAttachType")
 
   /*
-    Set state for the drawer, upload progress, drawer, and more
+    Set state for the drawer, upload progress, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -69,7 +69,7 @@ const LotteryResults = () => {
   const previewCriteriaTableHeaders = criteriaTableHeaders
 
   /*
-    Show a preview of the uploaded file within the photo drawer
+    Show a preview of the uploaded file within the upload drawer
   */
   const previewTableRows = []
   if (cloudinaryData.url !== "") {

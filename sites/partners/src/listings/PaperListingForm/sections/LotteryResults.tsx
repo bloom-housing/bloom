@@ -72,7 +72,7 @@ const LotteryResults = (props: LotteryResultsProps) => {
   }
 
   /*
-    Show a preview of the uploaded file within the photo drawer
+    Show a preview of the uploaded file within the upload drawer
   */
   const previewTableRows = []
   if (cloudinaryData.url !== "") {
