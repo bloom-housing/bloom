@@ -9,8 +9,8 @@ export class addNullJurisdictionTranslation1631110073158 implements MigrationInt
     translations["invite"] = {
       hello: "Welcome to the Partners Portal",
       inviteMessage:
-        "Thank you for setting up your account on %{appUrl}. It will now be easier for you to start, save, and submit online applications for listings that appear on the site.",
-      toCompleteAccountCreation: "To complete your account creation, please clink the link below:",
+        "Welcome to the the Partners Portal on %{appUrl}. You will now be able to manage listings and applications that you are a part of from one centralized location.",
+      toCompleteAccountCreation: "To complete your account creation, please click the link below:",
       confirmMyAccount: "Confirm my account",
     }
 
