@@ -46,6 +46,11 @@ export const FrontendListingFilterStateKeys = {
   ...ListingFilterKeys,
   includeNulls: "includeNulls" as const,
 }
+// The types in this interface are `string | ...` because we don't currently parse
+// the values pulled from the URL querystring to their types, so they could be
+// strings or the type the form fields set them to be.
+// TODO: Update `decodeFiltersFromFrontendUrl` to parse each filter into its
+// correct type, so we can remove the `string` type from these fields.
 export interface ListingFilterState {
   [FrontendListingFilterStateKeys.availability]?: string | AvailabilityFilterEnum
   [FrontendListingFilterStateKeys.bedrooms]?: string | number
