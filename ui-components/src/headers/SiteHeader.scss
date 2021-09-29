@@ -91,10 +91,42 @@
           @apply h-full;
           @apply pt-10;
 
+          &:focus {
+            box-shadow: 0 0 3px 4px $tailwind-accent-cool;
+            outline: none;
+          }
+
           &:hover {
             border-bottom: 3px solid;
             @apply border-primary;
             @apply cursor-pointer;
+          }
+        }
+
+        .navbar-dropdown-title {
+          @apply pt-6;
+          border-bottom: 3px solid transparent;
+        }
+
+        .navbar-dropdown-container {
+          background-color: white;
+          border: 1px solid red;
+          position: fixed;
+          margin-left: -125px;
+          margin-top: 35px;
+          @apply border-gray-500;
+          @apply border-t-2;
+          .navbar-dropdown {
+            display: flex;
+            flex-direction: column;
+            .navbar-dropdown-item {
+              @apply pt-4;
+              @apply pb-4;
+              @apply pl-3;
+              @apply pr-3;
+              @apply border-t-2;
+              @apply border-gray-400;
+            }
           }
         }
       }

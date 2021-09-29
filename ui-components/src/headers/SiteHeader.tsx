@@ -23,6 +23,7 @@ export interface SiteHeaderProps {
   logoSrc: string
   title: string
   imageOnly?: boolean
+  homeURL: string
   notice: string | React.ReactNode
   menuLinks: MenuLink[]
   language?: SiteHeaderLanguage
@@ -61,13 +62,20 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const [activeMenus, setActiveMenus] = useState<string[]>([])
 
   console.log("activeMenus", activeMenus)
-  const getDropdown = (menuTitle: string) => {
+  const getDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
     return (
       <span>
         {menuTitle}
-        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />{" "}
-        {/* gray-750 */}
-        {activeMenus.indexOf(menuTitle) >= 0 && "dropdown"}
+        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
+        {activeMenus.indexOf(menuTitle) >= 0 && (
+          <span className={"navbar-dropdown-container"}>
+            <div className={"navbar-dropdown"}>
+              {subMenus.map((subMenu) => {
+                return <span className={"navbar-dropdown-item"}>{subMenu.title}</span>
+              })}
+            </div>
+          </span>
+        )}
       </span>
     )
   }
@@ -92,7 +100,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
           <div className="navbar-logo">
             <LocalizedLink
               className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()}`}
-              href="/"
+              href={props.homeURL}
               aria-label="homepage"
             >
               <div
@@ -115,7 +123,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
               let menuTitle: JSX.Element
               // Dropdown exists
               if (menuLink.subMenuLinks) {
-                menuTitle = getDropdown(menuLink.title)
+                menuTitle = getDropdown(menuLink.title, menuLink.subMenuLinks)
               } else {
                 menuTitle = <>{menuLink.title}</>
               }
@@ -125,13 +133,14 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   {menuTitle}
                 </a>
               ) : (
-                <a
-                  className={"navbar-link"}
+                <button
+                  className={"navbar-link navbar-dropdown-title"}
                   aria-role={"button"}
+                  tabIndex={0}
                   onClick={() => menuOnClick(menuLink.title)}
                 >
                   {menuTitle}
-                </a>
+                </button>
               )
             })}
           </div>
