@@ -31,6 +31,8 @@ All notable changes to this project will be documented in this file. The format 
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
+  - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
+    - ** Breaking Change**: if your implementation relies on the export script, you'll need to use the start script, especially if you want to take advantage of the "fallback" setting for getStaticPaths
 
 ### UI Components
 
@@ -101,6 +103,12 @@ All notable changes to this project will be documented in this file. The format 
 
 - Updated:
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
+
+- Fixed:
+  - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
+This conversation was marked as resolved by seanmalbert
+ Show conversation
+  - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 ## v1.0.5 08/03/2021
 

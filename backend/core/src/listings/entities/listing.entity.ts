@@ -26,7 +26,7 @@ import {
   MaxLength,
   ValidateNested,
 } from "class-validator"
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
@@ -42,6 +42,8 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitsSummarized } from "../../units/types/units-summarized"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
+import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
+import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -80,6 +82,12 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethod)
   applicationMethods: ApplicationMethod[]
+
+  @Expose()
+  @ApiPropertyOptional()
+  get referralApplication(): ApplicationMethodDto | undefined {
+    return this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
+  }
 
   // booleans to make dealing with different application methods easier to parse
   @Column({ type: "boolean", default: false })
