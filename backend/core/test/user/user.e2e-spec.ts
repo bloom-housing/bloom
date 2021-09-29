@@ -413,6 +413,7 @@ describe("Applications", () => {
       dob: new Date(),
       language: Language.en,
     }
+
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
       .set("jurisdictionName", "Alameda")
@@ -454,5 +455,76 @@ describe("Applications", () => {
       .set(...setAuthorization(userAccessToken))
       .expect(200)
     expect(userProfileUpdateResponse.body.firstName).toBe(userProfileUpdateDto.firstName)
+  })
+
+  it("should not allow user A to edit user B profile (with /userProfile)", async () => {
+    const createAndConfirmUser = async (createDto: UserCreateDto) => {
+      const userCreateResponse = await supertest(app.getHttpServer())
+        .post(`/user/`)
+        .set("jurisdictionName", "Alameda")
+        .send(createDto)
+        .expect(201)
+
+      const userService = await app.resolve<UserService>(UserService)
+      const user = await userService.findByEmail(createDto.email)
+
+      await supertest(app.getHttpServer())
+        .put(`/user/confirm/`)
+        .send({ token: user.confirmationToken })
+        .expect(200)
+
+      const accessToken = await getUserAccessToken(app, createDto.email, createDto.password)
+      return { accessToken, userId: userCreateResponse.body.id }
+    }
+
+    const userACreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "user-a@example.com",
+      emailConfirmation: "user-a@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      language: Language.en,
+    }
+
+    const userBCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "user-b@example.com",
+      emailConfirmation: "user-b@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      language: Language.en,
+    }
+
+    const { userId: userAId } = await createAndConfirmUser(userACreateDto)
+    const { accessToken: userBAccessToken } = await createAndConfirmUser(userBCreateDto)
+
+    const userAProfileUpdateDto: UserProfileUpdateDto = {
+      id: userAId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...userACreateDto,
+      password: undefined,
+      jurisdictions: [],
+    }
+
+    // Restrict user B editing user A's profile
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${userAId}`)
+      .send(userAProfileUpdateDto)
+      .set(...setAuthorization(userBAccessToken))
+      .expect(403)
+
+    // Allow admin to edit userA
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${userAId}`)
+      .send(userAProfileUpdateDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
   })
 })
