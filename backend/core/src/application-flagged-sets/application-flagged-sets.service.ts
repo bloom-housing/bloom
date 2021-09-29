@@ -127,22 +127,15 @@ export class ApplicationFlaggedSetsService {
   private async _getAfsesContainingApplicationId(
     queryRunnery: QueryRunner,
     applicationId: string
-  ): Promise<Array<{ id: string }>> {
+  ): Promise<Array<{ application_flagged_set_id: string }>> {
     const metadataArgsStorage = getMetadataArgsStorage().findJoinTable(
       ApplicationFlaggedSet,
       "applications"
     )
     const applicationsJunctionTableName = metadataArgsStorage.name
-    const afsMetadata = queryRunnery.connection.getMetadata(ApplicationFlaggedSet)
-    const applicationsMetadata = queryRunnery.connection.getMetadata(Application)
     const query = `
-      SELECT DISTINCT afs.id FROM ${afsMetadata.tableName} afs 
-      INNER JOIN ( 
-          SELECT DISTINCT application_flagged_set_id, applications_id FROM ${applicationsJunctionTableName} 
-          WHERE ${applicationsJunctionTableName}.applications_id = $1
-      ) matching_afs ON afs.id = matching_afs.application_flagged_set_id
-      LEFT JOIN ${applicationsJunctionTableName} ON matching_afs.application_flagged_set_id = ${applicationsJunctionTableName}.application_flagged_set_id
-      LEFT JOIN ${applicationsMetadata.tableName} applications ON applications.id = ${applicationsJunctionTableName}.applications_id
+      SELECT DISTINCT application_flagged_set_id FROM ${applicationsJunctionTableName}
+      WHERE applications_id = $1
   `
     return await queryRunnery.query(query, [applicationId])
   }
@@ -162,7 +155,7 @@ export class ApplicationFlaggedSetsService {
       newApplication.id
     )
     const afses = await transAfsRepository.find({
-      where: { id: In(afsIds.map((afs) => afs.id)) },
+      where: { id: In(afsIds.map((afs) => afs.application_flagged_set_id)) },
       relations: ["applications"],
     })
     const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
