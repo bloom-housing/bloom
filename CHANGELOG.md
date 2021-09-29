@@ -6,18 +6,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-### Backend
-
-- Added:
-
-  - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
-  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
-  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
-
 ## Frontend
 
 - Added:
 
+  - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
   - Show confirmation modal when publishing listings ([#1772](https://github.com/bloom-housing/bloom/pull/1772)) (Jared White)
   - Split Listing form up into two main tabs ([#1644](https://github.com/bloom-housing/bloom/pull/1644)) (Jared White)
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
@@ -95,6 +88,9 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
+  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
   - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
   - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
   - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
