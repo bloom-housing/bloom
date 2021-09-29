@@ -195,6 +195,7 @@ export async function getStaticProps() {
       : []
   } catch (error) {
     console.error("listings getStaticProps error = ", error)
+    console.log("process.env.NODE_ENV = ", process.env.NODE_ENV)
     if (process.env.NODE_ENV !== "test") {
       throw error
     }
