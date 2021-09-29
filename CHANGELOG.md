@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
   - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
   - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
+  - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
 
 ## Frontend
 

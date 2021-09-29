@@ -2631,6 +2631,9 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean
+
+  /**  */
+  confirmationCode: string
 }
 
 export interface ApplicationFlaggedSet {
