@@ -9,7 +9,7 @@ import {
   ApplicationStatusType,
   ListingCard,
   imageUrlFromListing,
-  getSummariesTable,
+  getSummariesTableFromUnitSummary,
 } from "@bloom-housing/ui-components"
 import {
   Listing,
@@ -81,7 +81,9 @@ const getListingCardSubtitle = (address: Address) => {
 }
 
 const getListingTableData = (unitsSummarized: UnitsSummarized) => {
-  return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
+  return unitsSummarized !== undefined
+    ? getSummariesTableFromUnitSummary(unitsSummarized.byUnitTypeAndRent)
+    : []
 }
 
 const getListings = (listings) => {

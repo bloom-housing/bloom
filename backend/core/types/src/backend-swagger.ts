@@ -4258,59 +4258,56 @@ export interface Unit {
 }
 
 export interface UnitsSummary {
-  /**  */
-  listing: Id
+    /**  */
+    unitType: UnitType
 
-  /**  */
-  unitType: Id
-
-  /**  */
-  id: string
-
-  /**  */
-  monthlyRentMin?: number
-
-  /**  */
-  monthlyRentMax?: number
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
-
-  /**  */
-  amiPercentage?: number
-
-  /**  */
-  minimumIncomeMin?: string
-
-  /**  */
-  minimumIncomeMax?: string
-
-  /**  */
-  maxOccupancy?: number
-
-  /**  */
-  minOccupancy?: number
-
-  /**  */
-  floorMin?: number
-
-  /**  */
-  floorMax?: number
-
-  /**  */
-  sqFeetMin?: string
-
-  /**  */
-  sqFeetMax?: string
-
-  /**  */
-  priorityType?: CombinedPriorityTypeTypes
-
-  /**  */
-  totalCount?: number
-
-  /**  */
-  totalAvailable?: number
+    /**  */
+    id: string
+  
+    /**  */
+    monthlyRentMin?: number
+  
+    /**  */
+    monthlyRentMax?: number
+  
+    /**  */
+    monthlyRentAsPercentOfIncome?: string
+  
+    /**  */
+    amiPercentage?: number
+  
+    /**  */
+    minimumIncomeMin?: string
+  
+    /**  */
+    minimumIncomeMax?: string
+  
+    /**  */
+    maxOccupancy?: number
+  
+    /**  */
+    minOccupancy?: number
+  
+    /**  */
+    floorMin?: number
+  
+    /**  */
+    floorMax?: number
+  
+    /**  */
+    sqFeetMin?: string
+  
+    /**  */
+    sqFeetMax?: string
+  
+    /**  */
+    priorityType?: CombinedPriorityTypeTypes
+  
+    /**  */
+    totalCount?: number
+  
+    /**  */
+    totalAvailable?: number
 }
 
 export interface Listing {

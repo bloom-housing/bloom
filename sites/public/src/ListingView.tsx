@@ -39,7 +39,7 @@ import {
   Waitlist,
   WhatToExpect,
   getOccupancyDescription,
-  getSummariesTable,
+  getSummariesTableFromUnitSummary,
   imageUrlFromListing,
   occupancyTable,
   t,
@@ -110,7 +110,7 @@ export const ListingView = (props: ListingProps) => {
   let groupedUnits: GroupedTableGroup[] = null
 
   if (amiValues.length == 1) {
-    groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
+    groupedUnits = getSummariesTableFromUnitSummary(listing.unitsSummarized.byUnitTypeAndRent)
   } // else condition is handled inline below
 
   const occupancyDescription = getOccupancyDescription(listing)
@@ -349,7 +349,7 @@ export const ListingView = (props: ListingProps) => {
               return parseInt(item.percent, 10) == percent
             })
 
-            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
+            groupedUnits = byAMI ? getSummariesTableFromUnitSummary(byAMI.byUnitType) : []
 
             return (
               <React.Fragment key={percent}>
