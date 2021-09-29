@@ -76,7 +76,7 @@ export function addAvailabilityQuery(
   }
 }
 
-export function addAmiPercentageFilter(
+export function addMinAmiPercentageFilter(
   qb: WhereExpression,
   filterValue: number,
   includeNulls?: boolean

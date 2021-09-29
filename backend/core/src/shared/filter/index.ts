@@ -8,7 +8,7 @@ import {
 import {
   addSeniorHousingQuery,
   addAvailabilityQuery,
-  addAmiPercentageFilter,
+  addMinAmiPercentageFilter,
 } from "./custom_filters"
 
 /**
@@ -55,8 +55,8 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
         case ListingFilterKeys.availability:
           addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
           continue
-        case ListingFilterKeys.ami:
-          addAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
+        case ListingFilterKeys.minAmiPercentage:
+          addMinAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
           continue
       }
 

@@ -74,7 +74,7 @@ describe("FilterAdder", () => {
       const filters = [
         {
           $comparison: "NA",
-          ami: "40",
+          minAmiPercentage: "40",
         },
         {
           $comparison: "=",
