@@ -1,9 +1,7 @@
 import React, { useState } from "react"
-import { LocalizedLink } from "../actions/LocalizedLink"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
 import "./SiteHeader.scss"
-import { act } from "react-dom/test-utils"
 
 export interface SiteHeaderLanguage {
   list: LangItem[]
@@ -14,6 +12,8 @@ type LogoWidth = "slim" | "medium" | "wide"
 // Each MenuLink must contain either an href or an onClick
 export interface MenuLink {
   title: string
+  iconSrc?: string
+  iconClassName?: string
   href?: string
   onClick?: () => void
   subMenuLinks?: MenuLink[]
@@ -26,6 +26,8 @@ export interface SiteHeaderProps {
   homeURL: string
   notice: string | React.ReactNode
   menuLinks: MenuLink[]
+  menuItemClassName?: string
+  dropdownItemClassName?: string
   language?: SiteHeaderLanguage
   logoClass?: string
   logoWidth?: LogoWidth
@@ -71,7 +73,24 @@ const SiteHeader = (props: SiteHeaderProps) => {
           <span className={"navbar-dropdown-container"}>
             <div className={"navbar-dropdown"}>
               {subMenus.map((subMenu) => {
-                return <span className={"navbar-dropdown-item"}>{subMenu.title}</span>
+                return (
+                  <button
+                    className={"navbar-dropdown-item"}
+                    onClick={() => {
+                      if (subMenu.href) {
+                        window.location.href = subMenu.href
+                      }
+                      if (subMenu.onClick) {
+                        subMenu.onClick()
+                      }
+                    }}
+                  >
+                    {subMenu.iconSrc && (
+                      <img src={subMenu.iconSrc} className={subMenu.iconClassName} />
+                    )}
+                    {subMenu.title}
+                  </button>
+                )
               })}
             </div>
           </span>
@@ -79,7 +98,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </span>
     )
   }
-  const menuOnClick = (menuTitle: string) => {
+  const changeMenuShow = (menuTitle: string) => {
     const indexOfTitle = activeMenus.indexOf(menuTitle)
     console.log(indexOfTitle)
     console.log(activeMenus.splice(indexOfTitle, 1))
@@ -98,7 +117,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div className="navbar">
           <div className="navbar-logo">
-            <LocalizedLink
+            <a
               className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()}`}
               href={props.homeURL}
               aria-label="homepage"
@@ -115,7 +134,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 />
                 {!props.imageOnly && <div className="logo__title">{props.title}</div>}
               </div>
-            </LocalizedLink>
+            </a>
           </div>
 
           <div className="navbar-menu">
@@ -129,15 +148,21 @@ const SiteHeader = (props: SiteHeaderProps) => {
               }
 
               return menuLink.href ? (
-                <a className={"navbar-link"} aria-role={"button"} href={menuLink.href}>
+                <a
+                  className={`navbar-link ${props.topMenuClassName && props.menuItemClassName}`}
+                  aria-role={"button"}
+                  href={menuLink.href}
+                >
                   {menuTitle}
                 </a>
               ) : (
                 <button
-                  className={"navbar-link navbar-dropdown-title"}
+                  className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
                   aria-role={"button"}
                   tabIndex={0}
-                  onClick={() => menuOnClick(menuLink.title)}
+                  onClick={() => changeMenuShow(menuLink.title)}
+                  onMouseEnter={() => changeMenuShow(menuLink.title)}
+                  onMouseLeave={() => changeMenuShow(menuLink.title)}
                 >
                   {menuTitle}
                 </button>

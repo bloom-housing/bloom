@@ -65,6 +65,31 @@ const Layout = (props) => {
         },
       ],
     })
+    menuLinks.push({
+      title: "My Account2",
+      subMenuLinks: [
+        {
+          title: "Longgg link is gonna",
+          href: "/account/dashboard",
+        },
+        {
+          title: t("nav.myApplications"),
+          href: "/account/dashboard",
+        },
+        {
+          title: t("nav.accountSettings"),
+          href: "/account/edit",
+        },
+        {
+          title: t("nav.signOut"),
+          onClick: async () => {
+            setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+            await router.push("/sign-in")
+            signOut()
+          },
+        },
+      ],
+    })
   } else {
     menuLinks.push({
       title: "Sign In",
