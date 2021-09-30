@@ -54,7 +54,7 @@ export class refactorUnitTypesRentTypesAndPriorityTypes1625825502154 implements 
       "Hearing and Visual",
       "Mobility and Hearing",
       "Mobility and Visual",
-      "Mobility, Hearing and Visual"
+      "Mobility, Hearing and Visual",
     ]
     const existingAccessibilityPriorityTypes = (
       await queryRunner.query(`SELECT DISTINCT priority_type FROM units`)
