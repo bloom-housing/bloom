@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
@@ -12,6 +12,8 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import dbOptions = require("../../ormconfig.test")
 import { AmiChartsModule } from "../../src/ami-charts/ami-charts.module"
 import { AmiChartCreateDto } from "../../src/ami-charts/dto/ami-chart.dto"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { Repository } from "typeorm"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -22,18 +24,25 @@ jest.setTimeout(30000)
 describe("AmiCharts", () => {
   let app: INestApplication
   let adminAccesstoken: string
+  let jurisdictionRepository: Repository<Jurisdiction>
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, AmiChartsModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        AuthModule,
+        AmiChartsModule,
+        TypeOrmModule.forFeature([Jurisdiction]),
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
       .compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
+    jurisdictionRepository = app.get<Repository<Jurisdiction>>(getRepositoryToken(Jurisdiction))
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
   })
@@ -49,6 +58,7 @@ describe("AmiCharts", () => {
   })
 
   it(`should create and return a new ami chart`, async () => {
+    const jurisdiction = (await jurisdictionRepository.find({name: "Alameda"}))[0]
     const amiChartCreateDto: AmiChartCreateDto = {
       items: [
         {
@@ -58,6 +68,7 @@ describe("AmiCharts", () => {
         },
       ],
       name: "testAmiChart",
+      jurisdiction
     }
     const res = await supertest(app.getHttpServer())
       .post(`/amiCharts`)
