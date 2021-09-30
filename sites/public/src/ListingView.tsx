@@ -251,13 +251,15 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
-          <ApplicationSection
-            listing={listing}
-            preview={props.preview}
-            internalFormRoute="/applications/start/choose-language"
-            cloudName={process.env.cloudinaryCloudName}
-            openInFuture={appOpenInFuture}
-          />
+          {hasNonReferralMethods && (
+            <ApplicationSection
+              listing={listing}
+              preview={props.preview}
+              internalFormRoute="/applications/start/choose-language"
+              cloudName={process.env.cloudinaryCloudName}
+              openInFuture={appOpenInFuture}
+            />
+          )}
         </div>
       </div>
       <ListingDetails>
@@ -362,13 +364,15 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-              <ApplicationSection
-                listing={listing}
-                preview={props.preview}
-                internalFormRoute="/applications/start/choose-language"
-                cloudName={process.env.cloudinaryCloudName}
-                openInFuture={appOpenInFuture}
-              />
+              {hasNonReferralMethods && (
+                <ApplicationSection
+                  listing={listing}
+                  preview={props.preview}
+                  internalFormRoute="/applications/start/choose-language"
+                  cloudName={process.env.cloudinaryCloudName}
+                  openInFuture={appOpenInFuture}
+                />
+              )}
               {listing?.referralApplication && (
                 <ReferralApplication
                   phoneNumber={
