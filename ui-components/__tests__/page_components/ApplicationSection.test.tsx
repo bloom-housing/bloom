@@ -35,7 +35,7 @@ describe("<ApplicationSection>", () => {
     }
     listing.applicationPickUpAddressOfficeHours = "Monday, Tuesday & Friday, 9:00AM - 5:00PM"
     const { getByText, getAllByText } = render(
-      <ApplicationSection listing={listing} internalFormRoute="/forms" />
+      <ApplicationSection listing={listing} internalFormRoute="/forms" openInFuture={false} />
     )
     expect(getByText(listing.waitlistMaxSize)).toBeTruthy()
     expect(getAllByText(listing.applicationAddress?.street || "").length).toBe(1)
@@ -48,7 +48,7 @@ describe("<ApplicationSection>", () => {
     listing.waitlistCurrentSize = 0
     listing.applicationDueDate = new Date(moment().subtract(days, "days").format())
     const { queryByText } = render(
-      <ApplicationSection listing={listing} internalFormRoute="/forms" />
+      <ApplicationSection listing={listing} internalFormRoute="/forms" openInFuture={false} />
     )
     expect(listing.waitlistMaxSize && queryByText(listing.waitlistMaxSize)).toBeNull()
     expect(queryByText(listing.applicationAddress?.street || "")).toBeNull()
