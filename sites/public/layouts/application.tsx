@@ -79,6 +79,7 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
+          mobileDrawer={true}
           logoSrc="/images/logo_glyph.svg"
           homeURL={"/"}
           notice={

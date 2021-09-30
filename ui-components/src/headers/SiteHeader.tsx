@@ -37,6 +37,7 @@ export interface SiteHeaderProps {
   language?: SiteHeaderLanguage
   logoClass?: string
   logoWidth?: LogoWidth
+  mobileDrawer?: boolean
 }
 
 export interface SiteHeaderState {
@@ -131,73 +132,161 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return (
       <>
         {mobileMenu && (
-          <span className={"navbar-mobile-dropdown-container"}>
-            <div className={"navbar-mobile-dropdown"}>
-              {props.menuLinks.map((menuLink) => {
-                if (menuLink.subMenuLinks) {
-                  return (
-                    <>
-                      <button
-                        className={"navbar-mobile-dropdown-item"}
-                        onClick={() => changeMobileMenuShow(menuLink.title)}
-                      >
-                        {menuLink.title}
-                        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
-                      </button>
-                      {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
+          <>
+            {props.mobileDrawer ? (
+              <span className={"navbar-mobile-drawer-dropdown-container"}>
+                <div className={"navbar-mobile-drawer-dropdown"}>
+                  <button
+                    className={"navbar-mobile-drawer-close-row"}
+                    onClick={() => setMobileMenu(false)}
+                  >
+                    <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
+                  </button>
+                  {props.menuLinks.map((menuLink) => {
+                    if (menuLink.subMenuLinks) {
+                      return (
                         <>
-                          {menuLink.subMenuLinks.map((subMenuLink) => {
-                            return (
-                              <button
-                                className={
-                                  "navbar-mobile-dropdown-item navbar-mobile-dropdown-item-sublink"
-                                }
-                                onClick={() => {
-                                  if (subMenuLink.href) {
-                                    window.location.href = subMenuLink.href
-                                  }
-                                  if (subMenuLink.onClick) {
-                                    subMenuLink.onClick()
-                                  }
-                                }}
-                              >
-                                {subMenuLink.iconSrc && (
-                                  <img
-                                    src={subMenuLink.iconSrc}
-                                    className={subMenuLink.iconClassName}
-                                  />
-                                )}
-                                {subMenuLink.title}
-                              </button>
-                            )
-                          })}
+                          <button
+                            className={"navbar-mobile-drawer-dropdown-item"}
+                            onClick={() => changeMobileMenuShow(menuLink.title)}
+                          >
+                            {menuLink.title}
+                            <Icon
+                              size="small"
+                              symbol="arrowDown"
+                              fill={"#555555"}
+                              className={"pl-2"}
+                            />
+                          </button>
+                          {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
+                            <>
+                              {menuLink.subMenuLinks.map((subMenuLink) => {
+                                return (
+                                  <button
+                                    className={
+                                      "navbar-mobile-drawer-dropdown-item navbar-mobile-drawer-dropdown-item-sublink"
+                                    }
+                                    onClick={() => {
+                                      if (subMenuLink.href) {
+                                        window.location.href = subMenuLink.href
+                                      }
+                                      if (subMenuLink.onClick) {
+                                        subMenuLink.onClick()
+                                      }
+                                    }}
+                                  >
+                                    {subMenuLink.iconSrc && (
+                                      <img
+                                        src={subMenuLink.iconSrc}
+                                        className={subMenuLink.iconClassName}
+                                      />
+                                    )}
+                                    {subMenuLink.title}
+                                  </button>
+                                )
+                              })}
+                            </>
+                          )}
                         </>
-                      )}
-                    </>
-                  )
-                } else {
-                  return (
-                    <button
-                      className={"navbar-mobile-dropdown-item"}
-                      onClick={() => {
-                        if (menuLink.href) {
-                          window.location.href = menuLink.href
-                        }
-                        if (menuLink.onClick) {
-                          menuLink.onClick()
-                        }
-                      }}
-                    >
-                      {menuLink.iconSrc && (
-                        <img src={menuLink.iconSrc} className={menuLink.iconClassName} />
-                      )}
-                      {menuLink.title}
-                    </button>
-                  )
-                }
-              })}
-            </div>
-          </span>
+                      )
+                    } else {
+                      return (
+                        <button
+                          className={"navbar-mobile-drawer-dropdown-item"}
+                          onClick={() => {
+                            if (menuLink.href) {
+                              window.location.href = menuLink.href
+                            }
+                            if (menuLink.onClick) {
+                              menuLink.onClick()
+                            }
+                          }}
+                        >
+                          {menuLink.iconSrc && (
+                            <img src={menuLink.iconSrc} className={menuLink.iconClassName} />
+                          )}
+                          {menuLink.title}
+                        </button>
+                      )
+                    }
+                  })}
+                </div>
+              </span>
+            ) : (
+              <span className={"navbar-mobile-dropdown-container"}>
+                <div className={"navbar-mobile-dropdown"}>
+                  {props.menuLinks.map((menuLink) => {
+                    if (menuLink.subMenuLinks) {
+                      return (
+                        <>
+                          <button
+                            className={"navbar-mobile-dropdown-item"}
+                            onClick={() => changeMobileMenuShow(menuLink.title)}
+                          >
+                            {menuLink.title}
+                            <Icon
+                              size="small"
+                              symbol="arrowDown"
+                              fill={"#555555"}
+                              className={"pl-2"}
+                            />
+                          </button>
+                          {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
+                            <>
+                              {menuLink.subMenuLinks.map((subMenuLink) => {
+                                return (
+                                  <button
+                                    className={
+                                      "navbar-mobile-dropdown-item navbar-mobile-dropdown-item-sublink"
+                                    }
+                                    onClick={() => {
+                                      if (subMenuLink.href) {
+                                        window.location.href = subMenuLink.href
+                                      }
+                                      if (subMenuLink.onClick) {
+                                        subMenuLink.onClick()
+                                      }
+                                    }}
+                                  >
+                                    {subMenuLink.iconSrc && (
+                                      <img
+                                        src={subMenuLink.iconSrc}
+                                        className={subMenuLink.iconClassName}
+                                      />
+                                    )}
+                                    {subMenuLink.title}
+                                  </button>
+                                )
+                              })}
+                            </>
+                          )}
+                        </>
+                      )
+                    } else {
+                      return (
+                        <button
+                          className={"navbar-mobile-dropdown-item"}
+                          onClick={() => {
+                            if (menuLink.href) {
+                              window.location.href = menuLink.href
+                            }
+                            if (menuLink.onClick) {
+                              menuLink.onClick()
+                            }
+                          }}
+                        >
+                          {menuLink.iconSrc && (
+                            <img src={menuLink.iconSrc} className={menuLink.iconClassName} />
+                          )}
+                          {menuLink.title}
+                        </button>
+                      )
+                    }
+                  })}
+                </div>
+              </span>
+            )}
+          </>
         )}
       </>
     )
