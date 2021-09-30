@@ -1298,9 +1298,11 @@
     "seeRentalListings": "See Rentals",
     "title": "Apply for affordable housing in",
     "seeMoreOpportunities": "See more rental and ownership housing opportunities",
+    "seeMoreOpportunitiesTruncated": "See more housing opportunities and resources",
     "signUp": "Get emailed whenever a new listing is posted",
     "signUpToday": "Sign up today",
-    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
+    "viewAdditionalHousing": "View additional housing opportunities and resources",
+    "viewAdditionalHousingTruncated": "View opportunities and resources"
   },
   "whatToExpect": {
     "label": "What to Expect",
