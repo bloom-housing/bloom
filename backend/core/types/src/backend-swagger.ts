@@ -3626,7 +3626,7 @@ export interface User {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3670,7 +3670,7 @@ export interface UserCreate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserBasic {
@@ -3705,7 +3705,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3797,7 +3797,7 @@ export interface UserUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserFilterParams {
@@ -3853,7 +3853,7 @@ export interface UserInvite {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface JurisdictionCreate {
