@@ -1,6 +1,4 @@
 .homepage-extra {
-  @apply text-center;
-  @apply text-base;
   @apply flex;
   @apply flex-col;
   @apply justify-center;
@@ -17,12 +15,13 @@
     @apply items-center;
 
     @screen md {
-    @apply text-lg;
-    @apply flex-row;
-    @apply justify-around;
-    > :nth-child(2) {
-      @apply border-l;
-      @apply border-gray-450;
+      @apply text-lg;
+      @apply flex-row;
+      @apply justify-around;
+      > :nth-child(2) {
+        @apply border-l;
+        @apply border-gray-450;
+      }
     }
   }
 }
