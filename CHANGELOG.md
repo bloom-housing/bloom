@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. The format 
   - RTL support ([#627](https://github.com/CityOfDetroit/bloom/pull/627))
   - Add senior housing filtering to the filter modal ([#631](https://github.com/CityOfDetroit/bloom/pull/631))
   - Add AMI filter to frontend ([\$645](https://github.com/CityOfDetroit/bloom/pull/645))
+  - Add independent living filtering([#639](https://github.com/CityOfDetroit/bloom/pull/639))
 
 ## Detroit Team M11
 

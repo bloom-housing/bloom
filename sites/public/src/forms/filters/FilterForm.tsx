@@ -47,15 +47,7 @@ const FilterForm = (props: FilterFormProps) => {
     { value: "y", label: t("t.yes") },
     { value: "n", label: t("t.no") },
   ]
-  const communityTypeOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "all", label: t("listingFilters.communityTypeOptions.all") },
-    { value: "senior", label: t("listingFilters.communityTypeOptions.senior") },
-    {
-      value: "specialNeedsAndDisability",
-      label: t("listingFilters.communityTypeOptions.specialNeeds"),
-    },
-  ]
+
   const availabilityOptions: SelectOption[] = [
     EMPTY_OPTION,
     { value: AvailabilityFilterEnum.hasAvailability, label: t("listingFilters.hasAvailability") },
@@ -64,6 +56,12 @@ const FilterForm = (props: FilterFormProps) => {
   ]
 
   const seniorHousingOptions: SelectOption[] = [
+    EMPTY_OPTION,
+    { value: "true", label: t("t.yes") },
+    { value: "false", label: t("t.no") },
+  ]
+
+  const independentLivingHousingOptions: SelectOption[] = [
     EMPTY_OPTION,
     { value: "true", label: t("t.yes") },
     { value: "false", label: t("t.no") },
@@ -164,6 +162,15 @@ const FilterForm = (props: FilterFormProps) => {
           controlClassName="control"
           options={seniorHousingOptions}
           defaultValue={props.filterState?.seniorHousing?.toString()}
+        />
+        <Select
+          id="independentLivingHousing"
+          name={FrontendListingFilterStateKeys.independentLivingHousing}
+          label={t("listingFilters.independentLivingHousing")}
+          register={register}
+          controlClassName="control"
+          options={independentLivingHousingOptions}
+          defaultValue={props.filterState?.independentLivingHousing?.toString()}
         />
         {/* TODO(#515): Add more explanation and an ami percentage
         calculator to this filter */}

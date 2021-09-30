@@ -5,11 +5,18 @@ export function getFilterUrlLink(eligibilityRequirements) {
 
   const SENIOR_AGE = 62
 
-  const params: ListingFilterState = {}
+  const state: ListingFilterState = {}
 
   if (eligibilityRequirements.age < SENIOR_AGE) {
-    params.seniorHousing = false
+    state.seniorHousing = false
+  }
+  // If the user has as a disability or they prefer not to reveal they're
+  // disability status, we don't need to filter the listings down further.
+  // We show all listings as well as the communities that require a disability
+  // status to apply.
+  if (eligibilityRequirements.disability === "false") {
+    state.independentLivingHousing = false
   }
 
-  return `/listings/filtered?${encodeToFrontendFilterString(params)}`
+  return `/listings/filtered?${encodeToFrontendFilterString(state)}`
 }

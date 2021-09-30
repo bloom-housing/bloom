@@ -1357,7 +1357,7 @@
         "noResultsSubtitle": "تحرير أو إزالة عوامل التصفية للحصول على أفضل النتائج.",
         "includeUnknowns": "قم بتضمين النتائج بمعلومات غير كاملة",
         "senior": "مساكن كبار السن (62+)",
-        "specialNeeds": "ذوي الاحتياجات الخاصة والإعاقة",
+        "independentLivingHousing": "স্বাধীন জীবিত সম্প্রদায়",
         "minAmiPercentageLabel": "الوحدات المخصصة لذوي الدخل",
         "minAmiPercentageOptions": {
           "amiOption20": "20٪ من AMI أو أكثر",

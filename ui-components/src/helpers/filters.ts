@@ -30,6 +30,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.zipcode:
       return EnumListingFilterParamsComparison["IN"]
     case ListingFilterKeys.seniorHousing:
+    case ListingFilterKeys.independentLivingHousing:
     case ListingFilterKeys.availability:
     case ListingFilterKeys.minAmiPercentage:
       return EnumListingFilterParamsComparison["NA"]
@@ -58,6 +59,7 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.minRent]?: string | number
   [FrontendListingFilterStateKeys.maxRent]?: string | number
   [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
+  [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
   [FrontendListingFilterStateKeys.includeNulls]?: boolean
   [FrontendListingFilterStateKeys.minAmiPercentage]?: string | number
 }
