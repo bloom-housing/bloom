@@ -1308,6 +1308,7 @@
         "unitType": "نوع الوحدة",
         "url": "URL",
         "view": "رأي",
+        "viewListings":"عرض القوائم",
         "viewMap": "إعرض الخريطة",
         "viewOnMap": "عرض على الخريطة",
         "website": "موقع الكتروني",

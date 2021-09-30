@@ -1183,6 +1183,7 @@
         "unitType": "Tipo de unidad",
         "url": "URL",
         "view": "Vista",
+        "viewListings":"Ver listados",
         "viewMap": "Ver el mapa",
         "viewOnMap": "Ver en el mapa",
         "website": "Sitio web",
