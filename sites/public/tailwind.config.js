@@ -11,12 +11,13 @@ const bloomTheme = cloneDeep(require("@bloom-housing/ui-components/tailwind.conf
 module.exports = {
   ...bloomTheme,
   purge: {
-    enabled: true, // in future, we can remove the explicit enabling and purge only in production
+    enabled: process.env.NODE_ENV !== "development",
     content: [
       "./pages/**/*.tsx",
       "./src/**/*.tsx",
       "./layouts/**/*.tsx",
       "../../ui-components/src/**/*.tsx",
     ],
+    safelist: [/grid-cols-/],
   },
 }

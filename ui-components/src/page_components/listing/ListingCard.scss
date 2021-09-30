@@ -42,6 +42,13 @@
   @apply mb-2;
 }
 
+.listings-row_subtitle {
+  @apply font-alt-sans;
+  @apply text-gray-800;
+  @apply text-sm;
+  @apply mb-3;
+}
+
 .listings-row_table {
   @apply mb-4;
 }
