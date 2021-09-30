@@ -7,7 +7,6 @@ import {
   t,
   StatusBarType,
   ApplicationStatusType,
-  openDateState,
   ListingCard,
   imageUrlFromListing,
   getSummariesTable,
@@ -22,6 +21,7 @@ import {
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import moment from "moment"
+import { openInFuture } from "../lib/helpers"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -34,7 +34,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
   let formattedDate = ""
   let appStatus = ApplicationStatusType.Open
 
-  if (openDateState(listing)) {
+  if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
     const openDate = moment(date)
     formattedDate = openDate.format("MMM. D, YYYY")
@@ -119,7 +119,7 @@ const getListings = (listings) => {
 }
 
 const openListings = (listings) => {
-  return listings.length > 0 ? (
+  return listings?.length > 0 ? (
     <>{getListings(listings)}</>
   ) : (
     <div className="notice-block">
@@ -130,7 +130,7 @@ const openListings = (listings) => {
 
 const closedListings = (listings) => {
   return (
-    listings.length > 0 && (
+    listings?.length > 0 && (
       <ListingsGroup
         listingsCount={listings.length}
         header={t("listings.closedListings")}
@@ -165,35 +165,35 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 export async function getStaticProps() {
-  let openListings = []
-  let closedListings = []
-
-  try {
-    const response = await axios.get(process.env.listingServiceUrl, {
-      params: {
-        view: "base",
-        limit: "all",
-        filter: [
-          {
-            $comparison: "<>",
-            status: "pending",
-          },
-        ],
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params)
-      },
-    })
-
-    openListings = response?.data?.items
-      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
-      : []
-    closedListings = response?.data?.items
-      ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
-      : []
-  } catch (error) {
-    console.error(error)
+  if (process.env.npm_lifecycle_script === "next build") {
+    return {
+      props: {},
+      revalidate: process.env.cacheRevalidate,
+    }
   }
+
+  const response = await axios.get(process.env.listingServiceUrl, {
+    params: {
+      view: "base",
+      limit: "all",
+      filter: [
+        {
+          $comparison: "<>",
+          status: "pending",
+        },
+      ],
+    },
+    paramsSerializer: (params) => {
+      return qs.stringify(params)
+    },
+  })
+
+  const openListings = response?.data?.items
+    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
+    : []
+  const closedListings = response?.data?.items
+    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
+    : []
 
   return { props: { openListings, closedListings }, revalidate: process.env.cacheRevalidate }
 }

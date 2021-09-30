@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { DefaultAuthGuard } from "../auth/guards/default.guard"
+import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
@@ -27,7 +27,7 @@ import {
 @ApiTags("jurisdictions")
 @ApiBearerAuth()
 @ResourceType("jurisdiction")
-@UseGuards(DefaultAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard, AuthzGuard)
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class JurisdictionsController {
   constructor(private readonly jurisdictionsService: JurisdictionsService) {}
@@ -56,6 +56,17 @@ export class JurisdictionsController {
     return mapTo(
       JurisdictionDto,
       await this.jurisdictionsService.findOne({ where: { id: jurisdictionId } })
+    )
+  }
+
+  @Get(`byName/:jurisdictionName`)
+  @ApiOperation({ summary: "Get jurisdiction by name", operationId: "retrieveByName" })
+  async retrieveByName(
+    @Param("jurisdictionName") jurisdictionName: string
+  ): Promise<JurisdictionDto> {
+    return mapTo(
+      JurisdictionDto,
+      await this.jurisdictionsService.findOne({ where: { name: jurisdictionName } })
     )
   }
 

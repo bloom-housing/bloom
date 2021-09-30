@@ -9,6 +9,7 @@ export interface ApplicationSectionProps {
   internalFormRoute: string
   preview?: boolean
   cloudName?: string
+  openInFuture: boolean
 }
 
 const showWaitlist = (listing: Listing) => {
@@ -41,6 +42,7 @@ const ApplicationSection = (props: ApplicationSectionProps) => {
         preview={preview}
         internalFormRoute={props.internalFormRoute}
         cloudName={props.cloudName}
+        openInFuture={props.openInFuture}
       />
     </>
   )

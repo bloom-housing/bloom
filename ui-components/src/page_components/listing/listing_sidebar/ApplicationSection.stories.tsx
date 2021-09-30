@@ -19,7 +19,7 @@ export const dueSoon = () => {
   listing.applicationOpenDate = new Date(moment().format())
   listing.waitlistCurrentSize = 0
   listing.applicationDueDate = new Date(moment().add(days, "days").format())
-  return <ApplicationSection listing={listing} internalFormRoute="/forms" />
+  return <ApplicationSection listing={listing} internalFormRoute="/forms" openInFuture={false} />
 }
 
 export const previewState = () => {
@@ -52,7 +52,7 @@ export const previewState = () => {
 
   listing.applicationMethods = listing.applicationMethods.concat([testMethod1, testMethod2])
 
-  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" />
+  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" openInFuture={false} />
 }
 
 export const previewStateExternalLink = () => {
@@ -73,7 +73,7 @@ export const previewStateExternalLink = () => {
 
   listing.applicationMethods = listing.applicationMethods.concat([linkMethod])
 
-  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" />
+  return <ApplicationSection preview listing={listing} internalFormRoute="/forms" openInFuture={false} />
 }
 
 /*

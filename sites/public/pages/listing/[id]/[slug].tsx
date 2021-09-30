@@ -39,10 +39,8 @@ export default function ListingPage(props: ListingProps) {
 }
 
 export async function getStaticPaths(context: { locales: Array<string> }) {
-  let response
-
   try {
-    response = await axios.get(process.env.listingServiceUrl, {
+    const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
         limit: "all",
@@ -57,23 +55,24 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
         return qs.stringify(params)
       },
     })
-  } catch (e) {
+
+    return {
+      paths: response?.data?.items
+        ? context.locales.flatMap((locale: string) =>
+            response.data.items.map((listing) => ({
+              params: { id: listing.id, slug: listing.urlSlug },
+              locale: locale,
+            }))
+          )
+        : [],
+      fallback: true,
+    }
+  } catch (error) {
+    console.error("listings getStaticPaths error = ", error)
     return {
       paths: [],
-      fallback: false,
+      fallback: true,
     }
-  }
-
-  return {
-    paths: response?.data?.items
-      ? context.locales.flatMap((locale: string) =>
-          response.data.items.map((listing) => ({
-            params: { id: listing.id, slug: listing.urlSlug },
-            locale: locale,
-          }))
-        )
-      : [],
-    fallback: true,
   }
 }
 
