@@ -281,7 +281,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               id={"whatToExpect"}
               fullWidth={true}
               register={register}
-              maxLength={600}
+              maxLength={1000}
             />
           </GridCell>
         </GridSection>

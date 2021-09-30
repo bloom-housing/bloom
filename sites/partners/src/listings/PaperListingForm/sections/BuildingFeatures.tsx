@@ -23,7 +23,7 @@ const BuildingFeatures = () => {
             id={"amenities"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
           <Textarea
             label={t("t.accessibility")}
@@ -31,7 +31,7 @@ const BuildingFeatures = () => {
             id={"accessibility"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -41,7 +41,7 @@ const BuildingFeatures = () => {
             id={"unitAmenities"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
           <Textarea
             label={t("t.smokingPolicy")}
@@ -49,7 +49,7 @@ const BuildingFeatures = () => {
             id={"smokingPolicy"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -59,7 +59,7 @@ const BuildingFeatures = () => {
             id={"petPolicy"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
           <Textarea
             label={t("t.servicesOffered")}
@@ -67,7 +67,7 @@ const BuildingFeatures = () => {
             id={"servicesOffered"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={1000}
           />
         </GridSection>
       </GridSection>
