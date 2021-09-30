@@ -1,4 +1,35 @@
 .site-header {
+  .navbar-mobile-dropdown-container {
+    .navbar-mobile-dropdown {
+      @apply border-b;
+      @apply border-gray-450;
+      @apply w-full;
+      @apply flex;
+      @apply flex-col;
+      .navbar-mobile-dropdown-item {
+        @apply flex;
+        @apply text-gray-750;
+        @apply pt-3;
+        @apply pb-3;
+        @apply pl-4;
+        @apply pr-4;
+        @apply border-t;
+        @apply border-gray-450;
+        font-size: 14px;
+        &:hover,
+        &:focus {
+          @apply bg-gray-400;
+        }
+      }
+      .navbar-mobile-dropdown-item:nth-of-type(1) {
+        border-top: none;
+      }
+      .navbar-mobile-dropdown-item-sublink {
+        @apply pl-8;
+      }
+    }
+  }
+
   .navbar-container {
     display: flex;
     @apply w-full;
@@ -13,17 +44,23 @@
       flex-direction: row;
       justify-content: space-between;
       z-index: 10;
+      @apply border-b;
+      @apply border-gray-450;
 
       .navbar-logo {
+        @apply flex;
+        @apply items-center;
+        @apply justify-center;
         .logo {
           @apply text-black;
           @apply block;
           @apply text-center;
           @apply z-10;
-          @apply items-center;
-          @apply justify-center;
           max-height: 120px;
-          @apply p-3;
+          @apply pt-2;
+          @apply pb-2;
+          @apply pr-4;
+          @apply pl-4;
 
           @screen md {
             max-width: 60%;
@@ -104,10 +141,10 @@
         }
 
         .navbar-link {
-          @apply pr-4;
+          @apply pr-5;
           text-transform: uppercase;
           @apply text-sm;
-          @apply pl-3;
+          @apply pl-5;
           @apply text-gray-750;
           @apply h-full;
           @apply pt-10;
@@ -132,11 +169,11 @@
         .navbar-dropdown-container {
           background-color: white;
           position: fixed;
-          margin-left: -144px;
-          margin-top: 36px;
-          @apply border-gray-500;
-          @apply border-t-2;
-          width: 160px;
+          margin-left: -124px;
+          margin-top: 37px;
+          @apply border-gray-450;
+          @apply border;
+          width: 144px;
           .navbar-dropdown {
             display: flex;
             flex-direction: column;
@@ -146,13 +183,16 @@
               @apply pb-3;
               @apply pl-3;
               @apply pr-3;
-              @apply border-t-2;
-              @apply border-gray-400;
+              @apply border-t;
+              @apply border-gray-450;
               font-size: 14px;
               &:hover,
               &:focus {
                 @apply bg-gray-400;
               }
+            }
+            .navbar-dropdown-item:nth-of-type(1) {
+              border-top: none;
             }
           }
         }

@@ -79,8 +79,6 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return () => window.removeEventListener("resize", updateMedia)
   }, [])
 
-  console.log(isDesktop)
-
   const getLogoWidthClass = () => {
     if (props.logoWidth === "slim") return "navbar-width-slim"
     if (props.logoWidth === "medium") return "navbar-width-med"
@@ -89,6 +87,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
   }
 
   const [activeMenus, setActiveMenus] = useState<string[]>([])
+  const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])
+  console.log("rendering", activeMobileMenus)
+
   const [mobileMenu, setMobileMenu] = useState(false)
 
   const getDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
@@ -127,15 +128,96 @@ const SiteHeader = (props: SiteHeaderProps) => {
   }
 
   const getMobileDropdown = () => {
-    return <>{mobileMenu && <span>Mobile Menu</span>}</>
+    return (
+      <>
+        {mobileMenu && (
+          <span className={"navbar-mobile-dropdown-container"}>
+            <div className={"navbar-mobile-dropdown"}>
+              {props.menuLinks.map((menuLink) => {
+                if (menuLink.subMenuLinks) {
+                  return (
+                    <>
+                      <button
+                        className={"navbar-mobile-dropdown-item"}
+                        onClick={() => changeMobileMenuShow(menuLink.title)}
+                      >
+                        {menuLink.title}
+                        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
+                      </button>
+                      {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
+                        <>
+                          {menuLink.subMenuLinks.map((subMenuLink) => {
+                            return (
+                              <button
+                                className={
+                                  "navbar-mobile-dropdown-item navbar-mobile-dropdown-item-sublink"
+                                }
+                                onClick={() => {
+                                  if (subMenuLink.href) {
+                                    window.location.href = subMenuLink.href
+                                  }
+                                  if (subMenuLink.onClick) {
+                                    subMenuLink.onClick()
+                                  }
+                                }}
+                              >
+                                {subMenuLink.iconSrc && (
+                                  <img
+                                    src={subMenuLink.iconSrc}
+                                    className={subMenuLink.iconClassName}
+                                  />
+                                )}
+                                {subMenuLink.title}
+                              </button>
+                            )
+                          })}
+                        </>
+                      )}
+                    </>
+                  )
+                } else {
+                  return (
+                    <button
+                      className={"navbar-mobile-dropdown-item"}
+                      onClick={() => {
+                        if (menuLink.href) {
+                          window.location.href = menuLink.href
+                        }
+                        if (menuLink.onClick) {
+                          menuLink.onClick()
+                        }
+                      }}
+                    >
+                      {menuLink.iconSrc && (
+                        <img src={menuLink.iconSrc} className={menuLink.iconClassName} />
+                      )}
+                      {menuLink.title}
+                    </button>
+                  )
+                }
+              })}
+            </div>
+          </span>
+        )}
+      </>
+    )
   }
-  const changeMenuShow = (menuTitle: string) => {
+  const changeMenuShow = async (menuTitle: string) => {
     const indexOfTitle = activeMenus.indexOf(menuTitle)
-    console.log(indexOfTitle)
-    console.log(activeMenus.splice(indexOfTitle, 1))
-    const newMenus =
-      indexOfTitle >= 0 ? [...activeMenus.splice(indexOfTitle, 1)] : [...activeMenus, menuTitle]
-    setActiveMenus(newMenus)
+    setActiveMenus(
+      indexOfTitle >= 0
+        ? activeMenus.filter((menu) => menu !== menuTitle)
+        : [...activeMenus, menuTitle]
+    )
+  }
+
+  const changeMobileMenuShow = (menuTitle: string) => {
+    const indexOfTitle = activeMobileMenus.indexOf(menuTitle)
+    setActiveMobileMenus(
+      indexOfTitle >= 0
+        ? activeMobileMenus.filter((menu) => menu !== menuTitle)
+        : [...activeMobileMenus, menuTitle]
+    )
   }
 
   return (
@@ -208,20 +290,23 @@ const SiteHeader = (props: SiteHeaderProps) => {
               <>
                 <Button
                   size={AppearanceSizeType.small}
-                  onClick={() => setMobileMenu(!mobileMenu)}
-                  icon={"hamburger"}
+                  onClick={() => {
+                    setMobileMenu(!mobileMenu)
+                    setActiveMobileMenus([])
+                  }}
+                  icon={mobileMenu ? "closeSmall" : "hamburger"}
                   iconSize="base"
                   className={"navbar-mobile-menu-button"}
                   unstyled
                 >
-                  Menu
+                  {mobileMenu ? "Close" : "Menu"}
                 </Button>
-                {getMobileDropdown()}
               </>
             )}
           </div>
         </div>
       </nav>
+      {!isDesktop && mobileMenu && getMobileDropdown()}
     </div>
   )
 }
