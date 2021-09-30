@@ -123,7 +123,7 @@ function reformatListing(listing, relationsKeys: string[]) {
   return listing
 }
 
-const findByName = (list, name) => {
+const findByName = (list, name: string) => {
   return list.find((el) => el.name === name)
 }
 

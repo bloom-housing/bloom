@@ -14,10 +14,7 @@
   },
   "units": [
     {
-      "unitType": {
-        "name": "oneBdrm",
-        "numBedrooms": 1
-      },
+      "unitType": "oneBdrm",
       "status": "available"
     }
   ],
