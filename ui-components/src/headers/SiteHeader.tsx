@@ -1,6 +1,12 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
+import { Button } from "../actions/Button"
+import {
+  AppearanceBorderType,
+  AppearanceSizeType,
+  AppearanceStyleType,
+} from "../global/AppearanceTypes"
 import "./SiteHeader.scss"
 
 export interface SiteHeaderLanguage {
@@ -52,7 +58,28 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
 }
 
 const SiteHeader = (props: SiteHeaderProps) => {
-  // const [active, setActive] = useState(false)
+  const DESKTOP_MIN_WIDTH = 767
+  const [isDesktop, setIsDesktop] = useState(true)
+
+  useEffect(() => {
+    if (window.innerWidth > DESKTOP_MIN_WIDTH) {
+      setIsDesktop(true)
+    } else {
+      setIsDesktop(false)
+    }
+
+    const updateMedia = () => {
+      if (window.innerWidth > DESKTOP_MIN_WIDTH) {
+        setIsDesktop(true)
+      } else {
+        setIsDesktop(false)
+      }
+    }
+    window.addEventListener("resize", updateMedia)
+    return () => window.removeEventListener("resize", updateMedia)
+  }, [])
+
+  console.log(isDesktop)
 
   const getLogoWidthClass = () => {
     if (props.logoWidth === "slim") return "navbar-width-slim"
@@ -62,8 +89,8 @@ const SiteHeader = (props: SiteHeaderProps) => {
   }
 
   const [activeMenus, setActiveMenus] = useState<string[]>([])
+  const [mobileMenu, setMobileMenu] = useState(false)
 
-  console.log("activeMenus", activeMenus)
   const getDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
     return (
       <span>
@@ -97,6 +124,10 @@ const SiteHeader = (props: SiteHeaderProps) => {
         )}
       </span>
     )
+  }
+
+  const getMobileDropdown = () => {
+    return <>{mobileMenu && <span>Mobile Menu</span>}</>
   }
   const changeMenuShow = (menuTitle: string) => {
     const indexOfTitle = activeMenus.indexOf(menuTitle)
@@ -138,36 +169,56 @@ const SiteHeader = (props: SiteHeaderProps) => {
           </div>
 
           <div className="navbar-menu">
-            {props.menuLinks.map((menuLink, index) => {
-              let menuTitle: JSX.Element
-              // Dropdown exists
-              if (menuLink.subMenuLinks) {
-                menuTitle = getDropdown(menuLink.title, menuLink.subMenuLinks)
-              } else {
-                menuTitle = <>{menuLink.title}</>
-              }
+            {isDesktop ? (
+              <>
+                {props.menuLinks.map((menuLink, index) => {
+                  let menuTitle: JSX.Element
+                  // Dropdown exists
+                  if (menuLink.subMenuLinks) {
+                    menuTitle = getDropdown(menuLink.title, menuLink.subMenuLinks)
+                  } else {
+                    menuTitle = <>{menuLink.title}</>
+                  }
 
-              return menuLink.href ? (
-                <a
-                  className={`navbar-link ${props.topMenuClassName && props.menuItemClassName}`}
-                  aria-role={"button"}
-                  href={menuLink.href}
+                  return menuLink.href ? (
+                    <a
+                      className={`navbar-link ${
+                        props.menuItemClassName && props.menuItemClassName
+                      }`}
+                      aria-role={"button"}
+                      href={menuLink.href}
+                    >
+                      {menuTitle}
+                    </a>
+                  ) : (
+                    <button
+                      className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
+                      aria-role={"button"}
+                      tabIndex={0}
+                      onClick={() => changeMenuShow(menuLink.title)}
+                      onMouseEnter={() => changeMenuShow(menuLink.title)}
+                      onMouseLeave={() => changeMenuShow(menuLink.title)}
+                    >
+                      {menuTitle}
+                    </button>
+                  )
+                })}
+              </>
+            ) : (
+              <>
+                <Button
+                  size={AppearanceSizeType.small}
+                  onClick={() => setMobileMenu(!mobileMenu)}
+                  icon={"hamburger"}
+                  iconSize="base"
+                  className={"navbar-mobile-menu-button"}
+                  unstyled
                 >
-                  {menuTitle}
-                </a>
-              ) : (
-                <button
-                  className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
-                  aria-role={"button"}
-                  tabIndex={0}
-                  onClick={() => changeMenuShow(menuLink.title)}
-                  onMouseEnter={() => changeMenuShow(menuLink.title)}
-                  onMouseLeave={() => changeMenuShow(menuLink.title)}
-                >
-                  {menuTitle}
-                </button>
-              )
-            })}
+                  Menu
+                </Button>
+                {getMobileDropdown()}
+              </>
+            )}
           </div>
         </div>
       </nav>

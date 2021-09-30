@@ -7,6 +7,8 @@
 
     .navbar {
       width: 1025px;
+      height: 75px;
+      max-height: 75px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -20,14 +22,18 @@
           @apply z-10;
           @apply items-center;
           @apply justify-center;
-          max-width: 60%;
           max-height: 120px;
+          @apply p-3;
 
           @screen md {
+            max-width: 60%;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
             margin-bottom: -0.75rem;
             margin-top: -2.3rem;
-            padding-top: 1rem;
+            @apply pt-4;
+            @apply pb-4;
+            @apply pl-4;
+            @apply pr-4;
 
             &:focus {
               box-shadow: 0 0 3px 4px $tailwind-accent-cool;
@@ -40,10 +46,7 @@
 
           @apply bg-white;
           @apply border-b-0;
-          @apply pt-4;
-          @apply pb-4;
-          @apply pl-4;
-          @apply pr-4;
+
           @apply flex;
 
           .logo__image {
@@ -76,10 +79,28 @@
 
       .navbar-menu {
         @apply flex;
-        align-items: flex-end;
+        justify-content: center;
 
         @screen md {
           height: 75px;
+        }
+
+        .navbar-mobile-menu-button {
+          @apply relative;
+          @apply rounded;
+          @apply px-4;
+          @apply text-lg;
+          @apply text-center;
+          @apply uppercase;
+          @apply font-alt-sans;
+          @apply inline-block;
+          @apply tracking-widest;
+          @apply text-sm;
+          @apply font-bold;
+          @apply leading-snug;
+          @apply border-primary;
+          @apply border-2;
+          text-decoration: none;
         }
 
         .navbar-link {

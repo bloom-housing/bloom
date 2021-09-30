@@ -32,6 +32,11 @@
   @apply h-3;
 }
 
+.ui-base svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
 .ui-medium svg {
   @apply w-4;
   @apply h-4;

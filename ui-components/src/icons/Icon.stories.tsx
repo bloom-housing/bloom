@@ -29,6 +29,7 @@ export const IconFavorite = () => <Icon size="large" symbol="favorite" />
 export const IconFile = () => <Icon size="large" symbol="file" />
 export const IconForward = () => <Icon size="large" symbol="forward" />
 export const IconGlobe = () => <Icon size="large" symbol="globe" />
+export const IconHamburger = () => <Icon size="large" symbol="hamburger" />
 export const IconInfo = () => <Icon size="large" symbol="info" />
 export const IconLeft = () => <Icon size="large" symbol="left" />
 export const IconLightBulb = () => <Icon size="large" symbol="lightbulb" />
