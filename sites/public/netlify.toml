@@ -1,6 +1,6 @@
 [build]
 
-command = "yarn run build"
+command = "yarn run build; yarn run next start"
 ignore = "/bin/false"
 
 [build.environment]
