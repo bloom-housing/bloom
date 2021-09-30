@@ -20,7 +20,7 @@ export class ReservedCommunityType extends AbstractEntity {
   @MaxLength(2048, { groups: [ValidationsGroupsEnum.default] })
   description?: string | null
 
-  @ManyToOne(() => Jurisdiction, { eager: true, nullable: true })
+  @ManyToOne(() => Jurisdiction, { eager: true, nullable: false })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
