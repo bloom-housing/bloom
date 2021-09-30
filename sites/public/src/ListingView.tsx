@@ -54,8 +54,10 @@ export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props
 
-  const { content: appStatusContent, subContent: appStatusSubContent } =
-    useGetApplicationStatusProps(listing)
+  const {
+    content: appStatusContent,
+    subContent: appStatusSubContent,
+  } = useGetApplicationStatusProps(listing)
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
