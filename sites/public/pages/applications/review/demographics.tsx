@@ -59,7 +59,7 @@ const ApplicationDemographics = () => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: item.checked || application.demographics.howDidYouHear.includes(item.id),
+      defaultChecked: application.demographics.howDidYouHear.includes(item.id),
       register,
     }))
   }, [register, application])
