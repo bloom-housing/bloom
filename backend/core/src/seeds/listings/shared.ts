@@ -515,6 +515,7 @@ export const defaultListing: ListingSeedType = {
   leasingAgentOfficeHours: "Custom leasing agent office hours",
   leasingAgentPhone: "(415) 992-7251",
   leasingAgentTitle: "Leasing Agent Title",
+  listingPreferences: [],
   name: "Default Listing Seed",
   postmarkedApplicationsReceivedByDate: null,
   programRules: "Custom program rules text",

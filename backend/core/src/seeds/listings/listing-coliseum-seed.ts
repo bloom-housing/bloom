@@ -932,6 +932,7 @@ const coliseumListing: ListingSeedType = {
     "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   leasingAgentPhone: "(510) 625-1632",
   leasingAgentTitle: "Property Manager",
+  listingPreferences: [],
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,

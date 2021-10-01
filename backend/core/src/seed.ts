@@ -147,7 +147,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
@@ -163,7 +163,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "ghijkl",
-      passwordConfirmation: "Ghijkl1!",
+      passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
@@ -179,7 +179,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions,
     }),
     new AuthContext(null)

@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
@@ -13,6 +14,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { FormMetadata } from "../../applications/types/form-metadata/form-metadata"
 import { PreferenceLink } from "../types/preference-link"
 import { ApiProperty } from "@nestjs/swagger"
+import { ListingPreference } from "./listing-preference.entity"
 
 @Entity({ name: "preferences" })
 class Preference {
@@ -71,6 +73,12 @@ class Preference {
     onUpdate: "CASCADE",
   })
   listing: Listing
+
+  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.preference)
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingPreference)
+  listingPreferences: ListingPreference[]
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()

@@ -4260,6 +4260,26 @@ export interface ListingEvent {
   file?: Asset
 }
 
+export interface ListingPreference {
+  /**  */
+  preference: Id
+
+  /**  */
+  listingId: string
+
+  /**  */
+  preferenceId: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  ordinal?: number
+}
+
 export interface ReservedCommunityType {
   /**  */
   jurisdiction: Jurisdiction
@@ -4503,6 +4523,9 @@ export interface Listing {
 
   /**  */
   leasingAgents?: UserBasic[]
+
+  /**  */
+  listingPreferences: ListingPreference[]
 
   /**  */
   jurisdiction: IdName
@@ -5113,6 +5136,9 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
+  listingPreferences: ListingPreference[]
+
+  /**  */
   countyCode?: string
 }
 
@@ -5555,6 +5581,9 @@ export interface ListingUpdate {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  listingPreferences: ListingPreference[]
 
   /**  */
   countyCode?: string

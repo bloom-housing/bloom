@@ -46,6 +46,8 @@ const views: Views = {
       "amiChartOverride.items",
       "unitType.id",
       "unitType.name",
+      "listingPreferences.ordinal",
+      "listingPreferencesPreference.id",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
@@ -57,6 +59,8 @@ const views: Views = {
       { join: "units.amiChartOverride", alias: "amiChartOverride" },
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
       { join: "listings.preferences", alias: "preferences" },
+      { join: "listings.listingPreferences", alias: "listingPreferences" },
+      { join: "listingPreferences.preference", alias: "listingPreferencesPreference" },
     ],
   },
 }
@@ -191,6 +195,8 @@ views.full = {
     ["listings.applicationDropOffAddress", "applicationDropOffAddress"],
     ["listings.leasingAgents", "leasingAgents"],
     ["listings.preferences", "preferences"],
+    ["listings.listingPreferences", "listingPreferences"],
+    ["listingPreferences.preference", "listingPreferencesPreference"],
     ["listings.property", "property"],
     ["property.buildingAddress", "buildingAddress"],
     ["property.units", "units"],

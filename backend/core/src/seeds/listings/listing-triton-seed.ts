@@ -739,6 +739,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
+  listingPreferences: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
