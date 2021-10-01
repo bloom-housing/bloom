@@ -1,4 +1,6 @@
 .site-header {
+  overflow: hidden;
+  max-width: 100%;
   .navbar-mobile-dropdown-container {
     background-color: white;
     .navbar-mobile-dropdown {
@@ -32,7 +34,7 @@
   }
 
   .navbar-mobile-drawer-dropdown-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     background-color: white;
@@ -430,4 +432,21 @@
   //     left: 0;
   //   }
   // }
+}
+
+.pls-work-enter {
+  transition: all 400ms;
+  transform: translateX(100%);
+}
+.pls-work-enter-active {
+  transition: all 400ms;
+  transform: translateX(0%);
+}
+.pls-work-exit {
+  transition: all 500ms;
+  transform: translateX(100%);
+}
+.pls-work-exit-active {
+  transform: translateX(100%);
+  transition: all 500ms;
 }
