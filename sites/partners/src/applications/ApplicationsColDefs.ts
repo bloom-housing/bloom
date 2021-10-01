@@ -66,7 +66,6 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       width: 150,
       minWidth: 120,
       pinned: "left",
-      type: "leftAligned",
       cellRenderer: "formatLinkCell",
     },
     {
@@ -78,7 +77,6 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
       width: 150,
       minWidth: 120,
       pinned: "left",
-      type: "leftAligned",
       valueFormatter: ({ value }) => t(`application.details.submissionType.${value}`),
       comparator: compareStrings,
     },

@@ -138,6 +138,7 @@ export class ApplicationCreateDto extends OmitType(ApplicationDto, [
   "householdMembers",
   "markedAsDuplicate",
   "preferredUnit",
+  "confirmationCode",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -211,6 +212,7 @@ export class ApplicationUpdateDto extends OmitType(ApplicationDto, [
   "householdMembers",
   "markedAsDuplicate",
   "preferredUnit",
+  "confirmationCode",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

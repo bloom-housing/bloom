@@ -861,6 +861,8 @@ export class UserService {
       page?: number
       /**  */
       limit?: number | "all"
+      /**  */
+      filter?: UserFilterParams[]
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedUserList> {
@@ -868,7 +870,7 @@ export class UserService {
       let url = basePath + "/user/list"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { page: params["page"], limit: params["limit"] }
+      configs.params = { page: params["page"], limit: params["limit"], filter: params["filter"] }
       let data = null
 
       configs.data = data
@@ -2629,6 +2631,9 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean
+
+  /**  */
+  confirmationCode: string
 }
 
 export interface ApplicationFlaggedSet {
@@ -3621,7 +3626,7 @@ export interface User {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3665,7 +3670,7 @@ export interface UserCreate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserBasic {
@@ -3700,7 +3705,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3792,7 +3797,15 @@ export interface UserUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
+}
+
+export interface UserFilterParams {
+  /**  */
+  $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  isPartner?: boolean
 }
 
 export interface PaginatedUserList {
@@ -3840,7 +3853,7 @@ export interface UserInvite {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface JurisdictionCreate {
@@ -4319,6 +4332,9 @@ export interface UnitsSummary {
 }
 
 export interface Listing {
+  /**  */
+  referralApplication?: ApplicationMethod
+
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
 
@@ -5856,6 +5872,13 @@ export enum EnumApplicationsApiExtraModelOrder {
   "DESC" = "DESC",
 }
 export type CombinedRolesTypes = UserRolesCreate
+export enum EnumUserFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

@@ -94,6 +94,13 @@ const ListingsPage = ({ initialListings }) => {
 }
 
 export async function getStaticProps() {
+  if (process.env.npm_lifecycle_script === "next build") {
+    return {
+      props: {},
+      revalidate: process.env.cacheRevalidate,
+    }
+  }
+
   let initialListings = []
   try {
     const response = await axios.get(
@@ -103,7 +110,7 @@ export async function getStaticProps() {
   } catch (error) {
     console.error(error)
   }
-  return { props: { initialListings } }
+  return { props: { initialListings }, revalidate: process.env.cacheRevalidate }
 }
 
 export default ListingsPage

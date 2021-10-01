@@ -10,11 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Request as ExpressRequest } from "express"
-import { Expose, Transform } from "class-transformer"
-import { IsBoolean, IsOptional } from "class-validator"
-import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ResourceType } from "../decorators/resource-type.decorator"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 import { UserService } from "../services/user.service"
@@ -24,13 +21,11 @@ import { UserDto } from "../dto/user.dto"
 import { mapTo } from "../../shared/mapTo"
 import { StatusDto } from "../../shared/dto/status.dto"
 import { ConfirmDto } from "../dto/confirm.dto"
-import { LoginResponseDto } from "../dto/login.dto"
-import { ForgotPasswordDto, ForgotPasswordResponseDto } from "../dto/forgot-password.dto"
+import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 import { UpdatePasswordDto } from "../dto/update-password.dto"
 import { AuthContext } from "../types/auth-context"
 import { User } from "../entities/user.entity"
 import { ResourceAction } from "../decorators/resource-action.decorator"
-import { authzActions } from "../services/authz.service"
 import { UserBasicDto } from "../dto/user-basic.dto"
 import { EmailDto } from "../dto/email.dto"
 import { UserCreateDto } from "../dto/user-create.dto"
@@ -38,19 +33,11 @@ import { UserUpdateDto } from "../dto/user-update.dto"
 import { UserListQueryParams } from "../dto/user-list-query-params"
 import { PaginatedUserListDto } from "../dto/paginated-user-list.dto"
 import { UserInviteDto } from "../dto/user-invite.dto"
-
-export class UserCreateQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  noWelcomeEmail?: boolean
-}
+import { ForgotPasswordResponseDto } from "../dto/forgot-password-response.dto"
+import { LoginResponseDto } from "../dto/login-response.dto"
+import { authzActions } from "../enum/authz-actions.enum"
+import { UserCreateQueryParams } from "../dto/user-create-query-params"
+import { UserFilterParams } from "../dto/user-filter-params"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -122,6 +109,7 @@ export class UserController {
 
   @Get("/list")
   @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiExtraModels(UserFilterParams)
   @ApiOperation({ summary: "List users", operationId: "list" })
   async list(
     @Query() queryParams: UserListQueryParams,

@@ -244,7 +244,11 @@ describe("Users", () => {
       .send(userCreateDto)
       .expect(201)
     expect(res.body).toHaveProperty("id")
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+    expect(res.body).toHaveProperty("id")
   })
 
   it("should not allow user/anonymous to modify other existing user's data", async () => {

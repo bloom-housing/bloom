@@ -99,11 +99,15 @@ All notable changes to this project will be documented in this file. The format 
 - Added:
 
   - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
+  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
+  - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
 
 ## Frontend
 
 - Added:
 
+  - Show confirmation modal when publishing listings ([#1772](https://github.com/bloom-housing/bloom/pull/1772)) (Jared White)
   - Split Listing form up into two main tabs ([#1644](https://github.com/bloom-housing/bloom/pull/1644)) (Jared White)
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
   - Update buttons / pages visibility depending on a user role ([#1609](https://github.com/bloom-housing/bloom/pull/1609)) (Dominik Barcikowski)
@@ -113,9 +117,11 @@ All notable changes to this project will be documented in this file. The format 
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
   - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
+  - Add the "Add User" form ([#1857](https://github.com/bloom-housing/bloom/pull/1857)) (Dominik Barcikowski)
 
 - Fixed:
 
+  - Responsive Tailwind grid classes and nested drawer overlays now work ([#1881](https://github.com/bloom-housing/bloom/pull/1881)) (Jared White)
   - Update Listings component to sort listings by status ([#1585](https://github.com/bloom-housing/bloom/pull/1585))
   - Preferences ordinal bug in listings management ([#1641](https://github.com/bloom-housing/bloom/pull/1641)) (Emily Jablonski)
   - Updates EnumListingReviewOrderType to be ListingReviewOrder ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
@@ -126,11 +132,14 @@ All notable changes to this project will be documented in this file. The format 
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
+  - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
 
 - Changed:
 
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
+  - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
+    - ** Breaking Change**: if your implementation relies on the export script, you'll need to use the start script, especially if you want to take advantage of the "fallback" setting for getStaticPaths
 
 ### UI Components
 
@@ -167,6 +176,12 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
   - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
     - **Breaking Change**: Removed both existing props, replaced with a set not dependent on data model, and renamed component to StatusItem
+  - Removed business logic from AdditionalFees component ([#1844](https://github.com/bloom-housing/bloom/pull/1844)) (Emily Jablonski)
+    - **Breaking Change**: Removed listing prop and replaced with a set not dependent on data model
+  - Removed business logic from Apply, Waitlist components ([#1819](https://github.com/bloom-housing/bloom/pull/1819)) (Emily Jablonski)
+    - **Breaking Change**: Removed existing props from both components and replaced with a set not dependent on data model, split "Apply" component into two new components GetApplication and Submit Application, removed ApplicationSection components
+  - Allow for a style-able subheader to be added to ListingCard ([#1880](https://github.com/bloom-housing/bloom/pull/1880)) (Emily Jablonski)
+    - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
 
 ### Backend
 
@@ -217,6 +232,8 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
+  - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
+  - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 ## v1.0.5 08/03/2021
 
