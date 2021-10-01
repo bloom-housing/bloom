@@ -31,7 +31,8 @@ export interface SiteHeaderProps {
   title: string
   imageOnly?: boolean
   homeURL: string
-  notice: string | React.ReactNode
+  notice?: string | React.ReactNode
+  noticeMobile?: boolean
   menuLinks: MenuLink[]
   menuItemClassName?: string
   dropdownItemClassName?: string
@@ -139,7 +140,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
               className={"navbar-mobile-drawer-close-row"}
               onClick={() => setMobileDrawer(false)}
             >
-              <Icon size="small" symbol="close" fill={"#ffffff"} className={"pl-2"} />
+              <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
             </button>
             {props.menuLinks.map((menuLink, index) => {
               if (menuLink.subMenuLinks) {
@@ -150,8 +151,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
                       onClick={() => changeMobileMenuShow(menuLink.title)}
                     >
                       {menuLink.title}
-                      <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
+                      <Icon size="small" symbol={"arrowDown"} fill={"#555555"} className={"pl-2"} />
                     </button>
+
                     {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
                       <>
                         {menuLink.subMenuLinks.map((subMenuLink, index) => {
@@ -228,7 +230,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                         <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
                       </button>
                       {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
-                        <>
+                        <div className={"navbar-mobile-dropdown-links"}>
                           {menuLink.subMenuLinks.map((subMenuLink, index) => {
                             return (
                               <button
@@ -255,7 +257,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                               </button>
                             )
                           })}
-                        </>
+                        </div>
                       )}
                     </div>
                   )
@@ -308,9 +310,12 @@ const SiteHeader = (props: SiteHeaderProps) => {
     <div className={"site-header"}>
       {props.language && <LanguageNav language={props.language} />}
 
-      <div className="navbar-notice">
-        <div className="navbar-notice__text">{props.notice}</div>
-      </div>
+      {props.notice && (
+        <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
+          <div className="navbar-notice__text">{props.notice}</div>
+        </div>
+      )}
+
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div className="navbar">
           <div className="navbar-logo">
@@ -377,7 +382,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                 <Button
                   size={AppearanceSizeType.small}
                   onClick={() => {
-                    if (isDesktop) {
+                    if (!props.mobileDrawer) {
                       setMobileMenu(!mobileMenu)
                     } else {
                       setMobileDrawer(!mobileDrawer)

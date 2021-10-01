@@ -19,6 +19,7 @@ export const IconCheck = () => <Icon size="large" symbol="check" />
 export const IconClock = () => <Icon size="large" symbol="clock" />
 export const IconClose = () => <Icon size="large" symbol="close" />
 export const IconCloseRound = () => <Icon size="large" symbol="closeRound" />
+export const IconCloseSmall = () => <Icon size="large" symbol="closeSmall" />
 export const IconCross = () => <Icon size="large" symbol="cross" />
 export const IconDown = () => <Icon size="large" symbol="down" />
 export const IconDownload = () => <Icon size="large" symbol="download" />

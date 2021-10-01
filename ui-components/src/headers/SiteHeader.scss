@@ -1,6 +1,4 @@
 .site-header {
-  overflow: hidden;
-  max-width: 100%;
   .navbar-mobile-dropdown-container {
     background-color: white;
     .navbar-mobile-dropdown {
@@ -10,6 +8,7 @@
       @apply flex;
       @apply flex-col;
       .navbar-mobile-dropdown-item {
+        @apply w-full;
         @apply flex;
         @apply text-gray-750;
         @apply pt-3;
@@ -24,9 +23,12 @@
           @apply bg-gray-400;
         }
       }
-      .navbar-mobile-dropdown-item:nth-of-type(1) {
-        border-top: none;
+      .navbar-mobile-dropdown-links {
+        .navbar-mobile-dropdown-item:nth-of-type(1) {
+          border-top: none;
+        }
       }
+
       .navbar-mobile-dropdown-item-sublink {
         @apply pl-8;
       }
@@ -39,6 +41,7 @@
     right: 0;
     background-color: white;
     z-index: 10;
+    @apply h-full;
     .navbar-mobile-drawer-dropdown {
       @apply border-b;
       @apply border-gray-450;
@@ -50,7 +53,7 @@
         @apply bg-primary;
         @apply pt-3;
         @apply pb-3;
-        @apply pr-4;
+        @apply pr-2;
         @apply pl-2;
         @apply flex;
       }
@@ -61,18 +64,23 @@
         @apply pt-3;
         @apply pb-3;
         @apply pl-4;
-        @apply pr-20;
+        @apply pr-24;
         @apply border-t;
+        @apply border-l;
         @apply border-gray-450;
         font-size: 14px;
+        @apply w-full;
         &:hover,
         &:focus {
           @apply bg-gray-400;
         }
       }
-      .navbar-mobile-drawer-dropdown-item:nth-of-type(1) {
-        border-top: none;
+      .navbar-mobile-drawer-dropdown-links {
+        .navbar-mobile-drawer-dropdown-item:nth-of-type(1) {
+          border-top: none;
+        }
       }
+
       .navbar-mobile-drawer-dropdown-item-sublink {
         @apply pl-8;
         @apply pr-2;
@@ -85,6 +93,8 @@
     @apply w-full;
     align-items: center;
     justify-content: center;
+    @apply border-b;
+    @apply border-gray-450;
 
     .navbar {
       width: 1025px;
@@ -94,8 +104,7 @@
       flex-direction: row;
       justify-content: space-between;
       z-index: 10;
-      @apply border-b;
-      @apply border-gray-450;
+      margin-bottom: -1px;
 
       .navbar-logo {
         @apply flex;
@@ -241,9 +250,6 @@
                 @apply bg-gray-400;
               }
             }
-            .navbar-dropdown-item:nth-of-type(1) {
-              border-top: none;
-            }
           }
         }
       }
@@ -256,6 +262,14 @@
     @apply text-right;
     @apply text-white;
     @apply block;
+  }
+
+  .navbar-notice-hide {
+    display: none;
+
+    @screen md {
+      display: block;
+    }
   }
 
   .navbar-notice__text {
