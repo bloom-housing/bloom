@@ -28,18 +28,20 @@ const EligibilityDisability = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors, getValues } = useForm({
+  const { handleSubmit, register } = useForm({
     defaultValues: {
       disability: eligibilityRequirements?.disability,
     },
   })
 
-  const onSubmit = () => {
-    const data = getValues()
-    const { disability } = data
-    eligibilityRequirements.setDisability(disability)
+  const onSubmit = async (data) => {
+    eligibilityRequirements.setDisability(data.disability)
+    await router.push(eligibilityRoute(CURRENT_PAGE + 1))
+  }
 
-    void router.push(eligibilityRoute(CURRENT_PAGE + 1))
+  const onClick = async (data) => {
+    eligibilityRequirements.setDisability(data.disability)
+    await router.push(getFilterUrlLink(eligibilityRequirements))
   }
 
   const disabilityValues = [
@@ -56,19 +58,12 @@ const EligibilityDisability = () => {
     {
       id: "disabilityPreferNotToSay",
       value: "preferNotToSay",
-      label: t("eligibility.disability.preferNotToSay"),
+      label: t("eligibility.preferNotToSay"),
     },
   ]
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
     eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
-  }
-
-  const onClick = async () => {
-    const data = getValues()
-    const { disability } = data
-    eligibilityRequirements.setDisability(disability)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
   }
 
   return (
@@ -99,10 +94,7 @@ const EligibilityDisability = () => {
               <FieldGroup
                 type="radio"
                 name="disability"
-                error={errors.disability != null}
-                errorMessage={t("errors.selectOption")}
                 register={register}
-                validation={{ required: true }}
                 fields={disabilityValues}
               />
             </fieldset>

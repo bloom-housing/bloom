@@ -28,29 +28,25 @@ const EligibilityHouseholdSize = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, getValues } = useForm({
+  const { handleSubmit, register } = useForm({
     defaultValues: {
       householdSize: eligibilityRequirements?.householdSizeCount,
     },
   })
 
-  const onSubmit = () => {
-    const data = getValues()
-    const { householdSize } = data
-    eligibilityRequirements.setHouseholdSizeCount(householdSize)
+  const onSubmit = async (data) => {
+    eligibilityRequirements.setHouseholdSizeCount(data.householdSize)
 
-    void router.push(eligibilityRoute(CURRENT_PAGE + 1))
+    await router.push(eligibilityRoute(CURRENT_PAGE + 1))
+  }
+
+  const onClick = async (data) => {
+    eligibilityRequirements.setHouseholdSizeCount(data.householdSize)
+    await router.push(getFilterUrlLink(eligibilityRequirements))
   }
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
     eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
-  }
-
-  const onClick = async () => {
-    const data = getValues()
-    const { householdSize } = data
-    eligibilityRequirements.setHouseholdSizeCount(householdSize)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
   }
 
   const householdSizeRanges = ["one", "two", "three", "four", "five", "six", "seven", "eight"]

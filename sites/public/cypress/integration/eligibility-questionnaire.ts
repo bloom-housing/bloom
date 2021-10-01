@@ -24,8 +24,8 @@ describe("Verifying the eligibility questionnaire flow", () => {
     cy.contains("Next").click()
     cy.url().should("include", "/eligibility/age")
 
-    // Enter "55" for the age input.
-    cy.get("input").type("55")
+    // Select "< 55" for the age input.
+    cy.get("#ageLessThan55").click()
 
     // Click "Next" to go to the "Disability" section
     cy.contains("Next").click()

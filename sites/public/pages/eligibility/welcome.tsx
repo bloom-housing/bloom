@@ -25,8 +25,8 @@ const EligibilityWelcome = () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = () => {
-    void router.push(eligibilityRoute(CURRENT_PAGE + 1))
+  const onSubmit = async () => {
+    await router.push(eligibilityRoute(CURRENT_PAGE + 1))
   }
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {

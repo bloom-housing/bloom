@@ -1285,13 +1285,13 @@
         "age": {
             "prompt": "¿Cuántos años tienes?",
             "description": "Algunas propiedades solo aceptan personas mayores de 62 años.",
-            "label": "años",
-            "error": "Ingrese una edad válida."
+            "lessThan55": "< 55",
+            "55to61": "55 - 61",
+            "62plus": "62+"
         },
         "disability": {
             "prompt": "¿Tienes alguna discapacidad?",
-            "description": "Algunas propiedades están destinadas a residentes con discapacidades. Algunas casas pueden solicitar una prueba de discapacidad con su solicitud.",
-            "preferNotToSay": "Prefiero no decirlo"
+            "description": "Algunas propiedades están destinadas a residentes con discapacidades. Algunas casas pueden solicitar una prueba de discapacidad con su solicitud."
         },
         "income": {
             "prompt": "¿Cuál es el ingreso anual total de su hogar?",
@@ -1304,6 +1304,7 @@
                 "40kTo50k": "$40,000 - $50,000",
                 "over50k": "Más de $ 50,000"
             }
-        }
+        },
+        "preferNotToSay": "Prefiero no decirlo"
     }
 }

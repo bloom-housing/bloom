@@ -1431,13 +1431,13 @@
     "age": {
       "prompt": "How old are you?",
       "description": "Some properties only accept individuals over 62 years of age.",
-      "label": "years old",
-      "error": "Please enter a valid age."
+      "lessThan55": "< 55",
+      "55to61": "55 - 61",
+      "62plus": "62+"
     },
     "disability": {
       "prompt": "Do you have a disability?",
-      "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application.",
-      "preferNotToSay": "Prefer not to say"
+      "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application."
     },
     "income": {
       "prompt": "What is your total household annual income?",
@@ -1450,6 +1450,7 @@
         "40kTo50k": "$40,000 - $50,000",
         "over50k": "Over $50,000"
       }
-    }
+    },
+    "preferNotToSay": "Prefer not to say"
   }
 }

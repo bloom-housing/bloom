@@ -8,8 +8,8 @@ import {
   FormCard,
   t,
   Form,
-  Field,
   ProgressNav,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -17,42 +17,58 @@ import styles from "./EligibilityAge.module.scss"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
-import { EligibilityContext } from "../../lib/EligibilityContext"
+import { AgeRangeType, EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
 import { getFilterUrlLink } from "../../lib/filterUrlLink"
 
 const EligibilityAge = () => {
   const router = useRouter()
-  // Check if they need to be 18 or older to apply?
-  const MIN_AGE = 0
-  const MAX_AGE = 120
   const CURRENT_PAGE = 2
   const { eligibilityRequirements } = useContext(EligibilityContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, errors, setError } = useForm()
+  const { handleSubmit, register } = useForm()
 
-  const onSubmit = (data) => {
-    if (isAgeValid(data.age)) {
-      eligibilityRequirements.setAge(data.age)
-      void router.push(eligibilityRoute(CURRENT_PAGE + 1))
-    } else {
-      setError("age", { type: "manual", message: "" })
-    }
-  }
-
-  function isAgeValid(age: number) {
-    return age >= MIN_AGE && age <= MAX_AGE
-  }
-
-  if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
-    eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
+  const onSubmit = async (data) => {
+    eligibilityRequirements.setAge(data.age)
+    await router.push(eligibilityRoute(CURRENT_PAGE + 1))
   }
 
   const onClick = async (data) => {
     eligibilityRequirements.setAge(data.age)
     await router.push(getFilterUrlLink(eligibilityRequirements))
+  }
+
+  const ageValues = [
+    {
+      id: "ageLessThan55",
+      value: AgeRangeType.LessThanFiftyFive,
+      label: t("eligibility.age.lessThan55"),
+      defaultChecked: eligibilityRequirements?.age == AgeRangeType.LessThanFiftyFive,
+    },
+    {
+      id: "age55to61",
+      value: AgeRangeType.FiftyFiveToSixtyOne,
+      label: t("eligibility.age.55to61"),
+      defaultChecked: eligibilityRequirements?.age == AgeRangeType.FiftyFiveToSixtyOne,
+    },
+    {
+      id: "age62+",
+      value: AgeRangeType.SixtyTwoAndUp,
+      label: t("eligibility.age.62plus"),
+      defaultChecked: eligibilityRequirements?.age == AgeRangeType.SixtyTwoAndUp,
+    },
+    {
+      id: "preferNotToSay",
+      value: AgeRangeType.PreferNotSay,
+      label: t("eligibility.preferNotToSay"),
+      defaultChecked: eligibilityRequirements?.age == AgeRangeType.PreferNotSay,
+    },
+  ]
+
+  if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
+    eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
   }
 
   return (
@@ -80,20 +96,12 @@ const EligibilityAge = () => {
             <p className="field-note mb-4" id="age-description">
               {t("eligibility.age.description")}
             </p>
-            <Field
-              className={styles.age_field}
-              id="age"
+            <FieldGroup
+              type="radio"
+              fieldGroupClassName={styles.age_field}
               name="age"
-              label={t("eligibility.age.label")}
-              describedBy="age-description"
-              isLabelAfterField={true}
-              defaultValue={eligibilityRequirements.age}
-              inputProps={{ maxLength: 3 }}
-              type={"number"}
-              validation={{ required: true }}
-              error={errors.age}
-              errorMessage={t("eligibility.age.error")}
               register={register}
+              fields={ageValues}
             />
           </div>
           <div className="form-card__pager">

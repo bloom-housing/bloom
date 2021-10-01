@@ -27,16 +27,14 @@ const EligibilityIncome = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register, getValues } = useForm({
+  const { handleSubmit, register } = useForm({
     defaultValues: {
       income: eligibilityRequirements?.income ?? incomeRanges[0],
     },
   })
-  const onSubmit = () => {
-    const data = getValues()
-    const { income } = data
-    eligibilityRequirements.setIncome(income)
-    void router.push(getFilterUrlLink(eligibilityRequirements))
+  const onSubmit = async (data) => {
+    eligibilityRequirements.setIncome(data.income)
+    await router.push(getFilterUrlLink(eligibilityRequirements))
   }
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
