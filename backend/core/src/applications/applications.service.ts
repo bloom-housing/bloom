@@ -21,6 +21,7 @@ import { EmailService } from "../shared/email/email.service"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
 import { authzActions } from "../auth/enum/authz-actions.enum"
+import crypto from "crypto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -208,12 +209,12 @@ export class ApplicationsService {
         const application = await applicationsRepository.save({
           ...applicationCreateDto,
           user: this.req.user,
+          confirmationCode: ApplicationsService.generateConfirmationCode(),
         })
         await this.applicationFlaggedSetsService.onApplicationSave(
           application,
           transactionalEntityManager
         )
-
         return await applicationsRepository.findOne({ id: application.id })
       }
     )
@@ -231,9 +232,22 @@ export class ApplicationsService {
             console.error(e.message)
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (!(e instanceof QueryFailedError && e.code === "40001")) {
-              // 40001: could not serialize access due to read/write dependencies among transactions
+            if (
+              !(
+                e instanceof QueryFailedError &&
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // NOTE: 40001 could not serialize access due to read/write dependencies among transactions
+                (e.code === "40001" ||
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  // NOTE: constraint UQ_556c258a4439f1b7f53de2ed74f checks whether listing.id & confirmationCode is a unique combination
+                  //  it does make sense here to retry because it's a randomly generated 8 character string value
+                  (e.code === "23505" && e.constraint === "UQ_556c258a4439f1b7f53de2ed74f"))
+              )
+            ) {
               bail(e)
+              return
             }
             throw e
           }
@@ -253,6 +267,7 @@ export class ApplicationsService {
           429
         )
       }
+      throw e
     }
 
     // Listing is not eagerly joined on application entity so let's use the one provided with
@@ -284,5 +299,9 @@ export class ApplicationsService {
       }
     }
     return this.authzService.canOrThrow(user, "application", action, resource)
+  }
+
+  public static generateConfirmationCode(): string {
+    return crypto.randomBytes(4).toString("hex").toUpperCase()
   }
 }

@@ -1,4 +1,5 @@
 import React from "react"
+import { useForm } from "react-hook-form"
 import { MinimalTable } from "../tables/MinimalTable"
 import { ViewItem } from "../blocks/ViewItem"
 import { GridSection, GridCell } from "./GridSection"
@@ -110,25 +111,29 @@ export const FourColumnsEdit = () => (
   </GridSection>
 )
 
-export const FourColumnsFields = () => (
-  <GridSection title="Section Title" columns={4}>
-    <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
+export const FourColumnsFields = () => {
+  const { register } = useForm()
 
-    <Field label="Beta" placeholder="Enter text" name="label2" register={() => {}} />
+  return (
+    <GridSection title="Section Title" columns={4}>
+      <Field label="Alpha" placeholder="Enter text" name="label1" register={register} />
 
-    <Field label="Gamma" placeholder="Enter text" name="label3" register={() => {}} />
+      <Field label="Beta" placeholder="Enter text" name="label2" register={register} />
 
-    <Field label="Delta" placeholder="Enter text" name="label4" register={() => {}} />
+      <Field label="Gamma" placeholder="Enter text" name="label3" register={register} />
 
-    <Field label="Epsilon" placeholder="Enter text" name="label5" register={() => {}} />
+      <Field label="Delta" placeholder="Enter text" name="label4" register={register} />
 
-    <Field label="Zeta" placeholder="Enter text" name="label6" register={() => {}} />
+      <Field label="Epsilon" placeholder="Enter text" name="label5" register={register} />
 
-    <Field label="Eta" placeholder="Enter text" name="label7" register={() => {}} />
+      <Field label="Zeta" placeholder="Enter text" name="label6" register={register} />
 
-    <Field label="Theta" placeholder="Enter text" name="label8" register={() => {}} />
-  </GridSection>
-)
+      <Field label="Eta" placeholder="Enter text" name="label7" register={register} />
+
+      <Field label="Theta" placeholder="Enter text" name="label8" register={register} />
+    </GridSection>
+  )
+}
 
 export const Address = () => (
   <GridSection title="Section Title" tinted={true} inset={true} grid={false} className="gap-y-4">
@@ -178,27 +183,36 @@ export const Address = () => (
   </GridSection>
 )
 
-export const AddressFields = () => (
-  <GridSection title="Section Title" grid={false} className="mt-8">
-    <GridSection title="My Group" columns={6}>
-      <GridCell span={4}>
-        <Field label="Street Address" placeholder="Enter text" name="label1" register={() => {}} />
-      </GridCell>
+export const AddressFields = () => {
+  const { register } = useForm()
 
-      <GridCell span={2}>
-        <Field label="Address 2" placeholder="Enter text" name="label2" register={() => {}} />
-      </GridCell>
+  return (
+    <GridSection title="Section Title" grid={false} className="mt-8">
+      <GridSection title="My Group" columns={6}>
+        <GridCell span={4}>
+          <Field
+            label="Street Address"
+            placeholder="Enter text"
+            name="label1"
+            register={register}
+          />
+        </GridCell>
 
-      <GridCell span={2}>
-        <Field label="City" placeholder="Enter text" name="label3" register={() => {}} />
-      </GridCell>
+        <GridCell span={2}>
+          <Field label="Address 2" placeholder="Enter text" name="label2" register={register} />
+        </GridCell>
 
-      <Field label="State" placeholder="Enter text" name="label4" register={() => {}} />
+        <GridCell span={2}>
+          <Field label="City" placeholder="Enter text" name="label3" register={register} />
+        </GridCell>
 
-      <Field label="Zip" placeholder="Enter text" name="label5" register={() => {}} />
+        <Field label="State" placeholder="Enter text" name="label4" register={register} />
+
+        <Field label="Zip" placeholder="Enter text" name="label5" register={register} />
+      </GridSection>
     </GridSection>
-  </GridSection>
-)
+  )
+}
 
 export const GridSectionSingleColumn = () => (
   <GridSection tinted={true} grid={false} inset={true}>

@@ -11,6 +11,7 @@ import { IncomePeriod } from "../applications/types/income-period-enum"
 import { Listing } from "../listings/entities/listing.entity"
 import { User } from "../auth/entities/user.entity"
 import { UnitType } from "../unit-types/entities/unit-type.entity"
+import { ApplicationsService } from "../applications/applications.service"
 
 const applicationCreateDtoTemplate: Omit<
   ApplicationCreateDto,
@@ -232,5 +233,6 @@ export const makeNewApplication = async (
   return await applicationRepo.save({
     ...dto,
     user,
+    confirmationCode: ApplicationsService.generateConfirmationCode(),
   })
 }
