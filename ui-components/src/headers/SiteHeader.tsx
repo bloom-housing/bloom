@@ -1,45 +1,40 @@
 import React, { useState, useEffect } from "react"
-import { Transition, CSSTransition } from "react-transition-group"
+import { CSSTransition } from "react-transition-group"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
 import { Button } from "../actions/Button"
-import {
-  AppearanceBorderType,
-  AppearanceSizeType,
-  AppearanceStyleType,
-} from "../global/AppearanceTypes"
+import { AppearanceSizeType } from "../global/AppearanceTypes"
 import "./SiteHeader.scss"
 
 export interface SiteHeaderLanguage {
-  list: LangItem[]
   codes: string[]
+  list: LangItem[]
 }
 type LogoWidth = "slim" | "medium" | "wide"
 
-// Each MenuLink must contain either an href or an onClick
 export interface MenuLink {
-  title: string
-  iconSrc?: string
-  iconClassName?: string
   href?: string
+  iconClassName?: string
+  iconSrc?: string
   onClick?: () => void
   subMenuLinks?: MenuLink[]
+  title: string
 }
 
 export interface SiteHeaderProps {
-  logoSrc: string
-  title: string
-  imageOnly?: boolean
-  homeURL: string
-  notice?: string | React.ReactNode
-  noticeMobile?: boolean
-  menuLinks: MenuLink[]
-  menuItemClassName?: string
   dropdownItemClassName?: string
+  homeURL: string
+  imageOnly?: boolean
   language?: SiteHeaderLanguage
   logoClass?: string
+  logoSrc: string
   logoWidth?: LogoWidth
+  menuItemClassName?: string
+  menuLinks: MenuLink[]
   mobileDrawer?: boolean
+  notice?: string | React.ReactNode
+  noticeMobile?: boolean
+  title: string
 }
 
 export interface SiteHeaderState {
@@ -47,8 +42,8 @@ export interface SiteHeaderState {
 }
 
 export interface NavbarDropdownProps {
-  menuTitle: string
   children: React.ReactNode
+  menuTitle: string
 }
 
 export const NavbarDropdown = (props: NavbarDropdownProps) => {
@@ -318,17 +313,15 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div className="navbar">
-          <div className="navbar-logo">
+          <div className={`navbar-logo`}>
             <a
-              className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()}`}
+              className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()} ${
+                props.logoWidth && "navbar-custom-width"
+              }`}
               href={props.homeURL}
               aria-label="homepage"
             >
-              <div
-                className={`${getLogoWidthClass()} ${props.logoWidth && "navbar-custom-width"} ${
-                  props.imageOnly && "navbar-image-only-container"
-                }`}
-              >
+              <div className={` ${props.imageOnly && "navbar-image-only-container"}`}>
                 <img
                   className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
                   src={props.logoSrc}

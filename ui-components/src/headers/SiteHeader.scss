@@ -110,12 +110,14 @@
         @apply flex;
         @apply items-center;
         @apply justify-center;
+
         .logo {
           @apply text-black;
           @apply block;
           @apply text-center;
           @apply z-10;
           max-height: 120px;
+          height: 120px;
           @apply pt-2;
           @apply pb-2;
           @apply pr-4;
@@ -125,7 +127,7 @@
             max-width: 60%;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
             margin-bottom: -0.75rem;
-            margin-top: -2.3rem;
+            margin-top: -2.4rem;
             @apply pt-4;
             @apply pb-4;
             @apply pl-4;
@@ -170,6 +172,25 @@
               @apply text-tiny;
             }
           }
+        }
+
+        .navbar-width-slim {
+          width: 200px;
+        }
+
+        .navbar-width-med {
+          width: 450px;
+        }
+
+        .navbar-width-wide {
+          width: 600px;
+        }
+
+        .navbar-custom-width {
+          @apply flex;
+          @apply items-center;
+          @apply justify-center;
+          @apply flex-col;
         }
       }
 
@@ -305,31 +326,12 @@
   //   max-width: 100%;
   // }
 
-  // .navbar-custom-width {
-  //   @apply flex;
-  //   @apply items-center;
-  //   @apply justify-center;
-  //   @apply flex-col;
-  // }
-
   // .navbar-image-only-container {
   //   // 75px - .5rem of padding from the container around it.
   //   height: 67px;
   //   @screen md {
   //     height: 120px;
   //   }
-  // }
-
-  // .navbar-width-slim {
-  //   width: 200px;
-  // }
-
-  // .navbar-width-med {
-  //   width: 450px;
-  // }
-
-  // .navbar-width-wide {
-  //   width: 600px;
   // }
 
   // a.navbar-link{
