@@ -15,7 +15,6 @@ import {
   FormCard,
   FormOptions,
   ProgressNav,
-  relationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
@@ -24,7 +23,7 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 
 const ApplicationMember = () => {
   let memberId, member, saveText, cancelText

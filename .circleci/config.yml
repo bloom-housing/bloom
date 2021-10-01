@@ -69,7 +69,7 @@ jobs:
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:shared:ui
+      - run: yarn test:shared:helpers && yarn test:shared:ui
   jest-ui-components-a11y:
     executor: puppeteer-node
     steps:

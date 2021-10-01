@@ -21,7 +21,7 @@ import {
   genderKeys,
   sexualOrientation,
   howDidYouHear,
-} from "@bloom-housing/ui-components/src/helpers/formOptions"
+} from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
