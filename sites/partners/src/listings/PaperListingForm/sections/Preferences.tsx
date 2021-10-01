@@ -25,6 +25,9 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
   const [dragOrder, setDragOrder] = useState([])
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, getValues } = useFormContext()
+
   const draggableTableData = useMemo(
     () =>
       draftPreferences.map((pref) => ({
@@ -104,10 +107,6 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   if (preferencesError) {
     return null
   }
-
-  const formMethods = useFormContext()
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues } = formMethods
 
   const formTableHeaders = {
     order: "t.order",
