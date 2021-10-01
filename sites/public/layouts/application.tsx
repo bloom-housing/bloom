@@ -8,7 +8,6 @@ import {
   FooterNav,
   FooterSection,
   ExygyFooter,
-  // UserNav,
   MenuLink,
   t,
   AuthContext,
@@ -19,13 +18,24 @@ const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
   const router = useRouter()
 
-  const signedIn = !!profile
-
   const languages =
     router?.locales?.map((item) => ({
       prefix: item === "en" ? "" : item,
       label: t(`languages.${item}`),
     })) || []
+
+  console.log("formatted")
+  console.log(
+    languages.map((lang) => {
+      return {
+        prefix: lang.prefix,
+        label: lang.label,
+        onClick: () =>
+          void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+        active: t("config.routePrefix") === lang.prefix,
+      }
+    })
+  )
 
   const menuLinks: MenuLink[] = [
     {
@@ -39,7 +49,7 @@ const Layout = (props) => {
       href: "/housing-counselors",
     })
   }
-  if (profile) {
+  if (!!profile) {
     menuLinks.push({
       title: "My Account",
       subMenuLinks: [
@@ -91,39 +101,17 @@ const Layout = (props) => {
             </>
           }
           title={t("nav.siteTitle")}
-          language={{
-            list: languages,
-            codes: router?.locales,
-          }}
+          languages={languages.map((lang) => {
+            return {
+              prefix: lang.prefix,
+              label: lang.label,
+              onClick: () =>
+                void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+              active: t("config.routePrefix") === lang.prefix,
+            }
+          })}
           menuLinks={menuLinks}
         />
-        {/* <Link href="/listings">
-            <a className="navbar-item">{t("nav.listings")}</a>
-          </Link>
-
-          {process.env.housingCounselorServiceUrl && ( // Only show Get Assistance if housing counselor data is available
-            <Link href="/housing-counselors">
-              <a className="navbar-item">{t("nav.getAssistance")}</a>
-            </Link>
-          )}
-          <UserNav
-            signedIn={!!profile}
-            signOut={async () => {
-              setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-              await router.push("/sign-in")
-              signOut()
-            }}
-          >
-            <Link href="/account/dashboard">
-              <a className="navbar-item">{t("nav.myDashboard")}</a>
-            </Link>
-            <Link href="/account/applications">
-              <a className="navbar-item">{t("nav.myApplications")}</a>
-            </Link>
-            <Link href="/account/edit">
-              <a className="navbar-item">{t("nav.accountSettings")}</a>
-            </Link>
-          </UserNav> */}
         <main id="main-content">{props.children}</main>
       </div>
 

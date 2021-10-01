@@ -6,10 +6,6 @@ import { Button } from "../actions/Button"
 import { AppearanceSizeType } from "../global/AppearanceTypes"
 import "./SiteHeader.scss"
 
-export interface SiteHeaderLanguage {
-  codes: string[]
-  list: LangItem[]
-}
 type LogoWidth = "slim" | "medium" | "wide"
 
 export interface MenuLink {
@@ -25,7 +21,7 @@ export interface SiteHeaderProps {
   dropdownItemClassName?: string
   homeURL: string
   imageOnly?: boolean
-  language?: SiteHeaderLanguage
+  languages?: LangItem[]
   logoClass?: string
   logoSrc: string
   logoWidth?: LogoWidth
@@ -128,7 +124,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   const getMobileDrawer = () => {
     return (
-      <CSSTransition in={mobileDrawer} timeout={400} classNames={"pls-work"} unmountOnExit>
+      <CSSTransition in={mobileDrawer} timeout={400} classNames={"drawer-transition"} unmountOnExit>
         <span className={`navbar-mobile-drawer-dropdown-container`}>
           <div className={"navbar-mobile-drawer-dropdown"}>
             <button
@@ -303,7 +299,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   return (
     <div className={"site-header"}>
-      {props.language && <LanguageNav language={props.language} />}
+      {props.languages && <LanguageNav languages={props.languages} />}
 
       {props.notice && (
         <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
