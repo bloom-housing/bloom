@@ -90,6 +90,8 @@ Pull requests are opened to the dev branch, not to master. When opening a pull r
 
 Every PR needs to manually update our changelog. Find the relevant section (General, Frontend, Backend, UI Components) and subsection (Added, Changed, Fixed) and add a short description of your change followed by a link to the PR and your name (- Description Here ([#1234](https://github.com/bloom-housing/bloom/pull/1234)) (Your Name)). If it is a breaking change, please include **Breaking Change** and some notes below it about how to migrate.
 
-It is not required, but adding the ready for review label onto your PR when it is ready will help surface it to our internal team, as will assigning specific reviewers.
+When your PR is ready for review, add the `ready for review` label to help surface it to our internal team. If there are specific team members working frequently on pieces you're changing, assign them as reviewers. If you put up a PR that is not yet ready, add the `wip` label.
 
-Once the PR has been approved, we squash and merge into dev.
+Once the PR has been approved, you either squash and merge if your changes are in one package, or rebase and merge if your changes are across packages to allow the versions based off of your commit messages to propagate appropriately.
+
+As a review on a PR, try not to leave only comments. If the PR requires further discussion or changes, mark it with Requested Changes. If a PR looks good to you or even if there are smaller changes requested that won't require an additional review, please mark it with Approved and comment on the last few changes needed. This helps other reviewers better understand the state of PRs at the list view and prevents an additionl unnecessary review cycle.
