@@ -79,12 +79,9 @@ const Layout = (props) => {
           logoSrc="/images/logo_glyph.svg"
           homeURL={"/"}
           notice={
-            <>
-              {`${t("nav.getFeedback")} `}
-              <a href="" target="_blank" className={"cursor-pointer"}>
-                {t("nav.getFeedbackLink")}
-              </a>
-            </>
+            <a href="" target="_blank" className={"cursor-pointer"}>
+              {t("nav.getFeedback")}
+            </a>
           }
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {

@@ -280,6 +280,9 @@
             display: flex;
             flex-direction: column;
             .navbar-dropdown-item {
+              @apply flex;
+              @apply flex-row;
+              @apply items-center;
               @apply text-gray-750;
               @apply pt-3;
               @apply pb-3;
@@ -292,6 +295,9 @@
               &:focus {
                 @apply bg-gray-400;
               }
+            }
+            .dropdown-item-with-icon {
+              justify-content: left;
             }
           }
         }

@@ -88,7 +88,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return options.map((option, index) => {
       return (
         <button
-          className={buttonClassName}
+          className={`${buttonClassName} ${props.dropdownItemClassName} ${
+            option.iconSrc && "dropdown-item-with-icon"
+          }`}
           key={`${option.title}-${index}`}
           onClick={() => {
             menuAction(option.href, option.onClick)
@@ -104,7 +106,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
             }
           }}
         >
-          {option.iconSrc && <img src={option.iconSrc} className={option.iconClassName} />}
+          {option.iconSrc && isDesktop && (
+            <img src={option.iconSrc} className={option.iconClassName} />
+          )}
           {option.title}
         </button>
       )
@@ -258,7 +262,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             </span>
           ) : (
             <span
-              className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
+              className={`navbar-link navbar-dropdown-title`}
               tabIndex={0}
               key={`${menuLink.title}-${index}`}
               onKeyPress={(event) => {

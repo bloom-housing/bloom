@@ -165,27 +165,6 @@ export const withMenuDropdowns = () => (
           },
         ],
       },
-      {
-        title: "My Account",
-        subMenuLinks: [
-          {
-            title: "My Dashboard",
-            href: "/account/dashboard",
-          },
-          {
-            title: "My Applications",
-            href: "/account/dashboard",
-          },
-          {
-            title: "Account Settings",
-            href: "/account/edit",
-          },
-          {
-            title: "Sign Out",
-            onClick: () => {},
-          },
-        ],
-      },
     ]}
   />
 )
@@ -294,31 +273,55 @@ export const withFlattenedMobileSubMenus = () => (
           },
         ],
       },
+    ]}
+  />
+)
+
+export const withDropdownIcons = () => (
+  <SiteHeader
+    homeURL={"/"}
+    languages={[
+      { label: "English", onClick: () => console.log("Clicked English"), active: true },
+      { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
+      { label: "中文", onClick: () => console.log("Clicked 中文"), active: false },
+    ]}
+    notice="We're just getting started. We'd love to get your feedback."
+    logoSrc="/images/logo_glyph.svg"
+    title="Alameda County Housing Portal"
+    dropdownItemClassName={"text-xs"}
+    menuLinks={[
       {
         title: "My Account",
         subMenuLinks: [
           {
             title: "My Dashboard",
             href: "/account/dashboard",
+            iconSrc: "https://bit.ly/2YoHrxA",
+            iconClassName: "w-6 pr-2",
           },
           {
             title: "My Applications",
             href: "/account/dashboard",
+            iconSrc: "https://bit.ly/2YoHrxA",
+            iconClassName: "w-6 pr-2",
           },
           {
             title: "Account Settings",
             href: "/account/edit",
+            iconSrc: "https://bit.ly/2YoHrxA",
+            iconClassName: "w-6 pr-2",
           },
           {
             title: "Sign Out",
             onClick: () => {},
+            iconSrc: "https://bit.ly/2YoHrxA",
+            iconClassName: "w-6 pr-2",
           },
         ],
       },
     ]}
   />
 )
-
 export const imageOnlyLogo = () => (
   <SiteHeader
     homeURL={"/"}
