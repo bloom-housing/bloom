@@ -29,12 +29,12 @@ export interface SiteHeaderProps {
   menuLinks: MenuLink[]
   mobileDrawer?: boolean
   mobileText?: boolean
+  flattenSubMenus?: boolean
   notice?: string | React.ReactNode
   noticeMobile?: boolean
   title?: string
 }
 
-// TODO Optional mobile open button as text
 const SiteHeader = (props: SiteHeaderProps) => {
   const [activeMenus, setActiveMenus] = useState<string[]>([])
   const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])
@@ -123,6 +123,52 @@ const SiteHeader = (props: SiteHeaderProps) => {
     )
   }
 
+  // Build styled mobile menu options
+  const buildMobileMenuOptions = (
+    menuLinks: MenuLink[],
+    dropdownSublinkOptionClassName: string,
+    dropdownOptionClassName: string,
+    dropdownContainerClassName?: string
+  ) => {
+    return (
+      <>
+        {menuLinks.map((menuLink, index) => {
+          if (menuLink.subMenuLinks && !props.flattenSubMenus) {
+            return (
+              <div key={index}>
+                <button
+                  className={dropdownOptionClassName}
+                  onClick={() =>
+                    changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                  }
+                >
+                  {menuLink.title}
+                  <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
+                </button>
+                {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
+                  <div className={dropdownContainerClassName}>
+                    {getDropdownOptions(
+                      menuLink.subMenuLinks,
+                      dropdownSublinkOptionClassName ?? ""
+                    )}
+                  </div>
+                )}
+              </div>
+            )
+          } else {
+            return (
+              <>
+                {props.flattenSubMenus && menuLink.subMenuLinks
+                  ? getDropdownOptions(menuLink.subMenuLinks, dropdownOptionClassName ?? "")
+                  : getDropdownOptions([menuLink], dropdownOptionClassName ?? "")}
+              </>
+            )
+          }
+        })}
+      </>
+    )
+  }
+
   // Render the mobile drawer that opens on menu press when prop mobileDrawer is set
   const getMobileDrawer = () => {
     return (
@@ -135,31 +181,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
             >
               <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
             </button>
-            {props.menuLinks.map((menuLink, index) => {
-              if (menuLink.subMenuLinks) {
-                return (
-                  <div key={index}>
-                    <button
-                      className={"navbar-mobile-drawer-dropdown-item"}
-                      onClick={() =>
-                        changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
-                      }
-                    >
-                      {menuLink.title}
-                      <Icon size="small" symbol={"arrowDown"} fill={"#555555"} className={"pl-2"} />
-                    </button>
-
-                    {activeMobileMenus.indexOf(menuLink.title) >= 0 &&
-                      getDropdownOptions(
-                        menuLink.subMenuLinks,
-                        "navbar-mobile-drawer-dropdown-item navbar-mobile-drawer-dropdown-item-sublink"
-                      )}
-                  </div>
-                )
-              } else {
-                return getDropdownOptions([menuLink], "navbar-mobile-drawer-dropdown-item")
-              }
-            })}
+            {buildMobileMenuOptions(
+              props.menuLinks,
+              "navbar-mobile-drawer-dropdown-item navbar-mobile-drawer-dropdown-item-sublink",
+              "navbar-mobile-drawer-dropdown-item"
+            )}
           </div>
         </span>
       </CSSTransition>
@@ -173,33 +199,12 @@ const SiteHeader = (props: SiteHeaderProps) => {
         {!props.mobileDrawer && (
           <span className={"navbar-mobile-dropdown-container"}>
             <div className={"navbar-mobile-dropdown"}>
-              {props.menuLinks.map((menuLink, index) => {
-                if (menuLink.subMenuLinks) {
-                  return (
-                    <div key={index}>
-                      <button
-                        className={"navbar-mobile-dropdown-item"}
-                        onClick={() =>
-                          changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
-                        }
-                      >
-                        {menuLink.title}
-                        <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
-                      </button>
-                      {activeMobileMenus.indexOf(menuLink.title) >= 0 && (
-                        <div className={"navbar-mobile-dropdown-links"}>
-                          {getDropdownOptions(
-                            menuLink.subMenuLinks,
-                            "navbar-mobile-dropdown-item navbar-mobile-dropdown-item-sublink"
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )
-                } else {
-                  return getDropdownOptions([menuLink], "navbar-mobile-dropdown-item")
-                }
-              })}
+              {buildMobileMenuOptions(
+                props.menuLinks,
+                "navbar-mobile-dropdown-item navbar-mobile-dropdown-item-sublink",
+                "navbar-mobile-dropdown-item",
+                "navbar-mobile-dropdown-links"
+              )}
             </div>
           </span>
         )}

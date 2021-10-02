@@ -219,6 +219,36 @@ export const withMobileDrawer = () => (
   />
 )
 
+export const withMobileText = () => (
+  <SiteHeader
+    homeURL={"/"}
+    languages={[
+      { label: "English", onClick: () => console.log("Clicked English"), active: true },
+      { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
+      { label: "中文", onClick: () => console.log("Clicked 中文"), active: false },
+    ]}
+    mobileText={true}
+    notice="We're just getting started. We'd love to get your feedback."
+    logoSrc="/images/logo_glyph.svg"
+    title="Alameda County Housing Portal"
+    menuLinks={[
+      {
+        title: "Listings",
+        href: "/",
+      },
+      {
+        title: "Get Assistance",
+        href: "/",
+      },
+      {
+        title: "Sign In",
+        href: "/",
+      },
+    ]}
+    mobileDrawer={true}
+  />
+)
+
 export const withNoticeOnMobile = () => (
   <SiteHeader
     homeURL={"/"}
@@ -227,5 +257,64 @@ export const withNoticeOnMobile = () => (
     title="Alameda County Housing Portal"
     menuLinks={[]}
     noticeMobile={true}
+  />
+)
+
+export const withFlattenedMobileSubMenus = () => (
+  <SiteHeader
+    homeURL={"/"}
+    languages={[
+      { label: "English", onClick: () => console.log("Clicked English"), active: true },
+      { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
+      { label: "中文", onClick: () => console.log("Clicked 中文"), active: false },
+    ]}
+    flattenSubMenus={true}
+    notice="We're just getting started. We'd love to get your feedback."
+    logoSrc="/images/logo_glyph.svg"
+    title="Alameda County Housing Portal"
+    menuLinks={[
+      {
+        title: "My Account",
+        subMenuLinks: [
+          {
+            title: "My Dashboard",
+            href: "/account/dashboard",
+          },
+          {
+            title: "My Applications",
+            href: "/account/dashboard",
+          },
+          {
+            title: "Account Settings",
+            href: "/account/edit",
+          },
+          {
+            title: "Sign Out",
+            onClick: () => {},
+          },
+        ],
+      },
+      {
+        title: "My Account",
+        subMenuLinks: [
+          {
+            title: "My Dashboard",
+            href: "/account/dashboard",
+          },
+          {
+            title: "My Applications",
+            href: "/account/dashboard",
+          },
+          {
+            title: "Account Settings",
+            href: "/account/edit",
+          },
+          {
+            title: "Sign Out",
+            onClick: () => {},
+          },
+        ],
+      },
+    ]}
   />
 )

@@ -78,8 +78,6 @@ const Layout = (props) => {
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           homeURL={"/"}
-          mobileText
-          mobileDrawer
           notice={
             <>
               {`${t("nav.getFeedback")} `}
