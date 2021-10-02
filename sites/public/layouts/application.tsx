@@ -24,19 +24,6 @@ const Layout = (props) => {
       label: t(`languages.${item}`),
     })) || []
 
-  console.log("formatted")
-  console.log(
-    languages.map((lang) => {
-      return {
-        prefix: lang.prefix,
-        label: lang.label,
-        onClick: () =>
-          void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
-        active: t("config.routePrefix") === lang.prefix,
-      }
-    })
-  )
-
   const menuLinks: MenuLink[] = [
     {
       title: t("nav.listings"),

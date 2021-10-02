@@ -244,19 +244,14 @@
           }
         }
 
-        .navbar-dropdown-title {
-          @apply pt-6;
-          border-bottom: 3px solid transparent;
-        }
-
         .navbar-dropdown-container {
           background-color: white;
           position: fixed;
-          margin-left: -124px;
-          margin-top: 37px;
+          margin-left: -123px;
+          margin-top: 35px;
           @apply border-gray-450;
           @apply border;
-          width: 144px;
+          width: 143px;
           .navbar-dropdown {
             display: flex;
             flex-direction: column;

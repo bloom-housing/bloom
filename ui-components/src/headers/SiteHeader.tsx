@@ -51,10 +51,16 @@ export const NavbarDropdown = (props: NavbarDropdownProps) => {
   )
 }
 
+// TODO Optional mobile open button as text
 const SiteHeader = (props: SiteHeaderProps) => {
-  const DESKTOP_MIN_WIDTH = 767
   const [isDesktop, setIsDesktop] = useState(true)
+  const [activeMenus, setActiveMenus] = useState<string[]>([])
+  const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])
+  const [mobileMenu, setMobileMenu] = useState(false)
+  const [mobileDrawer, setMobileDrawer] = useState(false)
 
+  const DESKTOP_MIN_WIDTH = 767 // @screen md
+  // Enables toggling off navbar links when entering mobile
   useEffect(() => {
     if (window.innerWidth > DESKTOP_MIN_WIDTH) {
       setIsDesktop(true)
@@ -80,14 +86,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
-  const [activeMenus, setActiveMenus] = useState<string[]>([])
-  const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])
-  console.log("rendering", activeMobileMenus)
-
-  const [mobileMenu, setMobileMenu] = useState(false)
-  const [mobileDrawer, setMobileDrawer] = useState(false)
-
-  const getDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
+  const getDesktopDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
     return (
       <span>
         {menuTitle}
@@ -335,7 +334,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   let menuTitle: JSX.Element
                   // Dropdown exists
                   if (menuLink.subMenuLinks) {
-                    menuTitle = getDropdown(menuLink.title, menuLink.subMenuLinks)
+                    menuTitle = getDesktopDropdown(menuLink.title, menuLink.subMenuLinks)
                   } else {
                     menuTitle = <>{menuLink.title}</>
                   }
@@ -352,17 +351,21 @@ const SiteHeader = (props: SiteHeaderProps) => {
                       {menuTitle}
                     </a>
                   ) : (
-                    <button
+                    <span
                       className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
                       aria-role={"button"}
                       tabIndex={0}
                       key={index}
-                      onClick={() => changeMenuShow(menuLink.title)}
+                      onKeyPress={(event) => {
+                        if (event.key === "Enter") {
+                          changeMenuShow(menuLink.title)
+                        }
+                      }}
                       onMouseEnter={() => changeMenuShow(menuLink.title)}
                       onMouseLeave={() => changeMenuShow(menuLink.title)}
                     >
                       {menuTitle}
-                    </button>
+                    </span>
                   )
                 })}
               </>

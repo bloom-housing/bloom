@@ -13,7 +13,6 @@ export interface LanguageNavProps {
 }
 
 const LanguageNav = ({ languages }: LanguageNavProps) => {
-  console.log("from component", languages)
   return (
     <div className="language-bar">
       <div className="language-bar__inner">
