@@ -20,7 +20,7 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { TempEvent } from "./index"
-import { createDate, createTime } from "../../../lib/helpers"
+import { createDate, createTime, fieldHasError } from "../../../lib/helpers"
 import moment from "moment"
 
 type OpenHouseFormProps = {
@@ -119,7 +119,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 register={register}
                 watch={watch}
                 readerOnly
-                error={!!errors?.startTime}
+                error={fieldHasError(errors?.startTime)}
                 required
                 defaultValues={defaultValues?.startTime}
               />
@@ -134,7 +134,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 register={register}
                 watch={watch}
                 readerOnly
-                error={!!errors?.endTime}
+                error={fieldHasError(errors?.endTime)}
                 required
                 defaultValues={defaultValues?.endTime}
               />
@@ -163,7 +163,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                     placeholder={t("t.url")}
                     register={register}
                     readerOnly
-                    error={!!errors?.url}
+                    error={fieldHasError(errors?.url)}
                     errorMessage={t("errors.urlError")}
                     validation={{
                       pattern: urlRegex,

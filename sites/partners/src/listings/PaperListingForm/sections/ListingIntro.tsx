@@ -9,6 +9,7 @@ import {
   Select,
   ViewItem,
 } from "@bloom-housing/ui-components"
+import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 interface ListingIntroProps {
   jurisdictionOptions: SelectOption[]
@@ -29,7 +30,7 @@ const ListingIntro = (props: ListingIntroProps) => {
       <GridCell span={2} className={`${hideSelect ? "hidden" : ""}`}>
         <ViewItem
           label={t("t.jurisdiction")}
-          error={errors?.jurisdiction !== undefined || errors?.["jurisdiction.id"] !== undefined}
+          error={fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])}
         >
           <Select
             id={"jurisdiction.id"}
@@ -38,9 +39,13 @@ const ListingIntro = (props: ListingIntroProps) => {
             labelClassName="sr-only"
             register={register}
             controlClassName={`control ${hideSelect ? "hidden" : ""}`}
-            error={errors?.jurisdiction !== undefined || errors?.["jurisdiction.id"] !== undefined}
+            error={
+              fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
+            }
             errorMessage={
-              errors?.jurisdiction?.message ?? errors?.["jurisdiction.id"]?.message ?? undefined
+              fieldMessage(errors?.jurisdiction) ??
+              fieldMessage(errors?.["jurisdiction.id"]) ??
+              undefined
             }
             keyPrefix={"jurisdictions"}
             options={props.jurisdictionOptions}
@@ -60,8 +65,8 @@ const ListingIntro = (props: ListingIntroProps) => {
             onChange: () => clearErrors("name"),
           }}
           register={register}
-          error={errors?.name !== undefined}
-          errorMessage={errors?.name?.message}
+          error={fieldHasError(errors?.name)}
+          errorMessage={fieldMessage(errors?.name)}
         />
       </GridCell>
       <Field
@@ -69,8 +74,8 @@ const ListingIntro = (props: ListingIntroProps) => {
         name="developer"
         label={t("listings.developer")}
         placeholder={t("listings.developer")}
-        error={errors?.developer !== undefined}
-        errorMessage={errors?.developer?.message}
+        error={fieldHasError(errors?.developer)}
+        errorMessage={fieldMessage(errors?.developer)}
         inputProps={{
           onChange: () => clearErrors("developer"),
         }}

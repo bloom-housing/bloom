@@ -19,8 +19,9 @@ const DetailListingPhoto = () => {
     listingFormPhoto = listing.assets.find((asset) => asset.label == "building")
   }
 
+  const urlTest = new RegExp(/https?:\/\//)
   const listingPhotoUrl = listingFormPhoto
-    ? /https?:\/\//.exec(listingFormPhoto.fileId)
+    ? urlTest.test(listingFormPhoto.fileId)
       ? listingFormPhoto.fileId
       : cloudinaryUrlFromId(listingFormPhoto.fileId)
     : null

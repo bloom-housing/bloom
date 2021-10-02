@@ -16,6 +16,7 @@ import { FormListing } from "../index"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
+import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -152,8 +153,8 @@ const BuildingDetails = ({
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
-            error={errors?.buildingAddress?.street !== undefined}
-            errorMessage={errors?.buildingAddress?.street?.message}
+            error={fieldHasError(errors?.buildingAddress?.street)}
+            errorMessage={fieldMessage(errors?.buildingAddress?.street)}
             placeholder={t("application.contact.streetAddress")}
             inputProps={{
               onChange: () => clearErrors("buildingAddress.street"),
@@ -175,8 +176,8 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
-            error={errors?.buildingAddress?.city !== undefined}
-            errorMessage={errors?.buildingAddress?.city?.message}
+            error={fieldHasError(errors?.buildingAddress?.city)}
+            errorMessage={fieldMessage(errors?.buildingAddress?.city)}
             placeholder={t("application.contact.city")}
             inputProps={{
               onChange: () => clearErrors("buildingAddress.city"),
@@ -187,19 +188,19 @@ const BuildingDetails = ({
         <ViewItem
           label={t("application.contact.state")}
           className={"mb-0"}
-          error={errors?.buildingAddress?.state !== undefined}
+          error={fieldHasError(errors?.buildingAddress?.state)}
         >
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
-            error={errors?.buildingAddress?.state !== undefined}
+            error={fieldHasError(errors?.buildingAddress?.state)}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={stateKeys}
             keyPrefix="states"
-            errorMessage={errors?.buildingAddress?.state?.message}
+            errorMessage={fieldMessage(errors?.buildingAddress?.state)}
             inputProps={{
               onChange: () => clearErrors("buildingAddress.state"),
             }}
@@ -208,10 +209,10 @@ const BuildingDetails = ({
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
-          error={errors?.buildingAddress?.zipCode !== undefined}
+          error={fieldHasError(errors?.buildingAddress?.zipCode)}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
-          errorMessage={errors?.buildingAddress?.zipCode?.message}
+          errorMessage={fieldMessage(errors?.buildingAddress?.zipCode)}
           inputProps={{
             onChange: () => clearErrors("buildingAddress.zipCode"),
           }}

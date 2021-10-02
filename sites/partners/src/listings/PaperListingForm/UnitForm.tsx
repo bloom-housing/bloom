@@ -24,7 +24,7 @@ import {
   UnitType,
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
+import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -328,7 +328,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
                 register={register}
                 controlClassName="control"
                 options={options.unitTypes}
-                error={errors?.unitType !== undefined}
+                error={fieldHasError(errors?.unitType)}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
               />

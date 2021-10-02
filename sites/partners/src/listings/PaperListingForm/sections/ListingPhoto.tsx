@@ -13,7 +13,7 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
   const formMethods = useFormContext()
@@ -153,7 +153,7 @@ const ListingPhoto = () => {
             ) : (
               <Button
                 type="button"
-                styleType={errors?.image ? AppearanceStyleType.alert : null}
+                styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
                 onClick={() => {
                   setDrawerState(true)
                   clearErrors("image")
@@ -165,7 +165,9 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
-      {errors?.image && <span className={"text-sm text-alert"}>{errors?.image?.message}</span>}
+      {fieldHasError(errors?.image) && (
+        <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
+      )}
 
       <Drawer
         open={drawerState}

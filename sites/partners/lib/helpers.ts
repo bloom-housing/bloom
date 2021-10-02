@@ -14,6 +14,7 @@ import {
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
 import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
+import { FieldError } from "react-hook-form"
 
 type DateTimePST = {
   hour: string
@@ -253,4 +254,12 @@ export const removeEmptyFields = (obj) => {
       delete obj[key]
     }
   })
+}
+
+export const fieldHasError = (errorObj: FieldError) => {
+  return errorObj !== undefined
+}
+
+export const fieldMessage = (errorObj: FieldError) => {
+  return errorObj?.message
 }

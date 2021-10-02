@@ -14,7 +14,7 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
-import { getLotteryEvent } from "../../../../lib/helpers"
+import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
@@ -206,7 +206,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
           <GridCell>
             <p
               className={`field-label m-4 ml-0 ${
-                errors?.isWaitlistOpen !== undefined && waitlistOpen === null && "text-alert"
+                fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null && "text-alert"
               }`}
             >
               {t("listings.waitlist.openQuestion")}
@@ -215,8 +215,8 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               name="waitlistOpenQuestion"
               type="radio"
               register={register}
-              error={errors?.isWaitlistOpen !== undefined && waitlistOpen === null}
-              errorMessage={errors?.isWaitlistOpen?.message}
+              error={fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null}
+              errorMessage={fieldMessage(errors?.isWaitlistOpen)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],

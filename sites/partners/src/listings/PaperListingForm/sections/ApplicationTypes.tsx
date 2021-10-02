@@ -18,7 +18,7 @@ import {
   PhoneMask,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
   ApplicationMethodType,
@@ -189,7 +189,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           <GridCell>
             <p
               className={`field-label m-4 ml-0 ${
-                errors?.digitalApplication !== undefined &&
+                fieldHasError(errors?.digitalApplication) &&
                 digitalApplicationChoice === null &&
                 "text-alert"
               }`}
@@ -201,8 +201,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               name="digitalApplicationChoice"
               type="radio"
               register={register}
-              error={errors?.digitalApplication !== undefined && digitalApplicationChoice === null}
-              errorMessage={errors?.digitalApplication?.message}
+              error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
+              errorMessage={fieldMessage(errors?.digitalApplication)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -316,7 +316,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           <GridCell>
             <p
               className={`field-label m-4 ml-0 ${
-                errors?.paperApplication !== undefined &&
+                fieldHasError(errors?.paperApplication) &&
                 paperApplicationChoice === null &&
                 "text-alert"
               }`}
@@ -327,8 +327,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
-              error={errors?.paperApplication !== undefined && paperApplicationChoice === null}
-              errorMessage={errors?.paperApplication?.message}
+              error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
+              errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
               fields={[
                 {
@@ -419,7 +419,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           <GridCell>
             <p
               className={`field-label m-4 ml-0 ${
-                errors?.referralOpportunity !== undefined &&
+                fieldHasError(errors?.referralOpportunity) &&
                 referralOpportunityChoice === null &&
                 "text-alert"
               }`}
@@ -432,9 +432,9 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               type="radio"
               register={register}
               error={
-                errors?.referralOpportunity !== undefined && referralOpportunityChoice === null
+                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }
-              errorMessage={errors?.referralOpportunity?.message}
+              errorMessage={fieldMessage(errors?.referralOpportunity)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
+import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
@@ -27,8 +28,8 @@ const LeasingAgent = () => {
             label={t("leasingAgent.name")}
             name={"leasingAgentName"}
             id={"leasingAgentName"}
-            error={errors?.leasingAgentName !== undefined}
-            errorMessage={errors?.leasingAgentName?.message}
+            error={fieldHasError(errors?.leasingAgentName)}
+            errorMessage={fieldMessage(errors?.leasingAgentName)}
             placeholder={t("leasingAgent.namePlaceholder")}
             register={register}
             inputProps={{
@@ -39,8 +40,8 @@ const LeasingAgent = () => {
             label={t("t.email")}
             name={"leasingAgentEmail"}
             id={"leasingAgentEmail"}
-            error={errors?.leasingAgentEmail !== undefined}
-            errorMessage={errors?.leasingAgentEmail?.message}
+            error={fieldHasError(errors?.leasingAgentEmail)}
+            errorMessage={fieldMessage(errors?.leasingAgentEmail)}
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
             inputProps={{
@@ -51,8 +52,8 @@ const LeasingAgent = () => {
             label={t("t.phone")}
             name={"leasingAgentPhone"}
             id={"leasingAgentPhone"}
-            error={errors?.leasingAgentPhone !== undefined}
-            errorMessage={errors?.leasingAgentPhone?.message}
+            error={fieldHasError(errors?.leasingAgentPhone)}
+            errorMessage={fieldMessage(errors?.leasingAgentPhone)}
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}

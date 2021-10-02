@@ -16,6 +16,7 @@ import {
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
 import { TempUnit } from "../"
+import { fieldHasError } from "../../../../lib/helpers"
 
 type UnitProps = {
   units: TempUnit[]
@@ -162,7 +163,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
           <Button
             type="button"
             size={AppearanceSizeType.normal}
-            styleType={errors?.units ? AppearanceStyleType.alert : null}
+            styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
             onClick={() => {
               editUnit(units.length + 1)
               clearErrors("units")
@@ -173,7 +174,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         </div>
       </GridSection>
 
-      {errors?.units && (
+      {fieldHasError(errors?.units) && (
         <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
       )}
 
