@@ -318,3 +318,19 @@ export const withFlattenedMobileSubMenus = () => (
     ]}
   />
 )
+
+export const imageOnlyLogo = () => (
+  <SiteHeader
+    homeURL={"/"}
+    languages={[
+      { label: "English", onClick: () => console.log("Clicked English"), active: true },
+      { label: "Español", onClick: () => console.log("Clicked Español"), active: false },
+      { label: "中文", onClick: () => console.log("Clicked 中文"), active: false },
+    ]}
+    imageOnly
+    logoWidth={"medium"}
+    notice="We're just getting started. We'd love to get your feedback."
+    logoSrc="https://bit.ly/3me4iUC"
+    menuLinks={[]}
+  />
+)

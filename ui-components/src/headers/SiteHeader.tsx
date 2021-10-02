@@ -114,7 +114,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
   // Render the desktop dropdown that opens on mouse hover
   const getDesktopDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
     return (
-      <span>
+      <span key={menuTitle}>
         {menuTitle}
         <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
         {activeMenus.indexOf(menuTitle) >= 0 && (
@@ -140,7 +140,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
         {menuLinks.map((menuLink, index) => {
           if (menuLink.subMenuLinks && !props.flattenSubMenus) {
             return (
-              <div key={index}>
+              <div key={`${menuLink.title}-${index}`}>
                 <button
                   className={dropdownOptionClassName}
                   onClick={() =>
@@ -162,11 +162,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
             )
           } else {
             return (
-              <>
+              <div key={`${menuLink.title}-${index}`}>
                 {props.flattenSubMenus && menuLink.subMenuLinks
                   ? getDropdownOptions(menuLink.subMenuLinks, dropdownOptionClassName ?? "")
                   : getDropdownOptions([menuLink], dropdownOptionClassName ?? "")}
-              </>
+              </div>
             )
           }
         })}
@@ -233,7 +233,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
           if (menuLink.subMenuLinks) {
             menuContent = getDesktopDropdown(menuLink.title, menuLink.subMenuLinks)
           } else {
-            menuContent = <>{menuLink.title}</>
+            menuContent = <div key={menuLink.title}>{menuLink.title}</div>
           }
 
           return !menuLink.subMenuLinks ? (
@@ -244,7 +244,6 @@ const SiteHeader = (props: SiteHeaderProps) => {
               }}
               className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
               tabIndex={0}
-              aria-role={"button"}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
                   menuAction(menuLink.href, menuLink.onClick)
@@ -253,16 +252,15 @@ const SiteHeader = (props: SiteHeaderProps) => {
               onClick={() => {
                 menuAction(menuLink.href, menuLink.onClick)
               }}
-              key={index}
+              key={`${menuLink.title}-${index}`}
             >
               {menuContent}
             </span>
           ) : (
             <span
               className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
-              aria-role={"button"}
               tabIndex={0}
-              key={index}
+              key={`${menuLink.title}-${index}`}
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
                   changeMenuShow(menuLink.title, activeMenus, setActiveMenus)
@@ -334,7 +332,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
           href={props.homeURL}
           aria-label="homepage"
         >
-          <div className={` ${props.imageOnly && "navbar-image-only-container"}`}>
+          <div className={`${props.imageOnly && "navbar-image-only-container"}`}>
             <img
               className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
               src={props.logoSrc}

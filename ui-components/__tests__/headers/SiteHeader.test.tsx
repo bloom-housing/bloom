@@ -50,7 +50,7 @@ describe("<SiteHeader>", () => {
         ]}
       />
     )
-    expect(getByText("This is a preview of our new website.")).toBeTruthy()
+    expect(getByText("We're just getting started. We'd love to get your feedback.")).toBeTruthy()
     expect(getByText("Listings")).toBeTruthy()
     expect(getByText("Get Assistance")).toBeTruthy()
     expect(getByText("My Account")).toBeTruthy()
