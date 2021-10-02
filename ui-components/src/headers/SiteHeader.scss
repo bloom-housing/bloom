@@ -178,22 +178,30 @@
         }
 
         .navbar-width-slim {
-          width: 200px;
+          @screen md {
+            width: 200px;
+          }
         }
 
         .navbar-width-med {
-          width: 450px;
+          @screen md {
+            width: 450px;
+          }
         }
 
         .navbar-width-wide {
-          width: 600px;
+          @screen md {
+            width: 600px;
+          }
         }
 
         .navbar-custom-width {
-          @apply flex;
-          @apply items-center;
-          @apply justify-center;
-          @apply flex-col;
+          @screen md {
+            @apply flex;
+            @apply items-center;
+            @apply justify-center;
+            @apply flex-col;
+          }
         }
       }
 

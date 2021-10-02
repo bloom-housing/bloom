@@ -36,7 +36,7 @@ const Layout = (props) => {
       href: "/housing-counselors",
     })
   }
-  if (!!profile) {
+  if (profile) {
     menuLinks.push({
       title: "My Account",
       subMenuLinks: [
@@ -76,7 +76,6 @@ const Layout = (props) => {
           <title>{t("nav.siteTitle")}</title>
         </Head>
         <SiteHeader
-          mobileDrawer={true}
           logoSrc="/images/logo_glyph.svg"
           homeURL={"/"}
           notice={
@@ -90,7 +89,6 @@ const Layout = (props) => {
           title={t("nav.siteTitle")}
           languages={languages.map((lang) => {
             return {
-              prefix: lang.prefix,
               label: lang.label,
               onClick: () =>
                 void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),

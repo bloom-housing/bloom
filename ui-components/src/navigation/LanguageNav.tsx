@@ -2,9 +2,8 @@ import React from "react"
 import "./LanguageNav.scss"
 
 export type LangItem = {
-  prefix: string
   label: string
-  onClick: () => {}
+  onClick: () => void
   active: boolean
 }
 
@@ -19,7 +18,7 @@ const LanguageNav = ({ languages }: LanguageNavProps) => {
         <nav className="language-nav">
           <ul className="language-nav__list">
             {languages.map((item) => (
-              <li key={item.prefix}>
+              <li key={item.label}>
                 <button
                   onClick={() => {
                     item.onClick()
