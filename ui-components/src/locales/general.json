@@ -1190,6 +1190,7 @@
     "built": "Built",
     "call": "Call",
     "cancel": "Cancel",
+    "close": "Close",
     "confirm": "Confirm",
     "chooseFromFolder": "Choose from folder",
     "custom": "Custom",

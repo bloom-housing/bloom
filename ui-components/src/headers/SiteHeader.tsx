@@ -4,6 +4,7 @@ import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
 import { Button } from "../actions/Button"
 import { AppearanceSizeType } from "../global/AppearanceTypes"
+import { t } from "../helpers/translator"
 import "./SiteHeader.scss"
 
 type LogoWidth = "slim" | "medium" | "wide"
@@ -316,7 +317,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             className={"navbar-mobile-menu-button"}
             unstyled
           >
-            {mobileMenu ? "Close" : "Menu"}
+            {mobileMenu ? t("t.close") : t("t.menu")}
           </Button>
         )}
       </>

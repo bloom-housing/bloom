@@ -38,7 +38,7 @@ const Layout = (props) => {
   }
   if (profile) {
     menuLinks.push({
-      title: "My Account",
+      title: t("nav.myAccount"),
       subMenuLinks: [
         {
           title: t("nav.myDashboard"),
@@ -64,7 +64,7 @@ const Layout = (props) => {
     })
   } else {
     menuLinks.push({
-      title: "Sign In",
+      title: t("nav.signIn"),
       href: "/sign-in",
     })
   }
