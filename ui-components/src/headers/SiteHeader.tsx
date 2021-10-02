@@ -68,6 +68,39 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
+  // Render set of styled menu links
+  const getDropdownOptions = (
+    options: MenuLink[],
+    buttonClassName: string,
+    parentMenu?: string
+  ) => {
+    return options.map((option, index) => {
+      return (
+        <button
+          className={buttonClassName}
+          key={`${option.title}-${index}`}
+          onClick={() => {
+            if (option.href) {
+              window.location.href = option.href
+            }
+            if (option.onClick) {
+              option.onClick()
+            }
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Tab" && isDesktop && index === options.length - 1 && parentMenu) {
+              changeMenuShow(parentMenu, activeMenus, setActiveMenus)
+            }
+          }}
+        >
+          {option.iconSrc && <img src={option.iconSrc} className={option.iconClassName} />}
+          {option.title}
+        </button>
+      )
+    })
+  }
+
+  // Render the desktop dropdown that opens on mouse hover
   const getDesktopDropdown = (menuTitle: string, subMenus: MenuLink[]) => {
     return (
       <span>
@@ -76,7 +109,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
         {activeMenus.indexOf(menuTitle) >= 0 && (
           <span className={"navbar-dropdown-container"}>
             <div className={"navbar-dropdown"}>
-              {getDropdownOptions(subMenus, "navbar-dropdown-item")}
+              {getDropdownOptions(subMenus, "navbar-dropdown-item", menuTitle)}
             </div>
           </span>
         )}
@@ -84,6 +117,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     )
   }
 
+  // Render the mobile drawer that opens on menu press when prop mobileDrawer is set
   const getMobileDrawer = () => {
     return (
       <CSSTransition in={mobileDrawer} timeout={400} classNames={"drawer-transition"} unmountOnExit>
@@ -101,7 +135,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
                   <div key={index}>
                     <button
                       className={"navbar-mobile-drawer-dropdown-item"}
-                      onClick={() => changeMobileMenuShow(menuLink.title)}
+                      onClick={() =>
+                        changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                      }
                     >
                       {menuLink.title}
                       <Icon size="small" symbol={"arrowDown"} fill={"#555555"} className={"pl-2"} />
@@ -124,28 +160,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     )
   }
 
-  const getDropdownOptions = (options: MenuLink[], buttonClassName: string) => {
-    return options.map((option, index) => {
-      return (
-        <button
-          className={buttonClassName}
-          key={`${option.title}-${index}`}
-          onClick={() => {
-            if (option.href) {
-              window.location.href = option.href
-            }
-            if (option.onClick) {
-              option.onClick()
-            }
-          }}
-        >
-          {option.iconSrc && <img src={option.iconSrc} className={option.iconClassName} />}
-          {option.title}
-        </button>
-      )
-    })
-  }
-
+  // Renders the default mobile dropdown that opens on menu press
   const getMobileDropdown = () => {
     return (
       <>
@@ -158,7 +173,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
                     <div key={index}>
                       <button
                         className={"navbar-mobile-dropdown-item"}
-                        onClick={() => changeMobileMenuShow(menuLink.title)}
+                        onClick={() =>
+                          changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                        }
                       >
                         {menuLink.title}
                         <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
@@ -183,21 +200,103 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </>
     )
   }
-  const changeMenuShow = (menuTitle: string) => {
-    const indexOfTitle = activeMenus.indexOf(menuTitle)
-    setActiveMenus(
-      indexOfTitle >= 0
-        ? activeMenus.filter((menu) => menu !== menuTitle)
-        : [...activeMenus, menuTitle]
+  const changeMenuShow = (
+    title: string,
+    menus: string[],
+    setMenus: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    const indexOfTitle = menus.indexOf(title)
+    setMenus(indexOfTitle >= 0 ? menus.filter((menu) => menu !== title) : [...menus, title])
+  }
+
+  const getDesktopHeader = () => {
+    return (
+      <>
+        {props.menuLinks.map((menuLink, index) => {
+          let menuContent: JSX.Element
+          if (menuLink.subMenuLinks) {
+            menuContent = getDesktopDropdown(menuLink.title, menuLink.subMenuLinks)
+          } else {
+            menuContent = <>{menuLink.title}</>
+          }
+
+          return !menuLink.subMenuLinks ? (
+            <span
+              className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
+              aria-role={"button"}
+              onClick={() => {
+                if (menuLink.href) {
+                  window.location.href = menuLink.href
+                }
+              }}
+              key={index}
+            >
+              {menuContent}
+            </span>
+          ) : (
+            <span
+              className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
+              aria-role={"button"}
+              tabIndex={0}
+              key={index}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  changeMenuShow(menuLink.title, activeMenus, setActiveMenus)
+                }
+              }}
+              onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+              onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+            >
+              {menuContent}
+            </span>
+          )
+        })}
+      </>
     )
   }
 
-  const changeMobileMenuShow = (menuTitle: string) => {
-    const indexOfTitle = activeMobileMenus.indexOf(menuTitle)
-    setActiveMobileMenus(
-      indexOfTitle >= 0
-        ? activeMobileMenus.filter((menu) => menu !== menuTitle)
-        : [...activeMobileMenus, menuTitle]
+  const getMobileHeader = () => {
+    return (
+      <Button
+        size={AppearanceSizeType.small}
+        onClick={() => {
+          if (!props.mobileDrawer) {
+            setMobileMenu(!mobileMenu)
+          } else {
+            setMobileDrawer(!mobileDrawer)
+          }
+          setActiveMobileMenus([])
+        }}
+        icon={mobileMenu ? "closeSmall" : "hamburger"}
+        iconSize="base"
+        className={"navbar-mobile-menu-button"}
+        unstyled
+      >
+        {mobileMenu ? "Close" : "Menu"}
+      </Button>
+    )
+  }
+
+  const getLogo = () => {
+    return (
+      <div className={`navbar-logo`}>
+        <a
+          className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()} ${
+            props.logoWidth && "navbar-custom-width"
+          }`}
+          href={props.homeURL}
+          aria-label="homepage"
+        >
+          <div className={` ${props.imageOnly && "navbar-image-only-container"}`}>
+            <img
+              className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
+              src={props.logoSrc}
+              alt={"Site logo"}
+            />
+            {props.title && <div className="logo__title">{props.title}</div>}
+          </div>
+        </a>
+      </div>
     )
   }
 
@@ -213,89 +312,8 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div className="navbar">
-          <div className={`navbar-logo`}>
-            <a
-              className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()} ${
-                props.logoWidth && "navbar-custom-width"
-              }`}
-              href={props.homeURL}
-              aria-label="homepage"
-            >
-              <div className={` ${props.imageOnly && "navbar-image-only-container"}`}>
-                <img
-                  className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
-                  src={props.logoSrc}
-                  alt={"Site logo"}
-                />
-                {props.title && <div className="logo__title">{props.title}</div>}
-              </div>
-            </a>
-          </div>
-
-          <div className="navbar-menu">
-            {isDesktop ? (
-              <>
-                {props.menuLinks.map((menuLink, index) => {
-                  let menuTitle: JSX.Element
-                  // Dropdown exists
-                  if (menuLink.subMenuLinks) {
-                    menuTitle = getDesktopDropdown(menuLink.title, menuLink.subMenuLinks)
-                  } else {
-                    menuTitle = <>{menuLink.title}</>
-                  }
-
-                  return menuLink.href ? (
-                    <a
-                      className={`navbar-link ${
-                        props.menuItemClassName && props.menuItemClassName
-                      }`}
-                      aria-role={"button"}
-                      href={menuLink.href}
-                      key={index}
-                    >
-                      {menuTitle}
-                    </a>
-                  ) : (
-                    <span
-                      className={`navbar-link navbar-dropdown-title ${props.dropdownItemClassName}`}
-                      aria-role={"button"}
-                      tabIndex={0}
-                      key={index}
-                      onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          changeMenuShow(menuLink.title)
-                        }
-                      }}
-                      onMouseEnter={() => changeMenuShow(menuLink.title)}
-                      onMouseLeave={() => changeMenuShow(menuLink.title)}
-                    >
-                      {menuTitle}
-                    </span>
-                  )
-                })}
-              </>
-            ) : (
-              <>
-                <Button
-                  size={AppearanceSizeType.small}
-                  onClick={() => {
-                    if (!props.mobileDrawer) {
-                      setMobileMenu(!mobileMenu)
-                    } else {
-                      setMobileDrawer(!mobileDrawer)
-                    }
-                    setActiveMobileMenus([])
-                  }}
-                  icon={mobileMenu ? "closeSmall" : "hamburger"}
-                  iconSize="base"
-                  className={"navbar-mobile-menu-button"}
-                  unstyled
-                >
-                  {mobileMenu ? "Close" : "Menu"}
-                </Button>
-              </>
-            )}
-          </div>
+          {getLogo()}
+          <div className="navbar-menu">{isDesktop ? getDesktopHeader() : getMobileHeader()}</div>
         </div>
       </nav>
       {!isDesktop && mobileMenu && getMobileDropdown()}
