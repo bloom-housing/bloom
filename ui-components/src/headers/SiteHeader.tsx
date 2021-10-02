@@ -69,6 +69,15 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
+  const menuAction = (menuHref: string | undefined, menuOnClick?: () => void) => {
+    if (menuHref) {
+      window.location.href = menuHref
+    }
+    if (menuOnClick) {
+      menuOnClick()
+    }
+  }
+
   // Render set of styled menu links
   const getDropdownOptions = (
     options: MenuLink[],
@@ -81,16 +90,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
           className={buttonClassName}
           key={`${option.title}-${index}`}
           onClick={() => {
-            if (option.href) {
-              window.location.href = option.href
-            }
-            if (option.onClick) {
-              option.onClick()
-            }
+            menuAction(option.href, option.onClick)
           }}
           onKeyPress={(event) => {
-            if (event.key === "Enter" && option.href) {
-              window.location.href = option.href
+            if (event.key === "Enter") {
+              menuAction(option.href, option.onClick)
             }
           }}
           onKeyDown={(event) => {
@@ -241,14 +245,12 @@ const SiteHeader = (props: SiteHeaderProps) => {
               tabIndex={0}
               aria-role={"button"}
               onKeyPress={(event) => {
-                if (event.key === "Enter" && menuLink.href) {
-                  window.location.href = menuLink.href
+                if (event.key === "Enter") {
+                  menuAction(menuLink.href, menuLink.onClick)
                 }
               }}
               onClick={() => {
-                if (menuLink.href) {
-                  window.location.href = menuLink.href
-                }
+                menuAction(menuLink.href, menuLink.onClick)
               }}
               key={index}
             >
@@ -348,11 +350,9 @@ const SiteHeader = (props: SiteHeaderProps) => {
     <div className={"site-header"}>
       {props.languages && <LanguageNav languages={props.languages} />}
 
-      {props.notice && (
-        <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
-          <div className="navbar-notice__text">{props.notice}</div>
-        </div>
-      )}
+      <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
+        <div className="navbar-notice__text">{props.notice ?? ""}</div>
+      </div>
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div className="navbar">

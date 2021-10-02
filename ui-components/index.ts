@@ -88,7 +88,6 @@ export * from "./src/navigation/LanguageNav"
 export * from "./src/navigation/ProgressNav"
 export * from "./src/navigation/TabNav"
 export * from "./src/navigation/Tabs"
-export * from "./src/navigation/UserNav"
 
 /* Notifications */
 export * from "./src/notifications/ApplicationStatus"
