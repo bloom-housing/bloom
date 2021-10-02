@@ -87,6 +87,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
               option.onClick()
             }
           }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter" && option.href) {
+              window.location.href = option.href
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "Tab" && isDesktop && index === options.length - 1 && parentMenu) {
               changeMenuShow(parentMenu, activeMenus, setActiveMenus)
@@ -222,8 +227,18 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
           return !menuLink.subMenuLinks ? (
             <span
+              onScroll={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+              }}
               className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
+              tabIndex={0}
               aria-role={"button"}
+              onKeyPress={(event) => {
+                if (event.key === "Enter" && menuLink.href) {
+                  window.location.href = menuLink.href
+                }
+              }}
               onClick={() => {
                 if (menuLink.href) {
                   window.location.href = menuLink.href
