@@ -28,6 +28,7 @@ export interface SiteHeaderProps {
   menuItemClassName?: string
   menuLinks: MenuLink[]
   mobileDrawer?: boolean
+  mobileText?: boolean
   notice?: string | React.ReactNode
   noticeMobile?: boolean
   title?: string
@@ -272,23 +273,46 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   const getMobileHeader = () => {
     return (
-      <Button
-        size={AppearanceSizeType.small}
-        onClick={() => {
-          if (!props.mobileDrawer) {
-            setMobileMenu(!mobileMenu)
-          } else {
-            setMobileDrawer(!mobileDrawer)
-          }
-          setActiveMobileMenus([])
-        }}
-        icon={mobileMenu ? "closeSmall" : "hamburger"}
-        iconSize="base"
-        className={"navbar-mobile-menu-button"}
-        unstyled
-      >
-        {mobileMenu ? "Close" : "Menu"}
-      </Button>
+      <>
+        {props.mobileText ? (
+          <div
+            className={"flex flex-row items-center justify-center"}
+            onClick={() => {
+              if (!props.mobileDrawer) {
+                setMobileMenu(!mobileMenu)
+              } else {
+                setMobileDrawer(!mobileDrawer)
+              }
+              setActiveMobileMenus([])
+            }}
+          >
+            <button className={"pr-2 text-tiny text-primary uppercase"}>Menu</button>
+            <Icon
+              symbol={mobileMenu ? "closeSmall" : "hamburger"}
+              size={"base"}
+              className={"pr-3"}
+            />
+          </div>
+        ) : (
+          <Button
+            size={AppearanceSizeType.small}
+            onClick={() => {
+              if (!props.mobileDrawer) {
+                setMobileMenu(!mobileMenu)
+              } else {
+                setMobileDrawer(!mobileDrawer)
+              }
+              setActiveMobileMenus([])
+            }}
+            icon={mobileMenu ? "closeSmall" : "hamburger"}
+            iconSize="base"
+            className={"navbar-mobile-menu-button"}
+            unstyled
+          >
+            {mobileMenu ? "Close" : "Menu"}
+          </Button>
+        )}
+      </>
     )
   }
 

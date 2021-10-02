@@ -254,7 +254,7 @@
 
         .navbar-dropdown-container {
           background-color: white;
-          position: fixed;
+          position: absolute;
           margin-left: -123px;
           margin-top: 35px;
           @apply border-gray-450;
