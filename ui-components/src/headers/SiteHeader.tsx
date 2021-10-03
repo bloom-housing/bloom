@@ -20,7 +20,8 @@ export interface MenuLink {
 
 export interface SiteHeaderProps {
   dropdownItemClassName?: string
-  homeURL: string
+  homeURL?: string
+  homeOnClick?: () => void
   imageOnly?: boolean
   languages?: LangItem[]
   logoClass?: string
@@ -88,8 +89,8 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return options.map((option, index) => {
       return (
         <button
-          className={`${buttonClassName} ${props.dropdownItemClassName} ${
-            option.iconSrc && "dropdown-item-with-icon"
+          className={`${buttonClassName} ${
+            props.dropdownItemClassName ? props.dropdownItemClassName : ""
           }`}
           key={`${option.title}-${index}`}
           onClick={() => {
@@ -329,12 +330,14 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const getLogo = () => {
     return (
       <div className={`navbar-logo`}>
-        <a
+        <button
           className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()} ${
             props.logoWidth && "navbar-custom-width"
           }`}
-          href={props.homeURL}
           aria-label="homepage"
+          onClick={() => {
+            menuAction(props.homeURL, props.homeOnClick)
+          }}
         >
           <div className={`${props.imageOnly && "navbar-image-only-container"}`}>
             <img
@@ -344,7 +347,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             />
             {props.title && <div className="logo__title">{props.title}</div>}
           </div>
-        </a>
+        </button>
       </div>
     )
   }
