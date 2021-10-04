@@ -5,10 +5,7 @@ import { Expose, Type } from "class-transformer"
 import { IsDefined, IsOptional, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
-export class ListingPreferenceDto extends OmitType(ListingPreference, [
-  "listing",
-  "preference",
-] as const) {
+export class ListingPreferenceDto extends OmitType(ListingPreference, ["preference"] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
