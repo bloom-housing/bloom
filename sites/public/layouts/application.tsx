@@ -37,12 +37,11 @@ const Layout = (props) => {
     menuLinks.push({
       title: t("nav.getAssistance"),
       onClick: () => {
-        localizeLink(router, "/account/applications", router.locale)
+        localizeLink(router, "/housing-counselors", router.locale)
       },
     })
   }
   if (profile) {
-    console.log({ router })
     menuLinks.push({
       title: t("nav.myAccount"),
       subMenuLinks: [
