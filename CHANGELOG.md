@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
   - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
   - Add the "Add User" form ([#1857](https://github.com/bloom-housing/bloom/pull/1857)) (Dominik Barcikowski)
+  - Add a new account confirmation page ([#1654](https://github.com/bloom-housing/bloom/pull/1654)) (Dominik Barcikowski)
 
 - Fixed:
 
