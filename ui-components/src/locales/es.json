@@ -603,6 +603,10 @@
   "region": {
     "name": "Región local"
   },
+  "progressNav": {
+      "srHeading": "Progreso",
+      "current": "Paso actual: "
+  },
   "states": {
     "AL": "Alabama",
     "AK": "Alaska",

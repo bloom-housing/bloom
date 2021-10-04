@@ -1123,6 +1123,10 @@
   "region": {
     "name": "Local Region"
   },
+  "progressNav": {
+    "srHeading": "Progress",
+    "current": "Current step: "
+  },
   "states": {
     "AL": "Alabama",
     "AK": "Alaska",
