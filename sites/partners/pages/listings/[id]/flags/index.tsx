@@ -73,6 +73,7 @@ const FlagsPage = () => {
               quantityLabel={t("applications.totalSets")}
               setCurrentPage={setCurrentPage}
               setItemsPerPage={setItemsPerPage}
+              includeBorder={true}
             />
           </div>
         </div>

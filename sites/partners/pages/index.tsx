@@ -191,6 +191,7 @@ export default function ListingsList() {
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
                 onPerPageChange={() => setCurrentPage(1)}
+                includeBorder={true}
               />
             </div>
           </div>

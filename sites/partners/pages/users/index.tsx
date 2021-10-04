@@ -111,6 +111,7 @@ const Users = () => {
                 quantityLabel={t("users.totalUsers")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
+                includeBorder={true}
               />
             </div>
           </div>

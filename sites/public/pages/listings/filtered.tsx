@@ -156,6 +156,8 @@ const FilteredListingsPage = () => {
                 itemsPerPage={itemsPerPage}
                 quantityLabel={t("listings.totalListings")}
                 setCurrentPage={setQueryString}
+                includeBorder={false}
+                matchListingCardWidth={true}
               />
             </div>
           )}
