@@ -694,7 +694,8 @@
     "householdTooSmall": "Your household size is too small.",
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
-    "requiredFieldError": "This field is required."
+    "requiredFieldError": "This field is required",
+    "requiredFieldsError": "These fields are required"
   },
   "footer": {
     "contact": "Contact",
@@ -727,6 +728,7 @@
   },
   "listings": {
     "error": "There was an issue submitting the form.",
+    "fieldError": "Please resolve any errors before saving or publishing your listing.",
     "closeThisListing": "Do you really want to close this listing?",
     "publishThisListing": "Publishing will push the listing live on the public site.",
     "active": "Accepting Applications",

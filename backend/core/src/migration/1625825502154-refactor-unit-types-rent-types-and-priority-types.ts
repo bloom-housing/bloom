@@ -48,11 +48,13 @@ export class refactorUnitTypesRentTypesAndPriorityTypes1625825502154 implements 
     )
 
     const accessibilityPriorityTypeSeeds = [
-      "Mobility and Hearing & Visual",
-      "Mobility and Mobility with Hearing & Visual",
-      "Mobility and hearing",
       "Mobility",
-      "mobility",
+      "Hearing",
+      "Visual",
+      "Hearing and Visual",
+      "Mobility and Hearing",
+      "Mobility and Visual",
+      "Mobility, Hearing and Visual",
     ]
     const existingAccessibilityPriorityTypes = (
       await queryRunner.query(`SELECT DISTINCT priority_type FROM units`)

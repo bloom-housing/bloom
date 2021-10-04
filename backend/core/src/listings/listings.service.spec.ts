@@ -3,12 +3,13 @@ import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { Listing } from "./entities/listing.entity"
-import { ListingsQueryParams, ListingFilterParams } from "./dto/listing.dto"
 import { Compare } from "../shared/dto/filter.dto"
 import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { AvailabilityFilterEnum } from "./types/listing-filter-keys-enum"
+import { ListingFilterParams } from "./dto/listing-filter-params"
+import { ListingsQueryParams } from "./dto/listings-query-params"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -326,7 +327,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockQueryBuilder)
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
-      const params = { page: ("hello" as unknown) as number } // force the type for testing
+      const params = { page: "hello" as unknown as number } // force the type for testing
       const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)

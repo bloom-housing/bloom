@@ -900,6 +900,30 @@ export class UserService {
   }
 }
 
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -2276,22 +2300,22 @@ export interface Address {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -2902,22 +2926,22 @@ export interface AddressCreate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3215,22 +3239,22 @@ export interface AddressUpdate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3767,6 +3791,9 @@ export interface UserUpdate {
   id?: string
 
   /**  */
+  email?: string
+
+  /**  */
   createdAt?: Date
 
   /**  */
@@ -3783,9 +3810,6 @@ export interface UserUpdate {
 
   /**  */
   confirmedAt?: Date
-
-  /**  */
-  email: string
 
   /**  */
   firstName: string
@@ -3854,6 +3878,41 @@ export interface UserInvite {
 
   /**  */
   dob?: Date
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
 }
 
 export interface JurisdictionCreate {
@@ -4836,7 +4895,7 @@ export interface ListingCreate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressCreate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5307,7 +5366,7 @@ export interface ListingUpdate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressUpdate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5879,3 +5938,4 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedBuildingAddressTypes = AddressUpdate

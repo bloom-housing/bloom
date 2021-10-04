@@ -1,12 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
+import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control } = formMethods
+  const { register, control, errors, clearErrors, watch } = formMethods
+
+  const leasingAgentPhoneField: string = watch("leasingAgentPhone")
+
+  useEffect(() => {
+    clearErrors("leasingAgentPhone")
+  }, [leasingAgentPhoneField, clearErrors])
 
   return (
     <div>
@@ -21,20 +28,32 @@ const LeasingAgent = () => {
             label={t("leasingAgent.name")}
             name={"leasingAgentName"}
             id={"leasingAgentName"}
+            error={fieldHasError(errors?.leasingAgentName)}
+            errorMessage={fieldMessage(errors?.leasingAgentName)}
             placeholder={t("leasingAgent.namePlaceholder")}
             register={register}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentName"),
+            }}
           />
           <Field
             label={t("t.email")}
             name={"leasingAgentEmail"}
             id={"leasingAgentEmail"}
+            error={fieldHasError(errors?.leasingAgentEmail)}
+            errorMessage={fieldMessage(errors?.leasingAgentEmail)}
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentEmail"),
+            }}
           />
           <PhoneField
             label={t("t.phone")}
             name={"leasingAgentPhone"}
             id={"leasingAgentPhone"}
+            error={fieldHasError(errors?.leasingAgentPhone)}
+            errorMessage={fieldMessage(errors?.leasingAgentPhone)}
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}
