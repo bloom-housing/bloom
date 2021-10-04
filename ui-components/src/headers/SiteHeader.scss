@@ -100,19 +100,43 @@
         @apply flex;
         @apply items-center;
 
+        width: 100%;
+        justify-content: center;
+        @screen md {
+          width: auto;
+          justify-content: start;
+        }
+
         .logo {
           @apply text-black;
           @apply block;
           @apply text-center;
           @apply z-10;
-          max-height: 120px;
-          @apply pt-2;
-          @apply pb-2;
-          @apply pr-4;
-          @apply pl-4;
+          width: 100%;
+          height: 95%;
           display: flex;
           align-items: center;
           justify-content: center;
+
+          .navbar-image-only-container {
+            width: 100%;
+            height: 100%;
+            // 75px - .5rem of padding from the container around it
+            @screen md {
+              height: 67px;
+              height: 120px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              img {
+                margin: 0;
+              }
+            }
+            .navbar-image-only {
+              max-height: 90%;
+              max-width: 100%;
+            }
+          }
 
           @screen md {
             max-width: 60%;
@@ -127,23 +151,6 @@
 
             &:focus {
               box-shadow: 0 0 3px 4px $tailwind-accent-cool;
-            }
-
-            .navbar-image-only-container {
-              // 75px - .5rem of padding from the container around it
-              @screen md {
-                height: 67px;
-                height: 120px;
-                display: flex;
-                align-items: center;
-                img {
-                  margin: 0;
-                }
-              }
-              .navbar-image-only {
-                max-height: 90%;
-                max-width: 100%;
-              }
             }
           }
 
@@ -213,7 +220,8 @@
 
       .navbar-menu {
         @apply flex;
-        justify-content: center;
+        justify-content: flex-end;
+        min-width: 110px;
 
         @screen md {
           height: 75px;
@@ -222,7 +230,7 @@
         .navbar-mobile-menu-button {
           @apply relative;
           @apply rounded;
-          @apply px-4;
+          @apply px-2;
           @apply text-lg;
           @apply text-center;
           @apply uppercase;
@@ -235,6 +243,7 @@
           @apply border-primary;
           @apply border-2;
           text-decoration: none;
+          @apply mx-2;
         }
 
         .navbar-link {
