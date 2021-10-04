@@ -900,6 +900,30 @@ export class UserService {
   }
 }
 
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -3767,6 +3791,9 @@ export interface UserUpdate {
   id?: string
 
   /**  */
+  email?: string
+
+  /**  */
   createdAt?: Date
 
   /**  */
@@ -3783,9 +3810,6 @@ export interface UserUpdate {
 
   /**  */
   confirmedAt?: Date
-
-  /**  */
-  email: string
 
   /**  */
   firstName: string
@@ -3854,6 +3878,41 @@ export interface UserInvite {
 
   /**  */
   dob?: Date
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
 }
 
 export interface JurisdictionCreate {

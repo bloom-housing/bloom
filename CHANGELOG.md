@@ -14,6 +14,10 @@ All notable changes to this project will be documented in this file. The format 
   - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
   - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
+  - Added new userProfile resource and endpoint `PUT /userProfile/:id` suited specifically for users updating their own profiles ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
+
+- Changed:
+  - ** Breaking Change**: Endpoint `PUT /user/:id` is admin only now, because it allows edits over entire `user` table ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
   - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
 

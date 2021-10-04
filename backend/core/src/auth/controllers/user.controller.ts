@@ -38,6 +38,7 @@ import { LoginResponseDto } from "../dto/login-response.dto"
 import { authzActions } from "../enum/authz-actions.enum"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
+import { DefaultAuthGuard } from "../guards/default.guard"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -48,7 +49,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
   profile(@Request() req): UserDto {
     return mapTo(UserDto, req.user)
   }
@@ -101,7 +102,7 @@ export class UserController {
   }
 
   @Put(":id")
-  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
   async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.update(dto, new AuthContext(req.user as User)))
