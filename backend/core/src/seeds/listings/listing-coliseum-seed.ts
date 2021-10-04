@@ -6,6 +6,7 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
@@ -954,21 +955,21 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
   async seed() {
     const priorityTypeMobilityAndHearingWithVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and Hearing & Visual",
+        name: PriorityTypes.mobilityHearingVisual,
       }
     )
     const priorityTypeMobilityAndMobilityWithHearingAndVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and Mobility with Hearing & Visual",
+        name: PriorityTypes.mobilityHearingVisual,
       }
     )
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and hearing",
+        name: PriorityTypes.mobilityHearing,
       }
     )
     const priorityMobility = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail({
-      name: "Mobility",
+      name: PriorityTypes.mobility,
     })
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })

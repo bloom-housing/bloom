@@ -19,6 +19,7 @@ import {
   getDefaultUnits,
   getDisplaceePreference,
   getLiveWorkPreference,
+  PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 
@@ -42,7 +43,7 @@ export class ListingDefaultSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: "Mobility and hearing" }
+      { name: PriorityTypes.mobilityHearing }
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
