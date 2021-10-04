@@ -1,12 +1,13 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
+import { fieldMessage } from "../../../../lib/helpers"
 
 const AdditionalEligibility = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, errors, clearErrors } = formMethods
 
   return (
     <div>
@@ -50,6 +51,10 @@ const AdditionalEligibility = () => {
             fullWidth={true}
             register={register}
             maxLength={600}
+            errorMessage={fieldMessage(errors?.rentalAssistance?.message)}
+            inputProps={{
+              onChange: () => clearErrors("rentalAssistance"),
+            }}
           />
         </GridSection>
       </GridSection>

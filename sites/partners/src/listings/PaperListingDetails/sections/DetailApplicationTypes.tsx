@@ -43,7 +43,9 @@ const DetailApplicationTypes = () => {
     >
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Online Applications"}>{digitalMethod ? "Yes" : "No"}</ViewItem>
+          <ViewItem label={"Online Applications"}>
+            {listing.digitalApplication ? "Yes" : "No"}
+          </ViewItem>
         </GridCell>
         {digitalMethod && (
           <GridCell>
@@ -59,11 +61,12 @@ const DetailApplicationTypes = () => {
         )}
       </GridSection>
       <GridSection columns={1}>
-        {paperApplicationsTableRows.length == 0 ? (
-          <GridCell>
-            <ViewItem label={"Paper Applications"}>No</ViewItem>
-          </GridCell>
-        ) : (
+        <GridCell>
+          <ViewItem label={"Paper Applications"}>
+            {listing.paperApplication ? "Yes" : "No"}
+          </ViewItem>
+        </GridCell>
+        {paperApplicationsTableRows.length > 0 && (
           <GridCell>
             <ViewItem label={"Paper Applications"}>
               <MinimalTable
@@ -78,7 +81,7 @@ const DetailApplicationTypes = () => {
 
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Referral"}>{referralMethod ? "Yes" : "No"}</ViewItem>
+          <ViewItem label={"Referral"}>{listing.referralOpportunity ? "Yes" : "No"}</ViewItem>
         </GridCell>
         {referralMethod && (
           <>

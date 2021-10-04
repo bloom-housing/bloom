@@ -32,10 +32,9 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  city?: string | null
+  city: string
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -46,17 +45,15 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  state?: string | null
+  state: string
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  street?: string | null
+  street: string
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -67,10 +64,9 @@ export class Address {
 
   @Column({ type: "text", nullable: true })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  zipCode?: string | null
+  zipCode: string
 
   @Column({ type: "numeric", nullable: true })
   @Expose()

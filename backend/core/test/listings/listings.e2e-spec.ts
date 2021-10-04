@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
-import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
+import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
@@ -17,6 +17,7 @@ import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
+import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")

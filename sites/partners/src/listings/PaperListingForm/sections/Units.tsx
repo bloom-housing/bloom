@@ -16,6 +16,7 @@ import {
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
 import { TempUnit } from "../"
+import { fieldHasError } from "../../../../lib/helpers"
 
 type UnitProps = {
   units: TempUnit[]
@@ -30,7 +31,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue } = formMethods
+  const { register, setValue, errors, clearErrors } = formMethods
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -46,6 +47,14 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   useEffect(() => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
+
+  useEffect(() => {
+    if (units && units.length > 0 && !units[0].tempId) {
+      units.forEach((unit, index) => {
+        unit.tempId = index + 1
+      })
+    }
+  }, [units])
 
   const editUnit = (tempId: number) => {
     setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
@@ -154,12 +163,20 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
           <Button
             type="button"
             size={AppearanceSizeType.normal}
-            onClick={() => editUnit(units.length + 1)}
+            styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
+            onClick={() => {
+              editUnit(units.length + 1)
+              clearErrors("units")
+            }}
           >
             {t("listings.unit.add")}
           </Button>
         </div>
       </GridSection>
+
+      {fieldHasError(errors?.units) && (
+        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+      )}
 
       <Drawer
         open={!!unitDrawerId}

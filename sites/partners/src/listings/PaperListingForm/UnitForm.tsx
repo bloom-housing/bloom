@@ -24,7 +24,7 @@ import {
   UnitType,
 } from "@bloom-housing/backend-core/types"
 import { useAmiChartList, useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentType } from "../../../lib/helpers"
+import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/helpers"
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
@@ -102,8 +102,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
   const resetDefaultValues = async () => {
     if (defaultUnit) {
-      const chartData = await fetchAmiChart(defaultUnit.amiChart.id)
-      resetAmiTableValues(chartData, defaultUnit.amiPercentage)
+      if (defaultUnit.amiChart) {
+        const chartData = await fetchAmiChart(defaultUnit.amiChart.id)
+        resetAmiTableValues(chartData, defaultUnit.amiPercentage)
+      }
       Object.keys(defaultUnit).forEach((key) => {
         setValue(key, defaultUnit[key])
       })
@@ -204,19 +206,21 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       delete data.unitType
     }
 
-    // Only keep overrides so we're not duplicating existing ami data
-    ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
-      const existingChartValue = currentAmiChart.filter(
-        (item: AmiChartItem) =>
-          item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
-      )[0]
-      if (
-        data[`maxIncomeHouseholdSize${index + 1}`] &&
-        parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
-      ) {
-        delete data[`maxIncomeHouseholdSize${index + 1}`]
-      }
-    })
+    if (currentAmiChart) {
+      // Only keep overrides so we're not duplicating existing ami data
+      ;[...Array(maxAmiHouseholdSize)].forEach((_, index) => {
+        const existingChartValue = currentAmiChart.filter(
+          (item: AmiChartItem) =>
+            item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
+        )[0]
+        if (
+          data[`maxIncomeHouseholdSize${index + 1}`] &&
+          parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
+        ) {
+          delete data[`maxIncomeHouseholdSize${index + 1}`]
+        }
+      })
+    }
 
     const formData: TempUnit = {
       createdAt: undefined,
@@ -324,7 +328,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
                 register={register}
                 controlClassName="control"
                 options={options.unitTypes}
-                error={errors?.unitType !== undefined}
+                error={fieldHasError(errors?.unitType)}
                 errorMessage={t("errors.requiredFieldError")}
                 validation={{ required: true }}
               />
