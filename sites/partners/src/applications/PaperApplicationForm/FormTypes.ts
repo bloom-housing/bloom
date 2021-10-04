@@ -1,12 +1,12 @@
 import { DateFieldValues, DOBFieldValues, TimeFieldValues } from "@bloom-housing/ui-components"
 import { Language, IncomePeriod } from "@bloom-housing/backend-core/types"
 
-type Address = {
-  street?: string
+export type Address = {
+  street: string
   street2?: string
-  city?: string
-  state?: string
-  zipCode?: string
+  city: string
+  state: string
+  zipCode: string
 }
 
 export enum YesNoAnswer {

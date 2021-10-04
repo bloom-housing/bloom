@@ -6,6 +6,7 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
@@ -901,6 +902,10 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
+  image: {
+    label: "test_label",
+    fileId: "fileid",
+  },
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:
@@ -931,7 +936,7 @@ const coliseumListing: ListingSeedType = {
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
-  rentalAssistance: null,
+  rentalAssistance: "",
   rentalHistory: "Two years' landlord history or homeless verification",
   requiredDocuments:
     "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",
@@ -949,20 +954,22 @@ const coliseumListing: ListingSeedType = {
 export class ListingColiseumSeed extends ListingDefaultSeed {
   async seed() {
     const priorityTypeMobilityAndHearingWithVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: "Mobility and Hearing & Visual" }
+      {
+        name: PriorityTypes.mobilityHearingVisual,
+      }
     )
     const priorityTypeMobilityAndMobilityWithHearingAndVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and Mobility with Hearing & Visual",
+        name: PriorityTypes.mobilityHearingVisual,
       }
     )
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and hearing",
+        name: PriorityTypes.mobilityHearing,
       }
     )
     const priorityMobility = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail({
-      name: "Mobility",
+      name: PriorityTypes.mobility,
     })
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })

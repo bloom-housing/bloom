@@ -188,6 +188,8 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+    expect(res.body).toHaveProperty("confirmationCode")
+    expect(res.body.confirmationCode.length).toBe(8)
     res = await supertest(app.getHttpServer())
       .get(`/applications/${res.body.id}`)
       .set(...setAuthorization(user1AccessToken))

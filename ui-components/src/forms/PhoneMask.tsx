@@ -1,7 +1,7 @@
 import React from "react"
 import MaskedInput from "react-text-mask"
 
-export const PhoneMask = (props: any) => {
+export const PhoneMask = React.forwardRef((props: any, ref: any) => {
   const { value, onChange, name, disabled, placeholder } = props
 
   return (
@@ -19,6 +19,7 @@ export const PhoneMask = (props: any) => {
         e.persist()
         onChange(e)
       }}
+      ref={ref}
     />
   )
-}
+})

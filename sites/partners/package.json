@@ -19,7 +19,6 @@
   "dependencies": {
     "@bloom-housing/ui-components": "^1.0.5",
     "@mapbox/mapbox-sdk": "^0.13.0",
-    "@zeit/next-sass": "^1.0.1",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
     "axios": "^0.21.1",

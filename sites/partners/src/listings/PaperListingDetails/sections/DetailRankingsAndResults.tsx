@@ -58,7 +58,11 @@ const DetailRankingsAndResults = () => {
       )}
       <GridSection columns={2}>
         <ViewItem label={t("listings.waitlist.openQuestion")}>
-          {listing.isWaitlistOpen ? t("t.yes") : t("t.no")}
+          {listing.isWaitlistOpen
+            ? t("t.yes")
+            : listing.isWaitlistOpen === false
+            ? t("t.no")
+            : t("t.n/a")}
         </ViewItem>
       </GridSection>
       {listing.isWaitlistOpen && (

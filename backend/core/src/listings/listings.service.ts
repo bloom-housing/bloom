@@ -1,13 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common"
 import jp from "jsonpath"
 import { Listing } from "./entities/listing.entity"
-import {
-  ListingCreateDto,
-  ListingUpdateDto,
-  ListingFilterParams,
-  filterTypeToFieldMap,
-  ListingsQueryParams,
-} from "./dto/listing.dto"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, OrderByCondition, Repository } from "typeorm"
@@ -21,6 +14,11 @@ import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
+import { ListingCreateDto } from "./dto/listing-create.dto"
+import { ListingUpdateDto } from "./dto/listing-update.dto"
+import { ListingFilterParams } from "./dto/listing-filter-params"
+import { ListingsQueryParams } from "./dto/listings-query-params"
+import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
 
 @Injectable()
 export class ListingsService {

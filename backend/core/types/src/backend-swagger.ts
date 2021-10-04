@@ -2300,22 +2300,22 @@ export interface Address {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -2655,6 +2655,9 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean
+
+  /**  */
+  confirmationCode: string
 }
 
 export interface ApplicationFlaggedSet {
@@ -2923,22 +2926,22 @@ export interface AddressCreate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3236,22 +3239,22 @@ export interface AddressUpdate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3647,7 +3650,7 @@ export interface User {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3691,7 +3694,7 @@ export interface UserCreate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserBasic {
@@ -3726,7 +3729,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3818,7 +3821,7 @@ export interface UserUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserFilterParams {
@@ -3874,7 +3877,7 @@ export interface UserInvite {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserProfileUpdate {
@@ -4370,6 +4373,9 @@ export interface UnitsSummary {
 }
 
 export interface Listing {
+  /**  */
+  referralApplication?: ApplicationMethod
+
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
 
@@ -4871,7 +4877,7 @@ export interface ListingCreate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressCreate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5342,7 +5348,7 @@ export interface ListingUpdate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressUpdate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5908,3 +5914,4 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedBuildingAddressTypes = AddressUpdate
