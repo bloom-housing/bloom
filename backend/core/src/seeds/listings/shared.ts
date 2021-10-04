@@ -28,6 +28,16 @@ export function getDefaultAmiChart() {
   return JSON.parse(JSON.stringify(defaultAmiChart))
 }
 
+export enum PriorityTypes {
+  mobility = "Mobility",
+  hearing = "Hearing",
+  visual = "Visual",
+  hearingVisual = "Hearing and Visual",
+  mobilityHearing = "Mobility and Hearing",
+  mobilityVisual = "Mobility and Visual",
+  mobilityHearingVisual = "Mobility, Hearing and Visual",
+}
+
 export const defaultAmiChart: AmiChartCreateDto = {
   name: "AlamedaCountyTCAC2021",
   items: [
