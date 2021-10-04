@@ -188,6 +188,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             <button
               className={"navbar-mobile-drawer-close-row"}
               onClick={() => setMobileDrawer(false)}
+              aria-label={t("t.close")}
             >
               <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
             </button>
