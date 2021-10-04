@@ -72,11 +72,13 @@ const AgPagination = ({
 
         <div className="data-pager__control-group ml-0 md:ml-auto w-full md:w-auto md:flex md:items-center">
           <div className="data-pager__control">
-            <span className="field-label">
-              <strong>
-                Page {currentPage} of {totalPages}
-              </strong>
-            </span>
+            {totalItems > 0 && (
+              <span className="field-label">
+                <strong>
+                  Page {currentPage} of {totalPages}
+                </strong>
+              </span>
+            )}
             <span className="field-label">
               ({totalItems} {quantityLabel})
             </span>
