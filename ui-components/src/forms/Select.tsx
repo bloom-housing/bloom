@@ -44,38 +44,36 @@ export const Select = ({
   subNote,
 }: SelectProps) => {
   return (
-    <>
-      <div className={`field ${error ? "error" : ""}`}>
-        <label className={labelClassName} htmlFor={id}>
-          {label}
-        </label>
-        <div className={controlClassName}>
-          <select
-            className="input"
-            id={id || name}
-            name={name}
-            aria-describedby={describedBy ? describedBy : `${id}-error`}
-            aria-invalid={!!error || false}
-            ref={register && register(validation)}
-            disabled={disabled}
-            defaultValue={defaultValue ?? ""}
-            {...inputProps}
-          >
-            {placeholder && (
-              <option value="" disabled>
-                {placeholder}
-              </option>
-            )}
-            <FormOptions options={options} keyPrefix={keyPrefix} />
-          </select>
-        </div>
-        {subNote && <p className="field-sub-note">{subNote}</p>}
-        {error && errorMessage && (
-          <ErrorMessage id={`${id}-error`} error={error}>
-            {errorMessage}
-          </ErrorMessage>
-        )}
+    <div className={`field ${error ? "error" : ""}`}>
+      <label className={labelClassName} htmlFor={id}>
+        {label}
+      </label>
+      <div className={controlClassName}>
+        <select
+          className="input"
+          id={id || name}
+          name={name}
+          aria-describedby={describedBy ? describedBy : `${id}-error`}
+          aria-invalid={!!error || false}
+          ref={register && register(validation)}
+          disabled={disabled}
+          defaultValue={defaultValue ?? ""}
+          {...inputProps}
+        >
+          {placeholder && (
+            <option value="" disabled>
+              {placeholder}
+            </option>
+          )}
+          <FormOptions options={options} keyPrefix={keyPrefix} />
+        </select>
       </div>
-    </>
+      {subNote && <p className="field-sub-note">{subNote}</p>}
+      {error && errorMessage && (
+        <ErrorMessage id={`${id}-error`} error={error}>
+          {errorMessage}
+        </ErrorMessage>
+      )}
+    </div>
   )
 }
