@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react"
+import React, { useRef, useContext, useState } from "react"
 import { useRouter } from "next/router"
 import {
   t,
@@ -15,6 +15,7 @@ import {
   AlertBox,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
+import { LoginResponse } from "@bloom-housing/backend-core/types"
 
 type FormUserConfirmFields = {
   password: string
@@ -27,15 +28,20 @@ const FormUserConfirm = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, watch } = useForm<FormUserConfirmFields>()
   const router = useRouter()
-  const { mutate, isLoading, isError, reset: resetMutation } = useMutate()
+  const { mutate, isLoading: isConfirmLoading, isError, reset: resetMutation } = useMutate<
+    LoginResponse
+  >()
   const { userService } = useContext(AuthContext)
+  const { loginWithToken } = useContext(AuthContext)
 
   const token = router.query?.token as string
 
   const password = useRef({})
   password.current = watch("password", "")
 
-  const onSubmit = (data: FormUserConfirmFields) => {
+  const [isLoginLoading, setLoginLoading] = useState(false)
+
+  const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
 
     const body = {
@@ -43,16 +49,28 @@ const FormUserConfirm = () => {
       password: data.password,
     }
 
-    void mutate(() =>
-      userService
-        .confirm({
+    try {
+      const response = await mutate(() =>
+        userService.confirm({
           body,
         })
-        .then(() => {
-          setSiteAlertMessage(t(`users.accountConfirmed`), "success")
-          void router.push("/")
-        })
-    )
+      )
+
+      console.log("res", response)
+
+      const { accessToken } = response || {}
+
+      if (accessToken) {
+        setLoginLoading(true)
+        await loginWithToken(accessToken)
+        setLoginLoading(false)
+
+        setSiteAlertMessage(t(`users.accountConfirmed`), "success")
+        void router.push("/")
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   if (!token) {
@@ -139,7 +157,7 @@ const FormUserConfirm = () => {
               type="submit"
               styleType={AppearanceStyleType.primary}
               className={"items-center"}
-              loading={isLoading}
+              loading={isConfirmLoading || isLoginLoading}
             >
               {t("users.confirmAccount")}
             </Button>
