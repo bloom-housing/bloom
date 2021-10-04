@@ -174,6 +174,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         </div>
       </GridSection>
 
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.units) && (
         <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
       )}

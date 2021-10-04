@@ -7,6 +7,7 @@ export const PhoneField = (props: {
   error?: boolean
   errorMessage?: string
   controlClassName?: string
+  subNote?: string
   id?: string
   name: string
   label?: string
@@ -60,10 +61,11 @@ export const PhoneField = (props: {
         ) : (
           <Controller {...controllerProps} as={PhoneMask} />
         )}
-        <ErrorMessage id={`${props.id}-error`} error={props.error}>
-          {props.errorMessage}
-        </ErrorMessage>
       </div>
+      {props.subNote && <p className="field-sub-note">{props.subNote}</p>}
+      <ErrorMessage id={`${props.id}-error`} error={props.error}>
+        {props.errorMessage}
+      </ErrorMessage>
     </div>
   )
 }

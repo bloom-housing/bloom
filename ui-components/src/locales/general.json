@@ -895,6 +895,7 @@
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
+    "requiredToPublish": "Required to publish",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
     "reservedCommunitySeniorTitle": "Senior Building",
