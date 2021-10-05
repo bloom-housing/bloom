@@ -14,7 +14,6 @@ import { ReservedCommunityTypesModule } from "../../src/reserved-community-type/
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { Repository } from "typeorm"
-import { Application } from "../../src/applications/entities/application.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -70,6 +69,7 @@ describe("ReservedCommunityTypes", () => {
     expect(res.body).toHaveProperty("description")
     expect(res.body.name).toBe("test")
     expect(res.body.description).toBe("description")
+    expect(res.body.jurisdiction.id).toBe(jurisdiction.id)
 
     const getById = await supertest(app.getHttpServer())
       .get(`/reservedCommunityTypes/${res.body.id}`)
