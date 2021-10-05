@@ -136,6 +136,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ### General
 
+- Added:
+
+  - A new `shared-helpers` package for consolidating functions and constants between the Next.js sites and possibly the backend ([#1911](https://github.com/bloom-housing/bloom/issues/1911)) (Jared White)
+    **Breaking Change**: Various constants were extracted out of the `ui-components` package
+
 - Updated:
 
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
