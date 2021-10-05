@@ -249,7 +249,8 @@ export const removeEmptyFields = (obj) => {
     if (
       typeof obj[key] === "object" &&
       !Array.isArray(obj[key]) &&
-      Object.keys(obj[key]).length === 0
+      Object.keys(obj[key]).length === 0 &&
+      obj[key].constructor === Object
     ) {
       delete obj[key]
     }
