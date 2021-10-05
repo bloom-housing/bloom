@@ -11,6 +11,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -22,6 +23,7 @@ import {
   ReservedCommunityTypeUpdateDto,
 } from "./dto/reserved-community-type.dto"
 import { ReservedCommunityTypesService } from "./reserved-community-types.service"
+import { ReservedCommunityTypeListQueryParams } from "./dto/reserved-community-type-list-query-params"
 
 @Controller("reservedCommunityTypes")
 @ApiTags("reservedCommunityTypes")
@@ -34,8 +36,13 @@ export class ReservedCommunityTypesController {
 
   @Get()
   @ApiOperation({ summary: "List reservedCommunityTypes", operationId: "list" })
-  async list(): Promise<ReservedCommunityTypeDto[]> {
-    return mapTo(ReservedCommunityTypeDto, await this.reservedCommunityTypesService.list())
+  async list(
+    @Query() queryParams: ReservedCommunityTypeListQueryParams
+  ): Promise<ReservedCommunityTypeDto[]> {
+    return mapTo(
+      ReservedCommunityTypeDto,
+      await this.reservedCommunityTypesService.list(queryParams)
+    )
   }
 
   @Post()

@@ -18,9 +18,13 @@ const DetailListingPhoto = () => {
   if (listing.image == null && listing.assets.length > 0) {
     listingFormPhoto = listing.assets.find((asset) => asset.label == "building")
   }
-  const listingPhotoUrl = /https?:\/\//.exec(listingFormPhoto.fileId)
-    ? listingFormPhoto.fileId
-    : cloudinaryUrlFromId(listingFormPhoto.fileId)
+
+  const urlTest = new RegExp(/https?:\/\//)
+  const listingPhotoUrl = listingFormPhoto
+    ? urlTest.test(listingFormPhoto.fileId)
+      ? listingFormPhoto.fileId
+      : cloudinaryUrlFromId(listingFormPhoto.fileId)
+    : null
 
   const photoTableHeaders = {
     preview: "t.preview",
@@ -33,7 +37,7 @@ const DetailListingPhoto = () => {
           <img src={listingPhotoUrl} />
         </TableThumbnail>
       ),
-      fileName: listingFormPhoto.fileId.split("/").slice(-1).join(),
+      fileName: listingFormPhoto?.fileId.split("/").slice(-1).join(),
     },
   ]
 
@@ -46,7 +50,11 @@ const DetailListingPhoto = () => {
     >
       <GridSection>
         <GridCell span={2}>
-          <MinimalTable headers={photoTableHeaders} data={photoTableData}></MinimalTable>
+          {listingPhotoUrl ? (
+            <MinimalTable headers={photoTableHeaders} data={photoTableData} />
+          ) : (
+            <span className={"view-item__value"}>{t("t.none")}</span>
+          )}
         </GridCell>
       </GridSection>
     </GridSection>
