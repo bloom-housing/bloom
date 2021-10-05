@@ -9,6 +9,7 @@ import {
   OneToMany,
   OneToOne,
   RelationId,
+  Unique,
 } from "typeorm"
 import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -42,6 +43,7 @@ import { IncomePeriod } from "../types/income-period-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 
 @Entity({ name: "applications" })
+@Unique(["listing", "confirmationCode"])
 export class Application extends AbstractEntity {
   @DeleteDateColumn()
   @Expose()
@@ -249,4 +251,9 @@ export class Application extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   flagged?: boolean
+
+  @Column({ type: "text", nullable: false })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  confirmationCode: string
 }

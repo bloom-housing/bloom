@@ -900,6 +900,30 @@ export class UserService {
   }
 }
 
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -2282,22 +2306,22 @@ export interface Address {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -2637,6 +2661,9 @@ export interface Application {
 
   /**  */
   markedAsDuplicate: boolean
+
+  /**  */
+  confirmationCode: string
 }
 
 export interface ApplicationFlaggedSet {
@@ -2905,22 +2932,22 @@ export interface AddressCreate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3218,22 +3245,22 @@ export interface AddressUpdate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3629,7 +3656,7 @@ export interface User {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3673,7 +3700,7 @@ export interface UserCreate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserBasic {
@@ -3708,7 +3735,7 @@ export interface UserBasic {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3770,6 +3797,9 @@ export interface UserUpdate {
   id?: string
 
   /**  */
+  email?: string
+
+  /**  */
   createdAt?: Date
 
   /**  */
@@ -3788,9 +3818,6 @@ export interface UserUpdate {
   confirmedAt?: Date
 
   /**  */
-  email: string
-
-  /**  */
   firstName: string
 
   /**  */
@@ -3800,7 +3827,7 @@ export interface UserUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 }
 
 export interface UserFilterParams {
@@ -3856,7 +3883,42 @@ export interface UserInvite {
   lastName: string
 
   /**  */
+  dob?: Date
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
   dob: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
 }
 
 export interface JurisdictionCreate {
@@ -3889,6 +3951,9 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   name?: string
 
   /**  */
@@ -3902,6 +3967,21 @@ export interface ListingFilterParams {
 
   /**  */
   zipcode?: string
+
+  /**  */
+  availability?: EnumListingFilterParamsAvailability
+
+  /**  */
+  seniorHousing?: boolean
+
+  /**  */
+  minRent?: number
+
+  /**  */
+  maxRent?: number
+
+  /**  */
+  ami?: number
 
   /**  */
   leasingAgents?: string
@@ -4824,7 +4904,7 @@ export interface ListingCreate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressCreate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5295,7 +5375,7 @@ export interface ListingUpdate {
   amenities?: string
 
   /**  */
-  buildingAddress: AddressUpdate
+  buildingAddress?: CombinedBuildingAddressTypes
 
   /**  */
   buildingTotalUnits?: number
@@ -5812,12 +5892,18 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+}
+export enum EnumListingFilterParamsAvailability {
+  "hasAvailability" = "hasAvailability",
+  "noAvailability" = "noAvailability",
+  "waitlist" = "waitlist",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
@@ -5867,3 +5953,4 @@ export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
+export type CombinedBuildingAddressTypes = AddressUpdate
