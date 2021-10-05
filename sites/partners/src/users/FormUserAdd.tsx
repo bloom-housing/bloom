@@ -54,14 +54,17 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
      * - array of strings if multiple checkboxes are selected
      */
     const user_listings = (() => {
-      const value = getValues("user_listings")
+      const value = getValues("user_listings") as string[] | boolean | string
       const valueInArray = Array.isArray(value)
 
-      if (valueInArray) return value
-      if (value === false) return []
+      if (valueInArray) {
+        return value
+      } else if (typeof value === "string") {
+        return [value]
+      }
 
-      return [value]
-    })()
+      return []
+    })() as string[]
 
     const validation = await trigger()
 
