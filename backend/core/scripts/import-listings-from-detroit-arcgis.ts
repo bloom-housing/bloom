@@ -1,5 +1,5 @@
 import { importListing, ListingImport, UnitImport } from "./import-helpers"
-import { createUnitsArray, getDetroitJurisdiction } from "./detroit-helpers"
+import { createUnitsArray } from "./detroit-helpers"
 import axios from "axios"
 import { AddressCreate, ListingStatus, CSVFormattingType } from "../types/src/backend-swagger"
 
@@ -20,8 +20,6 @@ async function main() {
   const response = await axios.get(arcGisUrl, {
     params: { where: "1=1", f: "pjson", outFields: "*" },
   })
-
-  const jurisdiction = await getDetroitJurisdiction(importApiUrl, email, password)
 
   const numListings: number = response.data.features.length
   for (let i = 0; i < numListings; i++) {
@@ -83,7 +81,7 @@ async function main() {
       leasingAgentAddress: leasingAgentAddress,
       phoneNumber: listingAttributes.Property_Phone,
       status: ListingStatus.active,
-      jurisdiction: jurisdiction,
+      jurisdictionName: "Detroit",
 
       // The following fields are only set because they are required
       CSVFormattingType: CSVFormattingType.basic,

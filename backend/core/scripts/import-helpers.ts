@@ -18,16 +18,18 @@ const unitTypesService = new client.UnitTypesService()
 const unitAccessibilityPriorityTypesService = new client.UnitAccessibilityPriorityTypesService()
 const applicationMethodsService = new client.ApplicationMethodsService()
 const reservedCommunityTypesService = new client.ReservedCommunityTypesService()
+const jurisdictionService = new client.JurisdictionsService()
 
 // Create these import interfaces to mimic the format defined in backend-swagger.ts, but allow
 // certain fields to have a simpler type. For example: allow listing.units.unitType to be a
 // string (e.g. "oneBdrm"), and then the importListing function will look up the corresponding
 // unitType object by name and use that unitType object to construct the UnitCreate.
 export interface ListingImport
-  extends Omit<ListingCreate, "unitsSummary" | "units" | "reservedCommunityType"> {
+  extends Omit<ListingCreate, "unitsSummary" | "units" | "reservedCommunityType" | "jurisdiction"> {
   unitsSummary?: UnitsSummaryImport[]
   units?: UnitImport[]
   reservedCommunityTypeName?: string
+  jurisdictionName?: string
 }
 export interface UnitsSummaryImport extends Omit<UnitsSummaryCreate, "unitType"> {
   unitType?: string
@@ -121,7 +123,7 @@ function reformatListing(listing, relationsKeys: string[]) {
   return listing
 }
 
-const findByName = (list, name) => {
+const findByName = (list, name: string) => {
   return list.find((el) => el.name === name)
 }
 
@@ -154,6 +156,7 @@ export async function importListing(
   })
   const unitTypes = await unitTypesService.list()
   const priorityTypes = await unitAccessibilityPriorityTypesService.list()
+  const jurisdictions = await jurisdictionService.list()
 
   // Tidy a few of the listing's fields.
   const relationsKeys = []
@@ -207,6 +210,11 @@ export async function importListing(
     })
   }
 
+  let jurisdiction: client.Jurisdiction = null
+  if (listing.jurisdictionName) {
+    jurisdiction = findByName(jurisdictions, listing.jurisdictionName)
+  }
+
   // Construct the ListingCreate to be sent to the backend. Its structure mostly mimics that of the
   // input ListingImport, with the exception of the fields for which we had to look up referenced
   // types.
@@ -215,6 +223,7 @@ export async function importListing(
     unitsSummary: unitsSummaryCreate,
     units: unitsCreate,
     reservedCommunityType: reservedCommunityType,
+    jurisdiction: jurisdiction,
   }
 
   // Upload the listing, and then return it.
