@@ -340,7 +340,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             menuAction(props.homeURL, props.homeOnClick)
           }}
         >
-          <div className={`${props.imageOnly && "navbar-image-only-container"}`}>
+          <div className={`logo-content ${props.imageOnly && "navbar-image-only-container"}`}>
             <img
               className={`logo__image ${props.imageOnly && "navbar-image-only"}`}
               src={props.logoSrc}
