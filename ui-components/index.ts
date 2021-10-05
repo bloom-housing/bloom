@@ -49,6 +49,7 @@ export * from "./src/global/vendor/AgPagination"
 export * from "./src/headers/Hero"
 export * from "./src/headers/PageHeader"
 export * from "./src/headers/SiteHeader"
+export * from "./src/headers/Heading"
 
 /* Helpers */
 export * from "./src/helpers/address"
@@ -143,6 +144,7 @@ export * from "./src/sections/GridSection"
 export * from "./src/tables/StandardTable"
 export * from "./src/tables/GroupedTable"
 export * from "./src/tables/MinimalTable"
+export * from "./src/tables/StackedTable"
 
 /* Text */
 export * from "./src/text/Description"
