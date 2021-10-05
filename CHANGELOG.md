@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file. The format 
   - ** Breaking Change**: Endpoint `PUT /user/:id` is admin only now, because it allows edits over entire `user` table ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
   - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
+  - Add various backend filters ([#1884](https://github.com/bloom-housing/bloom/pull/1884))
 
 ## Frontend
 

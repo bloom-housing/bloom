@@ -3945,6 +3945,9 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   name?: string
 
   /**  */
@@ -3958,6 +3961,21 @@ export interface ListingFilterParams {
 
   /**  */
   zipcode?: string
+
+  /**  */
+  availability?: EnumListingFilterParamsAvailability
+
+  /**  */
+  seniorHousing?: boolean
+
+  /**  */
+  minRent?: number
+
+  /**  */
+  maxRent?: number
+
+  /**  */
+  ami?: number
 
   /**  */
   leasingAgents?: string
@@ -5859,12 +5877,18 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
+}
+export enum EnumListingFilterParamsAvailability {
+  "hasAvailability" = "hasAvailability",
+  "noAvailability" = "noAvailability",
+  "waitlist" = "waitlist",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
