@@ -327,7 +327,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockQueryBuilder)
 
       // Invalid pagination params (page specified, but not limit) -> no limit/offset
-      const params = { page: "hello" as unknown as number } // force the type for testing
+      const params = { page: ("hello" as unknown) as number } // force the type for testing
       const listings = await service.list(params)
 
       expect(listings.items).toEqual(mockListings)
