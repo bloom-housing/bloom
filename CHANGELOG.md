@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Update text for preferred unit types and terms ([#1934](https://github.com/bloom-housing/bloom/pull/1934)) (Jared White)
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
   - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
