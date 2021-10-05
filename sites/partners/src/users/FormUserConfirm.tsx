@@ -56,8 +56,6 @@ const FormUserConfirm = () => {
         })
       )
 
-      console.log("res", response)
-
       const { accessToken } = response || {}
 
       if (accessToken) {
