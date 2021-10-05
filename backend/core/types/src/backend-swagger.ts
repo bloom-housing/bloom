@@ -1602,12 +1602,18 @@ export class ReservedCommunityTypesService {
   /**
    * List reservedCommunityTypes
    */
-  list(options: IRequestOptions = {}): Promise<ReservedCommunityType[]> {
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/reservedCommunityTypes"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { jurisdictionName: params["jurisdictionName"] }
       let data = null
 
       configs.data = data
@@ -4206,6 +4212,9 @@ export interface ListingEvent {
 
 export interface ReservedCommunityType {
   /**  */
+  jurisdiction: Jurisdiction
+
+  /**  */
   id: string
 
   /**  */
@@ -5743,6 +5752,9 @@ export interface PropertyGroupUpdate {
 
 export interface ReservedCommunityTypeCreate {
   /**  */
+  jurisdiction: Id
+
+  /**  */
   name: string
 
   /**  */
@@ -5750,6 +5762,9 @@ export interface ReservedCommunityTypeCreate {
 }
 
 export interface ReservedCommunityTypeUpdate {
+  /**  */
+  jurisdiction: Id
+
   /**  */
   name: string
 

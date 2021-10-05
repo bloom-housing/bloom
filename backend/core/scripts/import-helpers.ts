@@ -72,7 +72,7 @@ async function uploadListing(listing: ListingCreate) {
 async function uploadReservedCommunityType(name: string) {
   try {
     return await reservedCommunityTypesService.create({
-      body: { name: name },
+      body: { name, jurisdiction: jurisdictions[0] },
     })
   } catch (e) {
     console.log(e.response)
