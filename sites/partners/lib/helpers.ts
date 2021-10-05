@@ -142,7 +142,9 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
-  if (!date || (!formTime.hours && !formTime.minutes)) return null
+  // date should be cloned, operations in the reference directly can occur unexpected changes
+  const dateClone = new Date(date.getTime())
+  if (!dateClone || (!formTime.hours && !formTime.minutes)) return null
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -150,8 +152,8 @@ export const createTime = (
   if (formTime.period === "pm" && formattedHours !== 12) {
     formattedHours = formattedHours + 12
   }
-  date.setHours(formattedHours, parseInt(formTime.minutes), 0)
-  return date
+  dateClone.setHours(formattedHours, parseInt(formTime.minutes), 0)
+  return dateClone
 }
 
 /**
