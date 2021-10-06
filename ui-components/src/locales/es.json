@@ -571,7 +571,6 @@
     "accountSettings": "Configuraciones de la cuenta",
     "browseProperties": "Ver Propiedades",
     "getAssistance": "Obtener asistencia",
-    "getFeedback": "Esta es una vista preliminar de nuestro nuevo sitio web. Tan solo estamos empezando. Nos encantaría recibir <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>sus comentarios.</a>",
     "listings": "Listados",
     "properties": "Propiedades",
     "applications": "Solicitudes",
