@@ -126,10 +126,11 @@ export class UserService {
 
   public async confirm(dto: ConfirmDto) {
     const user = await this.find({ confirmationToken: dto.token })
+    const token = decode(dto.token, process.env.APP_SECRET)
     if (!user) {
+      console.error("Confirmation token for user: ", token.id, " not found.")
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
-    const token = decode(dto.token, process.env.APP_SECRET)
 
     if (token.id !== user.id) {
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
