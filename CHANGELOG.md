@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file. The format 
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
+  - Listings management AMI charts populate after Save and New on units ([#1952](https://github.com/bloom-housing/bloom/pull/1952)) (Emily Jablonski)
 
 - Changed:
 
