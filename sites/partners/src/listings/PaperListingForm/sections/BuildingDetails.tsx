@@ -147,13 +147,12 @@ const BuildingDetails = ({
       title={t("listings.sections.buildingDetailsTitle")}
       description={t("listings.sections.buildingDetailsSubtitle")}
     >
-      <GridSection columns={3}>
+      <GridSection columns={3} subtitle={t("listings.sections.buildingAddress")}>
         <GridCell span={2}>
           <Field
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.buildingAddress?.street)}
             errorMessage={fieldMessage(errors?.buildingAddress?.street)}
             placeholder={t("application.contact.streetAddress")}
@@ -177,7 +176,6 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.buildingAddress?.city)}
             errorMessage={fieldMessage(errors?.buildingAddress?.city)}
             placeholder={t("application.contact.city")}
@@ -186,6 +184,7 @@ const BuildingDetails = ({
             }}
             register={register}
           />
+          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <ViewItem
           label={t("application.contact.state")}
@@ -195,7 +194,6 @@ const BuildingDetails = ({
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.buildingAddress?.state)}
             label={t("application.contact.state")}
             labelClassName="sr-only"
@@ -212,7 +210,6 @@ const BuildingDetails = ({
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
-          subNote={t("listings.requiredToPublish")}
           error={fieldHasError(errors?.buildingAddress?.zipCode)}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}

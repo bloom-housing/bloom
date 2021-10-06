@@ -932,6 +932,7 @@
       "applicationAddressTitle": "Application Address",
       "applicationTypesTitle": "Application Types",
       "applicationTypesSubtitle": "Configure the online application and upload paper application forms.",
+      "buildingAddress": "Building Address",
       "buildingDetailsSubtitle": "Tell us where the building is located.",
       "buildingDetailsTitle": "Building Details",
       "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
