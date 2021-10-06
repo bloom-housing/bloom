@@ -45,7 +45,27 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
   const { mutate, isLoading } = useMutate()
 
   const invite = async () => {
-    const { firstName, lastName, email, role, user_listings } = getValues()
+    const { firstName, lastName, email, role } = getValues()
+
+    /**
+     * react-hook form returns:
+     * - false if any option is selected
+     * - string if only one option is selected
+     * - array of strings if multiple checkboxes are selected
+     */
+    const user_listings = (() => {
+      const value = getValues("user_listings") as string[] | boolean | string
+      const valueInArray = Array.isArray(value)
+
+      if (valueInArray) {
+        return value
+      } else if (typeof value === "string") {
+        return [value]
+      }
+
+      return []
+    })() as string[]
+
     const validation = await trigger()
 
     if (!validation) return
@@ -55,7 +75,7 @@ const FormUserAdd = ({ listings, onDrawerClose }: FormUserAddProps) => {
       isPartner: role.includes(RoleOption.Partner),
     }))()
 
-    const leasingAgentInListings = user_listings.map((id) => ({ id }))
+    const leasingAgentInListings = user_listings?.map((id) => ({ id })) || []
 
     const jurisdictions = user_listings
       .reduce((acc, curr) => {

@@ -579,7 +579,12 @@
     "addUser": "Add User",
     "userDetails": "User Details",
     "allListings": "All listings",
-    "inviteSent": "Invite sent"
+    "inviteSent": "Invite sent",
+    "addPassword": "Add a Password",
+    "needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
+    "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
+    "confirmAccount": "Confirm Acount",
+    "accountConfirmed": "Account confirmed"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
