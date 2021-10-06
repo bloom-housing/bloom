@@ -94,22 +94,12 @@ export class UserService {
     return result
   }
 
-  async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
+  async update(dto: UserUpdateDto, authContext: AuthContext) {
     const user = await this.find({
       id: dto.id,
     })
     if (!user) {
       throw new NotFoundException()
-    }
-
-    await this.authzService.canOrThrow(authContext.user, "user", authzActions.update, {
-      ...dto,
-    })
-
-    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
-      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
-        ...dto,
-      })
     }
 
     let passwordHash

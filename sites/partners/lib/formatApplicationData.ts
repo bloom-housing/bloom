@@ -5,7 +5,7 @@ import {
   IncomePeriod,
   ApplicationSubmissionType,
   ApplicationStatus,
-  Address,
+  AddressUpdate,
   HouseholdMember,
 } from "@bloom-housing/backend-core/types"
 
@@ -18,6 +18,7 @@ import {
   FormTypes,
   YesNoAnswer,
   ApplicationTypes,
+  Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
 /*
@@ -25,10 +26,8 @@ import moment from "moment"
   This function eliminates those fields and parse to a proper format.
 */
 
-type GetAddressType = Omit<Address, "id" | "createdAt" | "updatedAt">
-
-const getAddress = (condition: boolean, addressData?: GetAddressType): GetAddressType => {
-  const blankAddress: GetAddressType = {
+const getAddress = (condition: boolean, addressData?: Address): AddressUpdate => {
+  const blankAddress: AddressUpdate = {
     street: "",
     street2: "",
     city: "",
@@ -36,7 +35,7 @@ const getAddress = (condition: boolean, addressData?: GetAddressType): GetAddres
     zipCode: "",
   }
 
-  return condition ? addressData : blankAddress
+  return condition ? (addressData as AddressUpdate) : blankAddress
 }
 
 const mapEmptyStringToNull = (value: string) => (value === "" ? null : value)

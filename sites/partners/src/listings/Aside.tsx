@@ -18,20 +18,18 @@ import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/typ
 
 type AsideProps = {
   type: AsideType
-  setStatus?: (status: ListingStatus) => void
   showCloseListingModal?: () => void
   showLotteryResultsDrawer?: () => void
-  showPublishModal?: () => void
+  submitFormWithStatus?: (confirm?: boolean, status?: ListingStatus) => void
 }
 
 type AsideType = "add" | "edit" | "details"
 
 const Aside = ({
   type,
-  setStatus,
   showCloseListingModal,
   showLotteryResultsDrawer,
-  showPublishModal,
+  submitFormWithStatus,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
 
@@ -55,6 +53,7 @@ const Aside = ({
           fullWidth
           className="bg-opacity-0"
           href={type === "add" ? "/" : `/listings/${listingId}`}
+          type="button"
         >
           {t("t.cancel")}
         </LinkButton>
@@ -65,7 +64,12 @@ const Aside = ({
       elements.push(
         <GridCell key="btn-submitNew">
           <LocalizedLink href={`/listings/${listingId}/edit`}>
-            <Button styleType={AppearanceStyleType.primary} fullWidth onClick={() => false}>
+            <Button
+              styleType={AppearanceStyleType.primary}
+              fullWidth
+              onClick={() => false}
+              type="button"
+            >
               {t("t.edit")}
             </Button>
           </LocalizedLink>
@@ -78,14 +82,21 @@ const Aside = ({
         <GridCell key="btn-publish">
           <Button
             styleType={AppearanceStyleType.success}
+            type="button"
             fullWidth
-            onClick={() => showPublishModal && showPublishModal()}
+            onClick={() => {
+              submitFormWithStatus(true, ListingStatus.active)
+            }}
           >
             {t("listings.actions.publish")}
           </Button>
         </GridCell>,
         <GridCell key="btn-draft">
-          <Button fullWidth onClick={() => setStatus(ListingStatus.pending)}>
+          <Button
+            type="button"
+            fullWidth
+            onClick={() => submitFormWithStatus(false, ListingStatus.pending)}
+          >
             {t("listings.actions.draft")}
           </Button>
         </GridCell>
@@ -97,9 +108,10 @@ const Aside = ({
         <GridCell key="btn-save">
           <Button
             styleType={AppearanceStyleType.primary}
+            type="button"
             fullWidth
             onClick={() => {
-              setStatus(listing.status)
+              submitFormWithStatus(false, listing.status)
             }}
           >
             {t("t.saveExit")}
@@ -114,7 +126,9 @@ const Aside = ({
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
-              onClick={() => showPublishModal && showPublishModal()}
+              onClick={() => {
+                submitFormWithStatus(true, ListingStatus.active)
+              }}
             >
               {t("listings.actions.publish")}
             </Button>
@@ -137,7 +151,8 @@ const Aside = ({
             <Button
               styleType={AppearanceStyleType.alert}
               fullWidth
-              onClick={() => setStatus(ListingStatus.pending)}
+              type="button"
+              onClick={() => submitFormWithStatus(false, ListingStatus.pending)}
               border={AppearanceBorderType.outlined}
             >
               {t("listings.actions.unpublish")}
@@ -185,7 +200,7 @@ const Aside = ({
       elements.push(
         <GridCell key="btn-preview">
           <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
-            <Button fullWidth onClick={() => false}>
+            <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
             </Button>
           </a>
@@ -219,10 +234,11 @@ const Aside = ({
   }, [
     listing,
     listingId,
-    setStatus,
     showCloseListingModal,
     showLotteryResultsDrawer,
-    showPublishModal,
+    submitFormWithStatus,
+    showCloseListingModal,
+    showLotteryResultsDrawer,
     type,
   ])
 

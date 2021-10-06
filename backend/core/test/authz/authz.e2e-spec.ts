@@ -106,7 +106,7 @@ describe("Authz", () => {
 
   describe("user", () => {
     it(`should not allow anonymous user to GET to get any user profile`, async () => {
-      await supertest(app.getHttpServer()).get(userEndpoint).expect(403)
+      await supertest(app.getHttpServer()).get(userEndpoint).expect(401)
     })
 
     it(`should allow a logged in user to GET to get any user profile`, async () => {
@@ -225,7 +225,7 @@ describe("Authz", () => {
 
       expect(profileRes.body.roles).toBe(null)
       await supertest(app.getHttpServer())
-        .put(`/user/${profileRes.body.id}`)
+        .put(`/userProfile/${profileRes.body.id}`)
         .send({ ...profileRes.body, roles: { isAdmin: true, isPartner: false } })
         .set(...setAuthorization(userAccessToken))
         .expect(200)

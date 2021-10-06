@@ -25,6 +25,13 @@ export class AuthzGuard implements CanActivate {
       this.reflector.get<string>("authz_action", context.getHandler()) ||
       httpMethodsToAction[req.method]
 
-    return this.authzService.can(authUser, type, action)
+    let resource
+    if (req.params.id) {
+      // NOTE: implicit assumption that if request.params contains an ID it also means that body contains one too and it should be the same
+      //  This prevents a security hole where user specifies params.id different than dto.id to pass authorization but actually edit a different resource
+      resource = { id: req.body.id }
+    }
+
+    return this.authzService.can(authUser, type, action, resource)
   }
 }

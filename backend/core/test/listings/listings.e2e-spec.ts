@@ -3,7 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
-import { ListingDto, ListingUpdateDto } from "../../src/listings/dto/listing.dto"
+import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
@@ -17,6 +17,7 @@ import { ListingEventCreateDto } from "../../src/listings/dto/listing-event.dto"
 import { ListingEventType } from "../../src/listings/types/listing-event-type-enum"
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
+import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -242,6 +243,139 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.id).toBeDefined()
     expect(modifiedListing.events[0].file.fileId).toBe(listingEvent.file.fileId)
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
+  })
+
+  // TODO: enable this test suite once AMI values are added to Bloom seeds
+  describe.skip("AMI Filter", () => {
+    it("should return listings with AMI >= the filter value", async () => {
+      const paramsWithEqualAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "60",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithEqualAmi))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+
+      const paramsWithLessAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "59",
+          },
+        ],
+      }
+      const res2 = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithLessAmi))
+        .expect(200)
+      expect(res2.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should not return listings with AMI < the filter value", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "61",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in Units Summary, even if Listings.amiPercentageMax field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 30 Listing With 10 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should not return listings with matching AMI in Listings.amiPercentageMax field, if Unit Summary field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 10 Listing With 30 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in the Listings.amiPercentageMax field, if the Unit Summary field is empty", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "19",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary Without And Listing With 20 Ami Percentage",
+          }),
+        ])
+      )
+    })
   })
 
   it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
