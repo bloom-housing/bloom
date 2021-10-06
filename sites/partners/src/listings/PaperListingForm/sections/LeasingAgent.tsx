@@ -74,6 +74,7 @@ const LeasingAgent = () => {
             fullWidth={true}
             placeholder={t("leasingAgent.officeHoursPlaceholder")}
             register={register}
+            maxLength={150}
           />
         </GridSection>
       </GridSection>
