@@ -2776,9 +2776,6 @@ export interface ApplicationFlaggedSet {
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
-  totalFlagged: number
-
-  /**  */
   currentPage: number
 
   /**  */
@@ -3897,6 +3894,9 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -4035,6 +4035,21 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
+
+  /**  */
+  availability?: EnumListingFilterParamsAvailability
+
+  /**  */
+  seniorHousing?: boolean
+
+  /**  */
+  minRent?: number
+
+  /**  */
+  maxRent?: number
+
+  /**  */
+  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4132,6 +4147,55 @@ export interface UnitsSummarized {
   hmi: HMI
 }
 
+export interface Asset {
+  /**  */
+  fileId: string
+
+  /**  */
+  label: string
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
+export interface ListingEvent {
+  /**  */
+  type: ListingEventType
+
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  startTime?: Date
+
+  /**  */
+  endTime?: Date
+
+  /**  */
+  url?: string
+
+  /**  */
+  note?: string
+
+  /**  */
+  label?: string
+
+  /**  */
+  file?: Asset
+}
+
 export interface PreferenceLink {
   /**  */
   title: string
@@ -4193,9 +4257,6 @@ export interface Preference {
   updatedAt: Date
 
   /**  */
-  ordinal?: number
-
-  /**  */
   title?: string
 
   /**  */
@@ -4206,78 +4267,17 @@ export interface Preference {
 
   /**  */
   formMetadata?: FormMetadata
-
-  /**  */
-  page?: number
-}
-
-export interface Asset {
-  /**  */
-  fileId: string
-
-  /**  */
-  label: string
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-}
-
-export interface ListingEvent {
-  /**  */
-  type: ListingEventType
-
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  startTime?: Date
-
-  /**  */
-  endTime?: Date
-
-  /**  */
-  url?: string
-
-  /**  */
-  note?: string
-
-  /**  */
-  label?: string
-
-  /**  */
-  file?: Asset
 }
 
 export interface ListingPreference {
   /**  */
-  preference: Id
-
-  /**  */
-  listingId: string
-
-  /**  */
-  preferenceId: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
+  preference: Preference
 
   /**  */
   ordinal?: number
+
+  /**  */
+  page?: number
 }
 
 export interface ReservedCommunityType {
@@ -4493,9 +4493,6 @@ export interface Listing {
 
   /**  */
   applicationMethods: ApplicationMethod[]
-
-  /**  */
-  preferences: Preference[]
 
   /**  */
   applicationAddress?: CombinedApplicationAddressTypes
@@ -4737,29 +4734,6 @@ export interface PaginatedListing {
   meta: PaginationMeta
 }
 
-export interface PreferenceCreate {
-  /**  */
-  links?: PreferenceLink[]
-
-  /**  */
-  ordinal?: number
-
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  page?: number
-}
-
 export interface ListingEventCreate {
   /**  */
   type: ListingEventType
@@ -4903,6 +4877,17 @@ export interface UnitsSummaryCreate {
   unitType: Id
 }
 
+export interface ListingPreferenceUpdate {
+  /**  */
+  preference: Id
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  page?: number
+}
+
 export interface ListingCreate {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4918,9 +4903,6 @@ export interface ListingCreate {
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
-
-  /**  */
-  preferences: PreferenceCreate[]
 
   /**  */
   applicationAddress?: CombinedApplicationAddressTypes
@@ -5005,6 +4987,9 @@ export interface ListingCreate {
 
   /**  */
   unitsSummary?: UnitsSummaryCreate[]
+
+  /**  */
+  listingPreferences: ListingPreferenceUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5136,36 +5121,7 @@ export interface ListingCreate {
   customMapPin?: boolean
 
   /**  */
-  listingPreferences: ListingPreference[]
-
-  /**  */
   countyCode?: string
-}
-
-export interface PreferenceUpdate {
-  /**  */
-  links?: PreferenceLink[]
-
-  /**  */
-  ordinal?: number
-
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  page?: number
-
-  /**  */
-  id: string
 }
 
 export interface ListingEventUpdate {
@@ -5367,9 +5323,6 @@ export interface ListingUpdate {
   applicationMethods: ApplicationMethodUpdate[]
 
   /**  */
-  preferences: PreferenceUpdate[]
-
-  /**  */
   applicationAddress?: CombinedApplicationAddressTypes
 
   /**  */
@@ -5452,6 +5405,9 @@ export interface ListingUpdate {
 
   /**  */
   unitsSummary?: UnitsSummaryUpdate[]
+
+  /**  */
+  listingPreferences: ListingPreferenceUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5583,10 +5539,44 @@ export interface ListingUpdate {
   customMapPin?: boolean
 
   /**  */
-  listingPreferences: ListingPreference[]
+  countyCode?: string
+}
+
+export interface PreferenceCreate {
+  /**  */
+  links?: PreferenceLink[]
 
   /**  */
-  countyCode?: string
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface PreferenceUpdate {
+  /**  */
+  links?: PreferenceLink[]
+
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+
+  /**  */
+  id: string
 }
 
 export interface Property {
@@ -5969,6 +5959,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {

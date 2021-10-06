@@ -10,7 +10,13 @@ import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
-import { defaultLeasingAgents } from "./seeds/listings/shared"
+import {
+  defaultLeasingAgents,
+  getDisplaceePreference,
+  getHopwaPreference,
+  getLiveWorkPreference,
+  getPbvPreference,
+} from "./seeds/listings/shared"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
@@ -31,6 +37,7 @@ import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
+import { Preference } from "./preferences/entities/preference.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -88,6 +95,18 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
+export async function createPreferences(app: INestApplicationContext) {
+  const preferencesRepository = await app.get<Repository<Preference>>(
+    getRepositoryToken(Preference)
+  )
+  return preferencesRepository.save([
+    getLiveWorkPreference(),
+    getPbvPreference(),
+    getHopwaPreference(),
+    getDisplaceePreference(),
+  ])
+}
+
 const seedListings = async (
   app: INestApplicationContext,
   rolesRepo: Repository<UserRoles>,
@@ -95,7 +114,7 @@ const seedListings = async (
 ) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
-
+  await createPreferences(app)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
   const applicationMethodsService = await app.resolve<ApplicationMethodsService>(

@@ -2,7 +2,6 @@ import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import moment from "moment"
-import { PreferenceDto } from "../../preferences/dto/preference.dto"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -32,7 +31,6 @@ export class ListingDto extends OmitType(Listing, [
   "leasingAgents",
   "leasingAgentAddress",
   "listingPreferences",
-  "preferences",
   "property",
   "reservedCommunityType",
   "result",
@@ -43,12 +41,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceDto)
-  preferences: PreferenceDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

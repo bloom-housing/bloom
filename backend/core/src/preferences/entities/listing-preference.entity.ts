@@ -7,11 +7,14 @@ import { Listing } from "../../listings/entities/listing.entity"
 
 @Entity({ name: "listing_preferences" })
 export class ListingPreference {
-  @ManyToOne(() => Listing, (listing) => listing.listingPreferences, { primary: true })
+  @ManyToOne(() => Listing, (listing) => listing.listingPreferences, {
+    primary: true,
+    orphanedRowAction: "delete",
+  })
   @Type(() => Listing)
   listing: Listing
 
-  @ManyToOne(() => Preference, (preference) => preference.listingPreferences, { primary: true })
+  @ManyToOne(() => Preference, (preference) => preference.listingPreferences, { primary: true, eager: true })
   @Expose()
   @Type(() => Preference)
   preference: Preference
@@ -21,4 +24,10 @@ export class ListingPreference {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   ordinal?: number | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  page?: number | null
 }

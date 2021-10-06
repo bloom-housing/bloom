@@ -188,7 +188,7 @@ export class ListingsService {
     const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
-        "preferences.ordinal": "ASC",
+        "listingPreferences.ordinal": "ASC",
       })
       .getOne()
     if (!result) {

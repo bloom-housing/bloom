@@ -13,7 +13,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
-import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
@@ -73,12 +72,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalApplicationSubmissionNotes?: string | null
-
-  @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Preference)
-  preferences: Preference[]
 
   @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.listing, {
     cascade: true,

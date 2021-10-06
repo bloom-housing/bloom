@@ -10,7 +10,6 @@ import {
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { IdDto } from "../../shared/dto/id.dto"
-import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ListingEventCreateDto } from "./listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
@@ -18,6 +17,7 @@ import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { ListingPreferenceUpdateDto } from "../../preferences/dto/listing-preference-update.dto"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -25,7 +25,6 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "updatedAt",
   "applicationMethods",
   "buildingSelectionCriteriaFile",
-  "preferences",
   "events",
   "image",
   "leasingAgentAddress",
@@ -53,18 +52,13 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "result",
   "unitsSummary",
   "referralApplication",
+  "listingPreferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodCreateDto)
   applicationMethods: ApplicationMethodCreateDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceCreateDto)
-  preferences: PreferenceCreateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -218,4 +212,10 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryCreateDto)
   unitsSummary?: UnitsSummaryCreateDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingPreferenceUpdateDto)
+  listingPreferences: ListingPreferenceUpdateDto[]
 }

@@ -801,7 +801,15 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       ...tritonListing,
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference()],
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 2,
+          page: 1,
+        },
+      ],
       events: [],
     }
 
