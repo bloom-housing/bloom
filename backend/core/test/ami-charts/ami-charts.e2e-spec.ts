@@ -58,7 +58,7 @@ describe("AmiCharts", () => {
   })
 
   it(`should create and return a new ami chart`, async () => {
-    const jurisdiction = (await jurisdictionRepository.find({name: "Alameda"}))[0]
+    const jurisdiction = (await jurisdictionRepository.find({ name: "Alameda" }))[0]
     const amiChartCreateDto: AmiChartCreateDto = {
       items: [
         {
@@ -68,7 +68,7 @@ describe("AmiCharts", () => {
         },
       ],
       name: "testAmiChart",
-      jurisdiction
+      jurisdiction,
     }
     const res = await supertest(app.getHttpServer())
       .post(`/amiCharts`)
