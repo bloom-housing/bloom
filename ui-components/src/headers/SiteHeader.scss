@@ -108,6 +108,7 @@
         }
 
         .logo {
+          @apply cursor-pointer;
           @apply text-black;
           @apply block;
           @apply text-center;
@@ -272,14 +273,19 @@
           }
         }
 
+        .desktop-header-button {
+          @apply pt-7;
+          border-bottom: 4px solid transparent;
+        }
+
         .navbar-dropdown-container {
           background-color: white;
           position: absolute;
-          margin-left: -123px;
+          margin-left: -124px;
           margin-top: 35px;
           @apply border-gray-450;
           @apply border;
-          width: 143px;
+          width: 144px;
           .navbar-dropdown {
             display: flex;
             flex-direction: column;
@@ -295,6 +301,7 @@
               @apply pr-3;
               @apply border-t;
               @apply border-gray-450;
+              @apply normal-case;
               font-size: 14px;
               text-align: left;
               &:hover,

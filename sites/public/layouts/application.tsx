@@ -13,7 +13,6 @@ import {
   AuthContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { localizeLink } from "../lib/helpers"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -28,17 +27,13 @@ const Layout = (props) => {
   const menuLinks: MenuLink[] = [
     {
       title: t("nav.listings"),
-      onClick: () => {
-        localizeLink(router, "/listings", router.locale)
-      },
+      href: "/listings",
     },
   ]
   if (process.env.housingCounselorServiceUrl) {
     menuLinks.push({
       title: t("nav.getAssistance"),
-      onClick: () => {
-        localizeLink(router, "/housing-counselors", router.locale)
-      },
+      href: "/housing-counselors",
     })
   }
   if (profile) {
@@ -47,27 +42,21 @@ const Layout = (props) => {
       subMenuLinks: [
         {
           title: t("nav.myDashboard"),
-          onClick: () => {
-            localizeLink(router, "/account/dashboard", router.locale)
-          },
+          href: "/account/dashboard",
         },
         {
           title: t("nav.myApplications"),
-          onClick: () => {
-            localizeLink(router, "/account/applications", router.locale)
-          },
+          href: "/account/applications",
         },
         {
           title: t("nav.accountSettings"),
-          onClick: () => {
-            localizeLink(router, "/account/edit", router.locale)
-          },
+          href: "/account/edit",
         },
         {
           title: t("nav.signOut"),
-          onClick: () => {
+          onClick: async () => {
             setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
-            localizeLink(router, "/sign-in", router.locale)
+            await router.push("/sign-in")
             signOut()
           },
         },
@@ -76,9 +65,7 @@ const Layout = (props) => {
   } else {
     menuLinks.push({
       title: t("nav.signIn"),
-      onClick: () => {
-        localizeLink(router, "/sign-in", router.locale)
-      },
+      href: "/sign-in",
     })
   }
 
@@ -90,9 +77,7 @@ const Layout = (props) => {
         </Head>
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
-          homeOnClick={() => {
-            localizeLink(router, "/", router.locale)
-          }}
+          homeURL="/"
           notice={
             <a href="" target="_blank" className={"cursor-pointer"}>
               {t("nav.getFeedback")}

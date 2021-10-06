@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { CSSTransition } from "react-transition-group"
 import { LanguageNav, LangItem } from "../navigation/LanguageNav"
 import { Icon } from "../icons/Icon"
@@ -6,6 +6,7 @@ import { Button } from "../actions/Button"
 import { AppearanceSizeType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
 import "./SiteHeader.scss"
+import { NavigationContext } from "../config/NavigationContext"
 
 type LogoWidth = "slim" | "medium" | "wide"
 
@@ -20,8 +21,7 @@ export interface MenuLink {
 
 export interface SiteHeaderProps {
   dropdownItemClassName?: string
-  homeURL?: string
-  homeOnClick?: () => void
+  homeURL: string
   imageOnly?: boolean
   languages?: LangItem[]
   logoClass?: string
@@ -43,6 +43,8 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const [isDesktop, setIsDesktop] = useState(true)
   const [mobileDrawer, setMobileDrawer] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
+
+  const { LinkComponent } = useContext(NavigationContext)
 
   const DESKTOP_MIN_WIDTH = 767 // @screen md
   // Enables toggling off navbar links when entering mobile
@@ -71,10 +73,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
     return ""
   }
 
-  const menuAction = (menuHref: string | undefined, menuOnClick?: () => void) => {
-    if (menuHref) {
-      window.location.href = menuHref
-    }
+  const menuAction = (menuOnClick?: () => void) => {
     if (menuOnClick) {
       menuOnClick()
     }
@@ -86,32 +85,65 @@ const SiteHeader = (props: SiteHeaderProps) => {
     buttonClassName: string,
     parentMenu?: string
   ) => {
-    return options.map((option, index) => {
+    const dropdownOptionKeyDown = (event: React.KeyboardEvent<HTMLElement>, index: number) => {
+      // Close menu when tabbing out backwards
+      if (event.shiftKey && event.key === "Tab" && isDesktop && index === 0 && parentMenu) {
+        changeMenuShow(parentMenu, activeMenus, setActiveMenus)
+      }
+      // Close menu when tabbing out forwards
+      if (event.key === "Tab" && isDesktop && index === options.length - 1 && parentMenu) {
+        changeMenuShow(parentMenu, activeMenus, setActiveMenus)
+      }
+    }
+
+    const dropdownOptionContent = (option: MenuLink) => {
       return (
-        <button
-          className={`${buttonClassName} ${
-            props.dropdownItemClassName ? props.dropdownItemClassName : ""
-          }`}
-          key={`${option.title}-${index}`}
-          onClick={() => {
-            menuAction(option.href, option.onClick)
-          }}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              menuAction(option.href, option.onClick)
-            }
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Tab" && isDesktop && index === options.length - 1 && parentMenu) {
-              changeMenuShow(parentMenu, activeMenus, setActiveMenus)
-            }
-          }}
-        >
+        <>
           {option.iconSrc && isDesktop && (
             <img src={option.iconSrc} className={option.iconClassName} />
           )}
           {option.title}
-        </button>
+        </>
+      )
+    }
+
+    const dropdownOptionClassname = `${buttonClassName} ${
+      props.dropdownItemClassName ? props.dropdownItemClassName : ""
+    }`
+
+    return options.map((option, index) => {
+      return (
+        <div key={index}>
+          {option.href ? (
+            <LinkComponent
+              className={dropdownOptionClassname}
+              key={`${option.title}-${index}`}
+              href={option.href}
+              onKeyDown={(event) => {
+                dropdownOptionKeyDown(event, index)
+              }}
+            >
+              {dropdownOptionContent(option)}
+            </LinkComponent>
+          ) : (
+            <button
+              tabIndex={0}
+              className={dropdownOptionClassname}
+              key={`${option.title}-${index}`}
+              onClick={() => {
+                menuAction(option.onClick)
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  menuAction(option.onClick)
+                }
+                dropdownOptionKeyDown(event, index)
+              }}
+            >
+              {dropdownOptionContent(option)}
+            </button>
+          )}
+        </div>
       )
     })
   }
@@ -148,9 +180,15 @@ const SiteHeader = (props: SiteHeaderProps) => {
               <div key={`${menuLink.title}-${index}`}>
                 <button
                   className={dropdownOptionClassName}
-                  onClick={() =>
+                  onClick={() => {
                     changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
-                  }
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault()
+                      changeMenuShow(menuLink.title, activeMobileMenus, setActiveMobileMenus)
+                    }
+                  }}
                 >
                   {menuLink.title}
                   <Icon size="small" symbol="arrowDown" fill={"#555555"} className={"pl-2"} />
@@ -188,6 +226,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
             <button
               className={"navbar-mobile-drawer-close-row"}
               onClick={() => setMobileDrawer(false)}
+              onKeyPress={(event) => {
+                if (event.key === "Enter") {
+                  setMobileDrawer(false)
+                }
+              }}
               aria-label={t("t.close")}
             >
               <Icon size="small" symbol="arrowForward" fill={"#ffffff"} className={"pl-2"} />
@@ -242,69 +285,93 @@ const SiteHeader = (props: SiteHeaderProps) => {
             menuContent = <div key={menuLink.title}>{menuLink.title}</div>
           }
 
-          return !menuLink.subMenuLinks ? (
-            <span
-              onScroll={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-              className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
-              tabIndex={0}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  menuAction(menuLink.href, menuLink.onClick)
-                }
-              }}
-              onClick={() => {
-                menuAction(menuLink.href, menuLink.onClick)
-              }}
-              key={`${menuLink.title}-${index}`}
-            >
-              {menuContent}
-            </span>
-          ) : (
-            <span
-              className={`navbar-link navbar-dropdown-title`}
-              tabIndex={0}
-              key={`${menuLink.title}-${index}`}
-              onKeyPress={(event) => {
-                if (event.key === "Enter") {
-                  changeMenuShow(menuLink.title, activeMenus, setActiveMenus)
-                }
-              }}
-              onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
-              onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
-            >
-              {menuContent}
-            </span>
-          )
+          if (!menuLink.subMenuLinks) {
+            if (menuLink.href) {
+              return (
+                <LinkComponent
+                  className={`navbar-link ${props.menuItemClassName && props.menuItemClassName}`}
+                  href={menuLink.href}
+                  key={`${menuLink.title}-${index}`}
+                >
+                  {menuContent}
+                </LinkComponent>
+              )
+            } else {
+              return (
+                <button
+                  className={`navbar-link ${
+                    props.menuItemClassName && props.menuItemClassName
+                  } desktop-header-button`}
+                  tabIndex={0}
+                  onClick={() => {
+                    menuAction(menuLink.onClick)
+                  }}
+                  onKeyPress={(event) => {
+                    if (event.key === "Enter") {
+                      menuAction(menuLink.onClick)
+                    }
+                  }}
+                  key={`${menuLink.title}-${index}`}
+                >
+                  {menuContent}
+                </button>
+              )
+            }
+          } else {
+            return (
+              <span
+                className={`navbar-link navbar-dropdown-title`}
+                tabIndex={0}
+                key={`${menuLink.title}-${index}`}
+                onKeyPress={(event) => {
+                  if (event.key === "Enter") {
+                    changeMenuShow(menuLink.title, activeMenus, setActiveMenus)
+                  }
+                }}
+                onMouseEnter={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+                onMouseLeave={() => changeMenuShow(menuLink.title, activeMenus, setActiveMenus)}
+              >
+                {menuContent}
+              </span>
+            )
+          }
         })}
       </>
     )
   }
 
   const getMobileHeader = () => {
+    const mobileHeaderAction = () => {
+      if (!props.mobileDrawer) {
+        setMobileMenu(!mobileMenu)
+      } else {
+        setMobileDrawer(!mobileDrawer)
+      }
+      setActiveMobileMenus([])
+    }
+
     return (
       <>
         {props.mobileText ? (
-          <div
+          <button
             className={"flex flex-row items-center justify-center"}
             onClick={() => {
-              if (!props.mobileDrawer) {
-                setMobileMenu(!mobileMenu)
-              } else {
-                setMobileDrawer(!mobileDrawer)
+              mobileHeaderAction()
+            }}
+            onKeyPress={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault()
+                mobileHeaderAction()
               }
-              setActiveMobileMenus([])
             }}
           >
-            <button className={"pr-2 text-tiny text-primary uppercase"}>Menu</button>
+            <div className={"pr-2 text-tiny text-primary uppercase"}>{t("t.menu")}</div>
             <Icon
               symbol={mobileMenu ? "closeSmall" : "hamburger"}
               size={"base"}
               className={"pr-3"}
             />
-          </div>
+          </button>
         ) : (
           <Button
             size={AppearanceSizeType.small}
@@ -331,14 +398,12 @@ const SiteHeader = (props: SiteHeaderProps) => {
   const getLogo = () => {
     return (
       <div className={`navbar-logo`}>
-        <button
+        <LinkComponent
           className={`logo ${props.logoClass && props.logoClass} ${getLogoWidthClass()} ${
             props.logoWidth && "navbar-custom-width"
           }`}
-          aria-label="homepage"
-          onClick={() => {
-            menuAction(props.homeURL, props.homeOnClick)
-          }}
+          href={props.homeURL}
+          aria-label={t("t.homePage")}
         >
           <div className={`logo-content ${props.imageOnly && "navbar-image-only-container"}`}>
             <img
@@ -348,7 +413,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
             />
             {props.title && <div className="logo__title">{props.title}</div>}
           </div>
-        </button>
+        </LinkComponent>
       </div>
     )
   }

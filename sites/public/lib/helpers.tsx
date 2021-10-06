@@ -13,7 +13,6 @@ import {
   getSummariesTable,
   StatusBarType,
 } from "@bloom-housing/ui-components"
-import { NextRouter } from "next/router"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -124,11 +123,5 @@ export const getListings = (listings) => {
         }}
       />
     )
-  })
-}
-
-export const localizeLink = (router: NextRouter, link: string, locale?: string) => {
-  void router.push(link, link, {
-    locale: locale || "en",
   })
 }
