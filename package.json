@@ -86,7 +86,7 @@
     "hooks": {
       "pre-commit": "echo 'Linting...' && lint-staged",
       "commit-msg": "echo 'Verifying commit message...' && commitlint -E HUSKY_GIT_PARAMS",
-      "prepare-commit-msg": "echo 'Building commit message...' && exec < /dev/tty && git cz --hook || true"
+      "prepare-commit-msg": "echo 'Building commit message...' && exec < /dev/tty && git cz --hook '$1' '$2' '$3' || true"
     }
   },
   "lint-staged": {
