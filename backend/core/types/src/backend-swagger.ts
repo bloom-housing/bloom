@@ -459,10 +459,6 @@ export class ApplicationsService {
       order?: string
       /**  */
       markedAsDuplicate?: boolean
-      /**  */
-      includeHeaders?: boolean
-      /**  */
-      includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -479,8 +475,6 @@ export class ApplicationsService {
         orderBy: params["orderBy"],
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
-        includeHeaders: params["includeHeaders"],
-        includeDemographics: params["includeDemographics"],
       }
       let data = null
 
@@ -2700,9 +2694,6 @@ export interface ApplicationFlaggedSet {
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
-  totalFlagged: number
-
-  /**  */
   currentPage: number
 
   /**  */
@@ -3835,6 +3826,9 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -3912,7 +3906,7 @@ export interface UserProfileUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3969,6 +3963,9 @@ export interface ListingFilterParams {
   zipcode?: string
 
   /**  */
+  leasingAgents?: string
+
+  /**  */
   availability?: EnumListingFilterParamsAvailability
 
   /**  */
@@ -3981,10 +3978,7 @@ export interface ListingFilterParams {
   maxRent?: number
 
   /**  */
-  ami?: number
-
-  /**  */
-  leasingAgents?: string
+  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -5876,6 +5870,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsComparison {

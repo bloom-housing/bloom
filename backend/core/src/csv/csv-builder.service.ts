@@ -14,9 +14,9 @@ export class CsvBuilder {
   }
 
   private setHeader(key: string, header: string, index: number): string {
-    let newKey = header.length ? `${header} ${key}` : key
+    let newKey = header
     if (index !== 0) {
-      newKey += ` ${index}`
+      newKey += ` (${index})`
     }
     if (this.headers[newKey] === undefined) {
       this.headers[newKey] = 1
@@ -30,15 +30,15 @@ export class CsvBuilder {
       val.forEach((val2, i) => {
         // preferences are a special case
         if (key === "preferences") {
-          val2.options.forEach((preference, j) => {
+          val2.options.forEach((preference) => {
             this.parseApplication(
               preference.key,
               preference.checked ? "Yes" : "No",
-              `${key} ${val2.key}`
+              `${header} ${val2.key} ${preference.key}`
             )
           })
         } else {
-          this.parseApplication(key, val2, `${header} ${key}`, i + 1)
+          this.parseApplication(key, val2, header, i + 1)
         }
       })
     } else if (val instanceof Object) {
@@ -48,7 +48,12 @@ export class CsvBuilder {
         this.data.push({ header: newKey, val: dayjs(val).format("DD-MM-YYYY h:mm:ss A") })
       } else {
         for (let i = 0, keys = Object.keys(val); i < keys.length; i++) {
-          this.parseApplication(keys[i], val[keys[i]], key)
+          this.parseApplication(
+            keys[i],
+            val[keys[i]],
+            header.length ? `${header} ${keys[i]}` : keys[i],
+            index
+          )
         }
       }
     } else {
@@ -58,8 +63,11 @@ export class CsvBuilder {
       if (typeof val === "boolean") {
         val = val ? "Yes" : "No"
       }
-
-      this.data.push({ header: newKey, val })
+      // use JSON.stringify to escape double and single quotes
+      this.data.push({
+        header: newKey,
+        val: val !== undefined && val !== null ? JSON.stringify(val) : "",
+      })
     }
   }
 
@@ -116,6 +124,7 @@ export class CsvBuilder {
       dataString += row.join(",")
       dataString += "\n"
     })
+
     return dataString
   }
 }
