@@ -602,6 +602,10 @@
   "region": {
     "name": "當地地區"
   },
+  "progressNav": {
+    "srHeading": "进度",
+    "current": "当前步骤："
+  },
   "states": {
     "AL": "Alabama（阿拉巴馬州）",
     "AK": "Alaska（阿拉斯加州）",
