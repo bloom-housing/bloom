@@ -1,8 +1,8 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDefaultAmiChart, getDefaultUnits, getDefaultProperty } from "./shared"
 import { tritonAmiChart } from "./listing-triton-seed"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
   async seed() {

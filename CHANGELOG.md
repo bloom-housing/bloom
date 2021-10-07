@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. The format 
   - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
   - ** Breaking Change**: Add `jurisdiction` relation to `ReservedCommunitType` entity ([#1889](https://github.com/bloom-housing/bloom/pull/1889))
   - Added new userProfile resource and endpoint `PUT /userProfile/:id` suited specifically for users updating their own profiles ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
+  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
 
 - Changed:
   - ** Breaking Change**: Endpoint `PUT /user/:id` is admin only now, because it allows edits over entire `user` table ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
