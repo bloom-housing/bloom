@@ -6,7 +6,7 @@ import { getConnection } from "typeorm"
 import { ConfigService } from "@nestjs/config"
 import dbOptions = require("../ormconfig")
 
-// Testing backend 2
+// Testing backend 3
 let app
 async function bootstrap() {
   app = await NestFactory.create(AppModule.register(dbOptions))
