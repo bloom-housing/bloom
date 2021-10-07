@@ -48,6 +48,7 @@
     "publish:backend": "cd backend/core && lerna publish from-package --yes",
     "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:all": "yarn publish:ui-components && yarn publish:backend",
+    "publish:prerelease:ui-components": "cd ui-components && lerna version --yes --no-commit-hooks --ignore-scripts --preid",
     "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
   "devDependencies": {
