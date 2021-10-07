@@ -47,8 +47,8 @@
     "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:backend": "cd backend/core && lerna publish from-package --yes",
     "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts",
-    "publish:all": "HUSKY=0 yarn publish:ui-components && yarn publish:backend",
-    "version:all": "HUSKY=0 yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
+    "publish:all": "yarn publish:ui-components && yarn publish:backend",
+    "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -84,8 +84,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'Linting...' && lint-staged",
-      "commit-msg": "echo 'Verifying commit message...' && commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "echo '\n(1) Linting...\n----------' && lint-staged",
+      "commit-msg": "echo '\n(2) Verifying conventional commit format... \n   (If this fails, install commitizen and commit with 'git cz' to automate the formatting!)\n----------' && commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {

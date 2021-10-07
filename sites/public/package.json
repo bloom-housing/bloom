@@ -5,7 +5,7 @@
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
-  "private": false,
+  "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect=9230' next -p ${NEXTJS_PORT:-3000}",
     "build": "next build",
