@@ -1,7 +1,7 @@
 {
   "name": "@bloom-housing/public",
   "author": "Sean Albert <sean.albert@exygy.com>",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
