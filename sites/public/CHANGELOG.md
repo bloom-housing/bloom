@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.1.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@8.0.5...@bloom-housing/public@8.1.0) (2021-10-07)
+
+
+### Features
+
+* public feature ([7e7c2c7](https://github.com/bloom-housing/bloom/commit/7e7c2c7573afe7a06298f6e86d3fff7d5db36ba7))
+
+
+
+
+
 ## [8.0.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@8.0.5-alpha.2...@bloom-housing/public@8.0.5) (2021-10-07)
 
 **Note:** Version bump only for package @bloom-housing/public
