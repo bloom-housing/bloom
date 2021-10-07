@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common"
 
 @Injectable()
 export class CsvEncoder {
-  public encode(input: Array<Array<string>>, includeHeaders?: boolean): string {
+  public encode(input: Array<Array<string>>): string {
     let output = ""
 
     if (input && !input.length) {
@@ -11,7 +11,7 @@ export class CsvEncoder {
     this._validateInput(input)
 
     const headers = input.shift()
-    if (includeHeaders && headers && Array.isArray(headers) && headers.length) {
+    if (headers && Array.isArray(headers) && headers.length) {
       output += this._encode(headers)
       output += "\n"
     }

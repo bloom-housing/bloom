@@ -134,7 +134,6 @@ const ApplicationsList = () => {
     try {
       const content = await applicationsService.listAsCsv({
         listingId,
-        includeHeaders: true,
       })
 
       const now = new Date()
