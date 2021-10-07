@@ -50,5 +50,6 @@
     "sass-loader": "^10.0.3",
     "typescript": "^3.9.7",
     "webpack": "^4.44.2"
-  }
+  },
+  "gitHead": "e2a4f2cf4e2d7314550e030a3f4b8a67c46ee30d"
 }
