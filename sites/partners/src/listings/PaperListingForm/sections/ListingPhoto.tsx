@@ -146,6 +146,11 @@ const ListingPhoto = () => {
         title={t("listings.sections.photoTitle")}
         description={t("listings.sections.photoSubtitle")}
       >
+        {
+          <span className={"text-tiny text-gray-800 block mb-2"}>
+            {t("listings.sections.photoTitle")}
+          </span>
+        }
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhoto?.fileId && listingFormPhoto.fileId != "" ? (

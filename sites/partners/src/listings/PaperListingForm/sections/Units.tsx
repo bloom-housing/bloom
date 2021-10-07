@@ -154,6 +154,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             />
           </GridCell>
         </GridSection>
+        <span className={"text-tiny text-gray-800 block mb-2"}>{t("listings.units")}</span>
         <div className="bg-gray-300 px-4 py-5">
           {!!units.length && (
             <div className="mb-5">
