@@ -20,6 +20,7 @@ export const SanMateoHUD2019: AmiChart = {
     updatedAt: new Date(),
     name: "Alameda",
     languages: [EnumJurisdictionLanguages.en],
+    preferences: [],
   },
   items: [
     {

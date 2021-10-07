@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +14,7 @@ import { FormMetadata } from "../../applications/types/form-metadata/form-metada
 import { PreferenceLink } from "../types/preference-link"
 import { ApiProperty } from "@nestjs/swagger"
 import { ListingPreference } from "./listing-preference.entity"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity({ name: "preferences" })
 class Preference {
@@ -72,6 +74,12 @@ class Preference {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => FormMetadata)
   formMetadata?: FormMetadata
+
+  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.preferences)
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Jurisdiction)
+  jurisdictions: Jurisdiction[]
 }
 
 export { Preference as default, Preference }

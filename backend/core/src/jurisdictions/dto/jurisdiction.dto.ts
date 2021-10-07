@@ -1,36 +1,15 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID } from "class-validator"
+import { ArrayMaxSize, IsArray, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
+import { IdDto } from "../../shared/dto/id.dto"
 
-export class JurisdictionDto extends OmitType(Jurisdiction, [] as const) {}
-
-export class JurisdictionCreateDto extends OmitType(JurisdictionDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-] as const) {}
-
-export class JurisdictionUpdateDto extends OmitType(JurisdictionDto, [
-  "id",
-  "createdAt",
-  "updatedAt",
-] as const) {
+export class JurisdictionDto extends OmitType(Jurisdiction, ["preferences"] as const) {
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  id?: string
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  createdAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
-  updatedAt?: Date
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(1024, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  preferences: IdDto[]
 }

@@ -14,7 +14,10 @@ export class ListingPreference {
   @Type(() => Listing)
   listing: Listing
 
-  @ManyToOne(() => Preference, (preference) => preference.listingPreferences, { primary: true, eager: true })
+  @ManyToOne(() => Preference, (preference) => preference.listingPreferences, {
+    primary: true,
+    eager: true,
+  })
   @Expose()
   @Type(() => Preference)
   preference: Preference

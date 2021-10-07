@@ -17,6 +17,7 @@ const amiChart: AmiChart = {
     updatedAt: new Date(),
     name: "Alameda",
     languages: [EnumJurisdictionLanguages.en],
+    preferences: [],
   },
   items: [
     {

@@ -1,6 +1,7 @@
 import { AbstractServiceFactory } from "../../shared/services/abstract-service"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
-import { JurisdictionCreateDto, JurisdictionUpdateDto } from "../dto/jurisdiction.dto"
+import { JurisdictionCreateDto } from "../dto/jurisdiction-create.dto"
+import { JurisdictionUpdateDto } from "../dto/jurisdiction-update.dto"
 
 export class JurisdictionsService extends AbstractServiceFactory<
   Jurisdiction,

@@ -1337,12 +1337,18 @@ export class PreferencesService {
   /**
    * List preferences
    */
-  list(options: IRequestOptions = {}): Promise<Preference[]> {
+  list(
+    params: {
+      /**  */
+      filter?: PreferencesFilterParams[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Preference[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/preferences"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { filter: params["filter"] }
       let data = null
 
       configs.data = data
@@ -2292,7 +2298,15 @@ export interface AmiChartItem {
   income: number
 }
 
+export interface Id {
+  /**  */
+  id: string
+}
+
 export interface Jurisdiction {
+  /**  */
+  preferences: Id[]
+
   /**  */
   id: string
 
@@ -2330,11 +2344,6 @@ export interface AmiChart {
 
   /**  */
   name: string
-}
-
-export interface Id {
-  /**  */
-  id: string
 }
 
 export interface AmiChartCreate {
@@ -3992,6 +4001,9 @@ export interface JurisdictionCreate {
 
   /**  */
   languages: EnumJurisdictionCreateLanguages[]
+
+  /** */
+  preferences: Id[]
 }
 
 export interface JurisdictionUpdate {
@@ -4012,6 +4024,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
+
+  /** */
+  preferences: Id[]
 }
 
 export interface ListingFilterParams {
@@ -5542,6 +5557,17 @@ export interface ListingUpdate {
   countyCode?: string
 }
 
+export interface PreferencesFilterParams {
+  /**  */
+  $comparison: EnumPreferencesFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
+
+  /**  */
+  jurisdiction?: string
+}
+
 export interface PreferenceCreate {
   /**  */
   links?: PreferenceLink[]
@@ -6029,3 +6055,11 @@ export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
+export enum EnumPreferencesFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "<=" = "<=",
+  "NA" = "NA",
+}

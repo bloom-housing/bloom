@@ -6,12 +6,13 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
 import { PreferencesService } from "../preferences/preferences.service"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { PreferenceDto } from "./dto/preference.dto"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
@@ -20,6 +21,8 @@ import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { PreferenceCreateDto } from "./dto/preference-create.dto"
 import { PreferenceUpdateDto } from "./dto/preference-update.dto"
+import { PreferencesListQueryParams } from "./dto/preferences-list-query-params"
+import { PreferencesFilterParams } from "./dto/preferences-filter-params"
 
 @Controller("/preferences")
 @ApiTags("preferences")
@@ -32,8 +35,9 @@ export class PreferencesController {
 
   @Get()
   @ApiOperation({ summary: "List preferences", operationId: "list" })
-  async list(): Promise<PreferenceDto[]> {
-    return mapTo(PreferenceDto, await this.preferencesService.list())
+  @ApiExtraModels(PreferencesFilterParams)
+  async list(@Query() queryParams: PreferencesListQueryParams): Promise<PreferenceDto[]> {
+    return mapTo(PreferenceDto, await this.preferencesService.list(queryParams))
   }
 
   @Post()
