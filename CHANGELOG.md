@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/bloom-housing/bloom/compare/v3.0.0...v3.1.0) (2021-10-07)
+
+
+### Features
+
+* feat ([4b20213](https://github.com/bloom-housing/bloom/commit/4b20213bbfc0f17b95bbcf39367f9d16747cc074))
+
+
+
+
+
 # [3.0.0](https://github.com/bloom-housing/bloom/compare/v2.0.7...v3.0.0) (2021-10-07)
 
 
