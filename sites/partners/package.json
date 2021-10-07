@@ -1,7 +1,7 @@
 {
   "name": "@bloom-housing/partners",
   "author": "Sean Albert <sean.albert@exygy.com>",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
@@ -18,7 +18,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^2.0.5",
+    "@bloom-housing/ui-components": "^2.0.6",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
