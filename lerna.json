@@ -1,6 +1,11 @@
 {
-  "packages": ["sites/public", "sites/partners", "backend/core", "ui-components"],
-  "version": "2.0.0",
+  "packages": [
+    "sites/public",
+    "sites/partners",
+    "backend/core",
+    "ui-components"
+  ],
+  "version": "2.0.1",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {
