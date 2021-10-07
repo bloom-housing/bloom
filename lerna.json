@@ -5,10 +5,12 @@
   "useWorkspaces": true,
   "command": {
     "publish": {
-      "conventionalCommits": true
+      "conventionalCommits": true,
+      "registry": "localhost:4873",
+      "message": "chore(release): publish"
     },
     "version": {
-      "message": "chore(release): publish"
+      "message": "chore(release): version"
     }
   }
 }
