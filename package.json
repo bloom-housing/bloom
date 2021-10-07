@@ -40,13 +40,13 @@
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
     "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
     "publish:ui-components": "cd ui-components && lerna publish from-package --yes",
-    "version:ui-components": "cd ui-components && lerna version --yes --no-commit-hooks",
+    "version:ui-components": "cd ui-components && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:public": "cd sites/public && lerna publish from-package --yes",
-    "version:public": "cd sites/public && lerna version --yes --no-commit-hooks",
+    "version:public": "cd sites/public && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:partners": "cd sites/partners && lerna publish from-package --yes",
-    "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks",
+    "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:backend": "cd backend/core && lerna publish from-package --yes",
-    "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks",
+    "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:all": "yarn publish:ui-components && yarn publish:backend",
     "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
@@ -86,7 +86,7 @@
     "hooks": {
       "pre-commit": "echo 'Linting...' && lint-staged",
       "commit-msg": "echo 'Verifying commit message...' && commitlint -E HUSKY_GIT_PARAMS",
-      "prepare-commit-msg": "echo 'Building commit message...' && exec < /dev/tty && git cz --hook '$1' '$2' '$3' || true"
+      "prepare-commit-msg": "echo 'Building commit message...' && exec < /dev/tty && git cz --hook || true"
     }
   },
   "lint-staged": {
