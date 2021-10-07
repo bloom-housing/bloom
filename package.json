@@ -46,7 +46,7 @@
     "version:partners": "cd sites/partners && lerna version",
     "publish:backend": "cd backend/core && lerna publish",
     "version:backend": "cd backend/core && lerna version",
-    "publish:all": "publish:ui-components && publish:public && publish:partners && publish:backend",
+    "publish:all": "yarn publish:ui-components && yarn publish:public && yarn publish:partners && yarn publish:backend",
     "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
   "devDependencies": {
