@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/bloom-housing/bloom/compare/v3.1.0...v4.0.0) (2021-10-07)
+
+
+### Styles
+
+* style breaking ([e037820](https://github.com/bloom-housing/bloom/commit/e0378206533506e3b6be759331a6dd8198aa6335))
+
+
+### BREAKING CHANGES
+
+* breaking
+
+
+
+
+
 # [3.1.0](https://github.com/bloom-housing/bloom/compare/v3.0.0...v3.1.0) (2021-10-07)
 
 
