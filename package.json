@@ -1,5 +1,6 @@
 {
   "name": "bloom-housing",
+  "author": "Sean Albert <sean.albert@exygy.com>",
   "version": "1.0.5",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
@@ -46,7 +47,7 @@
     "version:partners": "cd sites/partners && lerna version",
     "publish:backend": "cd backend/core && lerna publish from-package --yes",
     "version:backend": "cd backend/core && lerna version",
-    "publish:all": "yarn publish:ui-components && yarn publish:public && yarn publish:partners && yarn publish:backend",
+    "publish:all": "yarn publish:ui-components && yarn publish:backend",
     "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
   "devDependencies": {
