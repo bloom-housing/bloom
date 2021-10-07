@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@9.0.0...@bloom-housing/ui-components@9.0.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* fixing ui ([19137f1](https://github.com/bloom-housing/bloom/commit/19137f151741ce66c058f5022dc9ece036a237fd))
+
+
+
+
+
 # [9.0.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@8.1.0...@bloom-housing/ui-components@9.0.0) (2021-10-07)
 
 
