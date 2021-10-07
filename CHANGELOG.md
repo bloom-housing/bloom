@@ -1,3 +1,52 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [2.0.0](https://github.com/bloom-housing/bloom/compare/v1.0.5...v2.0.0) (2021-10-07)
+
+
+### Bug Fixes
+
+* fix dev seeds with new priority types ([#1920](https://github.com/bloom-housing/bloom/issues/1920)) ([b01bd7c](https://github.com/bloom-housing/bloom/commit/b01bd7ca2c1ba3ba7948ad8213a0939375003d90))
+* fixes reserved community type import ([e5b0e25](https://github.com/bloom-housing/bloom/commit/e5b0e25f556af6cdcdf05d79825736dddcd1e105))
+* netlify doesn't like specifying the start command in toml ([2691011](https://github.com/bloom-housing/bloom/commit/2691011cbd2512acce7bac0657119e5a41d399f0))
+* new icons for notifications ([8da124a](https://github.com/bloom-housing/bloom/commit/8da124a1f8bf795badb6d5149081f694bec416be))
+* Reponsive TW grid classes, nested overlays ([#1881](https://github.com/bloom-housing/bloom/issues/1881)) ([620ed1f](https://github.com/bloom-housing/bloom/commit/620ed1fbbf0466336a53ea233cdb0c3984eeda15))
+* translation typo in alternate contact page ([#1914](https://github.com/bloom-housing/bloom/issues/1914)) ([9792048](https://github.com/bloom-housing/bloom/commit/9792048dbf6469d641b938b712e9774853ca18f4))
+* update alameda's notification sign up URL ([#1874](https://github.com/bloom-housing/bloom/issues/1874)) ([3eb85fc](https://github.com/bloom-housing/bloom/commit/3eb85fccf7521e32f3d1f369e706cec0c078b536))
+
+
+### Code Refactoring
+
+* Update textarea character limits ([#1906](https://github.com/bloom-housing/bloom/issues/1906)) ([96d362f](https://github.com/bloom-housing/bloom/commit/96d362f0e8740d255f298ef7505f4933982e270d)), closes [#1890](https://github.com/bloom-housing/bloom/issues/1890)
+
+
+### Features
+
+* add screenreader messages to ProgresssNav ([#1922](https://github.com/bloom-housing/bloom/issues/1922)) ([569df79](https://github.com/bloom-housing/bloom/commit/569df790ce9bfb4f9bb290e4a1613e683371de79))
+* **backend:** add jurisdiction relation to ami charts entity ([#1905](https://github.com/bloom-housing/bloom/issues/1905)) ([1f13985](https://github.com/bloom-housing/bloom/commit/1f13985142c7908b4c37eaf0fbbbad0ad660f014))
+* **backend:** add jurisidction relation to ReservedCommunittType Entity ([#1889](https://github.com/bloom-housing/bloom/issues/1889)) ([9b0fe73](https://github.com/bloom-housing/bloom/commit/9b0fe73fe9ed1349584e119f235cb66f6e68785f))
+* listings management draft and publish validation backend & frontend ([#1850](https://github.com/bloom-housing/bloom/issues/1850)) ([ef67997](https://github.com/bloom-housing/bloom/commit/ef67997a056c6f1f758d2fa67bf877d4a3d897ab))
+* new subheader prop and custom class names on ListingCard ([e2ddbc7](https://github.com/bloom-housing/bloom/commit/e2ddbc776a0a9740f50a3bbfd7442f06597206dc))
+* Show confirmation modal when publishing listings ([#1847](https://github.com/bloom-housing/bloom/issues/1847)) ([2de8062](https://github.com/bloom-housing/bloom/commit/2de80625ee9569f41f57debf04e2030829b6c969)), closes [#1772](https://github.com/bloom-housing/bloom/issues/1772) [#1772](https://github.com/bloom-housing/bloom/issues/1772)
+
+
+### Performance Improvements
+
+* separates css imports and disables local purge ([#1883](https://github.com/bloom-housing/bloom/issues/1883)) ([668968e](https://github.com/bloom-housing/bloom/commit/668968e45072e9a5121af3cf32d0d8307c671907)), closes [#1882](https://github.com/bloom-housing/bloom/issues/1882)
+
+
+### BREAKING CHANGES
+
+* Default limit is 1000 now
+* tableHeader prop moved into a new tableHeaderProps object that contains all the new
+header props
+
+
+
+
+
 # Changelog
 
 All notable changes to this project will be documented in this file. The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
