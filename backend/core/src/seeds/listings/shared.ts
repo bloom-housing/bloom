@@ -6,7 +6,6 @@ import {
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
-import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
@@ -493,7 +492,6 @@ export const defaultListing: ListingSeedType = {
   costsNotIncluded: "Custom costs not included text",
   creditHistory: "Custom credit history text",
   criminalBackground: "Custom criminal background text",
-  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "500",
   depositMin: "500",
   disableUnitsAccordion: true,

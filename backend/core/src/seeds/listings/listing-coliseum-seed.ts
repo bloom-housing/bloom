@@ -9,7 +9,6 @@ import {
   PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
-import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
@@ -913,7 +912,6 @@ const coliseumListing: ListingSeedType = {
   creditHistory:
     "Management staff will request credit histories on each adult member of each applicant household. It is the applicant’s responsibility that at least one household member can demonstrate utilities can be put in their name. For this to be demonstrated, at least one household member must have a credit report that shows no utility accounts in default. Applicants who cannot have utilities put in their name will be considered ineligible. Any currently open bankruptcy proceeding of any of the household members will be considered a disqualifying condition. Applicants will not be considered to have a poor credit history when they were delinquent in rent because they were withholding rent due to substandard housing conditions in a manner consistent with local ordinance; or had a poor rent paying history clearly related to an excessive rent relative to their income, and responsible efforts were made to resolve the non-payment problem. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
   criminalBackground: null,
-  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "1,781",
   depositMin: "1,284",
   disableUnitsAccordion: true,

@@ -4416,9 +4416,6 @@ export interface Listing {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
-  CSVFormattingType: CSVFormattingType
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -4860,9 +4857,6 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5322,9 +5316,6 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   id?: string
@@ -5924,13 +5915,6 @@ export enum ListingStatus {
 export enum ListingReviewOrder {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
-}
-
-export enum CSVFormattingType {
-  "basic" = "basic",
-  "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
-  "ohaFormat" = "ohaFormat",
-  "bhaFormat" = "bhaFormat",
 }
 
 export enum ListingEventType {

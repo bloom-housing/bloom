@@ -1,130 +1,121 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CsvEncoder } from "./csv-encoder.service"
 import { Injectable } from "@nestjs/common"
-import { CSVFormattingType } from "./types/csv-formatting-type-enum"
-import { FormattingMetadata } from "./types/formatting-metadata"
-import { FormattingMetadataArray } from "./types/formatting-metadata-array"
-import { FormattingMetadataAggregate } from "./types/formatting-metadata-aggregate"
-import { FormattingMetadataAggregateFactory } from "./types/formatting-metadata-aggregate-factory"
+import dayjs from "dayjs"
+import { ApplicationDto } from "../applications/dto/application.dto"
 
 @Injectable()
 export class CsvBuilder {
-  constructor(private readonly csvEncoder: CsvEncoder) {}
-
-  private incrementMetadataArrayItemLabel(item: FormattingMetadata, index: number) {
-    const newItem = { ...item }
-    newItem.label += ` (${index})`
-    return newItem
+  headers: { [key: string]: number }
+  data: { header: string; val: any }[]
+  constructor(private readonly csvEncoder: CsvEncoder) {
+    this.headers = {}
+    this.data = []
   }
 
-  private retrieveValueByDiscriminator(obj, discriminator: string) {
-    let value: any = obj
-    for (const key of discriminator.split(".")) {
-      if (!key) {
-        continue
-      }
-      value = value[key]
+  private setHeader(key: string, header: string, index: number): string {
+    let newKey = header.length ? `${header} ${key}` : key
+    if (index !== 0) {
+      newKey += ` ${index}`
     }
-    return value
-  }
-
-  private flattenJson(obj: any, metadataAggregate: FormattingMetadataAggregate): Array<string> {
-    let outputRows: string[] = []
-    for (const metadataObj of metadataAggregate) {
-      let value
-      try {
-        value = this.retrieveValueByDiscriminator(obj, metadataObj.discriminator)
-      } catch (e) {
-        value = undefined
-      }
-      if (metadataObj.type === "array") {
-        const metadataArray: FormattingMetadataArray = metadataObj as FormattingMetadataArray
-        for (let i = 0; i < metadataArray.size; i++) {
-          let row
-          try {
-            row = value[i]
-          } catch (e) {
-            row = {}
-          }
-          const metadataArrayItems = metadataArray.items.map((item) =>
-            this.incrementMetadataArrayItemLabel(item, i + 1)
-          )
-          outputRows = outputRows.concat(this.flattenJson(row, metadataArrayItems))
-        }
-      } else {
-        const metadata: FormattingMetadata = metadataObj as FormattingMetadata
-        try {
-          outputRows.push(metadata.formatter(value))
-        } catch (e) {
-          outputRows.push("")
-        }
-      }
+    if (this.headers[newKey] === undefined) {
+      this.headers[newKey] = 1
     }
-    return outputRows
+
+    return newKey
   }
 
-  private getHeaders(metadataArray: any[]) {
-    let headers: string[] = []
-    for (const metadata of metadataArray) {
-      if (metadata.type === "array") {
-        for (let i = 0; i < metadata.size; i++) {
-          const items = metadata.items.map((item) =>
-            this.incrementMetadataArrayItemLabel(item, i + 1)
-          )
-          headers = headers.concat(this.getHeaders(items))
-        }
-      } else {
-        headers.push(metadata.label)
-      }
-    }
-    return headers
-  }
-
-  private normalizeMetadataArrays(
-    arr: any[],
-    formattingMetadataAggregate: FormattingMetadataAggregate
-  ) {
-    formattingMetadataAggregate
-      .filter((metadata) => metadata.type === "array")
-      .forEach((metadata) => {
-        const md = metadata as FormattingMetadataArray
-        if (md.size !== null) {
-          return
-        }
-        md.size = Math.max(
-          ...arr.map((item) => {
-            const value = this.retrieveValueByDiscriminator(item, md.discriminator)
-            if (!value || !Array.isArray(value)) {
-              return 0
-            }
-            return value.length
+  private parseApplication(key: string, val: any, header: string, index = 0): void {
+    if (Array.isArray(val)) {
+      val.forEach((val2, i) => {
+        // preferences are a special case
+        if (key === "preferences") {
+          val2.options.forEach((preference, j) => {
+            this.parseApplication(
+              preference.key,
+              preference.checked ? "Yes" : "No",
+              `${key} ${val2.key}`
+            )
           })
-        )
+        } else {
+          this.parseApplication(key, val2, `${header} ${key}`, i + 1)
+        }
       })
-    return formattingMetadataAggregate
+    } else if (val instanceof Object) {
+      // dates are objects
+      if (dayjs(val).isValid()) {
+        const newKey = this.setHeader(key, header, index)
+        this.data.push({ header: newKey, val: dayjs(val).format("DD-MM-YYYY h:mm:ss A") })
+      } else {
+        for (let i = 0, keys = Object.keys(val); i < keys.length; i++) {
+          this.parseApplication(keys[i], val[keys[i]], key)
+        }
+      }
+    } else {
+      const newKey = this.setHeader(key, header, index)
+
+      // format data before pushing
+      if (typeof val === "boolean") {
+        val = val ? "Yes" : "No"
+      }
+
+      this.data.push({ header: newKey, val })
+    }
   }
 
-  public build(
-    arr: any[],
-    formattingMetadataAggregateFactory: FormattingMetadataAggregateFactory,
-    csvFormattingType: CSVFormattingType,
-    includeHeaders?: boolean,
-    extraFormatters?: Array<FormattingMetadata>
-  ): string {
-    let formattingMetadataAggregate = formattingMetadataAggregateFactory(csvFormattingType)
-    if (!formattingMetadataAggregate) {
-      return ""
-    }
-    if (extraFormatters) {
-      formattingMetadataAggregate = formattingMetadataAggregate.concat(extraFormatters)
-    }
-    const normalizedMetadataAggregate = this.normalizeMetadataArrays(
-      arr,
-      formattingMetadataAggregate
-    )
-    const rows: Array<Array<string>> = []
-    rows.push(this.getHeaders(normalizedMetadataAggregate))
-    arr.forEach((item) => rows.push(this.flattenJson(item, normalizedMetadataAggregate)))
-    return this.csvEncoder.encode(rows, includeHeaders)
+  public build(arr: any[]): string {
+    arr.forEach((row: ApplicationDto) => {
+      this.parseApplication("", row, "")
+      this.data.push({ header: "_endRow", val: "_endRow" })
+    })
+
+    // headers to sorted array
+    const headerArray = Object.keys(this.headers)
+      // filter out unwanted keys
+      .filter(
+        (header) =>
+          !/\sid|createdAt|confirmationCode|deletedAt|listingId|updatedAt|userId/.test(header)
+      )
+      .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+
+    // initiate arrays to insert data
+    const rows = Array.from({ length: arr.length }, () => Array(headerArray.length))
+
+    // turn headers into csv format
+    let dataString = headerArray
+      .map((column) => {
+        // format header names
+        // let name = column.split(/(?=[A-Z])/).j
+        let columnArray = column.split(" ")
+        columnArray = columnArray.map((str) => {
+          // capitalize and split camel cased
+          let newStr = str.charAt(0).toUpperCase() + str.slice(1)
+          newStr = newStr.split(/(?=[A-Z])/).join(" ")
+          return newStr
+        })
+
+        return columnArray.join(" ")
+      })
+      .join(",")
+    dataString += "\n"
+
+    let row = 0
+    this.data.forEach((obj) => {
+      if (obj.val === "_endRow") {
+        row++
+      } else {
+        // get index of header
+        const headerIndex = headerArray.indexOf(obj.header)
+        if (headerIndex > -1) {
+          rows[row][headerIndex] = obj.val
+        }
+      }
+    })
+    // turn rows into csv format
+    rows.forEach((row) => {
+      dataString += row.join(",")
+      dataString += "\n"
+    })
+    return dataString
   }
 }

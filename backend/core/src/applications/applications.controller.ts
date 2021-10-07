@@ -148,30 +148,6 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   markedAsDuplicate?: boolean
 }
 
-export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  includeHeaders?: boolean
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  includeDemographics?: boolean
-}
-
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
@@ -202,15 +178,9 @@ export class ApplicationsController {
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
+  async listAsCsv(@Query() queryParams: PaginatedApplicationListQueryParams): Promise<string> {
     const applications = await this.applicationsService.listWithFlagged(queryParams)
-    const listing = await this.listingsService.findOne(queryParams.listingId)
-    return this.applicationCsvExporter.export(
-      applications,
-      listing.CSVFormattingType,
-      queryParams.includeHeaders,
-      queryParams.includeDemographics
-    )
+    return this.applicationCsvExporter.export(applications)
   }
 
   @Post()

@@ -30,7 +30,6 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
-import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
@@ -417,12 +416,6 @@ class Listing extends BaseEntity {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   displayWaitlistSize: boolean
-
-  @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
-  @Expose()
-  @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
-  CSVFormattingType: CSVFormattingType
 
   @Expose()
   @ApiProperty()

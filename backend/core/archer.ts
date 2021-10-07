@@ -1,11 +1,4 @@
-import {
-  AmiChart,
-  CSVFormattingType,
-  Listing,
-  ListingReviewOrder,
-  ListingStatus,
-  UnitStatus,
-} from "./types"
+import { AmiChart, Listing, ListingReviewOrder, ListingStatus, UnitStatus } from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
 
@@ -330,7 +323,6 @@ export const ArcherListing: Listing = {
   applicationFee: "30.0",
   criminalBackground:
     "A criminal background investigation will be obtained on each applicant.  As criminal background checks are done county by county and will be ran for all counties in which the applicant lived,  Applicants will be disqualified for tenancy if they have been convicted of a felony or misdemeanor.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
-  CSVFormattingType: CSVFormattingType.basic,
   leasingAgentAddress: {
     id: "id",
     createdAt: new Date(),

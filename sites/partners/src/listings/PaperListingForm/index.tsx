@@ -22,7 +22,6 @@ import {
 import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
-  CSVFormattingType,
   ListingApplicationAddressType,
   Unit,
   Listing,
@@ -147,7 +146,6 @@ const defaults: FormListing = {
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
-  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "0",
   depositMin: "0",
   disableUnitsAccordion: false,
