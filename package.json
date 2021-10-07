@@ -47,8 +47,8 @@
     "version:partners": "cd sites/partners && lerna version --yes --no-commit-hooks --ignore-scripts",
     "publish:backend": "cd backend/core && lerna publish from-package --yes",
     "version:backend": "cd backend/core && lerna version --yes --no-commit-hooks --ignore-scripts",
-    "publish:all": "yarn publish:ui-components && yarn publish:backend",
-    "version:all": "yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
+    "publish:all": "HUSKY=0 yarn publish:ui-components && yarn publish:backend",
+    "version:all": "HUSKY=0 yarn version:ui-components && yarn version:public && yarn version:partners && yarn version:backend"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
