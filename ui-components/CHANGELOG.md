@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/bloom-housing/bloom/compare/v2.0.4...v2.0.5) (2021-10-07)
+
+
+### Bug Fixes
+
+* patch 6 ([fcf80e7](https://github.com/bloom-housing/bloom/commit/fcf80e77a69330367e673ad525022d89426e73fa))
+* patch test 5 ([09decb1](https://github.com/bloom-housing/bloom/commit/09decb17017b5ca47b4067503aab711585291791))
+
+
+
+
+
 ## [2.0.4](https://github.com/bloom-housing/bloom/compare/v2.0.3...v2.0.4) (2021-10-07)
 
 
