@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/bloom-housing/bloom/compare/v6.0.0...v6.1.0) (2021-10-07)
+
+
+### Features
+
+* testing ([038c097](https://github.com/bloom-housing/bloom/commit/038c0977fb561b63ef4a3d2fb73ff674b97031a0))
+
+
+
+
+
 # [6.0.0](https://github.com/bloom-housing/bloom/compare/v5.0.0...v6.0.0) (2021-10-07)
 
 
