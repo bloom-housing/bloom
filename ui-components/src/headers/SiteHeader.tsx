@@ -38,7 +38,7 @@ export interface SiteHeaderProps {
 }
 
 const SiteHeader = (props: SiteHeaderProps) => {
-  // Adding a patch change
+  // Adding a patch change 2
   const [activeMenus, setActiveMenus] = useState<string[]>([])
   const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])
   const [isDesktop, setIsDesktop] = useState(true)
