@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [8.0.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@8.0.0...@bloom-housing/backend-core@8.0.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* backend path ([abfb8d0](https://github.com/bloom-housing/bloom/commit/abfb8d095ab2838bc889a0aa4acf67995e00045e))
+
+
+
+
+
 # 8.0.0 (2021-10-07)
 
 
