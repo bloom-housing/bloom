@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [10.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@10.0.1-alpha.0...@bloom-housing/ui-components@10.0.1-alpha.1) (2021-10-07)
+
+
+### Styles
+
+* breaking ([f7b4d35](https://github.com/bloom-housing/bloom/commit/f7b4d3545b8bc03ec447a0ed94da1da49d89b7f8))
+
+
+### BREAKING CHANGES
+
+* breaking
+
+
+
+
+
 ## [10.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@10.0.0...@bloom-housing/ui-components@10.0.1-alpha.0) (2021-10-07)
 
 
