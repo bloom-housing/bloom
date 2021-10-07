@@ -37,7 +37,9 @@
     "test:e2e:backend:core": "cd backend/core && yarn test:e2e",
     "test:apps": "concurrently \"yarn dev:backend\" \"yarn test:app:public\"",
     "test:apps:headless": "concurrently \"yarn dev:backend\" \"yarn test:app:public:headless\"",
-    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'"
+    "lint": "eslint '**/*.ts' '**/*.tsx' '**/*.js'",
+    "publish:ui-components": "cd ui-components && lerna publish",
+    "version:ui-components": "cd ui-components && lerna version"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
@@ -56,7 +58,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "husky": "^4.3.0",
     "jest": "^26.5.3",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
     "prettier": "^2.1.0",
     "react": "^17.0.2",

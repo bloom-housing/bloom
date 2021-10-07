@@ -76,6 +76,8 @@ Approximately weekly or as our roadmap requires us to, we will merge dev to mast
 
 `ui-components` is currently released on an ad-hoc basis, but we will soon be implementing a more frequent automatic release.
 
+You can check which registry npm is set to use with `npm config get registry`.
+
 ## Contributing
 
 Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to these guidelines.
