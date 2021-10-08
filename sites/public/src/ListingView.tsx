@@ -17,7 +17,6 @@ import {
   ExpandableText,
   GetApplication,
   GroupedTable,
-  GroupedTableGroup,
   ImageCard,
   InfoCard,
   LeasingAgent,
@@ -107,7 +106,7 @@ export const ListingView = (props: ListingProps) => {
       ),
     }
   })
-  let groupedUnits: GroupedTableGroup[] = null
+  let groupedUnits: Record<string, React.ReactNode>[] = null
 
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
@@ -356,7 +355,7 @@ export const ListingView = (props: ListingProps) => {
                 <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
                 <GroupedTable
                   headers={unitSummariesHeaders}
-                  data={groupedUnits}
+                  data={[{ data: groupedUnits }]}
                   responsiveCollapse={true}
                 />
               </React.Fragment>
@@ -365,7 +364,7 @@ export const ListingView = (props: ListingProps) => {
         {amiValues.length == 1 && (
           <GroupedTable
             headers={unitSummariesHeaders}
-            data={groupedUnits}
+            data={[{ data: groupedUnits }]}
             responsiveCollapse={true}
           />
         )}
