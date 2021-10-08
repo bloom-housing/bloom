@@ -6,11 +6,9 @@
 
 .image-card {
   @apply relative;
-  @include has-image-skeleton();
-
+  @apply bg-gray-500;
   img {
     @apply w-full;
-    min-height: 3rem;
   }
 }
 
@@ -35,11 +33,19 @@
   @apply inset-x-0;
   @apply bottom-0;
   @apply py-1;
+}
 
-  &:before {
-    @include overlay-image;
-    @include custom-linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  }
+.image-card__overlay {
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  @apply w-full;
+  height: 60%;
+}
+
+.image-card__placeholder {
+  height: 300px;
 }
 
 .image-card__tag {
