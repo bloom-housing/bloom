@@ -4,7 +4,7 @@ import { LanguageNav } from "../../src/navigation/LanguageNav"
 import { t } from "../../src/helpers/translator"
 import { mocked } from "ts-jest/utils"
 
-jest.mock("../../src/helpers/translator");
+jest.mock("../../src/helpers/translator")
 const mockedT = mocked(t, true)
 
 afterEach(cleanup)
