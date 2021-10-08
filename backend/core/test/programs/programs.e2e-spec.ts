@@ -10,9 +10,10 @@ import { AuthModule } from "../../src/auth/auth.module"
 import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
 import { Repository } from "typeorm"
 import { Program } from "../../src/program/entities/program.entity"
+import { ProgramsModule } from "../../src/program/programs.module"
+import { ProgramCreateDto } from "../../src/program/dto/program-create.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -20,9 +21,9 @@ import { Program } from "../../src/program/entities/program.entity"
 declare const expect: jest.Expect
 jest.setTimeout(30000)
 
-describe("Jurisdictions", () => {
+describe("Programs", () => {
   let app: INestApplication
-  let adminAccesstoken: string
+  let adminAccessToken: string
   let programsRepository: Repository<Program>
 
   beforeAll(async () => {
@@ -30,12 +31,7 @@ describe("Jurisdictions", () => {
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(dbOptions),
-        AuthModule,
-        JurisdictionsModule,
-        TypeOrmModule.forFeature([Program]),
-      ],
+      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, ProgramsModule],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -43,60 +39,39 @@ describe("Jurisdictions", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
-    adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   })
 
-  it(`should return jurisdictions`, async () => {
+  it(`should return programs`, async () => {
     const res = await supertest(app.getHttpServer())
-      .get(`/jurisdictions`)
-      .set(...setAuthorization(adminAccesstoken))
+      .get(`/programs`)
+      .set(...setAuthorization(adminAccessToken))
       .expect(200)
     expect(Array.isArray(res.body)).toBe(true)
   })
 
-  it(`should create and return a new jurisdiction`, async () => {
-    const newProgram = await programsRepository.save({
-      question: "TestQuestion",
-      subtitle: "TestSubtitle",
-      description: "TestDescription",
-      subdescription: "TestDescription",
-    })
+  it(`should create and return a new program`, async () => {
+    const newProgram: ProgramCreateDto = {
+      question: "question",
+      description: "description",
+      subtitle: "subtitle",
+      subdescription: "subdescription",
+    }
     const res = await supertest(app.getHttpServer())
-      .post(`/jurisdictions`)
-      .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test", programs: [newProgram] })
+      .post(`/programs`)
+      .set(...setAuthorization(adminAccessToken))
+      .send(newProgram)
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
-    expect(res.body).toHaveProperty("programs")
-    expect(Array.isArray(res.body.programs)).toBe(true)
-    expect(res.body.programs.length).toBe(1)
-    expect(res.body.programs[0].id).toBe(newProgram.id)
+    expect(res.body.id).toBe(res.body.id)
+    expect(res.body.question).toBe(newProgram.question)
 
-    const getById = await supertest(app.getHttpServer())
-      .get(`/jurisdictions/${res.body.id}`)
-      .expect(200)
-    expect(getById.body.programs[0].id).toBe(newProgram.id)
-  })
-
-  it(`should create and return a new jurisdiction by name`, async () => {
-    const res = await supertest(app.getHttpServer())
-      .post(`/jurisdictions`)
-      .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", programs: [] })
-      .expect(201)
-    expect(res.body).toHaveProperty("id")
-    expect(res.body).toHaveProperty("createdAt")
-    expect(res.body).toHaveProperty("updatedAt")
-    expect(res.body).toHaveProperty("name")
-    expect(res.body.name).toBe("test2")
-
-    const getByName = await supertest(app.getHttpServer())
-      .get(`/jurisdictions/byName/${res.body.name}`)
-      .expect(200)
-    expect(getByName.body.name).toBe("test2")
+    const getById = await supertest(app.getHttpServer()).get(`/programs/${res.body.id}`).expect(200)
+    expect(getById.body.id).toBe(res.body.id)
+    expect(getById.body.question).toBe(newProgram.question)
   })
 
   afterEach(() => {

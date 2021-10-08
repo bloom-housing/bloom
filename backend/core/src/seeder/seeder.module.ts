@@ -39,6 +39,7 @@ import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listi
 import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-missing-ami"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
+import { Program } from "../program/entities/program.entity"
 
 @Module({})
 export class SeederModule {
@@ -67,6 +68,7 @@ export class SeederModule {
           ApplicationMethod,
           PaperApplication,
           Jurisdiction,
+          Program,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,

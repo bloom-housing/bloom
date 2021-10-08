@@ -31,6 +31,7 @@ describe("Unit Transformations", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "name",
+        programs: [],
       },
     }
 

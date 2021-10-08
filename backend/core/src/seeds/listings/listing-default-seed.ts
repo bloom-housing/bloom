@@ -24,6 +24,7 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
+import { Program } from "../../program/entities/program.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -42,7 +43,9 @@ export class ListingDefaultSeed {
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
-    protected readonly jurisdictionRepository: Repository<Jurisdiction>
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>,
+    @InjectRepository(Program)
+    protected readonly programsRepository: Repository<Program>
   ) {}
 
   async seed() {
@@ -81,6 +84,13 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
     const newUnits = await this.unitsRepository.save(unitsToBeCreated)
 
+    const newProgram = await this.programsRepository.save({
+      question: "Default question",
+      subtitle: "Default subtitle",
+      description: "Default description",
+      subdescription: "Default subdescription",
+    })
+
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
@@ -103,6 +113,7 @@ export class ListingDefaultSeed {
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
       events: getDefaultListingEvents(),
+      listingPrograms: [{ program: newProgram, ordinal: 1, page: 1 }],
     }
 
     return await this.listingRepository.save(listingCreateDto)

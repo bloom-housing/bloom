@@ -2248,7 +2248,15 @@ export interface AmiChartItem {
   income: number
 }
 
+export interface Id {
+  /**  */
+  id: string
+}
+
 export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
   /**  */
   id: string
 
@@ -2283,11 +2291,6 @@ export interface AmiChart {
 
   /**  */
   name: string
-}
-
-export interface Id {
-  /**  */
-  id: string
 }
 
 export interface AmiChartCreate {
@@ -3939,6 +3942,9 @@ export interface JurisdictionCreate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  programs: Id[]
 }
 
 export interface JurisdictionUpdate {
@@ -3956,6 +3962,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  programs: Id[]
 }
 
 export interface ListingFilterParams {
@@ -4204,6 +4213,40 @@ export interface ListingEvent {
   file?: Asset
 }
 
+export interface Program {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  question?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  subdescription?: string
+}
+
+export interface ListingProgram {
+  /**  */
+  program: Program
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  page?: number
+}
+
 export interface ReservedCommunityType {
   /**  */
   jurisdiction: Jurisdiction
@@ -4447,6 +4490,9 @@ export interface Listing {
 
   /**  */
   leasingAgents?: UserBasic[]
+
+  /**  */
+  listingPrograms: ListingProgram[]
 
   /**  */
   jurisdiction: IdName
@@ -4824,6 +4870,17 @@ export interface UnitsSummaryCreate {
   unitType: Id
 }
 
+export interface ListingProgramUpdate {
+  /**  */
+  program: Id
+
+  /**  */
+  ordinal?: number
+
+  /**  */
+  page?: number
+}
+
 export interface ListingCreate {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4926,6 +4983,9 @@ export interface ListingCreate {
 
   /**  */
   unitsSummary?: UnitsSummaryCreate[]
+
+  /**  */
+  listingPrograms: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5370,6 +5430,9 @@ export interface ListingUpdate {
 
   /**  */
   unitsSummary?: UnitsSummaryUpdate[]
+
+  /**  */
+  listingPrograms: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string

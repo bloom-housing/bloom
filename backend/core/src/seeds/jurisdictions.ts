@@ -3,10 +3,10 @@ import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.se
 import { JurisdictionCreateDto } from "../jurisdictions/dto/jurisdiction.dto"
 
 export const defaultJurisdictions: JurisdictionCreateDto[] = [
-  { name: "Alameda" },
-  { name: "San Jose" },
-  { name: "San Mateo" },
-  { name: "Detroit" },
+  { name: "Alameda", programs: [] },
+  { name: "San Jose", programs: [] },
+  { name: "San Mateo", programs: [] },
+  { name: "Detroit", programs: [] },
 ]
 
 export async function createJurisdictions(app: INestApplicationContext) {

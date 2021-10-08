@@ -1,10 +1,18 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsUUID } from "class-validator"
+import { ArrayMaxSize, IsArray, IsDate, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
+import { IdDto } from "../../shared/dto/id.dto"
 
-export class JurisdictionDto extends OmitType(Jurisdiction, [] as const) {}
+export class JurisdictionDto extends OmitType(Jurisdiction, ["programs"] as const) {
+  @Expose()
+  @IsArray({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(1024, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => IdDto)
+  programs: IdDto[]
+}
 
 export class JurisdictionCreateDto extends OmitType(JurisdictionDto, [
   "id",

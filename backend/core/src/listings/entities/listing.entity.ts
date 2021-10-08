@@ -43,6 +43,7 @@ import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
+import { ListingProgram } from "../../program/entities/listing-program.entity"
 
 @Entity({ name: "listings" })
 class Listing extends BaseEntity {
@@ -506,6 +507,15 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
+
+  @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
+    cascade: true,
+    eager: true,
+  })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgram)
+  listingPrograms: ListingProgram[]
 }
 
 export { Listing as default, Listing }
