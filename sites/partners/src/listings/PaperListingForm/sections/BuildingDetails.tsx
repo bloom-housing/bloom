@@ -147,7 +147,7 @@ const BuildingDetails = ({
       title={t("listings.sections.buildingDetailsTitle")}
       description={t("listings.sections.buildingDetailsSubtitle")}
     >
-      <GridSection columns={3}>
+      <GridSection columns={3} subtitle={t("listings.sections.buildingAddress")}>
         <GridCell span={2}>
           <Field
             label={t("application.contact.streetAddress")}
@@ -184,6 +184,7 @@ const BuildingDetails = ({
             }}
             register={register}
           />
+          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <ViewItem
           label={t("application.contact.state")}
