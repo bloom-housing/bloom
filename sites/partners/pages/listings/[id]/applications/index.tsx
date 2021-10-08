@@ -297,6 +297,7 @@ const ApplicationsList = () => {
                 quantityLabel={t("applications.totalApplications")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
+                includeBorder={true}
               />
             </div>
           </div>

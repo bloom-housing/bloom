@@ -150,6 +150,7 @@ const Users = () => {
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
                 onPerPageChange={resetPagination}
+                includeBorder={true}
               />
             </div>
           </div>

@@ -168,7 +168,7 @@ const Flag = () => {
                 onSelectionChanged={onSelectionChanged}
               ></AgGridReact>
 
-              <div className="data-pager">
+              <div className="data-pager-container">
                 <div className="data-pager__control-group">
                   <span className="data-pager__control"></span>
                 </div>

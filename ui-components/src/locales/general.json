@@ -1153,7 +1153,8 @@
     "name": "Local Region"
   },
   "progressNav": {
-    "srHeading": "Progress"
+    "srHeading": "Progress",
+    "current": "Current step: "
   },
   "states": {
     "AL": "Alabama",

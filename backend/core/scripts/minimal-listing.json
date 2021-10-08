@@ -14,10 +14,7 @@
   },
   "units": [
     {
-      "unitType": {
-        "name": "oneBdrm",
-        "numBedrooms": 1
-      },
+      "unitType": "oneBdrm",
       "status": "available"
     }
   ],
@@ -25,7 +22,5 @@
   "applicationMethods": [],
   "events": [],
   "displayWaitlistSize": false,
-  "jurisdiction": {
-    "id": "651b272c-aeaa-4808-a581-1c761e52cb53"
-  }
+  "jurisdictionName": "Detroit"
 }

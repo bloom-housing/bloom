@@ -1,7 +1,6 @@
 import csv from "csv-parser"
 import fs from "fs"
 import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
-import { getDetroitJurisdiction } from "./detroit-helpers"
 import { AddressCreate, CSVFormattingType, ListingStatus } from "../types/src/backend-swagger"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
@@ -72,8 +71,6 @@ async function main() {
   await promise
 
   console.log(`CSV file successfully read in; ${rawListingFields.length} listings to upload`)
-
-  const jurisdiction = await getDetroitJurisdiction(importApiUrl, email, password)
 
   const uploadFailureMessages = []
   let numListingsSuccessfullyUploaded = 0
@@ -165,7 +162,7 @@ async function main() {
       amiPercentageMax: amiPercentageMax,
       status: ListingStatus.active,
       unitsSummary: unitsSummaries,
-      jurisdiction: jurisdiction,
+      jurisdictionName: "Detroit",
       reservedCommunityTypeName: reservedCommunityTypeName,
 
       // The following fields are only set because they are required

@@ -1123,7 +1123,8 @@
         "name": "স্থানীয় অঞ্চল"
     },
     "progressNav": {
-        "srHeading": "অগ্রগতি"
+        "srHeading": "অগ্রগতি",
+        "current": "বর্তমান ধাপ: "
     },
     "states": {
         "AL": "আলাবামা",

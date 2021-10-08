@@ -1123,7 +1123,8 @@
         "name": "المنطقة المحلية"
     },
     "progressNav": {
-        "srHeading": "تقدم"
+        "srHeading": "تقدم",
+        "current": "الخطوة الحالية: "
     },
     "states": {
         "AL": "ألاباما",

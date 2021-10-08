@@ -110,15 +110,18 @@
   }
 }
 
-.data-pager {
+.data-pager-container {
   @apply p-4;
   @apply flex;
   @apply items-center;
-  @apply border;
-  @apply border-t-0;
-  @apply rounded-b-md;
-  @apply border-gray-500;
   @apply bg-gray-200;
+
+  &.include-border {
+    @apply rounded-b-md;
+    @apply border;
+    @apply border-t-0;
+    @apply border-gray-500;
+  }
 }
 
 .sticky {
@@ -144,4 +147,25 @@
 
 .data-pager__control-group {
   margin-left: auto;
+}
+
+.data-pager {
+  @apply w-full;
+
+  @screen md {
+    @apply flex;
+    @apply m-auto;
+    @apply px-3;
+  }
+}
+
+.match-listing-card-width {
+  // These styles match the .listings-row class's max widths
+  @screen md {
+    max-width: 48rem;
+  }
+
+  @screen lg {
+    @apply max-w-5xl;
+  }
 }

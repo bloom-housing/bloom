@@ -998,7 +998,8 @@
         "name": "Región local"
     },
     "progressNav": {
-        "srHeading": "Progreso"
+        "srHeading": "Progreso",
+        "current": "Paso actual:"
     },
     "states": {
         "AL": "Alabama",
