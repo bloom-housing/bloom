@@ -50,8 +50,8 @@ const getListingTableData = (listing: Listing) => {
 export const getListings = (listings) => {
   const unitSummariesHeaders = {
     unitType: t("t.unitType"),
-    minimumIncome: t("t.minimumIncome"),
     rent: t("t.rent"),
+    availability: t("t.availability"),
   }
   return listings.map((listing: Listing, index) => {
     return (

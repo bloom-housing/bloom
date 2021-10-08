@@ -3805,6 +3805,9 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -5877,6 +5880,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsComparison {

@@ -35,7 +35,6 @@ import {
   ReferralApplication,
 } from "@bloom-housing/ui-components"
 import { ErrorPage } from "../pages/_error"
-import { useGetApplicationStatusProps } from "../lib/hooks"
 import { getGenericAddress, openInFuture } from "../lib/helpers"
 
 interface ListingProps {
@@ -45,11 +44,6 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   const { listing } = props
-
-  const {
-    content: appStatusContent,
-    subContent: appStatusSubContent,
-  } = useGetApplicationStatusProps(listing)
 
   const appOpenInFuture = openInFuture(listing)
   const hasNonReferralMethods = listing?.applicationMethods
