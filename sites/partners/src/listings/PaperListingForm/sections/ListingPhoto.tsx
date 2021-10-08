@@ -13,13 +13,13 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
+  const { register, setValue, watch, errors, clearErrors } = formMethods
 
   const listingFormPhoto = watch("image")
 
@@ -153,8 +153,10 @@ const ListingPhoto = () => {
             ) : (
               <Button
                 type="button"
+                styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
                 onClick={() => {
                   setDrawerState(true)
+                  clearErrors("image")
                 }}
               >
                 {t("listings.addPhoto")}
@@ -163,6 +165,9 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
+      {fieldHasError(errors?.image) && (
+        <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
+      )}
 
       <Drawer
         open={drawerState}

@@ -22,4 +22,4 @@ const ListingGuard = ({ children }: AuthGuardProps) => {
   return null
 }
 
-export { ListingGuard as default, ListingGuard }
+export default ListingGuard

@@ -185,6 +185,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
                 readerOnly
                 note={t("t.optional")}
                 rows={5}
+                maxLength={150}
               />
             </ViewItem>
           </GridCell>

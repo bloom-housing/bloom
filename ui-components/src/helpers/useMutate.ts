@@ -4,12 +4,14 @@ const useMutate = <UseMutateResponse>() => {
   const [data, setData] = useState<UseMutateResponse | undefined>(undefined)
   const [isSuccess, setSuccess] = useState(false)
   const [isLoading, setLoading] = useState(false)
-  const [isError, setError] = useState(null)
+  const [isError, setError] = useState<unknown>(null)
 
   const mutate = async (mutateFn: (args?: unknown) => Promise<UseMutateResponse>) => {
+    let response: UseMutateResponse | undefined = undefined
+
     try {
       setLoading(true)
-      const response = await mutateFn()
+      response = await mutateFn()
       setData(response)
       setSuccess(true)
       setLoading(false)
@@ -18,6 +20,8 @@ const useMutate = <UseMutateResponse>() => {
       setLoading(false)
       setError(err)
     }
+
+    return response
   }
 
   const reset = () => {

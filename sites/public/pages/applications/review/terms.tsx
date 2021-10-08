@@ -63,6 +63,7 @@ const ApplicationTerms = () => {
         setApiError(true)
         window.scrollTo(0, 0)
         console.error(`Error creating application: ${err}`)
+        throw err
       })
   }
 

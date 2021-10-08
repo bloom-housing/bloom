@@ -15,6 +15,7 @@ import {
   Clock,
   Close,
   CloseRound,
+  CloseSmall,
   Cross,
   Down,
   Download,
@@ -26,6 +27,7 @@ import {
   File,
   Forward,
   Globe,
+  Hamburger,
   Info,
   Left,
   Lightbulb,
@@ -71,6 +73,7 @@ const IconMap = {
   clock: Clock,
   close: Close,
   closeRound: CloseRound,
+  closeSmall: CloseSmall,
   cross: Cross,
   down: Down,
   download: Download,
@@ -82,6 +85,7 @@ const IconMap = {
   file: File,
   forward: Forward,
   globe: Globe,
+  hamburger: Hamburger,
   info: Info,
   left: Left,
   lightbulb: Lightbulb,
@@ -122,8 +126,10 @@ export const IconFillColors = {
   primary: "#0077DA",
 }
 
+export type IconSize = "tiny" | "small" | "base" | "medium" | "large" | "xlarge" | "2xl" | "3xl"
+
 export interface IconProps {
-  size: "tiny" | "small" | "medium" | "large" | "xlarge" | "2xl" | "3xl"
+  size: IconSize
   symbol: IconTypes
   className?: string
   fill?: string

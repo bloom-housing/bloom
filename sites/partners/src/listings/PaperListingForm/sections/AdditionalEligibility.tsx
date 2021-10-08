@@ -1,12 +1,13 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
+import { fieldMessage } from "../../../../lib/helpers"
 
 const AdditionalEligibility = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register } = formMethods
+  const { register, errors, clearErrors } = formMethods
 
   return (
     <div>
@@ -23,7 +24,6 @@ const AdditionalEligibility = () => {
             id={"creditHistory"}
             fullWidth={true}
             register={register}
-            maxLength={600}
           />
           <Textarea
             label={t("listings.rentalHistory")}
@@ -31,7 +31,6 @@ const AdditionalEligibility = () => {
             id={"rentalHistory"}
             fullWidth={true}
             register={register}
-            maxLength={600}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -41,7 +40,6 @@ const AdditionalEligibility = () => {
             id={"criminalBackground"}
             fullWidth={true}
             register={register}
-            maxLength={600}
           />
           <Textarea
             label={t("listings.sections.rentalAssistanceTitle")}
@@ -49,7 +47,10 @@ const AdditionalEligibility = () => {
             id={"rentalAssistance"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            errorMessage={fieldMessage(errors?.rentalAssistance?.message)}
+            inputProps={{
+              onChange: () => clearErrors("rentalAssistance"),
+            }}
           />
         </GridSection>
       </GridSection>

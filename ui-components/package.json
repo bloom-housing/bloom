@@ -77,7 +77,6 @@
     "@types/react-transition-group": "^4.4.0",
     "axios": "^0.21.1",
     "body-scroll-lock": "^3.1.5",
-    "bulma": "^0.9.1",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "moment": "^2.29.1",

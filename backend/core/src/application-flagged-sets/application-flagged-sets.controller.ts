@@ -11,33 +11,17 @@ import {
   ValidationPipe,
 } from "@nestjs/common"
 import { Request as ExpressRequest } from "express"
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { mapTo } from "../shared/mapTo"
-import { Expose } from "class-transformer"
-import { IsUUID } from "class-validator"
-import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { ApplicationFlaggedSetsService } from "./application-flagged-sets.service"
-import { PaginationQueryParams } from "../shared/dto/pagination.dto"
-import {
-  ApplicationFlaggedSetDto,
-  ApplicationFlaggedSetResolveDto,
-  PaginatedApplicationFlaggedSetDto,
-} from "./dto/application-flagged-set.dto"
-
-export class PaginatedApplicationFlaggedSetQueryParams extends PaginationQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "listingId",
-    required: true,
-  })
-  @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
-  listingId: string
-}
+import { ApplicationFlaggedSetDto } from "./dto/application-flagged-set.dto"
+import { PaginatedApplicationFlaggedSetDto } from "./dto/paginated-application-flagged-set.dto"
+import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
+import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
 
 @Controller("/applicationFlaggedSets")
 @ApiTags("applicationFlaggedSets")

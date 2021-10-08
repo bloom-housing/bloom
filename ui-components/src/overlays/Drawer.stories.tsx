@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useForm } from "react-hook-form"
 
 import { Drawer, DrawerSide } from "./Drawer"
 import { GridSection } from "../sections/GridSection"
@@ -101,29 +102,32 @@ export const StandardOnLeft = () => {
   )
 }
 
-export const DrawerFieldTest = () => (
-  <Drawer open={true} title="Drawer Title" ariaDescription="My Drawer">
-    <section className="border p-8 bg-white mb-8">
-      <GridSection title="Section Title" columns={4}>
-        <Field label="Alpha" placeholder="Enter text" name="label1" register={() => {}} />
+export const DrawerFieldTest = () => {
+  const { register } = useForm()
+  return (
+    <Drawer open={true} title="Drawer Title" ariaDescription="My Drawer">
+      <section className="border p-8 bg-white mb-8">
+        <GridSection title="Section Title" columns={4}>
+          <Field label="Alpha" placeholder="Enter text" name="label1" register={register} />
 
-        <Field label="Beta" placeholder="Enter text" name="label2" register={() => {}} />
+          <Field label="Beta" placeholder="Enter text" name="label2" register={register} />
 
-        <Field label="Gamma" placeholder="Enter text" name="label3" register={() => {}} />
+          <Field label="Gamma" placeholder="Enter text" name="label3" register={register} />
 
-        <Field label="Delta" placeholder="Enter text" name="label4" register={() => {}} />
+          <Field label="Delta" placeholder="Enter text" name="label4" register={register} />
 
-        <Field label="Epsilon" placeholder="Enter text" name="label5" register={() => {}} />
+          <Field label="Epsilon" placeholder="Enter text" name="label5" register={register} />
 
-        <Field label="Zeta" placeholder="Enter text" name="label6" register={() => {}} />
+          <Field label="Zeta" placeholder="Enter text" name="label6" register={register} />
 
-        <Field label="Eta" placeholder="Enter text" name="label7" register={() => {}} />
+          <Field label="Eta" placeholder="Enter text" name="label7" register={register} />
 
-        <Field label="Theta" placeholder="Enter text" name="label8" register={() => {}} />
-      </GridSection>
-    </section>
-  </Drawer>
-)
+          <Field label="Theta" placeholder="Enter text" name="label8" register={register} />
+        </GridSection>
+      </section>
+    </Drawer>
+  )
+}
 
 export const DrawerViewTest = () => (
   <Drawer open={true} title="Drawer Title" ariaDescription="My Drawer">
