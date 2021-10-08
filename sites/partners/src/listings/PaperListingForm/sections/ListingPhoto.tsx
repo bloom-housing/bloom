@@ -24,7 +24,7 @@ const ListingPhoto = () => {
   const listingFormPhoto = watch("image")
 
   /*
-    Set state for the drawer, upload progress, drawer, and more
+    Set state for the drawer, upload progress, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)

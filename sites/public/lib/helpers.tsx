@@ -92,9 +92,9 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
 
 export const getListings = (listings) => {
   const unitSummariesHeaders = {
-    unitType: t("t.unitType"),
-    minimumIncome: t("t.minimumIncome"),
-    rent: t("t.rent"),
+    unitType: "t.unitType",
+    minimumIncome: "t.minimumIncome",
+    rent: "t.rent",
   }
   return listings.map((listing: Listing, index) => {
     return (

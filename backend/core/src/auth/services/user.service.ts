@@ -189,7 +189,7 @@ export class UserService {
   }
 
   private static getConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
+    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
   }
 
   public async connectUserWithExistingApplications(user: User) {

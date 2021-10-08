@@ -197,6 +197,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   fullWidth={true}
                   register={register}
                   defaultValue={lotteryEvent ? lotteryEvent.note : null}
+                  maxLength={150}
                 />
               </GridCell>
             </GridSection>
@@ -293,7 +294,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               id={"whatToExpect"}
               fullWidth={true}
               register={register}
-              maxLength={600}
             />
           </GridCell>
         </GridSection>

@@ -48,7 +48,7 @@ export const Textarea = (props: TextareaProps) => {
         disabled={props.disabled}
         defaultValue={props.defaultValue}
         id={props.id ?? props.name}
-        maxLength={props.maxLength ?? 150}
+        maxLength={props.maxLength ?? 1000}
         name={props.name}
         placeholder={props.placeholder ?? t("t.description")}
         ref={props.register}
