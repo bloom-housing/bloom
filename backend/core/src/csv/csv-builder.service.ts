@@ -9,10 +9,20 @@ export class CsvBuilder {
   headers: { [key: string]: number }
   data: { header: string; val: any }[]
   inProgress: boolean
+  excludeKeys: string[]
   constructor(private readonly csvEncoder: CsvEncoder) {
     this.headers = {}
     this.data = []
     this.inProgress = false
+    this.excludeKeys = [
+      "id",
+      "createdAt",
+      "confirmationCode",
+      "deletedAt",
+      "listingId",
+      "updatedAt",
+      "userId",
+    ]
   }
 
   private setHeader(key: string, header: string, index: number): string {
@@ -34,6 +44,14 @@ export class CsvBuilder {
 
   private setProgress(inProgress: boolean) {
     this.inProgress = inProgress
+  }
+
+  private getExcludeKeysRegex() {
+    return new RegExp(this.excludeKeys.join("|"))
+  }
+
+  private addToExlucdedKeys(key) {
+    this.excludeKeys.push(key)
   }
 
   private parseApplication(key: string, val: any, header: string, index = 0): void {
@@ -82,7 +100,7 @@ export class CsvBuilder {
     }
   }
 
-  public build(arr: any[]): string {
+  public build(arr: any[], includeDemographics?: boolean): string {
     if (this.inProgress === true) {
       throw new HttpException(
         {
@@ -95,6 +113,9 @@ export class CsvBuilder {
     this.setProgress(true)
     let dataString = ""
     try {
+      if (!includeDemographics) {
+        this.addToExlucdedKeys("demographic")
+      }
       arr.forEach((row: ApplicationDto) => {
         this.parseApplication("", row, "")
         this.data.push({ header: "_endRow", val: "_endRow" })
@@ -103,10 +124,7 @@ export class CsvBuilder {
       // headers to sorted array
       const headerArray = Object.keys(this.headers)
         // filter out unwanted keys
-        .filter(
-          (header) =>
-            !/\sid|createdAt|confirmationCode|deletedAt|listingId|updatedAt|userId/.test(header)
-        )
+        .filter((header) => !this.getExcludeKeysRegex().test(header))
         .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
 
       // initiate arrays to insert data
