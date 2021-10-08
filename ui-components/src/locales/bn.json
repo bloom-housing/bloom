@@ -1,4 +1,7 @@
 {
+    "config": {
+        "routePrefix": "bn"
+    },
     "account": {
         "accountSettings": "অ্যাকাউন্ট সেটিংস",
         "errorFetchingApplications": "অ্যাপ্লিকেশন আনতে ত্রুটি",
@@ -649,7 +652,6 @@
             "success": "আপনি আপনার অ্যাকাউন্ট থেকে সফলভাবে লগ আউট করেছেন।"
         }
     },
-    "config": {},
     "errors": {
         "alert": {
             "timeoutPleaseTryAgain": "উফ! মনে হচ্ছে কিছু ভুল হয়েছে। অনুগ্রহপূর্বক আবার চেষ্টা করুন."

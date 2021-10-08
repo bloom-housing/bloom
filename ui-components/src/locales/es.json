@@ -1,4 +1,7 @@
 {
+    "config": {
+        "routePrefix": "es"
+    },
     "account": {
         "accountSettings": "Configuraciones de la cuenta",
         "errorFetchingApplications": "Error al recuperar aplicaciones",
@@ -524,7 +527,6 @@
             "success": "Ha cerrado la sesión con éxito de su cuenta."
         }
     },
-    "config": {},
     "errors": {
         "alert": {
             "timeoutPleaseTryAgain": "¡UPS! Parece que algo salió mal. Inténtalo de nuevo."
