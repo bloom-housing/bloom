@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file. The format 
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
+  - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
 
 - Changed:
 
