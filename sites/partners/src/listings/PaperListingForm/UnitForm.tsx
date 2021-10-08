@@ -32,9 +32,17 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   existingId: number
   nextId: number
+  savedUnit: boolean
 }
 
-const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFormProps) => {
+const UnitForm = ({
+  onSubmit,
+  onClose,
+  defaultUnit,
+  existingId,
+  nextId,
+  savedUnit,
+}: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [options, setOptions] = useState({
@@ -231,16 +239,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     }
 
     if (action === "copyNew") {
-      onSubmit({
-        ...formData,
-        tempId: nextId,
-      })
       onClose(true, { ...formData, tempId: nextId + 1 })
       void resetDefaultValues()
     } else if (action === "saveNew") {
       onSubmit({
         ...formData,
-        tempId: nextId,
+        tempId: existingId ?? nextId + 1,
       })
       onClose(true, null)
       reset()
@@ -550,15 +554,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         </GridSection>
       </div>
       <div className="mt-6">
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("copyNew")}
-          styleType={AppearanceStyleType.secondary}
-          className="mr-4"
-        >
-          {t("t.copyNew")}
-        </Button>
-
+        {savedUnit && (
+          <Button
+            type="button"
+            onClick={() => onFormSubmit("copyNew")}
+            styleType={AppearanceStyleType.secondary}
+            className="mr-4"
+          >
+            {t("t.copyNew")}
+          </Button>
+        )}
         <Button
           type="button"
           onClick={() => onFormSubmit("saveNew")}

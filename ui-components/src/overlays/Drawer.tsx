@@ -2,6 +2,8 @@ import * as React from "react"
 import "./Drawer.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
+import { Tag } from "../text/Tag"
+import { AppearanceStyleType, AppearanceSizeType } from "../global/AppearanceTypes"
 
 export enum DrawerSide {
   left = "left",
@@ -11,7 +13,8 @@ export enum DrawerSide {
 // Ensure each action has a unique key
 export interface DrawerProps extends OverlayProps {
   title?: string
-  subtitle?: string
+  headerTag?: string | React.ReactElement
+  headerTagStyle?: AppearanceStyleType
   className?: string
   direction?: DrawerSide
   actions?: React.ReactNode[]
@@ -33,6 +36,16 @@ const Drawer = (props: DrawerProps) => {
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
           {props.title && <h1 className="drawer__title">{props.title}</h1>}
+          {props.headerTag && (
+            <Tag
+              pillStyle={true}
+              size={AppearanceSizeType.small}
+              styleType={props.headerTagStyle}
+              className={"ml-3"}
+            >
+              {props.headerTag}
+            </Tag>
+          )}
           <button onClick={props.onClose} className="drawer__close" aria-label="Close" tabIndex={0}>
             <Icon size="medium" symbol="close" />
           </button>

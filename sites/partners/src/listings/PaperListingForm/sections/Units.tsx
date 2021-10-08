@@ -77,7 +77,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   )
 
   function saveUnit(newUnit: TempUnit) {
-    const exists = units.some((unit) => unit.tempId === newUnit.tempId)
+    const exists = units.some((unit) => unit.tempId === unitDrawerId)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
       setUnits(updateUnits)
@@ -183,6 +183,10 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       <Drawer
         open={!!unitDrawerId}
         title={t("listings.unit.add")}
+        headerTag={units.some((unit) => unit.tempId === unitDrawerId) ? t("t.saved") : t("t.draft")}
+        headerTagStyle={
+          units.some((unit) => unit.tempId === unitDrawerId) ? AppearanceStyleType.success : null
+        }
         ariaDescription={t("listings.unit.add")}
         onClose={() => setUnitDrawerId(null)}
       >
@@ -202,6 +206,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               setUnitDrawerId(null)
             }
           }}
+          savedUnit={units.some((unit) => unit.tempId === unitDrawerId)}
           defaultUnit={defaultUnit}
           existingId={units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId}
           nextId={units.length + 1}
