@@ -4458,6 +4458,9 @@ export interface Listing {
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
 
   /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
+
+  /**  */
   events: ListingEvent[]
 
   /**  */
@@ -4896,6 +4899,9 @@ export interface ListingCreate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEventCreate[]
@@ -5367,6 +5373,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEventUpdate[]
@@ -5965,6 +5974,7 @@ export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
+export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate

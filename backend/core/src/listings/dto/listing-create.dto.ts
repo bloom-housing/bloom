@@ -24,6 +24,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "preferences",
   "events",
   "image",
@@ -85,6 +86,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreateDto)
+  buildingSelectionCriteriaFile?: AssetCreateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -1,5 +1,13 @@
 import React, { useContext } from "react"
-import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import {
+  t,
+  GridSection,
+  ViewItem,
+  GridCell,
+  MinimalTable,
+  cloudinaryUrlFromId,
+  TableThumbnail,
+} from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -41,6 +49,43 @@ const DetailAdditionalEligibility = () => {
           </ViewItem>
         </GridCell>
       </GridSection>
+      {(listing.buildingSelectionCriteria || listing.buildingSelectionCriteriaFile?.fileId) && (
+        <GridSection columns={1}>
+          <GridCell>
+            <ViewItem label={t("listings.buildingSelectionCriteria")} />
+            {listing.buildingSelectionCriteriaFile?.fileId ? (
+              <MinimalTable
+                headers={{ preview: "t.preview", fileName: "t.fileName" }}
+                data={[
+                  {
+                    preview: (
+                      <TableThumbnail>
+                        <img
+                          alt="PDF preview"
+                          src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
+                        />
+                      </TableThumbnail>
+                    ),
+                    fileName: `${listing.buildingSelectionCriteriaFile.fileId
+                      .split("/")
+                      .slice(-1)
+                      .join()}.pdf`,
+                  },
+                ]}
+              />
+            ) : (
+              <MinimalTable
+                headers={{ url: t("t.url") }}
+                data={[
+                  {
+                    url: listing.buildingSelectionCriteria,
+                  },
+                ]}
+              />
+            )}
+          </GridCell>
+        </GridSection>
+      )}
     </GridSection>
   )
 }
