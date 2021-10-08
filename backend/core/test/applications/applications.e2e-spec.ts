@@ -631,7 +631,7 @@ describe("Applications", () => {
 
     const newUser = await supertest(app.getHttpServer())
       .post(`/user/?noWelcomeEmail=true`)
-      .set("jurisdictionName", "Alameda")
+      .set("jurisdictionName", "Detroit")
       .send(userCreateDto)
       .expect(201)
 
