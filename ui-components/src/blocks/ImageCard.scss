@@ -41,7 +41,10 @@
   bottom: 0;
   left: 0;
   @apply w-full;
-  height: 60%;
+  height: 100%;
+  @screen md {
+    height: 60%;
+  }
 }
 
 .image-card__placeholder {
@@ -58,7 +61,7 @@
 .image-card__title {
   @apply text-white;
   @apply text-left;
-  @apply text-3xl;
+  @apply text-lg;
   @apply uppercase;
   @apply font-alt-sans;
   @apply relative;
@@ -66,6 +69,9 @@
   @apply tracking-wider;
   @apply px-5;
   @apply pb-1;
+  @screen md {
+    @apply text-3xl;
+  }
 }
 
 .image-card__subtitle {
