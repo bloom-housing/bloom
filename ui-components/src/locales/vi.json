@@ -774,6 +774,7 @@
   "listingFilters": {
     "zipCode": "Mã Bưu Chính",
     "zipCodeDescription": "Nhập mã zip",
+    "rentRange": "Phạm vi thuê",
     "availability": "Tính khả dụng của đơn vị",
     "hasAvailability": "Có sẵn",
     "noAvailability": "Không có sẵn",
