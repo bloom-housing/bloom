@@ -1,21 +1,26 @@
 import * as React from "react"
 import { ImageCard, ImageCardProps } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
-import { GroupedTable, GroupedTableProps } from "../../tables/GroupedTable"
+import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
+
 import { t } from "../../helpers/translator"
 import "./ListingCard.scss"
+import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
+
+interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
 export interface ListingCardHeaderProps {
   tableHeader?: string
   tableHeaderClass?: string
   tableSubHeader?: string
   tableSubHeaderClass?: string
+  stackedTable?: boolean
 }
 export interface ListingCardProps {
   imageCardProps: ImageCardProps
   seeDetailsLink?: string
   tableHeaderProps?: ListingCardHeaderProps
-  tableProps: GroupedTableProps
+  tableProps: ListingCardTableProps
   detailsLinkClass?: string
 }
 
@@ -47,7 +52,15 @@ const ListingCard = (props: ListingCardProps) => {
           </h4>
         )}
         <div className="listings-row_table">
-          {tableProps.data && <GroupedTable {...tableProps} />}
+          {(tableProps.data || tableProps.stackedData) && (
+            <>
+              {tableHeaderProps?.stackedTable ? (
+                <StackedTable {...(tableProps as StackedTableProps)} />
+              ) : (
+                <StandardTable {...(tableProps as StandardTableProps)} />
+              )}
+            </>
+          )}
         </div>
         {props.seeDetailsLink && (
           <LinkButton className={detailsLinkClass} href={props.seeDetailsLink}>

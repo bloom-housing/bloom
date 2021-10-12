@@ -24,7 +24,7 @@ const ListingPhoto = () => {
   const listingFormPhoto = watch("image")
 
   /*
-    Set state for the drawer, upload progress, drawer, and more
+    Set state for the drawer, upload progress, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -146,6 +146,11 @@ const ListingPhoto = () => {
         title={t("listings.sections.photoTitle")}
         description={t("listings.sections.photoSubtitle")}
       >
+        {
+          <span className={"text-tiny text-gray-800 block mb-2"}>
+            {t("listings.sections.photoTitle")}
+          </span>
+        }
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhoto?.fileId && listingFormPhoto.fileId != "" ? (
@@ -165,6 +170,7 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.image) && (
         <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
       )}

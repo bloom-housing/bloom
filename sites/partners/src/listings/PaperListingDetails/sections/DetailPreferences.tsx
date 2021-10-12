@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, Button, ViewItem } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable, ViewItem } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 
 const DetailPreferences = () => {
@@ -39,4 +39,4 @@ const DetailPreferences = () => {
   )
 }
 
-export { DetailPreferences as default, DetailPreferences }
+export default DetailPreferences

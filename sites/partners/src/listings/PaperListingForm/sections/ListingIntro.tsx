@@ -42,6 +42,7 @@ const ListingIntro = (props: ListingIntroProps) => {
             error={
               fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
             }
+            subNote={t("listings.requiredToPublish")}
             errorMessage={
               fieldMessage(errors?.jurisdiction) ??
               fieldMessage(errors?.["jurisdiction.id"]) ??
@@ -64,6 +65,7 @@ const ListingIntro = (props: ListingIntroProps) => {
           inputProps={{
             onChange: () => clearErrors("name"),
           }}
+          subNote={t("listings.requiredToPublish")}
           register={register}
           error={fieldHasError(errors?.name)}
           errorMessage={fieldMessage(errors?.name)}
@@ -74,6 +76,7 @@ const ListingIntro = (props: ListingIntroProps) => {
         name="developer"
         label={t("listings.developer")}
         placeholder={t("listings.developer")}
+        subNote={t("listings.requiredToPublish")}
         error={fieldHasError(errors?.developer)}
         errorMessage={fieldMessage(errors?.developer)}
         inputProps={{

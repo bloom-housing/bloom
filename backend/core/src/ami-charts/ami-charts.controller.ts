@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -18,6 +19,7 @@ import { mapTo } from "../shared/mapTo"
 import { AmiChartsService } from "./ami-charts.service"
 import { AmiChartCreateDto, AmiChartDto, AmiChartUpdateDto } from "./dto/ami-chart.dto"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
+import { AmiChartListQueryParams } from "./dto/ami-chart-list-query-params"
 
 @Controller("/amiCharts")
 @ApiTags("amiCharts")
@@ -30,8 +32,8 @@ export class AmiChartsController {
 
   @Get()
   @ApiOperation({ summary: "List amiCharts", operationId: "list" })
-  async list(): Promise<AmiChartDto[]> {
-    return mapTo(AmiChartDto, await this.amiChartsService.list())
+  async list(@Query() queryParams: AmiChartListQueryParams): Promise<AmiChartDto[]> {
+    return mapTo(AmiChartDto, await this.amiChartsService.list(queryParams))
   }
 
   @Post()

@@ -70,11 +70,14 @@ const ApplicationPreferencesAll = () => {
   const preferenceCheckboxIds = useMemo(() => {
     return preferencesByPage?.reduce((acc, item) => {
       const preferenceName = item.formMetadata?.key
-      const optionPaths = item.formMetadata?.options?.map((option) => {
-        return getPreferenceOptionName(option.key, preferenceName)
-      })
-      if (!item.formMetadata.hideGenericDecline)
+      const optionPaths = item.formMetadata?.options
+        ? item.formMetadata.options.map((option) => {
+            return getPreferenceOptionName(option.key, preferenceName)
+          })
+        : []
+      if (item.formMetadata && !item.formMetadata?.hideGenericDecline) {
         optionPaths.push(getExclusivePreferenceOptionName(item?.formMetadata?.key))
+      }
 
       Object.assign(acc, {
         [preferenceName]: optionPaths,
@@ -278,7 +281,7 @@ const ApplicationPreferencesAll = () => {
 
         <div className="form-card__group px-0 pb-0">
           <p className="field-note">
-            {preferencesByPage[0]?.formMetadata.customSelectText ??
+            {preferencesByPage[0]?.formMetadata?.customSelectText ??
               t("application.preferences.selectBelow")}
           </p>
         </div>
@@ -317,7 +320,10 @@ const ApplicationPreferencesAll = () => {
                           true,
                           [],
                           preference,
-                          t("application.preferences.dontWant")
+                          preference.formMetadata.options &&
+                            preference.formMetadata.options.length === 1
+                            ? t("application.preferences.dontWantSingular")
+                            : t("application.preferences.dontWant")
                         )}
                     </fieldset>
                   </div>
