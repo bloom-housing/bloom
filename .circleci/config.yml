@@ -64,6 +64,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
+  jest-shared-helpers:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:shared:helpers
   jest-ui-components:
     executor: standard-node
     steps:
@@ -121,6 +127,9 @@ workflows:
     jobs:
       - setup
       - lint:
+          requires:
+            - setup
+      - jest-shared-helpers:
           requires:
             - setup
       - jest-ui-components:

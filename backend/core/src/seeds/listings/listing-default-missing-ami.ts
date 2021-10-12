@@ -1,11 +1,11 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDefaultProperty } from "./shared"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { UnitSeedType } from "./listings"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { CountyCode } from "../../shared/types/county-code"
 
 export const missingAmiLevelsChart: Omit<AmiChartCreateDto, "jurisdiction"> = {

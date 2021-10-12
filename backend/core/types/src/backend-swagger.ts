@@ -3850,6 +3850,9 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   isPartner?: boolean
 }
 
@@ -3927,7 +3930,7 @@ export interface UserProfileUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3984,6 +3987,9 @@ export interface ListingFilterParams {
   zipcode?: string
 
   /**  */
+  leasingAgents?: string
+
+  /**  */
   availability?: EnumListingFilterParamsAvailability
 
   /**  */
@@ -3996,10 +4002,7 @@ export interface ListingFilterParams {
   maxRent?: number
 
   /**  */
-  ami?: number
-
-  /**  */
-  leasingAgents?: string
+  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4728,24 +4731,6 @@ export interface ListingEventCreate {
   label?: string
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -4759,13 +4744,13 @@ export interface UnitCreate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeCreate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeCreate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeCreate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideCreate
@@ -5163,33 +5148,6 @@ export interface ListingEventUpdate {
   label?: string
 }
 
-export interface UnitTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
 export interface UnitAmiChartOverrideUpdate {
   /**  */
   id?: string
@@ -5221,13 +5179,13 @@ export interface UnitUpdate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeUpdate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeUpdate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeUpdate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideUpdate
@@ -5850,6 +5808,51 @@ export interface TranslationUpdate {
   jurisdiction: Id
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5909,6 +5912,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsComparison {

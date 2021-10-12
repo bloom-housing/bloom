@@ -7,12 +7,14 @@ import {
   GridCell,
   Select,
   FieldGroup,
+} from "@bloom-housing/ui-components"
+import {
   ethnicityKeys,
   raceKeys,
   genderKeys,
   sexualOrientation,
   howDidYouHear,
-} from "@bloom-housing/ui-components"
+} from "@bloom-housing/shared-helpers"
 
 const FormDemographics = () => {
   const formMethods = useFormContext()

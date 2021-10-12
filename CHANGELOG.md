@@ -6,8 +6,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-## Frontend
-
 - Added:
 
   - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
@@ -38,6 +36,8 @@ All notable changes to this project will be documented in this file. The format 
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
+  - Can toggle application pick up and drop off addresses off ([#1954](https://github.com/bloom-housing/bloom/pull/1954)) (Emily Jablonski)
+  - Listings management AMI charts populate after Save and New on units ([#1952](https://github.com/bloom-housing/bloom/pull/1952)) (Emily Jablonski)
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
 
@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
+  - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
 
 - Changed:
 
@@ -116,6 +117,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
+  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
 
 - Changed:
 
@@ -151,6 +153,11 @@ All notable changes to this project will be documented in this file. The format 
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
 
 ### General
+
+- Added:
+
+  - A new `shared-helpers` package for consolidating functions and constants between the Next.js sites and possibly the backend ([#1911](https://github.com/bloom-housing/bloom/issues/1911)) (Jared White)
+    **Breaking Change**: Various constants were extracted out of the `ui-components` package
 
 - Updated:
 
