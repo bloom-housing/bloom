@@ -11,8 +11,3 @@ export class LoginDto {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   password: string
 }
-
-export class LoginResponseDto {
-  @Expose()
-  accessToken: string
-}

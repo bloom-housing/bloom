@@ -1,5 +1,4 @@
 {
-  "": "",
   "account": {
     "accountSettings": "Account Settings",
     "errorFetchingApplications": "Error fetching applications",
@@ -576,7 +575,11 @@
     "unconfirmed": "Unconfirmed",
     "totalUsers": "total users",
     "administrator": "Administrator",
-    "partner": "Partner"
+    "partner": "Partner",
+    "addUser": "Add User",
+    "userDetails": "User Details",
+    "allListings": "All listings",
+    "inviteSent": "Invite sent"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -735,6 +738,7 @@
   "listings": {
     "error": "There was an issue submitting the form.",
     "closeThisListing": "Do you really want to close this listing?",
+    "publishThisListing": "Publishing will push the listing live on the public site.",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -845,7 +849,7 @@
     "listingSubmitted": "Listing Submitted",
     "listingUpdated": "Listing Updated",
     "longitude": "Longitude",
-    "lottery": "Lottery",
+    "lotteryTitle": "Lottery",
     "lotteryDateNotes": "Lottery Date Notes",
     "lotteryDateQuestion": "When will the lottery be run?",
     "lotteryEndTime": "Lottery End Time",
@@ -1068,6 +1072,14 @@
         "available": "Available",
         "occupied": "Occupied",
         "unavailable": "Unavailable"
+      },
+      "typeOptions": {
+        "studio": "Studio",
+        "oneBdrm": "One Bedroom",
+        "twoBdrm": "Two Bedroom",
+        "threeBdrm": "Three Bedroom",
+        "fourBdrm": "Four Bedroom",
+        "SRO": "Single Room Occupancy"
       }
     },
     "unitsSummary": {
@@ -1239,6 +1251,7 @@
     "hour": "Hour",
     "household": "Household",
     "income": "Income",
+    "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",
     "label": "Label",
@@ -1344,9 +1357,11 @@
     "checkEligibility": "Do I Qualify?",
     "checkEligibilityDescription": "Check in Minutes if You Qualify!",
     "subTitle": "Click the button below to find rental housing based on your income and household needs",
+    "seeMoreOpportunitiesTruncated": "See more housing opportunities and resources",
     "signUp": "Get emailed whenever a new listing is posted",
     "signUpToday": "Sign up today",
-    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
+    "viewAdditionalHousing": "View additional housing opportunities and resources",
+    "viewAdditionalHousingTruncated": "View opportunities and resources"
   },
   "whatToExpect": {
     "label": "What to Expect",

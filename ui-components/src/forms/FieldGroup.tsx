@@ -8,6 +8,7 @@ interface FieldSingle {
   value?: string
   defaultChecked?: boolean
   note?: string
+  inputProps?: Record<string, unknown>
 }
 
 interface FieldGroupProps {
@@ -64,6 +65,7 @@ const FieldGroup = ({
               defaultChecked={item.defaultChecked || false}
               ref={register(validation)}
               onChange={onChange}
+              {...item.inputProps}
             />
             <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
               {item.label}

@@ -47,7 +47,7 @@ describe("UnitAccessibilityPriorityTypes", () => {
     const unitAccessibilityPriorityTypes = res.body.map(
       (unitAccessibilityPriorityTypes) => unitAccessibilityPriorityTypes.name
     )
-    for (const predefinedUnitAccessibilityPriorityType of ["mobility"]) {
+    for (const predefinedUnitAccessibilityPriorityType of ["Mobility"]) {
       expect(unitAccessibilityPriorityTypes).toContain(predefinedUnitAccessibilityPriorityType)
     }
   })

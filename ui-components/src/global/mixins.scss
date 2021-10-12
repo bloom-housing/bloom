@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Using due to errors from compass mixin
 @mixin custom-linear-gradient($top, $bottom) {
   background: $top; /* Old browsers */
@@ -51,7 +53,7 @@
     width: 1px;
     margin-left: -1px;
     height: 0;
-    padding-top: 591.44px / 1127.34px * 100%;
+    padding-top: math.div(591.44px, 1127.34px) * 100%;
   }
 
   &::after {
