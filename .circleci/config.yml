@@ -129,6 +129,9 @@ workflows:
       - lint:
           requires:
             - setup
+      - jest-shared-helpers:
+          requires:
+            - setup
       - jest-ui-components:
           requires:
             - setup
