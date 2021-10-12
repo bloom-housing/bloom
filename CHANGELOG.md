@@ -6,8 +6,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-## Frontend
-
 - Added:
 
   - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
@@ -119,6 +117,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
+  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
 
 - Changed:
 

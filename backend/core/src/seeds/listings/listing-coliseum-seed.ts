@@ -13,11 +13,11 @@ import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 import { CountyCode } from "../../shared/types/county-code"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
