@@ -48,7 +48,7 @@ const views: Views = {
       "unitType.name",
       "listingPrograms.page",
       "listingPrograms.ordinal",
-      "listingProgramsProgram.id"
+      "listingProgramsProgram.id",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
