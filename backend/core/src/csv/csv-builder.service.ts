@@ -148,7 +148,6 @@ export class CsvBuilder {
         mappedStr += ` (${index})`
       }
     }
-
     if (this.headers[newKey] === undefined) {
       this.headers[newKey] = 1
     }
@@ -177,7 +176,7 @@ export class CsvBuilder {
       val.forEach((val2, i) => {
         // preferences are a special case
         if (key === "preferences") {
-          val2.options.forEach((preference) => {
+          val2.options?.forEach((preference) => {
             this.parseApplication(
               preference.key,
               preference.checked ? "Yes" : "No",
@@ -266,6 +265,11 @@ export class CsvBuilder {
               fields.forEach((field) => {
                 mappedField += " " + this.capAndSplit(field)
               })
+            } else if (test1) {
+              const columnCount = HEADER_COUNT_REG.exec(column)
+              if (columnCount !== null) {
+                mappedField += columnCount[0]
+              }
             }
             columnString = mappedField
           } else {
@@ -303,12 +307,16 @@ export class CsvBuilder {
 
       // turn headers into csv format
       dataString = headerArray.map((key) => key.replace(/^_[A-Z]\d?_/, "")).join(",")
-      dataString += "\n"
+      if (headerArray.length) {
+        dataString += "\n"
+      }
 
       // turn rows into csv format
       rows.forEach((row) => {
-        dataString += row.join(",")
-        dataString += "\n"
+        if (row.length) {
+          dataString += row.join(",")
+          dataString += "\n"
+        }
       })
     } catch (error) {
       console.log("CSV Export Error = ", error)
