@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindConditions, Repository } from "typeorm"
+import { DeepPartial, FindConditions, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
@@ -222,7 +222,7 @@ export class UserService {
     await this.applicationsRepository.save(applications)
   }
 
-  public async _createUser(dto: Partial<User>, authContext: AuthContext) {
+  public async _createUser(dto: DeepPartial<User>, authContext: AuthContext) {
     if (dto.confirmedAt) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
