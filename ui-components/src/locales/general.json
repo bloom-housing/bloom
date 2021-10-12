@@ -1433,6 +1433,7 @@
     "household": {
       "prompt": "How many people will be living in this property?",
       "srCountLabel": "Household Size",
+      "selectOne": "Select one",
       "ranges": {
         "one": "1 Member",
         "two": "2 Members",
