@@ -145,7 +145,6 @@
       "preferredUnit": {
         "preferredUnitType": "Tipo de vivienda preferida",
         "title": "¿Cuáles son los tamaños de vivienda que le interesan?",
-        "subTitle": "El tipo de vivienda seleccionado estará sujeto a disponibilidad.",
         "optionsLabel": "Marque todas las opciones que correspondan:",
         "options": {
           "studio": "Estudio",

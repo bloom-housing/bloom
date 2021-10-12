@@ -142,7 +142,6 @@
       "preferredUnit": {
         "preferredUnitType": "Loại Căn nhà Ưa thích",
         "title": "Kích thước căn nhà mà quý vị quan tâm là gì?",
-        "subTitle": "Loại căn nhà quý vị đã chọn sẽ tùy thuộc vào tình trạng sẵn có.",
         "optionsLabel": "Đánh dấu tất cả các lựa chọn phù hợp:",
         "options": {
           "studio": "Một phòng kiểu studio",

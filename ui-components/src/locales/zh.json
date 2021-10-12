@@ -142,7 +142,6 @@
       "preferredUnit": {
         "preferredUnitType": "首選單位類型",
         "title": "您對哪類單位面積感興趣？",
-        "subTitle": "您選擇的單位類型將視供應情況而定。",
         "optionsLabel": "請勾選所有適用的單位：",
         "options": {
           "studio": "套房",
