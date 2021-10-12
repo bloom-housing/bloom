@@ -602,6 +602,10 @@
   "region": {
     "name": "Địa phương"
   },
+  "progressNav": {
+    "srHeading": "Tiến trình",
+    "current": "Bước hiện tại:"
+  },
   "states": {
     "AL": "Alabama",
     "AK": "Alaska",

@@ -12,7 +12,7 @@ import { ListingReviewOrder } from "../../listings/types/listing-review-order-en
 import { CountyCode } from "../../shared/types/county-code"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
-export const tritonAmiChart: AmiChartCreateDto = {
+export const tritonAmiChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
   name: "San Jose TCAC 2019",
   items: [
     {
@@ -762,7 +762,13 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
 
-    const amiChart = await this.amiChartRepository.save(tritonAmiChart)
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...tritonAmiChart,
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...tritonProperty,

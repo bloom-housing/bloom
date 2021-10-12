@@ -6,28 +6,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
-### Backend
-
 - Added:
 
-  - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
-  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
-  - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
-  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
-  - ** Breaking Change**: Add `jurisdiction` relation to `ReservedCommunitType` entity ([#1889](https://github.com/bloom-housing/bloom/pull/1889))
-  - Added new userProfile resource and endpoint `PUT /userProfile/:id` suited specifically for users updating their own profiles ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
-  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
-
-- Changed:
-  - ** Breaking Change**: Endpoint `PUT /user/:id` is admin only now, because it allows edits over entire `user` table ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
-  - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
-  - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
-  - Add various backend filters ([#1884](https://github.com/bloom-housing/bloom/pull/1884))
-
-## Frontend
-
-- Added:
-
+  - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
   - Show confirmation modal when publishing listings ([#1772](https://github.com/bloom-housing/bloom/pull/1772)) (Jared White)
   - Split Listing form up into two main tabs ([#1644](https://github.com/bloom-housing/bloom/pull/1644)) (Jared White)
   - Allow lottery results to be uploaded for a closed listing ([#1568](https://github.com/bloom-housing/bloom/pull/1568)) (Jared White)
@@ -55,6 +36,8 @@ All notable changes to this project will be documented in this file. The format 
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
+  - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
+  - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
 
 - Changed:
 
@@ -72,6 +55,8 @@ All notable changes to this project will be documented in this file. The format 
   - Ability to have multiple statuses under the ImageCard ([#1700](https://github.com/bloom-housing/bloom/pull/1700)) (Emily Jablonski)
     - **Breaking Change**: Removed three props (appStatus, appStatusContent, and appStatusSubContent) in favor of an array that contains that data - will need to transition any status information to the new array format
   - Add Heading component and numbered-list styles ([#1405](https://github.com/bloom-housing/bloom/pull/1405)) (Marcin Jedras)
+  - Re-factor ResponsiveTable ([#1937](https://github.com/bloom-housing/bloom/pull/1937)) (Emily Jablonski)
+  - Add subNote to some form fields ([#1924](https://github.com/bloom-housing/bloom/pull/1924)) (Marcin Jedras)
 
 - Fixed:
 
@@ -112,6 +97,12 @@ All notable changes to this project will be documented in this file. The format 
 
 - Added:
 
+  - Add POST /users/invite endpoint and extend PUT /users/confirm with optional password change ([#1801](https://github.com/bloom-housing/bloom/pull/1801))
+  - Add `isPartner` filter to GET /user/list endpoint ([#1830](https://github.com/bloom-housing/bloom/pull/1830))
+  - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
+  - Add logic for connecting newly created user account to existing applications (matching based on applicant.emailAddress) ([#1807](https://github.com/bloom-housing/bloom/pull/1807))
+  - ** Breaking Change**: Add `jurisdiction` relation to `ReservedCommunitType` entity ([#1889](https://github.com/bloom-housing/bloom/pull/1889))
+  - Added new userProfile resource and endpoint `PUT /userProfile/:id` suited specifically for users updating their own profiles ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
   - Filtering, pagination, and tests for listings endpoint (Parts of Detroit Team [#18](https://github.com/CityOfDetroit/bloom/pull/18), [#133](https://github.com/CityOfDetroit/bloom/pull/133), [#180](https://github.com/CityOfDetroit/bloom/pull/180), [#257](https://github.com/CityOfDetroit/bloom/pull/257), [#264](https://github.com/CityOfDetroit/bloom/pull/264), [#271](https://github.com/CityOfDetroit/bloom/pull/271)) [#1578](https://github.com/CityOfDetroit/bloom/pull/1578)
   - Units summary table ([#1607](https://github.com/bloom-housing/bloom/pull/1607))
   - Add support for comma-separated lists to filters, ensure comparison is valid ([Detroit Team #356](https://github.com/CityOfDetroit/bloom/pull/356), [#1634](https://github.com/bloom-housing/bloom/pull/1634))
@@ -123,9 +114,15 @@ All notable changes to this project will be documented in this file. The format 
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
+  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
 
 - Changed:
 
+  - ** Breaking Change**: Endpoint `PUT /user/:id` is admin only now, because it allows edits over entire `user` table ([#1862](https://github.com/bloom-housing/bloom/pull/1862))
+  - Changes to applications done through `PUT /applications/:id` are now reflected in AFS ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
+  - Adds confirmationCode to applications table ([#1854](https://github.com/bloom-housing/bloom/pull/1854))
+  - Add various backend filters ([#1884](https://github.com/bloom-housing/bloom/pull/1884))
+  - Adds jurisdiction relation to AmiChart entity ([#1905](https://github.com/bloom-housing/bloom/pull/1905))
   - Updated listing's importer to handle latest unit and priority types changes ([#1584](https://github.com/bloom-housing/bloom/pull/1584)) (Marcin Jedras)
   - Sets cache manager to use Redis [#1589](https://github.com/bloom-housing/bloom/compare/dev...seanmalbert:1589/redis-cache-manager)
   - removed roles for public users and assigned a "partner" role for leasing agents([#1628](https://github.com/bloom-housing/bloom/pull/1628))
@@ -149,6 +146,7 @@ All notable changes to this project will be documented in this file. The format 
   - Fixed ListingsService.retrieve `view` query param not being optional in autogenerated client (it should be) [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
+  - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
 
 ### General
 

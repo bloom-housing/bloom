@@ -1,11 +1,10 @@
 import Head from "next/head"
-import qs from "qs"
-import axios from "axios"
 import { ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import { getListings } from "../lib/helpers"
+import { fetchBaseListingData } from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -59,35 +58,13 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 export async function getStaticProps() {
-  if (process.env.npm_lifecycle_script === "next build") {
-    return {
-      props: {},
-      revalidate: process.env.cacheRevalidate,
-    }
-  }
-
-  const response = await axios.get(process.env.listingServiceUrl, {
-    params: {
-      view: "base",
-      limit: "all",
-      filter: [
-        {
-          $comparison: "<>",
-          status: "pending",
-        },
-      ],
-    },
-    paramsSerializer: (params) => {
-      return qs.stringify(params)
-    },
-  })
-
-  const openListings = response?.data?.items
-    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.active)
-    : []
-  const closedListings = response?.data?.items
-    ? response.data.items.filter((listing: Listing) => listing.status === ListingStatus.closed)
-    : []
+  const listings = await fetchBaseListingData()
+  const openListings = listings.filter(
+    (listing: Listing) => listing.status === ListingStatus.active
+  )
+  const closedListings = listings.filter(
+    (listing: Listing) => listing.status === ListingStatus.closed
+  )
 
   return { props: { openListings, closedListings }, revalidate: process.env.cacheRevalidate }
 }
