@@ -459,6 +459,8 @@ export class ApplicationsService {
       order?: string
       /**  */
       markedAsDuplicate?: boolean
+      /**  */
+      includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<string> {
@@ -475,6 +477,7 @@ export class ApplicationsService {
         orderBy: params["orderBy"],
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
+        includeDemographics: params["includeDemographics"],
       }
       let data = null
 

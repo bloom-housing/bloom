@@ -3,38 +3,153 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import dayjs from "dayjs"
 import { CsvEncoder } from "./csv-encoder.service"
 import { ApplicationDto } from "../applications/dto/application.dto"
+import { capitalizeFirstLetter } from "../libs/stringLib"
+
+const HEADER_COUNT_REG = new RegExp(/\s\(\d\)/)
 
 @Injectable()
 export class CsvBuilder {
   headers: { [key: string]: number }
-  data: { header: string; val: any }[]
+  data: { header: string; mappedField: string; val: any }[]
   inProgress: boolean
   excludeKeys: string[]
+  mappedFields: { [key: string]: string }
   constructor(private readonly csvEncoder: CsvEncoder) {
     this.headers = {}
     this.data = []
     this.inProgress = false
     this.excludeKeys = [
       "id",
+      "appUrl",
       "createdAt",
       "confirmationCode",
       "deletedAt",
       "listingId",
+      "noEmail",
+      "noPhone",
       "updatedAt",
       "userId",
     ]
+    // preface fields with _[A-Z]_ to make sorting easier later
+    this.mappedFields = {
+      id: "_A_Application Number",
+      submissionType: "_B_Application Type",
+      submissionDate: "_C_Application Submission Date",
+      ...this.mapPrimaryApplicantFields("D"),
+      additionalPhoneNumber: "_E_Primary Applicant Additional Phone Number",
+      contactPreferences: "_F_Primary Applicant Preferred Contact Type",
+      ...this.mapAddressFields("applicant address", "Primary Applicant Address", "G"),
+      ...this.mapAddressFields("mailingAddress", "Primary Applicant Mailing Address", "H"),
+      ...this.mapAddressFields("applicant workAddress", "Primary Applicant Work Address", "I"),
+      ...this.mapAlternateContactFields("J"),
+      ...this.mapAddressFields(
+        "alternateContact mailingAddress",
+        "Alternate Contact Mailing Address",
+        "K"
+      ),
+      income: "_I_Income",
+      accessibility: "_L_ADA",
+      incomeVouchers: "_M_Vouchers or Subsidies",
+      preferredUnit: "_N_Requested Unit Type",
+      preferences: "_O_Preferences",
+      householdSize: "_P_Household Size",
+      householdMembers: "_Q_Household Members",
+      markedAsDuplicate: "_R_Marked As Duplicate",
+      flagged: "_S_Flagged As Duplicate",
+    }
   }
 
-  private setHeader(key: string, header: string, index: number): string {
+  private mapAddressFields(oldKey: string, newKey: string, sort) {
+    const obj = {}
+    const fields = [
+      "street",
+      "street2",
+      "city",
+      "zipCode",
+      "county",
+      "state",
+      "placeName",
+      "latitude",
+      "longitude",
+    ]
+    fields.forEach((field, i) => {
+      obj[`${oldKey} ${field}`] = `_${sort}${i}_${newKey} ${capitalizeFirstLetter(field)}`
+    })
+
+    return obj
+  }
+
+  private mapPrimaryApplicantFields(sort: string) {
+    const obj = {}
+    const fields = [
+      "firstName",
+      "middleName",
+      "lastName",
+      "birthMonth",
+      "birthDay",
+      "birthYear",
+      "emailAddress",
+      "phoneNumber",
+      "phoneNumberType",
+    ]
+    fields.forEach((field, i) => {
+      obj[`applicant ${field}`] = `_${sort}${i}_Primary Applicant ${this.capAndSplit(field)}`
+    })
+
+    return obj
+  }
+
+  private mapAlternateContactFields(sort: string) {
+    const obj = {}
+    const fields = [
+      "firstName",
+      "middleName",
+      "lastName",
+      "type",
+      "agency",
+      "otherType",
+      "emailAddress",
+      "phoneNumber",
+    ]
+
+    fields.forEach((field, i) => {
+      obj[`alternateContact ${field}`] = `_${sort}${i}_Alternate Contact ${this.capAndSplit(field)}`
+    })
+
+    return obj
+  }
+
+  private capAndSplit(str: string): string {
+    let newStr = capitalizeFirstLetter(str)
+    newStr = newStr.split(/(?=[A-Z])/).join(" ")
+    return newStr
+  }
+
+  private setHeader(header: string, index: number): [string, string?] {
     let newKey = header
+    // we pass along the mapped key for reference, so we can more easily set data to the correct column
+    const test1 = this.mappedFields[header]
+    const test2 = this.mappedFields[header.split(" ")[0]]
+    let mappedStr = test1 ?? test2
+    if (!test1 && test2) {
+      const [, ...fields] = header.split(" ")
+      if (fields) {
+        fields.forEach((field) => {
+          mappedStr += " " + this.capAndSplit(field)
+        })
+      }
+    }
+
     if (index !== 0) {
       newKey += ` (${index})`
+      if (mappedStr) {
+        mappedStr += ` (${index})`
+      }
     }
     if (this.headers[newKey] === undefined) {
       this.headers[newKey] = 1
     }
-
-    return newKey
+    return [newKey, mappedStr]
   }
 
   private resetData() {
@@ -73,8 +188,12 @@ export class CsvBuilder {
     } else if (val instanceof Object) {
       // dates are objects
       if (dayjs(val).isValid()) {
-        const newKey = this.setHeader(key, header, index)
-        this.data.push({ header: newKey, val: dayjs(val).format("DD-MM-YYYY h:mm:ss A") })
+        const [newKey, mappedField] = this.setHeader(header, index)
+        this.data.push({
+          header: newKey,
+          mappedField,
+          val: dayjs(val).format("DD-MM-YYYY h:mm:ss A"),
+        })
       } else {
         for (let i = 0, keys = Object.keys(val); i < keys.length; i++) {
           this.parseApplication(
@@ -86,8 +205,7 @@ export class CsvBuilder {
         }
       }
     } else {
-      const newKey = this.setHeader(key, header, index)
-
+      const [newKey, mappedField] = this.setHeader(header, index)
       // format data before pushing
       if (typeof val === "boolean") {
         val = val ? "Yes" : "No"
@@ -95,6 +213,7 @@ export class CsvBuilder {
       // use JSON.stringify to escape double and single quotes
       this.data.push({
         header: newKey,
+        mappedField,
         val: val !== undefined && val !== null ? JSON.stringify(val) : "",
       })
     }
@@ -114,37 +233,56 @@ export class CsvBuilder {
     let dataString = ""
     try {
       if (!includeDemographics) {
-        this.addToExlucdedKeys("demographic")
+        this.addToExlucdedKeys("demographics")
       }
       arr.forEach((row: ApplicationDto) => {
         this.parseApplication("", row, "")
-        this.data.push({ header: "_endRow", val: "_endRow" })
+        this.data.push({ header: "_endRow", mappedField: undefined, val: "_endRow" })
       })
 
-      // headers to sorted array
-      const headerArray = Object.keys(this.headers)
-        // filter out unwanted keys
-        .filter((header) => !this.getExcludeKeysRegex().test(header))
-        .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
-
+      // filter out excluded keys and fields not in mappedFields
+      let headerArray = [
+        "id",
+        ...Object.keys(this.headers).filter((header) => {
+          const mappedField =
+            this.mappedFields[header.replace(HEADER_COUNT_REG, "")] ||
+            this.mappedFields[header.split(" ")[0]]
+          return !this.getExcludeKeysRegex().test(header) && mappedField
+        }),
+      ]
       // initiate arrays to insert data
       const rows = Array.from({ length: arr.length }, () => Array(headerArray.length))
-      // turn headers into csv format
-      dataString = headerArray
-        .map((column) => {
-          // format header names
-          let columnArray = column.split(" ")
-          columnArray = columnArray.map((str) => {
-            // capitalize and split camel cased
-            let newStr = str.charAt(0).toUpperCase() + str.slice(1)
-            newStr = newStr.split(/(?=[A-Z])/).join(" ")
-            return newStr
-          })
 
-          return columnArray.join(" ")
+      headerArray = headerArray
+        .map((column) => {
+          let columnString = ""
+          const test1 = this.mappedFields[column.replace(HEADER_COUNT_REG, "")]
+          const test2 = this.mappedFields[column.split(" ")[0]]
+          let mappedField = test1 ?? test2
+          if (mappedField) {
+            if (!test1 && test2) {
+              const [, ...fields] = column.split(" ")
+              fields.forEach((field) => {
+                mappedField += " " + this.capAndSplit(field)
+              })
+            }
+            columnString = mappedField
+          } else {
+            // format header names
+            let columnArray = column.split(" ")
+            columnArray = columnArray.map((str) => {
+              let newStr = ""
+
+              // capitalize and split camel cased
+              newStr = this.capAndSplit(str)
+              return newStr
+            })
+
+            columnString = columnArray.join(" ")
+          }
+          return columnString
         })
-        .join(",")
-      dataString += "\n"
+        .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
 
       let row = 0
       this.data.forEach((obj) => {
@@ -152,12 +290,20 @@ export class CsvBuilder {
           row++
         } else {
           // get index of header
-          const headerIndex = headerArray.indexOf(obj.header)
+          const headerIndex = obj.mappedField
+            ? headerArray.indexOf(obj.mappedField)
+            : headerArray.indexOf(obj.header)
+
           if (headerIndex > -1) {
             rows[row][headerIndex] = obj.val
           }
         }
       })
+
+      // turn headers into csv format
+      dataString = headerArray.map((key) => key.replace(/^_[A-Z]\d?_/, "")).join(",")
+      dataString += "\n"
+
       // turn rows into csv format
       rows.forEach((row) => {
         dataString += row.join(",")

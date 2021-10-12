@@ -148,6 +148,19 @@ export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
   markedAsDuplicate?: boolean
 }
 
+export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
+  includeDemographics?: boolean
+}
+
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
@@ -178,9 +191,9 @@ export class ApplicationsController {
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(@Query() queryParams: PaginatedApplicationListQueryParams): Promise<string> {
+  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.listWithFlagged(queryParams)
-    return this.applicationCsvExporter.export(applications)
+    return this.applicationCsvExporter.export(applications, queryParams.includeDemographics)
   }
 
   @Post()
