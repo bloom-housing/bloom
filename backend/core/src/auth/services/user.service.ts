@@ -94,22 +94,12 @@ export class UserService {
     return result
   }
 
-  async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
+  async update(dto: UserUpdateDto, authContext: AuthContext) {
     const user = await this.find({
       id: dto.id,
     })
     if (!user) {
       throw new NotFoundException()
-    }
-
-    await this.authzService.canOrThrow(authContext.user, "user", authzActions.update, {
-      ...dto,
-    })
-
-    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
-      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
-        ...dto,
-      })
     }
 
     let passwordHash
@@ -199,7 +189,7 @@ export class UserService {
   }
 
   private static getConfirmationUrl(appUrl: string, user: User) {
-    return `${appUrl}?token=${user.confirmationToken}`
+    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
   }
 
   public async connectUserWithExistingApplications(user: User) {

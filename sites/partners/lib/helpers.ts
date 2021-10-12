@@ -14,6 +14,7 @@ import {
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
 import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
+import { FieldError } from "react-hook-form"
 
 type DateTimePST = {
   hour: string
@@ -141,7 +142,9 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
-  if (!date || !formTime) return null
+  // date should be cloned, operations in the reference directly can occur unexpected changes
+  const dateClone = new Date(date.getTime())
+  if (!dateClone || (!formTime.hours && !formTime.minutes)) return null
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -149,8 +152,8 @@ export const createTime = (
   if (formTime.period === "pm" && formattedHours !== 12) {
     formattedHours = formattedHours + 12
   }
-  date.setHours(formattedHours, parseInt(formTime.minutes), 0)
-  return date
+  dateClone.setHours(formattedHours, parseInt(formTime.minutes), 0)
+  return dateClone
 }
 
 /**
@@ -235,4 +238,32 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
     const yearIncomeNumber = currentType === "perMonth" ? value * 12 : value
     return usd.format(yearIncomeNumber)
   }
+}
+
+export const removeEmptyFields = (obj, keysToIgnore?: string[]) => {
+  Object.keys(obj).forEach(function (key) {
+    if (!keysToIgnore.includes(key)) {
+      if (obj[key] && typeof obj[key] === "object") {
+        removeEmptyFields(obj[key], keysToIgnore)
+      }
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key]
+      }
+      if (
+        typeof obj[key] === "object" &&
+        !Array.isArray(obj[key]) &&
+        Object.keys(obj[key]).length === 0
+      ) {
+        delete obj[key]
+      }
+    }
+  })
+}
+
+export const fieldHasError = (errorObj: FieldError) => {
+  return errorObj !== undefined
+}
+
+export const fieldMessage = (errorObj: FieldError) => {
+  return errorObj?.message
 }

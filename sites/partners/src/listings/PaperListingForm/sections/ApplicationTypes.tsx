@@ -18,7 +18,7 @@ import {
   PhoneMask,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 import {
   ApplicationMethodCreate,
   ApplicationMethodType,
@@ -34,7 +34,7 @@ interface Methods {
 
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = useFormContext()
+  const { register, setValue, watch, errors } = useFormContext()
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
@@ -187,12 +187,23 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       >
         <GridSection columns={2}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isDigitalApplication")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.digitalApplication) &&
+                digitalApplicationChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isDigitalApplication")}
+            </p>
 
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+              error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
+              errorMessage={fieldMessage(errors?.digitalApplication)}
+              groupSubNote={t("listings.requiredToPublish")}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -304,11 +315,22 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={2}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isPaperApplication")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.paperApplication) &&
+                paperApplicationChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isPaperApplication")}
+            </p>
 
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
+              groupSubNote={t("listings.requiredToPublish")}
+              error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
+              errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
               fields={[
                 {
@@ -397,12 +419,25 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={1}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.isReferralOpportunity")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.referralOpportunity) &&
+                referralOpportunityChoice === null &&
+                "text-alert"
+              }`}
+            >
+              {t("listings.isReferralOpportunity")}
+            </p>
 
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
+              groupSubNote={t("listings.requiredToPublish")}
+              error={
+                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
+              }
+              errorMessage={fieldMessage(errors?.referralOpportunity)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],

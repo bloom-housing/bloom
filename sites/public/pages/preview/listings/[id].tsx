@@ -40,7 +40,7 @@ export default function ListingPage(props: ListingProps) {
           </button>
         </div>
       )}
-      <ListingView listing={listing} preview={true} />
+      <ListingView listing={listing} preview={false} />
     </Layout>
   )
 }

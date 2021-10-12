@@ -395,6 +395,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     fullWidth={true}
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                    maxLength={150}
                   />
                 </GridCell>
               </GridSection>
@@ -460,6 +461,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     fullWidth={true}
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
+                    maxLength={150}
                   />
                 </GridCell>
               </GridSection>
@@ -526,6 +528,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               fullWidth={true}
               register={register}
               placeholder={t("t.addNotes")}
+              maxLength={150}
             />
           </GridCell>
         </GridSection>

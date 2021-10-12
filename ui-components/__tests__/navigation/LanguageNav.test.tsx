@@ -6,23 +6,20 @@ afterEach(cleanup)
 
 describe("<LanguageNav>", () => {
   it("renders without error", () => {
-    const props = {
-      language: {
-        list: [
-          {
-            prefix: "",
-            label: "English",
-          },
-          {
-            prefix: "es",
-            label: "Spanish",
-          },
-        ],
-        codes: ["en", "es"],
+    const languages = [
+      {
+        label: "English",
+        active: true,
+        onClick: () => {},
       },
-    }
+      {
+        label: "Spanish",
+        active: false,
+        onClick: () => {},
+      },
+    ]
 
-    const { getByText } = render(<LanguageNav language={props.language} />)
+    const { getByText } = render(<LanguageNav languages={languages} />)
     expect(getByText("English")).toBeTruthy()
     expect(getByText("Spanish")).toBeTruthy()
   })

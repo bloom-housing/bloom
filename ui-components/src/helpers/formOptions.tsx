@@ -10,6 +10,12 @@ export interface FormOptionsProps {
 
 export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
 
+export enum RoleOption {
+  Administrator = "administrator",
+  Partner = "partner",
+}
+export const roleKeys = Object.values(RoleOption)
+
 export const numberOptions = (end: number, start = 1): SelectOption[] => {
   const nums = []
   for (let i = start; i <= end; i++) {

@@ -1,0 +1,365 @@
+.site-header {
+  .navbar-mobile-dropdown-container {
+    background-color: white;
+    .navbar-mobile-dropdown {
+      @apply border-b;
+      @apply border-gray-450;
+      @apply w-full;
+      @apply flex;
+      @apply flex-col;
+      .navbar-mobile-dropdown-item {
+        @apply w-full;
+        @apply flex;
+        @apply text-gray-750;
+        @apply pt-3;
+        @apply pb-3;
+        @apply pl-4;
+        @apply pr-4;
+        @apply border-t;
+        @apply border-gray-450;
+        font-size: 14px;
+        &:hover,
+        &:focus {
+          @apply bg-gray-400;
+        }
+      }
+
+      .navbar-mobile-dropdown-item-sublink {
+        @apply pl-8;
+      }
+    }
+  }
+
+  .navbar-mobile-drawer-dropdown-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    z-index: 10;
+    @apply h-full;
+    .navbar-mobile-drawer-dropdown {
+      @apply border-b;
+      @apply border-gray-450;
+      @apply w-full;
+      @apply flex;
+      @apply flex-col;
+
+      .navbar-mobile-drawer-close-row {
+        @apply bg-primary;
+        @apply pt-3;
+        @apply pb-3;
+        @apply pr-2;
+        @apply pl-2;
+        @apply flex;
+      }
+
+      .navbar-mobile-drawer-dropdown-item {
+        @apply flex;
+        @apply text-gray-750;
+        @apply pt-3;
+        @apply pb-3;
+        @apply pl-4;
+        @apply pr-24;
+        @apply border-t;
+        @apply border-l;
+        @apply border-gray-450;
+        font-size: 14px;
+        @apply w-full;
+        &:hover,
+        &:focus {
+          @apply bg-gray-400;
+        }
+      }
+
+      .navbar-mobile-drawer-dropdown-item-sublink {
+        @apply pl-8;
+        @apply pr-2;
+      }
+    }
+  }
+
+  .navbar-container {
+    display: flex;
+    @apply w-full;
+    align-items: center;
+    justify-content: center;
+    @apply border-b;
+    @apply border-gray-450;
+
+    .navbar {
+      width: 1025px;
+      height: 75px;
+      max-height: 75px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      z-index: 10;
+      margin-bottom: -1px;
+
+      .navbar-logo {
+        @apply flex;
+        @apply items-center;
+
+        width: 100%;
+        justify-content: center;
+        @screen md {
+          width: auto;
+          justify-content: start;
+        }
+
+        .logo {
+          @apply cursor-pointer;
+          @apply text-black;
+          @apply block;
+          @apply text-center;
+          @apply z-10;
+          width: 100%;
+          height: 95%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .logo-content {
+            @apply p-1;
+          }
+
+          .navbar-image-only-container {
+            @apply p-0;
+            width: 100%;
+            height: 100%;
+            // 75px - .5rem of padding from the container around it
+            @screen md {
+              height: 67px;
+              height: 120px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              img {
+                margin: 0;
+              }
+            }
+            .navbar-image-only {
+              max-height: 90%;
+              max-width: 100%;
+            }
+          }
+
+          @screen md {
+            max-width: 60%;
+            height: 120px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+            margin-bottom: -0.75rem;
+            margin-top: -2.4rem;
+            @apply pt-1;
+            @apply pb-1;
+            @apply pl-3;
+            @apply pr-3;
+
+            &:focus {
+              box-shadow: 0 0 3px 4px $tailwind-accent-cool;
+            }
+          }
+
+          @screen print {
+            margin-top: 0;
+          }
+
+          @apply bg-white;
+          @apply border-b-0;
+
+          @apply flex;
+
+          .logo__image {
+            @apply inline-block;
+            @apply mt-1;
+            @apply mb-1;
+            max-height: 1.5rem;
+
+            @screen md {
+              @apply mt-3;
+              @apply mb-2;
+              max-height: 2rem;
+            }
+          }
+
+          .logo__title {
+            @apply uppercase;
+            @apply font-bold;
+            @apply text-gray-900;
+            @apply font-alt-sans;
+            @apply tracking-wider;
+            @apply text-sm;
+
+            @screen md {
+              @apply text-tiny;
+            }
+          }
+        }
+
+        .navbar-width-slim {
+          @screen md {
+            width: 200px;
+          }
+        }
+
+        .navbar-width-med {
+          @screen md {
+            width: 450px;
+          }
+        }
+
+        .navbar-width-wide {
+          @screen md {
+            width: 600px;
+          }
+        }
+
+        .navbar-custom-width {
+          @screen md {
+            @apply flex;
+            @apply items-center;
+            @apply justify-center;
+            @apply flex-col;
+          }
+        }
+      }
+
+      .navbar-menu {
+        @apply flex;
+        justify-content: flex-end;
+        min-width: 110px;
+
+        @screen md {
+          height: 75px;
+        }
+
+        .navbar-mobile-menu-button {
+          @apply relative;
+          @apply rounded;
+          @apply px-2;
+          @apply text-lg;
+          @apply text-center;
+          @apply uppercase;
+          @apply font-alt-sans;
+          @apply inline-block;
+          @apply tracking-widest;
+          @apply text-sm;
+          @apply font-bold;
+          @apply leading-snug;
+          @apply border-primary;
+          @apply border-2;
+          text-decoration: none;
+          @apply mx-2;
+        }
+
+        .navbar-link {
+          @apply pr-5;
+          text-transform: uppercase;
+          @apply text-sm;
+          @apply pl-5;
+          @apply text-gray-750;
+          @apply h-full;
+          @apply pt-10;
+
+          &:focus {
+            box-shadow: 0 0 3px 4px $tailwind-accent-cool;
+            outline: none;
+          }
+
+          &:hover {
+            border-bottom: 3px solid;
+            @apply border-primary;
+            @apply cursor-pointer;
+          }
+        }
+
+        .desktop-header-button {
+          @apply pt-7;
+          border-bottom: 4px solid transparent;
+        }
+
+        .navbar-dropdown-container {
+          background-color: white;
+          position: absolute;
+          margin-left: -124px;
+          margin-top: 35px;
+          @apply border-gray-450;
+          @apply border;
+          width: 144px;
+          .navbar-dropdown {
+            display: flex;
+            flex-direction: column;
+            .navbar-dropdown-item {
+              @apply flex;
+              @apply flex-row;
+              @apply items-center;
+              justify-content: left;
+              @apply text-gray-750;
+              @apply pt-3;
+              @apply pb-3;
+              @apply pl-3;
+              @apply pr-3;
+              @apply border-t;
+              @apply border-gray-450;
+              @apply normal-case;
+              font-size: 14px;
+              text-align: left;
+              &:hover,
+              &:focus {
+                @apply bg-gray-400;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navbar-notice {
+    @apply w-full;
+    @apply bg-primary;
+    @apply text-right;
+    @apply text-white;
+    @apply block;
+  }
+
+  .navbar-notice-hide {
+    display: none;
+
+    @screen md {
+      display: block;
+    }
+  }
+
+  .navbar-notice__text {
+    @apply max-w-5xl;
+    @apply m-auto;
+    @apply text-sm;
+    @apply pt-2;
+    @apply pb-2;
+    @apply pr-3;
+
+    a,
+    a:hover {
+      @apply underline;
+      color: inherit;
+    }
+  }
+}
+
+.drawer-transition-enter {
+  transition: all 400ms;
+  transform: translateX(100%);
+}
+.drawer-transition-enter-active {
+  transition: all 400ms;
+  transform: translateX(0%);
+}
+.drawer-transition-exit {
+  transition: all 500ms;
+  transform: translateX(100%);
+}
+.drawer-transition-exit-active {
+  transform: translateX(100%);
+  transition: all 500ms;
+}

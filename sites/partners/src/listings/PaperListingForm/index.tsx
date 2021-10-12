@@ -33,6 +33,7 @@ import {
   PaperApplication,
   PaperApplicationCreate,
   ListingReviewOrder,
+  User,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -44,7 +45,13 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import { stringToBoolean, stringToNumber, createDate, createTime } from "../../../lib/helpers"
+import {
+  stringToBoolean,
+  stringToNumber,
+  createDate,
+  createTime,
+  removeEmptyFields,
+} from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -56,6 +63,8 @@ import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import Preferences from "./sections/Preferences"
 import CommunityType from "./sections/CommunityType"
+import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
+import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -68,15 +77,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-  arePaperAppsMailedToAnotherAddress?: boolean
-  arePostmarksConsidered?: boolean
-  canApplicationsBeDroppedOff?: boolean
-  canPaperApplicationsBePickedUp?: boolean
+  arePaperAppsMailedToAnotherAddress?: YesNoAnswer
+  arePostmarksConsidered?: YesNoAnswer
+  canApplicationsBeDroppedOff?: YesNoAnswer
+  canPaperApplicationsBePickedUp?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
-  dueDateQuestionChoice?: boolean
+  dueDateQuestionChoice?: YesNoAnswer
+  criteriaAttachType?: string
   lotteryDate?: {
     month: string
     day: string
@@ -117,29 +127,14 @@ type ListingFormProps = {
 
 type AlertErrorType = "api" | "form"
 
-interface SubmitData {
-  ready: boolean
-  data: FormListing
-}
-
-const defaultAddress = {
-  id: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
-  city: "",
-  state: "",
-  street: "",
-  zipCode: "",
-}
-
 const defaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationAddress: defaultAddress,
+  applicationAddress: null,
   applicationDueDate: new Date(),
   applicationDueTime: null,
-  applicationFee: "0",
+  applicationFee: null,
   applicationMethods: [],
   applicationOpenDate: new Date(moment().subtract(10).format()),
   applicationOrganization: "",
@@ -150,29 +145,32 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
+  buildingSelectionCriteriaFile: { fileId: "", label: "" },
+  criteriaAttachType: "",
   jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
   CSVFormattingType: CSVFormattingType.basic,
-  depositMax: "",
-  depositMin: "",
+  depositMax: "0",
+  depositMin: "0",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
   image: { fileId: "", label: "" },
-  leasingAgentAddress: defaultAddress,
-  leasingAgentEmail: "test@email.com",
-  leasingAgentName: "",
+  leasingAgentAddress: null,
+  leasingAgentEmail: null,
+  leasingAgentName: null,
   leasingAgentOfficeHours: "",
-  leasingAgentPhone: "",
+  leasingAgentPhone: null,
   leasingAgentTitle: "",
-  name: "",
+  name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
   preferences: [],
   programRules: "",
-  rentalAssistance: "",
+  rentalAssistance:
+    "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
   rentalHistory: "",
   requiredDocuments: "",
   status: ListingStatus.pending,
@@ -185,9 +183,9 @@ const defaults: FormListing = {
   units: [],
   accessibility: "",
   amenities: "",
-  buildingAddress: defaultAddress,
+  buildingAddress: null,
   buildingTotalUnits: 0,
-  developer: "",
+  developer: null,
   householdSizeMax: 0,
   householdSizeMin: 0,
   neighborhood: "",
@@ -196,10 +194,10 @@ const defaults: FormListing = {
   unitsAvailable: 0,
   unitAmenities: "",
   servicesOffered: "",
-  yearBuilt: 2021,
+  yearBuilt: null,
   urlSlug: undefined,
   showWaitlist: false,
-  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+  reviewOrderType: null,
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -239,7 +237,8 @@ const formatFormData = (
   openHouseEvents: TempEvent[],
   preferences: Preference[],
   saveLatLong: LatitudeLongitude,
-  customPinPositionChosen: boolean
+  customPinPositionChosen: boolean,
+  profile: User
 ) => {
   const showWaitlistNumber =
     data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
@@ -270,19 +269,21 @@ const formatFormData = (
 
     Object.keys(unit).forEach((key) => {
       if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
-        if (!unit.amiChartOverride) {
-          unit.amiChartOverride = {
-            id: undefined,
-            createdAt: undefined,
-            updatedAt: undefined,
-            items: [],
+        if (parseInt(unit[key])) {
+          if (!unit.amiChartOverride) {
+            unit.amiChartOverride = {
+              id: undefined,
+              createdAt: undefined,
+              updatedAt: undefined,
+              items: [],
+            }
           }
+          unit.amiChartOverride.items.push({
+            percentOfAmi: parseInt(unit.amiPercentage),
+            householdSize: parseInt(key[key.length - 1]),
+            income: parseInt(unit[key]),
+          })
         }
-        unit.amiChartOverride.items.push({
-          percentOfAmi: parseInt(unit.amiPercentage),
-          householdSize: parseInt(key[key.length - 1]),
-          income: parseInt(unit[key]),
-        })
       }
     })
 
@@ -298,7 +299,7 @@ const formatFormData = (
     delete unit.tempId
   })
 
-  const events: ListingEventCreate[] = data.events.filter(
+  const events: ListingEventCreate[] = data.events?.filter(
     (event) => !(event?.type === ListingEventType.publicLottery)
   )
   if (
@@ -328,8 +329,14 @@ const formatFormData = (
     })
   }
 
+  const jurisdiction =
+    !data.jurisdiction?.name && profile.jurisdictions.length === 1
+      ? profile.jurisdictions[0]
+      : data.jurisdiction
+
   return {
     ...data,
+    jurisdiction,
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
@@ -340,7 +347,12 @@ const formatFormData = (
       longitude: saveLatLong.longitude ?? null,
     },
     customMapPin: customPinPositionChosen,
-    isWaitlistOpen: data.waitlistOpenQuestion === YesNoAnswer.Yes,
+    isWaitlistOpen:
+      data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? true
+        : data.waitlistOpenQuestion === YesNoAnswer.No
+        ? false
+        : null,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
@@ -350,40 +362,58 @@ const formatFormData = (
     waitlistOpenSpots:
       data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
     postmarkedApplicationsReceivedByDate:
-      data.postMarkDate && data.arePostmarksConsidered
+      data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
         ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
         : null,
     applicationDropOffAddressType:
+      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
         ? addressTypes[data.whereApplicationsDroppedOff]
         : null,
     applicationPickUpAddressType:
+      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
         ? addressTypes[data.whereApplicationsPickedUp]
         : null,
     applicationDropOffAddress:
-      data.canApplicationsBeDroppedOff &&
+      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationDropOffAddress
         : null,
     applicationPickUpAddress:
-      data.canPaperApplicationsBePickedUp &&
+      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationPickUpAddress
         : null,
-    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
-      ? data.applicationMailingAddress
-      : null,
+    applicationMailingAddress:
+      data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes
+        ? data.applicationMailingAddress
+        : null,
     events,
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
-    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
+    digitalApplication:
+      data.digitalApplicationChoice === YesNoAnswer.Yes
+        ? true
+        : data.digitalApplicationChoice === YesNoAnswer.No
+        ? false
+        : null,
     commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
-    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
-    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
+    paperApplication:
+      data.paperApplicationChoice === YesNoAnswer.Yes
+        ? true
+        : data.paperApplicationChoice === YesNoAnswer.No
+        ? false
+        : null,
+    referralOpportunity:
+      data.referralOpportunityChoice === YesNoAnswer.Yes
+        ? true
+        : data.referralOpportunityChoice === YesNoAnswer.No
+        ? false
+        : null,
   }
 }
 
@@ -392,17 +422,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : defaults
   const formMethods = useForm<FormListing>({
     defaultValues,
+    shouldUnregister: false,
   })
 
   const router = useRouter()
 
-  const { listingsService } = useContext(AuthContext)
+  const { listingsService, profile } = useContext(AuthContext)
 
   const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [status, setStatus] = useState<ListingStatus>(null)
-  const [submitData, setSubmitData] = useState<SubmitData>({ ready: false, data: defaultValues })
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
   const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
@@ -461,54 +490,82 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [listing, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, getValues } = formMethods
+  const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmit = (data: FormListing) => {
-    setAlert(null)
-    setLoading(true)
-    setSubmitData({ ready: true, data: { ...submitData.data, ...data } })
+  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
+    if (confirm) {
+      setPublishModal(true)
+      return
+    }
+    let formData = { ...defaultValues, ...getValues() }
+    if (status) {
+      formData = { ...formData, status }
+    }
+    void onSubmit(formData)
   }
 
-  /*
-    @data: form data comes from the react-hook-form
-  */
   const onSubmit = useCallback(
-    async (data: FormListing, status: ListingStatus) => {
-      try {
-        data = {
-          ...data,
-          status,
-        }
-        const orderedPreferences = preferences.map((pref, index) => {
-          return { ...pref, ordinal: index + 1 }
-        })
-        const formattedData = formatFormData(
-          data,
-          units,
-          openHouseEvents,
-          orderedPreferences,
-          latLong,
-          customMapPositionChosen
-        )
-        const result = editMode
-          ? await listingsService.update({
-              listingId: listing.id,
-              body: { id: listing.id, ...formattedData },
-            })
-          : await listingsService.create({ body: formattedData })
-        setLoading(false)
-        if (result) {
-          setSiteAlertMessage(
-            editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
-            "success"
+    async (formData: FormListing) => {
+      if (!loading) {
+        try {
+          setLoading(true)
+          clearErrors()
+          const orderedPreferences = preferences.map((pref, index) => {
+            return { ...pref, ordinal: index + 1 }
+          })
+          const formattedData = formatFormData(
+            formData,
+            units,
+            openHouseEvents,
+            orderedPreferences,
+            latLong,
+            customMapPositionChosen,
+            profile
           )
+          removeEmptyFields(formattedData, [
+            "applicationPickUpAddressType",
+            "applicationDropOffAddressType",
+          ])
+          const result = editMode
+            ? await listingsService.update({
+                listingId: listing.id,
+                body: { id: listing.id, ...formattedData },
+              })
+            : await listingsService.create({ body: formattedData })
+          reset(formData)
+          if (result) {
+            setSiteAlertMessage(
+              editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
+              "success"
+            )
 
-          await router.push(`/listings/${result.id}`)
+            await router.push(`/listings/${result.id}`)
+          }
+          setLoading(false)
+        } catch (err) {
+          reset(formData)
+          setLoading(false)
+          clearErrors()
+          const { data } = err.response || {}
+          if (data?.statusCode === 400) {
+            data?.message?.forEach((errorMessage: string) => {
+              const fieldName = errorMessage.split(" ")[0]
+              const readableError = getReadableErrorMessage(errorMessage)
+              if (readableError) {
+                setError(fieldName, { message: readableError })
+                if (fieldName === "buildingAddress") {
+                  setError(`${fieldName}.city`, { message: readableError })
+                  setError(`${fieldName}.state`, { message: readableError })
+                  setError(`${fieldName}.street`, { message: readableError })
+                  setError(`${fieldName}.zipCode`, { message: readableError })
+                }
+              }
+            })
+            setAlert("form")
+          } else {
+            setAlert("api")
+          }
         }
-      } catch (err) {
-        console.log(err)
-        setLoading(false)
-        setAlert("api")
       }
     },
     [
@@ -521,19 +578,13 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       preferences,
       latLong,
       customMapPositionChosen,
+      clearErrors,
+      loading,
+      reset,
+      setError,
+      profile,
     ]
   )
-
-  const onError = () => {
-    setLoading(false)
-    setAlert("form")
-  }
-
-  useEffect(() => {
-    if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data, status)
-    }
-  }, [submitData.ready, submitData.data, onSubmit, status])
 
   return loading === true ? null : (
     <>
@@ -571,11 +622,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               <div className="max-w-screen-xl px-5 mx-auto">
                 {alert && (
                   <AlertBox className="mb-5" onClose={() => setAlert(null)} closeable type="alert">
-                    {alert === "form" ? t("listings.error") : t("errors.alert.badRequest")}
+                    {alert === "form" ? t("listings.fieldError") : t("errors.alert.badRequest")}
                   </AlertBox>
                 )}
 
-                <Form id="listing-form" onSubmit={handleSubmit(triggerSubmit, onError)}>
+                <Form id="listing-form">
                   <div className="flex flex-row flex-wrap">
                     <div className="md:w-9/12 pb-24">
                       <Tabs
@@ -588,7 +639,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <Tab>Application Process</Tab>
                         </TabList>
                         <TabPanel>
-                          <ListingIntro />
+                          <ListingIntro
+                            jurisdictionOptions={[
+                              { label: "", value: "" },
+                              ...profile.jurisdictions.map((jurisdiction) => ({
+                                label: jurisdiction.name,
+                                value: jurisdiction.id,
+                              })),
+                            ]}
+                          />
                           <ListingPhoto />
                           <BuildingDetails
                             listing={listing}
@@ -607,6 +666,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <AdditionalFees />
                           <BuildingFeatures />
                           <AdditionalEligibility />
+                          <BuildingSelectionCriteria />
                           <AdditionalDetails />
 
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
@@ -651,9 +711,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={(data) => {
-                            setStatus(ListingStatus.closed)
-                            triggerSubmit({ ...getValues(), ...data })
+                          submitCallback={() => {
+                            triggerSubmitWithStatus(false, ListingStatus.closed)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -664,10 +723,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     <aside className="md:w-3/12 md:pl-6">
                       <Aside
                         type={editMode ? "edit" : "add"}
-                        setStatus={setStatus}
                         showCloseListingModal={() => setCloseModal(true)}
                         showLotteryResultsDrawer={() => setLotteryResultsDrawer(true)}
-                        showPublishModal={() => setPublishModal(true)}
+                        submitFormWithStatus={triggerSubmitWithStatus}
                       />
                     </aside>
                   </div>
@@ -685,16 +743,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setCloseModal(false)}
         actions={[
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              setStatus(ListingStatus.closed)
-              triggerSubmit(getValues())
+              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
             }}
           >
             {t("listings.actions.close")}
           </Button>,
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {
@@ -715,16 +774,19 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            type="button"
             styleType={AppearanceStyleType.success}
-            onClick={() => {
-              setStatus(ListingStatus.active)
-              triggerSubmit(getValues())
-              setPublishModal(false)
+            onClick={async () => {
+              // If we don't await here, the scroll block stays in place on modal close
+              /* eslint-disable-next-line @typescript-eslint/await-thenable */
+              await setPublishModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >
             {t("listings.actions.publish")}
           </Button>,
           <Button
+            type="button"
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
             onClick={() => {

@@ -17,7 +17,6 @@ import {
   ExpandableText,
   GetApplication,
   GroupedTable,
-  GroupedTableGroup,
   ImageCard,
   InfoCard,
   LeasingAgent,
@@ -38,6 +37,7 @@ import {
   UnitTables,
   Waitlist,
   WhatToExpect,
+  cloudinaryPdfFromId,
   getOccupancyDescription,
   getSummariesTable,
   imageUrlFromListing,
@@ -107,7 +107,7 @@ export const ListingView = (props: ListingProps) => {
       ),
     }
   })
-  let groupedUnits: GroupedTableGroup[] = null
+  let groupedUnits: Record<string, React.ReactNode>[] = null
 
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)
@@ -124,7 +124,20 @@ export const ListingView = (props: ListingProps) => {
     ? t("listings.forIncomeCalculationsBMR")
     : t("listings.forIncomeCalculations")
 
-  if (listing.buildingSelectionCriteria) {
+  if (listing.buildingSelectionCriteriaFile) {
+    buildingSelectionCriteria = (
+      <p>
+        <a
+          href={cloudinaryPdfFromId(
+            listing.buildingSelectionCriteriaFile.fileId,
+            process.env.cloudinaryCloudName
+          )}
+        >
+          {t("listings.moreBuildingSelectionCriteria")}
+        </a>
+      </p>
+    )
+  } else if (listing.buildingSelectionCriteria) {
     buildingSelectionCriteria = (
       <p>
         <a href={listing.buildingSelectionCriteria}>
@@ -216,10 +229,6 @@ export const ListingView = (props: ListingProps) => {
     } else {
       return listing.applicationPickUpAddress
     }
-  }
-
-  const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
-    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
   }
 
   const getOnlineApplicationURL = () => {
@@ -356,7 +365,7 @@ export const ListingView = (props: ListingProps) => {
                 <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
                 <GroupedTable
                   headers={unitSummariesHeaders}
-                  data={groupedUnits}
+                  data={[{ data: groupedUnits }]}
                   responsiveCollapse={true}
                 />
               </React.Fragment>
@@ -365,7 +374,7 @@ export const ListingView = (props: ListingProps) => {
         {amiValues.length == 1 && (
           <GroupedTable
             headers={unitSummariesHeaders}
-            data={groupedUnits}
+            data={[{ data: groupedUnits }]}
             responsiveCollapse={true}
           />
         )}
@@ -422,10 +431,12 @@ export const ListingView = (props: ListingProps) => {
               />
             </ListSection>
 
-            <ListSection
-              title={t("listings.sections.rentalAssistanceTitle")}
-              subtitle={listing.rentalAssistance || t("listings.sections.rentalAssistanceSubtitle")}
-            />
+            {listing.rentalAssistance && (
+              <ListSection
+                title={t("listings.sections.rentalAssistanceTitle")}
+                subtitle={listing.rentalAssistance}
+              />
+            )}
 
             {preferencesSection}
 
