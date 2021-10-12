@@ -1,5 +1,5 @@
 {
-  "packages": ["sites/public", "sites/partners", "backend/core", "ui-components"],
+  "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "ui-components"],
   "version": "1.0.5",
   "npmClient": "yarn",
   "useWorkspaces": true

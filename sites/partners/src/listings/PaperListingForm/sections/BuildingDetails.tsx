@@ -7,11 +7,11 @@ import {
   Field,
   ViewItem,
   Select,
-  stateKeys,
   FieldGroup,
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../index"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,

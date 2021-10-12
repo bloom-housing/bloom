@@ -7,11 +7,11 @@ import {
   Field,
   GridCell,
   Select,
-  stateKeys,
   ViewItem,
   DateField,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
