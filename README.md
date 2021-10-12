@@ -26,7 +26,9 @@ Each application is designed to run entirely in the browser, and to only serve a
 
 ### Shared Libraries
 
-- `ui-components` Contains shared UI components that are shared between applications and meant to be easily imported to implementation-specific sites without customization. Pull Requests to improve UI components in a generalized way are welcomed.
+- `ui-components` contains UI components that are shared between applications and meant to be easily imported to implementation-specific sites without customization. Pull Requests to improve UI components in a generalized way are welcomed. (Note: this package can be consumed by React apps of all kinds, not just Next.js apps.)
+
+- `shared-helpers` contains types and functions intended for shared use between the Next.js sites, and in certain instances the frontend plus the backend (not currently but perhaps in the future).
 
 ## Getting Started for Developers
 
