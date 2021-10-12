@@ -240,21 +240,22 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
   }
 }
 
-export const removeEmptyFields = (obj) => {
+export const removeEmptyFields = (obj, keysToIgnore?: string[]) => {
   Object.keys(obj).forEach(function (key) {
-    if (obj[key] && typeof obj[key] === "object") {
-      removeEmptyFields(obj[key])
-    }
-    if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
-      delete obj[key]
-    }
-    if (
-      typeof obj[key] === "object" &&
-      !Array.isArray(obj[key]) &&
-      Object.keys(obj[key]).length === 0 &&
-      obj[key].constructor === Object
-    ) {
-      delete obj[key]
+    if (!keysToIgnore.includes(key)) {
+      if (obj[key] && typeof obj[key] === "object") {
+        removeEmptyFields(obj[key], keysToIgnore)
+      }
+      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+        delete obj[key]
+      }
+      if (
+        typeof obj[key] === "object" &&
+        !Array.isArray(obj[key]) &&
+        Object.keys(obj[key]).length === 0
+      ) {
+        delete obj[key]
+      }
     }
   })
 }

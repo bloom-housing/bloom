@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file. The format 
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
+  - Can toggle application pick up and drop off addresses off ([#1954](https://github.com/bloom-housing/bloom/pull/1954)) (Emily Jablonski)
   - Listings management AMI charts populate after Save and New on units ([#1952](https://github.com/bloom-housing/bloom/pull/1952)) (Emily Jablonski)
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
