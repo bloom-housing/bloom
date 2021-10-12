@@ -18,6 +18,7 @@ import {
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { OmitType } from "@nestjs/swagger"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "assets",
@@ -80,6 +81,7 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   leasingAgentEmail: string
 
   @Expose()

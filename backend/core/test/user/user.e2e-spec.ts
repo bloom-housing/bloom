@@ -527,4 +527,27 @@ describe("Applications", () => {
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
   })
+
+  it("should lower case email of new user", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "TestingLowerCasing@LowerCasing.com",
+      emailConfirmation: "TestingLowerCasing@LowerCasing.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const mockWelcome = jest.spyOn(testEmailService, "welcome")
+    const res = await supertest(app.getHttpServer())
+      .post(`/user`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+    expect(mockWelcome.mock.calls.length).toBe(1)
+    expect(res.body).toHaveProperty("id")
+    expect(res.body).not.toHaveProperty("passwordHash")
+    expect(res.body).toHaveProperty("email")
+    expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
+  })
 })

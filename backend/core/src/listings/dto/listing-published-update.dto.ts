@@ -18,6 +18,7 @@ import { ListingUpdateDto } from "./listing-update.dto"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { OmitType } from "@nestjs/swagger"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "assets",
@@ -80,6 +81,7 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
 
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   leasingAgentEmail: string
 
   @Expose()
