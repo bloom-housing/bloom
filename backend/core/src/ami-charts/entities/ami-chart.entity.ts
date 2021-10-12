@@ -1,8 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm"
 import { Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsString, IsUUID, ValidateNested } from "class-validator"
 import { AmiChartItem } from "./ami-chart-item.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity()
 export class AmiChart {
@@ -35,4 +43,10 @@ export class AmiChart {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   name: string
+
+  @ManyToOne(() => Jurisdiction, { eager: true, nullable: false })
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Jurisdiction)
+  jurisdiction: Jurisdiction
 }

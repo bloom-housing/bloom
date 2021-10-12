@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import {
   LocalizedLink,
   SiteHeader,
@@ -9,11 +10,37 @@ import {
   ExygyFooter,
   t,
   AuthContext,
+  MenuLink,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
+  const router = useRouter()
 
+  const menuLinks: MenuLink[] = []
+  if (profile) {
+    menuLinks.push({
+      title: t("nav.listings"),
+      href: "/",
+    })
+  }
+  if (profile?.roles?.isAdmin) {
+    menuLinks.push({
+      title: t("nav.users"),
+      href: "/users",
+    })
+  }
+  if (profile) {
+    menuLinks.push({
+      title: t("nav.signOut"),
+      onClick: async () => {
+        setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+        await router.push("/sign-in")
+        signOut()
+      },
+    })
+  }
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
@@ -22,28 +49,13 @@ const Layout = (props) => {
         </Head>
 
         <SiteHeader
-          skip={t("nav.skip")}
           logoSrc="/images/logo_glyph.svg"
-          notice=""
           title={t("nav.siteTitlePartners")}
           logoWidth={"medium"}
-        >
-          <LocalizedLink href="/" className="navbar-item">
-            {t("nav.listings")}
-          </LocalizedLink>
+          menuLinks={menuLinks}
+          homeURL={"/"}
+        />
 
-          {profile?.roles?.isAdmin && (
-            <LocalizedLink href="/users" className="navbar-item">
-              {t("nav.users")}
-            </LocalizedLink>
-          )}
-
-          {!!profile && (
-            <a href="#" className="navbar-item" onClick={signOut}>
-              {t("nav.signOut")}
-            </a>
-          )}
-        </SiteHeader>
         <main>{props.children}</main>
 
         <SiteFooter>

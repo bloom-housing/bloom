@@ -38,7 +38,7 @@ export enum PriorityTypes {
   mobilityHearingVisual = "Mobility, Hearing and Visual",
 }
 
-export const defaultAmiChart: AmiChartCreateDto = {
+export const defaultAmiChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
   name: "AlamedaCountyTCAC2021",
   items: [
     {

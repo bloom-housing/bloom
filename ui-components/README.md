@@ -53,7 +53,6 @@ yarn test:a11y
 Vendor Plugins
 
 - [AG Grid](https://www.ag-grid.com)
-- [Bulma](https://bulma.io/documentation/components/navbar/) (for the navbar)
 
 ## Style Conventions
 

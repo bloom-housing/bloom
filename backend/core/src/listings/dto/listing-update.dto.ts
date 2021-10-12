@@ -26,6 +26,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "createdAt",
   "updatedAt",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "preferences",
   "image",
   "events",
@@ -103,6 +104,12 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressUpdateDto)
   applicationMailingAddress: AddressUpdateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetUpdateDto)
+  buildingSelectionCriteriaFile?: AssetUpdateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

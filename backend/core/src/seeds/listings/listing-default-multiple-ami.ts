@@ -3,6 +3,7 @@ import { getDefaultAmiChart, getDefaultUnits, getDefaultProperty } from "./share
 import { tritonAmiChart } from "./listing-triton-seed"
 import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
+import { CountyCode } from "../../shared/types/county-code"
 
 export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
   async seed() {
@@ -10,8 +11,17 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
 
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
 
-    const amiChartOne = await this.amiChartRepository.save(tritonAmiChart)
-    const amiChartTwo = await this.amiChartRepository.save(getDefaultAmiChart())
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChartOne = await this.amiChartRepository.save({
+      ...tritonAmiChart,
+      jurisdiction: alamedaJurisdiction,
+    })
+    const amiChartTwo = await this.amiChartRepository.save({
+      ...getDefaultAmiChart(),
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...getDefaultProperty(),
