@@ -139,13 +139,24 @@ export class UserService {
   }
 
   public async confirm(dto: ConfirmDto) {
-    const user = await this.find({ confirmationToken: dto.token })
-    if (!user) {
-      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
-    }
     const token = decode(dto.token, process.env.APP_SECRET)
 
-    if (token.id !== user.id) {
+    const user = await this.find({ id: token.id })
+    if (!user) {
+      console.error(`Trying to confirm non-existing user ${token.id}.`)
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+
+    if (user.confirmedAt) {
+      console.error(`User ${token.id} already confirmed.`)
+      throw new HttpException(
+        USER_ERRORS.ACCOUNT_CONFIRMED.message,
+        USER_ERRORS.ACCOUNT_CONFIRMED.status
+      )
+    }
+
+    if (user.confirmationToken !== dto.token) {
+      console.error(`Confirmation token mismatch for user ${token.id}.`)
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
 
