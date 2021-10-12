@@ -19,7 +19,7 @@ export class CsvBuilder {
     this.data = []
     this.inProgress = false
     this.excludeKeys = [
-      "id",
+      " id",
       "appUrl",
       "createdAt",
       "confirmationCode",
@@ -27,6 +27,7 @@ export class CsvBuilder {
       "listingId",
       "noEmail",
       "noPhone",
+      " orderId",
       "updatedAt",
       "userId",
     ]
@@ -56,6 +57,7 @@ export class CsvBuilder {
       householdMembers: "_Q_Household Members",
       markedAsDuplicate: "_R_Marked As Duplicate",
       flagged: "_S_Flagged As Duplicate",
+      demographics: "_T_Demographics",
     }
   }
 
@@ -146,6 +148,7 @@ export class CsvBuilder {
         mappedStr += ` (${index})`
       }
     }
+
     if (this.headers[newKey] === undefined) {
       this.headers[newKey] = 1
     }
@@ -241,15 +244,13 @@ export class CsvBuilder {
       })
 
       // filter out excluded keys and fields not in mappedFields
-      let headerArray = [
-        "id",
-        ...Object.keys(this.headers).filter((header) => {
-          const mappedField =
-            this.mappedFields[header.replace(HEADER_COUNT_REG, "")] ||
-            this.mappedFields[header.split(" ")[0]]
-          return !this.getExcludeKeysRegex().test(header) && mappedField
-        }),
-      ]
+      let headerArray = Object.keys(this.headers).filter((header) => {
+        const mappedField =
+          this.mappedFields[header.replace(HEADER_COUNT_REG, "")] ||
+          this.mappedFields[header.split(" ")[0]]
+        return !this.getExcludeKeysRegex().test(header) && mappedField
+      })
+
       // initiate arrays to insert data
       const rows = Array.from({ length: arr.length }, () => Array(headerArray.length))
 
