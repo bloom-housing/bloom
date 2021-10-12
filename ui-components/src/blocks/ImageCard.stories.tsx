@@ -22,6 +22,17 @@ export const withLink = () => (
   <ImageCard href="/listings" imageUrl="/images/listing.jpg" title="Hello World" />
 )
 
+export const withNoImage = () => <ImageCard href="/listings" title="Hello World" />
+
+export const withShortImageLongTitle = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/BBA_Renderings_jpeg_zmypjv.jpg
+  "
+    title="Here is the name of a long listing, it should wrap onto multiple lines"
+  />
+)
+
 export const withOneStatus = () => (
   <ImageCard
     href="/listings"
