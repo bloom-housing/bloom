@@ -2732,6 +2732,9 @@ export interface ApplicationFlaggedSet {
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
+  totalFlagged: number
+
+  /**  */
   currentPage: number
 
   /**  */
