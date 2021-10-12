@@ -244,6 +244,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       })
       onClose(true, null)
       reset()
+      void resetDefaultValues()
       setValue("status", "available")
     } else {
       onSubmit({
