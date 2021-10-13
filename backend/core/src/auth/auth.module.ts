@@ -16,6 +16,8 @@ import { UserController } from "./controllers/user.controller"
 import { EmailModule } from "../shared/email/email.module"
 import { PasswordService } from "./services/password.service"
 import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
+import { Application } from "../applications/entities/application.entity"
+import { UserProfileController } from "./controllers/user-profile.controller"
 
 @Module({
   imports: [
@@ -30,13 +32,13 @@ import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
         },
       }),
     }),
-    TypeOrmModule.forFeature([RevokedToken, User]),
+    TypeOrmModule.forFeature([RevokedToken, User, Application]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
   exports: [AuthzService, AuthService, UserService],
-  controllers: [AuthController, UserController],
+  controllers: [AuthController, UserController, UserProfileController],
 })
 export class AuthModule {}

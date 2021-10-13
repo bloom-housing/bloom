@@ -149,10 +149,10 @@
         "optionsLabel": "Marque todas las opciones que correspondan:",
         "options": {
           "studio": "Estudio",
-          "oneBedroom": "1 dormitorio",
-          "twoBedroom": "2 dormitorios",
-          "threeBedroom": "3 dormitorios",
-          "moreThanThreeBedroom": "+ de 3 dormitorios"
+          "oneBdrm": "1 dormitorio",
+          "twoBdrm": "2 dormitorios",
+          "threeBdrm": "3 dormitorios",
+          "fourBdrm": "+ de 3 dormitorios"
         }
       },
       "member": {
@@ -571,7 +571,6 @@
     "accountSettings": "Configuraciones de la cuenta",
     "browseProperties": "Ver Propiedades",
     "getAssistance": "Obtener asistencia",
-    "getFeedback": "Esta es una vista preliminar de nuestro nuevo sitio web. Tan solo estamos empezando. Nos encantaría recibir <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>sus comentarios.</a>",
     "listings": "Listados",
     "properties": "Propiedades",
     "applications": "Solicitudes",
@@ -602,6 +601,10 @@
   },
   "region": {
     "name": "Región local"
+  },
+  "progressNav": {
+      "srHeading": "Progreso",
+      "current": "Paso actual: "
   },
   "states": {
     "AL": "Alabama",
@@ -672,7 +675,7 @@
     "deposit": "Depósito",
     "edit": "Editar",
     "email": "Email",
-    "emailAddressPlaceHolder": "you@myemail.com",
+    "emailAddressPlaceholder": "you@myemail.com",
     "floor": "piso",
     "floors": "pisos",
     "getDirections": "Obtener instrucciones para llegar",

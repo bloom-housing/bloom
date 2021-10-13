@@ -12,10 +12,10 @@ import {
 } from "@bloom-housing/ui-components"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
-import { AppStatusItemWrapper } from "./AppStatusItemWrapper"
+import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 
-export default () => {
+const Applications = () => {
   const { applicationsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
   const [error, setError] = useState(null)
@@ -66,7 +66,7 @@ export default () => {
                     {applications &&
                       applications.items.length > 0 &&
                       applications.items.map((application, index) => (
-                        <AppStatusItemWrapper key={index} application={application} />
+                        <StatusItemWrapper key={index} application={application} />
                       ))}
                   </Fragment>
                   {!applications && !loading && noApplicationsSection()}
@@ -79,3 +79,5 @@ export default () => {
     </RequireLogin>
   )
 }
+
+export default Applications

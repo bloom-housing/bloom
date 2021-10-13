@@ -1,18 +1,29 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
+import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { UserCreateDto, UserDto, UserUpdateDto } from "../../src/auth/dto/user.dto"
+import { UserDto } from "../../src/auth/dto/user.dto"
 import { UserService } from "../../src/auth/services/user.service"
+import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
+import { UserUpdateDto } from "../../src/auth/dto/user-update.dto"
+import { UserInviteDto } from "../../src/auth/dto/user-invite.dto"
+import { Listing } from "../../src/listings/entities/listing.entity"
+import { Repository } from "typeorm"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { UserProfileUpdateDto } from "../../src/auth/dto/user-profile.dto"
+import { Language } from "../../src/shared/types/language-enum"
+import { User } from "../../src/auth/entities/user.entity"
+import { EnumUserFilterParamsComparison } from "../../types"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,11 +36,17 @@ describe("Applications", () => {
   let user1AccessToken: string
   let user2AccessToken: string
   let user2Profile: UserDto
+  let listingRepository: Repository<Listing>
+  let userService: UserService
+  let jurisdictionsRepository: Repository<Jurisdiction>
+  let adminAccessToken: string
+  let userAccessToken: string
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
     confirmation: async () => {},
     welcome: async () => {},
+    invite: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -39,7 +56,11 @@ describe("Applications", () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        TypeOrmModule.forFeature([Listing, Jurisdiction, User]),
+        AuthModule,
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -56,6 +77,13 @@ describe("Applications", () => {
         .get("/user")
         .set(...setAuthorization(user2AccessToken))
     ).body
+    listingRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
+    jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
+      getRepositoryToken(Jurisdiction)
+    )
+    userService = await moduleRef.resolve<UserService>(UserService)
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
 
   it("should not allow user to create an account with weak password", async () => {
@@ -105,7 +133,6 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email, password: userCreateDto.password })
       .expect(401)
 
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     const userModifyResponse = await supertest(app.getHttpServer())
       .put(`/user/${userCreateResponse.body.id}`)
       .set(...setAuthorization(adminAccessToken))
@@ -224,7 +251,11 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
     expect(res.body).toHaveProperty("id")
-    await supertest(app.getHttpServer()).post(`/user/`).send(userCreateDto).expect(400)
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+    expect(res.body).toHaveProperty("id")
   })
 
   it("should not allow user/anonymous to modify other existing user's data", async () => {
@@ -246,7 +277,7 @@ describe("Applications", () => {
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
       .send(user2UpdateDto)
-      .expect(403)
+      .expect(401)
   })
 
   it("should allow user to resend confirmation", async () => {
@@ -325,5 +356,218 @@ describe("Applications", () => {
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)
+  })
+
+  it("should invite a user to the partners portal", async () => {
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const jurisdiction = (await jurisdictionsRepository.find({ take: 1 }))[0]
+    const userInviteDto: UserInviteDto = {
+      email: "b4@b.com",
+      firstName: "First",
+      middleName: "Partner",
+      lastName: "Partner",
+      dob: new Date(),
+      leasingAgentInListings: [{ id: listing.id }],
+      roles: { isPartner: true },
+      jurisdictions: [{ id: jurisdiction.id }],
+    }
+
+    const mockInvite = jest.spyOn(testEmailService, "invite")
+
+    await supertest(app.getHttpServer())
+      .post(`/user/invite`)
+      .set(...setAuthorization(userAccessToken))
+      .send(userInviteDto)
+      .expect(403)
+
+    const response = await supertest(app.getHttpServer())
+      .post(`/user/invite`)
+      .send(userInviteDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+
+    const newUser = response.body
+
+    expect(newUser.roles.isPartner).toBe(true)
+    expect(newUser.roles.isAdmin).toBe(false)
+    expect(newUser.leasingAgentInListings.length).toBe(1)
+    expect(newUser.leasingAgentInListings[0].id).toBe(listing.id)
+    expect(mockInvite.mock.calls.length).toBe(1)
+
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByEmail(newUser.email)
+
+    const password = "Abcdef1!"
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken, password })
+      .expect(200)
+    const token = await getUserAccessToken(app, newUser.email, password)
+    expect(token).toBeDefined()
+  })
+
+  it("should allow user to update user profile throguh PUT /userProfile/:id endpoint", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "userProfile@b.com",
+      emailConfirmation: "userProfile@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      language: Language.en,
+    }
+
+    const userCreateResponse = await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    const userProfileUpdateDto: UserProfileUpdateDto = {
+      id: userCreateResponse.body.id,
+      createdAt: userCreateResponse.body.createdAt,
+      updatedAt: userCreateResponse.body.updatedAt,
+      jurisdictions: userCreateResponse.body.jurisdictions,
+      ...userCreateDto,
+      currentPassword: userCreateDto.password,
+      firstName: "NewFirstName",
+    }
+
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${userCreateResponse.body.id}`)
+      .send(userProfileUpdateDto)
+      .expect(401)
+
+    const userProfileUpdateResponse = await supertest(app.getHttpServer())
+      .put(`/userProfile/${userCreateResponse.body.id}`)
+      .send(userProfileUpdateDto)
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+    expect(userProfileUpdateResponse.body.firstName).toBe(userProfileUpdateDto.firstName)
+  })
+
+  it("should not allow user A to edit user B profile (with /userProfile)", async () => {
+    const createAndConfirmUser = async (createDto: UserCreateDto) => {
+      const userCreateResponse = await supertest(app.getHttpServer())
+        .post(`/user/`)
+        .set("jurisdictionName", "Alameda")
+        .send(createDto)
+        .expect(201)
+
+      const userService = await app.resolve<UserService>(UserService)
+      const user = await userService.findByEmail(createDto.email)
+
+      await supertest(app.getHttpServer())
+        .put(`/user/confirm/`)
+        .send({ token: user.confirmationToken })
+        .expect(200)
+
+      const accessToken = await getUserAccessToken(app, createDto.email, createDto.password)
+      return { accessToken, userId: userCreateResponse.body.id }
+    }
+
+    const userACreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "user-a@example.com",
+      emailConfirmation: "user-a@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      language: Language.en,
+    }
+
+    const userBCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "user-b@example.com",
+      emailConfirmation: "user-b@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      language: Language.en,
+    }
+
+    const { userId: userAId } = await createAndConfirmUser(userACreateDto)
+    const { accessToken: userBAccessToken } = await createAndConfirmUser(userBCreateDto)
+
+    const userAProfileUpdateDto: UserProfileUpdateDto = {
+      id: userAId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...userACreateDto,
+      password: undefined,
+      jurisdictions: [],
+    }
+
+    // Restrict user B editing user A's profile
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${userAId}`)
+      .send(userAProfileUpdateDto)
+      .set(...setAuthorization(userBAccessToken))
+      .expect(403)
+
+    // Allow admin to edit userA
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${userAId}`)
+      .send(userAProfileUpdateDto)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+  })
+
+  it("should allow filtering by isPartner user role", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "michalp@airnauts.com",
+        firstName: "Michal",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const filters = [
+      {
+        isPartner: true,
+        $comparison: EnumUserFilterParamsComparison["="],
+      },
+    ]
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/list/?${qs.stringify({ filter: filters })}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(res.body.items.map((user) => user.id).includes(user.id)).toBe(true)
+    expect(res.body.items.map((user) => user.roles.isPartner).some((isPartner) => !isPartner)).toBe(
+      false
+    )
+    expect(res.body.items.map((user) => user.roles.isPartner).every((isPartner) => isPartner)).toBe(
+      true
+    )
   })
 })

@@ -40,15 +40,20 @@ export class TranslationsService extends AbstractServiceFactory<
 >(Translation) {
   public async getTranslationByLanguageAndJurisdictionOrDefaultEn(
     language: Language,
-    jurisdictionId: string
+    jurisdictionId: string | null
   ) {
     try {
       return await this.findOne({
         where: {
           language,
-          jurisdiction: {
-            id: jurisdictionId,
-          },
+          ...(jurisdictionId && {
+            jurisdiction: {
+              id: jurisdictionId,
+            },
+          }),
+          ...(!jurisdictionId && {
+            jurisdiction: null,
+          }),
         },
       })
     } catch (e) {
@@ -57,9 +62,14 @@ export class TranslationsService extends AbstractServiceFactory<
         return this.findOne({
           where: {
             language: Language.en,
-            jurisdiction: {
-              id: jurisdictionId,
-            },
+            ...(jurisdictionId && {
+              jurisdiction: {
+                id: jurisdictionId,
+              },
+            }),
+            ...(!jurisdictionId && {
+              jurisdiction: null,
+            }),
           },
         })
       } else {

@@ -3,10 +3,13 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
   RelationId,
+  Unique,
 } from "typeorm"
 import { User } from "../../auth/entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
@@ -37,8 +40,10 @@ import { Language } from "../../shared/types/language-enum"
 import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
+import { UnitType } from "../../unit-types/entities/unit-type.entity"
 
 @Entity({ name: "applications" })
+@Unique(["listing", "confirmationCode"])
 export class Application extends AbstractEntity {
   @DeleteDateColumn()
   @Expose()
@@ -55,7 +60,7 @@ export class Application extends AbstractEntity {
   appUrl?: string | null
 
   @ManyToOne(() => User, { nullable: true })
-  user: User | null
+  user?: User | null
 
   @RelationId((application: Application) => application.user)
   @Expose()
@@ -191,12 +196,10 @@ export class Application extends AbstractEntity {
   @Type(() => HouseholdMember)
   householdMembers: HouseholdMember[]
 
-  @Column({ type: "text", array: true })
-  @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @ArrayMaxSize(8, { groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
-  preferredUnit: string[]
+  @ManyToMany(() => UnitType, { eager: true, cascade: true })
+  @JoinTable()
+  @Type(() => UnitType)
+  preferredUnit: UnitType[]
 
   @Column({ type: "jsonb" })
   @Expose()
@@ -248,4 +251,9 @@ export class Application extends AbstractEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   flagged?: boolean
+
+  @Column({ type: "text", nullable: false })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  confirmationCode: string
 }

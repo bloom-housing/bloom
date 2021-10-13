@@ -3,7 +3,6 @@
 If any, the applicant can select the type of ADA needed in the household.
 https://github.com/bloom-housing/bloom/issues/266
 */
-import React from "react"
 import {
   AppearanceStyleType,
   AlertBox,

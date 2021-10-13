@@ -1,5 +1,4 @@
 {
-  "": "",
   "account": {
     "accountSettings": "Account Settings",
     "errorFetchingApplications": "Error fetching applications",
@@ -301,10 +300,10 @@
         "optionsLabel": "Check all that apply:",
         "options": {
           "studio": "Studio",
-          "oneBedroom": "1 Bedroom",
-          "twoBedroom": "2 Bedroom",
-          "threeBedroom": "3 Bedroom",
-          "moreThanThreeBedroom": "3+ Bedroom"
+          "oneBdrm": "1 Bedroom",
+          "twoBdrm": "2 Bedroom",
+          "threeBdrm": "3 Bedroom",
+          "fourBdrm": "3+ Bedroom"
         }
       },
       "member": {
@@ -576,7 +575,16 @@
     "unconfirmed": "Unconfirmed",
     "totalUsers": "total users",
     "administrator": "Administrator",
-    "partner": "Partner"
+    "partner": "Partner",
+    "addUser": "Add User",
+    "userDetails": "User Details",
+    "allListings": "All listings",
+    "inviteSent": "Invite sent",
+    "addPassword": "Add a Password",
+    "needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
+    "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
+    "confirmAccount": "Confirm Acount",
+    "accountConfirmed": "Account confirmed"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -644,7 +652,8 @@
         "passwordMismatch": "The passwords do not match",
         "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
         "tokenExpired": "Your link has expired.",
-        "tokenMissing": "Wrong token provided."
+        "tokenMissing": "Wrong token provided.",
+        "generic": "Something went wrong while creating your account. Please try again.\n\nContact your housing department if you're still experiencing issues."
       }
     },
     "signOut": {
@@ -691,7 +700,8 @@
     "householdTooSmall": "Your household size is too small.",
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
-    "requiredFieldError": "This field is required."
+    "requiredFieldError": "This field is required",
+    "requiredFieldsError": "These fields are required"
   },
   "footer": {
     "contact": "Contact",
@@ -724,7 +734,9 @@
   },
   "listings": {
     "error": "There was an issue submitting the form.",
+    "fieldError": "Please resolve any errors before saving or publishing your listing.",
     "closeThisListing": "Do you really want to close this listing?",
+    "publishThisListing": "Publishing will push the listing live on the public site.",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -740,6 +752,7 @@
       "previewLotteryResults": "Preview Lottery Results"
     },
     "activePreferences": "Active Preferences",
+    "addBuildingSelectionCriteria": "Add Building Selection Criteria",
     "addListing": "Add Listing",
     "addPaperApplication": "Add Paper Application",
     "addPhoto": "Add Photo",
@@ -749,6 +762,7 @@
     "additionalInformation": "Additional Information",
     "allUnits": "All Units",
     "allUnitsReservedFor": "All units reserved for %{type}",
+    "amiOverrideTitle": "Override for household size of %{householdSize}",
     "annualIncome": "%{income} per year",
     "annualIncomeRange": "%{from} to %{to} per year",
     "applicationTitle": "Application Data",
@@ -788,6 +802,7 @@
     "bath": "bath",
     "browseListings": "Browse Listings",
     "buildingImageAltText": "A picture of the building",
+    "buildingSelectionCriteria": "Building Criteria Selection",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -833,7 +848,7 @@
     "listingSubmitted": "Listing Submitted",
     "listingUpdated": "Listing Updated",
     "longitude": "Longitude",
-    "lottery": "Lottery",
+    "lotteryTitle": "Lottery",
     "lotteryDateNotes": "Lottery Date Notes",
     "lotteryDateQuestion": "When will the lottery be run?",
     "lotteryEndTime": "Lottery End Time",
@@ -848,6 +863,7 @@
     "mapPinPosition": "Map Pin Position",
     "mapPreview": "Map Preview",
     "mapPreviewNoAddress": "Enter an address to preview the map",
+    "maxAnnualIncome": "Maximum Annual Income",
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
     "monthlyIncome": "%{income} per month",
@@ -882,6 +898,7 @@
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
+    "requiredToPublish": "Required to publish",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
     "reservedCommunitySeniorTitle": "Senior Building",
@@ -918,6 +935,7 @@
       "applicationAddressTitle": "Application Address",
       "applicationTypesTitle": "Application Types",
       "applicationTypesSubtitle": "Configure the online application and upload paper application forms.",
+      "buildingAddress": "Building Address",
       "buildingDetailsSubtitle": "Tell us where the building is located.",
       "buildingDetailsTitle": "Building Details",
       "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
@@ -1053,6 +1071,14 @@
         "available": "Available",
         "occupied": "Occupied",
         "unavailable": "Unavailable"
+      },
+      "typeOptions": {
+        "studio": "Studio",
+        "oneBdrm": "One Bedroom",
+        "twoBdrm": "Two Bedroom",
+        "threeBdrm": "Three Bedroom",
+        "fourBdrm": "Four Bedroom",
+        "SRO": "Single Room Occupancy"
       }
     },
     "events": {
@@ -1072,7 +1098,7 @@
     "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
-    "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
+    "getFeedback": "We'd love to get your feedback!",
     "listings": "Listings",
     "properties": "Properties",
     "applications": "Applications",
@@ -1106,6 +1132,10 @@
   },
   "region": {
     "name": "Local Region"
+  },
+  "progressNav": {
+    "srHeading": "Progress",
+    "current": "Current step: "
   },
   "states": {
     "AL": "Alabama",
@@ -1169,12 +1199,14 @@
     "areYouStillWorking": "Are you still working?",
     "accessibility": "Accessibility",
     "am": "AM",
+    "available": "available",
     "availability": "Availability",
     "automatic": "Automatic",
     "back": "Back",
     "built": "Built",
     "call": "Call",
     "cancel": "Cancel",
+    "close": "Close",
     "confirm": "Confirm",
     "chooseFromFolder": "Choose from folder",
     "custom": "Custom",
@@ -1198,9 +1230,12 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",
     "income": "Income",
+    "incomeRange": "Income Range",
+    "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",
     "label": "Label",

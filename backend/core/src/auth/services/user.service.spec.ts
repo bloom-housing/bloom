@@ -9,6 +9,9 @@ import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { ConfigService } from "@nestjs/config"
+import { UserCreateDto } from "../dto/user-create.dto"
+import { Application } from "../../applications/entities/application.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -17,6 +20,10 @@ declare const expect: jest.Expect
 
 const mockedUser = { id: "123", email: "abc@xyz.com" }
 const mockUserRepo = { findOne: jest.fn().mockResolvedValue(mockedUser), save: jest.fn() }
+const mockApplicationRepo = {
+  createQueryBuilder: jest.fn().mockResolvedValue(mockedUser),
+  save: jest.fn(),
+}
 
 describe("UserService", () => {
   let service: UserService
@@ -29,6 +36,10 @@ describe("UserService", () => {
         {
           provide: getRepositoryToken(User),
           useValue: mockUserRepo,
+        },
+        {
+          provide: getRepositoryToken(Application),
+          useValue: mockApplicationRepo,
         },
         {
           provide: EmailService,
@@ -46,6 +57,10 @@ describe("UserService", () => {
         },
         AuthzService,
         PasswordService,
+        {
+          provide: ConfigService,
+          useValue: { get: jest.fn() },
+        },
       ],
     }).compile()
 
@@ -54,6 +69,43 @@ describe("UserService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined()
+  })
+
+  describe("createUser", () => {
+    it("should return EMAIL_IN_USE error if email is already in use", async () => {
+      const user: UserCreateDto = {
+        email: "abc@xyz.com",
+        emailConfirmation: "abc@xyz.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      await expect(service.createUser(user, null, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      )
+    })
+
+    it("should return ERROR_SAVING if new user fails to save", async () => {
+      const user: UserCreateDto = {
+        email: "new@email.com",
+        emailConfirmation: "new@email.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
+      mockUserRepo.save = jest.fn().mockRejectedValue(new Error("failed to save"))
+      await expect(service.createUser(user, null, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      )
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
   })
 
   describe("forgotPassword", () => {

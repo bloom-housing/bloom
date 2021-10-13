@@ -3,11 +3,13 @@ p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
-p, user, user, !r.obj || (r.sub == r.obj.id), (read|update)
+p, admin, userProfile, true, .*
+p, user, user, !r.obj || (r.sub == r.obj.id), read
+p, user, userProfile, !r.obj || (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
-p, partner, asset, true, read
+p, partner, asset, true, .*
 
 p, admin, preference, true, .*
 p, partner, preference, true, .*

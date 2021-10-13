@@ -2,7 +2,6 @@
 2.1a - Member Info
 A notice regarding adding household members
 */
-import React from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,

@@ -7,15 +7,16 @@ import {
   Field,
   ViewItem,
   Select,
-  stateKeys,
   FieldGroup,
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import { FormListing } from "../index"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"
+import { fieldHasError, fieldMessage } from "../../../../lib/helpers"
 
 interface MapBoxFeature {
   center: number[] // Index 0: longitude, Index 1: latitude
@@ -47,7 +48,7 @@ const BuildingDetails = ({
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, getValues } = formMethods
+  const { register, control, getValues, errors, clearErrors } = formMethods
 
   const [geocodingClient, setGeocodingClient] = useState<GeocodeServiceType>()
 
@@ -70,11 +71,11 @@ const BuildingDetails = ({
 
   const displayMapPreview = () => {
     return (
-      buildingAddress.city &&
-      buildingAddress.state &&
-      buildingAddress.street &&
-      buildingAddress.zipCode &&
-      buildingAddress.zipCode.length >= 5
+      buildingAddress?.city &&
+      buildingAddress?.state &&
+      buildingAddress?.street &&
+      buildingAddress?.zipCode &&
+      buildingAddress?.zipCode.length >= 5
     )
   }
 
@@ -90,10 +91,10 @@ const BuildingDetails = ({
 
   const getNewLatLong = () => {
     if (
-      buildingAddress.city &&
-      buildingAddress.state &&
-      buildingAddress.street &&
-      buildingAddress.zipCode &&
+      buildingAddress?.city &&
+      buildingAddress?.state &&
+      buildingAddress?.street &&
+      buildingAddress?.zipCode &&
       geocodingClient
     ) {
       geocodingClient
@@ -123,7 +124,12 @@ const BuildingDetails = ({
       clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [buildingAddress.city, buildingAddress.state, buildingAddress.street, buildingAddress.zipCode])
+  }, [
+    buildingAddress?.city,
+    buildingAddress?.state,
+    buildingAddress?.street,
+    buildingAddress?.zipCode,
+  ])
 
   useEffect(() => {
     if (mapPinPosition === "automatic") {
@@ -141,13 +147,18 @@ const BuildingDetails = ({
       title={t("listings.sections.buildingDetailsTitle")}
       description={t("listings.sections.buildingDetailsSubtitle")}
     >
-      <GridSection columns={3}>
+      <GridSection columns={3} subtitle={t("listings.sections.buildingAddress")}>
         <GridCell span={2}>
           <Field
             label={t("application.contact.streetAddress")}
             name={"buildingAddress.street"}
             id={"buildingAddress.street"}
+            error={fieldHasError(errors?.buildingAddress?.street)}
+            errorMessage={fieldMessage(errors?.buildingAddress?.street)}
             placeholder={t("application.contact.streetAddress")}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress.street"),
+            }}
             register={register}
           />
         </GridCell>
@@ -165,29 +176,47 @@ const BuildingDetails = ({
             label={t("application.contact.city")}
             name={"buildingAddress.city"}
             id={"buildingAddress.city"}
+            error={fieldHasError(errors?.buildingAddress?.city)}
+            errorMessage={fieldMessage(errors?.buildingAddress?.city)}
             placeholder={t("application.contact.city")}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress.city"),
+            }}
             register={register}
           />
+          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
-        <ViewItem label={t("application.contact.state")} className="mb-0">
+        <ViewItem
+          label={t("application.contact.state")}
+          className={"mb-0"}
+          error={fieldHasError(errors?.buildingAddress?.state)}
+        >
           <Select
             id={`buildingAddress.state`}
             name={`buildingAddress.state`}
+            error={fieldHasError(errors?.buildingAddress?.state)}
             label={t("application.contact.state")}
             labelClassName="sr-only"
             register={register}
             controlClassName="control"
             options={stateKeys}
             keyPrefix="states"
-            errorMessage={t("errors.stateError")}
+            errorMessage={fieldMessage(errors?.buildingAddress?.state)}
+            inputProps={{
+              onChange: () => clearErrors("buildingAddress.state"),
+            }}
           />
         </ViewItem>
         <Field
           label={t("application.contact.zip")}
           name={"buildingAddress.zipCode"}
+          error={fieldHasError(errors?.buildingAddress?.zipCode)}
           id={"buildingAddress.zipCode"}
           placeholder={t("application.contact.zip")}
-          errorMessage={t("errors.zipCodeError")}
+          errorMessage={fieldMessage(errors?.buildingAddress?.zipCode)}
+          inputProps={{
+            onChange: () => clearErrors("buildingAddress.zipCode"),
+          }}
           register={register}
         />
         <GridCell span={2}>
@@ -201,7 +230,6 @@ const BuildingDetails = ({
           />
         </GridCell>
       </GridSection>
-
       <GridSection columns={3}>
         <GridCell span={2}>
           <ViewItem label={t("listings.mapPreview")} />

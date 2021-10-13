@@ -7,30 +7,46 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindConditions, Repository } from "typeorm"
+import { DeepPartial, FindConditions, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
+import crypto from "crypto"
 import { User } from "../entities/user.entity"
-import { EmailDto, UserCreateDto, UserUpdateDto, UserListQueryParams } from "../dto/user.dto"
 import { assignDefined } from "../../shared/assign-defined"
 import { ConfirmDto } from "../dto/confirm.dto"
 import { USER_ERRORS } from "../user-errors"
 import { UpdatePasswordDto } from "../dto/update-password.dto"
 import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
-import { authzActions, AuthzService } from "./authz.service"
+import { AuthzService } from "./authz.service"
 import { ForgotPasswordDto } from "../dto/forgot-password.dto"
 
 import { AuthContext } from "../types/auth-context"
 import { PasswordService } from "./password.service"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
+import { EmailDto } from "../dto/email.dto"
+import { UserCreateDto } from "../dto/user-create.dto"
+import { UserUpdateDto } from "../dto/user-update.dto"
+import { UserListQueryParams } from "../dto/user-list-query-params"
+import { UserInviteDto } from "../dto/user-invite.dto"
+import { ConfigService } from "@nestjs/config"
+import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
+import { authzActions } from "../enum/authz-actions.enum"
+import { addFilters } from "../../shared/filter"
+import { UserFilterParams } from "../dto/user-filter-params"
+import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
+import { Application } from "../../applications/entities/application.entity"
+import { Listing } from "../../listings/entities/listing.entity"
+import { UserRoles } from "../entities/user-roles.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly repo: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Application) private readonly applicationsRepository: Repository<Application>,
     private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
@@ -38,11 +54,11 @@ export class UserService {
   ) {}
 
   public async findByEmail(email: string) {
-    return this.repo.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return this.userRepository.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.repo.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
   public async list(
@@ -55,6 +71,14 @@ export class UserService {
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
     const qb = this._getQb()
+
+    if (params.filter) {
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        qb
+      )
+    }
 
     const result = await paginate<User>(qb, options)
     /**
@@ -70,22 +94,12 @@ export class UserService {
     return result
   }
 
-  async update(dto: Partial<UserUpdateDto>, authContext: AuthContext) {
+  async update(dto: UserUpdateDto, authContext: AuthContext) {
     const user = await this.find({
       id: dto.id,
     })
     if (!user) {
       throw new NotFoundException()
-    }
-
-    await this.authzService.canOrThrow(authContext.user, "user", authzActions.update, {
-      ...dto,
-    })
-
-    if (user.confirmedAt?.getTime() !== dto.confirmedAt?.getTime()) {
-      await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
-        ...dto,
-      })
     }
 
     let passwordHash
@@ -121,26 +135,40 @@ export class UserService {
       passwordHash,
     })
 
-    return await this.repo.save(user)
+    return await this.userRepository.save(user)
   }
 
   public async confirm(dto: ConfirmDto) {
-    const user = await this.find({ confirmationToken: dto.token })
     const token = decode(dto.token, process.env.APP_SECRET)
+
+    const user = await this.find({ id: token.id })
     if (!user) {
-      console.error("Confirmation token for user: ", token.id, " not found.")
-      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
+      console.error(`Trying to confirm non-existing user ${token.id}.`)
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
 
-    if (token.id !== user.id) {
+    if (user.confirmedAt) {
+      console.error(`User ${token.id} already confirmed.`)
+      throw new HttpException(
+        USER_ERRORS.ACCOUNT_CONFIRMED.message,
+        USER_ERRORS.ACCOUNT_CONFIRMED.status
+      )
+    }
+
+    if (user.confirmationToken !== dto.token) {
+      console.error(`Confirmation token mismatch for user ${token.id}.`)
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
 
     user.confirmedAt = new Date()
     user.confirmationToken = null
 
+    if (dto.password) {
+      user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+    }
+
     try {
-      await this.repo.save(user)
+      await this.userRepository.save(user)
       return this.authService.generateAccessToken(user)
     } catch (err) {
       throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
@@ -161,8 +189,9 @@ export class UserService {
       const payload = { id: user.id, exp: Number.parseInt(moment().add(24, "hours").format("X")) }
       user.confirmationToken = encode(payload, process.env.APP_SECRET)
       try {
-        await this.repo.save(user)
-        await this.emailService.welcome(user, dto.appUrl)
+        await this.userRepository.save(user)
+        const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
+        await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
@@ -170,47 +199,74 @@ export class UserService {
     }
   }
 
-  public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
+  private static getPublicConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
+  }
+
+  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}/users/confirm?token=${user.confirmationToken}`
+  }
+
+  public async connectUserWithExistingApplications(user: User) {
+    const applications = await this.applicationsRepository
+      .createQueryBuilder("applications")
+      .leftJoinAndSelect("applications.applicant", "applicant")
+      .where("applications.user IS NULL")
+      .andWhere("applicant.emailAddress = :email", { email: user.email })
+      .getMany()
+
+    for (const application of applications) {
+      application.user = user
+    }
+
+    await this.applicationsRepository.save(applications)
+  }
+
+  public async _createUser(dto: DeepPartial<User>, authContext: AuthContext) {
     if (dto.confirmedAt) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
       })
     }
-    let user = await this.findByEmail(dto.email)
-    if (user) {
+    const existingUser = await this.findByEmail(dto.email)
+    if (existingUser) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
-    const { password } = dto
-    user = new User()
-    user.firstName = dto.firstName
-    user.middleName = dto.middleName
-    user.lastName = dto.lastName
-    user.dob = dto.dob
-    user.email = dto.email
-    user.language = dto.language
-    // if coming from partners dto.jurisdictions can be set
-    user.jurisdictions = dto.jurisdictions
-      ? dto.jurisdictions
-      : [await this.jurisdictionResolverService.getJurisdiction()]
+
     try {
-      user.passwordHash = await this.passwordService.passwordToHash(password)
-      user = await this.repo.save(user)
+      let newUser = await this.userRepository.save(dto)
 
       const payload = {
-        id: user.id,
+        id: newUser.id,
         expiresAt: Number.parseInt(moment().add(24, "hours").format("X")),
       }
-      user.confirmationToken = encode(payload, process.env.APP_SECRET)
-      user = await this.repo.save(user)
+      newUser.confirmationToken = encode(payload, process.env.APP_SECRET)
+      newUser = await this.userRepository.save(newUser)
 
-      if (sendWelcomeEmail) {
-        await this.emailService.welcome(user, dto.appUrl)
-      }
-
-      return user
+      return newUser
     } catch (err) {
-      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      console.error(err)
+      throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
+  }
+
+  public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
+    const newUser = await this._createUser(
+      {
+        ...dto,
+        passwordHash: await this.passwordService.passwordToHash(dto.password),
+        jurisdictions: dto.jurisdictions
+          ? (dto.jurisdictions as JurisdictionDto[])
+          : [await this.jurisdictionResolverService.getJurisdiction()],
+      },
+      authContext
+    )
+    if (sendWelcomeEmail) {
+      const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
+      await this.emailService.welcome(newUser, dto.appUrl, confirmationUrl)
+    }
+    await this.connectUserWithExistingApplications(newUser)
+    return newUser
   }
 
   public async forgotPassword(dto: ForgotPasswordDto) {
@@ -222,7 +278,7 @@ export class UserService {
     // Token expires in 1 hour
     const payload = { id: user.id, exp: Number.parseInt(moment().add(1, "hour").format("X")) }
     user.resetToken = encode(payload, process.env.APP_SECRET)
-    await this.repo.save(user)
+    await this.userRepository.save(user)
     await this.emailService.forgotPassword(user, dto.appUrl)
     return user
   }
@@ -240,15 +296,38 @@ export class UserService {
 
     user.passwordHash = await this.passwordService.passwordToHash(dto.password)
     user.resetToken = null
-    await this.repo.save(user)
+    await this.userRepository.save(user)
     return this.authService.generateAccessToken(user)
   }
 
   private _getQb() {
-    const qb = this.repo.createQueryBuilder("user")
+    const qb = this.userRepository.createQueryBuilder("user")
     qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
     qb.leftJoinAndSelect("user.roles", "user_roles")
 
     return qb
+  }
+
+  async invite(dto: UserInviteDto, authContext: AuthContext) {
+    const password = crypto.randomBytes(8).toString("hex")
+    const user = await this._createUser(
+      {
+        ...dto,
+        passwordHash: await this.passwordService.passwordToHash(password),
+        leasingAgentInListings: dto.leasingAgentInListings as Listing[],
+        roles: dto.roles as UserRoles,
+        jurisdictions: dto.jurisdictions
+          ? (dto.jurisdictions as JurisdictionDto[])
+          : [await this.jurisdictionResolverService.getJurisdiction()],
+      },
+      authContext
+    )
+
+    await this.emailService.invite(
+      user,
+      this.configService.get("PARTNERS_PORTAL_URL"),
+      UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+    )
+    return user
   }
 }

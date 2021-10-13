@@ -37,6 +37,8 @@ import { ListingDefaultReservedSeed } from "../seeds/listings/listing-default-re
 import { ListingDefaultMultipleAMI } from "../seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-missing-ami"
+import { UnitTypesModule } from "../unit-types/unit-types.module"
+import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 
 @Module({})
 export class SeederModule {
@@ -64,6 +66,7 @@ export class SeederModule {
           UserRoles,
           ApplicationMethod,
           PaperApplication,
+          Jurisdiction,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,
@@ -76,6 +79,7 @@ export class SeederModule {
         AuthModule,
         ListingsModule,
         AmiChartsModule,
+        UnitTypesModule,
       ],
       providers: [
         ListingDefaultSeed,

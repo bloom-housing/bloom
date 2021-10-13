@@ -1,13 +1,13 @@
 import { PropertyCreateDto } from "../../property/dto/property.dto"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
-import { ListingCreateDto } from "../../listings/dto/listing.dto"
 import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
-import { UserCreateDto } from "../../auth/dto/user.dto"
 import { BaseEntity } from "typeorm"
+import { UserCreateDto } from "../../auth/dto/user-create.dto"
+import { ListingCreateDto } from "../../listings/dto/listing-create.dto"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 export type PropertySeedType = Omit<
   PropertyCreateDto,

@@ -5,6 +5,12 @@ const amiChart: AmiChart = {
   createdAt: new Date(),
   updatedAt: new Date(),
   name: "San Jose TCAC 2019",
+  jurisdiction: {
+    id: "jurisdictiion_id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "Alameda",
+  },
   items: [
     {
       percentOfAmi: 120,

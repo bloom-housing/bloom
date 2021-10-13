@@ -7,11 +7,12 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
+  EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
-  page: number
-  limit: number
+  page?: number
+  limit: number | "all"
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -52,6 +53,7 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
           leasingAgents: userId,
         },
       ],
+      view: "base",
     })
   }
 
@@ -139,19 +141,23 @@ export function useFlaggedApplicationsList({
 }: UseSingleApplicationDataProps) {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 
+  const params = {
+    listingId,
+    page,
+  }
+
   const queryParams = new URLSearchParams()
   queryParams.append("listingId", listingId)
   queryParams.append("page", page.toString())
-  queryParams.append("limit", limit.toString())
+
+  if (typeof limit === "number") {
+    queryParams.append("limit", limit.toString())
+    Object.assign(params, limit)
+  }
 
   const endpoint = `${process.env.backendApiBase}/applicationFlaggedSets?${queryParams.toString()}`
 
-  const fetcher = () =>
-    applicationFlaggedSetsService.list({
-      listingId,
-      page,
-      limit,
-    })
+  const fetcher = () => applicationFlaggedSetsService.list(params)
 
   const { data, error } = useSWR(endpoint, fetcher)
 
@@ -198,6 +204,19 @@ export function useAmiChartList() {
   const fetcher = () => amiChartsService.list()
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useSingleAmiChart(amiChartId: string) {
+  const { amiChartsService } = useContext(AuthContext)
+  const fetcher = () => amiChartsService.retrieve({ amiChartId })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${amiChartId}`, fetcher)
 
   return {
     data,
@@ -272,6 +291,12 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
+      filter: [
+        {
+          isPartner: true,
+          $comparison: EnumUserFilterParamsComparison["="],
+        },
+      ],
     })
 
   const { data, error } = useSWR(

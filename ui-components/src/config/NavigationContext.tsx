@@ -1,14 +1,20 @@
-import React, { AriaAttributes, createContext, FunctionComponent } from "react"
+import React, {
+  createContext,
+  FunctionComponent,
+  AnchorHTMLAttributes,
+  DetailedHTMLProps,
+} from "react"
 import { UrlObject } from "url"
 
 type Url = UrlObject | string
 
-export interface LinkProps {
-  href: string
-  "aria-label"?: string
-  "aria-current"?: AriaAttributes["aria-current"]
+type DefaultLinkProps = DetailedHTMLProps<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  HTMLAnchorElement
+>
+
+export interface LinkProps extends DefaultLinkProps {
   className?: string
-  tabIndex?: number
 }
 
 export interface GenericRouterOptions {
@@ -28,18 +34,8 @@ export interface NavigationContextProps {
 }
 
 export const NavigationContext = createContext<NavigationContextProps>({
-  // Replace with an official app solution
   LinkComponent: (props) => (
-    <a
-      className={props.className}
-      href={props.href}
-      onClick={(e) => {
-        e.preventDefault()
-        alert(`You clicked: ${props.href}`)
-      }}
-      {...(props["aria-label"] ? { "aria-label": props["aria-label"] } : {})}
-      {...(props["aria-current"] ? { "aria-current": props["aria-current"] } : {})}
-    >
+    <a className={props.className} {...props}>
       {props.children}
     </a>
   ),

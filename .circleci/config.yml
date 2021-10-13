@@ -5,7 +5,7 @@ orbs:
 executors:
   standard-node:
     docker:
-      - image: "cimg/node:12.18.4"
+      - image: "cimg/node:14.17.6"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -15,7 +15,7 @@ executors:
           POSTGRES_DB: bloom
   cypress-node:
     docker:
-      - image: "cypress/base:12.18.2"
+      - image: "cypress/base:14.17.0"
       - image: "circleci/redis:6.2.1-alpine"
       - image: "circleci/postgres:12.3-postgis"
         environment:
@@ -37,9 +37,10 @@ executors:
       REDIS_USE_TLS: "0"
       CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
+      PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
-      - image: "cimg/node:12.18.4-browsers"
+      - image: "cimg/node:14.17.6-browsers"
 
 jobs:
   setup:
@@ -63,6 +64,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn lint
+  jest-shared-helpers:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:shared:helpers
   jest-ui-components:
     executor: standard-node
     steps:
@@ -100,6 +107,7 @@ jobs:
             REDIS_USE_TLS: "0"
             CLOUDINARY_SECRET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
+            PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
     steps:
@@ -119,6 +127,9 @@ workflows:
     jobs:
       - setup
       - lint:
+          requires:
+            - setup
+      - jest-shared-helpers:
           requires:
             - setup
       - jest-ui-components:

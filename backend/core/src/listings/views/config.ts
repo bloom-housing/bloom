@@ -61,6 +61,20 @@ const views: Views = {
   },
 }
 
+views.partnerList = {
+  select: [
+    "listings.id",
+    "listings.name",
+    "listings.applicationDueDate",
+    "listings.applicationDueTime",
+    "listings.status",
+    "listings.waitlistMaxSize",
+    "listings.waitlistCurrentSize",
+    "property.unitsAvailable",
+  ],
+  leftJoins: [{ join: "listings.property", alias: "property" }],
+}
+
 views.detail = {
   select: [
     ...views.base.select,
@@ -98,6 +112,9 @@ views.detail = {
     "listings.isWaitlistOpen",
     "listings.waitlistOpenSpots",
     "listings.customMapPin",
+    "buildingSelectionCriteriaFile.id",
+    "buildingSelectionCriteriaFile.fileId",
+    "buildingSelectionCriteriaFile.label",
     "applicationMethods.id",
     "applicationMethods.label",
     "applicationMethods.externalReference",
@@ -144,6 +161,7 @@ views.detail = {
     { join: "listings.applicationMethods", alias: "applicationMethods" },
     { join: "applicationMethods.paperApplications", alias: "paperApplications" },
     { join: "paperApplications.file", alias: "paperApplicationFile" },
+    { join: "listings.buildingSelectionCriteriaFile", alias: "buildingSelectionCriteriaFile" },
     { join: "listings.events", alias: "listingEvents" },
     { join: "listingEvents.file", alias: "listingEventFile" },
     { join: "listings.result", alias: "result" },
@@ -162,6 +180,7 @@ views.full = {
     ["applicationMethods.paperApplications", "paperApplications"],
     ["paperApplications.file", "paperApplicationFile"],
     ["listings.image", "image"],
+    ["listings.buildingSelectionCriteriaFile", "buildingSelectionCriteriaFile"],
     ["listings.events", "listingEvents"],
     ["listingEvents.file", "listingEventFile"],
     ["listings.result", "result"],

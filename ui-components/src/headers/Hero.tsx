@@ -1,7 +1,5 @@
 import * as React from "react"
 import { LinkButton } from "../actions/LinkButton"
-import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
 import { t } from "../helpers/translator"
 import "./Hero.scss"
 
@@ -12,13 +10,9 @@ export interface HeroProps {
   buttonLink?: string
   secondaryButtonTitle?: string
   secondaryButtonLink?: string
-  listings?: Listing[]
+  allApplicationsClosed?: boolean
   children?: React.ReactNode
   centered?: boolean
-}
-
-const listingOpen = (listing: Listing) => {
-  return moment() < moment(listing.applicationDueDate)
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (
@@ -30,10 +24,8 @@ const HeroButton = (props: { title: string; href: string; className?: string }) 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
   let classNames = ""
-  if (props.listings) {
-    if (!props.listings.some(listingOpen)) {
-      subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
-    }
+  if (props.allApplicationsClosed) {
+    subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
   } else if (props.children) {
     subHeader = <h2 className="hero__subtitle">{props.children}</h2>
   }

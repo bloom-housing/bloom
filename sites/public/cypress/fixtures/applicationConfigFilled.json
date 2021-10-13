@@ -111,7 +111,11 @@
       "workInRegion": "yes"
     }
   ],
-  "preferredUnit": ["studio", "oneBedroom", "twoBedroom"],
+  "preferredUnit": [
+    {
+      "id": "dff3ff70-7085-4dab-afd9-de4b33e0ec1e"
+    }
+  ],
   "demographics": {
     "race": "white",
     "ethnicity": "hispanicLatino",

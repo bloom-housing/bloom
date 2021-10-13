@@ -1,7 +1,7 @@
 import * as React from "react"
 import "./Button.scss"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
-import { Icon, IconTypes } from "../icons/Icon"
+import { Icon, IconSize, IconTypes } from "../icons/Icon"
 
 export interface ButtonProps extends AppearanceProps {
   id?: string
@@ -10,6 +10,7 @@ export interface ButtonProps extends AppearanceProps {
   onClick?: (e: React.MouseEvent) => void
   icon?: IconTypes
   iconPlacement?: "left" | "right"
+  iconSize?: IconSize
   // TODO: inlineIcon is deprecated
   inlineIcon?: "left" | "right"
   inline?: boolean
@@ -40,13 +41,13 @@ export const buttonInner = (props: Omit<ButtonProps, "onClick">) => {
   if (props.icon) {
     return props.inlineIcon == "left" || props.iconPlacement == "left" ? (
       <>
-        <Icon className="button__icon" size={iconSize} symbol={props.icon} />
+        <Icon className="button__icon" size={props.iconSize ?? iconSize} symbol={props.icon} />
         <span className="button__content">{props.children}</span>
       </>
     ) : (
       <>
         <span className="button__content">{props.children}</span>
-        <Icon className="button__icon" size={iconSize} symbol={props.icon} />
+        <Icon className="button__icon" size={props.iconSize ?? iconSize} symbol={props.icon} />
       </>
     )
   } else if (props.loading) {

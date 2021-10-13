@@ -35,7 +35,13 @@ class UnitsSummary {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRent?: number | null
+  monthlyRentMin?: number | null
+
+  @Column({ nullable: true, type: "integer" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
+  monthlyRentMax?: number | null
 
   @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
   @Expose()
@@ -43,11 +49,11 @@ class UnitsSummary {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   monthlyRentAsPercentOfIncome?: string | null
 
-  @Column({ nullable: true, type: "text" })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  amiPercentage?: string | null
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  amiPercentage?: number | null
 
   @Column({ nullable: true, type: "text" })
   @Expose()

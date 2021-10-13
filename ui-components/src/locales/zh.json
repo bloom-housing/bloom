@@ -146,10 +146,10 @@
         "optionsLabel": "請勾選所有適用的單位：",
         "options": {
           "studio": "套房",
-          "oneBedroom": "1 間臥室",
-          "twoBedroom": "2 間臥室",
-          "threeBedroom": "3 間臥室",
-          "moreThanThreeBedroom": "3+ 間卧室"
+          "oneBdrm": "1 間臥室",
+          "twoBdrm": "2 間臥室",
+          "threeBdrm": "3 間臥室",
+          "fourBdrm": "3+ 間卧室"
         }
       },
       "member": {
@@ -571,7 +571,6 @@
     "accountSettings": "帳戶設定",
     "browseProperties": "瀏覽物業",
     "getAssistance": "尋求協助",
-    "getFeedback": "這是我們新網站的預覽。我們只是剛開始。我們希望獲得<a target='_blank' class='a-white lined' href='%{feedbackUrl}'> 您的回饋意見。</a>",
     "listings": "好屋推薦",
     "properties": "物業",
     "applications": "申請資訊",
@@ -602,6 +601,10 @@
   },
   "region": {
     "name": "當地地區"
+  },
+  "progressNav": {
+    "srHeading": "进度",
+    "current": "当前步骤："
   },
   "states": {
     "AL": "Alabama（阿拉巴馬州）",
@@ -672,7 +675,7 @@
     "deposit": "訂金",
     "edit": "編輯",
     "email": "電子郵件",
-    "emailAddressPlaceHolder": "you@myemail.com",
+    "emailAddressPlaceholder": "you@myemail.com",
     "floor": "樓層",
     "floors": "樓層",
     "getDirections": "取得路線",

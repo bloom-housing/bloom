@@ -1,4 +1,5 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
+import { getDate } from "./shared"
 
 export class ListingDefaultNoPreferenceSeed extends ListingDefaultSeed {
   async seed() {
@@ -7,6 +8,8 @@ export class ListingDefaultNoPreferenceSeed extends ListingDefaultSeed {
       ...listing,
       name: "Test: Default, No Preferences",
       preferences: [],
+      applicationDueDate: getDate(5),
+      applicationOpenDate: getDate(-5),
     })
   }
 }

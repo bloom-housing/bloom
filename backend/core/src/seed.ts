@@ -3,7 +3,6 @@ import { NestFactory } from "@nestjs/core"
 import yargs from "yargs"
 import { UserService } from "./auth/services/user.service"
 import { plainToClass } from "class-transformer"
-import { UserCreateDto } from "./auth/dto/user.dto"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "./auth/entities/user.entity"
@@ -29,6 +28,8 @@ import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listin
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
+import { UserCreateDto } from "./auth/dto/user-create.dto"
+import { UnitTypesService } from "./unit-types/unit-types.service"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -179,11 +180,15 @@ async function seed() {
     new AuthContext(null)
   )
 
+  const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
+
+  const unitTypes = await unitTypesService.list()
+
   for (let i = 0; i < 10; i++) {
     for (const listing of listings) {
       await Promise.all([
-        await makeNewApplication(app, listing, user1),
-        await makeNewApplication(app, listing, user2),
+        await makeNewApplication(app, listing, unitTypes, user1),
+        await makeNewApplication(app, listing, unitTypes, user2),
       ])
     }
   }

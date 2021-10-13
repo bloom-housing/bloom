@@ -1,18 +1,10 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common"
 import { newEnforcer } from "casbin"
 import path from "path"
 import { User } from "../entities/user.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoleEnum } from "../enum/user-role-enum"
-
-export enum authzActions {
-  create = "create",
-  read = "read",
-  update = "update",
-  delete = "delete",
-  submit = "submit",
-  confirm = "confirm",
-}
+import { authzActions } from "../enum/authz-actions.enum"
 
 @Injectable()
 export class AuthzService {

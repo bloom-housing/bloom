@@ -6,17 +6,18 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity, DeepPartial } from "typeorm"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 import { CountyCode } from "../../shared/types/county-code"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 const coliseumProperty: PropertySeedType = {
   accessibility:
@@ -887,7 +888,7 @@ const coliseumListing: ListingSeedType = {
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
-  applicationDueDate: getDate(10),
+  applicationDueDate: getDate(1),
   applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
@@ -900,6 +901,10 @@ const coliseumListing: ListingSeedType = {
     state: "CA",
     latitude: 37.7549632,
     longitude: -122.1968792,
+  },
+  image: {
+    label: "test_label",
+    fileId: "fileid",
   },
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
@@ -931,7 +936,7 @@ const coliseumListing: ListingSeedType = {
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
-  rentalAssistance: null,
+  rentalAssistance: "",
   rentalHistory: "Two years' landlord history or homeless verification",
   requiredDocuments:
     "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",
@@ -950,27 +955,33 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
   async seed() {
     const priorityTypeMobilityAndHearingWithVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and Hearing & Visual",
+        name: PriorityTypes.mobilityHearingVisual,
       }
     )
     const priorityTypeMobilityAndMobilityWithHearingAndVisual = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and Mobility with Hearing & Visual",
+        name: PriorityTypes.mobilityHearingVisual,
       }
     )
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
       {
-        name: "Mobility and hearing",
+        name: PriorityTypes.mobilityHearing,
       }
     )
     const priorityMobility = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail({
-      name: "Mobility",
+      name: PriorityTypes.mobility,
     })
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
     const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
 
-    const amiChart = await this.amiChartRepository.save(getDefaultAmiChart())
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...getDefaultAmiChart(),
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...coliseumProperty,

@@ -8,7 +8,3 @@ export class UserRolesDto extends OmitType(UserRoles, ["user"] as const) {
   @Type(() => IdDto)
   user: IdDto
 }
-
-export class UserRolesCreateDto extends OmitType(UserRolesDto, [] as const) {}
-
-export class UserRolesUpdateDto extends OmitType(UserRolesDto, [] as const) {}

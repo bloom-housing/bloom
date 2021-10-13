@@ -1,13 +1,14 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDefaultProperty } from "./shared"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { UnitSeedType } from "./listings"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { UnitStatus } from "../../units/types/unit-status-enum"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { CountyCode } from "../../shared/types/county-code"
 
-export const missingAmiLevelsChart: AmiChartCreateDto = {
+export const missingAmiLevelsChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
   name: "Missing Household Ami Levels",
   items: [
     {
@@ -141,7 +142,13 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
 
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
 
-    const amiChart = await this.amiChartRepository.save(missingAmiLevelsChart)
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...missingAmiLevelsChart,
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...getDefaultProperty(),

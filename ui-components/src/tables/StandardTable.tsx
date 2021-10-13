@@ -7,7 +7,7 @@ import { t } from "../helpers/translator"
 
 export interface TableHeadersOptions {
   name: string
-  className: string
+  className?: string
 }
 export interface TableHeaders {
   [key: string]: string | TableHeadersOptions
@@ -46,7 +46,7 @@ export interface StandardTableProps {
   draggable?: boolean
   setData?: (data: unknown[]) => void
   headers: TableHeaders
-  data: StandardTableData
+  data?: StandardTableData
   tableClassName?: string
   cellClassName?: string
   responsiveCollapse?: boolean
@@ -74,10 +74,6 @@ export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 
   const [tableData, setTableData] = useState<StandardTableData>()
-
-  useEffect(() => {
-    setTableData(props.data)
-  }, [props.data])
 
   const headerLabels = Object.values(headers)?.map((header, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
@@ -113,7 +109,7 @@ export const StandardTable = (props: StandardTableProps) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
       const cell = row[colKey]
 
-      const cellClass = [cellClassName, headerClassName(headers[colKey])].join(" ")
+      const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
       return (
         <Cell

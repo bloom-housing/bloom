@@ -2,7 +2,8 @@ import React, { useMemo } from "react"
 import { SWRConfig } from "swr"
 import type { AppProps } from "next/app"
 
-import "@bloom-housing/ui-components/src/global/index.scss"
+import "@bloom-housing/ui-components/src/global/css-imports.scss"
+import "@bloom-housing/ui-components/src/global/app-css.scss"
 import {
   addTranslation,
   ConfigProvider,
@@ -23,7 +24,7 @@ const signInMessage = "Login is required to view this page."
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
-  const skipLoginRoutes = ["/forgot-password", "/reset-password"]
+  const skipLoginRoutes = ["/forgot-password", "/reset-password", "/users/confirm"]
 
   useMemo(() => {
     addTranslation(translations.general, true)

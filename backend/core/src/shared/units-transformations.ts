@@ -141,22 +141,8 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
     })?.income
   }
 
-  const getYearlyRangeValue = (incomeRange: MinMaxCurrency) => {
-    return incomeRange.min === incomeRange.max
-      ? `listings.annualIncome*income:${incomeRange.min}`
-      : `listings.annualIncomeRange*from:${incomeRange.min}*to:${incomeRange.max}`
-  }
-
   const yearlyCurrencyStringToMonthly = (currency: string) => {
     return usd.format(parseFloat(currency.replace(/[^0-9.-]+/g, "")) / 12)
-  }
-
-  const getMonthlyRangeValue = (incomeRange: MinMaxCurrency) => {
-    const incomeMin = yearlyCurrencyStringToMonthly(incomeRange.min)
-    const incomeMax = yearlyCurrencyStringToMonthly(incomeRange.max)
-    return incomeRange.min === incomeRange.max
-      ? `listings.monthlyIncome*income:${incomeMin}`
-      : `listings.monthlyIncomeRange*from:${incomeMin}*to:${incomeMax}`
   }
 
   // Build row data by household size
@@ -203,10 +189,12 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
           { min: usd.format(firstChartValue), max: usd.format(firstChartValue) } as MinMaxCurrency
         )
         if (allPercentages.length === 1) {
-          rowData["maxIncomeMonth"] = getMonthlyRangeValue(maxIncomeRange)
-          rowData["maxIncomeYear"] = getYearlyRangeValue(maxIncomeRange)
+          rowData[
+            "maxIncomeMonth"
+          ] = `listings.monthlyIncome*income:${yearlyCurrencyStringToMonthly(maxIncomeRange.max)}`
+          rowData["maxIncomeYear"] = `listings.annualIncome*income:${maxIncomeRange.max}`
         } else {
-          rowData[`ami${currentAmiPercent}`] = getYearlyRangeValue(maxIncomeRange)
+          rowData[`ami${currentAmiPercent}`] = `listings.annualIncome*income:${maxIncomeRange.max}`
         }
         rowHasData = true
       }
@@ -300,7 +288,7 @@ export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {
   units.forEach((unit) => {
     const currentUnitType = unit.unitType
     const currentUnitRent = unit.monthlyRentAsPercentOfIncome
-    const thisKey = currentUnitType.name.concat(currentUnitRent)
+    const thisKey = currentUnitType?.name.concat(currentUnitRent)
     if (!(thisKey in unitMap)) unitMap[thisKey] = []
     unitMap[thisKey].push(unit)
   })

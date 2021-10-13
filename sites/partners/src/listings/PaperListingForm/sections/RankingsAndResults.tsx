@@ -14,7 +14,7 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
-import { getLotteryEvent } from "../../../../lib/helpers"
+import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
@@ -25,14 +25,18 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
+  const { register, watch, control, errors } = formMethods
 
   const lotteryEvent = getLotteryEvent(listing)
 
   const waitlistOpen = useWatch({
     control,
     name: "waitlistOpenQuestion",
-    defaultValue: listing?.isWaitlistOpen ? YesNoAnswer.Yes : YesNoAnswer.No,
+    defaultValue: listing?.isWaitlistOpen
+      ? YesNoAnswer.Yes
+      : listing?.isWaitlistOpen === false
+      ? YesNoAnswer.No
+      : null,
   })
 
   const showWaitlistSize = useWatch({
@@ -80,10 +84,10 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
                   defaultChecked:
-                    !listing || listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+                    listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
                 },
                 {
-                  label: t("listings.lottery"),
+                  label: t("listings.lotteryTitle"),
                   value: "reviewOrderLottery",
                   id: "reviewOrderLottery",
                   defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,
@@ -193,6 +197,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   fullWidth={true}
                   register={register}
                   defaultValue={lotteryEvent ? lotteryEvent.note : null}
+                  maxLength={150}
                 />
               </GridCell>
             </GridSection>
@@ -200,22 +205,31 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
         )}
         <GridSection columns={2} className={"flex items-center"}>
           <GridCell>
-            <p className="field-label m-4 ml-0">{t("listings.waitlist.openQuestion")}</p>
+            <p
+              className={`field-label m-4 ml-0 ${
+                fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null && "text-alert"
+              }`}
+            >
+              {t("listings.waitlist.openQuestion")}
+            </p>
             <FieldGroup
               name="waitlistOpenQuestion"
               type="radio"
+              groupSubNote={t("listings.requiredToPublish")}
               register={register}
+              error={fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null}
+              errorMessage={fieldMessage(errors?.isWaitlistOpen)}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
                   id: "waitlistOpenYes",
-                  defaultChecked: listing && listing.isWaitlistOpen,
+                  defaultChecked: listing && listing.isWaitlistOpen === true,
                 },
 
                 {
                   ...yesNoRadioOptions[1],
                   id: "waitlistOpenNo",
-                  defaultChecked: listing && !listing.isWaitlistOpen,
+                  defaultChecked: listing && listing.isWaitlistOpen === false,
                 },
               ]}
             />
@@ -281,7 +295,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               id={"whatToExpect"}
               fullWidth={true}
               register={register}
-              maxLength={600}
             />
           </GridCell>
         </GridSection>

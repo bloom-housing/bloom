@@ -1,13 +1,8 @@
 import React from "react"
 import { render, cleanup } from "@testing-library/react"
 import { Hero } from "../../src/headers/Hero"
-import Archer from "../../__tests__/fixtures/archer.json"
-import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
 
 afterEach(cleanup)
-
-const archer = Object.assign({}, Archer) as any
 
 describe("<Hero>", () => {
   it("renders with no listings", () => {
@@ -21,15 +16,12 @@ describe("<Hero>", () => {
     expect(getByText("I am a Button")).toBeTruthy()
   })
   it("renders with closed listings", () => {
-    const pastArcher = archer
-    pastArcher.applicationDueDate = moment().subtract(10, "days").format()
-    pastArcher.applicationOpenDate = moment().subtract(15, "days").format()
     const { getByText } = render(
       <Hero
         title={<>Say Hello to Your Hero</>}
         buttonTitle="I am a Button"
         buttonLink="/listings"
-        listings={[pastArcher] as Listing[]}
+        allApplicationsClosed={true}
       />
     )
     expect(getByText("Say Hello to Your Hero")).toBeTruthy()
@@ -39,16 +31,12 @@ describe("<Hero>", () => {
     expect(getByText("I am a Button")).toBeTruthy()
   })
   it("renders with some listings open", () => {
-    const futureArcher = archer
-    futureArcher.applicationDueDate = moment().add(15, "days").format()
-    futureArcher.applicationOpenDate = moment().subtract(10, "days").format()
     const { getByText } = render(
       <Hero
         title={<>Say Hello to Your Hero</>}
         buttonTitle="I am a Button"
         buttonLink="/listings"
         backgroundImage={"url"}
-        listings={[futureArcher] as Listing[]}
       />
     )
     expect(getByText("Say Hello to Your Hero")).toBeTruthy()

@@ -1,7 +1,6 @@
 import * as React from "react"
 import { t } from "./translator"
 import { UnitSummary } from "@bloom-housing/backend-core/types"
-import { GroupedTableGroup } from "../tables/GroupedTable"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
   const unitSummaries = summaries.map((unitSummary) => {
@@ -41,7 +40,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     return {
-      unitType: <strong>{t(`listings.unitTypes.${unitSummary.unitType.name}`)}</strong>,
+      unitType: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
       minimumIncome: (
         <>
           {minIncome} {t("t.perMonth")}
@@ -66,15 +65,10 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
 }
 
 export const getSummariesTable = (summaries: UnitSummary[]) => {
-  let groupedUnits = [] as Array<GroupedTableGroup>
+  let unitSummaries = [] as Record<string, React.ReactNode>[]
 
   if (summaries?.length > 0) {
-    const unitSummaries = unitSummariesTable(summaries)
-    groupedUnits = [
-      {
-        data: unitSummaries,
-      },
-    ]
+    unitSummaries = unitSummariesTable(summaries)
   }
-  return groupedUnits
+  return unitSummaries
 }

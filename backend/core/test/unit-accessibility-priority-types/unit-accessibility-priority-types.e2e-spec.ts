@@ -47,8 +47,16 @@ describe("UnitAccessibilityPriorityTypes", () => {
     const unitAccessibilityPriorityTypes = res.body.map(
       (unitAccessibilityPriorityTypes) => unitAccessibilityPriorityTypes.name
     )
-    for (const predefinedUnitAccessibilityPriorityType of ["mobility"]) {
-      expect(unitAccessibilityPriorityTypes).toContain(predefinedUnitAccessibilityPriorityType)
+    for (const predefinedUnitAccessibilityPriorityTypes of [
+      "Mobility",
+      "Hearing",
+      "Visual",
+      "Hearing and Visual",
+      "Mobility and Hearing",
+      "Mobility and Visual",
+      "Mobility, Hearing and Visual",
+    ]) {
+      expect(unitAccessibilityPriorityTypes).toContain(predefinedUnitAccessibilityPriorityTypes)
     }
   })
 

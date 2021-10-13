@@ -12,9 +12,9 @@ import {
   Form,
   FormCard,
   ProgressNav,
-  altContactRelationshipKeys,
   t,
 } from "@bloom-housing/ui-components"
+import { altContactRelationshipKeys } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"

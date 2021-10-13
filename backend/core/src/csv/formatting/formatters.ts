@@ -30,7 +30,7 @@ export const dobFormatter = (obj?: {
   return obj ? `${obj.birthMonth}/${obj.birthDay}/${obj.birthYear}` : defaultFormatter(obj)
 }
 export const joinArrayFormatter = (obj?: string[]) => (obj ? obj.join(",") : "")
-export const keysToJoinedStringFormatter = (obj: any) => {
+export const keysToJoinedStringFormatter = (obj: unknown) => {
   if (!obj) {
     return defaultFormatter(obj)
   }
@@ -335,7 +335,7 @@ export const formatRequestUnitType = {
   label: "Requested unit type",
   discriminator: "",
   formatter: (application: Application) => {
-    return joinArrayFormatter(application.preferredUnit)
+    return joinArrayFormatter(application.preferredUnit.map((unit) => unit.name))
   },
 }
 export const formatHouseholdSize = {
