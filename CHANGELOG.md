@@ -65,6 +65,7 @@ All notable changes to this project will be documented in this file. The format 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
+  - HouseholdSizeField bug when householdSizeMax is 0 ([#1910](https://github.com/bloom-housing/bloom/issues/1910)) (Yazeed)
 
 - Changed:
 
