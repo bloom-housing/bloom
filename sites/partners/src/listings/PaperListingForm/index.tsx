@@ -33,6 +33,7 @@ import {
   PaperApplicationCreate,
   ListingReviewOrder,
   User,
+  ListingPreference,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -165,7 +166,7 @@ const defaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
-  preferences: [],
+  listingPreferences: [],
   programRules: "",
   rentalAssistance:
     "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
@@ -233,7 +234,7 @@ const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[],
+  preferences: ListingPreference[],
   saveLatLong: LatitudeLongitude,
   customPinPositionChosen: boolean,
   profile: User
@@ -432,7 +433,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [preferences, setPreferences] = useState<Preference[]>(
+    listing?.listingPreferences.map((listingPref) => {
+      return { ...listingPref.preference }
+    }) ?? []
+  )
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
@@ -508,8 +513,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         try {
           setLoading(true)
           clearErrors()
-          const orderedPreferences = preferences.map((pref, index) => {
-            return { ...pref, ordinal: index + 1 }
+          const orderedPreferences = preferences.map((preference, index) => {
+            return { preference, ordinal: index + 1 }
           })
           const formattedData = formatFormData(
             formData,

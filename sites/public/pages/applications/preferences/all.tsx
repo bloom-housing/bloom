@@ -29,7 +29,7 @@ import { stateKeys } from "@bloom-housing/shared-helpers"
 const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
   const { conductor, application, listing } = useFormConductor("preferencesAll")
-  const preferences = listing?.preferences
+  const preferences = listing?.listingPreferences
   const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
@@ -70,14 +70,14 @@ const ApplicationPreferencesAll = () => {
   */
   const preferenceCheckboxIds = useMemo(() => {
     return preferencesByPage?.reduce((acc, item) => {
-      const preferenceName = item.formMetadata?.key
-      const optionPaths = item.formMetadata?.options
-        ? item.formMetadata.options.map((option) => {
+      const preferenceName = item.preference.formMetadata?.key
+      const optionPaths = item.preference.formMetadata?.options
+        ? item.preference.formMetadata.options.map((option) => {
             return getPreferenceOptionName(option.key, preferenceName)
           })
         : []
-      if (item.formMetadata && !item.formMetadata?.hideGenericDecline) {
-        optionPaths.push(getExclusivePreferenceOptionName(item?.formMetadata?.key))
+      if (item.preference.formMetadata && !item.preference.formMetadata?.hideGenericDecline) {
+        optionPaths.push(getExclusivePreferenceOptionName(item?.preference.formMetadata?.key))
       }
 
       Object.assign(acc, {
@@ -121,9 +121,11 @@ const ApplicationPreferencesAll = () => {
   */
   const allOptionFieldNames = useMemo(() => {
     const keys = []
-    preferencesByPage?.forEach((preference) =>
-      preference?.formMetadata?.options.forEach((option) => {
-        keys.push(getPreferenceOptionName(option.key, preference?.formMetadata?.key))
+    preferencesByPage?.forEach((listingPreference) =>
+      listingPreference.preference?.formMetadata?.options.forEach((option) => {
+        keys.push(
+          getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata?.key)
+        )
       })
     )
 
@@ -283,47 +285,54 @@ const ApplicationPreferencesAll = () => {
 
         <div className="form-card__group px-0 pb-0">
           <p className="field-note">
-            {preferencesByPage[0]?.formMetadata?.customSelectText ??
+            {preferencesByPage[0]?.preference.formMetadata?.customSelectText ??
               t("application.preferences.selectBelow")}
           </p>
         </div>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <>
-            {preferencesByPage?.map((preference, index) => {
+            {preferencesByPage?.map((listingPreference, index) => {
               return (
-                <div key={preference.id}>
+                <div key={listingPreference.preference.id}>
                   <div
                     className={`form-card__group px-0 ${
                       index + 1 !== preferencesByPage.length ? "border-b" : ""
                     }`}
                   >
                     <fieldset>
-                      <legend className="field-label--caps mb-4">{preference.title}</legend>
-                      <p className="field-note mb-8">{preference.description}</p>
-                      {preference?.formMetadata?.options?.map((option) => {
+                      <legend className="field-label--caps mb-4">
+                        {listingPreference.preference.title}
+                      </legend>
+                      <p className="field-note mb-8">{listingPreference.preference.description}</p>
+                      {listingPreference.preference?.formMetadata?.options?.map((option) => {
                         return getOption(
                           option.key,
-                          getPreferenceOptionName(option.key, preference.formMetadata.key),
+                          getPreferenceOptionName(
+                            option.key,
+                            listingPreference.preference.formMetadata.key
+                          ),
                           option.description,
                           option.exclusive,
                           option.extraData,
-                          preference
+                          listingPreference.preference
                         )
                       })}
 
                       {/** If we haven't hidden the generic decline, include it at the end */}
-                      {preference?.formMetadata &&
-                        !preference.formMetadata.hideGenericDecline &&
+                      {listingPreference.preference?.formMetadata &&
+                        !listingPreference.preference.formMetadata.hideGenericDecline &&
                         getOption(
                           null,
-                          getExclusivePreferenceOptionName(preference?.formMetadata?.key),
+                          getExclusivePreferenceOptionName(
+                            listingPreference.preference?.formMetadata?.key
+                          ),
                           false,
                           true,
                           [],
-                          preference,
-                          preference.formMetadata.options &&
-                            preference.formMetadata.options.length === 1
+                          listingPreference.preference,
+                          listingPreference.preference.formMetadata.options &&
+                            listingPreference.preference.formMetadata.options.length === 1
                             ? t("application.preferences.dontWantSingular")
                             : t("application.preferences.dontWant")
                         )}

@@ -89,8 +89,9 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   // Fetch and filter all preferences
   const { data: preferencesData = [] } = usePreferenceList()
   useEffect(() => {
+    console.log({ preferencesData })
     setUniquePreferences(
-      preferencesData.reduce(
+      preferencesData?.reduce(
         (items, item) =>
           items.find((x) => x.description === item.description) ? [...items] : [...items, item],
         []

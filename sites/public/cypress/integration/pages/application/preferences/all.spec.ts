@@ -15,7 +15,7 @@ describe("applications/preferences/all", function () {
     cy.fixture("listing.json")
       .as("listing")
       .then((listing) => {
-        const preferences = listing.preferences
+        const preferences = listing.listingPreferences
 
         cy.loadConfig(
           {
