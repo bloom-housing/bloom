@@ -14,16 +14,17 @@ import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ListingEventCreateDto } from "./listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
   "createdAt",
   "updatedAt",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "preferences",
   "events",
   "image",
@@ -85,6 +86,12 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetCreateDto)
+  buildingSelectionCriteriaFile?: AssetCreateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

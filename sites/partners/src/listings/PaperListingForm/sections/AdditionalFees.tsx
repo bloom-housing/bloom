@@ -62,6 +62,7 @@ const AdditionalFees = () => {
             id={"costsNotIncluded"}
             fullWidth={true}
             register={register}
+            maxLength={150}
           />
         </GridSection>
       </GridSection>

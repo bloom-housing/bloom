@@ -166,7 +166,7 @@ export class EmailService {
     return partials
   }
 
-  private async send(to: string, subject: string, body: string, retry?: number) {
+  private async send(to: string, subject: string, body: string, retry = 3) {
     await this.sendGrid.send(
       {
         to: to,
@@ -178,13 +178,11 @@ export class EmailService {
       (error) => {
         if (error instanceof ResponseError) {
           const { response } = error
-          const { body } = response
-          console.error(`Error sending email to: ${to}! Error body: ${body}`)
-          if (!retry) {
-            retry = 3
+          const { body: errBody } = response
+          console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
+          if (retry > 0) {
+            void this.send(to, subject, body, retry - 1)
           }
-          // Retries, if sending failed
-          void this.send(to, subject, body, retry - 1)
         }
       }
     )

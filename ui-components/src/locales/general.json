@@ -579,7 +579,12 @@
     "addUser": "Add User",
     "userDetails": "User Details",
     "allListings": "All listings",
-    "inviteSent": "Invite sent"
+    "inviteSent": "Invite sent",
+    "addPassword": "Add a Password",
+    "needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
+    "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
+    "confirmAccount": "Confirm Acount",
+    "accountConfirmed": "Account confirmed"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -647,7 +652,8 @@
         "passwordMismatch": "The passwords do not match",
         "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
         "tokenExpired": "Your link has expired.",
-        "tokenMissing": "Wrong token provided."
+        "tokenMissing": "Wrong token provided.",
+        "generic": "Something went wrong while creating your account. Please try again.\n\nContact your housing department if you're still experiencing issues."
       }
     },
     "signOut": {
@@ -746,6 +752,7 @@
       "previewLotteryResults": "Preview Lottery Results"
     },
     "activePreferences": "Active Preferences",
+    "addBuildingSelectionCriteria": "Add Building Selection Criteria",
     "addListing": "Add Listing",
     "addPaperApplication": "Add Paper Application",
     "addPhoto": "Add Photo",
@@ -795,6 +802,7 @@
     "bath": "bath",
     "browseListings": "Browse Listings",
     "buildingImageAltText": "A picture of the building",
+    "buildingSelectionCriteria": "Building Criteria Selection",
     "closedListings": "Closed Listings",
     "comingSoon": "Coming Soon",
     "confirmedPreferenceList": "Confirmed %{preference} List",
@@ -890,6 +898,7 @@
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
     "rentalHistory": "Rental History",
     "requiredDocuments": "Required Documents",
+    "requiredToPublish": "Required to publish",
     "reservedCommunityBuilding": "%{type} Building",
     "reservedCommunityDescription": "Reserved Community Description",
     "reservedCommunitySeniorTitle": "Senior Building",
@@ -926,6 +935,7 @@
       "applicationAddressTitle": "Application Address",
       "applicationTypesTitle": "Application Types",
       "applicationTypesSubtitle": "Configure the online application and upload paper application forms.",
+      "buildingAddress": "Building Address",
       "buildingDetailsSubtitle": "Tell us where the building is located.",
       "buildingDetailsTitle": "Building Details",
       "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
@@ -1088,7 +1098,7 @@
     "accountSettings": "Account Settings",
     "browseProperties": "Browse Properties",
     "getAssistance": "Get Assistance",
-    "getFeedback": "This is a preview of our new website. We're just getting started. We'd love to get <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>your feedback.</a>",
+    "getFeedback": "We'd love to get your feedback!",
     "listings": "Listings",
     "properties": "Properties",
     "applications": "Applications",
@@ -1122,6 +1132,10 @@
   },
   "region": {
     "name": "Local Region"
+  },
+  "progressNav": {
+    "srHeading": "Progress",
+    "current": "Current step: "
   },
   "states": {
     "AL": "Alabama",
@@ -1185,12 +1199,14 @@
     "areYouStillWorking": "Are you still working?",
     "accessibility": "Accessibility",
     "am": "AM",
+    "available": "available",
     "availability": "Availability",
     "automatic": "Automatic",
     "back": "Back",
     "built": "Built",
     "call": "Call",
     "cancel": "Cancel",
+    "close": "Close",
     "confirm": "Confirm",
     "chooseFromFolder": "Choose from folder",
     "custom": "Custom",
@@ -1214,9 +1230,11 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",
     "income": "Income",
+    "incomeRange": "Income Range",
     "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",

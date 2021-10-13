@@ -197,6 +197,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   fullWidth={true}
                   register={register}
                   defaultValue={lotteryEvent ? lotteryEvent.note : null}
+                  maxLength={150}
                 />
               </GridCell>
             </GridSection>
@@ -214,6 +215,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
             <FieldGroup
               name="waitlistOpenQuestion"
               type="radio"
+              groupSubNote={t("listings.requiredToPublish")}
               register={register}
               error={fieldHasError(errors?.isWaitlistOpen) && waitlistOpen === null}
               errorMessage={fieldMessage(errors?.isWaitlistOpen)}
@@ -293,7 +295,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               id={"whatToExpect"}
               fullWidth={true}
               register={register}
-              maxLength={600}
             />
           </GridCell>
         </GridSection>

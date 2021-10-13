@@ -7,6 +7,12 @@ export const SanMateoHUD2019: AmiChart = {
   createdAt: new Date(),
   updatedAt: new Date(),
   name: "SanMateoHUD2019",
+  jurisdiction: {
+    id: "jurisdictiion_id",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    name: "Alameda",
+  },
   items: [
     {
       percentOfAmi: 120,

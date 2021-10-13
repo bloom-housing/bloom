@@ -13,11 +13,11 @@ import {
   IsPhoneNumber,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UnitUpdateDto } from "../../units/dto/unit.dto"
 import { ListingUpdateDto } from "./listing-update.dto"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { OmitType } from "@nestjs/swagger"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
+import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "assets",

@@ -9,7 +9,6 @@ import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
 import { User } from "../../auth/entities/user.entity"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import {
   getDefaultAmiChart,
   getDefaultAssets,
@@ -22,6 +21,9 @@ import {
   PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { CountyCode } from "../../shared/types/county-code"
 
 export class ListingDefaultSeed {
   constructor(
@@ -38,7 +40,9 @@ export class ListingDefaultSeed {
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
-    protected readonly applicationMethodRepository: Repository<ApplicationMethod>
+    protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
+    @InjectRepository(Jurisdiction)
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>
   ) {}
 
   async seed() {
@@ -47,7 +51,13 @@ export class ListingDefaultSeed {
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const amiChart = await this.amiChartRepository.save(getDefaultAmiChart())
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...getDefaultAmiChart(),
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...getDefaultProperty(),

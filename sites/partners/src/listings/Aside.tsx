@@ -237,8 +237,6 @@ const Aside = ({
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,
-    showCloseListingModal,
-    showLotteryResultsDrawer,
     type,
   ])
 

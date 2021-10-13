@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react"
+import axios from "axios"
 import moment from "moment"
+import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
 import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
@@ -73,4 +75,37 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   }, [listing])
 
   return props
+}
+
+/**
+ * This is fired server side by getStaticProps
+ * By setting listingData here, we can continue to serve listings if the fetch fails.
+ * This more of a temporary solution.
+ */
+let listingData = []
+
+export async function fetchBaseListingData() {
+  try {
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
+
+    listingData = response.data?.items ?? []
+  } catch (error) {
+    console.log("fetchBaseListingData error = ", error)
+  }
+
+  return listingData
 }

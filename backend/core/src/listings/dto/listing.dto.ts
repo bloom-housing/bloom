@@ -1,29 +1,13 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
-import {
-  ArrayMaxSize,
-  IsDate,
-  IsDefined,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  ValidateNested,
-  IsNumberString,
-  IsEnum,
-  IsArray,
-  IsBooleanString,
-} from "class-validator"
+import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import moment from "moment"
 import { PreferenceDto } from "../../preferences/dto/preference.dto"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
-import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
-import { PaginationFactory, PaginationAllowsAllQueryParams } from "../../shared/dto/pagination.dto"
-import { BaseFilter } from "../../shared/dto/filter.dto"
-import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
+import { UnitDto } from "../../units/dto/unit.dto"
 import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/reserved-community-type.dto"
 import { AssetDto } from "../../assets/dto/asset.dto"
 import { ListingEventDto } from "./listing-event.dto"
@@ -40,6 +24,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationMailingAddress",
   "applications",
   "applicationMethods",
+  "buildingSelectionCriteriaFile",
   "events",
   "image",
   "jurisdiction",
@@ -86,6 +71,12 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
   applicationMailingAddress: AddressDto | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => AssetDto)
+  buildingSelectionCriteriaFile?: AssetDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

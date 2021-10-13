@@ -14,6 +14,7 @@ export interface FieldProps {
   id?: string
   name: string
   note?: string
+  subNote?: string
   label?: string
   defaultValue?: string | number
   onDrop?: (e: any) => boolean
@@ -110,6 +111,7 @@ const Field = (props: FieldProps) => {
         />
         {isRadioOrCheckbox && label}
       </div>
+      {props.subNote && <p className="field-sub-note">{props.subNote}</p>}
       {props.errorMessage && (
         <ErrorMessage id={`${idOrName}-error`} error={props.error}>
           {props.errorMessage}

@@ -9,9 +9,9 @@ import {
   Field,
   emailRegex,
   PhoneField,
-  altContactRelationshipKeys,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { altContactRelationshipKeys } from "@bloom-housing/shared-helpers"
 
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
