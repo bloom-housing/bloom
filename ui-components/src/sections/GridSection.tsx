@@ -16,7 +16,7 @@ const GridCell = (props: GridCellProps) => {
 }
 
 export interface GridSectionProps {
-  title?: string
+  title?: string | React.ReactNode
   edit?: string
   subtitle?: string
   description?: string
