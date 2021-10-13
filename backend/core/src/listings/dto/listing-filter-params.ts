@@ -2,9 +2,9 @@
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { Expose } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsBooleanString, IsEnum, IsNumberString, IsOptional, IsString } from "class-validator"
+import { IsEnum, IsNumberString, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { AvailabilityFilterEnum, ListingFilterKeys } from "../../.."
+import { ListingFilterKeys } from "../../.."
 import { ListingStatus } from "../types/listing-status-enum"
 
 // add other listing filter params here
@@ -66,55 +66,5 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.leasingAgents]?: string;
-
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(AvailabilityFilterEnum),
-    example: "hasAvailability",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsEnum(AvailabilityFilterEnum, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.availability]?: AvailabilityFilterEnum;
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: "true",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.seniorHousing]?: boolean;
-
-  @Expose()
-  @ApiProperty({
-    type: Number,
-    example: "300",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.minRent]?: number;
-
-  @Expose()
-  @ApiProperty({
-    type: Number,
-    example: "700",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.maxRent]?: number;
-
-  @Expose()
-  @ApiProperty({
-    type: Number,
-    example: "40",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.minAmiPercentage]?: number
+  [ListingFilterKeys.leasingAgents]?: string
 }
