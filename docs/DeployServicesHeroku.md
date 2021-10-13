@@ -3,6 +3,7 @@
 Bloom is designed to use a set of independently run services that provide the data and business logic processing needed by the front-end apps. While the Bloom architecture accomodates services built and operated in a variety of environments, the reference implementation includes services that can be easily run within the [Heroku PaaS environment](https://www.heroku.com/).
 
 ## Resources
+
 - [Heroku Postgres](https://www.heroku.com/postgres)
 - [Heroku Redis](https://www.heroku.com/redis)
 
@@ -17,6 +18,7 @@ Since the Bloom repository uses a monorepo layout, all Heroku services must use 
 Bloom's backend runs on Node.js and Heroku must be setup with [Heroku Buildpack for Node.js](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs).
 
 ## Procfile
+
 release: yarn herokusetup
 
 web: yarn start
