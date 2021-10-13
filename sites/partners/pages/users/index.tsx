@@ -11,17 +11,25 @@ import {
   AG_PER_PAGE_OPTIONS,
   SiteAlert,
 } from "@bloom-housing/ui-components"
-
+import { User } from "@bloom-housing/backend-core/types"
 import Layout from "../../layouts"
 import { useUserList, useListingsData } from "../../lib/hooks"
-import { FormUserAdd } from "../../src/users/FormUserAdd"
+import { FormUserManage } from "../../src/users/FormUserManage"
 
 const defaultColDef = {
   resizable: true,
   maxWidth: 300,
 }
 
+type IsDrawerOpenValue = {
+  type: "add" | "edit"
+  user?: User
+}
+
 const Users = () => {
+  /* Add user drawer */
+  const [isDrawerOpen, setDrawerOpen] = useState<IsDrawerOpenValue | null>(null)
+
   /* Ag Grid column definitions */
   const columns = useMemo(() => {
     return [
@@ -31,6 +39,17 @@ const Users = () => {
         valueGetter: ({ data }) => {
           const { firstName, lastName } = data
           return `${firstName} ${lastName}`
+        },
+        cellRendererFramework: (params) => {
+          const user = params.data
+          return (
+            <button
+              className="text-blue-700 underline"
+              onClick={() => setDrawerOpen({ type: "edit", user })}
+            >
+              {params.value}
+            </button>
+          )
         },
       },
       {
@@ -80,9 +99,6 @@ const Users = () => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)
 
-  /* Add user drawer */
-  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false)
-
   /* Fetch user list */
   const { data: userList } = useUserList({
     page: currentPage,
@@ -121,7 +137,7 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
-                  onClick={() => setDrawerOpen(true)}
+                  onClick={() => setDrawerOpen({ type: "add" })}
                   disabled={!listingDtos}
                 >
                   {t("users.addUser")}
@@ -157,12 +173,17 @@ const Users = () => {
       </section>
 
       <Drawer
-        open={isDrawerOpen}
-        title={t("users.addUser")}
+        open={!!isDrawerOpen}
+        title={isDrawerOpen?.type === "add" ? t("users.addUser") : t("users.editUser")}
         ariaDescription={t("users.addUser")}
-        onClose={() => setDrawerOpen(false)}
+        onClose={() => setDrawerOpen(null)}
       >
-        <FormUserAdd listings={listingDtos?.items} onDrawerClose={() => setDrawerOpen(false)} />
+        <FormUserManage
+          mode={isDrawerOpen?.type}
+          user={isDrawerOpen?.user}
+          listings={listingDtos?.items}
+          onDrawerClose={() => setDrawerOpen(null)}
+        />
       </Drawer>
     </Layout>
   )
