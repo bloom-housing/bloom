@@ -2,19 +2,12 @@ import React from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
 import {
-<<<<<<< HEAD
   Listing,
   ListingEvent,
   ListingEventType,
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
-=======
-  ApplicationMethodType,
-  Listing,
-  ListingEvent,
-  ListingEventType,
->>>>>>> master
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -210,7 +203,6 @@ export const ListingView = (props: ListingProps) => {
     } else return t("listings.reservedCommunityTitleDefault")
   }
 
-<<<<<<< HEAD
   // TODO: Move the below methods into our shared helper library when setup
   const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
     return applicationMethods.some((method) => method.type == type)
@@ -327,8 +319,6 @@ export const ListingView = (props: ListingProps) => {
 
   const applicationsClosed = moment() > moment(listing.applicationDueDate)
 
-=======
->>>>>>> master
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -396,19 +386,7 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
-<<<<<<< HEAD
           {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
-=======
-          {hasNonReferralMethods && (
-            <ApplicationSection
-              listing={listing}
-              preview={props.preview}
-              internalFormRoute="/applications/start/choose-language"
-              cloudName={process.env.cloudinaryCloudName}
-              openInFuture={appOpenInFuture}
-            />
-          )}
->>>>>>> master
         </div>
       </div>
       <ListingDetails>
@@ -515,19 +493,7 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
-<<<<<<< HEAD
               {hasNonReferralMethods && !applicationsClosed && applySidebar()}
-=======
-              {hasNonReferralMethods && (
-                <ApplicationSection
-                  listing={listing}
-                  preview={props.preview}
-                  internalFormRoute="/applications/start/choose-language"
-                  cloudName={process.env.cloudinaryCloudName}
-                  openInFuture={appOpenInFuture}
-                />
-              )}
->>>>>>> master
               {listing?.referralApplication && (
                 <ReferralApplication
                   phoneNumber={
@@ -550,11 +516,7 @@ export const ListingView = (props: ListingProps) => {
             )}
             {lotterySection}
             <WhatToExpect listing={listing} />
-<<<<<<< HEAD
             {!appOpenInFuture && <LeasingAgent listing={listing} />}
-=======
-            {!openInFuture && <LeasingAgent listing={listing} />}
->>>>>>> master
           </aside>
         </ListingDetailItem>
 

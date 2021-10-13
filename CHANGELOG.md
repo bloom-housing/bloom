@@ -22,12 +22,9 @@ All notable changes to this project will be documented in this file. The format 
   - Allow application status to show both FCFS and a due date ([#1680](https://github.com/bloom-housing/bloom/pull/1680)) (Emily Jablonski)
   - Add new /users page with table ([#1679](https://github.com/bloom-housing/bloom/pull/1679)) (Dominik Barcikowski)
   - Add new /unauthorized page ([#1763](https://github.com/bloom-housing/bloom/pull/1763)) (Dominik Barcikowski)
-<<<<<<< HEAD
   - Adds ability to create AMI chart overrides in listings management and refactors the unit form ([#1706](https://github.com/bloom-housing/bloom/pull/1706)) (Emily Jablonski)
   - Add the "Add User" form ([#1857](https://github.com/bloom-housing/bloom/pull/1857)) (Dominik Barcikowski)
   - Add a new account confirmation page ([#1654](https://github.com/bloom-housing/bloom/pull/1654)) (Dominik Barcikowski)
-=======
->>>>>>> master
 
 - Fixed:
 
@@ -41,7 +38,6 @@ All notable changes to this project will be documented in this file. The format 
   - Update unit availability field ([#1767](https://github.com/bloom-housing/bloom/pull/1767)) (Dominik Barcikowski)
   - Update select width ([#1765](https://github.com/bloom-housing/bloom/pull/1765)) (Dominik Barcikowski)
   - Reset page to 1 on limit change ([#1809](https://github.com/bloom-housing/bloom/pull/1809)) (Dominik Barcikowski)
-<<<<<<< HEAD
   - Update public and partners to support preferred unit ids ([#1774](https://github.com/bloom-housing/bloom/pull/1774)) (Dominik Barcikowski)
   - Update select options ([#1768](https://github.com/bloom-housing/bloom/pull/1768)) (Dominik Barcikowski)
   - Can toggle application pick up and drop off addresses off ([#1954](https://github.com/bloom-housing/bloom/pull/1954)) (Emily Jablonski)
@@ -56,10 +52,6 @@ All notable changes to this project will be documented in this file. The format 
   - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
     - ** Breaking Change**: if your implementation relies on the export script, you'll need to use the start script, especially if you want to take advantage of the "fallback" setting for getStaticPaths
   - Update textarea character limit and set default to 1000 ([#1906](https://github.com/bloom-housing/bloom/pull/1906)) (Dominik Barcikowski)
-=======
-  - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
-    - ** Breaking Change**: if your implementation relies on the export script, you'll need to use the start script, especially if you want to take advantage of the "fallback" setting for getStaticPaths
->>>>>>> master
 
 ### UI Components
 
@@ -79,12 +71,9 @@ All notable changes to this project will be documented in this file. The format 
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
 
 - Changed:
-<<<<<<< HEAD
 
   - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
   - Upgraded React to v17
-=======
->>>>>>> master
   - StandardTable new optional prop to translate cell content ([#1707](https://github.com/bloom-housing/bloom/pull/1707)) (Emily Jablonski)
   - Removed business logic from ListingsList component ([#1752](https://github.com/bloom-housing/bloom/pull/1752)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with children and a listingsCount prop
@@ -98,7 +87,6 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**
   - Removed business logic from HouseholdMemberForm component ([#1722](https://github.com/bloom-housing/bloom/pull/1722)) (Emily Jablonski)
     - **Breaking Change**: Removed existing props except for editMode and replaced with a set not dependent on data model
-<<<<<<< HEAD
   - Removed business logic from Hero component ([#1816](https://github.com/bloom-housing/bloom/pull/1816)) (Emily Jablonski)
     - **Breaking Change**: Removed listings prop and replaced with allApplicationsClosed prop
   - Removed business logic from AppStatusItem component ([#1714](https://github.com/bloom-housing/bloom/pull/1714)) (Emily Jablonski)
@@ -111,8 +99,6 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
   - Re-wrote SiteHeader to remove Bulma dependency and bugs ([#1885](https://github.com/bloom-housing/bloom/pull/1885)) (Emily Jablonski)
     - **Breaking Change**: SiteHeader has a new prop set, including some props to toggle new visual features
-=======
->>>>>>> master
 
 ### Backend
 
@@ -133,12 +119,9 @@ All notable changes to this project will be documented in this file. The format 
   - Adds UnitAmiChartOverride entity and implements ami chart overriding at Unit level [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds `authz.e2e-spec.ts` test cover for preventing user from voluntarily changing his associated `roles` object [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
-<<<<<<< HEAD
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
-=======
->>>>>>> master
 
 - Changed:
 
@@ -157,12 +140,9 @@ All notable changes to this project will be documented in this file. The format 
   - Allow for unit sets to have multiple ami charts ([#1678](https://github.com/bloom-housing/bloom/pull/1678)) (Emily Jablonski)
   - UnitDto now only contains an AMI chart ID instead of the entire object AmiChart. AmiCharts must now be fetched separately from `/amiCharts` ([#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - `GET /listings` filters query param has been changed to support a querystring serialized array of filters, it's a breaking change because comparison property can no longer be an array. Also a property ordering problem has been resolved. Now the strict requirement for every client using the API is to use `qs` serialization format for query params. ([#1782](https://github.com/bloom-housing/bloom/pull/1782))
-<<<<<<< HEAD
   - `amiPercentage` field on UnitsSummary is migrated to an integer instead of a string. ((#1797)[https://github.com/bloom-housing/bloom/pull/1797])
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
-=======
->>>>>>> master
 
 - Fixed:
   - Added checks for property in listing.dto transforms
@@ -173,11 +153,8 @@ All notable changes to this project will be documented in this file. The format 
   - Fixes flakiness in authz.e2e-spec.ts related to logged in user trying to GET /applications which did not belong to him (sorting of UUID is not deterministic, so the user should fetch by specying a query param userId = self) [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - Fixed ListingsService.retrieve `view` query param not being optional in autogenerated client (it should be) [#1575](https://github.com/bloom-housing/bloom/pull/1575)
   - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
-<<<<<<< HEAD
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
-=======
->>>>>>> master
 
 ### General
 
@@ -191,15 +168,9 @@ All notable changes to this project will be documented in this file. The format 
   - Updates so leasing agent can access listing detail on frontend and removes applicationCount logic on backend and the ability for a leasing agent to create a new listing [#1627](https://github.com/bloom-housing/bloom/pull/1627)
 
 - Fixed:
-<<<<<<< HEAD
 
   - Prettier action issues ([#1826](https://github.com/bloom-housing/bloom/issues/1826)) (Emily Jablonski)
   - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
-=======
-  - Issues with the Apply section and different application types. This includes updates to the ApplicationTypes section. This also renames `openDateState` to `openInFuture`, which is more descriptive and pulls logic out of UI-Components. This also has a fix for the re-submit issues on the listing form. ([#1853](https://github.com/bloom-housing/bloom/pull/1853))
-This conversation was marked as resolved by seanmalbert
- Show conversation
->>>>>>> master
   - **Breaking Change**: LeasingAgent no longer uses openDateState to determine if it should render. So if you need LeasingAgent to conditionally render, you have to add that check to where you call it.
 
 ## v1.0.5 08/03/2021

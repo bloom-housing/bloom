@@ -1,7 +1,6 @@
 import * as React from "react"
 import { ImageCard, ImageCardProps } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
-<<<<<<< HEAD
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 
 import { t } from "../../helpers/translator"
@@ -27,21 +26,6 @@ export interface ListingCardProps {
 
 const ListingCard = (props: ListingCardProps) => {
   const { imageCardProps, tableProps, detailsLinkClass, tableHeaderProps } = props
-=======
-import { GroupedTable, GroupedTableProps } from "../../tables/GroupedTable"
-import { t } from "../../helpers/translator"
-import "./ListingCard.scss"
-
-export interface ListingCardProps {
-  imageCardProps: ImageCardProps
-  seeDetailsLink: string
-  tableHeader: string
-  tableProps: GroupedTableProps
-}
-
-const ListingCard = (props: ListingCardProps) => {
-  const { imageCardProps, tableProps } = props
->>>>>>> master
 
   return (
     <article className="listings-row">
@@ -49,7 +33,6 @@ const ListingCard = (props: ListingCardProps) => {
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
-<<<<<<< HEAD
         {tableHeaderProps?.tableHeader && (
           <h3
             className={`listings-row_title ${
@@ -84,13 +67,6 @@ const ListingCard = (props: ListingCardProps) => {
             {t("t.seeDetails")}
           </LinkButton>
         )}
-=======
-        {props.tableHeader && <h4 className="listings-row_title">{props.tableHeader}</h4>}
-        <div className="listings-row_table">
-          {tableProps.data && <GroupedTable {...tableProps} />}
-        </div>
-        <LinkButton href={props.seeDetailsLink}>{t("t.seeDetails")}</LinkButton>
->>>>>>> master
       </div>
     </article>
   )

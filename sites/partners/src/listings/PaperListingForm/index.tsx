@@ -33,10 +33,7 @@ import {
   PaperApplication,
   PaperApplicationCreate,
   ListingReviewOrder,
-<<<<<<< HEAD
   User,
-=======
->>>>>>> master
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -80,27 +77,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-<<<<<<< HEAD
   arePaperAppsMailedToAnotherAddress?: YesNoAnswer
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer
   canPaperApplicationsBePickedUp?: YesNoAnswer
-=======
-  arePaperAppsMailedToAnotherAddress?: boolean
-  arePostmarksConsidered?: boolean
-  canApplicationsBeDroppedOff?: boolean
-  canPaperApplicationsBePickedUp?: boolean
->>>>>>> master
   digitalApplicationChoice?: YesNoAnswer
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
-<<<<<<< HEAD
   dueDateQuestionChoice?: YesNoAnswer
   criteriaAttachType?: string
-=======
-  dueDateQuestionChoice?: boolean
->>>>>>> master
   lotteryDate?: {
     month: string
     day: string
@@ -159,11 +145,8 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-<<<<<<< HEAD
   buildingSelectionCriteriaFile: { fileId: "", label: "" },
   criteriaAttachType: "",
-=======
->>>>>>> master
   jurisdiction: undefined,
   costsNotIncluded: "",
   creditHistory: "",
@@ -214,11 +197,7 @@ const defaults: FormListing = {
   yearBuilt: null,
   urlSlug: undefined,
   showWaitlist: false,
-<<<<<<< HEAD
   reviewOrderType: null,
-=======
-  reviewOrderType: ListingReviewOrder.firstComeFirstServe,
->>>>>>> master
   unitsSummary: [],
   unitsSummarized: {
     unitTypes: [],
@@ -416,7 +395,6 @@ const formatFormData = (
       data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe,
-<<<<<<< HEAD
     digitalApplication:
       data.digitalApplicationChoice === YesNoAnswer.Yes
         ? true
@@ -436,12 +414,6 @@ const formatFormData = (
         : data.referralOpportunityChoice === YesNoAnswer.No
         ? false
         : null,
-=======
-    digitalApplication: data.digitalApplicationChoice === YesNoAnswer.Yes,
-    commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
-    paperApplication: data.paperApplicationChoice === YesNoAnswer.Yes,
-    referralOpportunity: data.referralOpportunityChoice === YesNoAnswer.Yes,
->>>>>>> master
   }
 }
 
@@ -614,20 +586,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     ]
   )
 
-<<<<<<< HEAD
-=======
-  const onError = () => {
-    setLoading(false)
-    setAlert("form")
-  }
-
-  useEffect(() => {
-    if (submitData.ready === true && status !== null) {
-      void onSubmit(submitData.data, status)
-    }
-  }, [submitData.ready, submitData.data, onSubmit, status])
-
->>>>>>> master
   return loading === true ? null : (
     <>
       <LoadingOverlay isLoading={loading}>

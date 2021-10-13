@@ -46,10 +46,7 @@ export const Select = ({
   describedBy,
   inputProps,
   defaultValue,
-<<<<<<< HEAD
   subNote,
-=======
->>>>>>> master
 }: SelectProps) => {
   return (
     <div className={`field ${error ? "error" : ""}`}>

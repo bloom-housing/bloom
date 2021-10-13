@@ -32,7 +32,6 @@ const tailwindVars = require("@bloom-housing/ui-components/tailwind.tosass.js")(
 
 // Tell webpack to compile the ui components package
 // https://www.npmjs.com/package/next-transpile-modules
-<<<<<<< HEAD
 module.exports = withBundleAnalyzer(
   withTM({
     target: "serverless",
@@ -63,37 +62,4 @@ module.exports = withBundleAnalyzer(
       return config
     },
   })
-=======
-module.exports = withCSS(
-  withBundleAnalyzer(
-    withMDX(
-      withSass(
-        withTM({
-          target: "serverless",
-          env: {
-            backendApiBase: BACKEND_API_BASE,
-            listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
-            listingPhotoSize: process.env.LISTING_PHOTO_SIZE || "1302",
-            mapBoxToken: MAPBOX_TOKEN,
-            housingCounselorServiceUrl: HOUSING_COUNSELOR_SERVICE_URL,
-            gtmKey: process.env.GTM_KEY || null,
-            idleTimeout: process.env.IDLE_TIMEOUT,
-            jurisdictionName: process.env.JURISDICTION_NAME,
-            cacheRevalidate: process.env.CACHE_REVALIDATE
-              ? Number(process.env.CACHE_REVALIDATE)
-              : 60,
-            cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
-          },
-          i18n: {
-            locales: process.env.LANGUAGES ? process.env.LANGUAGES.split(",") : ["en"],
-            defaultLocale: "en",
-          },
-          sassLoaderOptions: {
-            additionalData: tailwindVars,
-          },
-        })
-      )
-    )
-  )
->>>>>>> master
 )

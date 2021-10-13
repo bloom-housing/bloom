@@ -7,30 +7,12 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
-<<<<<<< HEAD
   EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
   page?: number
   limit: number | "all"
-}
-
-interface UseSingleApplicationDataProps extends PaginationProps {
-  listingId: string
-}
-
-type UseUserListProps = PaginationProps
-
-type UseListingsDataProps = PaginationProps & {
-  userId?: string
-=======
-} from "@bloom-housing/backend-core/types"
-
-interface PaginationProps {
-  page: number
-  limit: number
->>>>>>> master
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {
@@ -71,10 +53,7 @@ export function useListingsData({ page, limit, userId }: UseListingsDataProps) {
           leasingAgents: userId,
         },
       ],
-<<<<<<< HEAD
       view: "base",
-=======
->>>>>>> master
     })
   }
 
@@ -312,15 +291,12 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
-<<<<<<< HEAD
       filter: [
         {
           isPartner: true,
           $comparison: EnumUserFilterParamsComparison["="],
         },
       ],
-=======
->>>>>>> master
     })
 
   const { data, error } = useSWR(

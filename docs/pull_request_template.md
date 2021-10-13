@@ -44,7 +44,4 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 - [ ] I have assigned reviewers
 - [ ] I have updated the changelog to include a description of my changes
 - [ ] I have run `yarn generate:client` if I made backend changes
-<<<<<<< HEAD
 - [ ] I have exported any new pieces in ui-components
-=======
->>>>>>> master

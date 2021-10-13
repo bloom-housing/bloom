@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
   "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "ui-components"],
-  "version": "1.0.5",
-=======
-  "packages": ["sites/public", "sites/partners", "backend/core", "ui-components"],
   "version": "2.0.0-pre-tailwind",
->>>>>>> master
   "npmClient": "yarn",
   "useWorkspaces": true
 }
