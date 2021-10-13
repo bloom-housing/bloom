@@ -190,7 +190,7 @@ export class UserService {
       user.confirmationToken = encode(payload, process.env.APP_SECRET)
       try {
         await this.userRepository.save(user)
-        const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, user)
+        const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
         await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
@@ -199,7 +199,11 @@ export class UserService {
     }
   }
 
-  private static getConfirmationUrl(appUrl: string, user: User) {
+  private static getPublicConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
+  }
+
+  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
     return `${appUrl}/users/confirm?token=${user.confirmationToken}`
   }
 
@@ -258,7 +262,7 @@ export class UserService {
       authContext
     )
     if (sendWelcomeEmail) {
-      const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, newUser)
+      const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
       await this.emailService.welcome(newUser, dto.appUrl, confirmationUrl)
     }
     await this.connectUserWithExistingApplications(newUser)
@@ -322,7 +326,7 @@ export class UserService {
     await this.emailService.invite(
       user,
       this.configService.get("PARTNERS_PORTAL_URL"),
-      UserService.getConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+      UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
     )
     return user
   }

@@ -652,7 +652,8 @@
         "passwordMismatch": "The passwords do not match",
         "passwordTooWeak": "Password is too weak. Must be at least 8 characters and include at least 1 letter and at least one number.",
         "tokenExpired": "Your link has expired.",
-        "tokenMissing": "Wrong token provided."
+        "tokenMissing": "Wrong token provided.",
+        "generic": "Something went wrong while creating your account. Please try again.\n\nContact your housing department if you're still experiencing issues."
       }
     },
     "signOut": {
