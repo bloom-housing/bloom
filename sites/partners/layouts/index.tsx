@@ -56,6 +56,21 @@ const Layout = (props) => {
           homeURL={"/"}
         />
 
+<<<<<<< HEAD
+=======
+          {profile?.roles?.isAdmin && (
+            <LocalizedLink href="/users" className="navbar-item">
+              {t("nav.users")}
+            </LocalizedLink>
+          )}
+
+          {!!profile && (
+            <a href="#" className="navbar-item" onClick={signOut}>
+              {t("nav.signOut")}
+            </a>
+          )}
+        </SiteHeader>
+>>>>>>> master
         <main>{props.children}</main>
 
         <SiteFooter>

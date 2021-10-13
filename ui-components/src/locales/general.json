@@ -575,6 +575,7 @@
     "unconfirmed": "Unconfirmed",
     "totalUsers": "total users",
     "administrator": "Administrator",
+<<<<<<< HEAD
     "partner": "Partner",
     "addUser": "Add User",
     "userDetails": "User Details",
@@ -585,6 +586,9 @@
     "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
     "confirmAccount": "Confirm Acount",
     "accountConfirmed": "Account confirmed"
+=======
+    "partner": "Partner"
+>>>>>>> master
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -665,7 +669,7 @@
   },
   "errors": {
     "alert": {
-      "badRequest": "Oops! Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
+      "badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
       "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
     },
     "notFound": {
@@ -935,7 +939,10 @@
       "applicationAddressTitle": "Application Address",
       "applicationTypesTitle": "Application Types",
       "applicationTypesSubtitle": "Configure the online application and upload paper application forms.",
+<<<<<<< HEAD
       "buildingAddress": "Building Address",
+=======
+>>>>>>> master
       "buildingDetailsSubtitle": "Tell us where the building is located.",
       "buildingDetailsTitle": "Building Details",
       "buildingFeaturesSubtitle": "Provide details about any amenities and unit details.",
@@ -1071,6 +1078,7 @@
         "available": "Available",
         "occupied": "Occupied",
         "unavailable": "Unavailable"
+<<<<<<< HEAD
       },
       "typeOptions": {
         "studio": "Studio",
@@ -1079,6 +1087,8 @@
         "threeBdrm": "Three Bedroom",
         "fourBdrm": "Four Bedroom",
         "SRO": "Single Room Occupancy"
+=======
+>>>>>>> master
       }
     },
     "events": {

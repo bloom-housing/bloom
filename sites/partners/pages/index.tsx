@@ -49,6 +49,12 @@ class ListingsLink extends formatLinkCell {
 
 export default function ListingsList() {
   const { profile } = useContext(AuthContext)
+<<<<<<< HEAD
+=======
+  const leasingAgentInListings = profile.leasingAgentInListings
+    ?.map((leasingAgent) => leasingAgent.id)
+    .join(",")
+>>>>>>> master
   const isAdmin = profile.roles?.isAdmin || false
 
   /* Pagination */

@@ -51,6 +51,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     value: status,
   }))
 
+  const unitStatusOptions = Object.values(UnitStatus).map((status) => ({
+    label: t(`listings.unit.statusOptions.${status}`),
+    value: status,
+  }))
+
   /**
    * fetch form options
    */

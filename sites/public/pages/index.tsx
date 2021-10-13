@@ -1,6 +1,10 @@
 import React, { useState } from "react"
 import Head from "next/head"
+<<<<<<< HEAD
 import { Jurisdiction, Listing } from "@bloom-housing/backend-core/types"
+=======
+import { Jurisdiction } from "@bloom-housing/backend-core/types"
+>>>>>>> master
 import {
   AlertBox,
   LinkButton,
@@ -10,13 +14,16 @@ import {
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
-import Layout from "../layouts/application"
 import axios from "axios"
+import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 
 interface IndexProps {
+<<<<<<< HEAD
   listings: Listing[]
+=======
+>>>>>>> master
   jurisdiction: Jurisdiction
 }
 

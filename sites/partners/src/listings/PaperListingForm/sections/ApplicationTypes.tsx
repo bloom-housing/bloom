@@ -18,7 +18,11 @@ import {
   PhoneMask,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
+<<<<<<< HEAD
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
+=======
+import { cloudinaryFileUploader } from "../../../../lib/helpers"
+>>>>>>> master
 import {
   ApplicationMethodCreate,
   ApplicationMethodType,
@@ -34,7 +38,11 @@ interface Methods {
 
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
+<<<<<<< HEAD
   const { register, setValue, watch, errors } = useFormContext()
+=======
+  const { register, setValue, watch } = useFormContext()
+>>>>>>> master
   // watch fields
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
@@ -187,6 +195,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
       >
         <GridSection columns={2}>
           <GridCell>
+<<<<<<< HEAD
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.digitalApplication) &&
@@ -196,14 +205,20 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             >
               {t("listings.isDigitalApplication")}
             </p>
+=======
+            <p className="field-label m-4 ml-0">{t("listings.isDigitalApplication")}</p>
+>>>>>>> master
 
             <FieldGroup
               name="digitalApplicationChoice"
               type="radio"
               register={register}
+<<<<<<< HEAD
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
               groupSubNote={t("listings.requiredToPublish")}
+=======
+>>>>>>> master
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -286,7 +301,11 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
         {((commonDigitalApplicationChoice && commonDigitalApplicationChoice === YesNoAnswer.No) ||
           (digitalApplicationChoice === YesNoAnswer.Yes &&
             !commonDigitalApplicationChoice &&
+<<<<<<< HEAD
             listing?.commonDigitalApplication === false)) && (
+=======
+            listing.commonDigitalApplication === false)) && (
+>>>>>>> master
           <GridSection columns={1}>
             <GridCell>
               <Field
@@ -315,6 +334,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={2}>
           <GridCell>
+<<<<<<< HEAD
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.paperApplication) &&
@@ -324,13 +344,19 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             >
               {t("listings.isPaperApplication")}
             </p>
+=======
+            <p className="field-label m-4 ml-0">{t("listings.isPaperApplication")}</p>
+>>>>>>> master
 
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
+<<<<<<< HEAD
               groupSubNote={t("listings.requiredToPublish")}
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
+=======
+>>>>>>> master
               register={register}
               fields={[
                 {
@@ -419,6 +445,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
 
         <GridSection columns={1}>
           <GridCell>
+<<<<<<< HEAD
             <p
               className={`field-label m-4 ml-0 ${
                 fieldHasError(errors?.referralOpportunity) &&
@@ -428,16 +455,22 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             >
               {t("listings.isReferralOpportunity")}
             </p>
+=======
+            <p className="field-label m-4 ml-0">{t("listings.isReferralOpportunity")}</p>
+>>>>>>> master
 
             <FieldGroup
               name="referralOpportunityChoice"
               type="radio"
               register={register}
+<<<<<<< HEAD
               groupSubNote={t("listings.requiredToPublish")}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }
               errorMessage={fieldMessage(errors?.referralOpportunity)}
+=======
+>>>>>>> master
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -568,6 +601,10 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 }))}
                 defaultValue={selectedLanguage}
                 inputProps={{
+<<<<<<< HEAD
+=======
+                  value: selectedLanguage,
+>>>>>>> master
                   onChange: (e) => {
                     setSelectedLanguage(e.target.value)
                   },

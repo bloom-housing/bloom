@@ -14,7 +14,11 @@ import {
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing } from "../index"
+<<<<<<< HEAD
 import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
+=======
+import { getLotteryEvent } from "../../../../lib/helpers"
+>>>>>>> master
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
 type RankingsAndResultsProps = {
@@ -84,7 +88,11 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   value: "reviewOrderFCFS",
                   id: "reviewOrderFCFS",
                   defaultChecked:
+<<<<<<< HEAD
                     listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+=======
+                    !listing || listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
+>>>>>>> master
                 },
                 {
                   label: t("listings.lotteryTitle"),

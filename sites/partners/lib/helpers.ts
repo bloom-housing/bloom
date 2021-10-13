@@ -142,9 +142,13 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
+<<<<<<< HEAD
   // date should be cloned, operations in the reference directly can occur unexpected changes
   const dateClone = new Date(date.getTime())
   if (!dateClone || (!formTime.hours && !formTime.minutes)) return null
+=======
+  if (!date || !formTime) return null
+>>>>>>> master
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -239,6 +243,7 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
     return usd.format(yearIncomeNumber)
   }
 }
+<<<<<<< HEAD
 
 export const removeEmptyFields = (obj, keysToIgnore?: string[]) => {
   Object.keys(obj).forEach(function (key) {
@@ -267,3 +272,5 @@ export const fieldHasError = (errorObj: FieldError) => {
 export const fieldMessage = (errorObj: FieldError) => {
   return errorObj?.message
 }
+=======
+>>>>>>> master

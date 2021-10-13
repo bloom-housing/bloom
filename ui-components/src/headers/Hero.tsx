@@ -24,8 +24,15 @@ const HeroButton = (props: { title: string; href: string; className?: string }) 
 const Hero = (props: HeroProps) => {
   let subHeader, styles
   let classNames = ""
+<<<<<<< HEAD
   if (props.allApplicationsClosed) {
     subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+=======
+  if (props.listings) {
+    if (!props.listings.some(listingOpen)) {
+      subHeader = <h2 className="hero__subtitle">{t("welcome.allApplicationClosed")}</h2>
+    }
+>>>>>>> master
   } else if (props.children) {
     subHeader = <h2 className="hero__subtitle">{props.children}</h2>
   }
