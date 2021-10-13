@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
 - Added:
 
   - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
