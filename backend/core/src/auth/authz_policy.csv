@@ -12,7 +12,7 @@ p, admin, asset, true, .*
 p, partner, asset, true, .*
 
 p, admin, preference, true, .*
-p, partner, preference, true, read
+p, partner, preference, true, .*
 
 p, admin, applicationMethod, true, .*
 p, partner, applicationMethod, true, read

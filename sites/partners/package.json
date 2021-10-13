@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",

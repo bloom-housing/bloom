@@ -3850,9 +3850,6 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   isPartner?: boolean
 }
 
@@ -3969,9 +3966,6 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   name?: string
 
   /**  */
@@ -3988,21 +3982,6 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
-
-  /**  */
-  availability?: EnumListingFilterParamsAvailability
-
-  /**  */
-  seniorHousing?: boolean
-
-  /**  */
-  minRent?: number
-
-  /**  */
-  maxRent?: number
-
-  /**  */
-  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -5912,7 +5891,6 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsComparison {
@@ -5920,18 +5898,12 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
-}
-export enum EnumListingFilterParamsAvailability {
-  "hasAvailability" = "hasAvailability",
-  "noAvailability" = "noAvailability",
-  "waitlist" = "waitlist",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",

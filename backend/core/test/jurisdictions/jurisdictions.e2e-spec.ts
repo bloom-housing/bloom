@@ -63,14 +63,6 @@ describe("Jurisdictions", () => {
     expect(getById.body.name).toBe("test")
   })
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
-  afterAll(async () => {
-    await app.close()
-  })
-
   it(`should create and return a new jurisdiction by name`, async () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
