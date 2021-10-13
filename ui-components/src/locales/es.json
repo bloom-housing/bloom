@@ -1271,7 +1271,6 @@
         },
         "household": {
             "prompt": "¿Cuántas personas vivirán en esta propiedad?",
-            "selectOne": "Seleccione uno",
             "srCountLabel": "Tamaño del hogar",
             "ranges": {
                 "one": "1 miembro",
