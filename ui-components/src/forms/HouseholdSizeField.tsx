@@ -31,7 +31,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
   }
   return (
     <>
-      <span className="hidden">
+      <span className="hidden" aria-hidden="true">
         <input
           className="invisible"
           type="number"
