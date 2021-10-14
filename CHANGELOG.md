@@ -158,7 +158,7 @@ All notable changes to this project will be documented in this file. The format 
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
   - fix AFS totalFlagged missing in swagger documentation
-  - lower cases email during user creation, across saved users, and where that now lower cased email is compared to a possibly non-lower cased email ([#1912](https://github.com/bloom-housing/bloom/issues/1912)) (Yazeed)
+  - lower cases email during user creation, across saved users, and where that now lower cased email is compared to a possibly non-lower cased email ([#1972](https://github.com/bloom-housing/bloom/pull/1972)) (Yazeed)
 
 ### General
 
