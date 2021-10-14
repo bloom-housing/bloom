@@ -525,6 +525,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           removeEmptyFields(formattedData, [
             "applicationPickUpAddressType",
             "applicationDropOffAddressType",
+            "applicationDueDate",
+            "applicationDueTime",
           ])
           const result = editMode
             ? await listingsService.update({
