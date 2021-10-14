@@ -1384,6 +1384,7 @@
     },
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",
+    "rentRange": "Rent range",
     "adaCompliant": "ADA compliant",
     "availability": "Unit availability",
     "hasAvailability": "Has availability",

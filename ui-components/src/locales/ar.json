@@ -1348,6 +1348,7 @@
         },
         "zipCode": "الرمز البريدي",
         "zipCodeDescription": "أدخل الرمز البريدي",
+        "rentRange": "نطاق الإيجار",
         "adaCompliant": "متوافق مع ADA",
         "availability": "توفر الوحدة",
         "hasAvailability": "لديها توافر",

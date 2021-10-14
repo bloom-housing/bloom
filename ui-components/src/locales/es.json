@@ -1223,6 +1223,7 @@
         },
         "zipCode": "Código postal",
         "zipCodeDescription": "Introduzca código postal",
+        "rentRange": "Rango de alquiler",
         "adaCompliant": "Cumple con la ADA",
         "availability": "Disponibilidad de la unidad",
         "hasAvailability": "Tiene disponibilidad",

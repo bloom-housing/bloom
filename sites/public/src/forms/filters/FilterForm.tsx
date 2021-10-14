@@ -128,7 +128,7 @@ const FilterForm = (props: FilterFormProps) => {
           errorMessage={t("errors.multipleZipCodeError")}
           defaultValue={props.filterState?.zipcode}
         />
-        <label className="field-label">Rent Range</label>
+        <label className="field-label">{t("listingFilters.rentRange")}</label>
         <div className="flex flex-row">
           <Field
             id="minRent"
