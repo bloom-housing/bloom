@@ -134,7 +134,6 @@ const ApplicationsList = () => {
     try {
       const content = await applicationsService.listAsCsv({
         listingId,
-        includeHeaders: true,
       })
 
       const now = new Date()
@@ -148,8 +147,7 @@ const ApplicationsList = () => {
       fileLink.click()
     } catch (err) {
       setCsvExportError(true)
-      setSiteAlertMessage(t("errors.alert.timeoutPleaseTryAgain"), "alert")
-      console.error(err)
+      setSiteAlertMessage(err.response.data.error, "alert")
     }
 
     setCsvExportLoading(false)
