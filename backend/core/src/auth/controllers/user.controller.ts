@@ -135,6 +135,12 @@ export class UserController {
     )
   }
 
+  @Get(`:userId`)
+  @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
+  async retrieve(@Param("userId") userId: string): Promise<UserDto> {
+    return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
+  }
+
   @Delete(`:userId`)
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
