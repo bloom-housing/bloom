@@ -157,6 +157,7 @@ All notable changes to this project will be documented in this file. The format 
   - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
+  - fix AFS totalFlagged missing in swagger documentation
 
 ### General
 
