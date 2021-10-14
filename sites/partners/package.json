@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^1.0.5",
+    "@bloom-housing/ui-components": "^2.0.0-alpha.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",

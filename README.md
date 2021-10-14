@@ -33,6 +33,11 @@ Currently across our jurisdictions, our backend and partners portal implementati
 
 ---
 
+- `shared-helpers` contains types and functions intended for shared use between the Next.js sites, and in certain instances the frontend plus the backend (not currently but perhaps in the future).
+- Visit [shared-helpers/README](https://github.com/bloom-housing/bloom/blob/dev/shared-helpers/README.md) for more details.
+
+---
+
 - `ui-components` contains React components that are either shared between our applications or pulled out to be more customizable for our consumers. We use [Storybook](https://storybook.js.org/), an environment for easily browing the UI components independent of their implementation. Contributions to component stories are encouraged.
 - Visit [ui-components/README](https://github.com/bloom-housing/bloom/blob/dev/ui-components/README.md) for more details and view our [published Storybook](https://storybook.bloom.exygy.dev/).
 

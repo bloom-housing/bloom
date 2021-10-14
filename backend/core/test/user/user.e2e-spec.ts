@@ -5,6 +5,7 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
+import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
@@ -21,6 +22,8 @@ import { Repository } from "typeorm"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { UserProfileUpdateDto } from "../../src/auth/dto/user-profile.dto"
 import { Language } from "../../src/shared/types/language-enum"
+import { User } from "../../src/auth/entities/user.entity"
+import { EnumUserFilterParamsComparison } from "../../types"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -34,6 +37,7 @@ describe("Applications", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
   let userAccessToken: string
@@ -54,7 +58,7 @@ describe("Applications", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Listing, Jurisdiction]),
+        TypeOrmModule.forFeature([Listing, Jurisdiction, User]),
         AuthModule,
       ],
     })
@@ -77,6 +81,7 @@ describe("Applications", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
@@ -526,6 +531,44 @@ describe("Applications", () => {
       .send(userAProfileUpdateDto)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+  })
+
+  it("should allow filtering by isPartner user role", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "michalp@airnauts.com",
+        firstName: "Michal",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const filters = [
+      {
+        isPartner: true,
+        $comparison: EnumUserFilterParamsComparison["="],
+      },
+    ]
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/list/?${qs.stringify({ filter: filters })}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(res.body.items.map((user) => user.id).includes(user.id)).toBe(true)
+    expect(res.body.items.map((user) => user.roles.isPartner).some((isPartner) => !isPartner)).toBe(
+      false
+    )
+    expect(res.body.items.map((user) => user.roles.isPartner).every((isPartner) => isPartner)).toBe(
+      true
+    )
   })
 
   it("should lower case email of new user", async () => {

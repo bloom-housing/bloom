@@ -1,12 +1,13 @@
 {
   "name": "bloom-housing",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
     "packages": [
       "sites/public",
       "sites/partners",
       "backend/core",
+      "shared-helpers",
       "ui-components"
     ],
     "nohoist": [
@@ -30,6 +31,7 @@
     "dev:frontend": "concurrently --names \" APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
     "dev:partners": "concurrently \"yarn dev:backend\" \"yarn dev:app:partners\"",
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
+    "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
     "test:shared:ui": "cd ui-components && yarn && yarn test",
     "test:shared:ui:a11y": "cd ui-components && yarn && yarn test:a11y",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",

@@ -1,10 +1,10 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDefaultAmiChart, getDefaultProperty } from "./shared"
 import { tritonAmiChart } from "./listing-triton-seed"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { UnitStatus } from "../../units/types/unit-status-enum"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { CountyCode } from "../../shared/types/county-code"
 
 export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed {

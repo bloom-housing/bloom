@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## v2.0.0-pre-tailwind 09/16/2021
+
 ## Frontend
 
 - Added:
@@ -45,6 +47,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Update text for preferred unit types and terms ([#1934](https://github.com/bloom-housing/bloom/pull/1934)) (Jared White)
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
   - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
@@ -66,6 +69,7 @@ All notable changes to this project will be documented in this file. The format 
 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
+  - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
 
 - Changed:
 
@@ -118,6 +122,7 @@ All notable changes to this project will be documented in this file. The format 
   - Adds Jurisdictions to users, listings and translations. The migration script assigns the first alpha sorted jurisdiction to users, so this piece may need to be changed for Detroit, if they have more than Detroit in their DB. [#1776](https://github.com/bloom-housing/bloom/pull/1776)
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
+  - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
 
 - Changed:
 
@@ -138,6 +143,8 @@ All notable changes to this project will be documented in this file. The format 
   - `GET /listings` filters query param has been changed to support a querystring serialized array of filters, it's a breaking change because comparison property can no longer be an array. Also a property ordering problem has been resolved. Now the strict requirement for every client using the API is to use `qs` serialization format for query params. ([#1782](https://github.com/bloom-housing/bloom/pull/1782))
   - `amiPercentage` field on UnitsSummary is migrated to an integer instead of a string. ((#1797)[https://github.com/bloom-housing/bloom/pull/1797])
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
+  - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
+  - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
 
 - Fixed:
   - Added checks for property in listing.dto transforms
@@ -150,8 +157,15 @@ All notable changes to this project will be documented in this file. The format 
   - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
+  - fix AFS totalFlagged missing in swagger documentation
   - lower cases email during user creation, across saved users, and where that now lower cased email is compared to a possibly non-lower cased email ([#1912](https://github.com/bloom-housing/bloom/issues/1912)) (Yazeed)
+
 ### General
+
+- Added:
+
+  - A new `shared-helpers` package for consolidating functions and constants between the Next.js sites and possibly the backend ([#1911](https://github.com/bloom-housing/bloom/issues/1911)) (Jared White)
+    **Breaking Change**: Various constants were extracted out of the `ui-components` package
 
 - Updated:
 

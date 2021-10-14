@@ -1,7 +1,12 @@
 import React from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { FormOptions, SelectOption } from "../helpers/formOptions"
+import { FormOptions } from "../helpers/formOptions"
 import { UseFormMethods } from "react-hook-form"
+
+export interface SelectOption {
+  value: string
+  label: string
+}
 
 interface SelectProps {
   error?: boolean

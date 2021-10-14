@@ -16,8 +16,8 @@ import {
   IsPhoneNumber,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { OmitType } from "@nestjs/swagger"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [

@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { FindConditions, Repository } from "typeorm"
+import { DeepPartial, FindConditions, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
@@ -145,13 +145,24 @@ export class UserService {
   }
 
   public async confirm(dto: ConfirmDto) {
-    const user = await this.find({ confirmationToken: dto.token })
-    if (!user) {
-      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
-    }
     const token = decode(dto.token, process.env.APP_SECRET)
 
-    if (token.id !== user.id) {
+    const user = await this.find({ id: token.id })
+    if (!user) {
+      console.error(`Trying to confirm non-existing user ${token.id}.`)
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+
+    if (user.confirmedAt) {
+      console.error(`User ${token.id} already confirmed.`)
+      throw new HttpException(
+        USER_ERRORS.ACCOUNT_CONFIRMED.message,
+        USER_ERRORS.ACCOUNT_CONFIRMED.status
+      )
+    }
+
+    if (user.confirmationToken !== dto.token) {
+      console.error(`Confirmation token mismatch for user ${token.id}.`)
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
     }
 
@@ -185,7 +196,7 @@ export class UserService {
       user.confirmationToken = encode(payload, process.env.APP_SECRET)
       try {
         await this.userRepository.save(user)
-        const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, user)
+        const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
         await this.emailService.welcome(user, dto.appUrl, confirmationUrl)
         return user
       } catch (err) {
@@ -194,7 +205,11 @@ export class UserService {
     }
   }
 
-  private static getConfirmationUrl(appUrl: string, user: User) {
+  private static getPublicConfirmationUrl(appUrl: string, user: User) {
+    return `${appUrl}?token=${user.confirmationToken}`
+  }
+
+  private static getPartnersConfirmationUrl(appUrl: string, user: User) {
     return `${appUrl}/users/confirm?token=${user.confirmationToken}`
   }
 
@@ -213,7 +228,7 @@ export class UserService {
     await this.applicationsRepository.save(applications)
   }
 
-  public async _createUser(dto: Partial<User>, authContext: AuthContext) {
+  public async _createUser(dto: DeepPartial<User>, authContext: AuthContext) {
     if (dto.confirmedAt) {
       await this.authzService.canOrThrow(authContext.user, "user", authzActions.confirm, {
         ...dto,
@@ -253,7 +268,7 @@ export class UserService {
       authContext
     )
     if (sendWelcomeEmail) {
-      const confirmationUrl = UserService.getConfirmationUrl(dto.appUrl, newUser)
+      const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, newUser)
       await this.emailService.welcome(newUser, dto.appUrl, confirmationUrl)
     }
     await this.connectUserWithExistingApplications(newUser)
@@ -317,7 +332,7 @@ export class UserService {
     await this.emailService.invite(
       user,
       this.configService.get("PARTNERS_PORTAL_URL"),
-      UserService.getConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
+      UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
     )
     return user
   }
