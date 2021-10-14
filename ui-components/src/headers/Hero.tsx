@@ -43,7 +43,7 @@ const Hero = (props: HeroProps) => {
       {props.buttonTitle && props.buttonLink && (
         <>
           {props.secondaryButtonTitle && props.secondaryButtonLink ? (
-            <div className="grid md:grid-cols-6 gap-5 ">
+            <div className="grid md:grid-cols-6 gap-5 max-w-screen-lg m-auto">
               <HeroButton
                 className={"md:col-start-3 with_secondary"}
                 href={props.buttonLink}
