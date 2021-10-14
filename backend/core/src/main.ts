@@ -8,9 +8,7 @@ import dbOptions = require("../ormconfig")
 
 let app
 async function bootstrap() {
-  app = await NestFactory.create(AppModule.register(dbOptions), {
-    logger: process.env.NODE_ENV === "development" ? ["error", "warn", "log"] : ["error", "warn"],
-  })
+  app = await NestFactory.create(AppModule.register(dbOptions))
   // Starts listening for shutdown hooks
   app.enableShutdownHooks()
   app = applicationSetup(app)

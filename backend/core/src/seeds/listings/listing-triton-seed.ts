@@ -2,6 +2,7 @@ import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
 import { getDefaultAmiChart, getDate, getDefaultAssets, getLiveWorkPreference } from "./shared"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
+import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
@@ -721,6 +722,7 @@ const tritonListing: ListingSeedType = {
   creditHistory:
     "No collections, no bankruptcy, income is twice monthly rent A credit report will be completed on all applicants to verify credit ratings.\n\nIncome plus verified credit history will be entered into a credit scoring model to determine rental eligibility and security deposit levels. All decisions for residency are based on a system which considers credit history, rent history, income qualifications, and employment history. An approved decision based on the system does not automatically constittute an approval of residency. Applicant(s) and occupant(s) aged 18 years or older MUST also pass the criminal background check based on the criteria contained herein to be approved for residency. \n\nCredit recommendations other than an accept decision, will require a rental verification. Applications for residency will automatically be denied for the following reasons:\n\n- a. An outstanding debt to a previous landlord or an outstanding NSF check must be paid in full\n- b. An unsatisfied breach of a prior lease or a prior eviction of any applicant or occupant\n- c. More than four (4) late pays and two (2) NSF's in the last twenty-four (24) months",
   criminalBackground: null,
+  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "800",
   depositMin: "500",
   disableUnitsAccordion: true,

@@ -1,6 +1,7 @@
 {
   "name": "Minimal Listing",
   "status": "active",
+  "CSVFormattingType": "basic",
   "countyCode": "Alameda",
   "preferences": [],
   "buildingAddress": {
