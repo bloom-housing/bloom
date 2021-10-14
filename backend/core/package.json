@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Marcin Jedras <marcin.jedras@exygy.com>",
   "private": false,
@@ -53,6 +53,7 @@
     "class-transformer": "0.3.1",
     "class-validator": "^0.12.2",
     "cloudinary": "^1.25.2",
+    "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "handlebars": "^4.7.6",

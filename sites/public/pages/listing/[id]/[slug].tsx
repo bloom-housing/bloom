@@ -1,3 +1,4 @@
+import React from "react"
 import qs from "qs"
 import Head from "next/head"
 import axios from "axios"

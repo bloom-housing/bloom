@@ -466,8 +466,6 @@ export class ApplicationsService {
       /**  */
       markedAsDuplicate?: boolean
       /**  */
-      includeHeaders?: boolean
-      /**  */
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
@@ -485,7 +483,6 @@ export class ApplicationsService {
         orderBy: params["orderBy"],
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
-        includeHeaders: params["includeHeaders"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
@@ -3850,9 +3847,6 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   isPartner?: boolean
 }
 
@@ -3969,9 +3963,6 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   name?: string
 
   /**  */
@@ -3988,21 +3979,6 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
-
-  /**  */
-  availability?: EnumListingFilterParamsAvailability
-
-  /**  */
-  seniorHousing?: boolean
-
-  /**  */
-  minRent?: number
-
-  /**  */
-  maxRent?: number
-
-  /**  */
-  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4434,9 +4410,6 @@ export interface Listing {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
-  CSVFormattingType: CSVFormattingType
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -4863,9 +4836,6 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5301,9 +5271,6 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   id?: string
@@ -5912,7 +5879,6 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsComparison {
@@ -5920,18 +5886,12 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
-}
-export enum EnumListingFilterParamsAvailability {
-  "hasAvailability" = "hasAvailability",
-  "noAvailability" = "noAvailability",
-  "waitlist" = "waitlist",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
@@ -5952,13 +5912,6 @@ export enum ListingStatus {
 export enum ListingReviewOrder {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
-}
-
-export enum CSVFormattingType {
-  "basic" = "basic",
-  "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
-  "ohaFormat" = "ohaFormat",
-  "bhaFormat" = "bhaFormat",
 }
 
 export enum ListingEventType {

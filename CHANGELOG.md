@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## v2.0.0-pre-tailwind 09/16/2021
+
 ## Frontend
 
 - Added:
@@ -45,6 +47,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Changed:
 
+  - Update text for preferred unit types and terms ([#1934](https://github.com/bloom-housing/bloom/pull/1934)) (Jared White)
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
   - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
@@ -142,6 +145,7 @@ All notable changes to this project will be documented in this file. The format 
   - `amiPercentage` field on UnitsSummary is migrated to an integer instead of a string. ((#1797)[https://github.com/bloom-housing/bloom/pull/1797])
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
+  - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
 
 - Fixed:
   - Added checks for property in listing.dto transforms
@@ -154,6 +158,7 @@ All notable changes to this project will be documented in this file. The format 
   - updated DTOs to omit entities and use DTOs for application-method, user-roles, user, listing and units-summary ([#1679](https://github.com/bloom-housing/bloom/pull/1679))
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
+  - fix AFS totalFlagged missing in swagger documentation
 
 ### General
 

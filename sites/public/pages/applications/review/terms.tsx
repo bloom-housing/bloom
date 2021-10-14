@@ -91,7 +91,7 @@ const ApplicationTerms = () => {
 
         {apiError && (
           <AlertBox type="alert" inverted onClose={() => setApiError(false)}>
-            {t("errors.rateLimitExceeded")}
+            {t("errors.alert.badRequest")}
           </AlertBox>
         )}
 

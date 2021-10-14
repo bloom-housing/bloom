@@ -4,7 +4,6 @@ import { Application } from "./entities/application.entity"
 import { ApplicationsService } from "./applications.service"
 import { ApplicationsController } from "./applications.controller"
 import { AuthModule } from "../auth/auth.module"
-import { CsvEncoder } from "../csv/csv-encoder.service"
 import { CsvBuilder } from "../csv/csv-builder.service"
 import { SharedModule } from "../shared/shared.module"
 import { ListingsModule } from "../listings/listings.module"
@@ -26,7 +25,7 @@ import { TranslationsModule } from "../translations/translations.module"
     TranslationsModule,
     EmailModule,
   ],
-  providers: [ApplicationsService, CsvEncoder, CsvBuilder, ApplicationCsvExporter],
+  providers: [ApplicationsService, CsvBuilder, ApplicationCsvExporter],
   exports: [ApplicationsService],
   controllers: [ApplicationsController, ApplicationsSubmissionController],
 })

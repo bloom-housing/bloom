@@ -158,17 +158,6 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  includeHeaders?: boolean
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
   includeDemographics?: boolean
 }
 
@@ -204,13 +193,7 @@ export class ApplicationsController {
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.listWithFlagged(queryParams)
-    const listing = await this.listingsService.findOne(queryParams.listingId)
-    return this.applicationCsvExporter.export(
-      applications,
-      listing.CSVFormattingType,
-      queryParams.includeHeaders,
-      queryParams.includeDemographics
-    )
+    return this.applicationCsvExporter.export(applications, queryParams.includeDemographics)
   }
 
   @Post()

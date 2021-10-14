@@ -255,6 +255,7 @@ export class ApplicationsService {
         { retries: 6, minTimeout: 200 }
       )
     } catch (e) {
+      console.log("Create application error = ", e)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (e instanceof QueryFailedError && e.code === "40001") {
