@@ -67,4 +67,11 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions: IdDto[]
+
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  leasingAgentInListings?: IdDto[] | null
 }

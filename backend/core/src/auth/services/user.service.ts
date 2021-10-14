@@ -330,4 +330,8 @@ export class UserService {
     )
     return user
   }
+
+  async delete(userId: string) {
+    await this.userRepository.delete(userId)
+  }
 }
