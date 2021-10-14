@@ -1,10 +1,3 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700");
-@import url("https://fonts.googleapis.com/css?family=Lato:400,900,700");
-@import url("https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic");
-
 html {
   @apply antialiased;
 }
@@ -68,5 +61,3 @@ main {
 /* ***********/
 /* Additional stylesheets are contained within individual component folders */
 /* ***********/
-
-@import "tailwindcss/utilities";

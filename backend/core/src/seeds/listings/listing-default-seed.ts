@@ -45,7 +45,7 @@ export class ListingDefaultSeed {
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: "Mobility and hearing" }
+      { name: "Mobility and Hearing" }
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })

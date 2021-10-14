@@ -1,5 +1,4 @@
 {
-  "": "",
   "account": {
     "accountSettings": "Account Settings",
     "errorFetchingApplications": "Error fetching applications",
@@ -576,7 +575,11 @@
     "unconfirmed": "Unconfirmed",
     "totalUsers": "total users",
     "administrator": "Administrator",
-    "partner": "Partner"
+    "partner": "Partner",
+    "addUser": "Add User",
+    "userDetails": "User Details",
+    "allListings": "All listings",
+    "inviteSent": "Invite sent"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -735,6 +738,7 @@
   "listings": {
     "error": "There was an issue submitting the form.",
     "closeThisListing": "Do you really want to close this listing?",
+    "publishThisListing": "Publishing will push the listing live on the public site.",
     "active": "Accepting Applications",
     "pending": "Coming Soon",
     "closed": "Closed",
@@ -845,7 +849,7 @@
     "listingSubmitted": "Listing Submitted",
     "listingUpdated": "Listing Updated",
     "longitude": "Longitude",
-    "lottery": "Lottery",
+    "lotteryTitle": "Lottery",
     "lotteryDateNotes": "Lottery Date Notes",
     "lotteryDateQuestion": "When will the lottery be run?",
     "lotteryEndTime": "Lottery End Time",
@@ -1068,6 +1072,14 @@
         "available": "Available",
         "occupied": "Occupied",
         "unavailable": "Unavailable"
+      },
+      "typeOptions": {
+        "studio": "Studio",
+        "oneBdrm": "One Bedroom",
+        "twoBdrm": "Two Bedroom",
+        "threeBdrm": "Three Bedroom",
+        "fourBdrm": "Four Bedroom",
+        "SRO": "Single Room Occupancy"
       }
     },
     "unitsSummary": {
@@ -1239,6 +1251,7 @@
     "hour": "Hour",
     "household": "Household",
     "income": "Income",
+    "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",
     "label": "Label",
@@ -1344,22 +1357,24 @@
     "checkEligibility": "Do I Qualify?",
     "checkEligibilityDescription": "Check in Minutes if You Qualify!",
     "subTitle": "Click the button below to find rental housing based on your income and household needs",
+    "seeMoreOpportunitiesTruncated": "See more housing opportunities and resources",
     "signUp": "Get emailed whenever a new listing is posted",
     "signUpToday": "Sign up today",
-    "viewAdditionalHousing": "View Additional Housing Opportunities and Resources"
+    "viewAdditionalHousing": "View additional housing opportunities and resources",
+    "viewAdditionalHousingTruncated": "View opportunities and resources"
   },
   "whatToExpect": {
     "label": "What to Expect",
     "default": "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
   },
   "listingFilters": {
-    "buttonTitle": "Filter Listings",
-    "buttonTitleWithNumber": "Filter Listings (%{number})",
+    "buttonTitle": "Filter listings",
+    "buttonTitleWithNumber": "Filter listings (%{number})",
     "resetButton": "Reset",
-    "modalTitle": "Filter Results",
+    "modalTitle": "Filter results",
     "modalHeader": "Use these options to refine your list of properties.",
     "neighborhood": "Neighborhood",
-    "bedrooms": "Unit Size",
+    "bedrooms": "Unit size",
     "bedroomsOptions": {
       "studioPlus": "0 or more bedrooms (Studio)",
       "onePlus": "1 or more bedrooms",
@@ -1370,12 +1385,12 @@
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",
     "rentRange": "Rent range",
-    "adaCompliant": "ADA Compliant",
-    "availability": "Unit Availability",
-    "hasAvailability": "Has Availability",
-    "noAvailability": "No Availability",
+    "adaCompliant": "ADA compliant",
+    "availability": "Unit availability",
+    "hasAvailability": "Has availability",
+    "noAvailability": "No availability",
     "waitlist": "Waitlist",
-    "applyFilters": "Apply Filters",
+    "applyFilters": "Apply filters",
     "noResults": "No results",
     "noResultsSubtitle": "Edit or remove filters for best results.",
     "includeUnknowns": "Include Results with Incomplete Information",

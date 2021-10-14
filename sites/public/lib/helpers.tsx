@@ -1,4 +1,5 @@
 import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "./constants"
+import moment from "moment"
 import { Address, Listing } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -27,6 +28,11 @@ export const getGenericAddress = (bloomAddress: Address) => {
   }
 }
 
+export const openInFuture = (listing: Listing) => {
+  const nowTime = moment()
+  return listing.applicationOpenDate && nowTime < moment(listing.applicationOpenDate)
+}
+
 const getListingCardSubtitle = (address: Address) => {
   const { street, city, state, zipCode } = address || {}
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
@@ -41,7 +47,7 @@ const getListingTableData = (listing: Listing) => {
   return []
 }
 
-export const getListings = (listings: Listing[]) => {
+export const getListings = (listings) => {
   const unitSummariesHeaders = {
     unitType: t("t.unitType"),
     rent: t("t.rent"),
@@ -69,7 +75,9 @@ export const getListings = (listings: Listing[]) => {
         }}
         seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
         detailsLinkClass="float-right"
-        tableHeader={listing.showWaitlist ? t("listings.waitlist.open") : null}
+        tableHeaderProps={{
+          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+        }}
       />
     )
   })

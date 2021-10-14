@@ -16,7 +16,8 @@
   }
 
   &.fullWidth {
-    @apply px-4;
+    @apply pl-4;
+    @apply pr-12;
   }
 
   &.narrow {

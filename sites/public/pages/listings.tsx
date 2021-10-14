@@ -105,7 +105,7 @@ export async function getStaticProps() {
   } catch (error) {
     console.error(error)
   }
-  return { props: { initialListings } }
+  return { props: { initialListings }, revalidate: process.env.cacheRevalidate }
 }
 
 export default ListingsPage

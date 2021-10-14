@@ -7,7 +7,6 @@ import useSWR from "swr"
 import {
   ApplicationStatusProps,
   isInternalLink,
-  openDateState,
   t,
   encodeToBackendFilterArray,
   ListingFilterState,
@@ -15,6 +14,7 @@ import {
 import { Listing, ListingReviewOrder, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { ParsedUrlQuery } from "querystring"
+import { openInFuture } from "../lib/helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -93,7 +93,7 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     let content = ""
     let subContent = ""
     let formattedDate = ""
-    if (openDateState(listing)) {
+    if (openInFuture(listing)) {
       const date = listing.applicationOpenDate
       const openDate = moment(date)
       formattedDate = openDate.format("MMM. D, YYYY")

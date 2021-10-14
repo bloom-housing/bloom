@@ -16,7 +16,7 @@ import {
 import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
 
-export default function SignIn() {
+const SignIn = () => {
   const { login } = useContext(AuthContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -118,3 +118,5 @@ export default function SignIn() {
     </FormsLayout>
   )
 }
+
+export default SignIn

@@ -1,6 +1,6 @@
 import Layout from "."
 
-export default function Forms(props) {
+const Forms = (props) => {
   return (
     <Layout>
       <section className="p-px bg-gray-300">
@@ -11,3 +11,5 @@ export default function Forms(props) {
     </Layout>
   )
 }
+
+export default Forms

@@ -21,6 +21,8 @@ import { ThrottlerModule } from "@nestjs/throttler"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { Listing } from "../../types"
 import { UserDto } from "../../src/auth/dto/user.dto"
+import { UserService } from "../../src/auth/services/user.service"
+import { UserCreateDto } from "../../src/auth/dto/user-create.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -186,6 +188,8 @@ describe("Applications", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body).toHaveProperty("id")
+    expect(res.body).toHaveProperty("confirmationCode")
+    expect(res.body.confirmationCode.length).toBe(8)
     res = await supertest(app.getHttpServer())
       .get(`/applications/${res.body.id}`)
       .set(...setAuthorization(user1AccessToken))
@@ -604,6 +608,53 @@ describe("Applications", () => {
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+  })
+
+  it(`should connect existing applications to new user account based on applicant.email`, async () => {
+    const body = getTestAppBody(listing1Id)
+    body.applicant.emailAddress = "mytestemail@example.com"
+    const appSubmisionRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .send(body)
+      .expect(201)
+
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "mytestemail@example.com",
+      emailConfirmation: "mytestemail@example.com",
+      firstName: "A",
+      middleName: "A",
+      lastName: "A",
+      dob: new Date(),
+    }
+
+    const newUser = await supertest(app.getHttpServer())
+      .post(`/user/?noWelcomeEmail=true`)
+      .set("jurisdictionName", "Detroit")
+      .send(userCreateDto)
+      .expect(201)
+
+    const userService = await app.resolve<UserService>(UserService)
+    const user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    const listApplicationsRes = await supertest(app.getHttpServer())
+      .get(`/applications/?userId=${newUser.body.id}`)
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+
+    expect(listApplicationsRes.body.items.length).toBe(1)
+    expect(listApplicationsRes.body.items[0].id).toBe(appSubmisionRes.body.id)
   })
 
   afterEach(async () => {
