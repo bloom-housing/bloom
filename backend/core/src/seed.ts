@@ -95,16 +95,27 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
-export async function createPreferences(app: INestApplicationContext) {
-  const preferencesRepository = await app.get<Repository<Preference>>(
-    getRepositoryToken(Preference)
-  )
-  return preferencesRepository.save([
+export async function createPreferences(
+  app: INestApplicationContext,
+  jurisdictions: Jurisdiction[]
+) {
+  const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
+  const preferences = await preferencesRepository.save([
     getLiveWorkPreference(),
     getPbvPreference(),
     getHopwaPreference(),
     getDisplaceePreference(),
   ])
+
+  for (const jurisdiction of jurisdictions) {
+    jurisdiction.preferences = preferences
+  }
+  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
+    getRepositoryToken(Jurisdiction)
+  )
+  await jurisdictionsRepository.save(jurisdictions)
+
+  return preferences
 }
 
 const seedListings = async (
@@ -114,7 +125,7 @@ const seedListings = async (
 ) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
-  await createPreferences(app)
+  await createPreferences(app, jurisdictions)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
   const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
