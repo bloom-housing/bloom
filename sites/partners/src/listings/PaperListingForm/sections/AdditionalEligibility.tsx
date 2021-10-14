@@ -47,7 +47,7 @@ const AdditionalEligibility = () => {
             id={"rentalAssistance"}
             fullWidth={true}
             register={register}
-            errorMessage={fieldMessage(errors?.rentalAssistance)}
+            errorMessage={fieldMessage(errors?.rentalAssistance?.message)}
             inputProps={{
               onChange: () => clearErrors("rentalAssistance"),
             }}
