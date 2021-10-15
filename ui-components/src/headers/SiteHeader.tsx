@@ -9,6 +9,7 @@ import "./SiteHeader.scss"
 import { NavigationContext } from "../config/NavigationContext"
 
 type LogoWidth = "slim" | "medium" | "wide"
+type SiteHeaderWidth = "base" | "wide"
 
 export interface MenuLink {
   href?: string
@@ -34,6 +35,7 @@ export interface SiteHeaderProps {
   flattenSubMenus?: boolean
   notice?: string | React.ReactNode
   noticeMobile?: boolean
+  siteHeaderWidth?: SiteHeaderWidth
   title?: string
 }
 
@@ -427,7 +429,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </div>
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
-        <div className="navbar">
+        <div
+          className={`navbar ${
+            props.siteHeaderWidth === "wide" ? "navbar-width-wide" : "navbar-width-base"
+          }`}
+        >
           {getLogo()}
           <div className="navbar-menu">{isDesktop ? getDesktopHeader() : getMobileHeader()}</div>
         </div>

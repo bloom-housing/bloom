@@ -86,8 +86,15 @@
     @apply border-b;
     @apply border-gray-450;
 
-    .navbar {
+    .navbar-width-base {
       width: 1025px;
+    }
+
+    .navbar-width-wide {
+      width: 1230px;
+    }
+
+    .navbar {
       height: 75px;
       max-height: 75px;
       display: flex;
