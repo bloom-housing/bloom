@@ -155,9 +155,9 @@ export const ListingView = (props: ListingProps) => {
           !listingPref.preference.formMetadata.hideFromListing
         )
       })
-      .map((listingPref) => {
+      .map((listingPref, index) => {
         return {
-          ordinal: listingPref.ordinal,
+          ordinal: index + 1,
           links: listingPref.preference.links,
           title: listingPref.preference.title,
           subtitle: listingPref.preference.subtitle,

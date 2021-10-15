@@ -334,7 +334,7 @@ export const defaultListingEvents: Array<ListingEventCreateDto> = [
     endTime: getDate(10),
     note: "Custom open house event note",
     type: ListingEventType.openHouse,
-    url: "example.com",
+    url: "https://www.example.com",
     label: "Custom Event URL Label",
   },
   {
@@ -342,7 +342,7 @@ export const defaultListingEvents: Array<ListingEventCreateDto> = [
     endTime: getDate(10),
     note: "Custom public lottery event note",
     type: ListingEventType.publicLottery,
-    url: "example2.com",
+    url: "https://www.example2.com",
     label: "Custom Event URL Label",
   },
 ]
@@ -489,7 +489,7 @@ export const defaultListing: ListingSeedType = {
     longitude: -122.40151,
   },
   applicationPickUpAddressOfficeHours: "Custom pick up address office hours text",
-  buildingSelectionCriteria: "example.com",
+  buildingSelectionCriteria: "https://www.example.com",
   costsNotIncluded: "Custom costs not included text",
   creditHistory: "Custom credit history text",
   criminalBackground: "Custom criminal background text",
@@ -544,7 +544,7 @@ export const liveWorkPreference: PreferenceSeedType = {
   links: [
     {
       title: "Link Title",
-      url: "example.com",
+      url: "https://www.example.com",
     },
   ],
   formMetadata: {

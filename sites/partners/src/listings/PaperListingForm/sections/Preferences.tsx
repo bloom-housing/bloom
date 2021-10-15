@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useContext } from "react"
 import {
   t,
   GridSection,
@@ -8,9 +8,10 @@ import {
   Drawer,
   AppearanceStyleType,
   Field,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { usePreferenceList } from "../../../../lib/hooks"
+import { useJurisdictionalPreferenceList } from "../../../../lib/hooks"
 import { Preference } from "@bloom-housing/backend-core/types"
 
 type PreferencesProps = {
@@ -21,9 +22,10 @@ type PreferencesProps = {
 const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   const [preferencesTableDrawer, setPreferencesTableDrawer] = useState<boolean | null>(null)
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
-  const [uniquePreferences, setUniquePreferences] = useState<Preference[]>([])
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
   const [dragOrder, setDragOrder] = useState([])
+
+  const { profile } = useContext(AuthContext)
 
   const draggableTableData = useMemo(
     () =>
@@ -87,17 +89,9 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   }, [dragOrder])
 
   // Fetch and filter all preferences
-  const { data: preferencesData = [] } = usePreferenceList()
-  useEffect(() => {
-    console.log({ preferencesData })
-    setUniquePreferences(
-      preferencesData?.reduce(
-        (items, item) =>
-          items.find((x) => x.description === item.description) ? [...items] : [...items, item],
-        []
-      )
-    )
-  }, [preferencesData])
+  const { data: preferencesData = [] } = useJurisdictionalPreferenceList(
+    profile.jurisdictions.map((jurisdiction) => jurisdiction.id)
+  )
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -194,7 +188,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
         className={"w-auto"}
       >
         <div className="border rounded-md p-8 bg-white">
-          {uniquePreferences.map((pref, index) => {
+          {preferencesData.map((pref, index) => {
             return (
               <GridSection columns={1} key={index}>
                 <Field
@@ -222,7 +216,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           onClick={() => {
             const selectedPreferences = getValues()
             const formPreferences = []
-            uniquePreferences.forEach((uniquePref) => {
+            preferencesData.forEach((uniquePref) => {
               if (selectedPreferences.preference[uniquePref.id]) {
                 formPreferences.push(uniquePref)
               }

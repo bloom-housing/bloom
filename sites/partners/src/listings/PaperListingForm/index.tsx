@@ -339,7 +339,7 @@ const formatFormData = (
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
-    preferences: preferences,
+    listingPreferences: preferences,
     buildingAddress: {
       ...data.buildingAddress,
       latitude: saveLatLong.latitude ?? null,

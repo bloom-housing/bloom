@@ -267,6 +267,24 @@ export function usePreferenceList() {
   }
 }
 
+export function useJurisdictionalPreferenceList(jurisdictionIDs: string[]) {
+  const { preferencesService } = useContext(AuthContext)
+  const fetcher = () => preferencesService.list()
+
+  const paramsString = qs.stringify({ filter: jurisdictionIDs })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/preferences?${paramsString}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()

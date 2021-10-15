@@ -58,7 +58,7 @@ export type ListingSeedType = Omit<
   jurisdictionName: string
 }
 
-export type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
+export type PreferenceSeedType = PreferenceCreateDto
 
 export type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 
