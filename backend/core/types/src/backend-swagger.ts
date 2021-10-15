@@ -2785,6 +2785,9 @@ export interface ApplicationFlaggedSet {
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
+  totalFlagged: number
+
+  /**  */
   currentPage: number
 
   /**  */
@@ -3903,9 +3906,6 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   isPartner?: boolean
 }
 
@@ -4050,21 +4050,6 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
-
-  /**  */
-  availability?: EnumListingFilterParamsAvailability
-
-  /**  */
-  seniorHousing?: boolean
-
-  /**  */
-  minRent?: number
-
-  /**  */
-  maxRent?: number
-
-  /**  */
-  minAmiPercentage?: number
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -5562,9 +5547,6 @@ export interface PreferencesFilterParams {
   $comparison: EnumPreferencesFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   jurisdiction?: string
 }
 
@@ -5985,7 +5967,6 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
@@ -6060,6 +6041,5 @@ export enum EnumPreferencesFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
