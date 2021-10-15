@@ -32,7 +32,7 @@ describe("Unit Transformations", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         name: "name",
-        languages: [Language.en]
+        languages: [Language.en],
       },
     }
 
