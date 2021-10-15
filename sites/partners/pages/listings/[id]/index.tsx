@@ -69,8 +69,6 @@ export default function ApplicationsList() {
 
   if (!listingDto) return null
 
-  console.log(listingDto)
-
   return (
     <ListingContext.Provider value={listingDto}>
       <ListingGuard>
