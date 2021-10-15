@@ -4,15 +4,16 @@ import { t } from "../helpers/translator"
 import "./Hero.scss"
 
 export interface HeroProps {
-  title: React.ReactNode
-  backgroundImage?: string
-  buttonTitle?: string
-  buttonLink?: string
-  secondaryButtonTitle?: string
-  secondaryButtonLink?: string
   allApplicationsClosed?: boolean
-  children?: React.ReactNode
+  backgroundImage?: string
+  buttonLink?: string
+  buttonTitle?: string
   centered?: boolean
+  children?: React.ReactNode
+  extraLargeTitle?: boolean
+  secondaryButtonLink?: string
+  secondaryButtonTitle?: string
+  title: React.ReactNode
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (
@@ -37,7 +38,9 @@ const Hero = (props: HeroProps) => {
   }
   return (
     <div className={`hero ${classNames}`} style={styles}>
-      <h1 className="hero__title">{props.title}</h1>
+      <h1 className={`hero__title ${props.extraLargeTitle ? "lg:text-6.5xl" : ""}`}>
+        {props.title}
+      </h1>
       {subHeader}
 
       {props.buttonTitle && props.buttonLink && (
