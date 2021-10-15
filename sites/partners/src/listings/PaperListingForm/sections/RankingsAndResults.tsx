@@ -197,7 +197,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   fullWidth={true}
                   register={register}
                   defaultValue={lotteryEvent ? lotteryEvent.note : null}
-                  maxLength={150}
                 />
               </GridCell>
             </GridSection>
