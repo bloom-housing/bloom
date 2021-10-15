@@ -684,14 +684,6 @@ const tritonUnits: Array<UnitSeedType> = [
 ]
 
 const tritonListing: ListingSeedType = {
-  applicationAddress: {
-    city: "Foster City",
-    state: "CA",
-    street: "55 Triton Park Lane",
-    zipCode: "94404",
-    latitude: 37.5658152,
-    longitude: -122.2704286,
-  },
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,

@@ -18,7 +18,6 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 
 export class ListingDto extends OmitType(Listing, [
-  "applicationAddress",
   "applicationPickUpAddress",
   "applicationDropOffAddress",
   "applicationMailingAddress",
@@ -47,12 +46,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => PreferenceDto)
   preferences: PreferenceDto[]
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

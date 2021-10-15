@@ -4422,9 +4422,6 @@ export interface Listing {
   preferences: Preference[]
 
   /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
-
-  /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
 
   /**  */
@@ -4842,9 +4839,6 @@ export interface ListingCreate {
 
   /**  */
   preferences: PreferenceCreate[]
-
-  /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
 
   /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
@@ -5286,9 +5280,6 @@ export interface ListingUpdate {
 
   /**  */
   preferences: PreferenceUpdate[]
-
-  /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
 
   /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
@@ -5927,7 +5918,6 @@ export enum UnitStatus {
   "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
-export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate

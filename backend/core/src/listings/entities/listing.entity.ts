@@ -179,13 +179,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Address)
-  applicationAddress?: Address | null
-
-  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
   applicationPickUpAddress?: Address | null
 
   @Column({ type: "text", nullable: true })
