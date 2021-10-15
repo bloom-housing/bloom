@@ -42,6 +42,7 @@ const LotteryResults = () => {
       id: "",
       url: "",
     })
+    setValue("criteriaAttachType", null)
     setDrawerState(false)
   }
 
@@ -220,13 +221,16 @@ const LotteryResults = () => {
           <Button
             key={0}
             onClick={() => {
-              const value = getValues("buildingSelectionCriteriaURL")
-              if (value) {
-                deletePDF()
-                saveURL(value)
-              } else {
-                deleteURL()
-                savePDF()
+              // Only try to save values if an attachment type has been selected
+              if (criteriaAttachType) {
+                const value = getValues("buildingSelectionCriteriaURL")
+                if (value) {
+                  deletePDF()
+                  saveURL(value)
+                } else {
+                  deleteURL()
+                  savePDF()
+                }
               }
               resetDrawerState()
             }}

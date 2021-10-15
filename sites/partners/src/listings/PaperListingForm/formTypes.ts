@@ -3,7 +3,6 @@ import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components
 import {
   Preference,
   ListingStatus,
-  CSVFormattingType,
   ListingApplicationAddressType,
   Unit,
   User,
@@ -94,7 +93,6 @@ export const formDefaults: FormListing = {
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
-  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "0",
   depositMin: "0",
   disableUnitsAccordion: false,

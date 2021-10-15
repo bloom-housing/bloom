@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm"
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { IsDate, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Expose, Type } from "class-transformer"
@@ -10,6 +10,7 @@ import { FlaggedSetStatus } from "../types/flagged-set-status-enum"
 import { Rule } from "../types/rule-enum"
 
 @Entity()
+@Index(["listing"])
 export class ApplicationFlaggedSet extends AbstractEntity {
   @Column({ enum: Rule, nullable: false })
   @Expose()
