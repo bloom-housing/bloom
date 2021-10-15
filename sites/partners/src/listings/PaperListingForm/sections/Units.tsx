@@ -206,7 +206,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
               setUnitDrawerId(null)
             }
           }}
-          savedUnit={units.some((unit) => unit.tempId === unitDrawerId)}
+          draft={!units.some((unit) => unit.tempId === unitDrawerId)}
           defaultUnit={defaultUnit}
           existingId={units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId}
           nextId={units.length + 1}

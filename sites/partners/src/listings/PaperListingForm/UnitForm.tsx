@@ -32,17 +32,10 @@ type UnitFormProps = {
   defaultUnit: TempUnit | undefined
   existingId: number
   nextId: number
-  savedUnit: boolean
+  draft: boolean
 }
 
-const UnitForm = ({
-  onSubmit,
-  onClose,
-  defaultUnit,
-  existingId,
-  nextId,
-  savedUnit,
-}: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [options, setOptions] = useState({
@@ -180,12 +173,9 @@ const UnitForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amiPercentage])
 
-  async function onFormSubmit(action?: string) {
-    setLoading(true)
-    const data = getValues()
-    const validation = await trigger()
-    if (!validation) return
+  type FormSubmitAction = "saveNew" | "saveExit"
 
+  const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
       data.amiChart = chart
@@ -230,30 +220,52 @@ const UnitForm = ({
       })
     }
 
-    const formData: TempUnit = {
+    return {
       createdAt: undefined,
       updatedAt: undefined,
       status: UnitStatus.available,
       id: null,
       ...data,
     }
+  }
 
-    if (action === "copyNew") {
-      onClose(true, { ...formData, tempId: nextId + 1 })
-      void resetDefaultValues()
-    } else if (action === "saveNew") {
+  const copyAndNew = () => {
+    const data = getValues()
+    const formData = formatFormData(data)
+    onClose(true, { ...formData, tempId: nextId + 1 })
+    void resetDefaultValues()
+  }
+
+  async function onFormSubmit(action?: FormSubmitAction) {
+    setLoading(true)
+    const data = getValues()
+    const validation = await trigger()
+    if (!validation) return
+
+    const formData = formatFormData(data)
+
+    // If we're looking at a draft unit in the drawer
+    // Save and New --> creates a new unit, opens a draft empty drawer
+    // Save & Exit --> creates a new unit, closes the drawer
+    // If we're looking at a saved unit
+    // Copy & New --> does not create a new unit, opens a draft drawer with same data
+    // Save & New --> does not create a new unit, submits changes with existing ID, opens a draft empty drawer
+    // Save & Exit --> does not create a new unit, submits changes with existing ID, closes the drawer
+
+    if (action === "saveNew") {
       onSubmit({
         ...formData,
-        tempId: existingId ?? nextId + 1,
+        tempId: draft ? nextId : existingId,
       })
       onClose(true, null)
       reset()
       void resetDefaultValues()
       setValue("status", "available")
-    } else {
+    }
+    if (action === "saveExit") {
       onSubmit({
         ...formData,
-        tempId: existingId ?? nextId,
+        tempId: draft ? nextId : existingId,
       })
       onClose(false)
     }
@@ -554,10 +566,10 @@ const UnitForm = ({
         </GridSection>
       </div>
       <div className="mt-6">
-        {savedUnit && (
+        {!draft && (
           <Button
             type="button"
-            onClick={() => onFormSubmit("copyNew")}
+            onClick={() => copyAndNew()}
             styleType={AppearanceStyleType.secondary}
             className="mr-4"
           >
@@ -575,7 +587,7 @@ const UnitForm = ({
 
         <Button
           type="button"
-          onClick={() => onFormSubmit()}
+          onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
         >
           {t("t.saveExit")}
