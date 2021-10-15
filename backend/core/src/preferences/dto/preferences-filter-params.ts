@@ -1,7 +1,7 @@
 import { BaseFilter } from "../../shared/dto/filter.dto"
 import { Expose } from "class-transformer"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsOptional } from "class-validator"
+import { IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { PreferenceFilterKeys } from "./preference-filter-keys"
 
