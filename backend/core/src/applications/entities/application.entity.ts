@@ -2,6 +2,7 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -44,6 +45,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
+@Index(["listing"])
 export class Application extends AbstractEntity {
   @DeleteDateColumn()
   @Expose()
