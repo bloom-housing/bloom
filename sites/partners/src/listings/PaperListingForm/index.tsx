@@ -247,6 +247,8 @@ const formatFormData = (
     data.applicationDueTimeField
   )
 
+  console.log("units from submit", units)
+
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":

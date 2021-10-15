@@ -25,13 +25,15 @@ type UnitProps = {
 }
 
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
-  const [unitDrawerId, setUnitDrawerId] = useState<number | null>(null)
+  const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, errors, clearErrors } = formMethods
+
+  const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -58,7 +60,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const editUnit = (tempId: number) => {
     setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
-    setUnitDrawerId(tempId)
+    setUnitDrawerOpen(true)
   }
 
   const deleteUnit = useCallback(
@@ -77,7 +79,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   )
 
   function saveUnit(newUnit: TempUnit) {
-    const exists = units.some((unit) => unit.tempId === unitDrawerId)
+    const exists = units.some((unit) => unit.tempId === newUnit.tempId)
     if (exists) {
       const updateUnits = units.map((unit) => (unit.tempId === newUnit.tempId ? newUnit : unit))
       setUnits(updateUnits)
@@ -181,35 +183,32 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       )}
 
       <Drawer
-        open={!!unitDrawerId}
+        open={unitDrawerOpen}
         title={t("listings.unit.add")}
-        headerTag={units.some((unit) => unit.tempId === unitDrawerId) ? t("t.saved") : t("t.draft")}
+        headerTag={
+          units.some((unit) => unit.tempId === defaultUnit?.tempId) ? t("t.saved") : t("t.draft")
+        }
         headerTagStyle={
-          units.some((unit) => unit.tempId === unitDrawerId) ? AppearanceStyleType.success : null
+          units.some((unit) => unit.tempId === defaultUnit?.tempId)
+            ? AppearanceStyleType.success
+            : null
         }
         ariaDescription={t("listings.unit.add")}
-        onClose={() => setUnitDrawerId(null)}
+        onClose={() => setUnitDrawerOpen(false)}
       >
         <UnitForm
           onSubmit={(unit) => saveUnit(unit)}
           onClose={(reopen: boolean, defaultUnit: TempUnit) => {
+            setDefaultUnit(defaultUnit)
             if (reopen) {
-              if (defaultUnit) {
-                setDefaultUnit(defaultUnit)
-                editUnit(units.length + 1)
-              } else {
-                setDefaultUnit(null)
-                setUnitDrawerId(units.length + 1)
-              }
+              editUnit(nextId)
             } else {
-              setDefaultUnit(null)
-              setUnitDrawerId(null)
+              setUnitDrawerOpen(false)
             }
           }}
-          draft={!units.some((unit) => unit.tempId === unitDrawerId)}
+          draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}
           defaultUnit={defaultUnit}
-          existingId={units.filter((unit) => unit.tempId === defaultUnit?.tempId)[0]?.tempId}
-          nextId={units.length + 1}
+          nextId={nextId}
         />
       </Drawer>
 

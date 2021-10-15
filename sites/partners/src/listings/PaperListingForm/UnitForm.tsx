@@ -28,14 +28,13 @@ import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/hel
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
-  onClose: (reopen: boolean, defaultUnit?: TempUnit) => void
+  onClose: (reopen: boolean, defaultUnit: TempUnit) => void
   defaultUnit: TempUnit | undefined
-  existingId: number
   nextId: number
   draft: boolean
 }
 
-const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [options, setOptions] = useState({
@@ -220,19 +219,21 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }:
       })
     }
 
-    return {
+    const formData = {
       createdAt: undefined,
       updatedAt: undefined,
       status: UnitStatus.available,
       id: null,
       ...data,
     }
+
+    return formData
   }
 
   const copyAndNew = () => {
     const data = getValues()
     const formData = formatFormData(data)
-    onClose(true, { ...formData, tempId: nextId + 1 })
+    onClose(true, formData)
     void resetDefaultValues()
   }
 
@@ -255,7 +256,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }:
     if (action === "saveNew") {
       onSubmit({
         ...formData,
-        tempId: draft ? nextId : existingId,
+        tempId: draft ? nextId : defaultUnit.tempId,
       })
       onClose(true, null)
       reset()
@@ -265,9 +266,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }:
     if (action === "saveExit") {
       onSubmit({
         ...formData,
-        tempId: draft ? nextId : existingId,
+        tempId: draft ? nextId : defaultUnit.tempId,
       })
-      onClose(false)
+      onClose(false, null)
     }
   }
 
@@ -595,7 +596,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId, draft }:
 
         <Button
           type="button"
-          onClick={() => onClose(false)}
+          onClick={() => onClose(false, null)}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >
