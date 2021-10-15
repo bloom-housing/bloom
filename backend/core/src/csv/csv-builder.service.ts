@@ -196,14 +196,29 @@ export class CsvBuilder {
         })
         .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
       let row = 0
+      // create map so we don't have to Array.indexOf() for every row
+      const headerIndexMap = {}
       this.parsedData.forEach((obj) => {
         if (obj.val === "_endRow") {
           row++
         } else {
+          let headerIndex = -1
           // get index of header
-          const headerIndex = obj.mappedField
-            ? headerArray.indexOf(obj.mappedField)
-            : headerArray.indexOf(obj.header)
+          if (obj.mappedField) {
+            if (headerIndexMap[obj.mappedField]) {
+              headerIndex = headerIndexMap[obj.mappedField]
+            } else {
+              headerIndex = headerArray.indexOf(obj.mappedField)
+              headerIndexMap[obj.mappedField] = headerIndex
+            }
+          } else {
+            if (headerIndexMap[obj.header]) {
+              headerIndex = headerIndexMap[obj.header]
+            } else {
+              headerIndex = headerArray.indexOf(obj.header)
+              headerIndexMap[obj.header] = headerIndex
+            }
+          }
 
           if (headerIndex > -1) {
             rows[row][headerIndex] = obj.val
@@ -227,7 +242,6 @@ export class CsvBuilder {
     } catch (error) {
       console.log("CSV Export Error = ", error)
     }
-
     return csvString
   }
 }
