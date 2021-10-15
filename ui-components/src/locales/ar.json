@@ -1,4 +1,7 @@
 {
+    "config": {
+        "routePrefix": "ar"
+    },
     "account": {
         "accountSettings": "إعدادت الحساب",
         "errorFetchingApplications": "خطأ في جلب التطبيقات",
@@ -649,7 +652,6 @@
             "success": "لقد قمت بتسجيل الخروج بنجاح من حسابك."
         }
     },
-    "config": {},
     "errors": {
         "alert": {
             "timeoutPleaseTryAgain": "وجه الفتاة! يبدو أنه حدث خطأ ما. حاول مرة اخرى."
