@@ -1,6 +1,15 @@
+import React from "react"
 import ReactDOMServer from "react-dom/server"
 import Markdown from "markdown-to-jsx"
-import { Listing, ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import moment from "moment"
+import {
+  Listing,
+  ListingEvent,
+  ListingEventType,
+  ListingApplicationAddressType,
+  ApplicationMethod,
+  ApplicationMethodType,
+} from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
   Description,
@@ -10,6 +19,7 @@ import {
   getSummariesTableFromUnitsSummary,
   ImageCard,
   imageUrlFromListing,
+  GetApplication,
   LeasingAgent,
   ListingDetailItem,
   ListingDetails,
@@ -20,10 +30,12 @@ import {
   OpenHouseEvent,
   ListingUpdated,
   Message,
-  ApplicationSection,
+  SubmitApplication,
+  Waitlist,
+  ReferralApplication,
 } from "@bloom-housing/ui-components"
 import { ErrorPage } from "../pages/_error"
-import { getGenericAddress } from "../lib/helpers"
+import { getGenericAddress, openInFuture } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
@@ -32,6 +44,11 @@ interface ListingProps {
 
 export const ListingView = (props: ListingProps) => {
   const { listing } = props
+
+  const appOpenInFuture = openInFuture(listing)
+  const hasNonReferralMethods = listing?.applicationMethods
+    ? listing.applicationMethods.some((method) => method.type !== ApplicationMethodType.Referral)
+    : false
 
   if (!listing) {
     return <ErrorPage />
@@ -91,6 +108,136 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
+  const getReservedTitle = () => {
+    if (
+      listing.reservedCommunityType.name === "senior55" ||
+      listing.reservedCommunityType.name === "senior62" ||
+      listing.reservedCommunityType.name === "senior"
+    ) {
+      return t("listings.reservedCommunitySeniorTitle")
+    } else return t("listings.reservedCommunityTitleDefault")
+  }
+
+  // TODO: Move the below methods into our shared helper library when setup
+  const hasMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+    return applicationMethods.some((method) => method.type == type)
+  }
+
+  const getMethod = (applicationMethods: ApplicationMethod[], type: ApplicationMethodType) => {
+    return applicationMethods.find((method) => method.type == type)
+  }
+
+  type AddressLocation = "dropOff" | "pickUp"
+
+  const getAddress = (
+    addressType: ListingApplicationAddressType | undefined,
+    location: AddressLocation
+  ) => {
+    if (addressType === ListingApplicationAddressType.leasingAgent) {
+      return listing.leasingAgentAddress
+    }
+    if (addressType === ListingApplicationAddressType.mailingAddress) {
+      return listing.applicationMailingAddress
+    }
+    if (location === "dropOff") {
+      return listing.applicationDropOffAddress
+    } else {
+      return listing.applicationPickUpAddress
+    }
+  }
+
+  const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
+  }
+
+  const getOnlineApplicationURL = () => {
+    let onlineApplicationURL
+    if (hasMethod(listing.applicationMethods, ApplicationMethodType.Internal)) {
+      onlineApplicationURL = `/applications/start/choose-language?listingId=${listing.id}`
+    } else if (hasMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)) {
+      onlineApplicationURL =
+        getMethod(listing.applicationMethods, ApplicationMethodType.ExternalLink)
+          ?.externalReference || ""
+    }
+    return onlineApplicationURL
+  }
+
+  const getPaperApplications = () => {
+    return (
+      getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)
+        ?.paperApplications.sort((a, b) => {
+          // Ensure English is always first
+          if (a.language == "en") return -1
+          if (b.language == "en") return 1
+
+          // Otherwise, do regular string sort
+          const aLang = t(`languages.${a.language}`)
+          const bLang = t(`languages.${b.language}`)
+          if (aLang < bLang) return -1
+          if (aLang > bLang) return 1
+          return 0
+        })
+        .map((paperApp) => {
+          return {
+            fileURL: paperApp?.file?.fileId.includes("https")
+              ? paperApp?.file?.fileId
+              : cloudinaryPdfFromId(
+                  paperApp?.file?.fileId || "",
+                  process.env.cloudinaryCloudName || ""
+                ),
+            languageString: t(`languages.${paperApp.language}`),
+          }
+        }) ?? null
+    )
+  }
+
+  // Move the above methods into our shared helper library when setup
+
+  const applySidebar = () => (
+    <>
+      <Waitlist
+        isWaitlistOpen={listing.isWaitlistOpen}
+        waitlistMaxSize={listing.waitlistMaxSize}
+        waitlistCurrentSize={listing.waitlistCurrentSize}
+        waitlistOpenSpots={listing.waitlistOpenSpots}
+        unitsAvailable={listing.unitsAvailable}
+      />
+      <GetApplication
+        onlineApplicationURL={getOnlineApplicationURL()}
+        applicationsDueDate={moment(listing.applicationDueDate).format(
+          `MMM. DD, YYYY [${t("t.at")}] h A`
+        )}
+        applicationsOpen={!appOpenInFuture}
+        applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        paperApplications={getPaperApplications()}
+        paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
+        postmarkedApplicationsReceivedByDate={moment(
+          listing.postmarkedApplicationsReceivedByDate
+        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
+        applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
+        applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
+        preview={props.preview}
+      />
+      <SubmitApplication
+        applicationMailingAddress={listing.applicationMailingAddress}
+        applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
+        applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
+        applicationOrganization={listing.applicationOrganization}
+        postmarkedApplicationData={{
+          postmarkedApplicationsReceivedByDate: moment(
+            listing.postmarkedApplicationsReceivedByDate
+          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          developer: listing.developer,
+          applicationsDueDate: moment(listing.applicationDueDate).format(
+            `MMM. DD, YYYY [${t("t.at")}] h A`
+          ),
+        }}
+      />
+    </>
+  )
+
+  const applicationsClosed = moment() > moment(listing.applicationDueDate)
+
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
@@ -135,7 +282,9 @@ export const ListingView = (props: ListingProps) => {
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ListingUpdated listingUpdated={listing.updatedAt} />
-        <ApplicationSection listing={listing} preview={props.preview} internalFormRoute="" />
+        <div className="mx-4">
+          {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
+        </div>
       </div>
       <ListingDetails>
         <ListingDetailItem
@@ -150,6 +299,20 @@ export const ListingView = (props: ListingProps) => {
             <div className="hidden md:block">
               <ListingUpdated listingUpdated={listing.updatedAt} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
+              {hasNonReferralMethods && !applicationsClosed && applySidebar()}
+              {listing?.referralApplication && (
+                <ReferralApplication
+                  phoneNumber={
+                    listing.referralApplication.phoneNumber ||
+                    t("application.referralApplication.phoneNumber")
+                  }
+                  description={
+                    listing.referralApplication.externalReference ||
+                    t("application.referralApplication.instructions")
+                  }
+                  title={t("application.referralApplication.furtherInformation")}
+                />
+              )}
             </div>
             {openHouseEvents && (
               <div className="mb-2 md:hidden">
@@ -163,7 +326,7 @@ export const ListingView = (props: ListingProps) => {
                 website: listing.managementWebsite,
               }}
             />
-            <ApplicationSection listing={listing} preview={props.preview} internalFormRoute="" />
+            {hasNonReferralMethods && !applicationsClosed && applySidebar()}
           </aside>
         </ListingDetailItem>
 
@@ -221,7 +384,12 @@ export const ListingView = (props: ListingProps) => {
                   }
                 />
               </dl>
-              <AdditionalFees listing={listing} />
+              <AdditionalFees
+                depositMin={listing.depositMin}
+                depositMax={listing.depositMax}
+                applicationFee={listing.applicationFee}
+                costsNotIncluded={listing.costsNotIncluded}
+              />
             </div>
           )}
         </ListingDetailItem>

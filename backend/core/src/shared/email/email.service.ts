@@ -194,7 +194,7 @@ export class EmailService {
     void (await this.loadTranslations(null, user.language || Language.en))
     await this.send(
       user.email,
-      "Welcome to Bloom",
+      this.polyglot.t("invite.hello"),
       this.template("invite")({
         user: user,
         confirmationUrl: confirmationUrl,

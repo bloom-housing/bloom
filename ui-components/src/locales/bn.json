@@ -1350,6 +1350,7 @@
         },
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",
+        "rentRange": "ভাড়া পরিসীমা",
         "adaCompliant": "ADA অনুগত",
         "availability": "ইউনিট প্রাপ্যতা",
         "hasAvailability": "প্রাপ্যতা আছে",

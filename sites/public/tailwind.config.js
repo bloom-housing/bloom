@@ -38,4 +38,16 @@ bloomTheme.theme.fontFamily["alt-sans"] = [
 ]
 bloomTheme.plugins.push(require("tailwindcss-rtl"))
 
-module.exports = bloomTheme
+module.exports = {
+  ...bloomTheme,
+  purge: {
+    enabled: process.env.NODE_ENV !== "development",
+    content: [
+      "./pages/**/*.tsx",
+      "./src/**/*.tsx",
+      "./layouts/**/*.tsx",
+      "../../ui-components/src/**/*.tsx",
+    ],
+    safelist: [/grid-cols-/],
+  },
+}

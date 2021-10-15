@@ -21,10 +21,7 @@
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^1.0.5",
-    "@mdx-js/loader": "1.6.18",
-    "@next/mdx": "^10.1.0",
-    "ag-grid-community": "^24.1.0",
-    "ag-grid-react": "^24.1.0",
+    "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "moment": "^2.29.1",
@@ -43,6 +40,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10"
   },
   "devDependencies": {
+    "@babel/core": "^7.11.6",
     "@next/bundle-analyzer": "^10.1.0",
     "@testing-library/dom": "^8.2.0",
     "@testing-library/user-event": "^13.2.1",

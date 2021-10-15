@@ -386,6 +386,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "referralApplication",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -584,6 +585,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "reservedCommunityType",
   "result",
   "unitsSummary",
+  "referralApplication",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -914,7 +916,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     required: false,
     enum: OrderByFieldsEnum,
     enumName: "OrderByFieldsEnum",
-    example: "updatedAt",
+    example: "mostRecentlyUpdated",
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })

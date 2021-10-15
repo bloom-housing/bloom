@@ -83,7 +83,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                     !listing || listing?.reviewOrderType === ListingReviewOrder.firstComeFirstServe,
                 },
                 {
-                  label: t("listings.lottery"),
+                  label: t("listings.lotteryTitle"),
                   value: "reviewOrderLottery",
                   id: "reviewOrderLottery",
                   defaultChecked: listing?.reviewOrderType === ListingReviewOrder.lottery,

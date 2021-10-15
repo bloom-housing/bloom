@@ -11,6 +11,7 @@ import {
   addMinAmiPercentageFilter,
   addIndependentLivingHousingQuery,
 } from "./custom_filters"
+import { UserFilterKeys } from "../../auth/types/user-filter-keys"
 
 /**
  *
@@ -43,7 +44,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
         continue
       }
       // Throw if this is not a supported filter type
-      if (!(filterKey in ListingFilterKeys)) {
+      if (!(filterKey in ListingFilterKeys || filterKey in UserFilterKeys)) {
         throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       }
 
