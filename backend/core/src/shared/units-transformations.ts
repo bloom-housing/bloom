@@ -108,13 +108,38 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   const hmiHeaders = {
     sizeColumn: showUnitType ? "t.unitType" : "listings.householdSize",
   } as AnyDict
-  const bmrHeaders = [
+
+  let bmrHeaders = [
     "listings.unitTypes.studio",
     "listings.unitTypes.oneBdrm",
     "listings.unitTypes.twoBdrm",
     "listings.unitTypes.threeBdrm",
     "listings.unitTypes.fourBdrm",
   ]
+
+  if (showUnitType) {
+    // the unit types used by the listing
+    const selectedUnitTypeNames = units.reduce((obj, unit) => {
+      if (unit.unitType) {
+        obj[unit.unitType.name] = unit.unitType.numBedrooms
+      }
+      return obj
+    }, {})
+    const sortedUnitTypeNames = Object.keys(selectedUnitTypeNames).sort((a, b) =>
+      selectedUnitTypeNames[a] < selectedUnitTypeNames[b]
+        ? -1
+        : selectedUnitTypeNames[a] > selectedUnitTypeNames[b]
+        ? 1
+        : 0
+    )
+    // setbmrHeaders based on the actual units
+    bmrHeaders = sortedUnitTypeNames.map((name) => `listings.unitTypes.${name}`)
+
+    // if showUnitType, we want to set the maxHouseholdSize to the largest unit.numBedrooms
+    const largestBedroom = Math.max(...units.map((unit) => unit.unitType?.numBedrooms || 0))
+    maxHouseholdSize = largestBedroom
+  }
+
   const hmiRows = [] as AnyDict[]
 
   // 1. If there are multiple AMI levels, show each AMI level (max income per
