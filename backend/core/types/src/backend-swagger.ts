@@ -466,8 +466,6 @@ export class ApplicationsService {
       /**  */
       markedAsDuplicate?: boolean
       /**  */
-      includeHeaders?: boolean
-      /**  */
       includeDemographics?: boolean
     } = {} as any,
     options: IRequestOptions = {}
@@ -485,7 +483,6 @@ export class ApplicationsService {
         orderBy: params["orderBy"],
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
-        includeHeaders: params["includeHeaders"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
@@ -3927,7 +3924,7 @@ export interface UserProfileUpdate {
   lastName: string
 
   /**  */
-  dob: Date
+  dob?: Date
 
   /**  */
   createdAt: Date
@@ -3966,9 +3963,6 @@ export interface ListingFilterParams {
   $comparison: EnumListingFilterParamsComparison
 
   /**  */
-  $include_nulls?: boolean
-
-  /**  */
   name?: string
 
   /**  */
@@ -3982,21 +3976,6 @@ export interface ListingFilterParams {
 
   /**  */
   zipcode?: string
-
-  /**  */
-  availability?: EnumListingFilterParamsAvailability
-
-  /**  */
-  seniorHousing?: boolean
-
-  /**  */
-  minRent?: number
-
-  /**  */
-  maxRent?: number
-
-  /**  */
-  ami?: number
 
   /**  */
   leasingAgents?: string
@@ -4431,9 +4410,6 @@ export interface Listing {
   reviewOrderType?: ListingReviewOrder
 
   /**  */
-  CSVFormattingType: CSVFormattingType
-
-  /**  */
   showWaitlist: boolean
 
   /**  */
@@ -4728,24 +4704,6 @@ export interface ListingEventCreate {
   label?: string
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -4759,13 +4717,13 @@ export interface UnitCreate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeCreate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeCreate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeCreate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideCreate
@@ -4878,9 +4836,6 @@ export interface ListingCreate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
@@ -5163,33 +5118,6 @@ export interface ListingEventUpdate {
   label?: string
 }
 
-export interface UnitTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
 export interface UnitAmiChartOverrideUpdate {
   /**  */
   id?: string
@@ -5221,13 +5149,13 @@ export interface UnitUpdate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeUpdate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeUpdate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeUpdate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideUpdate
@@ -5343,9 +5271,6 @@ export interface ListingUpdate {
 
   /**  */
   reviewOrderType?: ListingReviewOrder
-
-  /**  */
-  CSVFormattingType: CSVFormattingType
 
   /**  */
   id?: string
@@ -5850,6 +5775,51 @@ export interface TranslationUpdate {
   jurisdiction: Id
 }
 
+export interface UnitTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5916,18 +5886,12 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
-  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
   "active" = "active",
   "pending" = "pending",
   "closed" = "closed",
-}
-export enum EnumListingFilterParamsAvailability {
-  "hasAvailability" = "hasAvailability",
-  "noAvailability" = "noAvailability",
-  "waitlist" = "waitlist",
 }
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
@@ -5948,13 +5912,6 @@ export enum ListingStatus {
 export enum ListingReviewOrder {
   "lottery" = "lottery",
   "firstComeFirstServe" = "firstComeFirstServe",
-}
-
-export enum CSVFormattingType {
-  "basic" = "basic",
-  "withDisplaceeNameAndAddress" = "withDisplaceeNameAndAddress",
-  "ohaFormat" = "ohaFormat",
-  "bhaFormat" = "bhaFormat",
 }
 
 export enum ListingEventType {

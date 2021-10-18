@@ -16,10 +16,10 @@ import { PreferenceUpdateDto } from "../../preferences/dto/preference.dto"
 import { AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ListingEventUpdateDto } from "./listing-event.dto"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
-import { UnitUpdateDto } from "../../units/dto/unit.dto"
 import { UnitsSummaryUpdateDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodUpdateDto } from "../../application-methods/dto/application-method.dto"
+import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
   "id",

@@ -7,11 +7,11 @@ import {
   Field,
   GridCell,
   Select,
-  stateKeys,
   ViewItem,
   DateField,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
@@ -395,7 +395,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     fullWidth={true}
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
-                    maxLength={150}
                   />
                 </GridCell>
               </GridSection>
@@ -461,7 +460,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     fullWidth={true}
                     register={register}
                     placeholder={t("leasingAgent.officeHoursPlaceholder")}
-                    maxLength={150}
                   />
                 </GridCell>
               </GridSection>
@@ -528,7 +526,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               fullWidth={true}
               register={register}
               placeholder={t("t.addNotes")}
-              maxLength={150}
             />
           </GridCell>
         </GridSection>

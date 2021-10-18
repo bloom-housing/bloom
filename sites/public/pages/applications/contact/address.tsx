@@ -7,7 +7,6 @@ import {
   AppearanceStyleType,
   AlertBox,
   Button,
-  contactPreferencesKeys,
   ErrorMessage,
   Field,
   Form,
@@ -23,7 +22,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { phoneNumberKeys, stateKeys } from "@bloom-housing/ui-components/src/helpers/formOptions"
+import { contactPreferencesKeys, phoneNumberKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 

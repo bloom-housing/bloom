@@ -1,7 +1,7 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDefaultUnits, getDefaultProperty, getDefaultAmiChart } from "./shared"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import { BaseEntity } from "typeorm"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { CountyCode } from "../../shared/types/county-code"
 
 export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {

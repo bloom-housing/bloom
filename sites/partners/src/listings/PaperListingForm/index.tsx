@@ -22,7 +22,6 @@ import {
 import { useForm, FormProvider } from "react-hook-form"
 import {
   ListingStatus,
-  CSVFormattingType,
   ListingApplicationAddressType,
   Unit,
   Listing,
@@ -77,16 +76,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-  arePaperAppsMailedToAnotherAddress?: boolean
-  arePostmarksConsidered?: boolean
-  canApplicationsBeDroppedOff?: boolean
-  canPaperApplicationsBePickedUp?: boolean
+  arePaperAppsMailedToAnotherAddress?: YesNoAnswer
+  arePostmarksConsidered?: YesNoAnswer
+  canApplicationsBeDroppedOff?: YesNoAnswer
+  canPaperApplicationsBePickedUp?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
+  dueDateQuestionChoice?: YesNoAnswer
   criteriaAttachType?: string
-  dueDateQuestionChoice?: boolean
   lotteryDate?: {
     month: string
     day: string
@@ -151,7 +150,6 @@ const defaults: FormListing = {
   costsNotIncluded: "",
   creditHistory: "",
   criminalBackground: "",
-  CSVFormattingType: CSVFormattingType.basic,
   depositMax: "0",
   depositMin: "0",
   disableUnitsAccordion: false,
@@ -362,30 +360,33 @@ const formatFormData = (
     waitlistOpenSpots:
       data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
     postmarkedApplicationsReceivedByDate:
-      data.postMarkDate && data.arePostmarksConsidered
+      data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
         ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
         : null,
     applicationDropOffAddressType:
+      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
         ? addressTypes[data.whereApplicationsDroppedOff]
         : null,
     applicationPickUpAddressType:
+      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
         ? addressTypes[data.whereApplicationsPickedUp]
         : null,
     applicationDropOffAddress:
-      data.canApplicationsBeDroppedOff &&
+      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationDropOffAddress
         : null,
     applicationPickUpAddress:
-      data.canPaperApplicationsBePickedUp &&
+      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationPickUpAddress
         : null,
-    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
-      ? data.applicationMailingAddress
-      : null,
+    applicationMailingAddress:
+      data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes
+        ? data.applicationMailingAddress
+        : null,
     events,
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
@@ -519,7 +520,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
             profile
           )
-          removeEmptyFields(formattedData)
+          removeEmptyFields(formattedData, [
+            "applicationPickUpAddressType",
+            "applicationDropOffAddressType",
+            "applicationDueDate",
+            "applicationDueTime",
+          ])
           const result = editMode
             ? await listingsService.update({
                 listingId: listing.id,
@@ -541,7 +547,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           setLoading(false)
           clearErrors()
           const { data } = err.response || {}
-          if (data.statusCode === 400) {
+          if (data?.statusCode === 400) {
             data?.message?.forEach((errorMessage: string) => {
               const fieldName = errorMessage.split(" ")[0]
               const readableError = getReadableErrorMessage(errorMessage)

@@ -1,15 +1,6 @@
 import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
-import {
-  AvailabilityFilterEnum,
-  ListingFilterKeys,
-} from "../../listings/types/listing-filter-keys-enum"
-import {
-  addSeniorHousingQuery,
-  addAvailabilityQuery,
-  addMinAmiPercentageFilter,
-} from "./custom_filters"
 
 /**
  *
@@ -31,68 +22,35 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
 ): void {
   for (const [index, filter] of filters.entries()) {
     const comparison = filter["$comparison"]
-    const includeNulls = filter["$include_nulls"]
     for (const filterKey in filter) {
       if (
         filter[filterKey] === undefined ||
         filter[filterKey] === null ||
-        filterKey === "$comparison" ||
-        filterKey === "$include_nulls"
+        filterKey === "$comparison"
       ) {
         continue
       }
       // Throw if this is not a supported filter type
-      if (!(filterKey in ListingFilterKeys)) {
+      if (!(filterKey in filterTypeToFieldMap)) {
         throw new HttpException("Filter Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       }
-
-      const filterValue = filter[filterKey]
-      // Handle custom filters here, before dropping into generic filter handler
-      switch (filterKey) {
-        case ListingFilterKeys.seniorHousing:
-          addSeniorHousingQuery(qb, filterValue)
-          continue
-        case ListingFilterKeys.availability:
-          addAvailabilityQuery(qb, filterValue as AvailabilityFilterEnum, includeNulls)
-          continue
-        case ListingFilterKeys.minAmiPercentage:
-          addMinAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
-          continue
-      }
-
       const whereParameterName = `${filterKey}_${index}`
       const filterField = filterTypeToFieldMap[filterKey]
+      const filterValue = filter[filterKey]
       switch (comparison) {
         case Compare.IN:
-          qb.andWhere(
-            `(LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})${
-              includeNulls ? ` OR ${filterField} IS NULL` : ""
-            })`,
-            {
-              [whereParameterName]: filterValue
-                .split(",")
-                .map((s) => s.trim().toLowerCase())
-                .filter((s) => s.length !== 0),
-            }
-          )
+          qb.andWhere(`LOWER(CAST(${filterField} as text)) IN (:...${whereParameterName})`, {
+            [whereParameterName]: filterValue
+              .split(",")
+              .map((s) => s.trim().toLowerCase())
+              .filter((s) => s.length !== 0),
+          })
           break
         case Compare["<>"]:
         case Compare["="]:
-          qb.andWhere(
-            `(LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})${
-              includeNulls ? ` OR ${filterField} IS NULL` : ""
-            })`,
-            {
-              [whereParameterName]: filterValue,
-            }
-          )
-          break
         case Compare[">="]:
-        case Compare["<="]:
           qb.andWhere(
-            `(${filterField} ${comparison} :${whereParameterName}${
-              includeNulls ? ` OR ${filterField} IS NULL` : ""
-            })`,
+            `LOWER(CAST(${filterField} as text)) ${comparison} LOWER(:${whereParameterName})`,
             {
               [whereParameterName]: filterValue,
             }

@@ -47,31 +47,29 @@ export class ApplicationsService {
 
   public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
     const qb = this._getQb(params)
+    // N.B. we could significantly cut down the query time (and only do one query), if we use qb.getRawMany() here, but then we lose it in having to map it to something usable (which may still be faster)
     const result = await qb.getMany()
-
     // Get flagged applications
+    // we can inner join on application_flagged_set_applications_applications to know if it's flagged
     const flaggedQuery = await this.repository
       .createQueryBuilder("applications")
-      .leftJoin(
+      .innerJoin(
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications",
         "application_flagged_set_applications_applications.applications_id = applications.id"
       )
       .andWhere("applications.listing_id = :lid", { lid: params.listingId })
-      .select(
-        "applications.id, count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
-      )
       .groupBy("applications.id")
-      .getRawAndEntities()
-
+      .getRawMany()
     // Reorganize flagged to object to make it faster to map
-    const flagged = flaggedQuery.raw.reduce((obj, application) => {
-      return { ...obj, [application.id]: application.flagged }
+    const flagged = flaggedQuery.reduce((obj, application) => {
+      obj[application.id] = true
+      return obj
     }, {})
     await Promise.all(
       result.map(async (application) => {
         // Because TypeOrm can't map extra flagged field we need to map it manually
-        application.flagged = flagged[application.id]
+        application.flagged = flagged[application.id] || false
         await this.authorizeUserAction(this.req.user, application, authzActions.read)
       })
     )
@@ -255,6 +253,7 @@ export class ApplicationsService {
         { retries: 6, minTimeout: 200 }
       )
     } catch (e) {
+      console.log("Create application error = ", e)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (e instanceof QueryFailedError && e.code === "40001") {
