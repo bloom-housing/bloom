@@ -12,6 +12,12 @@ All notable changes to this project will be documented in this file. The format 
 
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
 
+## Backend
+
+- Fixed:
+
+  - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
+
 ## v2.0.0-pre-tailwind 09/16/2021
 
 ## Frontend
