@@ -5,6 +5,7 @@
   @apply leading-snug;
   @apply flex;
   @apply items-center;
+  max-height: 50px;
 
   .alert-box_inner {
     @apply m-auto;
@@ -73,7 +74,8 @@
 }
 
 .alert-box__close {
-  @apply absolute;
   @apply text-3xl;
   right: 1rem;
+  @apply ml-3;
+  @apply p-0;
 }

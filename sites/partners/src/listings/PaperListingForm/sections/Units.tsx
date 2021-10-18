@@ -195,6 +195,8 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         }
         ariaDescription={t("listings.unit.add")}
         onClose={() => setUnitDrawerOpen(false)}
+        toastContent={"Example toast"}
+        toastStyle={"success"}
       >
         <UnitForm
           onSubmit={(unit) => saveUnit(unit)}

@@ -172,7 +172,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amiPercentage])
 
-  type FormSubmitAction = "saveNew" | "saveExit"
+  type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
@@ -260,8 +260,8 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
       })
       onClose(true, null)
       reset()
-      void resetDefaultValues()
       setValue("status", "available")
+      setLoading(false)
     }
     if (action === "saveExit") {
       onSubmit({
@@ -269,6 +269,13 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         tempId: draft ? nextId : defaultUnit.tempId,
       })
       onClose(false, null)
+    }
+    if (action === "save") {
+      onSubmit({
+        ...formData,
+        tempId: draft ? nextId : defaultUnit.tempId,
+      })
+      onClose(true, formData)
     }
   }
 
@@ -567,14 +574,23 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         </GridSection>
       </div>
       <div className="mt-6">
-        {!draft && (
+        {!draft ? (
           <Button
             type="button"
             onClick={() => copyAndNew()}
             styleType={AppearanceStyleType.secondary}
             className="mr-4"
           >
-            {t("t.copyNew")}
+            {t("t.copy")}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            onClick={() => onFormSubmit("save")}
+            styleType={AppearanceStyleType.secondary}
+            className="mr-4"
+          >
+            {t("t.save")}
           </Button>
         )}
         <Button
