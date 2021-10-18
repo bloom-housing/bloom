@@ -137,7 +137,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
     // if showUnitType, we want to set the maxHouseholdSize to the largest unit.numBedrooms
     const largestBedroom = Math.max(...units.map((unit) => unit.unitType?.numBedrooms || 0))
-    maxHouseholdSize = largestBedroom
+    maxHouseholdSize = largestBedroom + 1
   }
 
   const hmiRows = [] as AnyDict[]
