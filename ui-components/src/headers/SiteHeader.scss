@@ -86,8 +86,15 @@
     @apply border-b;
     @apply border-gray-450;
 
-    .navbar {
+    .navbar-width-base {
       width: 1025px;
+    }
+
+    .navbar-width-wide {
+      width: 1230px;
+    }
+
+    .navbar {
       height: 75px;
       max-height: 75px;
       display: flex;
@@ -95,6 +102,7 @@
       justify-content: space-between;
       z-index: 10;
       margin-bottom: -1px;
+      max-width: 100%;
 
       .navbar-logo {
         @apply flex;
@@ -259,7 +267,11 @@
           @apply pl-5;
           @apply text-gray-750;
           @apply h-full;
-          @apply pt-10;
+          @apply pb-3;
+          @apply pt-1;
+          @apply flex;
+          @apply items-end;
+          border-bottom: 3px solid transparent;
 
           &:focus {
             box-shadow: 0 0 3px 4px $tailwind-accent-cool;
@@ -275,17 +287,18 @@
 
         .desktop-header-button {
           @apply pt-7;
-          border-bottom: 4px solid transparent;
+          border-bottom: 3px solid transparent;
         }
 
         .navbar-dropdown-container {
           background-color: white;
           position: absolute;
-          margin-left: -124px;
+          margin-left: -123px;
           margin-top: 35px;
           @apply border-gray-450;
           @apply border;
-          width: 144px;
+          border-top: none;
+          width: 143px;
           .navbar-dropdown {
             display: flex;
             flex-direction: column;
@@ -304,6 +317,7 @@
               @apply normal-case;
               font-size: 14px;
               text-align: left;
+              @apply w-full;
               &:hover,
               &:focus {
                 @apply bg-gray-400;
