@@ -5,6 +5,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ListingProgram } from "./listing-program.entity"
+import { FormMetadata } from "../../applications/types/form-metadata/form-metadata"
 
 @Entity({ name: "programs" })
 class Program extends AbstractEntity {
@@ -43,6 +44,13 @@ class Program extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Jurisdiction)
   jurisdictions: Jurisdiction[]
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => FormMetadata)
+  formMetadata?: FormMetadata
 }
 
 export { Program as default, Program }
