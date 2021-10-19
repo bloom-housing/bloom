@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@bloom-housing/ui-components": "^2.0.0-alpha.1",
+    "@bloom-housing/shared-helpers": "1.0.6-alpha.0",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
