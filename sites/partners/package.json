@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "2.0.0-pre-tailwind.0",
+  "version": "2.0.0-pre-tailwind.1",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -18,8 +18,8 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^2.0.0-alpha.1",
-    "@bloom-housing/shared-helpers": "1.0.6-alpha.0",
+    "@bloom-housing/shared-helpers": "^1.0.6-alpha.1",
+    "@bloom-housing/ui-components": "^2.0.0-alpha.2",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",

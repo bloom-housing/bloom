@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.0...@bloom-housing/public@2.0.0-pre-tailwind.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* Remove shared-helpers dependency from ui-components ([#2032](https://github.com/bloom-housing/bloom/issues/2032)) ([dba201f](https://github.com/bloom-housing/bloom/commit/dba201fa62523c59fc160addab793a7eac20609f))
+
+
+
+
+
 # 2.0.0-pre-tailwind.0 (2021-10-19)
 
 ### Bug Fixes
