@@ -874,6 +874,7 @@ const coliseumUnits: Array<UnitSeedType> = [
 ]
 
 const coliseumListing: ListingSeedType = {
+  jurisdictionName: "Alameda",
   applicationAddress: {
     county: "Alameda",
     city: "Oakland",
