@@ -15,7 +15,7 @@ import {
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { relationshipKeys } from "@bloom-housing/shared-helpers"
+import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "./FormTypes"
 
@@ -213,6 +213,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             dataKey="address"
             type="residence-member"
             register={register}
+            stateKeys={stateKeys}
           />
         )}
 
@@ -222,6 +223,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
             dataKey="workAddress"
             type="work"
             register={register}
+            stateKeys={stateKeys}
           />
         )}
       </div>
