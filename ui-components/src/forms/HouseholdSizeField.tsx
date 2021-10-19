@@ -7,7 +7,7 @@ import { UseFormMethods, FieldError } from "react-hook-form"
 export interface HouseholdSizeFieldProps {
   assistanceUrl: string
   clearErrors: () => void
-  error: FieldError
+  error: FieldError | null
   householdSize: number
   householdSizeMax: number
   householdSizeMin: number
