@@ -117,6 +117,7 @@ export class ListingDefaultSeed {
             title: getDisplaceePreference().title,
           }),
           ordinal: 2,
+          page: 1,
         },
       ],
       events: getDefaultListingEvents(),

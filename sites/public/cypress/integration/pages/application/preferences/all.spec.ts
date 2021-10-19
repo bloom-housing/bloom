@@ -77,7 +77,7 @@ describe("applications/preferences/all", function () {
 
     // fill Displaced Tenant preference
     cy.getByID(displacedTenantGeneralId).check()
-    cy.getByID("application.preferences.options.displacedTenant.general.name").select(
+    cy.getByID("application.preferences.options.displacedTenant.general.name").type(
       this.data["claimant"]
     )
     cy.getByID("application.preferences.options.displacedTenant.general.address.street").type(
@@ -98,7 +98,7 @@ describe("applications/preferences/all", function () {
 
     // fill Mission Corridor
     cy.getByID(displacedTenantMissionId).check()
-    cy.getByID("application.preferences.options.displacedTenant.missionCorridor.name").select(
+    cy.getByID("application.preferences.options.displacedTenant.missionCorridor.name").type(
       this.data["claimant"]
     )
     cy.getByID(
