@@ -582,15 +582,29 @@ describe("Applications", () => {
       lastName: "Last",
       dob: new Date(),
     }
-    const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
       .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
-    expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
     expect(res.body).toHaveProperty("email")
     expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
+
+    const confirmation = await supertest(app.getHttpServer())
+      .put(`/user/${res.body.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .send({
+        ...res.body,
+        confirmedAt: new Date(),
+      })
+      .expect(200)
+
+    expect(confirmation.body.confirmedAt).toBeDefined()
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email.toLowerCase(), password: userCreateDto.password })
+      .expect(201)
   })
 })
