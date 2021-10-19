@@ -15,6 +15,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### BREAKING CHANGES
 
-- moves form keys out of ui-components
-
-- fix: demographics typing
+- Move form keys out of ui-components
