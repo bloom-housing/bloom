@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
 
 ## v2.0.0-pre-tailwind 09/16/2021
