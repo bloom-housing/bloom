@@ -13,6 +13,10 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
+export enum AnotherAddressEnum {
+  anotherAddress = "anotherAddress",
+}
+
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
     month: string
@@ -58,13 +62,13 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   reviewOrderQuestion?: string
   waitlistOpenQuestion?: YesNoAnswer
   waitlistSizeQuestion?: YesNoAnswer
-  whereApplicationsDroppedOff?: ListingApplicationAddressType
-  whereApplicationsPickedUp?: ListingApplicationAddressType
+  whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
+  whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
 }
 
 export const addressTypes = {
   ...ListingApplicationAddressType,
-  anotherAddress: "anotherAddress",
+  anotherAddress: AnotherAddressEnum.anotherAddress,
 }
 
 export type AlertErrorType = "api" | "form"

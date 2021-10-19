@@ -13,7 +13,7 @@ export default class Formatter {
   }
 
   /** Format the data object */
-  format(): void {
+  format() {
     if (this.alreadyFormatted)
       throw new Error(
         "Cannot run formatter a second time on the same dataset. Call `importData' first."
@@ -21,9 +21,18 @@ export default class Formatter {
 
     this.process()
     this.alreadyFormatted = true
+    return this
   }
 
   /** Override in subclass */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected process(): void {}
+
+  processBoolean(
+    key: string,
+    { when, yes, no }: { when: boolean; yes: () => unknown; no?: () => unknown }
+  ) {
+    if (!no) no = () => null
+    this.data[key] = when ? yes() : no()
+  }
 }
