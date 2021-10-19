@@ -7,10 +7,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @bloom-housing/backend-core
 
-
-
-
-
 # 2.0.0-pre-tailwind.0 (2021-10-19)
 
 ### Bug Fixes
