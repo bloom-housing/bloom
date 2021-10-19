@@ -6,6 +6,8 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
@@ -1038,6 +1040,22 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         { ...getHopwaPreference(), ordinal: 3, page: 3 },
       ],
       events: [],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+          page: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+          page: 2,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)

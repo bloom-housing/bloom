@@ -13,13 +13,7 @@ class Program extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  question?: string | null
-
-  @Column({ type: "text", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  description?: string | null
+  title?: string | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -31,7 +25,7 @@ class Program extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  subdescription?: string | null
+  description?: string | null
 
   @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.program)
   @Expose()

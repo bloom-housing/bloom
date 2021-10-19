@@ -329,10 +329,9 @@ describe("Listings", () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
     const listing: ListingUpdateDto = { ...res.body.items[0] }
     const newProgram = await programsRepository.save({
-      question: "TestQuestion",
+      title: "TestTitle",
       subtitle: "TestSubtitle",
       description: "TestDescription",
-      subdescription: "TestDescription",
     })
     listing.listingPrograms = [{ program: newProgram, ordinal: 1, page: 1 }]
 
@@ -347,7 +346,7 @@ describe("Listings", () => {
       .expect(200)
 
     expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
-    expect(listingResponse.body.listingPrograms[0].program.question).toBe(newProgram.question)
+    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
     expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
     expect(listingResponse.body.listingPrograms[0].page).toBe(1)
 
