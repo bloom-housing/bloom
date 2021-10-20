@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose, Type } from "class-transformer"
 import {
@@ -16,6 +16,7 @@ import { Application } from "./application.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 @Entity()
+@Index(["application"])
 export class HouseholdMember extends AbstractEntity {
   @Column({ nullable: true })
   @Expose()

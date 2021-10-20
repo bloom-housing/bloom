@@ -80,6 +80,15 @@ describe("Jurisdictions", () => {
       .get(`/jurisdictions/byName/${res.body.name}`)
       .expect(200)
     expect(getByName.body.name).toBe("test2")
+    expect(getByName.body.languages[0]).toBe(Language.en)
+  })
+
+  it(`should not allow to create a jurisdiction with unsupported language`, async () => {
+    const res = await supertest(app.getHttpServer())
+      .post(`/jurisdictions`)
+      .set(...setAuthorization(adminAccesstoken))
+      .send({ name: "test2", languages: ["non_existent_language"] })
+      .expect(400)
   })
 
   afterEach(() => {

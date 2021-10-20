@@ -4,7 +4,6 @@ export class addLanguageToJurisdiction1634213955270 implements MigrationInterfac
   name = "addLanguageToJurisdiction1634213955270"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "listings" DROP COLUMN "csv_formatting_type"`)
     await queryRunner.query(
       `CREATE TYPE "jurisdictions_languages_enum" AS ENUM('en', 'es', 'vi', 'zh')`
     )
@@ -16,8 +15,5 @@ export class addLanguageToJurisdiction1634213955270 implements MigrationInterfac
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "jurisdictions" DROP COLUMN "languages"`)
     await queryRunner.query(`DROP TYPE "jurisdictions_languages_enum"`)
-    await queryRunner.query(
-      `ALTER TABLE "listings" ADD "csv_formatting_type" character varying NOT NULL DEFAULT 'basic'`
-    )
   }
 }

@@ -41,7 +41,7 @@ const ApplicationAddMembers = () => {
   const applicant = application.applicant
 
   const editMember = (orderId: number) => {
-    if (orderId != undefined && orderId >= 0) {
+    if (orderId !== undefined && orderId >= 0) {
       void router.push({
         pathname: "/applications/household/member",
         query: { memberId: orderId },
@@ -89,7 +89,7 @@ const ApplicationAddMembers = () => {
           )}
         </div>
 
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form>
           <div>
             <HouseholdSizeField
               assistanceUrl={t("application.household.assistanceUrl")}
