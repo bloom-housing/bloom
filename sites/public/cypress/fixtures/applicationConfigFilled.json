@@ -80,7 +80,7 @@
   "incomePeriod": "perMonth",
   "householdMembers": [
     {
-      "orderId": 0,
+      "memberId": 0,
       "firstName": "Member Name",
       "middleName": "Member Middle Name",
       "lastName": "Member Last Name",
