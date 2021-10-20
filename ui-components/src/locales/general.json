@@ -588,7 +588,8 @@
     "confirmAccount": "Confirm Acount",
     "accountConfirmed": "Account confirmed",
     "resendInvite": "Resend Invite",
-    "userUpdated": "User updated"
+    "userUpdated": "User updated",
+    "userDeleted": "User deleted"
   },
   "flags": {
     "flaggedSet": "Flagged Set",

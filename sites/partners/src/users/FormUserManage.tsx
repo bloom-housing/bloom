@@ -95,6 +95,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   const { mutate: sendInvite, isLoading: isSendInviteLoading } = useMutate()
   const { mutate: resendConfirmation, isLoading: isResendConfirmationLoading } = useMutate()
   const { mutate: updateUser, isLoading: isUpdateUserLoading } = useMutate()
+  const { mutate: deleteUser, isLoading: isDeleteUserLoading } = useMutate()
 
   const createUserBody = useCallback(async () => {
     const { firstName, lastName, email, role } = getValues()
@@ -224,9 +225,25 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   }, [createUserBody, onDrawerClose, updateUser, userService, user])
 
   const onDelete = () => {
-    // TODO implement delete action
-    console.log("delete user")
-    setDeleteModalActive(false)
+    const userId = user.id
+
+    void deleteUser(() =>
+      userService
+        .delete({
+          userId,
+        })
+        .then(() => {
+          setSiteAlertMessage(t(`users.userDeleted`), "success")
+        })
+        .catch(() => {
+          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+        })
+        .finally(() => {
+          onDrawerClose()
+          setDeleteModalActive(false)
+          void router.reload()
+        })
+    )
   }
 
   return (
@@ -425,6 +442,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           <Button
             type="button"
             styleType={AppearanceStyleType.alert}
+            loading={isDeleteUserLoading}
             onClick={() => {
               onDelete()
             }}
