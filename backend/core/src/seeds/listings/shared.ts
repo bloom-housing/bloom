@@ -460,6 +460,7 @@ export function getDefaultListing() {
 }
 
 export const defaultListing: ListingSeedType = {
+  jurisdictionName: "Alameda",
   applicationAddress: {
     city: "San Francisco",
     state: "CA",
