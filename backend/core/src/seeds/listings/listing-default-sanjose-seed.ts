@@ -25,7 +25,7 @@ import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
 
-export class ListingDefaultSeed {
+export class ListingDefaultSanJoseSeed {
   constructor(
     @InjectRepository(Listing) protected readonly listingRepository: Repository<Listing>,
     @InjectRepository(UnitAccessibilityPriorityType)
@@ -98,12 +98,12 @@ export class ListingDefaultSeed {
           ],
         },
       ],
-      name: "Test: Default, Two Preferences",
+      name: "Test: San Jose, Two Preferences",
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
       events: getDefaultListingEvents(),
-      jurisdictionName: "Alameda",
+      jurisdictionName: "San Jose",
     }
 
     return await this.listingRepository.save(listingCreateDto)
