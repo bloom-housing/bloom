@@ -54,11 +54,17 @@ export class UserService {
   ) {}
 
   public async findByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: { email: email.toLowerCase() },
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: options,
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async list(
