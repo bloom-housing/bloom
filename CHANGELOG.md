@@ -79,7 +79,7 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
   - Visual bugs with SiteHeader ([#2010](https://github.com/bloom-housing/bloom/pull/2010)) (Emily Jablonski)
-
+  - HouseholdSizeField bug when householdSizeMax is 0 ([#1991](https://github.com/bloom-housing/bloom/pull/1991)) (Yazeed)
 - Changed:
 
   - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
