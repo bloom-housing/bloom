@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -45,6 +46,7 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 
 @Entity({ name: "listings" })
+@Index(["jurisdiction"])
 class Listing extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
