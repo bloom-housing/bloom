@@ -76,7 +76,6 @@ export class ApplicationCsvExporter {
       " id",
       "appUrl",
       "createdAt",
-      "confirmationCode",
       "deletedAt",
       "listingId",
       "noEmail",

@@ -746,8 +746,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.closed)
             }}
           >
             {t("listings.actions.close")}
@@ -776,10 +776,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             type="button"
             styleType={AppearanceStyleType.success}
-            onClick={async () => {
-              // If we don't await here, the scroll block stays in place on modal close
-              /* eslint-disable-next-line @typescript-eslint/await-thenable */
-              await setPublishModal(false)
+            onClick={() => {
+              setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >

@@ -61,6 +61,14 @@ export class UserService {
     return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
   }
 
+  public async findOneOrFail(options: FindConditions<User>) {
+    const user = await this.find(options)
+    if (!user) {
+      throw new NotFoundException()
+    }
+    return user
+  }
+
   public async list(
     params: UserListQueryParams,
     authContext: AuthContext
@@ -329,5 +337,13 @@ export class UserService {
       UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
     )
     return user
+  }
+
+  async delete(userId: string) {
+    const user = await this.userRepository.findOne({ id: userId })
+    if (!user) {
+      throw new NotFoundException()
+    }
+    await this.userRepository.remove(user)
   }
 }

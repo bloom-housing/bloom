@@ -570,4 +570,39 @@ describe("Applications", () => {
       true
     )
   })
+
+  it("should get and delete a user by ID", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.id).toBe(user.id)
+    expect(res.body.email).toBe(user.email)
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(404)
+  })
 })

@@ -116,28 +116,37 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
     "listings.unitTypes.threeBdrm",
     "listings.unitTypes.fourBdrm",
   ]
-
+  // this is to map currentHouseholdSize to a units max occupancy
+  const unitOccupancy = []
   if (showUnitType) {
     // the unit types used by the listing
-    const selectedUnitTypeNames = units.reduce((obj, unit) => {
+    const selectedUnitTypes = units.reduce((obj, unit) => {
       if (unit.unitType) {
-        obj[unit.unitType.name] = unit.unitType.numBedrooms
+        obj[unit.unitType.name] = {
+          rooms: unit.unitType.numBedrooms,
+          maxOccupancy: unit.maxOccupancy,
+        }
       }
       return obj
     }, {})
-    const sortedUnitTypeNames = Object.keys(selectedUnitTypeNames).sort((a, b) =>
-      selectedUnitTypeNames[a] < selectedUnitTypeNames[b]
+    const sortedUnitTypeNames = Object.keys(selectedUnitTypes).sort((a, b) =>
+      selectedUnitTypes[a].rooms < selectedUnitTypes[b].rooms
         ? -1
-        : selectedUnitTypeNames[a] > selectedUnitTypeNames[b]
+        : selectedUnitTypes[a].rooms > selectedUnitTypes[b].rooms
         ? 1
         : 0
     )
     // setbmrHeaders based on the actual units
-    bmrHeaders = sortedUnitTypeNames.map((name) => `listings.unitTypes.${name}`)
+    bmrHeaders = sortedUnitTypeNames.map((type) => `listings.unitTypes.${type}`)
 
-    // if showUnitType, we want to set the maxHouseholdSize to the largest unit.numBedrooms
+    // set unitOccupancy based off of a units max occupancy
+    sortedUnitTypeNames.forEach((name) => {
+      unitOccupancy.push(selectedUnitTypes[name].maxOccupancy)
+    })
+
+    // if showUnitType, we want to set the maxHouseholdSize to the largest unit.maxOccupancy
     const largestBedroom = Math.max(...units.map((unit) => unit.unitType?.numBedrooms || 0))
-    maxHouseholdSize = largestBedroom
+    maxHouseholdSize = largestBedroom + 1
   }
 
   const hmiRows = [] as AnyDict[]
@@ -172,7 +181,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
   // Build row data by household size
   new Array(maxHouseholdSize).fill(maxHouseholdSize).forEach((_, index) => {
-    const currentHouseholdSize = index + 1
+    const currentHouseholdSize = showUnitType ? unitOccupancy[index] : index + 1
     const rowData = {
       sizeColumn: showUnitType ? bmrHeaders[index] : currentHouseholdSize,
     }

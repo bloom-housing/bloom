@@ -11,7 +11,7 @@ import {
   PhoneField,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { altContactRelationshipKeys } from "@bloom-housing/shared-helpers"
+import { altContactRelationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 
 const FormAlternateContact = () => {
   const formMethods = useFormContext()
@@ -143,6 +143,7 @@ const FormAlternateContact = () => {
           dataKey="application.alternateContact.mailingAddress"
           type="alternate"
           register={register}
+          stateKeys={stateKeys}
         />
       </GridSection>
     </GridSection>
