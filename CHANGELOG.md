@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Fixed:
 
+  - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
 
 ## Backend
@@ -56,6 +57,7 @@ All notable changes to this project will be documented in this file. The format 
   - Listings management AMI charts populate after Save and New on units ([#1952](https://github.com/bloom-housing/bloom/pull/1952)) (Emily Jablonski)
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
+  - Page now scrolls after closing modal ([#1962](https://github.com/bloom-housing/bloom/pull/1962)) (Emily Jablonski)
 
 - Changed:
 
@@ -82,6 +84,7 @@ All notable changes to this project will be documented in this file. The format 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
+  - Visual bugs with SiteHeader ([#2010](https://github.com/bloom-housing/bloom/pull/2010)) (Emily Jablonski)
 
 - Changed:
 
@@ -135,6 +138,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 
 - Changed:
 

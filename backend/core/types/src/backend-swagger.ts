@@ -901,6 +901,50 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      userId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{userId}"
+      url = url.replace("{userId}", params["userId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /**  */
+      userId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{userId}"
+      url = url.replace("{userId}", params["userId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserProfileService {
@@ -3825,6 +3869,9 @@ export interface UserUpdate {
 
   /**  */
   jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
 
   /**  */
   confirmedAt?: Date
