@@ -38,7 +38,6 @@ export class addListingPreferencesIntermediateRelation1633359409242 implements M
       uniquePreferences.map((pref) => pref.id),
     ])
     await queryRunner.query(`ALTER TABLE "preferences" DROP COLUMN "ordinal"`)
-    await queryRunner.query(`ALTER TABLE "preferences" DROP COLUMN "page"`)
     await queryRunner.query(
       `ALTER TABLE "preferences" DROP CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a"`
     )
@@ -51,7 +50,6 @@ export class addListingPreferencesIntermediateRelation1633359409242 implements M
       `ALTER TABLE "preferences" ADD CONSTRAINT "FK_91017f2182ec7b0dcd4abe68b5a" FOREIGN KEY ("listing_id") REFERENCES "listings"("id") ON DELETE CASCADE ON UPDATE CASCADE`
     )
     await queryRunner.query(`ALTER TABLE "preferences" ADD "ordinal" integer`)
-    await queryRunner.query(`ALTER TABLE "preferences" ADD "page" integer`)
     await queryRunner.query(
       `ALTER TABLE "listing_preferences" DROP CONSTRAINT "FK_797708bfa7897f574b8eb73cdcb"`
     )
