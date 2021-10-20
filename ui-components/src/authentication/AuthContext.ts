@@ -14,6 +14,7 @@ import {
   UnitAccessibilityPriorityTypesService,
   UnitTypesService,
   PreferencesService,
+  JurisdictionsService,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -36,6 +37,7 @@ type ContextProps = {
   applicationsService: ApplicationsService
   applicationFlaggedSetsService: ApplicationFlaggedSetsService
   listingsService: ListingsService
+  jurisdictionsService: JurisdictionsService
   userService: UserService
   authService: AuthService
   preferencesService: PreferencesService
@@ -221,6 +223,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     applicationsService: new ApplicationsService(),
     applicationFlaggedSetsService: new ApplicationFlaggedSetsService(),
     listingsService: new ListingsService(),
+    jurisdictionsService: new JurisdictionsService(),
     userService: new UserService(),
     authService: new AuthService(),
     preferencesService: new PreferencesService(),

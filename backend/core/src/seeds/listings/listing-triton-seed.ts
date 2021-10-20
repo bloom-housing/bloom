@@ -684,6 +684,7 @@ const tritonUnits: Array<UnitSeedType> = [
 ]
 
 const tritonListing: ListingSeedType = {
+  jurisdictionName: "Alameda",
   applicationAddress: {
     city: "Foster City",
     state: "CA",
