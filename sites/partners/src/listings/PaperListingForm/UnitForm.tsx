@@ -28,7 +28,7 @@ import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/hel
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
-  onClose: (reopen: boolean, defaultUnit: TempUnit) => void
+  onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   defaultUnit: TempUnit | undefined
   nextId: number
   draft: boolean
@@ -233,7 +233,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const copyAndNew = () => {
     const data = getValues()
     const formData = formatFormData(data)
-    onClose(true, formData)
+    onClose(true, false, formData)
     void resetDefaultValues()
   }
 
@@ -246,10 +246,11 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     const formData = formatFormData(data)
 
     // If we're looking at a draft unit in the drawer
+    // Save --> creates a new unit, drawer stays open on that unit
     // Save and New --> creates a new unit, opens a draft empty drawer
     // Save & Exit --> creates a new unit, closes the drawer
     // If we're looking at a saved unit
-    // Copy & New --> does not create a new unit, opens a draft drawer with same data
+    // Make a Copy --> does not create a new unit, opens a draft drawer with same data
     // Save & New --> does not create a new unit, submits changes with existing ID, opens a draft empty drawer
     // Save & Exit --> does not create a new unit, submits changes with existing ID, closes the drawer
 
@@ -258,7 +259,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         ...formData,
         tempId: draft ? nextId : defaultUnit.tempId,
       })
-      onClose(true, null)
+      onClose(true, false, null)
       reset()
       setValue("status", "available")
       setLoading(false)
@@ -268,14 +269,17 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
         ...formData,
         tempId: draft ? nextId : defaultUnit.tempId,
       })
-      onClose(false, null)
+      onClose(false, false, null)
     }
     if (action === "save") {
       onSubmit({
         ...formData,
-        tempId: draft ? nextId : defaultUnit.tempId,
+        tempId: nextId,
       })
-      onClose(true, formData)
+      onClose(false, true, {
+        ...formData,
+        tempId: nextId,
+      })
     }
   }
 
@@ -612,7 +616,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
         <Button
           type="button"
-          onClick={() => onClose(false, null)}
+          onClick={() => onClose(false, false, null)}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >

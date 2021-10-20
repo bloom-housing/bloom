@@ -28,6 +28,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)
   const [defaultUnit, setDefaultUnit] = useState<TempUnit | null>(null)
+  const [toastContent, setToastContent] = useState(null)
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -195,17 +196,25 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
         }
         ariaDescription={t("listings.unit.add")}
         onClose={() => setUnitDrawerOpen(false)}
-        toastContent={"Example toast"}
+        toastContent={toastContent}
         toastStyle={"success"}
       >
         <UnitForm
-          onSubmit={(unit) => saveUnit(unit)}
-          onClose={(reopen: boolean, defaultUnit: TempUnit) => {
+          onSubmit={(unit) => {
+            setToastContent(null)
+            saveUnit(unit)
+          }}
+          onClose={(openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => {
             setDefaultUnit(defaultUnit)
-            if (reopen) {
+            if (openNextUnit) {
+              if (defaultUnit) {
+                setToastContent(t("listings.unit.unitCopied"))
+              }
               editUnit(nextId)
-            } else {
+            } else if (!openCurrentUnit) {
               setUnitDrawerOpen(false)
+            } else {
+              setToastContent(t("listings.unit.unitSaved"))
             }
           }}
           draft={!units.some((unit) => unit.tempId === defaultUnit?.tempId)}

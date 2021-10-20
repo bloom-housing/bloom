@@ -51,7 +51,7 @@ const Drawer = (props: DrawerProps) => {
             </Tag>
           )}
           {props.toastContent && (
-            <AlertBox type={props.toastStyle} narrow={true} className={"ml-4"}>
+            <AlertBox type={props.toastStyle} narrow={true} className={"ml-4"} closeable={true}>
               {props.toastContent}
             </AlertBox>
           )}

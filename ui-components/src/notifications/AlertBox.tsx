@@ -33,7 +33,6 @@ const AlertBox = (props: AlertBoxProps) => {
     ...(props.className ? [props.className] : []),
     ...(props.boundToLayoutWidth ? [] : ["fullWidth"]),
     ...(props.narrow ? ["narrow"] : []),
-    ...(props.closeable ? ["pr-10"] : ["pr-4"]),
   ].join(" ")
 
   if (onClose) closeable = true
