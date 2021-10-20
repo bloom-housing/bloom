@@ -132,6 +132,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 
 - Changed:
 
