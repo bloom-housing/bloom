@@ -115,7 +115,7 @@ export async function fetchBaseListingData() {
   return listingData
 }
 
-let jurisdiction: Jurisdiction
+let jurisdiction: Jurisdiction | null = null
 
 export async function fetchJurisdictionByName() {
   try {
@@ -128,9 +128,9 @@ export async function fetchJurisdictionByName() {
       `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
     )
     jurisdiction = jurisdictionRes?.data
-
-    return jurisdiction
   } catch (error) {
     console.log("error = ", error)
   }
+
+  return jurisdiction
 }

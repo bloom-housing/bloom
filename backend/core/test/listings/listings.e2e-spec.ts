@@ -124,7 +124,6 @@ describe("Listings", () => {
 
   it("should return listings with matching Alameda jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
-    expect(jurisdictions.length).toBe(4)
     const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
     const queryParams = {
       limit: "all",
