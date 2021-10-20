@@ -129,7 +129,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
-  - Adds Program entity to Listing (Many to Many) and to Jurisdiction (Many to many) ([1968](https://github.com/bloom-housing/bloom/pull/1968))
+  - Adds Program entity to Listing (Many to Many) and to Jurisdiction (Many to many) and seed programs ([1968](https://github.com/bloom-housing/bloom/pull/1968))
 
 - Changed:
 

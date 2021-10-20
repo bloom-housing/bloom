@@ -3,6 +3,7 @@ import {
   AssetDtoSeedType,
   ListingSeedType,
   PreferenceSeedType,
+  ProgramSeedType,
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
@@ -678,6 +679,116 @@ export const hopwaPreference: PreferenceSeedType = {
     options: [
       {
         key: "hopwa",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+// programs
+
+export function getServedInMilitaryProgram() {
+  return JSON.parse(JSON.stringify(servedInMilitaryProgram))
+}
+
+export const servedInMilitaryProgram: ProgramSeedType = {
+  title: "Have you or anyone in your household served in the US military?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "servedInMilitary",
+    options: [
+      {
+        key: "servedInMilitary",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getTayProgram() {
+  return JSON.parse(JSON.stringify(tayProgram))
+}
+
+export const tayProgram: ProgramSeedType = {
+  title:
+    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "tay",
+    options: [
+      {
+        key: "tay",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getDisabilityOrMentalIlnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+}
+
+export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
+  title: "Do you or anyone in your household have a developmental disability or mental illness?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "disabilityOrMentalIllness",
+    options: [
+      {
+        key: "disabilityOrMentalIllness",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getHousingSituationProgram() {
+  return JSON.parse(JSON.stringify(housingSituationProgram))
+}
+
+export const housingSituationProgram: ProgramSeedType = {
+  title: "Thinking about the past 30 days, do either of these describe your housing situation?",
+  subtitle: "",
+  description: "",
+  formMetadata: {
+    key: "housingSituation",
+    options: [
+      {
+        key: "notPermanent",
+        extraData: [],
+      },
+      {
+        key: "homeless",
         extraData: [],
       },
       {

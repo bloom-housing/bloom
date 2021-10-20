@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
-import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
+import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -10,8 +10,6 @@ import { AuthModule } from "../../src/auth/auth.module"
 import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
-import { Repository } from "typeorm"
-import { Program } from "../../src/program/entities/program.entity"
 import { ProgramsModule } from "../../src/program/programs.module"
 import { ProgramCreateDto } from "../../src/program/dto/program-create.dto"
 
@@ -24,7 +22,6 @@ jest.setTimeout(30000)
 describe("Programs", () => {
   let app: INestApplication
   let adminAccessToken: string
-  let programsRepository: Repository<Program>
 
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
@@ -40,7 +37,6 @@ describe("Programs", () => {
     app = applicationSetup(app)
     await app.init()
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   })
 
   it(`should return programs`, async () => {
@@ -53,10 +49,9 @@ describe("Programs", () => {
 
   it(`should create and return a new program`, async () => {
     const newProgram: ProgramCreateDto = {
-      question: "question",
+      title: "title",
       description: "description",
       subtitle: "subtitle",
-      subdescription: "subdescription",
     }
     const res = await supertest(app.getHttpServer())
       .post(`/programs`)
@@ -67,11 +62,11 @@ describe("Programs", () => {
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
     expect(res.body.id).toBe(res.body.id)
-    expect(res.body.question).toBe(newProgram.question)
+    expect(res.body.title).toBe(newProgram.title)
 
     const getById = await supertest(app.getHttpServer()).get(`/programs/${res.body.id}`).expect(200)
     expect(getById.body.id).toBe(res.body.id)
-    expect(getById.body.question).toBe(newProgram.question)
+    expect(getById.body.title).toBe(newProgram.title)
   })
 
   afterEach(() => {

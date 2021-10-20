@@ -16,8 +16,12 @@ import {
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
+  getDisabilityOrMentalIlnessProgram,
   getDisplaceePreference,
+  getHousingSituationProgram,
   getLiveWorkPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
@@ -84,13 +88,6 @@ export class ListingDefaultSeed {
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
     const newUnits = await this.unitsRepository.save(unitsToBeCreated)
 
-    const newProgram = await this.programsRepository.save({
-      question: "Default question",
-      subtitle: "Default subtitle",
-      description: "Default description",
-      subdescription: "Default subdescription",
-    })
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
@@ -113,7 +110,36 @@ export class ListingDefaultSeed {
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
       events: getDefaultListingEvents(),
-      listingPrograms: [{ program: newProgram, ordinal: 1, page: 1 }],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+          page: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+          page: 2,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getDisabilityOrMentalIlnessProgram().title,
+          }),
+          ordinal: 3,
+          page: 3,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getHousingSituationProgram().title,
+          }),
+          ordinal: 4,
+          page: 4,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)
