@@ -96,6 +96,8 @@ export class User {
     eager: true,
     cascade: true,
     nullable: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @Expose()
   roles?: UserRoles

@@ -6,6 +6,8 @@ import { User } from "./user.entity"
 export class UserRoles {
   @OneToOne(() => User, (user) => user.roles, {
     primary: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinColumn()
   user: User

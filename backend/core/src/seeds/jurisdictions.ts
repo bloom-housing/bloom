@@ -1,12 +1,13 @@
 import { INestApplicationContext } from "@nestjs/common"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { JurisdictionCreateDto } from "../jurisdictions/dto/jurisdiction.dto"
+import { Language } from "../shared/types/language-enum"
 
 export const defaultJurisdictions: JurisdictionCreateDto[] = [
-  { name: "Alameda" },
-  { name: "San Jose" },
-  { name: "San Mateo" },
-  { name: "Detroit" },
+  { name: "Alameda", languages: [Language.en] },
+  { name: "San Jose", languages: [Language.en] },
+  { name: "San Mateo", languages: [Language.en] },
+  { name: "Detroit", languages: [Language.en] },
 ]
 
 export async function createJurisdictions(app: INestApplicationContext) {

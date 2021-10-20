@@ -9,6 +9,7 @@ import { User } from "./auth/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
+import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
 import { defaultLeasingAgents } from "./seeds/listings/shared"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
@@ -52,6 +53,7 @@ const listingSeeds: any[] = [
   ListingDefaultMultipleAMI,
   ListingDefaultMultipleAMIAndPercentages,
   ListingDefaultMissingAMI,
+  ListingDefaultSanJoseSeed,
 ]
 
 export function getSeedListingsCount() {
@@ -102,8 +104,11 @@ const seedListings = async (
 
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
-    const listing = await listingSeed.seed()
-    listing.jurisdiction = jurisdictions[0]
+    const listing: Listing & { jurisdictionName?: string } = await listingSeed.seed()
+    // set jurisdiction based off of the name provided on the seed
+    listing.jurisdiction = jurisdictions.find(
+      (jurisdiction) => jurisdiction.name === listing.jurisdictionName
+    )
     listing.leasingAgents = [everyOtherAgent]
     const applicationMethods = await applicationMethodsService.create({
       type: ApplicationMethodType.Internal,

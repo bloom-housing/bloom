@@ -1,5 +1,5 @@
 import { Test } from "@nestjs/testing"
-import { TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
@@ -18,6 +18,8 @@ import { ListingEventType } from "../../src/listings/types/listing-event-type-en
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
+import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { Repository } from "typeorm"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -30,10 +32,12 @@ jest.setTimeout(30000)
 
 describe("Listings", () => {
   let app
+  let jurisdictionsRepository: Repository<Jurisdiction>
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
+        TypeOrmModule.forFeature([Jurisdiction]),
         ListingsModule,
         AssetsModule,
         ApplicationMethodsModule,
@@ -43,6 +47,9 @@ describe("Listings", () => {
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
+    jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
+      getRepositoryToken(Jurisdiction)
+    )
   })
 
   it("should return all listings", async () => {
@@ -66,12 +73,13 @@ describe("Listings", () => {
   it("should return the last page of paginated listings", async () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
-    const page = "2"
-    const limit = "12"
-    const params = "/?page=" + page + "&limit=" + limit
-    const res = await supertest(app.getHttpServer())
-      .get("/listings" + params)
-      .expect(200)
+    const queryParams = {
+      limit: 13,
+      page: 2,
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toEqual(1)
   })
 
@@ -107,10 +115,67 @@ describe("Listings", () => {
           zipcode: "94621,94404",
         },
       ],
+      view: "base",
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it("should return listings with matching Alameda jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: alameda.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(13)
+  })
+
+  it("should return listings with matching San Jose jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
+    const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanjose.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(1)
+  })
+
+  it("should return no listings with San Mateo jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
+    const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanmateo.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(0)
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {

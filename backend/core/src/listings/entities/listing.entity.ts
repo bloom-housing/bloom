@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -46,6 +47,7 @@ import { ApplicationMethodType } from "../../application-methods/types/applicati
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 @Entity({ name: "listings" })
+@Index(["jurisdiction"])
 class Listing extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
