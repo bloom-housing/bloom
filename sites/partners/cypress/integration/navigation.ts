@@ -27,7 +27,7 @@ describe("Navigating around the site", () => {
       cy.visit("/")
       cy.get("aside").contains("a").click()
       cy.contains("Send email")
-      cy.get('.alert-box').should('not.exist')
+      cy.get(".alert-box").should("not.exist")
     })
   })
 
