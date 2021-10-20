@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
+import { ListingsModule } from "../../src/listings/listings.module"
 import { applicationSetup } from "../../src/app.module"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
@@ -167,6 +167,62 @@ describe("Listings", () => {
 
   it("should return no listings with San Mateo jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
+    const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanmateo.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(0)
+  })
+
+  it("should return listings with matching Alameda jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: alameda.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(13)
+  })
+
+  it("should return listings with matching San Jose jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
+    const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanjose.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(1)
+  })
+
+  it("should return no listings with San Mateo jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
     const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
     const queryParams = {
       limit: "all",
