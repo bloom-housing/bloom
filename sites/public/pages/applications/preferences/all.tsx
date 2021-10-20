@@ -30,8 +30,7 @@ const ApplicationPreferencesAll = () => {
   const clientLoaded = OnClientSide()
   const { conductor, application, listing } = useFormConductor("preferencesAll")
   const preferences = listing?.listingPreferences
-  const uniquePages: number[] = [...Array.from(new Set(preferences?.map((item) => item.page)))]
-  const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages.length : 1)
+  const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
   const preferencesByPage = preferences?.filter((item) => {
     return item.page === page
@@ -93,8 +92,8 @@ const ApplicationPreferencesAll = () => {
   */
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
-    if (uniquePages.length > 1) {
-      // If we've split preferences across multiple pages, save the data in segments
+    if (preferences.length > 1) {
+      // If we've got more than one preference, save the data in segments
       const currentPreferences = conductor.currentStep.application.preferences.filter(
         (preference) => {
           return preference.key !== body[0].key
@@ -107,7 +106,7 @@ const ApplicationPreferencesAll = () => {
       conductor.currentStep.save(body)
     }
     // Update to the next page if we have more pages
-    if (page !== uniquePages.length) {
+    if (page !== preferences.length) {
       setPage(page + 1)
       return
     }
@@ -268,7 +267,7 @@ const ApplicationPreferencesAll = () => {
             conductor.setNavigatedBack(true)
             setPage(page - 1)
           }}
-          custom={page === uniquePages.length}
+          custom={page === preferences.length}
         />
 
         <div className="form-card__lead border-b">
