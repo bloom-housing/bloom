@@ -116,28 +116,24 @@ export class ListingDefaultSeed {
             title: getServedInMilitaryProgram().title,
           }),
           ordinal: 1,
-          page: 1,
         },
         {
           program: await this.programsRepository.findOneOrFail({
             title: getTayProgram().title,
           }),
           ordinal: 2,
-          page: 2,
         },
         {
           program: await this.programsRepository.findOneOrFail({
             title: getDisabilityOrMentalIlnessProgram().title,
           }),
           ordinal: 3,
-          page: 3,
         },
         {
           program: await this.programsRepository.findOneOrFail({
             title: getHousingSituationProgram().title,
           }),
           ordinal: 4,
-          page: 4,
         },
       ],
       jurisdictionName: "Alameda",

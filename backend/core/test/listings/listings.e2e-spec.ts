@@ -397,7 +397,7 @@ describe("Listings", () => {
       subtitle: "TestSubtitle",
       description: "TestDescription",
     })
-    listing.listingPrograms = [{ program: newProgram, ordinal: 1, page: 1 }]
+    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -412,7 +412,6 @@ describe("Listings", () => {
     expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
     expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
     expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
-    expect(listingResponse.body.listingPrograms[0].page).toBe(1)
 
     await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)

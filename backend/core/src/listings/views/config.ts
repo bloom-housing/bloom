@@ -46,7 +46,6 @@ const views: Views = {
       "amiChartOverride.items",
       "unitType.id",
       "unitType.name",
-      "listingPrograms.page",
       "listingPrograms.ordinal",
       "listingProgramsProgram.id",
     ],

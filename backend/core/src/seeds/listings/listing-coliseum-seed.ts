@@ -1047,14 +1047,12 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
             title: getServedInMilitaryProgram().title,
           }),
           ordinal: 1,
-          page: 1,
         },
         {
           program: await this.programsRepository.findOneOrFail({
             title: getTayProgram().title,
           }),
           ordinal: 2,
-          page: 2,
         },
       ],
     }
