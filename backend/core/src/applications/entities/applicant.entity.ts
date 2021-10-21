@@ -14,6 +14,7 @@ import {
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 @Entity()
 export class Applicant extends AbstractEntity {
@@ -65,6 +66,7 @@ export class Applicant extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   emailAddress?: string | null
 
   @Column({ type: "bool", nullable: true })

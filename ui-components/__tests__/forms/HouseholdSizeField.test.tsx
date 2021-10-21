@@ -32,7 +32,7 @@ const ErrorHouseholdSize = (props: ErrorHouseholdSizeProps) => {
     <HouseholdSizeField
       assistanceUrl={""}
       clearErrors={props.clearErrorsSpy}
-      error={{ message: "Uh oh!" }}
+      error={{ message: "Uh oh!", type: "validate" }}
       householdSize={1}
       householdSizeMax={3}
       householdSizeMin={2}

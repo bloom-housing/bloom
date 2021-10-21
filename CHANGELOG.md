@@ -85,6 +85,7 @@ All notable changes to this project will be documented in this file. The format 
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
   - Visual bugs with SiteHeader ([#2010](https://github.com/bloom-housing/bloom/pull/2010)) (Emily Jablonski)
+  - HouseholdSizeField bug when householdSizeMax is 0 ([#1991](https://github.com/bloom-housing/bloom/pull/1991)) (Yazeed)
 
 - Changed:
 
@@ -138,6 +139,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Add Language to Jurisidiction entity ([#1998](https://github.com/bloom-housing/bloom/pull/1998))
   - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 
 - Changed:
@@ -174,6 +176,7 @@ All notable changes to this project will be documented in this file. The format 
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
   - fix AFS totalFlagged missing in swagger documentation
+  - lower cases email during user creation, across saved users, and where that now lower cased email is compared to a possibly non-lower cased email ([#1972](https://github.com/bloom-housing/bloom/pull/1972)) (Yazeed)
 
 ### General
 

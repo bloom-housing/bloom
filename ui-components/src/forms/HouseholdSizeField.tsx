@@ -2,12 +2,12 @@ import React from "react"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { AlertBox, AlertNotice } from "../notifications"
-import { UseFormMethods } from "react-hook-form"
+import { UseFormMethods, FieldError } from "react-hook-form"
 
 export interface HouseholdSizeFieldProps {
   assistanceUrl: string
   clearErrors: () => void
-  error: any
+  error: FieldError | null
   householdSize: number
   householdSizeMax: number
   householdSizeMin: number
@@ -26,47 +26,45 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
     error,
     assistanceUrl,
   } = props
-
+  if (!householdSizeMax || !validate) {
+    return <></>
+  }
   return (
     <>
-      {householdSizeMax && validate && (
-        <>
-          <span className="hidden">
-            <input
-              className="invisible"
-              type="number"
-              id="householdSize"
-              name="householdSize"
-              defaultValue={householdSize}
-              ref={
-                householdSizeMax
-                  ? register({
-                      min: {
-                        value: householdSizeMin || 0,
-                        message: t("errors.householdTooSmall"),
-                      },
-                      max: {
-                        value: householdSizeMax,
-                        message: t("errors.householdTooBig"),
-                      },
-                    })
-                  : register
-              }
-            />
-          </span>
-          <ErrorMessage id={"householdsize-error"} error={error}>
-            <AlertBox type="alert" inverted onClose={() => clearErrors()}>
-              {t("application.household.dontQualifyHeader")}
-            </AlertBox>
-            <AlertNotice title={error?.message} type="alert" inverted>
-              <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
-              <p>
-                <a href={assistanceUrl}>{t("nav.getAssistance")}</a>
-              </p>
-            </AlertNotice>
-          </ErrorMessage>
-        </>
-      )}
+      <span className="hidden" aria-hidden="true">
+        <input
+          className="invisible"
+          type="number"
+          id="householdSize"
+          name="householdSize"
+          defaultValue={householdSize}
+          ref={
+            householdSizeMax
+              ? register({
+                  min: {
+                    value: householdSizeMin || 0,
+                    message: t("errors.householdTooSmall"),
+                  },
+                  max: {
+                    value: householdSizeMax,
+                    message: t("errors.householdTooBig"),
+                  },
+                })
+              : register
+          }
+        />
+      </span>
+      <ErrorMessage id={"householdsize-error"} error={!!error}>
+        <AlertBox type="alert" inverted onClose={() => clearErrors()}>
+          {t("application.household.dontQualifyHeader")}
+        </AlertBox>
+        <AlertNotice title={error?.message} type="alert" inverted>
+          <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
+          <p>
+            <a href={assistanceUrl}>{t("nav.getAssistance")}</a>
+          </p>
+        </AlertNotice>
+      </ErrorMessage>
     </>
   )
 }
