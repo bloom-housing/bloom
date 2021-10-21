@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.2...@bloom-housing/public@2.0.0-pre-tailwind.3) (2021-10-21)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [2.0.0-pre-tailwind.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.1...@bloom-housing/public@2.0.0-pre-tailwind.2) (2021-10-21)
 
 
