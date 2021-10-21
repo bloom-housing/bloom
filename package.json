@@ -15,7 +15,10 @@
       "**/@anchan828/nest-sendgrid"
     ]
   },
-  "repository": "https://github.com/Exygy/bloom.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bloom-housing/bloom.git"
+  },
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
