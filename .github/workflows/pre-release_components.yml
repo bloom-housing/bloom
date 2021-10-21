@@ -1,0 +1,28 @@
+name: Pre-release ui-components
+
+on:
+  # Triggers the workflow on push only for the dev branch
+  push:
+    branches: [ dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out git repo
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Version ui-components
+        run: yarn version:prerelease:ui-components
+        
+      - name: Publish ui-components
+        run: yarn publish:ui-components
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
