@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.1...@bloom-housing/backend-core@2.0.0-pre-tailwind.2) (2021-10-21)
+
+
+### Bug Fixes
+
+* **backend:** enforces lower casing of emails ([#1972](https://github.com/bloom-housing/bloom/issues/1972)) ([2608e82](https://github.com/bloom-housing/bloom/commit/2608e8228830a2fc7e6b522c73cb587adbb5803b))
+* migration fix ([#2043](https://github.com/bloom-housing/bloom/issues/2043)) ([ffa4d45](https://github.com/bloom-housing/bloom/commit/ffa4d45e0f53ce071fc4dcf8079c06cf5e836ed3))
+
+
+### Features
+
+* adds jurisdiction filtering to listings ([#2027](https://github.com/bloom-housing/bloom/issues/2027)) ([219696b](https://github.com/bloom-housing/bloom/commit/219696ba784cfc079dd5aec74b24c3a8479160b6))
+* **backend:** add languages (Language[]) to Jurisdiction entity ([#1998](https://github.com/bloom-housing/bloom/issues/1998)) ([9ceed24](https://github.com/bloom-housing/bloom/commit/9ceed24d48b14888e6ea59b421b409f875d12b01))
+* **backend:** Add user delete endpoint and expose leasingAgentInList… ([#1996](https://github.com/bloom-housing/bloom/issues/1996)) ([a13f735](https://github.com/bloom-housing/bloom/commit/a13f73574b470beff2f8948abb226a6786856480))
+* **backend:** make use of new application confirmation codes ([#2014](https://github.com/bloom-housing/bloom/issues/2014)) ([3c45c29](https://github.com/bloom-housing/bloom/commit/3c45c2904818200eed4568931d4cc352fd2f449e))
+* **backend:** try fixing SETEX redis e2e tests flakiness ([#2044](https://github.com/bloom-housing/bloom/issues/2044)) ([4087c53](https://github.com/bloom-housing/bloom/commit/4087c532ddba672a415a048f4362e509aba7fd7f))
+
+
+
+
+
 # [2.0.0-pre-tailwind.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.0...@bloom-housing/backend-core@2.0.0-pre-tailwind.1) (2021-10-19)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

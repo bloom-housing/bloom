@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/shared-helpers",
-  "version": "1.0.6-alpha.1",
+  "version": "1.0.6-alpha.2",
   "description": "Shared helpers for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared-helpers",
   "main": "index.js",
