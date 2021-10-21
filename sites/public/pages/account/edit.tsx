@@ -98,9 +98,15 @@ const Edit = () => {
       await userService.update({
         body: { ...profile, phoneNumber },
       })
-      setPhoneNumberAlert({ type: "success", message: `${t("account.settings.alerts.phoneNumberSuccess")}` })
+      setPhoneNumberAlert({
+        type: "success",
+        message: `${t("account.settings.alerts.phoneNumberSuccess")}`,
+      })
     } catch (err) {
-      setPhoneNumberAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      setPhoneNumberAlert({
+        type: "alert",
+        message: `${t("account.settings.alerts.genericError")}`,
+      })
       console.warn(err)
     }
   }
