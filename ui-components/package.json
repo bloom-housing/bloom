@@ -7,6 +7,9 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build-storybook": "build-storybook -c .storybook -s ./public",
     "start": "start-storybook -s ./public",

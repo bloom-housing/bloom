@@ -4,6 +4,9 @@
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
