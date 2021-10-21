@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Config user
+      - name: Config user name
         run: git config --global user.name github.context.workflow
+
+      - name: Config user email
         run: git config --global user.email "github-actions@github.com"
 
       - name: Check out git repo
