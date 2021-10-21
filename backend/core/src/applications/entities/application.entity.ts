@@ -61,7 +61,7 @@ export class Application extends AbstractEntity {
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "SET NULL" })
   user?: User | null
 
   @RelationId((application: Application) => application.user)
