@@ -23,6 +23,8 @@ jobs:
 
       - name: Version ui-components
         run: yarn version:prerelease:ui-components
+        env:
+          GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
         
       - name: Publish ui-components
         run: yarn publish:ui-components
