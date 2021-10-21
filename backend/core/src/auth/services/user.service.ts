@@ -54,11 +54,25 @@ export class UserService {
   ) {}
 
   public async findByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: { email: email.toLowerCase() },
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: options,
+      relations: ["leasingAgentInListings"],
+    })
+  }
+
+  public async findOneOrFail(options: FindConditions<User>) {
+    const user = await this.find(options)
+    if (!user) {
+      throw new NotFoundException()
+    }
+    return user
   }
 
   public async list(
@@ -329,5 +343,13 @@ export class UserService {
       UserService.getPartnersConfirmationUrl(this.configService.get("PARTNERS_PORTAL_URL"), user)
     )
     return user
+  }
+
+  async delete(userId: string) {
+    const user = await this.userRepository.findOne({ id: userId })
+    if (!user) {
+      throw new NotFoundException()
+    }
+    await this.userRepository.remove(user)
   }
 }

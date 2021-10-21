@@ -1,4 +1,11 @@
-import { AmiChart, Listing, ListingReviewOrder, ListingStatus, UnitStatus } from "./types"
+import {
+  AmiChart,
+  EnumJurisdictionLanguages,
+  Listing,
+  ListingReviewOrder,
+  ListingStatus,
+  UnitStatus,
+} from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
 
@@ -13,6 +20,7 @@ export const SanMateoHUD2019: AmiChart = {
     updatedAt: new Date(),
     name: "Alameda",
     programs: [],
+    languages: [EnumJurisdictionLanguages.en],
   },
   items: [
     {

@@ -55,7 +55,7 @@ const ApplicationTerms = () => {
         },
       })
       .then((result) => {
-        conductor.currentStep.save({ confirmationId: result.id })
+        conductor.currentStep.save({ confirmationId: result.confirmationCode })
         return router.push("/applications/review/confirmation")
       })
       .catch((err) => {
@@ -116,7 +116,7 @@ const ApplicationTerms = () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button loading={submitting} styleType={AppearanceStyleType.primary}>
+              <Button loading={submitting} styleType={AppearanceStyleType.primary} type="submit">
                 {t("t.submit")}
               </Button>
             </div>

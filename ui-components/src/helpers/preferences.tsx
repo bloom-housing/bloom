@@ -16,7 +16,6 @@ import {
   SelectOption,
   resolveObject,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
 
 type ExtraFieldProps = {
   metaKey: string
@@ -27,6 +26,7 @@ type ExtraFieldProps = {
   errors?: UseFormMethods["errors"]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hhMembersOptions?: SelectOption[]
+  stateKeys: string[]
 }
 
 type FormAddressProps = {
@@ -36,6 +36,7 @@ type FormAddressProps = {
   register: UseFormMethods["register"]
   errors?: UseFormMethods["errors"]
   required?: boolean
+  stateKeys: string[]
 }
 
 type AddressType =
@@ -62,6 +63,7 @@ export const ExtraField = ({
   register,
   errors,
   hhMembersOptions,
+  stateKeys,
 }: ExtraFieldProps) => {
   const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
 
@@ -91,6 +93,7 @@ export const ExtraField = ({
                 register={register}
                 errors={errors}
                 required={true}
+                stateKeys={stateKeys}
               />
             </div>
           )
@@ -140,6 +143,7 @@ export const FormAddress = ({
   register,
   errors,
   required,
+  stateKeys,
 }: FormAddressProps) => {
   return (
     <>

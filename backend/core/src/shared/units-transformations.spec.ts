@@ -1,6 +1,7 @@
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { UnitAmiChartOverride } from "../units/entities/unit-ami-chart-override.entity"
 import { mergeAmiChartWithOverrides } from "./units-transformations"
+import { Language } from "./types/language-enum"
 
 describe("Unit Transformations", () => {
   it("Ami chart items are correctly overwritten", () => {
@@ -32,6 +33,7 @@ describe("Unit Transformations", () => {
         updatedAt: new Date(),
         name: "name",
         programs: [],
+        languages: [Language.en],
       },
     }
 

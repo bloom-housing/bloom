@@ -13,7 +13,7 @@ import {
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
-import { phoneNumberKeys, contactPreferencesKeys } from "@bloom-housing/shared-helpers"
+import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const FormPrimaryApplicant = () => {
@@ -236,6 +236,7 @@ const FormPrimaryApplicant = () => {
         dataKey="application.applicant.address"
         type="residence"
         register={register}
+        stateKeys={stateKeys}
       />
 
       {mailingAddressValue && (
@@ -244,6 +245,7 @@ const FormPrimaryApplicant = () => {
           dataKey="application.mailingAddress"
           type="mailing"
           register={register}
+          stateKeys={stateKeys}
         />
       )}
 
@@ -253,6 +255,7 @@ const FormPrimaryApplicant = () => {
           dataKey="application.applicant.workAddress"
           type="work"
           register={register}
+          stateKeys={stateKeys}
         />
       )}
     </GridSection>

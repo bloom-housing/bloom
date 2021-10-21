@@ -16,21 +16,16 @@ import {
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
-  getDisabilityOrMentalIlnessProgram,
   getDisplaceePreference,
-  getHousingSituationProgram,
   getLiveWorkPreference,
-  getServedInMilitaryProgram,
-  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
-import { Program } from "../../program/entities/program.entity"
 
-export class ListingDefaultSeed {
+export class ListingDefaultSanJoseSeed {
   constructor(
     @InjectRepository(Listing) protected readonly listingRepository: Repository<Listing>,
     @InjectRepository(UnitAccessibilityPriorityType)
@@ -47,9 +42,7 @@ export class ListingDefaultSeed {
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
-    protected readonly jurisdictionRepository: Repository<Jurisdiction>,
-    @InjectRepository(Program)
-    protected readonly programsRepository: Repository<Program>
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>
   ) {}
 
   async seed() {
@@ -110,37 +103,7 @@ export class ListingDefaultSeed {
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
       events: getDefaultListingEvents(),
-      listingPrograms: [
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
-          }),
-          ordinal: 1,
-          page: 1,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
-          }),
-          ordinal: 2,
-          page: 2,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getDisabilityOrMentalIlnessProgram().title,
-          }),
-          ordinal: 3,
-          page: 3,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getHousingSituationProgram().title,
-          }),
-          ordinal: 4,
-          page: 4,
-        },
-      ],
-      jurisdictionName: "Alameda",
+      jurisdictionName: "San Jose",
     }
 
     return await this.listingRepository.save(listingCreateDto)

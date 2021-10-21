@@ -14,7 +14,7 @@ import {
 import { Address } from "../../shared/entities/address.entity"
 import { Application } from "./application.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 @Entity()
 @Index(["application"])
 export class HouseholdMember extends AbstractEntity {
@@ -78,6 +78,7 @@ export class HouseholdMember extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   emailAddress?: string | null
 
   @Column({ nullable: true, type: "boolean" })
