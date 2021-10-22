@@ -5,7 +5,8 @@
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "license": "Apache-2.0",
   "main": "index.js",
