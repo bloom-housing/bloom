@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.9...@bloom-housing/public@2.0.0-pre-tailwind.10) (2021-10-22)
+
+
+### Bug Fixes
+
+* alternate contact email now validated ([#2035](https://github.com/bloom-housing/bloom/issues/2035)) ([b411695](https://github.com/bloom-housing/bloom/commit/b411695350f8f8de39c6994f2fac2fcb4678f678))
+
+
+
+
+
 # [2.0.0-pre-tailwind.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.8...@bloom-housing/public@2.0.0-pre-tailwind.9) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/public

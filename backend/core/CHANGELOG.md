@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.7...@bloom-housing/backend-core@2.0.0-pre-tailwind.8) (2021-10-22)
+
+
+### Bug Fixes
+
+* alternate contact email now validated ([#2035](https://github.com/bloom-housing/bloom/issues/2035)) ([b411695](https://github.com/bloom-housing/bloom/commit/b411695350f8f8de39c6994f2fac2fcb4678f678))
+
+
+
+
+
 # [2.0.0-pre-tailwind.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.6...@bloom-housing/backend-core@2.0.0-pre-tailwind.7) (2021-10-22)
 
 
