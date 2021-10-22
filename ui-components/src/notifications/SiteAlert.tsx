@@ -13,6 +13,10 @@ export const setSiteAlertMessage = (message: string, type: AlertTypes) => {
   sessionStorage.setItem(`alert_message_${type}`, message)
 }
 
+export const clearSiteAlertMessage = (type: AlertTypes) => {
+  sessionStorage.removeItem(`alert_message_${type}`)
+}
+
 /**
  * Show an alert based on a url query param.
  */
