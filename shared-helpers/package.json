@@ -6,6 +6,9 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest -w 1",
     "test:coverage": "jest -w 1 --coverage --watchAll=false",
