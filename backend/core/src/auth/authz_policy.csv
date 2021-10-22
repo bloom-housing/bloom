@@ -11,6 +11,10 @@ p, anonymous, user, true, create
 p, admin, asset, true, .*
 p, partner, asset, true, .*
 
+p, admin, program, true, .*
+p, partner, program, true, .*
+p, anonymous, program, true, read
+
 p, admin, preference, true, .*
 p, partner, preference, true, .*
 

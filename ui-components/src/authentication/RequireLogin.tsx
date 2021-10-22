@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext, useEffect } from "react"
-import { setSiteAlertMessage } from "../notifications/SiteAlert"
+import { clearSiteAlertMessage, setSiteAlertMessage } from "../notifications/SiteAlert"
 import { NavigationContext } from "../config/NavigationContext"
 import { AuthContext } from "./AuthContext"
 
@@ -48,6 +48,8 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
     if (loginRequiredForPath && initialStateLoaded && !profile) {
       setSiteAlertMessage(signInMessage, "notice")
       void router.push(signInPath)
+    } else {
+      clearSiteAlertMessage("notice")
     }
   }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
 

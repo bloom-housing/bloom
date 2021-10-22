@@ -1,6 +1,6 @@
 import { Test } from "@nestjs/testing"
 import { INestApplication } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
+import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
@@ -11,6 +11,8 @@ import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
+import { Repository } from "typeorm"
+import { Program } from "../../src/program/entities/program.entity"
 import { Language } from "../../src/shared/types/language-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -22,12 +24,19 @@ jest.setTimeout(30000)
 describe("Jurisdictions", () => {
   let app: INestApplication
   let adminAccesstoken: string
+  let programsRepository: Repository<Program>
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(dbOptions), AuthModule, JurisdictionsModule],
+      imports: [
+        TypeOrmModule.forRoot(dbOptions),
+        AuthModule,
+        JurisdictionsModule,
+        TypeOrmModule.forFeature([Program]),
+      ],
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -36,6 +45,7 @@ describe("Jurisdictions", () => {
     app = applicationSetup(app)
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   })
 
   it(`should return jurisdictions`, async () => {
@@ -47,28 +57,36 @@ describe("Jurisdictions", () => {
   })
 
   it(`should create and return a new jurisdiction`, async () => {
+    const newProgram = await programsRepository.save({
+      question: "TestQuestion",
+      subtitle: "TestSubtitle",
+      description: "TestDescription",
+      subdescription: "TestDescription",
+    })
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test", languages: [Language.en] })
+      .send({ name: "test", programs: [newProgram], languages: [Language.en] })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
-    expect(res.body).toHaveProperty("name")
-    expect(res.body.name).toBe("test")
+    expect(res.body).toHaveProperty("programs")
+    expect(Array.isArray(res.body.programs)).toBe(true)
+    expect(res.body.programs.length).toBe(1)
+    expect(res.body.programs[0].id).toBe(newProgram.id)
 
     const getById = await supertest(app.getHttpServer())
       .get(`/jurisdictions/${res.body.id}`)
       .expect(200)
-    expect(getById.body.name).toBe("test")
+    expect(getById.body.programs[0].id).toBe(newProgram.id)
   })
 
   it(`should create and return a new jurisdiction by name`, async () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", languages: [Language.en] })
+      .send({ name: "test2", programs: [], languages: [Language.en] })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
@@ -84,7 +102,7 @@ describe("Jurisdictions", () => {
   })
 
   it(`should not allow to create a jurisdiction with unsupported language`, async () => {
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
       .send({ name: "test2", languages: ["non_existent_language"] })
