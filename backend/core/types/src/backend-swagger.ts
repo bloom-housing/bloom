@@ -3753,10 +3753,10 @@ export interface UserCreate {
   jurisdictions?: Id[]
 
   /**  */
-  confirmedAt?: Date
+  email: string
 
   /**  */
-  email: string
+  confirmedAt?: Date
 
   /**  */
   firstName: string
@@ -4002,7 +4002,7 @@ export interface JurisdictionCreate {
   /**  */
   languages: EnumJurisdictionCreateLanguages[]
 
-  /** */
+  /**  */
   preferences: Id[]
 }
 
@@ -4025,7 +4025,7 @@ export interface JurisdictionUpdate {
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
 
-  /** */
+  /**  */
   preferences: Id[]
 }
 
@@ -4050,6 +4050,9 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
+
+  /**  */
+  jurisdiction?: string
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4275,9 +4278,6 @@ export interface ListingPreference {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ReservedCommunityType {
@@ -4883,9 +4883,6 @@ export interface ListingPreferenceUpdate {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ListingCreate {

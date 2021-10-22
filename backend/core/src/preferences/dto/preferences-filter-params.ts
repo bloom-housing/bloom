@@ -9,7 +9,7 @@ export class PreferencesFilterParams extends BaseFilter {
   @Expose()
   @ApiProperty({
     type: String,
-    example: "Coliseum",
+    example: "uuid",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

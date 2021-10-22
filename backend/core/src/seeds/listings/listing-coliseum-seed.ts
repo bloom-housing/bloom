@@ -1039,21 +1039,18 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
             title: getLiveWorkPreference().title,
           }),
           ordinal: 1,
-          page: 1,
         },
         {
           preference: await this.preferencesRepository.findOneOrFail({
             title: getPbvPreference().title,
           }),
           ordinal: 2,
-          page: 2,
         },
         {
           preference: await this.preferencesRepository.findOneOrFail({
             title: getHopwaPreference().title,
           }),
           ordinal: 3,
-          page: 3,
         },
       ],
       events: [],

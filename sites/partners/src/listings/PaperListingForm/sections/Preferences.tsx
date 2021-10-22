@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   t,
   GridSection,
@@ -8,7 +8,6 @@ import {
   Drawer,
   AppearanceStyleType,
   Field,
-  AuthContext,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { useJurisdictionalPreferenceList } from "../../../../lib/hooks"
@@ -24,8 +23,6 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
   const [dragOrder, setDragOrder] = useState([])
-
-  const { profile } = useContext(AuthContext)
 
   const draggableTableData = useMemo(
     () =>
@@ -74,6 +71,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           </div>
         ),
       })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [preferences]
   )
 
@@ -86,17 +84,17 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
       })
       setDraftPreferences(newDragOrder)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
-
-  // Fetch and filter all preferences
-  const { data: preferencesData = [] } = useJurisdictionalPreferenceList(
-    profile.jurisdictions.map((jurisdiction) => jurisdiction.id)
-  )
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues } = formMethods
+  const { register, getValues, watch } = formMethods
 
+  const jurisdiction: string = watch("jurisdiction.id")
+
+  // Fetch and filter all preferences
+  const { data: preferencesData = [] } = useJurisdictionalPreferenceList(jurisdiction)
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
@@ -188,25 +186,27 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
         className={"w-auto"}
       >
         <div className="border rounded-md p-8 bg-white">
-          {preferencesData.map((pref, index) => {
-            return (
-              <GridSection columns={1} key={index}>
-                <Field
-                  className={"font-semibold"}
-                  id={`preference.${pref.id}`}
-                  name={`preference.${pref.id}`}
-                  type="checkbox"
-                  label={pref.title}
-                  register={register}
-                  inputProps={{
-                    defaultChecked: draftPreferences.some(
-                      (existingPref) => existingPref.title === pref.title
-                    ),
-                  }}
-                />
-              </GridSection>
-            )
-          })}
+          {jurisdiction
+            ? preferencesData.map((pref, index) => {
+                return (
+                  <GridSection columns={1} key={index}>
+                    <Field
+                      className={"font-semibold"}
+                      id={`preference.${pref.id}`}
+                      name={`preference.${pref.id}`}
+                      type="checkbox"
+                      label={pref.title}
+                      register={register}
+                      inputProps={{
+                        defaultChecked: draftPreferences.some(
+                          (existingPref) => existingPref.title === pref.title
+                        ),
+                      }}
+                    />
+                  </GridSection>
+                )
+              })
+            : t("listings.selectJurisdiction")}
         </div>
         <Button
           type="button"

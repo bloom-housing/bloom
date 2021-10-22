@@ -807,7 +807,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
             title: getLiveWorkPreference().title,
           }),
           ordinal: 2,
-          page: 1,
         },
       ],
       events: [],

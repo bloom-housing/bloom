@@ -33,7 +33,7 @@ const ApplicationPreferencesAll = () => {
   const [page, setPage] = useState(conductor.navigatedThroughBack ? preferences.length : 1)
   const [applicationPreferences, setApplicationPreferences] = useState(application.preferences)
   const preferencesByPage = preferences?.filter((item) => {
-    return item.page === page
+    return item.ordinal === page
   })
 
   const currentPageSection = 4
@@ -92,7 +92,7 @@ const ApplicationPreferencesAll = () => {
   */
   const onSubmit = (data) => {
     const body = mapPreferencesToApi(data)
-    if (preferences.length > 1) {
+    if (preferences.length > 1 && body) {
       // If we've got more than one preference, save the data in segments
       const currentPreferences = conductor.currentStep.application.preferences.filter(
         (preference) => {

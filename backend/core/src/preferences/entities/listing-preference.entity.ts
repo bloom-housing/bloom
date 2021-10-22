@@ -27,10 +27,4 @@ export class ListingPreference {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   ordinal?: number | null
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  page?: number | null
 }

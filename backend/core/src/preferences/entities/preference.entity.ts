@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from "typeorm"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { FormMetadata } from "../../applications/types/form-metadata/form-metadata"
 import { PreferenceLink } from "../types/preference-link"
@@ -74,12 +74,6 @@ class Preference {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => FormMetadata)
   formMetadata?: FormMetadata
-
-  @Column({ type: "integer", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  page?: number | null
 
   @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.preferences)
   @Expose()

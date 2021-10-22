@@ -538,7 +538,6 @@ export function getLiveWorkPreference() {
 }
 
 export const liveWorkPreference: PreferenceSeedType = {
-  page: 1,
   title: "Live/Work in County",
   subtitle: "Live/Work in County subtitle",
   description: "At least one household member lives or works in County",
@@ -567,7 +566,6 @@ export function getDisplaceePreference() {
 }
 
 export const displaceePreference: PreferenceSeedType = {
-  page: 1,
   title: "Displacee Tenant Housing",
   subtitle: "Displacee Tenant Housing subtitle",
   description:
@@ -611,7 +609,6 @@ export function getPbvPreference() {
 }
 
 export const pbvPreference: PreferenceSeedType = {
-  page: 2,
   title: "Housing Authority Project-Based Voucher",
   subtitle: "",
   description:
@@ -660,7 +657,6 @@ export function getHopwaPreference() {
 }
 
 export const hopwaPreference: PreferenceSeedType = {
-  page: 3,
   title: "Housing Opportunities for Persons with AIDS",
   subtitle: "",
   description:

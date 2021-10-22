@@ -8,6 +8,7 @@ import {
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
   EnumUserFilterParamsComparison,
+  EnumPreferencesFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -267,16 +268,19 @@ export function usePreferenceList() {
   }
 }
 
-export function useJurisdictionalPreferenceList(jurisdictionIDs: string[]) {
+export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   const { preferencesService } = useContext(AuthContext)
-  const fetcher = () => preferencesService.list()
+  const fetcher = () =>
+    preferencesService.list({
+      filter: [
+        {
+          $comparison: EnumPreferencesFilterParamsComparison["="],
+          jurisdiction: jurisdictionId,
+        },
+      ],
+    })
 
-  const paramsString = qs.stringify({ filter: jurisdictionIDs })
-
-  const { data, error } = useSWR(
-    `${process.env.backendApiBase}/preferences?${paramsString}`,
-    fetcher
-  )
+  const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
 
   return {
     data,
