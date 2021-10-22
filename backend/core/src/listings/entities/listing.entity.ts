@@ -517,9 +517,10 @@ class Listing extends BaseEntity {
     eager: true,
   })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingProgram)
-  listingPrograms: ListingProgram[]
+  listingPrograms?: ListingProgram[]
 }
 
 export { Listing as default, Listing }

@@ -4332,9 +4332,6 @@ export interface ListingProgram {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ReservedCommunityType {
@@ -4582,7 +4579,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  listingPrograms: ListingProgram[]
+  listingPrograms?: ListingProgram[]
 
   /**  */
   jurisdiction: IdName
@@ -4966,9 +4963,6 @@ export interface ListingProgramUpdate {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ListingCreate {
