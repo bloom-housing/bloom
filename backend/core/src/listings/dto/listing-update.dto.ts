@@ -244,5 +244,5 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingProgramUpdateDto)
-  listingPrograms: ListingProgramUpdateDto[]
+  listingPrograms?: ListingProgramUpdateDto[]
 }
