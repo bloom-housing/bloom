@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.5...@bloom-housing/backend-core@2.0.0-pre-tailwind.6) (2021-10-22)
+
+
+### Features
+
+* **backend:** add Program entity ([#1968](https://github.com/bloom-housing/bloom/issues/1968)) ([492ec4d](https://github.com/bloom-housing/bloom/commit/492ec4d333cf9b73af772a1aceed29813f405ba0)), closes [#2034](https://github.com/bloom-housing/bloom/issues/2034)
+
+
+
+
+
 # [2.0.0-pre-tailwind.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.4...@bloom-housing/backend-core@2.0.0-pre-tailwind.5) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
