@@ -22,7 +22,8 @@
   "license": "Apache-2.0",
   "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
