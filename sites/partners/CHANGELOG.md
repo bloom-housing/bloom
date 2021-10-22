@@ -7,52 +7,27 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @bloom-housing/partners
 
-
-
-
-
 # [2.0.0-pre-tailwind.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.5...@bloom-housing/partners@2.0.0-pre-tailwind.6) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
 
-
-
-
-
 # [2.0.0-pre-tailwind.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.4...@bloom-housing/partners@2.0.0-pre-tailwind.5) (2021-10-22)
-
 
 ### Bug Fixes
 
-* do not show login required on forgot password page ([6578dda](https://github.com/bloom-housing/bloom/commit/6578dda1db68b9d63058900ae7e847f7b7021912))
-
-
-
-
+- do not show login required on forgot password page ([6578dda](https://github.com/bloom-housing/bloom/commit/6578dda1db68b9d63058900ae7e847f7b7021912))
 
 # [2.0.0-pre-tailwind.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.3...@bloom-housing/partners@2.0.0-pre-tailwind.4) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
 
-
-
-
-
 # [2.0.0-pre-tailwind.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.2...@bloom-housing/partners@2.0.0-pre-tailwind.3) (2021-10-21)
 
 **Note:** Version bump only for package @bloom-housing/partners
 
-
-
-
-
 # [2.0.0-pre-tailwind.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.1...@bloom-housing/partners@2.0.0-pre-tailwind.2) (2021-10-21)
 
 **Note:** Version bump only for package @bloom-housing/partners
-
-
-
-
 
 # [2.0.0-pre-tailwind.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.0...@bloom-housing/partners@2.0.0-pre-tailwind.1) (2021-10-19)
 

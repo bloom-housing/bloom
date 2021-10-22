@@ -7,33 +7,17 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
 
-
-
-
-
 ## [1.0.6-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@1.0.6-alpha.3...@bloom-housing/shared-helpers@1.0.6-alpha.4) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
-
-
-
-
 
 ## [1.0.6-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@1.0.6-alpha.2...@bloom-housing/shared-helpers@1.0.6-alpha.3) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
 
-
-
-
-
 ## [1.0.6-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@1.0.6-alpha.1...@bloom-housing/shared-helpers@1.0.6-alpha.2) (2021-10-21)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
-
-
-
-
 
 ## [1.0.6-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@1.0.6-alpha.0...@bloom-housing/shared-helpers@1.0.6-alpha.1) (2021-10-19)
 

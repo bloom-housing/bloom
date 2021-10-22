@@ -7,52 +7,27 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @bloom-housing/public
 
-
-
-
-
 # [2.0.0-pre-tailwind.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.5...@bloom-housing/public@2.0.0-pre-tailwind.6) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/public
-
-
-
-
 
 # [2.0.0-pre-tailwind.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.4...@bloom-housing/public@2.0.0-pre-tailwind.5) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/public
 
-
-
-
-
 # [2.0.0-pre-tailwind.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.3...@bloom-housing/public@2.0.0-pre-tailwind.4) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/public
-
-
-
-
 
 # [2.0.0-pre-tailwind.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.2...@bloom-housing/public@2.0.0-pre-tailwind.3) (2021-10-21)
 
 **Note:** Version bump only for package @bloom-housing/public
 
-
-
-
-
 # [2.0.0-pre-tailwind.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.1...@bloom-housing/public@2.0.0-pre-tailwind.2) (2021-10-21)
-
 
 ### Features
 
-* adds jurisdiction filtering to listings ([#2027](https://github.com/bloom-housing/bloom/issues/2027)) ([219696b](https://github.com/bloom-housing/bloom/commit/219696ba784cfc079dd5aec74b24c3a8479160b6))
-
-
-
-
+- adds jurisdiction filtering to listings ([#2027](https://github.com/bloom-housing/bloom/issues/2027)) ([219696b](https://github.com/bloom-housing/bloom/commit/219696ba784cfc079dd5aec74b24c3a8479160b6))
 
 # [2.0.0-pre-tailwind.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.0...@bloom-housing/public@2.0.0-pre-tailwind.1) (2021-10-19)
 
