@@ -131,7 +131,7 @@ const defaults: FormListing = {
   createdAt: undefined,
   updatedAt: undefined,
   applicationAddress: null,
-  applicationDueDate: new Date(),
+  applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
