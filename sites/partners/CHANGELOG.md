@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.8...@bloom-housing/partners@2.0.0-pre-tailwind.9) (2021-10-22)
+
+
+### Bug Fixes
+
+* makes listing programs optional ([fbe7134](https://github.com/bloom-housing/bloom/commit/fbe7134348e59e3fdb86663cfdca7648655e7b4b))
+
+
+
+
+
 # [2.0.0-pre-tailwind.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.7...@bloom-housing/partners@2.0.0-pre-tailwind.8) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
