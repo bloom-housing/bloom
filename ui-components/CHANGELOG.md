@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.5...@bloom-housing/ui-components@2.0.0-alpha.6) (2021-10-22)
+
+
+### Bug Fixes
+
+* do not show login required on forgot password page ([6578dda](https://github.com/bloom-housing/bloom/commit/6578dda1db68b9d63058900ae7e847f7b7021912))
+
+
+
+
+
 # [2.0.0-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.4...@bloom-housing/ui-components@2.0.0-alpha.5) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
