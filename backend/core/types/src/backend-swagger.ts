@@ -5069,7 +5069,7 @@ export interface ListingCreate {
   unitsSummary?: UnitsSummaryCreate[]
 
   /**  */
-  listingPrograms: ListingProgramUpdate[]
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5516,7 +5516,7 @@ export interface ListingUpdate {
   unitsSummary?: UnitsSummaryUpdate[]
 
   /**  */
-  listingPrograms: ListingProgramUpdate[]
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
