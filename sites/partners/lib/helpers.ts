@@ -240,22 +240,38 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
   }
 }
 
-export const removeEmptyFields = (obj, keysToIgnore?: string[]) => {
+const isObject = (obj, key) => {
+  return obj[key] && typeof obj[key] === "object" && !Array.isArray(obj[key])
+}
+
+/**
+ *
+ * @param obj - Any object
+ *
+ *  End result is an object with these rules for fields:
+ *    No empty objects - removed
+ *    No objects that only have fields with null / empty strings - removed
+ *    No null/undefined fields - removed
+ *    No empty strings - set to null but still included
+ *    Arrays / non-empty strings - no changes
+ */
+export const removeEmptyObjects = (obj) => {
   Object.keys(obj).forEach(function (key) {
-    if (!keysToIgnore.includes(key)) {
-      if (obj[key] && typeof obj[key] === "object") {
-        removeEmptyFields(obj[key], keysToIgnore)
-      }
-      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+    if (isObject(obj, key)) {
+      if (Object.keys(obj[key]).length === 0) {
         delete obj[key]
+      } else {
+        removeEmptyObjects(obj[key])
       }
-      if (
-        typeof obj[key] === "object" &&
-        !Array.isArray(obj[key]) &&
-        Object.keys(obj[key]).length === 0
-      ) {
-        delete obj[key]
-      }
+    }
+    if (isObject(obj, key) && Object.keys(obj[key]).length === 0) {
+      delete obj[key]
+    }
+    if (obj[key] === null || obj[key] === undefined) {
+      delete obj[key]
+    }
+    if (obj[key] === "") {
+      obj[key] = null
     }
   })
 }
