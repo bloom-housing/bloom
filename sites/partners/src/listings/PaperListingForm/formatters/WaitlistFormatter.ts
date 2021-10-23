@@ -17,11 +17,10 @@ export default class WaitlistFormatter extends Formatter {
     this.data.waitlistOpenSpots =
       this.data.waitlistOpenSpots && showWaitlistNumber ? Number(this.data.waitlistOpenSpots) : null
 
-    this.data.isWaitlistOpen =
-      this.data.waitlistOpenQuestion === YesNoAnswer.Yes
-        ? true
-        : this.data.waitlistOpenQuestion === YesNoAnswer.No
-        ? false
-        : null
+    this.processBoolean("isWaitlistOpen", {
+      when: this.data.waitlistOpenQuestion === YesNoAnswer.Yes,
+      yes: () => true,
+      no: () => (this.data.waitlistOpenQuestion === YesNoAnswer.No ? false : null),
+    })
   }
 }

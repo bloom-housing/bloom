@@ -7,22 +7,21 @@ import {
   FormMetadata,
 } from "../src/listings/PaperListingForm/formTypes"
 
-// test helper
-const formatData = (data, metadata) => {
+// test helpers
+const metadata = {} as FormMetadata
+const formatData = (data) => {
   return new BooleansFormatter({ ...data }, metadata).format().data
 }
-
-const metadata = {} as FormMetadata
 
 describe("BooleansFormatter", () => {
   it("should format postmarkedApplicationsReceivedByDate", () => {
     const data = {} as FormListing
 
-    expect(formatData(data, metadata).postmarkedApplicationsReceivedByDate).toBeNull()
+    expect(formatData(data).postmarkedApplicationsReceivedByDate).toBeNull()
 
     data.postMarkDate = { year: "2021", month: "03", day: "06" }
     data.arePostmarksConsidered = YesNoAnswer.Yes
-    expect(formatData(data, metadata).postmarkedApplicationsReceivedByDate.toISOString()).toEqual(
+    expect(formatData(data).postmarkedApplicationsReceivedByDate.toISOString()).toEqual(
       "2021-03-06T00:00:00.000Z"
     )
   })
@@ -30,27 +29,27 @@ describe("BooleansFormatter", () => {
   it("should format applicationDropOffAddressType", () => {
     const data = {} as FormListing
 
-    expect(formatData(data, metadata).applicationDropOffAddressType).toBeNull()
+    expect(formatData(data).applicationDropOffAddressType).toBeNull()
 
     data.canApplicationsBeDroppedOff = YesNoAnswer.Yes
     data.whereApplicationsDroppedOff = ListingApplicationAddressType.mailingAddress
-    expect(formatData(data, metadata).applicationDropOffAddressType).toEqual(
+    expect(formatData(data).applicationDropOffAddressType).toEqual(
       ListingApplicationAddressType.mailingAddress
     )
 
     data.whereApplicationsDroppedOff = AnotherAddressEnum.anotherAddress
-    expect(formatData(data, metadata).applicationDropOffAddressType).toBeNull()
+    expect(formatData(data).applicationDropOffAddressType).toBeNull()
   })
 
   it("should format digitalApplication", () => {
     const data = {} as FormListing
 
-    expect(formatData(data, metadata).digitalApplication).toBeNull()
+    expect(formatData(data).digitalApplication).toBeNull()
 
     data.digitalApplicationChoice = YesNoAnswer.Yes
-    expect(formatData(data, metadata).digitalApplication).toBe(true)
+    expect(formatData(data).digitalApplication).toBe(true)
 
     data.digitalApplicationChoice = YesNoAnswer.No
-    expect(formatData(data, metadata).digitalApplication).toBe(false)
+    expect(formatData(data).digitalApplication).toBe(false)
   })
 })

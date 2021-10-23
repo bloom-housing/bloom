@@ -1,9 +1,11 @@
 import Formatter from "./Formatter"
-import { stringToNumber } from "../../../../lib/helpers"
+import { stringToBoolean, stringToNumber } from "../../../../lib/helpers"
 
 export default class UnitsFormatter extends Formatter {
   /** Format the values within the units array */
   process() {
+    this.data.disableUnitsAccordion = stringToBoolean(this.data.disableUnitsAccordion)
+
     this.data.units = this.metadata.units.map((unitValue) => {
       const unit = { ...unitValue } // make a copy of the unit before transformation
 

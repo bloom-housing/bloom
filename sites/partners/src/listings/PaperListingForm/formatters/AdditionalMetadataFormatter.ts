@@ -1,6 +1,5 @@
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import Formatter from "./Formatter"
-import { stringToBoolean } from "../../../../lib/helpers"
 
 export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
@@ -9,7 +8,6 @@ export default class AdditionalMetadataFormatter extends Formatter {
       return { ...pref, ordinal: index + 1 }
     })
 
-    this.data.disableUnitsAccordion = stringToBoolean(this.data.disableUnitsAccordion)
     this.data.buildingAddress = {
       ...this.data.buildingAddress,
       latitude: this.metadata.latLong.latitude ?? null,
@@ -17,9 +15,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
     }
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
-    this.data.reservedCommunityType = this.data.reservedCommunityType.id
-      ? this.data.reservedCommunityType
-      : null
+    if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
