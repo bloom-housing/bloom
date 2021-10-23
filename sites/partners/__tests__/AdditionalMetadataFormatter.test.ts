@@ -12,9 +12,10 @@ const formatData = (data, metadata) => {
   return new AdditionalMetadataFormatter({ ...data }, metadata).format().data
 }
 
+const fixtureData = { reservedCommunityType: { id: "12345" } } as FormListing
+
 describe("AdditionalMetadataFormatter", () => {
   it("should format preferences", () => {
-    const data = { reservedCommunityType: { id: "12345" } } as FormListing
     const metadata = {
       latLong,
       preferences: [
@@ -27,11 +28,23 @@ describe("AdditionalMetadataFormatter", () => {
       ],
     } as FormMetadata
 
-    expect(formatData(data, metadata).preferences).toEqual([
+    expect(formatData(fixtureData, metadata).preferences).toEqual([
       { title: "Preference 1", ordinal: 1 },
       { title: "Preference 2", ordinal: 2 },
     ])
   })
 
-  it("should format", () => {})
+  it("should format buildingAddress", () => {
+    const address = { street: "123 Anywhere St.", city: "Anytown", state: "CA" }
+    const data = {
+      ...fixtureData,
+      buildingAddress: address,
+    }
+    const metadata = {
+      preferences: [],
+      latLong,
+    }
+
+    expect(formatData(data, metadata).buildingAddress).toEqual({ ...address, ...latLong })
+  })
 })

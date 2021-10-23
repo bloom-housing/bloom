@@ -19,7 +19,7 @@ module.exports = {
   preset: "ts-jest",
   globals: {
     "ts-jest": {
-      tsConfig: "tsconfig.json",
+      tsConfig: "tsconfig.test.json",
     },
   },
   rootDir: "../..",
@@ -29,4 +29,7 @@ module.exports = {
   },
   setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/sites/partners/.jest/setup-tests.js"],
+  moduleNameMapper: {
+    "\\.(scss|css|less)$": "identity-obj-proxy",
+  },
 }
