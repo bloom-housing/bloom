@@ -1348,7 +1348,7 @@
         },
         "zipCode": "الرمز البريدي",
         "zipCodeDescription": "أدخل الرمز البريدي",
-        "adaCompliant": "متوافق مع ADA",
+        "adaCompliant": "الميزات التي يمكن الوصول إليها للمقيمين ذوي الإعاقة؟",
         "availability": "توفر الوحدة",
         "hasAvailability": "لديها توافر",
         "noAvailability": "لا يوجد توافر",

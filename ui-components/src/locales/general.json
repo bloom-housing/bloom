@@ -1384,7 +1384,7 @@
     },
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",
-    "adaCompliant": "ADA Compliant",
+    "adaCompliant": "Accessible Features for Residents with Disabilities?",
     "availability": "Unit Availability",
     "hasAvailability": "Has Availability",
     "noAvailability": "No Availability",
