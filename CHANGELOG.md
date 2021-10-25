@@ -111,6 +111,7 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
   - Re-wrote SiteHeader to remove Bulma dependency and bugs ([#1885](https://github.com/bloom-housing/bloom/pull/1885)) (Emily Jablonski)
     - **Breaking Change**: SiteHeader has a new prop set, including some props to toggle new visual features
+  - Set a max width for hero buttons when there are secondary buttons ([#2002](https://github.com/bloom-housing/bloom/pull/2002)) (Andrea Egan)
 
 ### Backend
 
