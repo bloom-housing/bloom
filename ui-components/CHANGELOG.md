@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.11...@bloom-housing/ui-components@2.0.0-alpha.12) (2021-10-25)
+
+
+### Bug Fixes
+
+* duplicate unit during Copy & New and Save & New ([#1963](https://github.com/bloom-housing/bloom/issues/1963)) ([d597a3f](https://github.com/bloom-housing/bloom/commit/d597a3f57ed4c489804e10e3b6bac99e5f9bedcc))
+
+
+
+
+
 # [2.0.0-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.10...@bloom-housing/ui-components@2.0.0-alpha.11) (2021-10-25)
 
 
