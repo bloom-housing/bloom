@@ -18,7 +18,7 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { FormListing, TempEvent } from "../index"
+import { FormListing, TempEvent } from "../formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 
 type ApplicationDatesProps = {

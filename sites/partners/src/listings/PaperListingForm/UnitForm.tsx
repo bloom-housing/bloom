@@ -15,7 +15,7 @@ import {
   AuthContext,
 } from "@bloom-housing/ui-components"
 import { useForm, useWatch } from "react-hook-form"
-import { TempUnit } from "."
+import { TempUnit } from "./formTypes"
 import {
   AmiChart,
   AmiChartItem,
