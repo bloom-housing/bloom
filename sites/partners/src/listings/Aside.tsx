@@ -63,7 +63,7 @@ const Aside = ({
     })()
 
     submitFormWithStatus(false, newStatus)
-  }, [getValues, listing.status, submitFormWithStatus])
+  }, [getValues, listing, submitFormWithStatus])
 
   const actions = useMemo(() => {
     const elements = []
@@ -252,8 +252,7 @@ const Aside = ({
 
     return elements
   }, [
-    listing.events,
-    listing.status,
+    listing,
     listingId,
     saveAndExit,
     showCloseListingModal,
