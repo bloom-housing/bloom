@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.10...@bloom-housing/ui-components@2.0.0-alpha.11) (2021-10-25)
+
+
+### Bug Fixes
+
+* set a max width for header buttons when there are 2 buttons ([#2002](https://github.com/bloom-housing/bloom/issues/2002)) ([d3d4141](https://github.com/bloom-housing/bloom/commit/d3d4141511a39c6f76049a8ca2cfc534030c47b5))
+
+
+
+
+
 # [2.0.0-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.9...@bloom-housing/ui-components@2.0.0-alpha.10) (2021-10-22)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
