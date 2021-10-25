@@ -27,7 +27,6 @@
         "nameSuccess": "Name update successful",
         "dobSuccess": "Birthdate update successful",
         "emailSuccess": "Email update successful",
-        "phoneNumberSuccess": "Phone number update successful",
         "currentPassword": "Invalid current password. Please try again.",
         "passwordSuccess": "Password update successful",
         "passwordMatch": "New password fields do not match",

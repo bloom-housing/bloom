@@ -34,7 +34,6 @@ const Edit = () => {
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
-  const [phoneNumberAlert, setPhoneNumberAlert] = useState<AlertMessage>()
   const [emailAlert, setEmailAlert] = useState<AlertMessage>()
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
@@ -87,26 +86,6 @@ const Edit = () => {
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
     } catch (err) {
       setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
-      console.warn(err)
-    }
-  }
-
-  const onPhoneNumberSubmit = async (data: { phoneNumber: string }) => {
-    const { phoneNumber } = data
-    setPhoneNumberAlert(null)
-    try {
-      await userService.update({
-        body: { ...profile, phoneNumber },
-      })
-      setPhoneNumberAlert({
-        type: "success",
-        message: `${t("account.settings.alerts.phoneNumberSuccess")}`,
-      })
-    } catch (err) {
-      setPhoneNumberAlert({
-        type: "alert",
-        message: `${t("account.settings.alerts.genericError")}`,
-      })
       console.warn(err)
     }
   }
@@ -248,35 +227,6 @@ const Edit = () => {
                 errorMessage={`${t("errors.emailAddressError")}`}
                 register={register}
                 defaultValue={profile ? profile.email : null}
-              />
-              <div className="text-center">
-                <Button className={"items-center"}>{t("account.settings.update")}</Button>
-              </div>
-            </div>
-          </Form>
-          <Form id="update-phone-number" onSubmit={handleSubmit(onPhoneNumberSubmit)}>
-            {phoneNumberAlert && (
-              <AlertBox
-                type={phoneNumberAlert.type}
-                onClose={() => setPhoneNumberAlert(null)}
-                inverted
-                closeable
-              >
-                {phoneNumberAlert.message}
-              </AlertBox>
-            )}
-            <div className="form-card__group border-b">
-              <Field
-                caps={true}
-                type="phoneNumber"
-                name="phoneNumber"
-                label={`${t("t.phone")}`}
-                placeholder={`${t("t.phoneNumberPlaceholder")}`}
-                // validation={{ pattern: emailRegex }}
-                // error={errors.email}
-                errorMessage={`${t("errors.phoneNumberError")}`}
-                register={register}
-                defaultValue={profile ? profile.phoneNumber : null}
               />
               <div className="text-center">
                 <Button className={"items-center"}>{t("account.settings.update")}</Button>
