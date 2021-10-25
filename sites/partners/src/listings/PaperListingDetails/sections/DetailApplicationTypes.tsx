@@ -44,13 +44,17 @@ const DetailApplicationTypes = () => {
       <GridSection columns={2}>
         <GridCell>
           <ViewItem label={"Online Applications"}>
-            {listing.digitalApplication ? "Yes" : "No"}
+            {listing.digitalApplication === true
+              ? t("t.yes")
+              : listing.digitalApplication === false
+              ? t("t.no")
+              : t("t.n/a")}
           </ViewItem>
         </GridCell>
         {digitalMethod && (
           <GridCell>
             <ViewItem label={"Common Digital Application"}>
-              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
+              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
             </ViewItem>
           </GridCell>
         )}
@@ -63,7 +67,11 @@ const DetailApplicationTypes = () => {
       <GridSection columns={1}>
         <GridCell>
           <ViewItem label={"Paper Applications"}>
-            {listing.paperApplication ? "Yes" : "No"}
+            {listing.paperApplication === true
+              ? t("t.yes")
+              : listing.paperApplication === false
+              ? t("t.no")
+              : t("t.n/a")}
           </ViewItem>
         </GridCell>
         {paperApplicationsTableRows.length > 0 && (
@@ -81,7 +89,13 @@ const DetailApplicationTypes = () => {
 
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Referral"}>{listing.referralOpportunity ? "Yes" : "No"}</ViewItem>
+          <ViewItem label={"Referral"}>
+            {listing.referralOpportunity === true
+              ? t("t.yes")
+              : listing.referralOpportunity === false
+              ? t("t.no")
+              : t("t.n/a")}
+          </ViewItem>
         </GridCell>
         {referralMethod && (
           <>
