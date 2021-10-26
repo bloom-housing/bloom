@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.12...@bloom-housing/partners@2.0.0-pre-tailwind.13) (2021-10-26)
+
+
+### Bug Fixes
+
+* Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/issues/2015)) ([48aa14e](https://github.com/bloom-housing/bloom/commit/48aa14eb522cb8e4d0a25fdeadcc392b30d7f1a9))
+
+
+
+
+
 # [2.0.0-pre-tailwind.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.11...@bloom-housing/partners@2.0.0-pre-tailwind.12) (2021-10-25)
 
 
