@@ -25,6 +25,13 @@ describe("Navigating around the site", () => {
         cy.contains("This will be the home page")
       })
     })
+
+    it("Forgot password does not show alert", () => {
+      cy.visit("/")
+      cy.contains("Forgot password?").click()
+      cy.contains("Send email")
+      cy.get(".alert-box").should("not.exist")
+    })
   })
 
   describe("with a logged in user", () => {

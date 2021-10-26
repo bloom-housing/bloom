@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -43,8 +44,11 @@ import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
+import { ListingProgram } from "../../program/entities/listing-program.entity"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 @Entity({ name: "listings" })
+@Index(["jurisdiction"])
 class Listing extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
@@ -300,6 +304,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   leasingAgentEmail?: string | null
 
   @Column({ type: "text", nullable: true })
@@ -506,6 +511,16 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
+
+  @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
+    cascade: true,
+    eager: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgram)
+  listingPrograms?: ListingProgram[]
 }
 
 export { Listing as default, Listing }

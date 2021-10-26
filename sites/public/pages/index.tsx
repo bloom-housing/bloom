@@ -10,10 +10,10 @@ import {
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
-import axios from "axios"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
+import { fetchJurisdictionByName } from "../lib/hooks"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -90,18 +90,9 @@ export default function Home(props: IndexProps) {
 }
 
 export async function getStaticProps() {
-  let thisJurisdiction = null
-  try {
-    const jurisdictionName = process.env.jurisdictionName
-    const jurisdiction = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
-    )
-    thisJurisdiction = jurisdiction?.data ? jurisdiction.data : null
-  } catch (error) {
-    console.error(error)
-  }
+  const jurisdiction = await fetchJurisdictionByName()
 
   return {
-    props: { jurisdiction: thisJurisdiction },
+    props: { jurisdiction },
   }
 }

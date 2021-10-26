@@ -31,7 +31,6 @@ import { UserUpdateDto } from "../dto/user-update.dto"
 import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { authzActions } from "../enum/authz-actions.enum"
 import { addFilters } from "../../shared/filter"
 import { UserFilterParams } from "../dto/user-filter-params"
@@ -39,6 +38,7 @@ import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -54,11 +54,17 @@ export class UserService {
   ) {}
 
   public async findByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: { email: email.toLowerCase() },
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: options,
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async findOneOrFail(options: FindConditions<User>) {
@@ -264,7 +270,7 @@ export class UserService {
         ...dto,
         passwordHash: await this.passwordService.passwordToHash(dto.password),
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as JurisdictionDto[])
+          ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
       },
       authContext
@@ -325,7 +331,7 @@ export class UserService {
         leasingAgentInListings: dto.leasingAgentInListings as Listing[],
         roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as JurisdictionDto[])
+          ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
       },
       authContext

@@ -166,6 +166,7 @@ const defaults: FormListing = {
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
   preferences: [],
+  listingPrograms: [],
   programRules: "",
   rentalAssistance:
     "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",

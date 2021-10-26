@@ -20,6 +20,7 @@ import { UnitsSummaryUpdateDto } from "../../units-summary/dto/units-summary.dto
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodUpdateDto } from "../../application-methods/dto/application-method.dto"
 import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
+import { ListingProgramUpdateDto } from "../../program/dto/listing-program-update.dto"
 
 export class ListingUpdateDto extends OmitType(ListingDto, [
   "id",
@@ -55,6 +56,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "result",
   "unitsSummary",
   "referralApplication",
+  "listingPrograms",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -237,4 +239,10 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummaryUpdateDto)
   unitsSummary?: UnitsSummaryUpdateDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgramUpdateDto)
+  listingPrograms?: ListingProgramUpdateDto[]
 }

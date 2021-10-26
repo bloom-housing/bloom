@@ -9,7 +9,7 @@ export interface TagProps extends AppearanceProps {
   fillContainer?: boolean
 }
 
-const Tag = (props: TagProps) => {
+export const Tag = (props: TagProps) => {
   const tagClasses = ["tag"].concat(classNamesForAppearanceTypes(props))
 
   if (props.pillStyle) tagClasses.push("is-pill")
@@ -18,5 +18,3 @@ const Tag = (props: TagProps) => {
 
   return <span className={tagClasses.join(" ")}>{props.children}</span>
 }
-
-export { Tag as default, Tag }

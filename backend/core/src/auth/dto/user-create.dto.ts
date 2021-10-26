@@ -4,6 +4,7 @@ import { IsEmail, IsOptional, IsString, Matches, MaxLength, ValidateNested } fro
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
 import { Match } from "../../shared/decorators/match.decorator"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { UserDto } from "./user.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
@@ -14,6 +15,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   "leasingAgentInListings",
   "roles",
   "jurisdictions",
+  "email",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -32,6 +34,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @Match("email", { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   emailConfirmation: string
 
   @Expose()
@@ -45,4 +48,9 @@ export class UserCreateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions?: IdDto[]
+
+  @Expose()
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
+  email: string
 }
