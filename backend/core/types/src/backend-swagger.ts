@@ -3784,6 +3784,9 @@ export interface User {
   dob?: Date
 
   /**  */
+  phoneNumber?: string
+
+  /**  */
   createdAt: Date
 
   /**  */
@@ -3826,6 +3829,9 @@ export interface UserCreate {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserBasic {
@@ -3861,6 +3867,9 @@ export interface UserBasic {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 
   /**  */
   createdAt: Date
@@ -3956,6 +3965,9 @@ export interface UserUpdate {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserFilterParams {
@@ -4012,6 +4024,9 @@ export interface UserInvite {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserProfileUpdate {
