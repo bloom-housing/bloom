@@ -274,10 +274,12 @@ describe("Users", () => {
   })
 
   it("should allow a user to modify their phone number", async () => {
-    const user = (await supertest(app.getHttpServer())
+    const user = (
+      await supertest(app.getHttpServer())
         .get("/user")
         .set(...setAuthorization(userAccessToken))
-        .expect(200)).body
+        .expect(200)
+    ).body
     const testPhoneNumber = "1234567890"
     const userUpdateDto: UserUpdateDto = {
       id: user.id,
@@ -296,10 +298,12 @@ describe("Users", () => {
       .set(...setAuthorization(userAccessToken))
       .send(userUpdateDto)
       .expect(200)
-    const updatedUser = (await supertest(app.getHttpServer())
+    const updatedUser = (
+      await supertest(app.getHttpServer())
         .get("/user")
         .set(...setAuthorization(userAccessToken))
-        .expect(200)).body
+        .expect(200)
+    ).body
 
     expect(updatedUser.phoneNumber).toEqual(testPhoneNumber)
   })
