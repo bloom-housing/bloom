@@ -19,7 +19,7 @@
     "ts-node-dev": "^1.0.0-pre.44"
   },
   "dependencies": {
-    "@bloom-housing/core": "0.2.11",
+    "@bloom-housing/core": "0.3.4",
     "@koa/cors": "^3.0.0",
     "@types/koa": "^2.11.3",
     "@types/koa-router": "^7.4.0",
