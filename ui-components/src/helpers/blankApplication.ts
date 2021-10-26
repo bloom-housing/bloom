@@ -103,6 +103,7 @@ export const blankApplication = () => {
       howDidYouHear: [],
     },
     preferences: [] as ApplicationPreference[],
-    confirmationId: "",
+    confirmationCode: "",
+    id: "",
   }
 }
