@@ -12,7 +12,16 @@ import {
 } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
@@ -74,6 +83,11 @@ export class User {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   dob?: Date | null
+
+  @Column("varchar", { nullable: true })
+  @Expose()
+  @IsPhoneNumber(null)
+  phoneNumber?: string
 
   @CreateDateColumn()
   @Expose()
