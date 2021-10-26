@@ -213,6 +213,7 @@ export const transformUnits = (units: Units, amiCharts: any): UnitsSummarized =>
   data.amiPercentages = Array.from(
     new Set(units.map((unit) => unit.amiPercentage).filter((item) => item != null))
   )
+  console.log("*******")
   const nonReservedUnits = units.filter((unit: Unit) => unit.reservedType == null)
   data.byUnitType = summarizeUnits(units, data.unitTypes)
   data.byNonReservedUnitType = summarizeUnits(nonReservedUnits, data.unitTypes)
