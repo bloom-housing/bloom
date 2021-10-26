@@ -21,6 +21,8 @@ import { translations, overrideTranslations } from "../src/translations"
 import LinkComponent from "../src/LinkComponent"
 import { blankEligibilityRequirements, EligibilityContext } from "../lib/EligibilityContext"
 
+import "../lib/HorizontalScrollSection.scss"
+import "../styles/index.scss"
 // Note: import overrides.scss last so that it overrides styles defined in imports above
 import "../styles/overrides.scss"
 
