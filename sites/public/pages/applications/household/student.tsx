@@ -41,12 +41,12 @@ const ApplicationHouseholdStudent = () => {
 
   const householdStudentValues = [
     {
-      id: "householdChangesYes",
+      id: "householdStudentYes",
       value: "true",
       label: t("t.yes"),
     },
     {
-      id: "householdChangesNo",
+      id: "householdStudentNo",
       value: "false",
       label: t("t.no"),
     },
