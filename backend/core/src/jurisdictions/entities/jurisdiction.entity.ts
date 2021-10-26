@@ -29,7 +29,7 @@ export class Jurisdiction extends AbstractEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   notificationsSignUpURL?: string | null
 
-  @ManyToMany(() => Program, (program) => program.jurisdictions, { eager: true })
+  @ManyToMany(() => Program, (program) => program.jurisdictions, { cascade: true })
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
@@ -43,7 +43,7 @@ export class Jurisdiction extends AbstractEntity {
   @IsEnum(Language, { groups: [ValidationsGroupsEnum.default], each: true })
   languages: Language[]
 
-  @ManyToMany(() => Preference, (preference) => preference.jurisdictions, { eager: true })
+  @ManyToMany(() => Preference, (preference) => preference.jurisdictions, { cascade: true })
   @JoinTable()
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
