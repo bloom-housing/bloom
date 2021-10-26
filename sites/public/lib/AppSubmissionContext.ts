@@ -49,6 +49,12 @@ export const retrieveApplicationConfig = () => {
         name: "adaHouseholdMembers",
       },
       {
+        name: "householdChanges",
+      },
+      {
+        name: "householdStudent",
+      },
+      {
         name: "vouchersSubsidies",
       },
       {

@@ -280,6 +280,12 @@ const FormSummaryDetails = ({
               </Fragment>
             ))}
           </ViewItem>
+          <ViewItem id="householdChanges" label={t("application.household.expectingChanges.title")}>
+            {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
+          </ViewItem>
+          <ViewItem id="householdStudent" label={t("application.household.householdStudent.title")}>
+            {application.householdStudent ? t("t.yes") : t("t.no")}
+          </ViewItem>
         </div>
 
         <h3 className="form--card__sub-header">
