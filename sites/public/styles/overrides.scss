@@ -70,3 +70,76 @@ a.button.is-primary:hover {
   @apply text-center;
   @apply text-base;
 }
+
+.hero {
+  @apply font-bold;
+  @apply mx-4;
+  @apply mb-4;
+  @apply rounded-2xl;
+}
+
+.hero__title {
+  max-width: 35rem;
+  text-shadow: 0 0 20px black;
+}
+
+.hero__inset {
+  background-color: white;
+  border-radius: 25px;
+  color: black;
+  margin: 0 auto;
+  max-width: 32rem;
+  opacity: 0.95;
+  padding: 30px;
+}
+
+.hero__text {
+  font-size: medium;
+  font-weight: 300;
+  padding-bottom: 30px;
+}
+
+.hero__button {
+  background-color: #ffbe42;
+  border-radius: 15px;
+  color: black;
+  display: inline-block;
+  font-size: large;
+  margin-right: 0;
+  max-width: 100%;
+  padding: 12px;
+  width: 14rem;
+
+  @screen sm {
+    width: 12rem;
+  }
+
+  &:hover {
+    @apply bg-primary;
+    color: white;
+  }
+}
+
+.hero__button__first {
+  margin-bottom: 1rem;
+
+  @screen sm {
+    margin-bottom: 0;
+    border-radius: 30px 0 0 30px;
+    border-right-width: 1px;
+  }
+
+  &:focus {
+    border-right-width: 0;
+  }
+}
+.hero__button__second {
+  @screen sm {
+    border-radius: 0 30px 30px 0;
+    border-left-width: 1px;
+  }
+
+  &:focus {
+    border-left-width: 0;
+  }
+}

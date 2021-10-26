@@ -1,13 +1,6 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import {
-  AlertBox,
-  LinkButton,
-  Hero,
-  t,
-  SiteAlert,
-  MarkdownSection,
-} from "@bloom-housing/ui-components"
+import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
@@ -20,10 +13,23 @@ export default function Home() {
 
   const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
+  // TODO(https://github.com/CityOfDetroit/bloom/issues/712): avoid concatenating translated strings
   const heroTitle = (
     <>
-      {t("welcome.title")} <em>{t("region.name")}</em>
+      {t("welcome.title")} {t("region.name")}
     </>
+  )
+
+  const heroInset: React.ReactNode = (
+    <div className="hero__inset">
+      <div className="hero__text">{t("welcome.heroText")}</div>
+      <a href="/listings" className="hero__button__first hero__button">
+        {t("welcome.seeRentalListings")}
+      </a>
+      <a href="/eligibility/welcome" className="hero__button__second hero__button">
+        {t("welcome.checkEligibility")}
+      </a>
+    </div>
   )
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
@@ -48,20 +54,7 @@ export default function Home() {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero
-        title={heroTitle}
-        buttonTitle={t("welcome.seeRentalListings")}
-        buttonLink="/listings"
-        backgroundImage={"/images/hero.png"}
-      />
-      <div className="homepage-extra">
-        <MarkdownSection fullwidth={true}>
-          <>
-            <h2 className="text-xl">{t("welcome.checkEligibilityDescription")}</h2>
-            <LinkButton href="/eligibility/welcome">{t("welcome.checkEligibility")}</LinkButton>
-          </>
-        </MarkdownSection>
-      </div>
+      <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
       />
