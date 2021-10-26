@@ -358,6 +358,18 @@ export const DAHLIAToggleSet = () => (
     dropdownItemClassName={"text-xs"}
     menuLinks={[
       {
+        title: "Some longer links",
+        href: "/",
+      },
+      {
+        title: "Some longer links",
+        href: "/",
+      },
+      {
+        title: "Some longer links",
+        href: "/",
+      },
+      {
         title: "My Account",
         subMenuLinks: [
           {
