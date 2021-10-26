@@ -19,6 +19,7 @@ export const SanMateoHUD2019: AmiChart = {
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
   },
@@ -309,6 +310,7 @@ export const ArcherListing: Listing = {
   creditHistory:
     "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   depositMin: "1140.0",
+  listingPrograms: [],
   programRules:
     "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   // TODO confirm not used anywhere

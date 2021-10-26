@@ -740,6 +740,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
   listingPreferences: [],
+  listingPrograms: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,

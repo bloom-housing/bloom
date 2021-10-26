@@ -5,10 +5,10 @@ import { JurisdictionCreateDto } from "../jurisdictions/dto/jurisdiction-create.
 import { Language } from "../shared/types/language-enum"
 
 export const defaultJurisdictions: JurisdictionCreateDto[] = [
-  { name: "Alameda", preferences: [], languages: [Language.en] },
-  { name: "San Jose", preferences: [], languages: [Language.en] },
-  { name: "San Mateo", preferences: [], languages: [Language.en] },
-  { name: "Detroit", preferences: [], languages: [Language.en] },
+  { name: "Alameda", preferences: [], languages: [Language.en], programs: [] },
+  { name: "San Jose", preferences: [], languages: [Language.en], programs: [] },
+  { name: "San Mateo", preferences: [], languages: [Language.en], programs: [] },
+  { name: "Detroit", preferences: [], languages: [Language.en], programs: [] },
 ]
 
 export async function createJurisdictions(app: INestApplicationContext) {

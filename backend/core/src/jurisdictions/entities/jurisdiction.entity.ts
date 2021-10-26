@@ -1,5 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
+import { Program } from "../../program/entities/program.entity"
 import {
   IsString,
   MaxLength,
@@ -27,6 +28,13 @@ export class Jurisdiction extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   notificationsSignUpURL?: string | null
+
+  @ManyToMany(() => Program, (program) => program.jurisdictions, { eager: true })
+  @JoinTable()
+  @Expose()
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Program)
+  programs: Program[]
 
   @Column({ type: "enum", enum: Language, array: true, default: [Language.en] })
   @Expose()

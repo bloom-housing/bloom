@@ -12,6 +12,13 @@ All notable changes to this project will be documented in this file. The format 
 
   - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
+  - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
+
+## Backend
+
+- Fixed:
+
+  - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
 
 ## v2.0.0-pre-tailwind 09/16/2021
 
@@ -52,6 +59,7 @@ All notable changes to this project will be documented in this file. The format 
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
   - Page now scrolls after closing modal ([#1962](https://github.com/bloom-housing/bloom/pull/1962)) (Emily Jablonski)
+  - Copy & New and Save & New in LM will no longer create duplicate units ([#1963](https://github.com/bloom-housing/bloom/pull/1963)) (Emily Jablonski)
 
 - Changed:
 
@@ -110,6 +118,7 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
   - Re-wrote SiteHeader to remove Bulma dependency and bugs ([#1885](https://github.com/bloom-housing/bloom/pull/1885)) (Emily Jablonski)
     - **Breaking Change**: SiteHeader has a new prop set, including some props to toggle new visual features
+  - Set a max width for hero buttons when there are secondary buttons ([#2002](https://github.com/bloom-housing/bloom/pull/2002)) (Andrea Egan)
 
 ### Backend
 
@@ -133,6 +142,7 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Adds Program entity to Listing (Many to Many) and to Jurisdiction (Many to many) and seed programs ([1968](https://github.com/bloom-housing/bloom/pull/1968))
   - Add Language to Jurisidiction entity ([#1998](https://github.com/bloom-housing/bloom/pull/1998))
   - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 

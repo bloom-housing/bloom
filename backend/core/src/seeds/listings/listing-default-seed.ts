@@ -16,8 +16,12 @@ import {
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
+  getDisabilityOrMentalIlnessProgram,
   getDisplaceePreference,
+  getHousingSituationProgram,
   getLiveWorkPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
@@ -25,6 +29,7 @@ import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
 import { Preference } from "../../preferences/entities/preference.entity"
+import { Program } from "../../program/entities/program.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -45,7 +50,9 @@ export class ListingDefaultSeed {
     @InjectRepository(Jurisdiction)
     protected readonly jurisdictionRepository: Repository<Jurisdiction>,
     @InjectRepository(Preference)
-    protected readonly preferencesRepository: Repository<Preference>
+    protected readonly preferencesRepository: Repository<Preference>,
+    @InjectRepository(Program)
+    protected readonly programsRepository: Repository<Program>
   ) {}
 
   async seed() {
@@ -121,6 +128,32 @@ export class ListingDefaultSeed {
         },
       ],
       events: getDefaultListingEvents(),
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getDisabilityOrMentalIlnessProgram().title,
+          }),
+          ordinal: 3,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getHousingSituationProgram().title,
+          }),
+          ordinal: 4,
+        },
+      ],
       jurisdictionName: "Alameda",
     }
 

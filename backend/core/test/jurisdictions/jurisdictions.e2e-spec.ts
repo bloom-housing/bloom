@@ -11,8 +11,9 @@ import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
-import { Language } from "../../src/shared/types/language-enum"
 import { Repository } from "typeorm"
+import { Program } from "../../src/program/entities/program.entity"
+import { Language } from "../../src/shared/types/language-enum"
 import { Preference } from "../../src/preferences/entities/preference.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -25,6 +26,8 @@ describe("Jurisdictions", () => {
   let app: INestApplication
   let adminAccesstoken: string
   let preferencesRepository: Repository<Preference>
+  let programsRepository: Repository<Program>
+
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
     const testEmailService = { confirmation: async () => {} }
@@ -34,7 +37,7 @@ describe("Jurisdictions", () => {
         TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         JurisdictionsModule,
-        TypeOrmModule.forFeature([Preference]),
+        TypeOrmModule.forFeature([Preference, Program]),
       ],
     })
       .overrideProvider(EmailService)
@@ -45,6 +48,7 @@ describe("Jurisdictions", () => {
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
+    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   })
 
   it(`should return jurisdictions`, async () => {
@@ -62,10 +66,21 @@ describe("Jurisdictions", () => {
       description: "TestDescription",
       links: [],
     })
+    const newProgram = await programsRepository.save({
+      question: "TestQuestion",
+      subtitle: "TestSubtitle",
+      description: "TestDescription",
+      subdescription: "TestDescription",
+    })
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test", languages: [Language.en], preferences: [newPreference] })
+      .send({
+        name: "test",
+        languages: [Language.en],
+        preferences: [newPreference],
+        programs: [newProgram],
+      })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
@@ -76,12 +91,17 @@ describe("Jurisdictions", () => {
     expect(Array.isArray(res.body.preferences)).toBe(true)
     expect(res.body.preferences.length).toBe(1)
     expect(res.body.preferences[0].id).toBe(newPreference.id)
+    expect(res.body).toHaveProperty("programs")
+    expect(Array.isArray(res.body.programs)).toBe(true)
+    expect(res.body.programs.length).toBe(1)
+    expect(res.body.programs[0].id).toBe(newProgram.id)
 
     const getById = await supertest(app.getHttpServer())
       .get(`/jurisdictions/${res.body.id}`)
       .expect(200)
     expect(getById.body.name).toBe("test")
     expect(getById.body.preferences[0].id).toBe(newPreference.id)
+    expect(getById.body.programs[0].id).toBe(newProgram.id)
   })
 
   it(`should create and return a new jurisdiction by name`, async () => {
@@ -89,6 +109,7 @@ describe("Jurisdictions", () => {
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
       .send({ name: "test2", languages: [Language.en], preferences: [] })
+      .send({ name: "test2", programs: [], languages: [Language.en], preferences: [] })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
@@ -104,7 +125,7 @@ describe("Jurisdictions", () => {
   })
 
   it(`should not allow to create a jurisdiction with unsupported language`, async () => {
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
       .send({ name: "test2", languages: ["non_existent_language"] })

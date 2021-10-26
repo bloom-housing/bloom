@@ -2305,6 +2305,9 @@ export interface Id {
 
 export interface Jurisdiction {
   /**  */
+  programs: Id[]
+
+  /**  */
   preferences: Id[]
 
   /**  */
@@ -2650,6 +2653,28 @@ export interface ApplicationPreference {
   options: ApplicationPreferenceOption[]
 }
 
+export interface ApplicationProgramOption {
+  /**  */
+  key: string
+
+  /**  */
+  checked: boolean
+
+  /**  */
+  extraData?: AllExtraDataTypes[]
+}
+
+export interface ApplicationProgram {
+  /**  */
+  key: string
+
+  /**  */
+  claimed: boolean
+
+  /**  */
+  options: ApplicationProgramOption[]
+}
+
 export interface Application {
   /**  */
   incomePeriod?: IncomePeriod
@@ -2737,6 +2762,9 @@ export interface Application {
 
   /**  */
   preferences: ApplicationPreference[]
+
+  /**  */
+  programs?: ApplicationProgram[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3310,6 +3338,9 @@ export interface ApplicationCreate {
   preferences: ApplicationPreference[]
 
   /**  */
+  programs?: ApplicationProgram[]
+
+  /**  */
   acceptedTerms?: boolean
 
   /**  */
@@ -3634,6 +3665,9 @@ export interface ApplicationUpdate {
 
   /**  */
   preferences: ApplicationPreference[]
+
+  /**  */
+  programs?: ApplicationProgram[]
 
   /**  */
   acceptedTerms?: boolean
@@ -4003,6 +4037,9 @@ export interface JurisdictionCreate {
   languages: EnumJurisdictionCreateLanguages[]
 
   /**  */
+  programs: Id[]
+
+  /**  */
   preferences: Id[]
 }
 
@@ -4024,6 +4061,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  programs: Id[]
 
   /**  */
   preferences: Id[]
@@ -4199,14 +4239,6 @@ export interface ListingEvent {
   file?: Asset
 }
 
-export interface PreferenceLink {
-  /**  */
-  title: string
-
-  /**  */
-  url: string
-}
-
 export interface FormMetadataExtraData {
   /**  */
   type: InputType
@@ -4244,6 +4276,45 @@ export interface FormMetadata {
 
   /**  */
   hideFromListing: boolean
+}
+
+export interface Program {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface ListingProgram {
+  /**  */
+  program: Program
+
+  /**  */
+  ordinal?: number
+}
+
+export interface PreferenceLink {
+  /**  */
+  title: string
+
+  /**  */
+  url: string
 }
 
 export interface Preference {
@@ -4520,6 +4591,9 @@ export interface Listing {
 
   /**  */
   leasingAgents?: UserBasic[]
+
+  /**  */
+  listingPrograms?: ListingProgram[]
 
   /**  */
   listingPreferences: ListingPreference[]
@@ -4885,6 +4959,14 @@ export interface ListingPreferenceUpdate {
   ordinal?: number
 }
 
+export interface ListingProgramUpdate {
+  /**  */
+  program: Id
+
+  /**  */
+  ordinal?: number
+}
+
 export interface ListingCreate {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4987,6 +5069,9 @@ export interface ListingCreate {
 
   /**  */
   listingPreferences: ListingPreferenceUpdate[]
+
+  /**  */
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5405,6 +5490,9 @@ export interface ListingUpdate {
 
   /**  */
   listingPreferences: ListingPreferenceUpdate[]
+
+  /**  */
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string

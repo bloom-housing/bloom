@@ -48,6 +48,8 @@ const views: Views = {
       "unitType.name",
       "listingPreferences.ordinal",
       "listingPreferencesPreference.id",
+      "listingPrograms.ordinal",
+      "listingProgramsProgram.id",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
@@ -60,6 +62,8 @@ const views: Views = {
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
       { join: "listings.listingPreferences", alias: "listingPreferences" },
       { join: "listingPreferences.preference", alias: "listingPreferencesPreference" },
+      { join: "listings.listingPrograms", alias: "listingPrograms" },
+      { join: "listingPrograms.program", alias: "listingProgramsProgram" },
     ],
   },
 }
@@ -204,6 +208,8 @@ views.full = {
     ["units.amiChart", "amiChart"],
     ["listings.jurisdiction", "jurisdiction"],
     ["listings.reservedCommunityType", "reservedCommunityType"],
+    ["listings.listingPrograms", "listingPrograms"],
+    ["listingPrograms.program", "listingProgramsProgram"],
   ],
 }
 

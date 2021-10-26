@@ -8,6 +8,7 @@ import { UserCreateDto } from "../../auth/dto/user-create.dto"
 import { ListingCreateDto } from "../../listings/dto/listing-create.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { PreferenceCreateDto } from "../../preferences/dto/preference-create.dto"
+import { ProgramCreateDto } from "../../program/dto/program-create.dto"
 
 export type PropertySeedType = Omit<
   PropertyCreateDto,
@@ -59,6 +60,7 @@ export type ListingSeedType = Omit<
 }
 
 export type PreferenceSeedType = PreferenceCreateDto
+export type ProgramSeedType = Omit<ProgramCreateDto, "listing">
 
 export type AssetDtoSeedType = Omit<AssetCreateDto, "listing">
 

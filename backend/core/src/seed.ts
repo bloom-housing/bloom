@@ -9,14 +9,18 @@ import { User } from "./auth/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
-import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
 import {
   defaultLeasingAgents,
+  getDisabilityOrMentalIlnessProgram,
+  getHousingSituationProgram,
+  getServedInMilitaryProgram,
+  getTayProgram,
   getDisplaceePreference,
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
 } from "./seeds/listings/shared"
+import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
@@ -38,6 +42,7 @@ import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
 import { Preference } from "./preferences/entities/preference.entity"
+import { Program } from "./program/entities/program.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -114,8 +119,27 @@ export async function createPreferences(
     getRepositoryToken(Jurisdiction)
   )
   await jurisdictionsRepository.save(jurisdictions)
-
   return preferences
+}
+
+export async function createPrograms(app: INestApplicationContext, jurisdictions: Jurisdiction[]) {
+  const programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
+  const programs = await programsRepository.save([
+    getServedInMilitaryProgram(),
+    getTayProgram(),
+    getDisabilityOrMentalIlnessProgram(),
+    getHousingSituationProgram(),
+  ])
+
+  for (const jurisdiction of jurisdictions) {
+    jurisdiction.programs = programs
+  }
+  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
+    getRepositoryToken(Jurisdiction)
+  )
+  await jurisdictionsRepository.save(jurisdictions)
+
+  return programs
 }
 
 const seedListings = async (
@@ -166,6 +190,7 @@ async function seed() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
+  await createPrograms(app, jurisdictions)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
   const user1 = await userService.createUser(

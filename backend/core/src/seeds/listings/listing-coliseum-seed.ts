@@ -6,6 +6,8 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
@@ -933,6 +935,7 @@ const coliseumListing: ListingSeedType = {
   leasingAgentPhone: "(510) 625-1632",
   leasingAgentTitle: "Property Manager",
   listingPreferences: [],
+  listingPrograms: [],
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -1054,6 +1057,20 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         },
       ],
       events: [],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)
