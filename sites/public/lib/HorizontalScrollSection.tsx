@@ -53,14 +53,8 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
   return (
     <section className={props.className}>
       <div className={styles.title}>
-        {props.icon && (
-          <Icon size="xlarge" symbol={props.icon} className={styles.icon} />
-        )}
-        <h2
-          className={`${styles.title__text} ${
-            props.icon ? styles['icon-space'] : ""
-          }`}
-        >
+        {props.icon && <Icon size="xlarge" symbol={props.icon} className={styles.icon} />}
+        <h2 className={`${styles.title__text} ${props.icon ? styles["icon-space"] : ""}`}>
           {props.title}
         </h2>
         <Button
@@ -81,11 +75,7 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
         </Button>
       </div>
       {props.subtitle && (
-        <div
-          className={`${styles.subtitle} ${
-            props.icon ? styles['icon-space'] : ""
-          }`}
-        >
+        <div className={`${styles.subtitle} ${props.icon ? styles["icon-space"] : ""}`}>
           {props.subtitle}
         </div>
       )}
