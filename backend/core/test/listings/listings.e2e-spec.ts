@@ -202,6 +202,7 @@ describe("Listings", () => {
       .put(`/listings/${listing.id}`)
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
+      .expect(200)
     const modifiedListing: ListingDto = putResponse.body
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
