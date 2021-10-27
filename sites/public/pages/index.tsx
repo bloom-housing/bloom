@@ -4,6 +4,8 @@ import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
+import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
+import styles from "./index.module.scss"
 
 export default function Home() {
   const blankAlertInfo = {
@@ -32,6 +34,13 @@ export default function Home() {
     </div>
   )
 
+  // TODO(#674): Fill out neighborhood buttons with real data
+  const NeighborhoodButton = (props: { label: string }) => (
+    <a className={styles.neighborhood} href="/listings">
+      <p className={styles.neighborhood__text}>{props.label}</p>
+    </a>
+  )
+
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
   const alertClasses = "flex-grow mt-6 max-w-6xl w-full"
@@ -55,6 +64,18 @@ export default function Home() {
         </AlertBox>
       )}
       <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
+      <HorizontalScrollSection
+        title="Neighborhoods"
+        scrollAmount={311}
+        icon="map"
+        className={styles.neighborhoods}
+      >
+        <NeighborhoodButton label="Midtown" />
+        <NeighborhoodButton label="Elmwood Park" />
+        <NeighborhoodButton label="Islandview" />
+        <NeighborhoodButton label="Brightmoor" />
+        <NeighborhoodButton label="Fox Creek" />
+      </HorizontalScrollSection>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
       />
