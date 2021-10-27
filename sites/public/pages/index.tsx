@@ -33,6 +33,19 @@ export default function Home() {
       </a>
     </div>
   )
+  interface LatestListingLinkProps {
+    name: string
+    address: string
+    availability: string
+  }
+
+  const LatestListingsLink = (props: LatestListingLinkProps) => (
+    <a className={styles["latest-listing"]} href="/listings">
+      <h3 className={styles["latest-listing__name"]}>{props.name}</h3>
+      <p className={styles["latest-listing__address"]}>{props.address}</p>
+      <div className={styles["latest-listing__availability"]}>{props.availability}</div>
+    </a>
+  )
 
   // TODO(#674): Fill out neighborhood buttons with real data
   const NeighborhoodButton = (props: { label: string }) => (
@@ -64,6 +77,42 @@ export default function Home() {
         </AlertBox>
       )}
       <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
+      {/* TODO(#672): Translate title */}
+      <HorizontalScrollSection
+        title="Latest listings"
+        subtitle="Last updated 2/12/22"
+        scrollAmount={560}
+        icon="clock"
+        className={styles["latest-listings"]}
+      >
+        {/* TODO(#672): Populate with real data */}
+        <LatestListingsLink
+          name="New Center Square"
+          address="112 Seward Avenue, Detroit, MI 48202"
+          availability="3 br available, 2br available"
+        />
+        <LatestListingsLink
+          name="Treymore Apartments"
+          address="457 Brainard St, Detroit, MI 48201"
+          availability="3 br available, 2br available"
+        />
+        <LatestListingsLink
+          name="New Center Square"
+          address="112 Seward Avenue, Detroit, MI 48202"
+          availability="3 br available, 2br available"
+        />
+        <LatestListingsLink
+          name="New Center Square"
+          address="112 Seward Avenue, Detroit, MI 48202"
+          availability="3 br available, 2br available"
+        />
+        <LatestListingsLink
+          name="New Center Square"
+          address="112 Seward Avenue, Detroit, MI 48202"
+          availability="3 br available, 2br available"
+        />
+      </HorizontalScrollSection>
+      {/* TODO(#674): Translate title*/}
       <HorizontalScrollSection
         title="Neighborhoods"
         scrollAmount={311}

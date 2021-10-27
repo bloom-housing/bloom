@@ -1,14 +1,16 @@
 $large-padding: 80px;
 $small-padding: 36px;
+$icon-small: 32px;
+$icon-large: 40px;
 
 .icon svg {
   fill: $tailwind-primary;
-  height: 2rem;
-  width: 2rem;
+  height: $icon-small;
+  width: $icon-small;
 
   @screen sm {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: $icon-large;
+    width: $icon-large;
   }
 }
 
@@ -26,11 +28,33 @@ $small-padding: 36px;
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 2rem;
-  @apply text-primary-dark;
 
   @screen sm {
     font-size: 2rem;
     line-height: 2.25rem;
+  }
+}
+
+.icon-space.title__text {
+  margin-left: 16px;
+}
+
+.subtitle {
+  color: $tailwind-primary;
+  font-size: 0.875rem;
+  padding: 0 $small-padding;
+
+  @screen sm {
+    padding: 0 $large-padding;
+  }
+}
+
+.icon-space.subtitle {
+  margin-left: 16px;
+  padding: 0 $small-padding + $icon-small;
+
+  @screen sm {
+    padding: 0 $large-padding + $icon-large;
   }
 }
 
