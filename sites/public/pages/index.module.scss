@@ -20,7 +20,7 @@
   @apply text-primary-dark;
   backdrop-filter: blur(5px);
   background: rgba(255, 255, 255, .8);
-  border-radius: 48px 0 16px 48px;
+  border-radius: 48px 0 16px 48px; //TODO(#674): Double check border-radius
   bottom: 21px;
   font-size: .875rem;
   font-weight: 700;

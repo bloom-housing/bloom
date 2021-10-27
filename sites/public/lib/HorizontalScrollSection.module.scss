@@ -1,7 +1,7 @@
 $large-padding: 80px;
 $small-padding: 36px;
 
-.horizontal-scroll__icon svg {
+.icon svg {
   fill: $tailwind-primary;
   height: 2rem;
   width: 2rem;
@@ -12,7 +12,7 @@ $small-padding: 36px;
   }
 }
 
-.horizontal-scroll__title {
+.title {
   align-items: center;
   display: flex;
   padding: 0 $small-padding;
@@ -22,7 +22,7 @@ $small-padding: 36px;
   }
 }
 
-.horizontal-scroll__title__text {
+.title__text {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 2rem;
@@ -34,7 +34,7 @@ $small-padding: 36px;
   }
 }
 
-.button.horizontal-scroll__title__button {
+.title button.title__button {
   display: none;
 
   @screen sm {
@@ -44,14 +44,15 @@ $small-padding: 36px;
   }
 }
 
-.button.horizontal-scroll__title__button[disabled] svg {
+.title button.title__button[disabled] svg {
   fill-opacity: 40%;
 }
 
-.horizontal-scroll__content {
+.content {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: 1fr;
+  grid-auto-columns: fit-content(100%);
   -ms-overflow-style: none;  /* IE and Edge */
   overflow-x: scroll;
   padding-top: 34px;
@@ -65,12 +66,12 @@ $small-padding: 36px;
   }
 }
 
-.horizontal-scroll__content > * {
+.content > * {
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
 
-.horizontal-scroll__content > *:first-child {
+.content > *:first-child {
   margin-left: $small-padding;
 
   @screen sm {
@@ -78,6 +79,6 @@ $small-padding: 36px;
   }
 }
 
-.horizontal-scroll__content::-webkit-scrollbar {
+.content::-webkit-scrollbar {
   display: none;
 }

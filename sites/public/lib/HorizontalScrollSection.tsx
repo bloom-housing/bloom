@@ -1,6 +1,7 @@
 import { Button, debounce } from "@bloom-housing/ui-components"
 import { Icon, IconTypes } from "@bloom-housing/ui-components/src/icons/Icon"
 import React, { useEffect, useState } from "react"
+import styles from "../lib/HorizontalScrollSection.module.scss"
 
 export interface HorizontalScrollSectionProps {
   title: string
@@ -37,21 +38,25 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
 
   useEffect(() => {
     scrollContainerRef.current.addEventListener("scroll", debounceSetButtonState)
+    window.addEventListener("resize", debounceSetButtonState)
+    // Set the initial state incase window is wide enough to not have any scrolling
+    setButtonState()
 
     // Cleanup
-    return () => scrollContainerRef.current.removeEventListener("scroll", debounceSetButtonState)
+    return () => {
+      scrollContainerRef.current.removeEventListener("scroll", debounceSetButtonState)
+      window.removeEventListener("resize", debounceSetButtonState)
+    }
   })
 
   return (
     <section className={props.className}>
-      <div className="horizontal-scroll__title">
-        {props.icon && (
-          <Icon size="xlarge" symbol={props.icon} className="horizontal-scroll__icon" />
-        )}
-        <h2 className="horizontal-scroll__title__text">{props.title}</h2>
+      <div className={styles.title}>
+        {props.icon && <Icon size="xlarge" symbol={props.icon} className={styles.icon} />}
+        <h2 className={styles.title__text}>{props.title}</h2>
         <Button
           unstyled={true}
-          className="horizontal-scroll__title__button"
+          className={styles.title__button}
           onClick={leftButtonClick}
           disabled={!canScrollLeft}
         >
@@ -59,14 +64,14 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
         </Button>
         <Button
           unstyled={true}
-          className="horizontal-scroll__title__button"
+          className={styles.title__button}
           onClick={rightButtonClick}
           disabled={!canScrollRight}
         >
           <Icon size="medium" symbol="right" />
         </Button>
       </div>
-      <div className="horizontal-scroll__content" ref={scrollContainerRef}>
+      <div className={styles.content} ref={scrollContainerRef}>
         {props.children}
       </div>
     </section>

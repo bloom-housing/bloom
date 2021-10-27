@@ -5,6 +5,7 @@ import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
+import styles from "./index.module.scss"
 
 export default function Home() {
   const blankAlertInfo = {
@@ -35,8 +36,8 @@ export default function Home() {
 
   // TODO(#674): Fill out neighborhood buttons with real data
   const NeighborhoodButton = (props: { label: string }) => (
-    <a className="neighborhood" href="/listings">
-      <p className="neighborhood__text">{props.label}</p>
+    <a className={styles.neighborhood} href="/listings">
+      <p className={styles.neighborhood__text}>{props.label}</p>
     </a>
   )
 
@@ -67,7 +68,7 @@ export default function Home() {
         title="Neighborhoods"
         scrollAmount={311}
         icon="map"
-        className="neighborhoods"
+        className={styles.neighborhoods}
       >
         <NeighborhoodButton label="Midtown" />
         <NeighborhoodButton label="Elmwood Park" />
