@@ -20,9 +20,11 @@ export class ApplicationCsvExporter {
       "Email Address": app.householdMembers_email_address,
       "Phone Number": app.householdMembers_phone_number,
       "Phone Number Type": app.householdMembers_phone_number_type,
-      "Same Address as Primary Applicant": app.householdMembers_same_address,
+      "Same Address as Primary Applicant": this.csvBuilder.formatBoolean(
+        app.householdMembers_same_address
+      ),
       Relationship: app.householdMembers_relationship,
-      "Work in Region": app.householdMembers_work_in_region,
+      "Work in Region": this.csvBuilder.formatBoolean(app.householdMembers_work_in_region),
       City: app.householdMembers_address_city,
       State: app.householdMembers_address_state,
       Street: app.householdMembers_address_street,
@@ -55,6 +57,7 @@ export class ApplicationCsvExporter {
 
   exportFromObject(applications: { [key: string]: any }, includeDemographics?: boolean): string {
     const extraHeaders: KeyNumber = {
+      "Household Members": 1,
       Preference: 1,
     }
     const preferenceKeys: KeyNumber = {}
@@ -195,7 +198,6 @@ export class ApplicationCsvExporter {
           nested: true,
           keys: Object.keys(self.mapHouseholdMembers(obj)),
         },
-        // "Requested Unit Types": self.unitTypeReadableList(),
         Preference: {
           nested: false,
           keys: Object.keys(preferenceKeys),
@@ -204,6 +206,6 @@ export class ApplicationCsvExporter {
       return groups[group]
     }
 
-    return this.csvBuilder.buildFromObject(applicationsObj, extraHeaders, extraGroupKeys)
+    return this.csvBuilder.buildFromIdIndex(applicationsObj, extraHeaders, extraGroupKeys)
   }
 }

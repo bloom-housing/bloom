@@ -18,24 +18,39 @@ export class CsvBuilder {
     return val ? "Yes" : "No"
   }
 
-  public buildFromObject(
+  /**
+   * this assumes a flat file structure since it's getting fed data from a raw query
+   * relational data should be handled with the use of extraHeaders and extraGroupKeys,
+   * see application-csv-exporter Household Members for an example of this
+   * All formatting should be done before passing in
+   */
+  public buildFromIdIndex(
     obj: { [key: string]: any },
-    extraHeaders: { [key: string]: number },
-    extraGroupKeys: (
+    extraHeaders?: { [key: string]: number },
+    extraGroupKeys?: (
       group: string,
-      obj: { [key: string]: any }
+      obj?: { [key: string]: any }
     ) => { nested: boolean; keys: string[] }
   ): string {
     const headerIndex: { [key: string]: number } = {}
-
+    // rootKeys should be the ids
     const rootKeys = Object.keys(obj)
+
+    if (rootKeys.length === 0) return ""
+    /**
+     * initialApp should have all possible keys.
+     * If it can't, use extraHeaders
+     */
     const initialApp = obj[rootKeys[0]]
     let index = 0
+    console.log("extraHeaders = ", extraHeaders)
     // set headerIndex
     Object.keys(initialApp).forEach((key) => {
+      console.log("key = ", key)
       // if the key is in extra headers, we want to group them all together
-      if (extraHeaders[key]) {
+      if (extraHeaders && extraHeaders[key] && extraGroupKeys) {
         const groupKeys = extraGroupKeys(key, initialApp)
+        console.log("groupKeys = ", groupKeys)
         for (let i = 1; i < extraHeaders[key] + 1; i++) {
           const headerGroup = groupKeys.nested ? `${key} (${i})` : key
           groupKeys.keys.forEach((groupKey) => {
@@ -49,6 +64,7 @@ export class CsvBuilder {
       }
     })
     const headers = Object.keys(headerIndex)
+    console.log({ headerIndex })
 
     // initiate arrays to insert data
     const rows = Array.from({ length: rootKeys.length }, () => Array(headers.length))
@@ -58,8 +74,8 @@ export class CsvBuilder {
       const thisObj = obj[obj_id]
       Object.keys(thisObj).forEach((key) => {
         const val = thisObj[key]
-        const groupKeys = extraGroupKeys(key, initialApp)
-        if (extraHeaders[key]) {
+        const groupKeys = extraGroupKeys && extraGroupKeys(key, initialApp)
+        if (extraHeaders && extraHeaders[key] && groupKeys) {
           // val in this case is an object with ids as the keys
           const ids = Object.keys(val)
           if (groupKeys.nested && ids.length) {
