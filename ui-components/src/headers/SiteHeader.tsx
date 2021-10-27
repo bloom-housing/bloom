@@ -70,7 +70,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
   const getLogoWidthClass = () => {
     if (props.logoWidth === "slim") return "navbar-logo-width-slim"
-    if (props.logoWidth === "base") return "navbar-logo-width-base"
+    if (!props.logoWidth || props.logoWidth === "base") return "navbar-logo-width-base"
     if (props.logoWidth === "medium") return "navbar-logo-width-med"
     if (props.logoWidth === "wide") return "navbar-logo-width-wide"
     return ""
