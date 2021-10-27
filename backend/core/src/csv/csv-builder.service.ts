@@ -43,14 +43,11 @@ export class CsvBuilder {
      */
     const initialApp = obj[rootKeys[0]]
     let index = 0
-    console.log("extraHeaders = ", extraHeaders)
     // set headerIndex
     Object.keys(initialApp).forEach((key) => {
-      console.log("key = ", key)
       // if the key is in extra headers, we want to group them all together
       if (extraHeaders && extraHeaders[key] && extraGroupKeys) {
         const groupKeys = extraGroupKeys(key, initialApp)
-        console.log("groupKeys = ", groupKeys)
         for (let i = 1; i < extraHeaders[key] + 1; i++) {
           const headerGroup = groupKeys.nested ? `${key} (${i})` : key
           groupKeys.keys.forEach((groupKey) => {
@@ -64,7 +61,6 @@ export class CsvBuilder {
       }
     })
     const headers = Object.keys(headerIndex)
-    console.log({ headerIndex })
 
     // initiate arrays to insert data
     const rows = Array.from({ length: rootKeys.length }, () => Array(headers.length))

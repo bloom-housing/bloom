@@ -46,7 +46,6 @@ export class ApplicationsService {
   }
 
   public async rawListWithFlagged(params: PaginatedApplicationListQueryParams) {
-    const start = new Date().getTime()
     const qb = this._getQb(params)
     qb.leftJoin(
       "application_flagged_set_applications_applications",
@@ -59,10 +58,7 @@ export class ApplicationsService {
     qb.groupBy(
       "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, preferredUnit.id"
     )
-    const result = await qb.getRawMany()
-
-    console.log("get apps time = ", new Date().getTime() - start)
-    return result
+    return await qb.getRawMany()
   }
 
   async listPaginated(
