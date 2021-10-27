@@ -570,4 +570,76 @@ describe("Applications", () => {
       true
     )
   })
+
+  it("should get and delete a user by ID", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.id).toBe(user.id)
+    expect(res.body.email).toBe(user.email)
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(404)
+  })
+
+  it("should lower case email of new user", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "TestingLowerCasing@LowerCasing.com",
+      emailConfirmation: "TestingLowerCasing@LowerCasing.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const res = await supertest(app.getHttpServer())
+      .post(`/user`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+    expect(res.body).toHaveProperty("id")
+    expect(res.body).not.toHaveProperty("passwordHash")
+    expect(res.body).toHaveProperty("email")
+    expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
+
+    const confirmation = await supertest(app.getHttpServer())
+      .put(`/user/${res.body.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .send({
+        ...res.body,
+        confirmedAt: new Date(),
+      })
+      .expect(200)
+
+    expect(confirmation.body.confirmedAt).toBeDefined()
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email.toLowerCase(), password: userCreateDto.password })
+      .expect(201)
+  })
 })

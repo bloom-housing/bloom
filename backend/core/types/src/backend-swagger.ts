@@ -901,6 +901,50 @@ export class UserService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      userId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{userId}"
+      url = url.replace("{userId}", params["userId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /**  */
+      userId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{userId}"
+      url = url.replace("{userId}", params["userId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserProfileService {
@@ -2248,7 +2292,15 @@ export interface AmiChartItem {
   income: number
 }
 
+export interface Id {
+  /**  */
+  id: string
+}
+
 export interface Jurisdiction {
+  /**  */
+  programs: Id[]
+
   /**  */
   id: string
 
@@ -2263,6 +2315,9 @@ export interface Jurisdiction {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
 }
 
 export interface AmiChart {
@@ -2283,11 +2338,6 @@ export interface AmiChart {
 
   /**  */
   name: string
-}
-
-export interface Id {
-  /**  */
-  id: string
 }
 
 export interface AmiChartCreate {
@@ -2594,6 +2644,28 @@ export interface ApplicationPreference {
   options: ApplicationPreferenceOption[]
 }
 
+export interface ApplicationProgramOption {
+  /**  */
+  key: string
+
+  /**  */
+  checked: boolean
+
+  /**  */
+  extraData?: AllExtraDataTypes[]
+}
+
+export interface ApplicationProgram {
+  /**  */
+  key: string
+
+  /**  */
+  claimed: boolean
+
+  /**  */
+  options: ApplicationProgramOption[]
+}
+
 export interface Application {
   /**  */
   incomePeriod?: IncomePeriod
@@ -2681,6 +2753,9 @@ export interface Application {
 
   /**  */
   preferences: ApplicationPreference[]
+
+  /**  */
+  programs?: ApplicationProgram[]
 
   /**  */
   acceptedTerms?: boolean
@@ -3254,6 +3329,9 @@ export interface ApplicationCreate {
   preferences: ApplicationPreference[]
 
   /**  */
+  programs?: ApplicationProgram[]
+
+  /**  */
   acceptedTerms?: boolean
 
   /**  */
@@ -3580,6 +3658,9 @@ export interface ApplicationUpdate {
   preferences: ApplicationPreference[]
 
   /**  */
+  programs?: ApplicationProgram[]
+
+  /**  */
   acceptedTerms?: boolean
 
   /**  */
@@ -3697,10 +3778,10 @@ export interface UserCreate {
   jurisdictions?: Id[]
 
   /**  */
-  confirmedAt?: Date
+  email: string
 
   /**  */
-  email: string
+  confirmedAt?: Date
 
   /**  */
   firstName: string
@@ -3827,6 +3908,9 @@ export interface UserUpdate {
   jurisdictions: Id[]
 
   /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3939,6 +4023,12 @@ export interface JurisdictionCreate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionCreateLanguages[]
+
+  /**  */
+  programs: Id[]
 }
 
 export interface JurisdictionUpdate {
@@ -3956,6 +4046,12 @@ export interface JurisdictionUpdate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  programs: Id[]
 }
 
 export interface ListingFilterParams {
@@ -3979,6 +4075,9 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
+
+  /**  */
+  jurisdiction?: string
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4202,6 +4301,37 @@ export interface ListingEvent {
 
   /**  */
   file?: Asset
+}
+
+export interface Program {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface ListingProgram {
+  /**  */
+  program: Program
+
+  /**  */
+  ordinal?: number
 }
 
 export interface ReservedCommunityType {
@@ -4447,6 +4577,9 @@ export interface Listing {
 
   /**  */
   leasingAgents?: UserBasic[]
+
+  /**  */
+  listingPrograms?: ListingProgram[]
 
   /**  */
   jurisdiction: IdName
@@ -4824,6 +4957,14 @@ export interface UnitsSummaryCreate {
   unitType: Id
 }
 
+export interface ListingProgramUpdate {
+  /**  */
+  program: Id
+
+  /**  */
+  ordinal?: number
+}
+
 export interface ListingCreate {
   /**  */
   applicationPickUpAddressType?: ListingApplicationAddressType
@@ -4926,6 +5067,9 @@ export interface ListingCreate {
 
   /**  */
   unitsSummary?: UnitsSummaryCreate[]
+
+  /**  */
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5370,6 +5514,9 @@ export interface ListingUpdate {
 
   /**  */
   unitsSummary?: UnitsSummaryUpdate[]
+
+  /**  */
+  listingPrograms?: ListingProgramUpdate[]
 
   /**  */
   additionalApplicationSubmissionNotes?: string
@@ -5819,7 +5966,12 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+}
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5880,6 +6032,18 @@ export enum EnumUserFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "NA" = "NA",
+}
+export enum EnumJurisdictionCreateLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+}
+export enum EnumJurisdictionUpdateLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",

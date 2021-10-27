@@ -16,6 +16,7 @@ import { IdNameDto } from "../../shared/dto/idName.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationAddress",
@@ -30,6 +31,7 @@ export class ListingDto extends OmitType(Listing, [
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
+  "listingPrograms",
   "preferences",
   "property",
   "reservedCommunityType",
@@ -104,6 +106,13 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgramDto)
+  listingPrograms?: ListingProgramDto[]
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdNameDto)
@@ -125,7 +134,10 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @Transform(
     (_value, listing) => {
-      if (moment(listing.applicationDueDate).isBefore()) {
+      if (
+        moment(listing.applicationDueDate).isBefore() &&
+        listing.status !== ListingStatus.pending
+      ) {
         listing.status = ListingStatus.closed
       }
 

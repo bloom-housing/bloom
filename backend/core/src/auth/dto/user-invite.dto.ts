@@ -27,7 +27,7 @@ export class UserInviteDto extends OmitType(UserDto, [
   jurisdictions: IdDto[]
 
   @Expose()
-  @IsOptional()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)

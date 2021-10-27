@@ -1,11 +1,15 @@
 {
   "name": "@bloom-housing/shared-helpers",
-  "version": "1.0.6-alpha.0",
+  "version": "1.0.6-alpha.5",
   "description": "Shared helpers for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared-helpers",
   "main": "index.js",
   "license": "Apache-2.0",
   "private": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "test": "jest -w 1",
     "test:coverage": "jest -w 1 --coverage --watchAll=false",
