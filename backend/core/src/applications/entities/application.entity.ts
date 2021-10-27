@@ -45,7 +45,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
-@Index(["listing", "applicant"])
+@Index(["listing"])
 export class Application extends AbstractEntity {
   @DeleteDateColumn()
   @Expose()

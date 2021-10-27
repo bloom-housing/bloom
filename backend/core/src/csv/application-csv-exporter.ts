@@ -58,7 +58,6 @@ export class ApplicationCsvExporter {
       Preference: 1,
     }
     const preferenceKeys: KeyNumber = {}
-
     const applicationsObj = applications.reduce((obj, app) => {
       let demographics = {}
 
@@ -207,9 +206,4 @@ export class ApplicationCsvExporter {
 
     return this.csvBuilder.buildFromObject(applicationsObj, extraHeaders, extraGroupKeys)
   }
-}
-
-export class ApplicationCsvExporter2 {
-  constructor(private readonly csvBuilder: CsvBuilder) {}
-  return
 }
