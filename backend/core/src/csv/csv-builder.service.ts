@@ -1,247 +1,114 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Scope } from "@nestjs/common"
-import dayjs from "dayjs"
-import { ApplicationDto } from "../applications/dto/application.dto"
 import { capitalizeFirstLetter } from "../libs/stringLib"
 
-const HEADER_COUNT_REG = new RegExp(/\s\(\d\)/)
-
-interface MappedFields {
-  [key: string]: string
+export interface KeyNumber {
+  [key: string]: number
 }
 
 @Injectable({ scope: Scope.REQUEST })
 export class CsvBuilder {
-  headers: { [key: string]: number }
-  parsedData: { header: string; mappedField: string; val: any }[]
-  inProgress: boolean
-  excludeKeys: string[]
-  mappedFields: MappedFields
-  constructor() {
-    this.headers = {}
-    this.parsedData = []
-    this.inProgress = false
-    this.excludeKeys = []
-    this.mappedFields = {}
-  }
-
   public capAndSplit(str: string): string {
     let newStr = capitalizeFirstLetter(str)
     newStr = newStr.split(/(?=[A-Z])/).join(" ")
     return newStr
   }
 
-  public arrayToCapitalizedString(arr: string[]): string {
-    return arr.map((val) => this.capAndSplit(val)).join(" ")
+  public formatBoolean(val) {
+    return val ? "Yes" : "No"
   }
 
-  /**
-   * this tests two cases of a header, static and dynamic
-   * *
-   * Headers like "applicant firstName" or "houseHoldMembers firstName (1)" are static
-   * and headers like "preference <some other strings>" where it's defined off of the data.
-   * So in the case of dynamic we're just checking the first string to see if it matches
-   */
-  private isHeaderInMappedFields(name): [string, string] {
-    const staticHeader = this.mappedFields[name.replace(HEADER_COUNT_REG, "")]
-    const dynamicHeader = this.mappedFields[name.split(" ")[0]]
+  public buildFromObject(
+    obj: { [key: string]: any },
+    extraHeaders: { [key: string]: number },
+    extraGroupKeys: (
+      group: string,
+      obj: { [key: string]: any }
+    ) => { nested: boolean; keys: string[] }
+  ): string {
+    const headerIndex: { [key: string]: number } = {}
 
-    return [staticHeader, dynamicHeader]
-  }
-
-  /**
-   * This builder supports mapped (static and dynamic) and non mapped keys.
-   * For an example, using a mapped static header, we have the "applicant" object, which has
-   * "firstName" as a key. Since we only call setHeader when we've gotten down to non objects,
-   * it's finally called with setHeader("applicant firstName").
-   * Since "applicant firstName" is a mappedField, meaning that mappedField["applicant firstName"] = "Primary Applicant First Name", we want to set the mappedStr to this and pass along to add to the pasredData object.
-   * So that later, we can know what column the corresponding data goes in by that mapped field.
-   */
-  private setHeader(header: string, index: number): [string, string?] {
-    let newKey = header
-    // we pass along the mapped key for reference, so we can more easily set data to the correct column
-    const [staticHeader, dynamicHeader] = this.isHeaderInMappedFields(header)
-    let mappedStr = staticHeader ?? dynamicHeader
-    if (!staticHeader && dynamicHeader) {
-      const [, ...names] = header.split(" ")
-      if (names) {
-        mappedStr += " " + this.arrayToCapitalizedString(names)
-      }
-    }
-    if (!mappedStr) {
-      newKey = this.arrayToCapitalizedString(newKey.split(" "))
-    }
-
-    if (index !== 0) {
-      newKey += ` (${index})`
-      if (mappedStr) {
-        mappedStr += ` (${index})`
-      }
-    }
-    if (this.headers[newKey] === undefined) {
-      this.headers[newKey] = 1
-    }
-    return [newKey, mappedStr]
-  }
-
-  private getExcludeKeysRegex() {
-    return new RegExp(this.excludeKeys.join("|"))
-  }
-
-  public addToExcludedKeys(key) {
-    this.excludeKeys.push(key)
-  }
-
-  public setExcludedKeys(keys: string[]) {
-    this.excludeKeys = keys
-  }
-
-  public setMappedFields(obj: MappedFields) {
-    this.mappedFields = obj
-  }
-
-  private parseData(key: string, val: any, header: string, index = 0): void {
-    if (Array.isArray(val)) {
-      val.forEach((val2, i) => {
-        // preferences and programs are a special case
-        // TODO: think of a better way to handle this case
-        if (key === "preferences" || key === "programs") {
-          val2.options?.forEach((preference) => {
-            this.parseData(
-              preference.key,
-              preference.checked ? "Yes" : "No",
-              `${header} ${val2.key} ${preference.key}`
-            )
+    const rootKeys = Object.keys(obj)
+    const initialApp = obj[rootKeys[0]]
+    let index = 0
+    // set headerIndex
+    Object.keys(initialApp).forEach((key) => {
+      // if the key is in extra headers, we want to group them all together
+      if (extraHeaders[key]) {
+        const groupKeys = extraGroupKeys(key, initialApp)
+        for (let i = 1; i < extraHeaders[key] + 1; i++) {
+          const headerGroup = groupKeys.nested ? `${key} (${i})` : key
+          groupKeys.keys.forEach((groupKey) => {
+            headerIndex[`${headerGroup} ${groupKey}`] = index
+            index++
           })
-        } else {
-          this.parseData(key, val2, header, i + 1)
         }
-      })
-    } else if (val instanceof Object) {
-      // dates are objects
-      if (dayjs(val).isValid()) {
-        const [newKey, mappedField] = this.setHeader(header, index)
-        this.parsedData.push({
-          header: newKey,
-          mappedField,
-          val: dayjs(val).format("DD-MM-YYYY h:mm:ss A"),
-        })
       } else {
-        for (let i = 0, keys = Object.keys(val); i < keys.length; i++) {
-          this.parseData(
-            keys[i],
-            val[keys[i]],
-            header.length ? `${header} ${keys[i]}` : keys[i],
-            index
-          )
-        }
+        headerIndex[key] = index
+        index++
       }
-    } else {
-      const [newKey, mappedField] = this.setHeader(header, index)
-      // format data before pushing
-      if (typeof val === "boolean") {
-        val = val ? "Yes" : "No"
-      }
-      // use JSON.stringify to escape double and single quotes
-      this.parsedData.push({
-        header: newKey,
-        mappedField,
-        val: val !== undefined && val !== null ? JSON.stringify(val) : "",
-      })
-    }
-  }
+    })
+    const headers = Object.keys(headerIndex)
 
-  public build(arr: any[]): string {
-    let csvString = ""
-    try {
-      arr.forEach((row: ApplicationDto) => {
-        this.parseData("", row, "")
-        this.parsedData.push({ header: "_endRow", mappedField: undefined, val: "_endRow" })
-      })
-      // filter out excluded keys and fields not in mappedFields (if mappedFields is not empty)
-      const hasMappedFields = Object.keys(this.mappedFields).length > 0
-      const hasExcludeKeys = this.excludeKeys.length > 0
-      let headerArray = Object.keys(this.headers).filter((header) => {
-        const mappedField = hasMappedFields
-          ? this.mappedFields[header.replace(HEADER_COUNT_REG, "")] !== undefined ||
-            this.mappedFields[header.split(" ")[0]] !== undefined
-          : true
-        return (hasExcludeKeys === false || !this.getExcludeKeysRegex().test(header)) && mappedField
-      })
-      // initiate arrays to insert data
-      const rows = Array.from({ length: arr.length }, () => Array(headerArray.length))
+    // initiate arrays to insert data
+    const rows = Array.from({ length: rootKeys.length }, () => Array(headers.length))
 
-      headerArray = headerArray
-        .map((column) => {
-          let columnString = ""
-          const [staticHeader, dynamicHeader] = this.isHeaderInMappedFields(column)
-          let mappedField = staticHeader ?? dynamicHeader
-          if (mappedField) {
-            if (!staticHeader && dynamicHeader) {
-              const [, ...names] = column.split(" ")
-              mappedField += " " + this.arrayToCapitalizedString(names)
-            } else if (staticHeader) {
-              const columnCount = HEADER_COUNT_REG.exec(column)
-              if (columnCount !== null) {
-                mappedField += columnCount[0]
-              }
-            }
-            columnString = mappedField
-          } else {
-            // format header names
-            const columnArray = column.split(" ")
-            columnString = this.arrayToCapitalizedString(columnArray)
+    // set rows (a row is a record)
+    rootKeys.forEach((obj_id, row) => {
+      const thisObj = obj[obj_id]
+      Object.keys(thisObj).forEach((key) => {
+        const val = thisObj[key]
+        const groupKeys = extraGroupKeys(key, initialApp)
+        if (extraHeaders[key]) {
+          // val in this case is an object with ids as the keys
+          const ids = Object.keys(val)
+          if (groupKeys.nested && ids.length) {
+            Object.keys(val).forEach((sub_id, i) => {
+              const headerGroup = `${key} (${i + 1})`
+              groupKeys.keys.forEach((groupKey) => {
+                const column = headerIndex[`${headerGroup} ${groupKey}`]
+                const sub_val = val[sub_id][groupKey]
+                rows[row][column] =
+                  sub_val !== undefined && sub_val !== null ? JSON.stringify(sub_val) : ""
+              })
+            })
+          } else if (groupKeys.nested === false) {
+            Object.keys(val).forEach((sub_key) => {
+              const column = headerIndex[`${key} ${sub_key}`]
+              const sub_val = val[sub_key]
+              rows[row][column] =
+                sub_val !== undefined && sub_val !== null ? JSON.stringify(sub_val) : ""
+            })
           }
-          return columnString
-        })
-        .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
-      let row = 0
-      // create map so we don't have to Array.indexOf() for every row
-      const headerIndexMap = {}
-      this.parsedData.forEach((obj) => {
-        if (obj.val === "_endRow") {
-          row++
         } else {
-          let headerIndex = -1
-          // get index of header
-          if (obj.mappedField) {
-            if (headerIndexMap[obj.mappedField]) {
-              headerIndex = headerIndexMap[obj.mappedField]
-            } else {
-              headerIndex = headerArray.indexOf(obj.mappedField)
-              headerIndexMap[obj.mappedField] = headerIndex
-            }
+          const column = headerIndex[key]
+          let value
+          if (Array.isArray(val)) {
+            value = val.join(", ")
+          } else if (val instanceof Object) {
+            value = Object.keys(val)
+              .map((key) => val[key])
+              .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+              .join(", ")
           } else {
-            if (headerIndexMap[obj.header]) {
-              headerIndex = headerIndexMap[obj.header]
-            } else {
-              headerIndex = headerArray.indexOf(obj.header)
-              headerIndexMap[obj.header] = headerIndex
-            }
+            value = val
           }
-
-          if (headerIndex > -1) {
-            rows[row][headerIndex] = obj.val
-          }
+          rows[row][column] = value !== undefined && value !== null ? JSON.stringify(value) : ""
         }
       })
+    })
 
-      // turn headers into csv format
-      csvString = headerArray.map((key) => key.replace(/^_[A-Z]\d?_/, "")).join(",")
-      if (headerArray.length) {
+    let csvString = headers.join(",")
+    csvString += "\n"
+
+    // turn rows into csv format
+    rows.forEach((row) => {
+      if (row.length) {
+        csvString += row.join(",")
         csvString += "\n"
       }
+    })
 
-      // turn rows into csv format
-      rows.forEach((row) => {
-        if (row.length) {
-          csvString += row.join(",")
-          csvString += "\n"
-        }
-      })
-    } catch (error) {
-      console.log("CSV Export Error = ", error)
-    }
     return csvString
   }
 }

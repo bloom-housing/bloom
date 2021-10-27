@@ -45,34 +45,23 @@ export class ApplicationsService {
     return result
   }
 
-  public async listWithFlagged(params: PaginatedApplicationListQueryParams) {
+  public async rawListWithFlagged(params: PaginatedApplicationListQueryParams) {
+    const start = new Date().getTime()
     const qb = this._getQb(params)
-    // N.B. we could significantly cut down the query time (and only do one query), if we use qb.getRawMany() here, but then we lose it in having to map it to something usable (which may still be faster)
-    const result = await qb.getMany()
-    // Get flagged applications
-    // we can inner join on application_flagged_set_applications_applications to know if it's flagged
-    const flaggedQuery = await this.repository
-      .createQueryBuilder("applications")
-      .innerJoin(
-        "application_flagged_set_applications_applications",
-        "application_flagged_set_applications_applications",
-        "application_flagged_set_applications_applications.applications_id = applications.id"
-      )
-      .andWhere("applications.listing_id = :lid", { lid: params.listingId })
-      .groupBy("applications.id")
-      .getRawMany()
-    // Reorganize flagged to object to make it faster to map
-    const flagged = flaggedQuery.reduce((obj, application) => {
-      obj[application.id] = true
-      return obj
-    }, {})
-    await Promise.all(
-      result.map(async (application) => {
-        // Because TypeOrm can't map extra flagged field we need to map it manually
-        application.flagged = flagged[application.id] || false
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
-      })
+    qb.leftJoin(
+      "application_flagged_set_applications_applications",
+      "application_flagged_set_applications_applications",
+      "application_flagged_set_applications_applications.applications_id = application.id"
     )
+    qb.addSelect(
+      "count(application_flagged_set_applications_applications.applications_id) > 0 as flagged"
+    )
+    qb.groupBy(
+      "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, preferredUnit.id"
+    )
+    const result = await qb.getRawMany()
+
+    console.log("get apps time = ", new Date().getTime() - start)
     return result
   }
 
