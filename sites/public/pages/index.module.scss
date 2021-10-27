@@ -1,4 +1,4 @@
-.neighborhoods{
+.neighborhoods {
   padding: 26px 0;
 }
 
@@ -9,7 +9,7 @@
   margin: 0 33px 0 0;
   position: relative;
   width: 209px;
-  
+
   @screen sm {
     height: 194px;
     width: 278px;
@@ -19,10 +19,10 @@
 .neighborhood__text {
   @apply text-primary-dark;
   backdrop-filter: blur(5px);
-  background: rgba(255, 255, 255, .8);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 48px 0 16px 48px; //TODO(#674): Double check border-radius
   bottom: 21px;
-  font-size: .875rem;
+  font-size: 0.875rem;
   font-weight: 700;
   left: 21px;
   line-height: 1rem;
