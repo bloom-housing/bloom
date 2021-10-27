@@ -1,10 +1,10 @@
 import { ExceptionFilter, Catch, ArgumentsHost } from "@nestjs/common"
-import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError"
 
-@Catch(EntityNotFoundError)
+@Catch()
 export class EntityNotFoundExceptionFilter implements ExceptionFilter {
-  catch(exception: EntityNotFoundError, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const response = host.switchToHttp().getResponse()
+    console.error({ message: exception.response.message, stack: exception.stack, exception })
     response.status(404).json({ message: exception.message })
   }
 }
