@@ -289,6 +289,19 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   }
 }
 
+export function useProgramList() {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () => programsService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()

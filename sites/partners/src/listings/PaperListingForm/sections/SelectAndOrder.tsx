@@ -10,33 +10,64 @@ import {
   Field,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { useJurisdictionalPreferenceList } from "../../../../lib/hooks"
-import { Preference } from "@bloom-housing/backend-core/types"
+import { Preference, Program } from "@bloom-housing/backend-core/types"
 
-type PreferencesProps = {
-  preferences: Preference[]
-  setPreferences: (units: Preference[]) => void
+type SelectAndOrderSection = Preference | Program
+
+type SelectAndOrderProps = {
+  listingData: SelectAndOrderSection[]
+  setListingData: (listingData: SelectAndOrderSection[]) => void
+  title: string
+  subtitle: string
+  editText: string
+  addText: string
+  drawerTitle: string
+  drawerButtonText: string
+  dataFetcher: (
+    jurisdiction?: string
+  ) => {
+    data: SelectAndOrderSection[]
+    loading: boolean
+    error: any
+  }
+  formKey: string
 }
 
-const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
-  const [preferencesTableDrawer, setPreferencesTableDrawer] = useState<boolean | null>(null)
-  const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
-  const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
+const SelectAndOrder = ({
+  listingData,
+  setListingData,
+  title,
+  subtitle,
+  editText,
+  addText,
+  drawerTitle,
+  drawerButtonText,
+  dataFetcher,
+  formKey,
+}: SelectAndOrderProps) => {
+  const [tableDrawer, setTableDrawer] = useState<boolean | null>(null)
+  const [selectDrawer, setSelectDrawer] = useState<boolean | null>(null)
+  const [draftListingData, setDraftListingData] = useState<SelectAndOrderSection[]>(listingData)
   const [dragOrder, setDragOrder] = useState([])
+
+  const formMethods = useFormContext()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, getValues, watch, reset } = formMethods
 
   const draggableTableData = useMemo(
     () =>
-      draftPreferences.map((pref) => ({
-        name: pref.title,
+      draftListingData.map((item) => ({
+        name: item.title,
         action: (
           <div className="flex">
             <Button
               type="button"
               className="front-semibold uppercase text-red-700"
               onClick={() => {
-                const editedPreferences = [...draftPreferences]
-                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                setDraftPreferences(editedPreferences)
+                const editedListingData = [...draftListingData]
+                editedListingData.splice(editedListingData.indexOf(item), 1)
+                setDraftListingData(editedListingData)
+                reset()
               }}
               unstyled
             >
@@ -45,24 +76,24 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           </div>
         ),
       })),
-    [draftPreferences]
+    [draftListingData]
   )
 
   const formTableData = useMemo(
     () =>
-      preferences.map((pref, index) => ({
+      listingData.map((item, index) => ({
         order: index + 1,
-        name: pref.title,
+        name: item.title,
         action: (
           <div className="flex">
             <Button
               type="button"
               className="front-semibold uppercase text-red-700"
               onClick={() => {
-                const editedPreferences = [...preferences]
-                editedPreferences.splice(editedPreferences.indexOf(pref), 1)
-                setPreferences(editedPreferences)
-                setDraftPreferences(editedPreferences)
+                const editedListingData = [...listingData]
+                editedListingData.splice(editedListingData.indexOf(item), 1)
+                setListingData(editedListingData)
+                setDraftListingData(editedListingData)
               }}
               unstyled
             >
@@ -71,30 +102,25 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           </div>
         ),
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [preferences]
+    [listingData]
   )
 
   // Update local state with dragged state
   useEffect(() => {
-    if (draftPreferences.length > 0 && dragOrder.length > 0) {
+    if (draftListingData.length > 0 && dragOrder.length > 0) {
       const newDragOrder = []
-      dragOrder.forEach((pref) => {
-        newDragOrder.push(draftPreferences.filter((draftPref) => draftPref.title === pref.name)[0])
+      dragOrder.forEach((item) => {
+        newDragOrder.push(draftListingData.filter((draftItem) => draftItem.title === item.name)[0])
       })
-      setDraftPreferences(newDragOrder)
+      setDraftListingData(newDragOrder)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
 
-  const formMethods = useFormContext()
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, watch } = formMethods
-
   const jurisdiction: string = watch("jurisdiction.id")
 
-  // Fetch and filter all preferences
-  const { data: preferencesData = [] } = useJurisdictionalPreferenceList(jurisdiction)
+  const { data: fetchedData = [] } = dataFetcher(jurisdiction)
+
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
@@ -108,14 +134,9 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
 
   return (
     <>
-      <GridSection
-        title={t("listings.sections.housingPreferencesTitle")}
-        description={t("listings.sections.housingPreferencesSubtext")}
-        grid={false}
-        separator
-      >
+      <GridSection title={title} description={subtitle} grid={false} separator>
         <div className="bg-gray-300 px-4 py-5">
-          {!!preferences.length && (
+          {!!listingData.length && (
             <div className="mb-5">
               <MinimalTable headers={formTableHeaders} data={formTableData} />
             </div>
@@ -124,25 +145,25 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           <Button
             type="button"
             size={AppearanceSizeType.normal}
-            onClick={() => setPreferencesTableDrawer(true)}
+            onClick={() => setTableDrawer(true)}
           >
-            {preferences.length ? t("listings.editPreferences") : t("listings.addPreference")}
+            {listingData.length ? editText : addText}
           </Button>
         </div>
       </GridSection>
 
       <Drawer
-        open={!!preferencesTableDrawer}
-        title={t("listings.addPreferences")}
-        ariaDescription={t("listings.addPreferences")}
+        open={!!tableDrawer}
+        title={drawerTitle}
+        ariaDescription={drawerTitle}
         onClose={() => {
-          if (!preferencesSelectDrawer) {
-            setPreferencesTableDrawer(null)
+          if (!selectDrawer) {
+            setTableDrawer(null)
           }
         }}
       >
         <div className="border rounded-md p-8 bg-white">
-          {!!draftPreferences.length && (
+          {!!draftListingData.length && (
             <div className="mb-5">
               <MinimalTable
                 headers={draggableTableHeaders}
@@ -156,10 +177,10 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => {
-              setPreferencesSelectDrawer(true)
+              setSelectDrawer(true)
             }}
           >
-            {t("listings.selectPreferences")}
+            {drawerButtonText}
           </Button>
         </div>
         <Button
@@ -168,8 +189,8 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
           onClick={() => {
-            setPreferences(draftPreferences)
-            setPreferencesTableDrawer(null)
+            setListingData(draftListingData)
+            setTableDrawer(null)
           }}
         >
           {t("t.save")}
@@ -177,29 +198,29 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
       </Drawer>
 
       <Drawer
-        open={!!preferencesSelectDrawer}
-        title={t("listings.selectPreferences")}
-        ariaDescription={t("listings.selectPreferences")}
+        open={!!selectDrawer}
+        title={drawerButtonText}
+        ariaDescription={drawerButtonText}
         onClose={() => {
-          setPreferencesSelectDrawer(null)
+          setSelectDrawer(null)
         }}
         className={"w-auto"}
       >
         <div className="border rounded-md p-8 bg-white">
           {jurisdiction
-            ? preferencesData.map((pref, index) => {
+            ? fetchedData.map((item, index) => {
                 return (
                   <GridSection columns={1} key={index}>
                     <Field
                       className={"font-semibold"}
-                      id={`preference.${pref.id}`}
-                      name={`preference.${pref.id}`}
+                      id={`${formKey}.${item.id}`}
+                      name={`${formKey}.${item.id}`}
                       type="checkbox"
-                      label={pref.title}
+                      label={item.title}
                       register={register}
                       inputProps={{
-                        defaultChecked: draftPreferences.some(
-                          (existingPref) => existingPref.title === pref.title
+                        defaultChecked: draftListingData.some(
+                          (existingItem) => existingItem.title === item.title
                         ),
                       }}
                     />
@@ -214,15 +235,15 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           styleType={AppearanceStyleType.primary}
           size={AppearanceSizeType.normal}
           onClick={() => {
-            const selectedPreferences = getValues()
-            const formPreferences = []
-            preferencesData.forEach((uniquePref) => {
-              if (selectedPreferences.preference[uniquePref.id]) {
-                formPreferences.push(uniquePref)
+            const formData = getValues()
+            const formItems = []
+            fetchedData.forEach((uniqueItem) => {
+              if (formData[formKey][uniqueItem.id]) {
+                formItems.push(uniqueItem)
               }
             })
-            setDraftPreferences(formPreferences)
-            setPreferencesSelectDrawer(null)
+            setDraftListingData(formItems)
+            setSelectDrawer(null)
           }}
         >
           {t("t.save")}
@@ -232,4 +253,4 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   )
 }
 
-export default Preferences
+export default SelectAndOrder
