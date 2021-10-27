@@ -105,9 +105,9 @@
         @apply flex;
         @apply items-center;
         justify-content: center;
-        flex-shrink: 0;
         flex-grow: 1;
         @screen md {
+          flex-shrink: 0;
           flex-grow: initial;
         }
 
