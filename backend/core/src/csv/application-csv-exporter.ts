@@ -1,7 +1,8 @@
 import { Injectable, Scope } from "@nestjs/common"
 import dayjs from "dayjs"
 import { CsvBuilder, KeyNumber } from "./csv-builder.service"
-import { capitalizeFirstLetter } from "../libs/stringLib"
+import { capitalizeFirstLetter, capAndSplit } from "../libs/stringLib"
+import { formatBoolean, getBirthday } from "../libs/miscLib"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporter {
@@ -12,19 +13,14 @@ export class ApplicationCsvExporter {
       "First Name": app.householdMembers_first_name,
       "Middle Name": app.householdMembers_middle_name,
       "Last Name": app.householdMembers_last_name,
-      Birthday: this.getBirthday(
+      Birthday: getBirthday(
         app.householdMembers_birth_day,
         app.householdMembers_birth_month,
         app.householdMembers_birth_year
       ),
-      "Email Address": app.householdMembers_email_address,
-      "Phone Number": app.householdMembers_phone_number,
-      "Phone Number Type": app.householdMembers_phone_number_type,
-      "Same Address as Primary Applicant": this.csvBuilder.formatBoolean(
-        app.householdMembers_same_address
-      ),
+      "Same Address as Primary Applicant": formatBoolean(app.householdMembers_same_address),
       Relationship: app.householdMembers_relationship,
-      "Work in Region": this.csvBuilder.formatBoolean(app.householdMembers_work_in_region),
+      "Work in Region": formatBoolean(app.householdMembers_work_in_region),
       City: app.householdMembers_address_city,
       State: app.householdMembers_address_state,
       Street: app.householdMembers_address_street,
@@ -32,14 +28,6 @@ export class ApplicationCsvExporter {
       "Zip Code": app.householdMembers_address_zip_code,
     }
     return obj
-  }
-
-  getBirthday(day, month, year) {
-    let birthday = ""
-    if (day && month && year) {
-      birthday = `${month}/${day}/${year}`
-    }
-    return birthday
   }
 
   // could use translations
@@ -87,7 +75,7 @@ export class ApplicationCsvExporter {
           "Primary Applicant First Name": app.applicant_first_name,
           "Primary Applicant Middle Name": app.applicant_middle_name,
           "Primary Applicant Last Name": app.applicant_last_name,
-          "Primary Applicant Birthday": this.getBirthday(
+          "Primary Applicant Birthday": getBirthday(
             app.applicant_birth_day,
             app.applicant_birth_month,
             app.applicant_birth_year
@@ -127,17 +115,17 @@ export class ApplicationCsvExporter {
           "Alternate Contact State": app.alternateContact_mailingAddress_state,
           Income: app.application_income,
           "Income Period": app.application_income_period === "perMonth" ? "per month" : "per year",
-          "Accessibility Mobility": this.csvBuilder.formatBoolean(app.accessibility_mobility),
-          "Accessibility Vision": this.csvBuilder.formatBoolean(app.accessibility_vision),
-          "Accessibility Hearing": this.csvBuilder.formatBoolean(app.accessibility_hearing),
-          "Vouchers or Subsidies": this.csvBuilder.formatBoolean(app.application_income_vouchers),
+          "Accessibility Mobility": formatBoolean(app.accessibility_mobility),
+          "Accessibility Vision": formatBoolean(app.accessibility_vision),
+          "Accessibility Hearing": formatBoolean(app.accessibility_hearing),
+          "Vouchers or Subsidies": formatBoolean(app.application_income_vouchers),
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),
           },
           Preference: app.application_preferences.reduce((obj, preference) => {
-            const root = this.csvBuilder.capAndSplit(preference.key)
+            const root = capAndSplit(preference.key)
             preference.options.forEach((option) => {
-              const key = `${root}: ${this.csvBuilder.capAndSplit(option.key)}`
+              const key = `${root}: ${capAndSplit(option.key)}`
               preferenceKeys[key] = 1
               if (option.checked) {
                 obj[key] = "claimed"
@@ -162,8 +150,8 @@ export class ApplicationCsvExporter {
           "Household Members": {
             [app.householdMembers_id]: this.mapHouseholdMembers(app),
           },
-          "Marked As Duplicate": this.csvBuilder.formatBoolean(app.application_marked_as_duplicate),
-          "Flagged As Duplicate": this.csvBuilder.formatBoolean(app.flagged),
+          "Marked As Duplicate": formatBoolean(app.application_marked_as_duplicate),
+          "Flagged As Duplicate": formatBoolean(app.flagged),
           ...demographics,
         }
         /**

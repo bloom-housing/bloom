@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Scope } from "@nestjs/common"
-import { capitalizeFirstLetter } from "../libs/stringLib"
 
 export interface KeyNumber {
   [key: string]: number
@@ -8,16 +7,6 @@ export interface KeyNumber {
 
 @Injectable({ scope: Scope.REQUEST })
 export class CsvBuilder {
-  public capAndSplit(str: string): string {
-    let newStr = capitalizeFirstLetter(str)
-    newStr = newStr.split(/(?=[A-Z])/).join(" ")
-    return newStr
-  }
-
-  public formatBoolean(val) {
-    return val ? "Yes" : "No"
-  }
-
   /**
    * this assumes a flat file structure since it's getting fed data from a raw query
    * relational data should be handled with the use of extraHeaders and extraGroupKeys,
