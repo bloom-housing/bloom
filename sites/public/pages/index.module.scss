@@ -1,5 +1,53 @@
+.latest-listings {
+  padding: 24px 0 0 0;
+}
+.latest-listing {
+  @apply bg-primary;
+  border-radius: 24px;
+  color: #ffffff;
+  height: 258px;
+  margin: 0 40px 0 0;
+  overflow: hidden;
+  position: relative;
+  width: 390px;
+
+  @screen sm {
+    height: 340px;
+    width: 520px;
+  }
+}
+.latest-listing:hover {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.latest-listing__name {
+  bottom: 117px;
+  font-size: 1.75rem;
+  left: 24px;
+  position: absolute;
+}
+
+.latest-listing__address {
+  bottom: 82px;
+  font-size: 0.875rem;
+  left: 24px;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.latest-listing__availability {
+  background-color: #31383a;
+  bottom: 0;
+  font-size: 0.75rem;
+  height: 50px;
+  padding: 15px;
+  position: absolute;
+  width: 100%;
+}
+
 .neighborhoods {
-  padding: 26px 0;
+  padding: 24px 0;
 }
 
 .neighborhood {
@@ -14,6 +62,9 @@
     height: 194px;
     width: 278px;
   }
+}
+.neighborhood:hover {
+  opacity: 0.9;
 }
 
 .neighborhood__text {

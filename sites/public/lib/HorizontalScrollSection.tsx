@@ -7,6 +7,7 @@ export interface HorizontalScrollSectionProps {
   title: string
   scrollAmount: number
   children: React.ReactNode
+  subtitle?: string
   className?: string
   icon?: IconTypes
 }
@@ -53,7 +54,9 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
     <section className={props.className}>
       <div className={styles.title}>
         {props.icon && <Icon size="xlarge" symbol={props.icon} className={styles.icon} />}
-        <h2 className={styles.title__text}>{props.title}</h2>
+        <h2 className={`${styles.title__text} ${props.icon ? styles["icon-space"] : ""}`}>
+          {props.title}
+        </h2>
         <Button
           unstyled={true}
           className={styles.title__button}
@@ -71,6 +74,11 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
           <Icon size="medium" symbol="right" />
         </Button>
       </div>
+      {props.subtitle && (
+        <div className={`${styles.subtitle} ${props.icon ? styles["icon-space"] : ""}`}>
+          {props.subtitle}
+        </div>
+      )}
       <div className={styles.content} ref={scrollContainerRef}>
         {props.children}
       </div>
