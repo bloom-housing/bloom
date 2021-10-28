@@ -1,24 +1,28 @@
-import { Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
-import { PaginatedApplicationFlaggedSetQueryParams } from "./application-flagged-sets.controller"
+import { BadRequestException, Inject, Injectable, NotFoundException, Scope } from "@nestjs/common"
 import { AuthzService } from "../auth/services/authz.service"
 import { ApplicationFlaggedSet } from "./entities/application-flagged-set.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import {
   Brackets,
   DeepPartial,
+  EntityManager,
+  getManager,
+  getMetadataArgsStorage,
+  In,
+  QueryRunner,
   Repository,
   SelectQueryBuilder,
-  getManager,
-  EntityManager,
 } from "typeorm"
 import { paginate } from "nestjs-typeorm-paginate"
 import { Application } from "../applications/entities/application.entity"
-import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set.dto"
 import { REQUEST } from "@nestjs/core"
 import { Request as ExpressRequest } from "express"
 import { User } from "../auth/entities/user.entity"
 import { FlaggedSetStatus } from "./types/flagged-set-status-enum"
 import { Rule } from "./types/rule-enum"
+import { ApplicationFlaggedSetResolveDto } from "./dto/application-flagged-set-resolve.dto"
+import { PaginatedApplicationFlaggedSetQueryParams } from "./paginated-application-flagged-set-query-params"
+import { ListingStatus } from "../listings/types/listing-status-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationFlaggedSetsService {
@@ -71,11 +75,16 @@ export class ApplicationFlaggedSetsService {
       const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
       const afs = await transAfsRepository.findOne({
         where: { id: dto.afsId },
-        relations: ["applications"],
+        relations: ["applications", "listing"],
       })
       if (!afs) {
         throw new NotFoundException()
       }
+
+      if (afs.listing.status !== ListingStatus.closed) {
+        throw new BadRequestException("Listing must be closed before resolving any duplicates.")
+      }
+
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       afs.resolvingUser = this.request.user as User
       afs.resolvedTime = new Date()
@@ -113,6 +122,62 @@ export class ApplicationFlaggedSetsService {
         rule
       )
     }
+  }
+
+  private async _getAfsesContainingApplicationId(
+    queryRunnery: QueryRunner,
+    applicationId: string
+  ): Promise<Array<{ application_flagged_set_id: string }>> {
+    const metadataArgsStorage = getMetadataArgsStorage().findJoinTable(
+      ApplicationFlaggedSet,
+      "applications"
+    )
+    const applicationsJunctionTableName = metadataArgsStorage.name
+    const query = `
+      SELECT DISTINCT application_flagged_set_id FROM ${applicationsJunctionTableName}
+      WHERE applications_id = $1
+  `
+    return await queryRunnery.query(query, [applicationId])
+  }
+
+  async onApplicationUpdate(
+    newApplication: Application,
+    transactionalEntityManager: EntityManager
+  ) {
+    const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
+    newApplication.markedAsDuplicate = false
+    await transApplicationsRepository.save(newApplication)
+
+    const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
+
+    const afsIds = await this._getAfsesContainingApplicationId(
+      transAfsRepository.queryRunner,
+      newApplication.id
+    )
+    const afses = await transAfsRepository.find({
+      where: { id: In(afsIds.map((afs) => afs.application_flagged_set_id)) },
+      relations: ["applications"],
+    })
+    const afsesToBeSaved: Array<ApplicationFlaggedSet> = []
+    const afsesToBeRemoved: Array<ApplicationFlaggedSet> = []
+    for (const afs of afses) {
+      afs.status = FlaggedSetStatus.flagged
+      afs.resolvedTime = null
+      afs.resolvingUser = null
+      const applicationIndex = afs.applications.findIndex(
+        (application) => application.id === newApplication.id
+      )
+      afs.applications.splice(applicationIndex, 1)
+      if (afs.applications.length > 1) {
+        afsesToBeSaved.push(afs)
+      } else {
+        afsesToBeRemoved.push(afs)
+      }
+    }
+    await transAfsRepository.save(afsesToBeSaved)
+    await transAfsRepository.remove(afsesToBeRemoved)
+
+    await this.onApplicationSave(newApplication, transactionalEntityManager)
   }
 
   async fetchDuplicatesMatchingRule(

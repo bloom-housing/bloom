@@ -93,12 +93,18 @@ export class AmiChartsService {
   /**
    * List amiCharts
    */
-  list(options: IRequestOptions = {}): Promise<AmiChart[]> {
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<AmiChart[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/amiCharts"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { jurisdictionName: params["jurisdictionName"] }
       let data = null
 
       configs.data = data
@@ -900,6 +906,30 @@ export class UserService {
   }
 }
 
+export class UserProfileService {
+  /**
+   * Update profile user
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: UserProfileUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userProfile/{id}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -1578,12 +1608,18 @@ export class ReservedCommunityTypesService {
   /**
    * List reservedCommunityTypes
    */
-  list(options: IRequestOptions = {}): Promise<ReservedCommunityType[]> {
+  list(
+    params: {
+      /**  */
+      jurisdictionName?: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<ReservedCommunityType[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/reservedCommunityTypes"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { jurisdictionName: params["jurisdictionName"] }
       let data = null
 
       configs.data = data
@@ -2215,9 +2251,29 @@ export interface AmiChartItem {
   income: number
 }
 
+export interface Jurisdiction {
+  /**  */
+  id: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+}
+
 export interface AmiChart {
   /**  */
   items: AmiChartItem[]
+
+  /**  */
+  jurisdiction: Jurisdiction
 
   /**  */
   id: string
@@ -2232,9 +2288,17 @@ export interface AmiChart {
   name: string
 }
 
+export interface Id {
+  /**  */
+  id: string
+}
+
 export interface AmiChartCreate {
   /**  */
   items: AmiChartItem[]
+
+  /**  */
+  jurisdiction: Id
 
   /**  */
   name: string
@@ -2254,12 +2318,10 @@ export interface AmiChartUpdate {
   items: AmiChartItem[]
 
   /**  */
-  name: string
-}
+  jurisdiction: Id
 
-export interface Id {
   /**  */
-  id: string
+  name: string
 }
 
 export interface Address {
@@ -2276,22 +2338,22 @@ export interface Address {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -2670,9 +2732,6 @@ export interface ApplicationFlaggedSet {
 
 export interface ApplicationFlaggedSetPaginationMeta {
   /**  */
-  totalFlagged: number
-
-  /**  */
   currentPage: number
 
   /**  */
@@ -2902,22 +2961,22 @@ export interface AddressCreate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3215,22 +3274,22 @@ export interface AddressUpdate {
   placeName?: string
 
   /**  */
-  city?: string
+  city: string
 
   /**  */
   county?: string
 
   /**  */
-  state?: string
+  state: string
 
   /**  */
-  street?: string
+  street: string
 
   /**  */
   street2?: string
 
   /**  */
-  zipCode?: string
+  zipCode: string
 
   /**  */
   latitude?: number
@@ -3577,23 +3636,6 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
-export interface Jurisdiction {
-  /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-}
-
 export interface User {
   /**  */
   language?: Language
@@ -3767,6 +3809,9 @@ export interface UserUpdate {
   id?: string
 
   /**  */
+  email?: string
+
+  /**  */
   createdAt?: Date
 
   /**  */
@@ -3783,9 +3828,6 @@ export interface UserUpdate {
 
   /**  */
   confirmedAt?: Date
-
-  /**  */
-  email: string
 
   /**  */
   firstName: string
@@ -3859,6 +3901,41 @@ export interface UserInvite {
   dob?: Date
 }
 
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+}
+
 export interface JurisdictionCreate {
   /**  */
   name: string
@@ -3904,6 +3981,9 @@ export interface ListingFilterParams {
   zipcode?: string
 
   /**  */
+  leasingAgents?: string
+
+  /**  */
   availability?: EnumListingFilterParamsAvailability
 
   /**  */
@@ -3920,9 +4000,6 @@ export interface ListingFilterParams {
 
   /**  */
   minAmiPercentage?: number
-
-  /**  */
-  leasingAgents?: string
 }
 
 export interface UnitAccessibilityPriorityType {
@@ -4153,6 +4230,9 @@ export interface ListingEvent {
 
 export interface ReservedCommunityType {
   /**  */
+  jurisdiction: Jurisdiction
+
+  /**  */
   id: string
 
   /**  */
@@ -4376,6 +4456,9 @@ export interface Listing {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEvent[]
@@ -4669,24 +4752,6 @@ export interface ListingEventCreate {
   label?: string
 }
 
-export interface UnitTypeCreate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-}
-
-export interface UnitRentTypeCreate {
-  /**  */
-  name: string
-}
-
-export interface UnitAccessibilityPriorityTypeCreate {
-  /**  */
-  name: string
-}
-
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -4700,13 +4765,13 @@ export interface UnitCreate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeCreate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeCreate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeCreate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideCreate
@@ -4837,6 +4902,9 @@ export interface ListingCreate {
 
   /**  */
   applicationMailingAddress: CombinedApplicationMailingAddressTypes
+
+  /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
 
   /**  */
   events: ListingEventCreate[]
@@ -5122,33 +5190,6 @@ export interface ListingEventUpdate {
   label?: string
 }
 
-export interface UnitTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  numBedrooms: number
-
-  /**  */
-  id: string
-}
-
-export interface UnitRentTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
-export interface UnitAccessibilityPriorityTypeUpdate {
-  /**  */
-  name: string
-
-  /**  */
-  id: string
-}
-
 export interface UnitAmiChartOverrideUpdate {
   /**  */
   id?: string
@@ -5180,13 +5221,13 @@ export interface UnitUpdate {
   amiChart?: Id
 
   /**  */
-  unitType?: UnitTypeUpdate
+  unitType?: Id
 
   /**  */
-  unitRentType?: UnitRentTypeUpdate
+  unitRentType?: Id
 
   /**  */
-  priorityType?: UnitAccessibilityPriorityTypeUpdate
+  priorityType?: Id
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideUpdate
@@ -5553,6 +5594,9 @@ export interface ListingUpdate {
   region?: string
 
   /**  */
+  buildingSelectionCriteriaFile?: CombinedBuildingSelectionCriteriaFileTypes
+
+  /**  */
   countyCode?: string
 }
 
@@ -5753,6 +5797,9 @@ export interface PropertyGroupUpdate {
 
 export interface ReservedCommunityTypeCreate {
   /**  */
+  jurisdiction: Id
+
+  /**  */
   name: string
 
   /**  */
@@ -5760,6 +5807,9 @@ export interface ReservedCommunityTypeCreate {
 }
 
 export interface ReservedCommunityTypeUpdate {
+  /**  */
+  jurisdiction: Id
+
   /**  */
   name: string
 
@@ -5819,6 +5869,51 @@ export interface TranslationUpdate {
 
   /**  */
   jurisdiction: Id
+}
+
+export interface UnitTypeCreate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+}
+
+export interface UnitTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  numBedrooms: number
+
+  /**  */
+  id: string
+}
+
+export interface UnitRentTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitRentTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
+}
+
+export interface UnitAccessibilityPriorityTypeCreate {
+  /**  */
+  name: string
+}
+
+export interface UnitAccessibilityPriorityTypeUpdate {
+  /**  */
+  name: string
+
+  /**  */
+  id: string
 }
 
 export enum IncomePeriod {
@@ -5946,6 +6041,7 @@ export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
+export type CombinedBuildingSelectionCriteriaFileTypes = Asset
 export type CombinedImageTypes = AssetCreate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate

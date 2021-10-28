@@ -58,6 +58,7 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
             id={"reservedCommunityDescription"}
             fullWidth={true}
             register={register}
+            maxLength={150}
           />
         </GridCell>
       </GridSection>

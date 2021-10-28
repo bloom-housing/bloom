@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 import {
   LocalizedLink,
   SiteHeader,
@@ -8,8 +9,9 @@ import {
   FooterSection,
   t,
   AuthContext,
+  MenuLink,
+  setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
-import { useRouter } from "next/router"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -21,6 +23,29 @@ const Layout = (props) => {
       label: t(`languages.${item}`),
     })) || []
 
+  const menuLinks: MenuLink[] = []
+  if (profile) {
+    menuLinks.push({
+      title: t("nav.listings"),
+      href: "/",
+    })
+  }
+  if (profile?.roles?.isAdmin) {
+    menuLinks.push({
+      title: t("nav.users"),
+      href: "/users",
+    })
+  }
+  if (profile) {
+    menuLinks.push({
+      title: t("nav.signOut"),
+      onClick: async () => {
+        setSiteAlertMessage(t(`authentication.signOut.success`), "notice")
+        await router.push("/sign-in")
+        signOut()
+      },
+    })
+  }
   return (
     <div className="site-wrapper">
       <div className="site-content site-content--wide-content">
@@ -29,31 +54,21 @@ const Layout = (props) => {
         </Head>
 
         <SiteHeader
-          skip={t("nav.skip")}
-          logoSrc="/images/detroit-logo.png"
-          notice=""
+          logoSrc="/images/logo_glyph.svg"
           title={t("nav.siteTitlePartners")}
-          language={{
-            list: languages,
-            codes: router?.locales,
-          }}
-        >
-          <LocalizedLink href="/" className="navbar-item">
-            {t("nav.listings")}
-          </LocalizedLink>
+          logoWidth={"medium"}
+          menuLinks={menuLinks}
+          homeURL={"/"}
+          languages={languages.map((lang) => {
+            return {
+              label: lang.label,
+              onClick: () =>
+                void router.push(router.asPath, router.asPath, { locale: lang.prefix || "en" }),
+              active: t("config.routePrefix") === lang.prefix,
+            }
+          })}
+        />
 
-          {profile?.roles?.isAdmin && (
-            <LocalizedLink href="/users" className="navbar-item">
-              {t("nav.users")}
-            </LocalizedLink>
-          )}
-
-          {!!profile && (
-            <a href="#" className="navbar-item" onClick={signOut}>
-              {t("nav.signOut")}
-            </a>
-          )}
-        </SiteHeader>
         <main>{props.children}</main>
 
         <SiteFooter>

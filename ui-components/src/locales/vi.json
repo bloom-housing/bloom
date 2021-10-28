@@ -597,7 +597,6 @@
     "accountSettings": "Thiết lập Tài khoản",
     "browseProperties": "Duyệt các Bất động sản",
     "getAssistance": "Nhận Hỗ trợ",
-    "getFeedback": "Đây là bản xem trước của trang web mới của chúng tôi. Chúng tôi chỉ mới bắt đầu. Chúng tôi rất mong nhận được <a target='_blank' class='a-white lined' href='%{feedbackUrl}'>ý kiến phản hồi của quý vị.</a>",
     "listings": "Các danh sách nhà",
     "properties": "Các bất động sản",
     "applications": "Các đơn Ghi danh",
@@ -628,6 +627,10 @@
   },
   "region": {
     "name": "Địa phương"
+  },
+  "progressNav": {
+    "srHeading": "Tiến trình",
+    "current": "Bước hiện tại:"
   },
   "states": {
     "AL": "Alabama",
@@ -698,7 +701,7 @@
     "deposit": "Đặt cọc",
     "edit": "Hiệu đính",
     "email": "Email",
-    "emailAddressPlaceHolder": "you@myemail.com",
+    "emailAddressPlaceholder": "you@myemail.com",
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",

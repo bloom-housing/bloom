@@ -2,15 +2,15 @@
   "name": "Minimal Listing",
   "status": "active",
   "CSVFormattingType": "basic",
-  "countyCode": "Detroit",
+  "countyCode": "Alameda",
   "preferences": [],
   "buildingAddress": {
-    "city": "Detroit",
-    "state": "MI",
+    "city": "Oakland",
+    "state": "CA",
     "street": "Main St",
-    "zipCode": "48127",
-    "latitude": "42.36",
-    "longitude": "-83.1"
+    "zipCode": "94501",
+    "latitude": "37.80",
+    "longitude": "122.27"
   },
   "units": [
     {
@@ -22,5 +22,5 @@
   "applicationMethods": [],
   "events": [],
   "displayWaitlistSize": false,
-  "jurisdictionName": "Detroit"
+  "jurisdictionName": "Alameda"
 }

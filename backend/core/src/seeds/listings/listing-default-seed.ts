@@ -10,7 +10,6 @@ import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
 import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { User } from "../../auth/entities/user.entity"
-import { UnitCreateDto } from "../../units/dto/unit.dto"
 import {
   getDefaultAmiChart,
   getDefaultAssets,
@@ -20,8 +19,12 @@ import {
   getDefaultUnits,
   getDisplaceePreference,
   getLiveWorkPreference,
+  PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { CountyCode } from "../../shared/types/county-code"
 
 export class ListingDefaultSeed {
   constructor(
@@ -40,16 +43,24 @@ export class ListingDefaultSeed {
     protected readonly unitsSummaryRepository: Repository<UnitsSummary>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
-    protected readonly applicationMethodRepository: Repository<ApplicationMethod>
+    protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
+    @InjectRepository(Jurisdiction)
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>
   ) {}
 
   async seed() {
     const priorityTypeMobilityAndHearing = await this.unitAccessibilityPriorityTypeRepository.findOneOrFail(
-      { name: "Mobility and Hearing" }
+      { name: PriorityTypes.mobilityHearing }
     )
     const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
-    const amiChart = await this.amiChartRepository.save(getDefaultAmiChart())
+    const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.alameda,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...getDefaultAmiChart(),
+      jurisdiction: alamedaJurisdiction,
+    })
 
     const property = await this.propertyRepository.save({
       ...getDefaultProperty(),

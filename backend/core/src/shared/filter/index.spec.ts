@@ -1,6 +1,6 @@
-import { filterTypeToFieldMap } from "../../listings/dto/listing.dto"
 import { addFilters } from "."
 import { HttpException } from "@nestjs/common"
+import { filterTypeToFieldMap } from "../../listings/dto/filter-type-to-field-map"
 
 const mockQueryBuilder = {
   where: jest.fn().mockReturnThis(),

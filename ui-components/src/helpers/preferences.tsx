@@ -16,7 +16,7 @@ import {
   SelectOption,
   resolveObject,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "./formOptions"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 
 type ExtraFieldProps = {
   metaKey: string

@@ -15,7 +15,7 @@ export interface StatusBarType {
 }
 
 export interface ImageCardProps {
-  imageUrl: string
+  imageUrl?: string
   subtitle?: string
   title: string
   href?: string
@@ -55,6 +55,7 @@ const ImageCard = (props: ImageCardProps) => {
             alt={props.description || t("listings.buildingImageAltText")}
           />
         }
+        <div className={"image-card__overlay"} />
         <figcaption className="image-card__figcaption">
           <h2 className="image-card__title">{props.title}</h2>
           {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
