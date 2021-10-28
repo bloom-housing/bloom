@@ -208,7 +208,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "digitalApplicationChoiceYes",
-                  defaultChecked: listing?.digitalApplication === true,
+                  defaultChecked: listing?.digitalApplication === true ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -224,7 +224,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "digitalApplicationChoiceNo",
-                  defaultChecked: listing?.digitalApplication === false,
+                  defaultChecked: listing?.digitalApplication === false ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -249,7 +249,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[0],
                     id: "commonDigitalApplicationChoiceYes",
-                    defaultChecked: listing?.commonDigitalApplication === true,
+                    defaultChecked: listing?.commonDigitalApplication === true ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -265,7 +265,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   {
                     ...yesNoRadioOptions[1],
                     id: "commonDigitalApplicationChoiceNo",
-                    defaultChecked: listing?.commonDigitalApplication === false,
+                    defaultChecked: listing?.commonDigitalApplication === false ?? null,
                     inputProps: {
                       onChange: () => {
                         setMethods({
@@ -336,7 +336,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "paperApplicationYes",
-                  defaultChecked: listing?.paperApplication === true,
+                  defaultChecked: listing?.paperApplication === true ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -352,7 +352,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "paperApplicationNo",
-                  defaultChecked: listing?.paperApplication === false,
+                  defaultChecked: listing?.paperApplication === false ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -442,7 +442,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[0],
                   id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true,
+                  defaultChecked: listing?.referralOpportunity === true ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({
@@ -458,7 +458,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                 {
                   ...yesNoRadioOptions[1],
                   id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false,
+                  defaultChecked: listing?.referralOpportunity === false ?? null,
                   inputProps: {
                     onChange: () => {
                       setMethods({

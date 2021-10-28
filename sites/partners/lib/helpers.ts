@@ -163,6 +163,7 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
+  if (!formTime?.hours || !date) return null
   // date should be cloned, operations in the reference directly can occur unexpected changes
   const dateClone = new Date(date.getTime())
   if (!dateClone || (!formTime.hours && !formTime.minutes)) return null
@@ -181,7 +182,7 @@ export const createTime = (
  * Create Date object depending on DateField component
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
-  if (!formDate) return null
+  if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
   return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
 }
 
@@ -261,21 +262,49 @@ export function formatIncome(value: number, currentType: IncomePeriod, returnTyp
   }
 }
 
-export const removeEmptyFields = (obj, keysToIgnore?: string[]) => {
-  Object.keys(obj).forEach(function (key) {
-    if (!keysToIgnore.includes(key)) {
-      if (obj[key] && typeof obj[key] === "object") {
-        removeEmptyFields(obj[key], keysToIgnore)
+export const isObject = (obj: any, key: string) => {
+  return (
+    obj[key] &&
+    typeof obj[key] === "object" &&
+    !Array.isArray(obj[key]) &&
+    !(Object.prototype.toString.call(obj[key]) === "[object Date]")
+  )
+}
+
+/**
+ *
+ * @param obj - Any object
+ *
+ *  End result is an object with these rules for fields:
+ *    No empty objects - removed
+ *    No objects that only have fields with null / empty strings - removed
+ *    No null/undefined fields - removed
+ *    No empty strings - set to null but still included
+ *    Arrays / non-empty strings / Date objects - no changes
+ */
+export const removeEmptyObjects = (obj: any, nested?: boolean) => {
+  Object.keys(obj).forEach((key) => {
+    if (isObject(obj, key)) {
+      if (Object.keys(obj[key]).length === 0) {
+        delete obj[key]
+      } else {
+        removeEmptyObjects(obj[key], true)
       }
-      if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+    }
+    if (isObject(obj, key) && Object.keys(obj[key]).length === 0) {
+      delete obj[key]
+    }
+    if (obj[key] === null || obj[key] === undefined) {
+      if (nested) {
         delete obj[key]
       }
-      if (
-        typeof obj[key] === "object" &&
-        !Array.isArray(obj[key]) &&
-        Object.keys(obj[key]).length === 0
-      ) {
+    }
+
+    if (obj[key] === "") {
+      if (nested) {
         delete obj[key]
+      } else {
+        obj[key] = null
       }
     }
   })

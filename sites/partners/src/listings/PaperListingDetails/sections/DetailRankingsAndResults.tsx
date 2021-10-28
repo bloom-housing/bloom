@@ -4,7 +4,7 @@ import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
-import { getDetailFieldNumber, getDetailFieldString } from "./helpers"
+import { getDetailFieldNumber, getDetailFieldString, getDetailBoolean } from "./helpers"
 
 const DetailRankingsAndResults = () => {
   const listing = useContext(ListingContext)
@@ -58,11 +58,7 @@ const DetailRankingsAndResults = () => {
       )}
       <GridSection columns={2}>
         <ViewItem label={t("listings.waitlist.openQuestion")}>
-          {listing.isWaitlistOpen
-            ? t("t.yes")
-            : listing.isWaitlistOpen === false
-            ? t("t.no")
-            : t("t.n/a")}
+          {getDetailBoolean(listing.isWaitlistOpen)}
         </ViewItem>
       </GridSection>
       {listing.isWaitlistOpen && (
