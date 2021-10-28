@@ -38,3 +38,15 @@ export const withSecondaryButton = () => (
     backgroundImage="/images/banner.png"
   />
 )
+
+export const withExtraLargeTitleAndSecondaryButton = () => (
+  <Hero
+    backgroundImage="/images/banner.png"
+    buttonLink="/listings"
+    buttonTitle="Rent"
+    extraLargeTitle={true}
+    secondaryButtonLink="/listings/for-sale"
+    secondaryButtonTitle="Buy"
+    title={"Say Hello to Your Hero"}
+  />
+)

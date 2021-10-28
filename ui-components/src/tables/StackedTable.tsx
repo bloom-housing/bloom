@@ -44,14 +44,21 @@ const StackedTable = (props: StackedTableProps) => {
   })
 
   const modifiedHeaders = Object.keys(props.headers).reduce((acc, headerKey) => {
+    let tempHeader = props.headers[headerKey]
     if (props.headersHiddenDesktop?.includes(headerKey)) {
       let headerClasses = "md:hidden"
-      const headerObj = props.headers[headerKey]
-      headerClasses = `${headerObj["className"] && headerObj["className"]} ${headerClasses}`
-      acc[headerKey] = { name: headerObj["name"] ?? headerObj, className: headerClasses }
+      headerClasses = `${tempHeader["className"] && tempHeader["className"]} ${headerClasses}`
+      tempHeader = { name: tempHeader["name"] ?? tempHeader, className: headerClasses }
     } else {
       acc[headerKey] = props.headers[headerKey]
+      tempHeader = {
+        name: tempHeader["name"] ?? tempHeader,
+        className: `${
+          tempHeader["className"] && tempHeader["className"]
+        } px-0 text-base text-gray-700 border-b`,
+      }
     }
+    acc[headerKey] = tempHeader
     return acc
   }, {})
 
@@ -61,6 +68,7 @@ const StackedTable = (props: StackedTableProps) => {
       data={modifiedData}
       className={tableClasses.join(" ")}
       responsiveCollapse={true}
+      cellClassName={"py-3 px-0"}
     />
   )
 }
