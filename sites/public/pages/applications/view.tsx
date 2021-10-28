@@ -23,7 +23,7 @@ const ApplicationView = () => {
       <FormCard header="Confirmation">
         <div className="py-2">
           {listing && (
-            <Link href={`listing/${listing.id}/${listing.urlSlug}`}>
+            <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
               <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
             </Link>
           )}
