@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.10...@bloom-housing/backend-core@2.0.0-pre-tailwind.11) (2021-10-28)
+
+
+### Bug Fixes
+
+* in listings management keep empty strings, remove empty objects ([#2064](https://github.com/bloom-housing/bloom/issues/2064)) ([c4b1e83](https://github.com/bloom-housing/bloom/commit/c4b1e833ec128f457015ac7ffa421ee6047083d9))
+
+
+
+
+
+# [2.0.0-pre-tailwind.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.9...@bloom-housing/backend-core@2.0.0-pre-tailwind.10) (2021-10-27)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+# [2.0.0-pre-tailwind.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.8...@bloom-housing/backend-core@2.0.0-pre-tailwind.9) (2021-10-26)
+
+
+### Bug Fixes
+
+* Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/issues/2015)) ([48aa14e](https://github.com/bloom-housing/bloom/commit/48aa14eb522cb8e4d0a25fdeadcc392b30d7f1a9))
+
+
+
+
+
 # [2.0.0-pre-tailwind.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.7...@bloom-housing/backend-core@2.0.0-pre-tailwind.8) (2021-10-22)
 
 

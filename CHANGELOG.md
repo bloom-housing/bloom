@@ -14,6 +14,12 @@ All notable changes to this project will be documented in this file. The format 
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
   - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
 
+## Backend
+
+- Fixed:
+
+  - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
+
 ## v2.0.0-pre-tailwind 09/16/2021
 
 ## Frontend
@@ -53,6 +59,7 @@ All notable changes to this project will be documented in this file. The format 
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
   - Page now scrolls after closing modal ([#1962](https://github.com/bloom-housing/bloom/pull/1962)) (Emily Jablonski)
+  - Copy & New and Save & New in LM will no longer create duplicate units ([#1963](https://github.com/bloom-housing/bloom/pull/1963)) (Emily Jablonski)
 
 - Changed:
 

@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.15...@bloom-housing/partners@2.0.0-pre-tailwind.16) (2021-10-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+# [2.0.0-pre-tailwind.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.14...@bloom-housing/partners@2.0.0-pre-tailwind.15) (2021-10-28)
+
+
+### Bug Fixes
+
+* in listings management keep empty strings, remove empty objects ([#2064](https://github.com/bloom-housing/bloom/issues/2064)) ([c4b1e83](https://github.com/bloom-housing/bloom/commit/c4b1e833ec128f457015ac7ffa421ee6047083d9))
+
+
+
+
+
+# [2.0.0-pre-tailwind.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.13...@bloom-housing/partners@2.0.0-pre-tailwind.14) (2021-10-27)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+# [2.0.0-pre-tailwind.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.12...@bloom-housing/partners@2.0.0-pre-tailwind.13) (2021-10-26)
+
+
+### Bug Fixes
+
+* Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/issues/2015)) ([48aa14e](https://github.com/bloom-housing/bloom/commit/48aa14eb522cb8e4d0a25fdeadcc392b30d7f1a9))
+
+
+
+
+
+# [2.0.0-pre-tailwind.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.11...@bloom-housing/partners@2.0.0-pre-tailwind.12) (2021-10-25)
+
+
+### Bug Fixes
+
+* duplicate unit during Copy & New and Save & New ([#1963](https://github.com/bloom-housing/bloom/issues/1963)) ([d597a3f](https://github.com/bloom-housing/bloom/commit/d597a3f57ed4c489804e10e3b6bac99e5f9bedcc))
+
+
+
+
+
 # [2.0.0-pre-tailwind.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.10...@bloom-housing/partners@2.0.0-pre-tailwind.11) (2021-10-25)
 
 **Note:** Version bump only for package @bloom-housing/partners
