@@ -125,7 +125,10 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @Transform(
     (_value, listing) => {
-      if (moment(listing.applicationDueDate).isBefore()) {
+      if (
+        moment(listing.applicationDueDate).isBefore() &&
+        listing.status !== ListingStatus.pending
+      ) {
         listing.status = ListingStatus.closed
       }
 
