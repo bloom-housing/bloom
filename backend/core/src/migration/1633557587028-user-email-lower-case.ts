@@ -6,7 +6,7 @@ export class userEmailLowerCase1633557587028 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       UPDATE "user_accounts" SET email = lower(email);
-      UPDATE household_member SET email = lower(email_address);
+      UPDATE household_member SET email_address = lower(email_address);
       UPDATE listings SET leasing_agent_email = lower(leasing_agent_email);
       UPDATE applicant SET email_address = lower(email_address);
       UPDATE alternate_contact SET email_address = lower(email_address);
@@ -16,7 +16,7 @@ export class userEmailLowerCase1633557587028 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       UPDATE "user_accounts" SET email = lower(email);
-      UPDATE household_member SET email = lower(email_address);
+      UPDATE household_member SET email_address = lower(email_address);
       UPDATE listings SET leasing_agent_email = lower(leasing_agent_email);
       UPDATE applicant SET email_address = lower(email_address);
       UPDATE alternate_contact SET email_address = lower(email_address);
