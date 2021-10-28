@@ -84,7 +84,8 @@ All notable changes to this project will be documented in this file. The format 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
-
+  - Visual bugs with SiteHeader ([#2010](https://github.com/bloom-housing/bloom/pull/2010)) (Emily Jablonski)
+  - HouseholdSizeField bug when householdSizeMax is 0 ([#1991](https://github.com/bloom-housing/bloom/pull/1991)) (Yazeed)
 - Changed:
 
   - Upgraded Tailwind to v2, PostCSS to v8, and Storybook to 6.3 ([#1805])(https://github.com/bloom-housing/bloom/pull/1805)) (Jared White)
@@ -172,6 +173,7 @@ All notable changes to this project will be documented in this file. The format 
   - makes application flagged sets module take applications edits into account (e.g. a leasing agent changes something in the application) ([#1810](https://github.com/bloom-housing/bloom/pull/1810))
   - Listings with multiple AMI charts show a max value instead of a range ([#1925](https://github.com/bloom-housing/bloom/pull/1925)) (Emily Jablonski)
   - fix AFS totalFlagged missing in swagger documentation
+  - lower cases email during user creation, across saved users, and where that now lower cased email is compared to a possibly non-lower cased email ([#1972](https://github.com/bloom-housing/bloom/pull/1972)) (Yazeed)
 
 ### General
 
