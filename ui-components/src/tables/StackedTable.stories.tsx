@@ -61,13 +61,11 @@ const basicTableRowsSubtext = [
   },
 ]
 
-const headerClassNames = "text-base text-gray-700 border-b"
-
 const responsiveTableHeaders = {
-  units: { name: "t.unitType", className: headerClassNames },
-  availability: { name: "t.availability", className: headerClassNames },
-  income: { name: "t.incomeRange", className: headerClassNames },
-  rent: { name: "t.rent", className: headerClassNames },
+  units: { name: "t.unitType" },
+  availability: { name: "t.availability" },
+  income: { name: "t.incomeRange" },
+  rent: { name: "t.rent" },
 }
 
 const responsiveTableRows = [
