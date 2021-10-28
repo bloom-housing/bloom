@@ -288,7 +288,7 @@ describe("Listing Management Tests", () => {
     })
   })
 
-  describe.only("full new listing save checking validation constraints", () => {
+  describe("full new listing save checking validation constraints", () => {
     it("fill listing intro section", () => {
       cy.visit("/")
       cy.get("a > .button").contains("Add Listing").click()

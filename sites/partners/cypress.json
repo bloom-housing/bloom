@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:3001",
   "defaultCommandTimeout": 10000,
-  "projectId": "bloom-partners-reference"
+  "projectId": "bloom-partners-reference",
+  "numTestsKeptInMemory": 0
 }
