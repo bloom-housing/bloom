@@ -15,6 +15,7 @@ import {
 
 import { useFormContext } from "react-hook-form"
 import { Preference, FormMetadataExtraData } from "@bloom-housing/backend-core/types"
+import { stateKeys } from "@bloom-housing/shared-helpers"
 
 type FormPreferencesProps = {
   county: string
@@ -93,6 +94,7 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
               type={extra.type}
               register={register}
               hhMembersOptions={hhMembersOptions}
+              stateKeys={stateKeys}
             />
           ))}
       </React.Fragment>
