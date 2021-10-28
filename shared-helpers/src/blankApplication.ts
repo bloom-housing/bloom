@@ -4,9 +4,48 @@ import {
   Language,
   ApplicationPreference,
   ApplicationProgram,
+  Application,
 } from "@bloom-housing/backend-core/types"
 
-export const blankApplication = () => {
+type BlankApplication = Omit<
+  Application,
+  | "status"
+  | "incomePeriod"
+  | "language"
+  | "submissionType"
+  | "applicant"
+  | "listing"
+  | "user"
+  | "mailingAddress"
+  | "alternateAddress"
+  | "alternateContact"
+  | "accessibility"
+  | "demographics"
+  | "householdMembers"
+  | "preferredUnit"
+  | "id"
+  | "createdAt"
+  | "updatedAt"
+  | "deletedAt"
+  | "appUrl"
+  | "additionalPhone"
+  | "additionalPhoneNumber"
+  | "additionalPhoneNumberType"
+  | "contactPreferences"
+  | "householdSize"
+  | "housingStatus"
+  | "sendMailToMailingAddress"
+  | "incomeVouchers"
+  | "income"
+  | "preferences"
+  | "programs"
+  | "acceptedTerms"
+  | "submissionDate"
+  | "markedAsDuplicate"
+  | "confirmationCode"
+>
+
+export const blankApplication: BlankApplication = () => {
   return {
     loaded: false,
     autofilled: false,

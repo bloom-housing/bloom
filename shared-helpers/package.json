@@ -20,21 +20,14 @@
     "@bloom-housing/ui-components": "^3.0.1-alpha.46"
   },
   "devDependencies": {
+    "d-js": "1.1.6",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
-    "@types/jest": "^26.0.14",
     "@types/react-dom": "^16.9.5",
     "@types/react-test-renderer": "^16.9.3",
-    "axios": "^0.21.1",
-    "d-js": "1.1.6",
     "jest": "^26.5.3",
-    "nanoid": "^3.1.12",
-    "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-test-renderer": "^17.0.2",
-    "ts-jest": "^26.4.1",
-    "ts-loader": "^8.0.4",
-    "typesafe-actions": "^5.1.0",
     "typescript": "^3.9.7"
   }
 }
