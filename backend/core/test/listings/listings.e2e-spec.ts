@@ -37,6 +37,7 @@ describe("Listings", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
+        TypeOrmModule.forFeature([Jurisdiction]),
         ListingsModule,
         AssetsModule,
         ApplicationMethodsModule,

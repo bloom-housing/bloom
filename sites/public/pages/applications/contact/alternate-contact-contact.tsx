@@ -11,6 +11,7 @@ import {
   FormCard,
   ProgressNav,
   t,
+  emailRegex,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -105,6 +106,10 @@ export default () => {
               placeholder={t("t.emailAddressPlaceholder")}
               defaultValue={application.alternateContact.emailAddress || null}
               register={register}
+              type="email"
+              validation={{ pattern: emailRegex }}
+              error={errors.emailAddress}
+              errorMessage={t("errors.emailAddressError")}
             />
           </div>
           <div className="form-card__group">
