@@ -1,13 +1,24 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
+import {
+  AlertBox,
+  Hero,
+  t,
+  SiteAlert,
+  OneLineAddress,
+  imageUrlFromListing,
+} from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
+import axios from "axios"
 import styles from "./index.module.scss"
+import { Address, Listing, ListingStatus, UnitSummary } from "@bloom-housing/backend-core/types"
+import { getGenericAddress } from "../lib/helpers"
+import moment from "moment"
 
-export default function Home() {
+export default function Home({ latestListings }) {
   const blankAlertInfo = {
     alertMessage: null,
     alertType: null,
@@ -35,17 +46,96 @@ export default function Home() {
   )
   interface LatestListingLinkProps {
     name: string
-    address: string
-    availability: string
+    address: Address
+    imageUrl: string
+    availability?: string
   }
 
+  const linearGradient = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(24, 37, 42, .8))"
   const LatestListingsLink = (props: LatestListingLinkProps) => (
-    <a className={styles["latest-listing"]} href="/listings">
+    <a
+      className={styles["latest-listing"]}
+      href="/listings"
+      style={{
+        backgroundImage: `${linearGradient}, url(${props.imageUrl}`,
+      }}
+    >
       <h3 className={styles["latest-listing__name"]}>{props.name}</h3>
-      <p className={styles["latest-listing__address"]}>{props.address}</p>
-      <div className={styles["latest-listing__availability"]}>{props.availability}</div>
+      <p className={styles["latest-listing__address"]}>
+        <OneLineAddress address={getGenericAddress(props.address)} />
+      </p>
+      {props.availability && (
+        <div className={styles["latest-listing__availability"]}>{props.availability}</div>
+      )}
     </a>
   )
+
+  /**
+   * Get the listing with the latest 'updatedAt' field and format it
+   *
+   * TODO(#672): Translate last updated string
+   * @param listings
+   * @returns
+   */
+  const getLastUpdatedString = (listings: Array<Listing>) => {
+    // Get the latest updateAt date and format it as localized 'MM/D/YYYY'
+    const latestDate = moment
+      .max(
+        listings.map((listing) => {
+          return moment(listing.updatedAt)
+        })
+      )
+      .format("l")
+    return `Last updated ${latestDate}`
+  }
+
+  /**
+   * Convert the number of bedrooms to a human readable string
+   *
+   * TODO(#672): Translate unitBedrooms string
+   * @param numBedrooms
+   * @param plural
+   * @returns
+   */
+  const unitBedroomsToString = (numBedrooms: number, plural: boolean) => {
+    if (numBedrooms < 0 || numBedrooms == null) {
+      return ""
+    }
+
+    switch (numBedrooms) {
+      case 0:
+        return plural ? "studios" : "studio"
+      case 1:
+        return plural ? "1 bedrooms" : "1 bedroom"
+      case 2:
+        return plural ? "2 bedrooms" : "2 bedroom"
+      default:
+        return plural ? "3+ bedrooms" : "3+ bedroom"
+    }
+  }
+
+  /**
+   * Build a string of concatenated available units
+   *
+   * TODO(#672): Translate unit summary string
+   *
+   * For example: '(1) studio availble, (3) 2 bedrooms available'
+   * @param units Array of UnitSummarys
+   * @returns string
+   */
+  const buildUnitSummaryString = (units: Array<UnitSummary>) => {
+    return units
+      .filter((unitSummary) => {
+        return unitSummary.totalAvailable > 0
+      })
+      .map((unitSummary) => {
+        return `(${unitSummary.totalAvailable}) ${unitBedroomsToString(
+          unitSummary.unitType.numBedrooms,
+          unitSummary.totalAvailable > 1
+        )} available`
+      })
+      .join(", ")
+  }
 
   // TODO(#674): Fill out neighborhood buttons with real data
   const NeighborhoodButton = (props: { label: string }) => (
@@ -80,37 +170,22 @@ export default function Home() {
       {/* TODO(#672): Translate title */}
       <HorizontalScrollSection
         title="Latest listings"
-        subtitle="Last updated 2/12/22"
+        subtitle={getLastUpdatedString(latestListings.items)}
         scrollAmount={560}
         icon="clock"
         className={styles["latest-listings"]}
       >
-        {/* TODO(#672): Populate with real data */}
-        <LatestListingsLink
-          name="New Center Square"
-          address="112 Seward Avenue, Detroit, MI 48202"
-          availability="3 br available, 2br available"
-        />
-        <LatestListingsLink
-          name="Treymore Apartments"
-          address="457 Brainard St, Detroit, MI 48201"
-          availability="3 br available, 2br available"
-        />
-        <LatestListingsLink
-          name="New Center Square"
-          address="112 Seward Avenue, Detroit, MI 48202"
-          availability="3 br available, 2br available"
-        />
-        <LatestListingsLink
-          name="New Center Square"
-          address="112 Seward Avenue, Detroit, MI 48202"
-          availability="3 br available, 2br available"
-        />
-        <LatestListingsLink
-          name="New Center Square"
-          address="112 Seward Avenue, Detroit, MI 48202"
-          availability="3 br available, 2br available"
-        />
+        {latestListings.items.map((listing) => {
+          return (
+            <LatestListingsLink
+              key={listing.id}
+              name={listing.name}
+              address={listing.buildingAddress}
+              availability={buildUnitSummaryString(listing.unitsSummary)}
+              imageUrl={imageUrlFromListing(listing, 520)}
+            />
+          )
+        })}
       </HorizontalScrollSection>
       {/* TODO(#674): Translate title*/}
       <HorizontalScrollSection
@@ -130,4 +205,17 @@ export default function Home() {
       />
     </Layout>
   )
+}
+
+export async function getStaticProps() {
+  let latestListings = []
+  try {
+    const response = await axios.get(
+      `${process.env.listingServiceUrl}?limit=5&orderBy=mostRecentlyUpdated&availability=hasAvailability`
+    )
+    latestListings = response.data
+  } catch (error) {
+    console.error(error)
+  }
+  return { props: { latestListings }, revalidate: process.env.cacheRevalidate }
 }
