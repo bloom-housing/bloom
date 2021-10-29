@@ -54,9 +54,9 @@ const Layout = (props) => {
         </Head>
 
         <SiteHeader
-          logoSrc="/images/logo_glyph.svg"
+          logoSrc="/images/detroit-logo.png"
           title={t("nav.siteTitlePartners")}
-          logoWidth={"medium"}
+          logoWidth={"wide"}
           menuLinks={menuLinks}
           homeURL={"/"}
           languages={languages.map((lang) => {

@@ -87,7 +87,6 @@ services:
       - postgres
   redis:
     container_name: redis
-    restart: always
     image: redis:latest
     ports:
       - "6379:6379"
@@ -95,7 +94,6 @@ services:
       - backend
   postgres:
     container_name: postgres
-    restart: always
     image: postgres:13
     environment:
       POSTGRES_USER: "postgres"

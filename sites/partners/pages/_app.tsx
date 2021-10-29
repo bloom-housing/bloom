@@ -4,7 +4,6 @@ import type { AppProps } from "next/app"
 
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
-import "../styles/overrides.scss"
 import {
   addTranslation,
   ConfigProvider,
@@ -20,6 +19,9 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css"
 
 import LinkComponent from "../src/LinkComponent"
 import { translations, overrideTranslations } from "../src/translations"
+
+// Note: import overrides.scss last so that it overrides styles defined in imports above
+import "../styles/overrides.scss"
 
 const signInMessage = "Login is required to view this page."
 

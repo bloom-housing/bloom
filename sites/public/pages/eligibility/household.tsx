@@ -82,6 +82,7 @@ const EligibilityHouseholdSize = () => {
               validation={{ required: true }}
               register={register}
               controlClassName="control"
+              placeholder={t("t.selectOne")}
               options={householdSizeRanges}
               keyPrefix="eligibility.household.ranges"
             />

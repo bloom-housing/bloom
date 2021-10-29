@@ -1,4 +1,7 @@
 {
+    "config": {
+        "routePrefix": "es"
+    },
     "account": {
         "accountSettings": "Configuraciones de la cuenta",
         "errorFetchingApplications": "Error al recuperar aplicaciones",
@@ -524,7 +527,6 @@
             "success": "Ha cerrado la sesión con éxito de su cuenta."
         }
     },
-    "config": {},
     "errors": {
         "alert": {
             "timeoutPleaseTryAgain": "¡UPS! Parece que algo salió mal. Inténtalo de nuevo."
@@ -1210,7 +1212,7 @@
         "buttonTitle": "Filtrar listados",
         "buttonTitleWithNumber": "Filtrar listados (% {number})",
         "resetButton": "Reiniciar",
-        "modalTitle": "Filtrar Resultados",
+        "modalTitle": "Filtrar resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
         "neighborhood": "Vecindario",
         "bedrooms": "Tamaño de la unidad",
@@ -1223,6 +1225,7 @@
         },
         "zipCode": "Código postal",
         "zipCodeDescription": "Introduzca código postal",
+        "rentRange": "Rango de alquiler",
         "adaCompliant": "Cumple con la ADA",
         "availability": "Disponibilidad de la unidad",
         "hasAvailability": "Tiene disponibilidad",

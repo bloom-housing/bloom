@@ -153,7 +153,7 @@ export async function fetchBaseListingData() {
       },
     })
 
-    listingData = response.data?.items ?? []
+    listingData = response.data ?? []
   } catch (error) {
     console.log("fetchBaseListingData error = ", error)
   }

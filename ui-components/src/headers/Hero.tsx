@@ -13,6 +13,7 @@ export interface HeroProps {
   allApplicationsClosed?: boolean
   children?: React.ReactNode
   centered?: boolean
+  heroInset?: React.ReactNode
 }
 
 const HeroButton = (props: { title: string; href: string; className?: string }) => (
@@ -40,7 +41,8 @@ const Hero = (props: HeroProps) => {
       <h1 className="hero__title">{props.title}</h1>
       {subHeader}
 
-      {props.buttonTitle && props.buttonLink && (
+      {props.heroInset}
+      {!props.heroInset && props.buttonTitle && props.buttonLink && (
         <>
           {props.secondaryButtonTitle && props.secondaryButtonLink ? (
             <div className="grid md:grid-cols-6 gap-5 ">

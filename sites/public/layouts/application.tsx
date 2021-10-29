@@ -44,10 +44,6 @@ const Layout = (props) => {
           href: "/account/dashboard",
         },
         {
-          title: t("nav.myApplications"),
-          href: "/account/applications",
-        },
-        {
           title: t("nav.accountSettings"),
           href: "/account/edit",
         },
@@ -78,6 +74,7 @@ const Layout = (props) => {
           logoSrc="/images/detroit-logo.png"
           homeURL="/"
           title={t("nav.siteTitle")}
+          logoWidth={"medium"}
           languages={languages.map((lang) => {
             return {
               label: lang.label,
