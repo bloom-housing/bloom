@@ -432,6 +432,10 @@
           "label": "Residency",
           "description": "%{county} copy goes here…"
         },
+        "generalResidency": {
+          "label": "Residency",
+          "description": "%{county} copy goes here…"
+        },
         "residencyNoColiseum": {
           "label": "Residency",
           "description": "%{county} copy goes here…"
