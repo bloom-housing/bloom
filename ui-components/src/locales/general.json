@@ -374,8 +374,23 @@
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
       "dontWant": "I don't want these preferences",
+      "dontWantSingular": "I don't want this preference",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
+      "displacedHousehold": {
+        "title": "Displaced Household",
+        "displacedHousehold": {
+          "label": "Displaced Household Preference",
+          "description": ""
+        }
+      },
+      "neighborhoodResidence": {
+        "title": "Neighborhood Residents",
+        "neighborhoodResidence": {
+          "label": "Neighborhood Residents Preference",
+          "description": ""
+        }
+      },
       "liveWork": {
         "title": "Live or Work in %{county} County?",
         "live": {
@@ -389,9 +404,35 @@
           "link": "http://domain.com"
         }
       },
+      "liveWorkCity": {
+        "title": "Live or Work in the City of %{county}",
+        "live": {
+          "label": "Live in the City of %{county} Preference",
+          "description": "At least one member of my household lives in the City of %{county}"
+        },
+        "work": {
+          "label": "Work in the City of %{county} Preference",
+          "description": "At least one member of my household works in the City of %{county}"
+        }
+      },
+      "liveWorkOakland": {
+        "title": "Live or Work in the City of Oakland",
+        "live": {
+          "label": "Live in the City of Oakland Preference",
+          "description": "At least one member of my household lives in the City of Oakland"
+        },
+        "work": {
+          "label": "Work in the City of Oakland Preference",
+          "description": "At least one member of my household works in the City of Oakland"
+        }
+      },
       "PBV": {
         "title": "%{county} copy goes here…",
         "residency": {
+          "label": "Residency",
+          "description": "%{county} copy goes here…"
+        },
+        "residencyNoColiseum": {
           "label": "Residency",
           "description": "%{county} copy goes here…"
         },
@@ -972,6 +1013,7 @@
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
     "seeUnitInformation": "See Unit Information",
+    "selectionCriteria": "Selection Criteria",
     "selectPreferences": "Select Preferences",
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
