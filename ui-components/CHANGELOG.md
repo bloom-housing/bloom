@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.19...@bloom-housing/ui-components@2.0.0-alpha.20) (2021-10-29)
+
+
+### Bug Fixes
+
+* adds general residency to pbv preference ([268dd06](https://github.com/bloom-housing/bloom/commit/268dd06de4cea1c50a61a7fc88ad883c802aea92))
+
+
+
+
+
 # [2.0.0-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.18...@bloom-housing/ui-components@2.0.0-alpha.19) (2021-10-29)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
