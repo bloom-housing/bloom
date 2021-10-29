@@ -178,7 +178,6 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
-  // @ts-ignore: type any error
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
