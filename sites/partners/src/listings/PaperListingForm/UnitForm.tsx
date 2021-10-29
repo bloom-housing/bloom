@@ -14,7 +14,7 @@ import {
   numberOptions,
   AuthContext,
 } from "@bloom-housing/ui-components"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm, useWatch, useFormContext } from "react-hook-form"
 import { TempUnit } from "."
 import {
   AmiChart,
@@ -51,10 +51,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     value: status,
   }))
 
+  const formMethods = useFormContext()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { watch } = formMethods
+  const jurisdiction: string = watch("jurisdiction.name")
   /**
    * fetch form options
    */
-  const { data: amiCharts = [] } = useAmiChartList()
+  const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
 
@@ -174,6 +178,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
 
   type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
+  // @ts-ignore: type any error
   const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)

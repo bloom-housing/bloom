@@ -199,9 +199,9 @@ export function useSingleAmiChartData(amiChartId: string) {
   }
 }
 
-export function useAmiChartList() {
+export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
-  const fetcher = () => amiChartsService.list()
+  const fetcher = () => amiChartsService.list({ jurisdictionName: jurisdiction })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
 
