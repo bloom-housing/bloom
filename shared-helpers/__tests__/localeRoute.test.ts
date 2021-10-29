@@ -1,11 +1,11 @@
 import { cleanup } from "@testing-library/react"
-import * as formKeys from "../src/formKeys"
+import { lRoute } from "../src/localeRoute"
 
 afterEach(cleanup)
 
-describe("formKeys helper", () => {
-  it("should include all US states", () => {
-    // 52 because DC and "" are included
-    expect(formKeys.stateKeys.length).toBe(52)
+describe("localeRoute helper", () => {
+  it("return input if its a full URL", () => {
+    expect(lRoute("https://www.google.com")).toBe("https://www.google.com")
+    expect(lRoute("http://www.google.com")).toBe("http://www.google.com")
   })
 })

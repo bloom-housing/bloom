@@ -3,7 +3,6 @@ import { useContext, useState } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
-  blankApplication,
   AppearanceStyleType,
   Button,
   Form,
@@ -11,6 +10,7 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -42,7 +42,7 @@ export default () => {
         conductor.application = withUpdatedLang
       } else {
         const newApplication = {
-          ...blankApplication(),
+          ...blankApplication,
           language: conductor.application.language,
         }
         conductor.application = newApplication

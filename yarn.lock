@@ -3442,6 +3442,42 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bloom-housing/ui-components@^2.0.0-alpha.19":
+  version "2.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-2.0.0-alpha.19.tgz#7fe38f2ae0edfd4aa37c514c1f6615f2b79af2d4"
+  integrity sha512-uAzOzpLqS4eslKB616SBbFQNktukO529/I3wnKH9XcfF1ur3yPWtruJ4jhCSqoCYP8LchthcBuUPlaLoS7bsNA==
+  dependencies:
+    "@bloom-housing/backend-core" "^2.0.0-pre-tailwind.11"
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    "@types/body-scroll-lock" "^2.6.1"
+    "@types/jwt-decode" "^2.2.1"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/node" "^12.12.67"
+    "@types/node-polyglot" "^2.4.1"
+    "@types/react-beautiful-dnd" "^13.1.1"
+    "@types/react-dom" "^16.9.5"
+    "@types/react-text-mask" "^5.4.6"
+    "@types/react-transition-group" "^4.4.0"
+    axios "^0.21.1"
+    body-scroll-lock "^3.1.5"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "^6.11.4"
+    moment "^2.29.1"
+    nanoid "^3.1.12"
+    react "^17.0.2"
+    react-accessible-accordion "^3.3.5"
+    react-beautiful-dnd "^13.1.0"
+    react-dom "^17.0.2"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.5.2"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.4.3"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    typesafe-actions "^5.1.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"

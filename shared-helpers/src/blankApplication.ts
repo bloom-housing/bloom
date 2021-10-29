@@ -4,111 +4,49 @@ import {
   Language,
   ApplicationPreference,
   ApplicationProgram,
-  Application,
 } from "@bloom-housing/backend-core/types"
 
-type BlankApplication = Omit<
-  Application,
-  | "status"
-  | "incomePeriod"
-  | "language"
-  | "submissionType"
-  | "applicant"
-  | "listing"
-  | "user"
-  | "mailingAddress"
-  | "alternateAddress"
-  | "alternateContact"
-  | "accessibility"
-  | "demographics"
-  | "householdMembers"
-  | "preferredUnit"
-  | "id"
-  | "createdAt"
-  | "updatedAt"
-  | "deletedAt"
-  | "appUrl"
-  | "additionalPhone"
-  | "additionalPhoneNumber"
-  | "additionalPhoneNumberType"
-  | "contactPreferences"
-  | "householdSize"
-  | "housingStatus"
-  | "sendMailToMailingAddress"
-  | "incomeVouchers"
-  | "income"
-  | "preferences"
-  | "programs"
-  | "acceptedTerms"
-  | "submissionDate"
-  | "markedAsDuplicate"
-  | "confirmationCode"
->
-
-export const blankApplication: BlankApplication = () => {
-  return {
-    loaded: false,
-    autofilled: false,
-    completedSections: 0,
-    submissionType: ApplicationSubmissionType.electronical,
-    language: Language.en,
-    acceptedTerms: false,
-    status: ApplicationStatus.submitted,
-    applicant: {
-      orderId: undefined,
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      birthMonth: "",
-      birthDay: "",
-      birthYear: "",
-      emailAddress: null,
-      noEmail: false,
-      phoneNumber: "",
-      phoneNumberType: "",
-      noPhone: false,
-      workInRegion: null,
-      address: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        county: "",
-        latitude: null,
-        longitude: null,
-      },
-      workAddress: {
-        street: "",
-        street2: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        county: "",
-        latitude: null,
-        longitude: null,
-      },
-    },
-    additionalPhone: false,
-    additionalPhoneNumber: "",
-    additionalPhoneNumberType: "",
-    contactPreferences: [],
-    householdSize: 0,
-    housingStatus: "",
-    sendMailToMailingAddress: false,
-    mailingAddress: {
+export const blankApplication = {
+  loaded: false,
+  autofilled: false,
+  completedSections: 0,
+  submissionType: ApplicationSubmissionType.electronical,
+  language: Language.en,
+  acceptedTerms: false,
+  status: ApplicationStatus.submitted,
+  applicant: {
+    orderId: undefined,
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    birthMonth: "",
+    birthDay: "",
+    birthYear: "",
+    emailAddress: null,
+    noEmail: false,
+    phoneNumber: "",
+    phoneNumberType: "",
+    noPhone: false,
+    workInRegion: null,
+    address: {
       street: "",
       street2: "",
       city: "",
       state: "",
       zipCode: "",
+      county: "",
+      latitude: null,
+      longitude: null,
     },
-    alternateAddress: {
+    workAddress: {
       street: "",
       street2: "",
       city: "",
       state: "",
       zipCode: "",
+      county: "",
+      latitude: null,
+      longitude: null,
     },
     alternateContact: {
       type: "",
@@ -148,5 +86,5 @@ export const blankApplication: BlankApplication = () => {
     programs: [] as ApplicationProgram[],
     confirmationCode: "",
     id: "",
-  }
+  },
 }

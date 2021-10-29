@@ -32,4 +32,5 @@ module.exports = {
   },
   setupFiles: ["dotenv/config"],
   setupFilesAfterEnv: ["<rootDir>/shared-helpers/.jest/setup-tests.js"],
+  transformIgnorePatterns: ["<rootDir>/shared-helpers/node_modules/(?!@bloom-housing)"],
 }

@@ -1,8 +1,9 @@
 // Future home of additional Jest config
 import "@testing-library/jest-dom/extend-expect"
+const bloomTheme = require("./tailwind.config.js")
 
-import { addTranslation } from "../src/helpers/translator"
-import general from "../src/locales/general.json"
+// import { addTranslation } from "@bloom-housing/ui-components"
+// import general from "../../ui-components/src/locales/general.json"
 
 // see: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 window.matchMedia = jest.fn().mockImplementation((query) => {
@@ -18,4 +19,4 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
   }
 })
 
-addTranslation(general)
+// addTranslation(general)

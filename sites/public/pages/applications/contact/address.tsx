@@ -16,8 +16,8 @@ import {
   ProgressNav,
   FieldGroup,
   t,
-  blankApplication,
 } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
@@ -57,10 +57,10 @@ const ApplicationAddress = () => {
       application.additionalPhoneNumberType = ""
     }
     if (!application.sendMailToMailingAddress) {
-      application.mailingAddress = blankApplication().mailingAddress
+      application.mailingAddress = blankApplication.mailingAddress
     }
     if (!application.applicant.workInRegion) {
-      application.applicant.workAddress = blankApplication().applicant.workAddress
+      application.applicant.workAddress = blankApplication.applicant.workAddress
     }
     conductor.sync()
 
