@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
   - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
   - Incorrect last name ([#2107](https://github.com/bloom-housing/bloom/pull/2107)) (Dominik Barcikowski)
+
 ## Backend
 
 - Fixed:
