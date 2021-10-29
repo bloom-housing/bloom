@@ -157,6 +157,7 @@ const ListingPhoto = () => {
               <MinimalTable headers={photoTableHeaders} data={listingPhotoTableRows}></MinimalTable>
             ) : (
               <Button
+                id="addPhotoButton"
                 type="button"
                 styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
                 onClick={() => {
