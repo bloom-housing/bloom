@@ -83,7 +83,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
-    applicantData.lastName = mapEmptyStringToNull(applicantData.firstName)
+    applicantData.lastName = mapEmptyStringToNull(applicantData.lastName)
 
     const workAddress = getAddress(
       applicantData?.workInRegion === YesNoAnswer.Yes,
