@@ -101,6 +101,7 @@ const ApplicationDemographics = () => {
               keyPrefix="application.review.demographics.ethnicityOptions"
               dataTestId={"app-demographics-ethnicity"}
             />
+<<<<<<< HEAD
 
             <Select
               id="race"
@@ -114,6 +115,28 @@ const ApplicationDemographics = () => {
               keyPrefix="application.review.demographics.raceOptions"
               dataTestId={"app-demographics-race"}
             />
+=======
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.review.demographics.raceLabel")}
+              </legend>
+              <FieldGroup
+                name="race"
+                fields={Object.keys(raceKeys).map((rootKey) => ({
+                  id: rootKey,
+                  label: t(`application.review.demographics.raceOptions.${rootKey}`),
+                  value: rootKey,
+                  subFields: raceKeys[rootKey].map((subKey) => ({
+                    id: subKey,
+                    label: t(`application.review.demographics.raceOptions.${subKey}`),
+                    value: subKey,
+                  })),
+                }))}
+                type="checkbox"
+                register={register}
+              />
+            </fieldset>
+>>>>>>> feat: new demographics sub-race questions
           </div>
 
           <div className="form-card__group border-b">

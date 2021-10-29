@@ -57,7 +57,7 @@ export class ApplicationCsvExporter {
           demographics = {
             Ethnicity: app.demographics_ethnicity,
             Gender: app.demographics_gender,
-            Race: app.demographics_race,
+            Race: app.demographics_race.join(", "),
             "Sexual Orientation": app.demographics_sexual_orientation,
             "How Did You Hear": app.demographics_how_did_you_hear.join(", "),
           }

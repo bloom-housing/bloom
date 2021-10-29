@@ -97,17 +97,23 @@ export const altContactRelationshipKeys = [
 
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
-export const raceKeys = [
+export const rootRaceKeys = [
   "americanIndianAlaskanNative",
   "asian",
   "blackAfricanAmerican",
   "nativeHawaiianOtherPacificIslander",
   "white",
-  "americanIndianAlaskanNativeAndBlackAfricanAmerican",
-  "americanIndianAlaskanNativeAndWhite",
-  "asianAndWhite",
-  "blackAfricanAmericanAndWhite",
-  "otherMutliracial",
+  "otherMultiracial",
+  "declineToRespond",
+]
+
+export const asianKeys = ["asianIndian", "chinese", "filipino", "japanese", "korean", "vietnamese"]
+
+export const nativeHawaiianOtherPacificIslanderKeys = [
+  "nativeHawaiian",
+  "guamanianOrChamorro",
+  "samoan",
+  "otherPacificIslander",
 ]
 
 export const genderKeys = [
@@ -126,6 +132,16 @@ export const sexualOrientation = [
   "straightHeterosexual",
   "notListed",
 ]
+
+export const raceKeys = {
+  americanIndianAlaskanNative: [],
+  asian: asianKeys,
+  blackAfricanAmerican: [],
+  nativeHawaiianOtherPacificIslander: nativeHawaiianOtherPacificIslanderKeys,
+  white: [],
+  otherMultiracial: [],
+  declineToRespond: [],
+}
 
 export const howDidYouHear = [
   {

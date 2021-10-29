@@ -50,16 +50,20 @@ const FormDemographics = () => {
 
       <GridCell>
         <ViewItem label={t("application.add.race")}>
-          <Select
-            id="application.demographics.race"
+          <FieldGroup
             name="application.demographics.race"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.race")}
-            labelClassName="sr-only"
+            fields={Object.keys(raceKeys).map((rootKey) => ({
+              id: rootKey,
+              label: t(`application.review.demographics.raceOptions.${rootKey}`),
+              value: rootKey,
+              subFields: raceKeys[rootKey].map((subKey) => ({
+                id: subKey,
+                label: t(`application.review.demographics.raceOptions.${subKey}`),
+                value: subKey,
+              })),
+            }))}
+            type="checkbox"
             register={register}
-            controlClassName="control"
-            options={raceKeys}
-            keyPrefix="application.review.demographics.raceOptions"
           />
         </ViewItem>
       </GridCell>

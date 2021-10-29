@@ -96,11 +96,11 @@ const applicationCreateDtoTemplate: Omit<
   },
   contactPreferences: [],
   demographics: {
-    ethnicity: "ethnicity",
-    gender: "gender",
+    ethnicity: null,
+    gender: "female",
     howDidYouHear: ["email", "facebook"],
-    race: "race",
-    sexualOrientation: "orientation",
+    race: ["asian", "filipino"],
+    sexualOrientation: null,
   },
   householdMembers: [
     {
