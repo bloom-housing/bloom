@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.16...@bloom-housing/ui-components@2.0.0-alpha.17) (2021-10-29)
+
+
+### Bug Fixes
+
+* add missing preference strings ([#2104](https://github.com/bloom-housing/bloom/issues/2104)) ([e5d7890](https://github.com/bloom-housing/bloom/commit/e5d78903f93a56b6f7506f72e4f5f014f545f692))
+
+
+
+
+
 # [2.0.0-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.15...@bloom-housing/ui-components@2.0.0-alpha.16) (2021-10-28)
 
 
