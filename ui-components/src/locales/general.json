@@ -403,6 +403,28 @@
           "link": "http://domain.com"
         }
       },
+      "liveWorkCity": {
+        "title": "Live or Work in the City of %{county}",
+        "live": {
+          "label": "Live in the City of %{county} Preference",
+          "description": "At least one member of my household lives in the City of %{county}"
+        },
+        "work": {
+          "label": "Work in the City of %{county} Preference",
+          "description": "At least one member of my household works in the City of %{county}"
+        }
+      },
+      "liveWorkOakland": {
+        "title": "Live or Work in the City of Oakland",
+        "live": {
+          "label": "Live in the City of Oakland Preference",
+          "description": "At least one member of my household lives in the City of Oakland"
+        },
+        "work": {
+          "label": "Work in the City of Oakland Preference",
+          "description": "At least one member of my household works in the City of Oakland"
+        }
+      },
       "PBV": {
         "title": "%{county} copy goes here…",
         "residency": {
