@@ -13,11 +13,13 @@ const DetailPrograms = () => {
 
   const programsTableData = useMemo(
     () =>
-      listing?.listingPrograms.map((program, index) => ({
-        order: index + 1,
-        name: program.program.title,
-        description: program.program.description,
-      })),
+      listing?.listingPrograms
+        .sort((firstEl, secondEl) => firstEl.ordinal - secondEl.ordinal)
+        .map((program, index) => ({
+          order: index + 1,
+          name: program.program.title,
+          description: program.program.description,
+        })),
     [listing]
   )
 
