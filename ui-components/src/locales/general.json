@@ -376,6 +376,20 @@
       "dontWant": "I don't want these preferences",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
+      "displacedHousehold": {
+        "title": "Displaced Household",
+        "displacedHousehold": {
+          "label": "Displaced Household Preference",
+          "description": ""
+        }
+      },
+      "neighborhoodResidence": {
+        "title": "Neighborhood Residents",
+        "neighborhoodResidence": {
+          "label": "Neighborhood Residents Preference",
+          "description": ""
+        }
+      },
       "liveWork": {
         "title": "Live or Work in %{county} County?",
         "live": {
