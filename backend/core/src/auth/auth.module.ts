@@ -37,7 +37,7 @@ import { Application } from "../applications/entities/application.entity"
     EmailModule,
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
-  exports: [AuthzService, AuthService, UserService],
+  exports: [AuthzService, AuthService, UserService, PasswordService],
   controllers: [AuthController, UserController],
 })
 export class AuthModule {}

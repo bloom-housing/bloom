@@ -101,6 +101,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException()
     }
+    console.log("dto: " + JSON.stringify(dto))
 
     await this.authzService.canOrThrow(authContext.user, "user", authzActions.update, {
       ...dto,
