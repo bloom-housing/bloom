@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.13...@bloom-housing/backend-core@2.0.0-pre-tailwind.14) (2021-10-30)
+
+
+### Bug Fixes
+
+* updates household member count ([#2112](https://github.com/bloom-housing/bloom/issues/2112)) ([3dee0f7](https://github.com/bloom-housing/bloom/commit/3dee0f7d676ff42d546ecf83a17659cd69d7e1bc))
+
+
+
+
+
 # [2.0.0-pre-tailwind.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.12...@bloom-housing/backend-core@2.0.0-pre-tailwind.13) (2021-10-30)
 
 
