@@ -3,6 +3,90 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.21...@bloom-housing/ui-components@2.0.0-alpha.22) (2021-10-29)
+
+
+### Bug Fixes
+
+* adding unit tests to the unit type ([#2091](https://github.com/bloom-housing/bloom/issues/2091)) ([1f8d709](https://github.com/bloom-housing/bloom/commit/1f8d7094e508337131d3033476cd70c2befaecd0))
+
+
+
+
+
+# [2.0.0-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.20...@bloom-housing/ui-components@2.0.0-alpha.21) (2021-10-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+# [2.0.0-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.19...@bloom-housing/ui-components@2.0.0-alpha.20) (2021-10-29)
+
+
+### Bug Fixes
+
+* adds general residency to pbv preference ([268dd06](https://github.com/bloom-housing/bloom/commit/268dd06de4cea1c50a61a7fc88ad883c802aea92))
+
+
+
+
+
+# [2.0.0-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.18...@bloom-housing/ui-components@2.0.0-alpha.19) (2021-10-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+# [2.0.0-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.17...@bloom-housing/ui-components@2.0.0-alpha.18) (2021-10-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+# [2.0.0-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.16...@bloom-housing/ui-components@2.0.0-alpha.17) (2021-10-29)
+
+
+### Bug Fixes
+
+* add missing preference strings ([#2104](https://github.com/bloom-housing/bloom/issues/2104)) ([e5d7890](https://github.com/bloom-housing/bloom/commit/e5d78903f93a56b6f7506f72e4f5f014f545f692))
+
+
+
+
+
+# [2.0.0-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.15...@bloom-housing/ui-components@2.0.0-alpha.16) (2021-10-28)
+
+
+### Bug Fixes
+
+* expandable text without text ([#2100](https://github.com/bloom-housing/bloom/issues/2100)) ([289edd2](https://github.com/bloom-housing/bloom/commit/289edd253904fe9dae5c399d53516cec57f75208))
+
+
+
+
+
+# [2.0.0-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.14...@bloom-housing/ui-components@2.0.0-alpha.15) (2021-10-28)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+# [2.0.0-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.13...@bloom-housing/ui-components@2.0.0-alpha.14) (2021-10-27)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 # [2.0.0-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.12...@bloom-housing/ui-components@2.0.0-alpha.13) (2021-10-26)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

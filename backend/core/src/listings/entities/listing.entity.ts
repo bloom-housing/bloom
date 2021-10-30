@@ -96,25 +96,25 @@ class Listing extends BaseEntity {
   }
 
   // booleans to make dealing with different application methods easier to parse
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   digitalApplication?: boolean
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   commonDigitalApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   paperApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

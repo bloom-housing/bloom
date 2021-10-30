@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.11...@bloom-housing/backend-core@2.0.0-pre-tailwind.12) (2021-10-29)
+
+
+### Bug Fixes
+
+* fix for csv demographics and preference patch ([4768fb0](https://github.com/bloom-housing/bloom/commit/4768fb00be55957b3b1b197d149187c79374b48d))
+
+
+
+
+
+# [2.0.0-pre-tailwind.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.10...@bloom-housing/backend-core@2.0.0-pre-tailwind.11) (2021-10-28)
+
+
+### Bug Fixes
+
+* in listings management keep empty strings, remove empty objects ([#2064](https://github.com/bloom-housing/bloom/issues/2064)) ([c4b1e83](https://github.com/bloom-housing/bloom/commit/c4b1e833ec128f457015ac7ffa421ee6047083d9))
+
+
+
+
+
+# [2.0.0-pre-tailwind.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.9...@bloom-housing/backend-core@2.0.0-pre-tailwind.10) (2021-10-27)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 # [2.0.0-pre-tailwind.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.8...@bloom-housing/backend-core@2.0.0-pre-tailwind.9) (2021-10-26)
 
 
