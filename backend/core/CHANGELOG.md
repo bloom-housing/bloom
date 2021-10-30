@@ -3,6 +3,59 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-pre-tailwind.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.12...@bloom-housing/backend-core@2.0.0-pre-tailwind.13) (2021-10-30)
+
+
+* Preferences cleanup (#1947) ([7329a58](https://github.com/bloom-housing/bloom/commit/7329a58cc9242faf647459e46de1e3cff3fe9c9d)), closes [#1947](https://github.com/bloom-housing/bloom/issues/1947)
+
+
+### BREAKING CHANGES
+
+* Preferences are now M-N relation with a listing and have an intermediate table with ordinal number
+
+* refactor(backend): preferences deduplication
+
+So far each listing referenced it's own unique Preferences. This change introduces Many to Many
+relationship between Preference and Listing entity and forces sharing Preferences between listings.
+
+* feat(backend): extend preferences migration with moving existing relations to a new intermediate tab
+
+* feat(backend): add Preference - Jurisdiction ManyToMany relation
+
+* feat: adapt frontend to backend changes
+
+* fix(backend): typeORM preferences select statement
+
+* fix(backend): connect preferences with jurisdictions in seeds, fix pref filter validator
+
+* fix(backend): fix missing import in preferences-filter-params.ts
+
+* refactor: rebase issue
+
+* feat: uptake jurisdictional preferences
+
+* fix: fixup tests
+
+* fix: application preferences ignore page, always separate
+
+* Remove page from src/migration/1633359409242-add-listing-preferences-intermediate-relation.ts
+
+* fix: preference fetching and ordering/pages
+
+* Fix code style issues with Prettier
+
+* fix(backend): query User__leasingAgentInListings__jurisdiction_User__leasingAgentIn specified more
+
+* fix: perferences cypress tests
+
+Co-authored-by: Emily Jablonski <emily.jablonski@exygy.com>
+Co-authored-by: Sean Albert <smabert@gmail.com>
+Co-authored-by: Lint Action <lint-action@samuelmeuli.com>
+
+
+
+
+
 # [2.0.0-pre-tailwind.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.11...@bloom-housing/backend-core@2.0.0-pre-tailwind.12) (2021-10-29)
 
 
