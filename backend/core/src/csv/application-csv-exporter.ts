@@ -169,7 +169,7 @@ export class ApplicationCsvExporter {
           app.householdMembers_id
         ] = this.mapHouseholdMembers(app)
         extraHeaders["Household Members"] = Math.max(
-          1,
+          extraHeaders["Household Members"],
           Object.keys(obj[app.application_id]["Household Members"]).length
         )
       } else if (
