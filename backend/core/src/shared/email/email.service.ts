@@ -202,7 +202,7 @@ export class EmailService {
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
     void (await this.loadTranslations(
-      user.jurisdictions.length === 1 ? user.jurisdictions[0] : null,
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
       user.language || Language.en
     ))
     await this.send(
