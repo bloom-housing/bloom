@@ -108,7 +108,7 @@ describe("applications/household/member", function () {
         firstName: this.data["firstName"],
         lastName: this.data["lastName"],
         middleName: this.data["middleName"],
-        memberId: 0,
+        orderId: 0,
         phoneNumber: "",
         phoneNumberType: "",
         relationship: this.data["relationship"],
