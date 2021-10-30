@@ -52,7 +52,6 @@ const listingSeeds: any[] = [
   ListingDefaultOpenSoonSeed,
   ListingDefaultOnePreferenceSeed,
   ListingDefaultNoPreferenceSeed,
-  ListingDefaultNoPreferenceSeed,
   ListingDefaultBmrChartSeed,
   ListingTritonSeed,
   ListingDefaultReservedSeed,
