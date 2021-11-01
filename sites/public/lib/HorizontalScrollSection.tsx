@@ -38,14 +38,12 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
   const debounceSetButtonState = debounce(setButtonState, 100)
 
   useEffect(() => {
-    scrollContainerRef.current.addEventListener("scroll", debounceSetButtonState)
     window.addEventListener("resize", debounceSetButtonState)
     // Set the initial state incase window is wide enough to not have any scrolling
     setButtonState()
 
     // Cleanup
     return () => {
-      scrollContainerRef.current.removeEventListener("scroll", debounceSetButtonState)
       window.removeEventListener("resize", debounceSetButtonState)
     }
   })
@@ -79,7 +77,7 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
           {props.subtitle}
         </div>
       )}
-      <div className={styles.content} ref={scrollContainerRef}>
+      <div className={styles.content} ref={scrollContainerRef} onScroll={debounceSetButtonState}>
         {props.children}
       </div>
     </section>
