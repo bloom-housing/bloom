@@ -1,0 +1,86 @@
+.latest-listings {
+  padding: 24px 0 0 0;
+}
+.latest-listing {
+  @apply bg-primary;
+  border-radius: 24px;
+  color: #ffffff;
+  height: 258px;
+  margin: 0 40px 0 0;
+  overflow: hidden;
+  position: relative;
+  width: 390px;
+
+  @screen sm {
+    height: 340px;
+    width: 520px;
+  }
+}
+.latest-listing:hover {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.latest-listing__name {
+  bottom: 117px;
+  font-size: 1.75rem;
+  left: 24px;
+  position: absolute;
+}
+
+.latest-listing__address {
+  bottom: 82px;
+  font-size: 0.875rem;
+  left: 24px;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.latest-listing__availability {
+  background-color: #31383a;
+  bottom: 0;
+  font-size: 0.75rem;
+  height: 50px;
+  padding: 15px;
+  position: absolute;
+  width: 100%;
+}
+
+.neighborhoods {
+  padding: 24px 0;
+}
+
+.neighborhood {
+  @apply bg-primary;
+  border-radius: 50px;
+  height: 146px;
+  margin: 0 33px 0 0;
+  position: relative;
+  width: 209px;
+
+  @screen sm {
+    height: 194px;
+    width: 278px;
+  }
+}
+.neighborhood:hover {
+  opacity: 0.9;
+}
+
+.neighborhood__text {
+  @apply text-primary-dark;
+  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 48px 0 16px 48px; //TODO(#674): Double check border-radius
+  bottom: 21px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  left: 21px;
+  line-height: 1rem;
+  max-width: 236px;
+  overflow: hidden;
+  padding: 10px 17px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

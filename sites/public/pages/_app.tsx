@@ -1,6 +1,5 @@
 import "@bloom-housing/ui-components/src/global/css-imports.scss"
 import "@bloom-housing/ui-components/src/global/app-css.scss"
-import "../styles/overrides.scss"
 import { useEffect, useMemo, useState } from "react"
 import type { AppProps } from "next/app"
 import {
@@ -21,6 +20,9 @@ import ApplicationConductor, {
 import { translations, overrideTranslations } from "../src/translations"
 import LinkComponent from "../src/LinkComponent"
 import { blankEligibilityRequirements, EligibilityContext } from "../lib/EligibilityContext"
+
+// Note: import overrides.scss last so that it overrides styles defined in imports above
+import "../styles/overrides.scss"
 
 function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
