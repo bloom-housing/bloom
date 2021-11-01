@@ -239,6 +239,62 @@ describe("Listings", () => {
     expect(res.body.items.length).toBe(0)
   })
 
+  it("should return listings with matching Alameda jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: alameda.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(13)
+  })
+
+  it("should return listings with matching San Jose jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
+    const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanjose.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(1)
+  })
+
+  it("should return no listings with San Mateo jurisdiction", async () => {
+    const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
+    const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "=",
+          jurisdiction: sanmateo.id,
+        },
+      ],
+      view: "base",
+    }
+    const query = qs.stringify(queryParams)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBe(0)
+  })
+
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
