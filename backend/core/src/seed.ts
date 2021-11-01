@@ -15,6 +15,10 @@ import {
   getHousingSituationProgram,
   getServedInMilitaryProgram,
   getTayProgram,
+  getDisplaceePreference,
+  getHopwaPreference,
+  getLiveWorkPreference,
+  getPbvPreference,
 } from "./seeds/listings/shared"
 import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
 import { Listing } from "./listings/entities/listing.entity"
@@ -37,6 +41,7 @@ import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
+import { Preference } from "./preferences/entities/preference.entity"
 import { Program } from "./program/entities/program.entity"
 
 const argv = yargs.scriptName("seed").options({
@@ -95,6 +100,28 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
+export async function createPreferences(
+  app: INestApplicationContext,
+  jurisdictions: Jurisdiction[]
+) {
+  const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
+  const preferences = await preferencesRepository.save([
+    getLiveWorkPreference(),
+    getPbvPreference(),
+    getHopwaPreference(),
+    getDisplaceePreference(),
+  ])
+
+  for (const jurisdiction of jurisdictions) {
+    jurisdiction.preferences = preferences
+  }
+  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
+    getRepositoryToken(Jurisdiction)
+  )
+  await jurisdictionsRepository.save(jurisdictions)
+  return preferences
+}
+
 export async function createPrograms(app: INestApplicationContext, jurisdictions: Jurisdiction[]) {
   const programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   const programs = await programsRepository.save([
@@ -122,7 +149,7 @@ const seedListings = async (
 ) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
-
+  await createPreferences(app, jurisdictions)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
   const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
@@ -175,7 +202,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
@@ -191,7 +218,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "ghijkl",
-      passwordConfirmation: "Ghijkl1!",
+      passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
@@ -207,7 +234,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions,
     }),
     new AuthContext(null)
