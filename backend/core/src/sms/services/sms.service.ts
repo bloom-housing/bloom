@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Scope } from "@nestjs/common"
-import { UserService } from "src/auth/services/user.service"
-import { StatusDto } from "src/shared/dto/status.dto"
-import { mapTo } from "src/shared/mapTo"
+import { UserService } from "../../auth/services/user.service"
+import { StatusDto } from "../../shared/dto/status.dto"
+import { mapTo } from "../../shared/mapTo"
 import { SmsDto } from "../dto/sms.dto"
 import { TwilioService } from "./twilio.service"
 
