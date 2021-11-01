@@ -45,7 +45,7 @@ Cypress.Commands.add(
   "loadConfig",
   (listingOverrides, configFile = "applicationConfigBlank.json", configOverrides) => {
     cy.request("GET", listingsUrl).then((res) => {
-      const listing = res.body.items.find((item) => item.name === "Test: Default, Two Preferences")
+      const listing = res.body.items.find((item) => item.name === "Test: Triton")
 
       if (listingOverrides && listing) {
         Object.keys(listingOverrides).forEach((item) => {

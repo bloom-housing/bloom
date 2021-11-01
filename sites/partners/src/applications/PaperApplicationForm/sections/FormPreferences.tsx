@@ -14,16 +14,12 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
+import { Preference, FormMetadataExtraData } from "@bloom-housing/backend-core/types"
 import { stateKeys } from "@bloom-housing/shared-helpers"
-import {
-  Preference,
-  FormMetadataExtraData,
-  ListingPreference,
-} from "@bloom-housing/backend-core/types"
 
 type FormPreferencesProps = {
   county: string
-  preferences: ListingPreference[]
+  preferences: Preference[]
   hhMembersOptions?: SelectOption[]
 }
 
@@ -34,17 +30,14 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
   const { register, setValue, watch } = formMethods
 
   const hasMetaData = useMemo(() => {
-    return !!preferences?.filter((listingPreference) => listingPreference.preference?.formMetadata)
-      ?.length
+    return !!preferences?.filter((preference) => preference?.formMetadata)?.length
   }, [preferences])
 
   const allOptionFieldNames = useMemo(() => {
     const keys = []
-    preferences?.forEach((listingPreference) =>
-      listingPreference.preference?.formMetadata?.options.forEach((option) =>
-        keys.push(
-          getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata.key)
-        )
+    preferences?.forEach((preference) =>
+      preference?.formMetadata?.options.forEach((option) =>
+        keys.push(getPreferenceOptionName(option.key, preference?.formMetadata.key))
       )
     )
 
@@ -111,40 +104,35 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
   return (
     <GridSection title={t("application.details.preferences")} separator grid={false}>
       <GridSection columns={2}>
-        {preferences?.map((listingPreference) => {
-          const metaKey = listingPreference.preference?.formMetadata?.key
+        {preferences?.map((preference) => {
+          const metaKey = preference?.formMetadata?.key
 
           return (
-            <GridCell key={listingPreference.preference.id}>
+            <GridCell key={preference.id}>
               <ViewItem
                 label={t(`application.preferences.${metaKey}.title`, {
                   county,
                 })}
               >
                 <fieldset className="mt-4">
-                  {listingPreference.preference?.formMetadata?.options?.map((option) => {
+                  {preference?.formMetadata?.options?.map((option) => {
                     return getOption(
                       option.key,
-                      getPreferenceOptionName(
-                        option.key,
-                        listingPreference.preference?.formMetadata?.key
-                      ),
+                      getPreferenceOptionName(option.key, preference.formMetadata.key),
                       option.exclusive,
                       option.extraData,
-                      listingPreference.preference
+                      preference
                     )
                   })}
 
-                  {listingPreference.preference?.formMetadata &&
-                    !listingPreference.preference.formMetadata.hideGenericDecline &&
+                  {preference?.formMetadata &&
+                    !preference.formMetadata.hideGenericDecline &&
                     getOption(
                       null,
-                      getExclusivePreferenceOptionName(
-                        listingPreference.preference?.formMetadata?.key
-                      ),
+                      getExclusivePreferenceOptionName(preference?.formMetadata?.key),
                       true,
                       [],
-                      listingPreference.preference,
+                      preference,
                       t("application.preferences.dontWant")
                     )}
                 </fieldset>

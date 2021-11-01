@@ -4,7 +4,6 @@ import {
   ApplicationPreference,
   FormMetadataOptions,
   Preference,
-  ListingPreference,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -374,25 +373,20 @@ export type ExclusiveKey = {
 /*
   Create an array of all exclusive keys from a preference set
 */
-export const getExclusiveKeys = (preferences: ListingPreference[]) => {
+export const getExclusiveKeys = (preferences: Preference[]) => {
   const exclusive: ExclusiveKey[] = []
-  preferences?.forEach((listingPreference) => {
-    listingPreference.preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
+  preferences?.forEach((preference) => {
+    preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
       if (option.exclusive)
         exclusive.push({
-          optionKey: getPreferenceOptionName(
-            option.key,
-            listingPreference.preference?.formMetadata?.key ?? ""
-          ),
-          preferenceKey: listingPreference.preference?.formMetadata?.key,
+          optionKey: getPreferenceOptionName(option.key, preference?.formMetadata?.key ?? ""),
+          preferenceKey: preference?.formMetadata?.key,
         })
     })
-    if (!listingPreference.preference?.formMetadata?.hideGenericDecline)
+    if (!preference?.formMetadata?.hideGenericDecline)
       exclusive.push({
-        optionKey: getExclusivePreferenceOptionName(
-          listingPreference.preference?.formMetadata?.key
-        ),
-        preferenceKey: listingPreference.preference?.formMetadata?.key,
+        optionKey: getExclusivePreferenceOptionName(preference?.formMetadata?.key),
+        preferenceKey: preference?.formMetadata?.key,
       })
   })
   return exclusive

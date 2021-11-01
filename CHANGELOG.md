@@ -167,7 +167,6 @@ All notable changes to this project will be documented in this file. The format 
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
   - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
-  - Introduce N-M Listing-Preference relation through a self managed (not TypeORM managed) intermediate entity ListingPreference, which now holds ordinal and page. Remove Preference entity entirely with an appropriate DB migration. ([1947](https://github.com/bloom-housing/bloom/pull/1947))
 
 - Fixed:
   - Added checks for property in listing.dto transforms

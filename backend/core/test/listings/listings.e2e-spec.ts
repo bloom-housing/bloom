@@ -126,7 +126,8 @@ describe("Listings", () => {
       view: "base",
     }
     const query = qs.stringify(queryParams)
-    await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+    expect(res.body.items.length).toBeGreaterThanOrEqual(2)
   })
 
   it("should return listings with matching Alameda jurisdiction", async () => {
@@ -149,6 +150,7 @@ describe("Listings", () => {
 
   it("should return listings with matching San Jose jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
     const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
     const queryParams = {
       limit: "all",
@@ -167,6 +169,7 @@ describe("Listings", () => {
 
   it("should return no listings with San Mateo jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
+    expect(jurisdictions.length).toBe(4)
     const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
     const queryParams = {
       limit: "all",

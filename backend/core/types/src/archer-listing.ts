@@ -18,7 +18,6 @@ const amiChart: AmiChart = {
     name: "Alameda",
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
-    preferences: [],
   },
   items: [
     {

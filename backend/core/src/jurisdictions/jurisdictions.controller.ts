@@ -17,9 +17,11 @@ import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { JurisdictionsService } from "./services/jurisdictions.service"
-import { JurisdictionDto } from "./dto/jurisdiction.dto"
-import { JurisdictionCreateDto } from "./dto/jurisdiction-create.dto"
-import { JurisdictionUpdateDto } from "./dto/jurisdiction-update.dto"
+import {
+  JurisdictionCreateDto,
+  JurisdictionDto,
+  JurisdictionUpdateDto,
+} from "./dto/jurisdiction.dto"
 
 @Controller("jurisdictions")
 @ApiTags("jurisdictions")

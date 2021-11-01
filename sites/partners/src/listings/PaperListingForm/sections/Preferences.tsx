@@ -10,7 +10,7 @@ import {
   Field,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { useJurisdictionalPreferenceList } from "../../../../lib/hooks"
+import { usePreferenceList } from "../../../../lib/hooks"
 import { Preference } from "@bloom-housing/backend-core/types"
 
 type PreferencesProps = {
@@ -21,6 +21,7 @@ type PreferencesProps = {
 const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
   const [preferencesTableDrawer, setPreferencesTableDrawer] = useState<boolean | null>(null)
   const [preferencesSelectDrawer, setPreferencesSelectDrawer] = useState<boolean | null>(null)
+  const [uniquePreferences, setUniquePreferences] = useState<Preference[]>([])
   const [draftPreferences, setDraftPreferences] = useState<Preference[]>(preferences)
   const [dragOrder, setDragOrder] = useState([])
 
@@ -71,7 +72,6 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           </div>
         ),
       })),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [preferences]
   )
 
@@ -84,17 +84,24 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
       })
       setDraftPreferences(newDragOrder)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragOrder])
+
+  // Fetch and filter all preferences
+  const { data: preferencesData = [] } = usePreferenceList()
+  useEffect(() => {
+    setUniquePreferences(
+      preferencesData.reduce(
+        (items, item) =>
+          items.find((x) => x.description === item.description) ? [...items] : [...items, item],
+        []
+      )
+    )
+  }, [preferencesData])
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, watch } = formMethods
+  const { register, getValues } = formMethods
 
-  const jurisdiction: string = watch("jurisdiction.id")
-
-  // Fetch and filter all preferences
-  const { data: preferencesData = [] } = useJurisdictionalPreferenceList(jurisdiction)
   const formTableHeaders = {
     order: "t.order",
     name: "t.name",
@@ -186,27 +193,25 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
         className={"w-auto"}
       >
         <div className="border rounded-md p-8 bg-white">
-          {jurisdiction
-            ? preferencesData.map((pref, index) => {
-                return (
-                  <GridSection columns={1} key={index}>
-                    <Field
-                      className={"font-semibold"}
-                      id={`preference.${pref.id}`}
-                      name={`preference.${pref.id}`}
-                      type="checkbox"
-                      label={pref.title}
-                      register={register}
-                      inputProps={{
-                        defaultChecked: draftPreferences.some(
-                          (existingPref) => existingPref.title === pref.title
-                        ),
-                      }}
-                    />
-                  </GridSection>
-                )
-              })
-            : t("listings.selectJurisdiction")}
+          {uniquePreferences.map((pref, index) => {
+            return (
+              <GridSection columns={1} key={index}>
+                <Field
+                  className={"font-semibold"}
+                  id={`preference.${pref.id}`}
+                  name={`preference.${pref.id}`}
+                  type="checkbox"
+                  label={pref.title}
+                  register={register}
+                  inputProps={{
+                    defaultChecked: draftPreferences.some(
+                      (existingPref) => existingPref.title === pref.title
+                    ),
+                  }}
+                />
+              </GridSection>
+            )
+          })}
         </div>
         <Button
           type="button"
@@ -216,7 +221,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           onClick={() => {
             const selectedPreferences = getValues()
             const formPreferences = []
-            preferencesData.forEach((uniquePref) => {
+            uniquePreferences.forEach((uniquePref) => {
               if (selectedPreferences.preference[uniquePref.id]) {
                 formPreferences.push(uniquePref)
               }

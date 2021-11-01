@@ -743,7 +743,6 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
-  listingPreferences: [],
   listingPrograms: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
@@ -806,14 +805,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       ...tritonListing,
       property: property,
       assets: getDefaultAssets(),
-      listingPreferences: [
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
-          }),
-          ordinal: 2,
-        },
-      ],
+      preferences: [getLiveWorkPreference()],
       events: [],
     }
 
