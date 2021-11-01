@@ -290,7 +290,7 @@ const ApplicationPreferencesAll = () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <>
-            {preferencesByPage?.map((preference, index) => {
+            {preferencesByPage?.map((preference, index: number) => {
               return (
                 <div key={preference.id}>
                   <div
