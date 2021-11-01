@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.24...@bloom-housing/ui-components@2.0.0-alpha.25) (2021-11-01)
+
+
+### Bug Fixes
+
+* reverts preferences to re-add as breaking/major bump ([4f7d893](https://github.com/bloom-housing/bloom/commit/4f7d89327361b3b28b368c23cfd24e6e8123a0a8))
+
+
+
+
+
 # [2.0.0-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.23...@bloom-housing/ui-components@2.0.0-alpha.24) (2021-10-30)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
