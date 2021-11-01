@@ -14,7 +14,7 @@ import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
 import styles from "./index.module.scss"
-import { Address, Listing, ListingStatus, UnitSummary } from "@bloom-housing/backend-core/types"
+import { Address, Listing, UnitSummary } from "@bloom-housing/backend-core/types"
 import { getGenericAddress } from "../lib/helpers"
 import moment from "moment"
 
