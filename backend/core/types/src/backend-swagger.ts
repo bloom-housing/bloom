@@ -3697,10 +3697,10 @@ export interface UserCreate {
   jurisdictions?: Id[]
 
   /**  */
-  confirmedAt?: Date
+  email: string
 
   /**  */
-  email: string
+  confirmedAt?: Date
 
   /**  */
   firstName: string
@@ -3979,6 +3979,9 @@ export interface ListingFilterParams {
 
   /**  */
   leasingAgents?: string
+
+  /**  */
+  jurisdiction?: string
 }
 
 export interface UnitAccessibilityPriorityType {

@@ -60,6 +60,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
     if (listing.applicationDueDate) {
       const dueDate = moment(listing.applicationDueDate)
       const dueTime = moment(listing.applicationDueTime)
+      const dueCheck = listing.applicationDueTime ? dueTime : dueDate
       formattedDate = dueDate.format("MMM. DD, YYYY")
 
       if (listing.applicationDueTime) {
@@ -67,7 +68,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
       }
 
       // if due date is in future, listing is open
-      if (moment() < dueDate) {
+      if (moment() < dueCheck) {
         content = t("listings.applicationDeadline")
       } else {
         appStatus = ApplicationStatusType.Closed

@@ -316,8 +316,8 @@ export const ListingView = (props: ListingProps) => {
       />
     </>
   )
-
-  const applicationsClosed = moment() > moment(listing.applicationDueDate)
+  const dueDate = listing.applicationDueTime ?? listing.applicationDueDate
+  const applicationsClosed = moment() > moment(dueDate)
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">

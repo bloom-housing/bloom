@@ -17,7 +17,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^2.0.0-alpha.1",
+    "@bloom-housing/ui-components": "2.0.0-alpha.23",
     "@bloom-housing/shared-helpers": "1.0.5",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
