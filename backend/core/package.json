@@ -114,9 +114,6 @@
       "json",
       "ts"
     ],
-    "modulePaths": [
-      "src"
-    ],
     "rootDir": "src",
     "testRegex": ".spec.ts$",
     "transform": {
