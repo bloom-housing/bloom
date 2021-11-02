@@ -21,7 +21,7 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
 
     if (!id || !name) return acc
 
-    const unitTypeExists = acc.find((item) => item.id === id)
+    const unitTypeExists = acc.some((item) => item.id === id)
 
     if (!unitTypeExists) {
       acc.push({

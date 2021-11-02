@@ -2,7 +2,7 @@ import StepDefinition from "./StepDefinition"
 
 export default class PreferencesAllStep extends StepDefinition {
   skipStep() {
-    return !this.conductor.listing?.preferences?.length
+    return !this.conductor.listing?.listingPreferences?.length
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

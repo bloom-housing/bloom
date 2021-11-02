@@ -193,7 +193,10 @@ export class ApplicationsController {
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
     const applications = await this.applicationsService.rawListWithFlagged(queryParams)
-    return this.applicationCsvExporter.exportFromObject(applications)
+    return this.applicationCsvExporter.exportFromObject(
+      applications,
+      queryParams.includeDemographics
+    )
   }
 
   @Post()

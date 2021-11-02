@@ -3,7 +3,6 @@ import {
   CACHE_MANAGER,
   Inject,
   Module,
-  OnModuleDestroy,
   OnModuleInit,
   OnApplicationShutdown,
 } from "@nestjs/common"
