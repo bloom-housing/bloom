@@ -46,14 +46,29 @@ Cypress.Commands.add("beginApplication", (listingName) => {
   cy.getByTestId("app-next-step-button").click()
 })
 
+Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
+  cy.visit("/listings")
+  cy.contains(listingName).click()
+  cy.getByTestId("listing-view-apply-button").eq(1).click()
+  cy.getByTestId("app-choose-language-button").eq(0).click()
+  cy.getByTestId("app-next-step-button").click()
+  cy.getByTestId("autofill-decline").click()
+})
+
 Cypress.Commands.add("step1PrimaryApplicantName", (application) => {
   cy.getByTestId("app-primary-first-name").type(application.applicant.firstName)
-  cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName)
+  if (application.applicant.middleName) {
+    cy.getByTestId("app-primary-middle-name").type(application.applicant.middleName)
+  }
   cy.getByTestId("app-primary-last-name").type(application.applicant.lastName)
   cy.getByTestId("dob-field-month").type(application.applicant.birthMonth)
   cy.getByTestId("dob-field-day").type(application.applicant.birthDay)
   cy.getByTestId("dob-field-year").type(application.applicant.birthYear)
-  cy.getByTestId("app-primary-email").type(application.applicant.emailAddress)
+  if (application.applicant.noEmail) {
+    cy.getByTestId("app-primary-no-email").check()
+  } else {
+    cy.getByTestId("app-primary-email").type(application.applicant.emailAddress)
+  }
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -61,8 +76,12 @@ Cypress.Commands.add("step1PrimaryApplicantName", (application) => {
 })
 
 Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
-  cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
-  cy.getByTestId("app-primary-phone-number-type").select(application.applicant.phoneNumberType)
+  if (application.applicant.noPhone) {
+    cy.getByTestId("app-primary-no-phone").check()
+  } else {
+    cy.getPhoneFieldByTestId("app-primary-phone-number").type(application.applicant.phoneNumber)
+    cy.getByTestId("app-primary-phone-number-type").select(application.applicant.phoneNumberType)
+  }
 
   if (application.additionalPhoneNumber) {
     cy.getByTestId("app-primary-additional-phone").check()
@@ -94,7 +113,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
     cy.getByTestId("app-primary-contact-preference").eq(contactPreferenceIndex).check()
   })
 
-  if (application.applicant.workInRegion) {
+  if (application.applicant.workInRegion === "yes") {
     cy.getByTestId("app-primary-work-in-region-yes").check()
     cy.getByTestId("app-primary-work-address-street").type(application.applicant.workAddress.street)
     cy.getByTestId("app-primary-work-address-street2").type(
@@ -103,6 +122,8 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
     cy.getByTestId("app-primary-work-address-city").type(application.applicant.workAddress.city)
     cy.getByTestId("app-primary-work-address-state").select(application.applicant.workAddress.state)
     cy.getByTestId("app-primary-work-address-zip").type(application.applicant.workAddress.zipCode)
+  } else {
+    cy.getByTestId("app-primary-work-in-region-no").check()
   }
 
   cy.goNext()
@@ -124,7 +145,6 @@ Cypress.Commands.add("step3AlternateContactType", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("alternateContactType")
 })
 
 Cypress.Commands.add("step4AlternateContactName", (application) => {
@@ -171,7 +191,6 @@ Cypress.Commands.add("step6HouseholdSize", (application) => {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "applications/household/preferred-units")
-    cy.isNextRouteValid("liveAlone")
   }
 })
 
@@ -256,6 +275,13 @@ Cypress.Commands.add("step10Accessibility", (application) => {
   if (application.accessibility.hearing) {
     cy.getByTestId("app-ada-hearing").check()
   }
+  if (
+    !application.accessibility.hearing &&
+    !application.accessibility.hearing &&
+    !application.accessibility.mobility
+  ) {
+    cy.getByTestId("app-ada-none").check()
+  }
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
@@ -279,15 +305,14 @@ Cypress.Commands.add("step11IncomeVouchers", (application) => {
 Cypress.Commands.add("step12Income", (application) => {
   cy.getByTestId("app-income").type(application.income)
   if (application.incomePeriod === "perMonth") {
-    cy.getByTestId("app-income-period").eq(1).check()
-  } else {
     cy.getByTestId("app-income-period").eq(0).check()
+  } else {
+    cy.getByTestId("app-income-period").eq(1).check()
   }
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("income")
 })
 
 Cypress.Commands.add("step13SelectPreferences", (application) => {
@@ -315,17 +340,26 @@ Cypress.Commands.add("step13SelectPreferences", (application) => {
 })
 
 Cypress.Commands.add("step14GeneralPool", () => {
+  cy.location("pathname").should("include", "applications/preferences/general")
   cy.goNext()
   cy.isNextRouteValid("generalPool")
 })
 
 Cypress.Commands.add("step15Demographics", (application) => {
-  cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
-  cy.getByTestId("app-demographics-race").select(application.demographics.race)
-  cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
-  cy.getByTestId("app-demographics-sexual-orientation").select(
-    application.demographics.sexualOrientation
-  )
+  if (application.demographics.ethnicity) {
+    cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
+  }
+  if (application.demographics.race) {
+    cy.getByTestId("app-demographics-race").select(application.demographics.race)
+  }
+  if (application.demographics.gender) {
+    cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
+  }
+  if (application.demographics.sexualOrientation) {
+    cy.getByTestId("app-demographics-sexual-orientation").select(
+      application.demographics.sexualOrientation
+    )
+  }
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
     const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)

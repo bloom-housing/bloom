@@ -3,6 +3,7 @@ declare namespace Cypress {
 
   interface Chainable {
     beginApplication(listingName: string): Chainable
+    beginApplicationRejectAutofill(listingName: string): Chainable
     checkErrorAlert(command: string): Chainable
     checkErrorMessages(command: string): Chainable
     getByTestId(testId: string): Chainable<Element>
