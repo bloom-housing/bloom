@@ -16,6 +16,6 @@ describe("applications/review/terms", function () {
 
   it("should require form input", function () {
     submitApplication()
-    cy.checkErrorAlert("be.visible")
+    cy.checkErrorMessages("be.visible")
   })
 })
