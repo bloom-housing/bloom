@@ -15,10 +15,11 @@ import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
 import styles from "./index.module.scss"
-import { Listing, UnitsSummary } from "@bloom-housing/backend-core/types"
+import { Address, Listing, UnitSummary } from "@bloom-housing/backend-core/types"
 import { getGenericAddress } from "../lib/helpers"
 import moment from "moment"
 import Link from "next/link"
+import qs from "qs"
 
 export default function Home({ latestListings }) {
   const blankAlertInfo = {
@@ -215,9 +216,13 @@ export default function Home({ latestListings }) {
 export async function getStaticProps() {
   let latestListings = []
   try {
-    const response = await axios.get(
-      `${process.env.listingServiceUrl}?limit=5&orderBy=mostRecentlyUpdated&availability=hasAvailability`
-    )
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        limit: 5,
+        orderBy: "mostRecentlyUpdated",
+        availability: "hasAvailability",
+      },
+    })
     latestListings = response.data
   } catch (error) {
     console.error(error)
