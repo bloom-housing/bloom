@@ -46,7 +46,7 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
     return () => {
       window.removeEventListener("resize", debounceSetButtonState)
     }
-  }, [])
+  })
 
   return (
     <section className={props.className}>
