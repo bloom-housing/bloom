@@ -3,6 +3,7 @@
 }
 .latest-listing {
   @apply bg-primary;
+  background-size: cover;
   border-radius: 24px;
   color: #ffffff;
   height: 258px;
@@ -24,8 +25,12 @@
 .latest-listing__name {
   bottom: 117px;
   font-size: 1.75rem;
-  left: 24px;
+  overflow: hidden;
+  padding: 0 24px;
   position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .latest-listing__address {
