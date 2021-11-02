@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.1...@bloom-housing/public@2.0.1-alpha.2) (2021-11-02)
+
+
+### Bug Fixes
+
+* household member cypress test ([#2113](https://github.com/bloom-housing/bloom/issues/2113)) ([a6cd580](https://github.com/bloom-housing/bloom/commit/a6cd580f042fb8ff3c1cf03bec7198debdf22029))
+
+
+
+
+
 ## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.0...@bloom-housing/public@2.0.1-alpha.1) (2021-11-02)
 
 
