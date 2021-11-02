@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0...@bloom-housing/ui-components@2.0.1-alpha.0) (2021-11-02)
+
+
+### Bug Fixes
+
+* a11y color contrast issues with tint on ImageCard component ([#2074](https://github.com/bloom-housing/bloom/issues/2074)) ([5059291](https://github.com/bloom-housing/bloom/commit/505929149ee1485b9fc59402a9e14ead6de5dfc4))
+
+
+
+
+
 # [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.26...@bloom-housing/ui-components@2.0.0) (2021-11-02)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
