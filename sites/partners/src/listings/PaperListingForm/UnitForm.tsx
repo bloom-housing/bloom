@@ -54,7 +54,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { watch } = formMethods
-  const jurisdiction: string = watch("jurisdiction.name")
+  const jurisdiction: string = watch("jurisdiction.id")
   /**
    * fetch form options
    */

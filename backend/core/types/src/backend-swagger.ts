@@ -97,6 +97,8 @@ export class AmiChartsService {
     params: {
       /**  */
       jurisdictionName?: string
+      /**  */
+      jurisdictionid?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AmiChart[]> {
@@ -104,7 +106,10 @@ export class AmiChartsService {
       let url = basePath + "/amiCharts"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionName: params["jurisdictionName"] }
+      configs.params = {
+        jurisdictionName: params["jurisdictionName"],
+        jurisdictionid: params["jurisdictionid"],
+      }
       let data = null
 
       configs.data = data

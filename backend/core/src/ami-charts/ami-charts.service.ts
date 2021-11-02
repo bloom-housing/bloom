@@ -22,6 +22,8 @@ export class AmiChartsService {
       where: (qb) => {
         if (queryParams.jurisdictionName) {
           qb.where("jurisdiction.name = :jurisdictionName", queryParams)
+        } else if (queryParams.jurisdictionid) {
+          qb.where("jurisdiction.id = :jurisdictionid", queryParams)
         }
       },
     })
