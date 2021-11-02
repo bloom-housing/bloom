@@ -97,21 +97,18 @@ const ApplicationPreferredUnits = () => {
                 errorMessage={t("errors.selectAtLeastOne")}
                 validation={{ required: true }}
                 register={register}
+                dataTestId={"app-preferred-units"}
               />
             </fieldset>
           </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary}>Next</Button>
+              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-next-step-button"}>
+                {t("t.next")}
+              </Button>
             </div>
           </div>
-
-          {/* <div className="p-8 text-center">
-            <Link href="/">
-              <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
-            </Link>
-          </div> */}
         </Form>
       </FormCard>
     </FormsLayout>

@@ -99,6 +99,7 @@ const ApplicationDemographics = () => {
               controlClassName="control"
               options={ethnicityKeys}
               keyPrefix="application.review.demographics.ethnicityOptions"
+              dataTestId={"app-demographics-ethnicity"}
             />
 
             <Select
@@ -111,6 +112,7 @@ const ApplicationDemographics = () => {
               controlClassName="control"
               options={raceKeys}
               keyPrefix="application.review.demographics.raceOptions"
+              dataTestId={"app-demographics-race"}
             />
           </div>
 
@@ -125,6 +127,7 @@ const ApplicationDemographics = () => {
               controlClassName="control"
               options={genderKeys}
               keyPrefix="application.review.demographics.genderOptions"
+              dataTestId={"app-demographics-gender"}
             />
           </div>
 
@@ -139,6 +142,7 @@ const ApplicationDemographics = () => {
               controlClassName="control"
               options={sexualOrientation}
               keyPrefix="application.review.demographics.sexualOrientationOptions"
+              dataTestId={"app-demographics-sexual-orientation"}
             />
           </div>
 
@@ -152,21 +156,18 @@ const ApplicationDemographics = () => {
                 name="howDidYouHear"
                 fields={howDidYouHearOptions}
                 register={register}
+                dataTestId={"app-demographics-how-did-you-hear"}
               />
             </fieldset>
           </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary}>Next</Button>
+              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-next-step-button"}>
+                {t("t.next")}
+              </Button>
             </div>
           </div>
-
-          {/* <div className="p-8 text-center">
-            <Link href="/">
-              <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
-            </Link>
-          </div> */}
         </Form>
       </FormCard>
     </FormsLayout>

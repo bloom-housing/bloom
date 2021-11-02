@@ -92,6 +92,7 @@ export default () => {
               controlClassName="control"
               control={control}
               defaultValue={application.alternateContact.phoneNumber}
+              dataTestId={"app-alternate-phone-number"}
             />
           </div>
           <div className="form-card__group border-b">
@@ -110,6 +111,7 @@ export default () => {
               validation={{ pattern: emailRegex }}
               error={errors.emailAddress}
               errorMessage={t("errors.emailAddressError")}
+              dataTestId={"app-alternate-email"}
             />
           </div>
           <div className="form-card__group">
@@ -127,6 +129,7 @@ export default () => {
                 placeholder={t("application.contact.streetAddress")}
                 defaultValue={application.alternateContact.mailingAddress.street}
                 register={register}
+                dataTestId={"app-alternate-mailing-address-street"}
               />
 
               <div className="flex max-w-2xl">
@@ -137,6 +140,7 @@ export default () => {
                   placeholder={t("application.contact.cityName")}
                   defaultValue={application.alternateContact.mailingAddress.city}
                   register={register}
+                  dataTestId={"app-alternate-mailing-address-city"}
                 />
 
                 <Select
@@ -148,6 +152,7 @@ export default () => {
                   controlClassName="control"
                   options={stateKeys}
                   keyPrefix="states"
+                  dataTestId={"app-alternate-mailing-address-state"}
                 />
               </div>
               <Field
@@ -157,6 +162,7 @@ export default () => {
                 placeholder={t("application.contact.zipCode")}
                 defaultValue={application.alternateContact.mailingAddress.zipCode}
                 register={register}
+                dataTestId={"app-alternate-mailing-address-zip"}
               />
             </fieldset>
           </div>
@@ -168,6 +174,7 @@ export default () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
