@@ -425,9 +425,11 @@ const SiteHeader = (props: SiteHeaderProps) => {
     <div className={"site-header"}>
       {props.languages && <LanguageNav languages={props.languages} />}
 
-      <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
-        <div className="navbar-notice__text">{props.notice ?? ""}</div>
-      </div>
+      {props.notice && (
+        <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
+          <div className="navbar-notice__text">{props.notice ?? ""}</div>
+        </div>
+      )}
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
         <div
