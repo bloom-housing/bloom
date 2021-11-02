@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.25...@bloom-housing/ui-components@2.0.0-alpha.26) (2021-11-02)
+
+
+### Code Refactoring
+
+* listing preferences and adds jurisdictional filtering ([9f661b4](https://github.com/bloom-housing/bloom/commit/9f661b43921ec939bd1bf5709c934ad6f56dd859))
+
+
+### BREAKING CHANGES
+
+* updates preference relationship with listings
+
+
+
+
+
 # [2.0.0-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@2.0.0-alpha.24...@bloom-housing/ui-components@2.0.0-alpha.25) (2021-11-01)
 
 
