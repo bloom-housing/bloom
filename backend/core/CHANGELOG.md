@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.16...@bloom-housing/backend-core@2.0.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 # [2.0.0-pre-tailwind.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.15...@bloom-housing/backend-core@2.0.0-pre-tailwind.16) (2021-11-02)
 
 
