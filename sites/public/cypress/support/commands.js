@@ -3,6 +3,7 @@ import {
   applicationStepOrder,
   contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
+  howDidYouHearCheckboxesOrder,
 } from "./../mockData/applicationData"
 
 // Sign into the application as an admin
@@ -89,7 +90,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
   }
 
   application.contactPreferences.forEach((contactPreference) => {
-    const contactPreferenceIndex = contactPreferencesCheckboxesOrder.findIndex(contactPreference)
+    const contactPreferenceIndex = contactPreferencesCheckboxesOrder.indexOf(contactPreference)
     cy.getByTestId("app-primary-contact-preference").eq(contactPreferenceIndex).check()
   })
 
@@ -111,7 +112,7 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
 })
 
 Cypress.Commands.add("step3AlternateContactType", (application) => {
-  const alternateContactTypeIndex = alternateContactTypeRadioOrder.findIndex(
+  const alternateContactTypeIndex = alternateContactTypeRadioOrder.indexOf(
     application.alternateContact.type
   )
   cy.getByTestId("app-alternate-type").eq(alternateContactTypeIndex).check()
@@ -174,16 +175,11 @@ Cypress.Commands.add("step6HouseholdSize", (application) => {
   }
 })
 
-Cypress.Commands.add("step7AddHouseholdMembers", () => {
+Cypress.Commands.add("step7AddHouseholdMembers", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.location("pathname").should("include", "applications/household/add-members")
-
-  cy.getByTestId("app-add-household-member-button").click()
-  cy.checkErrorAlert("not.exist")
-  cy.checkErrorMessages("not.exist")
-  cy.location("pathname").should("include", "applications/household/member")
 
   application.householdMembers.forEach((householdMember) => {
     cy.getByTestId("app-add-household-member-button").click()
@@ -236,22 +232,14 @@ Cypress.Commands.add("step7AddHouseholdMembers", () => {
     cy.checkErrorAlert("not.exist")
     cy.checkErrorMessages("not.exist")
     cy.location("pathname").should("include", "/applications/household/add-members")
-    cy.getByTestId("app-done-household-members-button").click()
   })
+  cy.getByTestId("app-done-household-members-button").click()
 })
 
 Cypress.Commands.add("step9PreferredUnits", (application) => {
-  cy.getByTestId("app-preferred-units").each((unitCheckbox) => {
-    if (
-      application.preferredUnits.some((preferredUnit) => preferredUnit.name === unitCheckbox.label)
-    ) {
-      unitCheckbox.check()
-    }
+  application.preferredUnit.forEach((_, index) => {
+    cy.getByTestId("app-preferred-units").eq(index).check()
   })
-  // application.preferredUnits.forEach((preferredUnit) => {
-  //   const preferredUnitIndex = preferredUnitCheckboxesOrder.findIndex(preferredUnit.name)
-  //   cy.getByTestId("app-preferred-units").eq(preferredUnitIndex).check()
-  // })
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
@@ -303,11 +291,13 @@ Cypress.Commands.add("step12Income", (application) => {
 })
 
 Cypress.Commands.add("step13SelectPreferences", (application) => {
+  let preferenceClaimed = false
   application.preferences.forEach((preference) => {
     if (!preference.claimed) {
       // Selects the last instance, which is decline
       cy.getByTestId("app-preference-option").check()
     } else {
+      preferenceClaimed = true
       preference.options.forEach((option, index) => {
         if (option.checked) {
           cy.getByTestId("app-preference-option").eq(index).check()
@@ -316,19 +306,12 @@ Cypress.Commands.add("step13SelectPreferences", (application) => {
     }
     cy.goNext()
   })
-  // Skip general step
-  cy.isNextRouteValid("preferencesAll", 1)
-})
-
-Cypress.Commands.add("step13SelectNoPreferences", (application) => {
-  cy.getByTestId("app-preference-option").eq(1).check()
-  cy.goNext()
-  cy.checkErrorAlert("not.exist")
-
-  cy.getByTestId("app-preference-option").eq(1).check()
-  cy.goNext()
-  cy.checkErrorAlert("not.exist")
-  cy.isNextRouteValid("preferencesAll")
+  if (preferenceClaimed) {
+    // Skip general pool step
+    cy.isNextRouteValid("preferencesAll", 1)
+  } else {
+    cy.isNextRouteValid("preferencesAll")
+  }
 })
 
 Cypress.Commands.add("step14GeneralPool", () => {
@@ -338,11 +321,16 @@ Cypress.Commands.add("step14GeneralPool", () => {
 
 Cypress.Commands.add("step15Demographics", (application) => {
   cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
+  cy.getByTestId("app-demographics-race").select(application.demographics.race)
   cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
   cy.getByTestId("app-demographics-sexual-orientation").select(
     application.demographics.sexualOrientation
   )
-  cy.getByTestId("app-demographics-how-did-you-hear").eq(5).check()
+
+  application.demographics.howDidYouHear.forEach((howDidYouHear) => {
+    const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)
+    cy.getByTestId("app-demographics-how-did-you-hear").eq(howDidYouHearIndex).check()
+  })
 
   cy.goNext()
   cy.checkErrorAlert("not.exist")
@@ -351,6 +339,7 @@ Cypress.Commands.add("step15Demographics", (application) => {
 })
 
 Cypress.Commands.add("step16Summary", (application) => {
+  // TODO check values
   cy.getByTestId("app-summary-confirm").click()
   cy.isNextRouteValid("summary")
 })

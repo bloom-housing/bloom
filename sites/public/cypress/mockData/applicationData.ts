@@ -29,6 +29,18 @@ export const preferredUnitCheckboxesOrder = [
   "3+ Bedroom",
 ]
 
+export const howDidYouHearCheckboxesOrder = [
+  "alamedaCountyHCDWebsite",
+  "developerWebsite",
+  "flyer",
+  "emailAlert",
+  "friend",
+  "housingCounselor",
+  "radioAd",
+  "busAd",
+  "other",
+]
+
 export const coliseumApplication: Application = {
   markedAsDuplicate: false,
   ...idDefaults,
@@ -190,34 +202,6 @@ export const coliseumApplication: Application = {
       ],
     },
     {
-      key: "liveWork",
-      claimed: true,
-      options: [
-        {
-          key: "live",
-          checked: true,
-        },
-        {
-          key: "work",
-          checked: true,
-        },
-      ],
-    },
-    {
-      key: "HOPWA",
-      claimed: true,
-      options: [
-        {
-          key: "hopwa",
-          checked: true,
-        },
-        {
-          key: "doNotConsider",
-          checked: false,
-        },
-      ],
-    },
-    {
       key: "PBV",
       claimed: true,
       options: [
@@ -240,6 +224,20 @@ export const coliseumApplication: Application = {
         {
           key: "noneApplyButConsider",
           checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "HOPWA",
+      claimed: true,
+      options: [
+        {
+          key: "hopwa",
+          checked: true,
         },
         {
           key: "doNotConsider",

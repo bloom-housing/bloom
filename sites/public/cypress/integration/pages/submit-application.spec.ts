@@ -9,7 +9,7 @@ describe("Submit", function () {
     cy.step4AlternateContactName(coliseumApplication)
     cy.step5AlternateContactInfo(coliseumApplication)
     cy.step6HouseholdSize(coliseumApplication)
-    cy.step7HouseholdMembersList()
+    cy.step7AddHouseholdMembers(coliseumApplication)
     cy.step9PreferredUnits(coliseumApplication)
     cy.step10Accessibility(coliseumApplication)
     cy.step11IncomeVouchers(coliseumApplication)

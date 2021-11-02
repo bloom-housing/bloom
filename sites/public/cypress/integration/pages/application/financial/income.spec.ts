@@ -1,5 +1,3 @@
-import { filledApplication } from "../../../../mockData/applicationData"
-
 describe("applications/financial/income", function () {
   const route = "applications/financial/income"
 

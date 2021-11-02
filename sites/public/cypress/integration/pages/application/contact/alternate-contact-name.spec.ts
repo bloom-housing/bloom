@@ -1,5 +1,3 @@
-import { filledApplication } from "../../../../mockData/applicationData"
-
 describe("applications/contact/alternate-contact-name", function () {
   const route = "/applications/contact/alternate-contact-name"
 

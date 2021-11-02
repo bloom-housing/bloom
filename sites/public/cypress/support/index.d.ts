@@ -16,13 +16,12 @@ declare namespace Cypress {
     step4AlternateContactName(application: Application): Chainable
     step5AlternateContactInfo(application: Application): Chainable
     step6HouseholdSize(application: Application): Chainable
-    step7HouseholdMembersList(): Chainable
+    step7AddHouseholdMembers(application: Application): Chainable
     step8AddHouseholdMember(application: Application): Chainable
     step9PreferredUnits(application: Application): Chainable
     step10Accessibility(application: Application): Chainable
     step11IncomeVouchers(application: Application): Chainable
     step12Income(application: Application): Chainable
-    step13SelectNoPreferences(application: Application): Chainable
     step13SelectPreferences(application: Application): Chainable
     step14GeneralPool(): Chainable
     step15Demographics(application: Application): Chainable
