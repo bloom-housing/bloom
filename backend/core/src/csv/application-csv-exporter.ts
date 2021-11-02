@@ -64,7 +64,8 @@ export class ApplicationCsvExporter {
         }
 
         obj[app.application_id] = {
-          "Application Number": app.application_id,
+          "Application Id": app.application_id,
+          "Application Confirmation Number": app.application_confirmation_code,
           "Application Type":
             app.application_submission_type === "electronical"
               ? "electronic"
