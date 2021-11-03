@@ -693,6 +693,10 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
@@ -739,6 +743,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
+  listingPreferences: [],
   listingPrograms: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
@@ -801,7 +806,14 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       ...tritonListing,
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference()],
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 2,
+        },
+      ],
       events: [],
     }
 

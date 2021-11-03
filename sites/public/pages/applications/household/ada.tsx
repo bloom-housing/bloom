@@ -36,7 +36,6 @@ const ApplicationAda = () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    conductor.completeSection(2)
     conductor.currentStep.save({
       accessibility: {
         mobility: data.mobility,
@@ -44,6 +43,7 @@ const ApplicationAda = () => {
         hearing: data.hearing,
       },
     })
+    conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
   const onError = () => {

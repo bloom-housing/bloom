@@ -90,6 +90,8 @@ export const blankApplication = () => {
       vision: null,
       hearing: null,
     },
+    householdExpectingChanges: null,
+    householdStudent: null,
     incomeVouchers: null,
     income: null,
     incomePeriod: null,
