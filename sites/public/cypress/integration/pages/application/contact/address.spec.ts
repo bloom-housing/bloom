@@ -1,4 +1,3 @@
-// STEP 2
 describe("applications/contact/address", function () {
   const route = "/applications/contact/address"
 

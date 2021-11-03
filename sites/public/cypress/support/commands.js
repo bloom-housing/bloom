@@ -8,14 +8,12 @@ import {
   howDidYouHearCheckboxesOrder,
 } from "./../mockData/applicationData"
 
-// Sign into the application as an admin
 Cypress.Commands.add("signIn", () => {
   cy.get(`[data-test-id="sign-in-email-field"]`).type("admin@example.com")
   cy.get(`[data-test-id="sign-in-password-field"]`).type("abcdef")
   cy.get(`[data-test-id="sign-in-button"]`).click()
 })
 
-// Go to the next step in an application
 Cypress.Commands.add("goNext", () => {
   return cy.get(`[data-test-id="app-next-step-button"]`).click()
 })

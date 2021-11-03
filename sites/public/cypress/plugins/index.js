@@ -19,13 +19,8 @@ const path = require("path")
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
   const options = {
-    // send in the options from your webpack.config.js, so it works the same
-    // as your app's code
     webpackOptions: {
-      // entry: "./src/index.ts",
       module: {
         rules: [
           {
