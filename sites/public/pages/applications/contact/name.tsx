@@ -14,11 +14,11 @@ import {
   FormCard,
   Icon,
   IconFillColors,
-  OnClientSide,
   ProgressNav,
   t,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"

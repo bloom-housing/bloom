@@ -8,11 +8,11 @@ import {
 import {
   t,
   ListingCard,
-  imageUrlFromListing,
   ApplicationStatusType,
   getSummariesTable,
   StatusBarType,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 

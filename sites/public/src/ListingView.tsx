@@ -37,13 +37,15 @@ import {
   UnitTables,
   Waitlist,
   WhatToExpect,
-  cloudinaryPdfFromId,
-  getOccupancyDescription,
   getSummariesTable,
-  imageUrlFromListing,
-  occupancyTable,
   t,
 } from "@bloom-housing/ui-components"
+import {
+  cloudinaryPdfFromId,
+  getOccupancyDescription,
+  imageUrlFromListing,
+  occupancyTable,
+} from "@bloom-housing/shared-helpers"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"

@@ -1,5 +1,7 @@
 import { createElement, useContext } from "react"
-import { IdleTimeout, AuthContext, lRoute, t } from "@bloom-housing/ui-components"
+import { IdleTimeout, AuthContext, t } from "@bloom-housing/ui-components"
+import { lRoute } from "@bloom-housing/shared-helpers"
+
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 
 const ApplicationTimeout = () => {

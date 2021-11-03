@@ -3,13 +3,13 @@ import Head from "next/head"
 import {
   PageHeader,
   t,
-  lRoute,
   AuthContext,
   Button,
   LocalizedLink,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
+import { lRoute } from "@bloom-housing/shared-helpers"
 import moment from "moment"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"

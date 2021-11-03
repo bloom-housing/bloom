@@ -1,11 +1,14 @@
 import * as React from "react"
 import { t } from "./translator"
+import { Language } from "@bloom-housing/backend-core/types"
 import { SelectOption } from "../forms/Select"
 
 export interface FormOptionsProps {
   options: (string | SelectOption)[]
   keyPrefix?: string
 }
+
+export const applicationLanguageKeys = [Language.en, Language.es, Language.zh, Language.vi]
 
 export enum RoleOption {
   Administrator = "administrator",

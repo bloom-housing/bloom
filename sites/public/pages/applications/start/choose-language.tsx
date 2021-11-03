@@ -8,13 +8,14 @@ import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
-  imageUrlFromListing,
   LinkButton,
   FormCard,
   ProgressNav,
   AuthContext,
   t,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
