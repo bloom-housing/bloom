@@ -43,6 +43,7 @@ type ContextProps = {
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
   login: (email: string, password: string) => Promise<User | undefined>
+  loginWithToken: (token: string) => Promise<User | undefined>
   resetPassword: (
     token: string,
     password: string,
@@ -247,6 +248,16 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
       } finally {
         dispatch(stopLoading())
       }
+    },
+    loginWithToken: async (token: string) => {
+      dispatch(saveToken({ accessToken: token, apiUrl, dispatch }))
+      const profile = await userService?.userControllerProfile()
+      if (profile) {
+        dispatch(saveProfile(profile))
+        return profile
+      }
+
+      return undefined
     },
     signOut: () => dispatch(signOut()),
     resetPassword: async (token, password, passwordConfirmation) => {

@@ -13,18 +13,18 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
-import { cloudinaryFileUploader } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, watch } = formMethods
+  const { register, setValue, watch, errors, clearErrors } = formMethods
 
   const listingFormPhoto = watch("image")
 
   /*
-    Set state for the drawer, upload progress, drawer, and more
+    Set state for the drawer, upload progress, and more
   */
   const [drawerState, setDrawerState] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
@@ -146,6 +146,11 @@ const ListingPhoto = () => {
         title={t("listings.sections.photoTitle")}
         description={t("listings.sections.photoSubtitle")}
       >
+        {
+          <span className={"text-tiny text-gray-800 block mb-2"}>
+            {t("listings.sections.photoTitle")}
+          </span>
+        }
         <GridSection columns={1} tinted inset>
           <GridCell>
             {listingFormPhoto?.fileId && listingFormPhoto.fileId != "" ? (
@@ -153,8 +158,10 @@ const ListingPhoto = () => {
             ) : (
               <Button
                 type="button"
+                styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
                 onClick={() => {
                   setDrawerState(true)
+                  clearErrors("image")
                 }}
               >
                 {t("listings.addPhoto")}
@@ -163,6 +170,10 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {fieldHasError(errors?.image) && (
+        <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
+      )}
 
       <Drawer
         open={drawerState}

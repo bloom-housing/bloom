@@ -20,7 +20,7 @@
     "dev:all": "concurrently \"yarn dev:reseed-and-run-backend\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^1.0.5",
+    "@bloom-housing/ui-components": "^2.0.0-alpha.0",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",

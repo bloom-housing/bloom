@@ -3,8 +3,10 @@ import { Exclude, Expose, Type } from "class-transformer"
 import { IsDate, IsDefined, IsOptional, IsUUID, ValidateNested } from "class-validator"
 import { Property } from "../entities/property.entity"
 import { AddressDto, AddressUpdateDto } from "../../shared/dto/address.dto"
-import { UnitCreateDto, UnitDto, UnitUpdateDto } from "../../units/dto/unit.dto"
+import { UnitDto } from "../../units/dto/unit.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 
 export class PropertyDto extends OmitType(Property, [
   "units",

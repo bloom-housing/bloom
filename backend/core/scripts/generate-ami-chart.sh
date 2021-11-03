@@ -32,7 +32,7 @@ import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { BaseEntity } from "typeorm"
 
 // THIS FILE WAS AUTOMATICALLY GENERATED FROM $FILE.
-export const $FILENAME: Omit<AmiChartCreateDto, keyof BaseEntity> = {
+export const $FILENAME: Omit<AmiChartCreateDto, keyof BaseEntity | "jurisdiction"> = {
   name: "$FILENAME",
   items: [
 EOF

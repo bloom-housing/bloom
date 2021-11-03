@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "1.0.5",
+  "version": "2.0.0-alpha.0",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
   "main": "index.js",
@@ -77,7 +77,6 @@
     "@types/react-transition-group": "^4.4.0",
     "axios": "^0.21.1",
     "body-scroll-lock": "^3.1.5",
-    "bulma": "^0.9.1",
     "jwt-decode": "^2.2.0",
     "markdown-to-jsx": "^6.11.4",
     "moment": "^2.29.1",

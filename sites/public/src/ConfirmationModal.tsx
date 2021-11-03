@@ -55,8 +55,15 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
           })
           window.scrollTo(0, 0)
         })
-        .catch(() => {
-          setOpenModal(true)
+        .catch((error) => {
+          const {
+            response: { data },
+          } = error
+          if (data.statusCode === 406) {
+            setSiteAlertMessage(t(`authentication.createAccount.errors.${data.message}`), "alert")
+          } else {
+            setOpenModal(true)
+          }
         })
     }
     // This ensures useEffect is called only once

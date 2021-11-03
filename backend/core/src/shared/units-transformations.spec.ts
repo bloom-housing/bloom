@@ -26,6 +26,12 @@ describe("Unit Transformations", () => {
           income: 3,
         },
       ],
+      jurisdiction: {
+        id: "id",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        name: "name",
+      },
     }
 
     const amiChartOverride: UnitAmiChartOverride = {

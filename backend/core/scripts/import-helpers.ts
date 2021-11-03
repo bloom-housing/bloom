@@ -69,10 +69,13 @@ async function uploadListing(listing: ListingCreate) {
   }
 }
 
-async function uploadReservedCommunityType(name: string) {
+async function uploadReservedCommunityType(name: string, jurisdictions: client.Jurisdiction[]) {
   try {
     return await reservedCommunityTypesService.create({
-      body: { name: name },
+      body: {
+        name,
+        jurisdiction: jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit"),
+      },
     })
   } catch (e) {
     console.log(e.response)
@@ -190,7 +193,10 @@ export async function importListing(
   if (listing.reservedCommunityTypeName) {
     reservedCommunityType = await getReservedCommunityType(listing.reservedCommunityTypeName)
     if (!reservedCommunityType) {
-      reservedCommunityType = await uploadReservedCommunityType(listing.reservedCommunityTypeName)
+      reservedCommunityType = await uploadReservedCommunityType(
+        listing.reservedCommunityTypeName,
+        jurisdictions
+      )
     }
   }
 

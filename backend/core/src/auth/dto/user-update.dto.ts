@@ -3,6 +3,7 @@ import { Expose, Type } from "class-transformer"
 import {
   IsDate,
   IsDefined,
+  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -18,6 +19,7 @@ import { UserDto } from "./user.dto"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
+  "email",
   "createdAt",
   "updatedAt",
   "leasingAgentInListings",
@@ -28,6 +30,11 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   id?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  email?: string
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

@@ -8,7 +8,6 @@ import {
   DOBField,
   Field,
   Select,
-  relationshipKeys,
   AppearanceStyleType,
   AppearanceBorderType,
   FieldGroup,
@@ -16,6 +15,7 @@ import {
   Form,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { relationshipKeys } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import { YesNoAnswer } from "./FormTypes"
 

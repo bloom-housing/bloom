@@ -1,39 +1,31 @@
-# Bloom Partners Web Interface
+# Bloom Partners Application
 
-This is a reference implementation of the partners-facing web app, providing the UI for all of the administrative functions for affordable housing partners using Bloom-based systems. Partners include housing developers, property managers, cities, and counties.
-
-## What does this do?
-
-- Allows property managers to view the applications submitted for their listings.
+This is the reference implementation of our partners web app, providing the UI for all of the administrative functions for affordable housing partners using Bloom-based systems (managing applications, and soon publishing listings). Partners include housing developers, property managers, cities, and counties.
 
 ## Getting Started
 
-- `yarn install`
-- Copy `.env.template` to `.env.local` and edit variables appropriate to your local environment. S[ee the docs here](https://nextjs.org/docs/basic-features/environment-variables) for more detail on configuration options.
-- `yarn dev`
+All from within `sites/partners`:
 
-### Debugging
+- `yarn install` to install dependencies
+- Copy the `.env.template` to `.env` and edit variables appropriate to your local environment
+- `yarn dev:all` will start up the backend at port 3100 and the partners app at port 3001
 
-Starting the site with `yarn dev` includes the necessary debug flags.
+## Tests
 
-To connect to it from VS Code, add a configuration to launch.json that looks like
+For our partnres application, our tests currently consistent of a Cypress integration test suite. We are looking to add React Testing Library unit tests soon.
 
-```shell script
-{
-  "name": "Attach to Partners Site",
-  "port": 9231,
-  "request": "attach",
-  "skipFiles": [
-    "<node_internals>/**"
-  ],
-  "type": "node",
-  "restart": true,
-  "sourceMaps": true,
-  "cwd": "${workspaceFolder}/sites/partners"
-},
-```
+To run the Cypress suite, with the application running, run `yarn test` from within `sites/partners` and when the test runner in a Chrome browser opens, click on whichever suite you want to run.
 
-## Running end-to-end tests locally
+## Environment Variables
 
-- Start the Next.js server: `yarn test`
-- In the Cypress app, click on the test called "our_first_test.spec.js". This will open the Cypress test runner in a Chrome browser and run the test.
+| Name                     | Description                                                                                                                             | Default               | Type    |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
+| BACKEND_API_BASE         | URL pointing to a working NestJS bloom server (no trailing slash)                                                                       | http://localhost:3100 | string  |
+| NEXTJS_PORT              | Defines port number the server will listen to for incoming connections                                                                  | 3001                  | number  |
+| LISTINGS_QUERY           | Value specifying what path to use to fetch listings at build time for static serving (?)                                                | /listings             | string  |
+| SHOW_DUPLICATES          | Toggles the duplicate application feature on/off                                                                                        | false                 | boolean |
+| SHOW_LM_LINKS            | Toggles the listings management button on/off                                                                                           | true                  | boolean |
+| MAPBOX_TOKEN             | Access token used for interacting with maps. See more documentation [here](https://docs.mapbox.com/help/getting-started/access-tokens/) | Available internally  | string  |
+| CLOUDINARY_CLOUD_NAME    | Used for features that upload files/images                                                                                              | exygy                 | string  |
+| CLOUDINARY_KEY           | Used for features that upload files/images, access token                                                                                | Available internally  | string  |
+| CLOUDINARY_SIGNED_PRESET | Used for features that upload files/images, access token                                                                                | Available internally  | string  |

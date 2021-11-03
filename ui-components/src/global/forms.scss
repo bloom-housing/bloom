@@ -213,11 +213,6 @@
       }
     }
 
-    .error-message {
-      @apply text-sm;
-      @apply text-red-700;
-    }
-
     input[type="radio"] + label::before {
       box-shadow: 0 0 0 2px #fff, 0 0 0 4px $tailwind-alert;
     }
@@ -332,6 +327,21 @@ input[type="number"] {
   @apply text-tiny;
   @apply text-gray-700;
   @apply font-semibold;
+}
+
+.error-message {
+  @apply text-sm;
+  @apply text-red-700;
+  @apply tracking-wide;
+}
+
+.field-sub-note {
+  @apply mt-2;
+  @apply text-gray-750;
+  @apply text-sm;
+  @apply tracking-wide;
+  @apply font-sans;
+  font-weight: normal;
 }
 
 .form-section__title {

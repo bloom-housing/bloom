@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { Expose, Transform, Type } from "class-transformer"
+import { Expose, Transform } from "class-transformer"
 import { IsEnum, IsOptional, IsBoolean } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 
