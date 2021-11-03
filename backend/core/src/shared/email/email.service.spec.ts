@@ -71,6 +71,20 @@ describe("EmailService", () => {
     )
     await translationsRepository.createQueryBuilder().delete().execute()
     const translationsService = await module.resolve<TranslationsService>(TranslationsService)
+
+    await translationsService.create({
+      jurisdiction: {
+        id: null,
+      },
+      language: Language.en,
+      translations: {
+        footer: {
+          footer: "Generic footer",
+          thankYou: "Thank you!",
+        },
+      },
+    })
+
     await translationsService.create({
       jurisdiction: {
         id: jurisdiction.id,
@@ -146,13 +160,16 @@ describe("EmailService", () => {
   })
 
   describe("welcome", () => {
-    it("should generate html body", async () => {
+    it("should generate html body, jurisdictional footer", async () => {
       await service.welcome(user, "http://localhost:3000", "http://localhost:3000/?token=")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
       // Check if translation is working correctly
-      expect(sendMock.mock.calls[0][0].html.substring(0, 26)).toEqual("<h1>Hello Test \n User</h1>")
+      expect(sendMock.mock.calls[0][0].html).toContain(
+        "Alameda County - Housing and Community Development (HCD) Department"
+      )
+      expect(sendMock.mock.calls[0][0].html).toContain("<h1>Hello Test \n User</h1>")
     })
   })
 
