@@ -28,5 +28,6 @@ declare namespace Cypress {
     step15Demographics(application: Application): Chainable
     step16Summary(application: Application): Chainable
     step17TermsAndSubmit(application: Application): Chainable
+    submitApplication(listingName: string, application: Application, autofill?: boolean)
   }
 }

@@ -1,4 +1,6 @@
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+
 import {
   applicationStepOrder,
   contactPreferencesCheckboxesOrder,
@@ -372,13 +374,13 @@ Cypress.Commands.add("step15Demographics", (application) => {
   cy.isNextRouteValid("demographics")
 })
 
-Cypress.Commands.add("step16Summary", (application) => {
+Cypress.Commands.add("step16Summary", () => {
   // TODO check values
   cy.getByTestId("app-summary-confirm").click()
   cy.isNextRouteValid("summary")
 })
 
-Cypress.Commands.add("step17TermsAndSubmit", (application) => {
+Cypress.Commands.add("step17TermsAndSubmit", () => {
   cy.getByTestId("app-terms-agree").check()
   cy.getByTestId("app-terms-submit-button").click()
   cy.checkErrorAlert("not.exist")
@@ -387,8 +389,39 @@ Cypress.Commands.add("step17TermsAndSubmit", (application) => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
+Cypress.Commands.add("submitApplication", (listingName, application, autofill) => {
+  if (autofill === false) {
+    cy.beginApplicationRejectAutofill(listingName)
+  } else {
+    cy.beginApplication(listingName)
+  }
+  cy.step1PrimaryApplicantName(application)
+  cy.step2PrimaryApplicantAddresses(application)
+  cy.step3AlternateContactType(application)
+  if (application.alternateContact.type !== "dontHave") {
+    cy.step4AlternateContactName(application)
+    cy.step5AlternateContactInfo(application)
+  }
+  cy.step6HouseholdSize(application)
+  if (application.householdMembers.length > 0) {
+    cy.step7AddHouseholdMembers(application)
+  }
+  cy.step9PreferredUnits(application)
+  cy.step10Accessibility(application)
+  cy.step11IncomeVouchers(application)
+  cy.step12Income(application)
+  if (application.preferences.length > 0) {
+    cy.step13SelectPreferences(application)
+  } else {
+    cy.step14GeneralPool()
+  }
+  cy.step15Demographics(application)
+  cy.step16Summary(application)
+  // TODO: Check values on summary
+  cy.step17TermsAndSubmit(application)
+})
+
 Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
-  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   const nextRouteIndex =
     applicationStepOrder.findIndex((item) => item.name === currentStep) + 1 + skip
   const nextRoutePath = applicationStepOrder[nextRouteIndex].route
