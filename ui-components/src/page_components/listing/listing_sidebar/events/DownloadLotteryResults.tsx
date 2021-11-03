@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import { t } from "../../../../helpers/translator"
-import { pdfUrlFromListingEvents } from "../../../../helpers/pdfs"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import moment from "moment"
 
 const DownloadLotteryResults = (props: { event: ListingEvent; cloudName: string }) => {

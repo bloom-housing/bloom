@@ -1,5 +1,5 @@
 import React from "react"
-import { OnClientSide } from "../helpers/nextjs"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 import "./ProgressNav.scss"
 import { t } from "../helpers/translator"
 
