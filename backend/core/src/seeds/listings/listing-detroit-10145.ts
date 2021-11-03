@@ -36,6 +36,16 @@ const mcvListing: ListingSeedType = {
   managementWebsite: "associated-management.rentlinx.com/listings",
   name: "Medical Center Village",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10145Seed extends ListingDefaultSeed {

@@ -36,6 +36,16 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "www.nrpgroup.com/Home/Communities",
   name: "MLK Homes",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10151Seed extends ListingDefaultSeed {

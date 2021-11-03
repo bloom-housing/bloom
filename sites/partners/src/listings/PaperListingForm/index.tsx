@@ -52,7 +52,7 @@ import {
   createDate,
   createTime,
   toNumberOrNull,
-  removeEmptyFields,
+  removeEmptyObjects,
 } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
@@ -134,7 +134,7 @@ const defaults: FormListing = {
   createdAt: undefined,
   updatedAt: undefined,
   applicationAddress: null,
-  applicationDueDate: new Date(),
+  applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
@@ -147,7 +147,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  buildingSelectionCriteriaFile: { fileId: "", label: "" },
+  buildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
   jurisdiction: undefined,
   costsNotIncluded: "",
@@ -159,7 +159,7 @@ const defaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
-  image: { fileId: "", label: "" },
+  image: null,
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
@@ -562,10 +562,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
             profile
           )
-          removeEmptyFields(formattedData, [
-            "applicationPickUpAddressType",
-            "applicationDropOffAddressType",
-          ])
+          removeEmptyObjects(formattedData)
           const result = editMode
             ? await listingsService.update({
                 listingId: listing.id,

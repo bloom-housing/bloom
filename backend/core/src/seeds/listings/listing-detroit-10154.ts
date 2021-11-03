@@ -36,6 +36,16 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "www.continentalmgt.com",
   name: "Morningside Commons Multi",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10154Seed extends ListingDefaultSeed {

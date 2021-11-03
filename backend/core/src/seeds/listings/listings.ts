@@ -6,7 +6,7 @@ import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { BaseEntity } from "typeorm"
 import { UserCreateDto } from "../../auth/dto/user-create.dto"
-import { ListingCreateDto } from "../../listings/dto/listing-create.dto"
+import { ListingPublishedCreateDto } from "../../listings/dto/listing-published-create.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 
 export type PropertySeedType = Omit<
@@ -24,7 +24,7 @@ export type UnitSeedType = Omit<UnitCreateDto, "property">
 export type ApplicationMethodSeedType = ApplicationMethodCreateDto
 
 export type ListingSeedType = Omit<
-  ListingCreateDto,
+  ListingPublishedCreateDto,
   | keyof BaseEntity
   | "property"
   | "urlSlug"

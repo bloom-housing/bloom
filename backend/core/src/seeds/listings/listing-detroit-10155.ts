@@ -35,6 +35,16 @@ const listingSeed: ListingSeedType = {
   managementCompany: "Premier Property Management",
   name: "Morton Manor",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10155Seed extends ListingDefaultSeed {
