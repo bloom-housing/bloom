@@ -1,7 +1,6 @@
 import * as React from "react"
 import { t } from "./translator"
 import { UnitSummary, UnitsSummary } from "@bloom-housing/backend-core/types"
-import { GroupedTableGroup } from "../tables/GroupedTable"
 
 const getSummaryRow = (
   totalAvailable: number,
@@ -63,10 +62,10 @@ const getSummaryRow = (
 }
 
 export const getSummariesTableFromUnitSummary = (summaries: UnitSummary[]) => {
-  let groupedUnits = [] as Array<GroupedTableGroup>
+  let unitSummaries = [] as Record<string, React.ReactNode>[]
 
   if (summaries?.length > 0) {
-    const unitSummaries = summaries.map((unitSummary) => {
+    unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
         unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
         unitSummary.rentRange.min,
@@ -80,20 +79,15 @@ export const getSummariesTableFromUnitSummary = (summaries: UnitSummary[]) => {
         unitSummary.unitType.name
       )
     })
-    groupedUnits = [
-      {
-        data: unitSummaries,
-      },
-    ]
   }
-  return groupedUnits
+  return unitSummaries
 }
 
 export const getSummariesTableFromUnitsSummary = (summaries: UnitsSummary[]) => {
-  let groupedUnits = [] as Array<GroupedTableGroup>
+  let unitSummaries = [] as Record<string, React.ReactNode>[]
 
   if (summaries?.length > 0) {
-    const unitSummaries = summaries.map((unitSummary) => {
+    unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
         unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
         unitSummary.monthlyRentMin?.toString(),
@@ -103,11 +97,6 @@ export const getSummariesTableFromUnitsSummary = (summaries: UnitsSummary[]) => 
         unitSummary.unitType.name
       )
     })
-    groupedUnits = [
-      {
-        data: unitSummaries,
-      },
-    ]
   }
-  return groupedUnits
+  return unitSummaries
 }

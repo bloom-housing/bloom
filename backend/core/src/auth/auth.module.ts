@@ -17,6 +17,7 @@ import { EmailModule } from "../shared/email/email.module"
 import { PasswordService } from "./services/password.service"
 import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 import { Application } from "../applications/entities/application.entity"
+import { UserProfileController } from "./controllers/user-profile.controller"
 
 @Module({
   imports: [
@@ -38,6 +39,6 @@ import { Application } from "../applications/entities/application.entity"
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
   exports: [AuthzService, AuthService, UserService, PasswordService],
-  controllers: [AuthController, UserController],
+  controllers: [AuthController, UserController, UserProfileController],
 })
 export class AuthModule {}

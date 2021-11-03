@@ -19,6 +19,7 @@ interface FieldGroupProps {
   groupLabel?: string
   fields?: FieldSingle[]
   groupNote?: string
+  groupSubNote?: string
   register: UseFormMethods["register"]
   validation?: Record<string, unknown>
   fieldGroupClassName?: string
@@ -41,6 +42,7 @@ const FieldGroup = ({
   fieldClassName,
   onChange,
   fieldLabelClassName,
+  groupSubNote,
 }: FieldGroupProps) => {
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
@@ -52,9 +54,9 @@ const FieldGroup = ({
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
-      <div className={`field ${error && "error"} ${fieldGroupClassName || ""}`}>
+      <div className={`field ${error && "error"} ${fieldGroupClassName || ""} mb-0`}>
         {fields?.map((item) => (
-          <div className={`field ${fieldClassName || ""}`} key={item.id}>
+          <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
             <input
               aria-describedby={`${name}-error`}
               aria-invalid={!!error || false}
@@ -73,13 +75,13 @@ const FieldGroup = ({
             {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
           </div>
         ))}
-
-        {error && errorMessage && (
-          <ErrorMessage id={`${name}-error`} error={error}>
-            {errorMessage}
-          </ErrorMessage>
-        )}
       </div>
+      {groupSubNote && <p className="field-sub-note">{groupSubNote}</p>}
+      {error && errorMessage && (
+        <ErrorMessage id={`${name}-error`} error={error}>
+          {errorMessage}
+        </ErrorMessage>
+      )}
     </>
   )
 }

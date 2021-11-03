@@ -2,7 +2,7 @@
 // logo.
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
 
-.navbar-brand .logo .logo__image {
+.navbar-logo .logo .logo__image {
   min-height: 4rem;
   max-height: 5rem;
   @screen md {
@@ -11,7 +11,7 @@
   }
 }
 
-.navbar-brand .logo {
+.navbar-logo .logo {
   max-height: 15rem;
   max-width: 100%;
 

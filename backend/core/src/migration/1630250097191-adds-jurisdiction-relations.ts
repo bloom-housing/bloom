@@ -50,7 +50,9 @@ export class addsJurisdictionRelations1630250097191 implements MigrationInterfac
       `ALTER TABLE "user_accounts_jurisdictions_jurisdictions" ADD CONSTRAINT "FK_fe359f4430f9e0e7b278e03f0f3" FOREIGN KEY ("jurisdictions_id") REFERENCES "jurisdictions"("id") ON DELETE CASCADE ON UPDATE CASCADE`
     )
     // get first jurisdiction_id
-    const [{ id }] = await queryRunner.query(`SELECT id FROM jurisdictions ORDER BY name LIMIT 1`)
+    const [{ id }] = await queryRunner.query(
+      `SELECT id FROM jurisdictions WHERE name = 'Detroit' LIMIT 1`
+    )
     // insert into user_accounts_jurisdictions_jurisdictions
     // TODO: This works for Alameda, but if you have Alameda as a Jurisdiction and want to assign another, you'll want to change it, for example with Detroit, if Detroit isn't the only Jurisdiction in your DB.
     await queryRunner.query(

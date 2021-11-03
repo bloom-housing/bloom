@@ -10,11 +10,10 @@ import {
   Field,
   emailRegex,
   PhoneField,
-  phoneNumberKeys,
-  contactPreferencesKeys,
   FieldGroup,
   FormAddress,
 } from "@bloom-housing/ui-components"
+import { phoneNumberKeys, contactPreferencesKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 const FormPrimaryApplicant = () => {

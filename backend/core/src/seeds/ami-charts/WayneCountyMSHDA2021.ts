@@ -2,7 +2,7 @@ import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { BaseEntity } from "typeorm"
 
 // THIS FILE WAS AUTOMATICALLY GENERATED FROM WayneCountyMSHDA2021.txt.
-export const WayneCountyMSHDA2021: Omit<AmiChartCreateDto, keyof BaseEntity> = {
+export const WayneCountyMSHDA2021: Omit<AmiChartCreateDto, keyof BaseEntity | "jurisdiction"> = {
   name: "WayneCountyMSHDA2021",
   items: [
     {

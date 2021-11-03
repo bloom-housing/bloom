@@ -25,14 +25,15 @@ import {
   ListingDetails,
   ListingMap,
   OneLineAddress,
-  t,
-  UnitTables,
   OpenHouseEvent,
+  ReferralApplication,
+  SubmitApplication,
+  UnitTables,
+  Waitlist,
+  cloudinaryPdfFromId,
+  t,
   ListingUpdated,
   Message,
-  SubmitApplication,
-  Waitlist,
-  ReferralApplication,
 } from "@bloom-housing/ui-components"
 import { ErrorPage } from "../pages/_error"
 import { getGenericAddress, openInFuture } from "../lib/helpers"
@@ -65,7 +66,7 @@ export const ListingView = (props: ListingProps) => {
     availability: t("t.availability"),
   }
 
-  let groupedUnits: GroupedTableGroup[] = []
+  let groupedUnits: Record<string, React.ReactNode>[] = null
   if (listing.unitsSummary !== undefined && listing.unitsSummary.length > 0) {
     groupedUnits = getSummariesTableFromUnitsSummary(listing.unitsSummary)
   } else if (listing.unitsSummarized !== undefined) {
@@ -144,10 +145,6 @@ export const ListingView = (props: ListingProps) => {
     } else {
       return listing.applicationPickUpAddress
     }
-  }
-
-  const cloudinaryPdfFromId = (publicId: string, cloudName: string) => {
-    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.pdf`
   }
 
   const getOnlineApplicationURL = () => {
@@ -275,7 +272,7 @@ export const ListingView = (props: ListingProps) => {
         {groupedUnits?.length > 0 && (
           <GroupedTable
             headers={unitSummariesHeaders}
-            data={groupedUnits}
+            data={[{ data: groupedUnits }]}
             responsiveCollapse={true}
           />
         )}
