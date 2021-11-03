@@ -20,7 +20,6 @@ export class TwilioService {
       from: process.env.TWILIO_FROM_NUMBER,
       to: recipientPhoneNumber,
     }
-    console.log("sending :" + JSON.stringify(messageOptions))
     return this.client.messages.create(messageOptions)
   }
 }
