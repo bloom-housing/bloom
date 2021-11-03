@@ -41,6 +41,15 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "www.voa.org/housing_properties/oak-village-independence-house",
   name: "Oak Village Independence",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10168Seed extends ListingDefaultSeed {

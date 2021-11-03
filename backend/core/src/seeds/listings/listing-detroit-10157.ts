@@ -42,6 +42,17 @@ const nccListing: ListingSeedType = {
   managementWebsite: "www.kmgprestige.com/communities/",
   name: "New Center Commons",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  leasingAgentName: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10157Seed extends ListingDefaultSeed {

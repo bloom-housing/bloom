@@ -34,6 +34,17 @@ const listingSeed: ListingSeedType = {
   managementCompany: "Smiley Management",
   name: "Morang Apartments",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  leasingAgentName: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
 }
 
 export class Listing10153Seed extends ListingDefaultSeed {

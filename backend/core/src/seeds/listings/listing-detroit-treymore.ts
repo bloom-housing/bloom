@@ -46,6 +46,16 @@ const treymoreListing: ListingSeedType = {
   managementWebsite: "http://rentlinx.kmgprestige.com/Company.aspx?CompanyID=107",
   name: "Treymore Apartments",
   status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  leasingAgentName: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
 }
 
 export class ListingTreymoreSeed extends ListingDefaultSeed {
