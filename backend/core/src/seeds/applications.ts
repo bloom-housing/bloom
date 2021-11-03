@@ -148,6 +148,8 @@ const applicationCreateDtoTemplate: Omit<
   income: "5000.00",
   incomePeriod: IncomePeriod.perMonth,
   incomeVouchers: false,
+  householdExpectingChanges: false,
+  householdStudent: false,
   language: Language.en,
   mailingAddress: {
     city: "city",

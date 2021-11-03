@@ -3,6 +3,47 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.2...@bloom-housing/backend-core@2.0.1-alpha.3) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.1...@bloom-housing/backend-core@2.0.1-alpha.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* don't send email confirmation on paper app submission ([#2110](https://github.com/bloom-housing/bloom/issues/2110)) ([7f83b70](https://github.com/bloom-housing/bloom/commit/7f83b70327049245ecfba04ae3aea4e967929b2a))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.0...@bloom-housing/backend-core@2.0.1-alpha.1) (2021-11-03)
+
+
+### Features
+
+* jurisdictional email signatures ([#2111](https://github.com/bloom-housing/bloom/issues/2111)) ([7a146ff](https://github.com/bloom-housing/bloom/commit/7a146ffb5de88cfa2950e2a469a99e38d71b33c8))
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0...@bloom-housing/backend-core@2.0.1-alpha.0) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
 # [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.16...@bloom-housing/backend-core@2.0.0) (2021-11-02)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

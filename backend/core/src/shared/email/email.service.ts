@@ -1,6 +1,7 @@
 import { Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
+import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
 import { User } from "../../auth/entities/user.entity"
@@ -132,11 +133,22 @@ export class EmailService {
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
-    const translation = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+    const jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
       language,
       jurisdiction ? jurisdiction.id : null
     )
-    this.polyglot.replace(translation.translations)
+    const genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+      language,
+      null
+    )
+
+    // Deep merge
+    const translations = merge(
+      genericTranslations.translations,
+      jurisdictionalTranslations.translations
+    )
+
+    this.polyglot.replace(translations)
   }
 
   private template(view: string) {
@@ -189,7 +201,10 @@ export class EmailService {
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
-    void (await this.loadTranslations(null, user.language || Language.en))
+    void (await this.loadTranslations(
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
+      user.language || Language.en
+    ))
     await this.send(
       user.email,
       this.polyglot.t("invite.hello"),
