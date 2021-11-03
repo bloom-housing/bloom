@@ -3938,6 +3938,12 @@ export interface UserUpdate {
   leasingAgentInListings?: Id[]
 
   /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -4021,6 +4027,12 @@ export interface UserProfileUpdate {
 
   /**  */
   jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
 
   /**  */
   id: string

@@ -81,7 +81,7 @@ export async function createLeasingAgents(
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
       async (leasingAgent) =>
-        await usersService.createUser(
+        await usersService.createPublicUser(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
@@ -193,7 +193,7 @@ async function seed() {
   await createPrograms(app, jurisdictions)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
-  const user1 = await userService.createUser(
+  const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       emailConfirmation: "test@example.com",
@@ -209,7 +209,7 @@ async function seed() {
   )
   await userService.confirm({ token: user1.confirmationToken })
 
-  const user2 = await userService.createUser(
+  const user2 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       emailConfirmation: "test2@example.com",
@@ -225,7 +225,7 @@ async function seed() {
   )
   await userService.confirm({ token: user2.confirmationToken })
 
-  const admin = await userService.createUser(
+  const admin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "admin@example.com",
       emailConfirmation: "admin@example.com",
