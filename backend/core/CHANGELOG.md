@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.0...@bloom-housing/backend-core@2.0.1-alpha.1) (2021-11-03)
+
+
+### Features
+
+* jurisdictional email signatures ([#2111](https://github.com/bloom-housing/bloom/issues/2111)) ([7a146ff](https://github.com/bloom-housing/bloom/commit/7a146ffb5de88cfa2950e2a469a99e38d71b33c8))
+
+
+
+
+
 ## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0...@bloom-housing/backend-core@2.0.1-alpha.0) (2021-11-02)
 
 
