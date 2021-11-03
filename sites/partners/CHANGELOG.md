@@ -3,6 +3,90 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.3...@bloom-housing/partners@2.0.1-alpha.4) (2021-11-03)
+
+
+### Bug Fixes
+
+* don't send email confirmation on paper app submission ([#2110](https://github.com/bloom-housing/bloom/issues/2110)) ([7f83b70](https://github.com/bloom-housing/bloom/commit/7f83b70327049245ecfba04ae3aea4e967929b2a))
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.2...@bloom-housing/partners@2.0.1-alpha.3) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.1...@bloom-housing/partners@2.0.1-alpha.2) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.0...@bloom-housing/partners@2.0.1-alpha.1) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0...@bloom-housing/partners@2.0.1-alpha.0) (2021-11-02)
+
+
+### Bug Fixes
+
+* Updates lastName on application save ([aff87ec](https://github.com/bloom-housing/bloom/commit/aff87ec99ad2fbd4a1f9a6853157ea7770f85a56))
+
+
+
+
+
+# [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.26...@bloom-housing/partners@2.0.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+# [2.0.0-pre-tailwind.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.25...@bloom-housing/partners@2.0.0-pre-tailwind.26) (2021-11-02)
+
+
+### Code Refactoring
+
+* listing preferences and adds jurisdictional filtering ([9f661b4](https://github.com/bloom-housing/bloom/commit/9f661b43921ec939bd1bf5709c934ad6f56dd859))
+
+
+### BREAKING CHANGES
+
+* updates preference relationship with listings
+
+
+
+
+
+# [2.0.0-pre-tailwind.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.24...@bloom-housing/partners@2.0.0-pre-tailwind.25) (2021-11-01)
+
+
+### Bug Fixes
+
+* reverts preferences to re-add as breaking/major bump ([4f7d893](https://github.com/bloom-housing/bloom/commit/4f7d89327361b3b28b368c23cfd24e6e8123a0a8))
+
+
+
+
+
 # [2.0.0-pre-tailwind.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.23...@bloom-housing/partners@2.0.0-pre-tailwind.24) (2021-10-30)
 
 **Note:** Version bump only for package @bloom-housing/partners

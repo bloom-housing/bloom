@@ -2760,6 +2760,12 @@ export interface Application {
   sendMailToMailingAddress?: boolean
 
   /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -3334,6 +3340,12 @@ export interface ApplicationCreate {
   sendMailToMailingAddress?: boolean
 
   /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
+
+  /**  */
   incomeVouchers?: boolean
 
   /**  */
@@ -3661,6 +3673,12 @@ export interface ApplicationUpdate {
 
   /**  */
   sendMailToMailingAddress?: boolean
+
+  /**  */
+  householdExpectingChanges?: boolean
+
+  /**  */
+  householdStudent?: boolean
 
   /**  */
   incomeVouchers?: boolean
