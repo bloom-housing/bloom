@@ -20,8 +20,8 @@
     "@bloom-housing/ui-components": "^3.0.1-alpha.46"
   },
   "devDependencies": {
-    "@bloom-housing/backend-core": "^2.0.0-pre-tailwind.11",
-    "@bloom-housing/ui-components": "^2.0.0-alpha.19",
+    "@bloom-housing/backend-core": "^3.0.1-alpha.11",
+    "@bloom-housing/ui-components": "^3.0.1-alpha.10",
     "@types/node": "^12.12.67",
     "@types/node-polyglot": "^2.4.1",
     "axios": "^0.21.1",
