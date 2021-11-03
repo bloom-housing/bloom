@@ -280,41 +280,6 @@ describe("Applications", () => {
       .expect(401)
   })
 
-  it("should allow a user to modify their phone number", async () => {
-    const user = (
-      await supertest(app.getHttpServer())
-        .get("/user")
-        .set(...setAuthorization(userAccessToken))
-        .expect(200)
-    ).body
-    const testPhoneNumber = "1234567890"
-    const userUpdateDto: UserUpdateDto = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      confirmedAt: user.confirmedAt,
-      jurisdictions: user.jurisdictions.map((jurisdiction) => ({
-        id: jurisdiction.id,
-      })),
-      phoneNumber: testPhoneNumber,
-    }
-
-    await supertest(app.getHttpServer())
-      .put(`/user/${user.id}`)
-      .set(...setAuthorization(userAccessToken))
-      .send(userUpdateDto)
-      .expect(200)
-    const updatedUser = (
-      await supertest(app.getHttpServer())
-        .get("/user")
-        .set(...setAuthorization(userAccessToken))
-        .expect(200)
-    ).body
-
-    expect(updatedUser.phoneNumber).toEqual(testPhoneNumber)
-  })
-
   it("should allow user to resend confirmation", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
@@ -441,7 +406,7 @@ describe("Applications", () => {
     expect(token).toBeDefined()
   })
 
-  it("should allow user to update user profile throguh PUT /userProfile/:id endpoint", async () => {
+  it("should allow user to update user profile through PUT /userProfile/:id endpoint", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
@@ -482,6 +447,7 @@ describe("Applications", () => {
       ...userCreateDto,
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
+      phoneNumber: "+11234567890",
     }
 
     await supertest(app.getHttpServer())
