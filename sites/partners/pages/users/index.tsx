@@ -21,14 +21,14 @@ const defaultColDef = {
   maxWidth: 300,
 }
 
-type IsDrawerOpenValue = {
+type UserDrawerValue = {
   type: "add" | "edit"
   user?: User
 }
 
 const Users = () => {
   /* Add user drawer */
-  const [isDrawerOpen, setDrawerOpen] = useState<IsDrawerOpenValue | null>(null)
+  const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)
 
   /* Ag Grid column definitions */
   const columns = useMemo(() => {
@@ -45,7 +45,7 @@ const Users = () => {
           return (
             <button
               className="text-blue-700 underline"
-              onClick={() => setDrawerOpen({ type: "edit", user })}
+              onClick={() => setUserDrawer({ type: "edit", user })}
             >
               {params.value}
             </button>
@@ -137,7 +137,7 @@ const Users = () => {
               <div className="flex-row">
                 <Button
                   className="mx-1"
-                  onClick={() => setDrawerOpen({ type: "add" })}
+                  onClick={() => setUserDrawer({ type: "add" })}
                   disabled={!listingDtos}
                 >
                   {t("users.addUser")}
@@ -173,16 +173,16 @@ const Users = () => {
       </section>
 
       <Drawer
-        open={!!isDrawerOpen}
-        title={isDrawerOpen?.type === "add" ? t("users.addUser") : t("users.editUser")}
+        open={!!userDrawer}
+        title={userDrawer?.type === "add" ? t("users.addUser") : t("users.editUser")}
         ariaDescription={t("users.addUser")}
-        onClose={() => setDrawerOpen(null)}
+        onClose={() => setUserDrawer(null)}
       >
         <FormUserManage
-          mode={isDrawerOpen?.type}
-          user={isDrawerOpen?.user}
+          mode={userDrawer?.type}
+          user={userDrawer?.user}
           listings={listingDtos?.items}
-          onDrawerClose={() => setDrawerOpen(null)}
+          onDrawerClose={() => setUserDrawer(null)}
         />
       </Drawer>
     </Layout>
