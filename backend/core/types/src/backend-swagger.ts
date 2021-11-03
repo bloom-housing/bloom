@@ -1653,14 +1653,20 @@ export class PropertyGroupsService {
 
 export class ProgramsService {
   /**
-   * List programs
+   * List preferences
    */
-  list(options: IRequestOptions = {}): Promise<Program[]> {
+  list(
+    params: {
+      /**  */
+      filter?: ProgramsFilterParams[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + "/programs"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
+      configs.params = { filter: params["filter"] }
       let data = null
 
       configs.data = data
@@ -5989,6 +5995,14 @@ export interface PropertyGroupUpdate {
   id: string
 }
 
+export interface ProgramsFilterParams {
+  /**  */
+  $comparison: EnumProgramsFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
 export interface ProgramCreate {
   /**  */
   title?: string
@@ -6275,6 +6289,13 @@ export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
 export enum EnumPreferencesFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
+export enum EnumProgramsFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",

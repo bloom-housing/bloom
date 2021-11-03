@@ -67,11 +67,7 @@ import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import {
-  useJurisdictionalPreferenceList,
-  usePreferenceList,
-  useProgramList,
-} from "../../../lib/hooks"
+import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -706,7 +702,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             }
                             title={"Housing Programs"}
                             drawerButtonText={"Select programs"}
-                            dataFetcher={useProgramList}
+                            dataFetcher={useJurisdictionalProgramList}
                             formKey={"program"}
                           />
                           <AdditionalFees />
