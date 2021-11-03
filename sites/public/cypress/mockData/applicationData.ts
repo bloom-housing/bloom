@@ -91,6 +91,8 @@ export const coliseumApplication: Application = {
   householdSize: 2,
   housingStatus: "",
   sendMailToMailingAddress: true,
+  householdExpectingChanges: true,
+  householdStudent: true,
   mailingAddress: {
     ...idDefaults,
     street: "Mailing Street",
@@ -297,6 +299,8 @@ export const minimalDataApplication: Application = {
   householdSize: 1,
   housingStatus: "",
   sendMailToMailingAddress: false,
+  householdExpectingChanges: false,
+  householdStudent: false,
   mailingAddress: {
     ...idDefaults,
     street: "",
@@ -372,6 +376,8 @@ export const applicationStepOrder = [
   { name: "addMembers", route: "/applications/household/add-members" },
   { name: "preferredUnitSize", route: "/applications/household/preferred-units" },
   { name: "adaHouseholdMembers", route: "/applications/household/ada" },
+  { name: "householdExpectingChanges", route: "/applications/household/changes" },
+  { name: "householdStudent", route: "/applications/household/student" },
   { name: "vouchersSubsidies", route: "/applications/financial/vouchers" },
   { name: "income", route: "/applications/financial/income" },
   { name: "preferencesAll", route: "/applications/preferences/all" },
