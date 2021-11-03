@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.1...@bloom-housing/public@2.0.1-alpha.2) (2021-11-02)
+
+
+### Bug Fixes
+
+* household member cypress test ([#2113](https://github.com/bloom-housing/bloom/issues/2113)) ([a6cd580](https://github.com/bloom-housing/bloom/commit/a6cd580f042fb8ff3c1cf03bec7198debdf22029))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.0...@bloom-housing/public@2.0.1-alpha.1) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0...@bloom-housing/public@2.0.1-alpha.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 # [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.26...@bloom-housing/public@2.0.0) (2021-11-02)
 
 **Note:** Version bump only for package @bloom-housing/public

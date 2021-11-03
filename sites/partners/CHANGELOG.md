@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.1...@bloom-housing/partners@2.0.1-alpha.2) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.0...@bloom-housing/partners@2.0.1-alpha.1) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.0...@bloom-housing/partners@2.0.1-alpha.0) (2021-11-02)
+
+
+### Bug Fixes
+
+* Updates lastName on application save ([aff87ec](https://github.com/bloom-housing/bloom/commit/aff87ec99ad2fbd4a1f9a6853157ea7770f85a56))
+
+
+
+
+
 # [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@2.0.0-pre-tailwind.26...@bloom-housing/partners@2.0.0) (2021-11-02)
 
 **Note:** Version bump only for package @bloom-housing/partners

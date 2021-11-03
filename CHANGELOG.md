@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
   - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
-  - Confirmation code updates ([#2072](https://github.com/bloom-housing/bloom/pull/2072)) (Dominik Barcikowski)
+  - Incorrect last name ([#2107](https://github.com/bloom-housing/bloom/pull/2107)) (Dominik Barcikowski)
 
 ## Backend
 

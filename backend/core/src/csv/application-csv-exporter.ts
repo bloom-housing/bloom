@@ -119,6 +119,10 @@ export class ApplicationCsvExporter {
           "Accessibility Mobility": formatBoolean(app.accessibility_mobility),
           "Accessibility Vision": formatBoolean(app.accessibility_vision),
           "Accessibility Hearing": formatBoolean(app.accessibility_hearing),
+          "Expecting Household Changes": formatBoolean(app.application_household_expecting_changes),
+          "Household Includes Student or Member Nearing 18": formatBoolean(
+            app.application_household_student
+          ),
           "Vouchers or Subsidies": formatBoolean(app.application_income_vouchers),
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),

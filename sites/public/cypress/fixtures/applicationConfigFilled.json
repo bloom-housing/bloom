@@ -76,6 +76,8 @@
     "hearing": false
   },
   "incomeVouchers": false,
+  "householdExpectingChanges": false,
+  "householdStudent": false,
   "income": "3000.00",
   "incomePeriod": "perMonth",
   "householdMembers": [

@@ -77,6 +77,8 @@
     "hearing": null
   },
   "incomeVouchers": null,
+  "householdExpectingChanges": null,
+  "householdStudent": null,
   "income": null,
   "incomePeriod": null,
   "householdMembers": [],
