@@ -16,11 +16,11 @@ export class AmiChartListQueryParams {
 
   @Expose()
   @ApiProperty({
-    name: "jurisdictionid",
+    name: "jurisdictionId",
     required: false,
     type: String,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jurisdictionid?: string
+  jurisdictionId?: string
 }
