@@ -16,6 +16,7 @@ import {
   SiteAlert,
   Modal,
   passwordRegex,
+  PhoneField,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import moment from "moment"
@@ -26,7 +27,7 @@ export default () => {
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
+  const { control, register, handleSubmit, errors, watch } = useForm()
   const [requestError, setRequestError] = useState<string>()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
@@ -38,10 +39,12 @@ export default () => {
 
   const onSubmit = async (data) => {
     try {
-      const { dob, ...rest } = data
+      const { dob, phoneNumber, ...rest } = data
       await createUser({
         ...rest,
         dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        // Convert (123) 456-7890 to E.164 format with US country code: +11234567890
+        phoneNumber: phoneNumber.replace(/\((\d{3})\) (\d{3})-(\d{4})/, "+1$1$2$3"),
         language,
       })
 
@@ -51,7 +54,7 @@ export default () => {
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
       } else {
-        console.error(err)
+        console.log(JSON.stringify(err))
         setRequestError(`${t("authentication.createAccount.errors.generic")}`)
       }
       window.scrollTo(0, 0)
@@ -154,6 +157,18 @@ export default () => {
               error={errors.emailConfirmation}
               errorMessage={t("authentication.createAccount.errors.emailMismatch")}
               register={register}
+            />
+          </div>
+
+          <div className="form-card__group border-b">
+            <PhoneField
+              caps={true}
+              name="phoneNumber"
+              label={t("authentication.createAccount.phone")}
+              placeholder={t("authentication.createAccount.phonePlaceholder")}
+              error={errors.phoneNumber}
+              errorMessage={t("authentication.signIn.phoneError")}
+              control={control}
             />
           </div>
 

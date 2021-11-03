@@ -483,6 +483,7 @@
         "signIn": {
             "loginError": "Por favor, introduce una dirección de correo electrónico válida",
             "passwordError": "Por favor introduce una contraseña válida",
+            "phoneError": "Ingrese un número de teléfono de EE. UU. Válido.",
             "cantFindAccount": "No pudimos encontrar una cuenta con esa dirección de correo electrónico / contraseña.",
             "error": "Hubo un error al iniciar sesión",
             "errorGenericMessage": "Vuelva a intentarlo o póngase en contacto con el servicio de asistencia para obtener ayuda.",
@@ -504,6 +505,7 @@
             "email": "Correo electrónico",
             "emailPrivacy": "Solo usaremos su dirección de correo electrónico para comunicarnos con usted acerca de su solicitud.",
             "reEnterEmail": "Vuelva a introducir la dirección de correo electrónico",
+            "phone": "Teléfono",
             "reEnterPassword": "reingresa tu contraseña",
             "resendTheEmail": "Reenvíe el correo electrónico",
             "linkExpired": "Tu enlace ha caducado",
