@@ -89,33 +89,6 @@ const ApplicationDemographics = () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <Select
-              id="ethnicity"
-              name="ethnicity"
-              label={t("application.review.demographics.ethnicityLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={ethnicityKeys}
-              keyPrefix="application.review.demographics.ethnicityOptions"
-              dataTestId={"app-demographics-ethnicity"}
-            />
-<<<<<<< HEAD
-
-            <Select
-              id="race"
-              name="race"
-              label={t("application.review.demographics.raceLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={raceKeys}
-              keyPrefix="application.review.demographics.raceOptions"
-              dataTestId={"app-demographics-race"}
-            />
-=======
             <fieldset>
               <legend className="field-label--caps">
                 {t("application.review.demographics.raceLabel")}
@@ -136,7 +109,19 @@ const ApplicationDemographics = () => {
                 register={register}
               />
             </fieldset>
->>>>>>> feat: new demographics sub-race questions
+            <div className={"pt-4"}>
+              <Select
+                id="ethnicity"
+                name="ethnicity"
+                label={t("application.review.demographics.ethnicityLabel")}
+                placeholder={t("t.selectOne")}
+                register={register}
+                labelClassName="field-label--caps mb-3"
+                controlClassName="control"
+                options={ethnicityKeys}
+                keyPrefix="application.review.demographics.ethnicityOptions"
+              />
+            </div>
           </div>
 
           <div className="form-card__group border-b">

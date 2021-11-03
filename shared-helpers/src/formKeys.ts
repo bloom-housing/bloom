@@ -133,11 +133,36 @@ export const sexualOrientation = [
   "notListed",
 ]
 
-export const raceKeys = {
+const prependRoot = (root: string, subKeys: string[]) => {
+  return subKeys.map((key) => `${root}-${key}`)
+}
+
+interface subCheckboxes {
+  [key: string]: string[]
+}
+
+// Return to this when PR #2108 merges that changes package build to be able to import from ui-components
+// const createFormFieldForSubCheckboxes = (formKeys: subCheckboxes) => {
+//   return Object.keys(raceKeys).map((rootKey) => ({
+//     id: rootKey,
+//     label: t(`application.review.demographics.raceOptions.${rootKey}`),
+//     value: rootKey,
+//     subFields: raceKeys[rootKey].map((subKey) => ({
+//       id: subKey,
+//       label: t(`application.review.demographics.raceOptions.${subKey}`),
+//       value: subKey,
+//     })),
+//   }))
+// }
+
+export const raceKeys: subCheckboxes = {
   americanIndianAlaskanNative: [],
-  asian: asianKeys,
+  asian: prependRoot("asian", asianKeys),
   blackAfricanAmerican: [],
-  nativeHawaiianOtherPacificIslander: nativeHawaiianOtherPacificIslanderKeys,
+  nativeHawaiianOtherPacificIslander: prependRoot(
+    "nativeHawaiianOtherPacificIslander",
+    nativeHawaiianOtherPacificIslanderKeys
+  ),
   white: [],
   otherMultiracial: [],
   declineToRespond: [],

@@ -55,7 +55,7 @@ const FieldGroup = ({
 
   const getInput = (item: FieldSingle) => {
     return (
-      <>
+      <div key={name}>
         <input
           aria-describedby={`${name}-error`}
           aria-invalid={!!error || false}
@@ -80,7 +80,7 @@ const FieldGroup = ({
             </ExpandableContent>
           </div>
         )}
-      </>
+      </div>
     )
   }
   return (
