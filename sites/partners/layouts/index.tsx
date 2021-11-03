@@ -51,7 +51,6 @@ const Layout = (props) => {
         <SiteHeader
           logoSrc="/images/logo_glyph.svg"
           title={t("nav.siteTitlePartners")}
-          notice={" "}
           logoWidth={"medium"}
           menuLinks={menuLinks}
           siteHeaderWidth={"wide"}

@@ -17,16 +17,6 @@ export const basic = () => (
   />
 )
 
-export const withNotice = () => (
-  <SiteHeader
-    homeURL={"/"}
-    logoSrc="/images/logo_glyph.svg"
-    notice="This is a preview of our new website. We're just getting started. We'd love to get your feedback."
-    title="Alameda County Housing Portal"
-    menuLinks={[]}
-  />
-)
-
 export const withLanguage = () => (
   <SiteHeader
     homeURL={"/"}
