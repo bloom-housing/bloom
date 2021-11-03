@@ -88,7 +88,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toEqual(2)
+    expect(res.body.items.length).toEqual(1)
   })
 
   // TODO: replace jsonpath with SQL-level filtering
@@ -146,7 +146,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(14)
+    expect(res.body.items.length).toBe(13)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
