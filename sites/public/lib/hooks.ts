@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react"
-import qs from "qs"
-import moment from "moment"
-import { useRouter } from "next/router"
 import axios from "axios"
+import moment from "moment"
+import qs from "qs"
+import { useRouter } from "next/router"
 import useSWR from "swr"
 import {
   ApplicationStatusProps,
@@ -124,4 +124,39 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   }, [listing])
 
   return props
+}
+
+/**
+ * This is fired server side by getStaticProps
+ * By setting listingData here, we can continue to serve listings if the fetch fails.
+ * This more of a temporary solution.
+ */
+let listingData = []
+
+export async function fetchBaseListingData() {
+  try {
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "10",
+        page: "1",
+        orderBy: OrderByFieldsEnum.mostRecentlyUpdated,
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
+
+    listingData = response.data ?? []
+  } catch (error) {
+    console.log("fetchBaseListingData error = ", error)
+  }
+
+  return listingData
 }

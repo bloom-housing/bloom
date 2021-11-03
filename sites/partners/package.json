@@ -19,7 +19,7 @@
     "dev:all": "concurrently \"yarn dev:reseed-and-run-backend\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^1.0.5",
+    "@bloom-housing/ui-components": "^2.0.0-alpha.0",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@zeit/next-sass": "^1.0.1",
     "ag-grid-community": "^26.0.0",

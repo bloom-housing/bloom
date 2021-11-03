@@ -10,6 +10,7 @@ import { User } from "./auth/entities/user.entity"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import { Listing } from "./listings/entities/listing.entity"
+import { defaultLeasingAgents } from "./seeds/listings/shared"
 import { AuthContext } from "./auth/types/auth-context"
 import { Listing10158Seed } from "./seeds/listings/listing-detroit-10158"
 import { Listing10157Seed } from "./seeds/listings/listing-detroit-10157"
@@ -53,19 +54,50 @@ export function getSeedListingsCount() {
   return listingSeeds.length
 }
 
+export async function createLeasingAgents(
+  app: INestApplicationContext,
+  rolesRepo: Repository<UserRoles>,
+  jurisdictions: Jurisdiction[]
+) {
+  const usersService = await app.resolve<UserService>(UserService)
+  const leasingAgents = await Promise.all(
+    defaultLeasingAgents.map(
+      async (leasingAgent) =>
+        await usersService.createUser(
+          plainToClass(UserCreateDto, {
+            ...leasingAgent,
+            jurisdictions: [jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit")],
+          }),
+          new AuthContext(null)
+        )
+    )
+  )
+  await Promise.all([
+    leasingAgents.map(async (agent: User) => {
+      const roles: UserRoles = { user: agent, isPartner: true }
+      await rolesRepo.save(roles)
+      await usersService.confirm({ token: agent.confirmationToken })
+    }),
+  ])
+  return leasingAgents
+}
+
 const seedListings = async (
   app: INestApplicationContext,
   rolesRepo: Repository<UserRoles>,
   jurisdictions: Jurisdiction[]
 ) => {
   const seeds = []
+  const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
 
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
   for (const [index, listingSeed] of allSeeds.entries()) {
+    const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
     const listing = await listingSeed.seed()
-    listing.jurisdiction = jurisdictions[0]
+    listing.jurisdiction = jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit")
+    listing.leasingAgents = [everyOtherAgent]
     await listingRepository.save(listing)
 
     seeds.push(listing)
@@ -97,7 +129,7 @@ async function seed() {
         dob: new Date(),
         password: "abcdef",
         passwordConfirmation: "Abcdef1!",
-        jurisdictions: [jurisdictions[0]],
+        jurisdictions: [jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit")],
       }),
       new AuthContext(null)
     )
@@ -116,7 +148,7 @@ async function seed() {
         dob: new Date(),
         password: "ghijkl",
         passwordConfirmation: "Ghijkl1!",
-        jurisdictions: [jurisdictions[0]],
+        jurisdictions: [jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit")],
       }),
       new AuthContext(null)
     )
@@ -148,7 +180,10 @@ async function seed() {
 
   // Seed the Detroit AMI data, since it's not linked to any units.
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
-  await amiChartRepo.save(JSON.parse(JSON.stringify(WayneCountyMSHDA2021)))
+  await amiChartRepo.save({
+    ...JSON.parse(JSON.stringify(WayneCountyMSHDA2021)),
+    jurisdiction: jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit"),
+  })
   await app.close()
 }
 

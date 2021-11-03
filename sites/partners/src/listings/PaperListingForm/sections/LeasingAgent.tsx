@@ -1,12 +1,19 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
+import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors } = formMethods
+  const { register, control, errors, clearErrors, watch } = formMethods
+
+  const leasingAgentPhoneField: string = watch("leasingAgentPhone")
+
+  useEffect(() => {
+    clearErrors("leasingAgentPhone")
+  }, [leasingAgentPhoneField, clearErrors])
 
   return (
     <div>
@@ -21,28 +28,38 @@ const LeasingAgent = () => {
             label={t("leasingAgent.name")}
             name={"leasingAgentName"}
             id={"leasingAgentName"}
+            subNote={t("listings.requiredToPublish")}
+            error={fieldHasError(errors?.leasingAgentName)}
+            errorMessage={fieldMessage(errors?.leasingAgentName)}
             placeholder={t("leasingAgent.namePlaceholder")}
             register={register}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentName"),
+            }}
           />
           <Field
             label={t("t.email")}
             name={"leasingAgentEmail"}
             id={"leasingAgentEmail"}
+            subNote={t("listings.requiredToPublish")}
+            error={fieldHasError(errors?.leasingAgentEmail)}
+            errorMessage={fieldMessage(errors?.leasingAgentEmail)}
             placeholder={t("t.emailAddressPlaceholder")}
             register={register}
-            error={errors?.leasingAgentEmail !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
-            validation={{ required: true }}
+            inputProps={{
+              onChange: () => clearErrors("leasingAgentEmail"),
+            }}
           />
           <PhoneField
             label={t("t.phone")}
             name={"leasingAgentPhone"}
             id={"leasingAgentPhone"}
+            subNote={t("listings.requiredToPublish")}
+            error={fieldHasError(errors?.leasingAgentPhone)}
+            errorMessage={fieldMessage(errors?.leasingAgentPhone)}
             placeholder={t("t.phoneNumberPlaceholder")}
             control={control}
             controlClassName={"control"}
-            error={errors?.leasingAgentPhone !== undefined}
-            errorMessage={t("errors.requiredFieldError")}
             required={true}
           />
         </GridSection>
@@ -61,6 +78,7 @@ const LeasingAgent = () => {
             fullWidth={true}
             placeholder={t("leasingAgent.officeHoursPlaceholder")}
             register={register}
+            maxLength={150}
           />
         </GridSection>
       </GridSection>

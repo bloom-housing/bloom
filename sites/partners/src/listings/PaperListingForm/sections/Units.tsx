@@ -18,6 +18,7 @@ import { useFormContext } from "react-hook-form"
 import { TempUnit, TempUnitsSummary } from "../"
 import UnitsSummaryForm from "../UnitsSummaryForm"
 import { UnitsSummary } from "@bloom-housing/backend-core/types"
+import { fieldHasError } from "../../../../lib/helpers"
 
 type UnitProps = {
   units: TempUnit[]
@@ -54,7 +55,7 @@ const FormUnits = ({
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue } = formMethods
+  const { register, setValue, errors, clearErrors } = formMethods
 
   const unitTableHeaders = {
     number: "listings.unit.number",
@@ -82,6 +83,14 @@ const FormUnits = ({
   useEffect(() => {
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
+
+  useEffect(() => {
+    if (units && units.length > 0 && !units[0].tempId) {
+      units.forEach((unit, index) => {
+        unit.tempId = index + 1
+      })
+    }
+  }, [units])
 
   const editUnit = (tempId: number) => {
     setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
@@ -268,6 +277,7 @@ const FormUnits = ({
             />
           </GridCell>
         </GridSection>
+        <span className={"text-tiny text-gray-800 block mb-2"}>{t("listings.units")}</span>
         {showUnitsSummary && (
           <div className="bg-gray-300 px-4 py-5">
             <div className="mb-5">
@@ -280,7 +290,11 @@ const FormUnits = ({
             <Button
               type="button"
               size={AppearanceSizeType.normal}
-              onClick={() => editSummary(unitsSummaries.length + 1)}
+              styleType={fieldHasError(errors?.unitsSummaries) ? AppearanceStyleType.alert : null}
+              onClick={() => {
+                editSummary(unitsSummaries.length + 1)
+                clearErrors("unitsSummaries")
+              }}
             >
               {t("listings.unitsSummary.add")}
             </Button>
@@ -290,19 +304,35 @@ const FormUnits = ({
           <div className="bg-gray-300 px-4 py-5">
             {!!units.length && (
               <div className="mb-5">
-                <MinimalTable headers={unitTableHeaders} data={unitTableData} />
+                <MinimalTable
+                  headers={unitTableHeaders}
+                  data={unitTableData}
+                  responsiveCollapse={true}
+                />
               </div>
             )}
             <Button
               type="button"
               size={AppearanceSizeType.normal}
-              onClick={() => editUnit(units.length + 1)}
+              styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}
+              onClick={() => {
+                editUnit(units.length + 1)
+                clearErrors("units")
+              }}
             >
               {t("listings.unit.add")}
             </Button>
           </div>
         )}
       </GridSection>
+
+      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+      {fieldHasError(errors?.units) && (
+        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+      )}
+      {fieldHasError(errors?.unitsSummaries) && (
+        <span className={"text-sm text-alert"}>{t("errors.requiredFieldError")}</span>
+      )}
 
       <Drawer
         open={!!unitDrawerId}

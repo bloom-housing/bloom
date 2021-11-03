@@ -28,7 +28,17 @@ export function getDefaultAmiChart() {
   return JSON.parse(JSON.stringify(defaultAmiChart))
 }
 
-export const defaultAmiChart: AmiChartCreateDto = {
+export enum PriorityTypes {
+  mobility = "Mobility",
+  hearing = "Hearing",
+  visual = "Visual",
+  hearingVisual = "Hearing and Visual",
+  mobilityHearing = "Mobility and Hearing",
+  mobilityVisual = "Mobility and Visual",
+  mobilityHearingVisual = "Mobility, Hearing and Visual",
+}
+
+export const defaultAmiChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
   name: "AlamedaCountyTCAC2021",
   items: [
     {
@@ -488,6 +498,10 @@ export const defaultListing: ListingSeedType = {
   depositMin: "500",
   disableUnitsAccordion: true,
   displayWaitlistSize: false,
+  image: {
+    label: "test_label",
+    fileId: "fileid",
+  },
   leasingAgentAddress: {
     city: "San Francisco",
     state: "CA",

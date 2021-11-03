@@ -213,7 +213,10 @@ async function seed() {
 
   // Seed the Detroit AMI data, since it's not linked to any units.
   const amiChartRepo = app.get<Repository<AmiChart>>(getRepositoryToken(AmiChart))
-  await amiChartRepo.save(JSON.parse(JSON.stringify(WayneCountyMSHDA2021)))
+  await amiChartRepo.save({
+    ...JSON.parse(JSON.stringify(WayneCountyMSHDA2021)),
+    jurisdiction: jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit"),
+  })
 
   await userRepo.save(admin)
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }

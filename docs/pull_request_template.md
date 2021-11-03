@@ -1,13 +1,13 @@
 ## Issue
 
-- Closes # (issue)
-- Addresses # (issue)
+- Closes #issue
+- Addresses #issue
 - [ ] This change is a dependency for another issue
 - [ ] This change has a dependency from another issue
 
 ## Description
 
-Please include a summary of the change and which issue is addressed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+Please include a summary of the change and which issue(s) is addressed. Please also include relevant motivation and context. List any dependencies that are required for this change.
 
 ## Type of change
 
@@ -15,18 +15,15 @@ Please include a summary of the change and which issue is addressed. Please also
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Prototype/POC (not to merge)
-- [ ] This change is a refactor/address technical debt
+- [ ] This change is a refactor/addresses technical debt
 - [ ] This change requires a documentation update
 - [ ] This change requires a SQL Script
 
 ## How Can This Be Tested/Reviewed?
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can review. Please also list any relevant details for your test configuration
+Provide instructions so we can review.
 
-- [ ] Desktop View
-- [ ] Mobile View
-- [ ] Test A
-- [ ] Test B
+Describe the tests that you ran to verify your changes. Please also list any relevant details for your test configuration.
 
 ## Checklist:
 
@@ -43,3 +40,4 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] I have assigned reviewers
 - [ ] I have updated the changelog to include a description of my changes
 - [ ] I have run `yarn generate:client` if I made backend changes
+- [ ] I have exported any new pieces in ui-components

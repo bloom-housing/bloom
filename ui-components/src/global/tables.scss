@@ -123,7 +123,8 @@ tr.group-reserved td:first-of-type {
 /* Hat tip to this CSS solution:
 https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
 
-@media screen and (max-width: 639px) {
+//@screen md
+@media screen and (max-width: 767px) {
   table.responsive-collapse {
     thead {
       @apply hidden;
@@ -145,6 +146,7 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
     td {
       @apply block;
       @apply text-right;
+      border: 0px;
     }
 
     td:before {

@@ -14,10 +14,10 @@ import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
 import styles from "./index.module.scss"
-import { Address, Listing, UnitSummary } from "@bloom-housing/backend-core/types"
+import { Listing, UnitsSummary } from "@bloom-housing/backend-core/types"
 import { getGenericAddress } from "../lib/helpers"
 import moment from "moment"
-import qs from "qs"
+import Link from "next/link"
 
 export default function Home({ latestListings }) {
   const blankAlertInfo = {
@@ -44,31 +44,6 @@ export default function Home({ latestListings }) {
         {t("welcome.checkEligibility")}
       </a>
     </div>
-  )
-  interface LatestListingLinkProps {
-    name: string
-    address: Address
-    imageUrl: string
-    availability?: string
-  }
-
-  const linearGradient = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(24, 37, 42, .8))"
-  const LatestListingsLink = (props: LatestListingLinkProps) => (
-    <a
-      className={styles["latest-listing"]}
-      href="/listings"
-      style={{
-        backgroundImage: `${linearGradient}, url(${props.imageUrl}`,
-      }}
-    >
-      <h3 className={styles["latest-listing__name"]}>{props.name}</h3>
-      <p className={styles["latest-listing__address"]}>
-        <OneLineAddress address={getGenericAddress(props.address)} />
-      </p>
-      {props.availability && (
-        <div className={styles["latest-listing__availability"]}>{props.availability}</div>
-      )}
-    </a>
   )
 
   /**
@@ -124,7 +99,7 @@ export default function Home({ latestListings }) {
    * @param units Array of UnitSummarys
    * @returns string
    */
-  const buildUnitSummaryString = (units: Array<UnitSummary>) => {
+  const buildUnitSummaryString = (units: Array<UnitsSummary>) => {
     return units
       .filter((unitSummary) => {
         return unitSummary.totalAvailable > 0
@@ -136,6 +111,35 @@ export default function Home({ latestListings }) {
         )} available`
       })
       .join(", ")
+  }
+
+  const linearGradient = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(24, 37, 42, .8))"
+  interface LatestListingLinkProps {
+    listing: Listing
+  }
+  const LatestListingsLink = (props: LatestListingLinkProps) => {
+    const unitsSummary = buildUnitSummaryString(props.listing.unitsSummary)
+
+    return (
+      <Link href={`/listing/${props.listing.id}/${props.listing.urlSlug}`}>
+        <a
+          className={styles["latest-listing"]}
+          style={{
+            backgroundImage: `${linearGradient}, url(${
+              imageUrlFromListing(props.listing, 520) || "/images/detroitDefault.png"
+            })`,
+          }}
+        >
+          <h3 className={styles["latest-listing__name"]}>{props.listing.name}</h3>
+          <p className={styles["latest-listing__address"]}>
+            <OneLineAddress address={getGenericAddress(props.listing.buildingAddress)} />
+          </p>
+          {unitsSummary && (
+            <div className={styles["latest-listing__availability"]}>{unitsSummary}</div>
+          )}
+        </a>
+      </Link>
+    )
   }
 
   // TODO(#674): Fill out neighborhood buttons with real data
@@ -177,15 +181,7 @@ export default function Home({ latestListings }) {
         className={styles["latest-listings"]}
       >
         {latestListings.items.map((listing) => {
-          return (
-            <LatestListingsLink
-              key={listing.id}
-              name={listing.name}
-              address={listing.buildingAddress}
-              availability={buildUnitSummaryString(listing.unitsSummary)}
-              imageUrl={imageUrlFromListing(listing, 520)}
-            />
-          )
+          return <LatestListingsLink key={listing.id} listing={listing} />
         })}
       </HorizontalScrollSection>
       {/* TODO(#674): Translate title*/}

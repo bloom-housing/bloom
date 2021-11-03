@@ -26,23 +26,23 @@ const DetailApplicationAddress = () => {
       <GridSection grid={false} subtitle={t("listings.leasingAgentAddress")}>
         <GridSection columns={3}>
           <ViewItem label={t("listings.streetAddressOrPOBox")}>
-            {listing.leasingAgentAddress.street}
+            {listing.leasingAgentAddress?.street}
           </ViewItem>
           <ViewItem label={t("application.contact.apt")}>
-            {listing.leasingAgentAddress.street2}
+            {listing.leasingAgentAddress?.street2}
           </ViewItem>
         </GridSection>
         <GridSection columns={6}>
           <GridCell span={2}>
             <ViewItem label={t("application.contact.city")}>
-              {listing.leasingAgentAddress.city}
+              {listing.leasingAgentAddress?.city}
             </ViewItem>
           </GridCell>
           <ViewItem label={t("application.contact.state")}>
-            {listing.leasingAgentAddress.state}
+            {listing.leasingAgentAddress?.state}
           </ViewItem>
           <ViewItem label={t("application.contact.zip")}>
-            {listing.leasingAgentAddress.zipCode}
+            {listing.leasingAgentAddress?.zipCode}
           </ViewItem>
         </GridSection>
 
@@ -58,23 +58,23 @@ const DetailApplicationAddress = () => {
           <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
             <GridSection columns={3}>
               <ViewItem label={t("listings.streetAddressOrPOBox")}>
-                {listing.applicationMailingAddress.street}
+                {listing.applicationMailingAddress?.street}
               </ViewItem>
               <ViewItem label={t("application.contact.apt")}>
-                {listing.applicationMailingAddress.street2}
+                {listing.applicationMailingAddress?.street2}
               </ViewItem>
             </GridSection>
             <GridSection columns={6}>
               <GridCell span={2}>
                 <ViewItem label={t("application.contact.city")}>
-                  {listing.applicationMailingAddress.city}
+                  {listing.applicationMailingAddress?.city}
                 </ViewItem>
               </GridCell>
               <ViewItem label={t("application.contact.state")}>
-                {listing.applicationMailingAddress.state}
+                {listing.applicationMailingAddress?.state}
               </ViewItem>
               <ViewItem label={t("application.contact.zip")}>
-                {listing.applicationMailingAddress.zipCode}
+                {listing.applicationMailingAddress?.zipCode}
               </ViewItem>
             </GridSection>
           </GridSection>
@@ -99,23 +99,23 @@ const DetailApplicationAddress = () => {
           <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
             <GridSection columns={3}>
               <ViewItem label={t("listings.streetAddressOrPOBox")}>
-                {listing.applicationPickUpAddress.street}
+                {listing.applicationPickUpAddress?.street}
               </ViewItem>
               <ViewItem label={t("application.contact.apt")}>
-                {listing.applicationPickUpAddress.street2}
+                {listing.applicationPickUpAddress?.street2}
               </ViewItem>
             </GridSection>
             <GridSection columns={6}>
               <GridCell span={2}>
                 <ViewItem label={t("application.contact.city")}>
-                  {listing.applicationPickUpAddress.city}
+                  {listing.applicationPickUpAddress?.city}
                 </ViewItem>
               </GridCell>
               <ViewItem label={t("application.contact.state")}>
-                {listing.applicationPickUpAddress.state}
+                {listing.applicationPickUpAddress?.state}
               </ViewItem>
               <ViewItem label={t("application.contact.zip")}>
-                {listing.applicationPickUpAddress.zipCode}
+                {listing.applicationPickUpAddress?.zipCode}
               </ViewItem>
             </GridSection>
             <GridSection columns={3}>
@@ -147,23 +147,23 @@ const DetailApplicationAddress = () => {
           <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
             <GridSection columns={3}>
               <ViewItem label={t("listings.streetAddressOrPOBox")}>
-                {listing.applicationDropOffAddress.street}
+                {listing.applicationDropOffAddress?.street}
               </ViewItem>
               <ViewItem label={t("application.contact.apt")}>
-                {listing.applicationDropOffAddress.street2}
+                {listing.applicationDropOffAddress?.street2}
               </ViewItem>
             </GridSection>
             <GridSection columns={6}>
               <GridCell span={2}>
                 <ViewItem label={t("application.contact.city")}>
-                  {listing.applicationDropOffAddress.city}
+                  {listing.applicationDropOffAddress?.city}
                 </ViewItem>
               </GridCell>
               <ViewItem label={t("application.contact.state")}>
-                {listing.applicationDropOffAddress.state}
+                {listing.applicationDropOffAddress?.state}
               </ViewItem>
               <ViewItem label={t("application.contact.zip")}>
-                {listing.applicationDropOffAddress.zipCode}
+                {listing.applicationDropOffAddress?.zipCode}
               </ViewItem>
             </GridSection>
             <GridSection columns={3}>

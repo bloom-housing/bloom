@@ -1,5 +1,4 @@
 import Head from "next/head"
-import axios from "axios"
 import {
   PageHeader,
   AgPagination,
@@ -18,6 +17,7 @@ import React, { useState } from "react"
 import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
+import { fetchBaseListingData } from "../lib/hooks"
 
 const ListingsPage = ({ initialListings }) => {
   const router = useRouter()
@@ -96,15 +96,7 @@ const ListingsPage = ({ initialListings }) => {
 }
 
 export async function getStaticProps() {
-  let initialListings = []
-  try {
-    const response = await axios.get(
-      `${process.env.listingServiceUrl}?page=1?limit=10&orderBy=mostRecentlyUpdated`
-    )
-    initialListings = response.data
-  } catch (error) {
-    console.error(error)
-  }
+  const initialListings = await fetchBaseListingData()
   return { props: { initialListings }, revalidate: process.env.cacheRevalidate }
 }
 
