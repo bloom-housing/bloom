@@ -34,7 +34,7 @@ export class ProgramsController {
   constructor(private readonly programsService: ProgramsService) {}
 
   @Get()
-  @ApiOperation({ summary: "List preferences", operationId: "list" })
+  @ApiOperation({ summary: "List programs", operationId: "list" })
   @ApiExtraModels(ProgramsFilterParams)
   async list(@Query() queryParams: ProgramsListQueryParams): Promise<ProgramDto[]> {
     return mapTo(ProgramDto, await this.programsService.list(queryParams))

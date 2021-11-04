@@ -16,9 +16,9 @@ export class ProgramsService {
 
   list(params?: ProgramsListQueryParams): Promise<Program[]> {
     const qb = this.repository
-      .createQueryBuilder("preferences")
-      .leftJoin("preferences.jurisdictions", "preferenceJurisdictions")
-      .select(["preferences", "preferenceJurisdictions.id"])
+      .createQueryBuilder("programs")
+      .leftJoin("programs.jurisdictions", "programJurisdictions")
+      .select(["programs", "programJurisdictions.id"])
 
     if (params.filter) {
       addFilters<Array<ProgramsFilterParams>, typeof jurisdictionFilterTypeToFieldMap>(
