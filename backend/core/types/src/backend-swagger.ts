@@ -3973,9 +3973,6 @@ export interface UserProfileUpdate {
 
   /**  */
   updatedAt: Date
-
-  /**  */
-  phoneNumber?: string
 }
 
 export interface JurisdictionCreate {

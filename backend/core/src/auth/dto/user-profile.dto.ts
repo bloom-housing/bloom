@@ -23,7 +23,6 @@ export class UserProfileUpdateDto extends PickType(User, [
   "createdAt",
   "updatedAt",
   "language",
-  "phoneNumber",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
