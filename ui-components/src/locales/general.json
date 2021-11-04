@@ -144,6 +144,7 @@
       "agency": "Agency if Applicable",
       "adaPriorities": "ADA Priorities Selected",
       "preferences": "Application Preferences",
+      "programs": "Application Programs",
       "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
@@ -499,6 +500,44 @@
       "options": {
         "address": "Displaced Address",
         "name": "Claimant"
+      }
+    },
+    "programs": {
+      "servedInMilitary": {
+        "title": "Veteran",
+        "servedInMilitary": {
+          "label": "servedInMilitary"
+        },
+        "doNotConsider": {
+          "label": "doNotConsider"
+        }
+      },
+      "tay": {
+        "title": "Transition Age Youth",
+        "tay": {
+          "label": "tay"
+        }
+      },
+      "disabilityOrMentalIllness": {
+        "title": "Developmental Disability",
+        "disabilityOrMentalIllness": {
+          "label": "disabilityOrMentalIllness"
+        },
+        "doNotConsider": {
+          "label": "doNotConsider"
+        }
+      },
+      "housingSituation": {
+        "title": "Housing Situation",
+        "notPermanent": {
+          "label": "notPermanent"
+        },
+        "homeless": {
+          "label": "homeless"
+        },
+        "doNotConsider": {
+          "label": "doNotConsider"
+        }
       }
     },
     "review": {

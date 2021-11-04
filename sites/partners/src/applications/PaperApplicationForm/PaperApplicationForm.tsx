@@ -21,6 +21,7 @@ import { FormAlternateContact } from "./sections/FormAlternateContact"
 import { FormHouseholdMembers } from "./sections/FormHouseholdMembers"
 import { FormHouseholdDetails } from "./sections/FormHouseholdDetails"
 import { FormPreferences } from "./sections/FormPreferences"
+import { FormPrograms } from "./sections/FormPrograms"
 import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
@@ -41,6 +42,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
   const { listingDto } = useSingleListingData(listingId)
 
   const preferences = listingDto?.listingPreferences
+  const programs = listingDto?.listingPrograms
   const countyCode = listingDto?.countyCode
   const units = listingDto?.units
 
@@ -203,6 +205,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     />
 
                     <FormPreferences preferences={preferences} county={countyCode} />
+
+                    <FormPrograms programs={programs} county={countyCode} />
 
                     <FormHouseholdIncome />
 
