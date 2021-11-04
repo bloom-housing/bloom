@@ -143,8 +143,12 @@ export default function Home({ latestListings }) {
   }
 
   // TODO(#674): Fill out neighborhood buttons with real data
-  const NeighborhoodButton = (props: { label: string }) => (
-    <a className={styles.neighborhood} href="/listings">
+  const NeighborhoodButton = (props: { label: string; image?: string }) => (
+    <a
+      className={styles.neighborhood}
+      href="/listings"
+      style={{ backgroundImage: `url(${props.image})` }}
+    >
       <p className={styles.neighborhood__text}>{props.label}</p>
     </a>
   )
@@ -191,11 +195,27 @@ export default function Home({ latestListings }) {
         icon="map"
         className={styles.neighborhoods}
       >
-        <NeighborhoodButton label="Midtown" />
-        <NeighborhoodButton label="Elmwood Park" />
-        <NeighborhoodButton label="Islandview" />
-        <NeighborhoodButton label="Brightmoor" />
-        <NeighborhoodButton label="Fox Creek" />
+        {/* TODO(#674): Get official hosted images */}
+        <NeighborhoodButton
+          label="Midtown"
+          image="https://upload.wikimedia.org/wikipedia/commons/0/0f/Milner_Arms_Apartments_-_Detroit_Michigan.jpg"
+        />
+        <NeighborhoodButton
+          label="Elmwood Park"
+          image="https://i2.wp.com/planetdetroit.org/wp-content/uploads/2021/09/Elmwood-3-scaled.jpg?resize=1024%2C683&ssl=1"
+        />
+        <NeighborhoodButton
+          label="Islandview"
+          image="https://d12kp1agyyb87s.cloudfront.net/wp-content/uploads/2019/10/image001.jpg"
+        />
+        <NeighborhoodButton
+          label="Brightmoor"
+          image="https://www.neighborsbuildingbrightmoor.org/uploads/8/1/9/8/81981122/5585414_orig.jpg"
+        />
+        <NeighborhoodButton
+          label="Fox Creek"
+          image="https://theneighborhoods.org/sites/the-neighborhoods/files/styles/gallery_555x357/public/2018-11/small%20business_0.jpg?itok=KhgAsSdn"
+        />
       </HorizontalScrollSection>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}
