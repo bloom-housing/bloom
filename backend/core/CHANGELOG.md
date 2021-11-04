@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.4...@bloom-housing/backend-core@2.0.1-alpha.5) (2021-11-04)
+
+
+### Bug Fixes
+
+* **backend:** make it possible to filter portal users in /users endpoint ([#2078](https://github.com/bloom-housing/bloom/issues/2078)) ([29bf714](https://github.com/bloom-housing/bloom/commit/29bf714d28755916ec8ec896366c8c32c3a227c4))
+
+
+
+
+
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.3...@bloom-housing/backend-core@2.0.1-alpha.4) (2021-11-04)
+
+
+### Features
+
+* Updates application confirmation numbers ([#2072](https://github.com/bloom-housing/bloom/issues/2072)) ([75cd67b](https://github.com/bloom-housing/bloom/commit/75cd67bcb62280936bdeeaee8c9b7b2583a1339d))
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.2...@bloom-housing/backend-core@2.0.1-alpha.3) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.1...@bloom-housing/backend-core@2.0.1-alpha.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* don't send email confirmation on paper app submission ([#2110](https://github.com/bloom-housing/bloom/issues/2110)) ([7f83b70](https://github.com/bloom-housing/bloom/commit/7f83b70327049245ecfba04ae3aea4e967929b2a))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.0...@bloom-housing/backend-core@2.0.1-alpha.1) (2021-11-03)
+
+
+### Features
+
+* jurisdictional email signatures ([#2111](https://github.com/bloom-housing/bloom/issues/2111)) ([7a146ff](https://github.com/bloom-housing/bloom/commit/7a146ffb5de88cfa2950e2a469a99e38d71b33c8))
+
+
+
+
+
 ## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0...@bloom-housing/backend-core@2.0.1-alpha.0) (2021-11-02)
 
 

@@ -26,7 +26,7 @@ import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
-import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
+import { ListingTritonSeed, ListingTritonSeedDetroit } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethodsService } from "./application-methods/application-methods.service"
 import { ApplicationMethodType } from "./application-methods/types/application-method-type-enum"
@@ -57,7 +57,6 @@ const listingSeeds: any[] = [
   ListingDefaultOpenSoonSeed,
   ListingDefaultOnePreferenceSeed,
   ListingDefaultNoPreferenceSeed,
-  ListingDefaultNoPreferenceSeed,
   ListingDefaultBmrChartSeed,
   ListingTritonSeed,
   ListingDefaultReservedSeed,
@@ -66,6 +65,7 @@ const listingSeeds: any[] = [
   ListingDefaultMultipleAMIAndPercentages,
   ListingDefaultMissingAMI,
   ListingDefaultSanJoseSeed,
+  ListingTritonSeedDetroit,
 ]
 
 export function getSeedListingsCount() {

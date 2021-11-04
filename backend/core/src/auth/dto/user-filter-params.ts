@@ -14,5 +14,15 @@ export class UserFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [UserFilterKeys.isPartner]?: boolean
+  [UserFilterKeys.isPartner]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: true,
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [UserFilterKeys.isPortalUser]?: boolean
 }

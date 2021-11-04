@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.6...@bloom-housing/partners@2.0.1-alpha.7) (2021-11-04)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.5...@bloom-housing/partners@2.0.1-alpha.6) (2021-11-04)
+
+
+### Features
+
+* Updates application confirmation numbers ([#2072](https://github.com/bloom-housing/bloom/issues/2072)) ([75cd67b](https://github.com/bloom-housing/bloom/commit/75cd67bcb62280936bdeeaee8c9b7b2583a1339d))
+
+
+
+
+
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.4...@bloom-housing/partners@2.0.1-alpha.5) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.3...@bloom-housing/partners@2.0.1-alpha.4) (2021-11-03)
+
+
+### Bug Fixes
+
+* don't send email confirmation on paper app submission ([#2110](https://github.com/bloom-housing/bloom/issues/2110)) ([7f83b70](https://github.com/bloom-housing/bloom/commit/7f83b70327049245ecfba04ae3aea4e967929b2a))
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.2...@bloom-housing/partners@2.0.1-alpha.3) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.1...@bloom-housing/partners@2.0.1-alpha.2) (2021-11-02)
 
 

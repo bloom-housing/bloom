@@ -32,13 +32,12 @@ import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
 import { authzActions } from "../enum/authz-actions.enum"
-import { addFilters } from "../../shared/filter"
-import { UserFilterParams } from "../dto/user-filter-params"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { UserQueryFilter } from "../filters/user-query-filter"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -87,11 +86,8 @@ export class UserService {
     const qb = this._getQb()
 
     if (params.filter) {
-      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
-        params.filter,
-        userFilterTypeToFieldMap,
-        qb
-      )
+      const filter = new UserQueryFilter()
+      filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
     }
 
     const result = await paginate<User>(qb, options)
