@@ -74,6 +74,7 @@ export class ApplicationsService {
     return result
   }
 
+  // Submitting an application from public
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
     const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
@@ -84,12 +85,13 @@ export class ApplicationsService {
       throw new BadRequestException("Listing is not open for application submission.")
     }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    return await this._create(applicationCreateDto)
+    return await this._create(applicationCreateDto, true)
   }
 
+  // Entering a paper application from partners
   async create(applicationCreateDto: ApplicationCreateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
-    return this._create(applicationCreateDto)
+    return this._create(applicationCreateDto, false)
   }
 
   async findOne(applicationId: string) {
@@ -203,7 +205,10 @@ export class ApplicationsService {
     )
   }
 
-  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+  private async _create(
+    applicationCreateDto: ApplicationUpdateDto,
+    shouldSendConfirmation: boolean
+  ) {
     let application: Application
 
     try {
@@ -257,7 +262,7 @@ export class ApplicationsService {
     // Listing is not eagerly joined on application entity so let's use the one provided with
     // create dto
     const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
-    if (application.applicant.emailAddress) {
+    if (application.applicant.emailAddress && shouldSendConfirmation) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
     return application

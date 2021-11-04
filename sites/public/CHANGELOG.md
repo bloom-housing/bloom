@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.4...@bloom-housing/public@2.0.1-alpha.5) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.3...@bloom-housing/public@2.0.1-alpha.4) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.2...@bloom-housing/public@2.0.1-alpha.3) (2021-11-03)
+
+
+### Bug Fixes
+
+* SiteHeader visual issues with long menu bars ([#2068](https://github.com/bloom-housing/bloom/issues/2068)) ([fd6686e](https://github.com/bloom-housing/bloom/commit/fd6686e206b4e53ae8b6ab757ad0506eaead0d01))
+
+
+
+
+
 ## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.1...@bloom-housing/public@2.0.1-alpha.2) (2021-11-02)
 
 
