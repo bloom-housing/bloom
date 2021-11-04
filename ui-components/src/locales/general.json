@@ -1262,6 +1262,7 @@
     "filter": "Filter",
     "edit": "Edit",
     "email": "Email",
+    "finish": "Finish",
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
@@ -1444,7 +1445,8 @@
         "household": "Household",
         "age": "Age",
         "disability": "Disability",
-        "income": "Income"
+        "income": "Income",
+        "disclaimer": "Disclaimer"
       }
     },
     "welcome": {
@@ -1487,6 +1489,9 @@
         "40kTo50k": "$40,000 - $50,000",
         "over50k": "Over $50,000"
       }
+    },
+    "disclaimer": {
+      "description": "Thank you for checking how you qualify for affordable housing. Because affordable housing can be reserved for certain age groups or income levels, we have filtered our property listings based on your household characteristics. We hope you find housing that meets your needs. It's important to note that a good portion of affordable housing has a waitlist, but calling properties you're interested in is a good way to get on waitlists or learn of immediate openings."
     },
     "preferNotToSay": "Prefer not to say"
   }

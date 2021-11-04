@@ -1094,6 +1094,7 @@
         "filter": "Filtrar",
         "edit": "Editar",
         "email": "Correo electrónico",
+        "finish": "Terminar",
         "floor": "piso",
         "floors": "pisos",
         "getDirections": "Obtener las direcciones",
@@ -1268,7 +1269,8 @@
                 "household": "Hogar",
                 "age": "Edad",
                 "disability": "Invalidez",
-                "income": "Ingreso"
+                "income": "Ingreso",
+                "disclaimer": "Descargo de responsabilidad"
             }
         },
         "welcome": {
@@ -1311,6 +1313,9 @@
                 "40kTo50k": "$40,000 - $50,000",
                 "over50k": "Más de $ 50,000"
             }
+        },
+        "disclaimer": {
+            "description": "Gracias por verificar cómo califica para una vivienda asequible. Debido a que las viviendas asequibles se pueden reservar para ciertos grupos de edad o niveles de ingresos, hemos filtrado nuestros listados de propiedades en función de las características de su hogar. Esperamos que encuentre una vivienda que satisfaga sus necesidades. Es importante tener en cuenta que una buena parte de las viviendas asequibles tiene una lista de espera, pero llamar a las propiedades que le interesan es una buena manera de ingresar a las listas de espera o conocer las vacantes inmediatas."
         },
         "preferNotToSay": "Prefiero no decirlo"
     }

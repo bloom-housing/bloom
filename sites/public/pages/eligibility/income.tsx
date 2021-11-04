@@ -7,7 +7,7 @@ import React, { useContext } from "react"
 import { FormCard } from "@bloom-housing/ui-components/src/blocks/FormCard"
 import { t } from "@bloom-housing/ui-components/src/helpers/translator"
 import { ProgressNav } from "@bloom-housing/ui-components/src/navigation/ProgressNav"
-import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { Form } from "@bloom-housing/ui-components/src/forms/Form"
 import { Button } from "@bloom-housing/ui-components/src/actions/Button"
 import { AppearanceStyleType, Select } from "@bloom-housing/ui-components"
@@ -34,7 +34,7 @@ const EligibilityIncome = () => {
   })
   const onSubmit = async (data) => {
     eligibilityRequirements.setIncome(data.income)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
+    await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
   }
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
@@ -81,7 +81,7 @@ const EligibilityIncome = () => {
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary}>{t("t.done")}</Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("t.finish")}</Button>
             </div>
           </div>
         </Form>

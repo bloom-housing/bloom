@@ -21,17 +21,17 @@ describe("<EligibilityIncome>", () => {
     expect(
       screen.getByRole("heading", { name: "What is your total household annual income?" })
     ).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Finish" })).toBeInTheDocument()
   })
 
-  it("Clicks the Done button", async () => {
+  it("Clicks the Finish button", async () => {
     await act(async () => {
       render(<EligibilityIncome />)
       userEvent.selectOptions(screen.getByRole("combobox"), "10kTo20k")
-      fireEvent.click(screen.getByRole("button", { name: "Done" }))
+      fireEvent.click(screen.getByRole("button", { name: "Finish" }))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toContain("/listings")
+    expect(mockRouter.push.mock.calls[0][0]).toContain("/eligibility/disclaimer")
   })
 })

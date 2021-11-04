@@ -15,7 +15,7 @@ import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import { eligibilityRoute } from "../../lib/helpers"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
@@ -41,7 +41,7 @@ const EligibilityDisability = () => {
 
   const onClick = async (data) => {
     eligibilityRequirements.setDisability(data.disability)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
+    await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
   }
 
   const disabilityValues = [
@@ -107,7 +107,7 @@ const EligibilityDisability = () => {
                 className="mx-2 mt-6"
                 styleType={AppearanceStyleType.primary}
               >
-                {t("t.viewListings")}
+                {t("t.finish")}
               </Button>
             </div>
           </div>
