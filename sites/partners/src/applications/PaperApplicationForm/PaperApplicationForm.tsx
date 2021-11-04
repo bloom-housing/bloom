@@ -40,7 +40,7 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
-  const preferences = listingDto?.listingPreferences
+  const preferences = listingDto?.preferences
   const countyCode = listingDto?.countyCode
   const units = listingDto?.units
 

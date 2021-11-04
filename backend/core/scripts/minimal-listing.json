@@ -2,7 +2,7 @@
   "name": "Minimal Listing",
   "status": "active",
   "countyCode": "Alameda",
-  "listingPreferences": [],
+  "preferences": [],
   "buildingAddress": {
     "city": "Oakland",
     "state": "CA",

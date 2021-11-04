@@ -28,7 +28,6 @@ import { ApplicationMethod } from "../../application-methods/entities/applicatio
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
-import { Preference } from "../../preferences/entities/preference.entity"
 import { Program } from "../../program/entities/program.entity"
 
 export class ListingDefaultSeed {
@@ -49,8 +48,6 @@ export class ListingDefaultSeed {
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
     protected readonly jurisdictionRepository: Repository<Jurisdiction>,
-    @InjectRepository(Preference)
-    protected readonly preferencesRepository: Repository<Preference>,
     @InjectRepository(Program)
     protected readonly programsRepository: Repository<Program>
   ) {}
@@ -111,22 +108,7 @@ export class ListingDefaultSeed {
       name: "Test: Default, Two Preferences",
       property: property,
       assets: getDefaultAssets(),
-      listingPreferences: [
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
-          }),
-          ordinal: 1,
-          page: 1,
-        },
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getDisplaceePreference().title,
-          }),
-          ordinal: 2,
-          page: 1,
-        },
-      ],
+      preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
       events: getDefaultListingEvents(),
       listingPrograms: [
         {

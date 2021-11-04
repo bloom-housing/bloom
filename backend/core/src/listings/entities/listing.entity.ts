@@ -13,6 +13,7 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
+import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
@@ -45,7 +46,6 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
-import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -74,14 +74,11 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalApplicationSubmissionNotes?: string | null
 
-  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.listing, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreference)
-  listingPreferences: ListingPreference[]
+  @Type(() => Preference)
+  preferences: Preference[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()

@@ -2,19 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm"
+import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { FormMetadata } from "../../applications/types/form-metadata/form-metadata"
 import { PreferenceLink } from "../types/preference-link"
 import { ApiProperty } from "@nestjs/swagger"
-import { ListingPreference } from "./listing-preference.entity"
-import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Entity({ name: "preferences" })
 class Preference {
@@ -35,6 +33,12 @@ class Preference {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt: Date
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  ordinal?: number | null
 
   @Column({ type: "text", nullable: true })
   @Expose()
@@ -62,11 +66,11 @@ class Preference {
   @ApiProperty({ type: [PreferenceLink] })
   links?: PreferenceLink[] | null
 
-  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.preference)
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => ListingPreference)
-  listingPreferences: ListingPreference[]
+  @ManyToOne(() => Listing, (listing) => listing.preferences, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
+  listing: Listing
 
   @Column({ type: "jsonb", nullable: true })
   @Expose()
@@ -75,11 +79,11 @@ class Preference {
   @Type(() => FormMetadata)
   formMetadata?: FormMetadata
 
-  @ManyToMany(() => Jurisdiction, (jurisdiction) => jurisdiction.preferences)
+  @Column({ type: "integer", nullable: true })
   @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Jurisdiction)
-  jurisdictions: Jurisdiction[]
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  page?: number | null
 }
 
 export { Preference as default, Preference }

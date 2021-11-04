@@ -14,7 +14,6 @@ import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.modul
 import { Repository } from "typeorm"
 import { Program } from "../../src/program/entities/program.entity"
 import { Language } from "../../src/shared/types/language-enum"
-import { Preference } from "../../src/preferences/entities/preference.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -25,7 +24,6 @@ jest.setTimeout(30000)
 describe("Jurisdictions", () => {
   let app: INestApplication
   let adminAccesstoken: string
-  let preferencesRepository: Repository<Preference>
   let programsRepository: Repository<Program>
 
   beforeAll(async () => {
@@ -37,7 +35,7 @@ describe("Jurisdictions", () => {
         TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         JurisdictionsModule,
-        TypeOrmModule.forFeature([Preference, Program]),
+        TypeOrmModule.forFeature([Program]),
       ],
     })
       .overrideProvider(EmailService)
@@ -47,7 +45,6 @@ describe("Jurisdictions", () => {
     app = applicationSetup(app)
     await app.init()
     adminAccesstoken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-    preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
     programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
   })
 
@@ -59,13 +56,7 @@ describe("Jurisdictions", () => {
     expect(Array.isArray(res.body)).toBe(true)
   })
 
-  it(`should create and return a new jurisdiction with a preference`, async () => {
-    const newPreference = await preferencesRepository.save({
-      title: "TestTitle",
-      subtitle: "TestSubtitle",
-      description: "TestDescription",
-      links: [],
-    })
+  it(`should create and return a new jurisdiction`, async () => {
     const newProgram = await programsRepository.save({
       question: "TestQuestion",
       subtitle: "TestSubtitle",
@@ -75,22 +66,11 @@ describe("Jurisdictions", () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({
-        name: "test",
-        languages: [Language.en],
-        preferences: [newPreference],
-        programs: [newProgram],
-      })
+      .send({ name: "test", programs: [newProgram], languages: [Language.en] })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
-    expect(res.body).toHaveProperty("name")
-    expect(res.body).toHaveProperty("preferences")
-    expect(res.body.name).toBe("test")
-    expect(Array.isArray(res.body.preferences)).toBe(true)
-    expect(res.body.preferences.length).toBe(1)
-    expect(res.body.preferences[0].id).toBe(newPreference.id)
     expect(res.body).toHaveProperty("programs")
     expect(Array.isArray(res.body.programs)).toBe(true)
     expect(res.body.programs.length).toBe(1)
@@ -99,8 +79,6 @@ describe("Jurisdictions", () => {
     const getById = await supertest(app.getHttpServer())
       .get(`/jurisdictions/${res.body.id}`)
       .expect(200)
-    expect(getById.body.name).toBe("test")
-    expect(getById.body.preferences[0].id).toBe(newPreference.id)
     expect(getById.body.programs[0].id).toBe(newProgram.id)
   })
 
@@ -108,8 +86,7 @@ describe("Jurisdictions", () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", languages: [Language.en], preferences: [] })
-      .send({ name: "test2", programs: [], languages: [Language.en], preferences: [] })
+      .send({ name: "test2", programs: [], languages: [Language.en] })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")

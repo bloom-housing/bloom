@@ -15,7 +15,7 @@ describe("applications/preferences/all", function () {
     cy.fixture("listing.json")
       .as("listing")
       .then((listing) => {
-        const preferences = listing.listingPreferences
+        const preferences = listing.preferences
 
         cy.loadConfig(
           {
@@ -35,14 +35,23 @@ describe("applications/preferences/all", function () {
 
   it("Should show error alert when there are no preferences selected", function () {
     cy.goNext()
+
+    cy.checkErrorAlert("be.visible")
+  })
+
+  it("Should show error alert when address preference is selected and fields are empty", function () {
+    cy.getByID(liveWorkLiveId).check()
+
+    cy.getByID(displacedTenantGeneralId).check()
+
     cy.goNext()
+
     cy.checkErrorAlert("be.visible")
   })
 
   it("Should save values and redirect to the next step (claimed for at least one preference)", function () {
     cy.getByID(liveWorkLiveId).check()
     cy.getByID(liveWorkWorkId).check()
-    cy.goNext()
     cy.getByID("application.preferences.none.displacedTenant-none").check()
 
     cy.goNext()
@@ -54,7 +63,6 @@ describe("applications/preferences/all", function () {
 
   it("Should save values and redirect to the general pool (not claimed for any preference)", function () {
     cy.getByID("application.preferences.none.liveWork-none").check()
-    cy.goNext()
     cy.getByID("application.preferences.none.displacedTenant-none").check()
 
     cy.goNext()
@@ -66,10 +74,10 @@ describe("applications/preferences/all", function () {
   it("Should save values", function () {
     cy.getByID(liveWorkLiveId).check()
     cy.getByID(liveWorkWorkId).check()
-    cy.goNext()
+
     // fill Displaced Tenant preference
     cy.getByID(displacedTenantGeneralId).check()
-    cy.getByID("application.preferences.options.displacedTenant.general.name").type(
+    cy.getByID("application.preferences.options.displacedTenant.general.name").select(
       this.data["claimant"]
     )
     cy.getByID("application.preferences.options.displacedTenant.general.address.street").type(
@@ -90,7 +98,7 @@ describe("applications/preferences/all", function () {
 
     // fill Mission Corridor
     cy.getByID(displacedTenantMissionId).check()
-    cy.getByID("application.preferences.options.displacedTenant.missionCorridor.name").type(
+    cy.getByID("application.preferences.options.displacedTenant.missionCorridor.name").select(
       this.data["claimant"]
     )
     cy.getByID(
