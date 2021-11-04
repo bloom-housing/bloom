@@ -3722,6 +3722,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  emailSubscription: string
 }
 
 export interface UserBasic {
