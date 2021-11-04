@@ -38,7 +38,7 @@ import { UserProfileController } from "./controllers/user-profile.controller"
     EmailModule,
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
-  exports: [AuthzService, AuthService, UserService, PasswordService],
+  exports: [AuthzService, AuthService, UserService],
   controllers: [AuthController, UserController, UserProfileController],
 })
 export class AuthModule {}

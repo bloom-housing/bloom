@@ -48,8 +48,7 @@
     "clean": "rm -rf backend/core/dist/ backend/core/node_modules/ node_modules/ sites/partners/.next/ sites/partners/node_modules/ sites/public/.next/ sites/public/node_modules/ ui-components/node_modules/"
   },
   "dependencies": {
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10",
-    "twilio": "^3.70.0"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.10"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

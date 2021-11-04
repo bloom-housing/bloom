@@ -35,7 +35,7 @@ describe("SmsController", () => {
       await expect(
         controller.send(
           { user: { roles: { isAdmin: false } } },
-          { body: "test body", userEmail: "test@example.com" }
+          { body: "test body", phoneNumber: "+15555555555" }
         )
       ).rejects.toThrow(HttpException)
     })
@@ -43,12 +43,12 @@ describe("SmsController", () => {
     it("as admin sends to service", async () => {
       await controller.send(
         { user: { roles: { isAdmin: true } } },
-        { body: "test body", userEmail: "test@example.com" }
+        { body: "test body", phoneNumber: "+15555555555" }
       )
 
       expect(mockedSmsService.send).toHaveBeenCalledWith({
         body: "test body",
-        userEmail: "test@example.com",
+        phoneNumber: "+15555555555",
       })
     })
   })

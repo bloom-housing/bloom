@@ -34,7 +34,7 @@ export class SmsController {
   async send(@Request() req, @Body() dto: SmsDto): Promise<StatusDto> {
     // Only admins are allowed to send SMS messages.
     if (!new AuthContext(req.user as User).user.roles?.isAdmin) {
-      throw new HttpException("Only administrators can sent SMS messages.", HttpStatus.FORBIDDEN)
+      throw new HttpException("Only administrators can send SMS messages.", HttpStatus.FORBIDDEN)
     }
     return await this.smsService.send(dto)
   }

@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsEmail, IsString } from "class-validator"
+import { IsPhoneNumber, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
 export class SmsDto {
@@ -8,6 +8,6 @@ export class SmsDto {
   body: string
 
   @Expose()
-  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
-  userEmail: string
+  @IsPhoneNumber("US", { groups: [ValidationsGroupsEnum.default] })
+  phoneNumber: string
 }
