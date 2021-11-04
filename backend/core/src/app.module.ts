@@ -16,7 +16,6 @@ import { AuthModule } from "./auth/auth.module"
 
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
 import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
@@ -46,7 +45,7 @@ export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
   app.enableCors()
   app.use(logger)
-  app.useGlobalFilters(new EntityNotFoundExceptionFilter(), new CatchAllFilter(httpAdapter))
+  app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
   app.useGlobalInterceptors(
