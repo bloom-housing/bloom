@@ -55,7 +55,7 @@ const ApplicationTerms = () => {
         },
       })
       .then((result) => {
-        conductor.currentStep.save({ confirmationId: result.confirmationCode })
+        conductor.currentStep.save({ confirmationCode: result.confirmationCode })
         return router.push("/applications/review/confirmation")
       })
       .catch((err) => {

@@ -31,6 +31,6 @@ describe("applications/review/terms", function () {
 
     cy.location("pathname").should("include", "applications/review/confirmation")
 
-    cy.getByID("confirmationId").should("be.visible").and("not.be.empty")
+    cy.getByID("confirmationCode").should("be.visible").and("not.be.empty")
   })
 })
