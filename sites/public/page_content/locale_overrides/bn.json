@@ -20,5 +20,8 @@
   "leasingAgent": {
     "contact": "ব্যবস্থাপনা কোম্পানি",
     "dueToHighCallVolume": ""
+  },
+  "listingFilters": {
+    "resetButton": "সমস্ত তালিকা দেখুন"
   }
 }

@@ -20,5 +20,8 @@
   "leasingAgent": {
     "contact": "Empresa de gestión",
     "dueToHighCallVolume": ""
+  },
+  "listingFilters": {
+    "resetButton": "Ver Todos los Listados"
   }
 }

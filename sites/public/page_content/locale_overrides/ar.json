@@ -20,5 +20,8 @@
   "leasingAgent": {
     "contact": "شركة إدارة",
     "dueToHighCallVolume": ""
+  },
+  "listingFilters": {
+    "resetButton": "انظر جميع القوائم"
   }
 }
