@@ -11,8 +11,9 @@ import {
 
 import {
   TimeFieldPeriod,
-  mapPreferencesToApi,
-  mapApiToPreferencesForm,
+  mapPreferencesOrProgramsToApi,
+  mapApiToPreferencesOrProgramsForm,
+  FormPreferencesType,
 } from "@bloom-housing/ui-components"
 import {
   FormTypes,
@@ -111,7 +112,8 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     }
   })()
 
-  const preferences = mapPreferencesToApi(data)
+  const preferences = mapPreferencesOrProgramsToApi(data, FormPreferencesType.Preferences)
+  const programs = mapPreferencesOrProgramsToApi(data, FormPreferencesType.Programs)
 
   // additional phone
   const {
@@ -179,6 +181,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     householdExpectingChanges,
     householdStudent,
     preferences,
+    programs,
     income,
     incomePeriod,
     incomeVouchers,
@@ -251,7 +254,8 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
   const phoneNumber = applicationData.applicant.phoneNumber
 
-  const preferences = mapApiToPreferencesForm(applicationData.preferences)
+  const preferences = mapApiToPreferencesOrProgramsForm(applicationData.preferences)
+  const programs = mapApiToPreferencesOrProgramsForm(applicationData.programs)
 
   const application: ApplicationTypes = (() => {
     const {
@@ -288,6 +292,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       additionalPhoneNumber,
       additionalPhoneNumberType,
       preferences,
+      programs,
       contactPreferences,
       sendMailToMailingAddress,
       mailingAddress,

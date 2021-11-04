@@ -12,13 +12,14 @@ import {
   Button,
   AppearanceStyleType,
   resolveObject,
-  mapPreferencesToApi,
-  mapApiToPreferencesForm,
-  getPreferenceOptionName,
-  getExclusivePreferenceOptionName,
+  mapPreferencesOrProgramsToApi,
+  mapApiToPreferencesOrProgramsForm,
+  getPreferenceOrProgramOptionName,
+  getExclusiveOptionName,
   OnClientSide,
   getExclusiveKeys,
   setExclusive,
+  FormPreferencesType,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -41,20 +42,22 @@ const ApplicationPreferencesAll = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, handleSubmit, errors, getValues, reset, trigger } = useForm({
     defaultValues: {
-      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+      application: { preferences: mapApiToPreferencesOrProgramsForm(applicationPreferences) },
     },
   })
 
-  const [exclusiveKeys, setExclusiveKeys] = useState(getExclusiveKeys(preferencesByPage))
+  const [exclusiveKeys, setExclusiveKeys] = useState(
+    getExclusiveKeys(preferencesByPage, FormPreferencesType.Preferences)
+  )
 
   /*
     Required to keep the form up to date before submitting this section if you're moving between pages
   */
   useEffect(() => {
     reset({
-      application: { preferences: mapApiToPreferencesForm(applicationPreferences) },
+      application: { preferences: mapApiToPreferencesOrProgramsForm(applicationPreferences) },
     })
-    setExclusiveKeys(getExclusiveKeys(preferencesByPage))
+    setExclusiveKeys(getExclusiveKeys(preferencesByPage, FormPreferencesType.Preferences))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, applicationPreferences, reset])
 
@@ -72,11 +75,20 @@ const ApplicationPreferencesAll = () => {
       const preferenceName = item.preference.formMetadata?.key
       const optionPaths = item.preference.formMetadata?.options
         ? item.preference.formMetadata.options.map((option) => {
-            return getPreferenceOptionName(option.key, preferenceName)
+            return getPreferenceOrProgramOptionName(
+              option.key,
+              preferenceName,
+              FormPreferencesType.Preferences
+            )
           })
         : []
       if (item.preference.formMetadata && !item.preference.formMetadata?.hideGenericDecline) {
-        optionPaths.push(getExclusivePreferenceOptionName(item?.preference.formMetadata?.key))
+        optionPaths.push(
+          getExclusiveOptionName(
+            item?.preference.formMetadata?.key,
+            FormPreferencesType.Preferences
+          )
+        )
       }
 
       Object.assign(acc, {
@@ -91,7 +103,7 @@ const ApplicationPreferencesAll = () => {
     Submits the form
   */
   const onSubmit = (data) => {
-    const body = mapPreferencesToApi(data)
+    const body = mapPreferencesOrProgramsToApi(data, FormPreferencesType.Preferences)
     if (preferences.length > 1 && body) {
       // If we've got more than one preference, save the data in segments
       const currentPreferences = conductor.currentStep.application.preferences.filter(
@@ -123,7 +135,11 @@ const ApplicationPreferencesAll = () => {
     preferencesByPage?.forEach((listingPreference) =>
       listingPreference.preference?.formMetadata?.options.forEach((option) => {
         keys.push(
-          getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata?.key)
+          getPreferenceOrProgramOptionName(
+            option.key,
+            listingPreference.preference?.formMetadata?.key,
+            FormPreferencesType.Preferences
+          )
         )
       })
     )
@@ -197,8 +213,23 @@ const ApplicationPreferencesAll = () => {
                   void trigger()
                 }
                 if (exclusive && e.target.checked)
-                  setExclusive(true, setValue, exclusiveKeys, optionName, preference)
-                if (!exclusive) setExclusive(false, setValue, exclusiveKeys, optionName, preference)
+                  setExclusive(
+                    true,
+                    setValue,
+                    exclusiveKeys,
+                    optionName,
+                    preference,
+                    FormPreferencesType.Preferences
+                  )
+                if (!exclusive)
+                  setExclusive(
+                    false,
+                    setValue,
+                    exclusiveKeys,
+                    optionName,
+                    preference,
+                    FormPreferencesType.Preferences
+                  )
               },
             }}
             validation={{
@@ -244,6 +275,7 @@ const ApplicationPreferencesAll = () => {
               errors={errors}
               hhMembersOptions={hhMmembersOptions}
               stateKeys={stateKeys}
+              formType={FormPreferencesType.Preferences}
             />
           ))}
       </div>
@@ -307,9 +339,10 @@ const ApplicationPreferencesAll = () => {
                       {listingPreference.preference?.formMetadata?.options?.map((option) => {
                         return getOption(
                           option.key,
-                          getPreferenceOptionName(
+                          getPreferenceOrProgramOptionName(
                             option.key,
-                            listingPreference.preference.formMetadata.key
+                            listingPreference.preference.formMetadata.key,
+                            FormPreferencesType.Preferences
                           ),
                           option.description,
                           option.exclusive,
@@ -323,8 +356,9 @@ const ApplicationPreferencesAll = () => {
                         !listingPreference.preference.formMetadata.hideGenericDecline &&
                         getOption(
                           null,
-                          getExclusivePreferenceOptionName(
-                            listingPreference.preference?.formMetadata?.key
+                          getExclusiveOptionName(
+                            listingPreference.preference?.formMetadata?.key,
+                            FormPreferencesType.Preferences
                           ),
                           false,
                           true,

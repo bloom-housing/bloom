@@ -3,14 +3,15 @@ import {
   Field,
   t,
   ExtraField,
-  getPreferenceOptionName,
+  getPreferenceOrProgramOptionName,
   GridSection,
   ViewItem,
   GridCell,
   SelectOption,
-  getExclusivePreferenceOptionName,
+  getExclusiveOptionName,
   getExclusiveKeys,
   setExclusive,
+  FormPreferencesType,
 } from "@bloom-housing/ui-components"
 
 import { useFormContext } from "react-hook-form"
@@ -43,7 +44,11 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
     preferences?.forEach((listingPreference) =>
       listingPreference.preference?.formMetadata?.options.forEach((option) =>
         keys.push(
-          getPreferenceOptionName(option.key, listingPreference.preference?.formMetadata.key)
+          getPreferenceOrProgramOptionName(
+            option.key,
+            listingPreference.preference?.formMetadata.key,
+            FormPreferencesType.Preferences
+          )
         )
       )
     )
@@ -53,7 +58,7 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
 
   const watchPreferences = watch(allOptionFieldNames)
 
-  const exclusiveKeys = getExclusiveKeys(preferences)
+  const exclusiveKeys = getExclusiveKeys(preferences, FormPreferencesType.Preferences)
 
   if (!hasMetaData) {
     return null
@@ -83,10 +88,24 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
           inputProps={{
             onChange: (e) => {
               if (exclusive && e.target.checked) {
-                setExclusive(true, setValue, exclusiveKeys, optionName, preference)
+                setExclusive(
+                  true,
+                  setValue,
+                  exclusiveKeys,
+                  optionName,
+                  preference,
+                  FormPreferencesType.Preferences
+                )
               }
               if (!exclusive) {
-                setExclusive(false, setValue, exclusiveKeys, optionName, preference)
+                setExclusive(
+                  false,
+                  setValue,
+                  exclusiveKeys,
+                  optionName,
+                  preference,
+                  FormPreferencesType.Preferences
+                )
               }
             },
           }}
@@ -102,6 +121,7 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
               register={register}
               hhMembersOptions={hhMembersOptions}
               stateKeys={stateKeys}
+              formType={FormPreferencesType.Preferences}
             />
           ))}
       </React.Fragment>
@@ -125,9 +145,10 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
                   {listingPreference.preference?.formMetadata?.options?.map((option) => {
                     return getOption(
                       option.key,
-                      getPreferenceOptionName(
+                      getPreferenceOrProgramOptionName(
                         option.key,
-                        listingPreference.preference?.formMetadata?.key
+                        listingPreference.preference?.formMetadata?.key,
+                        FormPreferencesType.Preferences
                       ),
                       option.exclusive,
                       option.extraData,
@@ -139,8 +160,9 @@ const FormPreferences = ({ county, preferences, hhMembersOptions }: FormPreferen
                     !listingPreference.preference.formMetadata.hideGenericDecline &&
                     getOption(
                       null,
-                      getExclusivePreferenceOptionName(
-                        listingPreference.preference?.formMetadata?.key
+                      getExclusiveOptionName(
+                        listingPreference.preference?.formMetadata?.key,
+                        FormPreferencesType.Preferences
                       ),
                       true,
                       [],

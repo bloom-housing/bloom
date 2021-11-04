@@ -2,9 +2,12 @@ import React from "react"
 import {
   InputType,
   ApplicationPreference,
+  ApplicationProgram,
   FormMetadataOptions,
   Preference,
+  Program,
   ListingPreference,
+  ListingProgram,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -28,6 +31,7 @@ type ExtraFieldProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hhMembersOptions?: SelectOption[]
   stateKeys: string[]
+  formType: FormPreferencesType
 }
 
 type FormAddressProps = {
@@ -48,13 +52,19 @@ type AddressType =
   | "alternate"
   | "preference"
 
+export enum FormPreferencesType {
+  Preferences = "preferences",
+  Programs = "programs",
+}
+
 /*
-  Path to the preferences from listing object
+  Path to the preferences/programs from the listing object
 */
-export const PREFERENCES_FORM_PATH = "application.preferences.options"
-export const PREFERENCES_NONE_FORM_PATH = "application.preferences.none"
+const createFormOptionPath = (type: FormPreferencesType) => `application.${type}.options`
+const createFormNoneOptionPath = (type: FormPreferencesType) => `application.${type}.none`
+
 /*
-  It generates inner fields for preferences form
+  It generates inner fields for preferences/programs form
 */
 export const ExtraField = ({
   metaKey,
@@ -65,8 +75,16 @@ export const ExtraField = ({
   errors,
   hhMembersOptions,
   stateKeys,
+  formType,
 }: ExtraFieldProps) => {
-  const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
+  const FORM_PATH = createFormOptionPath(formType)
+
+  const TRANSLATION_PATH =
+    formType === FormPreferencesType.Preferences
+      ? `application.preferences.options`
+      : `application.programs.options`
+
+  const FIELD_NAME = `${FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
 
   return (
     <div className="my-4" key={FIELD_NAME}>
@@ -77,7 +95,7 @@ export const ExtraField = ({
               id={FIELD_NAME}
               name={FIELD_NAME}
               type="text"
-              label={t(`application.preferences.options.${extraKey}`)}
+              label={t(`${TRANSLATION_PATH}.${extraKey}`)}
               register={register}
               validation={{ required: true }}
               error={!!resolveObject(FIELD_NAME, errors)}
@@ -88,7 +106,7 @@ export const ExtraField = ({
           return (
             <div className="pb-4">
               <FormAddress
-                subtitle={t("application.preferences.options.address")}
+                subtitle={t(`${TRANSLATION_PATH}.address`)}
                 dataKey={FIELD_NAME}
                 type="preference"
                 register={register}
@@ -105,7 +123,7 @@ export const ExtraField = ({
                 id={FIELD_NAME}
                 name={FIELD_NAME}
                 type="text"
-                label={t(`application.preferences.options.${extraKey}`)}
+                label={t(`${TRANSLATION_PATH}.${extraKey}`)}
                 register={register}
                 validation={{ required: true }}
                 error={!!resolveObject(FIELD_NAME, errors)}
@@ -118,7 +136,7 @@ export const ExtraField = ({
               <Select
                 id={FIELD_NAME}
                 name={FIELD_NAME}
-                label={t(`application.preferences.options.${extraKey}`)}
+                label={t(`${TRANSLATION_PATH}.${extraKey}`)}
                 register={register}
                 controlClassName="control"
                 placeholder={t("t.selectOne")}
@@ -242,24 +260,37 @@ export const FormAddress = ({
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mapPreferencesToApi = (data: Record<string, any>) => {
-  if (!data.application?.preferences) return []
+export const mapPreferencesOrProgramsToApi = (
+  data: Record<string, any>,
+  type: FormPreferencesType
+) => {
+  if (type === FormPreferencesType.Preferences) {
+    if (!data.application?.preferences) return []
+  } else {
+    if (!data.application?.programs) return []
+  }
 
   const CLAIMED_KEY = "claimed"
 
-  const preferencesFormData = data.application.preferences.options
+  const formData = (() => {
+    if (type === FormPreferencesType.Preferences) {
+      return data.application.preferences.options
+    }
 
-  const keys = Object.keys(preferencesFormData)
+    return data.application.programs.options
+  })()
+
+  const keys = Object.keys(formData)
 
   return keys.map((key) => {
-    const currentPreference = preferencesFormData[key]
+    const currentItem = formData[key]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const currentPreferenceValues = Object.values(currentPreference) as Record<string, any>
+    const currentItemValues = Object.values(currentItem) as Record<string, any>
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const claimed = currentPreferenceValues.map((c: { claimed: any }) => c.claimed).includes(true)
+    const claimed = currentItemValues.map((c: { claimed: any }) => c.claimed).includes(true)
 
-    const options = Object.keys(currentPreference).map((option) => {
-      const currentOption = currentPreference[option]
+    const options = Object.keys(currentItem).map((option) => {
+      const currentOption = currentItem[option]
 
       // count keys except claimed
       const extraKeys = Object.keys(currentOption).filter((item) => item !== CLAIMED_KEY)
@@ -304,10 +335,13 @@ export const mapPreferencesToApi = (data: Record<string, any>) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) => {
-  const preferencesFormData = {}
+export const mapApiToPreferencesOrProgramsForm = (
+  data: ApplicationPreference[] | ApplicationProgram[]
+) => {
+  if (!data) return {}
+  const formData = {}
 
-  preferences.forEach((item) => {
+  data.forEach((item) => {
     const options = item.options.reduce((acc, curr) => {
       // extraData which comes from the API is an array, in the form we expect an object
       const extraData =
@@ -333,12 +367,12 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
       return acc
     }, {})
 
-    Object.assign(preferencesFormData, {
+    Object.assign(formData, {
       [item.key]: options,
     })
   })
 
-  const noneValues = preferences.reduce((acc, item) => {
+  const noneValues = data.reduce((acc, item) => {
     const isClaimed = item.claimed
 
     Object.assign(acc, {
@@ -348,23 +382,28 @@ export const mapApiToPreferencesForm = (preferences: ApplicationPreference[]) =>
     return acc
   }, {})
 
-  return { options: preferencesFormData, none: noneValues }
+  return { options: formData, none: noneValues }
 }
 
 /*
-  It generates checkbox name in proper prefrences structure
+  It generates checkbox name in proper preferences/programs structure
 */
-export const getPreferenceOptionName = (key: string, metaKey: string, noneOption?: boolean) => {
-  if (noneOption) return getExclusivePreferenceOptionName(key)
-  else return getNormalPreferenceOptionName(metaKey, key)
+export const getPreferenceOrProgramOptionName = (
+  key: string,
+  metaKey: string,
+  formType: FormPreferencesType,
+  noneOption?: boolean
+) => {
+  if (noneOption) return getExclusiveOptionName(key, createFormNoneOptionPath(formType))
+  else return getNormalOptionName(metaKey, key, createFormOptionPath(formType))
 }
 
-export const getNormalPreferenceOptionName = (metaKey: string, key: string) => {
-  return `${PREFERENCES_FORM_PATH}.${metaKey}.${key}.claimed`
+export const getNormalOptionName = (metaKey: string, key: string, path: string) => {
+  return `${path}.${metaKey}.${key}.claimed`
 }
 
-export const getExclusivePreferenceOptionName = (key: string | undefined) => {
-  return `${PREFERENCES_NONE_FORM_PATH}.${key}-none`
+export const getExclusiveOptionName = (key: string | undefined, path: string) => {
+  return `${path}.${key}-none`
 }
 
 export type ExclusiveKey = {
@@ -374,37 +413,42 @@ export type ExclusiveKey = {
 /*
   Create an array of all exclusive keys from a preference set
 */
-export const getExclusiveKeys = (preferences: ListingPreference[]) => {
+export const getExclusiveKeys = (
+  preferences: ListingPreference[] | ListingProgram[],
+  formType: FormPreferencesType
+) => {
+  const KEY = formType === FormPreferencesType.Preferences ? "preference" : "program"
+
   const exclusive: ExclusiveKey[] = []
   preferences?.forEach((listingPreference) => {
-    listingPreference.preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
+    listingPreference[KEY]?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
       if (option.exclusive)
         exclusive.push({
-          optionKey: getPreferenceOptionName(
+          optionKey: getPreferenceOrProgramOptionName(
             option.key,
-            listingPreference.preference?.formMetadata?.key ?? ""
+            listingPreference[KEY]?.formMetadata?.key ?? "",
+            formType
           ),
-          preferenceKey: listingPreference.preference?.formMetadata?.key,
+          preferenceKey: listingPreference[KEY]?.formMetadata?.key,
         })
     })
-    if (!listingPreference.preference?.formMetadata?.hideGenericDecline)
+    if (!listingPreference[KEY]?.formMetadata?.hideGenericDecline)
       exclusive.push({
-        optionKey: getExclusivePreferenceOptionName(
-          listingPreference.preference?.formMetadata?.key
-        ),
-        preferenceKey: listingPreference.preference?.formMetadata?.key,
+        optionKey: getExclusiveOptionName(listingPreference[KEY]?.formMetadata?.key, formType),
+        preferenceKey: listingPreference[KEY]?.formMetadata?.key,
       })
   })
   return exclusive
 }
 
-const uncheckPreference = (
+const uncheckOption = (
   metaKey: string,
   options: FormMetadataOptions[] | undefined,
-  setValue: (key: string, value: boolean) => void
+  setValue: (key: string, value: boolean) => void,
+  formType: FormPreferencesType
 ) => {
   options?.forEach((option) => {
-    setValue(getPreferenceOptionName(option.key, metaKey), false)
+    setValue(getPreferenceOrProgramOptionName(option.key, metaKey, formType), false)
   })
 }
 
@@ -416,21 +460,22 @@ export const setExclusive = (
   setValue: (key: string, value: boolean) => void,
   exclusiveKeys: ExclusiveKey[],
   key: string,
-  preference: Preference
+  option: Preference | Program,
+  formType: FormPreferencesType
 ) => {
   if (value) {
     // Uncheck all other keys if setting an exclusive key to true
-    uncheckPreference(
-      preference?.formMetadata?.key ?? "",
-      preference?.formMetadata?.options,
-      setValue
+    uncheckOption(
+      option?.formMetadata?.key ?? "",
+      option?.formMetadata?.options,
+      setValue,
+      formType
     )
     setValue(key ?? "", true)
   } else {
     // Uncheck all exclusive keys if setting a normal key to true
     exclusiveKeys.forEach((thisKey) => {
-      if (thisKey.preferenceKey === preference?.formMetadata?.key)
-        setValue(thisKey.optionKey, false)
+      if (thisKey.preferenceKey === option?.formMetadata?.key) setValue(thisKey.optionKey, false)
     })
   }
 }
