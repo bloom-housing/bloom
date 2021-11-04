@@ -25,6 +25,7 @@ describe("SmsService", () => {
       ],
     }).compile()
 
+    mockedTwilioService.send = jest.fn().mockResolvedValue({ errorCode: 0 })
     service = await module.resolve<SmsService>(SmsService)
   })
 
@@ -37,6 +38,17 @@ describe("SmsService", () => {
       await service.send({ phoneNumber: "+15555555555", body: "test body" })
 
       expect(mockedTwilioService.send).toHaveBeenCalledWith("test body", "+15555555555")
+    })
+
+    it("throws an exception when Twilio errors out", async () => {
+      mockedTwilioService.send.mockResolvedValue({
+        errorCode: 1,
+        errorMessage: "test error message",
+      })
+
+      await expect(
+        service.send({ phoneNumber: "+15555555555", body: "test body" })
+      ).rejects.toThrow(HttpException)
     })
   })
 })
