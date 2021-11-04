@@ -447,7 +447,7 @@ describe("Applications", () => {
       ...userCreateDto,
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
-      phoneNumber: "+11234567890",
+      phoneNumber: "+12025550194",
     }
 
     await supertest(app.getHttpServer())
