@@ -20,5 +20,8 @@
   "leasingAgent": {
     "contact": "Management Company",
     "dueToHighCallVolume": ""
+  },
+  "listingFilters": {
+    "resetButton": "See All Listings"
   }
 }
