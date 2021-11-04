@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.4...@bloom-housing/backend-core@2.0.1-alpha.5) (2021-11-04)
+
+
+### Bug Fixes
+
+* **backend:** make it possible to filter portal users in /users endpoint ([#2078](https://github.com/bloom-housing/bloom/issues/2078)) ([29bf714](https://github.com/bloom-housing/bloom/commit/29bf714d28755916ec8ec896366c8c32c3a227c4))
+
+
+
+
+
 ## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.3...@bloom-housing/backend-core@2.0.1-alpha.4) (2021-11-04)
 
 
