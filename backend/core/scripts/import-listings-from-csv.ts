@@ -164,6 +164,7 @@ async function main() {
       unitsSummary: unitsSummaries,
       jurisdictionName: "Detroit",
       reservedCommunityTypeName: reservedCommunityTypeName,
+      neighborhood: listingFields["Neighborhood"],
 
       // The following fields are only set because they are required
       units: [],
