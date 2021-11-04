@@ -177,17 +177,19 @@ export default function Home({ latestListings }) {
       )}
       <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
       {/* TODO(#672): Translate title */}
-      <HorizontalScrollSection
-        title="Latest listings"
-        subtitle={getLastUpdatedString(latestListings.items)}
-        scrollAmount={560}
-        icon="clock"
-        className={styles["latest-listings"]}
-      >
-        {latestListings.items.map((listing) => {
-          return <LatestListingsLink key={listing.id} listing={listing} />
-        })}
-      </HorizontalScrollSection>
+      {latestListings && latestListings.items && (
+        <HorizontalScrollSection
+          title="Latest listings"
+          subtitle={getLastUpdatedString(latestListings.items)}
+          scrollAmount={560}
+          icon="clock"
+          className={styles["latest-listings"]}
+        >
+          {latestListings.items.map((listing) => {
+            return <LatestListingsLink key={listing.id} listing={listing} />
+          })}
+        </HorizontalScrollSection>
+      )}
       {/* TODO(#674): Translate title*/}
       <HorizontalScrollSection
         title="Neighborhoods"
