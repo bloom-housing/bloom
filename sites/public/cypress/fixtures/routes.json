@@ -11,6 +11,7 @@
   "addMembers": "/applications/household/add-members",
   "preferredUnitSize": "/applications/household/preferred-units",
   "adaHouseholdMembers": "/applications/household/ada",
+  "programs": "/applications/household/programs",
   "householdChanges": "/applications/household/changes",
   "householdStudent": "/applications/household/student",
   "vouchersSubsidies": "/applications/financial/vouchers",

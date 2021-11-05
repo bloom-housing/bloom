@@ -143,6 +143,19 @@
       ]
     }
   ],
+  "programs": [
+    {
+      "key": "servedInMilitary",
+      "claimed": true,
+      "options": [
+        {
+          "key": "servedInMilitary",
+          "checked": true,
+          "extraData": []
+        }
+      ]
+    }
+  ],
   "confirmationCode": "",
   "status": "submitted",
   "submissionType": "electronical",
