@@ -1,6 +1,5 @@
 import { PropertyCreateDto } from "../../property/dto/property.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
-import { PreferenceCreateDto } from "../../preferences/dto/preference.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
 import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
@@ -8,6 +7,7 @@ import { BaseEntity } from "typeorm"
 import { UserCreateDto } from "../../auth/dto/user-create.dto"
 import { ListingPublishedCreateDto } from "../../listings/dto/listing-published-create.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
+import { PreferenceCreateDto } from "../../preferences/dto/preference-create.dto"
 import { ProgramCreateDto } from "../../program/dto/program-create.dto"
 
 export type PropertySeedType = Omit<
@@ -59,7 +59,7 @@ export type ListingSeedType = Omit<
   jurisdictionName: string
 }
 
-export type PreferenceSeedType = Omit<PreferenceCreateDto, "listing">
+export type PreferenceSeedType = PreferenceCreateDto
 export type ProgramSeedType = Omit<ProgramCreateDto, "listing">
 
 export type AssetDtoSeedType = Omit<AssetCreateDto, "listing">

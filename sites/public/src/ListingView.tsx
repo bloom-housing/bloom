@@ -147,14 +147,33 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  if (listing.preferences && listing.preferences.length > 0) {
+  const getPreferenceData = () => {
+    return listing.listingPreferences
+      .filter((listingPref) => {
+        return (
+          !listingPref.preference.formMetadata ||
+          !listingPref.preference.formMetadata.hideFromListing
+        )
+      })
+      .map((listingPref, index) => {
+        return {
+          ordinal: index + 1,
+          links: listingPref.preference.links,
+          title: listingPref.preference.title,
+          subtitle: listingPref.preference.subtitle,
+          description: listingPref.preference.description,
+        }
+      })
+  }
+
+  if (listing.listingPreferences && listing.listingPreferences.length > 0) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}
         subtitle={t("listings.sections.housingPreferencesSubtitle")}
       >
         <>
-          <PreferencesList preferences={listing.preferences} />
+          <PreferencesList listingPreferences={getPreferenceData()} />
           <p className="text-gray-700 text-tiny">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>

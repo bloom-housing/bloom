@@ -935,6 +935,7 @@
     "isDigitalApplication": "Is there a digital application?",
     "isPaperApplication": "Is there a paper application?",
     "isReferralOpportunity": "Is there a referral opportunity?",
+    "selectJurisdiction": "You must first select a jurisdiction",
     "latitude": "Latitude",
     "leasingAgentAddress": "Leasing Agent Address",
     "listingPreviewOnly": "This is a listing preview only.",
