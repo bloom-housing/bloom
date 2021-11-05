@@ -3,6 +3,133 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@2.0.1-alpha.9...@bloom-housing/public@3.0.0) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.8...@bloom-housing/public@2.0.1-alpha.9) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.7...@bloom-housing/public@2.0.1-alpha.8) (2021-11-04)
+
+
+### Reverts
+
+* Revert "refactor: listing preferences and adds jurisdictional filtering" ([41f72c0](https://github.com/bloom-housing/bloom/commit/41f72c0db49cf94d7930f5cfc88f6ee9d6040986))
+
+
+
+
+
+## [2.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.6...@bloom-housing/public@2.0.1-alpha.7) (2021-11-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.5...@bloom-housing/public@2.0.1-alpha.6) (2021-11-04)
+
+
+### Features
+
+* Updates application confirmation numbers ([#2072](https://github.com/bloom-housing/bloom/issues/2072)) ([75cd67b](https://github.com/bloom-housing/bloom/commit/75cd67bcb62280936bdeeaee8c9b7b2583a1339d))
+
+
+
+
+
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.4...@bloom-housing/public@2.0.1-alpha.5) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.3...@bloom-housing/public@2.0.1-alpha.4) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.2...@bloom-housing/public@2.0.1-alpha.3) (2021-11-03)
+
+
+### Bug Fixes
+
+* SiteHeader visual issues with long menu bars ([#2068](https://github.com/bloom-housing/bloom/issues/2068)) ([fd6686e](https://github.com/bloom-housing/bloom/commit/fd6686e206b4e53ae8b6ab757ad0506eaead0d01))
+
+
+
+
+
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.1...@bloom-housing/public@2.0.1-alpha.2) (2021-11-02)
+
+
+### Bug Fixes
+
+* household member cypress test ([#2113](https://github.com/bloom-housing/bloom/issues/2113)) ([a6cd580](https://github.com/bloom-housing/bloom/commit/a6cd580f042fb8ff3c1cf03bec7198debdf22029))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.1-alpha.0...@bloom-housing/public@2.0.1-alpha.1) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0...@bloom-housing/public@2.0.1-alpha.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+# [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.26...@bloom-housing/public@2.0.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+# [2.0.0-pre-tailwind.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.25...@bloom-housing/public@2.0.0-pre-tailwind.26) (2021-11-02)
+
+
+### Code Refactoring
+
+* listing preferences and adds jurisdictional filtering ([9f661b4](https://github.com/bloom-housing/bloom/commit/9f661b43921ec939bd1bf5709c934ad6f56dd859))
+
+
+### BREAKING CHANGES
+
+* updates preference relationship with listings
+
+
+
+
+
 # [2.0.0-pre-tailwind.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@2.0.0-pre-tailwind.24...@bloom-housing/public@2.0.0-pre-tailwind.25) (2021-11-01)
 
 

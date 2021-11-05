@@ -40,8 +40,8 @@ const ApplicationConfirmation = () => {
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
 
-          <p id="confirmationId" className="font-serif text-3xl my-1">
-            {application.confirmationId}
+          <p id="confirmationCode" className="font-serif text-3xl my-1">
+            {application.confirmationCode || application.id}
           </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>

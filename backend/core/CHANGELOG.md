@@ -3,6 +3,120 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.7...@bloom-housing/backend-core@3.0.0) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [2.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.6...@bloom-housing/backend-core@2.0.1-alpha.7) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [2.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.5...@bloom-housing/backend-core@2.0.1-alpha.6) (2021-11-04)
+
+
+### Reverts
+
+* Revert "refactor: listing preferences and adds jurisdictional filtering" ([41f72c0](https://github.com/bloom-housing/bloom/commit/41f72c0db49cf94d7930f5cfc88f6ee9d6040986))
+
+
+
+
+
+## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.4...@bloom-housing/backend-core@2.0.1-alpha.5) (2021-11-04)
+
+
+### Bug Fixes
+
+* **backend:** make it possible to filter portal users in /users endpoint ([#2078](https://github.com/bloom-housing/bloom/issues/2078)) ([29bf714](https://github.com/bloom-housing/bloom/commit/29bf714d28755916ec8ec896366c8c32c3a227c4))
+
+
+
+
+
+## [2.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.3...@bloom-housing/backend-core@2.0.1-alpha.4) (2021-11-04)
+
+
+### Features
+
+* Updates application confirmation numbers ([#2072](https://github.com/bloom-housing/bloom/issues/2072)) ([75cd67b](https://github.com/bloom-housing/bloom/commit/75cd67bcb62280936bdeeaee8c9b7b2583a1339d))
+
+
+
+
+
+## [2.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.2...@bloom-housing/backend-core@2.0.1-alpha.3) (2021-11-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [2.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.1...@bloom-housing/backend-core@2.0.1-alpha.2) (2021-11-03)
+
+
+### Bug Fixes
+
+* don't send email confirmation on paper app submission ([#2110](https://github.com/bloom-housing/bloom/issues/2110)) ([7f83b70](https://github.com/bloom-housing/bloom/commit/7f83b70327049245ecfba04ae3aea4e967929b2a))
+
+
+
+
+
+## [2.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.1-alpha.0...@bloom-housing/backend-core@2.0.1-alpha.1) (2021-11-03)
+
+
+### Features
+
+* jurisdictional email signatures ([#2111](https://github.com/bloom-housing/bloom/issues/2111)) ([7a146ff](https://github.com/bloom-housing/bloom/commit/7a146ffb5de88cfa2950e2a469a99e38d71b33c8))
+
+
+
+
+
+## [2.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0...@bloom-housing/backend-core@2.0.1-alpha.0) (2021-11-02)
+
+
+### Features
+
+* two new common app questions - Household Changes and Household Student ([#2070](https://github.com/bloom-housing/bloom/issues/2070)) ([42a752e](https://github.com/bloom-housing/bloom/commit/42a752ec073c0f5b65374c7a68da1e34b0b1c949))
+
+
+
+
+
+# [2.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.16...@bloom-housing/backend-core@2.0.0) (2021-11-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+# [2.0.0-pre-tailwind.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.15...@bloom-housing/backend-core@2.0.0-pre-tailwind.16) (2021-11-02)
+
+
+### Code Refactoring
+
+* listing preferences and adds jurisdictional filtering ([9f661b4](https://github.com/bloom-housing/bloom/commit/9f661b43921ec939bd1bf5709c934ad6f56dd859))
+
+
+### BREAKING CHANGES
+
+* updates preference relationship with listings
+
+
+
+
+
 # [2.0.0-pre-tailwind.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@2.0.0-pre-tailwind.14...@bloom-housing/backend-core@2.0.0-pre-tailwind.15) (2021-11-01)
 
 

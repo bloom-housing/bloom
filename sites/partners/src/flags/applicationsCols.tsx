@@ -17,8 +17,8 @@ export const getCols = () => [
     headerCheckboxSelection: true,
     checkboxSelection: true,
     cellRendererFramework: ({ data }) => {
-      if (!data?.id) return ""
-      return <Link href={`/application/${data.id}`}>{data.id}</Link>
+      if (!data?.id && !data?.confirmationCode) return ""
+      return <Link href={`/application/${data.id}`}>{data.confirmationCode || data.id}</Link>
     },
   },
   {

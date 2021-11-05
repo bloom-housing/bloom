@@ -98,7 +98,7 @@ export class ListingDefaultSanJoseSeed {
           ],
         },
       ],
-      name: "Test: Default, Two Preferences",
+      name: "Test: Default, Two Preferences (San Jose)",
       property: property,
       assets: getDefaultAssets(),
       preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],

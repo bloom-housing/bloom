@@ -2,12 +2,12 @@ describe("applications/review/confirmation", function () {
   const route = "/applications/review/confirmation"
 
   beforeEach(() => {
-    cy.loadConfig({}, "applicationConfigFilled.json", { confirmationId: "123" })
+    cy.loadConfig({}, "applicationConfigFilled.json", { confirmationCode: "123" })
     cy.visit(route)
   })
 
-  it("Should show confirmationID", function () {
-    cy.getByID("confirmationId").should("include.text", "123")
+  it("Should show confirmationCode", function () {
+    cy.getByID("confirmationCode").should("include.text", "123")
   })
 
   it("Should redirect to create account page", function () {
