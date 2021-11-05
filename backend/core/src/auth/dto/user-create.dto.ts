@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import { IsEmail, IsOptional, IsString, Matches, MaxLength, ValidateNested } from "class-validator"
+import { IsBoolean, IsEmail, IsOptional, IsString, Matches, MaxLength, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
 import { Match } from "../../shared/decorators/match.decorator"
@@ -45,4 +45,8 @@ export class UserCreateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions?: IdDto[]
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  emailSubscription: boolean
 }
