@@ -58,7 +58,7 @@ const ListingsPage = ({ initialListings }) => {
           size={AppearanceSizeType.small}
           href="/eligibility/welcome"
         >
-          {t("welcome.checkEligibility")}
+          {t("welcome.checkQualifications")}
         </LinkButton>
         <Button
           className="mx-2 mt-6"
