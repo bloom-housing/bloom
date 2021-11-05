@@ -333,6 +333,19 @@ const FormSummaryDetails = ({
           <ViewItem id="householdStudent" label={t("application.household.householdStudent.title")}>
             {application.householdStudent ? t("t.yes") : t("t.no")}
           </ViewItem>
+          {application.programs
+            .filter((item) => item.claimed === true)
+            .map((program) =>
+              program.options
+                .filter((item) => item.checked === true)
+                .map((option, index) => (
+                  <ViewItem label={t(`application.programs.${program.key}.summary`)} key={index}>
+                    {t(`application.programs.${program.key}.${option.key}.label`, {
+                      county: listing?.countyCode,
+                    })}
+                  </ViewItem>
+                ))
+            )}
         </div>
 
         <h3 className="form--card__sub-header">
