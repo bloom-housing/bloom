@@ -1,6 +1,13 @@
 import * as React from "react"
 import { t } from "../../../helpers/translator"
 
+export interface WaitlistProps {
+  isWaitlistOpen: boolean
+  waitlistMaxSize?: number
+  waitlistCurrentSize?: number
+  waitlistOpenSpots?: number
+}
+
 const WaitlistItem = (props: { className?: string; value: number; text: string }) => {
   return props.value ? (
     <li className={`uppercase text-gray-800 text-tiny ${props.className}`}>
@@ -10,68 +17,33 @@ const WaitlistItem = (props: { className?: string; value: number; text: string }
   ) : null
 }
 
-export interface WaitlistProps {
-  isWaitlistOpen: boolean
-  waitlistMaxSize: number
-  waitlistCurrentSize: number
-  waitlistOpenSpots: number
-  unitsAvailable: number
-}
-
 const Waitlist = (props: WaitlistProps) => {
-  let header, subheader, waitlistItems
-  if (!props.isWaitlistOpen && !props.waitlistCurrentSize) return <></>
-  if (props.unitsAvailable && props.unitsAvailable > 0 && props.isWaitlistOpen) {
-    header = t("listings.waitlist.unitsAndWaitlist")
-    subheader = t("listings.waitlist.submitAnApplication")
-    waitlistItems = (
-      <>
-        <WaitlistItem
-          value={props.unitsAvailable}
-          text={t("listings.availableUnits")}
-          className={"font-semibold"}
-        />
-        {props.waitlistOpenSpots && (
-          <WaitlistItem
-            value={props.waitlistOpenSpots}
-            text={t("listings.waitlist.openSlots")}
-            className={"font-semibold"}
-          />
-        )}
-      </>
-    )
-  } else {
-    if (props.isWaitlistOpen) {
-      header = t("listings.waitlist.isOpen")
-      subheader = t("listings.waitlist.submitForWaitlist")
-    } else {
-      header = t("listings.waitlist.closed")
-      subheader = null
-    }
-    waitlistItems = (
-      <>
-        <WaitlistItem
-          value={props.waitlistCurrentSize || 0}
-          text={t("listings.waitlist.currentSize")}
-        />
-        {props.waitlistOpenSpots && (
-          <WaitlistItem
-            value={props.waitlistOpenSpots}
-            text={t("listings.waitlist.openSlots")}
-            className={"font-semibold"}
-          />
-        )}
-        <WaitlistItem value={props.waitlistMaxSize || 0} text={t("listings.waitlist.finalSize")} />
-      </>
-    )
-  }
+  if (!props.isWaitlistOpen) return <></>
 
   return (
     <section className="aside-block is-tinted">
-      <h4 className="text-caps-tiny">{header}</h4>
+      <h4 className="text-caps-tiny">{t("listings.waitlist.unitsAndWaitlist")}</h4>
       <div>
-        {subheader && <p className="text-tiny text-gray-800 pb-3">{subheader}</p>}
-        {<ul>{waitlistItems}</ul>}
+        <p className="text-tiny text-gray-800 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
+        <ul>
+          {props.waitlistCurrentSize != null && props.waitlistCurrentSize > 0 && (
+            <WaitlistItem
+              value={props.waitlistCurrentSize}
+              text={t("listings.waitlist.currentSize")}
+              className={"font-semibold"}
+            />
+          )}
+          {props.waitlistOpenSpots != null && props.waitlistOpenSpots > 0 && (
+            <WaitlistItem
+              value={props.waitlistOpenSpots}
+              text={t("listings.waitlist.openSlots")}
+              className={"font-semibold"}
+            />
+          )}
+          {props.waitlistMaxSize != null && props.waitlistMaxSize > 0 && (
+            <WaitlistItem value={props.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
+          )}
+        </ul>
       </div>
     </section>
   )
