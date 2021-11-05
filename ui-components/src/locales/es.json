@@ -30,6 +30,7 @@
                 "nameSuccess": "Actualización de nombre exitosa",
                 "dobSuccess": "Actualización de fecha de nacimiento exitosa",
                 "emailSuccess": "Actualización de correo electrónico exitosa",
+                "phoneNumberSuccess": "La actualización del número de teléfono se realizó correctamente",
                 "currentPassword": "Contraseña actual inválida. Inténtalo de nuevo.",
                 "passwordSuccess": "Actualización de contraseña exitosa",
                 "passwordMatch": "Los campos de la nueva contraseña no coinciden",

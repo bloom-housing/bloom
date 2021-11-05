@@ -21,6 +21,7 @@ import {
 import FormsLayout from "../layouts/forms"
 import moment from "moment"
 import { useRouter } from "next/router"
+import { usToIntlPhone } from "../lib/helpers"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -44,7 +45,7 @@ export default () => {
         ...rest,
         dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
         // Convert (123) 456-7890 to E.164 format with US country code: +11234567890
-        phoneNumber: phoneNumber.replace(/\((\d{3})\) (\d{3})-(\d{4})/, "+1$1$2$3"),
+        phoneNumber: usToIntlPhone(phoneNumber),
         language,
       })
 
