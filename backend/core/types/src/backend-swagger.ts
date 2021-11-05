@@ -1714,6 +1714,30 @@ export class ReservedCommunityTypesService {
   }
 }
 
+export class SmsService {
+  /**
+   * Send an SMS
+   */
+  sendSms(
+    params: {
+      /** requestBody */
+      body?: Sms
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/sms"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class TranslationsService {
   /**
    * List translations
@@ -5836,6 +5860,14 @@ export interface ReservedCommunityTypeUpdate {
 
   /**  */
   id: string
+}
+
+export interface Sms {
+  /**  */
+  body: string
+
+  /**  */
+  phoneNumber: string
 }
 
 export interface Translation {
