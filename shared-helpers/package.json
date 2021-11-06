@@ -15,6 +15,9 @@
     "test:coverage": "jest -w 1 --coverage --watchAll=false",
     "prettier": "prettier --write \"**/*.ts\""
   },
+  "dependencies": {
+    "@bloom-housing/backend-core": "^3.0.1-alpha.0"
+  },
   "devDependencies": {
     "jest": "^26.5.3",
     "typescript": "^3.9.7"
