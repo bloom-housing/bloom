@@ -868,14 +868,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       ...tritonListing,
       property: property,
       assets: getDefaultAssets(),
-      listingPreferences: [
-        {
-          preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
-          }),
-          ordinal: 2,
-        },
-      ],
       events: [],
     }
 
