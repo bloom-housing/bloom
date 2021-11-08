@@ -394,7 +394,7 @@ export const getPreferenceOrProgramOptionName = (
   formType: FormPreferencesType,
   noneOption?: boolean
 ) => {
-  if (noneOption) return getExclusiveOptionName(key, createFormNoneOptionPath(formType))
+  if (noneOption) return getExclusiveOptionName(key, formType)
   else return getNormalOptionName(metaKey, key, createFormOptionPath(formType))
 }
 
@@ -402,8 +402,8 @@ export const getNormalOptionName = (metaKey: string, key: string, path: string) 
   return `${path}.${metaKey}.${key}.claimed`
 }
 
-export const getExclusiveOptionName = (key: string | undefined, path: string) => {
-  return `${path}.${key}-none`
+export const getExclusiveOptionName = (key: string | undefined, type: FormPreferencesType) => {
+  return `${createFormNoneOptionPath(type)}.${key}-none`
 }
 
 export type ExclusiveKey = {
