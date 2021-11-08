@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.2...@bloom-housing/ui-components@3.0.1-alpha.3) (2021-11-08)
+
+
+### Features
+
+* add Programs section to listings management ([#2093](https://github.com/bloom-housing/bloom/issues/2093)) ([9bd1fe1](https://github.com/bloom-housing/bloom/commit/9bd1fe1033dee0fb7e73756254474471bc304f5e))
+
+
+
+
+
 ## [3.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.1...@bloom-housing/ui-components@3.0.1-alpha.2) (2021-11-08)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
