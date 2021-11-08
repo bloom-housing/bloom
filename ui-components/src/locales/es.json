@@ -1271,7 +1271,7 @@
         },
         "welcome": {
             "header": "Bienvenidos",
-            "description": "Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos algunas preguntas. Algunas propiedades solo aceptan personas con ciertas edades, ingresos, etc."
+            "description": "¡Bienvenido a Detroit Home Connect! Sabemos que encontrar una vivienda puede resultar complicado. Estamos aquí para ayudar. Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos cuatro preguntas simples. Algunas viviendas asequibles solo aceptan personas de ciertas edades o ciertos ingresos, por lo que queremos asegurarnos de que solicite propiedades que funcionen para su hogar."
         },
         "household": {
             "prompt": "¿Cuántas personas vivirán en esta propiedad?",
