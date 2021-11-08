@@ -63,7 +63,7 @@ export async function createLeasingAgents(
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
       async (leasingAgent) =>
-        await usersService.createUser(
+        await usersService.createPublicUser(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions.find((jurisdiction) => jurisdiction.name == "Detroit")],
@@ -119,7 +119,7 @@ async function seed() {
 
   let user1 = await userService.findByEmail("test@example.com")
   if (user1 === undefined) {
-    user1 = await userService.createUser(
+    user1 = await userService.createPublicUser(
       plainToClass(UserCreateDto, {
         email: "test@example.com",
         emailConfirmation: "test@example.com",
@@ -138,7 +138,7 @@ async function seed() {
 
   let user2 = await userService.findByEmail("test2@example.com")
   if (user2 === undefined) {
-    user2 = await userService.createUser(
+    user2 = await userService.createPublicUser(
       plainToClass(UserCreateDto, {
         email: "test2@example.com",
         emailConfirmation: "test2@example.com",
@@ -157,7 +157,7 @@ async function seed() {
 
   let admin = await userService.findByEmail("admin@example.com")
   if (admin === undefined) {
-    admin = await userService.createUser(
+    admin = await userService.createPublicUser(
       plainToClass(UserCreateDto, {
         email: "admin@example.com",
         emailConfirmation: "admin@example.com",
