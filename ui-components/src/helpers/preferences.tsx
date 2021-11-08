@@ -421,21 +421,23 @@ export const getExclusiveKeys = (
 
   const exclusive: ExclusiveKey[] = []
   preferences?.forEach((listingPreference) => {
-    listingPreference[KEY]?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
+    const preference: Preference | Program = listingPreference[KEY]
+
+    preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
       if (option.exclusive)
         exclusive.push({
           optionKey: getPreferenceOrProgramOptionName(
             option.key,
-            listingPreference[KEY]?.formMetadata?.key ?? "",
+            preference?.formMetadata?.key ?? "",
             formType
           ),
-          preferenceKey: listingPreference[KEY]?.formMetadata?.key,
+          preferenceKey: preference?.formMetadata?.key,
         })
     })
-    if (!listingPreference[KEY]?.formMetadata?.hideGenericDecline)
+    if (!preference?.formMetadata?.hideGenericDecline)
       exclusive.push({
-        optionKey: getExclusiveOptionName(listingPreference[KEY]?.formMetadata?.key, formType),
-        preferenceKey: listingPreference[KEY]?.formMetadata?.key,
+        optionKey: getExclusiveOptionName(preference?.formMetadata?.key, formType),
+        preferenceKey: preference?.formMetadata?.key,
       })
   })
   return exclusive
