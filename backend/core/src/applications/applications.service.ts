@@ -22,6 +22,7 @@ import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
 import { authzActions } from "../auth/enum/authz-actions.enum"
 import crypto from "crypto"
+import { Listing } from "../listings/entities/listing.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -31,7 +32,8 @@ export class ApplicationsService {
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
-    @InjectRepository(Application) private readonly repository: Repository<Application>
+    @InjectRepository(Application) private readonly repository: Repository<Application>,
+    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -77,7 +79,11 @@ export class ApplicationsService {
   // Submitting an application from public
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
-    const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
+    const listing = await this.listingsRepository
+      .createQueryBuilder("listings")
+      .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
+      .select("listings.applicationDueDate")
+      .getOne()
     if (
       listing.applicationDueDate &&
       applicationCreateDto.submissionDate > listing.applicationDueDate
