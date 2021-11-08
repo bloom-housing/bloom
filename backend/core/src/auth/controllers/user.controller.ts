@@ -64,7 +64,7 @@ export class UserController {
   ): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.createUser(
+      await this.userService.createPublicUser(
         dto,
         new AuthContext(req.user as User),
         queryParams.noWelcomeEmail !== true
@@ -76,7 +76,7 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
   async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
-    await this.userService.resendConfirmation(dto)
+    await this.userService.resendPublicConfirmation(dto)
     return mapTo(StatusDto, { status: "ok" })
   }
 
@@ -129,7 +129,7 @@ export class UserController {
   async invite(@Request() req: ExpressRequest, @Body() dto: UserInviteDto): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.invite(dto, new AuthContext(req.user as User))
+      await this.userService.invitePartnersPortalUser(dto, new AuthContext(req.user as User))
     )
   }
 }
