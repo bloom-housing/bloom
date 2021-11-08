@@ -7,6 +7,7 @@ import {
   UserBasic,
   UserCreate,
   UserService,
+  UserProfileService,
   serviceOptions,
   Status,
   AmiChartsService,
@@ -39,6 +40,7 @@ type ContextProps = {
   listingsService: ListingsService
   jurisdictionsService: JurisdictionsService
   userService: UserService
+  userProfileService: UserProfileService
   authService: AuthService
   preferencesService: PreferencesService
   reservedCommunityTypeService: ReservedCommunityTypesService
@@ -225,6 +227,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     listingsService: new ListingsService(),
     jurisdictionsService: new JurisdictionsService(),
     userService: new UserService(),
+    userProfileService: new UserProfileService(),
     authService: new AuthService(),
     preferencesService: new PreferencesService(),
     reservedCommunityTypeService: new ReservedCommunityTypesService(),
