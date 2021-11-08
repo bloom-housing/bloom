@@ -50,7 +50,7 @@
 
         .navbar-mobile-menu-button {
           border: none;
-          margin: 2.25rem 0.5rem 0.75rem;
+          margin: 2.75rem 0.5rem 0.75rem;
         }
 
         .ui-icon svg rect {
@@ -81,10 +81,12 @@
 
           .logo__title {
             @apply text-primary-dark;
+            margin-top: 1.5rem;
             text-transform: none;
 
             @screen md {
               @apply text-2xl;
+              margin: 0;
             }
           }
 
