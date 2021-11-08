@@ -436,7 +436,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       <Modal
         open={!!isDeleteModalActive}
         title={t("t.areYouSure")}
-        ariaDescription={t("listings.closeThisListing")}
+        ariaDescription={t("users.doYouWantDeleteUser")}
         onClose={() => setDeleteModalActive(false)}
         actions={[
           <Button
@@ -461,7 +461,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
           </Button>,
         ]}
       >
-        {t("listings.closeThisListing")}
+        {t("users.doYouWantDeleteUser")}
       </Modal>
     </>
   )

@@ -643,7 +643,8 @@
     "accountConfirmed": "Account confirmed",
     "resendInvite": "Resend Invite",
     "userUpdated": "User updated",
-    "userDeleted": "User deleted"
+    "userDeleted": "User deleted",
+    "doYouWantDeleteUser": "Do you really want to delete this user?"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
