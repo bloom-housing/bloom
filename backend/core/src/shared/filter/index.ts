@@ -2,6 +2,15 @@ import { HttpException, HttpStatus } from "@nestjs/common"
 import { WhereExpression } from "typeorm"
 import { Compare } from "../dto/filter.dto"
 
+export interface IBaseQueryFilter {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addFilters<FilterParams extends any[], FilterFieldMap>(
+    filters: FilterParams,
+    filterTypeToFieldMap: FilterFieldMap,
+    qb: WhereExpression
+  )
+}
+
 /**
  *
  * @param filterParams

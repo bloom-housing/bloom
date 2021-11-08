@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell, MinimalTable } from "@bloom-housing/ui-components"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
+import { getDetailBoolean } from "./helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
@@ -44,13 +45,13 @@ const DetailApplicationTypes = () => {
       <GridSection columns={2}>
         <GridCell>
           <ViewItem label={"Online Applications"}>
-            {listing.digitalApplication ? "Yes" : "No"}
+            {getDetailBoolean(listing.digitalApplication)}
           </ViewItem>
         </GridCell>
         {digitalMethod && (
           <GridCell>
             <ViewItem label={"Common Digital Application"}>
-              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
+              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
             </ViewItem>
           </GridCell>
         )}
@@ -63,7 +64,7 @@ const DetailApplicationTypes = () => {
       <GridSection columns={1}>
         <GridCell>
           <ViewItem label={"Paper Applications"}>
-            {listing.paperApplication ? "Yes" : "No"}
+            {getDetailBoolean(listing.paperApplication)}
           </ViewItem>
         </GridCell>
         {paperApplicationsTableRows.length > 0 && (
@@ -81,7 +82,7 @@ const DetailApplicationTypes = () => {
 
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Referral"}>{listing.referralOpportunity ? "Yes" : "No"}</ViewItem>
+          <ViewItem label={"Referral"}>{getDetailBoolean(listing.referralOpportunity)}</ViewItem>
         </GridCell>
         {referralMethod && (
           <>

@@ -13,3 +13,15 @@ export function isEmpty(obj: unknown): boolean {
     obj === ""
   )
 }
+
+export function formatBoolean(val) {
+  return val ? "Yes" : "No"
+}
+
+export function getBirthday(day, month, year) {
+  let birthday = ""
+  if (day && month && year) {
+    birthday = `${month}/${day}/${year}`
+  }
+  return birthday
+}

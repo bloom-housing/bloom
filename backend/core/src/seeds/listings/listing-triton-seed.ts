@@ -693,6 +693,10 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
@@ -739,6 +743,7 @@ const tritonListing: ListingSeedType = {
   leasingAgentOfficeHours: "Monday - Friday, 9:00 am - 5:00 pm",
   leasingAgentPhone: "650-437-2039",
   leasingAgentTitle: "Business Manager",
+  listingPreferences: [],
   listingPrograms: [],
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
@@ -801,7 +806,76 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       ...tritonListing,
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference()],
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 2,
+        },
+      ],
+      events: [],
+    }
+
+    return await this.listingRepository.save(listingCreateDto)
+  }
+}
+
+export class ListingTritonSeedDetroit extends ListingDefaultSeed {
+  async seed() {
+    const unitTypeOneBdrm = await this.unitTypeRepository.findOneOrFail({ name: "oneBdrm" })
+    const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
+
+    const detroitJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.detroit,
+    })
+    const amiChart = await this.amiChartRepository.save({
+      ...tritonAmiChart,
+      name: `${tritonAmiChart.name}Detroit`,
+      jurisdiction: detroitJurisdiction,
+    })
+
+    const property = await this.propertyRepository.findOneOrFail({
+      developer: "Thompson Dorfman, LLC",
+      neighborhood: "Foster City",
+      smokingPolicy: "Non-Smoking",
+    })
+
+    const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = tritonUnits.map(
+      (unit) => {
+        return {
+          ...unit,
+          property: {
+            id: property.id,
+          },
+          amiChart,
+        }
+      }
+    )
+
+    unitsToBeCreated[0].unitType = unitTypeTwoBdrm
+    unitsToBeCreated[1].unitType = unitTypeOneBdrm
+    unitsToBeCreated[2].unitType = unitTypeOneBdrm
+    unitsToBeCreated[3].unitType = unitTypeOneBdrm
+    unitsToBeCreated[4].unitType = unitTypeOneBdrm
+
+    await this.unitsRepository.save(unitsToBeCreated)
+
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...tritonListing,
+      property: property,
+      assets: getDefaultAssets(),
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 2,
+        },
+      ],
       events: [],
     }
 
