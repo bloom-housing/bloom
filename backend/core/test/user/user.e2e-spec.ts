@@ -47,6 +47,7 @@ describe("Applications", () => {
     confirmation: async () => {},
     welcome: async () => {},
     invite: async () => {},
+    changeEmail: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -641,5 +642,101 @@ describe("Applications", () => {
       .post("/auth/login")
       .send({ email: userCreateDto.email.toLowerCase(), password: userCreateDto.password })
       .expect(201)
+  })
+
+  it("should change an email with confirmation flow", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "confirm@confirm.com",
+      emailConfirmation: "confirm@confirm.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    const res = await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    const newEmail = "test+confirm@example.com"
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${user.id}`)
+      .send({ ...res.body, newEmail, appUrl: "http://localhost" })
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+
+    // User should still be able to log in with the old email
+    await getUserAccessToken(app, userCreateDto.email, userCreateDto.password)
+
+    user = await userService.findByEmail(userCreateDto.email)
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    await getUserAccessToken(app, newEmail, userCreateDto.password)
+  })
+
+  it("should allow filtering by isPortalUser", async () => {
+    const usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
+
+    const totalUsersCount = await usersRepository.count()
+
+    const allUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+
+    const portalUsersFilter = [
+      {
+        isPortalUser: true,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const portalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: portalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      portalUsersListRes.body.items.every(
+        (user: UserDto) => user.roles.isAdmin || user.roles.isPartner
+      )
+    )
+    expect(portalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+
+    const nonPortalUsersFilter = [
+      {
+        isPortalUser: false,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const nonPortalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: nonPortalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      nonPortalUsersListRes.body.items.every(
+        (user: UserDto) => !!user.roles?.isAdmin && !!user.roles?.isPartner
+      )
+    )
+    expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
   })
 })
