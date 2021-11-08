@@ -201,6 +201,7 @@ const LotteryResults = () => {
             <MinimalTable headers={criteriaTableHeaders} data={criteriaTableRows}></MinimalTable>
           ) : (
             <Button
+              id="addBuildingSelectionCriteriaButton"
               type="button"
               onClick={() => {
                 setDrawerState(true)

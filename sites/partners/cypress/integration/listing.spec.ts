@@ -26,12 +26,8 @@ describe("Listing Management Tests", () => {
       cy.get(".addressPopup").contains(listing["buildingAddress.street"])
       cy.getByID("reservedCommunityType.id").select(listing["reservedCommunityType.id"])
       cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
-      cy.get(
-        ":nth-child(8) > :nth-child(2) > .grid-section > .grid-section__inner > .grid-item > .flex > :nth-child(1) > .font-semibold"
-      )
-        .contains("Unit Types")
-        .click()
-      cy.get(":nth-child(8) > :nth-child(2) > .bg-gray-300 > .button").contains("Add Unit").click()
+      cy.get("#unitTypes").check()
+      cy.get("#addUnitsButton").contains("Add Unit").click()
       cy.getByID("number").type(listing["number"])
       cy.getByID("unitType.id").select(listing["unitType.id"])
       cy.getByID("numBathrooms").select(listing["numBathrooms"])
@@ -39,25 +35,17 @@ describe("Listing Management Tests", () => {
       cy.getByID("sqFeet").type(listing["sqFeet"])
       cy.getByID("minOccupancy").select(listing["minOccupancy"])
       cy.getByID("maxOccupancy").select(listing["maxOccupancy"])
-      cy.get(".view-item__value > .flex > :nth-child(1) > .font-semibold")
-        .contains("Fixed amount")
-        .click()
+      cy.get("#fixed").check()
       cy.getByID("monthlyIncomeMin").type(listing["monthlyIncomeMin"])
       cy.getByID("monthlyRent").type(listing["monthlyRent"])
       cy.getByID("priorityType.id").select(listing["priorityType.id"])
       cy.get(".mt-6 > .is-primary").contains("Save & Exit").click()
-      cy.get(":nth-child(10) > .grid-section__inner > .bg-gray-300 > .button")
-        .contains("Add Preference")
-        .click()
+      cy.get("#addPreferenceButton").contains("Add Preference").click()
       cy.get(".border > .button").contains("Select Preferences").click()
       cy.get(":nth-child(1) > .grid-section__inner > .field > div > .label")
         .contains("Live/Work in County")
         .click()
-      cy.get(
-        ':nth-child(6) > .fixed-overlay > .fixed-overlay__inner > [data-focus-lock-disabled="false"] > .drawer > .drawer__body > .drawer__content > .button'
-      )
-        .contains("Save")
-        .click()
+      cy.get("#addPreferenceSaveButton").contains("Save").click()
 
       cy.get(".drawer__content > .is-primary").contains("Save").click()
       cy.getByID("applicationFee").type(listing["applicationFee"])
@@ -77,58 +65,28 @@ describe("Listing Management Tests", () => {
       cy.getByID("creditHistory").type(listing["creditHistory"])
       cy.getByID("rentalHistory").type(listing["rentalHistory"])
       cy.getByID("criminalBackground").type(listing["criminalBackground"])
-      cy.get(":nth-child(18) > .grid-section__inner > .grid-item > .button")
+      cy.get("#addBuildingSelectionCriteriaButton")
         .contains("Add Building Selection Criteria")
         .click()
-      cy.get(".border > :nth-child(1) > .flex > :nth-child(2) > .font-semibold")
-        .contains("Webpage URL")
-        .click()
+      cy.get("#criteriaAttachTypeURL").check()
       cy.getByID("buildingSelectionCriteriaURL").type(listing["buildingSelectionCriteriaURL"])
       cy.get(".p-4 > .is-primary").contains("Save").click()
       cy.getByID("requiredDocuments").type(listing["requiredDocuments"])
       cy.getByID("programRules").type(listing["programRules"])
       cy.getByID("specialNotes").type(listing["specialNotes"])
       cy.get(".text-right > .button").contains("Application Process").click()
-      cy.get(
-        ":nth-child(1) > :nth-child(2) > :nth-child(1) > .grid-section__inner > .grid-item > .flex > :nth-child(1) > .font-semibold"
-      )
-        .contains("First come first serve")
-        .click()
-      cy.get(
-        ":nth-child(1) > :nth-child(2) > :nth-child(2) > .grid-section__inner > .grid-item > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
-      cy.get(
-        ":nth-child(1) > :nth-child(2) > :nth-child(3) > .grid-section__inner > .grid-item > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
+      cy.get("#reviewOrderFCFS").check()
+      cy.get("#dueDateQuestionNo").check()
+      cy.get("#waitlistOpenNo").check()
       cy.getByID("leasingAgentName").type(listing["leasingAgentName"])
       cy.getByID("leasingAgentEmail").type(listing["leasingAgentEmail"])
       cy.getByID("leasingAgentPhone").type(listing["leasingAgentPhone"])
       cy.getByID("leasingAgentTitle").type(listing["leasingAgentTitle"])
       cy.getByID("leasingAgentOfficeHours").type(listing["leasingAgentOfficeHours"])
-      cy.get(
-        ":nth-child(3) > :nth-child(2) > :nth-child(1) > .grid-section__inner > .grid-item > .flex > :nth-child(1) > .font-semibold"
-      )
-        .contains("Yes")
-        .click()
-      cy.get(
-        ":nth-child(1) > .grid-section__inner > :nth-child(2) > .flex > :nth-child(1) > .font-semibold"
-      )
-        .contains("Yes")
-        .click()
-      cy.get(
-        ":nth-child(3) > :nth-child(2) > :nth-child(2) > .grid-section__inner > .grid-item > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
-      cy.get(
-        ":nth-child(3) > :nth-child(2) > :nth-child(3) > .grid-section__inner > .grid-item > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
+      cy.get("#digitalApplicationChoiceYes").check()
+      cy.get("#commonDigitalApplicationChoiceYes").check()
+      cy.get("#paperApplicationNo").check()
+      cy.get("#referralOpportunityNo").check()
 
       cy.getByID("leasingAgentAddress.street").type(listing["leasingAgentAddress.street"])
       cy.getByID("leasingAgentAddress.street2").type(listing["leasingAgentAddress.street2"])
@@ -136,28 +94,14 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").type(listing["leasingAgentAddress.zipCode"])
       cy.getByID("leasingAgentAddress.state").select(listing["leasingAgentAddress.state"])
 
-      cy.get(
-        ":nth-child(4) > .grid-section__inner > :nth-child(1) > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
-      cy.get(
-        ":nth-child(4) > .grid-section__inner > :nth-child(2) > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
-      cy.get(
-        ":nth-child(6) > .grid-section__inner > :nth-child(1) > .flex > :nth-child(2) > .font-semibold"
-      )
-        .contains("No")
-        .click()
+      cy.get("#applicationsPickedUpNo").check()
+      cy.get("#applicationsDroppedOffNo").check()
+      cy.get("#postmarksConsideredNo").check()
       cy.getByID("additionalApplicationSubmissionNotes").type(
         listing["additionalApplicationSubmissionNotes"]
       )
 
-      cy.get(":nth-child(2) > :nth-child(2) > .bg-gray-300 > .button")
-        .contains("Add Open House")
-        .click()
+      cy.get("#addOpenHouseButton").contains("Add Open House").click()
 
       cy.getByID("date.month").type(listing["date.month"])
       cy.getByID("date.day").type(listing["date.day"])
@@ -172,17 +116,9 @@ describe("Listing Management Tests", () => {
       cy.getByID("startTime.period").select("AM")
       cy.getByID("endTime.period").select("PM")
       cy.get("form > .button").contains("Save").click()
-      cy.get(
-        ".status-aside__buttons > .grid-section > .grid-section__inner > :nth-child(1) > .button"
-      )
-        .contains("Publish")
-        .click()
+      cy.get("#publishButton").contains("Publish").click()
 
-      cy.get(
-        "[data-testid=footer] > .grid-section > .grid-section__inner > :nth-child(1) > .button"
-      )
-        .contains("Publish")
-        .click()
+      cy.get("#publishButtonConfirm").contains("Publish").click()
       cy.get(".page-header__title > .font-semibold").contains(listing["name"])
     })
   })
