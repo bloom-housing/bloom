@@ -80,10 +80,11 @@ const Edit = () => {
     const { email } = data
     setEmailAlert(null)
     try {
-      await userService.update({
+      await userProfileService.update({
         body: {
           ...profile,
-          email,
+          appUrl: window.location.origin,
+          newEmail: email,
         },
       })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
