@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.0...@bloom-housing/partners@3.0.1-alpha.0) (2021-11-05)
+
+
+* 1837/preferences cleanup 3 (#2144) ([3ce6d5e](https://github.com/bloom-housing/bloom/commit/3ce6d5eb5aac49431ec5bf4912dbfcbe9077d84e)), closes [#2144](https://github.com/bloom-housing/bloom/issues/2144)
+
+
+### BREAKING CHANGES
+
+* Preferences are now M-N relation with a listing and have an intermediate table with ordinal number
+
+* refactor(backend): preferences deduplication
+
+So far each listing referenced it's own unique Preferences. This change introduces Many to Many
+relationship between Preference and Listing entity and forces sharing Preferences between listings.
+
+* feat(backend): extend preferences migration with moving existing relations to a new intermediate tab
+
+* feat(backend): add Preference - Jurisdiction ManyToMany relation
+
+* feat: adapt frontend to backend changes
+
+* fix(backend): typeORM preferences select statement
+
+* fix(backend): connect preferences with jurisdictions in seeds, fix pref filter validator
+
+* fix(backend): fix missing import in preferences-filter-params.ts
+
+* refactor: rebase issue
+
+* feat: uptake jurisdictional preferences
+
+* fix: fixup tests
+
+* fix: application preferences ignore page, always separate
+
+* Remove page from src/migration/1633359409242-add-listing-preferences-intermediate-relation.ts
+
+* fix: preference fetching and ordering/pages
+
+* Fix code style issues with Prettier
+
+* fix(backend): query User__leasingAgentInListings__jurisdiction_User__leasingAgentIn specified more
+
+* fix: perferences cypress tests
+
+Co-authored-by: Michal Plebanski <michalp@airnauts.com>
+Co-authored-by: Emily Jablonski <emily.jablonski@exygy.com>
+Co-authored-by: Lint Action <lint-action@samuelmeuli.com>
+
+
+
+
+
+# [3.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@2.0.1-alpha.9...@bloom-housing/partners@3.0.0) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.8...@bloom-housing/partners@2.0.1-alpha.9) (2021-11-05)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.7...@bloom-housing/partners@2.0.1-alpha.8) (2021-11-04)
+
+
+### Reverts
+
+* Revert "refactor: listing preferences and adds jurisdictional filtering" ([41f72c0](https://github.com/bloom-housing/bloom/commit/41f72c0db49cf94d7930f5cfc88f6ee9d6040986))
+
+
+
+
+
+## [2.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.6...@bloom-housing/partners@2.0.1-alpha.7) (2021-11-04)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [2.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.5...@bloom-housing/partners@2.0.1-alpha.6) (2021-11-04)
+
+
+### Features
+
+* Updates application confirmation numbers ([#2072](https://github.com/bloom-housing/bloom/issues/2072)) ([75cd67b](https://github.com/bloom-housing/bloom/commit/75cd67bcb62280936bdeeaee8c9b7b2583a1339d))
+
+
+
+
+
 ## [2.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@2.0.1-alpha.4...@bloom-housing/partners@2.0.1-alpha.5) (2021-11-03)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -60,7 +60,7 @@ export function getColDefs(maxHouseholdSize: number, countyCode: string) {
     },
     {
       headerName: t("application.details.number"),
-      field: "id",
+      field: "confirmationCode",
       sortable: false,
       filter: false,
       width: 150,
