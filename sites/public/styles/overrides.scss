@@ -24,11 +24,11 @@
       }
 
       .navbar-menu {
-        height: 88px;
+        height: 80px;
         min-width: 112px;
 
         @screen md {
-          margin-top: 56px;
+          margin: 48px 0 32px;
           position: absolute;
           right: 1rem;
         }
@@ -81,7 +81,6 @@
 
           .logo__title {
             @apply text-primary-dark;
-            margin-top: 24px;
             text-transform: none;
 
             @screen md {
