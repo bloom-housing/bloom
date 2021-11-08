@@ -4,7 +4,8 @@ export class addChangeEmailTranslations1635946663862 implements MigrationInterfa
   public async up(queryRunner: QueryRunner): Promise<void> {
     const changeEmail = {
       message: "An email address change has been requested for your account.",
-      onChangeEmailMessage: "To confirm the change to your email address, please click the link below:",
+      onChangeEmailMessage:
+        "To confirm the change to your email address, please click the link below:",
       changeMyEmail: "Confirm email change",
     }
     const translations = await queryRunner.query(`SELECT * from translations`)
