@@ -168,6 +168,7 @@ export default () => {
               placeholder={t("authentication.createAccount.phonePlaceholder")}
               error={errors.phoneNumber}
               errorMessage={t("authentication.signIn.phoneError")}
+              controlClassName="control"
               control={control}
             />
           </div>
