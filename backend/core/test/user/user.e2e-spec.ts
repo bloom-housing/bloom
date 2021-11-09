@@ -34,6 +34,7 @@ describe("Users", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
   let userAccessToken: string
@@ -43,6 +44,7 @@ describe("Users", () => {
     confirmation: async () => {},
     welcome: async () => {},
     invite: async () => {},
+    changeEmail: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -77,6 +79,7 @@ describe("Users", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
@@ -527,5 +530,92 @@ describe("Users", () => {
       .send(userAProfileUpdateDto)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+  })
+
+  it("should lower case email of new user", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "TestingLowerCasing@LowerCasing.com",
+      emailConfirmation: "TestingLowerCasing@LowerCasing.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+    const res = await supertest(app.getHttpServer())
+      .post(`/user`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+    expect(res.body).toHaveProperty("id")
+    expect(res.body).not.toHaveProperty("passwordHash")
+    expect(res.body).toHaveProperty("email")
+    expect(res.body.email).toBe("testinglowercasing@lowercasing.com")
+
+    const confirmation = await supertest(app.getHttpServer())
+      .put(`/user/${res.body.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .send({
+        ...res.body,
+        confirmedAt: new Date(),
+      })
+      .expect(200)
+
+    expect(confirmation.body.confirmedAt).toBeDefined()
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email.toLowerCase(), password: userCreateDto.password })
+      .expect(201)
+  })
+
+  it("should change an email with confirmation flow", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "confirm@confirm.com",
+      emailConfirmation: "confirm@confirm.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    const res = await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    const newEmail = "test+confirm@example.com"
+    await supertest(app.getHttpServer())
+      .put(`/userProfile/${user.id}`)
+      .send({ ...res.body, newEmail, appUrl: "http://localhost" })
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+
+    // User should still be able to log in with the old email
+    await getUserAccessToken(app, userCreateDto.email, userCreateDto.password)
+
+    user = await userService.findByEmail(userCreateDto.email)
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    await getUserAccessToken(app, newEmail, userCreateDto.password)
   })
 })

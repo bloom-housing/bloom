@@ -11,6 +11,7 @@ import {
 } from "class-validator"
 import { Address } from "../../shared/entities/address.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 @Entity()
 export class AlternateContact extends AbstractEntity {
@@ -61,6 +62,7 @@ export class AlternateContact extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   emailAddress?: string | null
 
   @OneToOne(() => Address, { eager: true, cascade: true })

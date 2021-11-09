@@ -3727,10 +3727,10 @@ export interface UserCreate {
   jurisdictions?: Id[]
 
   /**  */
-  confirmedAt?: Date
+  email: string
 
   /**  */
-  email: string
+  confirmedAt?: Date
 
   /**  */
   firstName: string
@@ -3863,6 +3863,15 @@ export interface UserUpdate {
   jurisdictions: Id[]
 
   /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3957,6 +3966,12 @@ export interface UserProfileUpdate {
   jurisdictions: Id[]
 
   /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
   id: string
 
   /**  */
@@ -3976,6 +3991,9 @@ export interface UserProfileUpdate {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface JurisdictionCreate {
@@ -5417,7 +5435,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  image?: AssetUpdate
+  image?: CombinedImageTypes
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -6092,6 +6110,6 @@ export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = Asset
-export type CombinedImageTypes = AssetCreate
+export type CombinedImageTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
