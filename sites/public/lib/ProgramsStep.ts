@@ -1,3 +1,4 @@
+import { ApplicationProgram } from "@bloom-housing/backend-core/types"
 import StepDefinition from "./StepDefinition"
 
 export default class ProgramsStep extends StepDefinition {
@@ -5,8 +6,7 @@ export default class ProgramsStep extends StepDefinition {
     return !this.conductor.listing?.listingPrograms?.length
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  save(formData: Record<string, any>) {
+  save(formData: ApplicationProgram[]) {
     this.application.programs = formData
     this.conductor.sync()
   }

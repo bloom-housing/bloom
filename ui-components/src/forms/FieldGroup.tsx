@@ -1,4 +1,5 @@
 import React from "react"
+import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods } from "react-hook-form"
 
@@ -7,6 +8,7 @@ interface FieldSingle {
   label: string
   value?: string
   defaultChecked?: boolean
+  description?: React.ReactNode
   note?: string
   inputProps?: Record<string, unknown>
 }
@@ -54,23 +56,33 @@ const FieldGroup = ({
 
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""} mb-0`}>
         {fields?.map((item) => (
-          <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
-            <input
-              aria-describedby={`${name}-error`}
-              aria-invalid={!!error || false}
-              type={type}
-              id={item.id}
-              defaultValue={item.value || item.id}
-              name={name}
-              defaultChecked={item.defaultChecked || false}
-              ref={register(validation)}
-              {...item.inputProps}
-            />
-            <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
-              {item.label}
-            </label>
-            {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
-          </div>
+          <>
+            <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
+              <input
+                aria-describedby={`${name}-error`}
+                aria-invalid={!!error || false}
+                type={type}
+                id={item.id}
+                defaultValue={item.value || item.id}
+                name={name}
+                defaultChecked={item.defaultChecked || false}
+                ref={register(validation)}
+                {...item.inputProps}
+              />
+              <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
+                {item.label}
+              </label>
+              {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
+            </div>
+
+            {item.description && (
+              <div className="ml-8 -mt-1 mb-5">
+                <ExpandableContent>
+                  <p className="field-note mb-2 -mt-2">{item.description}</p>
+                </ExpandableContent>
+              </div>
+            )}
+          </>
         ))}
       </div>
       {groupSubNote && <p className="field-sub-note">{groupSubNote}</p>}
