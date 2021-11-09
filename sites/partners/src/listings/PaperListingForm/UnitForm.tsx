@@ -345,7 +345,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 label={t("listings.unit.unitNumber")}
                 placeholder={t("listings.unit.unitNumber")}
                 register={register}
-                type="number"
+                type="text"
                 readerOnly
               />
             </ViewItem>
