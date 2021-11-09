@@ -614,6 +614,7 @@
     "signIn": {
       "loginError": "Please enter a valid email address",
       "passwordError": "Please enter a valid password",
+      "phoneError": "Please enter a valid US phone number.",
       "cantFindAccount": "We couldn't find an account with that email address/password.",
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
@@ -635,6 +636,8 @@
       "email": "Email",
       "emailPrivacy": "We will only use your email address to contact you about your application.",
       "reEnterEmail": "Re-enter email address",
+      "phonePlaceholder": "(555) 555-5555",
+      "phone": "Phone",
       "reEnterPassword": "Re-enter your password",
       "resendTheEmail": "Resend the email",
       "linkExpired": "Your link has expired",
