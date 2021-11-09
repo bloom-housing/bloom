@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.4...@bloom-housing/partners@3.0.1-alpha.5) (2021-11-09)
+
+
+### Features
+
+* Change unit number field type to text ([#2136](https://github.com/bloom-housing/bloom/issues/2136)) ([f54be7c](https://github.com/bloom-housing/bloom/commit/f54be7c7ba6aac8e00fee610dc86584b60cc212d))
+
+
+
+
+
 ## [3.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.3...@bloom-housing/partners@3.0.1-alpha.4) (2021-11-09)
 
 **Note:** Version bump only for package @bloom-housing/partners

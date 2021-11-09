@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "3.0.1-alpha.4",
+  "version": "3.0.1-alpha.5",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
