@@ -22,6 +22,7 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
+    "@bloom-housing/backend-core": "^3.0.1-alpha.0",
     "@bloom-housing/shared-helpers": "^3.0.0",
     "@bloom-housing/ui-components": "^3.0.1-alpha.7",
     "@mapbox/mapbox-sdk": "^0.13.0",

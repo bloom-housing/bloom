@@ -7,7 +7,6 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
-  EnumUserFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
