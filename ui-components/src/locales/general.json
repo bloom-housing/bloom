@@ -379,7 +379,6 @@
       }
     },
     "programs": {
-      "title": "PROGRAMS TITLE",
       "servedInMilitary": {
         "summary": "Veteran of the US Military",
         "servedInMilitary": {
@@ -1382,6 +1381,7 @@
     "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
+    "preferNotToSay": "Prefer not to say",
     "pm": "PM",
     "post": "Post",
     "preferences": "Preferences",
