@@ -208,25 +208,18 @@ export class ApplicationFlaggedSetsService {
     )
     const transAfsRepository = transactionalEntityManager.getRepository(ApplicationFlaggedSet)
     const visitedAfses = []
+    const afses = await transAfsRepository
+      .createQueryBuilder("afs")
+      .leftJoin("afs.applications", "applications")
+      .select(["afs", "applications.id"])
+      .where(`afs.listing_id = :listingId`, { listingId: newApplication.listing.id })
+      .andWhere(`rule = :rule`, { rule })
+      .getMany()
+
     for (const matchedApplication of applicationsMatchingRule) {
-      // NOTE: Optimize it because of N^2 complexity,
-      //  for each matched application we create a query returning a list of matching sets
-      // TODO: Add filtering into the query, right now all AFSes are fetched for each
-      //  matched application which will become a performance problem soon
-      const afsesMatchingRule = (
-        await transAfsRepository.find({
-          join: {
-            alias: "afs",
-            leftJoinAndSelect: {
-              applications: "afs.applications",
-            },
-          },
-          where: {
-            listingId: newApplication.listing.id,
-            rule: rule,
-          },
-        })
-      ).filter((afs) => afs.applications.map((app) => app.id).includes(matchedApplication.id))
+      const afsesMatchingRule = afses.filter((afs) =>
+        afs.applications.map((app) => app.id).includes(matchedApplication.id)
+      )
 
       if (afsesMatchingRule.length === 0) {
         const newAfs: DeepPartial<ApplicationFlaggedSet> = {
@@ -262,6 +255,7 @@ export class ApplicationFlaggedSetsService {
   ) {
     const transApplicationsRepository = transactionalEntityManager.getRepository(Application)
     return await transApplicationsRepository.find({
+      select: ["id"],
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
           id: newApplication.id,
@@ -308,6 +302,7 @@ export class ApplicationFlaggedSetsService {
     ]
 
     return await transApplicationsRepository.find({
+      select: ["id"],
       where: (qb: SelectQueryBuilder<Application>) => {
         qb.where("Application.id != :id", {
           id: newApplication.id,
