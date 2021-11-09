@@ -1,6 +1,5 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultAmiChart, getDefaultUnits, getDefaultProperty } from "./shared"
-import { tritonAmiChart } from "./listing-triton-seed"
+import { getDefaultUnits, getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { CountyCode } from "../../shared/types/county-code"
@@ -14,12 +13,12 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
       name: CountyCode.alameda,
     })
-    const amiChartOne = await this.amiChartRepository.save({
-      ...tritonAmiChart,
+    const amiChartOne = await this.amiChartRepository.findOneOrFail({
+      name: "San Jose TCAC 2019",
       jurisdiction: alamedaJurisdiction,
     })
-    const amiChartTwo = await this.amiChartRepository.save({
-      ...getDefaultAmiChart(),
+    const amiChartTwo = await this.amiChartRepository.findOneOrFail({
+      name: "AlamedaCountyTCAC2021",
       jurisdiction: alamedaJurisdiction,
     })
 
