@@ -6,11 +6,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiOperation, ApiTags, ApiExtraModels } from "@nestjs/swagger"
 import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
@@ -20,6 +21,8 @@ import { ProgramsService } from "./programs.service"
 import { ProgramDto } from "./dto/program.dto"
 import { ProgramCreateDto } from "./dto/program-create.dto"
 import { ProgramUpdateDto } from "./dto/program-update.dto"
+import { ProgramsFilterParams } from "./dto/programs-filter-params"
+import { ProgramsListQueryParams } from "./dto/programs-list-query-params"
 
 @Controller("/programs")
 @ApiTags("programs")
@@ -32,8 +35,9 @@ export class ProgramsController {
 
   @Get()
   @ApiOperation({ summary: "List programs", operationId: "list" })
-  async list(): Promise<ProgramDto[]> {
-    return mapTo(ProgramDto, await this.programsService.list())
+  @ApiExtraModels(ProgramsFilterParams)
+  async list(@Query() queryParams: ProgramsListQueryParams): Promise<ProgramDto[]> {
+    return mapTo(ProgramDto, await this.programsService.list(queryParams))
   }
 
   @Post()

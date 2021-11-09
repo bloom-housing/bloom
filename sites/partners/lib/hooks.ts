@@ -9,6 +9,7 @@ import {
   EnumListingFilterParamsComparison,
   EnumUserFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
+  EnumProgramsFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -200,9 +201,9 @@ export function useSingleAmiChartData(amiChartId: string) {
   }
 }
 
-export function useAmiChartList() {
+export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
-  const fetcher = () => amiChartsService.list()
+  const fetcher = () => amiChartsService.list({ jurisdictionId: jurisdiction })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
 
@@ -281,6 +282,40 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
     })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useProgramList() {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () => programsService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useJurisdictionalProgramList(jurisdictionId: string) {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () =>
+    programsService.list({
+      filter: [
+        {
+          $comparison: EnumProgramsFilterParamsComparison["="],
+          jurisdiction: jurisdictionId,
+        },
+      ],
+    })
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
 
   return {
     data,

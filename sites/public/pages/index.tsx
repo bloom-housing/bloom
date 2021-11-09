@@ -57,7 +57,7 @@ export default function Home(props: IndexProps) {
       )}
       <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
       <div className="homepage-extra">
-        <div className="action-blocks mt-4">
+        <div className="action-blocks mt-4 mb-4">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
             <ActionBlock
               className="flex-1"
