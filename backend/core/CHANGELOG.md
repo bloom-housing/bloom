@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.4...@bloom-housing/backend-core@3.0.1-alpha.5) (2021-11-09)
+
+
+### Features
+
+* **backend:** improve application flagged set saving efficiency ([#2147](https://github.com/bloom-housing/bloom/issues/2147)) ([08a064c](https://github.com/bloom-housing/bloom/commit/08a064c319adabb5385e474f5751246d92dba9a2))
+
+
+
+
+
 ## [3.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.3...@bloom-housing/backend-core@3.0.1-alpha.4) (2021-11-09)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
