@@ -3663,6 +3663,14 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface UserPreferences {
+  /**  */
+  sendEmailNotifications?: boolean
+
+  /**  */
+  sendSmsNotifications?: boolean
+}
+
 export interface User {
   /**  */
   language?: Language
@@ -3675,6 +3683,9 @@ export interface User {
 
   /**  */
   jurisdictions: Jurisdiction[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 
   /**  */
   id: string
@@ -3746,6 +3757,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserBasic {
@@ -3760,6 +3774,9 @@ export interface UserBasic {
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 
   /**  */
   id: string
@@ -3888,6 +3905,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserFilterParams {
@@ -3950,6 +3970,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserProfileUpdate {
@@ -3970,6 +3993,9 @@ export interface UserProfileUpdate {
 
   /**  */
   appUrl?: string
+
+  /**  */
+  preferences?: UserPreferences
 
   /**  */
   id: string
@@ -6038,6 +6064,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "DESC" = "DESC",
 }
 export type CombinedRolesTypes = UserRolesCreate
+export type CombinedPreferencesTypes = UserPreferences
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

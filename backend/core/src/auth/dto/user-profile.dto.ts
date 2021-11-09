@@ -16,6 +16,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserPreferencesDto } from "../../../src/user-preferences/dto/user-preferences.dto"
 
 export class UserProfileUpdateDto extends PickType(User, [
   "id",
@@ -59,4 +60,9 @@ export class UserProfileUpdateDto extends PickType(User, [
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UserPreferencesDto)
+  preferences?: UserPreferencesDto
 }
