@@ -17,6 +17,7 @@ import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 declare const expect: jest.Expect
+jest.setTimeout(30000)
 const user = new User()
 user.firstName = "Test"
 user.lastName = "User"
