@@ -90,7 +90,9 @@ export default function ApplicationsList() {
                 {application.applicant.firstName} {application.applicant.lastName}
               </p>
 
-              <p className="font-sans text-base mt-1">{application.id}</p>
+              <p className="font-sans text-base mt-1">
+                {application.confirmationCode || application.id}
+              </p>
             </>
           }
         >
