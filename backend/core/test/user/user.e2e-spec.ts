@@ -607,4 +607,50 @@ describe("Applications", () => {
       .send({ email: userCreateDto.email.toLowerCase(), password: userCreateDto.password })
       .expect(201)
   })
+
+  it("should allow filtering by isPortalUser", async () => {
+    const usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
+
+    const totalUsersCount = await usersRepository.count()
+
+    const allUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+
+    const portalUsersFilter = [
+      {
+        isPortalUser: true,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const portalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: portalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      portalUsersListRes.body.items.every(
+        (user: UserDto) => user.roles.isAdmin || user.roles.isPartner
+      )
+    )
+    expect(portalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+
+    const nonPortalUsersFilter = [
+      {
+        isPortalUser: false,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const nonPortalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: nonPortalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      nonPortalUsersListRes.body.items.every(
+        (user: UserDto) => !!user.roles?.isAdmin && !!user.roles?.isPartner
+      )
+    )
+    expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+  })
 })

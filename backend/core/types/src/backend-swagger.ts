@@ -3866,6 +3866,9 @@ export interface UserFilterParams {
 
   /**  */
   isPartner?: boolean
+
+  /**  */
+  isPortalUser?: boolean
 }
 
 export interface PaginatedUserList {
