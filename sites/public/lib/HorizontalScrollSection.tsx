@@ -51,7 +51,9 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
   return (
     <section className={props.className}>
       <div className={styles.title}>
-        {props.icon && <Icon size="xlarge" symbol={props.icon} className={styles.icon} />}
+        {props.icon && (
+          <Icon size="xlarge" symbol={props.icon} className={styles.icon} ariaHidden={true} />
+        )}
         <h2 className={`${styles.title__text} ${props.icon ? styles["icon-space"] : ""}`}>
           {props.title}
         </h2>
@@ -60,6 +62,7 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
           className={styles.title__button}
           onClick={leftButtonClick}
           disabled={!canScrollLeft}
+          ariaLabel="Scroll left"
         >
           <Icon size="medium" symbol="left" />
         </Button>
@@ -68,6 +71,7 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
           className={styles.title__button}
           onClick={rightButtonClick}
           disabled={!canScrollRight}
+          ariaLabel="Scroll right"
         >
           <Icon size="medium" symbol="right" />
         </Button>
