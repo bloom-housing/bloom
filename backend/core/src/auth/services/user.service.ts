@@ -31,13 +31,13 @@ import { UserUpdateDto } from "../dto/user-update.dto"
 import { UserListQueryParams } from "../dto/user-list-query-params"
 import { UserInviteDto } from "../dto/user-invite.dto"
 import { ConfigService } from "@nestjs/config"
-import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { authzActions } from "../enum/authz-actions.enum"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
 import { UserQueryFilter } from "../filters/user-query-filter"
+import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -266,7 +266,7 @@ export class UserService {
         ...dto,
         passwordHash: await this.passwordService.passwordToHash(dto.password),
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as JurisdictionDto[])
+          ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
       },
       authContext
@@ -327,7 +327,7 @@ export class UserService {
         leasingAgentInListings: dto.leasingAgentInListings as Listing[],
         roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
-          ? (dto.jurisdictions as JurisdictionDto[])
+          ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
       },
       authContext

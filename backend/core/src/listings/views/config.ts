@@ -46,6 +46,8 @@ const views: Views = {
       "amiChartOverride.items",
       "unitType.id",
       "unitType.name",
+      "listingPrograms.ordinal",
+      "listingProgramsProgram.id",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
@@ -57,6 +59,8 @@ const views: Views = {
       { join: "units.amiChartOverride", alias: "amiChartOverride" },
       { join: "listings.reservedCommunityType", alias: "reservedCommunityType" },
       { join: "listings.preferences", alias: "preferences" },
+      { join: "listings.listingPrograms", alias: "listingPrograms" },
+      { join: "listingPrograms.program", alias: "listingProgramsProgram" },
     ],
   },
 }
@@ -201,6 +205,8 @@ views.full = {
     ["units.amiChart", "amiChart"],
     ["listings.jurisdiction", "jurisdiction"],
     ["listings.reservedCommunityType", "reservedCommunityType"],
+    ["listings.listingPrograms", "listingPrograms"],
+    ["listingPrograms.program", "listingProgramsProgram"],
   ],
 }
 
