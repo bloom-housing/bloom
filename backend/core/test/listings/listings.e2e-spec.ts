@@ -70,7 +70,7 @@ describe("Listings", () => {
     // but the last listing.
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
-    const limit = 9
+    const limit = 12
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
@@ -82,7 +82,7 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const queryParams = {
-      limit: 13,
+      limit: 12,
       page: 2,
       view: "base",
     }
@@ -132,6 +132,7 @@ describe("Listings", () => {
   it("should return listings with matching Alameda jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
     const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
+    console.log("alameda = ", alameda)
     const queryParams = {
       limit: "all",
       filter: [
@@ -144,7 +145,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(13)
+    expect(res.body.items.length).toBe(12)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
