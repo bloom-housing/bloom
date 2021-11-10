@@ -147,7 +147,7 @@ workflows:
       - build-partners:
           requires:
             - setup
-      - public-cypress/run:
+      - cypress/run:
           requires:
             - setup
           executor: cypress-node
@@ -157,15 +157,4 @@ workflows:
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
-          store_artifacts: true
-      - partner-cypress/run:
-          requires:
-            - setup
-          executor: cypress-node
-          working_directory: sites/partners
-          yarn: true
-          build: |
-            yarn test:backend:core:dbsetup
-          start: yarn dev:all-cypress
-          wait-on: "http://0.0.0.0:3001"
           store_artifacts: true
