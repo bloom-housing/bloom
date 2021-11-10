@@ -42,9 +42,7 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 @ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 export class ListingsController {
-  constructor(
-    private readonly listingsService: ListingsService
-  ) {}
+  constructor(private readonly listingsService: ListingsService) {}
 
   // TODO: Limit requests to defined fields
   @Get()
