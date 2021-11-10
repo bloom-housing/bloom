@@ -60,6 +60,7 @@ const AdditionalFees = () => {
             label={t("listings.sections.depositHelperText")}
             name={"depositHelperText"}
             id={"depositHelperText"}
+            aria-describedby={"depositHelperText"}
             fullWidth={true}
             register={register}
           />
@@ -67,6 +68,7 @@ const AdditionalFees = () => {
             label={t("listings.sections.costsNotIncluded")}
             name={"costsNotIncluded"}
             id={"costsNotIncluded"}
+            aria-describedby={"costsNotIncluded"}
             fullWidth={true}
             register={register}
           />
