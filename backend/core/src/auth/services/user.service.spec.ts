@@ -82,7 +82,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      await expect(service.createUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
     })
@@ -99,7 +99,7 @@ describe("UserService", () => {
       }
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
       mockUserRepo.save = jest.fn().mockRejectedValue(new Error("failed to save"))
-      await expect(service.createUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       )
 

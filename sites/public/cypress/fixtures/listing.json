@@ -191,72 +191,78 @@
   "urlSlug": "archer_studios_98_archer_street_san_jose_ca",
   "applicationMethods": [],
   "assets": [],
-  "preferences": [
+  "listingPreferences": [
     {
-      "id": "e095a124-3d95-4f71-a9e2-4e93aac00bfa",
-      "createdAt": "2021-04-24T10:31:17.607Z",
-      "updatedAt": "2021-04-24T10:31:17.607Z",
+      "preference": {
+        "id": "e095a124-3d95-4f71-a9e2-4e93aac00bfa",
+        "createdAt": "2021-04-24T10:31:17.607Z",
+        "updatedAt": "2021-04-24T10:31:17.607Z",
+
+        "title": "Live or Work in Hayward",
+        "subtitle": "",
+        "description": "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
+        "links": [],
+        "formMetadata": {
+          "key": "liveWork",
+          "options": [
+            {
+              "key": "live",
+              "extraData": []
+            },
+            {
+              "key": "work",
+              "extraData": []
+            }
+          ]
+        }
+      },
       "ordinal": 1,
-      "page": 1,
-      "title": "Live or Work in Hayward",
-      "subtitle": "",
-      "description": "At least one member of my household lives in City of Hayward. At least one member of my household works in the City of Hayward",
-      "links": [],
-      "formMetadata": {
-        "key": "liveWork",
-        "options": [
-          {
-            "key": "live",
-            "extraData": []
-          },
-          {
-            "key": "work",
-            "extraData": []
-          }
-        ]
-      }
+      "page": 1
     },
     {
-      "id": "8b46a50c-c321-4506-ad71-a80245ef4602",
-      "createdAt": "2021-04-24T10:31:17.607Z",
-      "updatedAt": "2021-04-24T10:31:17.607Z",
+      "preference": {
+        "id": "8b46a50c-c321-4506-ad71-a80245ef4602",
+        "createdAt": "2021-04-24T10:31:17.607Z",
+        "updatedAt": "2021-04-24T10:31:17.607Z",
+
+        "title": "Displaced Tenant Housing Preference",
+        "subtitle": "",
+        "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
+        "links": [],
+        "formMetadata": {
+          "key": "displacedTenant",
+          "options": [
+            {
+              "key": "general",
+              "extraData": [
+                {
+                  "type": "hhMemberSelect",
+                  "key": "name"
+                },
+                {
+                  "type": "address",
+                  "key": "address"
+                }
+              ]
+            },
+            {
+              "key": "missionCorridor",
+              "extraData": [
+                {
+                  "type": "hhMemberSelect",
+                  "key": "name"
+                },
+                {
+                  "type": "address",
+                  "key": "address"
+                }
+              ]
+            }
+          ]
+        }
+      },
       "ordinal": 2,
-      "page": 1,
-      "title": "Displaced Tenant Housing Preference",
-      "subtitle": "",
-      "description": "At least one member of my household was displaced from a residential property due to redevelopment activity by the Hayward Housing Authority, the Redevelopment Agency or the City of Hayward.",
-      "links": [],
-      "formMetadata": {
-        "key": "displacedTenant",
-        "options": [
-          {
-            "key": "general",
-            "extraData": [
-              {
-                "type": "hhMemberSelect",
-                "key": "name"
-              },
-              {
-                "type": "address",
-                "key": "address"
-              }
-            ]
-          },
-          {
-            "key": "missionCorridor",
-            "extraData": [
-              {
-                "type": "hhMemberSelect",
-                "key": "name"
-              },
-              {
-                "type": "address",
-                "key": "address"
-              }
-            ]
-          }
-        ]
-      }
+      "page": 1
     }
   ],
   "units": [
@@ -1244,6 +1250,12 @@
       },
       {
         "name": "adaHouseholdMembers"
+      },
+      {
+        "name": "householdChanges"
+      },
+      {
+        "name": "householdStudent"
       },
       {
         "name": "vouchersSubsidies"

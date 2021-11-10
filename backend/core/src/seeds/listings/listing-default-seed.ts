@@ -16,14 +16,20 @@ import {
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
+  getDisabilityOrMentalIlnessProgram,
   getDisplaceePreference,
+  getHousingSituationProgram,
   getLiveWorkPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { CountyCode } from "../../shared/types/county-code"
+import { Preference } from "../../preferences/entities/preference.entity"
+import { Program } from "../../program/entities/program.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -42,7 +48,11 @@ export class ListingDefaultSeed {
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,
     @InjectRepository(Jurisdiction)
-    protected readonly jurisdictionRepository: Repository<Jurisdiction>
+    protected readonly jurisdictionRepository: Repository<Jurisdiction>,
+    @InjectRepository(Preference)
+    protected readonly preferencesRepository: Repository<Preference>,
+    @InjectRepository(Program)
+    protected readonly programsRepository: Repository<Program>
   ) {}
 
   async seed() {
@@ -101,8 +111,49 @@ export class ListingDefaultSeed {
       name: "Test: Default, Two Preferences",
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 1,
+          page: 1,
+        },
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getDisplaceePreference().title,
+          }),
+          ordinal: 2,
+          page: 1,
+        },
+      ],
       events: getDefaultListingEvents(),
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getDisabilityOrMentalIlnessProgram().title,
+          }),
+          ordinal: 3,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getHousingSituationProgram().title,
+          }),
+          ordinal: 4,
+        },
+      ],
       jurisdictionName: "Alameda",
     }
 

@@ -90,6 +90,8 @@ export const blankApplication = () => {
       vision: null,
       hearing: null,
     },
+    householdExpectingChanges: null,
+    householdStudent: null,
     incomeVouchers: null,
     income: null,
     incomePeriod: null,
@@ -103,6 +105,7 @@ export const blankApplication = () => {
       howDidYouHear: [],
     },
     preferences: [] as ApplicationPreference[],
-    confirmationId: "",
+    confirmationCode: "",
+    id: "",
   }
 }

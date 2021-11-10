@@ -19,6 +19,8 @@ import { ListingEventType } from "../../src/listings/types/listing-event-type-en
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
+import { Program } from "../../src/program/entities/program.entity"
+import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -31,8 +33,11 @@ declare const expect: jest.Expect
 jest.setTimeout(30000)
 
 describe("Listings", () => {
-  let app
+  let app: INestApplication
+  let programsRepository: Repository<Program>
+  let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
+
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
@@ -42,11 +47,14 @@ describe("Listings", () => {
         AssetsModule,
         ApplicationMethodsModule,
         PaperApplicationsModule,
+        TypeOrmModule.forFeature([Program]),
       ],
     }).compile()
     app = moduleRef.createNestApplication()
     app = applicationSetup(app)
     await app.init()
+    programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
+    adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
@@ -62,7 +70,7 @@ describe("Listings", () => {
     // but the last listing.
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
-    const limit = 9
+    const limit = 12
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
@@ -74,7 +82,7 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const queryParams = {
-      limit: 13,
+      limit: 12,
       page: 2,
       view: "base",
     }
@@ -118,13 +126,13 @@ describe("Listings", () => {
       view: "base",
     }
     const query = qs.stringify(queryParams)
-    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBeGreaterThanOrEqual(2)
+    await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
   })
 
   it("should return listings with matching Alameda jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
     const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
+    console.log("alameda = ", alameda)
     const queryParams = {
       limit: "all",
       filter: [
@@ -137,12 +145,11 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(13)
+    expect(res.body.items.length).toBe(12)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
-    expect(jurisdictions.length).toBe(4)
     const sanjose = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Jose")
     const queryParams = {
       limit: "all",
@@ -161,7 +168,6 @@ describe("Listings", () => {
 
   it("should return no listings with San Mateo jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
-    expect(jurisdictions.length).toBe(4)
     const sanmateo = jurisdictions.find((jurisdiction) => jurisdiction.name === "San Mateo")
     const queryParams = {
       limit: "all",
@@ -190,8 +196,6 @@ describe("Listings", () => {
     const oldOccupancy = Number(listing.units[0].maxOccupancy)
     listing.units[0].maxOccupancy = oldOccupancy + 1
 
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
@@ -214,8 +218,6 @@ describe("Listings", () => {
     }
     listing.image = image
 
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
-
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
       .send(listing)
@@ -234,8 +236,6 @@ describe("Listings", () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
     const listing: Listing = { ...res.body.items[0] }
-
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const assetCreateDto: AssetCreateDto = {
       fileId: "testFileId2",
@@ -276,8 +276,6 @@ describe("Listings", () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
-
-    const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
 
     const listingEvent: ListingEventCreateDto = {
       type: ListingEventType.openHouse,
@@ -387,6 +385,45 @@ describe("Listings", () => {
         secondPageListingUpdateTimestamp.getTime()
       )
     }
+  })
+
+  it("should add/overwrite and remove listing programs in existing listing", async () => {
+    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    const newProgram = await programsRepository.save({
+      title: "TestTitle",
+      subtitle: "TestSubtitle",
+      description: "TestDescription",
+    })
+    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+
+    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
+    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
+    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
+
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send({
+        ...putResponse.body,
+        listingPrograms: [],
+      })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse2 = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+    expect(listingResponse2.body.listingPrograms.length).toBe(0)
   })
 
   afterEach(() => {

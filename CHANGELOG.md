@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
+  - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
 
 ## v2.0.0-pre-tailwind 09/16/2021
 
@@ -141,6 +142,9 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Adds Program entity to Listing (Many to Many) and to Jurisdiction (Many to many) and seed programs ([1968](https://github.com/bloom-housing/bloom/pull/1968))
+  - Add Language to Jurisidiction entity ([#1998](https://github.com/bloom-housing/bloom/pull/1998))
+  - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 
 - Changed:
 
@@ -163,6 +167,7 @@ All notable changes to this project will be documented in this file. The format 
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
   - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
+  - Introduce N-M Listing-Preference relation through a self managed (not TypeORM managed) intermediate entity ListingPreference, which now holds ordinal and page. Remove Preference entity entirely with an appropriate DB migration. ([1947](https://github.com/bloom-housing/bloom/pull/1947))
 
 - Fixed:
   - Added checks for property in listing.dto transforms

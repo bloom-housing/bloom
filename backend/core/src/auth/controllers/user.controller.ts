@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
   Query,
@@ -64,7 +66,7 @@ export class UserController {
   ): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.createUser(
+      await this.userService.createPublicUser(
         dto,
         new AuthContext(req.user as User),
         queryParams.noWelcomeEmail !== true
@@ -76,7 +78,7 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Resend confirmation", operationId: "resendConfirmation" })
   async confirmation(@Body() dto: EmailDto): Promise<StatusDto> {
-    await this.userService.resendConfirmation(dto)
+    await this.userService.resendPublicConfirmation(dto)
     return mapTo(StatusDto, { status: "ok" })
   }
 
@@ -129,7 +131,20 @@ export class UserController {
   async invite(@Request() req: ExpressRequest, @Body() dto: UserInviteDto): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
-      await this.userService.invite(dto, new AuthContext(req.user as User))
+      await this.userService.invitePartnersPortalUser(dto, new AuthContext(req.user as User))
     )
+  }
+
+  @Get(`:userId`)
+  @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
+  async retrieve(@Param("userId") userId: string): Promise<UserDto> {
+    return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
+  }
+
+  @Delete(`:userId`)
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
+  async delete(@Param("userId") userId: string): Promise<void> {
+    return await this.userService.delete(userId)
   }
 }

@@ -3,6 +3,7 @@ import {
   AssetDtoSeedType,
   ListingSeedType,
   PreferenceSeedType,
+  ProgramSeedType,
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
@@ -334,7 +335,7 @@ export const defaultListingEvents: Array<ListingEventCreateDto> = [
     endTime: getDate(10),
     note: "Custom open house event note",
     type: ListingEventType.openHouse,
-    url: "example.com",
+    url: "https://www.example.com",
     label: "Custom Event URL Label",
   },
   {
@@ -342,7 +343,7 @@ export const defaultListingEvents: Array<ListingEventCreateDto> = [
     endTime: getDate(10),
     note: "Custom public lottery event note",
     type: ListingEventType.publicLottery,
-    url: "example2.com",
+    url: "https://www.example2.com",
     label: "Custom Event URL Label",
   },
 ]
@@ -489,7 +490,7 @@ export const defaultListing: ListingSeedType = {
     longitude: -122.40151,
   },
   applicationPickUpAddressOfficeHours: "Custom pick up address office hours text",
-  buildingSelectionCriteria: "example.com",
+  buildingSelectionCriteria: "https://www.example.com",
   costsNotIncluded: "Custom costs not included text",
   creditHistory: "Custom credit history text",
   criminalBackground: "Custom criminal background text",
@@ -515,6 +516,8 @@ export const defaultListing: ListingSeedType = {
   leasingAgentOfficeHours: "Custom leasing agent office hours",
   leasingAgentPhone: "(415) 992-7251",
   leasingAgentTitle: "Leasing Agent Title",
+  listingPreferences: [],
+  listingPrograms: [],
   name: "Default Listing Seed",
   postmarkedApplicationsReceivedByDate: null,
   programRules: "Custom program rules text",
@@ -537,15 +540,13 @@ export function getLiveWorkPreference() {
 }
 
 export const liveWorkPreference: PreferenceSeedType = {
-  ordinal: 1,
-  page: 1,
   title: "Live/Work in County",
   subtitle: "Live/Work in County subtitle",
   description: "At least one household member lives or works in County",
   links: [
     {
       title: "Link Title",
-      url: "example.com",
+      url: "https://www.example.com",
     },
   ],
   formMetadata: {
@@ -567,8 +568,6 @@ export function getDisplaceePreference() {
 }
 
 export const displaceePreference: PreferenceSeedType = {
-  ordinal: 1,
-  page: 1,
   title: "Displacee Tenant Housing",
   subtitle: "Displacee Tenant Housing subtitle",
   description:
@@ -612,8 +611,6 @@ export function getPbvPreference() {
 }
 
 export const pbvPreference: PreferenceSeedType = {
-  page: 1,
-  ordinal: 1,
   title: "Housing Authority Project-Based Voucher",
   subtitle: "",
   description:
@@ -662,8 +659,6 @@ export function getHopwaPreference() {
 }
 
 export const hopwaPreference: PreferenceSeedType = {
-  page: 1,
-  ordinal: 1,
   title: "Housing Opportunities for Persons with AIDS",
   subtitle: "",
   description:
@@ -678,6 +673,116 @@ export const hopwaPreference: PreferenceSeedType = {
     options: [
       {
         key: "hopwa",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+// programs
+
+export function getServedInMilitaryProgram() {
+  return JSON.parse(JSON.stringify(servedInMilitaryProgram))
+}
+
+export const servedInMilitaryProgram: ProgramSeedType = {
+  title: "Have you or anyone in your household served in the US military?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "servedInMilitary",
+    options: [
+      {
+        key: "servedInMilitary",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getTayProgram() {
+  return JSON.parse(JSON.stringify(tayProgram))
+}
+
+export const tayProgram: ProgramSeedType = {
+  title:
+    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "tay",
+    options: [
+      {
+        key: "tay",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getDisabilityOrMentalIlnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+}
+
+export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
+  title: "Do you or anyone in your household have a developmental disability or mental illness?",
+  subtitle: "",
+  description:
+    "Should your application be chosen, be prepared to provide supporting documentation.",
+  formMetadata: {
+    key: "disabilityOrMentalIllness",
+    options: [
+      {
+        key: "disabilityOrMentalIllness",
+        extraData: [],
+      },
+      {
+        key: "doNotConsider",
+        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export function getHousingSituationProgram() {
+  return JSON.parse(JSON.stringify(housingSituationProgram))
+}
+
+export const housingSituationProgram: ProgramSeedType = {
+  title: "Thinking about the past 30 days, do either of these describe your housing situation?",
+  subtitle: "",
+  description: "",
+  formMetadata: {
+    key: "housingSituation",
+    options: [
+      {
+        key: "notPermanent",
+        extraData: [],
+      },
+      {
+        key: "homeless",
         extraData: [],
       },
       {
