@@ -40,9 +40,7 @@ export class EmailService {
   }
 
   public async welcome(user: User, appUrl: string, confirmationUrl: string) {
-    const language = user.language || Language.en
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
-    void (await this.loadTranslations(jurisdiction, language))
+    await this.loadTranslationsForUser(user)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -54,6 +52,25 @@ export class EmailService {
       user.email,
       "Welcome to Bloom",
       this.template("register-email")({
+        user: user,
+        confirmationUrl: confirmationUrl,
+        appOptions: { appUrl: appUrl },
+      })
+    )
+  }
+
+  private async loadTranslationsForUser(user: User) {
+    const language = user.language || Language.en
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, language))
+  }
+
+  public async changeEmail(user: User, appUrl: string, confirmationUrl: string, newEmail: string) {
+    await this.loadTranslationsForUser(user)
+    await this.send(
+      newEmail,
+      "Bloom email change request",
+      this.template("change-email")({
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl: appUrl },
