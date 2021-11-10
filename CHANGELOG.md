@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. The format 
 - Fixed:
 
   - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
+  - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
 
 ## v2.0.0-pre-tailwind 09/16/2021
 
