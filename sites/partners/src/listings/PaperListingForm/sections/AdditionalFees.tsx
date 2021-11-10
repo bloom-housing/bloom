@@ -57,6 +57,13 @@ const AdditionalFees = () => {
         </GridSection>
         <GridSection columns={2}>
           <Textarea
+            label={t("listings.sections.depositHelperText")}
+            name={"depositHelperText"}
+            id={"depositHelperText"}
+            fullWidth={true}
+            register={register}
+          />
+          <Textarea
             label={t("listings.sections.costsNotIncluded")}
             name={"costsNotIncluded"}
             id={"costsNotIncluded"}

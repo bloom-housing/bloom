@@ -32,6 +32,11 @@ const DetailAdditionalFees = () => {
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
+          <ViewItem label={t("listings.sections.depositHelperText")}>
+            {getDetailFieldString(listing.depositHelperText)}
+          </ViewItem>
+        </GridCell>
+        <GridCell>
           <ViewItem label={t("listings.sections.costsNotIncluded")}>
             {getDetailFieldString(listing.costsNotIncluded)}
           </ViewItem>

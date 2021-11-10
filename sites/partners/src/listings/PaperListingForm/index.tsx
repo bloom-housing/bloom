@@ -156,6 +156,7 @@ const defaults: FormListing = {
   criminalBackground: "",
   depositMax: "0",
   depositMin: "0",
+  depositHelperText: "",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
