@@ -38,6 +38,14 @@ const getAddress = (condition: boolean, addressData?: Address): AddressUpdate =>
   return condition ? (addressData as AddressUpdate) : blankAddress
 }
 
+const getBooleanValue = (applicationField: YesNoAnswer) => {
+  return applicationField === null ? null : applicationField === YesNoAnswer.Yes ? true : false
+}
+
+const getYesNoValue = (applicationField: boolean) => {
+  return applicationField === null ? null : applicationField ? YesNoAnswer.Yes : YesNoAnswer.No
+}
+
 const mapEmptyStringToNull = (value: string) => (value === "" ? null : value)
 
 interface FormData extends FormTypes {
@@ -137,19 +145,10 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   const incomePeriod: IncomePeriod | null = data.application?.incomePeriod || null
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
-  const incomeVouchers =
-    data.application.incomeVouchers === YesNoAnswer.Yes
-      ? true
-      : data.application.incomeVouchers === YesNoAnswer.No
-      ? false
-      : null
-
-  const acceptedTerms =
-    data.application.acceptedTerms === YesNoAnswer.Yes
-      ? true
-      : data.application.acceptedTerms === YesNoAnswer.No
-      ? false
-      : null
+  const incomeVouchers = getBooleanValue(data.application.incomeVouchers)
+  const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
+  const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
+  const householdStudent = getBooleanValue(data.application.householdStudent)
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionType.paper
   const status = ApplicationStatus.submitted
@@ -177,6 +176,8 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     mailingAddress,
     alternateContact,
     accessibility,
+    householdExpectingChanges,
+    householdStudent,
     preferences,
     income,
     incomePeriod,
@@ -266,19 +267,11 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       alternateContact,
     } = applicationData
 
-    const incomeVouchers: YesNoAnswer =
-      applicationData.incomeVouchers === null
-        ? null
-        : applicationData.incomeVouchers
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
+    const incomeVouchers = getYesNoValue(applicationData.incomeVouchers)
+    const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
+    const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
+    const householdStudent = getYesNoValue(applicationData.householdStudent)
 
-    const acceptedTerms: YesNoAnswer =
-      applicationData.acceptedTerms === null
-        ? null
-        : applicationData.acceptedTerms
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
     const workInRegion = applicationData.applicant.workInRegion as YesNoAnswer
 
     const applicant = {
@@ -300,6 +293,8 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       mailingAddress,
       preferredUnit,
       accessibility,
+      householdExpectingChanges,
+      householdStudent,
       incomePeriod,
       incomeVouchers,
       demographics,

@@ -1246,6 +1246,12 @@
         "name": "adaHouseholdMembers"
       },
       {
+        "name": "householdChanges"
+      },
+      {
+        "name": "householdStudent"
+      },
+      {
         "name": "vouchersSubsidies"
       },
       {
