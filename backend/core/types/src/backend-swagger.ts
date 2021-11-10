@@ -2263,6 +2263,9 @@ export interface Jurisdiction {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionLanguages[]
 }
 
 export interface AmiChart {
@@ -3960,6 +3963,9 @@ export interface JurisdictionCreate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionCreateLanguages[]
 }
 
 export interface JurisdictionUpdate {
@@ -3977,6 +3983,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionUpdateLanguages[]
 }
 
 export interface ListingFilterParams {
@@ -5840,7 +5849,12 @@ export interface UnitAccessibilityPriorityTypeUpdate {
   /**  */
   id: string
 }
-
+export enum EnumJurisdictionLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+}
 export enum IncomePeriod {
   "perMonth" = "perMonth",
   "perYear" = "perYear",
@@ -5901,6 +5915,18 @@ export enum EnumUserFilterParamsComparison {
   "IN" = "IN",
   ">=" = ">=",
   "NA" = "NA",
+}
+export enum EnumJurisdictionCreateLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
+}
+export enum EnumJurisdictionUpdateLanguages {
+  "en" = "en",
+  "es" = "es",
+  "vi" = "vi",
+  "zh" = "zh",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
