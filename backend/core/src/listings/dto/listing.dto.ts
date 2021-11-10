@@ -100,10 +100,11 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingProgramDto)
-  listingPrograms: ListingProgramDto[]
+  listingPrograms?: ListingProgramDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

@@ -4382,9 +4382,6 @@ export interface ListingPreference {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ReservedCommunityType {
@@ -4629,7 +4626,7 @@ export interface Listing {
   leasingAgents?: UserBasic[]
 
   /**  */
-  listingPrograms: ListingProgram[]
+  listingPrograms?: ListingProgram[]
 
   /**  */
   listingPreferences: ListingPreference[]
@@ -5001,9 +4998,6 @@ export interface ListingProgramUpdate {
 
   /**  */
   ordinal?: number
-
-  /**  */
-  page?: number
 }
 
 export interface ListingCreate {
