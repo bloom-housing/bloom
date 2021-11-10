@@ -25,7 +25,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
       applicationDueDate={moment(listing.applicationDueDate).format("MMMM D, YYYY")}
       applicationURL={`application/${props.application.id}`}
       applicationUpdatedAt={moment(props.application.updatedAt).format("MMMM D, YYYY")}
-      confirmationNumber={props.application.id}
+      confirmationNumber={props.application.confirmationCode || props.application.id}
       listingName={listing.name}
       listingURL={`/listing/${listing.id}/${listing.urlSlug}`}
       key={props.application.id}

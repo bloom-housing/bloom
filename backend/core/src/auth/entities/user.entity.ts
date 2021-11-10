@@ -12,12 +12,22 @@ import {
 } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { Expose, Type } from "class-transformer"
-import { IsDate, IsEmail, IsEnum, IsOptional, IsString, IsUUID, MaxLength } from "class-validator"
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
 import { UserRoles } from "./user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -47,6 +57,7 @@ export class User {
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   email: string
 
   @Column("varchar")
@@ -75,6 +86,12 @@ export class User {
   @Type(() => Date)
   dob?: Date | null
 
+  @Column("varchar", { nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber(null, { groups: [ValidationsGroupsEnum.default] })
+  phoneNumber?: string
+
   @CreateDateColumn()
   @Expose()
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
@@ -94,6 +111,8 @@ export class User {
     eager: true,
     cascade: true,
     nullable: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @Expose()
   roles?: UserRoles

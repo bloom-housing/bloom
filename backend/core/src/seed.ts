@@ -9,13 +9,24 @@ import { User } from "./auth/entities/user.entity"
 import { makeNewApplication } from "./seeds/applications"
 import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
-import { defaultLeasingAgents } from "./seeds/listings/shared"
+import {
+  defaultLeasingAgents,
+  getDisabilityOrMentalIlnessProgram,
+  getHousingSituationProgram,
+  getServedInMilitaryProgram,
+  getTayProgram,
+  getDisplaceePreference,
+  getHopwaPreference,
+  getLiveWorkPreference,
+  getPbvPreference,
+} from "./seeds/listings/shared"
+import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
 import { Listing } from "./listings/entities/listing.entity"
 import { ListingColiseumSeed } from "./seeds/listings/listing-coliseum-seed"
 import { ListingDefaultOpenSoonSeed } from "./seeds/listings/listing-default-open-soon"
 import { ListingDefaultOnePreferenceSeed } from "./seeds/listings/listing-default-one-preference-seed"
 import { ListingDefaultNoPreferenceSeed } from "./seeds/listings/listing-default-no-preference-seed"
-import { ListingTritonSeed } from "./seeds/listings/listing-triton-seed"
+import { ListingTritonSeed, ListingTritonSeedDetroit } from "./seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "./seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethodsService } from "./application-methods/application-methods.service"
 import { ApplicationMethodType } from "./application-methods/types/application-method-type-enum"
@@ -30,6 +41,8 @@ import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
+import { Preference } from "./preferences/entities/preference.entity"
+import { Program } from "./program/entities/program.entity"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -44,7 +57,6 @@ const listingSeeds: any[] = [
   ListingDefaultOpenSoonSeed,
   ListingDefaultOnePreferenceSeed,
   ListingDefaultNoPreferenceSeed,
-  ListingDefaultNoPreferenceSeed,
   ListingDefaultBmrChartSeed,
   ListingTritonSeed,
   ListingDefaultReservedSeed,
@@ -52,6 +64,8 @@ const listingSeeds: any[] = [
   ListingDefaultMultipleAMI,
   ListingDefaultMultipleAMIAndPercentages,
   ListingDefaultMissingAMI,
+  ListingDefaultSanJoseSeed,
+  ListingTritonSeedDetroit,
 ]
 
 export function getSeedListingsCount() {
@@ -67,7 +81,7 @@ export async function createLeasingAgents(
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
       async (leasingAgent) =>
-        await usersService.createUser(
+        await usersService.createPublicUser(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
@@ -86,6 +100,48 @@ export async function createLeasingAgents(
   return leasingAgents
 }
 
+export async function createPreferences(
+  app: INestApplicationContext,
+  jurisdictions: Jurisdiction[]
+) {
+  const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
+  const preferences = await preferencesRepository.save([
+    getLiveWorkPreference(),
+    getPbvPreference(),
+    getHopwaPreference(),
+    getDisplaceePreference(),
+  ])
+
+  for (const jurisdiction of jurisdictions) {
+    jurisdiction.preferences = preferences
+  }
+  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
+    getRepositoryToken(Jurisdiction)
+  )
+  await jurisdictionsRepository.save(jurisdictions)
+  return preferences
+}
+
+export async function createPrograms(app: INestApplicationContext, jurisdictions: Jurisdiction[]) {
+  const programsRepository = app.get<Repository<Program>>(getRepositoryToken(Program))
+  const programs = await programsRepository.save([
+    getServedInMilitaryProgram(),
+    getTayProgram(),
+    getDisabilityOrMentalIlnessProgram(),
+    getHousingSituationProgram(),
+  ])
+
+  for (const jurisdiction of jurisdictions) {
+    jurisdiction.programs = programs
+  }
+  const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
+    getRepositoryToken(Jurisdiction)
+  )
+  await jurisdictionsRepository.save(jurisdictions)
+
+  return programs
+}
+
 const seedListings = async (
   app: INestApplicationContext,
   rolesRepo: Repository<UserRoles>,
@@ -93,7 +149,7 @@ const seedListings = async (
 ) => {
   const seeds = []
   const leasingAgents = await createLeasingAgents(app, rolesRepo, jurisdictions)
-
+  await createPreferences(app, jurisdictions)
   const allSeeds = listingSeeds.map((listingSeed) => app.get<ListingDefaultSeed>(listingSeed))
   const listingRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
   const applicationMethodsService = await app.resolve<ApplicationMethodsService>(
@@ -102,8 +158,11 @@ const seedListings = async (
 
   for (const [index, listingSeed] of allSeeds.entries()) {
     const everyOtherAgent = index % 2 ? leasingAgents[0] : leasingAgents[1]
-    const listing = await listingSeed.seed()
-    listing.jurisdiction = jurisdictions[0]
+    const listing: Listing & { jurisdictionName?: string } = await listingSeed.seed()
+    // set jurisdiction based off of the name provided on the seed
+    listing.jurisdiction = jurisdictions.find(
+      (jurisdiction) => jurisdiction.name === listing.jurisdictionName
+    )
     listing.leasingAgents = [everyOtherAgent]
     const applicationMethods = await applicationMethodsService.create({
       type: ApplicationMethodType.Internal,
@@ -131,9 +190,10 @@ async function seed() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
+  await createPrograms(app, jurisdictions)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
-  const user1 = await userService.createUser(
+  const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       emailConfirmation: "test@example.com",
@@ -142,14 +202,14 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
   await userService.confirm({ token: user1.confirmationToken })
 
-  const user2 = await userService.createUser(
+  const user2 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       emailConfirmation: "test2@example.com",
@@ -158,14 +218,14 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "ghijkl",
-      passwordConfirmation: "Ghijkl1!",
+      passwordConfirmation: "ghijkl",
       jurisdictions: [jurisdictions[0]],
     }),
     new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
 
-  const admin = await userService.createUser(
+  const admin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "admin@example.com",
       emailConfirmation: "admin@example.com",
@@ -174,7 +234,7 @@ async function seed() {
       lastName: "Last",
       dob: new Date(),
       password: "abcdef",
-      passwordConfirmation: "Abcdef1!",
+      passwordConfirmation: "abcdef",
       jurisdictions,
     }),
     new AuthContext(null)

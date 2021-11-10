@@ -3,8 +3,8 @@ import {
   CACHE_MANAGER,
   Inject,
   Module,
-  OnModuleDestroy,
   OnModuleInit,
+  OnApplicationShutdown,
 } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
@@ -57,7 +57,7 @@ if (process.env.REDIS_USE_TLS !== "0") {
   controllers: [ListingsController],
 })
 // We have to manually disconnect from redis on app close
-export class ListingsModule implements OnModuleDestroy, OnModuleInit {
+export class ListingsModule implements OnApplicationShutdown, OnModuleInit {
   redisClient: Redis.RedisClient
   constructor(@Inject(CACHE_MANAGER) private cacheManager: RedisCache) {
     this.redisClient = this.cacheManager.store.getClient()
@@ -66,7 +66,7 @@ export class ListingsModule implements OnModuleDestroy, OnModuleInit {
       console.log("redis error = ", error)
     })
   }
-  onModuleDestroy() {
+  onApplicationShutdown() {
     console.log("Disconnect from Redis")
     void this.cacheManager.store.reset()
     this.redisClient.quit()

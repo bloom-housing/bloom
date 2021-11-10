@@ -42,6 +42,7 @@ import { ApplicationStatus } from "../types/application-status-enum"
 import { ApplicationSubmissionType } from "../types/application-submission-type-enum"
 import { IncomePeriod } from "../types/income-period-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
+import { ApplicationProgram } from "./application-program.entity"
 
 @Entity({ name: "applications" })
 @Unique(["listing", "confirmationCode"])
@@ -61,7 +62,7 @@ export class Application extends AbstractEntity {
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "SET NULL" })
   user?: User | null
 
   @RelationId((application: Application) => application.user)
@@ -172,6 +173,18 @@ export class Application extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  householdExpectingChanges?: boolean | null
+
+  @Column({ type: "bool", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  householdStudent?: boolean | null
+
+  @Column({ type: "bool", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   incomeVouchers?: boolean | null
 
   @Column({ type: "text", nullable: true })
@@ -210,6 +223,14 @@ export class Application extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationPreference)
   preferences: ApplicationPreference[]
+
+  @Column({ type: "jsonb", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ApplicationProgram)
+  programs?: ApplicationProgram[]
 
   @Column({ enum: ApplicationStatus })
   @Expose()

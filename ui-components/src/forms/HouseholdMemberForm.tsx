@@ -23,6 +23,7 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
           id="edit-member"
           className="edit-link"
           onClick={() => props.editMember && props.editMember(props.memberId)}
+          type={"button"}
         >
           {t("t.edit")}
         </button>

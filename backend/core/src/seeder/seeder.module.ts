@@ -10,6 +10,7 @@ import { ApplicationsModule } from "../applications/applications.module"
 import { ListingsModule } from "../listings/listings.module"
 import { AmiChartsModule } from "../ami-charts/ami-charts.module"
 import { ListingDefaultSeed } from "../seeds/listings/listing-default-seed"
+import { ListingDefaultSanJoseSeed } from "../seeds/listings/listing-default-sanjose-seed"
 import { Listing } from "../listings/entities/listing.entity"
 import { UnitAccessibilityPriorityType } from "../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { ReservedCommunityType } from "../reserved-community-type/entities/reserved-community-type.entity"
@@ -26,7 +27,7 @@ import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-defaul
 import { Preference } from "../preferences/entities/preference.entity"
 import { ListingDefaultFCFSSeed } from "../seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultOpenSoonSeed } from "../seeds/listings/listing-default-open-soon"
-import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
+import { ListingTritonSeed, ListingTritonSeedDetroit } from "../seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
 import { PaperApplication } from "../paper-applications/entities/paper-application.entity"
@@ -39,6 +40,7 @@ import { ListingDefaultMultipleAMIAndPercentages } from "../seeds/listings/listi
 import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-missing-ami"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
+import { Program } from "../program/entities/program.entity"
 
 @Module({})
 export class SeederModule {
@@ -67,6 +69,7 @@ export class SeederModule {
           ApplicationMethod,
           PaperApplication,
           Jurisdiction,
+          Program,
         ]),
         ThrottlerModule.forRoot({
           ttl: 60,
@@ -95,6 +98,8 @@ export class SeederModule {
         ListingDefaultMultipleAMI,
         ListingDefaultMultipleAMIAndPercentages,
         ListingDefaultMissingAMI,
+        ListingDefaultSanJoseSeed,
+        ListingTritonSeedDetroit,
       ],
     }
   }

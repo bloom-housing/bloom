@@ -6,6 +6,8 @@ import {
   getHopwaPreference,
   getLiveWorkPreference,
   getPbvPreference,
+  getServedInMilitaryProgram,
+  getTayProgram,
   PriorityTypes,
 } from "./shared"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
@@ -874,6 +876,11 @@ const coliseumUnits: Array<UnitSeedType> = [
 ]
 
 const coliseumListing: ListingSeedType = {
+  jurisdictionName: "Alameda",
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
@@ -922,6 +929,8 @@ const coliseumListing: ListingSeedType = {
     "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   leasingAgentPhone: "(510) 625-1632",
   leasingAgentTitle: "Property Manager",
+  listingPreferences: [],
+  listingPrograms: [],
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
@@ -1022,12 +1031,41 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       ...coliseumListing,
       property: property,
       assets: getDefaultAssets(),
-      preferences: [
-        getLiveWorkPreference(),
-        { ...getPbvPreference(), ordinal: 2, page: 2 },
-        { ...getHopwaPreference(), ordinal: 3, page: 3 },
+      listingPreferences: [
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getLiveWorkPreference().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getPbvPreference().title,
+          }),
+          ordinal: 2,
+        },
+        {
+          preference: await this.preferencesRepository.findOneOrFail({
+            title: getHopwaPreference().title,
+          }),
+          ordinal: 3,
+        },
       ],
       events: [],
+      listingPrograms: [
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getServedInMilitaryProgram().title,
+          }),
+          ordinal: 1,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getTayProgram().title,
+          }),
+          ordinal: 2,
+        },
+      ],
     }
 
     return await this.listingRepository.save(listingCreateDto)

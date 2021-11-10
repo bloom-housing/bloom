@@ -1,11 +1,15 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "2.0.0-pre-tailwind",
+  "version": "3.0.1-alpha.11",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
   "license": "Apache-2.0",
   "private": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect=9231' next -p ${NEXTJS_PORT:-3001}",
     "build": "next build",
@@ -18,7 +22,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/ui-components": "^2.0.0-alpha.0",
+    "@bloom-housing/backend-core": "^3.0.1-alpha.9",
+    "@bloom-housing/shared-helpers": "^3.0.1-alpha.2",
+    "@bloom-housing/ui-components": "^3.0.1-alpha.8",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",

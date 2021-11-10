@@ -25,6 +25,8 @@ export type ApplicationTypes = {
   incomePeriod?: IncomePeriod
   incomeVouchers?: YesNoAnswer
   preferredUnit?: string[]
+  householdExpectingChanges?: YesNoAnswer
+  householdStudent?: YesNoAnswer
   accessibility: {
     mobility?: boolean
     vision?: boolean

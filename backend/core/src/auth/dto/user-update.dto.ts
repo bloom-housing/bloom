@@ -9,6 +9,7 @@ import {
   IsString,
   IsUUID,
   Matches,
+  MaxLength,
   ValidateIf,
   ValidateNested,
 } from "class-validator"
@@ -16,6 +17,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UserDto } from "./user.dto"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
@@ -34,6 +36,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   email?: string
 
   @Expose()
@@ -67,4 +70,23 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   jurisdictions: IdDto[]
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => IdDto)
+  leasingAgentInListings?: IdDto[] | null
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
+  newEmail?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
+  appUrl?: string | null
 }

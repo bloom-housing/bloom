@@ -1,4 +1,10 @@
-import { AmiChart, Listing, ListingStatus, UnitStatus } from "./backend-swagger"
+import {
+  AmiChart,
+  EnumJurisdictionLanguages,
+  Listing,
+  ListingStatus,
+  UnitStatus,
+} from "./backend-swagger"
 
 const amiChart: AmiChart = {
   id: "somerandomid",
@@ -10,6 +16,9 @@ const amiChart: AmiChart = {
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    programs: [],
+    languages: [EnumJurisdictionLanguages.en],
+    preferences: [],
   },
   items: [
     {
@@ -650,6 +659,7 @@ export const ArcherListing: Listing = {
   leasingAgentOfficeHours: "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
+  listingPrograms: [],
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
     "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",

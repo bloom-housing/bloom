@@ -33,6 +33,9 @@ import {
   PaperApplicationCreate,
   ListingReviewOrder,
   User,
+  ListingPreference,
+  Program,
+  ListingProgram,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -49,7 +52,7 @@ import {
   stringToNumber,
   createDate,
   createTime,
-  removeEmptyFields,
+  removeEmptyObjects,
 } from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
@@ -60,10 +63,11 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import Preferences from "./sections/Preferences"
+import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -130,7 +134,7 @@ const defaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationDueDate: new Date(),
+  applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
@@ -143,7 +147,7 @@ const defaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  buildingSelectionCriteriaFile: { fileId: "", label: "" },
+  buildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
   jurisdiction: undefined,
   costsNotIncluded: "",
@@ -154,7 +158,7 @@ const defaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
-  image: { fileId: "", label: "" },
+  image: null,
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
@@ -164,7 +168,8 @@ const defaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
-  preferences: [],
+  listingPreferences: [],
+  listingPrograms: [],
   programRules: "",
   rentalAssistance:
     "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
@@ -232,7 +237,8 @@ const formatFormData = (
   data: FormListing,
   units: TempUnit[],
   openHouseEvents: TempEvent[],
-  preferences: Preference[],
+  preferences: ListingPreference[],
+  programs: ListingProgram[],
   saveLatLong: LatitudeLongitude,
   customPinPositionChosen: boolean,
   profile: User
@@ -337,7 +343,8 @@ const formatFormData = (
     applicationDueTime: applicationDueTimeFormatted,
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
-    preferences: preferences,
+    listingPreferences: preferences,
+    listingPrograms: programs,
     buildingAddress: {
       ...data.buildingAddress,
       latitude: saveLatLong.latitude ?? null,
@@ -431,7 +438,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [preferences, setPreferences] = useState<Preference[]>(
+    listing?.listingPreferences.map((listingPref) => {
+      return { ...listingPref.preference }
+    }) ?? []
+  )
+  const [programs, setPrograms] = useState<Program[]>(
+    listing?.listingPrograms.map((program) => {
+      return program.program
+    }) ?? []
+  )
+
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
@@ -507,24 +524,23 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         try {
           setLoading(true)
           clearErrors()
-          const orderedPreferences = preferences.map((pref, index) => {
-            return { ...pref, ordinal: index + 1 }
+          const orderedPreferences = preferences.map((preference, index) => {
+            return { preference, ordinal: index + 1 }
+          })
+          const orderedPrograms = programs.map((program, index) => {
+            return { program: { ...program }, ordinal: index + 1 }
           })
           const formattedData = formatFormData(
             formData,
             units,
             openHouseEvents,
             orderedPreferences,
+            orderedPrograms,
             latLong,
             customMapPositionChosen,
             profile
           )
-          removeEmptyFields(formattedData, [
-            "applicationPickUpAddressType",
-            "applicationDropOffAddressType",
-            "applicationDueDate",
-            "applicationDueTime",
-          ])
+          removeEmptyObjects(formattedData)
           const result = editMode
             ? await listingsService.update({
                 listingId: listing.id,
@@ -575,6 +591,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing,
       router,
       preferences,
+      programs,
       latLong,
       customMapPositionChosen,
       clearErrors,
@@ -661,7 +678,32 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setUnits={setUnits}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
-                          <Preferences preferences={preferences} setPreferences={setPreferences} />
+                          <SelectAndOrder
+                            addText={t("listings.addPreference")}
+                            drawerTitle={t("listings.addPreferences")}
+                            editText={t("listings.editPreferences")}
+                            listingData={preferences}
+                            setListingData={setPreferences}
+                            subtitle={t("listings.sections.housingPreferencesSubtext")}
+                            title={t("listings.sections.housingPreferencesTitle")}
+                            drawerButtonText={t("listings.selectPreferences")}
+                            dataFetcher={useJurisdictionalPreferenceList}
+                            formKey={"preference"}
+                          />
+                          <SelectAndOrder
+                            addText={"Add program"}
+                            drawerTitle={"Add programs"}
+                            editText={"Edit programs"}
+                            listingData={programs}
+                            setListingData={setPrograms}
+                            subtitle={
+                              "Tell us about any additional housing programs related to this listing."
+                            }
+                            title={"Housing Programs"}
+                            drawerButtonText={"Select programs"}
+                            dataFetcher={useJurisdictionalProgramList}
+                            formKey={"program"}
+                          />
                           <AdditionalFees />
                           <BuildingFeatures />
                           <AdditionalEligibility />
@@ -745,8 +787,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.closed)
             }}
           >
             {t("listings.actions.close")}
@@ -775,10 +817,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           <Button
             type="button"
             styleType={AppearanceStyleType.success}
-            onClick={async () => {
-              // If we don't await here, the scroll block stays in place on modal close
-              /* eslint-disable-next-line @typescript-eslint/await-thenable */
-              await setPublishModal(false)
+            onClick={() => {
+              setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >
