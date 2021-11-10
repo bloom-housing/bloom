@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.8...@bloom-housing/backend-core@3.0.1-alpha.9) (2021-11-10)
+
+
+### Features
+
+* **backend:** add nginx proxy-cache configuration ([#2119](https://github.com/bloom-housing/bloom/issues/2119)) ([34d32e7](https://github.com/bloom-housing/bloom/commit/34d32e75ceae378a26c57f4c9b7feec8c88339e0))
+
+
+
+
+
 ## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.7...@bloom-housing/backend-core@3.0.1-alpha.8) (2021-11-09)
 
 
