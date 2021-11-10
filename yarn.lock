@@ -2711,6 +2711,41 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bloom-housing/ui-components@^3.0.1-alpha.8":
+  version "3.0.1-alpha.8"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-3.0.1-alpha.8.tgz#92996d01c6e78b398d59d89a68c9ad6820223282"
+  integrity sha512-eDFO8VQu2A58T5hYiqxo30szyqUpMVxsKUPjhbl+BPX+2rgVjCjiq4x47hqGZnnkDu3Kg59qvEZiAxpQvebgew==
+  dependencies:
+    "@mapbox/mapbox-sdk" "^0.13.0"
+    "@types/body-scroll-lock" "^2.6.1"
+    "@types/jwt-decode" "^2.2.1"
+    "@types/markdown-to-jsx" "^6.11.2"
+    "@types/node" "^12.12.67"
+    "@types/node-polyglot" "^2.4.1"
+    "@types/react-beautiful-dnd" "^13.1.1"
+    "@types/react-dom" "^16.9.5"
+    "@types/react-text-mask" "^5.4.6"
+    "@types/react-transition-group" "^4.4.0"
+    axios "^0.21.1"
+    body-scroll-lock "^3.1.5"
+    jwt-decode "^2.2.0"
+    markdown-to-jsx "^6.11.4"
+    moment "^2.29.1"
+    nanoid "^3.1.12"
+    react "^17.0.2"
+    react-accessible-accordion "^3.3.5"
+    react-beautiful-dnd "^13.1.0"
+    react-dom "^17.0.2"
+    react-dropzone "^11.3.2"
+    react-focus-lock "^2.5.2"
+    react-map-gl "^6.1.16"
+    react-media "^1.10.0"
+    react-tabs "^3.2.2"
+    react-text-mask "^5.4.3"
+    react-transition-group "^4.4.1"
+    tailwindcss "2.2.10"
+    typesafe-actions "^5.1.0"
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -6028,6 +6063,11 @@
   version "16.4.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.3.tgz#c01c1a215721f6dec71b47d88b4687463601ba48"
   integrity sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==
+
+"@types/node@>= 8":
+  version "16.11.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.7.tgz#36820945061326978c42a01e56b61cd223dfdc42"
+  integrity sha512-QB5D2sqfSjCmTuWcBWyJ+/44bcjO7VbjSbOE0ucoVbAsSNQc4Lt6QkgkVXkTDwkL4z/beecZNDvVX15D4P8Jbw==
 
 "@types/node@^12.12.67":
   version "12.12.67"
