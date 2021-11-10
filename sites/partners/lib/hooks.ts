@@ -7,7 +7,6 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
-  EnumUserFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
@@ -348,12 +347,13 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
-      filter: [
-        {
-          isPartner: true,
-          $comparison: EnumUserFilterParamsComparison["="],
-        },
-      ],
+      // TODO: temporary disabled, because it occurs an issue with data fetching (501 - Filter Not Implemented)
+      // filter: [
+      //   {
+      //     isPartner: true,
+      //     $comparison: EnumUserFilterParamsComparison["="],
+      //   },
+      // ],
     })
 
   const { data, error } = useSWR(

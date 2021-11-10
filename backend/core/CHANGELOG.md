@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.8...@bloom-housing/backend-core@3.0.1-alpha.9) (2021-11-10)
+
+
+### Features
+
+* **backend:** add nginx proxy-cache configuration ([#2119](https://github.com/bloom-housing/bloom/issues/2119)) ([34d32e7](https://github.com/bloom-housing/bloom/commit/34d32e75ceae378a26c57f4c9b7feec8c88339e0))
+
+
+
+
+
+## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.7...@bloom-housing/backend-core@3.0.1-alpha.8) (2021-11-09)
+
+
+### Bug Fixes
+
+* updates address order ([#2151](https://github.com/bloom-housing/bloom/issues/2151)) ([252e014](https://github.com/bloom-housing/bloom/commit/252e014dcbd2e4c305384ed552135f5a8e4e4767))
+
+
+
+
+
+## [3.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.6...@bloom-housing/backend-core@3.0.1-alpha.7) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.5...@bloom-housing/backend-core@3.0.1-alpha.6) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [3.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.4...@bloom-housing/backend-core@3.0.1-alpha.5) (2021-11-09)
 
 
