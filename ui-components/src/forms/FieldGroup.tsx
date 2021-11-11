@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useState } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods } from "react-hook-form"
+import { Field } from "./Field"
+import { t } from "../helpers/translator"
 
 interface FieldSingle {
   id: string
@@ -12,6 +14,8 @@ interface FieldSingle {
   note?: string
   inputProps?: Record<string, unknown>
   subFields?: FieldSingle[]
+  type?: string
+  additionalText?: boolean
 }
 
 interface FieldGroupProps {
@@ -53,16 +57,25 @@ const FieldGroup = ({
     fieldClassName = `${fieldClassName} flex-initial mr-4`
   }
 
-  const getInput = (item: FieldSingle) => {
+  const [checkedInputs, setCheckedInputs] = useState<string[]>([])
+
+  const getIndividualInput = (item: FieldSingle): React.ReactNode => {
     return (
-      <div key={name}>
+      <div key={item.value}>
         <input
           aria-describedby={`${name}-error`}
           aria-invalid={!!error || false}
           type={type}
           id={item.id}
           defaultValue={item.value || item.id}
-          name={name}
+          name={item.subFields ? `${name}.${item.value ?? item.id}` : name}
+          onClick={(e) => {
+            if (e.currentTarget.checked) {
+              setCheckedInputs([...checkedInputs, item.label])
+            } else {
+              setCheckedInputs(checkedInputs.filter((subset) => item.label !== subset))
+            }
+          }}
           defaultChecked={item.defaultChecked || false}
           ref={register(validation)}
           {...item.inputProps}
@@ -83,6 +96,24 @@ const FieldGroup = ({
       </div>
     )
   }
+
+  const getInputSet = (item: FieldSingle): React.ReactNode => {
+    return (
+      <div key={item.value}>
+        {getIndividualInput(item)}
+        {item.additionalText && checkedInputs.indexOf(item.label) >= 0 && (
+          <Field
+            id={item.id}
+            key={`${item.value}-additionalText`}
+            name={`${name}-${item.value}`}
+            register={register}
+            placeholder={t("t.description")}
+            className={"mb-4"}
+          />
+        )}
+      </div>
+    )
+  }
   return (
     <>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
@@ -91,12 +122,14 @@ const FieldGroup = ({
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""} mb-0`}>
         {fields?.map((item) => (
           <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
-            {getInput(item)}
-            <div className={"ml-8"}>
-              {item.subFields?.map((subItem) => {
-                return getInput(subItem)
-              })}
-            </div>
+            {getInputSet(item)}
+            {item.subFields && checkedInputs.indexOf(item.label) >= 0 && (
+              <div className={"ml-8"} key={`${item.value}-subfields`}>
+                {item.subFields?.map((subItem) => {
+                  return getInputSet(subItem)
+                })}
+              </div>
+            )}
           </div>
         ))}
       </div>

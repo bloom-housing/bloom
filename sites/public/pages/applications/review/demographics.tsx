@@ -21,6 +21,7 @@ import {
   genderKeys,
   sexualOrientation,
   howDidYouHear,
+  fieldGroupObjectToArray,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -41,15 +42,13 @@ const ApplicationDemographics = () => {
   })
 
   const onSubmit = (data) => {
-    const { ethnicity, race, gender, sexualOrientation, howDidYouHear } = data
-
     conductor.currentStep.save({
       demographics: {
-        ethnicity,
-        race,
-        gender,
-        sexualOrientation,
-        howDidYouHear,
+        ethnicity: data.ethnicity,
+        gender: data.gender,
+        sexualOrientation: data.sexualOrientation,
+        howDidYouHear: fieldGroupObjectToArray(data, "howDidYouHear"),
+        race: fieldGroupObjectToArray(data, "race"),
       },
     })
     conductor.routeToNextOrReturnUrl()
@@ -99,10 +98,12 @@ const ApplicationDemographics = () => {
                   id: rootKey,
                   label: t(`application.review.demographics.raceOptions.${rootKey}`),
                   value: rootKey,
+                  additionalText: rootKey.indexOf("other") >= 0,
                   subFields: raceKeys[rootKey].map((subKey) => ({
                     id: subKey,
                     label: t(`application.review.demographics.raceOptions.${subKey}`),
                     value: subKey,
+                    additionalText: subKey.indexOf("other") >= 0,
                   })),
                 }))}
                 type="checkbox"

@@ -33,6 +33,28 @@ const FormDemographics = () => {
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
       <GridCell>
+        <ViewItem label={t("application.add.race")}>
+          <FieldGroup
+            name="application.demographics.race"
+            fields={Object.keys(raceKeys).map((rootKey) => ({
+              id: rootKey,
+              label: t(`application.review.demographics.raceOptions.${rootKey}`),
+              value: rootKey,
+              additionalText: rootKey.indexOf("other") >= 0,
+              subFields: raceKeys[rootKey].map((subKey) => ({
+                id: subKey,
+                label: t(`application.review.demographics.raceOptions.${subKey}`),
+                value: subKey,
+                additionalText: subKey.indexOf("other") >= 0,
+              })),
+            }))}
+            type="checkbox"
+            register={register}
+          />
+        </ViewItem>
+      </GridCell>
+
+      <GridCell>
         <ViewItem label={t("application.add.ethnicity")}>
           <Select
             id="application.demographics.ethnicity"
@@ -44,26 +66,6 @@ const FormDemographics = () => {
             controlClassName="control"
             options={ethnicityKeys}
             keyPrefix="application.review.demographics.ethnicityOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.race")}>
-          <FieldGroup
-            name="application.demographics.race"
-            fields={Object.keys(raceKeys).map((rootKey) => ({
-              id: rootKey,
-              label: t(`application.review.demographics.raceOptions.${rootKey}`),
-              value: rootKey,
-              subFields: raceKeys[rootKey].map((subKey) => ({
-                id: subKey,
-                label: t(`application.review.demographics.raceOptions.${subKey}`),
-                value: subKey,
-              })),
-            }))}
-            type="checkbox"
-            register={register}
           />
         </ViewItem>
       </GridCell>

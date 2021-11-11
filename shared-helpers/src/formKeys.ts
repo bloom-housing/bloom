@@ -107,7 +107,15 @@ export const rootRaceKeys = [
   "declineToRespond",
 ]
 
-export const asianKeys = ["asianIndian", "chinese", "filipino", "japanese", "korean", "vietnamese"]
+export const asianKeys = [
+  "asianIndian",
+  "chinese",
+  "filipino",
+  "japanese",
+  "korean",
+  "vietnamese",
+  "otherAsian",
+]
 
 export const nativeHawaiianOtherPacificIslanderKeys = [
   "nativeHawaiian",
@@ -139,6 +147,12 @@ const prependRoot = (root: string, subKeys: string[]) => {
 
 interface subCheckboxes {
   [key: string]: string[]
+}
+
+export const fieldGroupObjectToArray = (formObject: { key: string }, rootKey: string) => {
+  return Object.keys(formObject)
+    .filter((formValue) => formValue.split("-")[0] === rootKey && formObject[formValue])
+    .map((formValue) => formObject[formValue])
 }
 
 // Return to this when PR #2108 merges that changes package build to be able to import from ui-components

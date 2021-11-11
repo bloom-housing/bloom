@@ -671,6 +671,7 @@
           "asian": "Asian",
           "asianAndWhite": "Asian and White",
           "asian-asianIndian": "Asian Indian",
+          "asian-otherAsian": "Other Asian",
           "blackAfricanAmerican": "Black / African American",
           "blackAfricanAmericanAndWhite": "Black / African American and White",
           "asian-chinese": "Chinese",
@@ -686,7 +687,6 @@
           "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Other Pacific Islander",
           "nativeHawaiianOtherPacificIslander-samoan": "Samoan",
           "asian-vietnamese": "Vietnamese",
-          "otherAsian": "Other Asian",
           "white": "White"
         },
         "genderOptions": {
