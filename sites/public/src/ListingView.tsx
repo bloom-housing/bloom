@@ -300,7 +300,6 @@ export const ListingView = (props: ListingProps) => {
         waitlistMaxSize={listing.waitlistMaxSize}
         waitlistCurrentSize={listing.waitlistCurrentSize}
         waitlistOpenSpots={listing.waitlistOpenSpots}
-        unitsAvailable={listing.unitsAvailable}
       />
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
