@@ -6,6 +6,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { UserRolesDto } from "./user-roles.dto"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { IdDto } from "../../shared/dto/id.dto"
+import { UserPreferencesDto } from "../../../src/user-preferences/dto/user-preferences.dto"
 
 export class UserBasicDto extends OmitType(User, [
   "leasingAgentInListings",
@@ -14,6 +15,7 @@ export class UserBasicDto extends OmitType(User, [
   "resetToken",
   "roles",
   "jurisdictions",
+  "preferences",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
@@ -33,4 +35,10 @@ export class UserBasicDto extends OmitType(User, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgentInListings?: IdDto[] | null
+
+  @Expose()
+  @IsOptional()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UserPreferencesDto)
+  preferences?: UserPreferencesDto | null
 }
