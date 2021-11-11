@@ -14,10 +14,11 @@ import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/application-flagged-sets.module"
 import { EmailModule } from "../shared/email/email.module"
 import { TranslationsModule } from "../translations/translations.module"
+import { Listing } from "../listings/entities/listing.entity"
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Application, Applicant, Address]),
+    TypeOrmModule.forFeature([Application, Applicant, Address, Listing]),
     AuthModule,
     SharedModule,
     ListingsModule,

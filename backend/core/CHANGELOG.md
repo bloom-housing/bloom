@@ -3,6 +3,93 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.8...@bloom-housing/backend-core@3.0.1-alpha.9) (2021-11-10)
+
+
+### Features
+
+* **backend:** add nginx proxy-cache configuration ([#2119](https://github.com/bloom-housing/bloom/issues/2119)) ([34d32e7](https://github.com/bloom-housing/bloom/commit/34d32e75ceae378a26c57f4c9b7feec8c88339e0))
+
+
+
+
+
+## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.7...@bloom-housing/backend-core@3.0.1-alpha.8) (2021-11-09)
+
+
+### Bug Fixes
+
+* updates address order ([#2151](https://github.com/bloom-housing/bloom/issues/2151)) ([252e014](https://github.com/bloom-housing/bloom/commit/252e014dcbd2e4c305384ed552135f5a8e4e4767))
+
+
+
+
+
+## [3.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.6...@bloom-housing/backend-core@3.0.1-alpha.7) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.5...@bloom-housing/backend-core@3.0.1-alpha.6) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.4...@bloom-housing/backend-core@3.0.1-alpha.5) (2021-11-09)
+
+
+### Features
+
+* **backend:** improve application flagged set saving efficiency ([#2147](https://github.com/bloom-housing/bloom/issues/2147)) ([08a064c](https://github.com/bloom-housing/bloom/commit/08a064c319adabb5385e474f5751246d92dba9a2))
+
+
+
+
+
+## [3.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.3...@bloom-housing/backend-core@3.0.1-alpha.4) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.2...@bloom-housing/backend-core@3.0.1-alpha.3) (2021-11-08)
+
+
+### Features
+
+* add Programs section to listings management ([#2093](https://github.com/bloom-housing/bloom/issues/2093)) ([9bd1fe1](https://github.com/bloom-housing/bloom/commit/9bd1fe1033dee0fb7e73756254474471bc304f5e))
+
+
+
+
+
+## [3.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.1...@bloom-housing/backend-core@3.0.1-alpha.2) (2021-11-08)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.0...@bloom-housing/backend-core@3.0.1-alpha.1) (2021-11-08)
+
+
+### Features
+
+* **backend:** extend UserUpdateDto to support email change with confirmation ([#2120](https://github.com/bloom-housing/bloom/issues/2120)) ([3e1fdbd](https://github.com/bloom-housing/bloom/commit/3e1fdbd0ea91d4773973d5c485a5ba61303db90a))
+
+
+
+
+
 ## [3.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.0...@bloom-housing/backend-core@3.0.1-alpha.0) (2021-11-05)
 
 

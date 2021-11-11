@@ -3,6 +3,100 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.10...@bloom-housing/partners@3.0.1-alpha.11) (2021-11-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.9...@bloom-housing/partners@3.0.1-alpha.10) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.8...@bloom-housing/partners@3.0.1-alpha.9) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.7...@bloom-housing/partners@3.0.1-alpha.8) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.6...@bloom-housing/partners@3.0.1-alpha.7) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.5...@bloom-housing/partners@3.0.1-alpha.6) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.4...@bloom-housing/partners@3.0.1-alpha.5) (2021-11-09)
+
+
+### Features
+
+* Change unit number field type to text ([#2136](https://github.com/bloom-housing/bloom/issues/2136)) ([f54be7c](https://github.com/bloom-housing/bloom/commit/f54be7c7ba6aac8e00fee610dc86584b60cc212d))
+
+
+
+
+
+## [3.0.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.3...@bloom-housing/partners@3.0.1-alpha.4) (2021-11-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.2...@bloom-housing/partners@3.0.1-alpha.3) (2021-11-08)
+
+
+### Features
+
+* add Programs section to listings management ([#2093](https://github.com/bloom-housing/bloom/issues/2093)) ([9bd1fe1](https://github.com/bloom-housing/bloom/commit/9bd1fe1033dee0fb7e73756254474471bc304f5e))
+
+
+
+
+
+## [3.0.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.1...@bloom-housing/partners@3.0.1-alpha.2) (2021-11-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.0...@bloom-housing/partners@3.0.1-alpha.1) (2021-11-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.0...@bloom-housing/partners@3.0.1-alpha.0) (2021-11-05)
 
 
