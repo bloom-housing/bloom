@@ -204,7 +204,7 @@ export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list({ jurisdictionId: jurisdiction })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${jurisdiction}`, fetcher)
 
   return {
     data,
@@ -280,7 +280,10 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
       ],
     })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/preferences/${jurisdictionId}`,
+    fetcher
+  )
 
   return {
     data,
@@ -314,7 +317,10 @@ export function useJurisdictionalProgramList(jurisdictionId: string) {
       ],
     })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/programs/${jurisdictionId}`,
+    fetcher
+  )
 
   return {
     data,
