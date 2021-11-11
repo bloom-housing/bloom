@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.9...@bloom-housing/backend-core@3.0.1-alpha.10) (2021-11-11)
+
+
+### Bug Fixes
+
+* recalculate units available on listing update ([#2150](https://github.com/bloom-housing/bloom/issues/2150)) ([f1a3dbc](https://github.com/bloom-housing/bloom/commit/f1a3dbce6478b16542ed61ab20de5dfb9b797262))
+
+
+
+
+
 ## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.8...@bloom-housing/backend-core@3.0.1-alpha.9) (2021-11-10)
 
 
