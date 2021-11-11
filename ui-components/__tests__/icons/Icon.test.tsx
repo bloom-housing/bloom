@@ -14,4 +14,12 @@ describe("<Icon>", () => {
     )
     expect(container.getElementsByClassName("custom-class").length).toBe(1)
   })
+  it("can render with ariaHidden set to true", () => {
+    const { container } = render(
+      <Icon size="2xl" symbol="profile" className={"custom-class"} ariaHidden={true} />
+    )
+    expect(container.getElementsByClassName("custom-class")[0].getAttribute("aria-hidden")).toBe(
+      "true"
+    )
+  })
 })
