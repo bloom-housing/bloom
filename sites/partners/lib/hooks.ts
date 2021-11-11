@@ -280,7 +280,10 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
       ],
     })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/preferences`, fetcher)
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/preferences/${jurisdictionId}`,
+    fetcher
+  )
 
   return {
     data,
