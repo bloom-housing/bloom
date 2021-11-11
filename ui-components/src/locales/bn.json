@@ -30,6 +30,7 @@
                 "nameSuccess": "নাম আপডেট সফল",
                 "dobSuccess": "জন্ম তারিখ আপডেট সফল",
                 "emailSuccess": "ইমেল আপডেট সফল",
+                "phoneNumberSuccess": "ফোন নম্বর আপডেট সফল হয়েছে৷",
                 "currentPassword": "অবৈধ বর্তমান পাসওয়ার্ড। অনুগ্রহপূর্বক আবার চেষ্টা করুন.",
                 "passwordSuccess": "পাসওয়ার্ড আপডেট সফল",
                 "passwordMatch": "নতুন পাসওয়ার্ড ক্ষেত্র মিলছে না",
