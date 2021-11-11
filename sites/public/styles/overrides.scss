@@ -24,11 +24,11 @@
       }
 
       .navbar-menu {
-        height: 88px;
+        height: 80px;
         min-width: 112px;
 
         @screen md {
-          margin-top: 56px;
+          margin: 48px 0 32px;
           position: absolute;
           right: 1rem;
         }
@@ -50,7 +50,7 @@
 
         .navbar-mobile-menu-button {
           border: none;
-          margin: 2.25rem 0.5rem 0.75rem;
+          margin: 2.75rem 0.5rem 0.75rem;
         }
 
         .ui-icon svg rect {
@@ -81,11 +81,12 @@
 
           .logo__title {
             @apply text-primary-dark;
-            margin-top: 24px;
+            margin-top: 1.5rem;
             text-transform: none;
 
             @screen md {
               @apply text-2xl;
+              margin: 0;
             }
           }
 
