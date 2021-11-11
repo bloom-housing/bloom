@@ -1,9 +1,8 @@
 describe("applications/household/programs", function () {
   const route = "/applications/household/programs"
 
-  const servedInMilitaryYesId =
-    "application.programs.options.servedInMilitary.servedInMilitary.claimed"
-  const tayNoId = "application.programs.options.tay.doNotConsider.claimed"
+  const servedInMilitaryYesId = "servedInMilitary"
+  const tayNoId = "doNotConsider"
 
   beforeEach(() => {
     cy.fixture("listing.json")
