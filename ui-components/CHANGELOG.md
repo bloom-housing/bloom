@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.8...@bloom-housing/ui-components@3.0.1-alpha.9) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.7...@bloom-housing/ui-components@3.0.1-alpha.8) (2021-11-09)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
