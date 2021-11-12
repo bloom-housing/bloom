@@ -94,7 +94,7 @@ describe("Listings", () => {
   // TODO: replace jsonpath with SQL-level filtering
   it("should return only the specified listings", async () => {
     const query =
-      "/?limit=all&jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
+      "/?limit=all&jsonpath=%24%5B%3F%28%40.buildingAddress.city%3D%3D%22Foster%20City%22%29%5D"
     const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
     expect(res.body.items.length).toEqual(2)
     for (const item of res.body.items) {

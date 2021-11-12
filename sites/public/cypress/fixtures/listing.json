@@ -8,14 +8,6 @@
   "applicationOpenDate": null,
   "applicationFee": "30.0",
   "applicationOrganization": "98 Archer Street",
-  "applicationAddress": {
-    "city": "San Jose",
-    "state": "CA",
-    "street": "98 Archer Street",
-    "zipCode": "95112",
-    "latitude": 37.36537,
-    "longitude": -121.91071
-  },
   "blankPaperApplicationCanBePickedUp": true,
   "buildingAddress": {
     "city": "San Jose",

@@ -19,7 +19,6 @@ import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.d
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 
 export class ListingDto extends OmitType(Listing, [
-  "applicationAddress",
   "applicationPickUpAddress",
   "applicationDropOffAddress",
   "applicationMailingAddress",
@@ -43,12 +42,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
