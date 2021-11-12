@@ -15,7 +15,7 @@
 
     .navbar {
       height: auto;
-      justify-content: center;
+      justify-content: flex-start;
       max-height: none;
       padding: 8px 0 16px;
 
@@ -23,14 +23,22 @@
         padding: 0;
       }
 
+      @screen xl {
+        justify-content: center;
+      }
+
       .navbar-menu {
         height: 80px;
         min-width: 112px;
 
         @screen md {
-          margin: 48px 0 32px;
+          margin: 40px 0 24px;
           position: absolute;
           right: 1rem;
+        }
+
+        @screen xl {
+          margin: 48px 0 32px;
         }
 
         .navbar-link {
@@ -60,6 +68,10 @@
 
       .navbar-logo {
         @screen md {
+          padding: 48px 0 32px 16px;
+        }
+
+        @screen xl {
           padding: 48px 0 32px;
         }
 
@@ -85,8 +97,12 @@
             text-transform: none;
 
             @screen md {
-              @apply text-2xl;
+              @apply text-lg;
               margin: 0;
+            }
+
+            @screen xl {
+              @apply text-2xl;
             }
           }
 
@@ -99,8 +115,11 @@
             @screen md {
               // Negative margin to center around the shield
               margin: -32px 0 0;
+              max-height: 6rem;
+            }
+
+            @screen xl {
               max-height: 7rem;
-              min-height: 6rem;
             }
           }
         }
