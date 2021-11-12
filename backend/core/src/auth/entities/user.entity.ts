@@ -27,6 +27,8 @@ import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
 import { UserRoles } from "./user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])
@@ -56,6 +58,7 @@ export class User {
   @Column("varchar")
   @Expose()
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   email: string
 
   @Column("varchar")
@@ -122,4 +125,12 @@ export class User {
   @ManyToMany(() => Jurisdiction, { cascade: true, eager: true })
   @JoinTable()
   jurisdictions: Jurisdiction[]
+
+  @OneToOne(() => UserPreferences, (preferences) => preferences.user, {
+    eager: true,
+    cascade: true,
+    nullable: true,
+  })
+  @Expose()
+  preferences?: UserPreferences
 }

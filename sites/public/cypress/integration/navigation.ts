@@ -31,11 +31,11 @@ describe("Navigating around the site", () => {
     cy.contains("Endorsement Disclaimers")
 
     // Click on the listings page link in the header nav
-    cy.get(".navbar").contains("Listings").click()
+    cy.get(".navbar").contains("Log in").click()
 
     // Should be on the listings page
-    cy.location("pathname").should("equal", "/listings")
-    cy.contains("Rent affordable housing")
+    cy.location("pathname").should("equal", "/sign-in")
+    cy.contains("Sign In")
 
     // Click on the navbar logo to go to the homepage
     cy.get(".navbar")

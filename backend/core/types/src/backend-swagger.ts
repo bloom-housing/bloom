@@ -1714,6 +1714,30 @@ export class ReservedCommunityTypesService {
   }
 }
 
+export class SmsService {
+  /**
+   * Send an SMS
+   */
+  sendSms(
+    params: {
+      /** requestBody */
+      body?: Sms
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/sms"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class TranslationsService {
   /**
    * List translations
@@ -3639,6 +3663,14 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface UserPreferences {
+  /**  */
+  sendEmailNotifications?: boolean
+
+  /**  */
+  sendSmsNotifications?: boolean
+}
+
 export interface User {
   /**  */
   language?: Language
@@ -3651,6 +3683,9 @@ export interface User {
 
   /**  */
   jurisdictions: Jurisdiction[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 
   /**  */
   id: string
@@ -3703,10 +3738,10 @@ export interface UserCreate {
   jurisdictions?: Id[]
 
   /**  */
-  confirmedAt?: Date
+  email: string
 
   /**  */
-  email: string
+  confirmedAt?: Date
 
   /**  */
   firstName: string
@@ -3725,6 +3760,9 @@ export interface UserCreate {
 
   /**  */
   emailSubscription: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserBasic {
@@ -3739,6 +3777,9 @@ export interface UserBasic {
 
   /**  */
   leasingAgentInListings?: Id[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 
   /**  */
   id: string
@@ -3842,6 +3883,15 @@ export interface UserUpdate {
   jurisdictions: Id[]
 
   /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3858,6 +3908,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserFilterParams {
@@ -3920,6 +3973,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
 }
 
 export interface UserProfileUpdate {
@@ -3934,6 +3990,15 @@ export interface UserProfileUpdate {
 
   /**  */
   jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  preferences?: UserPreferences
 
   /**  */
   id: string
@@ -3955,6 +4020,9 @@ export interface UserProfileUpdate {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface JurisdictionCreate {
@@ -5396,7 +5464,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  image?: AssetUpdate
+  image?: CombinedImageTypes
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5841,6 +5909,14 @@ export interface ReservedCommunityTypeUpdate {
   id: string
 }
 
+export interface Sms {
+  /**  */
+  body: string
+
+  /**  */
+  phoneNumber: string
+}
+
 export interface Translation {
   /**  */
   language: Language
@@ -5991,6 +6067,7 @@ export enum EnumApplicationsApiExtraModelOrder {
   "DESC" = "DESC",
 }
 export type CombinedRolesTypes = UserRolesCreate
+export type CombinedPreferencesTypes = UserPreferences
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -6063,6 +6140,6 @@ export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = Asset
-export type CombinedImageTypes = AssetCreate
+export type CombinedImageTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate

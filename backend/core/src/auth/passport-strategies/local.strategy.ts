@@ -19,7 +19,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { email },
+      where: { email: email.toLowerCase() },
       relations: ["leasingAgentInListings"],
     })
 

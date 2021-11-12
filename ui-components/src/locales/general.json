@@ -27,6 +27,7 @@
         "nameSuccess": "Name update successful",
         "dobSuccess": "Birthdate update successful",
         "emailSuccess": "Email update successful",
+        "phoneNumberSuccess": "Phone number update successful",
         "currentPassword": "Invalid current password. Please try again.",
         "passwordSuccess": "Password update successful",
         "passwordMatch": "New password fields do not match",
@@ -614,6 +615,7 @@
     "signIn": {
       "loginError": "Please enter a valid email address",
       "passwordError": "Please enter a valid password",
+      "phoneError": "Please enter a valid US phone number.",
       "cantFindAccount": "We couldn't find an account with that email address/password.",
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
@@ -635,6 +637,8 @@
       "email": "Email",
       "emailPrivacy": "We will only use your email address to contact you about your application.",
       "reEnterEmail": "Re-enter email address",
+      "phonePlaceholder": "(555) 555-5555",
+      "phone": "Phone",
       "reEnterPassword": "Re-enter your password",
       "resendTheEmail": "Resend the email",
       "emailSubscription": "Email me whenever a listing is posted or updated.",
@@ -1137,8 +1141,8 @@
     "myApplications": "My Applications",
     "myDashboard": "My Dashboard",
     "mySettings": "My Settings",
-    "signIn": "Sign In",
-    "signOut": "Sign Out",
+    "signIn": "Log in",
+    "signOut": "Log out",
     "siteTitle": "Housing Portal",
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
@@ -1373,6 +1377,7 @@
     "seeMoreOpportunities": "See more rental and ownership housing opportunities",
     "checkEligibility": "Do I Qualify?",
     "checkEligibilityDescription": "Check in Minutes if You Qualify!",
+    "checkQualifications": "Check Your Housing Qualifications",
     "subTitle": "Click the button below to find rental housing based on your income and household needs",
     "seeMoreOpportunitiesTruncated": "See more housing opportunities and resources",
     "signUp": "Get emailed whenever a new listing is posted",
@@ -1446,7 +1451,7 @@
     },
     "welcome": {
       "header": "Welcome",
-      "description": "To find you a home that best fits your needs, let's answer a few questions first. Some properties only accept people with certain ages, incomes, etc."
+      "description": "Welcome to Detroit Home Connect! We know that finding housing can be difficult. We are here to help. To find you a home that best fits your needs, let's answer four simple questions first. Some affordable housing only accepts people of certain ages or certain incomes, so we want to make sure you are applying to properties that work for your household."
     },
     "household": {
       "prompt": "How many people will be living in this property?",

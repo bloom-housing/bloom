@@ -39,6 +39,7 @@ import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
+import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -54,11 +55,17 @@ export class UserService {
   ) {}
 
   public async findByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email }, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: { email: email.toLowerCase() },
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async find(options: FindConditions<User>) {
-    return this.userRepository.findOne({ where: options, relations: ["leasingAgentInListings"] })
+    return await this.userRepository.findOne({
+      where: options,
+      relations: ["leasingAgentInListings"],
+    })
   }
 
   public async list(
@@ -130,6 +137,15 @@ export class UserService {
       delete dto.jurisdictions
     }
 
+    if (dto.newEmail && dto.appUrl) {
+      user.confirmationToken = UserService.createConfirmationToken(user.id, dto.newEmail)
+      const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
+      await this.emailService.changeEmail(user, dto.appUrl, confirmationUrl, dto.newEmail)
+    }
+
+    delete dto.newEmail
+    delete dto.appUrl
+
     assignDefined(user, {
       ...dto,
       passwordHash,
@@ -147,14 +163,6 @@ export class UserService {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
     }
 
-    if (user.confirmedAt) {
-      console.error(`User ${token.id} already confirmed.`)
-      throw new HttpException(
-        USER_ERRORS.ACCOUNT_CONFIRMED.message,
-        USER_ERRORS.ACCOUNT_CONFIRMED.status
-      )
-    }
-
     if (user.confirmationToken !== dto.token) {
       console.error(`Confirmation token mismatch for user ${token.id}.`)
       throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
@@ -168,14 +176,26 @@ export class UserService {
     }
 
     try {
-      await this.userRepository.save(user)
+      await this.userRepository.save({
+        ...user,
+        ...(token.email && { email: token.email }),
+      })
       return this.authService.generateAccessToken(user)
     } catch (err) {
       throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
     }
   }
 
-  public async resendConfirmation(dto: EmailDto) {
+  private static createConfirmationToken(userId: string, email: string) {
+    const payload = {
+      id: userId,
+      email,
+      exp: Number.parseInt(moment().add(24, "hours").format("X")),
+    }
+    return encode(payload, process.env.APP_SECRET)
+  }
+
+  public async resendPublicConfirmation(dto: EmailDto) {
     const user = await this.findByEmail(dto.email)
     if (!user) {
       throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
@@ -186,8 +206,7 @@ export class UserService {
         USER_ERRORS.ACCOUNT_CONFIRMED.status
       )
     } else {
-      const payload = { id: user.id, exp: Number.parseInt(moment().add(24, "hours").format("X")) }
-      user.confirmationToken = encode(payload, process.env.APP_SECRET)
+      user.confirmationToken = UserService.createConfirmationToken(user.id, user.email)
       try {
         await this.userRepository.save(user)
         const confirmationUrl = UserService.getPublicConfirmationUrl(dto.appUrl, user)
@@ -236,11 +255,7 @@ export class UserService {
     try {
       let newUser = await this.userRepository.save(dto)
 
-      const payload = {
-        id: newUser.id,
-        expiresAt: Number.parseInt(moment().add(24, "hours").format("X")),
-      }
-      newUser.confirmationToken = encode(payload, process.env.APP_SECRET)
+      newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
       newUser = await this.userRepository.save(newUser)
 
       return newUser
@@ -250,7 +265,11 @@ export class UserService {
     }
   }
 
-  public async createUser(dto: UserCreateDto, authContext: AuthContext, sendWelcomeEmail = false) {
+  public async createPublicUser(
+    dto: UserCreateDto,
+    authContext: AuthContext,
+    sendWelcomeEmail = false
+  ) {
     const newUser = await this._createUser(
       {
         ...dto,
@@ -258,6 +277,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as JurisdictionDto[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        preferences: dto.preferences as UserPreferences,
       },
       authContext
     )
@@ -308,7 +328,7 @@ export class UserService {
     return qb
   }
 
-  async invite(dto: UserInviteDto, authContext: AuthContext) {
+  async invitePartnersPortalUser(dto: UserInviteDto, authContext: AuthContext) {
     const password = crypto.randomBytes(8).toString("hex")
     const user = await this._createUser(
       {
@@ -319,6 +339,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as JurisdictionDto[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        preferences: dto.preferences as UserPreferences,
       },
       authContext
     )

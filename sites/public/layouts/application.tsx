@@ -23,18 +23,7 @@ const Layout = (props) => {
       label: t(`languages.${item}`),
     })) || []
 
-  const menuLinks: MenuLink[] = [
-    {
-      title: t("nav.listings"),
-      href: "/listings",
-    },
-  ]
-  if (process.env.housingCounselorServiceUrl) {
-    menuLinks.push({
-      title: t("nav.getAssistance"),
-      href: "/housing-counselors",
-    })
-  }
+  const menuLinks: MenuLink[] = []
   if (profile) {
     menuLinks.push({
       title: t("nav.myAccount"),

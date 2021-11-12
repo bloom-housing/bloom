@@ -17,9 +17,11 @@ import {
   passwordRegex,
   DOBField,
   DOBFieldValues,
+  PhoneField,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import FormsLayout from "../../layouts/forms"
+import { intlToUsPhone, usToIntlPhone } from "../../lib/helpers"
 
 type AlertMessage = {
   type: AlertTypes
@@ -29,12 +31,13 @@ type AlertMessage = {
 const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, watch } = useForm()
-  const { profile, userService } = useContext(AuthContext)
+  const { control, register, handleSubmit, errors, watch } = useForm()
+  const { profile, userProfileService } = useContext(AuthContext)
   const [passwordAlert, setPasswordAlert] = useState<AlertMessage>()
   const [nameAlert, setNameAlert] = useState<AlertMessage>()
   const [dobAlert, setDobAlert] = useState<AlertMessage>()
   const [emailAlert, setEmailAlert] = useState<AlertMessage>()
+  const [phoneAlert, setPhoneAlert] = useState<AlertMessage>()
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
   password.current = watch("password", "")
@@ -47,7 +50,7 @@ const Edit = () => {
     const { firstName, middleName, lastName } = data
     setNameAlert(null)
     try {
-      await userService.update({
+      await userProfileService.update({
         body: { ...profile, firstName, middleName, lastName },
       })
       setNameAlert({ type: "success", message: `${t("account.settings.alerts.nameSuccess")}` })
@@ -61,7 +64,7 @@ const Edit = () => {
     const { dateOfBirth } = data
     setDobAlert(null)
     try {
-      await userService.update({
+      await userProfileService.update({
         body: {
           ...profile,
           dob: moment(
@@ -80,12 +83,34 @@ const Edit = () => {
     const { email } = data
     setEmailAlert(null)
     try {
-      await userService.update({
-        body: { ...profile, email },
+      await userProfileService.update({
+        body: {
+          ...profile,
+          appUrl: window.location.origin,
+          newEmail: email,
+        },
       })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
     } catch (err) {
+      console.log("err = ", err)
       setEmailAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
+      console.warn(err)
+    }
+  }
+
+  const onPhoneSubmit = async (data: { phoneNumber: string }) => {
+    const { phoneNumber } = data
+    setPhoneAlert(null)
+    try {
+      await userProfileService.update({
+        body: { ...profile, phoneNumber: usToIntlPhone(phoneNumber) },
+      })
+      setPhoneAlert({
+        type: "success",
+        message: `${t("account.settings.alerts.phoneNumberSuccess")}`,
+      })
+    } catch (err) {
+      setPhoneAlert({ type: "alert", message: `${t("account.settings.alerts.genericError")}` })
       console.warn(err)
     }
   }
@@ -106,7 +131,7 @@ const Edit = () => {
       return
     }
     try {
-      await userService.update({
+      await userProfileService.update({
         body: { ...profile, password, currentPassword },
       })
       setPasswordAlert({
@@ -227,6 +252,34 @@ const Edit = () => {
                 errorMessage={`${t("errors.emailAddressError")}`}
                 register={register}
                 defaultValue={profile ? profile.email : null}
+              />
+              <div className="text-center">
+                <Button className={"items-center"}>{t("account.settings.update")}</Button>
+              </div>
+            </div>
+          </Form>
+          <Form id="update-phone-number" onSubmit={handleSubmit(onPhoneSubmit)}>
+            {phoneAlert && (
+              <AlertBox
+                type={phoneAlert.type}
+                onClose={() => setPhoneAlert(null)}
+                inverted
+                closeable
+              >
+                {phoneAlert.message}
+              </AlertBox>
+            )}
+            <div className="form-card__group border-b">
+              <PhoneField
+                caps={true}
+                name="phoneNumber"
+                label={t("authentication.createAccount.phone")}
+                placeholder={t("authentication.createAccount.phonePlaceholder")}
+                error={errors.phoneNumber}
+                errorMessage={t("authentication.signIn.phoneError")}
+                controlClassName="control"
+                control={control}
+                defaultValue={profile?.phoneNumber ? intlToUsPhone(profile.phoneNumber) : null}
               />
               <div className="text-center">
                 <Button className={"items-center"}>{t("account.settings.update")}</Button>

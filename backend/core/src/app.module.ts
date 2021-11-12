@@ -40,6 +40,9 @@ import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
 import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
+import { SmsModule } from "./sms/sms.module"
+import { ScheduleModule } from "@nestjs/schedule"
+import { CronModule } from "./cron/cron.module"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -87,12 +90,15 @@ export class AppModule {
         AuthModule,
         JurisdictionsModule,
         ListingsModule,
+        CronModule,
         PaperApplicationsModule,
         PreferencesModule,
         PropertiesModule,
         PropertyGroupsModule,
         ReservedCommunityTypesModule,
+        ScheduleModule.forRoot(),
         SharedModule,
+        SmsModule,
         TranslationsModule,
         TypeOrmModule.forRoot({
           ...dbOptions,

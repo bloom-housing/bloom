@@ -5,24 +5,114 @@
 .ui-icon svg {
   fill: $tailwind-primary-darker;
 }
-
-// The header logo should allow for a larger maximum height than the default
-// logo.
-.navbar-logo .logo .logo__image {
-  min-height: 4rem;
-  max-height: 5rem;
-  @screen md {
-    min-height: 6rem;
-    max-height: 7rem;
+.site-header {
+  .navbar-notice-hide {
+    display: none;
   }
-}
 
-.navbar-logo .logo {
-  max-height: 15rem;
-  max-width: 100%;
+  .navbar-container {
+    border: none;
 
-  .logo__title {
-    @apply text-sm;
+    .navbar {
+      height: auto;
+      justify-content: center;
+      max-height: none;
+      padding: 8px 0 16px;
+
+      @screen md {
+        padding: 0;
+      }
+
+      .navbar-menu {
+        height: 80px;
+        min-width: 112px;
+
+        @screen md {
+          margin: 48px 0 32px;
+          position: absolute;
+          right: 1rem;
+        }
+
+        .navbar-link {
+          @apply text-sm;
+          @apply text-primary;
+          align-items: center;
+          display: flex;
+          font-weight: 700;
+          padding: 1rem;
+          text-transform: none;
+        }
+
+        .navbar-link:hover {
+          @apply text-primary-dark;
+          border: none;
+        }
+
+        .navbar-mobile-menu-button {
+          border: none;
+          margin: 2.75rem 0.5rem 0.75rem;
+        }
+
+        .ui-icon svg rect {
+          fill: $tailwind-primary;
+        }
+      }
+
+      .navbar-logo {
+        @screen md {
+          padding: 48px 0 32px;
+        }
+
+        .logo {
+          background-color: initial;
+          box-shadow: none;
+          height: 100%;
+          margin: 0;
+          max-height: 15rem;
+          max-width: 100%;
+          padding: 0;
+          width: 100%;
+
+          .logo-content {
+            align-items: center;
+            display: flex;
+            padding: 0;
+          }
+
+          .logo__title {
+            @apply text-primary-dark;
+            margin-top: 1.5rem;
+            text-transform: none;
+
+            @screen md {
+              @apply text-2xl;
+              margin: 0;
+            }
+          }
+
+          .logo__image {
+            // The header logo should allow for a larger maximum height than the default
+            // logo.
+            max-height: 5rem;
+            min-height: 4rem;
+
+            @screen md {
+              // Negative margin to center around the shield
+              margin: -32px 0 0;
+              max-height: 7rem;
+              min-height: 6rem;
+            }
+          }
+        }
+
+        .navbar-custom-width {
+          align-items: initial;
+          display: initial;
+          flex-direction: initial;
+          justify-content: initial;
+        }
+      }
+    }
   }
 }
 
@@ -124,9 +214,9 @@ a.button.is-primary:hover {
   margin-bottom: 1rem;
 
   @screen sm {
-    margin-bottom: 0;
     border-radius: 30px 0 0 30px;
     border-right-width: 1px;
+    margin-bottom: 0;
   }
 
   &:focus {
@@ -135,8 +225,8 @@ a.button.is-primary:hover {
 }
 .hero__button__second {
   @screen sm {
-    border-radius: 0 30px 30px 0;
     border-left-width: 1px;
+    border-radius: 0 30px 30px 0;
   }
 
   &:focus {

@@ -35,14 +35,18 @@ export class ApplicationFlaggedSetsService {
     private readonly afsRepository: Repository<ApplicationFlaggedSet>
   ) {}
   async listPaginated(queryParams: PaginatedApplicationFlaggedSetQueryParams) {
+    // Using paginate with QueryBuilder instead of paginate with Repository because of https://github.com/typeorm/typeorm/issues/1668
     const results = await paginate<ApplicationFlaggedSet>(
-      this.afsRepository,
-      { limit: queryParams.limit, page: queryParams.page },
+      this.afsRepository
+        .createQueryBuilder("afs")
+        .leftJoinAndSelect("afs.applications", "applications")
+        .leftJoinAndSelect("afs.listing", "listing")
+        .where("afs.listing_id = :listingId", {
+          listingId: queryParams.listingId,
+        }),
       {
-        relations: ["listing", "applications"],
-        where: {
-          ...(queryParams.listingId && { listingId: queryParams.listingId }),
-        },
+        limit: queryParams.limit,
+        page: queryParams.page,
       }
     )
     const countTotalFlagged = await this.afsRepository.count({

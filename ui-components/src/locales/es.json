@@ -30,6 +30,7 @@
                 "nameSuccess": "Actualización de nombre exitosa",
                 "dobSuccess": "Actualización de fecha de nacimiento exitosa",
                 "emailSuccess": "Actualización de correo electrónico exitosa",
+                "phoneNumberSuccess": "La actualización del número de teléfono se realizó correctamente",
                 "currentPassword": "Contraseña actual inválida. Inténtalo de nuevo.",
                 "passwordSuccess": "Actualización de contraseña exitosa",
                 "passwordMatch": "Los campos de la nueva contraseña no coinciden",
@@ -483,6 +484,7 @@
         "signIn": {
             "loginError": "Por favor, introduce una dirección de correo electrónico válida",
             "passwordError": "Por favor introduce una contraseña válida",
+            "phoneError": "Ingrese un número de teléfono de EE. UU. Válido.",
             "cantFindAccount": "No pudimos encontrar una cuenta con esa dirección de correo electrónico / contraseña.",
             "error": "Hubo un error al iniciar sesión",
             "errorGenericMessage": "Vuelva a intentarlo o póngase en contacto con el servicio de asistencia para obtener ayuda.",
@@ -504,6 +506,7 @@
             "email": "Correo electrónico",
             "emailPrivacy": "Solo usaremos su dirección de correo electrónico para comunicarnos con usted acerca de su solicitud.",
             "reEnterEmail": "Vuelva a introducir la dirección de correo electrónico",
+            "phone": "Teléfono",
             "reEnterPassword": "reingresa tu contraseña",
             "resendTheEmail": "Reenvíe el correo electrónico",
             "emailSubscription": "Envíeme un correo electrónico cada vez que se publique o actualice una lista.",
@@ -972,8 +975,8 @@
         "myApplications": "mis aplicaciónes",
         "myDashboard": "Mi tablero",
         "mySettings": "Mi configuración",
-        "signIn": "Registrarse",
-        "signOut": "Desconectar",
+        "signIn": "Iniciar sesión",
+        "signOut": "Cerrar sesión",
         "siteTitle": "Portal de vivienda",
         "siteTitlePartners": "Portal de socios",
         "skip": "Saltar al contenido principal",
@@ -1203,6 +1206,7 @@
         "viewAdditionalHousing": "Ver recursos y oportunidades de vivienda adicionales",
         "checkEligibility": "¿Califico?",
         "checkEligibilityDescription": "¡Verifique en minutos si califica!",
+        "checkQualifications": "Verifique Sus Calificaciones de Vivienda",
         "subTitle": "Haga clic en el botón a continuación para encontrar viviendas de alquiler según sus ingresos y las necesidades de su hogar."
     },
     "whatToExpect": {
@@ -1271,7 +1275,7 @@
         },
         "welcome": {
             "header": "Bienvenidos",
-            "description": "Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos algunas preguntas. Algunas propiedades solo aceptan personas con ciertas edades, ingresos, etc."
+            "description": "¡Bienvenido a Detroit Home Connect! Sabemos que encontrar una vivienda puede resultar complicado. Estamos aquí para ayudar. Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos cuatro preguntas simples. Algunas viviendas asequibles solo aceptan personas de ciertas edades o ciertos ingresos, por lo que queremos asegurarnos de que solicite propiedades que funcionen para su hogar."
         },
         "household": {
             "prompt": "¿Cuántas personas vivirán en esta propiedad?",
