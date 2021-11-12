@@ -51,11 +51,13 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
       content = t("listings.applicationOpenPeriod")
     } else {
       if (listing.applicationDueDate) {
-        const dueDate = moment(listing.applicationDueDate)
-        const dueTime = moment(listing.applicationDueTime)
+        const dueDate = listing.applicationDueTime
+          ? moment(listing.applicationDueTime)
+          : moment(listing.applicationDueDate)
+
         formattedDate = dueDate.format("MMM. DD, YYYY")
         if (listing.applicationDueTime) {
-          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
+          formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
         }
         // if due date is in future, listing is open
         if (moment() < dueDate) {
