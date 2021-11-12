@@ -382,6 +382,62 @@ describe("Listings", () => {
     })
   })
 
+  describe("Unit size filtering", () => {
+    it("should return listings with >= 1 bedroom", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: ">=",
+            bedrooms: "1",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+
+      const listings: Listing[] = res.body.items
+      expect(listings.length).toBeGreaterThan(0)
+      // expect that all listings have at least one unit with >= 1 bedroom
+      expect(
+        listings.map((listing) => {
+          listing.unitsSummary.find((unit) => {
+            unit.unitType.numBedrooms >= 1
+          }) !== undefined
+        })
+      ).not.toContain(false)
+    })
+
+    it("should return listings with exactly 1 bedroom", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "=",
+            bedrooms: "1",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+
+      const listings: Listing[] = res.body.items
+      expect(listings.length).toBeGreaterThan(0)
+      // expect that all listings have at least one unit with exactly 1 bedroom
+      expect(
+        listings.map((listing) => {
+          listing.unitsSummary.find((unit) => {
+            unit.unitType.numBedrooms == 1
+          }) !== undefined
+        })
+      ).not.toContain(false)
+    })
+  })
+
   it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
     const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
     const listings = res.body.items
