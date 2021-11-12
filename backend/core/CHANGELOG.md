@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.11...@bloom-housing/backend-core@3.0.1-alpha.12) (2021-11-12)
+
+
+### Bug Fixes
+
+* sapp submission w/ no due date ([4af1f5a](https://github.com/bloom-housing/bloom/commit/4af1f5a8448f16d347b4a65ecb85fda4d6ed71fc))
+
+
+
+
+
 ## [3.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.10...@bloom-housing/backend-core@3.0.1-alpha.11) (2021-11-12)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
