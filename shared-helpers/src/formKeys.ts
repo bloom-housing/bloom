@@ -149,10 +149,24 @@ interface subCheckboxes {
   [key: string]: string[]
 }
 
-export const fieldGroupObjectToArray = (formObject: { key: string }, rootKey: string) => {
-  return Object.keys(formObject)
+export const fieldGroupObjectToArray = (formObject: { key: string }, rootKey: string): string[] => {
+  const modifiedArray: string[] = []
+  const getValue = (elem: string) => {
+    const formSubKey = elem.substring(elem.indexOf("-") + 1)
+    return formSubKey === formObject[elem] ? formSubKey : `${formSubKey}: ${formObject[elem]}`
+  }
+  Object.keys(formObject)
     .filter((formValue) => formValue.split("-")[0] === rootKey && formObject[formValue])
-    .map((formValue) => formObject[formValue])
+    .forEach((elem) => {
+      if (formObject[elem].isArray) {
+        formObject[elem].forEach(() => {
+          modifiedArray.push(getValue(elem))
+        })
+      } else {
+        modifiedArray.push(getValue(elem))
+      }
+    })
+  return modifiedArray
 }
 
 // Return to this when PR #2108 merges that changes package build to be able to import from ui-components

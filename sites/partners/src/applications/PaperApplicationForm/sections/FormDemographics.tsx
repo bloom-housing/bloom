@@ -15,8 +15,13 @@ import {
   sexualOrientation,
   howDidYouHear,
 } from "@bloom-housing/shared-helpers"
+import { Demographics } from "@bloom-housing/backend-core/types"
 
-const FormDemographics = () => {
+type FormDemographicsProps = {
+  formValues: Demographics
+}
+
+const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -30,6 +35,8 @@ const FormDemographics = () => {
     }))
   }, [register])
 
+  console.log(formValues)
+
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
       <GridCell>
@@ -41,6 +48,7 @@ const FormDemographics = () => {
               label: t(`application.review.demographics.raceOptions.${rootKey}`),
               value: rootKey,
               additionalText: rootKey.indexOf("other") >= 0,
+              defaultChecked: formValues.race.includes(rootKey),
               subFields: raceKeys[rootKey].map((subKey) => ({
                 id: subKey,
                 label: t(`application.review.demographics.raceOptions.${subKey}`),

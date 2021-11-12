@@ -47,7 +47,7 @@ const ApplicationDemographics = () => {
         ethnicity: data.ethnicity,
         gender: data.gender,
         sexualOrientation: data.sexualOrientation,
-        howDidYouHear: fieldGroupObjectToArray(data, "howDidYouHear"),
+        howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
       },
     })
@@ -58,7 +58,7 @@ const ApplicationDemographics = () => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: application.demographics.howDidYouHear.includes(item.id),
+      defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
       register,
     }))
   }, [register, application])
@@ -99,10 +99,12 @@ const ApplicationDemographics = () => {
                   label: t(`application.review.demographics.raceOptions.${rootKey}`),
                   value: rootKey,
                   additionalText: rootKey.indexOf("other") >= 0,
+                  defaultChecked: application[`race-${rootKey}`],
                   subFields: raceKeys[rootKey].map((subKey) => ({
                     id: subKey,
                     label: t(`application.review.demographics.raceOptions.${subKey}`),
                     value: subKey,
+                    defaultChecked: application[`race-${subKey}`],
                     additionalText: subKey.indexOf("other") >= 0,
                   })),
                 }))}

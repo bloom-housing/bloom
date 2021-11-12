@@ -59,6 +59,10 @@ const FieldGroup = ({
 
   const [checkedInputs, setCheckedInputs] = useState<string[]>([])
 
+  const subfieldsExist = () => {
+    return fields?.filter((field) => field.subFields).length
+  }
+
   const getIndividualInput = (item: FieldSingle): React.ReactNode => {
     return (
       <div key={item.value}>
@@ -68,7 +72,7 @@ const FieldGroup = ({
           type={type}
           id={item.id}
           defaultValue={item.value || item.id}
-          name={item.subFields ? `${name}.${item.value ?? item.id}` : name}
+          name={subfieldsExist() ? `${name}-${item.value}` : name}
           onClick={(e) => {
             if (e.currentTarget.checked) {
               setCheckedInputs([...checkedInputs, item.label])

@@ -50,6 +50,8 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     defaultValues,
   })
 
+  console.log({ defaultValues })
+
   const router = useRouter()
 
   const { applicationsService } = useContext(AuthContext)
@@ -206,7 +208,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdIncome />
 
-                    <FormDemographics />
+                    <FormDemographics formValues={application.demographics} />
 
                     <FormTerms />
                   </div>
