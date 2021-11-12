@@ -1,18 +1,19 @@
-describe("applications/financial/vouchers", function () {
-  const route = "/applications/financial/vouchers"
+describe("applications/household/changes", function () {
+  const route = "/applications/household/changes"
 
   beforeEach(() => {
     cy.visit(route)
   })
 
-  it("should render vouchers sub-form", function () {
+  it("should render expecting household changes sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
   it("should require form input", function () {
     cy.goNext()
-    cy.location("pathname").should("include", route)
+
     cy.checkErrorAlert("be.visible")
+    cy.checkErrorMessages("be.visible")
   })
 })
