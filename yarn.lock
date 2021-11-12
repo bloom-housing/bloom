@@ -6089,12 +6089,7 @@
   resolved "https://registry.yarnpkg.com/@types/node-polyglot/-/node-polyglot-2.4.1.tgz#406b9d3fc12b53f8009aa3aa3021613228d63e46"
   integrity sha512-TmMOqSuxyo71Snxa9SSwkMB1e/UvrTLsKPOYMizkDX2JSDZXeiQXgUBwNwfNtLP879Btq+GwkdsE9ojk7EKITA==
 
-"@types/node@*":
-  version "14.6.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.6.0.tgz#7d4411bf5157339337d7cff864d9ff45f177b499"
-  integrity sha512-mikldZQitV94akrc4sCcSjtJfsTKt4p+e/s0AGscVA6XArQ9kFclP+ZiYUMnq987rc6QlYxXv/EivqlfSLxpKA==
-
-"@types/node@>=12.12.47", "@types/node@>=13.7.0":
+"@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "16.4.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.3.tgz#c01c1a215721f6dec71b47d88b4687463601ba48"
   integrity sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==
@@ -6104,12 +6099,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.67.tgz#4f86badb292e822e3b13730a1f9713ed2377f789"
   integrity sha512-R48tgL2izApf+9rYNH+3RBMbRpPeW3N8f0I9HMhggeq4UXwBDqumJ14SDs4ctTMhG11pIOduZ4z3QWGOiMc9Vg==
 
-"@types/node@^14.0.10":
-  version "14.17.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.4.tgz#218712242446fc868d0e007af29a4408c7765bc0"
-  integrity sha512-8kQ3+wKGRNN0ghtEn7EGps/B8CzuBz1nXZEIGGLP2GnwbqYn4dbTs7k+VKLTq1HvZLRCIDtN3Snx1Ege8B7L5A==
-
-"@types/node@^14.6.2":
+"@types/node@^14.0.10", "@types/node@^14.6.2":
   version "14.17.6"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.6.tgz#cc61c8361c89e70c468cda464d1fa3dd7e5ebd62"
   integrity sha512-iBxsxU7eswQDGhlr3AiamBxOssaYxbM+NKXVil8jg9yFXvrfEFbDumLD/2dMTB+zYyg7w+Xjt8yuxfdbUHAtcQ==
@@ -10167,9 +10157,9 @@ electron-to-chromium@^1.3.830:
   integrity sha512-P/nDMPIYdb2PyqCQwhTXNi5JFjX1AsDVR0y6FrHw752izJIAJ+Pn5lugqyBq4tXeRSZBMBb2ZGvRGB1djtELEQ==
 
 electron@^13.1.7:
-  version "13.1.7"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-13.1.7.tgz#7e17f5c93a8d182a2a486884fed3dc34ab101be9"
-  integrity sha512-sVfpP/0s6a82FK32LMuEe9L+aWZw15u3uYn9xUJArPjy4OZHteE6yM5871YCNXNiDnoCLQ5eqQWipiVgHsf8nQ==
+  version "13.3.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-13.3.0.tgz#5f4f245723dd50fcd2c3d386a1d66fe748af404f"
+  integrity sha512-d/BvOLDjI4i7yf9tqCuLL2fFGA2TrM/D9PyRpua+rJolG0qrwp/FohP02L0m+44kmPpofIo4l3NPwLmzyKKimA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"

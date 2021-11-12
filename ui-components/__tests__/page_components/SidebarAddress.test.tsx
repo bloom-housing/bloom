@@ -7,8 +7,8 @@ afterEach(cleanup)
 
 describe("<SidebarAddress>", () => {
   it("renders with address", () => {
-    const { getByText } = render(<SidebarAddress address={ArcherListing.applicationAddress} />)
-    expect(getByText(ArcherListing.applicationAddress?.street || "", { exact: false })).toBeTruthy()
+    const { getByText } = render(<SidebarAddress address={ArcherListing.buildingAddress} />)
+    expect(getByText(ArcherListing.buildingAddress?.street || "", { exact: false })).toBeTruthy()
     expect(getByText("Get Directions")).toBeTruthy()
   })
   it("renders with office hours and no address", () => {

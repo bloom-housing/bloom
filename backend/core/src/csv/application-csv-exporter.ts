@@ -21,10 +21,10 @@ export class ApplicationCsvExporter {
       "Same Address as Primary Applicant": formatBoolean(app.householdMembers_same_address),
       Relationship: app.householdMembers_relationship,
       "Work in Region": formatBoolean(app.householdMembers_work_in_region),
-      City: app.householdMembers_address_city,
-      State: app.householdMembers_address_state,
       Street: app.householdMembers_address_street,
       "Street 2": app.householdMembers_address_street2,
+      City: app.householdMembers_address_city,
+      State: app.householdMembers_address_state,
       "Zip Code": app.householdMembers_address_zip_code,
     }
     return obj
@@ -64,7 +64,8 @@ export class ApplicationCsvExporter {
         }
 
         obj[app.application_id] = {
-          "Application Number": app.application_id,
+          "Application Id": app.application_id,
+          "Application Confirmation Code": app.application_confirmation_code,
           "Application Type":
             app.application_submission_type === "electronical"
               ? "electronic"
@@ -88,18 +89,18 @@ export class ApplicationCsvExporter {
           "Primary Applicant Street": app.applicant_address_street,
           "Primary Applicant Street 2": app.applicant_address_street2,
           "Primary Applicant City": app.applicant_address_city,
-          "Primary Applicant Zip Code": app.applicant_address_zip_code,
           "Primary Applicant State": app.applicant_address_state,
+          "Primary Applicant Zip Code": app.applicant_address_zip_code,
           "Primary Applicant Mailing Street": app.mailingAddress_street,
           "Primary Applicant Mailing Street 2": app.mailingAddress_street2,
           "Primary Applicant Mailing City": app.mailingAddress_city,
-          "Primary Applicant Mailing Zip Code": app.mailingAddress_zip_code,
           "Primary Applicant Mailing State": app.mailingAddress_state,
+          "Primary Applicant Mailing Zip Code": app.mailingAddress_zip_code,
           "Primary Applicant Work Street": app.applicant_workAddress_street,
           "Primary Applicant Work Street 2": app.applicant_workAddress_street2,
           "Primary Applicant Work City": app.applicant_workAddress_city,
-          "Primary Applicant Work Zip Code": app.applicant_workAddress_zip_code,
           "Primary Applicant Work State": app.applicant_workAddress_state,
+          "Primary Applicant Work Zip Code": app.applicant_workAddress_zip_code,
           "Alternate Contact First Name": app.alternateContact_first_name,
           "Alternate Contact Middle Name": app.alternateContact_middle_name,
           "Alternate Contact Last Name": app.alternateContact_last_name,
@@ -111,13 +112,17 @@ export class ApplicationCsvExporter {
           "Alternate Contact Street": app.alternateContact_mailingAddress_street,
           "Alternate Contact Street 2": app.alternateContact_mailingAddress_street2,
           "Alternate Contact City": app.alternateContact_mailingAddress_city,
-          "Alternate Contact Zip Code": app.alternateContact_mailingAddress_zip_code,
           "Alternate Contact State": app.alternateContact_mailingAddress_state,
+          "Alternate Contact Zip Code": app.alternateContact_mailingAddress_zip_code,
           Income: app.application_income,
           "Income Period": app.application_income_period === "perMonth" ? "per month" : "per year",
           "Accessibility Mobility": formatBoolean(app.accessibility_mobility),
           "Accessibility Vision": formatBoolean(app.accessibility_vision),
           "Accessibility Hearing": formatBoolean(app.accessibility_hearing),
+          "Expecting Household Changes": formatBoolean(app.application_household_expecting_changes),
+          "Household Includes Student or Member Nearing 18": formatBoolean(
+            app.application_household_student
+          ),
           "Vouchers or Subsidies": formatBoolean(app.application_income_vouchers),
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),

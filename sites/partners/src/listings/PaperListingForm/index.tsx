@@ -34,6 +34,8 @@ import {
   ListingReviewOrder,
   User,
   ListingPreference,
+  Program,
+  ListingProgram,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
@@ -61,10 +63,11 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import Preferences from "./sections/Preferences"
+import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
 
 export type FormListing = Omit<Listing, "countyCode"> & {
   applicationDueDateField?: {
@@ -131,7 +134,6 @@ const defaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationAddress: null,
   applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
@@ -236,6 +238,7 @@ const formatFormData = (
   units: TempUnit[],
   openHouseEvents: TempEvent[],
   preferences: ListingPreference[],
+  programs: ListingProgram[],
   saveLatLong: LatitudeLongitude,
   customPinPositionChosen: boolean,
   profile: User
@@ -341,6 +344,7 @@ const formatFormData = (
     disableUnitsAccordion: stringToBoolean(data.disableUnitsAccordion),
     units: units,
     listingPreferences: preferences,
+    listingPrograms: programs,
     buildingAddress: {
       ...data.buildingAddress,
       latitude: saveLatLong.latitude ?? null,
@@ -439,6 +443,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       return { ...listingPref.preference }
     }) ?? []
   )
+  const [programs, setPrograms] = useState<Program[]>(
+    listing?.listingPrograms.map((program) => {
+      return program.program
+    }) ?? []
+  )
+
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
@@ -517,11 +527,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           const orderedPreferences = preferences.map((preference, index) => {
             return { preference, ordinal: index + 1 }
           })
+          const orderedPrograms = programs.map((program, index) => {
+            return { program: { ...program }, ordinal: index + 1 }
+          })
           const formattedData = formatFormData(
             formData,
             units,
             openHouseEvents,
             orderedPreferences,
+            orderedPrograms,
             latLong,
             customMapPositionChosen,
             profile
@@ -577,6 +591,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing,
       router,
       preferences,
+      programs,
       latLong,
       customMapPositionChosen,
       clearErrors,
@@ -663,7 +678,32 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setUnits={setUnits}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
-                          <Preferences preferences={preferences} setPreferences={setPreferences} />
+                          <SelectAndOrder
+                            addText={t("listings.addPreference")}
+                            drawerTitle={t("listings.addPreferences")}
+                            editText={t("listings.editPreferences")}
+                            listingData={preferences}
+                            setListingData={setPreferences}
+                            subtitle={t("listings.sections.housingPreferencesSubtext")}
+                            title={t("listings.sections.housingPreferencesTitle")}
+                            drawerButtonText={t("listings.selectPreferences")}
+                            dataFetcher={useJurisdictionalPreferenceList}
+                            formKey={"preference"}
+                          />
+                          <SelectAndOrder
+                            addText={"Add program"}
+                            drawerTitle={"Add programs"}
+                            editText={"Edit programs"}
+                            listingData={programs}
+                            setListingData={setPrograms}
+                            subtitle={
+                              "Tell us about any additional housing programs related to this listing."
+                            }
+                            title={"Housing Programs"}
+                            drawerButtonText={"Select programs"}
+                            dataFetcher={useJurisdictionalProgramList}
+                            formKey={"program"}
+                          />
                           <AdditionalFees />
                           <BuildingFeatures />
                           <AdditionalEligibility />

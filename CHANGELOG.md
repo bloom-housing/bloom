@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. The format 
   - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
   - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
   - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
+  - Incorrect last name ([#2107](https://github.com/bloom-housing/bloom/pull/2107)) (Dominik Barcikowski)
 
 ## Backend
 
@@ -166,6 +167,7 @@ All notable changes to this project will be documented in this file. The format 
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
   - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
+  - Remove field applicationAddress ([#2009](https://github.com/bloom-housing/bloom/pull/2009)) (Emily Jablonski)
   - Introduce N-M Listing-Preference relation through a self managed (not TypeORM managed) intermediate entity ListingPreference, which now holds ordinal and page. Remove Preference entity entirely with an appropriate DB migration. ([1947](https://github.com/bloom-housing/bloom/pull/1947))
 
 - Fixed:

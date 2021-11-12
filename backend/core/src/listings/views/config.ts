@@ -147,7 +147,6 @@ views.detail = {
     "result.fileId",
     "result.label",
     ...getBaseAddressSelect([
-      "applicationAddress",
       "leasingAgentAddress",
       "applicationPickUpAddress",
       "applicationMailingAddress",
@@ -171,7 +170,6 @@ views.detail = {
     { join: "listings.events", alias: "listingEvents" },
     { join: "listingEvents.file", alias: "listingEventFile" },
     { join: "listings.result", alias: "result" },
-    { join: "listings.applicationAddress", alias: "applicationAddress" },
     { join: "listings.leasingAgentAddress", alias: "leasingAgentAddress" },
     { join: "listings.applicationPickUpAddress", alias: "applicationPickUpAddress" },
     { join: "listings.applicationMailingAddress", alias: "applicationMailingAddress" },
@@ -190,7 +188,6 @@ views.full = {
     ["listings.events", "listingEvents"],
     ["listingEvents.file", "listingEventFile"],
     ["listings.result", "result"],
-    ["listings.applicationAddress", "applicationAddress"],
     ["listings.leasingAgentAddress", "leasingAgentAddress"],
     ["listings.applicationPickUpAddress", "applicationPickUpAddress"],
     ["listings.applicationMailingAddress", "applicationMailingAddress"],

@@ -93,6 +93,7 @@ const Layout = (props) => {
             }
           })}
           menuLinks={menuLinks}
+          logoWidth={"base"}
         />
         <main id="main-content">{props.children}</main>
       </div>

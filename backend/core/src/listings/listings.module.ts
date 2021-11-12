@@ -68,6 +68,7 @@ export class ListingsModule implements OnApplicationShutdown, OnModuleInit {
   }
   onApplicationShutdown() {
     console.log("Disconnect from Redis")
+    void this.cacheManager.store.reset()
     this.redisClient.quit()
   }
 

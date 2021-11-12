@@ -62,7 +62,7 @@ export class Application extends AbstractEntity {
   @MaxLength(256, { groups: [ValidationsGroupsEnum.default] })
   appUrl?: string | null
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, onDelete: "SET NULL" })
   user?: User | null
 
   @RelationId((application: Application) => application.user)
@@ -168,6 +168,18 @@ export class Application extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Demographics)
   demographics: Demographics
+
+  @Column({ type: "bool", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  householdExpectingChanges?: boolean | null
+
+  @Column({ type: "bool", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  householdStudent?: boolean | null
 
   @Column({ type: "bool", nullable: true })
   @Expose()

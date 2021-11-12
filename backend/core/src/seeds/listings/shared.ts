@@ -462,15 +462,6 @@ export function getDefaultListing() {
 
 export const defaultListing: ListingSeedType = {
   jurisdictionName: "Alameda",
-  applicationAddress: {
-    city: "San Francisco",
-    state: "CA",
-    street: "548 Market Street",
-    street2: "Suite #59930",
-    zipCode: "94104",
-    latitude: 37.789673,
-    longitude: -122.40151,
-  },
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
@@ -696,10 +687,9 @@ export function getServedInMilitaryProgram() {
 }
 
 export const servedInMilitaryProgram: ProgramSeedType = {
-  title: "Have you or anyone in your household served in the US military?",
-  subtitle: "",
-  description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+  title: "Veteran",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+  description: "Have you or anyone in your household served in the US military?",
   formMetadata: {
     key: "servedInMilitary",
     options: [
@@ -722,11 +712,10 @@ export function getTayProgram() {
 }
 
 export const tayProgram: ProgramSeedType = {
-  title:
-    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
-  subtitle: "",
+  title: "Transition Age Youth",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
   formMetadata: {
     key: "tay",
     options: [
@@ -749,10 +738,10 @@ export function getDisabilityOrMentalIlnessProgram() {
 }
 
 export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
-  title: "Do you or anyone in your household have a developmental disability or mental illness?",
-  subtitle: "",
+  title: "Developmental Disability",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+    "Do you or anyone in your household have a developmental disability or mental illness?",
   formMetadata: {
     key: "disabilityOrMentalIllness",
     options: [
@@ -775,9 +764,10 @@ export function getHousingSituationProgram() {
 }
 
 export const housingSituationProgram: ProgramSeedType = {
-  title: "Thinking about the past 30 days, do either of these describe your housing situation?",
-  subtitle: "",
-  description: "",
+  title: "Housing Situation",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+  description:
+    "Thinking about the past 30 days, do either of these describe your housing situation?",
   formMetadata: {
     key: "housingSituation",
     options: [
