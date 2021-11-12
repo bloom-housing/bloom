@@ -1,6 +1,5 @@
 export * from "./src/blankApplication"
 export * from "./src/formKeys"
-export * from "./src/localeRoute"
 export * from "./src/nextjs"
 export * from "./src/occupancyFormatting"
 export * from "./src/pdfs"
