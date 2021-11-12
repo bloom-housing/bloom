@@ -637,7 +637,7 @@
       "reEnterEmail": "Re-enter email address",
       "reEnterPassword": "Re-enter your password",
       "resendTheEmail": "Resend the email",
-      "emailSubscription": "Email me whenever a new listing is posted",
+      "emailSubscription": "Email me whenever a listing is posted or updated.",
       "linkExpired": "Your link has expired",
       "mustBe8Chars": "Must be 8 characters",
       "password": "Password",
