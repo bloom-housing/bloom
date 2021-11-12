@@ -10,7 +10,6 @@ import {
   ImageCard,
   LinkButton,
   FormCard,
-  ProgressNav,
   AuthContext,
   t,
 } from "@bloom-housing/ui-components"
@@ -75,23 +74,20 @@ const ApplicationChooseLanguage = () => {
   const { content: appStatusContent } = useGetApplicationStatusProps(listing)
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={
-            listing?.applicationConfig.sections || [
-              "You",
-              "Household",
-              "Income",
-              "Preferences",
-              "Review",
-            ]
-          }
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={
+        listing?.applicationConfig.sections || [
+          "You",
+          "Household",
+          "Income",
+          "Preferences",
+          "Review",
+        ]
+      }
+    >
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">

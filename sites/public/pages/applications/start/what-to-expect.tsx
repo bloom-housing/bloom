@@ -2,14 +2,7 @@
 0.2 - What To Expect
 A notice regarding application process and rules
 */
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  ProgressNav,
-  t,
-  Form,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, FormCard, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
@@ -25,15 +18,12 @@ const ApplicationWhatToExpect = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">

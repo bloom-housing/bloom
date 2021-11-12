@@ -11,7 +11,6 @@ import {
   Field,
   Form,
   FormCard,
-  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
 import { altContactRelationshipKeys } from "@bloom-housing/shared-helpers"
@@ -44,14 +43,12 @@ const ApplicationAlternateContactType = () => {
   const type = watch("type", application.alternateContact.type)
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}

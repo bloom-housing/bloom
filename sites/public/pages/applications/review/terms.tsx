@@ -7,7 +7,6 @@ import {
   AppearanceStyleType,
   Button,
   FormCard,
-  ProgressNav,
   t,
   AuthContext,
   FieldGroup,
@@ -75,15 +74,12 @@ const ApplicationTerms = () => {
   ]
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>

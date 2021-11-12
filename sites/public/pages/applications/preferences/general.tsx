@@ -4,14 +4,7 @@ If all preferences are opted out the applicant is shown a screen confirming thei
 */
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  ProgressNav,
-  t,
-  Form,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, FormCard, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -31,15 +24,12 @@ const ApplicationPreferencesGeneral = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}

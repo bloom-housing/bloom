@@ -2,14 +2,7 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  ProgressNav,
-  t,
-  Form,
-} from "@bloom-housing/ui-components"
+import { AppearanceStyleType, Button, FormCard, t, Form } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
@@ -24,15 +17,12 @@ const ApplicationSummary = () => {
   const onSubmit = () => conductor.routeToNextOrReturnUrl()
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">

@@ -14,7 +14,6 @@ import {
   FormCard,
   Icon,
   IconFillColors,
-  ProgressNav,
   t,
   emailRegex,
 } from "@bloom-housing/ui-components"
@@ -62,15 +61,12 @@ const ApplicationName = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>

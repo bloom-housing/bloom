@@ -7,7 +7,6 @@ import {
   Button,
   Form,
   FormCard,
-  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
 import { blankApplication } from "@bloom-housing/shared-helpers"
@@ -78,15 +77,12 @@ export default () => {
   }
 
   return previousApplication ? (
-    <FormsLayout>
-      <FormCard header={listing?.name}>
-        <ProgressNav
-          currentPageSection={currentPageSection}
-          completedSections={application.completedSections}
-          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-        />
-      </FormCard>
-
+    <FormsLayout
+      listingName={listing?.name}
+      currentSection={currentPageSection}
+      completedSections={application.completedSections}
+      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+    >
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">
