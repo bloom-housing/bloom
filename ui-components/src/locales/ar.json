@@ -1347,13 +1347,13 @@
         "modalTitle": "تصفية النتائج",
         "modalHeader": "استخدم هذه الخيارات لتحسين قائمة الخصائص الخاصة بك.",
         "neighborhood": "حي",
-        "bedrooms": "حجم الوحدة",
+        "bedrooms": "غرف نوم",
         "bedroomsOptions": {
-            "studioPlus": "0 أو أكثر من غرف النوم (استوديو)",
-            "onePlus": "غرفة نوم واحدة أو أكثر",
-            "twoPlus": "2 غرف نوم أو أكثر",
-            "threePlus": "3 غرف نوم أو أكثر",
-            "fourPlus": "4 غرف نوم أو أكثر"
+            "studioPlus": "0 (استوديو)",
+            "onePlus": "1",
+            "twoPlus": "2",
+            "threePlus": "3",
+            "fourPlus": "4 أو أكثر"
         },
         "zipCode": "الرمز البريدي",
         "zipCodeDescription": "أدخل الرمز البريدي",

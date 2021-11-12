@@ -1398,13 +1398,13 @@
     "modalTitle": "Filter results",
     "modalHeader": "Use these options to refine your list of properties.",
     "neighborhood": "Neighborhood",
-    "bedrooms": "Unit size",
+    "bedrooms": "Bedrooms",
     "bedroomsOptions": {
-      "studioPlus": "0 or more bedrooms (Studio)",
-      "onePlus": "1 or more bedrooms",
-      "twoPlus": "2 or more bedrooms",
-      "threePlus": "3 or more bedrooms",
-      "fourPlus": "4 or more bedrooms"
+      "studioPlus": "0 (Studio)",
+      "onePlus": "1",
+      "twoPlus": "2",
+      "threePlus": "3",
+      "fourPlus": "4 or more"
     },
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",

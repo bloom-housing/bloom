@@ -99,15 +99,59 @@ const FilterForm = (props: FilterFormProps) => {
           options={availabilityOptions}
           defaultValue={props.filterState?.availability}
         />
-        <Select
-          id="unitOptions"
-          name={FrontendListingFilterStateKeys.bedrooms}
-          label={t("listingFilters.bedrooms")}
-          register={register}
-          controlClassName="control"
-          options={preferredUnitOptions}
-          defaultValue={props.filterState?.bedrooms?.toString()}
-        />
+        <label className="field-label">{t("listingFilters.bedrooms")}</label>
+        <div className="flex flex-row bedroom-selector">
+          <Field
+            id="studio"
+            name={FrontendListingFilterStateKeys.studio}
+            type="checkbox"
+            label={t("listingFilters.bedroomsOptions.studioPlus")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.studio),
+            }}
+          />
+          <Field
+            id="oneBdrm"
+            name={FrontendListingFilterStateKeys.oneBdrm}
+            type="checkbox"
+            label={t("listingFilters.bedroomsOptions.onePlus")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.oneBdrm),
+            }}
+          />
+          <Field
+            id="twoBdrm"
+            name={FrontendListingFilterStateKeys.twoBdrm}
+            type="checkbox"
+            label={t("listingFilters.bedroomsOptions.twoPlus")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.twoBdrm),
+            }}
+          />
+          <Field
+            id="threeBdrm"
+            name={FrontendListingFilterStateKeys.threeBdrm}
+            type="checkbox"
+            label={t("listingFilters.bedroomsOptions.threePlus")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.threeBdrm),
+            }}
+          />
+          <Field
+            id="fourPlusBdrm"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("listingFilters.bedroomsOptions.fourPlus")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.fourPlusBdrm),
+            }}
+          />
+        </div>
         <Field
           id="zipCodeField"
           name={FrontendListingFilterStateKeys.zipcode}

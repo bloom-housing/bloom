@@ -22,11 +22,11 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.status:
     case ListingFilterKeys.leasingAgents:
       return EnumListingFilterParamsComparison["="]
-    case ListingFilterKeys.bedrooms:
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]
     case ListingFilterKeys.maxRent:
       return EnumListingFilterParamsComparison["<="]
+    case ListingFilterKeys.bedrooms:
     case ListingFilterKeys.zipcode:
       return EnumListingFilterParamsComparison["IN"]
     case ListingFilterKeys.seniorHousing:
@@ -43,10 +43,21 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
 
 // Define the keys we expect to see in the frontend URL. These are also used for
 // the filter state object, ListingFilterState.
+// We exclude bedrooms, since that is constructed from studio, oneBdrm, and so on
+const { bedrooms, ...IncludedBackendKeys } = ListingFilterKeys
+enum BedroomFields {
+  studio = "studio",
+  oneBdrm = "oneBdrm",
+  twoBdrm = "twoBdrm",
+  threeBdrm = "threeBdrm",
+  fourPlusBdrm = "fourPlusBdrm",
+}
 export const FrontendListingFilterStateKeys = {
-  ...ListingFilterKeys,
+  ...IncludedBackendKeys,
+  ...BedroomFields,
   includeNulls: "includeNulls" as const,
 }
+
 // The types in this interface are `string | ...` because we don't currently parse
 // the values pulled from the URL querystring to their types, so they could be
 // strings or the type the form fields set them to be.
@@ -54,7 +65,6 @@ export const FrontendListingFilterStateKeys = {
 // correct type, so we can remove the `string` type from these fields.
 export interface ListingFilterState {
   [FrontendListingFilterStateKeys.availability]?: string | AvailabilityFilterEnum
-  [FrontendListingFilterStateKeys.bedrooms]?: string | number
   [FrontendListingFilterStateKeys.zipcode]?: string
   [FrontendListingFilterStateKeys.minRent]?: string | number
   [FrontendListingFilterStateKeys.maxRent]?: string | number
@@ -62,23 +72,67 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
   [FrontendListingFilterStateKeys.includeNulls]?: boolean
   [FrontendListingFilterStateKeys.minAmiPercentage]?: string | number
+  [FrontendListingFilterStateKeys.studio]?: string | boolean
+  [FrontendListingFilterStateKeys.oneBdrm]?: string | boolean
+  [FrontendListingFilterStateKeys.twoBdrm]?: string | boolean
+  [FrontendListingFilterStateKeys.threeBdrm]?: string | boolean
+  [FrontendListingFilterStateKeys.fourPlusBdrm]?: string | boolean
+}
+
+// Since it'd be tricky to OR a separate ">=" comparison with an "IN"
+// comparison, we fake it by mapping 4+ bedrooms to being IN 4,5,...,10. If we
+// ever have units with > 10 bedrooms, we'll need to update this.
+const BedroomValues = {
+  [BedroomFields.studio]: 0,
+  [BedroomFields.oneBdrm]: 1,
+  [BedroomFields.twoBdrm]: 2,
+  [BedroomFields.threeBdrm]: 3,
+  [BedroomFields.fourPlusBdrm]: "4,5,6,7,8,9,10",
 }
 
 export function encodeToBackendFilterArray(filterState: ListingFilterState) {
-  const filterArray = []
-  for (const filterType in filterState) {
-    // Only include things that are a backend filter type. The keys of
-    // ListingFilterState are a superset of ListingFilterKeys that may include
-    // keys not recognized by the backend, so we check against ListingFilterKeys
-    // here.
-    if (filterType in ListingFilterKeys) {
+  const filterArray: {
+    [x: string]: any
+    $comparison: EnumListingFilterParamsComparison
+    $include_nulls?: boolean | undefined
+    bedrooms?: string
+  }[] = []
+  if (filterState === undefined) {
+    return filterArray
+  }
+  const includeNulls =
+    FrontendListingFilterStateKeys.includeNulls in filterState &&
+    filterState[FrontendListingFilterStateKeys.includeNulls]
+      ? true
+      : undefined
+  // Only include things that are a backend filter type. The keys of
+  // ListingFilterState are a superset of ListingFilterKeys that may include
+  // keys not recognized by the backend, so we check against ListingFilterKeys
+  // here.
+  for (const filterType in ListingFilterKeys) {
+    if (filterType in filterState && filterState[filterType] !== null) {
       const comparison = getComparisonForFilter(ListingFilterKeys[filterType])
       filterArray.push({
         $comparison: comparison,
-        $include_nulls: filterState[FrontendListingFilterStateKeys.includeNulls],
         [filterType]: filterState[filterType],
+        ...(includeNulls && { $include_nulls: includeNulls }),
       })
     }
+  }
+
+  // Special-case the bedroom filters, since they get combined from separate fields.
+  const bedrooms = []
+  for (const bedroomFilterType in BedroomFields) {
+    if (bedroomFilterType in filterState) {
+      bedrooms.push(BedroomValues[bedroomFilterType])
+    }
+  }
+  if (bedrooms.length > 0) {
+    filterArray.push({
+      $comparison: getComparisonForFilter(ListingFilterKeys.bedrooms),
+      [ListingFilterKeys.bedrooms]: bedrooms.join(),
+      ...(includeNulls && { $include_nulls: includeNulls }),
+    })
   }
   return filterArray
 }
@@ -87,7 +141,7 @@ export function encodeToFrontendFilterString(filterState: ListingFilterState) {
   let queryString = ""
   for (const filterType in filterState) {
     const value = filterState[filterType]
-    if (filterType in FrontendListingFilterStateKeys && value !== undefined && value !== "") {
+    if (filterType in FrontendListingFilterStateKeys && value !== undefined && value) {
       queryString += `&${filterType}=${value}`
     }
   }

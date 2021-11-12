@@ -31,13 +31,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: Number,
-    example: "3",
+    type: String,
+    example: "2, 3",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.bedrooms]?: number;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.bedrooms]?: string;
 
   @Expose()
   @ApiProperty({
