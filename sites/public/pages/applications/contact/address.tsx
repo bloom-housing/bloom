@@ -13,6 +13,7 @@ import {
   FormCard,
   mergeDeep,
   FieldGroup,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
@@ -90,12 +91,15 @@ const ApplicationAddress = () => {
   }))
 
   return (
-    <FormsLayout
-      listingName={listing?.name}
-      currentSection={currentPageSection}
-      completedSections={application.completedSections}
-      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-    >
+    <FormsLayout>
+      <FormCard header={listing?.name}>
+        <ProgressNav
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
+        />
+      </FormCard>
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}

@@ -9,7 +9,7 @@ export const pdfUrlFromListingEvents = (
   listingEventType: ListingEventType,
   cloudName: string
 ) => {
-  const event = events.find((event) => event.type === listingEventType)
+  const event = events.find((event) => event?.type === listingEventType)
   if (event) {
     return event.file?.label == "cloudinaryPDF"
       ? cloudinaryPdfFromId(event.file.fileId, cloudName)

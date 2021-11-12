@@ -53,6 +53,7 @@ const ProgressNav = (props: {
             currentPageSection={props.currentPageSection}
             completedSections={props.completedSections}
             label={label}
+            mounted={props.mounted}
           />
         ))}
       </ul>

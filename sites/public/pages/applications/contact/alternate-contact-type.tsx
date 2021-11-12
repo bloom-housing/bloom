@@ -11,9 +11,10 @@ import {
   Field,
   Form,
   FormCard,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import { altContactRelationshipKeys } from "@bloom-housing/shared-helpers"
+import { altContactRelationshipKeys, OnClientSide } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -43,12 +44,15 @@ const ApplicationAlternateContactType = () => {
   const type = watch("type", application.alternateContact.type)
 
   return (
-    <FormsLayout
-      listingName={listing?.name}
-      currentSection={currentPageSection}
-      completedSections={application.completedSections}
-      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-    >
+    <FormsLayout>
+      <FormCard header={listing?.name}>
+        <ProgressNav
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
+        />
+      </FormCard>
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}

@@ -1,6 +1,5 @@
 import { createElement, useContext } from "react"
 import { IdleTimeout, AuthContext, t } from "@bloom-housing/ui-components"
-import { lRoute } from "@bloom-housing/shared-helpers"
 
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 
@@ -20,7 +19,7 @@ const ApplicationTimeout = () => {
         promptTitle: t("t.areYouStillWorking"),
         promptText: t("application.timeout.text"),
         promptAction: t("application.timeout.action"),
-        redirectPath: lRoute("/"),
+        redirectPath: "/",
         alertMessage: t("application.timeout.afterMessage"),
         alertType: "alert",
         onTimeout,

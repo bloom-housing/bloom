@@ -14,6 +14,7 @@ import {
   Form,
   FormCard,
   FormOptions,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
@@ -22,7 +23,7 @@ import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import React, { useContext } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import { OnClientSide, relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
 
 const ApplicationMember = () => {
   let memberId, member, saveText, cancelText
@@ -97,12 +98,15 @@ const ApplicationMember = () => {
   ]
 
   return (
-    <FormsLayout
-      listingName={listing?.name}
-      currentSection={currentPageSection}
-      completedSections={application.completedSections}
-      labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-    >
+    <FormsLayout>
+      <FormCard header={listing?.name}>
+        <ProgressNav
+          currentPageSection={currentPageSection}
+          completedSections={application.completedSections}
+          labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
+        />
+      </FormCard>
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
