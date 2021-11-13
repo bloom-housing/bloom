@@ -1118,7 +1118,8 @@
         "welcomeEnglish": "স্বাগত",
         "welcomeSpanish": "স্বাগত",
         "welcomeVietnamese": "ভিয়েতনামী",
-        "about": "আমাদের সম্পর্কে"
+        "about": "আমাদের সম্পর্কে",
+        "feedback": "প্রতিক্রিয়া"
     },
     "pageDescription": {
         "welcome": "%{RegionName} এর হাউজিং পোর্টালে সাশ্রয়ী মূল্যের আবাসনের জন্য অনুসন্ধান করুন এবং আবেদন করুন",

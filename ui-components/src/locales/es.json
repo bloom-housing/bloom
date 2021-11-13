@@ -993,7 +993,8 @@
         "welcomeEnglish": "Bienvenidos",
         "welcomeSpanish": "Bienvenido",
         "welcomeVietnamese": "vietnamita",
-        "about": "Sobre nosotras"
+        "about": "Sobre nosotras",
+        "feedback": "Realimentación"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",

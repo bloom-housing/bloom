@@ -96,6 +96,9 @@ const Layout = (props) => {
           <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
         </FooterSection>
         <FooterNav copyright={t("footer.copyright")}>
+          <Link href="/feedback">
+            <a>{t("pageTitle.feedback")}</a>
+          </Link>
           <Link href="/privacy">
             <a>{t("pageTitle.privacy")}</a>
           </Link>
