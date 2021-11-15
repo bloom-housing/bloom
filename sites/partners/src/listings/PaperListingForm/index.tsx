@@ -542,11 +542,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           )
           removeEmptyObjects(formattedData)
           const result = editMode
-            ? await listingsService.update({
-                listingId: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            : await listingsService.create({ body: formattedData })
+            ? await listingsService.update(
+                {
+                  listingId: listing.id,
+                  body: { id: listing.id, ...formattedData },
+                },
+                { headers: { "x-purge-cache": true } }
+              )
+            : await listingsService.create(
+                { body: formattedData },
+                { headers: { "x-purge-cache": true } }
+              )
           reset(formData)
           if (result) {
             setSiteAlertMessage(
