@@ -15,11 +15,10 @@ import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
-import { getFilterUrlLink } from "../../lib/filterUrlLink"
 
 const EligibilityHouseholdSize = () => {
   const router = useRouter()
@@ -42,7 +41,7 @@ const EligibilityHouseholdSize = () => {
 
   const onClick = async (data) => {
     eligibilityRequirements.setHouseholdSizeCount(data.householdSize)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
+    await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
   }
 
   if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
@@ -97,7 +96,7 @@ const EligibilityHouseholdSize = () => {
                 className="mx-2 mt-6"
                 styleType={AppearanceStyleType.primary}
               >
-                {t("t.viewListings")}
+                {t("t.finish")}
               </Button>
             </div>
           </div>

@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import styles from "./EligibilityAge.module.scss"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
-import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { AgeRangeType, EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
@@ -37,7 +37,7 @@ const EligibilityAge = () => {
 
   const onClick = async (data) => {
     eligibilityRequirements.setAge(data.age)
-    await router.push(getFilterUrlLink(eligibilityRequirements))
+    await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
   }
 
   const ageValues = [
@@ -113,7 +113,7 @@ const EligibilityAge = () => {
                 className="mx-2 mt-6"
                 styleType={AppearanceStyleType.primary}
               >
-                {t("t.viewListings")}
+                {t("t.finish")}
               </Button>
             </div>
           </div>

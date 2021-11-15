@@ -49,6 +49,16 @@ describe("<EligibilityDisability>", () => {
     expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/income")
   })
 
+  it("Clicks the Finish button", async () => {
+    await act(async () => {
+      render(<EligibilityDisability />)
+      fireEvent.click(screen.getByRole("button", { name: "Finish" }))
+    })
+
+    expect(mockRouter.push.mock.calls.length).toBe(1)
+    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/disclaimer")
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })

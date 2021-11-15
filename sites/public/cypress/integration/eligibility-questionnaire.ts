@@ -41,11 +41,12 @@ describe("Verifying the eligibility questionnaire flow", () => {
     // Select "$30k to $40k"
     cy.get("select").select("30kTo40k")
 
-    // Click "Done"
-    cy.contains("Done").click()
+    // Click "Finish"
+    cy.contains("Finish").click()
+    cy.url().should("include", "/eligibility/disclaimer")
 
-    // TODO: once the "Done" button is implemented, verify that it takes the user to the correct
-    // view.
+    cy.contains("View Listings").click()
+    cy.url().should("include", "/listings")
   })
 
   // TODO: consider adding tests for incorrect inputs in the Eligibility Questionnaire.
