@@ -452,11 +452,11 @@ export const tayProgram: ProgramSeedType = {
   },
 }
 
-export function getDisabilityOrMentalIlnessProgram() {
-  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+export function getDisabilityOrMentalIllnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
 }
 
-export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
+export const disabilityOrMentalIllnessProgram: ProgramSeedType = {
   title: "Developmental Disability",
   subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:

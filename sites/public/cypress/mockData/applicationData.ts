@@ -432,6 +432,46 @@ export const minimalDataApplication: Application = {
         },
       ],
     },
+    {
+      key: "disabilityOrMentalIllness",
+      claimed: false,
+      options: [
+        {
+          key: "disabilityOrMentalIllness",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "housingSituation",
+      claimed: false,
+      options: [
+        {
+          key: "notPermanent",
+          checked: false,
+        },
+        {
+          key: "homeless",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
   ],
   confirmationCode: "",
   status: ApplicationStatus.draft,
