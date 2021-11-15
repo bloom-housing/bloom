@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheInterceptor,
   CACHE_MANAGER,
   Controller,
   Delete,
@@ -15,10 +16,10 @@ import {
   ValidationPipe,
   ClassSerializerInterceptor,
   Headers,
-  Header,
 } from "@nestjs/common"
 import { ListingsService } from "./listings.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { Cache } from "cache-manager"
 import { ListingDto } from "./dto/listing.dto"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
@@ -26,6 +27,7 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Language } from "../shared/types/language-enum"
+import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 import { PaginatedListingDto } from "./dto/paginated-listing.dto"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -42,14 +44,18 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 @ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
 export class ListingsController {
-  constructor(private readonly listingsService: ListingsService) {}
+  cacheKeys: string[]
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly listingsService: ListingsService
+  ) {}
 
   // TODO: Limit requests to defined fields
   @Get()
   @ApiExtraModels(ListingFilterParams)
   @ApiOperation({ summary: "List listings", operationId: "list" })
   // ClassSerializerInterceptor has to come after CacheInterceptor
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
@@ -60,12 +66,13 @@ export class ListingsController {
   @UsePipes(new ListingCreateValidationPipe(defaultValidationPipeOptions))
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     const listing = await this.listingsService.create(listingDto)
+    await this.cacheManager.reset()
     return mapTo(ListingDto, listing)
   }
 
   @Get(`:listingId`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(ClassSerializerInterceptor)
+  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,
@@ -89,6 +96,7 @@ export class ListingsController {
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
+    await this.cacheManager.reset()
     return mapTo(ListingDto, listing)
   }
 
@@ -97,5 +105,6 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)
+    await this.cacheManager.reset()
   }
 }
