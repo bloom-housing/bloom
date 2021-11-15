@@ -329,40 +329,6 @@ export function useJurisdictionalProgramList(jurisdictionId: string) {
   }
 }
 
-export function useProgramList() {
-  const { programsService } = useContext(AuthContext)
-  const fetcher = () => programsService.list()
-
-  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
-export function useJurisdictionalProgramList(jurisdictionId: string) {
-  const { programsService } = useContext(AuthContext)
-  const fetcher = () =>
-    programsService.list({
-      filter: [
-        {
-          $comparison: EnumProgramsFilterParamsComparison["="],
-          jurisdiction: jurisdictionId,
-        },
-      ],
-    })
-
-  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
-
-  return {
-    data,
-    loading: !error && !data,
-    error,
-  }
-}
-
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()
