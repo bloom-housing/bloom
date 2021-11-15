@@ -535,6 +535,33 @@
           "label": "I only want to be considered for the PBV units"
         }
       },
+      "developmentalDisability": {
+        "title": "Do you or anyone in your household have a developmental disability?",
+        "description": "By selecting “yes”, you confirm that you someone in your household meets the definition of developmentally disabled.",
+        "yes": {
+          "label": "Yes, I or someone in my household has a developmental disability",
+          "description": "A developmental disability is defined in California law as intellectual disability, cerebral palsy, epilepsy, and autism. Other substantially disabling conditions closely related to intellectual disability or which require treatment similar to the treatment required by persons with intellectual disability may be eligible for services. The onset of these conditions had to have been prior to age 18; continues or can be expected to continue indefinitely and constitutes a substantial handicap for the individual.\n\nA Substantial Disability is s a condition which results in major impairment of cognitive and/or social functioning, representing sufficient impairment to require interdisciplinary planning and coordination of special or generic services to assist the individual in achieving maximum potential; and\n\nMust cause significant functional limitations, as determined by the regional center, in three or more of the following areas of major life activity, as appropriate to the person’s age. Since an individual’s cognitive and/or social functioning are many-faceted, the existence of a major impairment shall be determined through assessment(s) in the following areas of daily life activity:\n\n\u2022 Receptive and expressive language\n\n\u2022 Learning\n\n\u2022 Self-care\n\n\u2022Mobility\n\n\u2022 Self-direction\n\n\u2022 Capacity for independent living\n\n\u2022 Economic self-sufficiency\n\nA Developmental Disability shall not include handicapping conditions that are:\n\n\u2022 Solely psychiatric disorders where there is impaired intellectual or social functioning which originated as a result of the psychiatric disorder or treatment given for such a disorder. Such psychiatric disorders include psycho-social deprivation and/or psychosis, severe neurosis or personality disorders even where social and intellectual functioning has become seriously impaired as an integral manifestation of the disorder\n\n\u2022 Solely learning disabilities. A learning disability is a condition which manifests as a significant discrepancy between estimated cognitive potential and actual level of educational performance, and which is not a result of generalized intellectual disability, educational or psycho-social deprivation, psychiatric disorder, or sensory loss\n\n\u2022 Solely physical in nature. These conditions include congenital anomalies or conditions acquired through disease, accident, or faulty development which are not associated with a neurological impairment that results in a need for treatment similar to that required for intellectual disability. Some examples are polio, muscular dystrophy, and arthritis\n\nBy selecting “yes” that you meet the definition for Developmentally Disabled, you give your permission to MidPen Housing to share your information with the Regional Center (or other agency) you have indicated for purposes of confirming your eligibility."
+        },
+        "no": {
+          "label": "No, no one in my household has a developmental disability"
+        },
+        "iDontKnow": {
+          "label": "I don't know if someone in my household has a developmental disability"
+        }
+      },
+      "developmentalDisabilityRegistration": {
+        "title": "Are you registered with the Regional Center of the East Bay, or another Regional Center that supports people with developmental disabilities?",
+        "description": "If Yes, please provide the name of the organization. You give your permission to share your information with the Regional Center (or other agency) you have indicated for purposes of confirming your eligibility.",
+        "yes": {
+          "label": "Yes, I am registered with an organization that supports developmental disabilities"
+        },
+        "no": {
+          "label": "No, I am not registered with an organization that supports developmental disabilities"
+        },
+        "iDontKnow": {
+          "label": "I don't know if I am registered with an organization that supports developmental disabilities"
+        }
+      },
       "HOPWA": {
         "title": "Housing Opportunities for Persons with AIDS",
         "hopwa": {
@@ -564,8 +591,9 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "address": "Displaced Address",
-        "name": "Claimant"
+        "address": "Address",
+        "name": "Claimant",
+        "organization": "Name of Organization"
       }
     },
     "review": {
@@ -1035,7 +1063,8 @@
       "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
-      "specialNeeds": "Special Needs"
+      "specialNeeds": "Special Needs",
+      "developmentalDisability": "Developmental Disability"
     },
     "reservedFor": "Reserved for %{type}",
     "reservedCommunityType": "Reserved Community Type",
@@ -1043,7 +1072,8 @@
       "family": "families",
       "senior": "seniors",
       "veteran": "veterans",
-      "specialNeeds": "special needs"
+      "specialNeeds": "special needs",
+      "developmentalDisability": "Developmental Disabilities"
     },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
