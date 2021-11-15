@@ -395,7 +395,44 @@ export const minimalDataApplication: Application = {
     howDidYouHear: [],
   },
   preferences: [],
-  programs: [],
+  programs: [
+    {
+      claimed: false,
+      key: "servedInMilitary",
+      options: [
+        {
+          key: "servedInMilitary",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "tay",
+      claimed: false,
+      options: [
+        {
+          key: "tay",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+  ],
   confirmationCode: "",
   status: ApplicationStatus.draft,
   submissionType: ApplicationSubmissionType.electronical,
