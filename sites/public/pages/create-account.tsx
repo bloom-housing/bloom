@@ -159,8 +159,13 @@ export default () => {
               errorMessage={t("authentication.createAccount.errors.emailMismatch")}
               register={register}
             />
+            <Field
+              name="emailSubscription"
+              type="checkbox"
+              label={t("authentication.createAccount.emailSubscription")}
+              register={register}
+            />
           </div>
-
           <div className="form-card__group border-b">
             <PhoneField
               caps={true}

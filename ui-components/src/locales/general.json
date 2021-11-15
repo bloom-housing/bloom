@@ -641,6 +641,7 @@
       "phone": "Phone",
       "reEnterPassword": "Re-enter your password",
       "resendTheEmail": "Resend the email",
+      "emailSubscription": "Email me whenever a listing is posted or updated.",
       "linkExpired": "Your link has expired",
       "mustBe8Chars": "Must be 8 characters",
       "password": "Password",
