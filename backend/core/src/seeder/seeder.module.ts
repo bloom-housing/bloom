@@ -41,6 +41,12 @@ import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-miss
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Program } from "../program/entities/program.entity"
+import { AmiChartDefaultSeed } from "../seeds/ami-charts/default-ami-chart"
+import { AmiDefaultMissingAMI } from "../seeds/ami-charts/missing-household-ami-levels"
+import { AmiDefaultTriton } from "../seeds/ami-charts/triton-ami-chart"
+import { AmiDefaultTritonDetroit } from "../seeds/ami-charts/triton-ami-chart-detroit"
+import { AmiDefaultSanJose } from "../seeds/ami-charts/default-ami-chart-san-jose"
+import { AmiDefaultSanMateo } from "../seeds/ami-charts/default-ami-chart-san-mateo"
 
 @Module({})
 export class SeederModule {
@@ -100,6 +106,12 @@ export class SeederModule {
         ListingDefaultMissingAMI,
         ListingDefaultSanJoseSeed,
         ListingTritonSeedDetroit,
+        AmiChartDefaultSeed,
+        AmiDefaultMissingAMI,
+        AmiDefaultTriton,
+        AmiDefaultTritonDetroit,
+        AmiDefaultSanJose,
+        AmiDefaultSanMateo,
       ],
     }
   }
