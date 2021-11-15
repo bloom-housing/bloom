@@ -25,7 +25,6 @@ const ApplicationPrograms = () => {
   const { conductor, application, listing } = useFormConductor("programs")
   const programs = listing?.listingPrograms
   const uniquePages = new Set(programs?.map((item) => item.ordinal)).size
-  console.info(uniquePages)
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages : 1)
   const [pageProgram, setPageProgram] = useState(null)
   const [programData, setProgramData] = useState(null)
@@ -111,9 +110,11 @@ const ApplicationPrograms = () => {
         />
 
         <div className="form-card__lead border-b">
-          <h2 className="form-card__title is-borderless">{pageProgram.description}</h2>
+          <h2 className="form-card__title is-borderless">{pageProgram?.description}</h2>
 
-          {pageProgram.subTitle !== "" && <p className="field-note mt-5">{pageProgram.subtitle}</p>}
+          {pageProgram?.subTitle && pageProgram?.subTitle !== "" && (
+            <p className="field-note mt-5">{pageProgram.subtitle}</p>
+          )}
         </div>
 
         {!!Object.keys(errors).length && (
@@ -139,6 +140,7 @@ const ApplicationPrograms = () => {
                       errorMessage={t("errors.selectAnOption")}
                       register={register}
                       validation={{ required: true }}
+                      dataTestId={"app-program-option"}
                       fields={pageProgram?.formMetadata?.options?.map((option) => {
                         return {
                           id: option.key,
@@ -171,6 +173,7 @@ const ApplicationPrograms = () => {
                     conductor.returnToReview = false
                     conductor.setNavigatedBack(false)
                   }}
+                  data-test-id={"app-next-step-button"}
                 >
                   {t("t.next")}
                 </Button>
