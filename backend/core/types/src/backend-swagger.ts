@@ -97,6 +97,8 @@ export class AmiChartsService {
     params: {
       /**  */
       jurisdictionName?: string
+      /**  */
+      jurisdictionId?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<AmiChart[]> {
@@ -104,7 +106,10 @@ export class AmiChartsService {
       let url = basePath + "/amiCharts"
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-      configs.params = { jurisdictionName: params["jurisdictionName"] }
+      configs.params = {
+        jurisdictionName: params["jurisdictionName"],
+        jurisdictionId: params["jurisdictionId"],
+      }
       let data = null
 
       configs.data = data
@@ -3889,6 +3894,9 @@ export interface User {
   dob?: Date
 
   /**  */
+  phoneNumber?: string
+
+  /**  */
   createdAt: Date
 
   /**  */
@@ -3931,6 +3939,9 @@ export interface UserCreate {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserBasic {
@@ -3966,6 +3977,9 @@ export interface UserBasic {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 
   /**  */
   createdAt: Date
@@ -4048,6 +4062,12 @@ export interface UserUpdate {
   leasingAgentInListings?: Id[]
 
   /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -4061,6 +4081,9 @@ export interface UserUpdate {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserFilterParams {
@@ -4069,6 +4092,9 @@ export interface UserFilterParams {
 
   /**  */
   isPartner?: boolean
+
+  /**  */
+  isPortalUser?: boolean
 }
 
 export interface PaginatedUserList {
@@ -4117,6 +4143,9 @@ export interface UserInvite {
 
   /**  */
   dob?: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface UserProfileUpdate {
@@ -4131,6 +4160,12 @@ export interface UserProfileUpdate {
 
   /**  */
   jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
 
   /**  */
   id: string
@@ -4694,9 +4729,6 @@ export interface Listing {
   applicationMethods: ApplicationMethod[]
 
   /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
-
-  /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
 
   /**  */
@@ -5110,9 +5142,6 @@ export interface ListingCreate {
 
   /**  */
   applicationMethods: ApplicationMethodCreate[]
-
-  /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
 
   /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
@@ -5531,9 +5560,6 @@ export interface ListingUpdate {
 
   /**  */
   applicationMethods: ApplicationMethodUpdate[]
-
-  /**  */
-  applicationAddress?: CombinedApplicationAddressTypes
 
   /**  */
   applicationPickUpAddress?: CombinedApplicationPickUpAddressTypes
@@ -6279,7 +6305,6 @@ export enum UnitStatus {
   "unavailable" = "unavailable",
 }
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
-export type CombinedApplicationAddressTypes = AddressUpdate
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate

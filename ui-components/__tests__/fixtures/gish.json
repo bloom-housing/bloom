@@ -4,14 +4,6 @@
   "acceptingOnlineApplications": false,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Community Room, Laundry",
-  "applicationAddress": {
-    "city": "San Jose",
-    "street": "35 East Gish Road",
-    "zipCode": "95112",
-    "state": "CA",
-    "latitude": 37.36219,
-    "longitude": -121.909447
-  },
   "applicationDueDate": "2019-12-09T12:58:21.000-07:00",
   "applicationOrganization": "35 East Gish Road",
   "applicationPhone": "(408) 436-8972",

@@ -1,74 +1,22 @@
 describe("applications/household/add-members", function () {
   const route = "/applications/household/add-members"
 
-  it("Should render form", function () {
-    cy.loadConfig({
-      householdSizeMax: 2,
-      householdSizeMin: 0,
-    })
+  beforeEach(() => {
     cy.visit(route)
+  })
 
+  it("should render add household members sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("Should move to /contact/name after Edit click", function () {
-    cy.loadConfig({
-      householdSizeMax: 2,
-      householdSizeMin: 0,
-    })
-    cy.visit(route)
-
-    cy.getByID("edit-member").click()
+  it("should move backward in form to /contact/name after editing primary household member", function () {
+    cy.getByTestId("app-household-member-edit-button").click()
     cy.location("pathname").should("include", "applications/contact/name")
   })
 
-  it("Should move to /household/member Add member click", function () {
-    cy.loadConfig({
-      householdSizeMax: 2,
-      householdSizeMin: 0,
-    })
-    cy.visit(route)
-
-    cy.getByID("btn-add-member").click()
+  it("should move to correct route on Add Member click", function () {
+    cy.getByTestId("app-add-household-member-button").click()
     cy.location("pathname").should("include", "applications/household/member")
-  })
-
-  it("Should show an error when min. household size is > 1 and defined less", function () {
-    cy.loadConfig({
-      householdSizeMax: 2,
-      householdSizeMin: 2,
-    })
-    cy.visit(route)
-
-    cy.getByID("btn-add-done").click()
-
-    cy.get(".alert-notice").should("be.visible").and("contain", "small")
-  })
-
-  it("Should show an error if max. household size is 1 and defined more", function () {
-    cy.loadConfig(
-      {
-        householdSizeMax: 1,
-        householdSizeMin: 0,
-      },
-      "applicationConfigFilled.json"
-    )
-    cy.visit(route)
-
-    cy.getByID("btn-add-done").click()
-
-    cy.get(".alert-notice").should("be.visible").and("contain", "too big")
-  })
-
-  it("Should move to next route Add member click", function () {
-    cy.loadConfig({
-      householdSizeMax: 2,
-      householdSizeMin: 0,
-    })
-    cy.visit(route)
-
-    cy.getByID("btn-add-done").click()
-    cy.isNextRouteValid("addMembers")
   })
 })

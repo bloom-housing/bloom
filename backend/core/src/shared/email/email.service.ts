@@ -1,6 +1,7 @@
 import { Injectable, Logger, Scope } from "@nestjs/common"
 import { SendGridService } from "@anchan828/nest-sendgrid"
 import { ResponseError } from "@sendgrid/helpers/classes"
+import merge from "lodash/merge"
 import Handlebars from "handlebars"
 import path from "path"
 import { User } from "../../auth/entities/user.entity"
@@ -39,9 +40,7 @@ export class EmailService {
   }
 
   public async welcome(user: User, appUrl: string, confirmationUrl: string) {
-    const language = user.language || Language.en
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
-    void (await this.loadTranslations(jurisdiction, language))
+    await this.loadTranslationsForUser(user)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
         `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
@@ -53,6 +52,25 @@ export class EmailService {
       user.email,
       "Welcome to Bloom",
       this.template("register-email")({
+        user: user,
+        confirmationUrl: confirmationUrl,
+        appOptions: { appUrl: appUrl },
+      })
+    )
+  }
+
+  private async loadTranslationsForUser(user: User) {
+    const language = user.language || Language.en
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, language))
+  }
+
+  public async changeEmail(user: User, appUrl: string, confirmationUrl: string, newEmail: string) {
+    await this.loadTranslationsForUser(user)
+    await this.send(
+      newEmail,
+      "Bloom email change request",
+      this.template("change-email")({
         user: user,
         confirmationUrl: confirmationUrl,
         appOptions: { appUrl: appUrl },
@@ -132,11 +150,22 @@ export class EmailService {
   }
 
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
-    const translation = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+    const jurisdictionalTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
       language,
       jurisdiction ? jurisdiction.id : null
     )
-    this.polyglot.replace(translation.translations)
+    const genericTranslations = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
+      language,
+      null
+    )
+
+    // Deep merge
+    const translations = merge(
+      genericTranslations.translations,
+      jurisdictionalTranslations.translations
+    )
+
+    this.polyglot.replace(translations)
   }
 
   private template(view: string) {
@@ -189,7 +218,10 @@ export class EmailService {
   }
 
   async invite(user: User, appUrl: string, confirmationUrl: string) {
-    void (await this.loadTranslations(null, user.language || Language.en))
+    void (await this.loadTranslations(
+      user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
+      user.language || Language.en
+    ))
     await this.send(
       user.email,
       this.polyglot.t("invite.hello"),

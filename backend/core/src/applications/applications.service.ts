@@ -22,6 +22,7 @@ import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
 import { authzActions } from "../auth/enum/authz-actions.enum"
 import crypto from "crypto"
+import { Listing } from "../listings/entities/listing.entity"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -31,7 +32,8 @@ export class ApplicationsService {
     private readonly authzService: AuthzService,
     private readonly listingsService: ListingsService,
     private readonly emailService: EmailService,
-    @InjectRepository(Application) private readonly repository: Repository<Application>
+    @InjectRepository(Application) private readonly repository: Repository<Application>,
+    @InjectRepository(Listing) private readonly listingsRepository: Repository<Listing>
   ) {}
 
   public async list(params: PaginatedApplicationListQueryParams) {
@@ -74,22 +76,29 @@ export class ApplicationsService {
     return result
   }
 
+  // Submitting an application from public
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
-    const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
+    const listing = await this.listingsRepository
+      .createQueryBuilder("listings")
+      .where(`listings.id = :listingId`, { listingId: applicationCreateDto.listing.id })
+      .select("listings.applicationDueDate")
+      .getOne()
     if (
+      listing &&
       listing.applicationDueDate &&
       applicationCreateDto.submissionDate > listing.applicationDueDate
     ) {
       throw new BadRequestException("Listing is not open for application submission.")
     }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    return await this._create(applicationCreateDto)
+    return await this._create(applicationCreateDto, true)
   }
 
+  // Entering a paper application from partners
   async create(applicationCreateDto: ApplicationCreateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
-    return this._create(applicationCreateDto)
+    return this._create(applicationCreateDto, false)
   }
 
   async findOne(applicationId: string) {
@@ -203,7 +212,10 @@ export class ApplicationsService {
     )
   }
 
-  private async _create(applicationCreateDto: ApplicationUpdateDto) {
+  private async _create(
+    applicationCreateDto: ApplicationUpdateDto,
+    shouldSendConfirmation: boolean
+  ) {
     let application: Application
 
     try {
@@ -257,7 +269,7 @@ export class ApplicationsService {
     // Listing is not eagerly joined on application entity so let's use the one provided with
     // create dto
     const listing = await this.listingsService.findOne(applicationCreateDto.listing.id)
-    if (application.applicant.emailAddress) {
+    if (application.applicant.emailAddress && shouldSendConfirmation) {
       await this.emailService.confirmation(listing, application, applicationCreateDto.appUrl)
     }
     return application

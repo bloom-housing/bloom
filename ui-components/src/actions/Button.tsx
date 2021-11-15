@@ -67,6 +67,7 @@ const Button = (props: ButtonProps) => {
 
   return (
     <button
+      {...props}
       id={props.id}
       type={props.type}
       className={buttonClasses.join(" ")}

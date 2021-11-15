@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import {
   t,
   GridSection,
@@ -52,7 +52,28 @@ const SelectAndOrder = ({
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, getValues, watch, reset } = formMethods
+  const { register, getValues, watch, setValue } = formMethods
+
+  const deleteItem = useCallback(
+    (item: SelectAndOrderSection, setRootData?: boolean) => {
+      const editedListingData = [...draftListingData]
+      editedListingData.splice(editedListingData.indexOf(item), 1)
+      if (setRootData) {
+        setListingData(editedListingData)
+      }
+      setDraftListingData(editedListingData)
+      if (jurisdiction) {
+        fetchedData.map((item) => {
+          setValue(
+            `${formKey}.${item.id}`,
+            editedListingData.some((existingItem) => existingItem.title === item.title)
+          )
+        })
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [draftListingData]
+  )
 
   const draggableTableData = useMemo(
     () =>
@@ -64,10 +85,7 @@ const SelectAndOrder = ({
               type="button"
               className="front-semibold uppercase text-red-700"
               onClick={() => {
-                const editedListingData = [...draftListingData]
-                editedListingData.splice(editedListingData.indexOf(item), 1)
-                setDraftListingData(editedListingData)
-                reset()
+                deleteItem(item, false)
               }}
               unstyled
             >
@@ -76,7 +94,7 @@ const SelectAndOrder = ({
           </div>
         ),
       })),
-    [draftListingData]
+    [draftListingData, deleteItem]
   )
 
   const formTableData = useMemo(
@@ -90,10 +108,7 @@ const SelectAndOrder = ({
               type="button"
               className="front-semibold uppercase text-red-700"
               onClick={() => {
-                const editedListingData = [...listingData]
-                editedListingData.splice(editedListingData.indexOf(item), 1)
-                setListingData(editedListingData)
-                setDraftListingData(editedListingData)
+                deleteItem(item, true)
               }}
               unstyled
             >
@@ -102,7 +117,7 @@ const SelectAndOrder = ({
           </div>
         ),
       })),
-    [listingData]
+    [listingData, deleteItem]
   )
 
   // Update local state with dragged state
