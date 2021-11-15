@@ -10,7 +10,6 @@ import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
 import { User } from "../../auth/entities/user.entity"
 import {
-  getDefaultAmiChart,
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
@@ -54,8 +53,8 @@ export class ListingDefaultSanJoseSeed {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
       name: CountyCode.alameda,
     })
-    const amiChart = await this.amiChartRepository.save({
-      ...getDefaultAmiChart(),
+    const amiChart = await this.amiChartRepository.findOneOrFail({
+      name: "AlamedaCountyTCAC2021",
       jurisdiction: alamedaJurisdiction,
     })
 
