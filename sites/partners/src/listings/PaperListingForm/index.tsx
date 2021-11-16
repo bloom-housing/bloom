@@ -134,7 +134,6 @@ const defaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationAddress: null,
   applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
@@ -817,6 +816,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            id="publishButtonConfirm"
             type="button"
             styleType={AppearanceStyleType.success}
             onClick={() => {

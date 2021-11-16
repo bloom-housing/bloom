@@ -84,7 +84,7 @@ const ApplicationAlternateContactType = () => {
                     <Field
                       key={option}
                       type="radio"
-                      id={"type" + option}
+                      id={"type-" + option}
                       name="type"
                       label={t("application.alternateContact.type.options." + option)}
                       register={register}
@@ -94,6 +94,7 @@ const ApplicationAlternateContactType = () => {
                         value: option,
                         defaultChecked: application.alternateContact.type === option,
                       }}
+                      dataTestId={"app-alternate-type"}
                     />
 
                     {option === "other" && type === "other" && (
@@ -113,6 +114,7 @@ const ApplicationAlternateContactType = () => {
                           "application.alternateContact.type.otherTypeValidationErrorMessage"
                         )}
                         register={register}
+                        dataTestId={"app-alternate-other-type"}
                       />
                     )}
                     {i === altContactRelationshipKeys.length - 1 && (
@@ -130,6 +132,7 @@ const ApplicationAlternateContactType = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

@@ -4,14 +4,6 @@
   "acceptingOnlineApplications": true,
   "accessibility": "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
   "amenities": "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-  "applicationAddress": {
-    "city": "Foster City",
-    "street": "55 Triton Park Lane",
-    "zipCode": "94404",
-    "state": "CA",
-    "latitude": 37.55695,
-    "longitude": -122.27521
-  },
   "applicationDueDate": "2037-12-19T17:00:00.000-07:00",
   "applicationOrganization": "Triton",
   "applicationPhone": "(650) 437-2039",

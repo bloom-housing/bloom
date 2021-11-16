@@ -2,35 +2,20 @@ describe("applications/review/terms", function () {
   const route = "/applications/review/terms"
 
   function submitApplication() {
-    cy.get("button").contains("Submit").click()
+    cy.getByTestId("app-terms-submit-button").click()
   }
 
   beforeEach(() => {
-    cy.loadConfig({}, "applicationConfigFilled.json")
     cy.visit(route)
   })
 
-  it("Should render form", function () {
+  it("should render terms sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("Should display initial form errors", function () {
+  it("should require form input", function () {
     submitApplication()
-    cy.getByID("agree-error").should("be.visible").and("not.to.be.empty")
-  })
-
-  // Broken on master, addressed by PR #1155
-  it("Should redirect to the next step", function () {
-    cy.getByID("agree").check()
-
-    submitApplication()
-
-    cy.checkErrorAlert("not.exist")
-    cy.checkErrorMessages("not.exist")
-
-    cy.location("pathname").should("include", "applications/review/confirmation")
-
-    cy.getByID("confirmationCode").should("be.visible").and("not.be.empty")
+    cy.checkErrorMessages("be.visible")
   })
 })

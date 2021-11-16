@@ -3,14 +3,6 @@
   "postmarkedApplicationsReceivedByDate": "2019-12-05",
   "accessibility": "There is a total of 5 ADA units in the complex, all others are adaptable. Exterior Wheelchair ramp (front entry)",
   "amenities": "Community Room, Laundry Room, Assigned Parking, Bike Storage, Roof Top Garden, Part-time Resident Service Coordinator",
-  "applicationAddress": {
-    "city": "San Jose",
-    "street": "98 Archer Street",
-    "zipCode": "95112",
-    "state": "CA",
-    "latitude": 37.36537,
-    "longitude": -121.91071
-  },
   "applicationDueDate": "2019-12-31T15:22:57.000-07:00",
   "applicationMethods": [],
   "applicationOrganization": "98 Archer Street",

@@ -20,10 +20,11 @@ const HouseholdMemberForm = (props: HouseholdMemberFormProps) => {
       {props.memberFirstName} {props.memberLastName}
       {editMode ? (
         <button
-          id="edit-member"
+          id={`edit-member-${props.memberFirstName}-${props.memberLastName}`}
           className="edit-link"
           onClick={() => props.editMember && props.editMember(props.memberId)}
           type={"button"}
+          data-test-id={"app-household-member-edit-button"}
         >
           {t("t.edit")}
         </button>

@@ -1,8 +1,9 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultUnits, getDefaultProperty, getDefaultAmiChart } from "./shared"
+import { getDefaultUnits, getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { CountyCode } from "../../shared/types/county-code"
+import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 
 export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
   async seed() {
@@ -15,8 +16,8 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
       name: CountyCode.alameda,
     })
-    const amiChart = await this.amiChartRepository.save({
-      ...getDefaultAmiChart(),
+    const amiChart = await this.amiChartRepository.findOneOrFail({
+      name: defaultAmiChart.name,
       jurisdiction: alamedaJurisdiction,
     })
 

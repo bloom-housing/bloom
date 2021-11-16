@@ -15,29 +15,29 @@ const DetailAdditionalFees = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("listings.applicationFee")}>
+          <ViewItem id="applicationFee" label={t("listings.applicationFee")}>
             {getDetailFieldString(listing.applicationFee)}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("listings.depositMin")}>
+          <ViewItem id="depositMin" label={t("listings.depositMin")}>
             {getDetailFieldString(listing.depositMin)}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("listings.depositMax")}>
+          <ViewItem id="depositMax" label={t("listings.depositMax")}>
             {getDetailFieldString(listing.depositMax)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={2}>
-        <GridCell>
+      <GridCell>
           <ViewItem label={t("listings.sections.depositHelperText")}>
             {getDetailFieldString(listing.depositHelperText)}
           </ViewItem>
         </GridCell>
         <GridCell>
-          <ViewItem label={t("listings.sections.costsNotIncluded")}>
+          <ViewItem id="costsNotIncluded" label={t("listings.sections.costsNotIncluded")}>
             {getDetailFieldString(listing.costsNotIncluded)}
           </ViewItem>
         </GridCell>

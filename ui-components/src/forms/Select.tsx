@@ -27,6 +27,7 @@ interface SelectProps {
   keyPrefix?: string
   describedBy?: string
   inputProps?: Record<string, unknown>
+  dataTestId?: string
 }
 
 export const Select = ({
@@ -47,6 +48,7 @@ export const Select = ({
   inputProps,
   defaultValue,
   subNote,
+  dataTestId,
 }: SelectProps) => {
   return (
     <div className={`field ${error ? "error" : ""}`}>
@@ -58,6 +60,7 @@ export const Select = ({
           className="input"
           id={id || name}
           name={name}
+          data-test-id={dataTestId}
           aria-describedby={describedBy ? describedBy : `${id}-error`}
           aria-invalid={!!error || false}
           ref={register && register(validation)}

@@ -37,12 +37,18 @@ import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
+import { AmiChartDefaultSeed } from "./seeds/ami-charts/default-ami-chart"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
 import { Preference } from "./preferences/entities/preference.entity"
 import { Program } from "./program/entities/program.entity"
+import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-levels"
+import { AmiDefaultTriton } from "./seeds/ami-charts/triton-ami-chart"
+import { AmiDefaultTritonDetroit } from "./seeds/ami-charts/triton-ami-chart-detroit"
+import { AmiDefaultSanJose } from "./seeds/ami-charts/default-ami-chart-san-jose"
+import { AmiDefaultSanMateo } from "./seeds/ami-charts/default-ami-chart-san-mateo"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -66,6 +72,15 @@ const listingSeeds: any[] = [
   ListingDefaultMissingAMI,
   ListingDefaultSanJoseSeed,
   ListingTritonSeedDetroit,
+]
+
+const amiSeeds: any[] = [
+  AmiChartDefaultSeed,
+  AmiDefaultMissingAMI,
+  AmiDefaultTriton,
+  AmiDefaultTritonDetroit,
+  AmiDefaultSanJose,
+  AmiDefaultSanMateo,
 ]
 
 export function getSeedListingsCount() {
@@ -142,6 +157,16 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
   return programs
 }
 
+const seedAmiCharts = async (app: INestApplicationContext) => {
+  const allSeeds = amiSeeds.map((amiSeed) => app.get<AmiChartDefaultSeed>(amiSeed))
+  const amiCharts = []
+  for (const chart of allSeeds) {
+    const amiChart = await chart.seed()
+    amiCharts.push(amiChart)
+  }
+  return amiCharts
+}
+
 const seedListings = async (
   app: INestApplicationContext,
   rolesRepo: Repository<UserRoles>,
@@ -191,6 +216,7 @@ async function seed() {
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
   await createPrograms(app, jurisdictions)
+  await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
   const user1 = await userService.createPublicUser(

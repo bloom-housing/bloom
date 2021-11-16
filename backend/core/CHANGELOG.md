@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.14...@bloom-housing/backend-core@3.0.1-alpha.15) (2021-11-15)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.13...@bloom-housing/backend-core@3.0.1-alpha.14) (2021-11-15)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.12...@bloom-housing/backend-core@3.0.1-alpha.13) (2021-11-15)
+
+
+### Reverts
+
+* Revert "feat(backend): add nginx proxy-cache configuration (#2119)" ([d7a8951](https://github.com/bloom-housing/bloom/commit/d7a8951bc6686d4361f7c1100f09a45b29058fd0)), closes [#2119](https://github.com/bloom-housing/bloom/issues/2119)
+
+
+
+
+
+## [3.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.11...@bloom-housing/backend-core@3.0.1-alpha.12) (2021-11-12)
+
+
+### Bug Fixes
+
+* sapp submission w/ no due date ([4af1f5a](https://github.com/bloom-housing/bloom/commit/4af1f5a8448f16d347b4a65ecb85fda4d6ed71fc))
+
+
+
+
+
+## [3.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.10...@bloom-housing/backend-core@3.0.1-alpha.11) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.9...@bloom-housing/backend-core@3.0.1-alpha.10) (2021-11-11)
+
+
+### Bug Fixes
+
+* recalculate units available on listing update ([#2150](https://github.com/bloom-housing/bloom/issues/2150)) ([f1a3dbc](https://github.com/bloom-housing/bloom/commit/f1a3dbce6478b16542ed61ab20de5dfb9b797262))
+
+
+
+
+
 ## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.8...@bloom-housing/backend-core@3.0.1-alpha.9) (2021-11-10)
 
 

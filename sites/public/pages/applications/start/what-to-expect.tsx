@@ -51,6 +51,7 @@ const ApplicationWhatToExpect = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

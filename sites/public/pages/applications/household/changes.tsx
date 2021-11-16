@@ -98,6 +98,7 @@ const ApplicationHouseholdChanges = () => {
                 register={register}
                 validation={{ required: true }}
                 fields={householdChangesValues}
+                dataTestId={"app-expecting-changes"}
               />
             </fieldset>
           </div>
@@ -107,6 +108,7 @@ const ApplicationHouseholdChanges = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

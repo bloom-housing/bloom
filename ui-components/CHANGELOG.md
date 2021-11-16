@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.13...@bloom-housing/ui-components@3.0.1-alpha.14) (2021-11-16)
+
+
+### Bug Fixes
+
+* preference cleanup for avance ([d0aebbc](https://github.com/bloom-housing/bloom/commit/d0aebbcd334dfffc4a7a1a39e9964c90155c5bfb))
+
+
+
+
+
+## [3.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.12...@bloom-housing/ui-components@3.0.1-alpha.13) (2021-11-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.11...@bloom-housing/ui-components@3.0.1-alpha.12) (2021-11-16)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.10...@bloom-housing/ui-components@3.0.1-alpha.11) (2021-11-15)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.9...@bloom-housing/ui-components@3.0.1-alpha.10) (2021-11-12)
+
+
+### Features
+
+* refactor and add public site application flow cypress tests ([#2118](https://github.com/bloom-housing/bloom/issues/2118)) ([9ec0e8d](https://github.com/bloom-housing/bloom/commit/9ec0e8d05f9570773110754e7fdaf49254d1eab8))
+
+
+
+
+
+## [3.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.8...@bloom-housing/ui-components@3.0.1-alpha.9) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.7...@bloom-housing/ui-components@3.0.1-alpha.8) (2021-11-09)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

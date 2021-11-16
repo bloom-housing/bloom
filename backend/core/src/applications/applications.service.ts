@@ -85,6 +85,7 @@ export class ApplicationsService {
       .select("listings.applicationDueDate")
       .getOne()
     if (
+      listing &&
       listing.applicationDueDate &&
       applicationCreateDto.submissionDate > listing.applicationDueDate
     ) {
