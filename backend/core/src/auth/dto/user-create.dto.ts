@@ -58,6 +58,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   jurisdictions?: IdDto[]
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   emailSubscription?: boolean
 
