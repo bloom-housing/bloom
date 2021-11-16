@@ -59,10 +59,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     }
   }, [units])
 
-  const editUnit = (tempId: number) => {
-    setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
-    setUnitDrawerOpen(true)
-  }
+  const editUnit = useCallback(
+    (tempId: number) => {
+      setDefaultUnit(units.filter((unit) => unit.tempId === tempId)[0])
+      setUnitDrawerOpen(true)
+    },
+    [units]
+  )
 
   const deleteUnit = useCallback(
     (tempId: number) => {
@@ -165,6 +168,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
             </div>
           )}
           <Button
+            id="addUnitsButton"
             type="button"
             size={AppearanceSizeType.normal}
             styleType={fieldHasError(errors?.units) ? AppearanceStyleType.alert : null}

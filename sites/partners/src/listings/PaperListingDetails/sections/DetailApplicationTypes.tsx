@@ -44,26 +44,29 @@ const DetailApplicationTypes = () => {
     >
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Online Applications"}>
+          <ViewItem id="digitalApplication" label={"Online Applications"}>
             {getDetailBoolean(listing.digitalApplication)}
           </ViewItem>
         </GridCell>
         {digitalMethod && (
           <GridCell>
-            <ViewItem label={"Common Digital Application"}>
+            <ViewItem id="digitalMethod.type" label={"Common Digital Application"}>
               {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
             </ViewItem>
           </GridCell>
         )}
         {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
-          <ViewItem label={t("listings.customOnlineApplicationUrl")}>
+          <ViewItem
+            id="customOnlineApplicationUrl"
+            label={t("listings.customOnlineApplicationUrl")}
+          >
             {digitalMethod.externalReference}
           </ViewItem>
         )}
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={"Paper Applications"}>
+          <ViewItem id="paperApplication" label={"Paper Applications"}>
             {getDetailBoolean(listing.paperApplication)}
           </ViewItem>
         </GridCell>
@@ -71,6 +74,7 @@ const DetailApplicationTypes = () => {
           <GridCell>
             <ViewItem label={"Paper Applications"}>
               <MinimalTable
+                id="paperApplicationTable"
                 headers={paperApplicationsTableHeaders}
                 data={paperApplicationsTableRows}
                 flushLeft={true}
@@ -82,17 +86,19 @@ const DetailApplicationTypes = () => {
 
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Referral"}>{getDetailBoolean(listing.referralOpportunity)}</ViewItem>
+          <ViewItem id="referralOpportunity" label={"Referral"}>
+            {getDetailBoolean(listing.referralOpportunity)}
+          </ViewItem>
         </GridCell>
         {referralMethod && (
           <>
             <GridCell>
-              <ViewItem label={t("listings.referralContactPhone")}>
+              <ViewItem id="referralContactPhone" label={t("listings.referralContactPhone")}>
                 {referralMethod.phoneNumber}
               </ViewItem>
             </GridCell>
             <GridCell>
-              <ViewItem label={t("listings.referralSummary")}>
+              <ViewItem id="referralSummary" label={t("listings.referralSummary")}>
                 {referralMethod.externalReference}
               </ViewItem>
             </GridCell>

@@ -435,6 +435,28 @@
           "description": "At least one member of my household works in the City of Oakland"
         }
       },
+      "liveWorkLivermore": {
+        "title": "Live or Work in the City of Livermore",
+        "live": {
+          "label": "Live in the City of Livermore Preference",
+          "description": "At least one member of my household lives in the City of Livermore"
+        },
+        "work": {
+          "label": "Work in the City of Livermore Preference",
+          "description": "At least one member of my household works at least 20 hours/week in the City of Livermore"
+        }
+      },
+      "liveWorkTriValley": {
+        "title": "Live or Work in the Tri-Valley Area (Dublin, Livermore, Pleasanton)",
+        "live": {
+          "label": "Live in the Tri-Valley Area Preference",
+          "description": "At least one member of my household lives in the City of Dublin, Livermore or Pleasanton"
+        },
+        "work": {
+          "label": "Work in the Tri-Valley Area (Dublin, Livermore, Pleasanton) Preference",
+          "description": "At least one member of my household works in the City of Dublin, Livermore or Pleasanton"
+        }
+      },
       "PBV": {
         "title": "%{county} copy goes here…",
         "residency": {
@@ -468,6 +490,78 @@
           "label": "I don't want to be considered for [housing authority] project-based voucher units"
         }
       },
+      "livermorePBV": {
+        "title": "Livermore Housing Authority Preferences for Project-Based Voucher Units",
+        "description": "Housing units for lease in this application process have rental subsidies provided by the Livermore Housing Authority.  With that subsidy, tenant households pay 30% of their income as rent.  These tenants are required to verify their income annually with the property manager as well as the Livermore Housing Authority.\nIf you would like to also apply for Livermore Housing Authority Project-based Voucher units, please answer the following housing preference questions in the following screens.",
+        "insufficientFundingTerminated": {
+          "label": "Terminated due to Insufficient funding",
+          "description": "At least one member of my household was terminated from its Housing Choice Voucher (HCV) program due to insufficient program funding."
+        },
+        "insufficientFundingWithdrawn": {
+          "label": "Withdrawn Voucher due to Insufficient funding",
+          "description": "At least one member of my household was issued a Livermore Housing Authority voucher and whose voucher was withdrawn due to insufficient program funding."
+        },
+        "emergencyTransfer": {
+          "label": "Existing Participant Emergency Transfer Preference",
+          "description": "At least one member of my household was a victim of domestic  violence, dating violence, sexual assault, or stalking and is seeking an emergency transfer under the Violence Against Women Act (VAWA) from the Public Housing Authority’s public housing program or other covered housing program operated by the Public Housing Authority. The applicant must certify that the perpetrator will not be permitted to reside, visit or to stay as a guest in the housing choice voucher assisted unit."
+        },
+        "homeless": {
+          "label": "Homeless",
+          "description": "At least one member of my household verifiably lacks housing, including one whose primary residence during the night is a supervised public or private facility that provides temporary living  accommodations; an individual who is a resident in transitional housing; or an individual who has a primary residence in a public or private place not designed for, or ordinarily used as, a regular sleeping accommodation for human beings as confirmed by the applicant’s local homeless service organization or consortia of organizations."
+        },
+        "displacedFamily": {
+          "label": "Displaced Family Preference",
+          "description": "At least one member of my household was displaced from their unit due to a nationally declared disaster, or due to a state declared disaster."
+        },
+        "residency": {
+          "label": "Residency Preference",
+          "description": "At least one member of my household is a resident family. A resident family is defined as a family who lives, works, or who has been hired to work within the City of Livermore.\nUse of the residency preference will not have the purpose or effect of delaying admission to the program on the basis of race, color, religion, sex, national  origin, age, familial status, disability, sexual orientation, gender identity, or marital status.\nHomeless applicants will qualify for the residency preference if homeless within the City of Livermore.\nFor purposes of this preference, the term “homeless” generally means: (1) An individual or family who lacks a fixed, regular, and adequate nighttime  residence; (2) An individual or family with a primary nighttime residence that is a public or private place not designed for or ordinarily used as a regular  sleeping accommodation for human beings, including a car, park, abandoned building, bus or train station, airport, or camping ground; or (3) An individual or family living in a supervised publicly or privately operated shelter  designated to provide temporary living arrangements (including hotels and  motels paid for by Federal, State, or local government programs for low income individuals or by charitable organizations, congregate shelters, and  transitional housing)."
+        },
+        "working": {
+          "label": "Working Preference",
+          "description": "At least one member of my household is the head, spouse, cohead, or sole member of the household and is working and has worked an average of 20 hours a week for the past 6 months. As required by HUD, families where the head and spouse, or sole member is a person age 62 or older, or is a person with disabilities, will also be given the benefit of the  working preference [24 CFR 960.206(b)(2)].\nExample 1: Head of household is elderly, but does not work. There is no spouse or co-head. This family receives benefit of the working preference.\nExample 2: Head of household is 64, spouse is disabled. Neither work. This family receives benefit of the working preference.\nExample 3: Head of household is 63, spouse is neither elderly nor disabled. Neither work. This family does NOT receive benefit of the working  preference since both the head of household and spouse (or cohead) must be elderly and/or disabled to receive benefit of the working preference, unless one is working an average of 20 hours a week for the past 6 months."
+        },
+        "veteran": {
+          "label": "Veteran’s Preference",
+          "description": "At least one member of my household has served in the active military, naval, or air service of the United States and received other than a dishonorable discharge. This preference applies to  veterans and the unmarried surviving spouses of veterans."
+        },
+        "noneApplyButConsider": {
+          "label": "None of these preferences apply, but I still want to be considered for the PBV units"
+        },
+        "doNotConsider": {
+          "label": "Do not consider me for the PBV units"
+        },
+        "onlyConsider": {
+          "label": "I only want to be considered for the PBV units"
+        }
+      },
+      "developmentalDisability": {
+        "title": "Do you or anyone in your household have a developmental disability?",
+        "description": "By selecting “yes”, you confirm that you someone in your household meets the definition of developmentally disabled.",
+        "yes": {
+          "label": "Yes, I or someone in my household has a developmental disability",
+          "description": "A developmental disability is defined in California law as intellectual disability, cerebral palsy, epilepsy, and autism. Other substantially disabling conditions closely related to intellectual disability or which require treatment similar to the treatment required by persons with intellectual disability may be eligible for services. The onset of these conditions had to have been prior to age 18; continues or can be expected to continue indefinitely and constitutes a substantial handicap for the individual.\n\nA Substantial Disability is s a condition which results in major impairment of cognitive and/or social functioning, representing sufficient impairment to require interdisciplinary planning and coordination of special or generic services to assist the individual in achieving maximum potential; and\n\nMust cause significant functional limitations, as determined by the regional center, in three or more of the following areas of major life activity, as appropriate to the person’s age. Since an individual’s cognitive and/or social functioning are many-faceted, the existence of a major impairment shall be determined through assessment(s) in the following areas of daily life activity:\n\n\u2022 Receptive and expressive language\n\n\u2022 Learning\n\n\u2022 Self-care\n\n\u2022Mobility\n\n\u2022 Self-direction\n\n\u2022 Capacity for independent living\n\n\u2022 Economic self-sufficiency\n\nA Developmental Disability shall not include handicapping conditions that are:\n\n\u2022 Solely psychiatric disorders where there is impaired intellectual or social functioning which originated as a result of the psychiatric disorder or treatment given for such a disorder. Such psychiatric disorders include psycho-social deprivation and/or psychosis, severe neurosis or personality disorders even where social and intellectual functioning has become seriously impaired as an integral manifestation of the disorder\n\n\u2022 Solely learning disabilities. A learning disability is a condition which manifests as a significant discrepancy between estimated cognitive potential and actual level of educational performance, and which is not a result of generalized intellectual disability, educational or psycho-social deprivation, psychiatric disorder, or sensory loss\n\n\u2022 Solely physical in nature. These conditions include congenital anomalies or conditions acquired through disease, accident, or faulty development which are not associated with a neurological impairment that results in a need for treatment similar to that required for intellectual disability. Some examples are polio, muscular dystrophy, and arthritis\n\nBy selecting “yes” that you meet the definition for Developmentally Disabled, you give your permission to MidPen Housing to share your information with the Regional Center (or other agency) you have indicated for purposes of confirming your eligibility."
+        },
+        "no": {
+          "label": "No, no one in my household has a developmental disability"
+        },
+        "iDontKnow": {
+          "label": "I don't know if someone in my household has a developmental disability"
+        }
+      },
+      "developmentalDisabilityRegistration": {
+        "title": "Are you registered with the Regional Center of the East Bay, or another Regional Center that supports people with developmental disabilities?",
+        "description": "If Yes, please provide the name of the organization. You give your permission to share your information with the Regional Center (or other agency) you have indicated for purposes of confirming your eligibility.",
+        "yes": {
+          "label": "Yes, I am registered with an organization that supports developmental disabilities"
+        },
+        "no": {
+          "label": "No, I am not registered with an organization that supports developmental disabilities"
+        },
+        "iDontKnow": {
+          "label": "I don't know if I am registered with an organization that supports developmental disabilities"
+        }
+      },
       "HOPWA": {
         "title": "Housing Opportunities for Persons with AIDS",
         "hopwa": {
@@ -497,8 +591,9 @@
         "preamble": "You will be in the general pool of applicants."
       },
       "options": {
-        "address": "Displaced Address",
-        "name": "Claimant"
+        "address": "Address",
+        "name": "Name",
+        "organization": "Name of Organization"
       }
     },
     "review": {
@@ -968,7 +1063,15 @@
       "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
-      "specialNeeds": "Special Needs"
+      "specialNeeds": "Special Needs",
+      "developmentalDisability": "Developmental Disability"
+    },
+    "reservedCommunityTypeDescriptions": {
+      "senior": "Seniors",
+      "senior55": "Seniors 55+",
+      "senior62": "Seniors 62+",
+      "specialNeeds": "Special Needs",
+      "developmentalDisability": "People with Developmental Disabilities"
     },
     "reservedFor": "Reserved for %{type}",
     "reservedCommunityType": "Reserved Community Type",
@@ -976,7 +1079,8 @@
       "family": "families",
       "senior": "seniors",
       "veteran": "veterans",
-      "specialNeeds": "special needs"
+      "specialNeeds": "special needs",
+      "developmentalDisability": "Developmental Disabilities"
     },
     "reservedUnits": "Reserved Units",
     "reservedUnitsDescription": "In order to qualify for these units one of the following must apply to you or someone in your household:",
