@@ -66,7 +66,7 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    const qb = this._getQb(params)
+    const qb = this._getQb(params, true)
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
       result.items.map(async (application) => {
@@ -143,7 +143,7 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(params: PaginatedApplicationListQueryParams) {
+  private _getQb(params: PaginatedApplicationListQueryParams, skipPreferredUnits = false) {
     /**
      * Map used to generate proper parts
      * of query builder.
@@ -180,7 +180,9 @@ export class ApplicationsService {
     qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
     qb.leftJoinAndSelect("householdMembers.address", "householdMembers_address")
     qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembers_workAddress")
-    qb.leftJoinAndSelect("application.preferredUnit", "preferredUnit")
+    if (!skipPreferredUnits) {
+      qb.leftJoinAndSelect("application.preferredUnit", "preferredUnit")
+    }
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts
