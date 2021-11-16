@@ -13,7 +13,6 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { passwordRegex } from "../../shared/password-regex"
 import { Match } from "../../shared/decorators/match.decorator"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
-
 import { UserDto } from "./user.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
