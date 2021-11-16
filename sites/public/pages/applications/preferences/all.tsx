@@ -303,7 +303,13 @@ const ApplicationPreferencesAll = () => {
                       <legend className="field-label--caps mb-4">
                         {listingPreference.preference.title}
                       </legend>
-                      <p className="field-note mb-8">{listingPreference.preference.description}</p>
+                      <p className="field-note mb-8">
+                        {listingPreference.preference.description.replace(
+                          /\\n/g,
+                          `
+                        `
+                        )}
+                      </p>
                       {listingPreference.preference?.formMetadata?.options?.map((option) => {
                         return getOption(
                           option.key,
