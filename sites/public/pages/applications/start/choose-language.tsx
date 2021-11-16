@@ -123,6 +123,7 @@ const ApplicationChooseLanguage = () => {
                       onLanguageSelect(lang)
                     }}
                     key={index}
+                    data-test-id={"app-choose-language-button"}
                   >
                     {t(`applications.begin.${lang}`)}
                   </Button>
@@ -142,6 +143,7 @@ const ApplicationChooseLanguage = () => {
               <div>
                 <LinkButton
                   href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                  dataTestId={"app-choose-language-sign-in-button"}
                 >
                   {t("nav.signIn")}
                 </LinkButton>

@@ -43,7 +43,7 @@ const GetApplication = (props: ApplicationsProps) => {
       {props.applicationsOpen && props.onlineApplicationURL && (
         <>
           {props.preview ? (
-            <Button disabled className="w-full mb-2">
+            <Button disabled className="w-full mb-2" data-test-id={"listing-view-apply-button"}>
               {t("listings.apply.applyOnline")}
             </Button>
           ) : (
@@ -51,6 +51,7 @@ const GetApplication = (props: ApplicationsProps) => {
               styleType={AppearanceStyleType.primary}
               className="w-full mb-2"
               href={props.onlineApplicationURL}
+              dataTestId={"listing-view-apply-button"}
             >
               {t("listings.apply.applyOnline")}
             </LinkButton>

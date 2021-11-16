@@ -27,6 +27,7 @@ interface FieldGroupProps {
   fieldGroupClassName?: string
   fieldClassName?: string
   fieldLabelClassName?: string
+  dataTestId?: string
 }
 
 const FieldGroup = ({
@@ -43,6 +44,7 @@ const FieldGroup = ({
   fieldClassName,
   fieldLabelClassName,
   groupSubNote,
+  dataTestId,
 }: FieldGroupProps) => {
   // Always align two-option radio groups side by side
   if (fields?.length === 2) {
@@ -68,6 +70,7 @@ const FieldGroup = ({
                 defaultChecked={item.defaultChecked || false}
                 ref={register(validation)}
                 {...item.inputProps}
+                data-test-id={dataTestId}
               />
               <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
                 {item.label}

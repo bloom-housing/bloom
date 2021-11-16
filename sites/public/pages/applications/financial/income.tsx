@@ -168,6 +168,7 @@ const ApplicationIncome = () => {
               setValue={setValue}
               getValues={getValues}
               prepend={"$"}
+              dataTestId={"app-income"}
             />
 
             <fieldset>
@@ -180,6 +181,7 @@ const ApplicationIncome = () => {
                 register={register}
                 validation={{ required: true }}
                 fields={incomePeriodValues}
+                dataTestId={"app-income-period"}
               />
             </fieldset>
           </div>
@@ -192,6 +194,7 @@ const ApplicationIncome = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

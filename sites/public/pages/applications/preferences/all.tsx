@@ -210,6 +210,7 @@ const ApplicationPreferencesAll = () => {
                   ),
               },
             }}
+            dataTestId={"app-preference-option"}
           />
         </div>
 
@@ -244,6 +245,7 @@ const ApplicationPreferencesAll = () => {
               errors={errors}
               hhMembersOptions={hhMmembersOptions}
               stateKeys={stateKeys}
+              data-test-id={"app-preference-extra-field"}
             />
           ))}
       </div>
@@ -349,6 +351,7 @@ const ApplicationPreferencesAll = () => {
                     conductor.returnToReview = false
                     conductor.setNavigatedBack(false)
                   }}
+                  data-test-id={"app-next-step-button"}
                 >
                   {t("t.next")}
                 </Button>

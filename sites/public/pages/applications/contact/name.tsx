@@ -101,6 +101,7 @@ const ApplicationName = () => {
                 error={errors.applicant?.firstName}
                 errorMessage={t("errors.firstNameError")}
                 register={register}
+                dataTestId={"app-primary-first-name"}
               />
 
               <Field
@@ -111,6 +112,7 @@ const ApplicationName = () => {
                 readerOnly={true}
                 defaultValue={application.applicant.middleName}
                 register={register}
+                dataTestId={"app-primary-middle-name"}
               />
 
               <Field
@@ -124,6 +126,7 @@ const ApplicationName = () => {
                 error={errors.applicant?.lastName}
                 errorMessage={t("errors.lastNameError")}
                 register={register}
+                dataTestId={"app-primary-last-name"}
               />
             </fieldset>
           </div>
@@ -173,6 +176,7 @@ const ApplicationName = () => {
               errorMessage={t("errors.emailAddressError")}
               register={register}
               disabled={clientLoaded && (noEmail || autofilled)}
+              dataTestId={"app-primary-email"}
             />
 
             <Field
@@ -186,6 +190,7 @@ const ApplicationName = () => {
               inputProps={{
                 defaultChecked: clientLoaded && noEmail,
               }}
+              dataTestId={"app-primary-no-email"}
             />
           </div>
 
@@ -197,6 +202,7 @@ const ApplicationName = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

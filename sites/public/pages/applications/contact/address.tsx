@@ -129,6 +129,7 @@ const ApplicationAddress = () => {
               control={control}
               defaultValue={application.applicant.phoneNumber}
               disabled={clientLoaded && noPhone}
+              dataTestId={"app-primary-phone-number"}
             />
 
             <Select
@@ -146,6 +147,7 @@ const ApplicationAddress = () => {
               controlClassName="control"
               options={phoneNumberKeys}
               keyPrefix="application.contact.phoneNumberTypes"
+              dataTestId={"app-primary-phone-number-type"}
             />
 
             <Field
@@ -167,6 +169,7 @@ const ApplicationAddress = () => {
                   }
                 },
               }}
+              dataTestId={"app-primary-no-phone"}
             />
 
             <Field
@@ -186,6 +189,7 @@ const ApplicationAddress = () => {
                   }
                 },
               }}
+              dataTestId={"app-primary-additional-phone"}
             />
 
             {additionalPhone && (
@@ -201,8 +205,8 @@ const ApplicationAddress = () => {
                   control={control}
                   defaultValue={application.additionalPhoneNumber}
                   controlClassName="control"
+                  dataTestId={"app-primary-additional-phone-number"}
                 />
-
                 <Select
                   id="additionalPhoneNumberType"
                   name="additionalPhoneNumberType"
@@ -217,6 +221,7 @@ const ApplicationAddress = () => {
                   labelClassName={"sr-only"}
                   options={phoneNumberKeys}
                   keyPrefix="application.contact.phoneNumberTypes"
+                  dataTestId={"app-primary-additional-phone-number-type"}
                 />
               </>
             )}
@@ -240,6 +245,7 @@ const ApplicationAddress = () => {
                 error={errors.applicant?.address?.street}
                 errorMessage={t("errors.streetError")}
                 register={register}
+                dataTestId={"app-primary-address-street"}
               />
 
               <Field
@@ -249,6 +255,7 @@ const ApplicationAddress = () => {
                 placeholder={t("application.contact.apt")}
                 defaultValue={application.applicant.address.street2}
                 register={register}
+                dataTestId={"app-primary-address-street2"}
               />
 
               <div className="flex max-w-2xl">
@@ -262,6 +269,7 @@ const ApplicationAddress = () => {
                   error={errors.applicant?.address?.city}
                   errorMessage={t("errors.cityError")}
                   register={register}
+                  dataTestId={"app-primary-address-city"}
                 />
 
                 <Select
@@ -275,6 +283,7 @@ const ApplicationAddress = () => {
                   controlClassName="control"
                   options={stateKeys}
                   keyPrefix="states"
+                  dataTestId={"app-primary-address-state"}
                 />
               </div>
               <Field
@@ -287,8 +296,8 @@ const ApplicationAddress = () => {
                 error={errors.applicant?.address?.zipCode}
                 errorMessage={t("errors.zipCodeError")}
                 register={register}
+                dataTestId={"app-primary-address-zip"}
               />
-
               <Field
                 type="checkbox"
                 id="sendMailToMailingAddress"
@@ -299,6 +308,7 @@ const ApplicationAddress = () => {
                 inputProps={{
                   defaultChecked: application.sendMailToMailingAddress,
                 }}
+                dataTestId={"app-primary-send-to-mailing"}
               />
             </fieldset>
           </div>
@@ -321,6 +331,7 @@ const ApplicationAddress = () => {
                   error={errors.mailingAddress?.street}
                   errorMessage={t("errors.streetError")}
                   register={register}
+                  dataTestId={"app-primary-mailing-address-street"}
                 />
 
                 <Field
@@ -330,6 +341,7 @@ const ApplicationAddress = () => {
                   placeholder={t("application.contact.apt")}
                   defaultValue={application.mailingAddress.street2}
                   register={register}
+                  dataTestId={"app-primary-mailing-address-street2"}
                 />
 
                 <div className="flex max-w-2xl">
@@ -343,6 +355,7 @@ const ApplicationAddress = () => {
                     error={errors.mailingAddress?.city}
                     errorMessage={t("errors.cityError")}
                     register={register}
+                    dataTestId={"app-primary-mailing-address-city"}
                   />
 
                   <Select
@@ -357,6 +370,7 @@ const ApplicationAddress = () => {
                     controlClassName="control"
                     options={stateKeys}
                     keyPrefix="states"
+                    dataTestId={"app-primary-mailing-address-state"}
                   />
                 </div>
 
@@ -370,6 +384,7 @@ const ApplicationAddress = () => {
                   error={errors.mailingAddress?.zipCode}
                   errorMessage={t("errors.zipCodeError")}
                   register={register}
+                  dataTestId={"app-primary-mailing-address-zip"}
                 />
               </fieldset>
             </div>
@@ -387,6 +402,7 @@ const ApplicationAddress = () => {
                 error={errors?.contactPreferences}
                 errorMessage={t("errors.selectAtLeastOne")}
                 register={register}
+                dataTestId={"app-primary-contact-preference"}
               />
             </fieldset>
           </div>
@@ -411,6 +427,7 @@ const ApplicationAddress = () => {
                   value: "yes",
                   defaultChecked: application.applicant.workInRegion == "yes",
                 }}
+                dataTestId={"app-primary-work-in-region-yes"}
               />
 
               <Field
@@ -425,6 +442,7 @@ const ApplicationAddress = () => {
                   value: "no",
                   defaultChecked: application.applicant.workInRegion == "no",
                 }}
+                dataTestId={"app-primary-work-in-region-no"}
               />
 
               <ErrorMessage
@@ -452,6 +470,7 @@ const ApplicationAddress = () => {
                     error={errors.applicant?.workAddress?.street}
                     errorMessage={t("errors.streetError")}
                     register={register}
+                    dataTestId={"app-primary-work-address-street"}
                   />
 
                   <Field
@@ -461,6 +480,7 @@ const ApplicationAddress = () => {
                     placeholder={t("application.contact.apt")}
                     defaultValue={application.applicant.workAddress.street2}
                     register={register}
+                    dataTestId={"app-primary-work-address-street2"}
                   />
 
                   <div className="flex max-w-2xl">
@@ -474,6 +494,7 @@ const ApplicationAddress = () => {
                       error={errors.applicant?.workAddress?.city}
                       errorMessage={t("errors.cityError")}
                       register={register}
+                      dataTestId={"app-primary-work-address-city"}
                     />
 
                     <Select
@@ -488,6 +509,7 @@ const ApplicationAddress = () => {
                       controlClassName="control"
                       options={stateKeys}
                       keyPrefix="states"
+                      dataTestId={"app-primary-work-address-state"}
                     />
                   </div>
 
@@ -501,6 +523,7 @@ const ApplicationAddress = () => {
                     error={errors.applicant?.workAddress?.zipCode}
                     errorMessage={t("errors.zipCodeError")}
                     register={register}
+                    dataTestId={"app-primary-work-address-zip"}
                   />
                 </fieldset>
               </div>
@@ -515,6 +538,7 @@ const ApplicationAddress = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

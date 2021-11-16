@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.17...@bloom-housing/partners@3.0.1-alpha.18) (2021-11-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.16...@bloom-housing/partners@3.0.1-alpha.17) (2021-11-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.15...@bloom-housing/partners@3.0.1-alpha.16) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.14...@bloom-housing/partners@3.0.1-alpha.15) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.13...@bloom-housing/partners@3.0.1-alpha.14) (2021-11-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.12...@bloom-housing/partners@3.0.1-alpha.13) (2021-11-11)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.11...@bloom-housing/partners@3.0.1-alpha.12) (2021-11-11)
+
+
+### Bug Fixes
+
+* fixes program, preference, ami-chart de-dupe ([#2169](https://github.com/bloom-housing/bloom/issues/2169)) ([3530757](https://github.com/bloom-housing/bloom/commit/35307575bd78f4a0ceee03ae21f07a61e9018bba))
+
+
+
+
+
 ## [3.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.10...@bloom-housing/partners@3.0.1-alpha.11) (2021-11-10)
 
 **Note:** Version bump only for package @bloom-housing/partners

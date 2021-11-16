@@ -81,6 +81,7 @@ export default () => {
                 error={errors.firstName}
                 errorMessage={t("errors.firstNameError")}
                 register={register}
+                dataTestId={"app-alternate-first-name"}
               />
               <Field
                 id="lastName"
@@ -93,6 +94,7 @@ export default () => {
                 error={errors.lastName}
                 errorMessage={t("errors.lastNameError")}
                 register={register}
+                dataTestId={"app-alternate-last-name"}
               />
               {application.alternateContact.type === "caseManager" && (
                 <div className="mt-6">
@@ -111,6 +113,7 @@ export default () => {
                       "application.alternateContact.name.caseManagerAgencyValidationErrorMessage"
                     )}
                     register={register}
+                    dataTestId={"app-alternate-type"}
                   />
                 </div>
               )}
@@ -124,6 +127,7 @@ export default () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
