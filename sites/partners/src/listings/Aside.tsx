@@ -103,6 +103,7 @@ const Aside = ({
       elements.push(
         <GridCell key="btn-publish">
           <Button
+            id="publishButton"
             styleType={AppearanceStyleType.success}
             type="button"
             fullWidth
@@ -143,6 +144,7 @@ const Aside = ({
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              id="publishButton"
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
