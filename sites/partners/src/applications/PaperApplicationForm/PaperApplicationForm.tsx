@@ -206,7 +206,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormHouseholdIncome />
 
-                    <FormDemographics formValues={application.demographics} />
+                    <FormDemographics formValues={application?.demographics} />
 
                     <FormTerms />
                   </div>

@@ -39,6 +39,5 @@ export class Demographics extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
   @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   race?: string[] | null
 }
