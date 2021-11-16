@@ -34,6 +34,7 @@ describe("Users", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
   let userAccessToken: string
@@ -43,6 +44,7 @@ describe("Users", () => {
     confirmation: async () => {},
     welcome: async () => {},
     invite: async () => {},
+    changeEmail: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -77,6 +79,7 @@ describe("Users", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
