@@ -40,6 +40,8 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
+// TODO(#773): Determine the best way of surfacing accessibility-related
+// information in listing views.
 export const getImageTagFromListing = (listing: Listing) => {
   const reservedCommunityTypeName = listing.reservedCommunityType?.name
   return reservedCommunityTypeName && reservedCommunityTypeName !== "specialNeeds"
