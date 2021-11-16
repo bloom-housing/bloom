@@ -119,6 +119,7 @@ const ApplicationDemographics = () => {
                 controlClassName="control"
                 options={ethnicityKeys}
                 keyPrefix="application.review.demographics.ethnicityOptions"
+                dataTestId={"app-demographics-ethnicity"}
               />
             </div>
           </div>
