@@ -31,7 +31,7 @@ const Layout = (props) => {
     {
       title: t("pageTitle.about"),
       href: "/about",
-    }
+    },
   ]
   if (profile) {
     menuLinks.push({
