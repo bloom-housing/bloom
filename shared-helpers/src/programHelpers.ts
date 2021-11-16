@@ -47,6 +47,22 @@ export const mapProgramsToApi = (programs: Program[], data: Record<string, any>)
   return savedPrograms
 }
 
+// used in the paper apps only
+export const mapApiToProgramsPaperForm = (programs: ApplicationProgram[]) => {
+  const result = {}
+
+  programs.forEach((program) => {
+    const key = program.key
+    const selectedOption = program.options.find((item) => item.checked === true)?.key
+
+    if (program.claimed) {
+      Object.assign(result, { [key]: selectedOption })
+    }
+  })
+
+  return result
+}
+
 export const getProgramOptionName = (key: string, metaKey: string) => {
   return key === "preferNotToSay"
     ? "t.preferNotToSay"
