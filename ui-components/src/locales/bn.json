@@ -1339,9 +1339,17 @@
         "title": "সাশ্রয়ী মূল্যের আবাসনের জন্য আবেদন করুন",
         "seeMoreOpportunities": "আরও ভাড়া এবং মালিকানার আবাসন সুযোগ দেখুন",
         "viewAdditionalHousing": "অতিরিক্ত আবাসন সুযোগ এবং সম্পদ দেখুন",
+        "bedrooms": {
+            "studios": "(%{smart_count})টি স্টুডিও উপলব্ধ |||| (%{smart_count}) studios available",
+            "numBed": "(%{smart_count}) %{num_bed} বেডরুম উপলব্ধ |||| (%{smart_count}) %{num_bed} বেডরুম উপলব্ধ",
+            "fourPlusBed": "(%{smart_count}) 1 4+ বেডরুম উপলব্ধ |||| (%{smart_count}) 4+ বেডরুম উপলব্ধ"
+        },
         "checkEligibility": "আমি কি যোগ্যতা অর্জন করি?",
         "checkEligibilityDescription": "আপনি যোগ্য হলে মিনিট চেক করুন!",
         "checkQualifications": "আপনার হাউজিং যোগ্যতা পরীক্ষা করুন",
+        "latestListings": "সর্বশেষ তালিকা",
+        "lastUpdated": "সর্বশেষ আপডেট করা হয়েছে %{date} তারিখে",
+        "neighborhoods": "আশেপাশের এলাকা",
         "subTitle": "আপনার আয় এবং গৃহস্থালি চাহিদার উপর ভিত্তি করে ভাড়া আবাসন খুঁজে পেতে নীচের বোতামে ক্লিক করুন"
     },
     "whatToExpect": {

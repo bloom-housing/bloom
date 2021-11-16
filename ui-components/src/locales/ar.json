@@ -1339,9 +1339,17 @@
         "title": "تقدم بطلب للحصول على سكن ميسور التكلفة في",
         "seeMoreOpportunities": "شاهد المزيد من فرص الإسكان الإيجاري والملكية",
         "viewAdditionalHousing": "عرض فرص وموارد الإسكان الإضافية",
+        "bedrooms": {
+            "studios": "استوديو متاح(%{smart_count}) |||| استوديو متاح(%{smart_count})",
+            "numBed": "(%{smart_count}) %{num_bed} غرفة نوم المتاحة |||| (%{smart_count}) %{num_bed} غرف نوم المتاحة",
+            "fourPlusBed": "(%{smart_count}) 4+ غرفة نوم المتاحة |||| (%{smart_count}) 4+ غرف نوم المتاحة"
+        },
         "checkEligibility": "هل أنا مؤهل؟",
         "checkEligibilityDescription": "تحقق في دقائق إذا كنت مؤهلاً!",
         "checkQualifications": "تحقق من مؤهلات السكن الخاصة بك",
+        "latestListings": "أحدث القوائم",
+        "lastUpdated": "آخر تحديث %{date}",
+        "neighborhoods": "أحياء",
         "subTitle": "انقر فوق الزر أدناه للعثور على سكن مستأجر بناءً على دخلك واحتياجات أسرتك"
     },
     "whatToExpect": {

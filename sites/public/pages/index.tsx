@@ -44,7 +44,6 @@ export default function Home({ latestListings }) {
   /**
    * Get the listing with the latest 'updatedAt' field and format it
    *
-   * TODO(#672): Translate last updated string
    * @param listings
    * @returns
    */
@@ -57,38 +56,32 @@ export default function Home({ latestListings }) {
         })
       )
       .format("l")
-    return `Last updated ${latestDate}`
+    return t("welcome.lastUpdated", { date: latestDate })
   }
 
   /**
    * Convert the number of bedrooms to a human readable string
    *
-   * TODO(#672): Translate unitBedrooms string
    * @param numBedrooms
    * @param plural
    * @returns
    */
-  const unitBedroomsToString = (numBedrooms: number, plural: boolean) => {
+  const unitBedroomsToString = (numBedrooms: number, totalAvailable: number) => {
     if (numBedrooms < 0 || numBedrooms == null) {
       return ""
     }
 
-    switch (numBedrooms) {
-      case 0:
-        return plural ? "studios" : "studio"
-      case 1:
-        return plural ? "1 bedrooms" : "1 bedroom"
-      case 2:
-        return plural ? "2 bedrooms" : "2 bedroom"
-      default:
-        return plural ? "3+ bedrooms" : "3+ bedroom"
+    if (numBedrooms === 0) {
+      return t("welcome.bedrooms.studios", totalAvailable)
+    } else if (numBedrooms < 4) {
+      return t("welcome.bedrooms.numBed", { smart_count: totalAvailable, num_bed: numBedrooms })
+    } else {
+      return t("welcome.bedrooms.fourPlusBed", totalAvailable)
     }
   }
 
   /**
    * Build a string of concatenated available units
-   *
-   * TODO(#672): Translate unit summary string
    *
    * For example: '(1) studio availble, (3) 2 bedrooms available'
    * @param units Array of UnitSummarys
@@ -100,10 +93,7 @@ export default function Home({ latestListings }) {
         return unitSummary.totalAvailable > 0
       })
       .map((unitSummary) => {
-        return `(${unitSummary.totalAvailable}) ${unitBedroomsToString(
-          unitSummary.unitType.numBedrooms,
-          unitSummary.totalAvailable > 1
-        )} available`
+        return unitBedroomsToString(unitSummary.unitType.numBedrooms, unitSummary.totalAvailable)
       })
       .join(", ")
   }
@@ -171,10 +161,9 @@ export default function Home({ latestListings }) {
         </AlertBox>
       )}
       <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
-      {/* TODO(#672): Translate title */}
       {latestListings && latestListings.items && (
         <HorizontalScrollSection
-          title="Latest listings"
+          title={t("welcome.latestListings")}
           subtitle={getLastUpdatedString(latestListings.items)}
           scrollAmount={560}
           icon="clock"
@@ -185,9 +174,8 @@ export default function Home({ latestListings }) {
           })}
         </HorizontalScrollSection>
       )}
-      {/* TODO(#674): Translate title*/}
       <HorizontalScrollSection
-        title="Neighborhoods"
+        title={t("welcome.neighborhoods")}
         scrollAmount={311}
         icon="map"
         className={styles.neighborhoods}
