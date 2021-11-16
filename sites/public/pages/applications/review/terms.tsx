@@ -39,7 +39,6 @@ const ApplicationTerms = () => {
     conductor.currentStep.save({ acceptedTerms })
     application.acceptedTerms = acceptedTerms
     application.completedSections = 5
-    console.log(application)
     applicationsService
       .submit({
         body: {

@@ -75,6 +75,7 @@ const FieldGroup = ({
           defaultValue={item.value || item.id}
           name={subfieldsExist() ? `${name}-${item.value}` : name}
           onClick={(e) => {
+            // We cannot reliably target an individual checkbox in a field group since they have the same name, so we keep track on our own
             if (e.currentTarget.checked) {
               setCheckedInputs([...checkedInputs, item.label])
             } else {

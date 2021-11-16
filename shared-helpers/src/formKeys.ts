@@ -149,6 +149,7 @@ interface subCheckboxes {
   [key: string]: string[]
 }
 
+// Transform an object with keys that may be prepended with a string to an array of only the values with the string
 export const fieldGroupObjectToArray = (
   formObject: { [key: string]: any },
   rootKey: string
@@ -171,20 +172,6 @@ export const fieldGroupObjectToArray = (
     })
   return modifiedArray
 }
-
-// Return to this when PR #2108 merges that changes package build to be able to import from ui-components
-// const createFormFieldForSubCheckboxes = (formKeys: subCheckboxes) => {
-//   return Object.keys(raceKeys).map((rootKey) => ({
-//     id: rootKey,
-//     label: t(`application.review.demographics.raceOptions.${rootKey}`),
-//     value: rootKey,
-//     subFields: raceKeys[rootKey].map((subKey) => ({
-//       id: subKey,
-//       label: t(`application.review.demographics.raceOptions.${subKey}`),
-//       value: subKey,
-//     })),
-//   }))
-// }
 
 export const raceKeys: subCheckboxes = {
   americanIndianAlaskanNative: [],

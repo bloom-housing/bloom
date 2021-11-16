@@ -35,6 +35,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
     }))
   }, [register])
 
+  // Does a key exist in a root field or a sub array
   const isKeyIncluded = (raceKey: string) => {
     let keyExists = false
     formValues?.race?.forEach((value) => {
@@ -45,6 +46,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
     return keyExists
   }
 
+  // Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
   const getCustomValue = (subKey: string) => {
     const customValues = formValues?.race?.filter((value) => value.split(":")[0] === subKey)
     return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
