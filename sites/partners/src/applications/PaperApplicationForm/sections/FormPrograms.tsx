@@ -1,18 +1,8 @@
 import React from "react"
-import {
-  t,
-  GridSection,
-  ViewItem,
-  GridCell,
-  FieldGroup,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { ListingProgram } from "@bloom-housing/backend-core/types"
-import {
-  mapProgramsToApi,
-  getProgramOptionName,
-  getProgramOptionDescription,
-} from "@bloom-housing/shared-helpers"
+import { getProgramOptionName, getProgramOptionDescription } from "@bloom-housing/shared-helpers"
 
 type FormProgramsProps = {
   county: string
@@ -34,34 +24,36 @@ const FormPrograms = ({ county, programs }: FormProgramsProps) => {
           return (
             <GridCell key={listingProgram.program.id}>
               <ViewItem
-                label={t(`application.programs.${metaKey}.title`, {
+                label={t(`application.programs.${metaKey}.summary`, {
                   county,
                 })}
               >
-                  <fieldset>
-                    <FieldGroup
-                      fieldGroupClassName="grid grid-cols-1"
-                      fieldClassName="ml-0"
-                      type="radio"
-                      name={`application.programs.${listingProgram?.program.formMetadata?.key}`}
-                      register={register}
-                      fields={listingProgram?.program.formMetadata?.options?.map((option) => {
-                        return {
-                          id: `${listingProgram?.program.formMetadata?.key}-${option.key}`,
-                          label: t(getProgramOptionName(option.key, listingProgram?.program.formMetadata.key)),
-                          value: option.key,
-                          description: option.description
-                            ? t(
-                                getProgramOptionDescription(
-                                  option.key,
-                                  listingProgram?.program.formMetadata.key
-                                )
+                <fieldset>
+                  <FieldGroup
+                    fieldGroupClassName="grid grid-cols-1"
+                    fieldClassName="ml-0"
+                    type="radio"
+                    name={`application.programs.${listingProgram?.program.formMetadata?.key}`}
+                    register={register}
+                    fields={listingProgram?.program.formMetadata?.options?.map((option) => {
+                      return {
+                        id: `${listingProgram?.program.formMetadata?.key}-${option.key}`,
+                        label: t(
+                          getProgramOptionName(option.key, listingProgram?.program.formMetadata.key)
+                        ),
+                        value: option.key,
+                        description: option.description
+                          ? t(
+                              getProgramOptionDescription(
+                                option.key,
+                                listingProgram?.program.formMetadata.key
                               )
-                            : null
-                        }
-                      })}
-                    />
-                  </fieldset>
+                            )
+                          : null,
+                      }
+                    })}
+                  />
+                </fieldset>
               </ViewItem>
             </GridCell>
           )

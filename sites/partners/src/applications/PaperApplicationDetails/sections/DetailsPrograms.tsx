@@ -38,7 +38,7 @@ const DetailsPrograms = ({ listingId }: DetailsProgramsProps) => {
         return (
           <GridCell key={listingProgram.program.id}>
             <ViewItem
-              label={t(`application.programs.${metaKey}.title`, {
+              label={t(`application.programs.${metaKey}.summary`, {
                 county: listingDto?.countyCode,
               })}
             >
@@ -50,9 +50,11 @@ const DetailsPrograms = ({ listingId }: DetailsProgramsProps) => {
                 return options.map((option) => (
                   <div key={option.key}>
                     <p>
-                      {t(`application.programs.${metaKey}.${option.key}.label`, {
-                        county: listingDto?.countyCode,
-                      })}
+                      {option.key === "preferNotToSay"
+                        ? t("t.preferNotToSay")
+                        : t(`application.programs.${metaKey}.${option.key}.label`, {
+                            county: listingDto?.countyCode,
+                          })}
                     </p>
                   </div>
                 ))
