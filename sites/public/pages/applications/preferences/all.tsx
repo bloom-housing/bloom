@@ -285,13 +285,16 @@ const ApplicationPreferencesAll = () => {
             {t("errors.errorsToResolve")}
           </AlertBox>
         )}
-
-        <div className="form-card__group px-0 pb-0">
-          <p className="field-note">
-            {preferencesByPage[0]?.preference.formMetadata?.customSelectText ??
-              t("application.preferences.selectBelow")}
-          </p>
-        </div>
+        {(preferencesByPage[0]?.preference.formMetadata?.customSelectText?.length ||
+          preferencesByPage[0]?.preference.formMetadata?.customSelectText === null ||
+          preferencesByPage[0]?.preference.formMetadata?.customSelectText === undefined) && (
+          <div className="form-card__group px-0 pb-0">
+            <p className="field-note">
+              {preferencesByPage[0]?.preference.formMetadata?.customSelectText ??
+                t("application.preferences.selectBelow")}
+            </p>
+          </div>
+        )}
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <>
