@@ -34,7 +34,6 @@ describe("Users", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
-  let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
   let userAccessToken: string
@@ -44,7 +43,6 @@ describe("Users", () => {
     confirmation: async () => {},
     welcome: async () => {},
     invite: async () => {},
-    changeEmail: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -79,7 +77,6 @@ describe("Users", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
-    userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
   })
@@ -90,6 +87,7 @@ describe("Users", () => {
       passwordConfirmation: "abcdef",
       email: "abc@b.com",
       emailConfirmation: "abc@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -104,6 +102,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "abc@b.com",
       emailConfirmation: "abc@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -163,6 +162,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "a@b.com",
       emailConfirmation: "a@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -184,6 +184,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "a1@b.com",
       emailConfirmation: "a1@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -215,6 +216,7 @@ describe("Users", () => {
       passwordConfirmation: "abcdef2",
       email: "a2@b.com",
       emailConfirmation: "a2@b.com",
+      emailSubscription: true,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -238,6 +240,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "b@c.com",
       emailConfirmation: "b@c.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -284,6 +287,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "b1@b.com",
       emailConfirmation: "b1@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -306,6 +310,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "b2@b.com",
       emailConfirmation: "b2@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -342,6 +347,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "b3@b.com",
       emailConfirmation: "b3@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -410,6 +416,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "userProfile@b.com",
       emailConfirmation: "userProfile@b.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -486,6 +493,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "user-a@example.com",
       emailConfirmation: "user-a@example.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -498,6 +506,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "user-b@example.com",
       emailConfirmation: "user-b@example.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -532,12 +541,14 @@ describe("Users", () => {
       .expect(200)
   })
 
+
   it("should lower case email of new user", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
       email: "TestingLowerCasing@LowerCasing.com",
       emailConfirmation: "TestingLowerCasing@LowerCasing.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
@@ -575,6 +586,7 @@ describe("Users", () => {
       passwordConfirmation: "Abcdef1!",
       email: "confirm@confirm.com",
       emailConfirmation: "confirm@confirm.com",
+      emailSubscription: false,
       firstName: "First",
       middleName: "Mid",
       lastName: "Last",
