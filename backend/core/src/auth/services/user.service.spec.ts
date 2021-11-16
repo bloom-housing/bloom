@@ -76,7 +76,6 @@ describe("UserService", () => {
       const user: UserCreateDto = {
         email: "abc@xyz.com",
         emailConfirmation: "abc@xyz.com",
-        emailSubscription: false,
         password: "qwerty",
         passwordConfirmation: "qwerty",
         firstName: "First",
@@ -92,7 +91,6 @@ describe("UserService", () => {
       const user: UserCreateDto = {
         email: "new@email.com",
         emailConfirmation: "new@email.com",
-        emailSubscription: false,
         password: "qwerty",
         passwordConfirmation: "qwerty",
         firstName: "First",

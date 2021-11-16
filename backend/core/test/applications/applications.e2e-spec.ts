@@ -623,7 +623,6 @@ describe("Applications", () => {
       passwordConfirmation: "Abcdef1!",
       email: "mytestemail@example.com",
       emailConfirmation: "mytestemail@example.com",
-      emailSubscription: false,
       firstName: "A",
       middleName: "A",
       lastName: "A",
