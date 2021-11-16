@@ -40,6 +40,15 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
+// TODO(#773): Determine the best way of surfacing accessibility-related
+// information in listing views.
+export const getImageTagFromListing = (listing: Listing) => {
+  const reservedCommunityTypeName = listing.reservedCommunityType?.name
+  return reservedCommunityTypeName && reservedCommunityTypeName !== "specialNeeds"
+    ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+    : undefined
+}
+
 const getListingTableData = (listing: Listing) => {
   if (listing.unitsSummary !== undefined && listing.unitsSummary.length > 0) {
     return getSummariesTableFromUnitsSummary(listing.unitsSummary)
@@ -65,9 +74,7 @@ export const getListings = (listings) => {
           subtitle: getListingCardSubtitle(listing.buildingAddress),
           title: listing.name,
           href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: listing.reservedCommunityType
-            ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
-            : undefined,
+          tagLabel: getImageTagFromListing(listing),
         }}
         tableProps={{
           headers: unitSummariesHeaders,
