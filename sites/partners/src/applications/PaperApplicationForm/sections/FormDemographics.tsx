@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react"
+import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -8,13 +8,7 @@ import {
   Select,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import {
-  ethnicityKeys,
-  raceKeys,
-  genderKeys,
-  sexualOrientation,
-  howDidYouHear,
-} from "@bloom-housing/shared-helpers"
+import { ethnicityKeys, raceKeys, genderKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
 
 type FormDemographicsProps = {
@@ -91,38 +85,6 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
             controlClassName="control"
             options={ethnicityKeys}
             keyPrefix="application.review.demographics.ethnicityOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.gender")}>
-          <Select
-            id="application.demographics.gender"
-            name="application.demographics.gender"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.gender")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={genderKeys}
-            keyPrefix="application.review.demographics.genderOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.sexualOrientation")}>
-          <Select
-            id="application.demographics.sexualOrientation"
-            name="application.demographics.sexualOrientation"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.sexualOrientation")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={sexualOrientation}
-            keyPrefix="application.review.demographics.sexualOrientationOptions"
           />
         </ViewItem>
       </GridCell>

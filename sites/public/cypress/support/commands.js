@@ -400,14 +400,6 @@ Cypress.Commands.add("step17Demographics", (application) => {
   if (application.demographics.race) {
     cy.getByTestId("app-demographics-race").select(application.demographics.race)
   }
-  if (application.demographics.gender) {
-    cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
-  }
-  if (application.demographics.sexualOrientation) {
-    cy.getByTestId("app-demographics-sexual-orientation").select(
-      application.demographics.sexualOrientation
-    )
-  }
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
     const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)

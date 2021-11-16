@@ -97,7 +97,7 @@ const applicationCreateDtoTemplate: Omit<
   contactPreferences: [],
   demographics: {
     ethnicity: null,
-    gender: "female",
+    gender: null,
     howDidYouHear: ["email", "facebook"],
     race: ["asian", "filipino"],
     sexualOrientation: null,

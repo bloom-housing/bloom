@@ -18,8 +18,6 @@ import { useForm } from "react-hook-form"
 import {
   ethnicityKeys,
   raceKeys,
-  genderKeys,
-  sexualOrientation,
   howDidYouHear,
   fieldGroupObjectToArray,
 } from "@bloom-housing/shared-helpers"
@@ -36,8 +34,6 @@ const ApplicationDemographics = () => {
     defaultValues: {
       ethnicity: application.demographics.ethnicity,
       race: application.demographics.race,
-      gender: application.demographics.gender,
-      sexualOrientation: application.demographics.sexualOrientation,
     },
   })
 
@@ -45,8 +41,8 @@ const ApplicationDemographics = () => {
     conductor.currentStep.save({
       demographics: {
         ethnicity: data.ethnicity,
-        gender: data.gender,
-        sexualOrientation: data.sexualOrientation,
+        gender: "",
+        sexualOrientation: "",
         howDidYouHear: data.howDidYouHear,
         race: fieldGroupObjectToArray(data, "race"),
       },
@@ -125,36 +121,6 @@ const ApplicationDemographics = () => {
                 keyPrefix="application.review.demographics.ethnicityOptions"
               />
             </div>
-          </div>
-
-          <div className="form-card__group border-b">
-            <Select
-              id="gender"
-              name="gender"
-              label={t("application.review.demographics.genderLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={genderKeys}
-              keyPrefix="application.review.demographics.genderOptions"
-              dataTestId={"app-demographics-gender"}
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <Select
-              id="sexualOrientation"
-              name="sexualOrientation"
-              label={t("application.review.demographics.sexualOrientationLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={sexualOrientation}
-              keyPrefix="application.review.demographics.sexualOrientationOptions"
-              dataTestId={"app-demographics-sexual-orientation"}
-            />
           </div>
 
           <div className="form-card__group is-borderless">

@@ -182,8 +182,8 @@ export const coliseumApplication: Application = {
     ...idDefaults,
     race: ["white"],
     ethnicity: "hispanicLatino",
-    gender: "female",
-    sexualOrientation: "bisexual",
+    gender: "",
+    sexualOrientation: "",
     howDidYouHear: ["alamedaCountyHCDWebsite", "developerWebsite"],
   },
   preferences: [
