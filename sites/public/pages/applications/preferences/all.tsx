@@ -175,10 +175,12 @@ const ApplicationPreferencesAll = () => {
     exclusive: boolean,
     extraData: FormMetadataExtraData[],
     preference: Preference,
+    bottomBorder: boolean,
     label?: string
   ) => {
+    const rootClassName = bottomBorder ? "mb-5 border-b" : "mb-5"
     return (
-      <div className="mb-5" key={optionKey}>
+      <div className={rootClassName} key={optionKey}>
         <div className={`mb-5 field ${resolveObject(optionName, errors) ? "error" : ""}`}>
           <Field
             id={optionName}
@@ -214,7 +216,7 @@ const ApplicationPreferencesAll = () => {
         </div>
 
         {!(description === false) && (
-          <div className="ml-8 -mt-3">
+          <div className="ml-8 -mt-3 mb-5">
             <ExpandableContent>
               <p className="field-note mb-8">
                 {t(
@@ -310,7 +312,7 @@ const ApplicationPreferencesAll = () => {
                         `
                         )}
                       </p>
-                      {listingPreference.preference?.formMetadata?.options?.map((option) => {
+                      {listingPreference.preference?.formMetadata?.options?.map((option, index) => {
                         return getOption(
                           option.key,
                           getPreferenceOptionName(
@@ -320,7 +322,9 @@ const ApplicationPreferencesAll = () => {
                           option.description,
                           option.exclusive,
                           option.extraData,
-                          listingPreference.preference
+                          listingPreference.preference,
+                          index + 1 < listingPreference.preference?.formMetadata?.options.length ||
+                            !listingPreference.preference.formMetadata.hideGenericDecline
                         )
                       })}
 
@@ -336,6 +340,7 @@ const ApplicationPreferencesAll = () => {
                           true,
                           [],
                           listingPreference.preference,
+                          false,
                           listingPreference.preference.formMetadata.options &&
                             listingPreference.preference.formMetadata.options.length === 1
                             ? t("application.preferences.dontWantSingular")
