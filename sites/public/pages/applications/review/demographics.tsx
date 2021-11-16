@@ -105,6 +105,7 @@ const ApplicationDemographics = () => {
                   })),
                 }))}
                 type="checkbox"
+                dataTestId={"app-demographics-race"}
                 register={register}
               />
             </fieldset>
