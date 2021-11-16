@@ -129,4 +129,6 @@ export const blankApplication = {
   },
   preferences: [] as ApplicationPreference[],
   confirmationId: "",
+  confirmationCode: "",
+  id: "",
 }
