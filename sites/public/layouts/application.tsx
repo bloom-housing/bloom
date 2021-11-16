@@ -23,7 +23,12 @@ const Layout = (props) => {
       label: t(`languages.${item}`),
     })) || []
 
-  const menuLinks: MenuLink[] = []
+  const menuLinks: MenuLink[] = [
+    {
+      title: t("pageTitle.about"),
+      href: "/about",
+    },
+  ]
   if (profile) {
     menuLinks.push({
       title: t("nav.myAccount"),

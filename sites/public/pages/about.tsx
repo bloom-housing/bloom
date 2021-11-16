@@ -1,18 +1,18 @@
 import React from "react"
 import { MarkdownSection, t, PageHeader, GridSection, GridCell } from "@bloom-housing/ui-components"
-import Markdown from "markdown-to-jsx"
 import Layout from "../layouts/application"
-import pageContent from "../page_content/about.md"
 
 export default function About() {
   return (
     <Layout>
       <PageHeader title={t("pageTitle.about")} inverse />
-      <MarkdownSection>
-        <Markdown>{pageContent}</Markdown>
-      </MarkdownSection>
+      <div className="max-w-5xl m-auto px-5">
+        <p className="my-8">{t("about.body1")}</p>
+        <p className="my-8">{t("about.body2")}</p>
+        <p>{t("about.moreInfoContact")}</p>
+      </div>
       <MarkdownSection fullwidth>
-        <GridSection title="Thank You to Our Partners">
+        <GridSection title={t("about.thankYouPartners")}>
           <GridCell>
             <img src={"images/about/cass.png"} alt="Cass Community Social Services logo" />
           </GridCell>

@@ -2,6 +2,12 @@
     "config": {
         "routePrefix": "es"
     },
+    "about": {
+        "body1": "Sabemos que encontrar una vivienda que satisfaga sus necesidades puede ser difícil y frustrante. Detroit Home Connect es su mano amiga para encontrar un nuevo lugar al que llamar hogar.",
+        "body2": "Detroit Home Connect es un nuevo servicio de la ciudad de Detroit que le brinda un primer paso central para encontrar una vivienda en Detroit que satisfaga sus necesidades económicas y familiares. Puede comprender su elegibilidad para unidades de alquiler explorando opciones según el tamaño, la edad y los ingresos de su familia. El Departamento de Vivienda y Revitalización de la Ciudad de Detroit ha colaborado con Google.org para crear Detroit Home Connect. El diseño y las características del sitio web se basan en los comentarios y la información de los residentes del área y las organizaciones comunitarias.",
+        "moreInfoContact": "Para obtener más información, comuníquese con Safiya Merchant en safiya.merchant@detroitmi.gov.",
+        "thankYouPartners": "Gracias a nuestros socios:"
+    },
     "account": {
         "accountSettings": "Configuraciones de la cuenta",
         "errorFetchingApplications": "Error al recuperar aplicaciones",
