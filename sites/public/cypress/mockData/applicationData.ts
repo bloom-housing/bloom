@@ -180,7 +180,7 @@ export const coliseumApplication: Application = {
   ],
   demographics: {
     ...idDefaults,
-    race: "white",
+    race: ["white"],
     ethnicity: "hispanicLatino",
     gender: "female",
     sexualOrientation: "bisexual",
