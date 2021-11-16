@@ -31,18 +31,17 @@ const FormPrograms = ({ county, programs, hhMembersOptions }: FormProgramsProps)
   const { register, setValue, watch } = formMethods
 
   const hasMetaData = useMemo(() => {
-    return !!programs?.filter((listingPreference) => listingPreference.program?.formMetadata)
-      ?.length
+    return !!programs?.filter((listingProgram) => listingProgram.program?.formMetadata)?.length
   }, [programs])
 
   const allOptionFieldNames = useMemo(() => {
     const keys = []
-    programs?.forEach((listingPreference) =>
-      listingPreference.program?.formMetadata?.options.forEach((option) =>
+    programs?.forEach((listingProgram) =>
+      listingProgram.program?.formMetadata?.options.forEach((option) =>
         keys.push(
           getPreferenceOrProgramOptionName(
             option.key,
-            listingPreference.program?.formMetadata.key,
+            listingProgram.program?.formMetadata.key,
             FormPreferencesType.Programs
           )
         )
@@ -52,7 +51,7 @@ const FormPrograms = ({ county, programs, hhMembersOptions }: FormProgramsProps)
     return keys
   }, [programs])
 
-  const watchPreferences = watch(allOptionFieldNames)
+  const watchPrograms = watch(allOptionFieldNames)
 
   const exclusiveKeys = getExclusiveKeys(programs, FormPreferencesType.Programs)
 
@@ -106,7 +105,7 @@ const FormPrograms = ({ county, programs, hhMembersOptions }: FormProgramsProps)
             },
           }}
         />
-        {watchPreferences[optionName] &&
+        {watchPrograms[optionName] &&
           extraData?.map((extra) => (
             <ExtraField
               key={extra.key}
@@ -127,42 +126,42 @@ const FormPrograms = ({ county, programs, hhMembersOptions }: FormProgramsProps)
   return (
     <GridSection title={t("application.details.programs")} separator grid={false}>
       <GridSection columns={2}>
-        {programs?.map((listingPreference) => {
-          const metaKey = listingPreference.program?.formMetadata?.key
+        {programs?.map((listingProgram) => {
+          const metaKey = listingProgram.program?.formMetadata?.key
 
           return (
-            <GridCell key={listingPreference.program.id}>
+            <GridCell key={listingProgram.program.id}>
               <ViewItem
                 label={t(`application.programs.${metaKey}.title`, {
                   county,
                 })}
               >
                 <fieldset className="mt-4">
-                  {listingPreference.program?.formMetadata?.options?.map((option) => {
+                  {listingProgram.program?.formMetadata?.options?.map((option) => {
                     return getOption(
                       option.key,
                       getPreferenceOrProgramOptionName(
                         option.key,
-                        listingPreference.program?.formMetadata?.key,
+                        listingProgram.program?.formMetadata?.key,
                         FormPreferencesType.Programs
                       ),
                       option.exclusive,
                       option.extraData,
-                      listingPreference.program
+                      listingProgram.program
                     )
                   })}
 
-                  {listingPreference.program?.formMetadata &&
-                    !listingPreference.program.formMetadata.hideGenericDecline &&
+                  {listingProgram.program?.formMetadata &&
+                    !listingProgram.program.formMetadata.hideGenericDecline &&
                     getOption(
                       null,
                       getExclusiveOptionName(
-                        listingPreference.program?.formMetadata?.key,
+                        listingProgram.program?.formMetadata?.key,
                         FormPreferencesType.Programs
                       ),
                       true,
                       [],
-                      listingPreference.program,
+                      listingProgram.program,
                       t("application.programs.dontWant")
                     )}
                 </fieldset>
