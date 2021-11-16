@@ -77,13 +77,15 @@ const FormSummaryDetails = ({
 
   const preferenceHelperText = (extraData?: AllExtraDataTypes[]) => {
     if (!extraData) return
-
-    return extraData.reduce((acc, item) => {
+    return extraData.reduce((acc, item, i) => {
       if (
         item.type === InputType.text ||
         (item.type === InputType.hhMemberSelect && typeof item.value === "string")
       ) {
-        acc += `${item.value.toString()}, `
+        acc += `${item.value.toString()}`
+        if (i + 1 < extraData.length) {
+          acc += ", "
+        }
       }
 
       if (item.type === InputType.address && typeof item.value === "object") {

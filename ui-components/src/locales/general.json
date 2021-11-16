@@ -432,13 +432,13 @@
         }
       },
       "liveWorkTriValley": {
-        "title": "Live or Work in the Tri Valley Area (Dublin, Livermore, Pleasanton)",
+        "title": "Live or Work in the Tri-Valley Area (Dublin, Livermore, Pleasanton)",
         "live": {
-          "label": "Live in the Tri Valley Area Preference",
+          "label": "Live in the Tri-Valley Area Preference",
           "description": "At least one member of my household lives in the City of Dublin, Livermore or Pleasanton"
         },
         "work": {
-          "label": "Work in the Tri Valley Area (Dublin, Livermore, Pleasanton) Preference",
+          "label": "Work in the Tri-Valley Area (Dublin, Livermore, Pleasanton) Preference",
           "description": "At least one member of my household works in the City of Dublin, Livermore or Pleasanton"
         }
       },
@@ -569,7 +569,7 @@
       },
       "options": {
         "address": "Address",
-        "name": "Claimant",
+        "name": "Name",
         "organization": "Name of Organization"
       }
     },
@@ -1036,6 +1036,13 @@
       "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs",
       "developmentalDisability": "Developmental Disability"
+    },
+    "reservedCommunityTypeDescriptions": {
+      "senior": "Seniors",
+      "senior55": "Seniors 55+",
+      "senior62": "Seniors 62+",
+      "specialNeeds": "Special Needs",
+      "developmentalDisability": "People with Developmental Disabilities"
     },
     "reservedFor": "Reserved for %{type}",
     "reservedCommunityType": "Reserved Community Type",
