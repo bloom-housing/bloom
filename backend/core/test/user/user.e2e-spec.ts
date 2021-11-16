@@ -544,7 +544,6 @@ describe("Users", () => {
       .expect(200)
   })
 
-
   it("should lower case email of new user", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
