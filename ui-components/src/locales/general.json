@@ -443,7 +443,7 @@
         },
         "work": {
           "label": "Work in the City of Livermore Preference",
-          "description": "At least one member of my household works in the City of Livermore"
+          "description": "At least one member of my household works at least 20 hours/week in the City of Livermore"
         }
       },
       "liveWorkTriValley": {
