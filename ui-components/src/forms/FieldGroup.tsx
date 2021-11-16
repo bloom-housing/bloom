@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods } from "react-hook-form"
@@ -11,6 +11,7 @@ interface FieldSingle {
   value?: string
   defaultChecked?: boolean
   description?: React.ReactNode
+  defaultText?: string
   note?: string
   inputProps?: Record<string, unknown>
   subFields?: FieldSingle[]
@@ -101,6 +102,23 @@ const FieldGroup = ({
     )
   }
 
+  const checkSelected = (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
+    formFields?.forEach((field) => {
+      if (field.defaultChecked) {
+        checkedValues.push(field.label)
+      }
+      if (field.subFields) {
+        checkSelected(field.subFields, checkedValues)
+      }
+    })
+  }
+
+  useEffect(() => {
+    const initialValues: string[] = []
+    checkSelected(fields, initialValues)
+    setCheckedInputs([...initialValues])
+  }, [])
+
   const getInputSet = (item: FieldSingle): React.ReactNode => {
     return (
       <div key={item.value}>
@@ -111,6 +129,7 @@ const FieldGroup = ({
             key={`${item.value}-additionalText`}
             name={`${name}-${item.value}`}
             register={register}
+            defaultValue={item.defaultText}
             placeholder={t("t.description")}
             className={"mb-4"}
           />

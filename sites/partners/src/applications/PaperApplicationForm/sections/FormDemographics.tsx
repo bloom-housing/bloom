@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import {
   t,
@@ -35,30 +35,45 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
     }))
   }, [register])
 
-  console.log(formValues)
+  const isKeyIncluded = (raceKey: string) => {
+    let keyExists = false
+    formValues?.race?.forEach((value) => {
+      if (value.includes(raceKey)) {
+        keyExists = true
+      }
+    })
+    return keyExists
+  }
+
+  const getCustomValue = (subKey: string) => {
+    const customValues = formValues?.race?.filter((value) => value.split(":")[0] === subKey)
+    return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
+  }
+
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      register,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey),
+      })),
+    }))
+  }, [register])
 
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
       <GridCell>
         <ViewItem label={t("application.add.race")}>
-          <FieldGroup
-            name="application.demographics.race"
-            fields={Object.keys(raceKeys).map((rootKey) => ({
-              id: rootKey,
-              label: t(`application.review.demographics.raceOptions.${rootKey}`),
-              value: rootKey,
-              additionalText: rootKey.indexOf("other") >= 0,
-              defaultChecked: formValues.race.includes(rootKey),
-              subFields: raceKeys[rootKey].map((subKey) => ({
-                id: subKey,
-                label: t(`application.review.demographics.raceOptions.${subKey}`),
-                value: subKey,
-                additionalText: subKey.indexOf("other") >= 0,
-              })),
-            }))}
-            type="checkbox"
-            register={register}
-          />
+          <FieldGroup name="race" fields={raceOptions} type="checkbox" register={register} />
         </ViewItem>
       </GridCell>
 

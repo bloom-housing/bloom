@@ -13,8 +13,6 @@ const NewApplication = () => {
 
   const { application } = useSingleApplicationData(applicationId)
 
-  console.log({ application })
-
   if (!application) return false
 
   return (

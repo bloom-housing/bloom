@@ -21,6 +21,7 @@ import {
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
+import { fieldGroupObjectToArray } from "@bloom-housing/shared-helpers"
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -122,13 +123,17 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    demographics,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
+
+  const demographics = {
+    ...data.application.demographics,
+    race: fieldGroupObjectToArray(data, "race"),
+  }
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 

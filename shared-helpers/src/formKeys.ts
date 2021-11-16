@@ -149,7 +149,10 @@ interface subCheckboxes {
   [key: string]: string[]
 }
 
-export const fieldGroupObjectToArray = (formObject: { key: string }, rootKey: string): string[] => {
+export const fieldGroupObjectToArray = (
+  formObject: { [key: string]: any },
+  rootKey: string
+): string[] => {
   const modifiedArray: string[] = []
   const getValue = (elem: string) => {
     const formSubKey = elem.substring(elem.indexOf("-") + 1)

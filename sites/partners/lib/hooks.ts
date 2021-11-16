@@ -128,8 +128,6 @@ export function useSingleApplicationData(applicationId: string) {
   const fetcher = () => applicationsService.retrieve({ applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
-  console.log(data)
-
   return {
     application: data,
     applicationLoading: !error && !data,

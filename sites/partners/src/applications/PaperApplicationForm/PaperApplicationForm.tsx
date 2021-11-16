@@ -50,8 +50,6 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
     defaultValues,
   })
 
-  console.log({ defaultValues })
-
   const router = useRouter()
 
   const { applicationsService } = useContext(AuthContext)
