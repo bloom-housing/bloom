@@ -30,7 +30,6 @@ const Waitlist = (props: WaitlistProps) => {
             <WaitlistItem
               value={props.waitlistCurrentSize}
               text={t("listings.waitlist.currentSize")}
-              className={"font-semibold"}
             />
           )}
           {props.waitlistOpenSpots != null && props.waitlistOpenSpots > 0 && (
