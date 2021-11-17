@@ -155,6 +155,7 @@ const defaults: FormListing = {
   criminalBackground: "",
   depositMax: "0",
   depositMin: "0",
+  depositHelperText: "or one month's rent may be higher for lower credit scores",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
