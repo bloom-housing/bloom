@@ -352,9 +352,18 @@ const formatFormData = (
         : null,
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-    waitlistCurrentSize: data.waitlistCurrentSize ? Number(data.waitlistCurrentSize) : null,
-    waitlistMaxSize: data.waitlistMaxSize ? Number(data.waitlistMaxSize) : null,
-    waitlistOpenSpots: data.waitlistOpenSpots ? Number(data.waitlistOpenSpots) : null,
+    waitlistCurrentSize:
+      data.waitlistCurrentSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistCurrentSize)
+        : null,
+    waitlistMaxSize:
+      data.waitlistMaxSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistMaxSize)
+        : null,
+    waitlistOpenSpots:
+      data.waitlistOpenSpots && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistOpenSpots)
+        : null,
     postmarkedApplicationsReceivedByDate:
       data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
         ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
