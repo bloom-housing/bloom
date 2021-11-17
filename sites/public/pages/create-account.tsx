@@ -23,7 +23,7 @@ import moment from "moment"
 import { useRouter } from "next/router"
 import { usToIntlPhone } from "../lib/helpers"
 
-export default () => {
+const CreateAccount = () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)
   /* Form Handler */
@@ -282,3 +282,5 @@ export default () => {
     </FormsLayout>
   )
 }
+
+export default CreateAccount
