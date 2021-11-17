@@ -21,6 +21,10 @@ import {
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
+
+type preferredUnitType = {
+  id: string
+}
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -159,10 +163,15 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
+  let preferredUnit: preferredUnitType[] = []
 
-  const preferredUnit = data.application?.preferredUnit
-    ? data.application.preferredUnit?.map((id) => ({ id }))
-    : []
+  if (data.application?.preferredUnit) {
+    if (Array.isArray(data.application?.preferredUnit)) {
+      preferredUnit = data.application.preferredUnit.map((id) => ({ id }))
+    } else {
+      preferredUnit = [{ id: data.application.preferredUnit }]
+    }
+  }
 
   const result: ApplicationUpdate = {
     submissionDate,
