@@ -9,7 +9,13 @@ import { setAuthorization } from "../utils/set-authorization-helper"
 import { AssetCreateDto } from "../../src/assets/dto/asset.dto"
 import { ApplicationMethodCreateDto } from "../../src/application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../src/application-methods/types/application-method-type-enum"
-import { Language } from "../../types"
+import {
+  CSVFormattingType,
+  Language,
+  ListingReviewOrder,
+  ListingStatus,
+  UnitStatus,
+} from "../../types"
 import { AssetsModule } from "../../src/assets/assets.module"
 import { ApplicationMethodsModule } from "../../src/application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "../../src/paper-applications/paper-applications.module"
@@ -18,6 +24,9 @@ import { ListingEventType } from "../../src/listings/types/listing-event-type-en
 import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
+import { ListingPublishedCreateDto } from "../../src/listings/dto/listing-published-create.dto"
+import { UnitCreateDto } from "../../src/units/dto/unit-create.dto"
+import { AddressCreateDto } from "../../src/shared/dto/address.dto"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -632,6 +641,75 @@ describe("Listings", () => {
           }
         }
       }
+    })
+  })
+
+  describe("Create listing", () => {
+    it("should create a new listing", async () => {
+      const adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
+
+      // A listing requires a jurisdiction, so we just pick the first one we can get
+      const jurisdictionRes = await supertest(app.getHttpServer())
+        .get(`/jurisdictions`)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(200)
+      const jurisdictionId = jurisdictionRes.body[0].id
+
+      // TODO(#781): Use minimal-listing.json here. Future devs: if this test breaks,
+      // please update minimal-listing.json until this TODO is resolved.
+      const listing: ListingPublishedCreateDto = {
+        status: ListingStatus.active,
+        CSVFormattingType: CSVFormattingType.basic,
+        applicationMethods: [],
+        preferences: [],
+        applicationDropOffAddress: undefined,
+        applicationMailingAddress: undefined,
+        events: [],
+        units: [
+          {
+            status: UnitStatus.available,
+            property: undefined,
+          },
+        ],
+        buildingAddress: {
+          city: "city",
+          state: "state",
+          street: "street",
+          zipCode: "zip",
+        },
+        jurisdiction: { id: jurisdictionId },
+        assets: [],
+        name: "name",
+        displayWaitlistSize: false,
+        depositMin: "min",
+        depositMax: "max",
+        developer: "developer",
+        digitalApplication: false,
+        image: {
+          fileId: "file_id",
+          label: "label",
+        },
+        isWaitlistOpen: false,
+        leasingAgentEmail: "leasing_agent@example.com",
+        leasingAgentName: "leasing agent name",
+        leasingAgentPhone: "(202) 555-0194",
+        paperApplication: false,
+        referralOpportunity: false,
+        rentalAssistance: "rental_assistance",
+        reviewOrderType: ListingReviewOrder.lottery,
+        hasId: undefined,
+        save: undefined,
+        remove: undefined,
+        softRemove: undefined,
+        recover: undefined,
+        reload: undefined,
+      }
+
+      await supertest(app.getHttpServer())
+        .post(`/listings`)
+        .send(listing)
+        .set(...setAuthorization(adminAccessToken))
+        .expect(201)
     })
   })
 

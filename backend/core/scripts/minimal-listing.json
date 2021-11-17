@@ -22,5 +22,21 @@
   "applicationMethods": [],
   "events": [],
   "displayWaitlistSize": false,
-  "jurisdictionName": "Alameda"
+  "jurisdictionName": "Alameda",
+  "depositMin": "min",
+  "depositMax": "max",
+  "developer": "developer",
+  "digitalApplication": false,
+  "image": {
+    "fileId": "file_id",
+    "label": "label"
+  },
+  "isWaitlistOpen": false,
+  "leasingAgentEmail": "leasing_agent@example.com",
+  "leasingAgentName": "leasing agent name",
+  "leasingAgentPhone": "(202) 555-0194",
+  "paperApplication": false,
+  "referralOpportunity": false,
+  "rentalAssistance": "rental_assistance",
+  "reviewOrderType": "lottery"
 }
