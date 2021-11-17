@@ -412,6 +412,7 @@ export const minimalDataApplication: Application = {
   demographics: {
     ...idDefaults,
     howDidYouHear: [],
+    race: [],
   },
   preferences: [],
   programs: [
