@@ -25,6 +25,10 @@ const Layout = (props) => {
 
   const menuLinks: MenuLink[] = [
     {
+      title: t("pageTitle.resources"),
+      href: "/resources",
+    },
+    {
       title: t("pageTitle.about"),
       href: "/about",
     },

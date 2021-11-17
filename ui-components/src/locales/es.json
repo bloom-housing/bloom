@@ -1001,7 +1001,8 @@
         "welcomeSpanish": "Bienvenido",
         "welcomeVietnamese": "vietnamita",
         "about": "Sobre nosotras",
-        "feedback": "Realimentación"
+        "feedback": "Realimentación",
+        "resources": "Recursos para residentes"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",
@@ -1327,5 +1328,15 @@
             "description": "Gracias por verificar cómo califica para una vivienda asequible. Debido a que las viviendas asequibles se pueden reservar para ciertos grupos de edad o niveles de ingresos, hemos filtrado nuestros listados de propiedades en función de las características de su hogar. Esperamos que encuentre una vivienda que satisfaga sus necesidades. Es importante tener en cuenta que una buena parte de las viviendas asequibles tiene una lista de espera, pero llamar a las propiedades que le interesan es una buena manera de ingresar a las listas de espera o conocer las vacantes inmediatas."
         },
         "preferNotToSay": "Prefiero no decirlo"
+    },
+    "resources": {
+    "body1": "Es posible que necesite ayuda adicional en su búsqueda de vivienda. HRD ha compilado una lista de recursos para ayudarle a encontrar y mantener su vivienda",
+     "evictionAssistance": "Asistencia de desalojo",
+     "detroitHousingNetwork": "Red de Vivienda de Detroit",
+     "detroitHousingNetworkBody": "La Red de Vivienda de Detroit es una colección de organizaciones comunitarias de Detroit que brindan una variedad de servicios para propietarios e inquilinos, que incluyen asistencia con servicios públicos, asesoramiento para inquilinos y propietarios, asesoramiento sobre desalojos y soluciones de impuestos a la propiedad. Para obtener más información, visite" ,
+     "utilityAssistance": "Asistencia de servicios públicos",
+     "homelessnessServices": "Servicios para personas sin hogar",
+     "detroitLandBankAuthority": "Detroit Land Bank Authority",
+     "homeRepairResources": "Recursos de reparación del hogar"
     }
 }
