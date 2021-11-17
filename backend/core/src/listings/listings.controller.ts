@@ -36,6 +36,7 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -43,6 +44,7 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
   cacheKeys: string[]
   constructor(

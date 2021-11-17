@@ -41,6 +41,7 @@ import { ApplicationMethodsModule } from "./application-methods/applications-met
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 import { ProgramsModule } from "./program/programs.module"
 import { CatchAllFilter } from "./filters/catch-all.filter"
+import { ActivityLogModule } from "./activity-log/activity-log.module"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
@@ -55,7 +56,9 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({})
+@Module({
+  imports: [ActivityLogModule],
+})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     /**
