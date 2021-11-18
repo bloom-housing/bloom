@@ -1,4 +1,4 @@
-FROM nginx:1.11
+FROM nginx:1.20.2
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 
@@ -13,6 +13,8 @@ RUN apt-get update && \
       build-essential \
       libssl-dev \
       libpcre3 \
+      zlib1g \
+      zlib1g-dev \
       libpcre3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
