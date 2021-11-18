@@ -8,7 +8,7 @@ import {
   Select,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import { ethnicityKeys, raceKeys, genderKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
 import { Demographics } from "@bloom-housing/backend-core/types"
 
 type FormDemographicsProps = {
@@ -51,9 +51,9 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
       id: rootKey,
       label: t(`application.review.demographics.raceOptions.${rootKey}`),
       value: rootKey,
-      register,
       additionalText: rootKey.indexOf("other") >= 0,
       defaultChecked: isKeyIncluded(rootKey),
+      defaultText: getCustomValue(rootKey),
       subFields: raceKeys[rootKey].map((subKey) => ({
         id: subKey,
         label: t(`application.review.demographics.raceOptions.${subKey}`),
@@ -63,7 +63,7 @@ const FormDemographics = ({ formValues }: FormDemographicsProps) => {
         defaultText: getCustomValue(subKey),
       })),
     }))
-  }, [register])
+  }, [register, isKeyIncluded, getCustomValue])
 
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>

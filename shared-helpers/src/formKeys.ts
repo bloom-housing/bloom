@@ -141,7 +141,7 @@ export const sexualOrientation = [
   "notListed",
 ]
 
-const prependRoot = (root: string, subKeys: string[]) => {
+export const prependRoot = (root: string, subKeys: string[]) => {
   return subKeys.map((key) => `${root}-${key}`)
 }
 

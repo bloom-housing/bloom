@@ -44,12 +44,7 @@ export class ApplicationCsvExporter {
   }
 
   raceToReadable(type) {
-    const customSplit = type.split(":")
-    const rootKey = customSplit[0]
-    let customValue = ""
-    if (customSplit.length > 1) {
-      customValue = customSplit[1]
-    }
+    const [rootKey, customValue = ""] = type.split(":")
     const typeMap = {
       americanIndianAlaskanNative: "American Indian / Alaskan Native",
       asian: "Asian",
