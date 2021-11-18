@@ -1,5 +1,4 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common"
-import { Observable } from "rxjs"
 import { ActivityLogService } from "../services/activity-log.service"
 import { Reflector } from "@nestjs/core"
 import { httpMethodsToAction } from "../../shared/http-methods-to-actions"
@@ -15,7 +14,7 @@ export class ActivityLogInterceptor implements NestInterceptor {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  intercept(context: ExecutionContext, next: CallHandler) {
     const req = context.switchToHttp().getRequest()
 
     const module = this.reflector.getAllAndOverride<string>("authz_type", [
@@ -33,9 +32,9 @@ export class ActivityLogInterceptor implements NestInterceptor {
     }
 
     return next.handle().pipe(
-      tap(async () => {
+      tap(() => {
         if (module && action && resourceId && user) {
-          await this.activityLogService.log(module, action, resourceId, user)
+          void this.activityLogService.log(module, action, resourceId, user)
         }
       })
     )

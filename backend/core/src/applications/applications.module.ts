@@ -15,6 +15,7 @@ import { ApplicationFlaggedSetsModule } from "../application-flagged-sets/applic
 import { EmailModule } from "../shared/email/email.module"
 import { TranslationsModule } from "../translations/translations.module"
 import { Listing } from "../listings/entities/listing.entity"
+import { ActivityLogModule } from "../activity-log/activity-log.module"
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Listing } from "../listings/entities/listing.entity"
     ApplicationFlaggedSetsModule,
     TranslationsModule,
     EmailModule,
+    ActivityLogModule,
   ],
   providers: [ApplicationsService, CsvBuilder, ApplicationCsvExporter],
   exports: [ApplicationsService],
