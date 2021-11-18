@@ -100,7 +100,10 @@ export class ListingDefaultSanJoseSeed {
       name: "Test: Default, Two Preferences (San Jose)",
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
+      preferences: [
+        getLiveWorkPreference(alamedaJurisdiction.name),
+        { ...getDisplaceePreference(alamedaJurisdiction.name), ordinal: 2 },
+      ],
       events: getDefaultListingEvents(),
       jurisdictionName: "San Jose",
     }
