@@ -3759,12 +3759,6 @@ export interface UserCreate {
   phoneNumber?: string
 
   /**  */
-  emailSubscription?: boolean
-
-  /**  */
-  textSubscription?: boolean
-
-  /**  */
   preferences?: CombinedPreferencesTypes
 }
 

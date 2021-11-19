@@ -70,5 +70,5 @@ export class UserCreateDto extends OmitType(UserDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  textSubscription?: boolean
+  smsSubscription?: boolean
 }
