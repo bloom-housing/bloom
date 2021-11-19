@@ -50,7 +50,7 @@ const CreateAccount = () => {
         preferences: {
           sendEmailNotifications: emailSubscription,
           sendSmsNotifications: smsSubscription,
-        }
+        },
       })
 
       setOpenModal(true)
