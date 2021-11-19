@@ -26,20 +26,20 @@ const Waitlist = (props: WaitlistProps) => {
       <div>
         <p className="text-tiny text-gray-800 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
         <ul>
-          {props.waitlistCurrentSize != null && props.waitlistCurrentSize > 0 && (
+          {props.waitlistCurrentSize && props.waitlistCurrentSize > 0 && (
             <WaitlistItem
               value={props.waitlistCurrentSize}
               text={t("listings.waitlist.currentSize")}
             />
           )}
-          {props.waitlistOpenSpots != null && props.waitlistOpenSpots > 0 && (
+          {props.waitlistOpenSpots && props.waitlistOpenSpots > 0 && (
             <WaitlistItem
               value={props.waitlistOpenSpots}
               text={t("listings.waitlist.openSlots")}
               className={"font-semibold"}
             />
           )}
-          {props.waitlistMaxSize != null && props.waitlistMaxSize > 0 && (
+          {props.waitlistMaxSize && props.waitlistMaxSize > 0 && (
             <WaitlistItem value={props.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
           )}
         </ul>
