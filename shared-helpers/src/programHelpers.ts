@@ -1,50 +1,34 @@
-import { ApplicationProgram, Program } from "@bloom-housing/backend-core/types"
+import { Program } from "@bloom-housing/backend-core/types"
 
 export const PROGRAMS_FORM_PATH = "application.programs"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mapProgramsToApi = (programs: Program[], data: Record<string, any>) => {
+export const mapProgramToApi = (program: Program, data: Record<string, any>) => {
   if (Object.keys(data).length === 0) return []
 
-  const savedPrograms = [] as ApplicationProgram[]
-  Object.entries(data).forEach(([key, value]) => {
-    const program = programs.find((item) => item.formMetadata?.key === key)
-    let claimed = true
-    const options = []
+  const [key, value] = Object.entries(data)[0]
+  const options = []
 
-    if (value == "none") {
-      claimed = false
-      program?.formMetadata?.options.forEach((option) => {
-        options.push({
-          key: option.key,
-          checked: false,
-          extraData: [],
-        })
-      })
-    } else {
+  options.push({
+    key: value,
+    checked: true,
+    extraData: [],
+  })
+  program?.formMetadata?.options.forEach((option) => {
+    if (option.key !== value) {
       options.push({
-        key: value,
-        checked: true,
+        key: option.key,
+        checked: false,
         extraData: [],
       })
-      program?.formMetadata?.options.forEach((option) => {
-        if (option.key !== value) {
-          options.push({
-            key: option.key,
-            checked: false,
-            extraData: [],
-          })
-        }
-      })
     }
-
-    savedPrograms.push({
-      key,
-      claimed,
-      options,
-    })
   })
-  return savedPrograms
+
+  return {
+    key,
+    claimed: true,
+    options,
+  }
 }
 
 export const getProgramOptionName = (key: string, metaKey: string) => {

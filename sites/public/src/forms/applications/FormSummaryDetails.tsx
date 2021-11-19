@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
 import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
 import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
+import { getProgramOptionName } from "@bloom-housing/shared-helpers"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -334,7 +335,7 @@ const FormSummaryDetails = ({
                 .filter((item) => item.checked === true)
                 .map((option, index) => (
                   <ViewItem label={t(`application.programs.${program.key}.summary`)} key={index}>
-                    {t(`application.programs.${program.key}.${option.key}.label`, {
+                    {t(getProgramOptionName(option.key, program.key), {
                       county: listing?.countyCode,
                     })}
                   </ViewItem>

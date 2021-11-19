@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
+import { Program } from "@bloom-housing/backend-core"
 import {
   AlertBox,
   Form,
@@ -15,7 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 import {
-  mapProgramsToApi,
+  mapProgramToApi,
   getProgramOptionName,
   getProgramOptionDescription,
 } from "@bloom-housing/shared-helpers"
@@ -26,7 +27,7 @@ const ApplicationPrograms = () => {
   const programs = listing?.listingPrograms
   const uniquePages = new Set(programs?.map((item) => item.ordinal)).size
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages : 1)
-  const [pageProgram, setPageProgram] = useState(null)
+  const [pageProgram, setPageProgram] = useState<Program>(null)
   const [programData, setProgramData] = useState(null)
 
   const currentPageSection = 2
@@ -58,23 +59,12 @@ const ApplicationPrograms = () => {
     Submits the form
   */
   const onSubmit = (data) => {
-    let programsData = mapProgramsToApi(
-      programs.map((item) => item.program),
-      data
-    )
+    const applicationProgram = mapProgramToApi(pageProgram, data)
+    const currentPrograms = application.programs.filter((program) => {
+      return program.key !== pageProgram.formMetadata.key
+    })
+    conductor.currentStep.save([...currentPrograms, applicationProgram])
 
-    if (uniquePages > 1) {
-      // If we've split programs across multiple pages, save the data in segments
-      const programsDataKeys = programsData.map((program) => program.key)
-      const currentPrograms = application.programs.filter((program) => {
-        return !programsDataKeys.includes(program.key)
-      })
-      programsData = [...currentPrograms, ...programsData]
-      conductor.currentStep.save(programsData)
-    } else {
-      // Otherwise, submit all at once
-      conductor.currentStep.save(programsData)
-    }
     // Update to the next page if we have more pages
     if (page !== uniquePages) {
       setPage(page + 1)
@@ -112,9 +102,7 @@ const ApplicationPrograms = () => {
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{pageProgram?.description}</h2>
 
-          {pageProgram?.subTitle && pageProgram?.subTitle !== "" && (
-            <p className="field-note mt-5">{pageProgram.subtitle}</p>
-          )}
+          {pageProgram?.subtitle && <p className="field-note mt-5">{pageProgram.subtitle}</p>}
         </div>
 
         {!!Object.keys(errors).length && (
