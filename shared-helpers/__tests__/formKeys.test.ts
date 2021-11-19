@@ -41,4 +41,15 @@ describe("formKeys helpers", () => {
     const expectedArray = ["A", "B", "C", "D: subKey"]
     expect(fieldGroupObjectToArray(testObj, "root")).toStrictEqual(expectedArray)
   })
+
+  it("fieldGroupObjectToArray with subArrays", () => {
+    const testObj = {
+      ["root-A"]: "A",
+      ["root-B"]: "B",
+      ["root-C"]: "C",
+      ["root-D"]: ["1", "2"],
+    }
+    const expectedArray = ["A", "B", "C", "D: 1,2"]
+    expect(fieldGroupObjectToArray(testObj, "root")).toStrictEqual(expectedArray)
+  })
 })
