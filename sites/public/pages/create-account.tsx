@@ -177,6 +177,12 @@ const CreateAccount = () => {
               controlClassName="control"
               control={control}
             />
+            <Field
+              name="textSubscription"
+              type="checkbox"
+              label={t("authentication.createAccount.textSubscription")}
+              register={register}
+            />
           </div>
 
           <div className="form-card__group border-b">

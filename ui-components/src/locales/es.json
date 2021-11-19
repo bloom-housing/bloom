@@ -516,6 +516,7 @@
             "reEnterPassword": "reingresa tu contraseña",
             "resendTheEmail": "Reenvíe el correo electrónico",
             "emailSubscription": "Envíeme un correo electrónico cada vez que se publique o actualice una lista.",
+            "textSubscription": "Envíame un mensaje de texto cada vez que se publique o actualice una lista.",
             "linkExpired": "Tu enlace ha caducado",
             "mustBe8Chars": "Debe tener 8 caracteres",
             "password": "Clave",

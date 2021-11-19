@@ -3762,6 +3762,9 @@ export interface UserCreate {
   emailSubscription?: boolean
 
   /**  */
+  textSubscription?: boolean
+
+  /**  */
   preferences?: CombinedPreferencesTypes
 }
 

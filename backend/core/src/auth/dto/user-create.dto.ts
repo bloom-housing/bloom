@@ -66,4 +66,9 @@ export class UserCreateDto extends OmitType(UserDto, [
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
   @EnforceLowerCase()
   email: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  textSubscription?: boolean
 }
