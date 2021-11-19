@@ -72,11 +72,12 @@ export class AppModule {
      */
     const redis =
       "0" === process.env.REDIS_USE_TLS
-        ? new Redis(process.env.REDIS_URL)
+        ? new Redis(process.env.REDIS_URL, { connectTimeout: 60000 })
         : new Redis(process.env.REDIS_TLS_URL, {
             tls: {
               rejectUnauthorized: false,
             },
+            connectTimeout: 60000,
           })
 
     return {
