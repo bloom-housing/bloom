@@ -40,13 +40,17 @@ const CreateAccount = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { dob, phoneNumber, ...rest } = data
+      const { dob, phoneNumber, smsSubscription, emailSubscription, ...rest } = data
       await createUser({
         ...rest,
         dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
         // Convert (123) 456-7890 to E.164 format with US country code: +11234567890
         phoneNumber: usToIntlPhone(phoneNumber),
         language,
+        preferences: {
+          sendEmailNotifications: emailSubscription,
+          sendSmsNotifications: smsSubscription,
+        },
       })
 
       setOpenModal(true)
@@ -176,6 +180,12 @@ const CreateAccount = () => {
               errorMessage={t("authentication.signIn.phoneError")}
               controlClassName="control"
               control={control}
+            />
+            <Field
+              name="smsSubscription"
+              type="checkbox"
+              label={t("authentication.createAccount.smsSubscription")}
+              register={register}
             />
           </div>
 
