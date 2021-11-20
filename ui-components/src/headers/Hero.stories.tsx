@@ -43,10 +43,10 @@ export const withExtraLargeTitleAndSecondaryButton = () => (
   <Hero
     backgroundImage="/images/banner.png"
     buttonLink="/listings"
-    buttonTitle="Rent"
+    buttonTitle="I am small"
     extraLargeTitle={true}
     secondaryButtonLink="/listings/for-sale"
-    secondaryButtonTitle="Buy"
-    title={"Say Hello to Your Hero"}
+    secondaryButtonTitle="I am a long button"
+    title={"Say Hello to Your Hero I am Long"}
   />
 )
