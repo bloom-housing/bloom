@@ -158,6 +158,7 @@ const SelectAndOrder = ({
           )}
 
           <Button
+            id="addPreferenceButton"
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => setTableDrawer(true)}
@@ -245,6 +246,7 @@ const SelectAndOrder = ({
             : t("listings.selectJurisdiction")}
         </div>
         <Button
+          id="addPreferenceSaveButton"
           type="button"
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}

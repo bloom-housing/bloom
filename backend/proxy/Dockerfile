@@ -1,4 +1,4 @@
-FROM nginx:1.20.2
+FROM nginx:1.11
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 

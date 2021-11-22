@@ -367,7 +367,9 @@ export const ListingView = (props: ListingProps) => {
         {listing.reservedCommunityType && (
           <Message warning={true}>
             {t("listings.reservedFor", {
-              type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+              type: t(
+                `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityType.name}`
+              ),
             })}
           </Message>
         )}
@@ -587,6 +589,7 @@ export const ListingView = (props: ListingProps) => {
               depositMax={listing.depositMax}
               applicationFee={listing.applicationFee}
               costsNotIncluded={listing.costsNotIncluded}
+              depositHelperText={listing.depositHelperText}
             />
           </div>
         </ListingDetailItem>

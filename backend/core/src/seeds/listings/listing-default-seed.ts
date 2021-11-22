@@ -10,13 +10,12 @@ import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
 import { User } from "../../auth/entities/user.entity"
 import {
-  getDefaultAmiChart,
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
-  getDisabilityOrMentalIlnessProgram,
+  getDisabilityOrMentalIllnessProgram,
   getDisplaceePreference,
   getHousingSituationProgram,
   getLiveWorkPreference,
@@ -64,8 +63,8 @@ export class ListingDefaultSeed {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
       name: CountyCode.alameda,
     })
-    const amiChart = await this.amiChartRepository.save({
-      ...getDefaultAmiChart(),
+    const amiChart = await this.amiChartRepository.findOneOrFail({
+      name: "AlamedaCountyTCAC2021",
       jurisdiction: alamedaJurisdiction,
     })
 
@@ -143,7 +142,7 @@ export class ListingDefaultSeed {
         },
         {
           program: await this.programsRepository.findOneOrFail({
-            title: getDisabilityOrMentalIlnessProgram().title,
+            title: getDisabilityOrMentalIllnessProgram().title,
           }),
           ordinal: 3,
         },

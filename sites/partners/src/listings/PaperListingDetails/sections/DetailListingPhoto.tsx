@@ -51,7 +51,11 @@ const DetailListingPhoto = () => {
       <GridSection>
         <GridCell span={2}>
           {listingPhotoUrl ? (
-            <MinimalTable headers={photoTableHeaders} data={photoTableData} />
+            <MinimalTable
+              id="listingPhotoTable"
+              headers={photoTableHeaders}
+              data={photoTableData}
+            />
           ) : (
             <span className={"view-item__value"}>{t("t.none")}</span>
           )}
