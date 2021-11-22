@@ -148,6 +148,60 @@ export class EmailService {
     )
   }
 
+  public async newlisting(listing: Listing, user: User) {
+    await this.loadTranslationsForUser(user)
+    if (this.configService.get<string>("NODE_ENV") == "production") {
+      Logger.log(
+        `Preparing to send a listing email to ${
+          user.email
+        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+      )
+    }
+
+    const rentRange = await this.getRentRange(listing)
+    await this.send(
+      user.email,
+      "New Listing",
+      this.template("new-listing")({
+        listing: listing,
+        rent: rentRange,
+      })
+    )
+  }
+
+  public async updateListingReminder(listing: Listing, user: User) {
+    await this.loadTranslationsForUser(user)
+    if (this.configService.get<string>("NODE_ENV") == "production") {
+      Logger.log(
+        `Preparing to send a reminder to update listing email to ${
+          user.email
+        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+      )
+    }
+
+    const rentRange = await this.getRentRange(listing)
+    await this.send(
+      user.email,
+      "Update Listing",
+      this.template("update-listing")({
+        listing: listing,
+        rent: rentRange,
+      })
+    )
+  }
+
+  // function to calculate rent - min of all mins and max of all maxs
+  private async getRentRange(listing: Listing){
+    const minArray = listing.unitsSummary.map(a => a.monthlyRentMin)
+    const maxArray = listing.unitsSummary.map(a => a.monthlyRentMax)
+    if ((minArray.length == 0) || (maxArray.length == 0)){
+      return "Call"
+    }
+    const minRent =  "$".concat(String(Math.min(...minArray)))
+    const maxRent = "$".concat(String(Math.max(...maxArray)))
+    return minRent.concat(" - ", maxRent)
+  }
+
   private async loadTranslations(jurisdiction: Jurisdiction | null, language: Language) {
     const translation = await this.translationService.getTranslationByLanguageAndJurisdictionOrDefaultEn(
       language,
