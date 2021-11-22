@@ -248,6 +248,44 @@ export const coliseumApplication: Application = {
       ],
     },
   ],
+  programs: [
+    {
+      claimed: true,
+      key: "servedInMilitary",
+      options: [
+        {
+          key: "servedInMilitary",
+          checked: true,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "tay",
+      claimed: true,
+      options: [
+        {
+          key: "tay",
+          checked: true,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+  ],
   confirmationCode: "",
   status: ApplicationStatus.draft,
   submissionType: ApplicationSubmissionType.electronical,
@@ -357,6 +395,84 @@ export const minimalDataApplication: Application = {
     howDidYouHear: [],
   },
   preferences: [],
+  programs: [
+    {
+      claimed: false,
+      key: "servedInMilitary",
+      options: [
+        {
+          key: "servedInMilitary",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "tay",
+      claimed: false,
+      options: [
+        {
+          key: "tay",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "disabilityOrMentalIllness",
+      claimed: false,
+      options: [
+        {
+          key: "disabilityOrMentalIllness",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+    {
+      key: "housingSituation",
+      claimed: false,
+      options: [
+        {
+          key: "notPermanent",
+          checked: false,
+        },
+        {
+          key: "homeless",
+          checked: false,
+        },
+        {
+          key: "doNotConsider",
+          checked: false,
+        },
+        {
+          key: "preferNotToSay",
+          checked: false,
+        },
+      ],
+    },
+  ],
   confirmationCode: "",
   status: ApplicationStatus.draft,
   submissionType: ApplicationSubmissionType.electronical,
@@ -376,6 +492,7 @@ export const applicationStepOrder = [
   { name: "addMembers", route: "/applications/household/add-members" },
   { name: "preferredUnitSize", route: "/applications/household/preferred-units" },
   { name: "adaHouseholdMembers", route: "/applications/household/ada" },
+  { name: "programs", route: "/applications/household/programs" },
   { name: "householdExpectingChanges", route: "/applications/household/changes" },
   { name: "householdStudent", route: "/applications/household/student" },
   { name: "vouchersSubsidies", route: "/applications/financial/vouchers" },
