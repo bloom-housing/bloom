@@ -7,6 +7,7 @@ import {
   ApplicationStatus,
   AddressUpdate,
   HouseholdMember,
+  Program,
 } from "@bloom-housing/backend-core/types"
 
 import {
@@ -14,6 +15,7 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
+import { mapProgramsToApi, mapApiToProgramsPaperForm } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
   YesNoAnswer,
@@ -54,11 +56,18 @@ interface FormData extends FormTypes {
   submissionType: ApplicationSubmissionType
 }
 
+type mapFormToApiProps = {
+  data: FormData
+  listingId: string
+  editMode: boolean
+  programs: Program[]
+}
+
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = (data: FormData, listingId: string, editMode: boolean) => {
+export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -113,6 +122,14 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   })()
 
   const preferences = mapPreferencesToApi(data)
+  const programsForm = Object.entries(data.application.programs).reduce((acc, curr) => {
+    if (curr[1]) {
+      Object.assign(acc, { [curr[0]]: curr[1] })
+    }
+    return acc
+  }, {})
+
+  const programsData = mapProgramsToApi(programs, programsForm)
 
   // additional phone
   const {
@@ -184,6 +201,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     householdExpectingChanges,
     householdStudent,
     preferences,
+    programs: programsData,
     income,
     incomePeriod,
     incomeVouchers,
@@ -257,6 +275,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences = mapApiToPreferencesForm(applicationData.preferences)
+  const programs = mapApiToProgramsPaperForm(applicationData.programs)
 
   const application: ApplicationTypes = (() => {
     const {
@@ -305,6 +324,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       demographics,
       acceptedTerms,
       alternateContact,
+      programs,
     }
 
     return result

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.20...@bloom-housing/backend-core@3.0.1-alpha.21) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.19...@bloom-housing/backend-core@3.0.1-alpha.20) (2021-11-22)
+
+
+### Features
+
+* adds jurisdictions to pref seeds ([#2199](https://github.com/bloom-housing/bloom/issues/2199)) ([9e47cec](https://github.com/bloom-housing/bloom/commit/9e47cec3b1acfe769207ccbb33c07019cd742e33))
+
+
+
+
+
 ## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.18...@bloom-housing/backend-core@3.0.1-alpha.19) (2021-11-22)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
