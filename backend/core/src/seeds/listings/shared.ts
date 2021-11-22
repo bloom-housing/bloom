@@ -239,8 +239,10 @@ export const defaultListing: ListingSeedType = {
 }
 
 // Preferences
-export function getLiveWorkPreference() {
-  return JSON.parse(JSON.stringify(liveWorkPreference))
+export function getLiveWorkPreference(jurisdictionName) {
+  const preference = { ...liveWorkPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const liveWorkPreference: PreferenceSeedType = {
@@ -267,8 +269,10 @@ export const liveWorkPreference: PreferenceSeedType = {
     ],
   },
 }
-export function getDisplaceePreference() {
-  return JSON.parse(JSON.stringify(displaceePreference))
+export function getDisplaceePreference(jurisdictionName) {
+  const preference = { ...displaceePreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const displaceePreference: PreferenceSeedType = {
@@ -310,8 +314,10 @@ export const displaceePreference: PreferenceSeedType = {
   },
 }
 
-export function getPbvPreference() {
-  return JSON.parse(JSON.stringify(pbvPreference))
+export function getPbvPreference(jurisdictionName) {
+  const preference = { ...pbvPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const pbvPreference: PreferenceSeedType = {
@@ -358,8 +364,10 @@ export const pbvPreference: PreferenceSeedType = {
   },
 }
 
-export function getHopwaPreference() {
-  return JSON.parse(JSON.stringify(hopwaPreference))
+export function getHopwaPreference(jurisdictionName) {
+  const preference = { ...hopwaPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const hopwaPreference: PreferenceSeedType = {
@@ -404,11 +412,16 @@ export const servedInMilitaryProgram: ProgramSeedType = {
     options: [
       {
         key: "servedInMilitary",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -430,11 +443,16 @@ export const tayProgram: ProgramSeedType = {
     options: [
       {
         key: "tay",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -442,11 +460,11 @@ export const tayProgram: ProgramSeedType = {
   },
 }
 
-export function getDisabilityOrMentalIlnessProgram() {
-  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+export function getDisabilityOrMentalIllnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
 }
 
-export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
+export const disabilityOrMentalIllnessProgram: ProgramSeedType = {
   title: "Developmental Disability",
   subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
@@ -456,11 +474,16 @@ export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
     options: [
       {
         key: "disabilityOrMentalIllness",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -482,15 +505,21 @@ export const housingSituationProgram: ProgramSeedType = {
     options: [
       {
         key: "notPermanent",
+        description: true,
         extraData: [],
       },
       {
         key: "homeless",
+        description: true,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },

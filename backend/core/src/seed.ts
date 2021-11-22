@@ -11,7 +11,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import {
   defaultLeasingAgents,
-  getDisabilityOrMentalIlnessProgram,
+  getDisabilityOrMentalIllnessProgram,
   getHousingSituationProgram,
   getServedInMilitaryProgram,
   getTayProgram,
@@ -120,15 +120,24 @@ export async function createPreferences(
   jurisdictions: Jurisdiction[]
 ) {
   const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
-  const preferences = await preferencesRepository.save([
-    getLiveWorkPreference(),
-    getPbvPreference(),
-    getHopwaPreference(),
-    getDisplaceePreference(),
-  ])
+  const preferencesToSave = []
+
+  jurisdictions.forEach((jurisdiction) => {
+    preferencesToSave.push(
+      getLiveWorkPreference(jurisdiction.name),
+      getPbvPreference(jurisdiction.name),
+      getHopwaPreference(jurisdiction.name),
+      getDisplaceePreference(jurisdiction.name)
+    )
+  })
+
+  const preferences = await preferencesRepository.save(preferencesToSave)
 
   for (const jurisdiction of jurisdictions) {
-    jurisdiction.preferences = preferences
+    jurisdiction.preferences = preferences.filter((preference) => {
+      const jurisdictionName = preference.title.split("-").pop()
+      return jurisdictionName === ` ${jurisdiction.name}`
+    })
   }
   const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
     getRepositoryToken(Jurisdiction)
@@ -142,7 +151,7 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
   const programs = await programsRepository.save([
     getServedInMilitaryProgram(),
     getTayProgram(),
-    getDisabilityOrMentalIlnessProgram(),
+    getDisabilityOrMentalIllnessProgram(),
     getHousingSituationProgram(),
   ])
 
