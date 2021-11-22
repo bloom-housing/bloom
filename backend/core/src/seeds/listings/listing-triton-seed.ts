@@ -246,7 +246,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       listingPreferences: [
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
+            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 2,
         },

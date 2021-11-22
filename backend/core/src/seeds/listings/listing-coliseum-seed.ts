@@ -1033,19 +1033,19 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
       listingPreferences: [
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
+            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 1,
         },
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getPbvPreference().title,
+            title: getPbvPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 2,
         },
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getHopwaPreference().title,
+            title: getHopwaPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 3,
         },
