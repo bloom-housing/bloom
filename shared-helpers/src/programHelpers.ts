@@ -3,7 +3,13 @@ import { ApplicationProgram, Program } from "@bloom-housing/backend-core/types"
 export const PROGRAMS_FORM_PATH = "application.programs"
 
 export const mapProgramToApi = (program: Program, data: Record<string, any>) => {
-  if (Object.keys(data).length === 0) return {}
+  if (Object.keys(data).length === 0) {
+    return {
+      key: "",
+      claimed: false,
+      options: [],
+    }
+  }
 
   const [key, value] = Object.entries(data)[0]
   const options = []
