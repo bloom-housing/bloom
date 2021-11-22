@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ApplicationContext } from "../../ApplicationContext"
 import { useSingleListingData } from "../../../../lib/hooks"
@@ -15,10 +15,9 @@ const DetailsPrograms = ({ listingId }: DetailsProgramsProps) => {
   const listingPrograms = listingDto?.listingPrograms
   const programs = application?.programs
 
-  const hasMetaData = useMemo(() => {
-    return !!listingPrograms?.filter((listingProgram) => listingProgram.program?.formMetadata)
-      ?.length
-  }, [listingPrograms])
+  const hasMetaData = !!listingPrograms?.some(
+    (listingProgram) => listingProgram.program?.formMetadata
+  )
 
   if (!hasMetaData) {
     return null
