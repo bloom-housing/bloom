@@ -28,6 +28,7 @@ import { Listing10159Seed } from "./seeds/listings/listing-detroit-10159"
 import { Listing10168Seed } from "./seeds/listings/listing-detroit-10168"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
+import { Listing10202Seed } from "./seeds/listings/listing-detroit-10202"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -47,6 +48,7 @@ const listingSeeds: any[] = [
   Listing10158Seed,
   Listing10159Seed,
   Listing10168Seed,
+  Listing10202Seed,
   ListingTreymoreSeed,
 ]
 
