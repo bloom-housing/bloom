@@ -79,8 +79,8 @@ const Edit = () => {
     }
   }
 
-  const onEmailSubmit = async (data: { email: string }) => {
-    const { email } = data
+  const onEmailSubmit = async (data: { email: string; emailSubscription: boolean }) => {
+    const { email, emailSubscription } = data
     setEmailAlert(null)
     try {
       await userProfileService.update({
@@ -88,6 +88,9 @@ const Edit = () => {
           ...profile,
           appUrl: window.location.origin,
           newEmail: email,
+          preferences: {
+            sendEmailNotifications: emailSubscription,
+          },
         },
       })
       setEmailAlert({ type: "success", message: `${t("account.settings.alerts.emailSuccess")}` })
@@ -98,12 +101,18 @@ const Edit = () => {
     }
   }
 
-  const onPhoneSubmit = async (data: { phoneNumber: string }) => {
-    const { phoneNumber } = data
+  const onPhoneSubmit = async (data: { phoneNumber: string; smsSubscription: boolean }) => {
+    const { phoneNumber, smsSubscription } = data
     setPhoneAlert(null)
     try {
       await userProfileService.update({
-        body: { ...profile, phoneNumber: usToIntlPhone(phoneNumber) },
+        body: {
+          ...profile,
+          phoneNumber: usToIntlPhone(phoneNumber),
+          preferences: {
+            sendSmsNotifications: smsSubscription,
+          },
+        },
       })
       setPhoneAlert({
         type: "success",
@@ -253,6 +262,12 @@ const Edit = () => {
                 register={register}
                 defaultValue={profile ? profile.email : null}
               />
+              <Field
+                name="emailSubscription"
+                type="checkbox"
+                label={t("authentication.createAccount.emailSubscription")}
+                register={register}
+              />
               <div className="text-center">
                 <Button className={"items-center"}>{t("account.settings.update")}</Button>
               </div>
@@ -280,6 +295,12 @@ const Edit = () => {
                 controlClassName="control"
                 control={control}
                 defaultValue={profile?.phoneNumber ? intlToUsPhone(profile.phoneNumber) : null}
+              />
+              <Field
+                name="smsSubscription"
+                type="checkbox"
+                label={t("authentication.createAccount.smsSubscription")}
+                register={register}
               />
               <div className="text-center">
                 <Button className={"items-center"}>{t("account.settings.update")}</Button>
