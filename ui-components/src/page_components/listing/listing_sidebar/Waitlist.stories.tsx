@@ -30,15 +30,19 @@ export const OpenAndAllValuesSupplied = () => {
   )
 }
 
-export const OpenWithOnlyMaxAndOpen = () => {
+export const OpenWithSomeZeroes = () => {
   return (
     <Waitlist
       isWaitlistOpen={true}
       waitlistMaxSize={10}
       waitlistCurrentSize={0}
-      waitlistOpenSpots={10}
+      waitlistOpenSpots={0}
     />
   )
+}
+
+export const OpenWithOnlyMaxAndOpen = () => {
+  return <Waitlist isWaitlistOpen={true} waitlistMaxSize={10} waitlistOpenSpots={10} />
 }
 
 export const OpenWithOnlyMax = () => {

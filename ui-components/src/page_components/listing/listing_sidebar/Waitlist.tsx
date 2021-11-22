@@ -8,14 +8,12 @@ export interface WaitlistProps {
   waitlistOpenSpots?: number
 }
 
-const WaitlistItem = (props: { className?: string; value: number; text: string }) => {
-  return props.value ? (
-    <li className={`uppercase text-gray-800 text-tiny ${props.className}`}>
-      <span className="text-right w-12 inline-block pr-2">{props.value}</span>
-      <span>{props.text}</span>
-    </li>
-  ) : null
-}
+const WaitlistItem = (props: { className?: string; value: number; text: string }) => (
+  <li className={`uppercase text-gray-800 text-tiny ${props.className}`}>
+    <span className="text-right w-12 inline-block pr-2">{props.value}</span>
+    <span>{props.text}</span>
+  </li>
+)
 
 const Waitlist = (props: WaitlistProps) => {
   if (!props.isWaitlistOpen) return <></>
@@ -26,20 +24,20 @@ const Waitlist = (props: WaitlistProps) => {
       <div>
         <p className="text-tiny text-gray-800 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
         <ul>
-          {props.waitlistCurrentSize !== undefined && props.waitlistCurrentSize > 0 && (
+          {props.waitlistCurrentSize !== undefined && (
             <WaitlistItem
               value={props.waitlistCurrentSize}
               text={t("listings.waitlist.currentSize")}
             />
           )}
-          {props.waitlistOpenSpots !== undefined && props.waitlistOpenSpots > 0 && (
+          {props.waitlistOpenSpots !== undefined && (
             <WaitlistItem
               value={props.waitlistOpenSpots}
               text={t("listings.waitlist.openSlots")}
               className={"font-semibold"}
             />
           )}
-          {props.waitlistMaxSize !== undefined && props.waitlistMaxSize > 0 && (
+          {props.waitlistMaxSize !== undefined && (
             <WaitlistItem value={props.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
           )}
         </ul>
