@@ -59,6 +59,7 @@ const ApplicationPrograms = () => {
     Submits the form
   */
   const onSubmit = (data) => {
+    console.log("program submit data = ", data)
     const applicationProgram = mapProgramToApi(pageProgram, data)
     const currentPrograms = application.programs.filter((program) => {
       return program.key !== pageProgram.formMetadata.key

@@ -497,7 +497,7 @@ export function getHousingSituationProgram() {
 
 export const housingSituationProgram: ProgramSeedType = {
   title: "Housing Situation",
-  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+  subtitle: "",
   description:
     "Thinking about the past 30 days, do either of these describe your housing situation?",
   formMetadata: {
