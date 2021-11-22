@@ -2,7 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { getDetailFieldString } from "./helpers"
+import { getDetailFieldString, getDetailFieldDate, getDetailFieldTime } from "./helpers"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
@@ -209,8 +209,18 @@ const DetailApplicationAddress = () => {
               <ViewItem
                 id="postmarkedApplicationsReceivedByDate"
                 label={t("listings.postmarkByDate")}
+                dataTestId={"postmark-date"}
               >
-                {new Date(listing.postmarkedApplicationsReceivedByDate).toDateString()}
+                {getDetailFieldDate(listing.postmarkedApplicationsReceivedByDate)}
+              </ViewItem>
+            </GridCell>
+            <GridCell span={2}>
+              <ViewItem
+                id="postmarkedApplicationsReceivedByDateTime"
+                label={t("listings.postmarkByTime")}
+                dataTestId={"postmark-time"}
+              >
+                {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
               </ViewItem>
             </GridCell>
           </GridSection>

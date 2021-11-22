@@ -80,6 +80,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
+  postmarkByDateDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  postmarkByDateTimeField?: {
+    hours: string
+    minutes: string
+    period: TimeFieldPeriod
+  }
   arePaperAppsMailedToAnotherAddress?: YesNoAnswer
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer
@@ -253,6 +263,17 @@ const formatFormData = (
     data.applicationDueTimeField
   )
 
+  let postmarkByDateTimeFormatted = null
+
+  if (
+    data.arePostmarksConsidered === YesNoAnswer.Yes &&
+    data.postmarkByDateDateField &&
+    data.postmarkByDateTimeField
+  ) {
+    const postmarkByDateFormatted = createDate(data.postmarkByDateDateField)
+    postmarkByDateTimeFormatted = createTime(postmarkByDateFormatted, data.postmarkByDateTimeField)
+  }
+
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":
@@ -366,10 +387,7 @@ const formatFormData = (
       data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
     waitlistOpenSpots:
       data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
-    postmarkedApplicationsReceivedByDate:
-      data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
-        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
-        : null,
+    postmarkedApplicationsReceivedByDate: postmarkByDateTimeFormatted,
     applicationDropOffAddressType:
       data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress

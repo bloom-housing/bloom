@@ -10,6 +10,7 @@ import {
   ViewItem,
   DateField,
   FieldGroup,
+  TimeField,
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
@@ -466,7 +467,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             </GridSection>
           )}
 
-        <GridSection columns={3} className={"flex items-center"}>
+        <GridSection columns={4} className={"flex items-center"}>
           <GridCell>
             <GridCell>
               <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
@@ -489,33 +490,62 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               ]}
             />
           </GridCell>
-          {postmarksConsidered === YesNoAnswer.Yes && (
-            <GridCell>
-              <ViewItem label={t("listings.postmarkByDate")} className="mb-0">
-                <DateField
-                  label={""}
-                  name={"postMarkDate"}
-                  id={"postMarkDate"}
-                  register={register}
-                  watch={watch}
-                  defaultDate={{
-                    month:
-                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
+          <GridCell>
+            {postmarksConsidered === YesNoAnswer.Yes && (
+              <DateField
+                label={t("listings.postmarkByDate")}
+                name={"postmarkByDateDateField"}
+                id={"postmarkByDateDateField"}
+                register={register}
+                watch={watch}
+                defaultDate={{
+                  month: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
-                        .format("MM") ?? null,
-                    day:
-                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
+                        .format("MM")
+                    : null,
+                  day: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
-                        .format("DD") ?? null,
-                    year:
-                      moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
+                        .format("DD")
+                    : null,
+                  year: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
                         .utc()
-                        .format("YYYY") ?? null,
-                  }}
-                />
-              </ViewItem>
-            </GridCell>
-          )}
+                        .format("YYYY")
+                    : null,
+                }}
+                dataTestId={"postmark-date-field"}
+              />
+            )}
+          </GridCell>
+          <GridCell>
+            {postmarksConsidered === YesNoAnswer.Yes && (
+              <TimeField
+                label={t("listings.postmarkByTime")}
+                name={"postmarkByDateTimeField"}
+                id={"postmarkByDateTimeField"}
+                register={register}
+                watch={watch}
+                defaultValues={{
+                  hours: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("hh")
+                    : null,
+                  minutes: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("mm")
+                    : null,
+                  seconds: listing?.postmarkedApplicationsReceivedByDate
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("ss")
+                    : null,
+                  period:
+                    new Date(listing?.postmarkedApplicationsReceivedByDate).getHours() >= 12
+                      ? "pm"
+                      : "am",
+                }}
+                dataTestId={"postmark-time-field"}
+              />
+            )}
+          </GridCell>
         </GridSection>
         <GridSection columns={3}>
           <GridCell span={2}>
