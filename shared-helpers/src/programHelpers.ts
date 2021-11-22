@@ -33,7 +33,6 @@ export const mapProgramToApi = (program: Program, data: Record<string, any>) => 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapProgramsToApi = (programs: Program[], data: Record<string, any>) => {
   if (Object.keys(data).length === 0) return []
-  console.log("data = ", data)
   const savedPrograms = [] as ApplicationProgram[]
   Object.entries(data).forEach(([key, value]) => {
     const program = programs.find((item) => item.formMetadata?.key === key)
