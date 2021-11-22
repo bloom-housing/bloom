@@ -113,7 +113,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
 
     return options.map((option, index) => {
       return (
-        <div key={index}>
+        <div className="navbar-dropdown-item-container" key={index}>
           {option.href ? (
             <LinkComponent
               className={dropdownOptionClassname}
