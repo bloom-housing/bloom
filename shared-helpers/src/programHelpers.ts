@@ -2,47 +2,47 @@ import { ApplicationProgram, Program } from "@bloom-housing/backend-core/types"
 
 export const PROGRAMS_FORM_PATH = "application.programs"
 
+export const mapProgramToApi = (program: Program, data: Record<string, any>) => {
+  if (Object.keys(data).length === 0) return {}
+
+  const [key, value] = Object.entries(data)[0]
+  const options = []
+
+  options.push({
+    key: value,
+    checked: true,
+    extraData: [],
+  })
+  program?.formMetadata?.options.forEach((option) => {
+    if (option.key !== value) {
+      options.push({
+        key: option.key,
+        checked: false,
+        extraData: [],
+      })
+    }
+  })
+
+  return {
+    key,
+    claimed: true,
+    options,
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mapProgramsToApi = (programs: Program[], data: Record<string, any>) => {
   if (Object.keys(data).length === 0) return []
-
+  console.log("data = ", data)
   const savedPrograms = [] as ApplicationProgram[]
   Object.entries(data).forEach(([key, value]) => {
     const program = programs.find((item) => item.formMetadata?.key === key)
-    let claimed = true
-    const options = []
+    if (!program) return
 
-    if (value == "none") {
-      claimed = false
-      program?.formMetadata?.options.forEach((option) => {
-        options.push({
-          key: option.key,
-          checked: false,
-          extraData: [],
-        })
-      })
-    } else {
-      options.push({
-        key: value,
-        checked: true,
-        extraData: [],
-      })
-      program?.formMetadata?.options.forEach((option) => {
-        if (option.key !== value) {
-          options.push({
-            key: option.key,
-            checked: false,
-            extraData: [],
-          })
-        }
-      })
+    const mappedProgram = mapProgramToApi(program, { [key]: value })
+    if (mappedProgram.key) {
+      savedPrograms.push(mappedProgram)
     }
-
-    savedPrograms.push({
-      key,
-      claimed,
-      options,
-    })
   })
   return savedPrograms
 }
@@ -51,7 +51,7 @@ export const mapProgramsToApi = (programs: Program[], data: Record<string, any>)
 export const mapApiToProgramsPaperForm = (programs: ApplicationProgram[]) => {
   const result = {}
 
-  programs.forEach((program) => {
+  programs?.forEach((program) => {
     const key = program.key
     const selectedOption = program.options.find((item) => item.checked === true)?.key
 
