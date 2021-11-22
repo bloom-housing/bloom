@@ -15,7 +15,11 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
-import { mapProgramsToApi, mapApiToProgramsPaperForm } from "@bloom-housing/shared-helpers"
+import {
+  fieldGroupObjectToArray,
+  mapProgramsToApi,
+  mapApiToProgramsPaperForm,
+} from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
   YesNoAnswer,
@@ -23,7 +27,6 @@ import {
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
-import { fieldGroupObjectToArray } from "@bloom-housing/shared-helpers"
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
