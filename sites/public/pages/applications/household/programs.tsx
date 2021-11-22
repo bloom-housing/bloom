@@ -25,7 +25,7 @@ const ApplicationPrograms = () => {
   const { conductor, application, listing } = useFormConductor("programs")
   const programs = listing?.listingPrograms
   const uniquePages = new Set(programs?.map((item) => item.ordinal)).size
-  console.info(uniquePages)
+
   const [page, setPage] = useState(conductor.navigatedThroughBack ? uniquePages : 1)
   const [pageProgram, setPageProgram] = useState(null)
   const [programData, setProgramData] = useState(null)
