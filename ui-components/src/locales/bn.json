@@ -1355,13 +1355,13 @@
         "modalTitle": "ফিল্টার ফল",
         "modalHeader": "আপনার বৈশিষ্ট্যের তালিকা পরিমার্জন করতে এই বিকল্পগুলি ব্যবহার করুন।",
         "neighborhood": "প্রতিবেশ",
-        "bedrooms": "একক পরিমান",
+        "bedrooms": "বেডরুম",
         "bedroomsOptions": {
-            "studioPlus": "0 বা তার বেশি শয়নকক্ষ (স্টুডিও)",
-            "onePlus": "1 বা ততোধিক বেডরুম",
-            "twoPlus": "2 বা ততোধিক বেডরুম",
-            "threePlus": "3 বা ততোধিক বেডরুম",
-            "fourPlus": "4 বা ততোধিক বেডরুম"
+            "studioPlus": "0 (স্টুডিও)",
+            "onePlus": "1",
+            "twoPlus": "2",
+            "threePlus": "3",
+            "fourPlus": "4 বা তার বেশি"
         },
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",

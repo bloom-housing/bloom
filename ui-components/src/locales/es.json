@@ -1230,13 +1230,13 @@
         "modalTitle": "Filtrar resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
         "neighborhood": "Vecindario",
-        "bedrooms": "Tamaño de la unidad",
+        "bedrooms": "Dormitorios",
         "bedroomsOptions": {
-            "studioPlus": "0 o más habitaciones (estudio)",
-            "onePlus": "1 o más dormitorios",
-            "twoPlus": "2 o más recámaras",
-            "threePlus": "3 o más recámaras",
-            "fourPlus": "4 o más recámaras"
+            "studioPlus": "0 (Estudio)",
+            "onePlus": "1",
+            "twoPlus": "2",
+            "threePlus": "3",
+            "fourPlus": "4 o más"
         },
         "zipCode": "Código postal",
         "zipCodeDescription": "Introduzca código postal",

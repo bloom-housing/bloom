@@ -29,17 +29,28 @@ describe("encode backend filter array", () => {
 
   it("should handle multiple filters", () => {
     const filter: ListingFilterState = {
-      bedrooms: "3",
+      threeBdrm: true,
       zipcode: "48226",
+    }
+    expect(encodeToBackendFilterArray(filter)).toContainEqual({
+      $comparison: EnumListingFilterParamsComparison["IN"],
+      bedrooms: "3",
+    })
+    expect(encodeToBackendFilterArray(filter)).toContainEqual({
+      $comparison: EnumListingFilterParamsComparison["IN"],
+      zipcode: "48226",
+    })
+  })
+
+  it("should handle multiple bedroom filters", () => {
+    const filter: ListingFilterState = {
+      twoBdrm: true,
+      threeBdrm: true,
     }
     expect(encodeToBackendFilterArray(filter)).toEqual([
       {
-        $comparison: EnumListingFilterParamsComparison[">="],
-        bedrooms: "3",
-      },
-      {
         $comparison: EnumListingFilterParamsComparison["IN"],
-        zipcode: "48226",
+        bedrooms: "2,3",
       },
     ])
   })
@@ -55,18 +66,18 @@ describe("encode filter state as frontend querystring", () => {
 
   it("should handle multiple filters", () => {
     const filter: ListingFilterState = {
-      bedrooms: "3",
+      threeBdrm: true,
       zipcode: "48226",
     }
-    expect(encodeToFrontendFilterString(filter)).toBe("&bedrooms=3&zipcode=48226")
+    expect(encodeToFrontendFilterString(filter)).toBe("&threeBdrm=true&zipcode=48226")
   })
 
   it("should exclude empty filters", () => {
     const filter: ListingFilterState = {
-      bedrooms: "3",
+      threeBdrm: true,
       zipcode: "",
     }
-    expect(encodeToFrontendFilterString(filter)).toBe("&bedrooms=3")
+    expect(encodeToFrontendFilterString(filter)).toBe("&threeBdrm=true")
   })
 })
 
@@ -80,12 +91,12 @@ describe("get filter state from parsed url", () => {
   })
 
   it("should handle multiple filters", () => {
-    const filterString = parse("localhost:3000/listings?page=1&bedrooms=3&zipcode=48226")
+    const filterString = parse("localhost:3000/listings?page=1&threeBdrm=true&zipcode=48226")
     const expected: ListingFilterState = {
-      bedrooms: "3",
+      threeBdrm: "true",
       zipcode: "48226",
     }
-    expect(decodeFiltersFromFrontendUrl(filterString)).toStrictEqual(expected)
+    expect(decodeFiltersFromFrontendUrl(filterString)).toEqual(expected)
   })
 
   it("should handle no filters", () => {

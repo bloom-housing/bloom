@@ -4061,7 +4061,7 @@ export interface ListingFilterParams {
   status?: EnumListingFilterParamsStatus
 
   /**  */
-  bedrooms?: number
+  bedrooms?: string
 
   /**  */
   zipcode?: string
