@@ -17,6 +17,8 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
+import { Interval } from "@nestjs/schedule"
+import { ListingStatus } from "./types/listing-status-enum"
 
 @Injectable()
 export class ListingsService {
@@ -211,5 +213,23 @@ export class ListingsService {
       listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
     }
     return listing
+  }
+
+  @Interval(1000 * 60 * 60)
+  public async changeOverdueListingsStatusCron() {
+    const listings = await this.listingRepository
+      .createQueryBuilder()
+      .select(["id", "applicationDueDate", "status"])
+      .getMany()
+    let shouldSave = false
+    for (const listing of listings) {
+      if (listing.applicationDueDate && listing.applicationDueDate < new Date()) {
+        listing.status = ListingStatus.closed
+        shouldSave = true
+      }
+    }
+    if (shouldSave) {
+      await this.listingRepository.save(listings)
+    }
   }
 }
