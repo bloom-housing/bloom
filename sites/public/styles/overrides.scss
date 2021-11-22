@@ -56,9 +56,27 @@
           border: none;
         }
 
+        .navbar-dropdown-container {
+          display: flex;
+          margin-left: -1rem;
+          margin-top: 10px;
+          width: auto;
+          .navbar-dropdown {
+            .navbar-dropdown-item-container {
+              display: flex;
+            }
+            .navbar-dropdown-item {
+              flex: 1 1 auto;
+              font-size: 0.75rem;
+            }
+          }
+        }
+
         .navbar-mobile-menu-button {
+          @apply flex;
           border: none;
-          margin: 2.75rem 0.5rem 0.75rem;
+          margin: 2.75rem 0.5rem 0;
+          padding: 0 0.5rem 0.75rem;
         }
 
         .ui-icon svg rect {
