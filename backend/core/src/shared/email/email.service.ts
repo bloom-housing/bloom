@@ -152,9 +152,9 @@ export class EmailService {
     await this.loadTranslationsForUser(user)
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a listing email to ${
-          user.email
-        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a listing email to ${user.email} from ${this.configService.get<string>(
+          "EMAIL_FROM_ADDRESS"
+        )}...`
       )
     }
 
@@ -191,13 +191,13 @@ export class EmailService {
   }
 
   // function to calculate rent - min of all mins and max of all maxs
-  private async getRentRange(listing: Listing){
-    const minArray = listing.unitsSummary.map(a => a.monthlyRentMin)
-    const maxArray = listing.unitsSummary.map(a => a.monthlyRentMax)
-    if ((minArray.length == 0) || (maxArray.length == 0)){
+  private async getRentRange(listing: Listing) {
+    const minArray = listing.unitsSummary.map((a) => a.monthlyRentMin)
+    const maxArray = listing.unitsSummary.map((a) => a.monthlyRentMax)
+    if (minArray.length == 0 || maxArray.length == 0) {
       return "Call"
     }
-    const minRent =  "$".concat(String(Math.min(...minArray)))
+    const minRent = "$".concat(String(Math.min(...minArray)))
     const maxRent = "$".concat(String(Math.max(...maxArray)))
     return minRent.concat(" - ", maxRent)
   }
