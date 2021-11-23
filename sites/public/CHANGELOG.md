@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.32...@bloom-housing/public@3.0.1-alpha.33) (2021-11-23)
+
+
+### Bug Fixes
+
+* change the yes/no radio text to be more descriptive ([#2208](https://github.com/bloom-housing/bloom/issues/2208)) ([0c46054](https://github.com/bloom-housing/bloom/commit/0c46054574535523d6f217bb0677bbe732b8945f))
+
+
+
+
+
 ## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.31...@bloom-housing/public@3.0.1-alpha.32) (2021-11-23)
 
 **Note:** Version bump only for package @bloom-housing/public
