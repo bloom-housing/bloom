@@ -26,11 +26,11 @@ describe("<Waitlist>", () => {
       />
     )
     expect(getByText("Available Units and Waitlist")).toBeTruthy()
-    expect(getByText("Current Waitlist Size"))
+    expect(getByText("Current Waitlist Size")).toBeTruthy()
     expect(getByText("40")).toBeTruthy()
-    expect(getByText("Open Waitlist Slots"))
+    expect(getByText("Open Waitlist Slots")).toBeTruthy()
     expect(getByText("60")).toBeTruthy()
-    expect(getByText("Final Waitlist Size"))
+    expect(getByText("Final Waitlist Size")).toBeTruthy()
     expect(getByText("100")).toBeTruthy()
     expect(
       getByText(
@@ -39,7 +39,7 @@ describe("<Waitlist>", () => {
     ).toBeTruthy()
   })
   it("renders with open spots", () => {
-    const { getByText } = render(
+    const { getByText, queryByText } = render(
       <Waitlist
         isWaitlistOpen={true}
         waitlistMaxSize={10}
@@ -52,5 +52,17 @@ describe("<Waitlist>", () => {
         "Once ranked applicants fill all available units, the remaining ranked applicants will be placed on a waitlist for those same units."
       )
     ).toBeTruthy()
+    expect(queryByText("0")).toBeTruthy()
+  })
+  it("doesn't show null values", () => {
+    const { queryByText } = render(
+      <Waitlist
+        isWaitlistOpen={true}
+        waitlistMaxSize={10}
+        waitlistCurrentSize={null}
+        waitlistOpenSpots={10}
+      />
+    )
+    expect(queryByText("0")).toBeNull()
   })
 })
