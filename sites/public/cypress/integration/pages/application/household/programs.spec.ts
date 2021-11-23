@@ -1,6 +1,18 @@
 describe("applications/household/programs", function () {
   const route = "/applications/household/programs"
 
+  beforeEach(() => {
+    cy.visit(route)
+  })
+
+  it("Should render form", function () {
+    cy.get("form").should("be.visible")
+    cy.location("pathname").should("include", route)
+  })
+})
+/* describe("applications/household/programs", function () {
+  const route = "/applications/household/programs"
+
   const servedInMilitaryYesId = "servedInMilitary"
   const tayNoId = "doNotConsider"
 
@@ -63,4 +75,4 @@ describe("applications/household/programs", function () {
         }
       )
   })
-})
+})*/
