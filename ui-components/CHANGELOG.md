@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.19...@bloom-housing/ui-components@3.0.1-alpha.20) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaLabel prop to Button component ([509ddc8](https://github.com/bloom-housing/bloom/commit/509ddc898ba44c05e26f8ed8c777f1ba456eeee5))
+
+
+
+
+
 ## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.18...@bloom-housing/ui-components@3.0.1-alpha.19) (2021-11-23)
 
 
