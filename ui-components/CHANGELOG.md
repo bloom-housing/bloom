@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.18...@bloom-housing/ui-components@3.0.1-alpha.19) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaHidden to Icon component ([c7bb86a](https://github.com/bloom-housing/bloom/commit/c7bb86aec6fd5ad386c7ca50087d0113b14503be))
+
+
+
+
+
 ## [3.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.17...@bloom-housing/ui-components@3.0.1-alpha.18) (2021-11-23)
 
 
