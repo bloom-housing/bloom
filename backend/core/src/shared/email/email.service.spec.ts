@@ -5,7 +5,6 @@ import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing } from "../../../types"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { TranslationsService } from "../../translations/translations.service"
 import { Translation } from "../../translations/entities/translation.entity"
 import { Language } from "../types/language-enum"
 import { Repository } from "typeorm"
@@ -15,6 +14,7 @@ import dbOptions = require("../../../ormconfig.test")
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { TranslationsService } from "../../translations/services/translations.service"
 
 declare const expect: jest.Expect
 jest.setTimeout(30000)

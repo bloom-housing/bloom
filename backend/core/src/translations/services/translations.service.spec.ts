@@ -1,9 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { nanoid } from "nanoid"
-import { Translation } from "./entities/translation.entity"
 import { TranslationsService } from "./translations.service"
-import { Language } from "../shared/types/language-enum"
+import { Translation } from "../entities/translation.entity"
+import { Language } from "../../shared/types/language-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

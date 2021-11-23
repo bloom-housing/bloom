@@ -10,11 +10,11 @@ import Polyglot from "node-polyglot"
 import fs from "fs"
 import { ConfigService } from "@nestjs/config"
 import { Application } from "../../applications/entities/application.entity"
-import { TranslationsService } from "../../translations/translations.service"
 import { Language } from "../types/language-enum"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
+import { TranslationsService } from "../../translations/services/translations.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
