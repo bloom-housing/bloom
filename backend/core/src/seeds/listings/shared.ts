@@ -462,15 +462,6 @@ export function getDefaultListing() {
 
 export const defaultListing: ListingSeedType = {
   jurisdictionName: "Alameda",
-  applicationAddress: {
-    city: "San Francisco",
-    state: "CA",
-    street: "548 Market Street",
-    street2: "Suite #59930",
-    zipCode: "94104",
-    latitude: 37.789673,
-    longitude: -122.40151,
-  },
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,

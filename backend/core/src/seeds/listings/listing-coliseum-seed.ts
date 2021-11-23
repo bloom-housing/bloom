@@ -877,15 +877,10 @@ const coliseumUnits: Array<UnitSeedType> = [
 
 const coliseumListing: ListingSeedType = {
   jurisdictionName: "Alameda",
-  applicationAddress: {
-    county: "Alameda",
-    city: "Oakland",
-    street: "1701 Martin Luther King Way",
-    zipCode: "94621",
-    state: "CA",
-    latitude: 37.7549632,
-    longitude: -122.1968792,
-  },
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
