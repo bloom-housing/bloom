@@ -173,7 +173,7 @@ export class TranslationsService extends AbstractServiceFactory<
       jurisdictionId: listing.jurisdiction.id,
       language,
       translations: translatedValues,
-      timestamp: listing.updatedAt
+      timestamp: listing.updatedAt,
     })
   }
 
