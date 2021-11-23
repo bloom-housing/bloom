@@ -7,7 +7,7 @@ const ProgressNavItem = (props: {
   currentPageSection: number
   completedSections: number
   label: string
-  mounted?: boolean
+  mounted: boolean
 }) => {
   let bgColor = "is-disabled"
   if (props.mounted) {
@@ -39,7 +39,7 @@ const ProgressNav = (props: {
   currentPageSection: number
   completedSections: number
   labels: string[]
-  mounted?: boolean
+  mounted: boolean
 }) => {
   return (
     <div>
