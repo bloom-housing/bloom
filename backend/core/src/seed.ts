@@ -11,7 +11,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import {
   defaultLeasingAgents,
-  getDisabilityOrMentalIlnessProgram,
+  getDisabilityOrMentalIllnessProgram,
   getHousingSituationProgram,
   getServedInMilitaryProgram,
   getTayProgram,
@@ -37,12 +37,18 @@ import { UserRoles } from "./auth/entities/user-roles.entity"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
+import { AmiChartDefaultSeed } from "./seeds/ami-charts/default-ami-chart"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { UserCreateDto } from "./auth/dto/user-create.dto"
 import { UnitTypesService } from "./unit-types/unit-types.service"
 import { Preference } from "./preferences/entities/preference.entity"
 import { Program } from "./program/entities/program.entity"
+import { AmiDefaultMissingAMI } from "./seeds/ami-charts/missing-household-ami-levels"
+import { AmiDefaultTriton } from "./seeds/ami-charts/triton-ami-chart"
+import { AmiDefaultTritonDetroit } from "./seeds/ami-charts/triton-ami-chart-detroit"
+import { AmiDefaultSanJose } from "./seeds/ami-charts/default-ami-chart-san-jose"
+import { AmiDefaultSanMateo } from "./seeds/ami-charts/default-ami-chart-san-mateo"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -68,6 +74,15 @@ const listingSeeds: any[] = [
   ListingTritonSeedDetroit,
 ]
 
+const amiSeeds: any[] = [
+  AmiChartDefaultSeed,
+  AmiDefaultMissingAMI,
+  AmiDefaultTriton,
+  AmiDefaultTritonDetroit,
+  AmiDefaultSanJose,
+  AmiDefaultSanMateo,
+]
+
 export function getSeedListingsCount() {
   return listingSeeds.length
 }
@@ -81,7 +96,7 @@ export async function createLeasingAgents(
   const leasingAgents = await Promise.all(
     defaultLeasingAgents.map(
       async (leasingAgent) =>
-        await usersService.createUser(
+        await usersService.createPublicUser(
           plainToClass(UserCreateDto, {
             ...leasingAgent,
             jurisdictions: [jurisdictions[0]],
@@ -105,15 +120,24 @@ export async function createPreferences(
   jurisdictions: Jurisdiction[]
 ) {
   const preferencesRepository = app.get<Repository<Preference>>(getRepositoryToken(Preference))
-  const preferences = await preferencesRepository.save([
-    getLiveWorkPreference(),
-    getPbvPreference(),
-    getHopwaPreference(),
-    getDisplaceePreference(),
-  ])
+  const preferencesToSave = []
+
+  jurisdictions.forEach((jurisdiction) => {
+    preferencesToSave.push(
+      getLiveWorkPreference(jurisdiction.name),
+      getPbvPreference(jurisdiction.name),
+      getHopwaPreference(jurisdiction.name),
+      getDisplaceePreference(jurisdiction.name)
+    )
+  })
+
+  const preferences = await preferencesRepository.save(preferencesToSave)
 
   for (const jurisdiction of jurisdictions) {
-    jurisdiction.preferences = preferences
+    jurisdiction.preferences = preferences.filter((preference) => {
+      const jurisdictionName = preference.title.split("-").pop()
+      return jurisdictionName === ` ${jurisdiction.name}`
+    })
   }
   const jurisdictionsRepository = app.get<Repository<Jurisdiction>>(
     getRepositoryToken(Jurisdiction)
@@ -127,7 +151,7 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
   const programs = await programsRepository.save([
     getServedInMilitaryProgram(),
     getTayProgram(),
-    getDisabilityOrMentalIlnessProgram(),
+    getDisabilityOrMentalIllnessProgram(),
     getHousingSituationProgram(),
   ])
 
@@ -140,6 +164,16 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
   await jurisdictionsRepository.save(jurisdictions)
 
   return programs
+}
+
+const seedAmiCharts = async (app: INestApplicationContext) => {
+  const allSeeds = amiSeeds.map((amiSeed) => app.get<AmiChartDefaultSeed>(amiSeed))
+  const amiCharts = []
+  for (const chart of allSeeds) {
+    const amiChart = await chart.seed()
+    amiCharts.push(amiChart)
+  }
+  return amiCharts
 }
 
 const seedListings = async (
@@ -191,9 +225,10 @@ async function seed() {
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
   await createPrograms(app, jurisdictions)
+  await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 
-  const user1 = await userService.createUser(
+  const user1 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test@example.com",
       emailConfirmation: "test@example.com",
@@ -209,7 +244,7 @@ async function seed() {
   )
   await userService.confirm({ token: user1.confirmationToken })
 
-  const user2 = await userService.createUser(
+  const user2 = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "test2@example.com",
       emailConfirmation: "test2@example.com",
@@ -225,7 +260,7 @@ async function seed() {
   )
   await userService.confirm({ token: user2.confirmationToken })
 
-  const admin = await userService.createUser(
+  const admin = await userService.createPublicUser(
     plainToClass(UserCreateDto, {
       email: "admin@example.com",
       emailConfirmation: "admin@example.com",

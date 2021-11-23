@@ -15,21 +15,21 @@ const DetailAdditionalDetails = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.requiredDocuments")}>
+          <ViewItem id="requiredDocuments" label={t("listings.requiredDocuments")}>
             {getDetailFieldString(listing.requiredDocuments)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.importantProgramRules")}>
+          <ViewItem id="programRules" label={t("listings.importantProgramRules")}>
             {getDetailFieldString(listing.programRules)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.specialNotes")}>
+          <ViewItem id="specialNotes" label={t("listings.specialNotes")}>
             {getDetailFieldString(listing.specialNotes)}
           </ViewItem>
         </GridCell>

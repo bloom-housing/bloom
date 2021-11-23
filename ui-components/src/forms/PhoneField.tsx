@@ -19,6 +19,7 @@ export const PhoneField = (props: {
   disabled?: boolean
   required?: boolean
   mask?: (args: any) => JSX.Element
+  dataTestId?: string
 }) => {
   const labelClasses = ["label"]
   if (props.caps) labelClasses.push("field-label--caps")
@@ -55,7 +56,7 @@ export const PhoneField = (props: {
   return (
     <div className={"field " + (props.error ? "error" : "")}>
       {props.label && <label className={labelClasses.join(" ")}>{props.label}</label>}
-      <div className={props.controlClassName}>
+      <div className={props.controlClassName} data-test-id={props.dataTestId}>
         {props.mask ? (
           <Controller {...controllerProps} render={props.mask} />
         ) : (

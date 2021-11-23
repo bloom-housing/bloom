@@ -25,7 +25,7 @@ const DetailRankingsAndResults = () => {
       inset
     >
       <GridSection columns={2}>
-        <ViewItem label={t("listings.reviewOrderQuestion")}>
+        <ViewItem id="reviewOrderQuestion" label={t("listings.reviewOrderQuestion")}>
           {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe
             ? t("listings.firstComeFirstServe")
             : t("listings.lotteryTitle")}
@@ -34,49 +34,51 @@ const DetailRankingsAndResults = () => {
       {lotteryEvent && (
         <>
           <GridSection columns={3}>
-            <ViewItem label={t("listings.lotteryDateQuestion")}>
+            <ViewItem id="lotteryEvent.startTime.date" label={t("listings.lotteryDateQuestion")}>
               {moment(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
             </ViewItem>
-            <ViewItem label={t("listings.lotteryStartTime")}>
+            <ViewItem id="lotteryEvent.startTime.time" label={t("listings.lotteryStartTime")}>
               {moment(new Date(lotteryEvent?.startTime)).format("hh:mm A")}
             </ViewItem>
-            <ViewItem label={t("listings.lotteryEndTime")}>
+            <ViewItem id="lotteryEvent.lotteryEndTime.time" label={t("listings.lotteryEndTime")}>
               {moment(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
             </ViewItem>
           </GridSection>
           <GridSection columns={2}>
-            <ViewItem label={t("listings.lotteryDateNotes")}>{lotteryEvent?.note}</ViewItem>
+            <ViewItem id="lotteryDateNotes" label={t("listings.lotteryDateNotes")}>
+              {lotteryEvent?.note}
+            </ViewItem>
           </GridSection>
         </>
       )}
       {getReviewOrderType() === ListingReviewOrder.firstComeFirstServe && (
         <GridSection columns={2}>
-          <ViewItem label={t("listings.dueDateQuestion")}>
+          <ViewItem id="dueDateQuestion" label={t("listings.dueDateQuestion")}>
             {listing.applicationDueDate ? t("t.yes") : t("t.no")}
           </ViewItem>
         </GridSection>
       )}
       <GridSection columns={2}>
-        <ViewItem label={t("listings.waitlist.openQuestion")}>
+        <ViewItem id="waitlist.openQuestion" label={t("listings.waitlist.openQuestion")}>
           {getDetailBoolean(listing.isWaitlistOpen)}
         </ViewItem>
       </GridSection>
       {listing.isWaitlistOpen && (
         <GridSection columns={3}>
-          <ViewItem label={t("listings.waitlist.maxSize")}>
+          <ViewItem id="waitlistMaxSize" label={t("listings.waitlist.maxSize")}>
             {getDetailFieldNumber(listing.waitlistMaxSize)}
           </ViewItem>
-          <ViewItem label={t("listings.waitlist.currentSize")}>
+          <ViewItem id="waitlistCurrentSize" label={t("listings.waitlist.currentSize")}>
             {getDetailFieldNumber(listing.waitlistCurrentSize)}
           </ViewItem>
-          <ViewItem label={t("listings.waitlist.openSize")}>
+          <ViewItem id="waitlistOpenSpots" label={t("listings.waitlist.openSize")}>
             {getDetailFieldNumber(listing.waitlistOpenSpots)}
           </ViewItem>
         </GridSection>
       )}
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.whatToExpectLabel")}>
+          <ViewItem id="whatToExpect" label={t("listings.whatToExpectLabel")}>
             {getDetailFieldString(listing.whatToExpect)}
           </ViewItem>
         </GridCell>

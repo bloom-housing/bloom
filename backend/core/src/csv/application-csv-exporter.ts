@@ -21,10 +21,10 @@ export class ApplicationCsvExporter {
       "Same Address as Primary Applicant": formatBoolean(app.householdMembers_same_address),
       Relationship: app.householdMembers_relationship,
       "Work in Region": formatBoolean(app.householdMembers_work_in_region),
-      City: app.householdMembers_address_city,
-      State: app.householdMembers_address_state,
       Street: app.householdMembers_address_street,
       "Street 2": app.householdMembers_address_street2,
+      City: app.householdMembers_address_city,
+      State: app.householdMembers_address_state,
       "Zip Code": app.householdMembers_address_zip_code,
     }
     return obj
@@ -43,6 +43,34 @@ export class ApplicationCsvExporter {
     return typeMap[type] ?? type
   }
 
+  raceToReadable(type) {
+    const [rootKey, customValue = ""] = type.split(":")
+    const typeMap = {
+      americanIndianAlaskanNative: "American Indian / Alaskan Native",
+      asian: "Asian",
+      "asian-asianIndian": "Asian[Asian Indian]",
+      "asian-otherAsian": `Asian[Other Asian:${customValue}]`,
+      blackAfricanAmerican: "Black / African American",
+      "asian-chinese": "Asian[Chinese]",
+      declineToRespond: "Decline to Respond",
+      "asian-filipino": "Asian[Filipino]",
+      "nativeHawaiianOtherPacificIslander-guamanianOrChamorro":
+        "Native Hawaiian / Other Pacific Islander[Guamanian or Chamorro]",
+      "asian-japanese": "Asian[Japanese]",
+      "asian-korean": "Asian[Korean]",
+      "nativeHawaiianOtherPacificIslander-nativeHawaiian":
+        "Native Hawaiian / Other Pacific Islander[Native Hawaiian]",
+      nativeHawaiianOtherPacificIslander: "Native Hawaiian / Other Pacific Islander",
+      otherMultiracial: `Other / Multiracial:${customValue}`,
+      "nativeHawaiianOtherPacificIslander-otherPacificIslander": `Native Hawaiian / Other Pacific Islander[Other Pacific Islander:${customValue}]`,
+      "nativeHawaiianOtherPacificIslander-samoan":
+        "Native Hawaiian / Other Pacific Islander[Samoan]",
+      "asian-vietnamese": "Asian[Vietnamese]",
+      white: "White",
+    }
+    return typeMap[rootKey] ?? rootKey
+  }
+
   exportFromObject(applications: { [key: string]: any }, includeDemographics?: boolean): string {
     const extraHeaders: KeyNumber = {
       "Household Members": 1,
@@ -56,15 +84,14 @@ export class ApplicationCsvExporter {
         if (includeDemographics) {
           demographics = {
             Ethnicity: app.demographics_ethnicity,
-            Gender: app.demographics_gender,
-            Race: app.demographics_race,
-            "Sexual Orientation": app.demographics_sexual_orientation,
+            Race: app.demographics_race.map((race) => this.raceToReadable(race)),
             "How Did You Hear": app.demographics_how_did_you_hear.join(", "),
           }
         }
 
         obj[app.application_id] = {
-          "Application Number": app.application_id,
+          "Application Id": app.application_id,
+          "Application Confirmation Code": app.application_confirmation_code,
           "Application Type":
             app.application_submission_type === "electronical"
               ? "electronic"
@@ -88,18 +115,18 @@ export class ApplicationCsvExporter {
           "Primary Applicant Street": app.applicant_address_street,
           "Primary Applicant Street 2": app.applicant_address_street2,
           "Primary Applicant City": app.applicant_address_city,
-          "Primary Applicant Zip Code": app.applicant_address_zip_code,
           "Primary Applicant State": app.applicant_address_state,
+          "Primary Applicant Zip Code": app.applicant_address_zip_code,
           "Primary Applicant Mailing Street": app.mailingAddress_street,
           "Primary Applicant Mailing Street 2": app.mailingAddress_street2,
           "Primary Applicant Mailing City": app.mailingAddress_city,
-          "Primary Applicant Mailing Zip Code": app.mailingAddress_zip_code,
           "Primary Applicant Mailing State": app.mailingAddress_state,
+          "Primary Applicant Mailing Zip Code": app.mailingAddress_zip_code,
           "Primary Applicant Work Street": app.applicant_workAddress_street,
           "Primary Applicant Work Street 2": app.applicant_workAddress_street2,
           "Primary Applicant Work City": app.applicant_workAddress_city,
-          "Primary Applicant Work Zip Code": app.applicant_workAddress_zip_code,
           "Primary Applicant Work State": app.applicant_workAddress_state,
+          "Primary Applicant Work Zip Code": app.applicant_workAddress_zip_code,
           "Alternate Contact First Name": app.alternateContact_first_name,
           "Alternate Contact Middle Name": app.alternateContact_middle_name,
           "Alternate Contact Last Name": app.alternateContact_last_name,
@@ -111,8 +138,8 @@ export class ApplicationCsvExporter {
           "Alternate Contact Street": app.alternateContact_mailingAddress_street,
           "Alternate Contact Street 2": app.alternateContact_mailingAddress_street2,
           "Alternate Contact City": app.alternateContact_mailingAddress_city,
-          "Alternate Contact Zip Code": app.alternateContact_mailingAddress_zip_code,
           "Alternate Contact State": app.alternateContact_mailingAddress_state,
+          "Alternate Contact Zip Code": app.alternateContact_mailingAddress_zip_code,
           Income: app.application_income,
           "Income Period": app.application_income_period === "perMonth" ? "per month" : "per year",
           "Accessibility Mobility": formatBoolean(app.accessibility_mobility),

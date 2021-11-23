@@ -3,6 +3,7 @@ import {
   ApplicationSubmissionType,
   Language,
   ApplicationPreference,
+  ApplicationProgram,
 } from "@bloom-housing/backend-core/types"
 
 export const blankApplication = () => {
@@ -99,12 +100,14 @@ export const blankApplication = () => {
     preferredUnit: [],
     demographics: {
       ethnicity: "",
-      race: "",
+      race: [],
       gender: "",
       sexualOrientation: "",
       howDidYouHear: [],
     },
     preferences: [] as ApplicationPreference[],
-    confirmationId: "",
+    programs: [] as ApplicationProgram[],
+    confirmationCode: "",
+    id: "",
   }
 }

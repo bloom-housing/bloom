@@ -10,7 +10,6 @@ import { Property } from "../../property/entities/property.entity"
 import { Unit } from "../../units/entities/unit.entity"
 import { User } from "../../auth/entities/user.entity"
 import {
-  getDefaultAmiChart,
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
@@ -54,8 +53,8 @@ export class ListingDefaultSanJoseSeed {
     const alamedaJurisdiction = await this.jurisdictionRepository.findOneOrFail({
       name: CountyCode.alameda,
     })
-    const amiChart = await this.amiChartRepository.save({
-      ...getDefaultAmiChart(),
+    const amiChart = await this.amiChartRepository.findOneOrFail({
+      name: "AlamedaCountyTCAC2021",
       jurisdiction: alamedaJurisdiction,
     })
 
@@ -101,7 +100,10 @@ export class ListingDefaultSanJoseSeed {
       name: "Test: Default, Two Preferences (San Jose)",
       property: property,
       assets: getDefaultAssets(),
-      preferences: [getLiveWorkPreference(), { ...getDisplaceePreference(), ordinal: 2 }],
+      preferences: [
+        getLiveWorkPreference(alamedaJurisdiction.name),
+        { ...getDisplaceePreference(alamedaJurisdiction.name), ordinal: 2 },
+      ],
       events: getDefaultListingEvents(),
       jurisdictionName: "San Jose",
     }

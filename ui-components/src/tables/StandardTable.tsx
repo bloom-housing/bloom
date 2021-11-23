@@ -51,6 +51,7 @@ export interface StandardTableProps {
   cellClassName?: string
   responsiveCollapse?: boolean
   translateData?: boolean
+  id?: string
 }
 
 export type StandardTableData = Record<string, React.ReactNode>[] | undefined
@@ -204,7 +205,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table className={tableClasses.join(" ")}>
+      <table id={props.id} className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>
         </thead>

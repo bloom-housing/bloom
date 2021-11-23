@@ -37,7 +37,7 @@ const Hero = (props: HeroProps) => {
     classNames = "centered"
   }
   return (
-    <div className={`hero ${classNames}`} style={styles}>
+    <div className={`hero ${classNames}`} style={styles} data-test-id={"hero-component"}>
       <h1 className={`hero__title ${props.extraLargeTitle ? "lg:text-6.5xl" : ""}`}>
         {props.title}
       </h1>

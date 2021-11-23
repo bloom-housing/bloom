@@ -87,7 +87,7 @@ const ApplicationHouseholdStudent = () => {
             className={`form-card__group field text-lg ${errors.householdStudent ? "error" : ""}`}
           >
             <fieldset>
-              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
                 name="householdStudent"
@@ -96,6 +96,7 @@ const ApplicationHouseholdStudent = () => {
                 register={register}
                 validation={{ required: true }}
                 fields={householdStudentValues}
+                dataTestId={"app-student"}
               />
             </fieldset>
           </div>
@@ -105,6 +106,7 @@ const ApplicationHouseholdStudent = () => {
               <Button
                 styleType={AppearanceStyleType.primary}
                 onClick={() => conductor.setNavigatedBack(false)}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

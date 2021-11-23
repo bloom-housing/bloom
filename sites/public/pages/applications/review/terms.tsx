@@ -55,7 +55,7 @@ const ApplicationTerms = () => {
         },
       })
       .then((result) => {
-        conductor.currentStep.save({ confirmationId: result.confirmationCode })
+        conductor.currentStep.save({ confirmationCode: result.confirmationCode })
         return router.push("/applications/review/confirmation")
       })
       .catch((err) => {
@@ -111,12 +111,18 @@ const ApplicationTerms = () => {
                 error={errors.agree}
                 errorMessage={t("errors.agreeError")}
                 fieldLabelClassName={"text-primary"}
+                dataTestId={"app-terms-agree"}
               />
             </div>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button loading={submitting} styleType={AppearanceStyleType.primary} type="submit">
+              <Button
+                loading={submitting}
+                styleType={AppearanceStyleType.primary}
+                type="submit"
+                data-test-id={"app-terms-submit-button"}
+              >
                 {t("t.submit")}
               </Button>
             </div>
