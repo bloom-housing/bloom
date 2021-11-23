@@ -11,7 +11,7 @@ import {
   ListingMap,
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { neighborhoodKeys, stateKeys} from "@bloom-housing/shared-helpers/src/formKeys"
 import { FormListing } from "../index"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
@@ -163,13 +163,25 @@ const BuildingDetails = ({
             validation={{ required: true }}
           />
         </GridCell>
-        <Field
+        <ViewItem
           label={t("t.neighborhood")}
-          name={"neighborhood"}
-          id={"neighborhood"}
-          placeholder={t("t.neighborhood")}
-          register={register}
-        />
+          className={"mb-0"}
+        >
+          <Select
+            id={`neighborhood`}
+            name={`neighborhood`}
+            label={t("t.neighborhood")}
+            labelClassName="sr-only"
+            register={register}
+            controlClassName="control"
+            options={neighborhoodKeys}
+            keyPrefix="neighborhoods"
+            errorMessage={fieldMessage(errors?.neighborhood)}
+            inputProps={{
+              onChange: () => clearErrors("neighborhood"),
+            }}
+          />
+        </ViewItem>
       </GridSection>
       <GridSection columns={6}>
         <GridCell span={2}>
