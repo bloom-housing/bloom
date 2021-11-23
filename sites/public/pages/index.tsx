@@ -27,12 +27,7 @@ export default function Home({ latestListings }) {
 
   const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
 
-  // TODO(https://github.com/CityOfDetroit/bloom/issues/712): avoid concatenating translated strings
-  const heroTitle = (
-    <>
-      {t("welcome.title")} {t("region.name")}
-    </>
-  )
+  const heroTitle = <>{t("welcome.title")}</>
 
   const heroInset: React.ReactNode = (
     <div className="hero__inset">
