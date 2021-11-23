@@ -1,12 +1,10 @@
 import { View } from "../../views/base.view"
 
-export enum ListingViewEnum {
+export enum ApplicationViewEnum {
   base = "base",
-  detail = "detail",
-  full = "full",
   partnerList = "partnerList",
 }
 
 export type Views = {
-  [key in ListingViewEnum]?: View
+  [key in ApplicationViewEnum]?: View
 }
