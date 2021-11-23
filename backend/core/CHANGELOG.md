@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.22...@bloom-housing/backend-core@3.0.1-alpha.23) (2021-11-23)
+
+
+### Features
+
+* updates email confirmation for lottery ([#2200](https://github.com/bloom-housing/bloom/issues/2200)) ([1a5e824](https://github.com/bloom-housing/bloom/commit/1a5e824c96d8e23674c32ea92688b9f7255528d3))
+
+
+
+
+
 ## [3.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.21...@bloom-housing/backend-core@3.0.1-alpha.22) (2021-11-23)
 
 
