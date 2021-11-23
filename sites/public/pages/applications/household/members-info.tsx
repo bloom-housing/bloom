@@ -69,6 +69,7 @@ const ApplicationMembersInfo = () => {
                 onClick={() => {
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>

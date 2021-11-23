@@ -141,6 +141,7 @@ const ApplicationMember = () => {
                     error={errors.firstName}
                     errorMessage={t("errors.firstNameError")}
                     register={register}
+                    dataTestId={"app-household-member-first-name"}
                   />
 
                   <Field
@@ -151,6 +152,7 @@ const ApplicationMember = () => {
                     placeholder={t("application.name.middleNameOptional")}
                     defaultValue={member.middleName}
                     register={register}
+                    dataTestId={"app-household-member-middle-name"}
                   />
 
                   <Field
@@ -164,6 +166,7 @@ const ApplicationMember = () => {
                     error={errors.lastName}
                     errorMessage={t("errors.lastNameError")}
                     register={register}
+                    dataTestId={"app-household-member-last-name"}
                   />
                 </fieldset>
               </div>
@@ -197,6 +200,7 @@ const ApplicationMember = () => {
                     error={errors.sameAddress}
                     errorMessage={t("errors.selectOption")}
                     fields={sameAddressOptions}
+                    dataTestId={"app-household-member-same-address"}
                   />
                 </fieldset>
 
@@ -215,6 +219,7 @@ const ApplicationMember = () => {
                       error={errors.address?.street}
                       errorMessage={t("errors.streetError")}
                       register={register}
+                      dataTestId={"app-household-member-address-street"}
                     />
 
                     <Field
@@ -224,6 +229,7 @@ const ApplicationMember = () => {
                       placeholder={t("application.contact.apt")}
                       defaultValue={member.address.street2}
                       register={register}
+                      dataTestId={"app-household-member-address-street2"}
                     />
 
                     <div className="flex max-w-2xl">
@@ -237,6 +243,7 @@ const ApplicationMember = () => {
                         error={errors.address?.city}
                         errorMessage={t("errors.cityError")}
                         register={register}
+                        dataTestId={"app-household-member-address-city"}
                       />
 
                       <Select
@@ -251,6 +258,7 @@ const ApplicationMember = () => {
                         controlClassName="control"
                         options={stateKeys}
                         keyPrefix="states"
+                        dataTestId={"app-household-member-address-state"}
                       />
                     </div>
 
@@ -264,6 +272,7 @@ const ApplicationMember = () => {
                       error={errors.address?.zipCode}
                       errorMessage={t("errors.zipCodeError")}
                       register={register}
+                      dataTestId={"app-household-member-address-zip"}
                     />
                   </fieldset>
                 )}
@@ -285,6 +294,7 @@ const ApplicationMember = () => {
                     error={errors.workInRegion}
                     errorMessage={t("errors.selectOption")}
                     fields={workInRegionOptions}
+                    dataTestId={"app-household-member-work-in-region"}
                   />
                 </fieldset>
 
@@ -303,6 +313,7 @@ const ApplicationMember = () => {
                       error={errors.workAddress?.street}
                       errorMessage={t("errors.streetError")}
                       register={register}
+                      dataTestId={"app-household-member-work-address-street"}
                     />
 
                     <Field
@@ -312,6 +323,7 @@ const ApplicationMember = () => {
                       placeholder={t("application.contact.apt")}
                       defaultValue={member.workAddress.street2}
                       register={register}
+                      dataTestId={"app-household-member-work-address-street2"}
                     />
 
                     <div className="flex max-w-2xl">
@@ -325,6 +337,7 @@ const ApplicationMember = () => {
                         error={errors.workAddress?.city}
                         errorMessage={t("errors.cityError")}
                         register={register}
+                        dataTestId={"app-household-member-work-address-city"}
                       />
 
                       <Select
@@ -339,6 +352,7 @@ const ApplicationMember = () => {
                         controlClassName="control"
                         options={stateKeys}
                         keyPrefix="states"
+                        dataTestId={"app-household-member-work-address-state"}
                       />
                     </div>
 
@@ -352,6 +366,7 @@ const ApplicationMember = () => {
                       error={errors.workAddress?.zipCode}
                       errorMessage={t("errors.zipCodeError")}
                       register={register}
+                      dataTestId={"app-household-member-work-address-zip"}
                     />
                   </fieldset>
                 )}
@@ -369,6 +384,7 @@ const ApplicationMember = () => {
                       defaultValue={member.relationship}
                       ref={register({ required: true })}
                       className="w-full"
+                      data-test-id={"app-household-member-relationship"}
                     >
                       <FormOptions
                         options={relationshipKeys}
@@ -384,12 +400,22 @@ const ApplicationMember = () => {
 
               <div className="form-card__pager">
                 <div className="form-card__pager-row primary">
-                  <Button id="save-member" styleType={AppearanceStyleType.primary}>
+                  <Button
+                    id="save-member"
+                    styleType={AppearanceStyleType.primary}
+                    data-test-id={"app-household-member-save"}
+                  >
                     {saveText}
                   </Button>
                 </div>
                 <div className="form-card__pager-row py-8">
-                  <a id="cancel-add" href="#" className="lined text-tiny" onClick={deleteMember}>
+                  <a
+                    id="cancel-add"
+                    href="#"
+                    className="lined text-tiny"
+                    onClick={deleteMember}
+                    data-test-id={"app-household-member-cancel"}
+                  >
                     {cancelText}
                   </a>
                 </div>

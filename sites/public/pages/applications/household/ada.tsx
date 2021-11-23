@@ -95,6 +95,7 @@ const ApplicationAda = () => {
                     void trigger("none")
                   }, 1)
                 }}
+                data-test-id={"app-ada-mobility"}
               />
               <label htmlFor="mobility" className="font-semibold">
                 {t("application.ada.mobility")}
@@ -114,6 +115,7 @@ const ApplicationAda = () => {
                     void trigger("none")
                   }, 1)
                 }}
+                data-test-id={"app-ada-vision"}
               />
               <label htmlFor="vision" className="font-semibold">
                 {t("application.ada.vision")}
@@ -133,6 +135,7 @@ const ApplicationAda = () => {
                     void trigger("none")
                   }, 1)
                 }}
+                data-test-id={"app-ada-hearing"}
               />
               <label htmlFor="hearing" className="font-semibold">
                 {t("application.ada.hearing")}
@@ -152,6 +155,7 @@ const ApplicationAda = () => {
                       value || getValues("mobility") || getValues("vision") || getValues("hearing"),
                   },
                 })}
+                data-test-id={"app-ada-none"}
                 onChange={(e) => {
                   if (e.target.checked) {
                     setValue("none", true)
@@ -182,6 +186,7 @@ const ApplicationAda = () => {
                   conductor.returnToReview = false
                   conductor.setNavigatedBack(false)
                 }}
+                data-test-id={"app-next-step-button"}
               >
                 {t("t.next")}
               </Button>
