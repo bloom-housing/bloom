@@ -16,7 +16,7 @@ export class seedTranslationEntries1620660845209 implements MigrationInterface {
           FCFS:
             "Applicants will be contacted by the property agent on a first come first serve basis until vacancies are filled.",
           lottery:
-            "The lottery will be held on %{lotteryDate}. Applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
+            "Applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
           noLottery:
             "Applicants will be contacted by the agent in waitlist order until vacancies are filled.",
         },
