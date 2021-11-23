@@ -46,5 +46,5 @@ export const OpenWithOnlyMaxAndOpen = () => {
 }
 
 export const OpenWithOnlyMax = () => {
-  return <Waitlist isWaitlistOpen={true} waitlistMaxSize={10} />
+  return <Waitlist isWaitlistOpen={true} waitlistMaxSize={10} waitlistCurrentSize={null} />
 }

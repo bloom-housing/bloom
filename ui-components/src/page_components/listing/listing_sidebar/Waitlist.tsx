@@ -3,9 +3,9 @@ import { t } from "../../../helpers/translator"
 
 export interface WaitlistProps {
   isWaitlistOpen: boolean
-  waitlistMaxSize?: number
-  waitlistCurrentSize?: number
-  waitlistOpenSpots?: number
+  waitlistMaxSize?: number | null
+  waitlistCurrentSize?: number | null
+  waitlistOpenSpots?: number | null
 }
 
 const WaitlistItem = (props: { className?: string; value: number; text: string }) => (
@@ -24,20 +24,20 @@ const Waitlist = (props: WaitlistProps) => {
       <div>
         <p className="text-tiny text-gray-800 pb-3">{t("listings.waitlist.submitAnApplication")}</p>
         <ul>
-          {props.waitlistCurrentSize !== undefined && (
+          {props.waitlistCurrentSize != null && (
             <WaitlistItem
               value={props.waitlistCurrentSize}
               text={t("listings.waitlist.currentSize")}
             />
           )}
-          {props.waitlistOpenSpots !== undefined && (
+          {props.waitlistOpenSpots != null && (
             <WaitlistItem
               value={props.waitlistOpenSpots}
               text={t("listings.waitlist.openSlots")}
               className={"font-semibold"}
             />
           )}
-          {props.waitlistMaxSize !== undefined && (
+          {props.waitlistMaxSize != null && (
             <WaitlistItem value={props.waitlistMaxSize} text={t("listings.waitlist.finalSize")} />
           )}
         </ul>
