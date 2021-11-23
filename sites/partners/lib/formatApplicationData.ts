@@ -15,7 +15,11 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
-import { mapProgramsToApi, mapApiToProgramsPaperForm } from "@bloom-housing/shared-helpers"
+import {
+  fieldGroupObjectToArray,
+  mapProgramsToApi,
+  mapApiToProgramsPaperForm,
+} from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
   YesNoAnswer,
@@ -139,13 +143,17 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    demographics,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
+
+  const demographics = {
+    ...data.application.demographics,
+    race: fieldGroupObjectToArray(data, "race"),
+  }
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 

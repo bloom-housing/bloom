@@ -41,6 +41,25 @@ export const howDidYouHearCheckboxesOrder = [
   "other",
 ]
 
+export const raceCheckboxesOrder = [
+  "americanIndianAlaskanNative",
+  "asian",
+  "asian-asianIndian",
+  "asian-chinese",
+  "asian-filipino",
+  "asian-korean",
+  "asian-vietnamese",
+  "asian-otherAsian",
+  "blackAfricanAmerican",
+  "nativeHawaiianOtherPacificIslander",
+  "nativeHawaiianOtherPacificIslander-nativeHawaiian",
+  "nativeHawaiianOtherPacificIslander-guamanianOrChamorro",
+  "nativeHawaiianOtherPacificIslander-samoan",
+  "white",
+  "otherMultiracial",
+  "declineToRespond",
+]
+
 export const coliseumApplication: Application = {
   markedAsDuplicate: false,
   ...idDefaults,
@@ -180,10 +199,10 @@ export const coliseumApplication: Application = {
   ],
   demographics: {
     ...idDefaults,
-    race: "white",
+    race: ["race-white"],
     ethnicity: "hispanicLatino",
-    gender: "female",
-    sexualOrientation: "bisexual",
+    gender: "",
+    sexualOrientation: "",
     howDidYouHear: ["alamedaCountyHCDWebsite", "developerWebsite"],
   },
   preferences: [
@@ -393,6 +412,7 @@ export const minimalDataApplication: Application = {
   demographics: {
     ...idDefaults,
     howDidYouHear: [],
+    race: [],
   },
   preferences: [],
   programs: [

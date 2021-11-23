@@ -34,7 +34,7 @@ export type ApplicationTypes = {
   }
   demographics: {
     ethnicity?: string
-    race?: string
+    race?: string[]
     gender?: string
     sexualOrientation?: string
     howDidYouHear: string[]
