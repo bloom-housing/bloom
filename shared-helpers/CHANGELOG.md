@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@3.0.1-alpha.19...@bloom-housing/shared-helpers@3.0.1-alpha.20) (2021-11-23)
+
+
+### Bug Fixes
+
+* remove alameda reference in demographics ([#2209](https://github.com/bloom-housing/bloom/issues/2209)) ([7d5991c](https://github.com/bloom-housing/bloom/commit/7d5991cbf6dbe0b61f2b14d265e87ce3687f743d))
+
+
+
+
+
 ## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@3.0.1-alpha.18...@bloom-housing/shared-helpers@3.0.1-alpha.19) (2021-11-23)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
