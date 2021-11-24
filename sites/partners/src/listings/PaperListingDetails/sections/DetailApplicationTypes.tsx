@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell, MinimalTable } from "@bloom-housing/ui-components"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
+import { getDetailBoolean } from "./helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
