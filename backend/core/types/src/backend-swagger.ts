@@ -1118,8 +1118,6 @@ export class ListingsService {
       view?: string
       /**  */
       orderBy?: OrderByFieldsEnum
-      /**  */
-      jsonpath?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<PaginatedListing> {
@@ -1133,7 +1131,6 @@ export class ListingsService {
         filter: params["filter"],
         view: params["view"],
         orderBy: params["orderBy"],
-        jsonpath: params["jsonpath"],
       }
       let data = null
 
@@ -2664,7 +2661,7 @@ export interface Demographics {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMember {
@@ -3329,7 +3326,7 @@ export interface DemographicsCreate {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMemberCreate {
@@ -3643,7 +3640,7 @@ export interface DemographicsUpdate {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMemberUpdate {

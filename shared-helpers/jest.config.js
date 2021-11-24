@@ -22,6 +22,9 @@ module.exports = {
       tsConfig: "tsconfig.json",
     },
   },
+  moduleNameMapper: {
+    "\\.(scss|css|less)$": "identity-obj-proxy",
+  },
   rootDir: "..",
   roots: ["<rootDir>/shared-helpers"],
   transform: {

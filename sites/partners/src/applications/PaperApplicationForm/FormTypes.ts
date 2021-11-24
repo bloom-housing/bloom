@@ -34,7 +34,7 @@ export type ApplicationTypes = {
   }
   demographics: {
     ethnicity?: string
-    race?: string
+    race?: string[]
     gender?: string
     sexualOrientation?: string
     howDidYouHear: string[]
@@ -62,6 +62,7 @@ export type ApplicationTypes = {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   preferences: Record<string, any>
+  programs: Record<string, string>
 }
 
 export type FormTypes = {

@@ -49,6 +49,9 @@ export const retrieveApplicationConfig = (listing: Listing) => {
         name: "adaHouseholdMembers",
       },
       {
+        name: "programs",
+      },
+      {
         name: "householdChanges",
       },
       {

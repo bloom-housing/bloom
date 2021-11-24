@@ -2,8 +2,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const withTM = require("next-transpile-modules")([
+  "@bloom-housing/shared-helpers",
   "@bloom-housing/ui-components",
   "@bloom-housing/backend-core",
+  "@bloom-housing/shared-helpers",
 ])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",

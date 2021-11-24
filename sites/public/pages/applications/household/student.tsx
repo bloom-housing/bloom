@@ -87,7 +87,7 @@ const ApplicationHouseholdStudent = () => {
             className={`form-card__group field text-lg ${errors.householdStudent ? "error" : ""}`}
           >
             <fieldset>
-              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
                 name="householdStudent"
