@@ -457,15 +457,21 @@ Cypress.Commands.add("submitApplication", (listingName, application, autofill) =
   cy.step12Student(application)
   cy.step13IncomeVouchers(application)
   cy.step14Income(application)
-  if (application.preferences.length > 0) {
-    cy.step15SelectPreferences(application)
-  } else {
-    cy.step16GeneralPool()
-  }
-  cy.step17Demographics(application)
-  cy.step18Summary(application)
-  // TODO: Check values on summary
-  cy.step19TermsAndSubmit(application)
+  cy.window().then((win) => {
+    const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
+    if (listing.listingPreferences.length > 0) {
+      if (application.preferences.length > 0) {
+        cy.step15SelectPreferences(application)
+      } else {
+        cy.step16GeneralPool()
+      }
+    }
+
+    cy.step17Demographics(application)
+    cy.step18Summary(application)
+    // TODO: Check values on summary
+    cy.step19TermsAndSubmit(application)
+  })
 })
 
 Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
