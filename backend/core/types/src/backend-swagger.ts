@@ -4161,6 +4161,9 @@ export interface UserProfileUpdate {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
 }
 
 export interface JurisdictionCreate {
@@ -4862,6 +4865,9 @@ export interface Listing {
   depositMax?: string
 
   /**  */
+  depositHelperText?: string
+
+  /**  */
   disableUnitsAccordion?: boolean
 
   /**  */
@@ -5260,6 +5266,9 @@ export interface ListingCreate {
 
   /**  */
   depositMax?: string
+
+  /**  */
+  depositHelperText?: string
 
   /**  */
   disableUnitsAccordion?: boolean
@@ -5678,6 +5687,9 @@ export interface ListingUpdate {
 
   /**  */
   depositMax?: string
+
+  /**  */
+  depositHelperText?: string
 
   /**  */
   disableUnitsAccordion?: boolean
