@@ -1,8 +1,8 @@
 # Pull Request Template
 
-## Issue
+## Issue Overview
 
-Addresses #issue
+This PR addresses #issue
 
 - [ ] This change addresses the issue in full
 - [ ] This change addresses only certain aspects of the issue
@@ -12,16 +12,6 @@ Addresses #issue
 ## Description
 
 Please include a summary of the change and which issue(s) is addressed. Please also include relevant motivation and context. List any dependencies that are required for this change.
-
-## Type of change
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Prototype/POC (not to merge)
-- [ ] This change is a refactor/addresses technical debt
-- [ ] This change requires a documentation update
-- [ ] This change requires a SQL Script
 
 ## How Can This Be Tested/Reviewed?
 
@@ -42,6 +32,21 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
 - [ ] I have assigned reviewers
-- [ ] I have updated the changelog to include a description of my changes
-- [ ] I have run `yarn generate:client` if I made backend changes
-- [ ] I have exported any new pieces in ui-components
+- [ ] I have run `yarn generate:client` and/or created a migration if I made backend changes that require them
+- [ ] I have exported any new pieces added to ui-components
+- [ ] My commit message(s) is/are polished, and any breaking changes are indicated in the message and are well-described
+- [ ] Commits made across packages purposefully have the same commit message/version change, else are separated into different commits
+
+## Reviewer Notes:
+
+Steps to review a PR:
+
+- Read and understand the issue
+- Review the code itself from a style point of view
+- Pull the changes down locally and test that the acceptance criteria is met
+- Also review the acceptance criteria on the Netlify deploy preview (noting that these do not yet include any backend changes made in the PR)
+- Either explicitly ask a clarifying question, request changes, or approve the PR if there are small remaining changes but the PR is otherwise good to go
+
+## On Merge:
+
+If you have one commit and message, squash. If you need each message to be applied, rebase and merge.

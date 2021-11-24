@@ -11,21 +11,16 @@ import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { InputType } from "../../shared/types/input-type"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingEventType } from "../../listings/types/listing-event-type-enum"
-import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
 import { ListingEventCreateDto } from "../../listings/dto/listing-event.dto"
 import { UnitStatus } from "../../units/types/unit-status-enum"
 import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { UserCreateDto } from "../../auth/dto/user-create.dto"
-
+import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
   return someDate
-}
-
-export function getDefaultAmiChart() {
-  return JSON.parse(JSON.stringify(defaultAmiChart))
 }
 
 export enum PriorityTypes {
@@ -36,292 +31,6 @@ export enum PriorityTypes {
   mobilityHearing = "Mobility and Hearing",
   mobilityVisual = "Mobility and Visual",
   mobilityHearingVisual = "Mobility, Hearing and Visual",
-}
-
-export const defaultAmiChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
-  name: "AlamedaCountyTCAC2021",
-  items: [
-    {
-      percentOfAmi: 80,
-      householdSize: 1,
-      income: 76720,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 2,
-      income: 87680,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 3,
-      income: 98640,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 4,
-      income: 109600,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 5,
-      income: 11840,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 6,
-      income: 127200,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 7,
-      income: 135920,
-    },
-    {
-      percentOfAmi: 80,
-      householdSize: 8,
-      income: 144720,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 1,
-      income: 57540,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 2,
-      income: 65760,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 3,
-      income: 73980,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 4,
-      income: 82200,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 5,
-      income: 88800,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 6,
-      income: 95400,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 7,
-      income: 101940,
-    },
-    {
-      percentOfAmi: 60,
-      householdSize: 8,
-      income: 108540,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 1,
-      income: 47950,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 2,
-      income: 54800,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 3,
-      income: 61650,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 4,
-      income: 68500,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 5,
-      income: 74000,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 6,
-      income: 79500,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 7,
-      income: 84950,
-    },
-    {
-      percentOfAmi: 50,
-      householdSize: 8,
-      income: 90450,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 1,
-      income: 43155,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 2,
-      income: 49320,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 3,
-      income: 55485,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 4,
-      income: 61650,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 5,
-      income: 66600,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 6,
-      income: 71550,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 7,
-      income: 76455,
-    },
-    {
-      percentOfAmi: 45,
-      householdSize: 8,
-      income: 81405,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 1,
-      income: 38360,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 2,
-      income: 43840,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 3,
-      income: 49320,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 4,
-      income: 54800,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 5,
-      income: 59200,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 6,
-      income: 63600,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 7,
-      income: 67960,
-    },
-    {
-      percentOfAmi: 40,
-      householdSize: 8,
-      income: 72360,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 1,
-      income: 28770,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 2,
-      income: 32880,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 3,
-      income: 36990,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 4,
-      income: 41100,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 5,
-      income: 44400,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 6,
-      income: 47700,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 7,
-      income: 50970,
-    },
-    {
-      percentOfAmi: 30,
-      householdSize: 8,
-      income: 54270,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 1,
-      income: 19180,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 2,
-      income: 21920,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 3,
-      income: 24660,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 4,
-      income: 27400,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 5,
-      income: 29600,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 6,
-      income: 31800,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 7,
-      income: 33980,
-    },
-    {
-      percentOfAmi: 20,
-      householdSize: 8,
-      income: 36180,
-    },
-  ],
 }
 
 // Events
@@ -462,19 +171,14 @@ export function getDefaultListing() {
 
 export const defaultListing: ListingSeedType = {
   jurisdictionName: "Alameda",
-  applicationAddress: {
-    city: "San Francisco",
-    state: "CA",
-    street: "548 Market Street",
-    street2: "Suite #59930",
-    zipCode: "94104",
-    latitude: 37.789673,
-    longitude: -122.40151,
-  },
   countyCode: CountyCode.alameda,
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
+  digitalApplication: false,
+  commonDigitalApplication: false,
+  paperApplication: false,
+  referralOpportunity: false,
   applicationDueDate: getDate(10),
   applicationDueTime: null,
   applicationFee: "20",
@@ -535,8 +239,10 @@ export const defaultListing: ListingSeedType = {
 }
 
 // Preferences
-export function getLiveWorkPreference() {
-  return JSON.parse(JSON.stringify(liveWorkPreference))
+export function getLiveWorkPreference(jurisdictionName) {
+  const preference = { ...liveWorkPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const liveWorkPreference: PreferenceSeedType = {
@@ -563,8 +269,10 @@ export const liveWorkPreference: PreferenceSeedType = {
     ],
   },
 }
-export function getDisplaceePreference() {
-  return JSON.parse(JSON.stringify(displaceePreference))
+export function getDisplaceePreference(jurisdictionName) {
+  const preference = { ...displaceePreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const displaceePreference: PreferenceSeedType = {
@@ -606,8 +314,10 @@ export const displaceePreference: PreferenceSeedType = {
   },
 }
 
-export function getPbvPreference() {
-  return JSON.parse(JSON.stringify(pbvPreference))
+export function getPbvPreference(jurisdictionName) {
+  const preference = { ...pbvPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const pbvPreference: PreferenceSeedType = {
@@ -654,8 +364,10 @@ export const pbvPreference: PreferenceSeedType = {
   },
 }
 
-export function getHopwaPreference() {
-  return JSON.parse(JSON.stringify(hopwaPreference))
+export function getHopwaPreference(jurisdictionName) {
+  const preference = { ...hopwaPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const hopwaPreference: PreferenceSeedType = {
@@ -692,20 +404,24 @@ export function getServedInMilitaryProgram() {
 }
 
 export const servedInMilitaryProgram: ProgramSeedType = {
-  title: "Have you or anyone in your household served in the US military?",
-  subtitle: "",
-  description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+  title: "Veteran",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
+  description: "Have you or anyone in your household served in the US military?",
   formMetadata: {
     key: "servedInMilitary",
     options: [
       {
         key: "servedInMilitary",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -718,21 +434,25 @@ export function getTayProgram() {
 }
 
 export const tayProgram: ProgramSeedType = {
-  title:
-    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
-  subtitle: "",
+  title: "Transition Age Youth",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+    "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
   formMetadata: {
     key: "tay",
     options: [
       {
         key: "tay",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -740,25 +460,30 @@ export const tayProgram: ProgramSeedType = {
   },
 }
 
-export function getDisabilityOrMentalIlnessProgram() {
-  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+export function getDisabilityOrMentalIllnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
 }
 
-export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
-  title: "Do you or anyone in your household have a developmental disability or mental illness?",
-  subtitle: "",
+export const disabilityOrMentalIllnessProgram: ProgramSeedType = {
+  title: "Developmental Disability",
+  subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
-    "Should your application be chosen, be prepared to provide supporting documentation.",
+    "Do you or anyone in your household have a developmental disability or mental illness?",
   formMetadata: {
     key: "disabilityOrMentalIllness",
     options: [
       {
         key: "disabilityOrMentalIllness",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -771,23 +496,30 @@ export function getHousingSituationProgram() {
 }
 
 export const housingSituationProgram: ProgramSeedType = {
-  title: "Thinking about the past 30 days, do either of these describe your housing situation?",
+  title: "Housing Situation",
   subtitle: "",
-  description: "",
+  description:
+    "Thinking about the past 30 days, do either of these describe your housing situation?",
   formMetadata: {
     key: "housingSituation",
     options: [
       {
         key: "notPermanent",
+        description: true,
         extraData: [],
       },
       {
         key: "homeless",
+        description: true,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },

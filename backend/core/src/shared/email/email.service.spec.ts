@@ -28,6 +28,7 @@ const listing = Object.assign({}, ArcherListing)
 const application = {
   applicant: { emailAddress: "test@xample.com", firstName: "Test", lastName: "User" },
   id: "abcdefg",
+  confirmationCode: "abc123",
 }
 let sendMock
 
@@ -189,7 +190,7 @@ describe("EmailService", () => {
         /http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/
       )
       // contains application id
-      expect(sendMock.mock.calls[0][0].html).toMatch(/abcdefg/)
+      expect(sendMock.mock.calls[0][0].html).toMatch(/abc123/)
     })
   })
 

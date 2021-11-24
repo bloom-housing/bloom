@@ -144,6 +144,7 @@
       "agency": "Agency if Applicable",
       "adaPriorities": "ADA Priorities Selected",
       "preferences": "Application Preferences",
+      "programs": "Application Programs",
       "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
@@ -378,13 +379,71 @@
         "legend": "Housing vouchers, nontaxable income or rental subsidies"
       }
     },
+    "programs": {
+      "servedInMilitary": {
+        "summary": "Veteran of the US Military",
+        "servedInMilitary": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "tay": {
+        "summary": "Transition Age Youth (TAY)",
+        "tay": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "disabilityOrMentalIllness": {
+        "summary": "People with Developmental Disabilities or Mental Illness",
+        "disabilityOrMentalIllness": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "housingSituation": {
+        "summary": "Temporarily Housed or Homeless",
+        "notPermanent": {
+          "label": "I have somewhere to stay, but it isn't permanent",
+          "description": "Includes staying with friends or family, living in a motel / hotel, or living in a medical or other facility and those who have received an eviction notice or will imminently lose their current residence"
+        },
+        "homeless": {
+          "label": "I'm homeless",
+          "description": "Includes living outside, or in your car, or staying at a shelter, or in a motel / hotel paid for with an emergency voucher"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      }
+    },
     "preferences": {
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",
       "selectBelow": "If you have one of these housing preferences, select it below:",
       "dontWant": "I don't want these preferences",
+      "dontWantSingular": "I don't want this preference",
       "stillHaveOpportunity": "You'll still have the opportunity to claim other preferences.",
       "youHaveClaimed": "You have claimed:",
+      "displacedHousehold": {
+        "title": "Displaced Household",
+        "displacedHousehold": {
+          "label": "Displaced Household Preference",
+          "description": ""
+        }
+      },
+      "neighborhoodResidence": {
+        "title": "Neighborhood Residents",
+        "neighborhoodResidence": {
+          "label": "Neighborhood Residents Preference",
+          "description": ""
+        }
+      },
       "liveWork": {
         "title": "Live or Work in %{county} County?",
         "live": {
@@ -445,6 +504,14 @@
       "PBV": {
         "title": "%{county} copy goes here…",
         "residency": {
+          "label": "Residency",
+          "description": "%{county} copy goes here…"
+        },
+        "generalResidency": {
+          "label": "Residency",
+          "description": "%{county} copy goes here…"
+        },
+        "residencyNoColiseum": {
           "label": "Residency",
           "description": "%{county} copy goes here…"
         },
@@ -600,15 +667,28 @@
         },
         "raceOptions": {
           "americanIndianAlaskanNative": "American Indian / Alaskan Native",
-          "asian": "Asian",
-          "blackAfricanAmerican": "Black / African American",
-          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
-          "white": "White",
           "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
           "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asian": "Asian",
           "asianAndWhite": "Asian and White",
+          "asian-asianIndian": "Asian Indian",
+          "asian-otherAsian": "Other Asian",
+          "blackAfricanAmerican": "Black / African American",
           "blackAfricanAmericanAndWhite": "Black / African American and White",
-          "otherMutliracial": "Other / Mutliracial"
+          "asian-chinese": "Chinese",
+          "declineToRespond": "Decline to Respond",
+          "asian-filipino": "Filipino",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guamanian or Chamorro",
+          "asian-japanese": "Japanese",
+          "asian-korean": "Korean",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Native Hawaiian",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "otherMultiracial": "Other / Multiracial",
+          "otherMutliracial": "Other / Mutliracial",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Other Pacific Islander",
+          "nativeHawaiianOtherPacificIslander-samoan": "Samoan",
+          "asian-vietnamese": "Vietnamese",
+          "white": "White"
         },
         "genderOptions": {
           "female": "Female",
@@ -626,7 +706,7 @@
           "notListed": "Not Listed"
         },
         "howDidYouHearOptions": {
-          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "jurisdictionWebsite": "Alameda County HCD Website",
           "developerWebsite": "Developer Website",
           "flyer": "Flyer",
           "emailAlert": "Email Alert",
@@ -703,14 +783,20 @@
     "administrator": "Administrator",
     "partner": "Partner",
     "addUser": "Add User",
+    "editUser": "Edit User",
     "userDetails": "User Details",
     "allListings": "All listings",
     "inviteSent": "Invite sent",
+    "confirmationSent": "Confirmation sent",
     "addPassword": "Add a Password",
     "needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
     "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
     "confirmAccount": "Confirm Acount",
-    "accountConfirmed": "Account confirmed"
+    "accountConfirmed": "Account confirmed",
+    "resendInvite": "Resend Invite",
+    "userUpdated": "User updated",
+    "userDeleted": "User deleted",
+    "doYouWantDeleteUser": "Do you really want to delete this user?"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
@@ -1081,6 +1167,7 @@
       "communityType": "Community Type",
       "communityTypeSubtitle": "Are there any requirements that applicants need to meet?",
       "costsNotIncluded": "Costs Not Included",
+      "depositHelperText": "Deposit Helper Text",
       "eligibilitySubtitle": "Income, occupancy, preferences, and subsidies",
       "eligibilityTitle": "Eligibility",
       "featuresSubtitle": "Amenities, unit details and additional fees",
@@ -1108,6 +1195,7 @@
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
     "seeUnitInformation": "See Unit Information",
+    "selectionCriteria": "Selection Criteria",
     "selectPreferences": "Select Preferences",
     "showClosedListings": "Show Closed Listings",
     "singleRoomOccupancy": "Single Room Occupancy",
@@ -1412,6 +1500,8 @@
     "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
+    "preferNotToSay": "Prefer not to say",
+    "pleaseSelectYesNo": "Please select yes or no.",
     "pm": "PM",
     "post": "Post",
     "preferences": "Preferences",

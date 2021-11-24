@@ -36,8 +36,8 @@ import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
-import { UserQueryFilter } from "../filters/user-query-filter"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { UserQueryFilter } from "../filters/user-query-filter"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {

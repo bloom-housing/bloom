@@ -2,52 +2,28 @@ describe("applications/household/ada", function () {
   const route = "/applications/household/ada"
 
   beforeEach(() => {
-    cy.loadConfig()
-    cy.fixture("applications/ada.json").as("data")
     cy.visit(route)
   })
 
-  it("Should render form", function () {
+  it("should render ada sub-form", function () {
     cy.get("form").should("be.visible")
     cy.location("pathname").should("include", route)
   })
 
-  it("Should display initial form errors", function () {
+  it("should require form input", function () {
     cy.goNext()
-
     cy.checkErrorAlert("be.visible")
-
-    cy.getByID("accessibilityCheckboxGroupError").should("be.visible").and("not.to.be.empty")
+    cy.location("pathname").should("include", route)
   })
 
-  it("Should uncheck all checkboxes when 'No' is selected", function () {
-    cy.getByID("mobility").check()
-    cy.getByID("vision").check()
-    cy.getByID("hearing").check()
+  it("should uncheck all other checkboxes when 'No' is selected", function () {
+    cy.get("[data-test-id=app-ada-mobility]").check()
+    cy.get("[data-test-id=app-ada-vision]").check()
+    cy.get("[data-test-id=app-ada-hearing]").check()
 
-    cy.getByID("none").check()
-
-    cy.getByID("mobility").should("not.be.checked")
-    cy.getByID("vision").should("not.be.checked")
-    cy.getByID("hearing").should("not.be.checked")
-  })
-
-  it("Should save form values and redirect to the next step", function () {
-    cy.getByID("mobility").check()
-    cy.getByID("vision").check()
-    cy.getByID("hearing").check()
-
-    cy.goNext()
-
-    cy.checkErrorAlert("not.exist")
-    cy.checkErrorMessages("not.exist")
-
-    cy.isNextRouteValid("adaHouseholdMembers")
-
-    cy.getSubmissionContext().its("accessibility").should("deep.nested.include", {
-      mobility: this.data["mobility"],
-      vision: this.data["vision"],
-      hearing: this.data["hearing"],
-    })
+    cy.get("[data-test-id=app-ada-none]").check()
+    cy.get("[data-test-id=app-ada-mobility]").should("not.be.checked")
+    cy.get("[data-test-id=app-ada-vision]").should("not.be.checked")
+    cy.get("[data-test-id=app-ada-hearing]").should("not.be.checked")
   })
 })

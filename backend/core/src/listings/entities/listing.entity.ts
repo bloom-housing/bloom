@@ -96,25 +96,25 @@ class Listing extends BaseEntity {
   }
 
   // booleans to make dealing with different application methods easier to parse
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   digitalApplication?: boolean
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   commonDigitalApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   paperApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -180,13 +180,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationOrganization?: string | null
-
-  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  applicationAddress?: Address | null
 
   @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
@@ -283,6 +276,12 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   depositMax?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  depositHelperText?: string | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()

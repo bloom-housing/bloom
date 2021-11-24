@@ -15,7 +15,7 @@ const DetailCommunityType = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("listings.reservedCommunityType")}>
+          <ViewItem id="reservedCommunityType" label={t("listings.reservedCommunityType")}>
             {getDetailFieldString(
               listing.reservedCommunityType
                 ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
@@ -26,7 +26,10 @@ const DetailCommunityType = () => {
       </GridSection>
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={t("listings.reservedCommunityDescription")}>
+          <ViewItem
+            id="reservedCommunityDescription"
+            label={t("listings.reservedCommunityDescription")}
+          >
             {getDetailFieldString(listing.reservedCommunityDescription)}
           </ViewItem>
         </GridCell>

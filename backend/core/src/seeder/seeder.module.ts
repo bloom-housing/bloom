@@ -27,7 +27,7 @@ import { ListingDefaultNoPreferenceSeed } from "../seeds/listings/listing-defaul
 import { Preference } from "../preferences/entities/preference.entity"
 import { ListingDefaultFCFSSeed } from "../seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultOpenSoonSeed } from "../seeds/listings/listing-default-open-soon"
-import { ListingTritonSeed } from "../seeds/listings/listing-triton-seed"
+import { ListingTritonSeed, ListingTritonSeedDetroit } from "../seeds/listings/listing-triton-seed"
 import { ListingDefaultBmrChartSeed } from "../seeds/listings/listing-default-bmr-chart-seed"
 import { ApplicationMethod } from "../application-methods/entities/application-method.entity"
 import { PaperApplication } from "../paper-applications/entities/paper-application.entity"
@@ -41,6 +41,12 @@ import { ListingDefaultMissingAMI } from "../seeds/listings/listing-default-miss
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Program } from "../program/entities/program.entity"
+import { AmiChartDefaultSeed } from "../seeds/ami-charts/default-ami-chart"
+import { AmiDefaultMissingAMI } from "../seeds/ami-charts/missing-household-ami-levels"
+import { AmiDefaultTriton } from "../seeds/ami-charts/triton-ami-chart"
+import { AmiDefaultTritonDetroit } from "../seeds/ami-charts/triton-ami-chart-detroit"
+import { AmiDefaultSanJose } from "../seeds/ami-charts/default-ami-chart-san-jose"
+import { AmiDefaultSanMateo } from "../seeds/ami-charts/default-ami-chart-san-mateo"
 
 @Module({})
 export class SeederModule {
@@ -99,6 +105,13 @@ export class SeederModule {
         ListingDefaultMultipleAMIAndPercentages,
         ListingDefaultMissingAMI,
         ListingDefaultSanJoseSeed,
+        ListingTritonSeedDetroit,
+        AmiChartDefaultSeed,
+        AmiDefaultMissingAMI,
+        AmiDefaultTriton,
+        AmiDefaultTritonDetroit,
+        AmiDefaultSanJose,
+        AmiDefaultSanMateo,
       ],
     }
   }

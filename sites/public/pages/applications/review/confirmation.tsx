@@ -40,7 +40,11 @@ const ApplicationConfirmation = () => {
             {t("application.review.confirmation.lotteryNumber")}
           </h3>
 
-          <p id="confirmationCode" className="font-serif text-3xl my-1">
+          <p
+            id="confirmationCode"
+            className="font-serif text-3xl my-1"
+            data-test-id={"app-confirmation-id"}
+          >
             {application.confirmationCode || application.id}
           </p>
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
@@ -94,6 +98,7 @@ const ApplicationConfirmation = () => {
                 onClick={() => {
                   void router.push("/create-account")
                 }}
+                data-test-id={"app-confirmation-create-account"}
               >
                 {t("account.createAccount")}
               </Button>
@@ -101,19 +106,19 @@ const ApplicationConfirmation = () => {
           )}
 
           <div className="form-card__pager-row py-6">
-            <a className="lined text-tiny" href="/">
+            <a className="lined text-tiny" href="/" data-test-id={"app-confirmation-done"}>
               {t("application.review.confirmation.imdone")}
             </a>
           </div>
 
           <div className="form-card__pager-row py-6">
-            <Link href="/listings">
+            <Link href="/listings" data-test-id={"app-confirmation-browse"}>
               <a className="lined text-tiny">{t("application.review.confirmation.browseMore")}</a>
             </Link>
           </div>
 
           <div className="form-card__pager-row py-6 border-t">
-            <Link href="/applications/view">
+            <Link href="/applications/view" data-test-id={"app-confirmation-print"}>
               <a className="lined text-tiny">{t("application.review.confirmation.print")}</a>
             </Link>
           </div>

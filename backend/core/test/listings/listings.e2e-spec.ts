@@ -1,6 +1,5 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
 import supertest from "supertest"
 import { ListingsModule } from "../../src/listings/listings.module"
 import { applicationSetup } from "../../src/app.module"
@@ -20,6 +19,7 @@ import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { Program } from "../../src/program/entities/program.entity"
+import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
@@ -82,36 +82,13 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const queryParams = {
-      limit: 12,
+      limit: 13,
       page: 2,
       view: "base",
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toEqual(1)
-  })
-
-  // TODO: replace jsonpath with SQL-level filtering
-  it("should return only the specified listings", async () => {
-    const query =
-      "/?limit=all&jsonpath=%24%5B%3F%28%40.applicationAddress.city%3D%3D%22Foster%20City%22%29%5D"
-    const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.length).toEqual(1)
-    expect(res.body.items[0].applicationAddress.city).toEqual("Foster City")
-  })
-
-  // TODO: replace jsonpath with SQL-level filtering
-  it("shouldn't return any listings for incorrect query", async () => {
-    const query = "/?jsonpath=%24%5B%3F(%40.applicationNONSENSE.argh%3D%3D%22San+Jose%22)%5D"
-    const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.length).toEqual(0)
-  })
-
-  // TODO: replace jsonpath with SQL-level filtering
-  it("should return only active listings", async () => {
-    const query = "/?limit=all&jsonpath=%24%5B%3F%28%40.status%3D%3D%22active%22%29%5D"
-    const res = await supertest(app.getHttpServer()).get(`/listings${query}`).expect(200)
-    expect(res.body.items.map((listing) => listing.id).length).toBeGreaterThan(0)
   })
 
   it("should return listings with matching zipcodes", async () => {
@@ -132,7 +109,6 @@ describe("Listings", () => {
   it("should return listings with matching Alameda jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
     const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
-    console.log("alameda = ", alameda)
     const queryParams = {
       limit: "all",
       filter: [
@@ -145,7 +121,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(12)
+    expect(res.body.items.length).toBe(13)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
@@ -200,6 +176,7 @@ describe("Listings", () => {
       .put(`/listings/${listing.id}`)
       .send(listing)
       .set(...setAuthorization(adminAccessToken))
+      .expect(200)
     const modifiedListing: ListingDto = putResponse.body
     expect(modifiedListing.amenities).toBe(amenitiesValue)
     expect(modifiedListing.units[0].maxOccupancy).toBe(oldOccupancy + 1)
@@ -321,7 +298,9 @@ describe("Listings", () => {
     const secondListing = listings[1]
     expect(secondListing.name).toBe("Test: Triton")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Default, No Preferences")
+    expect(thirdListing.name).toBe("Test: Triton")
+    const fourthListing = listings[3]
+    expect(fourthListing.name).toBe("Test: Default, No Preferences")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)

@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
-import jp from "jsonpath"
 import { Listing } from "./entities/listing.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
@@ -43,6 +42,7 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
             "listings.applicationOpenDate": "DESC",
+            "listings.id": "ASC",
           }
         default:
           throw new HttpException(
@@ -110,11 +110,6 @@ export class ListingsService {
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
       totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
-    }
-
-    // TODO(https://github.com/CityOfDetroit/bloom/issues/135): Decide whether to remove jsonpath
-    if (params.jsonpath) {
-      listings = jp.query(listings, params.jsonpath)
     }
 
     // There is a bug in nestjs-typeorm-paginate's handling of complex, nested

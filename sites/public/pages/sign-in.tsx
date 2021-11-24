@@ -71,6 +71,7 @@ const SignIn = () => {
               error={errors.email}
               errorMessage="Please enter your login email"
               register={register}
+              dataTestId="sign-in-email-field"
             />
 
             <aside className="float-right text-tiny font-semibold">
@@ -88,10 +89,13 @@ const SignIn = () => {
               errorMessage="Please enter your login password"
               register={register}
               type="password"
+              dataTestId="sign-in-password-field"
             />
 
             <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary}>Sign In</Button>
+              <Button styleType={AppearanceStyleType.primary} data-test-id="sign-in-button">
+                Sign In
+              </Button>
             </div>
           </Form>
         </div>

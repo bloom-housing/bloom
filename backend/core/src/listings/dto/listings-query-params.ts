@@ -52,13 +52,4 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })
   orderBy?: OrderByFieldsEnum
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  jsonpath?: string
 }

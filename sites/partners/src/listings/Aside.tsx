@@ -103,6 +103,7 @@ const Aside = ({
       elements.push(
         <GridCell key="btn-publish">
           <Button
+            id="publishButton"
             styleType={AppearanceStyleType.success}
             type="button"
             fullWidth
@@ -143,6 +144,7 @@ const Aside = ({
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              id="publishButton"
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
@@ -158,7 +160,7 @@ const Aside = ({
 
       if (listing.status === ListingStatus.active) {
         elements.push(
-          <div className="grid grid-cols-2 gap-2" key="btn-close-unpublish">
+          <div className="grid gap-2" key="btn-close-unpublish">
             <Button
               type="button"
               styleType={AppearanceStyleType.secondary}

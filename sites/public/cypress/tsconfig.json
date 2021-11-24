@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "strict": true,
-    // "baseUrl": "../../../node_modules",
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "allowJs": true,
+    "types": ["cypress"],
+    "target": "es5"
   },
+  "exclude": ["../node_modules"],
   "include": ["**/*.ts"]
 }

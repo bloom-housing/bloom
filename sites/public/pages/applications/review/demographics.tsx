@@ -18,9 +18,8 @@ import { useForm } from "react-hook-form"
 import {
   ethnicityKeys,
   raceKeys,
-  genderKeys,
-  sexualOrientation,
   howDidYouHear,
+  fieldGroupObjectToArray,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -35,21 +34,17 @@ const ApplicationDemographics = () => {
     defaultValues: {
       ethnicity: application.demographics.ethnicity,
       race: application.demographics.race,
-      gender: application.demographics.gender,
-      sexualOrientation: application.demographics.sexualOrientation,
     },
   })
 
   const onSubmit = (data) => {
-    const { ethnicity, race, gender, sexualOrientation, howDidYouHear } = data
-
     conductor.currentStep.save({
       demographics: {
-        ethnicity,
-        race,
-        gender,
-        sexualOrientation,
-        howDidYouHear,
+        ethnicity: data.ethnicity,
+        gender: "",
+        sexualOrientation: "",
+        howDidYouHear: data.howDidYouHear,
+        race: fieldGroupObjectToArray(data, "race"),
       },
     })
     conductor.routeToNextOrReturnUrl()
@@ -59,7 +54,7 @@ const ApplicationDemographics = () => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
-      defaultChecked: application.demographics.howDidYouHear.includes(item.id),
+      defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
       register,
     }))
   }, [register, application])
@@ -89,57 +84,45 @@ const ApplicationDemographics = () => {
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
-            <Select
-              id="ethnicity"
-              name="ethnicity"
-              label={t("application.review.demographics.ethnicityLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={ethnicityKeys}
-              keyPrefix="application.review.demographics.ethnicityOptions"
-            />
-
-            <Select
-              id="race"
-              name="race"
-              label={t("application.review.demographics.raceLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={raceKeys}
-              keyPrefix="application.review.demographics.raceOptions"
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <Select
-              id="gender"
-              name="gender"
-              label={t("application.review.demographics.genderLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={genderKeys}
-              keyPrefix="application.review.demographics.genderOptions"
-            />
-          </div>
-
-          <div className="form-card__group border-b">
-            <Select
-              id="sexualOrientation"
-              name="sexualOrientation"
-              label={t("application.review.demographics.sexualOrientationLabel")}
-              placeholder={t("t.selectOne")}
-              register={register}
-              labelClassName="field-label--caps mb-3"
-              controlClassName="control"
-              options={sexualOrientation}
-              keyPrefix="application.review.demographics.sexualOrientationOptions"
-            />
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("application.review.demographics.raceLabel")}
+              </legend>
+              <FieldGroup
+                name="race"
+                fields={Object.keys(raceKeys).map((rootKey) => ({
+                  id: rootKey,
+                  label: t(`application.review.demographics.raceOptions.${rootKey}`),
+                  value: rootKey,
+                  additionalText: rootKey.indexOf("other") >= 0,
+                  defaultChecked: application[`race-${rootKey}`],
+                  subFields: raceKeys[rootKey].map((subKey) => ({
+                    id: subKey,
+                    label: t(`application.review.demographics.raceOptions.${subKey}`),
+                    value: subKey,
+                    defaultChecked: application[`race-${subKey}`],
+                    additionalText: subKey.indexOf("other") >= 0,
+                  })),
+                }))}
+                type="checkbox"
+                dataTestId={"app-demographics-race"}
+                register={register}
+              />
+            </fieldset>
+            <div className={"pt-4"}>
+              <Select
+                id="ethnicity"
+                name="ethnicity"
+                label={t("application.review.demographics.ethnicityLabel")}
+                placeholder={t("t.selectOne")}
+                register={register}
+                labelClassName="field-label--caps mb-3"
+                controlClassName="control"
+                options={ethnicityKeys}
+                keyPrefix="application.review.demographics.ethnicityOptions"
+                dataTestId={"app-demographics-ethnicity"}
+              />
+            </div>
           </div>
 
           <div className="form-card__group is-borderless">
@@ -152,21 +135,18 @@ const ApplicationDemographics = () => {
                 name="howDidYouHear"
                 fields={howDidYouHearOptions}
                 register={register}
+                dataTestId={"app-demographics-how-did-you-hear"}
               />
             </fieldset>
           </div>
 
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary}>Next</Button>
+              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-next-step-button"}>
+                {t("t.next")}
+              </Button>
             </div>
           </div>
-
-          {/* <div className="p-8 text-center">
-            <Link href="/">
-              <a className="lined text-tiny">{t("application.form.general.saveAndFinishLater")}</a>
-            </Link>
-          </div> */}
         </Form>
       </FormCard>
     </FormsLayout>
