@@ -27,6 +27,7 @@ import { DetailsAlternateContact } from "../../../src/applications/PaperApplicat
 import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
 import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
 import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
+import { DetailsPrograms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrograms"
 import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
@@ -140,6 +141,8 @@ export default function ApplicationsList() {
                 <DetailsHouseholdDetails />
 
                 <DetailsPreferences listingId={application?.listing?.id} />
+
+                <DetailsPrograms listingId={application?.listing?.id} />
 
                 <DetailsHouseholdIncome />
 
