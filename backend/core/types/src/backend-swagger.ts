@@ -1757,6 +1757,116 @@ export class PropertyGroupsService {
   }
 }
 
+export class ProgramsService {
+  /**
+   * List programs
+   */
+  list(
+    params: {
+      /**  */
+      filter?: ProgramsFilterParams[]
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program[]> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs"
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+      configs.params = { filter: params["filter"] }
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Create program
+   */
+  create(
+    params: {
+      /** requestBody */
+      body?: ProgramCreate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Update program
+   */
+  update(
+    params: {
+      /** requestBody */
+      body?: ProgramUpdate
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get program by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      programId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Program> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+      url = url.replace("{programId}", params["programId"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete program by id
+   */
+  delete(
+    params: {
+      /**  */
+      programId: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/programs/{programId}"
+      url = url.replace("{programId}", params["programId"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class ReservedCommunityTypesService {
   /**
    * List reservedCommunityTypes
@@ -5829,37 +5939,6 @@ export interface PreferenceUpdate {
   id: string
 }
 
-export interface ProgramCreate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-}
-
-export interface ProgramUpdate {
-  /**  */
-  title?: string
-
-  /**  */
-  subtitle?: string
-
-  /**  */
-  description?: string
-
-  /**  */
-  formMetadata?: FormMetadata
-
-  /**  */
-  id: string
-}
-
 export interface Property {
   /**  */
   units: Unit[]
@@ -6050,6 +6129,45 @@ export interface PropertyGroupUpdate {
 
   /**  */
   properties: Id[]
+
+  /**  */
+  id: string
+}
+
+export interface ProgramsFilterParams {
+  /**  */
+  $comparison: EnumProgramsFilterParamsComparison
+
+  /**  */
+  jurisdiction?: string
+}
+
+export interface ProgramCreate {
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
+}
+
+export interface ProgramUpdate {
+  /**  */
+  title?: string
+
+  /**  */
+  subtitle?: string
+
+  /**  */
+  description?: string
+
+  /**  */
+  formMetadata?: FormMetadata
 
   /**  */
   id: string
@@ -6309,6 +6427,13 @@ export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
 export enum EnumPreferencesFilterParamsComparison {
+  "=" = "=",
+  "<>" = "<>",
+  "IN" = "IN",
+  ">=" = ">=",
+  "NA" = "NA",
+}
+export enum EnumProgramsFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",

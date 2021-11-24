@@ -6,6 +6,10 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "private": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect=9231' next -p ${NEXTJS_PORT:-3001}",
     "build": "next build",

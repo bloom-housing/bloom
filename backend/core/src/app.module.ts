@@ -94,6 +94,7 @@ export class AppModule {
         ProgramsModule,
         PropertiesModule,
         PropertyGroupsModule,
+        ProgramsModule,
         ReservedCommunityTypesModule,
         SharedModule,
         TranslationsModule,

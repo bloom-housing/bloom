@@ -8,6 +8,7 @@ import {
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
+  EnumProgramsFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -203,7 +204,7 @@ export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
   const fetcher = () => amiChartsService.list({ jurisdictionId: jurisdiction })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${jurisdiction}`, fetcher)
 
   return {
     data,
@@ -291,6 +292,43 @@ export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   }
 }
 
+export function useProgramList() {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () => programsService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useJurisdictionalProgramList(jurisdictionId: string) {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () =>
+    programsService.list({
+      filter: [
+        {
+          $comparison: EnumProgramsFilterParamsComparison["="],
+          jurisdiction: jurisdictionId,
+        },
+      ],
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/programs/${jurisdictionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()
@@ -315,12 +353,13 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
-      filter: [
-        {
-          isPartner: true,
-          $comparison: EnumUserFilterParamsComparison["="],
-        },
-      ],
+      // TODO: temporary disabled, because it occurs an issue with data fetching (501 - Filter Not Implemented)
+      // filter: [
+      //   {
+      //     isPartner: true,
+      //     $comparison: EnumUserFilterParamsComparison["="],
+      //   },
+      // ],
     })
 
   const { data, error } = useSWR(

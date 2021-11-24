@@ -236,7 +236,6 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   listingPreferences: ListingPreferenceUpdateDto[]
 
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingProgramUpdateDto)

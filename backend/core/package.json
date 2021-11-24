@@ -1,9 +1,13 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.1-alpha.8",
+  "version": "3.0.1-alpha.23",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
-  "author": "Marcin Jedras <marcin.jedras@exygy.com>",
+  "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {

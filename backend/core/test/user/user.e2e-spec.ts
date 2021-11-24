@@ -24,6 +24,8 @@ import { UserProfileUpdateDto } from "../../src/auth/dto/user-profile.dto"
 import { Language } from "../../src/shared/types/language-enum"
 import { User } from "../../src/auth/entities/user.entity"
 import { EnumUserFilterParamsComparison } from "../../types"
+import { getTestAppBody } from "../lib/get-test-app-body"
+import { Application } from "../../src/applications/entities/application.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -37,6 +39,7 @@ describe("Applications", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let applicationsRepository: Repository<Application>
   let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
   let adminAccessToken: string
@@ -59,7 +62,7 @@ describe("Applications", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Listing, Jurisdiction, User]),
+        TypeOrmModule.forFeature([Listing, Jurisdiction, User, Application]),
         AuthModule,
       ],
     })
@@ -79,6 +82,7 @@ describe("Applications", () => {
         .set(...setAuthorization(user2AccessToken))
     ).body
     listingRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
+    applicationsRepository = moduleRef.get<Repository<Application>>(getRepositoryToken(Application))
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
@@ -571,6 +575,78 @@ describe("Applications", () => {
     expect(res.body.items.map((user) => user.roles.isPartner).every((isPartner) => isPartner)).toBe(
       true
     )
+  })
+
+  it("should get and delete a user by ID", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.id).toBe(user.id)
+    expect(res.body.email).toBe(user.email)
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(404)
+  })
+
+  it("should create and delete a user with existing application by ID", async () => {
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+    const applicationUpdate = getTestAppBody(listing.id)
+    const newApp = await applicationsRepository.save({
+      ...applicationUpdate,
+      user,
+      confirmationCode: "abcdefgh",
+    })
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const application = await applicationsRepository.findOneOrFail({
+      where: { id: (newApp as Application).id },
+      relations: ["user"],
+    })
+
+    expect(application.user).toBe(null)
   })
 
   it("should lower case email of new user", async () => {

@@ -1,6 +1,5 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
 import supertest from "supertest"
 import { ListingsModule } from "../../src/listings/listings.module"
 import { applicationSetup } from "../../src/app.module"
@@ -20,6 +19,7 @@ import { Listing } from "../../src/listings/entities/listing.entity"
 import qs from "qs"
 import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { Program } from "../../src/program/entities/program.entity"
+import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 
@@ -82,7 +82,7 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const queryParams = {
-      limit: 12,
+      limit: 13,
       page: 2,
       view: "base",
     }
@@ -109,7 +109,6 @@ describe("Listings", () => {
   it("should return listings with matching Alameda jurisdiction", async () => {
     const jurisdictions = await jurisdictionsRepository.find()
     const alameda = jurisdictions.find((jurisdiction) => jurisdiction.name === "Alameda")
-    console.log("alameda = ", alameda)
     const queryParams = {
       limit: "all",
       filter: [
@@ -122,7 +121,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(12)
+    expect(res.body.items.length).toBe(13)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
