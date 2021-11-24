@@ -1,12 +1,9 @@
 {
-  //  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["cypress"],
-    "isolatedModules": false,
-    "noEmit": false,
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "esModuleInterop": true
+    "strict": true,
+    "target": "es5",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "cypress-file-upload"]
   },
-  "include": ["./**/*.ts", "../../../node_modules/cypress/types/cypress-global-vars.d.ts"]
+  "include": ["**/*.ts"]
 }

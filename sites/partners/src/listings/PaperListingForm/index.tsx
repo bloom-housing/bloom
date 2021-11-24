@@ -779,6 +779,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            id="publishButtonConfirm"
             type="button"
             styleType={AppearanceStyleType.success}
             onClick={() => {

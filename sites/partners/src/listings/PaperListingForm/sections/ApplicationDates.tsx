@@ -170,6 +170,7 @@ const ApplicationDates = ({
             )}
 
             <Button
+              id="addOpenHouseButton"
               type="button"
               size={AppearanceSizeType.normal}
               onClick={() => setDrawerOpenHouse(true)}

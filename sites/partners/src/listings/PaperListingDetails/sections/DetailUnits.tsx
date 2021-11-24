@@ -54,6 +54,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       inset
     >
       <ViewItem
+        id="unitTypesOrIndividual"
         label={t("listings.unitTypesOrIndividual")}
         children={
           listing.disableUnitsAccordion
@@ -63,7 +64,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       />
 
       {listing.units.length ? (
-        <MinimalTable headers={unitTableHeaders} data={unitTableData} />
+        <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
       ) : (
         <>
           <hr className={"mt-4 mb-4"} />

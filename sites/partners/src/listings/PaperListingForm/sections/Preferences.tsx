@@ -122,6 +122,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
           )}
 
           <Button
+            id="addPreferenceButton"
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => setPreferencesTableDrawer(true)}
@@ -209,6 +210,7 @@ const Preferences = ({ preferences, setPreferences }: PreferencesProps) => {
             : t("listings.selectJurisdiction")}
         </div>
         <Button
+          id="addPreferenceSaveButton"
           type="button"
           className={"mt-4"}
           styleType={AppearanceStyleType.primary}
