@@ -38,6 +38,7 @@ import { Listing10158Seed } from "../seeds/listings/listing-detroit-10158"
 import { Listing10157Seed } from "../seeds/listings/listing-detroit-10157"
 import { Listing10147Seed } from "../seeds/listings/listing-detroit-10147"
 import { Listing10145Seed } from "../seeds/listings/listing-detroit-10145"
+import { Listing10202Seed } from "../seeds/listings/listing-detroit-10202"
 import { ListingTreymoreSeed } from "../seeds/listings/listing-detroit-treymore"
 import { UnitsSummary } from "../units-summary/entities/units-summary.entity"
 import { ListingDefaultMultipleAMI } from "../seeds/listings/listing-default-multiple-ami"
@@ -119,6 +120,7 @@ export class SeederModule {
         Listing10155Seed,
         Listing10159Seed,
         Listing10168Seed,
+        Listing10202Seed,
         ListingTreymoreSeed,
         ListingDefaultMultipleAMI,
         ListingDefaultMultipleAMIAndPercentages,
