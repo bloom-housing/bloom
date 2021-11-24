@@ -6,6 +6,7 @@ import {
   contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
   howDidYouHearCheckboxesOrder,
+  raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
 Cypress.Commands.add("signIn", () => {
@@ -375,17 +376,11 @@ Cypress.Commands.add("step16Demographics", (application) => {
   if (application.demographics.ethnicity) {
     cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
   }
-  if (application.demographics.race) {
-    cy.getByTestId("app-demographics-race").select(application.demographics.race)
-  }
-  if (application.demographics.gender) {
-    cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
-  }
-  if (application.demographics.sexualOrientation) {
-    cy.getByTestId("app-demographics-sexual-orientation").select(
-      application.demographics.sexualOrientation
-    )
-  }
+
+  application.demographics.race.forEach((race) => {
+    const raceIndex = raceCheckboxesOrder.indexOf(race)
+    cy.getByTestId("app-demographics-race").eq(raceIndex).check()
+  })
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
     const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)

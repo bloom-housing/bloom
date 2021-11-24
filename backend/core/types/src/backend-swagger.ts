@@ -2650,7 +2650,7 @@ export interface Demographics {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMember {
@@ -3315,7 +3315,7 @@ export interface DemographicsCreate {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMemberCreate {
@@ -3629,7 +3629,7 @@ export interface DemographicsUpdate {
   howDidYouHear: string[]
 
   /**  */
-  race?: string
+  race?: string[]
 }
 
 export interface HouseholdMemberUpdate {

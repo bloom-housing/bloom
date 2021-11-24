@@ -14,6 +14,7 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
+import { fieldGroupObjectToArray } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
   YesNoAnswer,
@@ -122,13 +123,17 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    demographics,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
+
+  const demographics = {
+    ...data.application.demographics,
+    race: fieldGroupObjectToArray(data, "race"),
+  }
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 

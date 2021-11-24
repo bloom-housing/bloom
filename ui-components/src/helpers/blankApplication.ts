@@ -99,7 +99,7 @@ export const blankApplication = () => {
     preferredUnit: [],
     demographics: {
       ethnicity: "",
-      race: "",
+      race: [],
       gender: "",
       sexualOrientation: "",
       howDidYouHear: [],

@@ -93,7 +93,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     },
     demographics: {
       ethnicity: "",
-      race: "",
+      race: [],
       gender: "",
       sexualOrientation: "",
       howDidYouHear: [],
