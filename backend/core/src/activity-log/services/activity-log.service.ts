@@ -10,7 +10,14 @@ export class ActivityLogService {
     @InjectRepository(ActivityLog)
     private readonly repository: Repository<ActivityLog>
   ) {}
-  public async log(module: string, action: string, recordId: string, user: User) {
-    return await this.repository.save({ module, action, recordId, user })
+
+  public async log(
+    module: string,
+    action: string,
+    recordId: string,
+    user: User,
+    metadata?: string
+  ) {
+    return await this.repository.save({ module, action, recordId, user, metadata })
   }
 }

@@ -9,7 +9,6 @@ import { User } from "../../auth/entities/user.entity"
 export class ActivityLog extends AbstractEntity {
   @Column()
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   module: string
 
   @Column("uuid")
@@ -18,13 +17,15 @@ export class ActivityLog extends AbstractEntity {
 
   @Column()
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   action: string
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn()
   @Expose()
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => User)
   user: User
+
+  @Column({ nullable: true })
+  @Expose()
+  metadata?: string
 }

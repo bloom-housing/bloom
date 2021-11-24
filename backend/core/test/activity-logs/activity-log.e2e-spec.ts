@@ -17,6 +17,8 @@ import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ThrottlerModule } from "@nestjs/throttler"
 import { User } from "../../src/auth/entities/user.entity"
 import { getTestAppBody } from "../lib/get-test-app-body"
+import { ListingsModule } from "../../src/listings/listings.module"
+import { Listing } from "../../src/listings/entities/listing.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -30,6 +32,7 @@ describe("Programs", () => {
   let adminAccessToken: string
   let activityLogsRepository: Repository<ActivityLog>
   let applicationsRepository: Repository<Application>
+  let listingsRepository: Repository<Listing>
 
   beforeAll(async () => {
     /* eslint-enable @typescript-eslint/no-empty-function */
@@ -44,6 +47,7 @@ describe("Programs", () => {
           limit: 2,
           ignoreUserAgents: [/^node-superagent.*$/],
         }),
+        ListingsModule,
       ],
     }).compile()
     app = moduleRef.createNestApplication()
@@ -58,12 +62,13 @@ describe("Programs", () => {
     adminId = (await userRepository.findOne({ email: "admin@example.com" })).id
     activityLogsRepository = app.get<Repository<ActivityLog>>(getRepositoryToken(ActivityLog))
     applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
+    listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
     const listingsRes = await supertest(app.getHttpServer())
       .get("/listings?limit=all&view=full")
       .expect(200)
     const appBody = getTestAppBody(listingsRes.body.items[0].id)
-    const a = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .post(`/applications/submit`)
       .send(appBody)
       .set("jurisdictionName", "Alameda")
@@ -78,7 +83,7 @@ describe("Programs", () => {
     const testApplication = (
       await applicationsRepository.find({ take: 1, relations: ["listing"] })
     )[0]
-    const res = await supertest(app.getHttpServer())
+    await supertest(app.getHttpServer())
       .put(`/applications/${testApplication.id}`)
       .set(...setAuthorization(adminAccessToken))
       .send(testApplication)
@@ -89,6 +94,7 @@ describe("Programs", () => {
     expect(activityLogs[0].user.id).toBe(adminId)
     expect(activityLogs[0].action).toBe(authzActions.update)
     expect(activityLogs[0].module).toBe("application")
+    expect(activityLogs[0].metadata).toBe(null)
   })
 
   it(`should not capture application edit that failed`, async () => {
@@ -105,6 +111,30 @@ describe("Programs", () => {
       .expect(400)
     const activityLogs = await activityLogsRepository.find({ relations: ["user"] })
     expect(activityLogs.length).toBe(0)
+  })
+
+  it(`should capture listing status as activity log metadata`, async () => {
+    const testListing = (await listingsRepository.find({ take: 1 }))[0]
+
+    const listingGetRes = await supertest(app.getHttpServer())
+      .get(`/listings/${testListing.id}`)
+      .expect(200)
+
+    await supertest(app.getHttpServer())
+      .put(`/listings/${testListing.id}`)
+      .send({
+        ...listingGetRes.body,
+      })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const activityLogs = await activityLogsRepository.find({ relations: ["user"] })
+    expect(activityLogs.length).toBe(1)
+    expect(activityLogs[0].recordId).toBe(testListing.id)
+    expect(activityLogs[0].user.id).toBe(adminId)
+    expect(activityLogs[0].action).toBe(authzActions.update)
+    expect(activityLogs[0].module).toBe("listing")
+    expect(activityLogs[0].metadata).toBe(listingGetRes.body.status)
   })
 
   afterAll(async () => {
