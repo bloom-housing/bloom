@@ -14,6 +14,7 @@ import { TranslationsService } from "../../translations/translations.service"
 import { Language } from "../types/language-enum"
 import { JurisdictionResolverService } from "../../jurisdictions/services/jurisdiction-resolver.service"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { ListingReviewOrder } from "../../listings/types/listing-review-order-enum"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -94,7 +95,7 @@ export class EmailService {
     }
 
     if (listing.applicationDueDate) {
-      if (!listing.waitlistMaxSize) {
+      if (listing.reviewOrderType === ListingReviewOrder.lottery) {
         whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
           lotteryDate: listing.applicationDueDate,
         })
