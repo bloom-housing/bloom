@@ -15,7 +15,6 @@ import {
   mapPreferencesToApi,
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
-import { fieldGroupObjectToArray } from "@bloom-housing/shared-helpers"
 import {
   fieldGroupObjectToArray,
   mapProgramsToApi,
