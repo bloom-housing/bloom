@@ -407,7 +407,7 @@ describe("Applications", () => {
     expect(token).toBeDefined()
   })
 
-  it("should allow user to update user profile throguh PUT /userProfile/:id endpoint", async () => {
+  it("should allow user to update user profile through PUT /userProfile/:id endpoint", async () => {
     const userCreateDto: UserCreateDto = {
       password: "Abcdef1!",
       passwordConfirmation: "Abcdef1!",
@@ -448,6 +448,7 @@ describe("Applications", () => {
       ...userCreateDto,
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
+      phoneNumber: "+12025550194",
     }
 
     await supertest(app.getHttpServer())
