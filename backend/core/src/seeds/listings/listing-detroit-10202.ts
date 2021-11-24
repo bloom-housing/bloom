@@ -36,7 +36,7 @@ const mcvListing: ListingSeedType = {
   managementCompany: "Associated Management Co",
   managementWebsite: "associated-management.rentlinx.com/listings",
   name: "River Towers",
-  status: ListingStatus.active,
+  status: ListingStatus.pending,
   image: undefined,
   digitalApplication: undefined,
   paperApplication: undefined,
