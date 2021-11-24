@@ -239,8 +239,10 @@ export const defaultListing: ListingSeedType = {
 }
 
 // Preferences
-export function getLiveWorkPreference() {
-  return JSON.parse(JSON.stringify(liveWorkPreference))
+export function getLiveWorkPreference(jurisdictionName) {
+  const preference = { ...liveWorkPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const liveWorkPreference: PreferenceSeedType = {
@@ -267,8 +269,10 @@ export const liveWorkPreference: PreferenceSeedType = {
     ],
   },
 }
-export function getDisplaceePreference() {
-  return JSON.parse(JSON.stringify(displaceePreference))
+export function getDisplaceePreference(jurisdictionName) {
+  const preference = { ...displaceePreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const displaceePreference: PreferenceSeedType = {
@@ -310,8 +314,10 @@ export const displaceePreference: PreferenceSeedType = {
   },
 }
 
-export function getPbvPreference() {
-  return JSON.parse(JSON.stringify(pbvPreference))
+export function getPbvPreference(jurisdictionName) {
+  const preference = { ...pbvPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const pbvPreference: PreferenceSeedType = {
@@ -358,8 +364,10 @@ export const pbvPreference: PreferenceSeedType = {
   },
 }
 
-export function getHopwaPreference() {
-  return JSON.parse(JSON.stringify(hopwaPreference))
+export function getHopwaPreference(jurisdictionName) {
+  const preference = { ...hopwaPreference }
+  preference.title += ` - ${jurisdictionName}`
+  return preference
 }
 
 export const hopwaPreference: PreferenceSeedType = {

@@ -113,14 +113,14 @@ export class ListingDefaultSeed {
       listingPreferences: [
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
+            title: getLiveWorkPreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 1,
           page: 1,
         },
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getDisplaceePreference().title,
+            title: getDisplaceePreference(alamedaJurisdiction.name).title,
           }),
           ordinal: 2,
           page: 1,
@@ -154,6 +154,7 @@ export class ListingDefaultSeed {
         },
       ],
       jurisdictionName: "Alameda",
+      jurisdiction: alamedaJurisdiction,
     }
 
     return await this.listingRepository.save(listingCreateDto)
