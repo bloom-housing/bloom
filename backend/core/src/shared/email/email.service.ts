@@ -158,7 +158,7 @@ export class EmailService {
       )
     }
 
-    const rentRange = await this.getRentRange(listing)
+    const rentRange = this.getRentRange(listing)
     await this.send(
       user.email,
       "New Listing",
@@ -179,7 +179,7 @@ export class EmailService {
       )
     }
 
-    const rentRange = await this.getRentRange(listing)
+    const rentRange = this.getRentRange(listing)
     await this.send(
       user.email,
       "Update Listing",
