@@ -191,10 +191,10 @@ export class EmailService {
   }
 
   // function to calculate rent - min of all mins and max of all maxs
-  private getRentRange(listing: Listing){
-    const minArray = listing.unitsSummary.map(a => a.monthlyRentMin)
-    const maxArray = listing.unitsSummary.map(a => a.monthlyRentMax)
-    if ((minArray.length == 0) || (maxArray.length == 0)){
+  private getRentRange(listing: Listing) {
+    const minArray = listing.unitsSummary.map((a) => a.monthlyRentMin)
+    const maxArray = listing.unitsSummary.map((a) => a.monthlyRentMax)
+    if (minArray.length == 0 || maxArray.length == 0) {
       return "Call"
     }
     const minRent = "$".concat(String(Math.min(...minArray)))
