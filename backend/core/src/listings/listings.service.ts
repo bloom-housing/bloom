@@ -42,6 +42,7 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
             "listings.applicationOpenDate": "DESC",
+            "listings.id": "ASC",
           }
         default:
           throw new HttpException(

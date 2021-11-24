@@ -299,7 +299,9 @@ describe("Listings", () => {
     const secondListing = listings[1]
     expect(secondListing.name).toBe("Test: Triton")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Default, No Preferences")
+    expect(thirdListing.name).toBe("Test: Triton")
+    const fourthListing = listings[3]
+    expect(fourthListing.name).toBe("Test: Default, No Preferences")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)

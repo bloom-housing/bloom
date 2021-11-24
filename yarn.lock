@@ -3470,40 +3470,57 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/ui-components@^3.0.1-alpha.8":
-  version "3.0.1-alpha.8"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/ui-components/-/ui-components-3.0.1-alpha.8.tgz#92996d01c6e78b398d59d89a68c9ad6820223282"
-  integrity sha512-eDFO8VQu2A58T5hYiqxo30szyqUpMVxsKUPjhbl+BPX+2rgVjCjiq4x47hqGZnnkDu3Kg59qvEZiAxpQvebgew==
+"@bloom-housing/backend-core@^3.0.1-alpha.23":
+  version "3.0.1-alpha.23"
+  resolved "https://registry.yarnpkg.com/@bloom-housing/backend-core/-/backend-core-3.0.1-alpha.23.tgz#fb906e5b8d9137f75c7996a69aeb34e177e9c2ab"
+  integrity sha512-Km7M9oCmYWpdLAQzqjA5vpQUg5x+DEC+5oCKN1lCsjr+SfQkBYP8beXa4K3RnT8ZlDR/5/D6cmkb4Fbqlz3jtA==
   dependencies:
-    "@mapbox/mapbox-sdk" "^0.13.0"
-    "@types/body-scroll-lock" "^2.6.1"
-    "@types/jwt-decode" "^2.2.1"
-    "@types/markdown-to-jsx" "^6.11.2"
-    "@types/node" "^12.12.67"
-    "@types/node-polyglot" "^2.4.1"
-    "@types/react-beautiful-dnd" "^13.1.1"
-    "@types/react-dom" "^16.9.5"
-    "@types/react-text-mask" "^5.4.6"
-    "@types/react-transition-group" "^4.4.0"
-    axios "^0.21.1"
-    body-scroll-lock "^3.1.5"
-    jwt-decode "^2.2.0"
-    markdown-to-jsx "^6.11.4"
+    "@anchan828/nest-sendgrid" "^0.3.25"
+    "@google-cloud/translate" "^6.2.6"
+    "@nestjs/cli" "^7.5.1"
+    "@nestjs/common" "^7.6.18"
+    "@nestjs/config" "^0.5.0"
+    "@nestjs/core" "^7.6.18"
+    "@nestjs/jwt" "^7.1.0"
+    "@nestjs/passport" "^7.1.0"
+    "@nestjs/platform-express" "^7.6.18"
+    "@nestjs/swagger" "4.7.3"
+    "@nestjs/throttler" "^1.1.2"
+    "@nestjs/typeorm" "^7.1.0"
+    "@types/cache-manager" "^3.4.0"
+    async-retry "^1.3.1"
+    axios "^0.21.0"
+    cache-manager "^3.4.0"
+    cache-manager-redis-store "^2.0.0"
+    casbin "^5.1.6"
+    class-transformer "0.3.1"
+    class-validator "^0.12.2"
+    cloudinary "^1.25.2"
+    dayjs "^1.10.7"
+    dotenv "^8.2.0"
+    express "^4.17.1"
+    handlebars "^4.7.6"
+    ioredis "^4.24.4"
+    joi "^17.3.0"
+    jwt-simple "^0.5.6"
     moment "^2.29.1"
     nanoid "^3.1.12"
-    react "^17.0.2"
-    react-accessible-accordion "^3.3.5"
-    react-beautiful-dnd "^13.1.0"
-    react-dom "^17.0.2"
-    react-dropzone "^11.3.2"
-    react-focus-lock "^2.5.2"
-    react-map-gl "^6.1.16"
-    react-media "^1.10.0"
-    react-tabs "^3.2.2"
-    react-text-mask "^5.4.3"
-    react-transition-group "^4.4.1"
-    tailwindcss "2.2.10"
-    typesafe-actions "^5.1.0"
+    nestjs-throttler-storage-redis "^0.1.11"
+    nestjs-typeorm-paginate "^2.2.1"
+    newrelic "7.5.1"
+    node-polyglot "^2.4.0"
+    passport "^0.4.1"
+    passport-jwt "^4.0.0"
+    passport-local "^1.0.0"
+    pg "^8.4.1"
+    reflect-metadata "^0.1.13"
+    rimraf "^3.0.2"
+    rxjs "^6.6.3"
+    swagger-ui-express "^4.1.4"
+    ts-node "^9.0.0"
+    typeorm "0.2.34"
+    typeorm-naming-strategies "^1.1.0"
+    typescript "^3.9.7"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -8527,7 +8544,7 @@ bluebird@3.7.1:
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.1.tgz#df70e302b471d7473489acf26a93d63b53f874de"
   integrity sha512-DdmyoGCleJnkbp3nkbxTLJ18rjDsE4yCggEwKNXkeV123sPNfOCYeDoeuOY+F2FrSjO1YXcTU+dsy96KMy+gcg==
 
-bluebird@^3.3.5, bluebird@^3.5.5, bluebird@^3.7.1, bluebird@^3.7.2:
+bluebird@^3.3.5, bluebird@^3.5.1, bluebird@^3.5.3, bluebird@^3.5.5, bluebird@^3.7.1, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -10511,13 +10528,6 @@ debug@4.1.1, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
-
-debug@=3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
-  dependencies:
-    ms "2.0.0"
 
 debug@^3.0.0:
   version "3.2.7"
