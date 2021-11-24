@@ -378,49 +378,6 @@
         "legend": "Housing vouchers, nontaxable income or rental subsidies"
       }
     },
-    "programs": {
-      "servedInMilitary": {
-        "summary": "Veteran of the US Military",
-        "servedInMilitary": {
-          "label": "Yes"
-        },
-        "doNotConsider": {
-          "label": "No"
-        }
-      },
-      "tay": {
-        "summary": "Transition Age Youth (TAY)",
-        "tay": {
-          "label": "Yes"
-        },
-        "doNotConsider": {
-          "label": "No"
-        }
-      },
-      "disabilityOrMentalIllness": {
-        "summary": "People with Developmental Disabilities or Mental Illness",
-        "disabilityOrMentalIllness": {
-          "label": "Yes"
-        },
-        "doNotConsider": {
-          "label": "No"
-        }
-      },
-      "housingSituation": {
-        "summary": "Temporarily Housed or Homeless",
-        "notPermanent": {
-          "label": "I have somewhere to stay, but it isn't permanent",
-          "description": "Includes staying with friends or family, living in a motel / hotel, or living in a medical or other facility and those who have received an eviction notice or will imminently lose their current residence"
-        },
-        "homeless": {
-          "label": "I'm homeless",
-          "description": "Includes living outside, or in your car, or staying at a shelter, or in a motel / hotel paid for with an emergency voucher"
-        },
-        "doNotConsider": {
-          "label": "No"
-        }
-      }
-    },
     "preferences": {
       "title": "Your household may qualify for the following housing preferences.",
       "preamble": "If you qualify for this preference, you'll get a higher ranking.",

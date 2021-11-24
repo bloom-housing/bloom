@@ -11,7 +11,7 @@ import { INestApplicationContext } from "@nestjs/common"
 import { ListingDefaultSeed } from "./seeds/listings/listing-default-seed"
 import {
   defaultLeasingAgents,
-  getDisabilityOrMentalIllnessProgram,
+  getDisabilityOrMentalIlnessProgram,
   getHousingSituationProgram,
   getServedInMilitaryProgram,
   getTayProgram,
@@ -151,7 +151,7 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
   const programs = await programsRepository.save([
     getServedInMilitaryProgram(),
     getTayProgram(),
-    getDisabilityOrMentalIllnessProgram(),
+    getDisabilityOrMentalIlnessProgram(),
     getHousingSituationProgram(),
   ])
 

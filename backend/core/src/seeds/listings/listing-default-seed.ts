@@ -15,7 +15,7 @@ import {
   getDefaultListingEvents,
   getDefaultProperty,
   getDefaultUnits,
-  getDisabilityOrMentalIllnessProgram,
+  getDisabilityOrMentalIlnessProgram,
   getDisplaceePreference,
   getHousingSituationProgram,
   getLiveWorkPreference,
@@ -142,7 +142,7 @@ export class ListingDefaultSeed {
         },
         {
           program: await this.programsRepository.findOneOrFail({
-            title: getDisabilityOrMentalIllnessProgram().title,
+            title: getDisabilityOrMentalIlnessProgram().title,
           }),
           ordinal: 3,
         },

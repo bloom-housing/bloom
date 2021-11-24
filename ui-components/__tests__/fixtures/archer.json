@@ -63,50 +63,7 @@
   "leasingAgentOfficeHours": "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
   "leasingAgentPhone": "(408) 217-8562",
   "leasingAgentTitle": "",
-  "listingPrograms": [
-    {
-      "ordinal": 1,
-      "program": {
-        "title": "Have you or anyone in your household served in the US military?",
-        "subtitle": "",
-        "description": "Should your application be chosen, be prepared to provide supporting documentation.",
-        "formMetadata": {
-          "key": "servedInMilitary",
-          "options": [
-            { "key": "servedInMilitary", "extraData": [] },
-            { "key": "doNotConsider", "extraData": [], "description": false, "exclusive": true }
-          ]
-        },
-        "id": "9659a7e2-12b0-40cf-83d5-32b7eb3f5262",
-        "createdAt": "2021-10-27T07:24:05.498Z",
-        "updatedAt": "2021-10-27T07:24:05.498Z"
-      }
-    },
-    {
-      "ordinal": 2,
-      "program": {
-        "title": "Are you or anyone in your household a transition age youth (TAY) aging out of foster care?",
-        "subtitle": "",
-        "description": "Should your application be chosen, be prepared to provide supporting documentation.",
-        "formMetadata": {
-          "key": "tay",
-          "options": [
-            { "key": "tay", "extraData": [] },
-            { "key": "doNotConsider", "extraData": [], "description": false, "exclusive": true }
-          ]
-        },
-        "id": "7585cba3-f636-4f98-8479-cb9fb73eb859",
-        "createdAt": "2021-10-27T07:24:05.498Z",
-        "updatedAt": "2021-10-27T07:24:05.498Z"
-      }
-    }
-  ],
-  "name": "Archer Studios",
-  "neighborhood": "Rosemary Gardens Park",
-  "petPolicy": "No pets allowed. Accommodation animals may be granted to persons with disabilities via a reasonable accommodation request.",
-  "postmarkedApplicationsReceivedByDate": "2019-12-05",
-  "programRules": "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
-  "rentalAssistance": null,
+  "rentalAssistance": "Custom rental assistance",
   "rentalHistory": "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
   "preferences": [],
   "buildingTotalUnits": 35,

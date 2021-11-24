@@ -1,12 +1,17 @@
-import { Button, LinkButton, OnClientSide, t } from "@bloom-housing/ui-components"
+import { LinkButton, OnClientSide, Icon, t } from "@bloom-housing/ui-components"
 
 const FormBackLink = (props: { url: string; onClick: () => void; custom?: boolean }) => {
   return (
     <p className="form-card__back" onClick={props.onClick}>
       {props.custom ? (
-        <Button inlineIcon="left" icon="arrowBack">
+        <span
+          tabIndex={0}
+          onClick={props.onClick}
+          className={"button is-inline inline-icon--left cursor-pointer"}
+        >
+          <Icon symbol={"arrowBack"} size={"tiny"} className={"button__icon"} />
           {t("t.back")}
-        </Button>
+        </span>
       ) : (
         <>
           {OnClientSide() && props.url && (

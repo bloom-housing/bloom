@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup, fireEvent } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import { FieldGroup } from "../../src/forms/FieldGroup"
 import { useForm } from "react-hook-form"
 
@@ -134,16 +134,12 @@ const FieldGroupSubfieldsChecked = () => {
 
 describe("<FieldGroup>", () => {
   it("renders with label and note", () => {
-    const { getByText, queryByText } = render(<FieldGroupCustom />)
+    const { getByText } = render(<FieldGroupCustom />)
     expect(getByText("Group Note")).toBeTruthy()
     expect(getByText("Group Label")).toBeTruthy()
     expect(getByText("Input 1")).toBeTruthy()
     expect(getByText("Field Note")).toBeTruthy()
     expect(getByText("Input 2")).toBeTruthy()
-    expect(getByText("read more")).toBeTruthy()
-    expect(queryByText("Input description")).toBeNull()
-    fireEvent.click(getByText("read more"))
-    expect(getByText("Input description")).toBeTruthy()
   })
   it("renders with an error state", () => {
     const { getByText } = render(<FieldGroupError />)
