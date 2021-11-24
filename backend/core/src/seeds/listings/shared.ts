@@ -412,11 +412,16 @@ export const servedInMilitaryProgram: ProgramSeedType = {
     options: [
       {
         key: "servedInMilitary",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -438,11 +443,16 @@ export const tayProgram: ProgramSeedType = {
     options: [
       {
         key: "tay",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -450,11 +460,11 @@ export const tayProgram: ProgramSeedType = {
   },
 }
 
-export function getDisabilityOrMentalIlnessProgram() {
-  return JSON.parse(JSON.stringify(disabilityOrMentalIlnessProgram))
+export function getDisabilityOrMentalIllnessProgram() {
+  return JSON.parse(JSON.stringify(disabilityOrMentalIllnessProgram))
 }
 
-export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
+export const disabilityOrMentalIllnessProgram: ProgramSeedType = {
   title: "Developmental Disability",
   subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
   description:
@@ -464,11 +474,16 @@ export const disabilityOrMentalIlnessProgram: ProgramSeedType = {
     options: [
       {
         key: "disabilityOrMentalIllness",
+        description: false,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
@@ -490,15 +505,21 @@ export const housingSituationProgram: ProgramSeedType = {
     options: [
       {
         key: "notPermanent",
+        description: true,
         extraData: [],
       },
       {
         key: "homeless",
+        description: true,
         extraData: [],
       },
       {
         key: "doNotConsider",
-        exclusive: true,
+        description: false,
+        extraData: [],
+      },
+      {
+        key: "preferNotToSay",
         description: false,
         extraData: [],
       },
