@@ -3470,58 +3470,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bloom-housing/backend-core@^3.0.1-alpha.23":
-  version "3.0.1-alpha.23"
-  resolved "https://registry.yarnpkg.com/@bloom-housing/backend-core/-/backend-core-3.0.1-alpha.23.tgz#fb906e5b8d9137f75c7996a69aeb34e177e9c2ab"
-  integrity sha512-Km7M9oCmYWpdLAQzqjA5vpQUg5x+DEC+5oCKN1lCsjr+SfQkBYP8beXa4K3RnT8ZlDR/5/D6cmkb4Fbqlz3jtA==
-  dependencies:
-    "@anchan828/nest-sendgrid" "^0.3.25"
-    "@google-cloud/translate" "^6.2.6"
-    "@nestjs/cli" "^7.5.1"
-    "@nestjs/common" "^7.6.18"
-    "@nestjs/config" "^0.5.0"
-    "@nestjs/core" "^7.6.18"
-    "@nestjs/jwt" "^7.1.0"
-    "@nestjs/passport" "^7.1.0"
-    "@nestjs/platform-express" "^7.6.18"
-    "@nestjs/swagger" "4.7.3"
-    "@nestjs/throttler" "^1.1.2"
-    "@nestjs/typeorm" "^7.1.0"
-    "@types/cache-manager" "^3.4.0"
-    async-retry "^1.3.1"
-    axios "^0.21.0"
-    cache-manager "^3.4.0"
-    cache-manager-redis-store "^2.0.0"
-    casbin "^5.1.6"
-    class-transformer "0.3.1"
-    class-validator "^0.12.2"
-    cloudinary "^1.25.2"
-    dayjs "^1.10.7"
-    dotenv "^8.2.0"
-    express "^4.17.1"
-    handlebars "^4.7.6"
-    ioredis "^4.24.4"
-    joi "^17.3.0"
-    jwt-simple "^0.5.6"
-    moment "^2.29.1"
-    nanoid "^3.1.12"
-    nestjs-throttler-storage-redis "^0.1.11"
-    nestjs-typeorm-paginate "^2.2.1"
-    newrelic "7.5.1"
-    node-polyglot "^2.4.0"
-    passport "^0.4.1"
-    passport-jwt "^4.0.0"
-    passport-local "^1.0.0"
-    pg "^8.4.1"
-    reflect-metadata "^0.1.13"
-    rimraf "^3.0.2"
-    rxjs "^6.6.3"
-    swagger-ui-express "^4.1.4"
-    ts-node "^9.0.0"
-    typeorm "0.2.34"
-    typeorm-naming-strategies "^1.1.0"
-    typescript "^3.9.7"
-
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -6827,11 +6775,6 @@
   version "16.4.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.3.tgz#c01c1a215721f6dec71b47d88b4687463601ba48"
   integrity sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==
-
-"@types/node@>= 8":
-  version "16.11.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.7.tgz#36820945061326978c42a01e56b61cd223dfdc42"
-  integrity sha512-QB5D2sqfSjCmTuWcBWyJ+/44bcjO7VbjSbOE0ucoVbAsSNQc4Lt6QkgkVXkTDwkL4z/beecZNDvVX15D4P8Jbw==
 
 "@types/node@^12.12.67":
   version "12.12.67"
