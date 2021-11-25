@@ -15,6 +15,8 @@ import { JurisdictionResolverService } from "../../jurisdictions/services/jurisd
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { TranslationsService } from "../../translations/services/translations.service"
+import { GeneratedListingTranslation } from "../../translations/entities/generated-listing-translation.entity"
+import { GoogleTranslateService } from "../../translations/services/google-translate.service"
 
 declare const expect: jest.Expect
 jest.setTimeout(30000)
@@ -41,7 +43,7 @@ describe("EmailService", () => {
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Translation, Jurisdiction]),
+        TypeOrmModule.forFeature([Translation, Jurisdiction, GeneratedListingTranslation]),
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
@@ -51,6 +53,7 @@ describe("EmailService", () => {
         EmailService,
         TranslationsService,
         JurisdictionsService,
+        GoogleTranslateService,
         JurisdictionResolverService,
         {
           provide: REQUEST,

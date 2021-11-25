@@ -92,6 +92,7 @@ export class TranslationsService extends AbstractServiceFactory<
 
   public async translateListing(listing: Listing, language: Language) {
     if (!this.googleTranslateService.isConfigured()) {
+      console.warn("listing translation requested, but google translate service is not configured")
       return
     }
 
@@ -111,7 +112,7 @@ export class TranslationsService extends AbstractServiceFactory<
         language
       )
       persistedTranslatedValues = await this.persistTranslatedValues(
-        persistedTranslatedValues.id,
+        persistedTranslatedValues?.id,
         listing,
         language,
         newTranslations
@@ -121,6 +122,7 @@ export class TranslationsService extends AbstractServiceFactory<
     keysAndValuesToBeTranslated.keys.forEach((key, index) => {
       this.setValue(listing, key, persistedTranslatedValues.translations[0][index])
     })
+    return listing
   }
 
   // Sets value to the object by string path. eg. "property.accessibility" or "preferences.0.title"
@@ -139,7 +141,6 @@ export class TranslationsService extends AbstractServiceFactory<
   private findData(translationKeys, object: Listing, results, parent = null) {
     translationKeys.forEach((key) => {
       if (typeof key === "string") {
-        console.log("object[key] = ", object[key])
         if (object[key] && isEmpty(object[key]) === false) {
           results.keys.push(parent ? [parent, key].join(".") : key)
           results.values.push(object[key])
