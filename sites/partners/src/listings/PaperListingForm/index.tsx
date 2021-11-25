@@ -507,12 +507,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
+  const triggerSubmitWithStatus = (
+    confirm?: boolean,
+    status?: ListingStatus,
+    newData?: FormListing
+  ) => {
     if (confirm) {
       setPublishModal(true)
       return
     }
-    let formData = { ...defaultValues, ...getValues() }
+    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
     if (status) {
       formData = { ...formData, status }
     }
@@ -753,8 +757,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={() => {
-                            triggerSubmitWithStatus(false, ListingStatus.closed)
+                          submitCallback={(data) => {
+                            triggerSubmitWithStatus(
+                              false,
+                              ListingStatus.closed,
+                              data as FormListing
+                            )
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
