@@ -395,14 +395,15 @@ Cypress.Commands.add("step16GeneralPool", () => {
 })
 
 Cypress.Commands.add("step17Demographics", (application) => {
-  if (application.demographics.ethnicity) {
-    cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
-  }
-
+  cy.location("pathname").should("include", "applications/review/demographics")
   application.demographics.race.forEach((race) => {
     const raceIndex = raceCheckboxesOrder.indexOf(race)
     cy.getByTestId("app-demographics-race").eq(raceIndex).check()
   })
+
+  if (application.demographics.ethnicity) {
+    cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
+  }
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
     const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)
@@ -480,6 +481,5 @@ Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
   const nextRoutePath = applicationStepOrder[nextRouteIndex].route
     ? applicationStepOrder[nextRouteIndex].route
     : ""
-
   cy.location("pathname").should("include", nextRoutePath)
 })
