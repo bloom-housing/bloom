@@ -43,7 +43,7 @@ const ApplicationSummary = () => {
         <FormSummaryDetails
           application={application}
           listing={listing}
-          hidePreferences={listing.listingPreferences.length === 0}
+          hidePreferences={listing?.listingPreferences.length === 0}
           editMode
         />
 
