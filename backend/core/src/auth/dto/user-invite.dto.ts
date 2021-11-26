@@ -13,6 +13,8 @@ export class UserInviteDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "leasingAgentInListings",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
