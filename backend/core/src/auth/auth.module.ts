@@ -13,11 +13,11 @@ import { AuthController } from "./controllers/auth.controller"
 import { User } from "./entities/user.entity"
 import { UserService } from "./services/user.service"
 import { UserController } from "./controllers/user.controller"
-import { EmailModule } from "../shared/email/email.module"
 import { PasswordService } from "./services/password.service"
 import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
+import { EmailModule } from "../email/email.module"
 
 @Module({
   imports: [
