@@ -309,6 +309,7 @@
         "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
+          "SRO": "SRO",
           "studio": "Studio",
           "oneBdrm": "1 Bedroom",
           "twoBdrm": "2 Bedroom",
