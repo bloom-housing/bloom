@@ -510,7 +510,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const triggerSubmitWithStatus = (
     confirm?: boolean,
     status?: ListingStatus,
-    newData?: FormListing
+    newData?: Partial<FormListing>
   ) => {
     if (confirm) {
       setPublishModal(true)
@@ -758,11 +758,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
                           submitCallback={(data) => {
-                            triggerSubmitWithStatus(
-                              false,
-                              ListingStatus.closed,
-                              data as FormListing
-                            )
+                            triggerSubmitWithStatus(false, ListingStatus.closed, data)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
