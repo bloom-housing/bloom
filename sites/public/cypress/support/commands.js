@@ -431,7 +431,7 @@ Cypress.Commands.add("step19TermsAndSubmit", () => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
-Cypress.Commands.add("submitApplication", (listingName, application, autofill) => {
+Cypress.Commands.add("submitApplication", (listingName, application, done, autofill) => {
   if (autofill === false) {
     cy.beginApplicationRejectAutofill(listingName)
   } else {
@@ -472,7 +472,9 @@ Cypress.Commands.add("submitApplication", (listingName, application, autofill) =
     cy.step18Summary(application)
     // TODO: Check values on summary
     cy.step19TermsAndSubmit(application)
+    done()
   })
+  done()
 })
 
 Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
