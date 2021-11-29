@@ -21,7 +21,7 @@ export class BaseApplicationView extends BaseView {
   }
 
   getViewQb(): SelectQueryBuilder<Application> {
-    this.view.leftJoins.forEach(({ join, alias }) => this.qb.leftJoinAndSelect(join, alias))
+    this.view.leftJoinAndSelect.forEach((tuple) => this.qb.leftJoinAndSelect(...tuple))
 
     return this.qb
   }
@@ -32,14 +32,4 @@ export class PartnerList extends BaseApplicationView {
     super(qb)
     this.view = views.partnerList
   }
-
-  // getViewQb(): SelectQueryBuilder<Application> {
-  //   this.qb.select(this.view.select)
-
-  //   this.view.leftJoins.forEach((join) => {
-  //     this.qb.leftJoin(join.join, join.alias)
-  //   })
-
-  //   return this.qb
-  // }
 }
