@@ -17,6 +17,7 @@ import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormType
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
 import { isNullOrUndefined } from "../../../../lib/helpers"
+import { Grid } from "ag-grid-community"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -469,11 +470,10 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             </GridSection>
           )}
 
-        <GridSection columns={4} className={"flex items-center"}>
+        <GridSection columns={3}>
           <GridCell>
-            <GridCell>
-              <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
-            </GridCell>
+            <p className="field-label m-4 ml-0">{t("listings.postmarksConsideredQuestion")}</p>
+
             <FieldGroup
               name="arePostmarksConsidered"
               type="radio"
@@ -492,7 +492,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               ]}
             />
           </GridCell>
-          <GridCell>
+          <GridCell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <DateField
                 label={t("listings.postmarkByDate")}
@@ -521,7 +521,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
               />
             )}
           </GridCell>
-          <GridCell>
+          <GridCell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <TimeField
                 label={t("listings.postmarkByTime")}
