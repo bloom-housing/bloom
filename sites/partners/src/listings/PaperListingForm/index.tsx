@@ -244,9 +244,6 @@ const formatFormData = (
   customPinPositionChosen: boolean,
   profile: User
 ) => {
-  const showWaitlistNumber =
-    data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
   const applicationDueDateFormatted = createDate(data.applicationDueDateField)
   const applicationDueTimeFormatted = createTime(
     applicationDueDateFormatted,
@@ -361,11 +358,17 @@ const formatFormData = (
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
-      data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
+      data.waitlistCurrentSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistCurrentSize)
+        : null,
     waitlistMaxSize:
-      data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
+      data.waitlistMaxSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistMaxSize)
+        : null,
     waitlistOpenSpots:
-      data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+      data.waitlistOpenSpots && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistOpenSpots)
+        : null,
     postmarkedApplicationsReceivedByDate:
       data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
         ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
