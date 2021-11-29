@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.37...@bloom-housing/public@3.0.1-alpha.38) (2021-11-29)
+
+
+### Bug Fixes
+
+* feedback on the waitlist data and display ([9432542](https://github.com/bloom-housing/bloom/commit/9432542efd9ba2e4bf8dd7195895e75f5d2e0623))
+
+
+
+
+
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.36...@bloom-housing/public@3.0.1-alpha.37) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.35...@bloom-housing/public@3.0.1-alpha.36) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.34...@bloom-housing/public@3.0.1-alpha.35) (2021-11-29)
+
+
+### Bug Fixes
+
+* summary/review no listing ([cbc18f7](https://github.com/bloom-housing/bloom/commit/cbc18f77a9a0020b63aee570010e9a4ed6546cd2))
+
+
+### Features
+
+* adds done() to cy.sumbmitApplication ([81ca55a](https://github.com/bloom-housing/bloom/commit/81ca55a9f2bca5482985de62ec94e81b34a5ee55))
+* skip preferences if not on listing ([2037b74](https://github.com/bloom-housing/bloom/commit/2037b7484c86cd9f3381c96f61c982a1bada80d5))
+
+
+
+
+
 ## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.33...@bloom-housing/public@3.0.1-alpha.34) (2021-11-23)
 
 
