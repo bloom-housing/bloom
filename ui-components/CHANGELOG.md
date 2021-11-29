@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.23...@bloom-housing/ui-components@3.0.1-alpha.24) (2021-11-29)
+
+
+### Bug Fixes
+
+* guard against 0 output ([0ea9012](https://github.com/bloom-housing/bloom/commit/0ea9012fdac02fb1cb4357abec2ec69633902654))
+* remove bold style from current waitlist size ([2e2f414](https://github.com/bloom-housing/bloom/commit/2e2f4141e62c8544c0828b29de0b99bb97abb201))
+* show waitlist values even if they're zero ([6a35e67](https://github.com/bloom-housing/bloom/commit/6a35e679f142105e40719e89bda3d957e3200e1d))
+* simpler conditionals ([f3e588d](https://github.com/bloom-housing/bloom/commit/f3e588d5e6dd0a39d1aed99ef6eba0054540ed14))
+* waitlist: handle both null and undefined ([90fd369](https://github.com/bloom-housing/bloom/commit/90fd369b471c7f9baa0a1d58f452159449fe6fcf))
+
+
+### Features
+
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/bloom-housing/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+
+
+
+
+
 ## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.22...@bloom-housing/ui-components@3.0.1-alpha.23) (2021-11-29)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

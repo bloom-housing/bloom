@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/shared-helpers",
-  "version": "3.0.1-alpha.22",
+  "version": "3.0.1-alpha.23",
   "description": "Shared helpers for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared-helpers",
   "main": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^3.0.1-alpha.25",
-    "@bloom-housing/ui-components": "^3.0.1-alpha.23"
+    "@bloom-housing/ui-components": "^3.0.1-alpha.24"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
