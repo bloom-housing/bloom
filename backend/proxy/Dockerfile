@@ -1,6 +1,4 @@
 FROM nginx:1.11
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 
 MAINTAINER David Galoyan <davojan@gmail.com>
 
@@ -31,6 +29,10 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     tar -xf ngx_cache_purge-$NGX_CACHE_PURGE_VERSION.tar.gz && \
     mv ngx_cache_purge-$NGX_CACHE_PURGE_VERSION ngx_cache_purge && \
     rm ngx_cache_purge-$NGX_CACHE_PURGE_VERSION.tar.gz
+
+## move copy to here so the above can build from cache
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 
 # configure and build
 RUN cd /tmp/nginx && \

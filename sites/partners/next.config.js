@@ -25,6 +25,8 @@ if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith(
 const LISTINGS_QUERY = process.env.LISTINGS_QUERY || "/listings"
 console.log(`Using ${BACKEND_API_BASE}${LISTINGS_QUERY} for the listing service.`)
 
+const BACKEND_PROXY_BASE = process.env.BACKEND_PROXY_BASE
+
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN
 // Load the Tailwind theme and set up SASS vars
 const bloomTheme = require("./tailwind.config.js")
@@ -37,6 +39,7 @@ module.exports = withBundleAnalyzer(
     target: "serverless",
     env: {
       backendApiBase: BACKEND_API_BASE,
+      backendProxyBase: BACKEND_PROXY_BASE,
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
       showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
