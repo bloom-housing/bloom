@@ -26,3 +26,32 @@ export const FieldGroupDefault = () => {
     />
   )
 }
+
+export const FieldGroupDescriptions = () => {
+  const { register } = useForm({ mode: "onChange" })
+  return (
+    <FieldGroup
+      register={register}
+      name={"Test Input"}
+      type={"radio"}
+      fields={[
+        {
+          id: "1234",
+          label: "Input 1",
+          description: (
+            <span>
+              This is an <em>HTML</em> description
+            </span>
+          ),
+        },
+        { id: "5678", label: "Input 2", description: "This is a text description" },
+        { id: "9765", label: "Input 3" },
+        { id: "4321", label: "Input 4" },
+      ]}
+      fieldGroupClassName="grid grid-cols-1"
+      fieldClassName="ml-0"
+      groupNote={"Group Note"}
+      groupLabel={"Group Label"}
+    />
+  )
+}

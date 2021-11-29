@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.35...@bloom-housing/partners@3.0.1-alpha.36) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1-alpha.35) (2021-11-29)
+
+
+### Bug Fixes
+
+* cannot save custom mailing, dropoff, or pickup address ([#2207](https://github.com/bloom-housing/bloom/issues/2207)) ([96484b5](https://github.com/bloom-housing/bloom/commit/96484b5676ecb000e492851ee12766ba9e6cd86f))
+
+
+
+
+
+## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.33...@bloom-housing/partners@3.0.1-alpha.34) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.32...@bloom-housing/partners@3.0.1-alpha.33) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.31...@bloom-housing/partners@3.0.1-alpha.32) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.30...@bloom-housing/partners@3.0.1-alpha.31) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.29...@bloom-housing/partners@3.0.1-alpha.30) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.28...@bloom-housing/partners@3.0.1-alpha.29) (2021-11-23)
+
+
+### Features
+
+* new demographics sub-race questions ([#2109](https://github.com/bloom-housing/bloom/issues/2109)) ([9ab8926](https://github.com/bloom-housing/bloom/commit/9ab892694c1ad2fa8890b411b3b32af68ade1fc3))
+
+
+
+
+
+## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.27...@bloom-housing/partners@3.0.1-alpha.28) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.26...@bloom-housing/partners@3.0.1-alpha.27) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.25...@bloom-housing/partners@3.0.1-alpha.26) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.24...@bloom-housing/partners@3.0.1-alpha.25) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.23...@bloom-housing/partners@3.0.1-alpha.24) (2021-11-17)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -3,6 +3,136 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.36...@bloom-housing/public@3.0.1-alpha.37) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.35...@bloom-housing/public@3.0.1-alpha.36) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.34...@bloom-housing/public@3.0.1-alpha.35) (2021-11-29)
+
+
+### Bug Fixes
+
+* summary/review no listing ([cbc18f7](https://github.com/bloom-housing/bloom/commit/cbc18f77a9a0020b63aee570010e9a4ed6546cd2))
+
+
+### Features
+
+* adds done() to cy.sumbmitApplication ([81ca55a](https://github.com/bloom-housing/bloom/commit/81ca55a9f2bca5482985de62ec94e81b34a5ee55))
+* skip preferences if not on listing ([2037b74](https://github.com/bloom-housing/bloom/commit/2037b7484c86cd9f3381c96f61c982a1bada80d5))
+
+
+
+
+
+## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.33...@bloom-housing/public@3.0.1-alpha.34) (2021-11-23)
+
+
+### Bug Fixes
+
+* remove alameda reference in demographics ([#2209](https://github.com/bloom-housing/bloom/issues/2209)) ([7d5991c](https://github.com/bloom-housing/bloom/commit/7d5991cbf6dbe0b61f2b14d265e87ce3687f743d))
+
+
+
+
+
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.32...@bloom-housing/public@3.0.1-alpha.33) (2021-11-23)
+
+
+### Bug Fixes
+
+* change the yes/no radio text to be more descriptive ([#2208](https://github.com/bloom-housing/bloom/issues/2208)) ([0c46054](https://github.com/bloom-housing/bloom/commit/0c46054574535523d6f217bb0677bbe732b8945f))
+
+
+
+
+
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.31...@bloom-housing/public@3.0.1-alpha.32) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.30...@bloom-housing/public@3.0.1-alpha.31) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.29...@bloom-housing/public@3.0.1-alpha.30) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.28...@bloom-housing/public@3.0.1-alpha.29) (2021-11-23)
+
+
+### Features
+
+* new demographics sub-race questions ([#2109](https://github.com/bloom-housing/bloom/issues/2109)) ([9ab8926](https://github.com/bloom-housing/bloom/commit/9ab892694c1ad2fa8890b411b3b32af68ade1fc3))
+
+
+
+
+
+## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.27...@bloom-housing/public@3.0.1-alpha.28) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.26...@bloom-housing/public@3.0.1-alpha.27) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.25...@bloom-housing/public@3.0.1-alpha.26) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.24...@bloom-housing/public@3.0.1-alpha.25) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.23...@bloom-housing/public@3.0.1-alpha.24) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.22...@bloom-housing/public@3.0.1-alpha.23) (2021-11-17)
 
 **Note:** Version bump only for package @bloom-housing/public

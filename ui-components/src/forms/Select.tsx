@@ -63,6 +63,7 @@ export const Select = ({
           data-test-id={dataTestId}
           aria-describedby={describedBy ? describedBy : `${id}-error`}
           aria-invalid={!!error || false}
+          aria-label={label}
           ref={register && register(validation)}
           disabled={disabled}
           defaultValue={defaultValue ?? ""}

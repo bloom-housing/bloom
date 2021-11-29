@@ -6,6 +6,7 @@ import {
   contactPreferencesCheckboxesOrder,
   alternateContactTypeRadioOrder,
   howDidYouHearCheckboxesOrder,
+  raceCheckboxesOrder,
 } from "./../mockData/applicationData"
 
 Cypress.Commands.add("signIn", () => {
@@ -286,10 +287,32 @@ Cypress.Commands.add("step9Accessibility", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
-  cy.isNextRouteValid("adaHouseholdMembers")
+  if (application.programs.length) {
+    cy.isNextRouteValid("adaHouseholdMembers")
+  } else {
+    cy.isNextRouteValid("adaHouseholdMembers", 1)
+  }
 })
 
-Cypress.Commands.add("step10Changes", (application) => {
+Cypress.Commands.add("step10Programs", (application) => {
+  application.programs.forEach((program) => {
+    if (!program.claimed) {
+      // Selects the last instance, which is decline
+      cy.getByTestId("app-program-option").check()
+    } else {
+      program.options.forEach((option, index) => {
+        if (option.checked) {
+          cy.getByTestId("app-program-option").eq(index).check()
+        }
+      })
+    }
+    cy.goNext()
+  })
+
+  cy.isNextRouteValid("programs")
+})
+
+Cypress.Commands.add("step11Changes", (application) => {
   if (application.householdExpectingChanges) {
     cy.getByTestId("app-expecting-changes").eq(0).check()
   } else {
@@ -302,7 +325,7 @@ Cypress.Commands.add("step10Changes", (application) => {
   cy.isNextRouteValid("householdExpectingChanges")
 })
 
-Cypress.Commands.add("step11Student", (application) => {
+Cypress.Commands.add("step12Student", (application) => {
   if (application.householdStudent) {
     cy.getByTestId("app-student").eq(0).check()
   } else {
@@ -315,7 +338,7 @@ Cypress.Commands.add("step11Student", (application) => {
   cy.isNextRouteValid("householdStudent")
 })
 
-Cypress.Commands.add("step12IncomeVouchers", (application) => {
+Cypress.Commands.add("step13IncomeVouchers", (application) => {
   if (application.incomeVouchers) {
     cy.getByTestId("app-income-vouchers").eq(0).check()
   } else {
@@ -328,7 +351,7 @@ Cypress.Commands.add("step12IncomeVouchers", (application) => {
   cy.isNextRouteValid("vouchersSubsidies")
 })
 
-Cypress.Commands.add("step13Income", (application) => {
+Cypress.Commands.add("step14Income", (application) => {
   cy.getByTestId("app-income").type(application.income)
   if (application.incomePeriod === "perMonth") {
     cy.getByTestId("app-income-period").eq(0).check()
@@ -341,7 +364,7 @@ Cypress.Commands.add("step13Income", (application) => {
   cy.checkErrorMessages("not.exist")
 })
 
-Cypress.Commands.add("step14SelectPreferences", (application) => {
+Cypress.Commands.add("step15SelectPreferences", (application) => {
   let preferenceClaimed = false
   application.preferences.forEach((preference) => {
     if (!preference.claimed) {
@@ -365,26 +388,21 @@ Cypress.Commands.add("step14SelectPreferences", (application) => {
   }
 })
 
-Cypress.Commands.add("step15GeneralPool", () => {
+Cypress.Commands.add("step16GeneralPool", () => {
   cy.location("pathname").should("include", "applications/preferences/general")
   cy.goNext()
   cy.isNextRouteValid("generalPool")
 })
 
-Cypress.Commands.add("step16Demographics", (application) => {
+Cypress.Commands.add("step17Demographics", (application) => {
+  cy.location("pathname").should("include", "applications/review/demographics")
+  application.demographics.race.forEach((race) => {
+    const raceIndex = raceCheckboxesOrder.indexOf(race)
+    cy.getByTestId("app-demographics-race").eq(raceIndex).check()
+  })
+
   if (application.demographics.ethnicity) {
     cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
-  }
-  if (application.demographics.race) {
-    cy.getByTestId("app-demographics-race").select(application.demographics.race)
-  }
-  if (application.demographics.gender) {
-    cy.getByTestId("app-demographics-gender").select(application.demographics.gender)
-  }
-  if (application.demographics.sexualOrientation) {
-    cy.getByTestId("app-demographics-sexual-orientation").select(
-      application.demographics.sexualOrientation
-    )
   }
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
@@ -398,13 +416,13 @@ Cypress.Commands.add("step16Demographics", (application) => {
   cy.isNextRouteValid("demographics")
 })
 
-Cypress.Commands.add("step17Summary", () => {
+Cypress.Commands.add("step18Summary", () => {
   // TODO check values
   cy.getByTestId("app-summary-confirm").click()
   cy.isNextRouteValid("summary")
 })
 
-Cypress.Commands.add("step18TermsAndSubmit", () => {
+Cypress.Commands.add("step19TermsAndSubmit", () => {
   cy.getByTestId("app-terms-agree").check()
   cy.getByTestId("app-terms-submit-button").click()
   cy.checkErrorAlert("not.exist")
@@ -413,7 +431,7 @@ Cypress.Commands.add("step18TermsAndSubmit", () => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
-Cypress.Commands.add("submitApplication", (listingName, application, autofill) => {
+Cypress.Commands.add("submitApplication", (listingName, application, done, autofill) => {
   if (autofill === false) {
     cy.beginApplicationRejectAutofill(listingName)
   } else {
@@ -432,19 +450,31 @@ Cypress.Commands.add("submitApplication", (listingName, application, autofill) =
   }
   cy.step8PreferredUnits(application)
   cy.step9Accessibility(application)
-  cy.step10Changes(application)
-  cy.step11Student(application)
-  cy.step12IncomeVouchers(application)
-  cy.step13Income(application)
-  if (application.preferences.length > 0) {
-    cy.step14SelectPreferences(application)
-  } else {
-    cy.step15GeneralPool()
+  if (application.programs.length > 0) {
+    cy.step10Programs(application)
   }
-  cy.step16Demographics(application)
-  cy.step17Summary(application)
-  // TODO: Check values on summary
-  cy.step18TermsAndSubmit(application)
+  cy.step11Changes(application)
+
+  cy.step12Student(application)
+  cy.step13IncomeVouchers(application)
+  cy.step14Income(application)
+  cy.window().then((win) => {
+    const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
+    if (listing.listingPreferences.length > 0) {
+      if (application.preferences.length > 0) {
+        cy.step15SelectPreferences(application)
+      } else {
+        cy.step16GeneralPool()
+      }
+    }
+
+    cy.step17Demographics(application)
+    cy.step18Summary(application)
+    // TODO: Check values on summary
+    cy.step19TermsAndSubmit(application)
+    done()
+  })
+  done()
 })
 
 Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
@@ -453,6 +483,5 @@ Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
   const nextRoutePath = applicationStepOrder[nextRouteIndex].route
     ? applicationStepOrder[nextRouteIndex].route
     : ""
-
   cy.location("pathname").should("include", nextRoutePath)
 })

@@ -55,13 +55,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         : YesNoAnswer.No,
   })
 
-  const applicationsPickedUpAddress = useWatch({
+  const pickedUpAddressType = useWatch({
     control,
     name: "whereApplicationsPickedUp",
-    defaultValue:
-      listing?.applicationPickUpAddress || listing?.applicationPickUpAddressType
-        ? listing?.applicationPickUpAddressType || addressTypes.anotherAddress
-        : null,
+    defaultValue: listing?.applicationPickUpAddressType
+      ? listing?.applicationPickUpAddressType
+      : listing?.applicationPickUpAddress
+      ? addressTypes.anotherAddress
+      : null,
   })
 
   const paperMailedToAnotherAddress = useWatch({
@@ -70,13 +71,14 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     defaultValue: listing && listing?.applicationMailingAddress !== null,
   })
 
-  const droppedOffAddress = useWatch({
+  const droppedOffAddressType = useWatch({
     control,
     name: "whereApplicationsDroppedOff",
-    defaultValue:
-      listing?.applicationDropOffAddress || listing?.applicationDropOffAddressType
-        ? listing?.applicationDropOffAddressType || addressTypes.anotherAddress
-        : null,
+    defaultValue: listing?.applicationDropOffAddressType
+      ? listing?.applicationDropOffAddressType
+      : listing?.applicationDropOffAddress
+      ? addressTypes.anotherAddress
+      : null,
   })
 
   const yesNoRadioOptions = [
@@ -337,7 +339,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         </GridSection>
 
         {applicationsPickedUp === YesNoAnswer.Yes &&
-          applicationsPickedUpAddress === addressTypes.anotherAddress && (
+          pickedUpAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
               <GridSection columns={3}>
                 <Field
@@ -402,7 +404,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             </GridSection>
           )}
         {applicationsDroppedOff === YesNoAnswer.Yes &&
-          droppedOffAddress === addressTypes.anotherAddress && (
+          droppedOffAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
               <GridSection columns={3}>
                 <Field
