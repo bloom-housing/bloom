@@ -22,6 +22,9 @@ import { ListingProgramUpdateDto } from "../../program/dto/listing-program-updat
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
+  "applicationPickUpAddress",
+  "applicationDropOffAddress",
+  "applicationMailingAddress",
   "createdAt",
   "updatedAt",
   "applicationMethods",
