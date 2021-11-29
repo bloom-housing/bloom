@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.37...@bloom-housing/public@3.0.1-alpha.38) (2021-11-29)
+
+
+### Bug Fixes
+
+* feedback on the waitlist data and display ([9432542](https://github.com/bloom-housing/bloom/commit/9432542efd9ba2e4bf8dd7195895e75f5d2e0623))
+
+
+
+
+
 ## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.36...@bloom-housing/public@3.0.1-alpha.37) (2021-11-29)
 
 **Note:** Version bump only for package @bloom-housing/public

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.36...@bloom-housing/partners@3.0.1-alpha.37) (2021-11-29)
+
+
+### Bug Fixes
+
+* feedback on the waitlist data and display ([9432542](https://github.com/bloom-housing/bloom/commit/9432542efd9ba2e4bf8dd7195895e75f5d2e0623))
+
+
+### Features
+
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/bloom-housing/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+
+
+
+
+
 ## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.35...@bloom-housing/partners@3.0.1-alpha.36) (2021-11-29)
 
 **Note:** Version bump only for package @bloom-housing/partners
