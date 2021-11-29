@@ -382,7 +382,7 @@ const formatFormData = (
         : null,
     applicationDropOffAddress:
       data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
-      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+      data.whereApplicationsDroppedOff === addressTypes.anotherAddress
         ? data.applicationDropOffAddress
         : null,
     applicationPickUpAddress:
@@ -390,10 +390,9 @@ const formatFormData = (
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationPickUpAddress
         : null,
-    applicationMailingAddress:
-      data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes
-        ? data.applicationMailingAddress
-        : null,
+    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+      ? data.applicationMailingAddress
+      : null,
     events,
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
