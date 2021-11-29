@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.21...@bloom-housing/ui-components@3.0.1-alpha.22) (2021-11-23)
+
+
+### Bug Fixes
+
+* remove alameda reference in demographics ([#2209](https://github.com/bloom-housing/bloom/issues/2209)) ([7d5991c](https://github.com/bloom-housing/bloom/commit/7d5991cbf6dbe0b61f2b14d265e87ce3687f743d))
+
+
+
+
+
+## [3.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.20...@bloom-housing/ui-components@3.0.1-alpha.21) (2021-11-23)
+
+
+### Bug Fixes
+
+* change the yes/no radio text to be more descriptive ([#2208](https://github.com/bloom-housing/bloom/issues/2208)) ([0c46054](https://github.com/bloom-housing/bloom/commit/0c46054574535523d6f217bb0677bbe732b8945f))
+
+
+
+
+
+## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.19...@bloom-housing/ui-components@3.0.1-alpha.20) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaLabel prop to Button component ([509ddc8](https://github.com/bloom-housing/bloom/commit/509ddc898ba44c05e26f8ed8c777f1ba456eeee5))
+
+
+
+
+
+## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.18...@bloom-housing/ui-components@3.0.1-alpha.19) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaHidden to Icon component ([c7bb86a](https://github.com/bloom-housing/bloom/commit/c7bb86aec6fd5ad386c7ca50087d0113b14503be))
+
+
+
+
+
+## [3.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.17...@bloom-housing/ui-components@3.0.1-alpha.18) (2021-11-23)
+
+
+### Features
+
+* new demographics sub-race questions ([#2109](https://github.com/bloom-housing/bloom/issues/2109)) ([9ab8926](https://github.com/bloom-housing/bloom/commit/9ab892694c1ad2fa8890b411b3b32af68ade1fc3))
+
+
+
+
+
+## [3.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.16...@bloom-housing/ui-components@3.0.1-alpha.17) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.15...@bloom-housing/ui-components@3.0.1-alpha.16) (2021-11-22)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

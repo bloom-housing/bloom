@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.22...@bloom-housing/backend-core@3.0.1-alpha.23) (2021-11-23)
+
+
+### Features
+
+* updates email confirmation for lottery ([#2200](https://github.com/bloom-housing/bloom/issues/2200)) ([1a5e824](https://github.com/bloom-housing/bloom/commit/1a5e824c96d8e23674c32ea92688b9f7255528d3))
+
+
+
+
+
+## [3.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.21...@bloom-housing/backend-core@3.0.1-alpha.22) (2021-11-23)
+
+
+### Features
+
+* new demographics sub-race questions ([#2109](https://github.com/bloom-housing/bloom/issues/2109)) ([9ab8926](https://github.com/bloom-housing/bloom/commit/9ab892694c1ad2fa8890b411b3b32af68ade1fc3))
+
+
+
+
+
+## [3.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.20...@bloom-housing/backend-core@3.0.1-alpha.21) (2021-11-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.19...@bloom-housing/backend-core@3.0.1-alpha.20) (2021-11-22)
 
 
