@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@3.0.1-alpha.24) (2021-11-29)
+
+
+### Bug Fixes
+
+* cannot save custom mailing, dropoff, or pickup address ([#2207](https://github.com/bloom-housing/bloom/issues/2207)) ([96484b5](https://github.com/bloom-housing/bloom/commit/96484b5676ecb000e492851ee12766ba9e6cd86f))
+
+
+
+
+
 ## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.22...@bloom-housing/backend-core@3.0.1-alpha.23) (2021-11-23)
 
 

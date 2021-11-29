@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1-alpha.35) (2021-11-29)
+
+
+### Bug Fixes
+
+* cannot save custom mailing, dropoff, or pickup address ([#2207](https://github.com/bloom-housing/bloom/issues/2207)) ([96484b5](https://github.com/bloom-housing/bloom/commit/96484b5676ecb000e492851ee12766ba9e6cd86f))
+
+
+
+
+
 ## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.33...@bloom-housing/partners@3.0.1-alpha.34) (2021-11-23)
 
 **Note:** Version bump only for package @bloom-housing/partners
