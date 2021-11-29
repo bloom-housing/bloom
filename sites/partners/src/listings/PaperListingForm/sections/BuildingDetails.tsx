@@ -165,8 +165,8 @@ const BuildingDetails = ({
         </GridCell>
         <ViewItem label={t("t.neighborhood")} className={"mb-0"}>
           <Select
-            id={`neighborhood`}
-            name={`neighborhood`}
+            id="neighborhood"
+            name="neighborhood"
             label={t("t.neighborhood")}
             labelClassName="sr-only"
             register={register}
