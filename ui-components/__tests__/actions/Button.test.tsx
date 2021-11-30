@@ -106,4 +106,11 @@ describe("<Button>", () => {
     expect(container.getElementsByClassName("is-fullwidth").length).toBe(1)
     expect(container.getElementsByClassName("extra-special-extra-class").length).toBe(1)
   })
+
+  it("adds aria-label", () => {
+    const { getByText } = render(<Button ariaLabel="button action">Button Content</Button>)
+
+    expect(getByText("Button Content")).not.toBeNull()
+    expect(getByText("Button Content").getAttribute("aria-label")).toBe("button action")
+  })
 })

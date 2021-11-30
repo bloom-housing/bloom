@@ -20,15 +20,21 @@ declare namespace Cypress {
     step7AddHouseholdMembers(application: Application): Chainable
     step8PreferredUnits(application: Application): Chainable
     step9Accessibility(application: Application): Chainable
-    step10Changes(application: Application): Chainable
-    step11Student(application: Application): Chainable
-    step12IncomeVouchers(application: Application): Chainable
-    step13Income(application: Application): Chainable
-    step14SelectPreferences(application: Application): Chainable
-    step15GeneralPool(): Chainable
-    step16Demographics(application: Application): Chainable
-    step17Summary(application: Application): Chainable
-    step18TermsAndSubmit(application: Application): Chainable
-    submitApplication(listingName: string, application: Application, autofill?: boolean)
+    step10Programs(application: Application): Chainable
+    step11Changes(application: Application): Chainable
+    step12Student(application: Application): Chainable
+    step13IncomeVouchers(application: Application): Chainable
+    step14Income(application: Application): Chainable
+    step15SelectPreferences(application: Application): Chainable
+    step16GeneralPool(): Chainable
+    step17Demographics(application: Application): Chainable
+    step18Summary(application: Application): Chainable
+    step19TermsAndSubmit(application: Application): Chainable
+    submitApplication(
+      listingName: string,
+      application: Application,
+      done: () => void,
+      autofill?: boolean
+    )
   }
 }

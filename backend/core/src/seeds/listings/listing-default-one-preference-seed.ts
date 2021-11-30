@@ -10,7 +10,7 @@ export class ListingDefaultOnePreferenceSeed extends ListingDefaultSeed {
       listingPreferences: [
         {
           preference: await this.preferencesRepository.findOneOrFail({
-            title: getLiveWorkPreference().title,
+            title: getLiveWorkPreference(listing.jurisdiction.name).title,
           }),
           ordinal: 1,
           page: 1,

@@ -144,6 +144,7 @@
       "agency": "Agency if Applicable",
       "adaPriorities": "ADA Priorities Selected",
       "preferences": "Application Preferences",
+      "programs": "Application Programs",
       "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
@@ -376,6 +377,49 @@
           "text": "like VASH, HSA, HOPWA, Catholic Charities, AIDS Foundation, etc."
         },
         "legend": "Housing vouchers, nontaxable income or rental subsidies"
+      }
+    },
+    "programs": {
+      "servedInMilitary": {
+        "summary": "Veteran of the US Military",
+        "servedInMilitary": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "tay": {
+        "summary": "Transition Age Youth (TAY)",
+        "tay": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "disabilityOrMentalIllness": {
+        "summary": "People with Developmental Disabilities or Mental Illness",
+        "disabilityOrMentalIllness": {
+          "label": "Yes"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
+      },
+      "housingSituation": {
+        "summary": "Temporarily Housed or Homeless",
+        "notPermanent": {
+          "label": "I have somewhere to stay, but it isn't permanent",
+          "description": "Includes staying with friends or family, living in a motel / hotel, or living in a medical or other facility and those who have received an eviction notice or will imminently lose their current residence"
+        },
+        "homeless": {
+          "label": "I'm homeless",
+          "description": "Includes living outside, or in your car, or staying at a shelter, or in a motel / hotel paid for with an emergency voucher"
+        },
+        "doNotConsider": {
+          "label": "No"
+        }
       }
     },
     "preferences": {
@@ -623,15 +667,28 @@
         },
         "raceOptions": {
           "americanIndianAlaskanNative": "American Indian / Alaskan Native",
-          "asian": "Asian",
-          "blackAfricanAmerican": "Black / African American",
-          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
-          "white": "White",
           "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
           "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asian": "Asian",
           "asianAndWhite": "Asian and White",
+          "asian-asianIndian": "Asian Indian",
+          "asian-otherAsian": "Other Asian",
+          "blackAfricanAmerican": "Black / African American",
           "blackAfricanAmericanAndWhite": "Black / African American and White",
-          "otherMutliracial": "Other / Mutliracial"
+          "asian-chinese": "Chinese",
+          "declineToRespond": "Decline to Respond",
+          "asian-filipino": "Filipino",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guamanian or Chamorro",
+          "asian-japanese": "Japanese",
+          "asian-korean": "Korean",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Native Hawaiian",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "otherMultiracial": "Other / Multiracial",
+          "otherMutliracial": "Other / Mutliracial",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Other Pacific Islander",
+          "nativeHawaiianOtherPacificIslander-samoan": "Samoan",
+          "asian-vietnamese": "Vietnamese",
+          "white": "White"
         },
         "genderOptions": {
           "female": "Female",
@@ -649,7 +706,7 @@
           "notListed": "Not Listed"
         },
         "howDidYouHearOptions": {
-          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "jurisdictionWebsite": "Alameda County HCD Website",
           "developerWebsite": "Developer Website",
           "flyer": "Flyer",
           "emailAlert": "Email Alert",
@@ -1049,6 +1106,7 @@
       "header": "Public Lottery",
       "seeVideo": "See Video"
     },
+    "recommended": "Recommended",
     "referralContactPhone": "Referral Contact Phone",
     "referralSummary": "Referral Summary",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
@@ -1174,7 +1232,7 @@
       "maxSize": "Maximum Waitlist Size",
       "maxSizeQuestion": "What is the maximum size of the waitlist?",
       "open": "Open Waitlist",
-      "openQuestion": "Is the waitlist open?",
+      "openQuestion": "Do you want to show a waitlist?",
       "openSize": "Number of Openings",
       "openSizeQuestion": "How many spots are open on the list?",
       "openSlots": "Open Waitlist Slots",
@@ -1443,6 +1501,8 @@
     "phone": "Phone",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
+    "preferNotToSay": "Prefer not to say",
+    "pleaseSelectYesNo": "Please select yes or no.",
     "pm": "PM",
     "post": "Post",
     "preferences": "Preferences",
