@@ -129,12 +129,14 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
   })()
 
   const preferences = mapPreferencesToApi(data)
-  const programsForm = Object.entries(data.application.programs).reduce((acc, curr) => {
-    if (curr[1]) {
-      Object.assign(acc, { [curr[0]]: curr[1] })
-    }
-    return acc
-  }, {})
+  const programsForm = data.application.programs
+    ? Object.entries(data.application.programs).reduce((acc, curr) => {
+        if (curr[1]) {
+          Object.assign(acc, { [curr[0]]: curr[1] })
+        }
+        return acc
+      }, {})
+    : {}
 
   const programsData = mapProgramsToApi(programs, programsForm)
 
