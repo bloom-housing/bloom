@@ -65,13 +65,13 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
             }))
           )
         : [],
-      fallback: true,
+      fallback: "blocking",
     }
   } catch (error) {
     console.error("listings getStaticPaths error = ", error)
     return {
       paths: [],
-      fallback: true,
+      fallback: "blocking",
     }
   }
 }
