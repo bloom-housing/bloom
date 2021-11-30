@@ -2,7 +2,8 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { getDetailFieldString, getDetailFieldDate, getDetailFieldTime } from "./helpers"
+import { getDetailFieldString, getDetailFieldTime } from "./helpers"
+import moment from "moment"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
@@ -12,6 +13,10 @@ const DetailApplicationAddress = () => {
       return t("listings.leasingAgentAddress")
     if (addressType === ListingApplicationAddressType.mailingAddress)
       return t("application.contact.mailingAddress")
+  }
+
+  const postMarkDateFormat = (date: Date) => {
+    return date ? moment(new Date(date)).format("MM/DD/YYYY") : t("t.none")
   }
 
   return (
@@ -211,7 +216,7 @@ const DetailApplicationAddress = () => {
                 label={t("listings.postmarkByDate")}
                 dataTestId={"postmark-date"}
               >
-                {getDetailFieldDate(listing.postmarkedApplicationsReceivedByDate)}
+                {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
               </ViewItem>
             </GridCell>
             <GridCell span={2}>
