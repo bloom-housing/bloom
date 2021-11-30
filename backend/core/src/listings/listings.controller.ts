@@ -1,6 +1,5 @@
 import {
   Body,
-  CacheInterceptor,
   CACHE_MANAGER,
   Controller,
   Delete,
@@ -55,7 +54,7 @@ export class ListingsController {
   @ApiExtraModels(ListingFilterParams)
   @ApiOperation({ summary: "List listings", operationId: "list" })
   // ClassSerializerInterceptor has to come after CacheInterceptor
-  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
