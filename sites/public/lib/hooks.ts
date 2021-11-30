@@ -78,28 +78,35 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
 }
 
 export async function fetchBaseListingData() {
-  const { id: jurisdictionId } = await fetchJurisdictionByName()
-  const response = await axios.get(process.env.listingServiceUrl, {
-    params: {
-      view: "base",
-      limit: "all",
-      filter: [
-        {
-          $comparison: "<>",
-          status: "pending",
-        },
-        {
-          $comparison: "=",
-          jurisdiction: jurisdictionId,
-        },
-      ],
-    },
-    paramsSerializer: (params) => {
-      return qs.stringify(params)
-    },
-  })
+  let listings = []
+  try {
+    const { id: jurisdictionId } = await fetchJurisdictionByName()
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params: {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "<>",
+            status: "pending",
+          },
+          {
+            $comparison: "=",
+            jurisdiction: jurisdictionId,
+          },
+        ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
+      },
+    })
 
-  return response.data?.items ?? []
+    listings = response.data?.items
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
+  }
+
+  return listings
 }
 
 let jurisdiction: Jurisdiction | null = null
