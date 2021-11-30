@@ -61,7 +61,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
-          dataTestId={props.dataTestId ? `${props.dataTestId}-month`: undefined}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-month` : undefined}
         />
         <Field
           name={getFieldName("day")}
@@ -82,7 +82,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
-          dataTestId={props.dataTestId ? `${props.dataTestId}-day`: undefined}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-day` : undefined}
         />
         <Field
           name={getFieldName("year")}
@@ -105,7 +105,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 4 }}
           register={register}
-          dataTestId={props.dataTestId ? `${props.dataTestId}-year`: undefined}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-year` : undefined}
         />
       </div>
       {props.note && <p className="field-note mb-2 mt-4">{props.note}</p>}

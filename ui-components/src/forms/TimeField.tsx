@@ -55,7 +55,7 @@ const TimeField = ({
   seconds,
   defaultValues,
   disabled,
-  dataTestId
+  dataTestId,
 }: TimeFieldProps) => {
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
@@ -101,7 +101,7 @@ const TimeField = ({
           register={register}
           describedBy={`${id}-error`}
           disabled={disabled}
-          dataTestId={dataTestId ? `${dataTestId}-hours`: undefined}
+          dataTestId={dataTestId ? `${dataTestId}-hours` : undefined}
         />
 
         <Field
@@ -125,7 +125,7 @@ const TimeField = ({
           register={register}
           describedBy={`${id}-error`}
           disabled={disabled}
-          dataTestId={dataTestId ? `${dataTestId}-minutes`: undefined}
+          dataTestId={dataTestId ? `${dataTestId}-minutes` : undefined}
         />
 
         {seconds && (
@@ -150,7 +150,7 @@ const TimeField = ({
             register={register}
             describedBy={`${id}-error`}
             disabled={disabled}
-            dataTestId={dataTestId ? `${dataTestId}-seconds`: undefined}
+            dataTestId={dataTestId ? `${dataTestId}-seconds` : undefined}
           />
         )}
 
@@ -166,7 +166,7 @@ const TimeField = ({
           error={error}
           describedBy={`${id}-error`}
           disabled={disabled}
-          dataTestId={dataTestId ? `${dataTestId}-period`: undefined}
+          dataTestId={dataTestId ? `${dataTestId}-period` : undefined}
         />
       </div>
 
