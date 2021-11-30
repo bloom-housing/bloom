@@ -31,7 +31,7 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     rm ngx_cache_purge-$NGX_CACHE_PURGE_VERSION.tar.gz
 
 ## move copy to here so the above can build from cache
-COPY ./default.conf /etc/nginx/conf.d/default.conf
+COPY ./default.conf /etc/nginx/conf.d/default.conf.template
 COPY ./proxy.conf /etc/nginx/conf.d/proxy.conf
 
 # configure and build
@@ -41,3 +41,4 @@ RUN cd /tmp/nginx && \
     make && make install && \
     rm -rf /tmp/nginx*
 
+CMD /bin/bash -c "envsubst '\$PORT,\$BACKEND_HOSTNAME' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
