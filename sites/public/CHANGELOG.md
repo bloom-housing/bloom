@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.39...@bloom-housing/public@3.0.1-alpha.40) (2021-11-30)
+
+
+### Bug Fixes
+
+* fetchBaseListingData ([#2238](https://github.com/bloom-housing/bloom/issues/2238)) ([55dd01c](https://github.com/bloom-housing/bloom/commit/55dd01c2e49c383d010493f464092d3948351bd4))
+
+
+
+
+
 ## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.38...@bloom-housing/public@3.0.1-alpha.39) (2021-11-30)
 
 
