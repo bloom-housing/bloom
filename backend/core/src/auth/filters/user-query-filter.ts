@@ -1,4 +1,4 @@
-import { BaseQueryFilter } from "../../shared/filter/base-query-filter"
+import { BaseQueryFilter } from "../../shared/query-filter/base-query-filter"
 import { Brackets, WhereExpression } from "typeorm"
 import { UserFilterKeys } from "../types/user-filter-keys"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"

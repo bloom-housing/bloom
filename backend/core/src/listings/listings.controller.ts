@@ -26,7 +26,6 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Language } from "../shared/types/language-enum"
-import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 import { PaginatedListingDto } from "./dto/paginated-listing.dto"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -35,6 +34,7 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
+import { ListingLangCacheInterceptor } from "../shared/interceptors/listing-lang-cache.interceptor"
 
 @Controller("listings")
 @ApiTags("listings")

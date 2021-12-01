@@ -1,4 +1,6 @@
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
@@ -16,7 +18,6 @@ import { AuthModule } from "./auth/auth.module"
 
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
@@ -40,7 +41,7 @@ import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priori
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 import { ProgramsModule } from "./program/programs.module"
-import { CatchAllFilter } from "./filters/catch-all.filter"
+import { logger } from "./shared/middlewares/logger.middleware"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)
