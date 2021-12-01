@@ -17,7 +17,6 @@ import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormType
 import { FormListing, addressTypes } from "../index"
 import moment from "moment"
 import { isNullOrUndefined } from "../../../../lib/helpers"
-import { Grid } from "ag-grid-community"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -502,19 +501,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 watch={watch}
                 defaultDate={{
                   month: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
-                        .utc()
-                        .format("MM")
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("MM")
                     : null,
                   day: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
-                        .utc()
-                        .format("DD")
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("DD")
                     : null,
                   year: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
-                        .utc()
-                        .format("YYYY")
+                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("YYYY")
                     : null,
                 }}
                 dataTestId={"postmark-date-field"}

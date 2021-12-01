@@ -263,13 +263,16 @@ const formatFormData = (
 
   let postmarkByDateTimeFormatted = null
 
-  if (
-    data.arePostmarksConsidered === YesNoAnswer.Yes &&
-    data.postmarkByDateDateField &&
-    data.postmarkByDateTimeField
-  ) {
+  if (data.arePostmarksConsidered === YesNoAnswer.Yes && data.postmarkByDateDateField) {
     const postmarkByDateFormatted = createDate(data.postmarkByDateDateField)
-    postmarkByDateTimeFormatted = createTime(postmarkByDateFormatted, data.postmarkByDateTimeField)
+    if (data.postmarkByDateTimeField?.hours) {
+      postmarkByDateTimeFormatted = createTime(
+        postmarkByDateFormatted,
+        data.postmarkByDateTimeField
+      )
+    } else {
+      postmarkByDateTimeFormatted = postmarkByDateFormatted
+    }
   }
 
   units.forEach((unit) => {
