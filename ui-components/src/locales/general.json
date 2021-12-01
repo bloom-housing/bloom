@@ -1107,6 +1107,7 @@
       "header": "Public Lottery",
       "seeVideo": "See Video"
     },
+    "recommended": "Recommended",
     "referralContactPhone": "Referral Contact Phone",
     "referralSummary": "Referral Summary",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
@@ -1232,7 +1233,7 @@
       "maxSize": "Maximum Waitlist Size",
       "maxSizeQuestion": "What is the maximum size of the waitlist?",
       "open": "Open Waitlist",
-      "openQuestion": "Is the waitlist open?",
+      "openQuestion": "Do you want to show a waitlist?",
       "openSize": "Number of Openings",
       "openSizeQuestion": "How many spots are open on the list?",
       "openSlots": "Open Waitlist Slots",

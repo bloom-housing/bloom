@@ -77,14 +77,8 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-/**
- * This is fired server side by getStaticProps
- * By setting listingData here, we can continue to serve listings if the fetch fails.
- * This more of a temporary solution.
- */
-let listingData = []
-
 export async function fetchBaseListingData() {
+  let listings = []
   try {
     const { id: jurisdictionId } = await fetchJurisdictionByName()
     const response = await axios.get(process.env.listingServiceUrl, {
@@ -107,12 +101,12 @@ export async function fetchBaseListingData() {
       },
     })
 
-    listingData = response.data?.items ?? []
-  } catch (error) {
-    console.log("fetchBaseListingData error = ", error)
+    listings = response.data?.items
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
   }
 
-  return listingData
+  return listings
 }
 
 let jurisdiction: Jurisdiction | null = null
