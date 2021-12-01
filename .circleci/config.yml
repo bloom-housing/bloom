@@ -156,7 +156,7 @@ workflows:
       - unit-test-partners:
           requires:
             - setup
-      - cypress-public:
+      - cypress-public/run:
           requires:
             - setup
           executor: cypress-node
@@ -167,7 +167,7 @@ workflows:
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
           store_artifacts: true
-      - cypress-partners:
+      - cypress-partners/run:
           requires:
             - setup
           executor: cypress-node
