@@ -7,6 +7,7 @@ import { AuthService } from "../services/auth.service"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "../entities/user.entity"
 import { Repository } from "typeorm"
+import { UserService } from "../services/user.service"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
@@ -35,9 +36,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException()
     }
     const userId = payload.sub
-    return this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ["leasingAgentInListings"],
     })
+
+    if (UserService.isPasswordOutdated(user)) {
+      throw new UnauthorizedException()
+    }
+
+    return user
   }
 }

@@ -41,6 +41,7 @@ import { authzActions } from "../enum/authz-actions.enum"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
+import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -51,7 +52,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(DefaultAuthGuard, AuthzGuard)
+  @UseGuards(DefaultAuthGuard, UserProfileAuthzGuard)
   profile(@Request() req): UserDto {
     return mapTo(UserDto, req.user)
   }
@@ -135,16 +136,17 @@ export class UserController {
     )
   }
 
-  @Get(`:userId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
-  async retrieve(@Param("userId") userId: string): Promise<UserDto> {
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
+  async retrieve(@Param("id") userId: string): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
   }
 
-  @Delete(`:userId`)
+  @Delete(`:id`)
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
-  async delete(@Param("userId") userId: string): Promise<void> {
+  async delete(@Param("id") userId: string): Promise<void> {
     return await this.userService.delete(userId)
   }
 }

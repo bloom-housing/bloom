@@ -41,6 +41,15 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  passwordUpdatedAt: Date
+
+  @Column({ default: 180 })
+  @Expose()
+  passwordValidForDays: number
+
   @Column("varchar", { nullable: true })
   resetToken: string
 

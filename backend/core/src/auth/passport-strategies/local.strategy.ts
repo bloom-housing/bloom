@@ -5,6 +5,7 @@ import { User } from "../entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { PasswordService } from "../services/password.service"
+import { UserService } from "../services/user.service"
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -25,7 +26,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
     if (user) {
       const validPassword = await this.passwordService.verifyUserPassword(user, password)
-      if (validPassword && user.confirmedAt) {
+      if (validPassword && user.confirmedAt && !UserService.isPasswordOutdated(user)) {
         return user
       }
     }

@@ -22,6 +22,8 @@ describe("<Timeout>", () => {
             createdAt: new Date(),
             updatedAt: new Date(),
             jurisdictions: [],
+            passwordUpdatedAt: new Date(),
+            passwordValidForDays: 180,
           },
           signOut: () => {},
         }}
