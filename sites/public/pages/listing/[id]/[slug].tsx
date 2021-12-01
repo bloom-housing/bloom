@@ -77,10 +77,11 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
 }
 
 export async function getStaticProps(context: { params: Record<string, string>; locale: string }) {
+  console.log("context = ", context)
   const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
     headers: { language: context.locale },
   })
-
+  console.log("listing = ", response.data)
   return {
     props: {
       listing: response.data,
