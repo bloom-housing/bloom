@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.40...@bloom-housing/public@3.0.1-alpha.41) (2021-11-30)
+
+
+### Features
+
+* getStaticPaths fallback blocking test ([a42170d](https://github.com/bloom-housing/bloom/commit/a42170d5c514998dad2b2011b8a6b9021955f277))
+
+
+
+
+
 ## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.39...@bloom-housing/public@3.0.1-alpha.40) (2021-11-30)
 
 
