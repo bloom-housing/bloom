@@ -56,6 +56,7 @@ import { ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed } from "../se
 import { ListingDefaultSummaryWith10ListingWith30AmiPercentageSeed } from "../seeds/listings/listing-default-summary-with-10-listing-with-30-ami-percentage-seed"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
+import { Listing10136Seed } from "../seeds/listings/listing-detroit-10136"
 
 @Module({})
 export class SeederModule {
@@ -110,6 +111,7 @@ export class SeederModule {
         ListingTritonSeed,
         ListingDefaultReservedSeed,
         ListingDefaultFCFSSeed,
+        Listing10136Seed,
         Listing10158Seed,
         Listing10157Seed,
         Listing10147Seed,

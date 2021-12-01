@@ -29,6 +29,7 @@ import { Listing10168Seed } from "./seeds/listings/listing-detroit-10168"
 import { createJurisdictions } from "./seeds/jurisdictions"
 import { Jurisdiction } from "./jurisdictions/entities/jurisdiction.entity"
 import { Listing10202Seed } from "./seeds/listings/listing-detroit-10202"
+import { Listing10136Seed } from "./seeds/listings/listing-detroit-10136"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -38,6 +39,7 @@ const argv = yargs.scriptName("seed").options({
 // number in listings.e2e-spec.ts.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const listingSeeds: any[] = [
+  Listing10136Seed,
   Listing10145Seed,
   Listing10147Seed,
   Listing10151Seed,
