@@ -28,9 +28,6 @@ import {
 } from "../src/applications/PaperApplicationForm/FormTypes"
 import moment, { Moment } from "moment"
 
-type preferredUnitType = {
-  id: string
-}
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
