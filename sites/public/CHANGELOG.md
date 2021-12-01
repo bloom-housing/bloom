@@ -3,6 +3,90 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.43...@bloom-housing/public@3.0.1-alpha.44) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.42...@bloom-housing/public@3.0.1-alpha.43) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.41...@bloom-housing/public@3.0.1-alpha.42) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.40...@bloom-housing/public@3.0.1-alpha.41) (2021-11-30)
+
+
+### Features
+
+* getStaticPaths fallback blocking test ([a42170d](https://github.com/bloom-housing/bloom/commit/a42170d5c514998dad2b2011b8a6b9021955f277))
+
+
+
+
+
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.39...@bloom-housing/public@3.0.1-alpha.40) (2021-11-30)
+
+
+### Bug Fixes
+
+* fetchBaseListingData ([#2238](https://github.com/bloom-housing/bloom/issues/2238)) ([55dd01c](https://github.com/bloom-housing/bloom/commit/55dd01c2e49c383d010493f464092d3948351bd4))
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.38...@bloom-housing/public@3.0.1-alpha.39) (2021-11-30)
+
+
+### Bug Fixes
+
+* **backend:** nginx with heroku configuration ([#2196](https://github.com/bloom-housing/bloom/issues/2196)) ([a1e2630](https://github.com/bloom-housing/bloom/commit/a1e26303bdd660b9ac267da55dc8d09661216f1c))
+
+
+
+
+
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.37...@bloom-housing/public@3.0.1-alpha.38) (2021-11-29)
+
+
+### Bug Fixes
+
+* feedback on the waitlist data and display ([9432542](https://github.com/bloom-housing/bloom/commit/9432542efd9ba2e4bf8dd7195895e75f5d2e0623))
+
+
+
+
+
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.36...@bloom-housing/public@3.0.1-alpha.37) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.35...@bloom-housing/public@3.0.1-alpha.36) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.34...@bloom-housing/public@3.0.1-alpha.35) (2021-11-29)
 
 

@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.27...@bloom-housing/backend-core@3.0.1-alpha.28) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.26...@bloom-housing/backend-core@3.0.1-alpha.27) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.25...@bloom-housing/backend-core@3.0.1-alpha.26) (2021-11-30)
+
+
+### Bug Fixes
+
+* **backend:** nginx with heroku configuration ([#2196](https://github.com/bloom-housing/bloom/issues/2196)) ([a1e2630](https://github.com/bloom-housing/bloom/commit/a1e26303bdd660b9ac267da55dc8d09661216f1c))
+
+
+
+
+
+## [3.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.24...@bloom-housing/backend-core@3.0.1-alpha.25) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@3.0.1-alpha.24) (2021-11-29)
+
+
+### Bug Fixes
+
+* cannot save custom mailing, dropoff, or pickup address ([#2207](https://github.com/bloom-housing/bloom/issues/2207)) ([96484b5](https://github.com/bloom-housing/bloom/commit/96484b5676ecb000e492851ee12766ba9e6cd86f))
+
+
+
+
+
 ## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.22...@bloom-housing/backend-core@3.0.1-alpha.23) (2021-11-23)
 
 

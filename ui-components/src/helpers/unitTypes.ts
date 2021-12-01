@@ -5,7 +5,7 @@ type GetUnitTypeNamesReturn = {
   name: string
 }
 
-export const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
+export const UnitTypeSort = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
 
 export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
   if (!units) return []
