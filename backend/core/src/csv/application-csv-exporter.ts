@@ -33,7 +33,7 @@ export class ApplicationCsvExporter {
   // could use translations
   unitTypeToReadable(type) {
     const typeMap = {
-      sro: "Single Room Occupancy",
+      sro: "SRO",
       studio: "Studio",
       oneBdrm: "One Bedroom",
       twoBdrm: "Two Bedroom",
