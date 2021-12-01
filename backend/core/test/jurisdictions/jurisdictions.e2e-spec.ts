@@ -7,7 +7,6 @@ import dbOptions = require("../../ormconfig.test")
 import supertest from "supertest"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { JurisdictionsModule } from "../../src/jurisdictions/jurisdictions.module"
@@ -15,6 +14,7 @@ import { Repository } from "typeorm"
 import { Program } from "../../src/program/entities/program.entity"
 import { Language } from "../../src/shared/types/language-enum"
 import { Preference } from "../../src/preferences/entities/preference.entity"
+import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

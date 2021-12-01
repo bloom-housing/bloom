@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.41...@bloom-housing/partners@3.0.1-alpha.42) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.40...@bloom-housing/partners@3.0.1-alpha.41) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.39...@bloom-housing/partners@3.0.1-alpha.40) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.38...@bloom-housing/partners@3.0.1-alpha.39) (2021-11-30)
+
+
+### Bug Fixes
+
+* lottery results uploads now save ([#2226](https://github.com/bloom-housing/bloom/issues/2226)) ([8964bba](https://github.com/bloom-housing/bloom/commit/8964bba2deddbd077a049649c26f6fe8b576ed2f))
+
+
+
+
+
 ## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.37...@bloom-housing/partners@3.0.1-alpha.38) (2021-11-30)
 
 
