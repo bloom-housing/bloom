@@ -26,7 +26,7 @@ import {
   ApplicationTypes,
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import moment, { Moment } from "moment"
 
 type preferredUnitType = {
   id: string
@@ -190,7 +190,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
-  let preferredUnit: preferredUnitType[] = []
+  let preferredUnit: Record<"id", string>[] = []
 
   if (data.application?.preferredUnit) {
     if (Array.isArray(data.application?.preferredUnit)) {
