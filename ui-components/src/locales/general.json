@@ -309,6 +309,7 @@
         "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
+          "SRO": "SRO",
           "studio": "Studio",
           "oneBdrm": "1 Bedroom",
           "twoBdrm": "2 Bedroom",
@@ -1199,7 +1200,7 @@
     "selectionCriteria": "Selection Criteria",
     "selectPreferences": "Select Preferences",
     "showClosedListings": "Show Closed Listings",
-    "singleRoomOccupancy": "Single Room Occupancy",
+    "singleRoomOccupancy": "SRO",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
     "specialNotes": "Special Notes",
     "streetAddressOrPOBox": "Street Address or PO Box",
@@ -1210,7 +1211,7 @@
       "threeBdrm": "3 BR",
       "fourBdrm": "4 BR",
       "studio": "Studio",
-      "SRO": "Single Room Occupancy"
+      "SRO": "SRO"
     },
     "unitsAreFor": "These units are for %{type}.",
     "unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
@@ -1305,7 +1306,7 @@
         "twoBdrm": "Two Bedroom",
         "threeBdrm": "Three Bedroom",
         "fourBdrm": "Four Bedroom",
-        "SRO": "Single Room Occupancy"
+        "SRO": "SRO"
       }
     },
     "events": {
