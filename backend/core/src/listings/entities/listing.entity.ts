@@ -94,7 +94,7 @@ class Listing extends BaseEntity {
   @Expose()
   @ApiPropertyOptional()
   get referralApplication(): ApplicationMethodDto | undefined {
-    return this.applicationMethods.find((method) => method.type === ApplicationMethodType.Referral)
+    return this.applicationMethods?.find((method) => method.type === ApplicationMethodType.Referral)
   }
 
   // booleans to make dealing with different application methods easier to parse
