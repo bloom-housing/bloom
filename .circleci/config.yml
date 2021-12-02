@@ -157,6 +157,7 @@ workflows:
           requires:
             - setup
       - cypress/run:
+          name: "cypress-public"
           requires:
             - setup
           executor: cypress-node
@@ -168,6 +169,7 @@ workflows:
           wait-on: "http://0.0.0.0:3000"
           store_artifacts: true
       - cypress/run:
+          name: "cypress-partners"
           requires:
             - setup
           executor: cypress-node
