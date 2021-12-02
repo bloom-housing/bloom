@@ -20,7 +20,7 @@ import {
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
 
-type AlertMessageProps = {
+type RequestErrorProps = {
   title: string
   content: string
 }
@@ -33,7 +33,7 @@ const SignIn = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
-  const [requestError, setRequestError] = useState<AlertMessageProps | null>()
+  const [requestError, setRequestError] = useState<RequestErrorProps | null>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
