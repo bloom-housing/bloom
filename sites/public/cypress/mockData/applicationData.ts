@@ -30,7 +30,7 @@ export const preferredUnitCheckboxesOrder = [
 ]
 
 export const howDidYouHearCheckboxesOrder = [
-  "alamedaCountyHCDWebsite",
+  "jurisdictionWebsite",
   "developerWebsite",
   "flyer",
   "emailAlert",
@@ -39,6 +39,25 @@ export const howDidYouHearCheckboxesOrder = [
   "radioAd",
   "busAd",
   "other",
+]
+
+export const raceCheckboxesOrder = [
+  "americanIndianAlaskanNative",
+  "asian",
+  "asian-asianIndian",
+  "asian-chinese",
+  "asian-filipino",
+  "asian-korean",
+  "asian-vietnamese",
+  "asian-otherAsian",
+  "blackAfricanAmerican",
+  "nativeHawaiianOtherPacificIslander",
+  "nativeHawaiianOtherPacificIslander-nativeHawaiian",
+  "nativeHawaiianOtherPacificIslander-guamanianOrChamorro",
+  "nativeHawaiianOtherPacificIslander-samoan",
+  "white",
+  "otherMultiracial",
+  "declineToRespond",
 ]
 
 export const coliseumApplication: Application = {
@@ -180,11 +199,11 @@ export const coliseumApplication: Application = {
   ],
   demographics: {
     ...idDefaults,
-    race: "white",
+    race: ["race-white"],
     ethnicity: "hispanicLatino",
-    gender: "female",
-    sexualOrientation: "bisexual",
-    howDidYouHear: ["alamedaCountyHCDWebsite", "developerWebsite"],
+    gender: "",
+    sexualOrientation: "",
+    howDidYouHear: ["jurisdictionWebsite", "developerWebsite"],
   },
   preferences: [
     {
@@ -393,6 +412,7 @@ export const minimalDataApplication: Application = {
   demographics: {
     ...idDefaults,
     howDidYouHear: [],
+    race: [],
   },
   preferences: [],
   programs: [

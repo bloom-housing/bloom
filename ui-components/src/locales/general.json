@@ -144,6 +144,7 @@
       "agency": "Agency if Applicable",
       "adaPriorities": "ADA Priorities Selected",
       "preferences": "Application Preferences",
+      "programs": "Application Programs",
       "liveOrWorkIn": "Live or Work in",
       "householdIncome": "Declared Household Income",
       "annualIncome": "Annual Income",
@@ -308,6 +309,7 @@
         "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
+          "SRO": "SRO",
           "studio": "Studio",
           "oneBdrm": "1 Bedroom",
           "twoBdrm": "2 Bedroom",
@@ -666,15 +668,28 @@
         },
         "raceOptions": {
           "americanIndianAlaskanNative": "American Indian / Alaskan Native",
-          "asian": "Asian",
-          "blackAfricanAmerican": "Black / African American",
-          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
-          "white": "White",
           "americanIndianAlaskanNativeAndBlackAfricanAmerican": "American Indian / Alaskan Native and Black/African American",
           "americanIndianAlaskanNativeAndWhite": "American Indian / Alaskan Native and White",
+          "asian": "Asian",
           "asianAndWhite": "Asian and White",
+          "asian-asianIndian": "Asian Indian",
+          "asian-otherAsian": "Other Asian",
+          "blackAfricanAmerican": "Black / African American",
           "blackAfricanAmericanAndWhite": "Black / African American and White",
-          "otherMutliracial": "Other / Mutliracial"
+          "asian-chinese": "Chinese",
+          "declineToRespond": "Decline to Respond",
+          "asian-filipino": "Filipino",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guamanian or Chamorro",
+          "asian-japanese": "Japanese",
+          "asian-korean": "Korean",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Native Hawaiian",
+          "nativeHawaiianOtherPacificIslander": "Native Hawaiian / Other Pacific Islander",
+          "otherMultiracial": "Other / Multiracial",
+          "otherMutliracial": "Other / Mutliracial",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Other Pacific Islander",
+          "nativeHawaiianOtherPacificIslander-samoan": "Samoan",
+          "asian-vietnamese": "Vietnamese",
+          "white": "White"
         },
         "genderOptions": {
           "female": "Female",
@@ -692,7 +707,7 @@
           "notListed": "Not Listed"
         },
         "howDidYouHearOptions": {
-          "alamedaCountyHCDWebsite": "Alameda County HCD Website",
+          "jurisdictionWebsite": "Alameda County HCD Website",
           "developerWebsite": "Developer Website",
           "flyer": "Flyer",
           "emailAlert": "Email Alert",
@@ -1092,6 +1107,7 @@
       "header": "Public Lottery",
       "seeVideo": "See Video"
     },
+    "recommended": "Recommended",
     "referralContactPhone": "Referral Contact Phone",
     "referralSummary": "Referral Summary",
     "remainingUnitsAfterPreferenceConsideration": "After all preference holders have been considered, any remaining units will be available to other qualified applicants.",
@@ -1184,7 +1200,7 @@
     "selectionCriteria": "Selection Criteria",
     "selectPreferences": "Select Preferences",
     "showClosedListings": "Show Closed Listings",
-    "singleRoomOccupancy": "Single Room Occupancy",
+    "singleRoomOccupancy": "SRO",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
     "specialNotes": "Special Notes",
     "streetAddressOrPOBox": "Street Address or PO Box",
@@ -1195,7 +1211,7 @@
       "threeBdrm": "3 BR",
       "fourBdrm": "4 BR",
       "studio": "Studio",
-      "SRO": "Single Room Occupancy"
+      "SRO": "SRO"
     },
     "unitsAreFor": "These units are for %{type}.",
     "unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
@@ -1217,7 +1233,7 @@
       "maxSize": "Maximum Waitlist Size",
       "maxSizeQuestion": "What is the maximum size of the waitlist?",
       "open": "Open Waitlist",
-      "openQuestion": "Is the waitlist open?",
+      "openQuestion": "Do you want to show a waitlist?",
       "openSize": "Number of Openings",
       "openSizeQuestion": "How many spots are open on the list?",
       "openSlots": "Open Waitlist Slots",
@@ -1290,7 +1306,7 @@
         "twoBdrm": "Two Bedroom",
         "threeBdrm": "Three Bedroom",
         "fourBdrm": "Four Bedroom",
-        "SRO": "Single Room Occupancy"
+        "SRO": "SRO"
       }
     },
     "events": {
@@ -1487,6 +1503,7 @@
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Please select one.",
     "preferNotToSay": "Prefer not to say",
+    "pleaseSelectYesNo": "Please select yes or no.",
     "pm": "PM",
     "post": "Post",
     "preferences": "Preferences",

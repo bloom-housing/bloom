@@ -7,6 +7,7 @@ import {
   ApplicationStatus,
   AddressUpdate,
   HouseholdMember,
+  Program,
 } from "@bloom-housing/backend-core/types"
 
 import {
@@ -15,12 +16,18 @@ import {
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
 import {
+  fieldGroupObjectToArray,
+  mapProgramsToApi,
+  mapApiToProgramsPaperForm,
+} from "@bloom-housing/shared-helpers"
+import {
   FormTypes,
   YesNoAnswer,
   ApplicationTypes,
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import moment, { Moment } from "moment"
+
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -53,11 +60,18 @@ interface FormData extends FormTypes {
   submissionType: ApplicationSubmissionType
 }
 
+type mapFormToApiProps = {
+  data: FormData
+  listingId: string
+  editMode: boolean
+  programs: Program[]
+}
+
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = (data: FormData, listingId: string, editMode: boolean) => {
+export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -112,6 +126,16 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   })()
 
   const preferences = mapPreferencesToApi(data)
+  const programsForm = data.application.programs
+    ? Object.entries(data.application.programs).reduce((acc, curr) => {
+        if (curr[1]) {
+          Object.assign(acc, { [curr[0]]: curr[1] })
+        }
+        return acc
+      }, {})
+    : {}
+
+  const programsData = mapProgramsToApi(programs, programsForm)
 
   // additional phone
   const {
@@ -122,13 +146,17 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    demographics,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
+
+  const demographics = {
+    ...data.application.demographics,
+    race: fieldGroupObjectToArray(data, "race"),
+  }
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
@@ -159,10 +187,15 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
+  let preferredUnit: Record<"id", string>[] = []
 
-  const preferredUnit = data.application?.preferredUnit
-    ? data.application.preferredUnit?.map((id) => ({ id }))
-    : []
+  if (data.application?.preferredUnit) {
+    if (Array.isArray(data.application?.preferredUnit)) {
+      preferredUnit = data.application.preferredUnit.map((id) => ({ id }))
+    } else {
+      preferredUnit = [{ id: data.application.preferredUnit }]
+    }
+  }
 
   const result: ApplicationUpdate = {
     submissionDate,
@@ -179,6 +212,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     householdExpectingChanges,
     householdStudent,
     preferences,
+    programs: programsData,
     income,
     incomePeriod,
     incomeVouchers,
@@ -252,6 +286,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences = mapApiToPreferencesForm(applicationData.preferences)
+  const programs = mapApiToProgramsPaperForm(applicationData.programs)
 
   const application: ApplicationTypes = (() => {
     const {
@@ -300,6 +335,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       demographics,
       acceptedTerms,
       alternateContact,
+      programs,
     }
 
     return result

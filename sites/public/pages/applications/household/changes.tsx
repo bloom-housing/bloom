@@ -89,7 +89,7 @@ const ApplicationHouseholdChanges = () => {
             }`}
           >
             <fieldset>
-              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
                 name="householdExpectingChanges"

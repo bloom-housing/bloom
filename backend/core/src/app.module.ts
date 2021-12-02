@@ -16,7 +16,6 @@ import { AuthModule } from "./auth/auth.module"
 
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
@@ -40,8 +39,9 @@ import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priori
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
 import { ProgramsModule } from "./program/programs.module"
-import { CatchAllFilter } from "./filters/catch-all.filter"
 import { ActivityLogModule } from "./activity-log/activity-log.module"
+import { logger } from "./shared/middlewares/logger.middleware"
+import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
   const { httpAdapter } = app.get(HttpAdapterHost)

@@ -5,7 +5,7 @@ import { Jurisdiction } from "../entities/jurisdiction.entity"
 import { JurisdictionCreateDto } from "../dto/jurisdiction-create.dto"
 import { QueryOneOptions } from "../../shared/services/abstract-service"
 import { JurisdictionUpdateDto } from "../dto/jurisdiction-update.dto"
-import { assignDefined } from "../../shared/assign-defined"
+import { assignDefined } from "../../shared/utils/assign-defined"
 
 export class JurisdictionsService {
   constructor(

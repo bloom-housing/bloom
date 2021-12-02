@@ -64,13 +64,6 @@ const DetailRankingsAndResults = () => {
         </ViewItem>
       </GridSection>
       {listing.isWaitlistOpen && (
-        <GridSection columns={2}>
-          <ViewItem id="waitlist.sizeQuestion" label={t("listings.waitlist.sizeQuestion")}>
-            {listing.waitlistMaxSize ? t("t.yes") : t("t.no")}
-          </ViewItem>
-        </GridSection>
-      )}
-      {listing.waitlistMaxSize && (
         <GridSection columns={3}>
           <ViewItem id="waitlistMaxSize" label={t("listings.waitlist.maxSize")}>
             {getDetailFieldNumber(listing.waitlistMaxSize)}

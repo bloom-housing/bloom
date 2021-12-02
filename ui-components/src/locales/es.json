@@ -295,7 +295,7 @@
           "notListed": "No aparece en la lista"
         },
         "howDidYouHearOptions": {
-          "alamedaCountyHCDWebsite": "Sitio web del HCD del Condado de Alameda",
+          "jurisdictionWebsite": "Sitio web del HCD del Condado de Alameda",
           "developerWebsite": "Sitio web del constructor",
           "flyer": "Folleto",
           "emailAlert": "Aviso por email",
