@@ -28,7 +28,7 @@ export default class BooleansFormatter extends Formatter {
     this.processBoolean("applicationDropOffAddress", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
-        this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
+        this.data.whereApplicationsDroppedOff === addressTypes.anotherAddress,
       trueCase: () => this.data.applicationDropOffAddress,
     })
     this.processBoolean("applicationPickUpAddress", {
