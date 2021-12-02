@@ -2,8 +2,6 @@ import { Views } from "./types"
 
 const views: Views = {
   base: {
-    select: [],
-    leftJoins: [],
     leftJoinAndSelect: [
       ["application.applicant", "applicant"],
       ["applicant.address", "applicant_address"],
@@ -23,8 +21,6 @@ const views: Views = {
 }
 
 views.partnerList = {
-  select: [],
-  leftJoins: [],
   leftJoinAndSelect: [
     ["application.applicant", "applicant"],
     ["application.householdMembers", "householdMembers"],
