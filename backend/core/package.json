@@ -27,7 +27,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./jest-e2e.json --runInBand --forceExit",
+    "test:e2e": "jest --coverage --config ./jest-e2e.json --runInBand --forceExit",
     "test:e2e:local": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && psql -d bloom_test -c 'CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seed.ts --test && yarn run test:e2e",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "herokusetup": "node heroku.setup.js",
