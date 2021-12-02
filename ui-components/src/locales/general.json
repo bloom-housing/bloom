@@ -834,7 +834,8 @@
       "accountHasBeenLocked": "For secruity reasons, this account has been locked.",
       "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
       "enterValidEmailAndPassword": "Please enter a valid email and password.",
-      "afterFailedAttempts": "For security reasons, after 5 more failed attempts, you’ll have to wait 30 minutes before trying again."
+      "afterFailedAttempts": "For security reasons, after 5 more failed attempts, you’ll have to wait 30 minutes before trying again.",
+      "partnersSignIn": "Partners Sign In"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
