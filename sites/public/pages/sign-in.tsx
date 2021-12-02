@@ -13,10 +13,17 @@ import {
   t,
   AlertBox,
   SiteAlert,
+  AlertNotice,
+  ErrorMessage,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
+
+type AlertMessageProps = {
+  title: string
+  content: string
+}
 
 const SignIn = () => {
   const { login } = useContext(AuthContext)
@@ -26,7 +33,7 @@ const SignIn = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
-  const [requestError, setRequestError] = useState<string>()
+  const [requestError, setRequestError] = useState<AlertMessageProps | null>()
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
@@ -38,12 +45,22 @@ const SignIn = () => {
     } catch (err) {
       const { status } = err.response || {}
       if (status === 401) {
-        setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
+        setRequestError({
+          title: t("authentication.signIn.enterValidEmailAndPassword"),
+          content: t("authentication.signIn.afterFailedAttempts"),
+        })
+      } else if (status === 429) {
+        setRequestError({
+          title: t("authentication.signIn.accountHasBeenLocked"),
+          content: t("authentication.signIn.youHaveToWait"),
+        })
       } else {
         console.error(err)
-        setRequestError(
-          `${t("authentication.signIn.error")}. ${t("authentication.signIn.errorGenericMessage")}`
-        )
+
+        setRequestError({
+          title: t("authentication.signIn.error"),
+          content: t("authentication.signIn.errorGenericMessage"),
+        })
       }
     }
   }
@@ -55,11 +72,18 @@ const SignIn = () => {
           <Icon size="2xl" symbol="profile" />
           <h2 className="form-card__title">Sign In</h2>
         </div>
-        {requestError && (
-          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-            {requestError}
-          </AlertBox>
+        {!!requestError && (
+          <ErrorMessage id={"householdsize-error"} error={!!requestError}>
+            <AlertBox type="alert" inverted onClose={() => setRequestError(null)}>
+              {requestError.title}
+            </AlertBox>
+
+            <AlertNotice title="" type="alert" inverted>
+              {requestError.content}
+            </AlertNotice>
+          </ErrorMessage>
         )}
+
         <SiteAlert type="notice" dismissable />
         <div className="form-card__group pt-0 border-b">
           <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
