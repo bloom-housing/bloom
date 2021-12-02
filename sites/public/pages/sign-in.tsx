@@ -70,7 +70,7 @@ const SignIn = () => {
       <FormCard>
         <div className="form-card__lead text-center border-b mx-0">
           <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">Sign In</h2>
+          <h2 className="form-card__title">{t(`nav.signIn`)}</h2>
         </div>
         {!!requestError && (
           <ErrorMessage id={"householdsize-error"} error={!!requestError}>
