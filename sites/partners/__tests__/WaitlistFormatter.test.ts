@@ -15,13 +15,10 @@ describe("WaitlistFormatter", () => {
     data.waitlistOpenQuestion = YesNoAnswer.Yes
     expect(formatData(data).waitlistCurrentSize).toBeNull()
 
-    data.waitlistSizeQuestion = YesNoAnswer.Yes
-    expect(formatData(data).waitlistCurrentSize).toBeNull()
-
     data.waitlistCurrentSize = 10
     expect(formatData(data).waitlistCurrentSize).toEqual(10)
 
-    data.waitlistSizeQuestion = YesNoAnswer.No
+    data.waitlistOpenQuestion = YesNoAnswer.No
     expect(formatData(data).waitlistCurrentSize).toBeNull()
   })
 
@@ -30,13 +27,12 @@ describe("WaitlistFormatter", () => {
     expect(formatData(data).waitlistMaxSize).toBeNull()
 
     data.waitlistOpenQuestion = YesNoAnswer.Yes
-    data.waitlistSizeQuestion = YesNoAnswer.Yes
     expect(formatData(data).waitlistMaxSize).toBeNull()
 
     data.waitlistMaxSize = 20
     expect(formatData(data).waitlistMaxSize).toEqual(20)
 
-    data.waitlistSizeQuestion = YesNoAnswer.No
+    data.waitlistOpenQuestion = YesNoAnswer.No
     expect(formatData(data).waitlistMaxSize).toBeNull()
   })
 
@@ -45,13 +41,12 @@ describe("WaitlistFormatter", () => {
     expect(formatData(data).waitlistOpenSpots).toBeNull()
 
     data.waitlistOpenQuestion = YesNoAnswer.Yes
-    data.waitlistSizeQuestion = YesNoAnswer.Yes
     expect(formatData(data).waitlistOpenSpots).toBeNull()
 
     data.waitlistOpenSpots = 15
     expect(formatData(data).waitlistOpenSpots).toEqual(15)
 
-    data.waitlistSizeQuestion = YesNoAnswer.No
+    data.waitlistOpenQuestion = YesNoAnswer.No
     expect(formatData(data).waitlistOpenSpots).toBeNull()
   })
 

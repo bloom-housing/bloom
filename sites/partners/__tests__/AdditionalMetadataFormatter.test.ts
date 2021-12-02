@@ -26,11 +26,12 @@ describe("AdditionalMetadataFormatter", () => {
           title: "Preference 2",
         },
       ],
+      programs: [],
     } as FormMetadata
 
-    expect(formatData(fixtureData, metadata).preferences).toEqual([
-      { title: "Preference 1", ordinal: 1 },
-      { title: "Preference 2", ordinal: 2 },
+    expect(formatData(fixtureData, metadata).listingPreferences).toEqual([
+      { preference: { title: "Preference 1" }, ordinal: 1 },
+      { preference: { title: "Preference 2" }, ordinal: 2 },
     ])
   })
 
@@ -42,6 +43,7 @@ describe("AdditionalMetadataFormatter", () => {
     }
     const metadata = {
       preferences: [],
+      programs: [],
       latLong,
     }
 
