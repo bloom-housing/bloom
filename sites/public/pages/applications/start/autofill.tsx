@@ -110,6 +110,7 @@ export default () => {
                 onClick={() => {
                   useDetails = true
                 }}
+                data-test-id={"autofill-accept"}
               >
                 {t("application.autofill.start")}
               </Button>
@@ -121,6 +122,7 @@ export default () => {
                 onClick={() => {
                   useDetails = false
                 }}
+                data-test-id={"autofill-decline"}
               >
                 {t("application.autofill.reset")}
               </Button>

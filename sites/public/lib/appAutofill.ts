@@ -28,7 +28,7 @@ class AutofillCleaner {
       delete this.application[key]
     })
 
-    this.application["confirmationId"] = "" // only used on frontend
+    this.application["confirmationCode"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
     this.application["autofilled"] = true // only used on frontend
     this.application.submissionType = ApplicationSubmissionType.electronical

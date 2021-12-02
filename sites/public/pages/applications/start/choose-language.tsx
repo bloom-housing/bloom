@@ -22,10 +22,11 @@ import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(process.env.listingServiceUrl + "?limit=all")
-  conductor.listing =
-    response.data.items.find((listing) => listing.id == listingId) || response.data.items[0] // FIXME: temporary fallback
-  const applicationConfig = retrieveApplicationConfig() // TODO: load from backend
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
+    headers: { language: context.locale },
+  })
+  conductor.listing = response.data
+  const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig
   stateFunction(conductor.listing)
   context.syncListing(conductor.listing)
@@ -123,6 +124,7 @@ const ApplicationChooseLanguage = () => {
                       onLanguageSelect(lang)
                     }}
                     key={index}
+                    data-test-id={"app-choose-language-button"}
                   >
                     {t(`applications.begin.${lang}`)}
                   </Button>
@@ -142,6 +144,7 @@ const ApplicationChooseLanguage = () => {
               <div>
                 <LinkButton
                   href={`/sign-in?redirectUrl=/applications/start/choose-language&listingId=${listingId?.toString()}`}
+                  dataTestId={"app-choose-language-sign-in-button"}
                 >
                   {t("nav.signIn")}
                 </LinkButton>

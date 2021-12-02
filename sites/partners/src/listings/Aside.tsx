@@ -1,5 +1,6 @@
-import React, { useContext, useMemo } from "react"
+import React, { useContext, useMemo, useCallback } from "react"
 import moment from "moment"
+import { useFormContext } from "react-hook-form"
 import {
   pdfUrlFromListingEvents,
   t,
@@ -14,6 +15,7 @@ import {
   Icon,
 } from "@bloom-housing/ui-components"
 import { ListingContext } from "./ListingContext"
+import { createDate } from "../../lib/helpers"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
@@ -32,6 +34,8 @@ const Aside = ({
   submitFormWithStatus,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { getValues } = useFormContext() || {}
 
   const listingId = listing?.id
 
@@ -42,6 +46,24 @@ const Aside = ({
 
     return momentDate.format("MMMM DD, YYYY")
   }, [listing])
+
+  const saveAndExit = useCallback(() => {
+    const applicationDueDateField = getValues()?.applicationDueDateField
+    const applicationDueDateFormatted = createDate(applicationDueDateField)
+
+    const newStatus = (() => {
+      if (
+        listing.status === ListingStatus.closed &&
+        moment(applicationDueDateFormatted).isAfter()
+      ) {
+        return ListingStatus.active
+      }
+
+      return listing.status
+    })()
+
+    submitFormWithStatus(false, newStatus)
+  }, [getValues, listing, submitFormWithStatus])
 
   const actions = useMemo(() => {
     const elements = []
@@ -81,6 +103,7 @@ const Aside = ({
       elements.push(
         <GridCell key="btn-publish">
           <Button
+            id="publishButton"
             styleType={AppearanceStyleType.success}
             type="button"
             fullWidth
@@ -110,9 +133,7 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => {
-              submitFormWithStatus(false, listing.status)
-            }}
+            onClick={() => saveAndExit()}
           >
             {t("t.saveExit")}
           </Button>
@@ -123,6 +144,7 @@ const Aside = ({
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              id="publishButton"
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
@@ -138,7 +160,7 @@ const Aside = ({
 
       if (listing.status === ListingStatus.active) {
         elements.push(
-          <div className="grid grid-cols-2 gap-2" key="btn-close-unpublish">
+          <div className="grid gap-2" key="btn-close-unpublish">
             <Button
               type="button"
               styleType={AppearanceStyleType.secondary}
@@ -234,6 +256,7 @@ const Aside = ({
   }, [
     listing,
     listingId,
+    saveAndExit,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,

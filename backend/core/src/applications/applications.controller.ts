@@ -12,7 +12,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApplicationsService } from "./applications.service"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
 import { AuthzGuard } from "../auth/guards/authz.guard"
@@ -29,9 +28,10 @@ import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
 import { PaginationQueryParams } from "../shared/dto/pagination.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { ApplicationCsvExporter } from "../csv/application-csv-exporter"
 import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
+import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
+import { ApplicationsService } from "./services/applications.service"
 
 export enum OrderByParam {
   firstName = "applicant.firstName",
@@ -177,7 +177,7 @@ export class ApplicationsController {
   constructor(
     private readonly applicationsService: ApplicationsService,
     private readonly listingsService: ListingsService,
-    private readonly applicationCsvExporter: ApplicationCsvExporter
+    private readonly applicationCsvExporter: ApplicationCsvExporterService
   ) {}
 
   @Get()
@@ -192,8 +192,11 @@ export class ApplicationsController {
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
   async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
-    const applications = await this.applicationsService.listWithFlagged(queryParams)
-    return this.applicationCsvExporter.export(applications, queryParams.includeDemographics)
+    const applications = await this.applicationsService.rawListWithFlagged(queryParams)
+    return this.applicationCsvExporter.exportFromObject(
+      applications,
+      queryParams.includeDemographics
+    )
   }
 
   @Post()

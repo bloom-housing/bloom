@@ -1,5 +1,7 @@
 .page-header {
   @apply py-8;
+  @apply border-t;
+  @apply border-gray-450;
 
   @screen md {
     @apply py-10;
@@ -7,6 +9,7 @@
 
   &.bg-primary-dark {
     @apply text-white;
+    @apply border-primary;
   }
 }
 

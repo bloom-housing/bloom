@@ -73,12 +73,12 @@ const DetailApplicationDates = () => {
       >
         <GridSection columns={3}>
           <GridCell>
-            <ViewItem label={t("listings.applicationDeadline")}>
+            <ViewItem id="applicationDeadline" label={t("listings.applicationDeadline")}>
               {listing.applicationDueDate && getDetailFieldDate(listing.applicationDueDate)}
             </ViewItem>
           </GridCell>
           <GridCell>
-            <ViewItem label={t("listings.applicationDueTime")}>
+            <ViewItem id="applicationDueTime" label={t("listings.applicationDueTime")}>
               {listing.applicationDueTime && getDetailFieldTime(listing.applicationDueTime)}
             </ViewItem>
           </GridCell>
@@ -86,10 +86,14 @@ const DetailApplicationDates = () => {
 
         {!!openHouseEvents.length && (
           <GridSection columns={1}>
-            <ViewItem label={t("listings.openHouseEvent.header")}>
+            <ViewItem id="openHouseEvent.header" label={t("listings.openHouseEvent.header")}>
               <div className="mt-5">
                 <div className="mb-5">
-                  <MinimalTable headers={openHouseHeaders} data={openHouseEvents} />
+                  <MinimalTable
+                    id="openhouseHeader"
+                    headers={openHouseHeaders}
+                    data={openHouseEvents}
+                  />
                 </div>
               </div>
             </ViewItem>
@@ -105,16 +109,16 @@ const DetailApplicationDates = () => {
           <section className="border rounded-md p-8 bg-white mb-8">
             <GridSection tinted={true} inset={true} grid={false}>
               <GridSection grid columns={3}>
-                <ViewItem label={t("t.date")}>
+                <ViewItem id="drawer.startTime.date" label={t("t.date")}>
                   {drawer?.startTime && getDetailFieldDate(drawer.startTime)}
                 </ViewItem>
-                <ViewItem label={t("t.startTime")}>
+                <ViewItem id="drawer.startTime.time" label={t("t.startTime")}>
                   {getDetailFieldTime(drawer?.startTime)}
                 </ViewItem>
-                <ViewItem label={t("t.endTime")}>
+                <ViewItem id="drawer.endTime.time" label={t("t.endTime")}>
                   {drawer?.endTime && getDetailFieldTime(drawer?.endTime)}
                 </ViewItem>
-                <ViewItem label={t("t.url")}>
+                <ViewItem id="drawer.url" label={t("t.url")}>
                   {drawer?.url ? (
                     <LinkButton className="mx-0 my-0" href={drawer.url} unstyled>
                       {drawer?.label ?? t("t.url")}
@@ -123,7 +127,7 @@ const DetailApplicationDates = () => {
                     t("t.n/a")
                   )}
                 </ViewItem>
-                <ViewItem label={t("listings.events.openHouseNotes")}>
+                <ViewItem id="events.openHouseNotes" label={t("listings.events.openHouseNotes")}>
                   {drawer?.note || t("t.n/a")}
                 </ViewItem>
               </GridSection>

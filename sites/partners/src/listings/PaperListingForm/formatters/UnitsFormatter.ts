@@ -36,8 +36,6 @@ export default class UnitsFormatter extends Formatter {
                 updatedAt: undefined,
                 items: [],
               }
-            } else {
-              unit.amiChartOverride.items = [...unit.amiChartOverride.items]
             }
             unit.amiChartOverride.items.push({
               percentOfAmi: parseInt(unit.amiPercentage),

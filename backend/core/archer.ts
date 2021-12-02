@@ -1,4 +1,11 @@
-import { AmiChart, Listing, ListingReviewOrder, ListingStatus, UnitStatus } from "./types"
+import {
+  AmiChart,
+  EnumJurisdictionLanguages,
+  Listing,
+  ListingReviewOrder,
+  ListingStatus,
+  UnitStatus,
+} from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
 
@@ -12,6 +19,9 @@ export const SanMateoHUD2019: AmiChart = {
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    programs: [],
+    languages: [EnumJurisdictionLanguages.en],
+    preferences: [],
   },
   items: [
     {
@@ -266,17 +276,6 @@ export const ArcherListing: Listing = {
   whatToExpect: "Applicant will be contacted. All info will be verified. Be prepared if chosen.",
   status: ListingStatus.active,
   postmarkedApplicationsReceivedByDate: new Date("2019-12-05"),
-  applicationAddress: {
-    id: "id",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    city: "San Jose",
-    street: "98 Archer Street",
-    zipCode: "95112",
-    state: "CA",
-    latitude: 37.36537,
-    longitude: -121.91071,
-  },
   applicationDueDate: new Date("2019-12-31T15:22:57.000-07:00"),
   applicationMethods: [],
   applicationOrganization: "98 Archer Street",
@@ -300,6 +299,7 @@ export const ArcherListing: Listing = {
   creditHistory:
     "Applications will be rated on a score system for housing. An applicant's score may be impacted by negative tenant peformance information provided to the credit reporting agency.  All applicants are expected have a passing acore of 70 points out of 100 to be considered for housing.  Applicants with no credit history will receive a maximum of 80 points to fairly outweigh positive and/or negative trades as would an applicant with established credit history. Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process. ",
   depositMin: "1140.0",
+  listingPrograms: [],
   programRules:
     "Applicants must adhere to minimum & maximum income limits. Tenant Selection Criteria applies.",
   // TODO confirm not used anywhere
@@ -345,10 +345,10 @@ export const ArcherListing: Listing = {
   leasingAgentOfficeHours: "Monday, Tuesday & Friday, 9:00AM - 5:00PM",
   leasingAgentPhone: "(408) 217-8562",
   leasingAgentTitle: "",
+  listingPreferences: [],
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
     "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
-  preferences: [],
   householdSizeMin: 2,
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",

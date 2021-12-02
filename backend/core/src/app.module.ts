@@ -1,4 +1,6 @@
 // dotenv is a dev dependency, so conditionally import it (don't need it in Prod).
+import { CatchAllFilter } from "./shared/filters/catch-all-filter"
+
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   require("dotenv").config()
@@ -16,8 +18,6 @@ import { AuthModule } from "./auth/auth.module"
 
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
-import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
@@ -31,7 +31,7 @@ import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
-import { Reflector } from "@nestjs/core"
+import { HttpAdapterHost, Reflector } from "@nestjs/core"
 import { AssetsModule } from "./assets/assets.module"
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module"
 import { ReservedCommunityTypesModule } from "./reserved-community-type/reserved-community-types.module"
@@ -40,11 +40,14 @@ import { UnitRentTypesModule } from "./unit-rent-types/unit-rent-types.module"
 import { UnitAccessibilityPriorityTypesModule } from "./unit-accessbility-priority-types/unit-accessibility-priority-types.module"
 import { ApplicationMethodsModule } from "./application-methods/applications-methods.module"
 import { PaperApplicationsModule } from "./paper-applications/paper-applications.module"
+import { ProgramsModule } from "./program/programs.module"
+import { logger } from "./shared/middlewares/logger.middleware"
 
 export function applicationSetup(app: INestApplication) {
+  const { httpAdapter } = app.get(HttpAdapterHost)
   app.enableCors()
   app.use(logger)
-  app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
   app.useGlobalInterceptors(
@@ -91,6 +94,7 @@ export class AppModule {
         PreferencesModule,
         PropertiesModule,
         PropertyGroupsModule,
+        ProgramsModule,
         ReservedCommunityTypesModule,
         SharedModule,
         TranslationsModule,

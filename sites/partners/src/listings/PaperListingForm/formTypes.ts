@@ -2,6 +2,7 @@ import moment from "moment"
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   Preference,
+  Program,
   ListingStatus,
   ListingApplicationAddressType,
   Unit,
@@ -77,8 +78,7 @@ export const formDefaults: FormListing = {
   id: undefined,
   createdAt: undefined,
   updatedAt: undefined,
-  applicationAddress: null,
-  applicationDueDate: new Date(),
+  applicationDueDate: null,
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
@@ -91,7 +91,7 @@ export const formDefaults: FormListing = {
   applicationDropOffAddressOfficeHours: null,
   assets: [],
   buildingSelectionCriteria: "",
-  buildingSelectionCriteriaFile: { fileId: "", label: "" },
+  buildingSelectionCriteriaFile: null,
   criteriaAttachType: "",
   jurisdiction: undefined,
   costsNotIncluded: "",
@@ -99,10 +99,11 @@ export const formDefaults: FormListing = {
   criminalBackground: "",
   depositMax: "0",
   depositMin: "0",
+  depositHelperText: "or one month's rent may be higher for lower credit scores",
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
-  image: { fileId: "", label: "" },
+  image: null,
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,
@@ -112,7 +113,8 @@ export const formDefaults: FormListing = {
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,
-  preferences: [],
+  listingPreferences: [],
+  listingPrograms: [],
   programRules: "",
   rentalAssistance:
     "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
@@ -178,6 +180,7 @@ export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
   preferences: Preference[]
+  programs: Program[]
   units: TempUnit[]
   openHouseEvents: TempEvent[]
   profile: User

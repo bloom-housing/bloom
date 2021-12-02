@@ -15,40 +15,42 @@ const DetailBuildingFeatures = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.propertyAmenities")}>
+          <ViewItem id="amenities" label={t("t.propertyAmenities")}>
             {getDetailFieldString(listing.amenities)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.unitAmenities")}>
+          <ViewItem id="unitAmenities" label={t("t.unitAmenities")}>
             {getDetailFieldString(listing.unitAmenities)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.accessibility")}>
+          <ViewItem id="accessibility" label={t("t.accessibility")}>
             {getDetailFieldString(listing.accessibility)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.smokingPolicy")}>
+          <ViewItem id="smokingPolicy" label={t("t.smokingPolicy")}>
             {getDetailFieldString(listing.smokingPolicy)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.petsPolicy")}>{getDetailFieldString(listing.petPolicy)}</ViewItem>
+          <ViewItem id="petPolicy" label={t("t.petsPolicy")}>
+            {getDetailFieldString(listing.petPolicy)}
+          </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("t.servicesOffered")}>
+          <ViewItem id="servicesOffered" label={t("t.servicesOffered")}>
             {getDetailFieldString(listing.servicesOffered)}
           </ViewItem>
         </GridCell>

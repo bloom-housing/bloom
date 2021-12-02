@@ -147,14 +147,33 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  if (listing.preferences && listing.preferences.length > 0) {
+  const getPreferenceData = () => {
+    return listing.listingPreferences
+      .filter((listingPref) => {
+        return (
+          !listingPref.preference.formMetadata ||
+          !listingPref.preference.formMetadata.hideFromListing
+        )
+      })
+      .map((listingPref, index) => {
+        return {
+          ordinal: index + 1,
+          links: listingPref.preference.links,
+          title: listingPref.preference.title,
+          subtitle: listingPref.preference.subtitle,
+          description: listingPref.preference.description,
+        }
+      })
+  }
+
+  if (listing.listingPreferences && listing.listingPreferences.length > 0) {
     preferencesSection = (
       <ListSection
         title={t("listings.sections.housingPreferencesTitle")}
         subtitle={t("listings.sections.housingPreferencesSubtitle")}
       >
         <>
-          <PreferencesList preferences={listing.preferences} />
+          <PreferencesList listingPreferences={getPreferenceData()} />
           <p className="text-gray-700 text-tiny">
             {t("listings.remainingUnitsAfterPreferenceConsideration")}
           </p>
@@ -276,13 +295,6 @@ export const ListingView = (props: ListingProps) => {
 
   const applySidebar = () => (
     <>
-      <Waitlist
-        isWaitlistOpen={listing.isWaitlistOpen}
-        waitlistMaxSize={listing.waitlistMaxSize}
-        waitlistCurrentSize={listing.waitlistCurrentSize}
-        waitlistOpenSpots={listing.waitlistOpenSpots}
-        unitsAvailable={listing.unitsAvailable}
-      />
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
         applicationsDueDate={moment(listing.applicationDueDate).format(
@@ -348,7 +360,9 @@ export const ListingView = (props: ListingProps) => {
         {listing.reservedCommunityType && (
           <Message warning={true}>
             {t("listings.reservedFor", {
-              type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+              type: t(
+                `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityType.name}`
+              ),
             })}
           </Message>
         )}
@@ -386,6 +400,14 @@ export const ListingView = (props: ListingProps) => {
             event={lotteryResults}
             cloudName={process.env.cloudinaryCloudName}
           />
+          {!applicationsClosed && (
+            <Waitlist
+              isWaitlistOpen={listing.isWaitlistOpen}
+              waitlistMaxSize={listing.waitlistMaxSize}
+              waitlistCurrentSize={listing.waitlistCurrentSize}
+              waitlistOpenSpots={listing.waitlistOpenSpots}
+            />
+          )}
           {hasNonReferralMethods && !applicationsClosed ? <>{applySidebar()}</> : <></>}
         </div>
       </div>
@@ -493,6 +515,14 @@ export const ListingView = (props: ListingProps) => {
                 cloudName={process.env.cloudinaryCloudName}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
+              {!applicationsClosed && (
+                <Waitlist
+                  isWaitlistOpen={listing.isWaitlistOpen}
+                  waitlistMaxSize={listing.waitlistMaxSize}
+                  waitlistCurrentSize={listing.waitlistCurrentSize}
+                  waitlistOpenSpots={listing.waitlistOpenSpots}
+                />
+              )}
               {hasNonReferralMethods && !applicationsClosed && applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication
@@ -568,6 +598,7 @@ export const ListingView = (props: ListingProps) => {
               depositMax={listing.depositMax}
               applicationFee={listing.applicationFee}
               costsNotIncluded={listing.costsNotIncluded}
+              depositHelperText={listing.depositHelperText}
             />
           </div>
         </ListingDetailItem>

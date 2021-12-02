@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -12,7 +13,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
-import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
@@ -43,8 +43,12 @@ import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
+import { ListingProgram } from "../../program/entities/listing-program.entity"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 
 @Entity({ name: "listings" })
+@Index(["jurisdiction"])
 class Listing extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
@@ -70,11 +74,14 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalApplicationSubmissionNotes?: string | null
 
-  @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
+  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.listing, {
+    cascade: true,
+    eager: true,
+  })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Preference)
-  preferences: Preference[]
+  @Type(() => ListingPreference)
+  listingPreferences: ListingPreference[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
@@ -89,25 +96,25 @@ class Listing extends BaseEntity {
   }
 
   // booleans to make dealing with different application methods easier to parse
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   digitalApplication?: boolean
 
-  @Column({ type: "boolean", default: true })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   commonDigitalApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   paperApplication?: boolean
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
@@ -173,13 +180,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationOrganization?: string | null
-
-  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  applicationAddress?: Address | null
 
   @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
@@ -277,6 +277,12 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   depositMax?: string | null
 
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  depositHelperText?: string | null
+
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -300,6 +306,7 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEmail({}, { groups: [ValidationsGroupsEnum.default] })
+  @EnforceLowerCase()
   leasingAgentEmail?: string | null
 
   @Column({ type: "text", nullable: true })
@@ -506,6 +513,16 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitsSummary)
   unitsSummary: UnitsSummary[]
+
+  @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
+    cascade: true,
+    eager: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgram)
+  listingPrograms?: ListingProgram[]
 }
 
 export { Listing as default, Listing }

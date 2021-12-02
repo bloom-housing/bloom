@@ -5,7 +5,7 @@ type GetUnitTypeNamesReturn = {
   name: string
 }
 
-export const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
+export const UnitTypeSort = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm"]
 
 export const sortUnitTypes = (units: UnitType[] | GetUnitTypeNamesReturn[]) => {
   if (!units) return []
@@ -21,7 +21,7 @@ export const getUniqueUnitTypes = (units: Unit[]): GetUnitTypeNamesReturn[] => {
 
     if (!id || !name) return acc
 
-    const unitTypeExists = acc.find((item) => item.id === id)
+    const unitTypeExists = acc.some((item) => item.id === id)
 
     if (!unitTypeExists) {
       acc.push({

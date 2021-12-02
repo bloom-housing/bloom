@@ -4,23 +4,23 @@ import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormType
 export default class WaitlistFormatter extends Formatter {
   /** Process all of the waitlist settings */
   process() {
-    const showWaitlistNumber =
-      this.data.waitlistOpenQuestion === YesNoAnswer.Yes &&
-      this.data.waitlistSizeQuestion === YesNoAnswer.Yes
-
-    this.data.waitlistCurrentSize =
-      this.data.waitlistCurrentSize && showWaitlistNumber
-        ? Number(this.data.waitlistCurrentSize)
-        : null
-    this.data.waitlistMaxSize =
-      this.data.waitlistMaxSize && showWaitlistNumber ? Number(this.data.waitlistMaxSize) : null
-    this.data.waitlistOpenSpots =
-      this.data.waitlistOpenSpots && showWaitlistNumber ? Number(this.data.waitlistOpenSpots) : null
+    const showWaitlist = this.data.waitlistOpenQuestion === YesNoAnswer.Yes
 
     this.processBoolean("isWaitlistOpen", {
-      when: this.data.waitlistOpenQuestion === YesNoAnswer.Yes,
-      yes: () => true,
-      no: () => (this.data.waitlistOpenQuestion === YesNoAnswer.No ? false : null),
+      when: showWaitlist,
+      falseCase: () => (this.data.waitlistOpenQuestion === YesNoAnswer.No ? false : null),
+    })
+    this.processBoolean("waitlistCurrentSize", {
+      when: this.data.waitlistCurrentSize && showWaitlist,
+      trueCase: () => Number(this.data.waitlistCurrentSize),
+    })
+    this.processBoolean("waitlistMaxSize", {
+      when: this.data.waitlistMaxSize && showWaitlist,
+      trueCase: () => Number(this.data.waitlistMaxSize),
+    })
+    this.processBoolean("waitlistOpenSpots", {
+      when: this.data.waitlistOpenSpots && showWaitlist,
+      trueCase: () => Number(this.data.waitlistOpenSpots),
     })
   }
 }

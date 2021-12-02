@@ -2,7 +2,6 @@ import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import moment from "moment"
-import { PreferenceDto } from "../../preferences/dto/preference.dto"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -16,9 +15,10 @@ import { IdNameDto } from "../../shared/dto/idName.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
+import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 
 export class ListingDto extends OmitType(Listing, [
-  "applicationAddress",
   "applicationPickUpAddress",
   "applicationDropOffAddress",
   "applicationMailingAddress",
@@ -30,7 +30,8 @@ export class ListingDto extends OmitType(Listing, [
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
-  "preferences",
+  "listingPreferences",
+  "listingPrograms",
   "property",
   "reservedCommunityType",
   "result",
@@ -41,18 +42,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceDto)
-  preferences: PreferenceDto[]
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -104,6 +93,19 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgramDto)
+  listingPrograms?: ListingProgramDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingPreferenceDto)
+  listingPreferences: ListingPreferenceDto[]
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdNameDto)
@@ -125,7 +127,10 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @Transform(
     (_value, listing) => {
-      if (moment(listing.applicationDueDate).isBefore()) {
+      if (
+        moment(listing.applicationDueDate).isBefore() &&
+        listing.status !== ListingStatus.pending
+      ) {
         listing.status = ListingStatus.closed
       }
 

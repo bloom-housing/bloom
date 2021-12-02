@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
+import axios from "axios"
 import { useRouter } from "next/router"
 import {
   AuthContext,
@@ -19,7 +20,12 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
-import { ListingStatus, ListingEventType, Preference } from "@bloom-housing/backend-core/types"
+import {
+  ListingStatus,
+  ListingEventType,
+  Preference,
+  Program,
+} from "@bloom-housing/backend-core/types"
 import { nanoid } from "nanoid"
 import { AlertErrorType, FormListing, TempEvent, TempUnit, formDefaults } from "./formTypes"
 import ListingDataPipeline from "./ListingDataPipeline"
@@ -39,10 +45,11 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import ApplicationDates from "./sections/ApplicationDates"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import Preferences from "./sections/Preferences"
+import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
+import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -66,7 +73,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [preferences, setPreferences] = useState<Preference[]>(
+    listing?.listingPreferences.map((listingPref) => {
+      return { ...listingPref.preference }
+    }) ?? []
+  )
+  const [programs, setPrograms] = useState<Program[]>(
+    listing?.listingPrograms.map((program) => {
+      return program.program
+    }) ?? []
+  )
+
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
@@ -124,12 +141,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
+  const triggerSubmitWithStatus = (
+    confirm?: boolean,
+    status?: ListingStatus,
+    newData?: Partial<FormListing>
+  ) => {
     if (confirm) {
       setPublishModal(true)
       return
     }
-    let formData = { ...defaultValues, ...getValues() }
+    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
     if (status) {
       formData = { ...formData, status }
     }
@@ -145,6 +166,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           const dataPipeline = new ListingDataPipeline(formData, {
             preferences,
+            programs,
             units,
             openHouseEvents,
             profile,
@@ -155,14 +177,38 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           console.info("DATA!", formattedData)
 
           const result = editMode
-            ? await listingsService.update({
-                listingId: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            : await listingsService.create({ body: formattedData })
+            ? await listingsService.update(
+                {
+                  listingId: listing.id,
+                  body: { id: listing.id, ...formattedData },
+                },
+                { headers: { "x-purge-cache": true } }
+              )
+            : await listingsService.create(
+                { body: formattedData },
+                { headers: { "x-purge-cache": true } }
+              )
           reset(formData)
 
           if (result) {
+            /**
+             * Send purge request to Nginx.
+             * Wrapped in try catch, because it's possible that content may not be cached in between edits,
+             * and will return a 404, which is expected.
+             * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
+             * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
+             */
+            if (process.env.backendProxyBase) {
+              try {
+                await axios.request({
+                  url: `${process.env.backendProxyBase}/listings*`,
+                  method: "purge",
+                })
+              } catch (e) {
+                console.log("purge error = ", e)
+              }
+            }
+
             setSiteAlertMessage(
               editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
               "success"
@@ -205,6 +251,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listing,
       router,
       preferences,
+      programs,
       latLong,
       customMapPositionChosen,
       clearErrors,
@@ -291,7 +338,32 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setUnits={setUnits}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
-                          <Preferences preferences={preferences} setPreferences={setPreferences} />
+                          <SelectAndOrder
+                            addText={t("listings.addPreference")}
+                            drawerTitle={t("listings.addPreferences")}
+                            editText={t("listings.editPreferences")}
+                            listingData={preferences}
+                            setListingData={setPreferences}
+                            subtitle={t("listings.sections.housingPreferencesSubtext")}
+                            title={t("listings.sections.housingPreferencesTitle")}
+                            drawerButtonText={t("listings.selectPreferences")}
+                            dataFetcher={useJurisdictionalPreferenceList}
+                            formKey={"preference"}
+                          />
+                          <SelectAndOrder
+                            addText={"Add program"}
+                            drawerTitle={"Add programs"}
+                            editText={"Edit programs"}
+                            listingData={programs}
+                            setListingData={setPrograms}
+                            subtitle={
+                              "Tell us about any additional housing programs related to this listing."
+                            }
+                            title={"Housing Programs"}
+                            drawerButtonText={"Select programs"}
+                            dataFetcher={useJurisdictionalProgramList}
+                            formKey={"program"}
+                          />
                           <AdditionalFees />
                           <BuildingFeatures />
                           <AdditionalEligibility />
@@ -340,8 +412,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={() => {
-                            triggerSubmitWithStatus(false, ListingStatus.closed)
+                          submitCallback={(data) => {
+                            triggerSubmitWithStatus(false, ListingStatus.closed, data)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -375,8 +447,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.closed)
             }}
           >
             {t("listings.actions.close")}
@@ -403,12 +475,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            id="publishButtonConfirm"
             type="button"
             styleType={AppearanceStyleType.success}
-            onClick={async () => {
-              // If we don't await here, the scroll block stays in place on modal close
-              /* eslint-disable-next-line @typescript-eslint/await-thenable */
-              await setPublishModal(false)
+            onClick={() => {
+              setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >

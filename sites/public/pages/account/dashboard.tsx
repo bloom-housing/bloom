@@ -50,7 +50,7 @@ class Dashboard extends Component<DashboardProps> {
               {this.state.alertMessage}
             </AlertBox>
           )}
-          <section className="bg-gray-300">
+          <section className="bg-gray-300 border-t border-gray-450">
             <div className="max-w-5xl mx-auto md:py-8">
               <SiteAlert type="success" className="md:mb-8" timeout={30000} />
 
@@ -61,12 +61,14 @@ class Dashboard extends Component<DashboardProps> {
                     title={t("account.myApplications")}
                     subtitle={t("account.myApplicationsSubtitle")}
                     icon={<HeaderBadge />}
+                    dataTestId={"account-dashboard-applications"}
                   ></DashBlock>
                   <DashBlock
                     href="/account/edit"
                     title={t("account.accountSettings")}
                     subtitle={t("account.accountSettingsSubtitle")}
                     icon={settingsIcon}
+                    dataTestId={"account-dashboard-settings"}
                   ></DashBlock>
                 </DashBlocks>
               </div>

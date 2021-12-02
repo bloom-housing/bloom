@@ -65,22 +65,23 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
             }))
           )
         : [],
-      fallback: true,
+      fallback: "blocking",
     }
   } catch (error) {
     console.error("listings getStaticPaths error = ", error)
     return {
       paths: [],
-      fallback: true,
+      fallback: "blocking",
     }
   }
 }
 
 export async function getStaticProps(context: { params: Record<string, string>; locale: string }) {
+  console.log("context = ", context)
   const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
     headers: { language: context.locale },
   })
-
+  console.log("listing = ", response.data)
   return {
     props: {
       listing: response.data,

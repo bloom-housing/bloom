@@ -4,7 +4,7 @@ import moment from "moment"
 import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
-import { Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { Jurisdiction, Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { openInFuture } from "../lib/helpers"
@@ -77,15 +77,10 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-/**
- * This is fired server side by getStaticProps
- * By setting listingData here, we can continue to serve listings if the fetch fails.
- * This more of a temporary solution.
- */
-let listingData = []
-
 export async function fetchBaseListingData() {
+  let listings = []
   try {
+    const { id: jurisdictionId } = await fetchJurisdictionByName()
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
@@ -95,6 +90,10 @@ export async function fetchBaseListingData() {
             $comparison: "<>",
             status: "pending",
           },
+          {
+            $comparison: "=",
+            jurisdiction: jurisdictionId,
+          },
         ],
       },
       paramsSerializer: (params) => {
@@ -102,10 +101,30 @@ export async function fetchBaseListingData() {
       },
     })
 
-    listingData = response.data?.items ?? []
-  } catch (error) {
-    console.log("fetchBaseListingData error = ", error)
+    listings = response.data?.items
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
   }
 
-  return listingData
+  return listings
+}
+
+let jurisdiction: Jurisdiction | null = null
+
+export async function fetchJurisdictionByName() {
+  try {
+    if (jurisdiction) {
+      return jurisdiction
+    }
+
+    const jurisdictionName = process.env.jurisdictionName
+    const jurisdictionRes = await axios.get(
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+    )
+    jurisdiction = jurisdictionRes?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
+
+  return jurisdiction
 }

@@ -4,7 +4,6 @@ import { UserService } from "./user.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { User } from "../entities/user.entity"
 import { USER_ERRORS } from "../user-errors"
-import { EmailService } from "../../shared/email/email.service"
 import { AuthService } from "./auth.service"
 import { AuthzService } from "./authz.service"
 import { PasswordService } from "./password.service"
@@ -12,6 +11,7 @@ import { JurisdictionResolverService } from "../../jurisdictions/services/jurisd
 import { ConfigService } from "@nestjs/config"
 import { UserCreateDto } from "../dto/user-create.dto"
 import { Application } from "../../applications/entities/application.entity"
+import { EmailService } from "../../email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -82,7 +82,7 @@ describe("UserService", () => {
         lastName: "Last",
         dob: new Date(),
       }
-      await expect(service.createUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
     })
@@ -99,7 +99,7 @@ describe("UserService", () => {
       }
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
       mockUserRepo.save = jest.fn().mockRejectedValue(new Error("failed to save"))
-      await expect(service.createUser(user, null, null)).rejects.toThrow(
+      await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       )
 

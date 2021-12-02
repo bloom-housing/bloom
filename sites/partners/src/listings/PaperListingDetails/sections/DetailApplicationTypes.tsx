@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell, MinimalTable } from "@bloom-housing/ui-components"
 import { ApplicationMethodType } from "@bloom-housing/backend-core/types"
 import { ListingContext } from "../../ListingContext"
+import { getDetailBoolean } from "./helpers"
 
 const DetailApplicationTypes = () => {
   const listing = useContext(ListingContext)
@@ -43,33 +44,37 @@ const DetailApplicationTypes = () => {
     >
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Online Applications"}>
-            {listing.digitalApplication ? "Yes" : "No"}
+          <ViewItem id="digitalApplication" label={"Online Applications"}>
+            {getDetailBoolean(listing.digitalApplication)}
           </ViewItem>
         </GridCell>
         {digitalMethod && (
           <GridCell>
-            <ViewItem label={"Common Digital Application"}>
-              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? "No" : "Yes"}
+            <ViewItem id="digitalMethod.type" label={"Common Digital Application"}>
+              {digitalMethod?.type === ApplicationMethodType.ExternalLink ? t("t.no") : t("t.yes")}
             </ViewItem>
           </GridCell>
         )}
         {digitalMethod?.type === ApplicationMethodType.ExternalLink && (
-          <ViewItem label={t("listings.customOnlineApplicationUrl")}>
+          <ViewItem
+            id="customOnlineApplicationUrl"
+            label={t("listings.customOnlineApplicationUrl")}
+          >
             {digitalMethod.externalReference}
           </ViewItem>
         )}
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={"Paper Applications"}>
-            {listing.paperApplication ? "Yes" : "No"}
+          <ViewItem id="paperApplication" label={"Paper Applications"}>
+            {getDetailBoolean(listing.paperApplication)}
           </ViewItem>
         </GridCell>
         {paperApplicationsTableRows.length > 0 && (
           <GridCell>
             <ViewItem label={"Paper Applications"}>
               <MinimalTable
+                id="paperApplicationTable"
                 headers={paperApplicationsTableHeaders}
                 data={paperApplicationsTableRows}
                 flushLeft={true}
@@ -81,17 +86,19 @@ const DetailApplicationTypes = () => {
 
       <GridSection columns={2}>
         <GridCell>
-          <ViewItem label={"Referral"}>{listing.referralOpportunity ? "Yes" : "No"}</ViewItem>
+          <ViewItem id="referralOpportunity" label={"Referral"}>
+            {getDetailBoolean(listing.referralOpportunity)}
+          </ViewItem>
         </GridCell>
         {referralMethod && (
           <>
             <GridCell>
-              <ViewItem label={t("listings.referralContactPhone")}>
+              <ViewItem id="referralContactPhone" label={t("listings.referralContactPhone")}>
                 {referralMethod.phoneNumber}
               </ViewItem>
             </GridCell>
             <GridCell>
-              <ViewItem label={t("listings.referralSummary")}>
+              <ViewItem id="referralSummary" label={t("listings.referralSummary")}>
                 {referralMethod.externalReference}
               </ViewItem>
             </GridCell>

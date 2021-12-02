@@ -40,7 +40,12 @@ const ApplicationSummary = () => {
           </h2>
         </div>
 
-        <FormSummaryDetails application={application} listing={listing} editMode />
+        <FormSummaryDetails
+          application={application}
+          listing={listing}
+          hidePreferences={listing?.listingPreferences.length === 0}
+          editMode
+        />
 
         <div className="form-card__group">
           <p className="field-note text-gray-800 text-center">
@@ -51,7 +56,9 @@ const ApplicationSummary = () => {
         <div className="form-card__pager">
           <div className="form-card__pager-row primary">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Button styleType={AppearanceStyleType.primary}>{t("t.confirm")}</Button>
+              <Button styleType={AppearanceStyleType.primary} data-test-id={"app-summary-confirm"}>
+                {t("t.confirm")}
+              </Button>
             </Form>
           </div>
         </div>

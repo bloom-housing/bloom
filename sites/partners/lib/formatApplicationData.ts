@@ -7,6 +7,7 @@ import {
   ApplicationStatus,
   AddressUpdate,
   HouseholdMember,
+  Program,
 } from "@bloom-housing/backend-core/types"
 
 import {
@@ -15,12 +16,18 @@ import {
   mapApiToPreferencesForm,
 } from "@bloom-housing/ui-components"
 import {
+  fieldGroupObjectToArray,
+  mapProgramsToApi,
+  mapApiToProgramsPaperForm,
+} from "@bloom-housing/shared-helpers"
+import {
   FormTypes,
   YesNoAnswer,
   ApplicationTypes,
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import moment, { Moment } from "moment"
+
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -38,6 +45,14 @@ const getAddress = (condition: boolean, addressData?: Address): AddressUpdate =>
   return condition ? (addressData as AddressUpdate) : blankAddress
 }
 
+const getBooleanValue = (applicationField: YesNoAnswer) => {
+  return applicationField === null ? null : applicationField === YesNoAnswer.Yes ? true : false
+}
+
+const getYesNoValue = (applicationField: boolean) => {
+  return applicationField === null ? null : applicationField ? YesNoAnswer.Yes : YesNoAnswer.No
+}
+
 const mapEmptyStringToNull = (value: string) => (value === "" ? null : value)
 
 interface FormData extends FormTypes {
@@ -45,11 +60,18 @@ interface FormData extends FormTypes {
   submissionType: ApplicationSubmissionType
 }
 
+type mapFormToApiProps = {
+  data: FormData
+  listingId: string
+  editMode: boolean
+  programs: Program[]
+}
+
 /*
   Format data which comes from react-hook-form into correct API format.
 */
 
-export const mapFormToApi = (data: FormData, listingId: string, editMode: boolean) => {
+export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
   const submissionDate: Date | null = (() => {
@@ -83,7 +105,7 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     const emailAddress: string | null = applicantData?.emailAddress || null
 
     applicantData.firstName = mapEmptyStringToNull(applicantData.firstName)
-    applicantData.lastName = mapEmptyStringToNull(applicantData.firstName)
+    applicantData.lastName = mapEmptyStringToNull(applicantData.lastName)
 
     const workAddress = getAddress(
       applicantData?.workInRegion === YesNoAnswer.Yes,
@@ -104,6 +126,16 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   })()
 
   const preferences = mapPreferencesToApi(data)
+  const programsForm = data.application.programs
+    ? Object.entries(data.application.programs).reduce((acc, curr) => {
+        if (curr[1]) {
+          Object.assign(acc, { [curr[0]]: curr[1] })
+        }
+        return acc
+      }, {})
+    : {}
+
+  const programsData = mapProgramsToApi(programs, programsForm)
 
   // additional phone
   const {
@@ -114,13 +146,17 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     contactPreferences,
     sendMailToMailingAddress,
     accessibility,
-    demographics,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
   const additionalPhoneNumberType = additionalPhoneNumberTypeData
     ? additionalPhoneNumberTypeData
     : null
+
+  const demographics = {
+    ...data.application.demographics,
+    race: fieldGroupObjectToArray(data, "race"),
+  }
 
   const mailingAddress = getAddress(sendMailToMailingAddress, mailingAddressData)
 
@@ -137,19 +173,10 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
   const incomePeriod: IncomePeriod | null = data.application?.incomePeriod || null
 
   const income = incomePeriod === IncomePeriod.perMonth ? incomeMonth : incomeYear || null
-  const incomeVouchers =
-    data.application.incomeVouchers === YesNoAnswer.Yes
-      ? true
-      : data.application.incomeVouchers === YesNoAnswer.No
-      ? false
-      : null
-
-  const acceptedTerms =
-    data.application.acceptedTerms === YesNoAnswer.Yes
-      ? true
-      : data.application.acceptedTerms === YesNoAnswer.No
-      ? false
-      : null
+  const incomeVouchers = getBooleanValue(data.application.incomeVouchers)
+  const acceptedTerms = getBooleanValue(data.application.acceptedTerms)
+  const householdExpectingChanges = getBooleanValue(data.application.householdExpectingChanges)
+  const householdStudent = getBooleanValue(data.application.householdStudent)
 
   const submissionType = editMode ? data.submissionType : ApplicationSubmissionType.paper
   const status = ApplicationStatus.submitted
@@ -160,10 +187,15 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
+  let preferredUnit: Record<"id", string>[] = []
 
-  const preferredUnit = data.application?.preferredUnit
-    ? data.application.preferredUnit?.map((id) => ({ id }))
-    : []
+  if (data.application?.preferredUnit) {
+    if (Array.isArray(data.application?.preferredUnit)) {
+      preferredUnit = data.application.preferredUnit.map((id) => ({ id }))
+    } else {
+      preferredUnit = [{ id: data.application.preferredUnit }]
+    }
+  }
 
   const result: ApplicationUpdate = {
     submissionDate,
@@ -177,7 +209,10 @@ export const mapFormToApi = (data: FormData, listingId: string, editMode: boolea
     mailingAddress,
     alternateContact,
     accessibility,
+    householdExpectingChanges,
+    householdStudent,
     preferences,
+    programs: programsData,
     income,
     incomePeriod,
     incomeVouchers,
@@ -251,6 +286,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const phoneNumber = applicationData.applicant.phoneNumber
 
   const preferences = mapApiToPreferencesForm(applicationData.preferences)
+  const programs = mapApiToProgramsPaperForm(applicationData.programs)
 
   const application: ApplicationTypes = (() => {
     const {
@@ -266,19 +302,11 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       alternateContact,
     } = applicationData
 
-    const incomeVouchers: YesNoAnswer =
-      applicationData.incomeVouchers === null
-        ? null
-        : applicationData.incomeVouchers
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
+    const incomeVouchers = getYesNoValue(applicationData.incomeVouchers)
+    const acceptedTerms = getYesNoValue(applicationData.acceptedTerms)
+    const householdExpectingChanges = getYesNoValue(applicationData.householdExpectingChanges)
+    const householdStudent = getYesNoValue(applicationData.householdStudent)
 
-    const acceptedTerms: YesNoAnswer =
-      applicationData.acceptedTerms === null
-        ? null
-        : applicationData.acceptedTerms
-        ? YesNoAnswer.Yes
-        : YesNoAnswer.No
     const workInRegion = applicationData.applicant.workInRegion as YesNoAnswer
 
     const applicant = {
@@ -300,11 +328,14 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       mailingAddress,
       preferredUnit,
       accessibility,
+      householdExpectingChanges,
+      householdStudent,
       incomePeriod,
       incomeVouchers,
       demographics,
       acceptedTerms,
       alternateContact,
+      programs,
     }
 
     return result

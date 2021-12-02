@@ -53,6 +53,7 @@ const Layout = (props) => {
           title={t("nav.siteTitlePartners")}
           logoWidth={"medium"}
           menuLinks={menuLinks}
+          siteHeaderWidth={"wide"}
           homeURL={"/"}
         />
 

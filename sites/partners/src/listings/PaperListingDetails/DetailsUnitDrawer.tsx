@@ -37,7 +37,11 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
       <section className="border rounded-md p-8 bg-white mb-8">
         <GridSection title={t("listings.unit.details")} tinted={true} inset={true} grid={false}>
           <GridSection grid columns={4}>
-            <ViewItem label={t("listings.unit.unitNumber")} children={unit?.number || t("t.n/a")} />
+            <ViewItem
+              id="unit.unitNumber"
+              label={t("listings.unit.unitNumber")}
+              children={unit?.number || t("t.n/a")}
+            />
 
             <ViewItem
               label={t("listings.unit.type")}
@@ -45,25 +49,37 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             />
 
             <ViewItem
+              id="unit.numBathrooms"
               label={t("listings.unit.numBathrooms")}
               children={unit?.numBathrooms || t("t.n/a")}
             />
 
-            <ViewItem label={t("listings.unit.floor")} children={unit?.floor || t("t.n/a")} />
+            <ViewItem
+              id="unit.floor"
+              label={t("listings.unit.floor")}
+              children={unit?.floor || t("t.n/a")}
+            />
 
             <ViewItem
+              id="unit.squareFootage"
               label={t("listings.unit.squareFootage")}
               children={unit?.sqFeet || t("t.n/a")}
             />
 
-            <ViewItem label={t("listings.unit.unitStatus")} children={unit?.status || t("t.n/a")} />
+            <ViewItem
+              id="unit.unitStatus"
+              label={t("listings.unit.unitStatus")}
+              children={unit?.status || t("t.n/a")}
+            />
 
             <ViewItem
+              id="unit.minOccupancy"
               label={t("listings.unit.minOccupancy")}
               children={unit?.minOccupancy || t("t.n/a")}
             />
 
             <ViewItem
+              id="unit.maxOccupancy"
               label={t("listings.unit.maxOccupancy")}
               children={unit?.maxOccupancy || t("t.n/a")}
             />
@@ -72,10 +88,12 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
         <GridSection title={t("listings.unit.eligibility")} tinted={true} inset={true} grid={false}>
           <GridSection grid columns={4}>
             <ViewItem
+              id="unit.amiChart"
               label={t("listings.unit.amiChart")}
               children={unit?.amiChart?.id ? AmiChartWrapper(unit.amiChart.id) : t("t.n/a")}
             />
             <ViewItem
+              id="unit.amiPercentage"
               label={t("listings.unit.amiPercentage")}
               children={unit?.amiPercentage || t("t.n/a")}
             />
@@ -84,6 +102,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             {unit?.amiChartOverride?.items.map((override, index) => {
               return (
                 <ViewItem
+                  id="amiOverrideTitle"
                   key={index}
                   label={t("listings.amiOverrideTitle", { householdSize: override.householdSize })}
                   children={`$${override.income}`}
@@ -95,11 +114,13 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             {rentType === "fixed" && (
               <>
                 <ViewItem
+                  id="unit.monthlyIncomeMin"
                   label={t("t.minimumIncome")}
                   children={unit?.monthlyIncomeMin || t("t.n/a")}
                 />
 
                 <ViewItem
+                  id="unit.monthlyRent"
                   label={t("listings.unit.monthlyRent")}
                   children={unit?.monthlyRent || t("t.n/a")}
                 />
@@ -107,6 +128,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
             )}
             {rentType === "percentage" && (
               <ViewItem
+                id="unit.percentage"
                 label={t("listings.unit.percentage")}
                 children={unit?.monthlyRentAsPercentOfIncome || t("t.n/a")}
               />
@@ -116,6 +138,7 @@ const DetailUnitDrawer = ({ unit, setUnitDrawer }: UnitDrawerProps) => {
         <GridSection title={t("t.accessibility")} tinted={true} inset={true} grid={false}>
           <GridSection grid columns={4}>
             <ViewItem
+              id="unit.accessibilityPriorityType"
               label={t("listings.unit.accessibilityPriorityType")}
               children={unit?.priorityType?.name || t("t.n/a")}
             />

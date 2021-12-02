@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom/extend-expect"
+import { configure } from "@testing-library/dom"
 
 import { addTranslation } from "../src/helpers/translator"
 import general from "../src/locales/general.json"
@@ -18,3 +19,5 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
 })
 
 addTranslation(general)
+
+configure({ testIdAttribute: "data-test-id" })

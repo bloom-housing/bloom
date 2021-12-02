@@ -30,9 +30,14 @@ export default class Formatter {
 
   processBoolean(
     key: string,
-    { when, yes, no }: { when: boolean; yes: () => unknown; no?: () => unknown }
+    {
+      when,
+      trueCase,
+      falseCase,
+    }: { when: boolean; trueCase?: () => unknown; falseCase?: () => unknown }
   ) {
-    if (!no) no = () => null
-    this.data[key] = when ? yes() : no()
+    if (!trueCase) trueCase = () => true
+    if (!falseCase) falseCase = () => null
+    this.data[key] = when ? trueCase() : falseCase()
   }
 }

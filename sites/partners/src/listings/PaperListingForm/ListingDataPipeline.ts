@@ -1,5 +1,5 @@
 import Formatter from "./formatters/Formatter"
-import { removeEmptyFields } from "../../../lib/helpers"
+import { removeEmptyObjects } from "../../../lib/helpers"
 import { FormListing, FormMetadata } from "./formTypes"
 
 /**
@@ -64,12 +64,7 @@ export default class ListingDataPipeline {
       new formatterClass(this.data, this.metadata).format()
     })
 
-    removeEmptyFields(this.data, [
-      "applicationPickUpAddressType",
-      "applicationDropOffAddressType",
-      "applicationDueDate",
-      "applicationDueTime",
-    ])
+    removeEmptyObjects(this.data)
 
     this.alreadyFormatted = true
 

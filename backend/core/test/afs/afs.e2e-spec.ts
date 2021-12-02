@@ -6,7 +6,6 @@ import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
 import { ApplicationsModule } from "../../src/applications/applications.module"
 import { ListingsModule } from "../../src/listings/listings.module"
-import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { Repository } from "typeorm"
@@ -23,6 +22,7 @@ import { ListingStatus } from "../../src/listings/types/listing-status-enum"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import dbOptions = require("../../ormconfig.test")
+import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.

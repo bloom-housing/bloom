@@ -10,10 +10,10 @@ import {
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
-import axios from "axios"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
+import { fetchJurisdictionByName } from "../lib/hooks"
 
 interface IndexProps {
   jurisdiction: Jurisdiction
@@ -57,7 +57,7 @@ export default function Home(props: IndexProps) {
       )}
       <Hero title={heroTitle} buttonTitle={t("welcome.seeRentalListings")} buttonLink="/listings" />
       <div className="homepage-extra">
-        <div className="action-blocks mt-4">
+        <div className="action-blocks mt-4 mb-4">
           {props.jurisdiction && props.jurisdiction.notificationsSignUpURL && (
             <ActionBlock
               className="flex-1"
@@ -90,18 +90,9 @@ export default function Home(props: IndexProps) {
 }
 
 export async function getStaticProps() {
-  let thisJurisdiction = null
-  try {
-    const jurisdictionName = process.env.jurisdictionName
-    const jurisdiction = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
-    )
-    thisJurisdiction = jurisdiction?.data ? jurisdiction.data : null
-  } catch (error) {
-    console.error(error)
-  }
+  const jurisdiction = await fetchJurisdictionByName()
 
   return {
-    props: { jurisdiction: thisJurisdiction },
+    props: { jurisdiction },
   }
 }

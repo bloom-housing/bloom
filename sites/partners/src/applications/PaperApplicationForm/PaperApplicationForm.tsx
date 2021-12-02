@@ -24,6 +24,7 @@ import { FormPreferences } from "./sections/FormPreferences"
 import { FormHouseholdIncome } from "./sections/FormHouseholdIncome"
 import { FormDemographics } from "./sections/FormDemographics"
 import { FormTerms } from "./sections/FormTerms"
+import { FormPrograms } from "./sections/FormPrograms"
 
 import { Aside } from "../Aside"
 import { FormTypes } from "./FormTypes"
@@ -40,7 +41,8 @@ type AlertErrorType = "api" | "form"
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
 
-  const preferences = listingDto?.preferences
+  const preferences = listingDto?.listingPreferences
+  const programs = listingDto?.listingPrograms
   const countyCode = listingDto?.countyCode
   const units = listingDto?.units
 
@@ -97,7 +99,12 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
       ...data,
     }
 
-    const body = mapFormToApi(formData, listingId, editMode)
+    const body = mapFormToApi({
+      data: formData,
+      listingId,
+      editMode,
+      programs: programs.map((item) => item.program),
+    })
 
     try {
       const result = editMode
@@ -204,9 +211,11 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
 
                     <FormPreferences preferences={preferences} county={countyCode} />
 
+                    <FormPrograms programs={programs} county={countyCode} />
+
                     <FormHouseholdIncome />
 
-                    <FormDemographics />
+                    <FormDemographics formValues={application?.demographics} />
 
                     <FormTerms />
                   </div>

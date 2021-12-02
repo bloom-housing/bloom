@@ -7,7 +7,7 @@ export default class BooleansFormatter extends Formatter {
   process() {
     this.processBoolean("postmarkedApplicationsReceivedByDate", {
       when: this.data.postMarkDate && this.data.arePostmarksConsidered === YesNoAnswer.Yes,
-      yes: () =>
+      trueCase: () =>
         new Date(
           `${this.data.postMarkDate.year}-${this.data.postMarkDate.month}-${this.data.postMarkDate.day}`
         ),
@@ -17,49 +17,46 @@ export default class BooleansFormatter extends Formatter {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
         addressTypes[this.data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress,
-      yes: () => addressTypes[this.data.whereApplicationsDroppedOff],
+      trueCase: () => addressTypes[this.data.whereApplicationsDroppedOff],
     })
     this.processBoolean("applicationPickUpAddressType", {
       when:
         this.data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
         addressTypes[this.data.whereApplicationsPickedUp] !== addressTypes.anotherAddress,
-      yes: () => addressTypes[this.data.whereApplicationsPickedUp],
+      trueCase: () => addressTypes[this.data.whereApplicationsPickedUp],
     })
     this.processBoolean("applicationDropOffAddress", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
-      yes: () => this.data.applicationDropOffAddress,
+      trueCase: () => this.data.applicationDropOffAddress,
     })
     this.processBoolean("applicationPickUpAddress", {
       when:
         this.data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
-      yes: () => this.data.applicationPickUpAddress,
+      trueCase: () => this.data.applicationPickUpAddress,
     })
     this.processBoolean("applicationMailingAddress", {
       when: this.data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes,
-      yes: () => this.data.applicationMailingAddress,
+      trueCase: () => this.data.applicationMailingAddress,
     })
 
     this.processBoolean("digitalApplication", {
       when: this.data.digitalApplicationChoice === YesNoAnswer.Yes,
-      yes: () => true,
-      no: () => (this.data.digitalApplicationChoice === YesNoAnswer.No ? false : null),
+      falseCase: () => (this.data.digitalApplicationChoice === YesNoAnswer.No ? false : null),
     })
     this.data.commonDigitalApplication =
       this.data.commonDigitalApplicationChoice === YesNoAnswer.Yes
 
     this.processBoolean("paperApplication", {
       when: this.data.paperApplicationChoice === YesNoAnswer.Yes,
-      yes: () => true,
-      no: () => (this.data.paperApplicationChoice === YesNoAnswer.No ? false : null),
+      falseCase: () => (this.data.paperApplicationChoice === YesNoAnswer.No ? false : null),
     })
 
     this.processBoolean("referralOpportunity", {
       when: this.data.referralOpportunityChoice === YesNoAnswer.Yes,
-      yes: () => true,
-      no: () => (this.data.referralOpportunityChoice === YesNoAnswer.No ? false : null),
+      falseCase: () => (this.data.referralOpportunityChoice === YesNoAnswer.No ? false : null),
     })
   }
 }

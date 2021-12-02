@@ -33,8 +33,8 @@ const DOBField = (props: DOBFieldProps) => {
     return [name, baseName].filter((item) => item).join(".")
   }
 
-  const birthDay = watch(getFieldName("birthDay"))
-  const birthMonth = watch(getFieldName("birthMonth"))
+  const birthDay = watch(getFieldName("birthDay")) ?? defaultDOB?.birthDay
+  const birthMonth = watch(getFieldName("birthMonth")) ?? defaultDOB?.birthMonth
 
   const validateAge = (value: string) => {
     return (
@@ -71,6 +71,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={"dob-field-month"}
         />
         <Field
           name={getFieldName("birthDay")}
@@ -92,6 +93,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={"dob-field-day"}
         />
         <Field
           name={getFieldName("birthYear")}
@@ -115,6 +117,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 4 }}
           register={register}
+          dataTestId={"dob-field-year"}
         />
       </div>
 

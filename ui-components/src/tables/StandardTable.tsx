@@ -51,6 +51,7 @@ export interface StandardTableProps {
   cellClassName?: string
   responsiveCollapse?: boolean
   translateData?: boolean
+  id?: string
 }
 
 export type StandardTableData = Record<string, React.ReactNode>[] | undefined
@@ -79,7 +80,7 @@ export const StandardTable = (props: StandardTableProps) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
     return (
       <HeaderCell key={uniqKey} className={headerClassName(header)}>
-        {getTranslationWithArguments(headerName(header))}
+        {header && header !== "" ? getTranslationWithArguments(headerName(header)) : header}
       </HeaderCell>
     )
   })
@@ -114,10 +115,14 @@ export const StandardTable = (props: StandardTableProps) => {
       return (
         <Cell
           key={uniqKey}
-          headerLabel={getTranslationWithArguments(headerName(headers[colKey]))}
+          headerLabel={
+            headers[colKey] && headers[colKey] !== ""
+              ? getTranslationWithArguments(headerName(headers[colKey]))
+              : headers[colKey]
+          }
           className={cellClass !== " " ? cellClass : undefined}
         >
-          {props.translateData && typeof cell === "string"
+          {props.translateData && typeof cell === "string" && cell !== ""
             ? getTranslationWithArguments(cell)
             : cell}
         </Cell>
@@ -200,7 +205,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
   return (
     <div style={{ overflowX: "auto" }}>
-      <table className={tableClasses.join(" ")}>
+      <table id={props.id} className={tableClasses.join(" ")}>
         <thead>
           <tr>{headerLabels}</tr>
         </thead>
