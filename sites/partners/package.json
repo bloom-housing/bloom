@@ -18,7 +18,7 @@
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
     "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "export": "next export",
-    "start": "next start",
+    "start": "next start -p ${NEXTJS_PORT:-3001}",
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && yarn dev",
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\"",
