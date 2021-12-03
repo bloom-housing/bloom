@@ -16745,10 +16745,12 @@ nestjs-throttler-storage-redis@^0.1.11:
   resolved "https://registry.yarnpkg.com/nestjs-throttler-storage-redis/-/nestjs-throttler-storage-redis-0.1.11.tgz#fa9933992644f8615346afa5a6e5b2c563869d64"
   integrity sha512-AwWBWjNaBZGCnjRx0Ah5/b4S0arwl4nGFWMcieybgzgE4HCYFfXWENZPyRWeCG/CTyzhxCsQfwiHKUapTNZ4Sg==
 
-nestjs-typeorm-paginate@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/nestjs-typeorm-paginate/-/nestjs-typeorm-paginate-2.2.1.tgz#dff5f75948262603dfc0fb345e45450449ac6e3d"
-  integrity sha512-Xl5PsIqGjd6GV7ODIoTnDgqUSBJW5cwnjCfed1emmtr/cZLE0osOSS22SoMGCcPNRZ3BPcl/3R0RjPn4TbJphA==
+nestjs-typeorm-paginate@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/nestjs-typeorm-paginate/-/nestjs-typeorm-paginate-3.1.3.tgz#ba68bb403a53b2cf02b1c55af254f5f6cce8edb7"
+  integrity sha512-7iXNnO9hUe1IbJfUeVU6lH0fTEvmPPRvySIKphhEFE39VF1rz0ptd/0pec7pDs6oI9vFQlsdtiH39TNaL4Gf9Q==
+  dependencies:
+    chalk "^4.1.2"
 
 newrelic@7.5.1:
   version "7.5.1"
