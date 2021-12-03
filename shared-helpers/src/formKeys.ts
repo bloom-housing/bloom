@@ -188,7 +188,7 @@ export const raceKeys: subCheckboxes = {
 
 export const howDidYouHear = [
   {
-    id: "alamedaCountyHCDWebsite",
+    id: "jurisdictionWebsite",
   },
   {
     id: "developerWebsite",
@@ -236,4 +236,4 @@ export const preferredUnit = [
   },
 ]
 
-export const bedroomKeys = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]

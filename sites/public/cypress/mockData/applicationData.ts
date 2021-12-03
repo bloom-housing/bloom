@@ -30,7 +30,7 @@ export const preferredUnitCheckboxesOrder = [
 ]
 
 export const howDidYouHearCheckboxesOrder = [
-  "alamedaCountyHCDWebsite",
+  "jurisdictionWebsite",
   "developerWebsite",
   "flyer",
   "emailAlert",
@@ -203,7 +203,7 @@ export const coliseumApplication: Application = {
     ethnicity: "hispanicLatino",
     gender: "",
     sexualOrientation: "",
-    howDidYouHear: ["alamedaCountyHCDWebsite", "developerWebsite"],
+    howDidYouHear: ["jurisdictionWebsite", "developerWebsite"],
   },
   preferences: [
     {

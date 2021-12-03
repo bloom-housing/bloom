@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
+import axios from "axios"
 import { useRouter } from "next/router"
 import {
   AuthContext,
@@ -244,9 +245,6 @@ const formatFormData = (
   customPinPositionChosen: boolean,
   profile: User
 ) => {
-  const showWaitlistNumber =
-    data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
   const applicationDueDateFormatted = createDate(data.applicationDueDateField)
   const applicationDueTimeFormatted = createTime(
     applicationDueDateFormatted,
@@ -361,11 +359,17 @@ const formatFormData = (
     applicationDueDate: applicationDueDateFormatted,
     yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
     waitlistCurrentSize:
-      data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
+      data.waitlistCurrentSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistCurrentSize)
+        : null,
     waitlistMaxSize:
-      data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
+      data.waitlistMaxSize && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistMaxSize)
+        : null,
     waitlistOpenSpots:
-      data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
+      data.waitlistOpenSpots && data.waitlistOpenQuestion === YesNoAnswer.Yes
+        ? Number(data.waitlistOpenSpots)
+        : null,
     postmarkedApplicationsReceivedByDate:
       data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
         ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
@@ -382,7 +386,7 @@ const formatFormData = (
         : null,
     applicationDropOffAddress:
       data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
-      data.whereApplicationsPickedUp === addressTypes.anotherAddress
+      data.whereApplicationsDroppedOff === addressTypes.anotherAddress
         ? data.applicationDropOffAddress
         : null,
     applicationPickUpAddress:
@@ -390,10 +394,9 @@ const formatFormData = (
       data.whereApplicationsPickedUp === addressTypes.anotherAddress
         ? data.applicationPickUpAddress
         : null,
-    applicationMailingAddress:
-      data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes
-        ? data.applicationMailingAddress
-        : null,
+    applicationMailingAddress: data.arePaperAppsMailedToAnotherAddress
+      ? data.applicationMailingAddress
+      : null,
     events,
     reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
     reviewOrderType:
@@ -507,12 +510,16 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
+  const triggerSubmitWithStatus = (
+    confirm?: boolean,
+    status?: ListingStatus,
+    newData?: Partial<FormListing>
+  ) => {
     if (confirm) {
       setPublishModal(true)
       return
     }
-    let formData = { ...defaultValues, ...getValues() }
+    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
     if (status) {
       formData = { ...formData, status }
     }
@@ -543,13 +550,37 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           )
           removeEmptyObjects(formattedData)
           const result = editMode
-            ? await listingsService.update({
-                listingId: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            : await listingsService.create({ body: formattedData })
+            ? await listingsService.update(
+                {
+                  listingId: listing.id,
+                  body: { id: listing.id, ...formattedData },
+                },
+                { headers: { "x-purge-cache": true } }
+              )
+            : await listingsService.create(
+                { body: formattedData },
+                { headers: { "x-purge-cache": true } }
+              )
           reset(formData)
           if (result) {
+            /**
+             * Send purge request to Nginx.
+             * Wrapped in try catch, because it's possible that content may not be cached in between edits,
+             * and will return a 404, which is expected.
+             * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
+             * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
+             */
+            if (process.env.backendProxyBase) {
+              try {
+                await axios.request({
+                  url: `${process.env.backendProxyBase}/listings*`,
+                  method: "purge",
+                })
+              } catch (e) {
+                console.log("purge error = ", e)
+              }
+            }
+
             setSiteAlertMessage(
               editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
               "success"
@@ -753,8 +784,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={() => {
-                            triggerSubmitWithStatus(false, ListingStatus.closed)
+                          submitCallback={(data) => {
+                            triggerSubmitWithStatus(false, ListingStatus.closed, data)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}

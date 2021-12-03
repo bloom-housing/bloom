@@ -99,7 +99,7 @@ const ApplicationVouchers = () => {
           <div className={`form-card__group field text-lg ${errors.incomeVouchers ? "error" : ""}`}>
             <fieldset>
               <legend className="sr-only">{t("application.financial.vouchers.legend")}</legend>
-              <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+              <p className="field-note mb-4">{t("t.pleaseSelectYesNo")}</p>
               <FieldGroup
                 type="radio"
                 name="incomeVouchers"

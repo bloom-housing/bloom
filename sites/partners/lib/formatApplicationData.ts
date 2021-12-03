@@ -26,7 +26,8 @@ import {
   ApplicationTypes,
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import moment, { Moment } from "moment"
+
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
   This function eliminates those fields and parse to a proper format.
@@ -125,12 +126,14 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
   })()
 
   const preferences = mapPreferencesToApi(data)
-  const programsForm = Object.entries(data.application.programs).reduce((acc, curr) => {
-    if (curr[1]) {
-      Object.assign(acc, { [curr[0]]: curr[1] })
-    }
-    return acc
-  }, {})
+  const programsForm = data.application.programs
+    ? Object.entries(data.application.programs).reduce((acc, curr) => {
+        if (curr[1]) {
+          Object.assign(acc, { [curr[0]]: curr[1] })
+        }
+        return acc
+      }, {})
+    : {}
 
   const programsData = mapProgramsToApi(programs, programsForm)
 
@@ -184,10 +187,15 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
 
   // we need to add primary applicant
   const householdSize = householdMembers.length + 1 || 1
+  let preferredUnit: Record<"id", string>[] = []
 
-  const preferredUnit = data.application?.preferredUnit
-    ? data.application.preferredUnit?.map((id) => ({ id }))
-    : []
+  if (data.application?.preferredUnit) {
+    if (Array.isArray(data.application?.preferredUnit)) {
+      preferredUnit = data.application.preferredUnit.map((id) => ({ id }))
+    } else {
+      preferredUnit = [{ id: data.application.preferredUnit }]
+    }
+  }
 
   const result: ApplicationUpdate = {
     submissionDate,

@@ -5,11 +5,11 @@ import { ProgramUpdateDto } from "./dto/program-update.dto"
 import { NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { assignDefined } from "../shared/assign-defined"
-import { addFilters } from "../shared/filter"
+import { addFilters } from "../shared/query-filter"
 import { ProgramsListQueryParams } from "./dto/programs-list-query-params"
 import { ProgramsFilterParams } from "./dto/programs-filter-params"
 import { jurisdictionFilterTypeToFieldMap } from "./dto/jurisdictionFilterTypeToFieldMap"
+import { assignDefined } from "../shared/utils/assign-defined"
 
 export class ProgramsService {
   constructor(@InjectRepository(Program) private readonly repository: Repository<Program>) {}

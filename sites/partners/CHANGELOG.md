@@ -3,6 +3,119 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.41...@bloom-housing/partners@3.0.1-alpha.42) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.40...@bloom-housing/partners@3.0.1-alpha.41) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.39...@bloom-housing/partners@3.0.1-alpha.40) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.38...@bloom-housing/partners@3.0.1-alpha.39) (2021-11-30)
+
+
+### Bug Fixes
+
+* lottery results uploads now save ([#2226](https://github.com/bloom-housing/bloom/issues/2226)) ([8964bba](https://github.com/bloom-housing/bloom/commit/8964bba2deddbd077a049649c26f6fe8b576ed2f))
+
+
+
+
+
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.37...@bloom-housing/partners@3.0.1-alpha.38) (2021-11-30)
+
+
+### Bug Fixes
+
+* **backend:** nginx with heroku configuration ([#2196](https://github.com/bloom-housing/bloom/issues/2196)) ([a1e2630](https://github.com/bloom-housing/bloom/commit/a1e26303bdd660b9ac267da55dc8d09661216f1c))
+
+
+
+
+
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.36...@bloom-housing/partners@3.0.1-alpha.37) (2021-11-29)
+
+
+### Bug Fixes
+
+* feedback on the waitlist data and display ([9432542](https://github.com/bloom-housing/bloom/commit/9432542efd9ba2e4bf8dd7195895e75f5d2e0623))
+
+
+### Features
+
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/bloom-housing/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.35...@bloom-housing/partners@3.0.1-alpha.36) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1-alpha.35) (2021-11-29)
+
+
+### Bug Fixes
+
+* cannot save custom mailing, dropoff, or pickup address ([#2207](https://github.com/bloom-housing/bloom/issues/2207)) ([96484b5](https://github.com/bloom-housing/bloom/commit/96484b5676ecb000e492851ee12766ba9e6cd86f))
+
+
+
+
+
+## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.33...@bloom-housing/partners@3.0.1-alpha.34) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.32...@bloom-housing/partners@3.0.1-alpha.33) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.31...@bloom-housing/partners@3.0.1-alpha.32) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.30...@bloom-housing/partners@3.0.1-alpha.31) (2021-11-23)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.29...@bloom-housing/partners@3.0.1-alpha.30) (2021-11-23)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -6,9 +6,9 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { Language } from "../../shared/types/language-enum"
 import { Listing } from "../../listings/entities/listing.entity"
-import { isEmpty } from "../../libs/miscLib"
 import { GoogleTranslateService } from "./google-translate.service"
 import { GeneratedListingTranslation } from "../entities/generated-listing-translation.entity"
+import { isEmpty } from "../../shared/utils/is-empty"
 
 const TRANSLATION_KEYS = [
   "applicationPickUpAddressOfficeHours",

@@ -50,7 +50,12 @@ const ApplicationView = () => {
           </p>
         </div>
 
-        <FormSummaryDetails listing={listing} application={application} editMode={false} />
+        <FormSummaryDetails
+          listing={listing}
+          application={application}
+          hidePreferences={listing?.listingPreferences.length === 0}
+          editMode={false}
+        />
 
         <div className="form-card__pager hide-for-print">
           <div className="form-card__pager-row py-6">

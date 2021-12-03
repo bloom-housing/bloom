@@ -3,6 +3,102 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.26...@bloom-housing/ui-components@3.0.1-alpha.27) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.25...@bloom-housing/ui-components@3.0.1-alpha.26) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.24...@bloom-housing/ui-components@3.0.1-alpha.25) (2021-11-30)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.23...@bloom-housing/ui-components@3.0.1-alpha.24) (2021-11-29)
+
+
+### Bug Fixes
+
+* guard against 0 output ([0ea9012](https://github.com/bloom-housing/bloom/commit/0ea9012fdac02fb1cb4357abec2ec69633902654))
+* remove bold style from current waitlist size ([2e2f414](https://github.com/bloom-housing/bloom/commit/2e2f4141e62c8544c0828b29de0b99bb97abb201))
+* show waitlist values even if they're zero ([6a35e67](https://github.com/bloom-housing/bloom/commit/6a35e679f142105e40719e89bda3d957e3200e1d))
+* simpler conditionals ([f3e588d](https://github.com/bloom-housing/bloom/commit/f3e588d5e6dd0a39d1aed99ef6eba0054540ed14))
+* waitlist: handle both null and undefined ([90fd369](https://github.com/bloom-housing/bloom/commit/90fd369b471c7f9baa0a1d58f452159449fe6fcf))
+
+
+### Features
+
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/bloom-housing/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+
+
+
+
+
+## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.22...@bloom-housing/ui-components@3.0.1-alpha.23) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.21...@bloom-housing/ui-components@3.0.1-alpha.22) (2021-11-23)
+
+
+### Bug Fixes
+
+* remove alameda reference in demographics ([#2209](https://github.com/bloom-housing/bloom/issues/2209)) ([7d5991c](https://github.com/bloom-housing/bloom/commit/7d5991cbf6dbe0b61f2b14d265e87ce3687f743d))
+
+
+
+
+
+## [3.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.20...@bloom-housing/ui-components@3.0.1-alpha.21) (2021-11-23)
+
+
+### Bug Fixes
+
+* change the yes/no radio text to be more descriptive ([#2208](https://github.com/bloom-housing/bloom/issues/2208)) ([0c46054](https://github.com/bloom-housing/bloom/commit/0c46054574535523d6f217bb0677bbe732b8945f))
+
+
+
+
+
+## [3.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.19...@bloom-housing/ui-components@3.0.1-alpha.20) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaLabel prop to Button component ([509ddc8](https://github.com/bloom-housing/bloom/commit/509ddc898ba44c05e26f8ed8c777f1ba456eeee5))
+
+
+
+
+
+## [3.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.18...@bloom-housing/ui-components@3.0.1-alpha.19) (2021-11-23)
+
+
+### Bug Fixes
+
+* add ariaHidden to Icon component ([c7bb86a](https://github.com/bloom-housing/bloom/commit/c7bb86aec6fd5ad386c7ca50087d0113b14503be))
+
+
+
+
+
 ## [3.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.17...@bloom-housing/ui-components@3.0.1-alpha.18) (2021-11-23)
 
 
