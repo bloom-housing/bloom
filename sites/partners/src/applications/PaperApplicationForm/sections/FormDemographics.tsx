@@ -8,15 +8,14 @@ import {
   Select,
   FieldGroup,
 } from "@bloom-housing/ui-components"
-import {
-  ethnicityKeys,
-  raceKeys,
-  genderKeys,
-  sexualOrientation,
-  howDidYouHear,
-} from "@bloom-housing/shared-helpers"
+import { ethnicityKeys, raceKeys, howDidYouHear } from "@bloom-housing/shared-helpers"
+import { Demographics } from "@bloom-housing/backend-core/types"
 
-const FormDemographics = () => {
+type FormDemographicsProps = {
+  formValues: Demographics
+}
+
+const FormDemographics = ({ formValues }: FormDemographicsProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -30,8 +29,50 @@ const FormDemographics = () => {
     }))
   }, [register])
 
+  // Does a key exist in a root field or a sub array
+  const isKeyIncluded = (raceKey: string) => {
+    let keyExists = false
+    formValues?.race?.forEach((value) => {
+      if (value.includes(raceKey)) {
+        keyExists = true
+      }
+    })
+    return keyExists
+  }
+
+  // Get the value of a field that is storing a custom value, i.e. "otherAsian: Custom Race Input"
+  const getCustomValue = (subKey: string) => {
+    const customValues = formValues?.race?.filter((value) => value.split(":")[0] === subKey)
+    return customValues?.length ? customValues[0].split(":")[1]?.substring(1) : ""
+  }
+
+  const raceOptions = useMemo(() => {
+    return Object.keys(raceKeys).map((rootKey) => ({
+      id: rootKey,
+      label: t(`application.review.demographics.raceOptions.${rootKey}`),
+      value: rootKey,
+      additionalText: rootKey.indexOf("other") >= 0,
+      defaultChecked: isKeyIncluded(rootKey),
+      defaultText: getCustomValue(rootKey),
+      subFields: raceKeys[rootKey].map((subKey) => ({
+        id: subKey,
+        label: t(`application.review.demographics.raceOptions.${subKey}`),
+        value: subKey,
+        defaultChecked: isKeyIncluded(subKey),
+        additionalText: subKey.indexOf("other") >= 0,
+        defaultText: getCustomValue(subKey),
+      })),
+    }))
+  }, [register, isKeyIncluded, getCustomValue])
+
   return (
     <GridSection title={t("application.add.demographicsInformation")} columns={3} separator>
+      <GridCell>
+        <ViewItem label={t("application.add.race")}>
+          <FieldGroup name="race" fields={raceOptions} type="checkbox" register={register} />
+        </ViewItem>
+      </GridCell>
+
       <GridCell>
         <ViewItem label={t("application.add.ethnicity")}>
           <Select
@@ -44,54 +85,6 @@ const FormDemographics = () => {
             controlClassName="control"
             options={ethnicityKeys}
             keyPrefix="application.review.demographics.ethnicityOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.race")}>
-          <Select
-            id="application.demographics.race"
-            name="application.demographics.race"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.race")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={raceKeys}
-            keyPrefix="application.review.demographics.raceOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.gender")}>
-          <Select
-            id="application.demographics.gender"
-            name="application.demographics.gender"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.gender")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={genderKeys}
-            keyPrefix="application.review.demographics.genderOptions"
-          />
-        </ViewItem>
-      </GridCell>
-
-      <GridCell>
-        <ViewItem label={t("application.add.sexualOrientation")}>
-          <Select
-            id="application.demographics.sexualOrientation"
-            name="application.demographics.sexualOrientation"
-            placeholder={t("t.selectOne")}
-            label={t("application.add.sexualOrientation")}
-            labelClassName="sr-only"
-            register={register}
-            controlClassName="control"
-            options={sexualOrientation}
-            keyPrefix="application.review.demographics.sexualOrientationOptions"
           />
         </ViewItem>
       </GridCell>

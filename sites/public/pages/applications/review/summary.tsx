@@ -40,7 +40,12 @@ const ApplicationSummary = () => {
           </h2>
         </div>
 
-        <FormSummaryDetails application={application} listing={listing} editMode />
+        <FormSummaryDetails
+          application={application}
+          listing={listing}
+          hidePreferences={listing?.listingPreferences.length === 0}
+          editMode
+        />
 
         <div className="form-card__group">
           <p className="field-note text-gray-800 text-center">

@@ -5,7 +5,7 @@ import { Translate } from "@google-cloud/translate/build/src/v2"
 import { TranslationCreateDto, TranslationUpdateDto } from "./dto/translation.dto"
 import { Language } from "../shared/types/language-enum"
 import { Listing } from "../listings/entities/listing.entity"
-import { isEmpty } from "../libs/miscLib"
+import { isEmpty } from "../shared/utils/is-empty"
 
 const TRANSLATION_KEYS = [
   "applicationPickUpAddressOfficeHours",

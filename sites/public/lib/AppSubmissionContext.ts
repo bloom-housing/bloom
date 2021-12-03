@@ -3,10 +3,10 @@ import ApplicationConductor from "./ApplicationConductor"
 import { blankApplication } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 
-export const retrieveApplicationConfig = () => {
+export const retrieveApplicationConfig = (listing: Listing) => {
   // Note: this whole function will eventually be replaced with one that reads this from the backend.
-  return {
-    sections: ["you", "household", "income", "preferences", "review"],
+  const config = {
+    sections: ["you", "household", "income"],
     languages: ["en", "es", "zh", "vi"],
     steps: [
       {
@@ -63,23 +63,38 @@ export const retrieveApplicationConfig = () => {
       {
         name: "income",
       },
+    ],
+  }
+
+  // conditionally add preferences
+  if (listing.listingPreferences.length) {
+    config.sections.push("preferences")
+    config.steps.push(
       {
         name: "preferencesAll",
       },
       {
         name: "generalPool",
-      },
-      {
-        name: "demographics",
-      },
-      {
-        name: "summary",
-      },
-      {
-        name: "terms",
-      },
-    ],
+      }
+    )
   }
+
+  // push rest onto sections and steps
+  config.sections.push("review")
+
+  config.steps.push(
+    {
+      name: "demographics",
+    },
+    {
+      name: "summary",
+    },
+    {
+      name: "terms",
+    }
+  )
+
+  return config
 }
 
 export const AppSubmissionContext = createContext({
