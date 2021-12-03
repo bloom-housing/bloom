@@ -23,7 +23,6 @@ import { authzActions } from "../../auth/enum/authz-actions.enum"
 import { ApplicationCreateDto, ApplicationUpdateDto } from "../dto/application.dto"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
-import { getView } from "../views/view"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -67,7 +66,7 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    const qb = this._getQb(params, !params.listingId ? "base" : "partnerList")
+    const qb = this._getQb(params)
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
       result.items.map(async (application) => {
@@ -144,7 +143,7 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(params: PaginatedApplicationListQueryParams, view = "base") {
+  private _getQb(params: PaginatedApplicationListQueryParams) {
     /**
      * Map used to generate proper parts
      * of query builder.
@@ -168,8 +167,20 @@ export class ApplicationsService {
     }
 
     // --> Build main query
-    const qbView = getView(this.repository.createQueryBuilder("application"), view)
-    const qb = qbView.getViewQb()
+    const qb = this.repository.createQueryBuilder("application")
+    qb.leftJoinAndSelect("application.applicant", "applicant")
+    qb.leftJoinAndSelect("applicant.address", "applicant_address")
+    qb.leftJoinAndSelect("applicant.workAddress", "applicant_workAddress")
+    qb.leftJoinAndSelect("application.alternateAddress", "alternateAddress")
+    qb.leftJoinAndSelect("application.mailingAddress", "mailingAddress")
+    qb.leftJoinAndSelect("application.alternateContact", "alternateContact")
+    qb.leftJoinAndSelect("alternateContact.mailingAddress", "alternateContact_mailingAddress")
+    qb.leftJoinAndSelect("application.accessibility", "accessibility")
+    qb.leftJoinAndSelect("application.demographics", "demographics")
+    qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
+    qb.leftJoinAndSelect("householdMembers.address", "householdMembers_address")
+    qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembers_workAddress")
+    qb.leftJoinAndSelect("application.preferredUnit", "preferredUnit")
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts
