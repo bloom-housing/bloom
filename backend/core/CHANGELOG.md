@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.28...@bloom-housing/backend-core@3.0.1-alpha.29) (2021-12-03)
+
+
+### Features
+
+* **backend:** add storing listing translations ([#2215](https://github.com/bloom-housing/bloom/issues/2215)) ([6ac63ea](https://github.com/bloom-housing/bloom/commit/6ac63eae82e14ab32d541b907c7e5dc800c1971f))
+
+
+
+
+
 ## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.27...@bloom-housing/backend-core@3.0.1-alpha.28) (2021-12-01)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

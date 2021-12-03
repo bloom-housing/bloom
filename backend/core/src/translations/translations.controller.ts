@@ -15,9 +15,9 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { TranslationsService } from "./translations.service"
 import { TranslationCreateDto, TranslationDto, TranslationUpdateDto } from "./dto/translation.dto"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
+import { TranslationsService } from "./services/translations.service"
 
 @Controller("/translations")
 @ApiTags("translations")
