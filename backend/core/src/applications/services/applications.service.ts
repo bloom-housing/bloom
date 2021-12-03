@@ -67,7 +67,7 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    const qb = this._getQb(params, !!params.listingId ? "partnerList" : "base")
+    const qb = this._getQb(params, !params.listingId ? "base" : "partnerList")
     const result = await paginate(qb, { limit: params.limit, page: params.page })
     await Promise.all(
       result.items.map(async (application) => {
