@@ -11,13 +11,7 @@ export class ActivityLogService {
     private readonly repository: Repository<ActivityLog>
   ) {}
 
-  public async log(
-    module: string,
-    action: string,
-    recordId: string,
-    user: User,
-    metadata?: string
-  ) {
+  public async log(module: string, action: string, recordId: string, user: User, metadata?: any) {
     return await this.repository.save({ module, action, recordId, user, metadata })
   }
 }

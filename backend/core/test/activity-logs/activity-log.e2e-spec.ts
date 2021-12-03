@@ -134,7 +134,7 @@ describe("Programs", () => {
     expect(activityLogs[0].user.id).toBe(adminId)
     expect(activityLogs[0].action).toBe(authzActions.update)
     expect(activityLogs[0].module).toBe("listing")
-    expect(activityLogs[0].metadata).toBe(listingGetRes.body.status)
+    expect(activityLogs[0].metadata).toStrictEqual({ status: listingGetRes.body.status })
   })
 
   afterAll(async () => {
