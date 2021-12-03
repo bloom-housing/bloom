@@ -2,12 +2,12 @@ import { SelectQueryBuilder } from "typeorm"
 import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
 import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
-import { View, BaseView } from "../../views/base.view"
+import { View } from "./types"
 
 export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   switch (views[view]) {
     case views.base:
-      return new BaseListingView(qb)
+      return new BaseView(qb)
     case views.detail:
       return new DetailView(qb)
     case views.full:
@@ -16,11 +16,11 @@ export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   }
 }
 
-export class BaseListingView extends BaseView {
+export class BaseView {
   qb: SelectQueryBuilder<Listing>
   view: View
   constructor(qb: SelectQueryBuilder<Listing>) {
-    super(qb)
+    this.qb = qb
     this.view = views.base
   }
 
@@ -44,14 +44,14 @@ export class BaseListingView extends BaseView {
   }
 }
 
-export class DetailView extends BaseListingView {
+export class DetailView extends BaseView {
   constructor(qb: SelectQueryBuilder<Listing>) {
     super(qb)
     this.view = views.detail
   }
 }
 
-export class FullView extends BaseListingView {
+export class FullView extends BaseView {
   constructor(qb: SelectQueryBuilder<Listing>) {
     super(qb)
     this.view = views.full

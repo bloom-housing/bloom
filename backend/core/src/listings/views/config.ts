@@ -1,5 +1,14 @@
 import { Views } from "./types"
-import { getBaseAddressSelect } from "../../views/base.view"
+
+function getBaseAddressSelect(schemas: string[]): string[] {
+  const fields = ["city", "state", "street", "street2", "zipCode", "latitude", "longitude"]
+
+  let select: string[] = []
+  schemas.forEach((schema) => {
+    select = select.concat(fields.map((field) => `${schema}.${field}`))
+  })
+  return select
+}
 
 const views: Views = {
   base: {
