@@ -36,7 +36,7 @@ $icon-large: 40px;
 }
 
 .icon-space.title__text {
-  margin-left: 16px;
+  margin-inline-start: 16px;
 }
 
 .subtitle {
@@ -50,12 +50,16 @@ $icon-large: 40px;
 }
 
 .icon-space.subtitle {
-  margin-left: 16px;
+  margin-inline-start: 16px;
   padding: 0 $small-padding + $icon-small;
 
   @screen sm {
     padding: 0 $large-padding + $icon-large;
   }
+}
+
+.controls_container {
+  direction: ltr;
 }
 
 .title button.title__button {
@@ -81,12 +85,12 @@ $icon-large: 40px;
   overflow-x: scroll;
   padding-top: 34px;
   scroll-behavior: smooth;
-  scroll-padding-left: $small-padding;
+  scroll-padding-inline-start: $small-padding;
   scroll-snap-type: x proximity;
   scrollbar-width: none; /* Firefox */
 
   @screen sm {
-    scroll-padding-left: $large-padding;
+    scroll-padding-inline-start: $large-padding;
   }
 }
 
@@ -96,10 +100,10 @@ $icon-large: 40px;
 }
 
 .content > *:first-child {
-  margin-left: $small-padding;
+  margin-inline-start: $small-padding;
 
   @screen sm {
-    margin-left: $large-padding;
+    margin-inline-start: $large-padding;
   }
 }
 
