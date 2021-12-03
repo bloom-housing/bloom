@@ -218,18 +218,16 @@ export class ListingsService {
   @Interval(1000 * 60 * 60)
   public async changeOverdueListingsStatusCron() {
     const listings = await this.listingRepository
-      .createQueryBuilder()
-      .select(["id", "applicationDueDate", "status"])
+      .createQueryBuilder("listings")
+      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
+      .where(`listings.status = '${ListingStatus.active}'`)
+      .andWhere(`listings.applicationDueDate IS NOT NULL`)
+      .andWhere(`listings.applicationDueDate < NOW()`)
       .getMany()
-    let shouldSave = false
     for (const listing of listings) {
-      if (listing.applicationDueDate && listing.applicationDueDate < new Date()) {
-        listing.status = ListingStatus.closed
-        shouldSave = true
-      }
+      listing.status = ListingStatus.closed
     }
-    if (shouldSave) {
-      await this.listingRepository.save(listings)
-    }
+
+    await this.listingRepository.save(listings)
   }
 }
