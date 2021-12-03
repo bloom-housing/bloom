@@ -59,9 +59,7 @@ describe("Listings", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
-    listingsRepository = moduleRef.get<Repository<Listing>>(
-      getRepositoryToken(Listing)
-    )
+    listingsRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
   })
 
   it("should return all listings", async () => {
