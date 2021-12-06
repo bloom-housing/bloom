@@ -2,6 +2,7 @@ import csv from "csv-parser"
 import fs from "fs"
 import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
 import { AddressCreate, CSVFormattingType, ListingStatus } from "../types/src/backend-swagger"
+import { ListingReviewOrder } from "../src/listings/types/listing-review-order-enum"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
 // the corresponding Listings. A few notes:
@@ -41,7 +42,7 @@ async function main() {
         const listingName: string = listingFields["Project Name"]
         // Exclude listings that are not "regulated" affordable housing
         const affordabilityStatus: string = listingFields["Affordability status"]
-        if (affordabilityStatus.toLowerCase() !== "regulated") {
+        if (affordabilityStatus?.toLowerCase() !== "regulated") {
           console.log(
             `Skipping listing because it is not *regulated* affordable housing: ${listingName}`
           )
@@ -176,6 +177,19 @@ async function main() {
       events: [],
       assets: [],
       displayWaitlistSize: false,
+      depositMin: "",
+      depositMax: "",
+      developer: "",
+      digitalApplication: false,
+      image: {
+        fileId: "",
+        label: "",
+      },
+      isWaitlistOpen: true,
+      paperApplication: false,
+      referralOpportunity: false,
+      rentalAssistance: "",
+      reviewOrderType: ListingReviewOrder.firstComeFirstServe,
     }
 
     try {
