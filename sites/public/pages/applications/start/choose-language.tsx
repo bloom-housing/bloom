@@ -22,9 +22,7 @@ import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
-    headers: { language: context.locale },
-  })
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`)
   conductor.listing = response.data
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig

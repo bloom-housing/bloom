@@ -5,7 +5,7 @@ import { EmailService } from "./email.service"
 import { ConfigModule } from "@nestjs/config"
 import { ArcherListing, Language } from "../../types"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { TranslationsService } from "../translations/translations.service"
+import { TranslationsService } from "../translations/services/translations.service"
 import { Translation } from "../translations/entities/translation.entity"
 import { Repository } from "typeorm"
 import { REQUEST } from "@nestjs/core"
@@ -14,6 +14,8 @@ import dbOptions = require("../../ormconfig.test")
 import { JurisdictionResolverService } from "../jurisdictions/services/jurisdiction-resolver.service"
 import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
+import { GeneratedListingTranslation } from "../translations/entities/generated-listing-translation.entity"
+import { GoogleTranslateService } from "../translations/services/google-translate.service"
 
 declare const expect: jest.Expect
 jest.setTimeout(30000)
@@ -40,7 +42,7 @@ describe("EmailService", () => {
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Translation, Jurisdiction]),
+        TypeOrmModule.forFeature([Translation, Jurisdiction, GeneratedListingTranslation]),
         ConfigModule,
         SendGridModule.forRoot({
           apikey: "SG.fake",
@@ -50,6 +52,7 @@ describe("EmailService", () => {
         EmailService,
         TranslationsService,
         JurisdictionsService,
+        GoogleTranslateService,
         JurisdictionResolverService,
         {
           provide: REQUEST,
