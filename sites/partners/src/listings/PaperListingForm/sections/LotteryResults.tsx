@@ -8,7 +8,6 @@ import {
   Drawer,
   Dropzone,
   MinimalTable,
-  TableThumbnail,
 } from "@bloom-housing/ui-components"
 import {
   ListingEvent,
@@ -66,7 +65,6 @@ const LotteryResults = (props: LotteryResultsProps) => {
   }
 
   const resultsTableHeaders = {
-    preview: "t.preview",
     fileName: "t.fileName",
     actions: "",
   }
@@ -77,11 +75,6 @@ const LotteryResults = (props: LotteryResultsProps) => {
   const previewTableRows = []
   if (cloudinaryData.url !== "") {
     previewTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img alt="PDF preview" src={cloudinaryData.url} />
-        </TableThumbnail>
-      ),
       fileName: cloudinaryData.id.split("/").slice(-1).join(),
       actions: (
         <Button

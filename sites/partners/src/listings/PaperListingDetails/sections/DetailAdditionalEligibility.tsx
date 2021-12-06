@@ -1,13 +1,5 @@
 import React, { useContext } from "react"
-import {
-  t,
-  GridSection,
-  ViewItem,
-  GridCell,
-  MinimalTable,
-  cloudinaryUrlFromId,
-  TableThumbnail,
-} from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell, MinimalTable } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -56,17 +48,9 @@ const DetailAdditionalEligibility = () => {
             {listing.buildingSelectionCriteriaFile?.fileId ? (
               <MinimalTable
                 id="buildingSelectionCriteriaTable"
-                headers={{ preview: "t.preview", fileName: "t.fileName" }}
+                headers={{ fileName: "t.fileName" }}
                 data={[
                   {
-                    preview: (
-                      <TableThumbnail>
-                        <img
-                          alt="PDF preview"
-                          src={cloudinaryUrlFromId(listing.buildingSelectionCriteriaFile.fileId)}
-                        />
-                      </TableThumbnail>
-                    ),
                     fileName: `${listing.buildingSelectionCriteriaFile.fileId
                       .split("/")
                       .slice(-1)

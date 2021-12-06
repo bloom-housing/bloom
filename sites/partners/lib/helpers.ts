@@ -219,7 +219,7 @@ export const cloudinaryFileUploader = async ({
     setProgressValue(100)
     setCloudinaryData({
       id: response.data.public_id,
-      url: cloudinaryUrlFromId(response.data.public_id),
+      url: cloudinaryUrlFromId(response.data.public_id, 400, response.data.resource_type),
     })
   })
 }

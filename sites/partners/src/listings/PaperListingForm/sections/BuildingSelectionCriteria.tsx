@@ -63,7 +63,6 @@ const LotteryResults = () => {
   }
 
   let criteriaTableHeaders: Record<string, string> = {
-    preview: "t.preview",
     fileName: "t.fileName",
     actions: "",
   }
@@ -75,11 +74,6 @@ const LotteryResults = () => {
   const previewTableRows = []
   if (cloudinaryData.url !== "") {
     previewTableRows.push({
-      preview: (
-        <TableThumbnail>
-          <img alt="PDF preview" src={cloudinaryData.url} />
-        </TableThumbnail>
-      ),
       fileName: cloudinaryData.id.split("/").slice(-1).join(),
       actions: (
         <Button

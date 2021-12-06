@@ -21,7 +21,7 @@ export const CloudinaryUpload = async ({
   timestamp,
   tag = "browser_upload",
 }: CloudinaryUploadProps) => {
-  const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`
+  let url = `https://api.cloudinary.com/v1_1/${cloudName}`
   const data = new FormData()
   data.append("upload_preset", uploadPreset)
   data.append("tags", tag)
@@ -36,6 +36,12 @@ export const CloudinaryUpload = async ({
     const err = "Please supply a cloud name and upload preset for Cloudinary"
     alert(err)
     throw err
+  }
+
+  if (file.type === "application/pdf") {
+    url += "/raw/upload"
+  } else {
+    url += "/upload"
   }
 
   const response = await axios.request({

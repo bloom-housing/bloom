@@ -132,6 +132,7 @@ export const ListingView = (props: ListingProps) => {
             listing.buildingSelectionCriteriaFile.fileId,
             process.env.cloudinaryCloudName
           )}
+          target="_blank"
         >
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
@@ -140,7 +141,7 @@ export const ListingView = (props: ListingProps) => {
   } else if (listing.buildingSelectionCriteria) {
     buildingSelectionCriteria = (
       <p>
-        <a href={listing.buildingSelectionCriteria}>
+        <a href={listing.buildingSelectionCriteria} target="_blank">
           {t("listings.moreBuildingSelectionCriteria")}
         </a>
       </p>

@@ -1,8 +1,10 @@
 import { Asset, Listing } from "@bloom-housing/backend-core/types"
 
-export const cloudinaryUrlFromId = (publicId: string, size = 400) => {
+export const cloudinaryUrlFromId = (publicId: string, size = 400, resourceType = "image") => {
   const cloudName = process.env.cloudinaryCloudName || process.env.CLOUDINARY_CLOUD_NAME
-  return `https://res.cloudinary.com/${cloudName}/image/upload/w_${size},c_limit,q_65/${publicId}.jpg`
+  let url = `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/w_${size},c_limit,q_65/${publicId}`
+  url = resourceType === "raw" ? url : url + ".jpg"
+  return url
 }
 
 export const imageUrlFromListing = (listing: Listing, size = 400) => {
