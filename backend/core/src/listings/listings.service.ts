@@ -19,6 +19,7 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
+import { mapTo } from "../../src/shared/mapTo"
 
 @Injectable()
 export class ListingsService {
@@ -121,6 +122,10 @@ export class ListingsService {
     if (params.jsonpath) {
       listings = jp.query(listings, params.jsonpath)
     }
+
+    // The result of the query above does not produce Listing instances, only objects. To ensure
+    // that `get` accessors work, we need to `mapTo` Listing instances.
+    listings = listings.map((l) => mapTo(Listing, l))
 
     // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
     // queries (https://github.com/nestjsx/nestjs-typeorm-paginate/issues/6) so

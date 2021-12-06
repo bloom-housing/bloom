@@ -45,6 +45,7 @@ export class Property {
   updatedAt: Date
 
   @OneToMany(() => Unit, (unit) => unit.property, { eager: true, cascade: true })
+  @Expose()
   units: Unit[]
 
   @ManyToMany(() => PropertyGroup)
