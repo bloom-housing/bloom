@@ -282,7 +282,7 @@ const ApplicationMember = () => {
                 <fieldset>
                   <legend className="field-label--caps">
                     {t("application.household.member.workInRegion", {
-                      jurisdiction: t("t.jurisdictionName"),
+                      county: listing?.countyCode,
                     })}
                   </legend>
                   <FieldGroup

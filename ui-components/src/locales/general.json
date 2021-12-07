@@ -240,7 +240,7 @@
       "sendMailToMailingAddress": "Send my mail to a different address",
       "mailingAddress": "Mailing Address",
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
-      "doYouWorkIn": "Do you work in %{jurisdiction}?",
+      "doYouWorkIn": "Do you work in %{county} County?",
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address"
     },
@@ -329,7 +329,7 @@
         "title": "Tell us about this person",
         "updateHouseholdMember": "Update Household Member",
         "whatReletionship": "What is their relationship to you",
-        "workInRegion": "Do they work in %{jurisdiction}?",
+        "workInRegion": "Do they work in %{county} County?",
         "workInRegionNote": "TBD"
       },
       "membersInfo": {
@@ -1468,7 +1468,6 @@
     "invite": "Invite",
     "jumpTo": "Jump to",
     "jurisdiction": "Jurisdiction",
-    "jurisidictionName": "<JURISDICTION>",
     "label": "Label",
     "language": "Language",
     "lastUpdated": "Last Updated",

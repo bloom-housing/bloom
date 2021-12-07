@@ -4,6 +4,8 @@ import chineseTranslations from "@bloom-housing/ui-components/src/locales/zh.jso
 import vietnameseTranslations from "@bloom-housing/ui-components/src/locales/vi.json"
 import tagalogTranslations from "@bloom-housing/ui-components/src/locales/tl.json"
 
+import additionalGeneralTranslations from "../page_content/locale_overrides/general.json"
+
 export const translations = {
   general: generalTranslations,
   es: spanishTranslations,
@@ -12,4 +14,4 @@ export const translations = {
   tl: tagalogTranslations,
 } as Record<string, any>
 
-export const overrideTranslations = {} as Record<string, any>
+export const overrideTranslations = { en: additionalGeneralTranslations } as Record<string, any>
