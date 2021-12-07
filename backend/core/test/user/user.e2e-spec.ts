@@ -745,7 +745,7 @@ describe("Applications", () => {
       .get(`/user/list`)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
-    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+    expect(allUsersListRes.body.meta.totalItems >= totalUsersCount).toBe(true)
 
     const portalUsersFilter = [
       {

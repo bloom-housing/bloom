@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { DeepPartial, FindConditions, Repository } from "typeorm"
-import { paginate, Pagination } from "nestjs-typeorm-paginate"
+import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
 import moment from "moment"
 import crypto from "crypto"
@@ -81,27 +81,39 @@ export class UserService {
     const options = {
       limit: params.limit === "all" ? undefined : params.limit,
       page: params.page || 10,
+      PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
+    const distinctIDQB = this._getQb(false)
+    distinctIDQB.addSelect("user.id")
+    distinctIDQB.groupBy("user.id")
     const qb = this._getQb()
 
     if (params.filter) {
       const filter = new UserQueryFilter()
+      filter.addFilters(params.filter, userFilterTypeToFieldMap, distinctIDQB)
       filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
     }
+    const distinctIDResult = await paginate<User>(distinctIDQB, options)
 
-    const result = await paginate<User>(qb, options)
+    qb.andWhere("user.id IN (:...distinctIDs)", {
+      distinctIDs: distinctIDResult.items.map((elem) => elem.id),
+    })
+    const result = await qb.getMany()
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
      */
     await Promise.all(
-      result.items.map(async (user) => {
+      result.map(async (user) => {
         await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
       })
     )
 
-    return result
+    return {
+      ...distinctIDResult,
+      items: result,
+    }
   }
 
   async update(dto: UserUpdateDto, authContext: AuthContext) {
@@ -322,10 +334,15 @@ export class UserService {
     return this.authService.generateAccessToken(user)
   }
 
-  private _getQb() {
+  private _getQb(withSelect: boolean = true) {
     const qb = this.userRepository.createQueryBuilder("user")
-    qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
-    qb.leftJoinAndSelect("user.roles", "user_roles")
+    if (withSelect) {
+      qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+      qb.leftJoinAndSelect("user.roles", "user_roles")
+    } else {
+      qb.leftJoin("user.leasingAgentInListings", "listings")
+      qb.leftJoin("user.roles", "user_roles")
+    }
 
     return qb
   }

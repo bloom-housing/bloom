@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { QueryFailedError, Repository } from "typeorm"
-import { paginate, Pagination } from "nestjs-typeorm-paginate"
+import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
@@ -67,14 +67,47 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    const qb = this._getQb(params, !params.listingId ? "base" : "partnerList")
-    const result = await paginate(qb, { limit: params.limit, page: params.page })
-    await Promise.all(
-      result.items.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+    if (!params.listingId) {
+      const qb = this._getQb(params)
+      const result = await paginate(qb, {
+        limit: params.limit,
+        page: params.page,
+        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
       })
-    )
-    return result
+      await Promise.all(
+        result.items.map(async (application) => {
+          await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        })
+      )
+      return result
+    } else {
+      const qb = this._getQb(params, "partnerList")
+
+      const applicationIDQB = this._getQb(params, "partnerList", false)
+      applicationIDQB.groupBy("application.id")
+
+      const applicationIDResult = await paginate<Application>(applicationIDQB, {
+        limit: params.limit,
+        page: params.page,
+        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
+      })
+
+      qb.andWhere("application.id IN (:...applicationIDs)", {
+        applicationIDs: applicationIDResult.items.map((elem) => elem.id),
+      })
+
+      const result = await qb.getMany()
+
+      await Promise.all(
+        result.map(async (application) => {
+          await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        })
+      )
+      return {
+        ...applicationIDResult,
+        items: result,
+      }
+    }
   }
 
   // Submitting an application from public
@@ -144,7 +177,11 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(params: PaginatedApplicationListQueryParams, view = "base") {
+  private _getQb(
+    params: PaginatedApplicationListQueryParams,
+    view = "base",
+    withSelect: boolean = true
+  ) {
     /**
      * Map used to generate proper parts
      * of query builder.
@@ -169,7 +206,7 @@ export class ApplicationsService {
 
     // --> Build main query
     const qbView = getView(this.repository.createQueryBuilder("application"), view)
-    const qb = qbView.getViewQb()
+    const qb = qbView.getViewQb(withSelect)
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts
