@@ -1,7 +1,14 @@
 import csv from "csv-parser"
 import fs from "fs"
+import axios from "axios"
 import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
-import { AddressCreate, CSVFormattingType, ListingStatus } from "../types/src/backend-swagger"
+import * as client from "../types/src/backend-swagger"
+import {
+  AddressCreate,
+  CSVFormattingType,
+  ListingStatus,
+  serviceOptions,
+} from "../types/src/backend-swagger"
 import { ListingReviewOrder } from "../src/listings/types/listing-review-order-enum"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
@@ -27,6 +34,18 @@ async function main() {
   const [importApiUrl, userAndPassword, csvFilePath] = process.argv.slice(2)
   const [email, password] = userAndPassword.split(":")
 
+  serviceOptions.axios = axios.create({
+    baseURL: importApiUrl,
+    timeout: 10000,
+  })
+
+  const hrdIds: Set<string> = new Set(
+    (await new client.ListingsService().list({ limit: "all" })).items.map(
+      (listing) => listing.hrdId
+    )
+  )
+  console.log(`Got ${hrdIds.size} HRD ids.`)
+
   // Regex used to parse the AMI from an AMI column name
   const amiColumnRegex = /(\d+) Pct AMI/ // e.g. 30 Pct AMI
 
@@ -39,13 +58,19 @@ async function main() {
     fs.createReadStream(csvFilePath)
       .pipe(csv())
       .on("data", (listingFields) => {
-        const listingName: string = listingFields["Project Name"]
+        const listingName: string = listingFields["Project Name"].trim()
         // Exclude listings that are not "regulated" affordable housing
         const affordabilityStatus: string = listingFields["Affordability status"]
         if (affordabilityStatus?.toLowerCase() !== "regulated") {
           console.log(
             `Skipping listing because it is not *regulated* affordable housing: ${listingName}`
           )
+          return
+        }
+
+        // Exclude listings that are already present in the db, based on HRD id.
+        if (hrdIds.has(listingFields["HRDID"])) {
+          console.log(`Skipping ${listingName} because it's already in the database.`)
           return
         }
 
