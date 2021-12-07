@@ -45,6 +45,9 @@ Cypress.Commands.add("beginApplication", (listingName) => {
   cy.get("[data-test-id=sign-in-button").click()
   cy.getByTestId("app-choose-language-button").eq(0).click()
   cy.getByTestId("app-next-step-button").click()
+  // We have to decline autofill currently because there's no test run
+  // that works when various fields are filled & disabled
+  cy.getByTestId("autofill-decline").click()
 })
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
@@ -294,7 +297,7 @@ Cypress.Commands.add("step9Accessibility", (application) => {
   }
 })
 
-Cypress.Commands.add("step10Programs", (application) => {
+Cypress.Commands.add("step12Programs", (application) => {
   application.programs.forEach((program) => {
     if (!program.claimed) {
       // Selects the last instance, which is decline
@@ -312,7 +315,7 @@ Cypress.Commands.add("step10Programs", (application) => {
   cy.isNextRouteValid("programs")
 })
 
-Cypress.Commands.add("step11Changes", (application) => {
+Cypress.Commands.add("step10Changes", (application) => {
   if (application.householdExpectingChanges) {
     cy.getByTestId("app-expecting-changes").eq(0).check()
   } else {
@@ -325,7 +328,7 @@ Cypress.Commands.add("step11Changes", (application) => {
   cy.isNextRouteValid("householdExpectingChanges")
 })
 
-Cypress.Commands.add("step12Student", (application) => {
+Cypress.Commands.add("step11Student", (application) => {
   if (application.householdStudent) {
     cy.getByTestId("app-student").eq(0).check()
   } else {
@@ -453,12 +456,11 @@ Cypress.Commands.add("submitApplication", (listingName, application, autofill) =
   }
   cy.step8PreferredUnits(application)
   cy.step9Accessibility(application)
+  cy.step10Changes(application)
+  cy.step11Student(application)
   if (application.programs.length > 0) {
-    cy.step10Programs(application)
+    cy.step12Programs(application)
   }
-  cy.step11Changes(application)
-
-  cy.step12Student(application)
   cy.step13IncomeVouchers(application)
   cy.step14Income(application)
   cy.window().then((win) => {
