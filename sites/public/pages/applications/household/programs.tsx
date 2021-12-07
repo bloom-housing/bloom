@@ -116,7 +116,7 @@ const ApplicationPrograms = () => {
           <>
             {pageProgram && (
               <div key={pageProgram.id}>
-                <div className="form-card__group px-0">
+                <div className="form-card__group field text-lg">
                   <fieldset>
                     <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
 

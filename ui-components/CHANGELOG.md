@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.31...@bloom-housing/ui-components@3.0.1-alpha.32) (2021-12-07)
+
+
+### Bug Fixes
+
+* Fix modal styles on mobile ([#2280](https://github.com/bloom-housing/bloom/issues/2280)) ([95f45e5](https://github.com/bloom-housing/bloom/commit/95f45e5a6d2c38c512f59d8cb35847cab59dc8bb)), closes [#2253](https://github.com/bloom-housing/bloom/issues/2253)
+
+
+
+
+
 ## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.30...@bloom-housing/ui-components@3.0.1-alpha.31) (2021-12-06)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
