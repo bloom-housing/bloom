@@ -11,7 +11,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { User } from "../../auth/entities/user.entity"
 import { Application } from "../../applications/entities/application.entity"
 import { ApplicationsService } from "../../applications/services/applications.service"
-import { ApplicationCreateDto } from "../../applications/dto/application-create.dto"
+import { ApplicationCreateDto } from "../../applications/dto/application.dto"
 
 const applicationCreateDtoTemplate: Omit<
   ApplicationCreateDto,
