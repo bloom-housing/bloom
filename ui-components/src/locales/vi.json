@@ -130,7 +130,8 @@
       "addMembers": {
         "addHouseholdMember": "+ Thêm Thành viên Hộ Gia đình",
         "done": "Thêm xong thành viên",
-        "title": "Hãy cho chúng tôi biết về hộ gia đình của quý vị."
+        "title": "Hãy cho chúng tôi biết về hộ gia đình của quý vị.",
+        "doubleCheck": "Hãy kiểm tra lại thông tin cho mỗi thành viên hộ gia đình."
       },
       "householdMember": "Thành viên Hộ Gia đình",
       "householdMembers": "Các Thành viên Hộ Gia đình",
@@ -361,7 +362,15 @@
     "signIn": {
       "error": "Đã xảy ra lỗi khi quý vị đăng nhập",
       "errorGenericMessage": "Vui lòng thử lại hoặc liên lạc với bộ phận hỗ trợ để được trợ giúp.",
+      "forgotPassword": "Quên mật khẩu",
       "success": "Chào mừng quý vị trở lại, %{name}!"
+    },
+    "createAccount": {
+      "accountConfirmed": "Tài khoản của quý vị đã được xác nhận.",
+      "anEmailHasBeenSent": "Một email đã được gửi tới %{email}",
+      "confirmationInstruction": "Hãy nhấp vào đường liên kết trong email mà chúng tôi gửi cho quý vị để hoàn thành việc lập tài khoản.",
+      "confirmationNeeded": "Cần xác nhận",
+      "resendTheEmail": "Gửi lại Email"
     }
   },
   "config": {
