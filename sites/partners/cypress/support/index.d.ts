@@ -13,6 +13,7 @@ declare namespace Cypress {
     login(): Chainable
     attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable
+    getByTestId(testId: string): Chainable<Element>
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */

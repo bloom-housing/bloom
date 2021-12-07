@@ -91,6 +91,7 @@ const Aside = ({
               fullWidth
               onClick={() => false}
               type="button"
+              dataTestId="listingEditButton"
             >
               {t("t.edit")}
             </Button>
@@ -133,7 +134,8 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => saveAndExit()}
+            onClick={() => submitFormWithStatus(true, ListingStatus.active)}
+            dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
           </Button>
