@@ -123,6 +123,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     })
   }
 
+  const momentizedDate = moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
+
   return (
     <div>
       <hr className="mt-6 mb-6" />
@@ -501,13 +503,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 watch={watch}
                 defaultDate={{
                   month: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("MM")
+                    ? momentizedDate.format("MM")
                     : null,
                   day: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("DD")
+                    ? momentizedDate.format("DD")
                     : null,
                   year: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("YYYY")
+                    ? momentizedDate.format("YYYY")
                     : null,
                 }}
                 dataTestId={"postmark-date-field"}
@@ -524,13 +526,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 watch={watch}
                 defaultValues={{
                   hours: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("hh")
+                    ? momentizedDate.format("hh")
                     : null,
                   minutes: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("mm")
+                    ? momentizedDate.format("mm")
                     : null,
                   seconds: listing?.postmarkedApplicationsReceivedByDate
-                    ? moment(new Date(listing?.postmarkedApplicationsReceivedByDate)).format("ss")
+                    ? momentizedDate.format("ss")
                     : null,
                   period:
                     new Date(listing?.postmarkedApplicationsReceivedByDate).getHours() >= 12

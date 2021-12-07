@@ -20,7 +20,6 @@ export interface ApplicationAddressesProps {
 }
 
 const SubmitApplication = (props: ApplicationAddressesProps) => {
-  console.log(props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate)
   return (
     <>
       {(props.applicationMailingAddress ||
