@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.51...@bloom-housing/public@3.0.1-alpha.52) (2021-12-07)
+
+
+### Bug Fixes
+
+* visual improvement to programs form display ([#2276](https://github.com/bloom-housing/bloom/issues/2276)) ([e8c87d1](https://github.com/bloom-housing/bloom/commit/e8c87d1323ed9a1de0865a172d02139aefe37967))
+
+
+
+
+
 ## [3.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.50...@bloom-housing/public@3.0.1-alpha.51) (2021-12-07)
 
 **Note:** Version bump only for package @bloom-housing/public
