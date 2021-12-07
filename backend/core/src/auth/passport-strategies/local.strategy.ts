@@ -1,11 +1,12 @@
 import { Strategy } from "passport-local"
 import { PassportStrategy } from "@nestjs/passport"
-import { Injectable, UnauthorizedException } from "@nestjs/common"
+import { HttpException, Injectable, UnauthorizedException } from "@nestjs/common"
 import { User } from "../entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { PasswordService } from "../services/password.service"
 import { UserService } from "../services/user.service"
+import { USER_ERRORS } from "../user-errors"
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -26,7 +27,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
     if (user) {
       const validPassword = await this.passwordService.verifyUserPassword(user, password)
-      if (validPassword && user.confirmedAt && !UserService.isPasswordOutdated(user)) {
+      if (UserService.isPasswordOutdated(user)) {
+        throw new HttpException(
+          USER_ERRORS.PASSWORD_OUTDATED.message,
+          USER_ERRORS.PASSWORD_OUTDATED.status
+        )
+      }
+      if (validPassword && user.confirmedAt) {
         return user
       }
     }
