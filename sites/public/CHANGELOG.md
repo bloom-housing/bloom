@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.49...@bloom-housing/public@3.0.1-alpha.50) (2021-12-06)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.48...@bloom-housing/public@3.0.1-alpha.49) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.47...@bloom-housing/public@3.0.1-alpha.48) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.46...@bloom-housing/public@3.0.1-alpha.47) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [3.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.45...@bloom-housing/public@3.0.1-alpha.46) (2021-12-02)
+
+
+### Bug Fixes
+
+* applications/view hide prefs ([89ff7bb](https://github.com/bloom-housing/bloom/commit/89ff7bb03380332b107be2a2a5321097ade99466))
+
+
+
+
+
 ## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.44...@bloom-housing/public@3.0.1-alpha.45) (2021-12-02)
 
 

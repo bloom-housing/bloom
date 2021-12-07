@@ -1,14 +1,14 @@
 import { Test, TestingModule } from "@nestjs/testing"
-import { ListingsService } from "./listings.service"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { HttpException, HttpStatus } from "@nestjs/common"
-import { Listing } from "./entities/listing.entity"
-import { Compare } from "../shared/dto/filter.dto"
-import { TranslationsService } from "../translations/translations.service"
-import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
-import { ListingFilterParams } from "./dto/listing-filter-params"
-import { ListingsQueryParams } from "./dto/listings-query-params"
+import { ListingsService } from "../listings.service"
+import { Listing } from "../entities/listing.entity"
+import { TranslationsService } from "../../translations/services/translations.service"
+import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
+import { ListingsQueryParams } from "../dto/listings-query-params"
+import { Compare } from "../../shared/dto/filter.dto"
+import { ListingFilterParams } from "../dto/listing-filter-params"
+import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -94,6 +94,7 @@ const mockQueryBuilder = {
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
+  save: jest.fn(),
 }
 
 describe("ListingsService", () => {
