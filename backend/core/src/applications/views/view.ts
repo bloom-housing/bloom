@@ -20,7 +20,7 @@ export class BaseApplicationView extends BaseView {
     this.view = views.base
   }
 
-  getViewQb(withSelect: boolean = true): SelectQueryBuilder<Application> {
+  getViewQb(withSelect = true): SelectQueryBuilder<Application> {
     if (withSelect) {
       this.view.leftJoinAndSelect.forEach((tuple) => this.qb.leftJoinAndSelect(...tuple))
     } else {

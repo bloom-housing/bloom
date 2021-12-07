@@ -177,11 +177,7 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(
-    params: PaginatedApplicationListQueryParams,
-    view = "base",
-    withSelect: boolean = true
-  ) {
+  private _getQb(params: PaginatedApplicationListQueryParams, view = "base", withSelect = true) {
     /**
      * Map used to generate proper parts
      * of query builder.

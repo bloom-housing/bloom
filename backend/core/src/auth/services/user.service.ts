@@ -334,7 +334,7 @@ export class UserService {
     return this.authService.generateAccessToken(user)
   }
 
-  private _getQb(withSelect: boolean = true) {
+  private _getQb(withSelect = true) {
     const qb = this.userRepository.createQueryBuilder("user")
     if (withSelect) {
       qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
