@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.32...@bloom-housing/backend-core@3.0.1-alpha.33) (2021-12-07)
+
+
+### Features
+
+* overrides fallback to english, tagalog support ([#2262](https://github.com/bloom-housing/bloom/issues/2262)) ([679ab9b](https://github.com/bloom-housing/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+
+
+
+
+
 ## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.31...@bloom-housing/backend-core@3.0.1-alpha.32) (2021-12-06)
 
 
