@@ -12,9 +12,12 @@ describe("Listing Management Tests", () => {
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
-      cy.getByID("listing-photo-upload").attachFile("exygy.jpeg", {
-        subjectType: "input",
-      })
+      cy.getByID("listing-photo-upload").attachFile(
+        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+        {
+          subjectType: "input",
+        }
+      )
       cy.get('[data-label="File Name"]').contains("exygy")
       cy.get(".p-4 > .is-primary").contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
