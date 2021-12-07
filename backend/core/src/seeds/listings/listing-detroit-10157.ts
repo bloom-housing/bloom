@@ -21,7 +21,7 @@ const nccProperty: PropertySeedType = {
   buildingTotalUnits: 71,
   neighborhood: "New Center Commons",
   petPolicy: "No Pets Allowed",
-  unitAmenities: "Air Conditioning Dishwasher Garbage Disposal Range Refrigerator",
+  unitAmenities: "Air Conditioning, Dishwasher, Garbage Disposal, Range, Refrigerator",
   unitsAvailable: 5,
   yearBuilt: 1929,
 }

@@ -19,7 +19,7 @@ const ncpProperty: PropertySeedType = {
   },
   buildingTotalUnits: 76,
   neighborhood: "New Center Commons",
-  unitAmenities: "Air Conditioning(Wall unit), Garbage Disposal, Range, Refrigerator",
+  unitAmenities: "Air Conditioning (Wall unit), Garbage Disposal, Range, Refrigerator",
   yearBuilt: 1971,
 }
 
