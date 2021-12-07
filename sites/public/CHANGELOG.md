@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.52...@bloom-housing/public@3.0.1-alpha.53) (2021-12-07)
+
+
+### Bug Fixes
+
+* submission tests not running ([#2282](https://github.com/bloom-housing/bloom/issues/2282)) ([735cf2b](https://github.com/bloom-housing/bloom/commit/735cf2bcafdd81d45856d856102c6e0665742daa))
+
+
+
+
+
 ## [3.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.51...@bloom-housing/public@3.0.1-alpha.52) (2021-12-07)
 
 
