@@ -1,38 +1,53 @@
 import { Injectable } from "@nestjs/common"
 import { Cron, CronExpression } from "@nestjs/schedule"
+import { UserListQueryParams } from "src/auth/dto/user-list-query-params";
+import { UserService } from "src/auth/services/user.service";
+import { AuthContext } from "src/auth/types/auth-context";
 import { ListingsQueryParams } from "src/listings/dto/listings-query-params";
 import { Listing } from "src/listings/entities/listing.entity";
+import { Compare } from "src/shared/dto/filter.dto";
 import { EmailService } from "src/shared/email/email.service";
+import { User } from "types";
+import { ListingsService } from "../listings/listings.service"
 
 @Injectable()
 export class CronService {
 
   constructor(
     private readonly emailService: EmailService,
+    private readonly listingsService: ListingsService,
+    private readonly userService: UserService,
+
   ) {}
 
   @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
-  handleCron() {
+  async handleCron() {
     // TODO: add a cron task here.
      // Check if the flag to send alerts is enabled.
      if (!process.env.SEND_NOTIFICATIONS_FOR_UPDATE_LISTINGS_REMINDER) {
       return;
     }
 
-    // Retrieve all listings and respective users
-    // Select listing, user where emailNotifications=true
-    ListingsQueryParams params;
-    allListingsAndUsers = this.listingsService.list(params);
-
-    // Filter to only listings that are newly added/modified
-    listingsToUpdate = allListings.filter(shouldSendNotificationForListing);
+    const userQueryParams: UserListQueryParams = {
+      filter: [
+        {
+          $comparison: Compare["EQUALS"],
+          isPartner: true,
+        },
+      ],
+    }
+    const users = this.userService.list(userQueryParams, new AuthContext());
+    const allListings = await this.listingsService.list({});
     
-    // Send notifications
-    this.emailService.sendUpdateNotifications(listingsToUpdate.Listing, listingsToUpdate.user);
-  }
-
-  shouldSendNotificationForListing(listing: Listing) {
-    return true
-
+    for (var listing of allListings.items){
+      for (var leasingAgent of listing.leasingAgents){
+        if ((await users).items.includes(leasingAgent)) {
+          if (leasingAgent.preferences.sendEmailNotifications == true) {
+            this.emailService.updateListingReminder(listing, leasingAgent);
+          }
+        }
+      }
+    }
   }
 }
+
