@@ -12,6 +12,10 @@ export interface HorizontalScrollSectionProps {
   icon?: IconTypes
 }
 
+function isRtl(): boolean {
+  return getComputedStyle(document.body).direction == "rtl"
+}
+
 const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
@@ -19,32 +23,44 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
 
   const leftButtonClick = () => {
     scrollContainerRef.current.scrollBy({
-      left: -1 * props.scrollAmount,
+      left: -props.scrollAmount,
       top: 0,
       behavior: "smooth",
     })
   }
 
   const rightButtonClick = () => {
-    scrollContainerRef.current.scrollBy({ left: props.scrollAmount, top: 0, behavior: "smooth" })
+    scrollContainerRef.current.scrollBy({
+      left: props.scrollAmount,
+      top: 0,
+      behavior: "smooth",
+    })
   }
 
   const setButtonState = () => {
     const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-    setCanScrollLeft(scrollLeft > 0)
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth)
+    const scrollStart = isRtl() ? -scrollLeft : scrollLeft
+    const scrollEnd = scrollWidth - clientWidth + (isRtl() ? scrollLeft : -scrollLeft)
+    setCanScrollLeft(isRtl() ? scrollEnd > 0 : scrollStart > 0)
+    setCanScrollRight(isRtl() ? scrollStart > 0 : scrollEnd > 0)
   }
 
   const debounceSetButtonState = debounce(setButtonState, 100)
+  let observer: MutationObserver
 
   useEffect(() => {
     window.addEventListener("resize", debounceSetButtonState)
+    observer = new MutationObserver(() => {
+      setButtonState()
+    })
+    observer.observe(document.body, { attributes: true })
     // Set the initial state incase window is wide enough to not have any scrolling
     setButtonState()
 
     // Cleanup
     return () => {
       window.removeEventListener("resize", debounceSetButtonState)
+      observer.disconnect()
     }
   })
 
@@ -57,24 +73,26 @@ const HorizontalScrollSection = (props: HorizontalScrollSectionProps) => {
         <h2 className={`${styles.title__text} ${props.icon ? styles["icon-space"] : ""}`}>
           {props.title}
         </h2>
-        <Button
-          unstyled={true}
-          className={styles.title__button}
-          onClick={leftButtonClick}
-          disabled={!canScrollLeft}
-          ariaLabel="Scroll left"
-        >
-          <Icon size="medium" symbol="left" />
-        </Button>
-        <Button
-          unstyled={true}
-          className={styles.title__button}
-          onClick={rightButtonClick}
-          disabled={!canScrollRight}
-          ariaLabel="Scroll right"
-        >
-          <Icon size="medium" symbol="right" />
-        </Button>
+        <div className={styles.controls_container}>
+          <Button
+            unstyled={true}
+            className={styles.title__button}
+            onClick={leftButtonClick}
+            disabled={!canScrollLeft}
+            ariaLabel="Scroll left"
+          >
+            <Icon size="medium" symbol="left" />
+          </Button>
+          <Button
+            unstyled={true}
+            className={styles.title__button}
+            onClick={rightButtonClick}
+            disabled={!canScrollRight}
+            ariaLabel="Scroll right"
+          >
+            <Icon size="medium" symbol="right" />
+          </Button>
+        </div>
       </div>
       {props.subtitle && (
         <div className={`${styles.subtitle} ${props.icon ? styles["icon-space"] : ""}`}>
