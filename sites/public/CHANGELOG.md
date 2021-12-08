@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.44...@bloom-housing/public@3.0.1-alpha.45) (2021-12-02)
+
+
+### Bug Fixes
+
+* choose-language context ([f62bf46](https://github.com/bloom-housing/bloom/commit/f62bf4623b8ec0955b54727ba422357acaaed754))
+
+
+
+
+
 ## [3.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.43...@bloom-housing/public@3.0.1-alpha.44) (2021-12-01)
 
 **Note:** Version bump only for package @bloom-housing/public
