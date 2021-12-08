@@ -6194,6 +6194,7 @@ export enum EnumJurisdictionLanguages {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum IncomePeriod {
   "perMonth" = "perMonth",
@@ -6211,6 +6212,7 @@ export enum Language {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 
 export enum ApplicationSubmissionType {
@@ -6261,12 +6263,14 @@ export enum EnumJurisdictionCreateLanguages {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum EnumJurisdictionUpdateLanguages {
   "en" = "en",
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",
