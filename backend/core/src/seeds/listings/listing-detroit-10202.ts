@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType } from "./listings"
+import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
@@ -58,13 +58,20 @@ export class Listing10202Seed extends ListingDefaultSeed {
       ...mcvProperty,
     })
 
+    const assets: Array<AssetDtoSeedType> = [
+      {
+        label: "building",
+        fileId: "https://s3.amazonaws.com/photos.rentlinx.com/L800/85883803.jpg",
+      },
+    ]
+
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...mcvListing,
       applicationMethods: [],
-      assets: [],
+      assets: assets,
       events: [],
       property: property,
       preferences: [],

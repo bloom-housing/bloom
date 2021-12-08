@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType } from "./listings"
+import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
@@ -59,13 +59,22 @@ export class Listing10151Seed extends ListingDefaultSeed {
 
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "specialNeeds" })
 
+    const assets: Array<AssetDtoSeedType> = [
+      {
+        label: "building",
+        // NOTE: this is not an actual image of the property.
+        fileId:
+          "https://images.unsplash.com/photo-1629371997433-d11e6161a8b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80",
+      },
+    ]
+
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...listingSeed,
       applicationMethods: [],
-      assets: [],
+      assets: assets,
       events: [],
       property: property,
       preferences: [],
