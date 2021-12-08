@@ -130,6 +130,7 @@
       "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "Desafortunadamente, parece que usted no reúne los requisitos de este listado.",
       "dontQualifyInfo": "Por favor haga cambios si usted cree haber cometido algún error. Tenga presente que si usted falsifica cualquier tipo de información en su solicitud será descalificado(a). Si la información que usted ingresó es correcta, lo invitamos a visitarnos en el futuro a medida que otras propiedades están disponibles.",
+      "genericSubtitle": "Si se eligiera su solicitud, esté preparado para proporcionar documentación respaldatoria.",
       "addMembers": {
         "addHouseholdMember": "+ Añadir a un miembro del hogar",
         "done": "Ya terminó de añadir personas",
@@ -146,6 +147,7 @@
       "preferredUnit": {
         "preferredUnitType": "Tipo de vivienda preferida",
         "title": "¿Cuáles son los tamaños de vivienda que le interesan?",
+        "subTitle": "Aunque los tamaños de las unidades en general se basen en la ocupación, indique el tamaño de unidad que desee para determinar su preferencia en esta oportunidad o establecer una lista de espera (solo por esta oportunidad).",
         "optionsLabel": "Marque todas las opciones que correspondan:",
         "options": {
           "studio": "Estudio",
@@ -154,6 +156,12 @@
           "threeBdrm": "3 dormitorios",
           "fourBdrm": "+ de 3 dormitorios"
         }
+      },
+      "expectingChanges": {
+        "question": "¿Espera que haya cambios en su grupo familiar en los próximos 12 meses?"
+      },
+      "householdStudent": {
+        "question": "¿Alguien de su grupo familiar es estudiante a tiempo completo o cumplirá 18 años en los próximos 60 días?"
       },
       "member": {
         "cancelAddingThisPerson": "Cancelar añadir a esta persona",
@@ -278,7 +286,20 @@
           "americanIndianAlaskanNativeAndWhite": "Indígena norteamericano o nativo de Alaska y blanco",
           "asianAndWhite": "Asiático y blanco",
           "blackAfricanAmericanAndWhite": "Negro o afroamericano y blanco",
-          "otherMutliracial": "Otro / Multirracial"
+          "otherMutliracial": "Otro / Multirracial",
+          "asian-otherAsian": "De otro país asiático",
+          "asian-chinese": "Chino",
+          "declineToRespond": "No desea responder",
+          "asian-filipino": "Filipino",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guameño o chamorro",
+          "asian-japanese": "Japonés",
+          "asian-korean": "Coreano",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Nativo hawaiano",
+          "otherMultiracial": "Otro/multirracial",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Otro habitante de una isla del Pacífico",
+          "nativeHawaiianOtherPacificIslander-samoan": "Samoano",
+          "asian-vietnamese": "Vietnamita"
+
         },
         "genderOptions": {
           "female": "Mujer",
@@ -711,6 +732,7 @@
     "phone": "Teléfono",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Por favor seleccione una opción.",
+    "pleaseSelectYesNo": "Elija “sí” o “no”.",
     "preferences": "Preferencias",
     "propertyAmenities": "Servicios en la propiedad",
     "range": "%{from} a %{to}",
@@ -746,7 +768,11 @@
     "seeRentalListings": "Ver viviendas en alquiler",
     "title": "Haga su solicitud de vivienda de precio accesible en",
     "seeMoreOpportunities": "Ver más oportunidades de alquiler y propiedad de vivienda",
-    "viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda"
+    "viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda",
+    "seeMoreOpportunitiesTruncated": "Ver más oportunidades y recursos de vivienda",
+    "viewAdditionalHousingTruncated": "Ver oportunidades y recursos",
+    "signUp": "Reciba correos electrónicos cuando se publique un anuncio nuevo",
+    "signUpToday": "Regístrese hoy"
   },
   "whatToExpect": {
     "label": "Lo que puede esperar",

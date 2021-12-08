@@ -843,6 +843,7 @@
       "firstName": "First Name",
       "middleNameOptional": "Middle Name (optional)",
       "middleName": "Middle Name",
+      "noAccount": "Don't have an account?",
       "lastName": "Last Name",
       "yourDateOfBirth": "Your Date of Birth",
       "email": "Email",
