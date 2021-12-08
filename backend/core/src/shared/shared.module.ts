@@ -21,6 +21,8 @@ import Joi from "joi"
         CLOUDINARY_SECRET: Joi.string().required(),
         CLOUDINARY_KEY: Joi.string().required(),
         PARTNERS_PORTAL_URL: Joi.string().required(),
+        MFA_CODE_LENGTH: Joi.number().default(6),
+        MFA_CODE_VALID_MS: Joi.number().default(1000 * 60 * 5),
       }),
     }),
   ],

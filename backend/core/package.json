@@ -73,6 +73,7 @@
     "newrelic": "7.5.1",
     "node-polyglot": "^2.4.0",
     "passport": "^0.4.1",
+    "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.4.1",

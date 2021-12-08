@@ -16,6 +16,7 @@ export class UserCreateDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "email",
+  "mfaEnabled",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
-import { LocalStrategy } from "./passport-strategies/local.strategy"
+import { LocalMfaStrategy } from "./passport-strategies/local-mfa.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
 import { PassportModule } from "@nestjs/passport"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -18,6 +18,7 @@ import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
 import { EmailModule } from "../email/email.module"
+import { SmsMfaService } from "./services/sms-mfa.service"
 
 @Module({
   imports: [
@@ -37,7 +38,15 @@ import { EmailModule } from "../email/email.module"
     JurisdictionsModule,
     EmailModule,
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
+  providers: [
+    LocalMfaStrategy,
+    JwtStrategy,
+    AuthService,
+    AuthzService,
+    UserService,
+    PasswordService,
+    SmsMfaService,
+  ],
   exports: [AuthzService, AuthService, UserService],
   controllers: [AuthController, UserController, UserProfileController],
 })

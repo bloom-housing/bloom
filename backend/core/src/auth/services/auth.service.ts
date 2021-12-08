@@ -9,7 +9,8 @@ import { User } from "../entities/user.entity"
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    @InjectRepository(RevokedToken) private readonly revokedTokenRepo: Repository<RevokedToken>
+    @InjectRepository(RevokedToken) private readonly revokedTokenRepo: Repository<RevokedToken>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}
 
   generateAccessToken(user: User) {

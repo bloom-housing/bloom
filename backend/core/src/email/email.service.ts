@@ -79,6 +79,10 @@ export class EmailService {
     )
   }
 
+  public async sendMfaCode(email: string, mfaCode: string) {
+    console.log("Sending mfa code through email")
+  }
+
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
     const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     void (await this.loadTranslations(jurisdiction, application.language || Language.en))

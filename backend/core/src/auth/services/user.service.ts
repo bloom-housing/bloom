@@ -38,6 +38,10 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
+import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
+import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
+import { MfaType } from "../types/mfa-type"
+import { SmsMfaService } from "./sms-mfa.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -49,7 +53,8 @@ export class UserService {
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
-    private readonly jurisdictionResolverService: JurisdictionResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService,
+    private readonly smsMfaService: SmsMfaService
   ) {}
 
   public async findByEmail(email: string) {
@@ -280,6 +285,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        mfaEnabled: false,
       },
       authContext
     )
@@ -341,6 +347,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        mfaEnabled: true,
       },
       authContext
     )
@@ -359,5 +366,60 @@ export class UserService {
       throw new NotFoundException()
     }
     await this.userRepository.remove(user)
+  }
+
+  generateMfaCode() {
+    let out = ""
+    const characters = "0123456789"
+    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
+      out += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return out
+  }
+
+  private static maskPhoneNumber(phoneNumber: string) {
+    let maskedPhoneNumber = ""
+    for (let i = 0; i < phoneNumber.length; i++) {
+      if (i < 3 || i > phoneNumber.length - 3) {
+        maskedPhoneNumber += phoneNumber[i]
+      } else {
+        maskedPhoneNumber += "*"
+      }
+    }
+    return maskedPhoneNumber
+  }
+
+  async requestMfaCode(requestMfaCodeDto: RequestMfaCodeDto): Promise<RequestMfaCodeResponseDto> {
+    const user = await this.userRepository.findOne({
+      where: { email: requestMfaCodeDto.email.toLowerCase() },
+    })
+
+    if (!user) {
+      throw new NotFoundException()
+    }
+
+    const validPassword = await this.passwordService.verifyUserPassword(
+      user,
+      requestMfaCodeDto.password
+    )
+    if (!validPassword) {
+      throw new UnauthorizedException()
+    }
+
+    const mfaCode = this.generateMfaCode()
+
+    user.mfaCode = mfaCode
+    user.mfaCodeUpdatedAt = new Date()
+    await this.userRepository.save(user)
+
+    if (requestMfaCodeDto.mfaType === MfaType.email) {
+      await this.emailService.sendMfaCode(user.email, mfaCode)
+    } else if (requestMfaCodeDto.mfaType === MfaType.sms) {
+      await this.smsMfaService.sendMfaCode(user.phoneNumber, mfaCode)
+    }
+
+    return requestMfaCodeDto.mfaType === MfaType.email
+      ? { email: user.email }
+      : { maskedPhoneNumber: UserService.maskPhoneNumber(user.phoneNumber) }
   }
 }

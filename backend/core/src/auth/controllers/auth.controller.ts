@@ -1,5 +1,13 @@
-import { Controller, Request, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
-import { LocalAuthGuard } from "../guards/local-auth.guard"
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+  Body,
+} from "@nestjs/common"
+import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
 import { DefaultAuthGuard } from "../guards/default.guard"
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
@@ -7,14 +15,20 @@ import { LoginDto } from "../dto/login.dto"
 import { mapTo } from "../../shared/mapTo"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 import { LoginResponseDto } from "../dto/login-response.dto"
+import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
+import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
+import { UserService } from "../services/user.service"
 
 @Controller("auth")
 @ApiTags("auth")
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalMfaAuthGuard)
   @Post("login")
   @ApiBody({ type: LoginDto })
   @ApiOperation({ summary: "Login", operationId: "login" })
@@ -29,5 +43,15 @@ export class AuthController {
   token(@Request() req): LoginResponseDto {
     const accessToken = this.authService.generateAccessToken(req.user)
     return mapTo(LoginResponseDto, { accessToken })
+  }
+
+  @Post("request-mfa-code")
+  @ApiBody({ type: RequestMfaCodeDto })
+  @ApiOperation({ summary: "Request mfa code", operationId: "Request mfa code" })
+  async requestMfaCode(
+    @Body() requestMfaCodeDto: RequestMfaCodeDto
+  ): Promise<RequestMfaCodeResponseDto> {
+    const requestMfaCodeResponse = await this.userService.requestMfaCode(requestMfaCodeDto)
+    return mapTo(RequestMfaCodeResponseDto, requestMfaCodeResponse)
   }
 }

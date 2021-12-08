@@ -26,6 +26,7 @@ import { EnumUserFilterParamsComparison } from "../../types"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { Application } from "../../src/applications/entities/application.entity"
 import { EmailService } from "../../src/email/email.service"
+import { MfaType } from "../../src/auth/types/mfa-type"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -42,20 +43,22 @@ describe("Applications", () => {
   let applicationsRepository: Repository<Application>
   let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
+  let usersRepository: Repository<User>
   let adminAccessToken: string
   let userAccessToken: string
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    confirmation: async () => {},
-    welcome: async () => {},
-    invite: async () => {},
-    changeEmail: async () => {},
+    confirmation: jest.fn(),
+    welcome: jest.fn(),
+    invite: jest.fn(),
+    changeEmail: jest.fn(),
+    sendMfaCode: jest.fn(),
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.resetAllMocks()
   })
 
   beforeAll(async () => {
@@ -86,6 +89,7 @@ describe("Applications", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    usersRepository = moduleRef.get<Repository<User>>(getRepositoryToken(User))
     userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
@@ -401,6 +405,8 @@ describe("Applications", () => {
 
     const userService = await app.resolve<UserService>(UserService)
     const user = await userService.findByEmail(newUser.email)
+    user.mfaEnabled = false
+    await usersRepository.save(user)
 
     const password = "Abcdef1!"
     await supertest(app.getHttpServer())
@@ -552,6 +558,7 @@ describe("Applications", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -590,6 +597,7 @@ describe("Applications", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -626,6 +634,7 @@ describe("Applications", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -780,5 +789,59 @@ describe("Applications", () => {
       )
     )
     expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+  })
+
+  it("should require mfa code for users with mfa enabled", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "mfa@b.com",
+      emailConfirmation: "mfa@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    let user = await usersRepository.findOne({ email: userCreateDto.email })
+    user.mfaEnabled = true
+    user = await usersRepository.save(user)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    testEmailService.sendMfaCode = jest.fn()
+
+    await supertest(app.getHttpServer())
+      .post(`/auth/request-mfa-code`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+        mfaType: MfaType.email,
+      })
+      .expect(201)
+
+    user = await usersRepository.findOne({ email: userCreateDto.email })
+    expect(typeof user.mfaCode).toBe("string")
+    expect(user.mfaCodeUpdatedAt).toBeDefined()
+    expect(testEmailService.sendMfaCode).toBeCalled()
+    expect(testEmailService.sendMfaCode.mock.calls[0][1]).toBe(user.mfaCode)
+
+    await supertest(app.getHttpServer())
+      .post(`/auth/login`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+        mfaCode: user.mfaCode
+      })
+      .expect(201)
   })
 })
