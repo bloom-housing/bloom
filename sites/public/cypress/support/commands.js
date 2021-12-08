@@ -45,9 +45,6 @@ Cypress.Commands.add("beginApplication", (listingName) => {
   cy.get("[data-test-id=sign-in-button").click()
   cy.getByTestId("app-choose-language-button").eq(0).click()
   cy.getByTestId("app-next-step-button").click()
-  // We have to decline autofill currently because there's no test run
-  // that works when various fields are filled & disabled
-  cy.getByTestId("autofill-decline").click()
 })
 
 Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
