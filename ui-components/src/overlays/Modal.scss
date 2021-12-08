@@ -8,7 +8,10 @@
   @apply bg-white;
   @apply rounded-md;
   @apply shadow-md;
-  min-width: 32rem;
+
+  @screen md {
+    min-width: 32rem;
+  }
 }
 
 // Content containers

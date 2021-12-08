@@ -37,6 +37,7 @@ describe("Listings", () => {
   let programsRepository: Repository<Program>
   let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
+  let listingsRepository: Repository<Listing>
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -58,6 +59,7 @@ describe("Listings", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    listingsRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
   })
 
   it("should return all listings", async () => {

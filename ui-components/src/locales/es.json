@@ -133,7 +133,8 @@
       "addMembers": {
         "addHouseholdMember": "+ Añadir a un miembro del hogar",
         "done": "Ya terminó de añadir personas",
-        "title": "Háblenos un poco acerca de su hogar."
+        "title": "Háblenos un poco acerca de su hogar.",
+        "doubleCheck": "Por favor revise la información de cada miembro del hogar."
       },
       "householdMember": "Miembro del hogar",
       "householdMembers": "Miembros del hogar",
@@ -364,7 +365,15 @@
     "signIn": {
       "error": "Hubo un error cuando usted inició sesión",
       "errorGenericMessage": "Por favor inténtelo de nuevo, o comuníquese con servicio al cliente para recibir asistencia.",
+      "forgotPassword": "Olvidé la contraseña",
       "success": "¡Bienvenido de nuevo, %{name}!"
+    },
+    "createAccount": {
+      "accountConfirmed": "Su cuenta ha sido confirmada correctamente.",
+      "anEmailHasBeenSent": "Se ha enviado un email a %{email}",
+      "confirmationInstruction": "Por favor haga clic en el enlace del email que le hemos enviado para completar la creación de su cuenta.",
+      "confirmationNeeded": "Se necesita confirmación",
+      "resendTheEmail": "Volver a enviar el email"
     }
   },
   "errors": {
@@ -402,7 +411,7 @@
     "forGeneralQuestions": "Si requiere información general sobre el programa, nos puede llamar al 000-000-0000.",
     "giveFeedback": "Proporcione sus comentarios",
     "privacyPolicy": "Política de privacidad",
-    "copyright": "Demonstration County © 2020 • Todos los derechos reservados."
+    "copyright": "Demonstration Jurisdiction © 2021 • Todos los derechos reservados."
   },
   "housingCounselors": {
     "subtitle": "Hable con un asesor de vivienda local en forma específica a sus necesidades.",

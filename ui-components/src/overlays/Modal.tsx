@@ -19,12 +19,11 @@ const ModalHeader = (props: { title: string }) => (
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
   <footer className="modal__footer bg-primary-lighter" data-testid="footer">
-    <GridSection columns={4} reverse={true} tightSpacing={true}>
-      {props.actions &&
-        props.actions.map((action: React.ReactNode, index: number) => (
-          <GridCell key={index}>{action}</GridCell>
-        ))}
-    </GridSection>
+    <div className="flex flex-row-reverse gap-5">
+      {props.actions.map((action: React.ReactNode, index: number) => (
+        <div key={index}>{action}</div>
+      ))}
+    </div>
   </footer>
 )
 
