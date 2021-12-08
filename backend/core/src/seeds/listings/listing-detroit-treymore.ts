@@ -9,7 +9,7 @@ import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto
 
 const treymoreProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/457-Brainard-Street-Detroit-MI-48201
-  amenities: "Parking Elevator in Building (Community Room)",
+  amenities: "Parking, Elevator in Building, Community Room",
   buildingAddress: {
     city: "Detroit",
     state: "MI",
@@ -20,7 +20,7 @@ const treymoreProperty: PropertySeedType = {
   },
   petPolicy: "No Pets Allowed",
   unitAmenities:
-    "Air Conditioning(Central Air Conditioning) Garbage Disposal Range Refrigerator (Coin Laundry Room in building)",
+    "Air Conditioning (Central Air Conditioning), Garbage Disposal, Range, Refrigerator, Coin Laundry Room in building",
   unitsAvailable: 4,
   yearBuilt: 1916,
   accessibility: "2 units are barrier free; 2 units are bi-level 1.5 bath",
