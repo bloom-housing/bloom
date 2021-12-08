@@ -234,6 +234,20 @@ export const ListingView = (props: ListingProps) => {
   )
 
   const applicationsClosed = moment() > moment(listing.applicationDueDate)
+  const useMarkdownForPropertyAmenities = listing.amenities?.includes(",")
+  const useMarkdownForUnitAmenities = listing.unitAmenities?.includes(",")
+  const propertyAmenities = useMarkdownForPropertyAmenities
+    ? listing.amenities
+        .split(",")
+        .map((a) => `* ${a.trim()}`)
+        .join("\n")
+    : listing.amenities
+  const unitAmenities = useMarkdownForUnitAmenities
+    ? listing.unitAmenities
+        .split(",")
+        .map((a) => `* ${a.trim()}`)
+        .join("\n")
+    : listing.unitAmenities
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
@@ -351,10 +365,18 @@ export const ListingView = (props: ListingProps) => {
                   <Description term={t("t.petsPolicy")} description={listing.petPolicy} />
                 )}
                 {listing.amenities && (
-                  <Description term={t("t.propertyAmenities")} description={listing.amenities} />
+                  <Description
+                    term={t("t.propertyAmenities")}
+                    description={propertyAmenities}
+                    markdown={useMarkdownForPropertyAmenities}
+                  />
                 )}
                 {listing.unitAmenities && (
-                  <Description term={t("t.unitAmenities")} description={listing.unitAmenities} />
+                  <Description
+                    term={t("t.unitAmenities")}
+                    description={unitAmenities}
+                    markdown={useMarkdownForUnitAmenities}
+                  />
                 )}
                 {listing.servicesOffered && (
                   <Description
