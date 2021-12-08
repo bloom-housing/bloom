@@ -84,8 +84,12 @@ export class ApplicationsService {
       const qb = this._getQb(params, "partnerList")
 
       const applicationIDQB = this._getQb(params, "partnerList", false)
+      applicationIDQB.select("application.id")
       applicationIDQB.groupBy("application.id")
-
+      if (params.orderBy) {
+        applicationIDQB.addSelect(params.orderBy)
+        applicationIDQB.addGroupBy(params.orderBy)
+      }
       const applicationIDResult = await paginate<Application>(applicationIDQB, {
         limit: params.limit,
         page: params.page,
