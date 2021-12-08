@@ -91,6 +91,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   const uniquePercentageChartSet: ChartAndPercentage[] = [
     ...new Set(
       units
+        .filter((unit) => amiChartMap[unit.amiChartId])
         .map((unit) => {
           let amiChart = amiChartMap[unit.amiChartId]
           if (unit.amiChartOverride) {
