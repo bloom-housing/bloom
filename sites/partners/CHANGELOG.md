@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.52...@bloom-housing/partners@3.0.1-alpha.53) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.51...@bloom-housing/partners@3.0.1-alpha.52) (2021-12-09)
 
 **Note:** Version bump only for package @bloom-housing/partners
