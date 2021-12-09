@@ -97,20 +97,25 @@ const Layout = (props) => {
       <SiteFooter>
         <h2 className="sr-only">{t("footer.srHeading")}</h2>
         <FooterSection>
-          <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
+          <img src="/images/detroit-logo-white.png" alt="City of Detroit logo"/>
         </FooterSection>
         <FooterSection>
           <h3 className="sr-only">{t("footer.srProjectInformation")}</h3>
           <p>
+            <h4>
             {t("footer.header")}
+            </h4>
             <br />
             <a href={t("footer.headerUrl")} target="_blank">
               {t("footer.headerLink")}
             </a>
           </p>
-          <h3 className="sr-only">{t("footer.srContactInformation")}</h3>
-          <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
-          <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
+          <p> 
+            <a className="subheader">{t("footer.forListingQuestions")}</a>
+            <p className="mt-10 text-tiny">{t("footer.pleaseContact")}</p>
+            <a className="subheader">{t("footer.forGeneralInquiries")}</a>
+            <p className="mt-10 text-tiny">{t("footer.youMayCall")}</p>
+          </p>
         </FooterSection>
         <FooterNav copyright={t("footer.copyright")}>
           <Link href="/feedback">

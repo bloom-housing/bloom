@@ -1003,8 +1003,8 @@
         "welcomeSpanish": "Bienvenido",
         "welcomeVietnamese": "vietnamita",
         "about": "Acerca de",
-        "feedback": "Realimentación",
-        "resources": "Recursos"
+        "resources": "Recursos",
+        "feedback": "Compartir comentarios sobre el sitio web"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",

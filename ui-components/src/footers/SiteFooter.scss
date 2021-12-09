@@ -2,20 +2,28 @@ footer.site-footer {
   @apply text-gray-500;
   @apply w-full;
   @apply bg-gray-800;
-  @apply text-center;
 
   img {
     @apply inline;
     width: 130px;
     opacity: 0.8;
+    float: left;
   }
 
   a {
     @apply text-white;
+    float: left;
   }
 
   p {
     @apply mb-5;
+  }
+
+  h4 {
+    @apply text-white;
+    font-weight: bold;
+    text-align: left;
+
   }
 
   & > .footer-row:first-of-type {
