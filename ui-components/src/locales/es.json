@@ -158,9 +158,11 @@
         }
       },
       "expectingChanges": {
+        "title": "Espera cambios en su grupo familiar",
         "question": "¿Espera que haya cambios en su grupo familiar en los próximos 12 meses?"
       },
       "householdStudent": {
+        "title":  "El grupo familiar incluye un estudiante o miembro que está por cumplir 18 años",
         "question": "¿Alguien de su grupo familiar es estudiante a tiempo completo o cumplirá 18 años en los próximos 60 días?"
       },
       "member": {
