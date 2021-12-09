@@ -4500,6 +4500,44 @@ export interface UnitsSummary {
   totalAvailable?: number
 }
 
+export interface ListingFeatures {
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+}
+
 export interface Listing {
   /**  */
   referralApplication?: ApplicationMethod
@@ -4620,6 +4658,9 @@ export interface Listing {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 
   /**  */
   id: string
@@ -5216,6 +5257,9 @@ export interface ListingCreate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface PreferenceUpdate {
@@ -5684,6 +5728,9 @@ export interface ListingUpdate {
 
   /**  */
   countyCode?: string
+
+  /**  */
+  features?: ListingFeatures
 }
 
 export interface Property {
