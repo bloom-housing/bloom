@@ -155,9 +155,11 @@
         }
       },
       "expectingChanges": {
+        "title": "預計家庭變化",
         "question": "您預計家庭在接下來的 12 個月內可能發生什麼變化？"
       },
       "householdStudent": {
+        "title": "家人包括接近 18 歲的學生或成員",
         "question": "您的家人是否有全日制學生或在 60 天內年滿 18 歲？"
       },
       "member": {
