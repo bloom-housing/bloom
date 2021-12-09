@@ -26,8 +26,6 @@ const AlertBox = (props: AlertBoxProps) => {
   const [showing, setShowing] = useState(true)
   let { onClose, closeable } = props
 
-  console.log(props)
-
   const classNames = [
     "alert-box",
     colorClasses[props.type || "alert"],

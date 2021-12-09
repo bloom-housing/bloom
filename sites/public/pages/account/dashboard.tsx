@@ -38,8 +38,6 @@ class Dashboard extends Component<DashboardProps> {
         <Icon size="medium" symbol="settings" />
       </span>
     )
-    console.log(this.props.router.query)
-    console.log(this.state.alertMessage)
 
     return (
       <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
