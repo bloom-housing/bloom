@@ -2,7 +2,7 @@ import React from "react"
 import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { ListingProgram } from "@bloom-housing/backend-core/types"
-import { getProgramOptionName, getProgramOptionDescription } from "@bloom-housing/shared-helpers"
+import { getProgramOptionName } from "@bloom-housing/shared-helpers"
 
 type FormProgramsProps = {
   county: string
@@ -42,14 +42,6 @@ const FormPrograms = ({ county, programs }: FormProgramsProps) => {
                           getProgramOptionName(option.key, listingProgram?.program.formMetadata.key)
                         ),
                         value: option.key,
-                        description: option.description
-                          ? t(
-                              getProgramOptionDescription(
-                                option.key,
-                                listingProgram?.program.formMetadata.key
-                              )
-                            )
-                          : null,
                       }
                     })}
                   />
