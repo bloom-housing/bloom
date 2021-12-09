@@ -291,6 +291,7 @@
           "otherMutliracial": "Otro / Multirracial",
           "asian-otherAsian": "De otro país asiático",
           "asian-chinese": "Chino",
+          "asian-asianIndian": "Indio asiático",
           "declineToRespond": "No desea responder",
           "asian-filipino": "Filipino",
           "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guameño o chamorro",
@@ -393,10 +394,17 @@
     },
     "createAccount": {
       "accountConfirmed": "Su cuenta ha sido confirmada correctamente.",
+      "password": "Contraseña",
+      "noAccount": "No tienes una cuenta?",
       "anEmailHasBeenSent": "Se ha enviado un email a %{email}",
       "confirmationInstruction": "Por favor haga clic en el enlace del email que le hemos enviado para completar la creación de su cuenta.",
       "confirmationNeeded": "Se necesita confirmación",
-      "resendTheEmail": "Volver a enviar el email"
+      "resendTheEmail": "Volver a enviar el email",
+      "reEnterEmail": "Vuelva a introducir la dirección de correo electrónico",
+      "passwordInfo": "Debe tener al menos 8 caracteres e incluir al menos 1 letra y al menos un número",
+      "reEnterPassword": "Reingresa tu contraseña",
+      "mustBe8Chars": "debe tener 8 caracteres",
+      "yourName": "Su nombre"
     }
   },
   "errors": {
@@ -707,6 +715,7 @@
     "edit": "Editar",
     "email": "Email",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "Ingrese descripción",
     "floor": "piso",
     "floors": "pisos",
     "getDirections": "Obtener instrucciones para llegar",
