@@ -840,7 +840,7 @@ describe("Applications", () => {
       .send({
         email: userCreateDto.email,
         password: userCreateDto.password,
-        mfaCode: user.mfaCode
+        mfaCode: user.mfaCode,
       })
       .expect(201)
   })
