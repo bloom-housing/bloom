@@ -7,7 +7,7 @@ import { Listing } from "./listing.entity"
 
 @Entity({ name: "listing_features" })
 export class ListingFeatures extends AbstractEntity {
-  @OneToOne(() => Listing, (listing) => listing.events)
+  @OneToOne(() => Listing, (listing) => listing.features)
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Listing)
