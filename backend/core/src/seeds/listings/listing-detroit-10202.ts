@@ -47,6 +47,20 @@ const mcvListing: ListingSeedType = {
   rentalAssistance: undefined,
   reviewOrderType: undefined,
   isWaitlistOpen: undefined,
+  features: {
+    elevator: true,
+    wheelchairRamp: false,
+    serviceAnimalsAllowed: true,
+    accessibleParking: true,
+    parkingOnSite: true,
+    inUnitWasherDryer: true,
+    laundryInBuilding: false,
+    barrierFreeEntrance: true,
+    rollInShower: false,
+    grabBars: false,
+    heatingInUnit: true,
+    acInUnit: true,
+  },
 }
 
 export class Listing10202Seed extends ListingDefaultSeed {
