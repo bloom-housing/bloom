@@ -107,7 +107,7 @@ const FormSummaryDetails = ({
 
   const preferredUnits = application.preferredUnit?.map((unit) => {
     const unitDetails = allListingUnitTypes?.find((unitType) => unitType.id === unit.id)
-    return unitDetails?.name
+    return unitDetails?.name || unit.name
   })
 
   return (
