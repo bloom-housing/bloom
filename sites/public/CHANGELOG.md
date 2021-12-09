@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.59](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.58...@bloom-housing/public@3.0.1-alpha.59) (2021-12-09)
+
+
+### Bug Fixes
+
+* prefUnits on autofill summary ([#2294](https://github.com/bloom-housing/bloom/issues/2294)) ([2b370e9](https://github.com/bloom-housing/bloom/commit/2b370e9321ec652ed3d124319e08e01fc765d636))
+
+
+
+
+
 ## [3.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.57...@bloom-housing/public@3.0.1-alpha.58) (2021-12-09)
 
 **Note:** Version bump only for package @bloom-housing/public
