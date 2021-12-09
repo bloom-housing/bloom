@@ -14,19 +14,6 @@ import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import ProgramsStep from "./ProgramsStep"
 
-export const loadApplicationFromAutosave = () => {
-  if (typeof window != "undefined") {
-    const autosavedApplication = window.sessionStorage.getItem("bloom-app-autosave")
-    if (autosavedApplication) {
-      const application = JSON.parse(autosavedApplication)
-      application.loaded = true
-      return application
-    }
-  }
-
-  return null
-}
-
 export const loadSavedListing = () => {
   if (typeof window != "undefined") {
     const savedListing = window.sessionStorage.getItem("bloom-app-listing")
@@ -194,7 +181,6 @@ export default class ApplicationConductor {
     // NOTE: had to remove timeout because of Next doing full-page reloads in
     // some cases. Need to revisit after upgrading to v10
     if (typeof window != "undefined") {
-      window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
       if (this.listing) {
         window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
       }
@@ -204,11 +190,9 @@ export default class ApplicationConductor {
   reset() {
     this.application = blankApplication()
     this.listing = {} as Listing
-
+    this.currentStepIndex = 0
     if (typeof window != "undefined") {
-      window.sessionStorage.removeItem("bloom-app-autosave")
       window.sessionStorage.removeItem("bloom-app-listing")
-      this.currentStepIndex = 0
     }
   }
 
