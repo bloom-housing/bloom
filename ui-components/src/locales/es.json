@@ -599,7 +599,8 @@
   },
   "nav": {
     "accountSettings": "Configuraciones de la cuenta",
-    "browseProperties": "Ver Propiedades",
+    "browseProperties": "Buscar Propiedades",
+    "getFeedback": "Nos encantaría recibir sus comentarios",
     "getAssistance": "Obtener asistencia",
     "listings": "Listados",
     "properties": "Propiedades",
