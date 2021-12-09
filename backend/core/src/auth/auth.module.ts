@@ -19,6 +19,7 @@ import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
 import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
+import { TwilioModule } from "nestjs-twilio"
 
 @Module({
   imports: [
@@ -32,6 +33,14 @@ import { SmsMfaService } from "./services/sms-mfa.service"
           expiresIn: "10m",
         },
       }),
+    }),
+    TwilioModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        accountSid: configService.get("TWILIO_ACCOUNT_SID"),
+        authToken: configService.get("TWILIO_AUTH_TOKEN"),
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([RevokedToken, User, Application]),
     SharedModule,

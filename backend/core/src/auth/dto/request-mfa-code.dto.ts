@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsEmail, IsEnum, IsString } from "class-validator"
+import { IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { MfaType } from "../types/mfa-type"
@@ -17,4 +17,9 @@ export class RequestMfaCodeDto {
   @Expose()
   @IsEnum(MfaType, { groups: [ValidationsGroupsEnum.default] })
   mfaType: MfaType
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber(null, { groups: [ValidationsGroupsEnum.default] })
+  phoneNumber?: string
 }

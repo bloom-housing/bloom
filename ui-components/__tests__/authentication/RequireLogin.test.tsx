@@ -25,6 +25,7 @@ const mockUser: User = {
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
   jurisdictions: [],
+  mfaEnabled: false,
 }
 
 let initialStateLoaded = false

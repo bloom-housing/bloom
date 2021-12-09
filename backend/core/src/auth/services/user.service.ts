@@ -42,6 +42,8 @@ import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
 import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
 import { MfaType } from "../types/mfa-type"
 import { SmsMfaService } from "./sms-mfa.service"
+import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
+import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -389,13 +391,46 @@ export class UserService {
     return maskedPhoneNumber
   }
 
-  async requestMfaCode(requestMfaCodeDto: RequestMfaCodeDto): Promise<RequestMfaCodeResponseDto> {
+  private static hasUsedMfaInThePast(user: User): boolean {
+    const result = !!user.mfaCodeUpdatedAt
+    console.log(user.mfaCodeUpdatedAt)
+    console.log(result)
+    return result
+  }
+
+  async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
     const user = await this.userRepository.findOne({
+      where: { email: getMfaInfoDto.email.toLowerCase() },
+    })
+    if (!user) {
+      throw new UnauthorizedException()
+    }
+
+    const validPassword = await this.passwordService.verifyUserPassword(
+      user,
+      getMfaInfoDto.password
+    )
+    if (!validPassword) {
+      throw new UnauthorizedException()
+    }
+
+    return {
+      email: user.email,
+      maskedPhoneNumber: user.phoneNumber
+        ? UserService.maskPhoneNumber(user.phoneNumber)
+        : undefined,
+      isMfaEnabled: user.mfaEnabled,
+      mfaUsedInThePast: UserService.hasUsedMfaInThePast(user),
+    }
+  }
+
+  async requestMfaCode(requestMfaCodeDto: RequestMfaCodeDto): Promise<RequestMfaCodeResponseDto> {
+    let user = await this.userRepository.findOne({
       where: { email: requestMfaCodeDto.email.toLowerCase() },
     })
 
-    if (!user) {
-      throw new NotFoundException()
+    if (!user || !user.mfaEnabled) {
+      throw new UnauthorizedException()
     }
 
     const validPassword = await this.passwordService.verifyUserPassword(
@@ -406,17 +441,31 @@ export class UserService {
       throw new UnauthorizedException()
     }
 
+    if (requestMfaCodeDto.phoneNumber && requestMfaCodeDto.mfaType === MfaType.sms) {
+      if (UserService.hasUsedMfaInThePast(user)) {
+        throw new UnauthorizedException(
+          "phone number can only be specified the first time using mfa"
+        )
+      }
+      if (user.phoneNumber && user.phoneNumber !== requestMfaCodeDto.phoneNumber) {
+        throw new UnauthorizedException("user and mfa request phone numbers differ")
+      }
+      user.phoneNumber = requestMfaCodeDto.phoneNumber
+    }
     const mfaCode = this.generateMfaCode()
-
     user.mfaCode = mfaCode
     user.mfaCodeUpdatedAt = new Date()
-    await this.userRepository.save(user)
 
-    if (requestMfaCodeDto.mfaType === MfaType.email) {
-      await this.emailService.sendMfaCode(user.email, mfaCode)
-    } else if (requestMfaCodeDto.mfaType === MfaType.sms) {
-      await this.smsMfaService.sendMfaCode(user.phoneNumber, mfaCode)
-    }
+    user = await this.userRepository.manager.transaction(async (entityManager) => {
+      const transactionalRepository = entityManager.getRepository(User)
+      await transactionalRepository.save(user)
+      if (requestMfaCodeDto.mfaType === MfaType.email) {
+        await this.emailService.sendMfaCode(user, user.email, mfaCode)
+      } else if (requestMfaCodeDto.mfaType === MfaType.sms) {
+        await this.smsMfaService.sendMfaCode(user, user.phoneNumber, mfaCode)
+      }
+      return user
+    })
 
     return requestMfaCodeDto.mfaType === MfaType.email
       ? { email: user.email }

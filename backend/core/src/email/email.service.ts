@@ -79,8 +79,17 @@ export class EmailService {
     )
   }
 
-  public async sendMfaCode(email: string, mfaCode: string) {
+  public async sendMfaCode(user: User, email: string, mfaCode: string) {
     console.log("Sending mfa code through email")
+    await this.loadTranslationsForUser(user)
+    await this.send(
+      "michalp@airnauts.com",
+      "Bloom account access token",
+      this.template("mfa-code")({
+        user: user,
+        mfaCodeOptions: { mfaCode },
+      })
+    )
   }
 
   public async confirmation(listing: Listing, application: Application, appUrl: string) {

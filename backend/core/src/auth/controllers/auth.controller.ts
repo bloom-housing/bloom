@@ -18,6 +18,8 @@ import { LoginResponseDto } from "../dto/login-response.dto"
 import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
 import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
 import { UserService } from "../services/user.service"
+import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
+import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 @Controller("auth")
 @ApiTags("auth")
@@ -46,12 +48,18 @@ export class AuthController {
   }
 
   @Post("request-mfa-code")
-  @ApiBody({ type: RequestMfaCodeDto })
-  @ApiOperation({ summary: "Request mfa code", operationId: "Request mfa code" })
+  @ApiOperation({ summary: "Request mfa code", operationId: "requestMfaCode" })
   async requestMfaCode(
     @Body() requestMfaCodeDto: RequestMfaCodeDto
   ): Promise<RequestMfaCodeResponseDto> {
     const requestMfaCodeResponse = await this.userService.requestMfaCode(requestMfaCodeDto)
     return mapTo(RequestMfaCodeResponseDto, requestMfaCodeResponse)
+  }
+
+  @Post("mfa-info")
+  @ApiOperation({ summary: "Get mfa info", operationId: "getMfaInfo" })
+  async getMfaInfo(@Body() getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
+    const getMfaInfoResponseDto = await this.userService.getMfaInfo(getMfaInfoDto)
+    return mapTo(GetMfaInfoResponseDto, getMfaInfoResponseDto)
   }
 }

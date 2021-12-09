@@ -714,6 +714,48 @@ export class AuthService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Request mfa code
+   */
+  requestMfaCode(
+    params: {
+      /** requestBody */
+      body?: RequestMfaCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<RequestMfaCodeResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-mfa-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get mfa info
+   */
+  getMfaInfo(
+    params: {
+      /** requestBody */
+      body?: GetMfaInfo
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GetMfaInfoResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/mfa-info"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -3830,11 +3872,58 @@ export interface Login {
 
   /**  */
   password: string
+
+  /**  */
+  mfaCode?: string
 }
 
 export interface LoginResponse {
   /**  */
   accessToken: string
+}
+
+export interface RequestMfaCode {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+
+  /**  */
+  mfaType: EnumRequestMfaCodeMfaType
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface RequestMfaCodeResponse {
+  /**  */
+  maskedPhoneNumber?: string
+
+  /**  */
+  email?: string
+}
+
+export interface GetMfaInfo {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+}
+
+export interface GetMfaInfoResponse {
+  /**  */
+  maskedPhoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  isMfaEnabled: boolean
+
+  /**  */
+  mfaUsedInThePast: boolean
 }
 
 export interface IdName {
@@ -3898,6 +3987,9 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  mfaEnabled: boolean
 }
 
 export interface UserCreate {
@@ -3983,6 +4075,9 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  mfaEnabled: boolean
 }
 
 export interface Email {
@@ -6249,6 +6344,10 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
+}
+export enum EnumRequestMfaCodeMfaType {
+  "sms" = "sms",
+  "email" = "email",
 }
 export type CombinedRolesTypes = UserRolesCreate
 export enum EnumUserFilterParamsComparison {

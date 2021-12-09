@@ -820,6 +820,19 @@ describe("Applications", () => {
 
     testEmailService.sendMfaCode = jest.fn()
 
+    let getMfaInfoResponse = await supertest(app.getHttpServer())
+      .post(`/auth/mfa-info`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+      })
+      .expect(201)
+
+    expect(getMfaInfoResponse.body.maskedPhoneNumber).toBeUndefined()
+    expect(getMfaInfoResponse.body.email).toBe(userCreateDto.email)
+    expect(getMfaInfoResponse.body.isMfaEnabled).toBe(true)
+    expect(getMfaInfoResponse.body.mfaUsedInThePast).toBe(false)
+
     await supertest(app.getHttpServer())
       .post(`/auth/request-mfa-code`)
       .send({
@@ -833,7 +846,7 @@ describe("Applications", () => {
     expect(typeof user.mfaCode).toBe("string")
     expect(user.mfaCodeUpdatedAt).toBeDefined()
     expect(testEmailService.sendMfaCode).toBeCalled()
-    expect(testEmailService.sendMfaCode.mock.calls[0][1]).toBe(user.mfaCode)
+    expect(testEmailService.sendMfaCode.mock.calls[0][2]).toBe(user.mfaCode)
 
     await supertest(app.getHttpServer())
       .post(`/auth/login`)
@@ -843,5 +856,14 @@ describe("Applications", () => {
         mfaCode: user.mfaCode,
       })
       .expect(201)
+
+    getMfaInfoResponse = await supertest(app.getHttpServer())
+      .post(`/auth/mfa-info`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+      })
+      .expect(201)
+    expect(getMfaInfoResponse.body.mfaUsedInThePast).toBe(true)
   })
 })

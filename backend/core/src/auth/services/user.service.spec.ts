@@ -12,6 +12,7 @@ import { ConfigService } from "@nestjs/config"
 import { UserCreateDto } from "../dto/user-create.dto"
 import { Application } from "../../applications/entities/application.entity"
 import { EmailService } from "../../email/email.service"
+import { SmsMfaService } from "./sms-mfa.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -56,6 +57,7 @@ describe("UserService", () => {
           },
         },
         AuthzService,
+        { provide: SmsMfaService, useValue: { sendMfaCode: jest.fn() } },
         PasswordService,
         {
           provide: ConfigService,
