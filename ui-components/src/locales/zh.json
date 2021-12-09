@@ -288,6 +288,7 @@
           "otherMutliracial": "其他／混血",
           "asian-otherAsian": "其他亞裔",
           "asian-chinese": "中國人",
+          "asian-asianIndian": "亞洲 印度人",
           "declineToRespond": "拒絕回答",
           "asian-filipino": "菲律賓人",
           "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "關島或查莫羅",
@@ -392,7 +393,14 @@
       "anEmailHasBeenSent": "本電郵已發送至 %{email}",
       "confirmationInstruction": "請按一下我們發送的電子郵件內連結，並完成建立帳戶程序。",
       "confirmationNeeded": "需要確認",
-      "resendTheEmail": "重新發送電子郵件"
+      "resendTheEmail": "重新發送電子郵件",
+      "password": "密碼",
+      "noAccount": "沒有賬戶？",
+      "reEnterEmail": "重新輸入電子郵件地址",
+      "passwordInfo": "必須至少為 8 個字符，並且至少包含 1 個字母和至少一個數字",
+      "reEnterPassword": "重新輸入您的密碼",
+      "mustBe8Chars": "必須是 8 個字符",
+      "yourName": "您的姓名"
     }
   },
   "config": {
@@ -706,6 +714,7 @@
     "edit": "編輯",
     "email": "電子郵件",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "輸入說明",
     "floor": "樓層",
     "floors": "樓層",
     "getDirections": "取得路線",
