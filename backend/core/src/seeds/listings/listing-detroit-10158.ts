@@ -48,6 +48,20 @@ const ncpListing: ListingSeedType = {
   leasingAgentName: undefined,
   rentalAssistance: undefined,
   reviewOrderType: undefined,
+  features: {
+    elevator: true,
+    wheelchairRamp: true,
+    serviceAnimalsAllowed: true,
+    accessibleParking: true,
+    parkingOnSite: true,
+    inUnitWasherDryer: false,
+    laundryInBuilding: false,
+    barrierFreeEntrance: true,
+    rollInShower: true,
+    grabBars: true,
+    heatingInUnit: true,
+    acInUnit: true,
+  },
 }
 
 export class Listing10158Seed extends ListingDefaultSeed {
