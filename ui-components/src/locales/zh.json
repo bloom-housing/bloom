@@ -598,8 +598,9 @@
   },
   "nav": {
     "accountSettings": "帳戶設定",
+    "getFeedback": "我們希望得到您的回饋",
     "browseProperties": "瀏覽物業",
-    "getAssistance": "尋求協助",
+    "getAssistance": "獲得協助",
     "listings": "好屋推薦",
     "properties": "物業",
     "applications": "申請資訊",
