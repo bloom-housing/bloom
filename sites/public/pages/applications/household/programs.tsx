@@ -72,6 +72,7 @@ const ApplicationPrograms = () => {
     }
     // Otherwise complete the section and move to the next URL
     conductor.completeSection(2)
+    conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
 
