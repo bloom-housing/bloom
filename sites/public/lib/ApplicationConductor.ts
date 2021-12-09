@@ -84,15 +84,15 @@ export default class ApplicationConductor {
     adaHouseholdMembers: {
       url: "/applications/household/ada",
     },
-    programs: {
-      url: "/applications/household/programs",
-      definition: ProgramsStep,
-    },
     householdChanges: {
       url: "/applications/household/changes",
     },
     householdStudent: {
       url: "/applications/household/student",
+    },
+    programs: {
+      url: "/applications/household/programs",
+      definition: ProgramsStep,
     },
     vouchersSubsidies: {
       url: "/applications/financial/vouchers",
