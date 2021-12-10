@@ -22,6 +22,7 @@ import { useListingsData } from "../../lib/hooks"
 import { ListingFilterParams, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import FilterForm from "../../src/forms/filters/FilterForm"
 import { getListings } from "../../lib/helpers"
+import FindRentalsForMeLink from "../../lib/FindRentalsForMeLink"
 
 const FilteredListingsPage = () => {
   const router = useRouter()
@@ -96,7 +97,12 @@ const FilteredListingsPage = () => {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
+      <PageHeader
+        className="listings-title"
+        title={t("pageTitle.rent")}
+        inverse={true}
+        tabNav={<FindRentalsForMeLink title={t("welcome.findRentalsForMe")} />}
+      />
       <Modal
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
@@ -105,13 +111,6 @@ const FilteredListingsPage = () => {
         <FilterForm onSubmit={onSubmit} filterState={filterState} />
       </Modal>
       <div className="container max-w-3xl px-4 content-start mx-auto">
-        <LinkButton
-          className="mx-2 mt-6"
-          size={AppearanceSizeType.small}
-          href="/eligibility/welcome"
-        >
-          {t("welcome.checkQualifications")}
-        </LinkButton>
         <Button
           className="mx-2 mt-6"
           size={AppearanceSizeType.small}

@@ -1346,7 +1346,7 @@
         },
         "checkEligibility": "هل أنا مؤهل؟",
         "checkEligibilityDescription": "تحقق في دقائق إذا كنت مؤهلاً!",
-        "checkQualifications": "تحقق من مؤهلات السكن الخاصة بك",
+        "findRentalsForMe": "البحث عن الايجارات بالنسبة لي",
         "latestListings": "أحدث القوائم",
         "lastUpdated": "آخر تحديث %{date}",
         "neighborhoods": "أحياء",
