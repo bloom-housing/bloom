@@ -1,23 +1,15 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import {
-  AlertBox,
-  Hero,
-  t,
-  SiteAlert,
-  OneLineAddress,
-  imageUrlFromListing,
-} from "@bloom-housing/ui-components"
+import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
 import styles from "./index.module.scss"
-import { Listing, UnitsSummary } from "@bloom-housing/backend-core/types"
-import { getGenericAddress } from "../lib/helpers"
+import { Listing } from "@bloom-housing/backend-core/types"
+import { getListings } from "../lib/helpers"
 import moment from "moment"
-import Link from "next/link"
 
 export default function Home({ latestListings }) {
   const blankAlertInfo = {
@@ -57,74 +49,6 @@ export default function Home({ latestListings }) {
       )
       .format("l")
     return t("welcome.lastUpdated", { date: latestDate })
-  }
-
-  /**
-   * Convert the number of bedrooms to a human readable string
-   *
-   * @param numBedrooms
-   * @param plural
-   * @returns
-   */
-  const unitBedroomsToString = (numBedrooms: number, totalAvailable: number) => {
-    if (numBedrooms < 0 || numBedrooms == null) {
-      return ""
-    }
-
-    if (numBedrooms === 0) {
-      return t("welcome.bedrooms.studios", totalAvailable)
-    } else if (numBedrooms < 4) {
-      return t("welcome.bedrooms.numBed", { smart_count: totalAvailable, num_bed: numBedrooms })
-    } else {
-      return t("welcome.bedrooms.fourPlusBed", totalAvailable)
-    }
-  }
-
-  /**
-   * Build a string of concatenated available units
-   *
-   * For example: '(1) studio availble, (3) 2 bedrooms available'
-   * @param units Array of UnitSummarys
-   * @returns string
-   */
-  const buildUnitSummaryString = (units: Array<UnitsSummary>) => {
-    return units
-      .filter((unitSummary) => {
-        return unitSummary.totalAvailable > 0
-      })
-      .map((unitSummary) => {
-        return unitBedroomsToString(unitSummary.unitType.numBedrooms, unitSummary.totalAvailable)
-      })
-      .join(", ")
-  }
-
-  const linearGradient = "linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(24, 37, 42, .8))"
-  interface LatestListingLinkProps {
-    listing: Listing
-  }
-  const LatestListingsLink = (props: LatestListingLinkProps) => {
-    const unitsSummary = buildUnitSummaryString(props.listing.unitsSummary)
-
-    return (
-      <Link href={`/listing/${props.listing.id}/${props.listing.urlSlug}`}>
-        <a
-          className={styles["latest-listing"]}
-          style={{
-            backgroundImage: `${linearGradient}, url(${
-              imageUrlFromListing(props.listing, 520) || "/images/detroitDefault.png"
-            })`,
-          }}
-        >
-          <h3 className={styles["latest-listing__name"]}>{props.listing.name}</h3>
-          <p className={styles["latest-listing__address"]}>
-            <OneLineAddress address={getGenericAddress(props.listing.buildingAddress)} />
-          </p>
-          {unitsSummary && (
-            <div className={styles["latest-listing__availability"]}>{unitsSummary}</div>
-          )}
-        </a>
-      </Link>
-    )
   }
 
   // TODO(#674): Fill out neighborhood buttons with real data
@@ -167,16 +91,14 @@ export default function Home({ latestListings }) {
           subtitle={getLastUpdatedString(latestListings.items)}
           scrollAmount={560}
           icon="clock"
-          className={styles["latest-listings"]}
+          className={`${styles["latest-listings"]} latest-listings`}
         >
-          {latestListings.items.map((listing) => {
-            return <LatestListingsLink key={listing.id} listing={listing} />
-          })}
+          {getListings(latestListings.items)}
         </HorizontalScrollSection>
       )}
       <HorizontalScrollSection
         title={t("welcome.neighborhoods")}
-        scrollAmount={311}
+        scrollAmount={527}
         icon="map"
         className={styles.neighborhoods}
       >
