@@ -7,7 +7,7 @@ import { Listing } from "./listing.entity"
 
 @Entity({ name: "listing_features" })
 export class ListingFeatures extends AbstractEntity {
-  @OneToOne(() => Listing, (listing) => listing.events)
+  @OneToOne(() => Listing, (listing) => listing.features)
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Listing)
@@ -23,65 +23,65 @@ export class ListingFeatures extends AbstractEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  wheelchair_ramp?: boolean | null
+  wheelchairRamp?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  service_animals_allowed?: boolean | null
+  serviceAnimalsAllowed?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  accessible_parking?: boolean | null
+  accessibleParking?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  parking_on_site?: boolean | null
+  parkingOnSite?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  in_unit_washer_dryer?: boolean | null
+  inUnitWasherDryer?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  laundry_in_building?: boolean | null
+  laundryInBuilding?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  barrier_free_entrance?: boolean | null
+  barrierFreeEntrance?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  roll_in_shower?: boolean | null
+  rollInShower?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  grab_bars?: boolean | null
+  grabBars?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  heating_in_unit?: boolean | null
+  heatingInUnit?: boolean | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  ac_in_unit?: boolean | null
+  acInUnit?: boolean | null
 }

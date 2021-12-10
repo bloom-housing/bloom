@@ -46,6 +46,20 @@ const listingSeed: ListingSeedType = {
   rentalAssistance: undefined,
   reviewOrderType: undefined,
   isWaitlistOpen: undefined,
+  features: {
+    elevator: true,
+    wheelchairRamp: true,
+    serviceAnimalsAllowed: false,
+    accessibleParking: true,
+    parkingOnSite: true,
+    inUnitWasherDryer: false,
+    laundryInBuilding: true,
+    barrierFreeEntrance: true,
+    rollInShower: false,
+    grabBars: false,
+    heatingInUnit: false,
+    acInUnit: true,
+  },
 }
 
 export class Listing10136Seed extends ListingDefaultSeed {
