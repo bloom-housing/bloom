@@ -8,13 +8,14 @@
   color: #18252a;
   letter-spacing: initial;
   margin-top: 16px;
+  padding: .625rem 1.625rem;
   text-shadow: 1px 1px 0px #f2f2f2;
   text-transform: none;
-  padding: 0.75rem 3.25rem;
 
   @screen md {
     @apply text-2xl;
     margin-top: 0;
+    padding: 1.25rem 3.25rem;
   }
 }
 
