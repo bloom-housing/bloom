@@ -35,6 +35,7 @@ describe("Unit Transformations", () => {
         programs: [],
         languages: [Language.en],
         preferences: [],
+        partnerTerms: "",
       },
     }
 

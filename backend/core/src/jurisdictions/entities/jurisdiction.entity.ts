@@ -49,4 +49,10 @@ export class Jurisdiction extends AbstractEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Preference)
   preferences: Preference[]
+
+  @Column({ nullable: true, type: "text" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  partnerTerms?: string | null
 }
