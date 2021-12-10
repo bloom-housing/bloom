@@ -1454,7 +1454,19 @@
       "amiOption125": "125% of AMI or more",
       "amiOption140": "140% of AMI or more",
       "amiOption150": "150% of AMI or more"
-    }
+    },
+      "elevator": "Elevator",
+      "wheelchair_ramp": "Wheelchair Ramp",
+      "service_animals_allowed": "Service Animals Allowed",
+      "accessible_parking": "Accessible Parking",
+      "parking_on_site": "Parking On Site",
+      "in_unit_washer_dryer": "In Unit Washer Dryer",
+      "laundry_in_building": "Laundry in Building",
+      "barrier_free_entrance": "Barrier Free Entrance",
+      "roll_in_shower": "Roll in Shower",
+      "grab_bars": "Grab Bars",
+      "heating_in_unit": "Heating in Unit",
+      "ac_in_unit": "AC in Unit"
   },
   "eligibility": {
     "progress": {
@@ -1464,6 +1476,7 @@
         "household": "Household",
         "age": "Age",
         "disability": "Disability",
+        "accessibility": "Accessibility",
         "income": "Income",
         "disclaimer": "Disclaimer"
       }
@@ -1508,6 +1521,20 @@
         "40kTo50k": "$40,000 - $50,000",
         "over50k": "Over $50,000"
       }
+    },
+    "accessibility": {
+      "elevator": "Elevator",
+      "wheelchair_ramp": "Wheelchair Ramp",
+      "service_animals_allowed": "Service Animals Allowed",
+      "accessible_parking": "Accessible Parking",
+      "parking_on_site": "Parking On Site",
+      "in_unit_washer_dryer": "In Unit Washer Dryer",
+      "laundry_in_building": "Laundry in Building",
+      "barrier_free_entrance": "Barrier Free Entrance",
+      "roll_in_shower": "Roll in Shower",
+      "grab_bars": "Grab Bars",
+      "heating_in_unit": "Heating in Unit",
+      "ac_in_unit": "AC in Unit"
     },
     "disclaimer": {
       "description": "Thank you for checking how you qualify for affordable housing. Because affordable housing can be reserved for certain age groups or income levels, we have filtered our property listings based on your household characteristics. We hope you find housing that meets your needs. It's important to note that a good portion of affordable housing has a waitlist, but calling properties you're interested in is a good way to get on waitlists or learn of immediate openings."

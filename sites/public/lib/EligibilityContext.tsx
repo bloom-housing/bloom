@@ -32,6 +32,10 @@ class EligibilityRequirements {
   setIncome(income: string) {
     this.income = income
   }
+
+  setAccessibility(){
+  }
+
   setDisability(disability: string) {
     this.disability = disability
   }
