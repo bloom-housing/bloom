@@ -2,7 +2,7 @@
 5.1 Demographics
 Optional demographic questions
 */
-import React, { useMemo } from "react"
+import React from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -50,14 +50,14 @@ const ApplicationDemographics = () => {
     conductor.routeToNextOrReturnUrl()
   }
 
-  const howDidYouHearOptions = useMemo(() => {
+  const howDidYouHearOptions = () => {
     return howDidYouHear?.map((item) => ({
       id: item.id,
       label: t(`application.review.demographics.howDidYouHearOptions.${item.id}`),
       defaultChecked: application.demographics.howDidYouHear?.includes(item.id),
       register,
     }))
-  }, [register, application])
+  }
 
   return (
     <FormsLayout>
@@ -133,7 +133,7 @@ const ApplicationDemographics = () => {
               <FieldGroup
                 type="checkbox"
                 name="howDidYouHear"
-                fields={howDidYouHearOptions}
+                fields={howDidYouHearOptions()}
                 register={register}
                 dataTestId={"app-demographics-how-did-you-hear"}
               />
