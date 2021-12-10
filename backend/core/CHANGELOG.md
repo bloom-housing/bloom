@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.34...@bloom-housing/backend-core@3.0.1-alpha.35) (2021-12-10)
+
+
+### Features
+
+* adds whatToExpect to GTrans ([#2303](https://github.com/bloom-housing/bloom/issues/2303)) ([6d7305b](https://github.com/bloom-housing/bloom/commit/6d7305b8e3b7e1c3a9776123e8e6d370ab803af0))
+
+
+
+
+
 ## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.33...@bloom-housing/backend-core@3.0.1-alpha.34) (2021-12-09)
 
 
