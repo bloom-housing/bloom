@@ -6,7 +6,6 @@ import {
   AppearanceSizeType,
   Modal,
   t,
-  LinkButton,
   encodeToFrontendFilterString,
   ListingFilterState,
   FrontendListingFilterStateKeys,
@@ -18,6 +17,7 @@ import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
 import { fetchBaseListingData } from "../lib/hooks"
+import FindRentalsForMeLink from "../lib/FindRentalsForMeLink"
 
 const ListingsPage = ({ initialListings }) => {
   const router = useRouter()
@@ -44,7 +44,12 @@ const ListingsPage = ({ initialListings }) => {
       </Head>
 
       <MetaTags title={t("nav.siteTitle")} image={metaImage} description={metaDescription} />
-      <PageHeader title={t("pageTitle.rent")} />
+      <PageHeader
+        className="listings-title"
+        title={t("pageTitle.rent")}
+        inverse={true}
+        tabNav={<FindRentalsForMeLink title={t("welcome.findRentalsForMe")} />}
+      />
       <Modal
         open={filterModalVisible}
         title={t("listingFilters.modalTitle")}
@@ -53,13 +58,6 @@ const ListingsPage = ({ initialListings }) => {
         <FilterForm onSubmit={(data) => onSubmit(/*page=*/ 1, data)} />
       </Modal>
       <div className="container max-w-3xl px-4 content-start mx-auto">
-        <LinkButton
-          className="mx-2 mt-6"
-          size={AppearanceSizeType.small}
-          href="/eligibility/welcome"
-        >
-          {t("welcome.checkQualifications")}
-        </LinkButton>
         <Button
           className="mx-2 mt-6"
           size={AppearanceSizeType.small}

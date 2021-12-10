@@ -1221,7 +1221,7 @@
         },
         "checkEligibility": "¿Califico?",
         "checkEligibilityDescription": "¡Verifique en minutos si califica!",
-        "checkQualifications": "Verifique Sus Calificaciones de Vivienda",
+        "findRentalsForMe": "Encuentra alquileres para mí",
         "latestListings": "Últimos listados",
         "lastUpdated": "Última actualización %{date}",
         "neighborhoods": "Barrios",

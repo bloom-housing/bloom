@@ -1346,7 +1346,7 @@
         },
         "checkEligibility": "আমি কি যোগ্যতা অর্জন করি?",
         "checkEligibilityDescription": "আপনি যোগ্য হলে মিনিট চেক করুন!",
-        "checkQualifications": "আপনার হাউজিং যোগ্যতা পরীক্ষা করুন",
+        "findRentalsForMe": "আমার জন্য ভাড়া খুঁজুন",
         "latestListings": "সর্বশেষ তালিকা",
         "lastUpdated": "সর্বশেষ আপডেট করা হয়েছে %{date} তারিখে",
         "neighborhoods": "আশেপাশের এলাকা",

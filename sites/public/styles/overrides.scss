@@ -276,12 +276,31 @@ a.button.is-primary:hover {
 }
 
 .eligibility-disclaimer-submit-container {
-  text-align: center;
   padding-bottom: 40px;
+  text-align: center;
 }
 
 .bedroom-selector > .field {
   label {
     margin-top: 10px;
+  }
+}
+
+.page-header__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  @screen md {
+    font-size: 1.75rem;
+  }
+}
+
+.listings-title .page-header__group {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @screen md {
+    flex-direction: row;
   }
 }
