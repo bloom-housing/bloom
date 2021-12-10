@@ -982,8 +982,9 @@
         "myApplications": "mis aplicaciónes",
         "myDashboard": "Mi tablero",
         "mySettings": "Mi configuración",
-        "signIn": "Iniciar sesión",
-        "signOut": "Cerrar sesión",
+        "signIn": "Registrarse",
+        "signOut": "desconectar",
+        "signUp": "Inscribirse",
         "siteTitle": "Portal de vivienda",
         "siteTitlePartners": "Portal de socios",
         "skip": "Saltar al contenido principal",
@@ -1001,9 +1002,9 @@
         "welcomeEnglish": "Bienvenidos",
         "welcomeSpanish": "Bienvenido",
         "welcomeVietnamese": "vietnamita",
-        "about": "Sobre nosotras",
+        "about": "Acerca de",
         "feedback": "Realimentación",
-        "resources": "Recursos para residentes"
+        "resources": "Recursos"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",

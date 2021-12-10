@@ -1107,8 +1107,9 @@
         "myApplications": "আমার অ্যাপ্লিকেশন",
         "myDashboard": "আমার ড্যাশবোর্ড",
         "mySettings": "আমার সেটিংস",
-        "signIn": "প্রবেশ করুন",
-        "signOut": "প্রস্থান",
+        "signIn": "সাইন ইন করুন",
+        "signOut": "সাইন আউট",
+        "signUp": "নিবন্ধন করুন",
         "siteTitle": "হাউজিং পোর্টাল",
         "siteTitlePartners": "অংশীদারদের পোর্টাল",
         "skip": "স্কিপ করে মূল কন্টেন্ট এ যাও",
@@ -1126,9 +1127,9 @@
         "welcomeEnglish": "স্বাগত",
         "welcomeSpanish": "স্বাগত",
         "welcomeVietnamese": "ভিয়েতনামী",
-        "about": "আমাদের সম্পর্কে",
+        "about": "সম্পর্কিত",
         "feedback": "প্রতিক্রিয়া",
-        "resources": "আবাসিক সম্পদ"
+        "resources": "সম্পদ"
     },
     "pageDescription": {
         "welcome": "%{RegionName} এর হাউজিং পোর্টালে সাশ্রয়ী মূল্যের আবাসনের জন্য অনুসন্ধান করুন এবং আবেদন করুন",

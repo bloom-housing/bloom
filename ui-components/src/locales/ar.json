@@ -1107,8 +1107,9 @@
         "myApplications": "تطبيقاتي",
         "myDashboard": "لوحة القيادة الخاصة بي",
         "mySettings": "اعداداتي",
-        "signIn": "تسجيل دخول",
-        "signOut": "تسجيل خروج",
+        "signIn": "تسجيل الدخول",
+        "signOut": "خروج",
+        "signUp": "اشتراك",
         "siteTitle": "بوابة الإسكان",
         "siteTitlePartners": "بوابة الشركاء",
         "skip": "تخطي إلى المحتوى الرئيسي",
@@ -1126,9 +1127,9 @@
         "welcomeEnglish": "أهلا بك",
         "welcomeSpanish": "اهلا",
         "welcomeVietnamese": "فيتنامي",
-        "about": "معلومات عنا",
+        "about": "عن",
         "feedback": "استجابة",
-        "resources": "موارد المقيمين"
+        "resources": "موارد"
     },
     "pageDescription": {
         "welcome": "ابحث وتقدم للحصول على سكن ميسور التكلفة على بوابة إسكان٪ {regionName}",
