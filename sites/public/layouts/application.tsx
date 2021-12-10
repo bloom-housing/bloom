@@ -105,29 +105,19 @@ const Layout = (props) => {
             <h4>
             {t("footer.header")}
             </h4>
-            <br />
             <a href={t("footer.headerUrl")} target="_blank">
               {t("footer.headerLink")}
             </a>
-          </p>
-          <p> 
-            <a className="subheader">{t("footer.forListingQuestions")}</a>
-            <p className="mt-10 text-tiny">{t("footer.pleaseContact")}</p>
-            <a className="subheader">{t("footer.forGeneralInquiries")}</a>
-            <p className="mt-10 text-tiny">{t("footer.youMayCall")}</p>
+            <p className="righthand"> 
+              <a className="subheader">{t("footer.forGeneralInquiries")}</a>
+              <p className="mt-10 text-tiny">{t("footer.youMayCall")}</p>
+            </p> 
+            <p className="righthand"> 
+              <a className="subheader">{t("footer.forListingQuestions")}</a>
+              <p className="mt-10 text-tiny">{t("footer.pleaseContact")}</p>
+           </p>
           </p>
         </FooterSection>
-        <FooterNav copyright={t("footer.copyright")}>
-          <Link href="/feedback">
-            <a>{t("pageTitle.feedback")}</a>
-          </Link>
-          <Link href="/privacy">
-            <a>{t("pageTitle.privacy")}</a>
-          </Link>
-          <Link href="/disclaimer">
-            <a>{t("pageTitle.disclaimer")}</a>
-          </Link>
-        </FooterNav>
       </SiteFooter>
     </div>
   )

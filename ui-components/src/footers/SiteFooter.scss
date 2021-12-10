@@ -3,6 +3,7 @@ footer.site-footer {
   @apply w-full;
   @apply bg-gray-800;
 
+
   img {
     @apply inline;
     width: 130px;
@@ -17,6 +18,18 @@ footer.site-footer {
 
   p {
     @apply mb-5;
+    width: 100%;
+  }
+
+  .righthand {
+    float: right;
+    width: 25%;
+    margin-right: 10px;
+  }
+
+  .subheader {
+    font-weight: bold;
+    font-size: medium;
   }
 
   h4 {
