@@ -41,9 +41,6 @@ const ApplicationChooseLanguage = () => {
 
   useEffect(() => {
     conductor.reset()
-  }, [listingId])
-
-  useEffect(() => {
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
       void router.push("/")
