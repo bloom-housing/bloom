@@ -288,9 +288,10 @@
           "otherMutliracial": "Khác / Đa chủng tộc",
           "asian-otherAsian": "Người Châu Á Khác",
           "asian-chinese": "Người Trung Quốc",
-          "declineToRespond": "Decline to Respond",
+          "asian-asianIndian": "Người Ấn Độ Châu Á",
+          "declineToRespond": "Từ chối phản hồi",
           "asian-filipino": "Người Philippines",
-          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guamanian or Chamorro",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Người Guam hoặc Chamorro",
           "asian-japanese": "Người Nhật Bản",
           "asian-korean": "Người Hàn Quốc",
           "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Người Hawaii Bản Địa",
@@ -392,7 +393,14 @@
       "anEmailHasBeenSent": "Một email đã được gửi tới %{email}",
       "confirmationInstruction": "Hãy nhấp vào đường liên kết trong email mà chúng tôi gửi cho quý vị để hoàn thành việc lập tài khoản.",
       "confirmationNeeded": "Cần xác nhận",
-      "resendTheEmail": "Gửi lại Email"
+      "resendTheEmail": "Gửi lại Email",
+      "password": "Mật khẩu",
+      "noAccount": "Không có tài khoản?",
+      "reEnterEmail": "Nhập lại địa chỉ Email",
+      "passwordInfo": "Phải có ít nhất 8 ký tự và bao gồm ít nhất 1 chữ cái và ít nhất một số",
+      "reEnterPassword": "Nhập lại mật khẩu của bạn",
+      "mustBe8Chars": "phải có 8 ký tự",
+      "yourName": "Tên Quý vị"
     }
   },
   "config": {
@@ -706,6 +714,7 @@
     "edit": "Hiệu đính",
     "email": "Email",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "Nhập mô tả",
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",
