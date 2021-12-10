@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.64...@bloom-housing/public@3.0.1-alpha.65) (2021-12-10)
+
+
+### Bug Fixes
+
+* demographics howDidYouHear options were not changing on language change ([#2305](https://github.com/bloom-housing/bloom/issues/2305)) ([a9859d1](https://github.com/bloom-housing/bloom/commit/a9859d1a718d88e0e1ff671a408887691306b4b9))
+
+
+
+
+
 ## [3.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.63...@bloom-housing/public@3.0.1-alpha.64) (2021-12-10)
 
 **Note:** Version bump only for package @bloom-housing/public
