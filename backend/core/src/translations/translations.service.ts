@@ -17,6 +17,7 @@ const TRANSLATION_KEYS = [
   "rentalHistory",
   "requiredDocuments",
   "specialNotes",
+  "whatToExpect",
   {
     events: ["note", "label"],
     property: [
