@@ -7,6 +7,21 @@ export enum AgeRangeType {
   "PreferNotSay" = "preferNotSay",
 }
 
+export enum AccessibilityFeatures {
+  "elevator"= "Elevator",
+      "wheelchair_ramp"= "wheelchairRamp",
+      "service_animals_allowed"= "serviceAnimalsAllowed",
+      "accessible_parking"= "accessibleParking",
+      "parking_on_site"= "parkingOnSite",
+      "in_unit_washer_dryer"= "inUnitWasherDryer",
+      "laundry_in_building"= "laundryInBuilding",
+      "barrier_free_entrance"= "barrierFreeEntrance",
+      "roll_in_shower"= "rollInShower",
+      "grab_bars"= "grabBars",
+      "heating_in_unit"= "heatingInUnit",
+      "ac_in_unit"= "acInUnit",
+}
+
 class EligibilityRequirements {
   age: AgeRangeType
   householdSizeCount: number

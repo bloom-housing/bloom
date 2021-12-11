@@ -23,7 +23,7 @@ const EligibilityIncome = () => {
   const { eligibilityRequirements } = useContext(EligibilityContext)
 
   const incomeRanges = ["below10k", "10kTo20k", "30kTo40k", "40kTo50k", "over50k"]
-  const CURRENT_PAGE = 4
+  const CURRENT_PAGE = 5
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -45,7 +45,7 @@ const EligibilityIncome = () => {
     <FormsLayout>
       <FormCard header={t("eligibility.progress.header")}>
         <ProgressNav
-          currentPageSection={5}
+          currentPageSection={6}
           completedSections={eligibilityRequirements.completedSections}
           labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
           routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}

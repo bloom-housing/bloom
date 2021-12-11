@@ -1476,7 +1476,7 @@
         "household": "Household",
         "age": "Age",
         "disability": "Disability",
-        "accessibility": "Accessibility",
+        "accessibility": "Accessibility Features",
         "income": "Income",
         "disclaimer": "Disclaimer"
       }
@@ -1523,6 +1523,8 @@
       }
     },
     "accessibility": {
+      "prompt": "Do you require additional accessibility features?",
+      "description": "Some properties have accessibility features that others may not have.",
       "elevator": "Elevator",
       "wheelchair_ramp": "Wheelchair Ramp",
       "service_animals_allowed": "Service Animals Allowed",
