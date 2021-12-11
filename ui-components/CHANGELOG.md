@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.40...@bloom-housing/ui-components@3.0.1-alpha.41) (2021-12-11)
+
+
+### Bug Fixes
+
+* fix hero secondary button width issue ([a652569](https://github.com/bloom-housing/bloom/commit/a652569017fab7663681a4101ce8cf74ea2f016e))
+
+
+
+
+
 ## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.39...@bloom-housing/ui-components@3.0.1-alpha.40) (2021-12-10)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
