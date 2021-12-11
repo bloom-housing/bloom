@@ -4,5 +4,7 @@
   "projectId": "bloom-public-reference",
   "pageLoadTimeout": 100000,
   "video": true,
-  "videoUploadOnPasses": false
+  "videoUploadOnPasses": false,
+  "viewportHeight": 800,
+  "viewportWidth": 1280
 }
