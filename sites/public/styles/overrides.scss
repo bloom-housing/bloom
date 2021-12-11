@@ -88,8 +88,8 @@ $header-desktop-min-size: 1024px;
         }
 
         .navbar-link__sign-in {
-          margin-left: 1rem;
-          padding-left: 2rem;
+          margin-inline-start: 1rem;
+          padding-inline-start: 2rem;
           position: relative;
         }
 
@@ -97,10 +97,10 @@ $header-desktop-min-size: 1024px;
         // this is the simplest way to do it without making significant changes to the SiteHeader
         // component
         .navbar-link__sign-in:before {
-          border-left: 3px solid $tailwind-primary;
+          border-inline-start: 3px solid $tailwind-primary;
           content: "";
           height: 18px;
-          left: 0;
+          inset-inline-start: 0;
           position: absolute;
         }
 
