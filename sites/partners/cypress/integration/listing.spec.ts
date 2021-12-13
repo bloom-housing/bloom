@@ -212,7 +212,7 @@ describe("Listing Management Tests", () => {
 
   it("verify the changes saved successfully", () => {
     cy.fixture("listing").then((listing) => {
-      cy.get("#name").contains(`${listing["name"]} (Edited)`)
+      cy.get("#name").contains(`${listing["name"]}`)
     })
   })
 })

@@ -521,7 +521,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     newData?: Partial<FormListing>
   ) => {
     if (confirm && status === ListingStatus.active) {
-      if (listing.status === ListingStatus.active) {
+      if (listing?.status === ListingStatus.active) {
         setListingIsAlreadyLiveModal(true)
       } else {
         setPublishModal(true)
