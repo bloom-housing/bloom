@@ -1233,8 +1233,10 @@
         "default": "El agente de la propiedad se pondrá en contacto con los solicitantes en orden de clasificación hasta que se llenen las vacantes. Se verificará toda la información que haya proporcionado y se confirmará su elegibilidad. Su solicitud será eliminada de la lista de espera si ha realizado declaraciones fraudulentas. Si no podemos verificar una preferencia de vivienda que ha reclamado, no recibirá la preferencia, pero no será penalizado de otra manera. Si se elige su solicitud, esté preparado para completar una solicitud más detallada y proporcionar los documentos de respaldo requeridos."
     },
     "listingFilters": {
-        "buttonTitle": "Filtrar listados",
-        "buttonTitleWithNumber": "Filtrar listados (% {number})",
+        "buttonTitle": "Filtrar",
+        "buttonTitleWithNumber": "Filtrar (% {number})",
+        "loading": "Cargando...",
+        "rentalsFound": "%{smart_count} alquiler encontrado|||| %{smart_count} alquileres encontrados",
         "resetButton": "Reiniciar",
         "modalTitle": "Filtrar resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",

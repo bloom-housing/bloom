@@ -9,7 +9,6 @@ import {
   t,
   encodeToFrontendFilterString,
   decodeFiltersFromFrontendUrl,
-  LinkButton,
   LoadingOverlay,
   ListingFilterState,
   FrontendListingFilterStateKeys,
@@ -19,7 +18,7 @@ import { MetaTags } from "../../src/MetaTags"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useListingsData } from "../../lib/hooks"
-import { ListingFilterParams, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
+import { OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
 import FilterForm from "../../src/forms/filters/FilterForm"
 import { getListings } from "../../lib/helpers"
 import FindRentalsForMeLink from "../../lib/FindRentalsForMeLink"
@@ -90,6 +89,15 @@ const FilteredListingsPage = () => {
     setQueryString(/*page=*/ 1, data)
   }
 
+  let rentalsFoundTitle: string
+  if (listingsLoading) {
+    rentalsFoundTitle = t("listingFilters.loading")
+  } else {
+    rentalsFoundTitle = t("listingFilters.rentalsFound", {
+      smart_count: listingsData?.meta.totalItems,
+    })
+  }
+
   return (
     <Layout>
       <Head>
@@ -110,23 +118,30 @@ const FilteredListingsPage = () => {
       >
         <FilterForm onSubmit={onSubmit} filterState={filterState} />
       </Modal>
-      <div className="container max-w-3xl px-4 content-start mx-auto">
+      <h3 className="max-w-5xl container mx-auto text-4xl text-primary-darker font-bold px-4 py-8">
+        {rentalsFoundTitle}
+      </h3>
+      <div className="flex container content-center max-w-5xl px-4 mx-auto">
+        {}
         <Button
-          className="mx-2 mt-6"
-          size={AppearanceSizeType.small}
+          className="mr-5"
+          size={AppearanceSizeType.normal}
+          icon="filter"
+          iconPlacement="left"
+          iconSize="base"
           onClick={() => setFilterModalVisible(true)}
         >
           {buttonTitle}
         </Button>
         {numberOfFilters > 0 && (
           <Button
-            className="mx-2 mt-6"
-            size={AppearanceSizeType.small}
+            className="mx-2"
+            size={AppearanceSizeType.normal}
             styleType={AppearanceStyleType.secondary}
             // "Submit" the form with no params to trigger a reset.
             onClick={() => onSubmit({})}
             icon="close"
-            iconPlacement="left"
+            iconPlacement="right"
           >
             {t("listingFilters.resetButton")}
           </Button>
