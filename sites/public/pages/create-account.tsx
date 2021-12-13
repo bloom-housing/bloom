@@ -75,13 +75,13 @@ export default () => {
         <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
-              {t("authentication.createAccount.yourName")}
+              {t("application.name.yourName")}
             </label>
 
             <Field
               controlClassName="mt-2"
               name="firstName"
-              placeholder={t("authentication.createAccount.firstName")}
+              placeholder={t("application.name.firstName")}
               validation={{ required: true }}
               error={errors.firstName}
               errorMessage={t("errors.firstNameError")}
@@ -90,13 +90,13 @@ export default () => {
 
             <Field
               name="middleName"
-              placeholder={t("authentication.createAccount.middleNameOptional")}
+              placeholder={t("application.name.middleNameOptional")}
               register={register}
             />
 
             <Field
               name="lastName"
-              placeholder={t("authentication.createAccount.lastName")}
+              placeholder={t("application.name.lastName")}
               validation={{ required: true }}
               error={errors.lastName}
               errorMessage={t("errors.lastNameError")}
@@ -114,7 +114,7 @@ export default () => {
               watch={watch}
               validateAge18={true}
               errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={t("authentication.createAccount.yourDateOfBirth")}
+              label={t("application.name.yourDateOfBirth")}
             />
           </div>
 
@@ -123,7 +123,7 @@ export default () => {
               caps={true}
               type="email"
               name="email"
-              label={t("authentication.createAccount.email")}
+              label={t("t.email")}
               placeholder="example@web.com"
               validation={{ required: true, pattern: emailRegex }}
               error={errors.email}

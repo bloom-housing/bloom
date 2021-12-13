@@ -91,17 +91,17 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   const uniquePercentageChartSet: ChartAndPercentage[] = [
     ...new Set(
       units
+        .filter((unit) => amiChartMap[unit.amiChartId])
         .map((unit) => {
           let amiChart = amiChartMap[unit.amiChartId]
           if (unit.amiChartOverride) {
             amiChart = mergeAmiChartWithOverrides(amiChart, unit.amiChartOverride)
           }
-          return {
+          return JSON.stringify({
             percentage: parseInt(unit.amiPercentage, 10),
             chart: amiChart,
-          }
+          })
         })
-        .map((item) => JSON.stringify(item))
     ),
   ].map((uniqueSetString) => JSON.parse(uniqueSetString))
 
@@ -189,6 +189,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
     let rowHasData = false // Row is valid if at least one column is filled, otherwise don't push the row
     allPercentages.forEach((currentAmiPercent) => {
+      console.log({ uniquePercentageChartSet })
       // Get all the charts that we're using with this percentage and size
       const uniquePercentCharts = uniquePercentageChartSet.filter((uniqueChartAndPercentage) => {
         return uniqueChartAndPercentage.percentage === currentAmiPercent

@@ -112,6 +112,7 @@ const ApplicationPreferencesAll = () => {
     }
     // Otherwise complete the section and move to the next URL
     conductor.completeSection(4)
+    conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
 

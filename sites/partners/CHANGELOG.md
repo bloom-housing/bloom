@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.55...@bloom-housing/partners@3.0.1-alpha.56) (2021-12-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.54...@bloom-housing/partners@3.0.1-alpha.55) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.53...@bloom-housing/partners@3.0.1-alpha.54) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.52...@bloom-housing/partners@3.0.1-alpha.53) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.51...@bloom-housing/partners@3.0.1-alpha.52) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.50...@bloom-housing/partners@3.0.1-alpha.51) (2021-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.49...@bloom-housing/partners@3.0.1-alpha.50) (2021-12-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.48...@bloom-housing/partners@3.0.1-alpha.49) (2021-12-07)
+
+
+### Features
+
+* overrides fallback to english, tagalog support ([#2262](https://github.com/bloom-housing/bloom/issues/2262)) ([679ab9b](https://github.com/bloom-housing/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+
+
+
+
+
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.47...@bloom-housing/partners@3.0.1-alpha.48) (2021-12-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.46...@bloom-housing/partners@3.0.1-alpha.47) (2021-12-06)
 
 

@@ -27,7 +27,6 @@ const ApplicationHouseholdStudent = () => {
     shouldFocusError: false,
   })
   const onSubmit = (data) => {
-    conductor.completeSection(2)
     const { householdStudent } = data
     conductor.currentStep.save({
       householdStudent: householdStudent === "true",
