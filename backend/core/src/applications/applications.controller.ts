@@ -9,12 +9,12 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
-import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
 import {
@@ -32,6 +32,7 @@ import { applicationPreferenceApiExtraModels } from "./application-preference-ap
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 
 export enum OrderByParam {
   firstName = "applicant.firstName",
@@ -165,7 +166,8 @@ export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQuer
 @ApiTags("applications")
 @ApiBearerAuth()
 @ResourceType("application")
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard)
+@UseInterceptors(ActivityLogInterceptor)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
@@ -206,25 +208,25 @@ export class ApplicationsController {
     return mapTo(ApplicationDto, application)
   }
 
-  @Get(`:applicationId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  async retrieve(@Param("applicationId") applicationId: string): Promise<ApplicationDto> {
+  async retrieve(@Param("id") applicationId: string): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     return mapTo(ApplicationDto, app)
   }
 
-  @Put(`:applicationId`)
+  @Put(`:id`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
   async update(
-    @Param("applicationId") applicationId: string,
+    @Param("id") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<ApplicationDto> {
     return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
   }
 
-  @Delete(`:applicationId`)
+  @Delete(`:id`)
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Param("applicationId") applicationId: string) {
+  async delete(@Param("id") applicationId: string) {
     await this.applicationsService.delete(applicationId)
   }
 }

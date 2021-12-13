@@ -1,7 +1,6 @@
 import { INestApplicationContext } from "@nestjs/common"
 import { Repository } from "typeorm"
 import { getRepositoryToken } from "@nestjs/typeorm"
-import { ApplicationCreateDto } from "../../applications/dto/application.dto"
 import { IncomePeriod } from "../../applications/types/income-period-enum"
 import { Language } from "../../shared/types/language-enum"
 import { InputType } from "../../shared/types/input-type"
@@ -12,6 +11,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { User } from "../../auth/entities/user.entity"
 import { Application } from "../../applications/entities/application.entity"
 import { ApplicationsService } from "../../applications/services/applications.service"
+import { ApplicationCreateDto } from "../../applications/dto/application.dto"
 
 const applicationCreateDtoTemplate: Omit<
   ApplicationCreateDto,
