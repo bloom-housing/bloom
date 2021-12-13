@@ -9,18 +9,16 @@ import { ListingsService } from "../listings/listings.service"
 
 @Injectable()
 export class CronService {
-
   constructor(
     private readonly emailService: EmailService,
     private readonly listingsService: ListingsService,
-    private readonly userService: UserService,
-
+    private readonly userService: UserService
   ) {}
 
   @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
   async handleCron() {
-     if (!process.env.SEND_NOTIFICATIONS_FOR_UPDATE_LISTINGS_REMINDER) {
-      return;
+    if (!process.env.SEND_NOTIFICATIONS_FOR_UPDATE_LISTINGS_REMINDER) {
+      return
     }
 
     const userQueryParams: UserListQueryParams = {
@@ -45,4 +43,3 @@ export class CronService {
     }
   }
 }
-
