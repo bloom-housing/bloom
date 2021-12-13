@@ -19,6 +19,7 @@ import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/co
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityHouseholdSize = () => {
   const router = useRouter()
@@ -51,15 +52,7 @@ const EligibilityHouseholdSize = () => {
   const householdSizeRanges = ["one", "two", "three", "four", "five", "six", "seven", "eight"]
 
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={2}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={2}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}
@@ -102,7 +95,7 @@ const EligibilityHouseholdSize = () => {
           </div>
         </Form>
       </FormCard>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 

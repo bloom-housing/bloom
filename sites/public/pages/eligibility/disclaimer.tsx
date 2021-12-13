@@ -9,6 +9,7 @@ import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import { getFilterUrlLink } from "../../lib/filterUrlLink"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityDisclaimer = () => {
   const router = useRouter()
@@ -21,7 +22,7 @@ const EligibilityDisclaimer = () => {
   }
 
   return (
-    <FormsLayout>
+    <EligibilityLayout>
       <header className="eligibility-disclaimer-header">
         <h1 className="form-card__header_title">{t("eligibility.progress.sections.disclaimer")}</h1>
       </header>
@@ -31,7 +32,7 @@ const EligibilityDisclaimer = () => {
       <Form className="eligibility-disclaimer-submit-container" onSubmit={handleSubmit(onSubmit)}>
         <Button styleType={AppearanceStyleType.primary}>{t("t.viewListings")}</Button>
       </Form>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 

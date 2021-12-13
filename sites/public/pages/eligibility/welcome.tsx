@@ -10,13 +10,13 @@ import {
   Form,
   ProgressNav,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React, { useContext } from "react"
 import { useRouter } from "next/router"
 import { ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { eligibilityRoute } from "../../lib/helpers"
 import { EligibilityContext } from "../../lib/EligibilityContext"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityWelcome = () => {
   const router = useRouter()
@@ -34,15 +34,7 @@ const EligibilityWelcome = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={1}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={1}>
       <FormCard>
         <div className="form-card__lead pb-0 pt-8">
           <h2 className="form-card__title is-borderless">{t("eligibility.welcome.header")}</h2>
@@ -58,7 +50,7 @@ const EligibilityWelcome = () => {
           </div>
         </Form>
       </FormCard>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 

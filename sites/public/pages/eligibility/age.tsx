@@ -21,6 +21,7 @@ import { AgeRangeType, EligibilityContext } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
 import { getFilterUrlLink } from "../../lib/filterUrlLink"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityAge = () => {
   const router = useRouter()
@@ -72,15 +73,7 @@ const EligibilityAge = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={3}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={3}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}
@@ -119,7 +112,7 @@ const EligibilityAge = () => {
           </div>
         </Form>
       </FormCard>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 
