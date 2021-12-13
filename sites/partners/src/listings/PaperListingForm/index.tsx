@@ -520,8 +520,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     status?: ListingStatus,
     newData?: Partial<FormListing>
   ) => {
-    if (confirm) {
-      if (editMode) {
+    if (confirm && status === ListingStatus.active) {
+      if (listing.status === ListingStatus.active) {
         setListingIsAlreadyLiveModal(true)
       } else {
         setPublishModal(true)
@@ -882,7 +882,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       </Modal>
 
       <Modal
-        open={!!listingIsAlreadyLiveModal}
+        open={listingIsAlreadyLiveModal}
         title={t("t.areYouSure")}
         ariaDescription={t("listings.listingIsAlreadyLive")}
         onClose={() => setListingIsAlreadyLiveModal(false)}

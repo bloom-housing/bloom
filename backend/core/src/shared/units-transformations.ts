@@ -189,7 +189,6 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
     let rowHasData = false // Row is valid if at least one column is filled, otherwise don't push the row
     allPercentages.forEach((currentAmiPercent) => {
-      console.log({ uniquePercentageChartSet })
       // Get all the charts that we're using with this percentage and size
       const uniquePercentCharts = uniquePercentageChartSet.filter((uniqueChartAndPercentage) => {
         return uniqueChartAndPercentage.percentage === currentAmiPercent

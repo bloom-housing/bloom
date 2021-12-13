@@ -134,7 +134,7 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => submitFormWithStatus(true, ListingStatus.active)}
+            onClick={() => submitFormWithStatus(true, listing.status)}
             dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
