@@ -26,6 +26,7 @@ import { User } from "../../src/auth/entities/user.entity"
 import { EnumUserFilterParamsComparison } from "../../types"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { Application } from "../../src/applications/entities/application.entity"
+import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -817,6 +818,7 @@ describe("Applications", () => {
       .put(`/user/confirm/`)
       .send({ token: user.confirmationToken })
       .expect(200)
+
     const userAccessToken = await getUserAccessToken(
       app,
       userCreateDto.email,
@@ -831,6 +833,7 @@ describe("Applications", () => {
 
     // Put password updated at date 190 days in the past
     user = await userService.findByEmail(userCreateDto.email)
+    user.roles = { isAdmin: true, isPartner: false } as UserRoles
     user.passwordUpdatedAt = new Date(user.passwordUpdatedAt.getTime() - 190 * 24 * 60 * 60 * 1000)
 
     await usersRepository.save(user)

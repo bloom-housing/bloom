@@ -69,7 +69,9 @@ export class UserService {
   public static isPasswordOutdated(user: User) {
     return (
       new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
-      new Date()
+        new Date() &&
+      user.roles &&
+      (user.roles.isAdmin || user.roles.isPartner)
     )
   }
 
