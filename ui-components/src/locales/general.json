@@ -1499,7 +1499,7 @@
       "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application."
     },
     "income": {
-      "prompt": "What is your total household annual income?",
+      "prompt": "What is the estimated total annual income for everyone who will live with you, including yourself?",
       "description": "Include income for everyone who will be living in your household including yourself. Income includes social security, retirement accounts and wages.",
       "label": "Income range",
       "ranges": {

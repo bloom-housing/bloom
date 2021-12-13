@@ -19,7 +19,10 @@ describe("<EligibilityIncome>", () => {
       render(<EligibilityIncome />)
     })
     expect(
-      screen.getByRole("heading", { name: "What is your total household annual income?" })
+      screen.getByRole("heading", {
+        name:
+          "What is the estimated total annual income for everyone who will live with you, including yourself?",
+      })
     ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Finish" })).toBeInTheDocument()
   })

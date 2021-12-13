@@ -1323,7 +1323,7 @@
             "description": "Algunas propiedades están destinadas a residentes con discapacidades. Algunas casas pueden solicitar una prueba de discapacidad con su solicitud."
         },
         "income": {
-            "prompt": "¿Cuál es el ingreso anual total de su hogar?",
+            "prompt": "¿Cuál es el ingreso anual total estimado para todas las personas que vivirán con usted, incluido usted mismo?",
             "description": "Incluya los ingresos de todas las personas que vivirán en su hogar, incluido usted mismo. Los ingresos incluyen seguridad social, cuentas de jubilación y salarios.",
             "label": "Rango de ingresos",
             "ranges": {
