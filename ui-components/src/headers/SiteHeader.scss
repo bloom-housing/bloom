@@ -322,7 +322,10 @@
   .navbar-notice {
     @apply w-full;
     @apply bg-primary;
-    @apply text-right;
+    @screen md {
+      @apply text-right;
+    }
+    @apply text-left;
     @apply text-white;
     @apply block;
   }
@@ -338,9 +341,8 @@
   .navbar-notice__text {
     @apply max-w-5xl;
     @apply text-sm;
-    @apply pt-2;
-    @apply pb-2;
-    @apply pr-3;
+    @apply py-2;
+    @apply px-3;
     margin: auto;
 
     a,
