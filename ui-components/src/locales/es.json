@@ -1320,7 +1320,7 @@
         },
         "disability": {
             "prompt": "¿Tienes alguna discapacidad?",
-            "description": "Algunas propiedades están destinadas a residentes con discapacidades. Algunas casas pueden solicitar una prueba de discapacidad con su solicitud."
+            "description": "Es posible que deba proporcionar un comprobante de discapacidad cuando solicite algunas viviendas."
         },
         "income": {
             "prompt": "¿Cuál es el ingreso anual total de su hogar?",

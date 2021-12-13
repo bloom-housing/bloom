@@ -1496,7 +1496,7 @@
     },
     "disability": {
       "prompt": "Do you have a disability?",
-      "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application."
+      "description": "You might need to provide proof of disability when you apply for some homes."
     },
     "income": {
       "prompt": "What is your total household annual income?",
