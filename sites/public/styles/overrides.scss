@@ -153,9 +153,17 @@
   }
 }
 
+.progress-nav {
+  padding: 20px 0;
+  @screen md {
+    padding: 31px 0;
+  }
+}
+
 li.progress-nav__item,
 h1.form-card__header_title {
   text-transform: capitalize;
+  padding: 0;
 }
 
 // For the eligibility questionnaire, there are five headers, so give each 20% of the full navbar

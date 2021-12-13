@@ -17,6 +17,7 @@ import { eligibilityRoute } from "../../lib/helpers"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { useRouter } from "next/router"
 import { getFilterUrlLink } from "../../lib/filterUrlLink"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityIncome = () => {
   const router = useRouter()
@@ -42,15 +43,7 @@ const EligibilityIncome = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={5}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={5}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}
@@ -86,7 +79,7 @@ const EligibilityIncome = () => {
           </div>
         </Form>
       </FormCard>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 
