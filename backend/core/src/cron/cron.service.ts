@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common"
 import { Cron, CronExpression } from "@nestjs/schedule"
-import { UserListQueryParams } from "src/auth/dto/user-list-query-params";
-import { UserService } from "src/auth/services/user.service";
-import { AuthContext } from "src/auth/types/auth-context";
-import { Compare } from "src/shared/dto/filter.dto";
-import { EmailService } from "src/shared/email/email.service";
+import { UserListQueryParams } from "../auth/dto/user-list-query-params";
+import { UserService } from "../auth/services/user.service";
+import { AuthContext } from "../auth/types/auth-context";
+import { Compare } from "../shared/dto/filter.dto";
+import { EmailService } from "../shared/email/email.service";
 import { ListingsService } from "../listings/listings.service"
 
 @Injectable()
@@ -31,17 +31,15 @@ export class CronService {
         },
       ],
     }
-    const users = this.userService.list(userQueryParams, new AuthContext());
+    const users = await this.userService.list(userQueryParams, new AuthContext());
     const allListings = await this.listingsService.list({});
     
     // For each listing, check whether the listed leasing agents are in the list of partner users.
     // If the leasing agent is a partner and has their email notifications turned on, send the reminder email.
     for (var listing of allListings.items){
       for (var leasingAgent of listing.leasingAgents){
-        if ((await users).items.includes(leasingAgent)) {
-          if (leasingAgent.preferences.sendEmailNotifications == true) {
+        if (users.items.includes(leasingAgent) && leasingAgent.preferences.sendEmailNotifications) {
             this.emailService.updateListingReminder(listing, leasingAgent);
-          }
         }
       }
     }
