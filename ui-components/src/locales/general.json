@@ -1148,8 +1148,9 @@
     "myApplications": "My Applications",
     "myDashboard": "My Dashboard",
     "mySettings": "My Settings",
-    "signIn": "Log in",
-    "signOut": "Log out",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signUp": "Sign up",
     "siteTitle": "Housing Portal",
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
@@ -1167,9 +1168,9 @@
     "welcomeEnglish": "Welcome",
     "welcomeSpanish": "Bienvenido",
     "welcomeVietnamese": "Tiếng Việt",
-    "about": "About Us",
+    "about": "About",
     "feedback": "Feedback",
-    "resources": "Resident Resources"
+    "resources": "Resources"
   },
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",

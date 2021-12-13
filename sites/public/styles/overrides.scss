@@ -5,7 +5,10 @@
 .ui-icon svg {
   fill: $tailwind-primary-darker;
 }
-.site-header {
+
+$header-desktop-min-size: 1024px;
+
+.site-header.site-header {
   .navbar-notice-hide {
     display: none;
   }
@@ -14,13 +17,20 @@
     border: none;
 
     .navbar {
+      align-items: center;
       height: auto;
       justify-content: flex-start;
       max-height: none;
-      padding: 8px 0 16px;
+      padding: 24px 0 18px;
 
-      @screen md {
-        padding: 0;
+      @media (min-width: $header-desktop-min-size) {
+        padding: 0 12px;
+        width: 100%;
+      }
+
+      @screen lg {
+        padding: 0 50px;
+        width: 100%;
       }
 
       @screen xl {
@@ -28,27 +38,82 @@
       }
 
       .navbar-menu {
-        height: 80px;
-        min-width: 112px;
+        height: 48px;
+        margin-right: 12px;
+        min-width: 48px;
+        width: 48px;
 
-        @screen md {
+        @media (min-width: $header-desktop-min-size) {
           margin: 40px 0 24px;
-          position: absolute;
-          right: 1rem;
+          width: 100%;
         }
 
         @screen xl {
           margin: 48px 0 32px;
         }
 
+        .button.navbar-mobile-menu-button {
+          align-items: center;
+          justify-content: center;
+          margin: 0;
+          padding: 0;
+        }
+
+        .button {
+          width: 60px;
+        }
+
+        .button__content {
+          display: none;
+        }
+
+        .button__icon {
+          margin-left: 0;
+        }
+
+        .ui-base svg {
+          height: 18px;
+          width: 21px;
+        }
+
         .navbar-link {
-          @apply text-sm;
           @apply text-primary;
           align-items: center;
           display: flex;
+          font-size: 1.125rem;
           font-weight: 700;
+          height: 40px;
           padding: 1rem;
           text-transform: none;
+        }
+
+        .navbar-link__sign-in {
+          margin-inline-start: 1rem;
+          padding-inline-start: 2rem;
+          position: relative;
+        }
+
+        // This is a little hacky to get the divider line to the left of the "sign in" link, but
+        // this is the simplest way to do it without making significant changes to the SiteHeader
+        // component
+        .navbar-link__sign-in:before {
+          border-inline-start: 3px solid $tailwind-primary;
+          content: "";
+          height: 18px;
+          inset-inline-start: 0;
+          position: absolute;
+        }
+
+        .navbar-link__sign-up {
+          border: 2px solid $tailwind-primary;
+          border-radius: 44px;
+        }
+
+        .navbar-link.navbar-link__sign-up:hover {
+          @apply text-white;
+          background-color: $tailwind-primary;
+          border: 2px solid $tailwind-primary;
+          border-radius: 44px;
         }
 
         .navbar-link:hover {
@@ -86,7 +151,12 @@
 
       .navbar-logo {
         @screen md {
-          padding: 48px 0 32px 16px;
+          width: 100%;
+        }
+
+        @media (min-width: $header-desktop-min-size) {
+          padding: 48px 0 32px 0;
+          width: 100%;
         }
 
         @screen xl {
@@ -111,12 +181,15 @@
 
           .logo__title {
             @apply text-primary-dark;
-            margin-top: 1.5rem;
+            @apply text-base;
+            letter-spacing: initial;
+            margin-left: 4px;
+            text-align: left;
             text-transform: none;
 
-            @screen md {
-              @apply text-lg;
-              margin: 0;
+            @media (min-width: $header-desktop-min-size) {
+              @apply text-2xl;
+              margin-left: 8px;
             }
 
             @screen xl {
@@ -124,15 +197,26 @@
             }
           }
 
+          .logo__subtitle {
+            font-size: 0.625rem;
+            font-weight: 400;
+
+            @media (min-width: $header-desktop-min-size) {
+              @apply text-sm;
+            }
+          }
+
           .logo__image {
+            height: 57px;
+            margin: -12px 0 0 12px;
             // The header logo should allow for a larger maximum height than the default
             // logo.
             max-height: 5rem;
-            min-height: 4rem;
 
-            @screen md {
+            @media (min-width: $header-desktop-min-size) {
+              height: 77px;
               // Negative margin to center around the shield
-              margin: -32px 0 0;
+              margin: -16px 0 0;
               max-height: 6rem;
             }
 
@@ -149,6 +233,15 @@
           justify-content: initial;
         }
       }
+    }
+  }
+
+  .navbar-mobile-dropdown-container .navbar-mobile-dropdown .navbar-mobile-dropdown-item {
+    @screen md {
+      @apply text-primary;
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-transform: none;
     }
   }
 }
