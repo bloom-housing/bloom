@@ -1434,7 +1434,7 @@
     "applyFilters": "Apply filters",
     "noResults": "No results",
     "noResultsSubtitle": "Edit or remove filters for best results.",
-    "includeUnknowns": "Include Results with Incomplete Information",
+    "includeUnknowns": "Show homes with missing information",
     "senior": "Senior housing (62+)",
     "independentLivingHousing": "Independent living community",
     "minAmiPercentageLabel": "Units set aside for people with incomes of",
