@@ -3,6 +3,208 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.44...@bloom-housing/ui-components@3.0.1-alpha.45) (2021-12-14)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.43...@bloom-housing/ui-components@3.0.1-alpha.44) (2021-12-14)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.42...@bloom-housing/ui-components@3.0.1-alpha.43) (2021-12-13)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.40...@bloom-housing/ui-components@3.0.1-alpha.42) (2021-12-13)
+
+
+### Bug Fixes
+
+* fix hero button width with secondary button ([#2306](https://github.com/bloom-housing/bloom/issues/2306)) ([929ac8e](https://github.com/bloom-housing/bloom/commit/929ac8e7fd30718a77a10277323abf1604a45a19))
+* mobile notice text wrap issue ([#2308](https://github.com/bloom-housing/bloom/issues/2308)) ([47fdd7e](https://github.com/bloom-housing/bloom/commit/47fdd7ea0e15ec50888cb00f1caa11df269c9e84))
+* versioning issues ([#2311](https://github.com/bloom-housing/bloom/issues/2311)) ([0b1d143](https://github.com/bloom-housing/bloom/commit/0b1d143ab8b17add9d52533560f28d7a1f6dfd3d))
+
+
+
+
+
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.39...@bloom-housing/ui-components@3.0.1-alpha.40) (2021-12-10)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.38...@bloom-housing/ui-components@3.0.1-alpha.39) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.37...@bloom-housing/ui-components@3.0.1-alpha.38) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.36...@bloom-housing/ui-components@3.0.1-alpha.37) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.35...@bloom-housing/ui-components@3.0.1-alpha.36) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.34...@bloom-housing/ui-components@3.0.1-alpha.35) (2021-12-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.33...@bloom-housing/ui-components@3.0.1-alpha.34) (2021-12-07)
+
+
+### Bug Fixes
+
+* account translations ([#2278](https://github.com/bloom-housing/bloom/issues/2278)) ([1420282](https://github.com/bloom-housing/bloom/commit/1420282ec0de17b8629f2a7dd6c1149f7a1f8894))
+
+
+
+
+
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.32...@bloom-housing/ui-components@3.0.1-alpha.33) (2021-12-07)
+
+
+### Features
+
+* overrides fallback to english, tagalog support ([#2262](https://github.com/bloom-housing/bloom/issues/2262)) ([679ab9b](https://github.com/bloom-housing/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+
+
+
+
+
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.31...@bloom-housing/ui-components@3.0.1-alpha.32) (2021-12-07)
+
+
+### Bug Fixes
+
+* Fix modal styles on mobile ([#2280](https://github.com/bloom-housing/bloom/issues/2280)) ([95f45e5](https://github.com/bloom-housing/bloom/commit/95f45e5a6d2c38c512f59d8cb35847cab59dc8bb)), closes [#2253](https://github.com/bloom-housing/bloom/issues/2253)
+
+
+
+
+
+## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.30...@bloom-housing/ui-components@3.0.1-alpha.31) (2021-12-06)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.29...@bloom-housing/ui-components@3.0.1-alpha.30) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.28...@bloom-housing/ui-components@3.0.1-alpha.29) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.27...@bloom-housing/ui-components@3.0.1-alpha.28) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.26...@bloom-housing/ui-components@3.0.1-alpha.27) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.25...@bloom-housing/ui-components@3.0.1-alpha.26) (2021-12-01)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.24...@bloom-housing/ui-components@3.0.1-alpha.25) (2021-11-30)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.23...@bloom-housing/ui-components@3.0.1-alpha.24) (2021-11-29)
+
+
+### Bug Fixes
+
+* guard against 0 output ([0ea9012](https://github.com/bloom-housing/bloom/commit/0ea9012fdac02fb1cb4357abec2ec69633902654))
+* remove bold style from current waitlist size ([2e2f414](https://github.com/bloom-housing/bloom/commit/2e2f4141e62c8544c0828b29de0b99bb97abb201))
+* show waitlist values even if they're zero ([6a35e67](https://github.com/bloom-housing/bloom/commit/6a35e679f142105e40719e89bda3d957e3200e1d))
+* simpler conditionals ([f3e588d](https://github.com/bloom-housing/bloom/commit/f3e588d5e6dd0a39d1aed99ef6eba0054540ed14))
+* waitlist: handle both null and undefined ([90fd369](https://github.com/bloom-housing/bloom/commit/90fd369b471c7f9baa0a1d58f452159449fe6fcf))
+
+
+### Features
+
+* simplify Waitlist component and use more flexible schema ([96df149](https://github.com/bloom-housing/bloom/commit/96df1496f377ddfa6f0e6c016c84954b6a43ff4a))
+
+
+
+
+
+## [3.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.22...@bloom-housing/ui-components@3.0.1-alpha.23) (2021-11-29)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.21...@bloom-housing/ui-components@3.0.1-alpha.22) (2021-11-23)
 
 

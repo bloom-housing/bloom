@@ -10,6 +10,7 @@ declare namespace Cypress {
      * @example cy.dataCy('greeting')
      */
     getByID(value: string): Chainable<Element>
+    getByTestId(value: string): Chainable<Element>
     login(): Chainable
     attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable

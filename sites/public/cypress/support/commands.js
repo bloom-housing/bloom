@@ -294,7 +294,7 @@ Cypress.Commands.add("step9Accessibility", (application) => {
   }
 })
 
-Cypress.Commands.add("step10Programs", (application) => {
+Cypress.Commands.add("step12Programs", (application) => {
   application.programs.forEach((program) => {
     if (!program.claimed) {
       // Selects the last instance, which is decline
@@ -312,7 +312,7 @@ Cypress.Commands.add("step10Programs", (application) => {
   cy.isNextRouteValid("programs")
 })
 
-Cypress.Commands.add("step11Changes", (application) => {
+Cypress.Commands.add("step10Changes", (application) => {
   if (application.householdExpectingChanges) {
     cy.getByTestId("app-expecting-changes").eq(0).check()
   } else {
@@ -325,7 +325,7 @@ Cypress.Commands.add("step11Changes", (application) => {
   cy.isNextRouteValid("householdExpectingChanges")
 })
 
-Cypress.Commands.add("step12Student", (application) => {
+Cypress.Commands.add("step11Student", (application) => {
   if (application.householdStudent) {
     cy.getByTestId("app-student").eq(0).check()
   } else {
@@ -395,14 +395,15 @@ Cypress.Commands.add("step16GeneralPool", () => {
 })
 
 Cypress.Commands.add("step17Demographics", (application) => {
-  if (application.demographics.ethnicity) {
-    cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
-  }
-
+  cy.location("pathname").should("include", "applications/review/demographics")
   application.demographics.race.forEach((race) => {
     const raceIndex = raceCheckboxesOrder.indexOf(race)
     cy.getByTestId("app-demographics-race").eq(raceIndex).check()
   })
+
+  if (application.demographics.ethnicity) {
+    cy.getByTestId("app-demographics-ethnicity").select(application.demographics.ethnicity)
+  }
 
   application.demographics.howDidYouHear.forEach((howDidYouHear) => {
     const howDidYouHearIndex = howDidYouHearCheckboxesOrder.indexOf(howDidYouHear)
@@ -431,9 +432,12 @@ Cypress.Commands.add("step19TermsAndSubmit", () => {
 })
 
 Cypress.Commands.add("submitApplication", (listingName, application, autofill) => {
+  cy.log("submitApplication")
   if (autofill === false) {
+    cy.log("autofill false")
     cy.beginApplicationRejectAutofill(listingName)
   } else {
+    cy.log("autofill true")
     cy.beginApplication(listingName)
   }
   cy.step1PrimaryApplicantName(application)
@@ -449,23 +453,28 @@ Cypress.Commands.add("submitApplication", (listingName, application, autofill) =
   }
   cy.step8PreferredUnits(application)
   cy.step9Accessibility(application)
+  cy.step10Changes(application)
+  cy.step11Student(application)
   if (application.programs.length > 0) {
-    cy.step10Programs(application)
+    cy.step12Programs(application)
   }
-  cy.step11Changes(application)
-
-  cy.step12Student(application)
   cy.step13IncomeVouchers(application)
   cy.step14Income(application)
-  if (application.preferences.length > 0) {
-    cy.step15SelectPreferences(application)
-  } else {
-    cy.step16GeneralPool()
-  }
-  cy.step17Demographics(application)
-  cy.step18Summary(application)
-  // TODO: Check values on summary
-  cy.step19TermsAndSubmit(application)
+  cy.window().then((win) => {
+    const listing = JSON.parse(win.sessionStorage.getItem("bloom-app-listing"))
+    if (listing.listingPreferences.length > 0) {
+      if (application.preferences.length > 0) {
+        cy.step15SelectPreferences(application)
+      } else {
+        cy.step16GeneralPool()
+      }
+    }
+
+    cy.step17Demographics(application)
+    cy.step18Summary(application)
+    // TODO: Check values on summary
+    cy.step19TermsAndSubmit(application)
+  })
 })
 
 Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
@@ -474,6 +483,5 @@ Cypress.Commands.add("isNextRouteValid", (currentStep, skip = 0) => {
   const nextRoutePath = applicationStepOrder[nextRouteIndex].route
     ? applicationStepOrder[nextRouteIndex].route
     : ""
-
   cy.location("pathname").should("include", nextRoutePath)
 })
