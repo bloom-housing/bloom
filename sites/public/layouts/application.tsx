@@ -97,17 +97,19 @@ const Layout = (props) => {
       <SiteFooter>
         <h2 className="sr-only">{t("footer.srHeading")}</h2>
         <FooterSection>
-          <img src="/images/detroit-logo-white.png" alt="City of Detroit logo"/>
-        </FooterSection>
-        <FooterSection>
-          <h3 className="sr-only">{t("footer.srProjectInformation")}</h3>
-          <p>
-            <h4>
-            {t("footer.header")}
-            </h4>
-            <a href={t("footer.headerUrl")} target="_blank">
-              {t("footer.headerLink")}
-            </a>
+            <img src="/images/detroit-logo-white.png" alt="City of Detroit logo"/>
+            <h3 className="sr-only">{t("footer.srProjectInformation")}</h3>
+            <p className="footer-left-block">
+              <div>
+              <h4>
+              {t("footer.header")}
+              </h4>
+              <a href={t("footer.headerUrl")} target="_blank">
+                {t("footer.headerLink")}
+              </a>
+              </div>
+            </p>
+            <p className="footer-right-block"> 
             <p className="righthand"> 
               <a className="subheader">{t("footer.forGeneralInquiries")}</a>
               <p className="mt-10 text-tiny">{t("footer.youMayCall")}</p>
@@ -116,8 +118,19 @@ const Layout = (props) => {
               <a className="subheader">{t("footer.forListingQuestions")}</a>
               <p className="mt-10 text-tiny">{t("footer.pleaseContact")}</p>
            </p>
-          </p>
+           </p>
         </FooterSection>
+        <FooterNav copyright={t("footer.copyright")}>
+          <Link href="/feedback">
+            <a>{t("pageTitle.feedback")}</a>
+          </Link>
+          <Link href="/privacy">
+            <a>{t("pageTitle.privacy")}</a>
+          </Link>
+          <Link href="/disclaimer">
+            <a>{t("pageTitle.disclaimer")}</a>
+          </Link>
+        </FooterNav>
       </SiteFooter>
     </div>
   )

@@ -7,8 +7,9 @@ footer.site-footer {
   img {
     @apply inline;
     width: 130px;
+    height: 130px;
     opacity: 0.8;
-    float: left;
+    margin-right: 10px;
   }
 
   a {
@@ -30,6 +31,21 @@ footer.site-footer {
   .subheader {
     font-weight: bold;
     font-size: medium;
+  }
+
+  .footer-right-block{
+    display: flex;
+    justify-content: right;
+  }
+
+  .footer-left-block{
+    display: flex;
+    justify-content: left;
+  }
+
+  .footer-end-block{
+    display: flex;
+    justify-content: left;
   }
 
   h4 {
