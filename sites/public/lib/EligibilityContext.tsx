@@ -1,4 +1,5 @@
 import React from "react"
+import { AccessibilityFeatures } from "../pages/eligibility/accessibility"
 
 export enum AgeRangeType {
   "LessThanFiftyFive" = "lessThan55",
@@ -7,33 +8,35 @@ export enum AgeRangeType {
   "PreferNotSay" = "preferNotSay",
 }
 
-export enum AccessibilityFeatures {
-  "elevator"= "Elevator",
-      "wheelchair_ramp"= "wheelchairRamp",
-      "service_animals_allowed"= "serviceAnimalsAllowed",
-      "accessible_parking"= "accessibleParking",
-      "parking_on_site"= "parkingOnSite",
-      "in_unit_washer_dryer"= "inUnitWasherDryer",
-      "laundry_in_building"= "laundryInBuilding",
-      "barrier_free_entrance"= "barrierFreeEntrance",
-      "roll_in_shower"= "rollInShower",
-      "grab_bars"= "grabBars",
-      "heating_in_unit"= "heatingInUnit",
-      "ac_in_unit"= "acInUnit",
-}
+/*export enum AccessibilityFeatures {
+  "elevator"= "elevator",
+  "wheelchairRamp"= "wheelchairRamp",
+  "serviceAnimalsAllowed"= "serviceAnimalsAllowed",
+  "accessibleParking"= "accessibleParking",
+  "parkingOnSite"= "parkingOnSite",
+  "inUnitWasherDryer"= "inUnitWasherDryer",
+  "laundryInBuilding"= "laundryInBuilding",
+  "barrierFreeEntrance"= "barrierFreeEntrance",
+  "rollInShower"= "rollInShower",
+  "grabBars"= "grabBars",
+  "heatingInUnit"= "heatingInUnit",
+  "acInUnit"= "acInUnit",
+}*/
 
 class EligibilityRequirements {
   age: AgeRangeType
   householdSizeCount: number
   income: string
   disability: string
+  accessibility: AccessibilityFeatures
   completedSections: number
 
-  constructor(age: AgeRangeType, householdSizeCount: number, income: string, disability: string) {
+  constructor(age: AgeRangeType, householdSizeCount: number, income: string, disability: string, accessibility: AccessibilityFeatures) {
     this.age = age
     this.householdSizeCount = householdSizeCount
     this.income = income
     this.disability = disability
+    this.accessibility = accessibility
     this.completedSections = 0
   }
 
@@ -48,7 +51,8 @@ class EligibilityRequirements {
     this.income = income
   }
 
-  setAccessibility(){
+  setAccessibility(accessibilityFeatures: AccessibilityFeatures){
+    this.accessibility = accessibilityFeatures
   }
 
   setDisability(disability: string) {
@@ -61,7 +65,7 @@ class EligibilityRequirements {
 }
 
 export const blankEligibilityRequirements = () => {
-  return new EligibilityRequirements(null, null, null, null)
+  return new EligibilityRequirements(null, null, null, null, null)
 }
 
 export const EligibilityContext = React.createContext({

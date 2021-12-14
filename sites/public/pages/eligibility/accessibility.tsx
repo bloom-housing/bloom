@@ -16,11 +16,59 @@ import {
   import React, { useContext } from "react"
   import { useRouter } from "next/router"
   import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
-  import { AccessibilityFeatures, EligibilityContext } from "../../lib/EligibilityContext"
+  import { EligibilityContext } from "../../lib/EligibilityContext"
   import FormBackLink from "../../src/forms/applications/FormBackLink"
   import { eligibilityRoute } from "../../lib/helpers"
+
+  export class AccessibilityFeatures {
+    elevator: boolean
+    wheelchairRamp: boolean
+    serviceAnimalsAllowed: boolean
+    accessibleParking: boolean
+    parkingOnSite: boolean
+    inUnitWasherDryer: boolean
+    laundryInBuilding: boolean
+    barrierFreeEntrance: boolean
+    rollInShower: boolean
+    grabBars: boolean
+    heatingInUnit: boolean
+    acInUnit: boolean
+
+    constructor(elevator: boolean,
+      wheelchairRamp: boolean,
+      serviceAnimalsAllowed: boolean,
+      accessibleParking: boolean,
+      parkingOnSite: boolean,
+      inUnitWasherDryer: boolean,
+      laundryInBuilding: boolean,
+      barrierFreeEntrance: boolean,
+      rollInShower: boolean,
+      grabBars: boolean,
+      heatingInUnit: boolean,
+      acInUnit: boolean) {
+      this.elevator = elevator
+      this.wheelchairRamp = wheelchairRamp
+      this.serviceAnimalsAllowed = serviceAnimalsAllowed
+      this.accessibleParking = accessibleParking
+      this.parkingOnSite = parkingOnSite
+      this.inUnitWasherDryer = inUnitWasherDryer
+      this.laundryInBuilding = laundryInBuilding
+      this.barrierFreeEntrance = barrierFreeEntrance
+      this.rollInShower = rollInShower
+      this.grabBars = grabBars
+      this.heatingInUnit = heatingInUnit
+      this.acInUnit = acInUnit
+    }
+  
+    setElevator(elevator: boolean) {
+      this.elevator = elevator
+    }
+  
+    
+  }
   
   const EligibilityAccessibility = () => {
+    const AccFilter = new AccessibilityFeatures(false, false, false, false, false, false, false, false, false, false, false, false)
     const router = useRouter()
     const CURRENT_PAGE = 4
     const { eligibilityRequirements } = useContext(EligibilityContext)
@@ -35,9 +83,26 @@ import {
   
     const onClick = async (data) => {
       eligibilityRequirements.setAccessibility()
+      accessibilityValues[0].
       await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
     }
+
+    /*var AccessibilityFeature: {[key: string]: boolean} = {
+      "elevator": false,
+      "wheelchairRamp": false,
+      "serviceAnimalsAllowed": false,
+      "accessibleParking": false,
+      "parkingOnSite": false,
+      "inUnitWasherDryer": false,
+      "laundryInBuilding": false,
+      "barrierFreeEntrance": false,
+      "rollInShower": false,
+      "grabBars": false,
+      "heatingInUnit": false,
+      "acInUnit": false,
+    } */   
   
+    
     const accessibilityValues = [
         {
             id: "elevator",
@@ -46,69 +111,69 @@ import {
             defaultChecked: false,
           },
           {
-            id: "wheelchair_ramp",
-            value: AccessibilityFeatures.wheelchair_ramp,
-            label: t("eligibility.accessibility.wheelchair_ramp"),
+            id: "wheelchairRamp",
+            value: AccessibilityFeatures.wheelchairRamp,
+            label: t("eligibility.accessibility.wheelchairRamp"),
             defaultChecked: false,
           },
           {
-            id: "service_animals_allowed",
-            value: AccessibilityFeatures.service_animals_allowed,
-            label: t("eligibility.accessibility.service_animals_allowed"),
+            id: "serviceAnimalsAllowed",
+            value: AccessibilityFeatures.serviceAnimalsAllowed,
+            label: t("eligibility.accessibility.serviceAnimalsAllowed"),
             defaultChecked: false,
           },
           {
-            id: "accessible_parking",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.accessible_parking"),
+            id: "accessibleParking",
+            value: AccessibilityFeatures.accessibleParking,
+            label: t("eligibility.accessibility.accessibleParking"),
             defaultChecked: false,
           },
           {
-            id: "parking_on_site",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.parking_on_site"),
+            id: "parkingOnSite",
+            value: AccessibilityFeatures.parkingOnSite,
+            label: t("eligibility.parkingOnSite"),
             defaultChecked: false,
           },
           {
-            id: "in_unit_washer_dryer",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.in_unit_washer_dryer"),
+            id: "inUnitWasherDryer",
+            value: AccessibilityFeatures.inUnitWasherDryer,
+            label: t("eligibility.accessibility.inUnitWasherDryer"),
             defaultChecked: false,
           },
           {
-            id: "laundry_in_building",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.laundry_in_building"),
+            id: "laundryInBuilding",
+            value: AccessibilityFeatures.laundryInBuilding,
+            label: t("eligibility.accessibility.laundryInBuilding"),
             defaultChecked: false,
           },
           {
-            id: "barrier_free_entrance",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.barrier_free_entrance"),
+            id: "barrierFreeEntrance",
+            value: AccessibilityFeatures.barrierFreeEntrance,
+            label: t("eligibility.accessibility.barrierFreeEntrance"),
             defaultChecked: false,
           },
           {
-            id: "roll_in_shower",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.roll_in_shower"),
+            id: "rollInShower",
+            value: AccessibilityFeatures.rollInShower,
+            label: t("eligibility.accessibility.rollInShower"),
             defaultChecked: false,
           },
           {
-            id: "grab_bars",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.grab_bars"),
+            id: "grabBars",
+            value: AccessibilityFeatures.grabBars,
+            label: t("eligibility.accessibility.grabBars"),
             defaultChecked: false,
           },
           {
-            id: "heating_in_unit",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.heating_in_unit"),
+            id: "heatingInUnit",
+            value: AccessibilityFeatures.heatingInUnit,
+            label: t("eligibility.accessibility.heatingInUnit"),
             defaultChecked: false,
           },
           {
-            id: "ac_in_unit",
-            value: AccessibilityFeatures.accessible_parking,
-            label: t("eligibility.accessibility.ac_in_unit"),
+            id: "acInUnit",
+            value: AccessibilityFeatures.acInUnit,
+            label: t("eligibility.accessibility.acInUnit"),
             defaultChecked: false,
           },
     ]

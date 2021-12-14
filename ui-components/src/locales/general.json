@@ -1456,17 +1456,17 @@
       "amiOption150": "150% of AMI or more"
     },
       "elevator": "Elevator",
-      "wheelchair_ramp": "Wheelchair Ramp",
-      "service_animals_allowed": "Service Animals Allowed",
-      "accessible_parking": "Accessible Parking",
-      "parking_on_site": "Parking On Site",
-      "in_unit_washer_dryer": "In Unit Washer Dryer",
-      "laundry_in_building": "Laundry in Building",
-      "barrier_free_entrance": "Barrier Free Entrance",
-      "roll_in_shower": "Roll in Shower",
-      "grab_bars": "Grab Bars",
-      "heating_in_unit": "Heating in Unit",
-      "ac_in_unit": "AC in Unit"
+      "wheelchairRamp": "Wheelchair Ramp",
+      "serviceAnimalsAllowed": "Service Animals Allowed",
+      "accessibleParking": "Accessible Parking",
+      "parkingOnSite": "Parking On Site",
+      "inUnitWasherDryer": "In Unit Washer Dryer",
+      "laundryInBuilding": "Laundry in Building",
+      "barrierFreeEntrance": "Barrier Free Entrance",
+      "rollInShower": "Roll in Shower",
+      "grabBars": "Grab Bars",
+      "heatingInUnit": "Heating in Unit",
+      "acInUnit": "AC in Unit"
   },
   "eligibility": {
     "progress": {
