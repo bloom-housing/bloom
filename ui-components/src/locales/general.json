@@ -837,7 +837,9 @@
       "enterValidEmailAndPassword": "Please enter a valid email and password.",
       "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
       "partnersSignIn": "Partners Sign In",
-      "dontHaveAccount": "Don't have an account"
+      "dontHaveAccount": "Don't have an account",
+      "enterLoginPassword": "Please enter your login password",
+      "enterLoginEmail": "Please enter your login email"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",

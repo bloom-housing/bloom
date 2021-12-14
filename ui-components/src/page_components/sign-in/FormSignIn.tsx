@@ -81,10 +81,10 @@ const FormSignIn = ({
           <Field
             caps={true}
             name="email"
-            label="Email"
+            label={t("t.email")}
             validation={{ required: true }}
             error={errors.email}
-            errorMessage="Please enter your login email"
+            errorMessage={t("authentication.signIn.enterLoginEmail")}
             register={register}
             dataTestId="sign-in-email-field"
           />
@@ -98,10 +98,10 @@ const FormSignIn = ({
           <Field
             caps={true}
             name="password"
-            label="Password"
+            label={t("authentication.createAccount.password")}
             validation={{ required: true }}
             error={errors.password}
-            errorMessage="Please enter your login password"
+            errorMessage={t("authentication.signIn.enterLoginPassword")}
             register={register}
             type="password"
             dataTestId="sign-in-password-field"
@@ -116,7 +116,7 @@ const FormSignIn = ({
       </div>
       {showRegisterBtn && (
         <div className="form-card__group text-center">
-          <h2 className="mb-6">{t("authentication.signIn.dontHaveAccount")}</h2>
+          <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
 
           <LinkButton href="/create-account">{t("account.createAccount")}</LinkButton>
         </div>
