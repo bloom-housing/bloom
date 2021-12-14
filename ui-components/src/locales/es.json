@@ -1313,7 +1313,7 @@
         },
         "age": {
             "prompt": "¿Cuántos años tienes?",
-            "description": "Algunas propiedades solo aceptan personas mayores de 62 años.",
+            "description": "Puede elegir varios rangos de edad. Algunos alquileres tienen requisitos de edad mínima.",
             "lessThan55": "< 55",
             "55to61": "55 - 61",
             "62plus": "62+"

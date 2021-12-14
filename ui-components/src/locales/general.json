@@ -1489,7 +1489,7 @@
     },
     "age": {
       "prompt": "How old are you?",
-      "description": "Some properties only accept individuals over 62 years of age.",
+      "description": "You can choose multiple age ranges. Some rentals have minimum age requirements.",
       "lessThan55": "< 55",
       "55to61": "55 - 61",
       "62plus": "62+"
