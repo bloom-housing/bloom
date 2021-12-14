@@ -22,13 +22,12 @@ export default function Home({ latestListings }) {
   const heroTitle = <>{t("welcome.title")}</>
 
   const heroInset: React.ReactNode = (
-    <div className="hero__inset">
-      <div className="hero__text">{t("welcome.heroText")}</div>
+    <div>
       <a href="/listings" className="hero__button__first hero__button">
         {t("welcome.seeRentalListings")}
       </a>
       <a href="/eligibility/welcome" className="hero__button__second hero__button">
-        {t("welcome.checkEligibility")}
+        {t("welcome.findRentalsForMe")}
       </a>
     </div>
   )
