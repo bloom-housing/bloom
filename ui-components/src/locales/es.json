@@ -1324,7 +1324,13 @@
         },
         "income": {
             "prompt": "¿Cuál es el ingreso anual total estimado para todas las personas que vivirán con usted, incluido usted mismo?",
-            "description": "Incluya los ingresos de todas las personas que vivirán en su hogar, incluido usted mismo. Los ingresos incluyen seguridad social, cuentas de jubilación y salarios.",
+            "description": "Incluya los ingresos de los últimos 12 meses para usted y todos los que vivirán con usted. Cuando solicite un alquiler, las propiedades también considerarán otros factores para determinar si su ingreso anual estimado cumple con los requisitos de elegibilidad. Ejemplos de ingresos:",
+            "examples": {
+                "wages": "Salarios y propinas",
+                "socialSecurity": "Seguridad Social",
+                "retirement": "Ingreso de jubilación",
+                "unemployment": "Compensacion por desempleo"
+            },
             "label": "Rango de ingresos",
             "ranges": {
                 "below10k": "Por debajo de $ 10,000",

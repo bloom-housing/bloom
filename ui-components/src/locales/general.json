@@ -1500,7 +1500,13 @@
     },
     "income": {
       "prompt": "What is the estimated total annual income for everyone who will live with you, including yourself?",
-      "description": "Include income for everyone who will be living in your household including yourself. Income includes social security, retirement accounts and wages.",
+      "description": "Include income from the last 12 months for yourself and everyone who will live with you. When you apply for a rental, properties will also consider other factors to determine if your estimated annual income meets eligibility requirements.  Examples of income:",
+      "examples": {
+        "wages": "Wages and tips",
+        "socialSecurity": "Social Security",
+        "retirement": "Retirement income",
+        "unemployment": "Unemployment compensation"
+      },
       "label": "Income range",
       "ranges": {
         "below10k": "Below $10,000",

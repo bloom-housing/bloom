@@ -2,11 +2,9 @@
 Income
 Prompts the user for their annual income.
 */
-import FormsLayout from "../../layouts/forms"
 import React, { useContext } from "react"
 import { FormCard } from "@bloom-housing/ui-components/src/blocks/FormCard"
 import { t } from "@bloom-housing/ui-components/src/helpers/translator"
-import { ProgressNav } from "@bloom-housing/ui-components/src/navigation/ProgressNav"
 import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { Form } from "@bloom-housing/ui-components/src/forms/Form"
 import { Button } from "@bloom-housing/ui-components/src/actions/Button"
@@ -16,8 +14,8 @@ import { EligibilityContext } from "../../lib/EligibilityContext"
 import { eligibilityRoute } from "../../lib/helpers"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { useRouter } from "next/router"
-import { getFilterUrlLink } from "../../lib/filterUrlLink"
 import EligibilityLayout from "../../layouts/eligibility"
+import style from "./EligibilityIncome.module.scss"
 
 const EligibilityIncome = () => {
   const router = useRouter()
@@ -60,6 +58,12 @@ const EligibilityIncome = () => {
             <p className="field-note mb-4" id="income-description">
               {t("eligibility.income.description")}
             </p>
+            <ul className={`${style.wage_types} field-note`}>
+              <li>{t("eligibility.income.examples.wages")}</li>
+              <li>{t("eligibility.income.examples.socialSecurity")}</li>
+              <li>{t("eligibility.income.examples.retirement")}</li>
+              <li>{t("eligibility.income.examples.unemployment")}</li>
+            </ul>
             <Select
               id="income"
               name="income"
