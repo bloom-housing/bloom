@@ -34,10 +34,10 @@ export class CronService {
 
     // For each listing, check whether the listed leasing agents are in the list of partner users.
     // If the leasing agent is a partner and has their email notifications turned on, send the reminder email.
-    for (var listing of allListings.items) {
-      for (var leasingAgent of listing.leasingAgents) {
+    for (let listing of allListings.items) {
+      for (let leasingAgent of listing.leasingAgents) {
         if (users.items.includes(leasingAgent) && leasingAgent.preferences.sendEmailNotifications) {
-          this.emailService.updateListingReminder(listing, leasingAgent)
+          await this.emailService.updateListingReminder(listing, leasingAgent)
         }
       }
     }
