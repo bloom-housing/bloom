@@ -3,7 +3,6 @@ import { EmailService } from "../shared/email/email.service"
 import { CronService } from "./cron.service"
 
 @Module({
-  imports: [EmailService],
-  providers: [CronService],
+  providers: [CronService, EmailService],
 })
 export class CronModule {}
