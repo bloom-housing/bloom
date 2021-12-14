@@ -9,6 +9,7 @@ import {
   AppearanceStyleType,
   FrontendListingFilterStateKeys,
   ListingFilterState,
+  ListingFeatures,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 
@@ -149,6 +150,131 @@ const FilterForm = (props: FilterFormProps) => {
             register={register}
             inputProps={{
               defaultChecked: Boolean(props.filterState?.fourPlusBdrm),
+            }}
+          />
+        </div>
+        <label className="field-label">{t("eligibility.accessibility.title")}</label>
+        <div className="flex flex-row bedroom-selector">
+          <Field
+            id="elevator"
+            name={FrontendListingFilterStateKeys.studio}
+            type="checkbox"
+            label= {t("eligibility.accessibility.elevator")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="wheelchair_ramp"
+            name={FrontendListingFilterStateKeys.oneBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.wheelchair_ramp")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="service_animals_allowed"
+            name={FrontendListingFilterStateKeys.twoBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.service_animals_allowed")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="accessible_parking"
+            name={FrontendListingFilterStateKeys.threeBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.accessible_parking")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="parking_on_site"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.parking_on_site")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="in_unit_washer_dryer"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.in_unit_washer_dryer")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          </div>
+          <div className="flex flex-row bedroom-selector">
+          <Field
+            id="laundry_in_building"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.laundry_in_building")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="barrier_free_entrance"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.barrier_free_entrance")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="roll_in_shower"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.roll_in_shower")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="grab_bars"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.grab_bars")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="heating_in_unit"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.heating_in_unit")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
+            }}
+          />
+          <Field
+            id="ac_in_unit"
+            name={FrontendListingFilterStateKeys.fourPlusBdrm}
+            type="checkbox"
+            label={t("eligibility.accessibility.ac_in_unit")}
+            register={register}
+            inputProps={{
+              defaultChecked: false,
             }}
           />
         </div>

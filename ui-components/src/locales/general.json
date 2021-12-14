@@ -1523,6 +1523,7 @@
       }
     },
     "accessibility": {
+      "title": "Accessibility Features",
       "prompt": "Do you require additional accessibility features?",
       "description": "Some properties have accessibility features that others may not have.",
       "elevator": "Elevator",

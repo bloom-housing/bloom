@@ -63,6 +63,54 @@ import {
             label: t("eligibility.accessibility.accessible_parking"),
             defaultChecked: false,
           },
+          {
+            id: "parking_on_site",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.parking_on_site"),
+            defaultChecked: false,
+          },
+          {
+            id: "in_unit_washer_dryer",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.in_unit_washer_dryer"),
+            defaultChecked: false,
+          },
+          {
+            id: "laundry_in_building",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.laundry_in_building"),
+            defaultChecked: false,
+          },
+          {
+            id: "barrier_free_entrance",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.barrier_free_entrance"),
+            defaultChecked: false,
+          },
+          {
+            id: "roll_in_shower",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.roll_in_shower"),
+            defaultChecked: false,
+          },
+          {
+            id: "grab_bars",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.grab_bars"),
+            defaultChecked: false,
+          },
+          {
+            id: "heating_in_unit",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.heating_in_unit"),
+            defaultChecked: false,
+          },
+          {
+            id: "ac_in_unit",
+            value: AccessibilityFeatures.accessible_parking,
+            label: t("eligibility.accessibility.ac_in_unit"),
+            defaultChecked: false,
+          },
     ]
   
     if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
