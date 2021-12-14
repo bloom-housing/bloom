@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.37...@bloom-housing/backend-core@3.0.1-alpha.38) (2021-12-14)
+
+
+### Features
+
+* **backend:** add partnerTerms to jurisdiction entity ([#2301](https://github.com/bloom-housing/bloom/issues/2301)) ([7ecf3ef](https://github.com/bloom-housing/bloom/commit/7ecf3ef24f261bf6b42fc38cf0080251a3c60e89))
+
+
+
+
+
 ## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.36...@bloom-housing/backend-core@3.0.1-alpha.37) (2021-12-13)
 
 
