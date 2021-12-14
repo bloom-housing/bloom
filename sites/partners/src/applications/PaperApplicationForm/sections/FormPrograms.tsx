@@ -42,14 +42,6 @@ const FormPrograms = ({ county, programs }: FormProgramsProps) => {
                           getProgramOptionName(option.key, listingProgram?.program.formMetadata.key)
                         ),
                         value: option.key,
-                        description: option.description
-                          ? t(
-                              getProgramOptionDescription(
-                                option.key,
-                                listingProgram?.program.formMetadata.key
-                              )
-                            )
-                          : null,
                       }
                     })}
                   />

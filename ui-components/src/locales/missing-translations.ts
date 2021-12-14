@@ -3,6 +3,7 @@ const englishTranslations = require("./general.json")
 const spanishTranslations = require("./es.json")
 const chineseTranslations = require("./zh.json")
 const vietnameseTranslations = require("./vi.json")
+const tagalogTranslations = require("./tl.json")
 
 function main() {
   type TranslationsType = {
@@ -13,6 +14,7 @@ function main() {
     { translationKeys: spanishTranslations, language: "es" },
     { translationKeys: chineseTranslations, language: "zh" },
     { translationKeys: vietnameseTranslations, language: "vi" },
+    { translationKeys: tagalogTranslations, language: "tl"}
   ]
 
   const addEntry = (

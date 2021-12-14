@@ -5,6 +5,9 @@ import { getBirthday } from "../../shared/utils/get-birthday"
 import { formatBoolean } from "../../shared/utils/format-boolean"
 import { capitalizeFirstLetter } from "../../shared/utils/capitalize-first-letter"
 import { capAndSplit } from "../../shared/utils/cap-and-split"
+import { ApplicationProgram } from "../entities/application-program.entity"
+import { ApplicationPreference } from "../entities/application-preferences.entity"
+import { AddressCreateDto } from "../../shared/dto/address.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationCsvExporterService {
@@ -73,12 +76,60 @@ export class ApplicationCsvExporterService {
     return typeMap[rootKey] ?? rootKey
   }
 
+  buildProgram(items: ApplicationProgram[], programKeys: KeyNumber) {
+    return this.buildPreference(items, programKeys)
+  }
+
+  buildPreference(
+    items: ApplicationPreference[] | ApplicationProgram[],
+    preferenceKeys: KeyNumber
+  ) {
+    if (!items) {
+      return {}
+    }
+
+    return items.reduce((obj, preference) => {
+      const root = capAndSplit(preference.key)
+      preference.options.forEach((option) => {
+        // TODO: remove temporary patch
+        if (option.key === "residencyNoColiseum") {
+          option.key = "residency"
+        }
+        const key = `${root}: ${capAndSplit(option.key)}`
+        preferenceKeys[key] = 1
+        if (option.checked) {
+          obj[key] = "claimed"
+        }
+        if (option.extraData?.length) {
+          const extraKey = `${key} - ${option.extraData.map((obj) => obj.key).join(" and ")}`
+          let extraString = ""
+          option.extraData.forEach((extra) => {
+            if (extra.type === "text") {
+              extraString += `${capitalizeFirstLetter(extra.key)}: ${extra.value as string}, `
+            } else if (extra.type === "address") {
+              extraString += `Street: ${(extra.value as AddressCreateDto).street}, Street 2: ${
+                (extra.value as AddressCreateDto).street2
+              }, City: ${(extra.value as AddressCreateDto).city}, State: ${
+                (extra.value as AddressCreateDto).state
+              }, Zip Code: ${(extra.value as AddressCreateDto).zipCode}`
+            }
+          })
+          preferenceKeys[extraKey] = 1
+          obj[extraKey] = extraString
+        }
+      })
+      return obj
+    }, {})
+  }
+
   exportFromObject(applications: { [key: string]: any }, includeDemographics?: boolean): string {
     const extraHeaders: KeyNumber = {
       "Household Members": 1,
       Preference: 1,
+      Program: 1,
     }
     const preferenceKeys: KeyNumber = {}
+    const programKeys: KeyNumber = {}
     const applicationsObj = applications.reduce((obj, app) => {
       let demographics = {}
 
@@ -155,34 +206,8 @@ export class ApplicationCsvExporterService {
           "Requested Unit Types": {
             [app.preferredUnit_id]: this.unitTypeToReadable(app.preferredUnit_name),
           },
-          Preference: app.application_preferences.reduce((obj, preference) => {
-            const root = capAndSplit(preference.key)
-            preference.options.forEach((option) => {
-              // TODO: remove temporary patch
-              if (option.key === "residencyNoColiseum") {
-                option.key = "residency"
-              }
-              const key = `${root}: ${capAndSplit(option.key)}`
-              preferenceKeys[key] = 1
-              if (option.checked) {
-                obj[key] = "claimed"
-              }
-              if (option.extraData?.length) {
-                const extraKey = `${key} - ${option.extraData.map((obj) => obj.key).join(" and ")}`
-                let extraString = ""
-                option.extraData.forEach((extra) => {
-                  if (extra.type === "text") {
-                    extraString += `${capitalizeFirstLetter(extra.key)}: ${extra.value}, `
-                  } else if (extra.type === "address") {
-                    extraString += `Street: ${extra.value.street}, Street 2: ${extra.value.street2}, City: ${extra.value.city}, State: ${extra.value.state}, Zip Code: ${extra.value.zipCode}`
-                  }
-                })
-                preferenceKeys[extraKey] = 1
-                obj[extraKey] = extraString
-              }
-            })
-            return obj
-          }, {}),
+          Preference: this.buildPreference(app.application_preferences, preferenceKeys),
+          Program: this.buildProgram(app.application_programs, programKeys),
           "Household Size": app.application_household_size,
           "Household Members": {
             [app.householdMembers_id]: this.mapHouseholdMembers(app),
@@ -226,6 +251,10 @@ export class ApplicationCsvExporterService {
         Preference: {
           nested: false,
           keys: Object.keys(preferenceKeys),
+        },
+        Program: {
+          nested: false,
+          keys: Object.keys(programKeys),
         },
       }
       return groups[group]

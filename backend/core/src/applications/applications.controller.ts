@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
@@ -23,6 +24,7 @@ import { applicationPreferenceApiExtraModels } from "./types/application-prefere
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { PaginatedApplicationListQueryParams } from "./dto/paginated-application-list-query-params"
 import { ApplicationsCsvListQueryParams } from "./dto/applications-csv-list-query-params"
 import { ApplicationsApiExtraModel } from "./types/applications-api-extra-model"
@@ -35,6 +37,7 @@ import { ApplicationUpdateDto } from "./dto/application-update.dto"
 @ApiBearerAuth()
 @ResourceType("application")
 @UseGuards(OptionalAuthGuard)
+@UseInterceptors(ActivityLogInterceptor)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,

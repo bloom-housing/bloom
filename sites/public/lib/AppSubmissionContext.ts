@@ -49,13 +49,13 @@ export const retrieveApplicationConfig = (listing: Listing) => {
         name: "adaHouseholdMembers",
       },
       {
-        name: "programs",
-      },
-      {
         name: "householdChanges",
       },
       {
         name: "householdStudent",
+      },
+      {
+        name: "programs",
       },
       {
         name: "vouchersSubsidies",
