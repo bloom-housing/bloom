@@ -266,6 +266,29 @@ li.progress-nav__item {
   width: 20%;
 }
 
+.progress-nav__item {
+  &.is-active:before {
+    @apply bg-primary-dark;
+  }
+  &.is-disabled:before {
+    @apply bg-white border-2 border-primary;
+  }
+  &:before {
+    @apply bg-primary border-0;
+  }
+  &:after {
+    @apply bg-primary;
+    height: 2px;
+    margin-top: -1px; // so the connecting line is vertically centered between the pips
+  }
+  &.is-active > a {
+    @apply text-primary-dark;
+  }
+  a {
+    @apply text-primary;
+  }
+}
+
 // Body text should have normal font weight
 .field-note {
   @apply font-normal;
