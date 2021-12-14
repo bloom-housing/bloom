@@ -5,10 +5,10 @@ Prompts the user for their annual income.
 import React, { useContext } from "react"
 import { FormCard } from "@bloom-housing/ui-components/src/blocks/FormCard"
 import { t } from "@bloom-housing/ui-components/src/helpers/translator"
-import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
+import { ELIGIBILITY_DISCLAIMER_ROUTE } from "../../lib/constants"
 import { Form } from "@bloom-housing/ui-components/src/forms/Form"
 import { Button } from "@bloom-housing/ui-components/src/actions/Button"
-import { AppearanceStyleType, Select } from "@bloom-housing/ui-components"
+import { AppearanceStyleType, FieldGroup } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { EligibilityContext } from "../../lib/EligibilityContext"
 import { eligibilityRoute } from "../../lib/helpers"
@@ -64,16 +64,18 @@ const EligibilityIncome = () => {
               <li>{t("eligibility.income.examples.retirement")}</li>
               <li>{t("eligibility.income.examples.unemployment")}</li>
             </ul>
-            <Select
-              id="income"
+            <FieldGroup
               name="income"
-              label={t("eligibility.income.label")}
-              describedBy="income-description"
-              validation={{ required: true }}
+              type="radio"
               register={register}
-              controlClassName="control"
-              options={incomeRanges}
-              keyPrefix="eligibility.income.ranges"
+              fields={incomeRanges.map((key) => {
+                return {
+                  label: t(`eligibility.income.ranges.${key}`),
+                  value: key,
+                  id: key,
+                  defaultChecked: eligibilityRequirements?.income === key,
+                }
+              })}
             />
           </div>
           <div className="form-card__pager">

@@ -2,7 +2,6 @@ import { render, fireEvent, screen } from "@testing-library/react"
 import EligibilityIncome from "../../pages/eligibility/income"
 import React from "react"
 import { act } from "react-dom/test-utils"
-import userEvent from "@testing-library/user-event"
 
 const mockRouter = {
   push: jest.fn(),
@@ -30,7 +29,7 @@ describe("<EligibilityIncome>", () => {
   it("Clicks the Finish button", async () => {
     await act(async () => {
       render(<EligibilityIncome />)
-      userEvent.selectOptions(screen.getByRole("combobox"), "10kTo20k")
+      fireEvent.click(screen.getByRole("radio", { name: "$10,000 - $19,999" }))
       fireEvent.click(screen.getByRole("button", { name: "Finish" }))
     })
 
