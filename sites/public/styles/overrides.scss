@@ -527,7 +527,7 @@ a.button.is-primary:hover {
   border-radius: 60px;
   text-transform: initial;
   letter-spacing: initial;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 
   @screen md {
     @apply text-base;
@@ -536,7 +536,7 @@ a.button.is-primary:hover {
   &:hover {
     background-color: $tailwind-primary;
     border-color: $tailwind-primary;
-    
+
     .ui-icon svg {
       fill: white;
     }
@@ -546,7 +546,7 @@ a.button.is-primary:hover {
     &.button__icon {
       margin: 0 0.5rem 0 0;
     }
-    
+
     &.ui-base svg {
       width: 1rem;
       height: 1rem;
@@ -556,7 +556,7 @@ a.button.is-primary:hover {
         height: 1.5rem;
       }
     }
-    
+
     svg {
       fill: $tailwind-primary;
     }
