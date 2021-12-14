@@ -9,6 +9,7 @@ import {
   Query,
   Request,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
@@ -41,6 +42,7 @@ import { authzActions } from "../enum/authz-actions.enum"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
+import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 
 @Controller("user")
 @ApiBearerAuth()
@@ -98,6 +100,7 @@ export class UserController {
 
   @Put("update-password")
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
+  @UseInterceptors(ActivityLogInterceptor)
   async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
     const accessToken = await this.userService.updatePassword(dto)
     return mapTo(LoginResponseDto, { accessToken })
@@ -106,6 +109,7 @@ export class UserController {
   @Put(":id")
   @UseGuards(DefaultAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Update user", operationId: "update" })
+  @UseInterceptors(ActivityLogInterceptor)
   async update(@Request() req: ExpressRequest, @Body() dto: UserUpdateDto): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.update(dto, new AuthContext(req.user as User)))
   }
@@ -128,6 +132,7 @@ export class UserController {
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Invite user", operationId: "invite" })
   @ResourceAction(authzActions.invite)
+  @UseInterceptors(ActivityLogInterceptor)
   async invite(@Request() req: ExpressRequest, @Body() dto: UserInviteDto): Promise<UserBasicDto> {
     return mapTo(
       UserBasicDto,
@@ -135,16 +140,17 @@ export class UserController {
     )
   }
 
-  @Get(`:userId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
-  async retrieve(@Param("userId") userId: string): Promise<UserDto> {
+  async retrieve(@Param("id") userId: string): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
   }
 
-  @Delete(`:userId`)
+  @Delete(`:id`)
   @UseGuards(OptionalAuthGuard, AuthzGuard)
   @ApiOperation({ summary: "Delete user by id", operationId: "delete" })
-  async delete(@Param("userId") userId: string): Promise<void> {
+  @UseInterceptors(ActivityLogInterceptor)
+  async delete(@Param("id") userId: string): Promise<void> {
     return await this.userService.delete(userId)
   }
 }

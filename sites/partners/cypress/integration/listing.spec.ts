@@ -96,7 +96,13 @@ describe("Listing Management Tests", () => {
 
       cy.get("#applicationsPickedUpNo").check()
       cy.get("#applicationsDroppedOffNo").check()
-      cy.get("#postmarksConsideredNo").check()
+      cy.get("#postmarksConsideredYes").check()
+      cy.getByTestId("postmark-date-field-month").type("12")
+      cy.getByTestId("postmark-date-field-day").type("17")
+      cy.getByTestId("postmark-date-field-year").type("2022")
+      cy.getByTestId("postmark-time-field-hours").type("5")
+      cy.getByTestId("postmark-time-field-minutes").type("45")
+      cy.getByTestId("postmark-time-field-period").select("PM")
       cy.getByID("additionalApplicationSubmissionNotes").type(
         listing["additionalApplicationSubmissionNotes"]
       )
@@ -193,7 +199,13 @@ describe("Listing Management Tests", () => {
       cy.get("#applicationPickupQuestion").contains("No")
       cy.get("#applicationMailingAddress").contains("No")
       cy.get("#applicationDropOffQuestion").contains("No")
-      cy.get("#postmarksConsideredQuestion").contains("No")
+      cy.get("#postmarksConsideredQuestion").contains("Yes")
+      cy.getByTestId("postmark-date").contains("12")
+      cy.getByTestId("postmark-date").contains("17")
+      cy.getByTestId("postmark-date").contains("2022")
+      cy.getByTestId("postmark-time").contains("5")
+      cy.getByTestId("postmark-time").contains("45")
+      cy.getByTestId("postmark-time").contains("PM")
       cy.get("#additionalApplicationSubmissionNotes").contains(
         listing["additionalApplicationSubmissionNotes"]
       )

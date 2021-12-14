@@ -465,7 +465,7 @@ describe("Applications", () => {
       .expect(201)
     await supertest(app.getHttpServer())
       .put(`/applications/${createRes.body.id}`)
-      .send(body)
+      .send(createRes.body)
       .set(...setAuthorization(user1AccessToken))
       .expect(403)
   })
