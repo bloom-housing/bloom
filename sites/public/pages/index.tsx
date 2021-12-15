@@ -51,14 +51,14 @@ export default function Home({ latestListings }) {
     return t("welcome.lastUpdated", { date: latestDate })
   }
 
-  // TODO(#674): Fill out neighborhood buttons with real data
-  const NeighborhoodButton = (props: { label: string; image?: string }) => (
+  // TODO(#674): Fill out region buttons with real data
+  const RegionButton = (props: { label: string; image?: string }) => (
     <a
-      className={styles.neighborhood}
+      className={styles.region}
       href="/listings"
       style={{ backgroundImage: `url(${props.image})` }}
     >
-      <p className={styles.neighborhood__text}>{props.label}</p>
+      <p className={styles.region__text}>{props.label}</p>
     </a>
   )
 
@@ -97,31 +97,31 @@ export default function Home({ latestListings }) {
         </HorizontalScrollSection>
       )}
       <HorizontalScrollSection
-        title={t("welcome.neighborhoods")}
-        scrollAmount={527}
+        title={t("welcome.cityRegions")}
+        scrollAmount={311}
         icon="map"
-        className={styles.neighborhoods}
+        className={styles.regions}
       >
         {/* TODO(#674): Get official hosted images */}
-        <NeighborhoodButton
-          label="Midtown"
-          image="https://upload.wikimedia.org/wikipedia/commons/0/0f/Milner_Arms_Apartments_-_Detroit_Michigan.jpg"
+        <RegionButton
+          label="Downtown"
+          image="https://pbs.twimg.com/media/DSzZwQKVAAASkw_?format=jpg&name=large"
         />
-        <NeighborhoodButton
-          label="Elmwood Park"
-          image="https://i2.wp.com/planetdetroit.org/wp-content/uploads/2021/09/Elmwood-3-scaled.jpg?resize=1024%2C683&ssl=1"
-        />
-        <NeighborhoodButton
-          label="Islandview"
+        <RegionButton
+          label="Eastside"
           image="https://d12kp1agyyb87s.cloudfront.net/wp-content/uploads/2019/10/image001.jpg"
         />
-        <NeighborhoodButton
-          label="Brightmoor"
-          image="https://www.neighborsbuildingbrightmoor.org/uploads/8/1/9/8/81981122/5585414_orig.jpg"
+        <RegionButton
+          label="Westside"
+          image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Atkinson_avenue_historic_district.JPG/1920px-Atkinson_avenue_historic_district.JPG"
         />
-        <NeighborhoodButton
-          label="Fox Creek"
-          image="https://theneighborhoods.org/sites/the-neighborhoods/files/styles/gallery_555x357/public/2018-11/small%20business_0.jpg?itok=KhgAsSdn"
+        <RegionButton
+          label="Southwest"
+          image="https://www.theneighborhoods.org/sites/the-neighborhoods/files/2020-10/Southwest-Mural_1.jpg"
+        />
+        <RegionButton
+          label="Midtown - New Center"
+          image="https://cdn.pixabay.com/photo/2019/03/17/04/00/detroit-4060269_960_720.jpg"
         />
       </HorizontalScrollSection>
       <ConfirmationModal

@@ -2,16 +2,16 @@
   padding: 24px 0 0 0;
 }
 
-.neighborhoods {
+.regions {
   padding: 24px 0;
 }
 
-.neighborhood {
+.region {
   @apply bg-primary;
   background-size: cover;
   border-radius: 50px;
   height: 146px;
-  margin: 0 33px 0 0;
+  margin: 0 33px 8px 0;
   position: relative;
   width: 209px;
 
@@ -20,11 +20,11 @@
     width: 278px;
   }
 }
-.neighborhood:hover {
+.region:hover {
   opacity: 0.9;
 }
 
-.neighborhood__text {
+.region__text {
   @apply text-primary-dark;
   backdrop-filter: blur(5px);
   background: rgba(255, 255, 255, 0.8);

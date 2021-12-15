@@ -1350,7 +1350,7 @@
         "findRentalsForMe": "البحث عن الايجارات بالنسبة لي",
         "latestListings": "أحدث القوائم",
         "lastUpdated": "آخر تحديث %{date}",
-        "neighborhoods": "أحياء",
+        "cityRegions": "مناطق المدينة",
         "subTitle": "انقر فوق الزر أدناه للعثور على سكن مستأجر بناءً على دخلك واحتياجات أسرتك"
     },
     "whatToExpect": {
