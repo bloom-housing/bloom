@@ -903,7 +903,7 @@
             "senior55": "বয়স্ক 55+",
             "senior62": "সিনিয়র 62+",
             "partiallySenior": "আংশিক সিনিয়র",
-            "specialNeeds": "বিশেষ প্রয়োজন"
+            "specialNeeds": "অ্যাক্সেসযোগ্য"
         },
         "reservedFor": "%{Type} এর জন্য সংরক্ষিত",
         "reservedCommunityType": "সংরক্ষিত সম্প্রদায়ের ধরন",

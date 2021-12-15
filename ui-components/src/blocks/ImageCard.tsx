@@ -6,6 +6,7 @@ import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
+import { IconProps } from "../icons/Icon"
 
 export interface StatusBarType {
   status?: ApplicationStatusType
@@ -21,6 +22,7 @@ export interface ImageCardProps {
   href?: string
   description?: string
   tagLabel?: string
+  tagIcon?: IconProps
   statuses?: StatusBarType[]
 }
 
@@ -45,7 +47,9 @@ const ImageCard = (props: ImageCardProps) => {
     <div className="image-card__wrapper">
       {props.tagLabel && (
         <div className="image-card-tag__wrapper">
-          <Tag styleType={AppearanceStyleType.warning}>{props.tagLabel}</Tag>
+          <Tag icon={props.tagIcon} styleType={AppearanceStyleType.warning}>
+            {props.tagLabel}
+          </Tag>
         </div>
       )}
       <figure className="image-card">

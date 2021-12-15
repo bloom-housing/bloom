@@ -903,7 +903,7 @@
             "senior55": "كبار السن 55+",
             "senior62": "كبار السن 62+",
             "partiallySenior": "كبار السن جزئيا",
-            "specialNeeds": "الاحتياجات الخاصة"
+            "specialNeeds": "يمكن الوصول"
         },
         "reservedFor": "محجوز لـ٪ {type}",
         "reservedCommunityType": "نوع المجتمع المحجوز",

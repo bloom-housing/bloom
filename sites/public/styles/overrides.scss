@@ -434,24 +434,6 @@ li.progress-nav__item {
     object-fit: cover;
   }
 
-  .image-card-tag__wrapper {
-    justify-content: flex-end;
-
-    .tag {
-      @apply text-base;
-      background: $tailwind-lush;
-      border-radius: 4px;
-      color: #15242b;
-      font-weight: bold;
-      margin-right: 12px;
-      padding: 8px 16px;
-
-      @screen md {
-        margin-right: 24px;
-      }
-    }
-  }
-
   .image-card__overlay {
     background-image: none;
     border-radius: 24px;
@@ -604,5 +586,32 @@ a.button.is-primary:hover {
 
   .ui-icon svg {
     fill: $tailwind-primary-darker;
+  }
+}
+
+.image-card-tag__wrapper {
+  justify-content: flex-end;
+
+  .tag {
+    @apply text-base;
+    background: $tailwind-lush;
+    border-radius: 4px;
+    color: #15242b;
+    font-weight: bold;
+    margin-inline-end: 12px;
+    padding: 8px 16px;
+
+    @screen md {
+      margin-inline-end: 36px;
+    }
+  }
+
+  .tag__icon {
+    padding-inline-end: 10px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }

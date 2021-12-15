@@ -778,7 +778,7 @@
             "senior55": "Mayores de 55 años",
             "senior62": "Mayores 62+",
             "partiallySenior": "Parcialmente Mayores",
-            "specialNeeds": "Necesidades especiales"
+            "specialNeeds": "Accesible"
         },
         "reservedFor": "Reservado para% {type}",
         "reservedCommunityType": "Tipo de comunidad reservada",
