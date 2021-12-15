@@ -27,6 +27,8 @@ export default () => {
   const currentPageSection = 1
   let useDetails = false
 
+  const mounted = OnClientSide()
+
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
@@ -84,7 +86,7 @@ export default () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
+          mounted={mounted}
         />
       </FormCard>
       <FormCard>
