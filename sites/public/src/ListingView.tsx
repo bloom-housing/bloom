@@ -8,6 +8,7 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -300,7 +301,7 @@ export const ListingView = (props: ListingProps) => {
         applicationsDueDate={moment(listing.applicationDueDate).format(
           `MMM. DD, YYYY [${t("t.at")}] h A`
         )}
-        applicationsOpen={!appOpenInFuture}
+        applicationsOpen={!appOpenInFuture && listing.status !== ListingStatus.closed}
         applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
