@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.63...@bloom-housing/partners@3.0.1-alpha.64) (2021-12-15)
+
+
+### Features
+
+* filter partner users ([63566f2](https://github.com/bloom-housing/bloom/commit/63566f206b154031a143b649b986aaecd5181313))
+
+
+
+
+
+## [3.0.1-alpha.63](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.62...@bloom-housing/partners@3.0.1-alpha.63) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.62](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.61...@bloom-housing/partners@3.0.1-alpha.62) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.60...@bloom-housing/partners@3.0.1-alpha.61) (2021-12-14)
 
 **Note:** Version bump only for package @bloom-housing/partners
