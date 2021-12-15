@@ -1,101 +1,86 @@
 import { OmitType } from "@nestjs/swagger"
+import { Expose, Type } from "class-transformer"
 import { ArrayMaxSize, IsDefined, ValidateNested } from "class-validator"
-import { Application } from "../entities/application.entity"
-import { Expose, plainToClass, Transform, Type } from "class-transformer"
-import { IdDto } from "../../shared/dto/id.dto"
-import { ApplicantDto } from "./applicant.dto"
-import { AddressDto } from "../../shared/dto/address.dto"
-import { AlternateContactDto } from "./alternate-contact.dto"
-import { DemographicsDto } from "./demographics.dto"
-import { HouseholdMemberDto } from "./household-member.dto"
-import { AccessibilityDto } from "./accessibility.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
+import { IdDto } from "../../shared/dto/id.dto"
+import { ApplicantCreateDto } from "./applicant.dto"
+import { AddressCreateDto } from "../../shared/dto/address.dto"
+import { AlternateContactCreateDto } from "./alternate-contact.dto"
+import { AccessibilityCreateDto } from "./accessibility.dto"
+import { DemographicsCreateDto } from "./demographics.dto"
+import { HouseholdMemberCreateDto } from "./household-member.dto"
+import { ApplicationDto } from "./application.dto"
 
-export class ApplicationDto extends OmitType(Application, [
-  "listing",
-  "listingId",
-  "user",
-  "userId",
+export class ApplicationCreateDto extends OmitType(ApplicationDto, [
+  "id",
+  "createdAt",
+  "updatedAt",
+  "deletedAt",
   "applicant",
+  "listing",
+  "user",
   "mailingAddress",
   "alternateAddress",
   "alternateContact",
   "accessibility",
   "demographics",
   "householdMembers",
-  "flagged",
+  "markedAsDuplicate",
   "preferredUnit",
+  "confirmationCode",
 ] as const) {
-  @Expose()
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => ApplicantDto)
-  applicant: ApplicantDto
-
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
-  @Transform(
-    (value, obj) => {
-      return plainToClass(IdDto, { id: obj.listingId })
-    },
-    { toClassOnly: true }
-  )
   listing: IdDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  @Transform(
-    (value, obj) => {
-      return obj.userId ? plainToClass(IdDto, { id: obj.userId }) : undefined
-    },
-    { toClassOnly: true }
-  )
-  user?: IdDto
+  @Type(() => ApplicantCreateDto)
+  applicant: ApplicantCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  mailingAddress: AddressDto
+  @Type(() => AddressCreateDto)
+  mailingAddress: AddressCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  alternateAddress: AddressDto
+  @Type(() => AddressCreateDto)
+  alternateAddress: AddressCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AlternateContactDto)
-  alternateContact: AlternateContactDto
+  @Type(() => AlternateContactCreateDto)
+  alternateContact: AlternateContactCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AccessibilityDto)
-  accessibility: AccessibilityDto
+  @Type(() => AccessibilityCreateDto)
+  accessibility: AccessibilityCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => DemographicsDto)
-  demographics: DemographicsDto
+  @Type(() => DemographicsCreateDto)
+  demographics: DemographicsCreateDto
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMaxSize(32, { groups: [ValidationsGroupsEnum.default] })
-  @Type(() => HouseholdMemberDto)
-  householdMembers: HouseholdMemberDto[]
+  @Type(() => HouseholdMemberCreateDto)
+  householdMembers: HouseholdMemberCreateDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitTypeDto)
-  preferredUnit: UnitTypeDto[]
+  @Type(() => IdDto)
+  preferredUnit: IdDto[]
 }
