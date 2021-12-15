@@ -474,9 +474,14 @@ export const MailThin = (props: IconProps) => {
       fill={props.fill ?? "none"}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="80" height="75" fill="#E5E5E5" />
+      <rect width="80" height="75" fill={props.fill ?? "none"} />
       <g clipPath="url(#clip0)">
-        <rect width="1280" height="1390" transform="translate(-284 -530)" fill="white" />
+        <rect
+          width="1280"
+          height="1390"
+          transform="translate(-284 -530)"
+          fill={props.fill ?? "none"}
+        />
         <path
           d="M61.3749 24.2402L43.2061 39.7424C41.8262 40.8341 39.7563 40.8341 38.3764 39.7424L19.9775 24.2402"
           stroke="black"
