@@ -1486,7 +1486,7 @@
     },
     "welcome": {
       "header": "Welcome",
-      "description": "Welcome to Detroit Home Connect! We know that finding housing can be difficult. We are here to help. To find you a home that best fits your needs, let's answer four simple questions first. Some affordable housing only accepts people of certain ages or certain incomes, so we want to make sure you are applying to properties that work for your household."
+      "description": "Welcome to Detroit Home Connect! To see rentals that you may qualify for, just answer four questions."
     },
     "household": {
       "prompt": "How many people will be living in this property?",
@@ -1550,9 +1550,10 @@
       "acInUnit": "AC in Unit"
     },
     "disclaimer": {
-      "description": "Thank you for checking how you qualify for affordable housing. Because affordable housing can be reserved for certain age groups or income levels, we have filtered our property listings based on your household characteristics. We hope you find housing that meets your needs. It's important to note that a good portion of affordable housing has a waitlist, but calling properties you're interested in is a good way to get on waitlists or learn of immediate openings."
+      "description": "Thank you for answering these questions. When you click or tap \"See results now\", you'll see rentals that might fit your needs based on your answers. Multiple factors can affect eligibility for specific rentals, so if you see a rental you're interested in, contact the Property Agent on the listing. They can help you determine if you're eligible for that rental."
     },
-    "preferNotToSay": "Prefer not to say"
+    "preferNotToSay": "Prefer not to say",
+    "seeResultsNow": "See results now"
   },
   "resources": {
     "body1": "You may need additional assistance in your search for housing. HRD has compiled a list of resources to help you find and maintain your housing.",

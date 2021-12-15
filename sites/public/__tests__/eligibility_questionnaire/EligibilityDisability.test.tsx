@@ -49,14 +49,14 @@ describe("<EligibilityDisability>", () => {
     expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/accessibility")
   })
 
-  it("Clicks the Finish button", async () => {
+  it("Clicks the See results now button", async () => {
     await act(async () => {
       render(<EligibilityDisability />)
-      fireEvent.click(screen.getByRole("button", { name: "Finish" }))
+      fireEvent.click(screen.getByRole("button", { name: "See results now" }))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/disclaimer")
+    expect(mockRouter.push.mock.calls[0][0]).toContain("/listings")
   })
 
   afterEach(() => {

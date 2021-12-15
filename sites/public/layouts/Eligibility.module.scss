@@ -17,4 +17,9 @@
 
 .eligibility_contents {
   max-width: 500px;
+  padding: 0 20px;
+
+  @screen md {
+    padding: 0;
+  }
 }
