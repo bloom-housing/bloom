@@ -1003,7 +1003,7 @@
       "howToApply": "How to Apply",
       "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
       "pickUpAnApplication": "Pick up an application",
-      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
+      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{postmarkReceivedByDate} and received by mail no later than %{applicationDueDate}. Applications received after %{applicationDueDate} via mail will not be accepted even if they are postmarked by %{postmarkReceivedByDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
       "submitAPaperApplication": "Submit a Paper Application"
     },
