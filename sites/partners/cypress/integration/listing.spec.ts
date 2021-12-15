@@ -12,10 +12,10 @@ describe("Listing Management Tests", () => {
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
-      cy.getByID("listing-photo-upload").attachFile(
+      cy.get(`[data-test-id="dropzone-input"]`).attachFile(
         "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
         {
-          subjectType: "input",
+          subjectType: "drag-n-drop",
         }
       )
       cy.get(`[data-test-id="listing-photo-uploaded"]`).contains("Save").click()
