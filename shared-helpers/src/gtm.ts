@@ -7,7 +7,7 @@ declare global {
 export type BaseDataLayerArgs = {
   event: string
   pageTitle: string
-  userId: string
+  status: string
 }
 
 export type ListingList = BaseDataLayerArgs & {
