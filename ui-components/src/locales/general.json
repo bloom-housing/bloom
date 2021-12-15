@@ -127,7 +127,7 @@
       "displacedAddress": "Displaced Address"
     },
     "referralApplication": {
-      "instructions": "The permanent supportive housing units are referred directly through <COUNTY> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "instructions": "The permanent supportive housing units are referred directly through <JURISDICTION> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
       "furtherInformation": "For further information",
       "phoneNumber": "211"
     },
@@ -309,6 +309,7 @@
         "legend": "Preferred unit type",
         "optionsLabel": "Check all that apply:",
         "options": {
+          "SRO": "SRO",
           "studio": "Studio",
           "oneBdrm": "1 Bedroom",
           "twoBdrm": "2 Bedroom",
@@ -842,6 +843,7 @@
       "firstName": "First Name",
       "middleNameOptional": "Middle Name (optional)",
       "middleName": "Middle Name",
+      "noAccount": "Don't have an account?",
       "lastName": "Last Name",
       "yourDateOfBirth": "Your Date of Birth",
       "email": "Email",
@@ -921,7 +923,7 @@
     "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
     "giveFeedback": "Give Feedback",
     "privacyPolicy": "Privacy Policy",
-    "copyright": "Demonstration County © 2020 • All Rights Reserved"
+    "copyright": "Demonstration Jurisdiction © 2021 • All Rights Reserved"
   },
   "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
@@ -933,7 +935,8 @@
     "en": "English",
     "es": "Español",
     "zh": "中文",
-    "vi": "Tiếng Việt"
+    "vi": "Tiếng Việt",
+    "tl": "Tagalog"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
@@ -1096,6 +1099,7 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "pickupAddress": "Pickup Address",
     "postmarkByDate": "Postmark by Date",
+    "postmarkByTime": "Postmark by Time",
     "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
@@ -1199,7 +1203,7 @@
     "selectionCriteria": "Selection Criteria",
     "selectPreferences": "Select Preferences",
     "showClosedListings": "Show Closed Listings",
-    "singleRoomOccupancy": "Single Room Occupancy",
+    "singleRoomOccupancy": "SRO",
     "singleRoomOccupancyDescription": "This property offers single rooms for one person only. Tenants may share bathrooms, and sometimes kitchen facilities.",
     "specialNotes": "Special Notes",
     "streetAddressOrPOBox": "Street Address or PO Box",
@@ -1210,7 +1214,7 @@
       "threeBdrm": "3 BR",
       "fourBdrm": "4 BR",
       "studio": "Studio",
-      "SRO": "Single Room Occupancy"
+      "SRO": "SRO"
     },
     "unitsAreFor": "These units are for %{type}.",
     "unitsHaveAccessibilityFeaturesFor": "These units have accessibility features for people with %{type}.",
@@ -1305,7 +1309,7 @@
         "twoBdrm": "Two Bedroom",
         "threeBdrm": "Three Bedroom",
         "fourBdrm": "Four Bedroom",
-        "SRO": "Single Room Occupancy"
+        "SRO": "SRO"
       }
     },
     "events": {

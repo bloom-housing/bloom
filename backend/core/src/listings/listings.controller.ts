@@ -26,7 +26,6 @@ import { AuthzGuard } from "../auth/guards/authz.guard"
 import { mapTo } from "../shared/mapTo"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
 import { Language } from "../shared/types/language-enum"
-import { ListingLangCacheInterceptor } from "../cache/listing-lang-cache.interceptor"
 import { PaginatedListingDto } from "./dto/paginated-listing.dto"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
@@ -35,6 +34,8 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
+import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -42,6 +43,8 @@ import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-v
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
+@UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
   cacheKeys: string[]
   constructor(
@@ -69,13 +72,13 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Get(`:listingId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,
-    @Param("listingId") listingId: string,
+    @Param("id") listingId: string,
     @Query() queryParams: ListingsRetrieveQueryParams
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
@@ -87,11 +90,11 @@ export class ListingsController {
     )
   }
 
-  @Put(`:listingId`)
+  @Put(`:id`)
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
   async update(
-    @Param("listingId") listingId: string,
+    @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
@@ -99,10 +102,10 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Delete(`:listingId`)
+  @Delete(`:id`)
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async delete(@Param("listingId") listingId: string) {
+  async delete(@Param("id") listingId: string) {
     await this.listingsService.delete(listingId)
     await this.cacheManager.reset()
   }

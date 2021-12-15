@@ -1,14 +1,7 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common"
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
 import { AuthzService } from "../services/authz.service"
-
-const httpMethodsToAction = {
-  PUT: "update",
-  PATCH: "update",
-  DELETE: "delete",
-  POST: "create",
-  GET: "read",
-}
+import { httpMethodsToAction } from "../../shared/http-methods-to-actions"
 
 @Injectable()
 export class AuthzGuard implements CanActivate {

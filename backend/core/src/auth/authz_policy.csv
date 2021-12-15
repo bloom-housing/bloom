@@ -1,5 +1,6 @@
 p, admin, application, true, .*
-p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
+p, user, application, true, submit
+p, user, application, !r.obj || (r.sub == r.obj.userId), read
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*

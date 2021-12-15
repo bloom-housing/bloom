@@ -91,17 +91,17 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   const uniquePercentageChartSet: ChartAndPercentage[] = [
     ...new Set(
       units
+        .filter((unit) => amiChartMap[unit.amiChartId])
         .map((unit) => {
           let amiChart = amiChartMap[unit.amiChartId]
           if (unit.amiChartOverride) {
             amiChart = mergeAmiChartWithOverrides(amiChart, unit.amiChartOverride)
           }
-          return {
+          return JSON.stringify({
             percentage: parseInt(unit.amiPercentage, 10),
             chart: amiChart,
-          }
+          })
         })
-        .map((item) => JSON.stringify(item))
     ),
   ].map((uniqueSetString) => JSON.parse(uniqueSetString))
 
@@ -110,6 +110,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   } as AnyDict
 
   let bmrHeaders = [
+    "listings.unitTypes.SRO",
     "listings.unitTypes.studio",
     "listings.unitTypes.oneBdrm",
     "listings.unitTypes.twoBdrm",
@@ -312,7 +313,7 @@ type UnitMap = {
   [key: string]: Unit[]
 }
 
-const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+const UnitTypeSort = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
 export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {

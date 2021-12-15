@@ -1,5 +1,4 @@
 import React from "react"
-import qs from "qs"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -37,8 +36,11 @@ export default function ListingPage(props: ListingProps) {
     </Layout>
   )
 }
-
-export async function getStaticPaths(context: { locales: Array<string> }) {
+/**
+ *
+ * getStaticPaths and getStaticProps with revalidation isn't actually working on netflify, so we have to use getServerSideProps until it does
+ */
+/* export async function getStaticPaths(context: { locales: Array<string> }) {
   try {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
@@ -74,18 +76,21 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
       fallback: "blocking",
     }
   }
-}
+} */
 
-export async function getStaticProps(context: { params: Record<string, string>; locale: string }) {
-  console.log("context = ", context)
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-    headers: { language: context.locale },
-  })
-  console.log("listing = ", response.data)
-  return {
-    props: {
-      listing: response.data,
-    },
-    revalidate: process.env.cacheRevalidate,
+export async function getServerSideProps(context: {
+  params: Record<string, string>
+  locale: string
+}) {
+  let response
+
+  try {
+    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+      headers: { language: context.locale },
+    })
+  } catch (e) {
+    return { notFound: true }
   }
+
+  return { props: { listing: response.data } }
 }
