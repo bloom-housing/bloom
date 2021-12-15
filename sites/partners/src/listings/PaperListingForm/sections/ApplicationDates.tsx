@@ -42,7 +42,7 @@ const ApplicationDates = ({
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
-      const { startTime, endTime, url, tempId } = event
+      const { startTime, endTime, url } = event
 
       return {
         date: startTime && getDetailFieldDate(startTime),
@@ -68,7 +68,7 @@ const ApplicationDates = ({
             <Button
               type="button"
               className="font-semibold uppercase text-red-700"
-              onClick={() => setModalDeleteOpenHouse(tempId)}
+              onClick={() => setModalDeleteOpenHouse(event)}
               unstyled
             >
               {t("t.delete")}
@@ -90,23 +90,26 @@ const ApplicationDates = ({
   })
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
-  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
+  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
 
   const onOpenHouseEventsSubmit = (event: TempEvent) => {
     setDrawerOpenHouse(false)
 
-    const eventsWithoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
+    const eventsWithoutEdited = openHouseEvents.filter((item) => {
+      return event.id ? event.id !== item.id : event.tempId !== item.tempId
+    })
 
-    // determine if event is currently edited
-    if (eventsWithoutEdited.length !== openHouseEvents.length) {
-      setOpenHouseEvents([...eventsWithoutEdited, event])
-    } else {
-      setOpenHouseEvents([...openHouseEvents, event])
-    }
+    setOpenHouseEvents(
+      [...eventsWithoutEdited, event].sort((a, b) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return a.startTime - b.startTime
+      })
+    )
   }
 
-  const onOpenHouseEventDelete = (tempId: string) => {
-    const newEvents = openHouseEvents.filter((event) => event.tempId !== tempId)
+  const onOpenHouseEventDelete = (eventToDelete: TempEvent) => {
+    const newEvents = openHouseEvents.filter((event) => event !== eventToDelete)
     setOpenHouseEvents(newEvents)
     setModalDeleteOpenHouse(null)
   }

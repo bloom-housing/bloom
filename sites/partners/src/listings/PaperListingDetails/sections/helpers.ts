@@ -10,7 +10,7 @@ export const getDetailFieldString = (listingString: string) => {
 }
 
 export const getDetailFieldDate = (listingDate: Date) => {
-  return listingDate ? moment(new Date(listingDate)).utc().format("MM/DD/YYYY") : t("t.none")
+  return listingDate ? moment(new Date(listingDate)).format("MM/DD/YYYY") : t("t.none")
 }
 
 export const getDetailFieldTime = (listingTime: Date) => {

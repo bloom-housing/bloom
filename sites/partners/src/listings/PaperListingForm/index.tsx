@@ -40,7 +40,6 @@ import {
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 import moment from "moment"
-import { nanoid } from "nanoid"
 
 import Aside from "../Aside"
 import AdditionalDetails from "./sections/AdditionalDetails"
@@ -326,7 +325,10 @@ const formatFormData = (
   })
 
   const events: ListingEventCreate[] = data.events?.filter(
-    (event) => !(event?.type === ListingEventType.publicLottery)
+    (event) =>
+      !(
+        event?.type === ListingEventType.publicLottery || event?.type === ListingEventType.openHouse
+      )
   )
   if (
     data.lotteryDate &&
@@ -513,18 +515,22 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     if (listing?.events) {
-      const events = listing.events
-        .filter((event) => event.type === ListingEventType.openHouse)
-        .map((event) => ({
-          ...event,
-          startTime: event.startTime,
-          endTime: event.endTime,
-          url: event.url,
-          note: event.note,
-          tempId: nanoid(),
-        }))
-
-      setOpenHouseEvents(events)
+      setOpenHouseEvents(
+        listing.events
+          .filter((event) => event.type === ListingEventType.openHouse)
+          .map((event) => {
+            return {
+              ...event,
+              startTime: new Date(event.startTime),
+              endTime: new Date(event.endTime),
+            }
+          })
+          .sort((a, b) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return a.startTime - b.startTime
+          })
+      )
     }
   }, [listing, setUnits, setOpenHouseEvents])
 

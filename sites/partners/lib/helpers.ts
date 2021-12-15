@@ -162,7 +162,18 @@ export const createTime = (
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
   if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
-  return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
+  const tzOffset = new Date().getTimezoneOffset() / -60
+  let tzString: string
+
+  if (tzOffset >= 0) {
+    if (tzOffset < 10) tzString = `+0${tzOffset}:00`
+    if (tzOffset >= 10) tzString = `+${tzOffset}:00`
+  } else {
+    if (tzOffset > -10) tzString = `-0${tzOffset.toString().substring(1)}:00`
+    if (tzOffset <= -10) tzString = `${tzOffset}:00`
+  }
+
+  return new Date(`${formDate.year}-${formDate.month}-${formDate.day}T00:00:00.000${tzString}`)
 }
 
 interface FileUploaderParams {
