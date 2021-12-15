@@ -18,10 +18,7 @@ describe("Listing Management Tests", () => {
           subjectType: "input",
         }
       )
-      cy.get('[data-label="File Name"]').contains(
-        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
-      )
-      cy.get(".p-4 > .is-primary").contains("Save").click()
+      cy.get(`[data-test-id="listing-photo-uploaded"]`).contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
       cy.getByID("neighborhood").type(listing["neighborhood"])
       cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
