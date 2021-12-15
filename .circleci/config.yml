@@ -35,6 +35,9 @@ executors:
       REDIS_TLS_URL: "rediss://localhost:6379/0"
       REDIS_URL: "redis://localhost:6379/0"
       REDIS_USE_TLS: "0"
+      CLOUDINARY_SECRET: "fake_secret"
+      CLOUDINARY_KEY: "fake_key"
+      CLOUDINARY_CLOUD_NAME: "exygy"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
@@ -105,6 +108,7 @@ jobs:
             REDIS_USE_TLS: "0"
             CLOUDINARY_SECRET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
+            CLOUDINARY_CLOUD_NAME: "exygy"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
