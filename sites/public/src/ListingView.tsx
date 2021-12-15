@@ -36,7 +36,12 @@ import {
   Message,
 } from "@bloom-housing/ui-components"
 import { ErrorPage } from "../pages/_error"
-import { getGenericAddress, getImageTagFromListing, openInFuture } from "../lib/helpers"
+import {
+  getGenericAddress,
+  getImageTagIconFromListing,
+  getImageTagLabelFromListing,
+  openInFuture,
+} from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
@@ -255,7 +260,8 @@ export const ListingView = (props: ListingProps) => {
         <ImageCard
           title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-          tagLabel={getImageTagFromListing(listing)}
+          tagLabel={getImageTagLabelFromListing(listing)}
+          tagIcon={getImageTagIconFromListing(listing)}
         />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">

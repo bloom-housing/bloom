@@ -1,6 +1,7 @@
 import * as React from "react"
 import "./Icon.scss"
 import {
+  Accessible,
   Application,
   ArrowBack,
   ArrowDown,
@@ -60,6 +61,7 @@ import {
 } from "./Icons"
 
 const IconMap = {
+  accessible: Accessible,
   application: Application,
   arrowBack: ArrowBack,
   arrowForward: ArrowForward,
