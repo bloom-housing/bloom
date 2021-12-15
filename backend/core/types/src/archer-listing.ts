@@ -19,6 +19,7 @@ const amiChart: AmiChart = {
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
+    publicUrl: "",
   },
   items: [
     {

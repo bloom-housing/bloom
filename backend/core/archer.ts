@@ -22,6 +22,7 @@ export const SanMateoHUD2019: AmiChart = {
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
+    publicUrl: "",
   },
   items: [
     {

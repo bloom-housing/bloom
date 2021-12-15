@@ -502,13 +502,13 @@ export class ApplicationsService {
   retrieve(
     params: {
       /**  */
-      applicationId: string
+      id: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{applicationId}"
-      url = url.replace("{applicationId}", params["applicationId"] + "")
+      let url = basePath + "/applications/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
 
@@ -524,15 +524,15 @@ export class ApplicationsService {
   update(
     params: {
       /**  */
-      applicationId: string
+      id: string
       /** requestBody */
       body?: ApplicationUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Application> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{applicationId}"
-      url = url.replace("{applicationId}", params["applicationId"] + "")
+      let url = basePath + "/applications/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -548,13 +548,13 @@ export class ApplicationsService {
   delete(
     params: {
       /**  */
-      applicationId: string
+      id: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/applications/{applicationId}"
-      url = url.replace("{applicationId}", params["applicationId"] + "")
+      let url = basePath + "/applications/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -861,6 +861,50 @@ export class UserService {
     })
   }
   /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List users
    */
   list(
@@ -901,50 +945,6 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get user by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      userId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{userId}"
-      url = url.replace("{userId}", params["userId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /**  */
-      userId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{userId}"
-      url = url.replace("{userId}", params["userId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -1165,15 +1165,15 @@ export class ListingsService {
   retrieve(
     params: {
       /**  */
-      listingId: string
+      id: string
       /**  */
       view?: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
       configs.params = { view: params["view"] }
@@ -1189,15 +1189,15 @@ export class ListingsService {
   update(
     params: {
       /**  */
-      listingId: string
+      id: string
       /** requestBody */
       body?: ListingUpdate
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<Listing> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
 
@@ -1213,13 +1213,13 @@ export class ListingsService {
   delete(
     params: {
       /**  */
-      listingId: string
+      id: string
     } = {} as any,
     options: IRequestOptions = {}
   ): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = basePath + "/listings/{listingId}"
-      url = url.replace("{listingId}", params["listingId"] + "")
+      let url = basePath + "/listings/{id}"
+      url = url.replace("{id}", params["id"] + "")
 
       const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
 
@@ -2442,6 +2442,9 @@ export interface Jurisdiction {
 
   /**  */
   partnerTerms?: string
+
+  /**  */
+  publicUrl: string
 }
 
 export interface AmiChart {
@@ -4206,6 +4209,9 @@ export interface JurisdictionCreate {
   partnerTerms?: string
 
   /**  */
+  publicUrl: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4233,6 +4239,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   partnerTerms?: string
+
+  /**  */
+  publicUrl: string
 
   /**  */
   programs: Id[]

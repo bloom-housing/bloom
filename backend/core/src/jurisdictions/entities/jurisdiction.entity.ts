@@ -55,4 +55,9 @@ export class Jurisdiction extends AbstractEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   partnerTerms?: string | null
+
+  @Column({ type: "text", default: "" })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  publicUrl: string
 }
