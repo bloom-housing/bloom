@@ -89,6 +89,18 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.twoBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.threeBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.fourPlusBdrm]?: string | boolean
+  [FrontendListingFilterStateKeys.elevator]?: string | boolean
+  [FrontendListingFilterStateKeys.wheelchairRamp]?: string | boolean
+  [FrontendListingFilterStateKeys.serviceAnimalsAllowed]?: string | boolean
+  [FrontendListingFilterStateKeys.accessibleParking]?: string | boolean
+  [FrontendListingFilterStateKeys.parkingOnSite]?: string | boolean
+  [FrontendListingFilterStateKeys.inUnitWasherDryer]?: string | boolean
+  [FrontendListingFilterStateKeys.laundryInBuilding]?: string | boolean
+  [FrontendListingFilterStateKeys.barrierFreeEntrance]?: string | boolean
+  [FrontendListingFilterStateKeys.rollInShower]?: string | boolean
+  [FrontendListingFilterStateKeys.grabBars]?: string | boolean
+  [FrontendListingFilterStateKeys.heatingInUnit]?: string | boolean
+  [FrontendListingFilterStateKeys.acInUnit]?: string | boolean
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"

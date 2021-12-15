@@ -118,4 +118,125 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.minAmiPercentage]?: number
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.elevator]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.wheelchairRamp]?: boolean;
+  
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.serviceAnimalsAllowed]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.accessibleParking]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.parkingOnSite]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.inUnitWasherDryer]?: boolean;
+  
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.laundryInBuilding]?: boolean;
+  
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.barrierFreeEntrance]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.rollInShower]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.grabBars]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.heatingInUnit]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: Boolean,
+    example: "true",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.acInUnit]?: boolean;
+
 }

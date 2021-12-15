@@ -10,65 +10,19 @@ import {
     Form,
     ProgressNav,
     FieldGroup,
+    Field,
   } from "@bloom-housing/ui-components"
   import FormsLayout from "../../layouts/forms"
   import { useForm } from "react-hook-form"
   import React, { useContext } from "react"
   import { useRouter } from "next/router"
   import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
-  import { EligibilityContext } from "../../lib/EligibilityContext"
+  import { EligibilityContext, AccessibilityFeatures } from "../../lib/EligibilityContext"
   import FormBackLink from "../../src/forms/applications/FormBackLink"
   import { eligibilityRoute } from "../../lib/helpers"
 
-  export class AccessibilityFeatures {
-    elevator: boolean
-    wheelchairRamp: boolean
-    serviceAnimalsAllowed: boolean
-    accessibleParking: boolean
-    parkingOnSite: boolean
-    inUnitWasherDryer: boolean
-    laundryInBuilding: boolean
-    barrierFreeEntrance: boolean
-    rollInShower: boolean
-    grabBars: boolean
-    heatingInUnit: boolean
-    acInUnit: boolean
-
-    constructor(elevator: boolean,
-      wheelchairRamp: boolean,
-      serviceAnimalsAllowed: boolean,
-      accessibleParking: boolean,
-      parkingOnSite: boolean,
-      inUnitWasherDryer: boolean,
-      laundryInBuilding: boolean,
-      barrierFreeEntrance: boolean,
-      rollInShower: boolean,
-      grabBars: boolean,
-      heatingInUnit: boolean,
-      acInUnit: boolean) {
-      this.elevator = elevator
-      this.wheelchairRamp = wheelchairRamp
-      this.serviceAnimalsAllowed = serviceAnimalsAllowed
-      this.accessibleParking = accessibleParking
-      this.parkingOnSite = parkingOnSite
-      this.inUnitWasherDryer = inUnitWasherDryer
-      this.laundryInBuilding = laundryInBuilding
-      this.barrierFreeEntrance = barrierFreeEntrance
-      this.rollInShower = rollInShower
-      this.grabBars = grabBars
-      this.heatingInUnit = heatingInUnit
-      this.acInUnit = acInUnit
-    }
-  
-    setElevator(elevator: boolean) {
-      this.elevator = elevator
-    }
-  
-    
-  }
   
   const EligibilityAccessibility = () => {
-    const AccFilter = new AccessibilityFeatures(false, false, false, false, false, false, false, false, false, false, false, false)
     const router = useRouter()
     const CURRENT_PAGE = 4
     const { eligibilityRequirements } = useContext(EligibilityContext)
@@ -77,107 +31,37 @@ import {
     const { handleSubmit, register } = useForm()
   
     const onSubmit = async (data) => {
-      eligibilityRequirements.setAccessibility()
+      eligibilityRequirements.setElevator(data.elevator)
+      eligibilityRequirements.setWheelchairRamp(data.wheelchairRamp)
+      eligibilityRequirements.setServiceAnimalsAllowed(data.serviceAnimalsAllowed)
+      eligibilityRequirements.setAccessibleParking(data.accessibleParking)
+      eligibilityRequirements.setParkingOnSite(data.parkingOnSite)
+      eligibilityRequirements.setInUnitWasherDryer(data.inUnitWasherDryer)
+      eligibilityRequirements.setLaundryInBuilding(data.laundryInBuilding)
+      eligibilityRequirements.setBarrierFreeEntrance(data.barrierFreeEntrance)
+      eligibilityRequirements.setRollInShower(data.rollInShower)
+      eligibilityRequirements.setGrabBars(data.grabBars)
+      eligibilityRequirements.setHeatingInUnit(data.heatingInUnit)
+      eligibilityRequirements.setaAcInUnit(data.acInUnit)
       await router.push(eligibilityRoute(CURRENT_PAGE + 1))
     }
   
     const onClick = async (data) => {
-      eligibilityRequirements.setAccessibility()
-      accessibilityValues[0].
+      eligibilityRequirements.setElevator(data.elevator)
+      eligibilityRequirements.setWheelchairRamp(data.wheelchairRamp)
+      eligibilityRequirements.setServiceAnimalsAllowed(data.serviceAnimalsAllowed)
+      eligibilityRequirements.setAccessibleParking(data.accessibleParking)
+      eligibilityRequirements.setParkingOnSite(data.parkingOnSite)
+      eligibilityRequirements.setInUnitWasherDryer(data.inUnitWasherDryer)
+      eligibilityRequirements.setLaundryInBuilding(data.laundryInBuilding)
+      eligibilityRequirements.setBarrierFreeEntrance(data.barrierFreeEntrance)
+      eligibilityRequirements.setRollInShower(data.rollInShower)
+      eligibilityRequirements.setGrabBars(data.grabBars)
+      eligibilityRequirements.setHeatingInUnit(data.heatingInUnit)
+      eligibilityRequirements.setaAcInUnit(data.acInUnit)
       await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
     }
 
-    /*var AccessibilityFeature: {[key: string]: boolean} = {
-      "elevator": false,
-      "wheelchairRamp": false,
-      "serviceAnimalsAllowed": false,
-      "accessibleParking": false,
-      "parkingOnSite": false,
-      "inUnitWasherDryer": false,
-      "laundryInBuilding": false,
-      "barrierFreeEntrance": false,
-      "rollInShower": false,
-      "grabBars": false,
-      "heatingInUnit": false,
-      "acInUnit": false,
-    } */   
-  
-    
-    const accessibilityValues = [
-        {
-            id: "elevator",
-            value: AccessibilityFeatures.elevator,
-            label: t("eligibility.accessibility.elevator"),
-            defaultChecked: false,
-          },
-          {
-            id: "wheelchairRamp",
-            value: AccessibilityFeatures.wheelchairRamp,
-            label: t("eligibility.accessibility.wheelchairRamp"),
-            defaultChecked: false,
-          },
-          {
-            id: "serviceAnimalsAllowed",
-            value: AccessibilityFeatures.serviceAnimalsAllowed,
-            label: t("eligibility.accessibility.serviceAnimalsAllowed"),
-            defaultChecked: false,
-          },
-          {
-            id: "accessibleParking",
-            value: AccessibilityFeatures.accessibleParking,
-            label: t("eligibility.accessibility.accessibleParking"),
-            defaultChecked: false,
-          },
-          {
-            id: "parkingOnSite",
-            value: AccessibilityFeatures.parkingOnSite,
-            label: t("eligibility.parkingOnSite"),
-            defaultChecked: false,
-          },
-          {
-            id: "inUnitWasherDryer",
-            value: AccessibilityFeatures.inUnitWasherDryer,
-            label: t("eligibility.accessibility.inUnitWasherDryer"),
-            defaultChecked: false,
-          },
-          {
-            id: "laundryInBuilding",
-            value: AccessibilityFeatures.laundryInBuilding,
-            label: t("eligibility.accessibility.laundryInBuilding"),
-            defaultChecked: false,
-          },
-          {
-            id: "barrierFreeEntrance",
-            value: AccessibilityFeatures.barrierFreeEntrance,
-            label: t("eligibility.accessibility.barrierFreeEntrance"),
-            defaultChecked: false,
-          },
-          {
-            id: "rollInShower",
-            value: AccessibilityFeatures.rollInShower,
-            label: t("eligibility.accessibility.rollInShower"),
-            defaultChecked: false,
-          },
-          {
-            id: "grabBars",
-            value: AccessibilityFeatures.grabBars,
-            label: t("eligibility.accessibility.grabBars"),
-            defaultChecked: false,
-          },
-          {
-            id: "heatingInUnit",
-            value: AccessibilityFeatures.heatingInUnit,
-            label: t("eligibility.accessibility.heatingInUnit"),
-            defaultChecked: false,
-          },
-          {
-            id: "acInUnit",
-            value: AccessibilityFeatures.acInUnit,
-            label: t("eligibility.accessibility.acInUnit"),
-            defaultChecked: false,
-          },
-    ]
-  
     if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
       eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
     }
@@ -207,11 +91,125 @@ import {
               <p className="field-note mb-4" id="accessibility-description">
                 {t("eligibility.accessibility.description")}
               </p>
-              <FieldGroup
+              <Field
+                id="elevator"
+                name="elevator"
                 type="checkbox"
-                name="accessibility"
+                label={t("eligibility.accessibility.elevator")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements?.elevator,
+                }}
                 register={register}
-                fields={accessibilityValues}
+              />
+              <Field
+                id="wheelchairRamp"
+                name="wheelchairRamp"
+                type="checkbox"
+                label={t("eligibility.accessibility.wheelchairRamp")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.wheelchairRamp,
+                }}
+                register={register}
+              />
+              <Field
+                id="serviceAnimalsAllowed"
+                name="serviceAnimalsAllowed"
+                type="checkbox"
+                label={t("eligibility.accessibility.serviceAnimalsAllowed")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.serviceAnimalsAllowed,
+                }}
+                register={register}
+              />
+              <Field
+                id="accessibleParking"
+                name="accessibleParking"
+                type="checkbox"
+                label={t("eligibility.accessibility.accessibleParking")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.accessibleParking,
+                }}
+                register={register}
+              />
+              <Field
+                id="parkingOnSite"
+                name="parkingOnSite"
+                type="checkbox"
+                label={t("eligibility.accessibility.parkingOnSite")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.parkingOnSite,
+                }}
+                register={register}
+              />
+              <Field
+                id="inUnitWasherDryer"
+                name="inUnitWasherDryer"
+                type="checkbox"
+                label={t("eligibility.accessibility.inUnitWasherDryer")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.inUnitWasherDryer,
+                }}
+                register={register}
+              />
+              <Field
+                id="laundryInBuilding"
+                name="laundryInBuilding"
+                type="checkbox"
+                label={t("eligibility.accessibility.laundryInBuilding")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.laundryInBuilding,
+                }}
+                register={register}
+              />
+              <Field
+                id="barrierFreeEntrance"
+                name="barrierFreeEntrance"
+                type="checkbox"
+                label={t("eligibility.accessibility.barrierFreeEntrance")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.barrierFreeEntrance,
+                }}
+                register={register}
+              />
+              <Field
+                id="rollInShower"
+                name="rollInShower"
+                type="checkbox"
+                label={t("eligibility.accessibility.rollInShower")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.rollInShower,
+                }}
+                register={register}
+              />
+              <Field
+                id="grabBars"
+                name="grabBars"
+                type="checkbox"
+                label={t("eligibility.accessibility.grabBars")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.grabBars,
+                }}
+                register={register}
+              />
+              <Field
+                id="heatingInUnit"
+                name="heatingInUnit"
+                type="checkbox"
+                label={t("eligibility.accessibility.heatingInUnit")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.heatingInUnit,
+                }}
+                register={register}
+              />
+              <Field
+                id="acInUnit"
+                name="acInUnit"
+                type="checkbox"
+                label={t("eligibility.accessibility.acInUnit")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.acInUnit,
+                }}
+                register={register}
               />
             </div>
             <div className="form-card__pager">

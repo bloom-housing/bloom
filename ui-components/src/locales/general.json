@@ -1527,17 +1527,17 @@
       "prompt": "Do you require additional accessibility features?",
       "description": "Some properties have accessibility features that others may not have.",
       "elevator": "Elevator",
-      "wheelchair_ramp": "Wheelchair Ramp",
-      "service_animals_allowed": "Service Animals Allowed",
-      "accessible_parking": "Accessible Parking",
-      "parking_on_site": "Parking On Site",
-      "in_unit_washer_dryer": "In Unit Washer Dryer",
-      "laundry_in_building": "Laundry in Building",
-      "barrier_free_entrance": "Barrier Free Entrance",
-      "roll_in_shower": "Roll in Shower",
-      "grab_bars": "Grab Bars",
-      "heating_in_unit": "Heating in Unit",
-      "ac_in_unit": "AC in Unit"
+      "wheelchairRamp": "Wheelchair Ramp",
+      "serviceAnimalsAllowed": "Service Animals Allowed",
+      "accessibleParking": "Accessible Parking",
+      "parkingOnSite": "Parking On Site",
+      "inUnitWasherDryer": "In Unit Washer Dryer",
+      "laundryInBuilding": "Laundry in Building",
+      "barrierFreeEntrance": "Barrier Free Entrance",
+      "rollInShower": "Roll in Shower",
+      "grabBars": "Grab Bars",
+      "heatingInUnit": "Heating in Unit",
+      "acInUnit": "AC in Unit"
     },
     "disclaimer": {
       "description": "Thank you for checking how you qualify for affordable housing. Because affordable housing can be reserved for certain age groups or income levels, we have filtered our property listings based on your household characteristics. We hope you find housing that meets your needs. It's important to note that a good portion of affordable housing has a waitlist, but calling properties you're interested in is a good way to get on waitlists or learn of immediate openings."

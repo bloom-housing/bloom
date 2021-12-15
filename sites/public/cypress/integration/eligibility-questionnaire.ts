@@ -34,6 +34,10 @@ describe("Verifying the eligibility questionnaire flow", () => {
     // Click "no" to indicate no disability.
     cy.get("#disabilityNo").click()
 
+    // Click "Next" to go to the "Accessibility" section
+    cy.contains("Next").click()
+    cy.url().should("include", "/eligibility/accessibility")
+
     // Click "Next" to go to the "Income" section
     cy.contains("Next").click()
     cy.url().should("include", "/eligibility/income")
