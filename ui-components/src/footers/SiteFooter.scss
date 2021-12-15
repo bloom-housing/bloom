@@ -2,57 +2,20 @@ footer.site-footer {
   @apply text-gray-500;
   @apply w-full;
   @apply bg-gray-800;
-
+  @apply text-center;
 
   img {
     @apply inline;
     width: 130px;
-    height: 130px;
     opacity: 0.8;
-    margin-right: 10px;
   }
 
   a {
     @apply text-white;
-    float: left;
   }
 
   p {
     @apply mb-5;
-    width: 100%;
-  }
-
-  .righthand {
-    float: right;
-    width: 25%;
-    margin-right: 10px;
-  }
-
-  .subheader {
-    font-weight: bold;
-    font-size: medium;
-  }
-
-  .footer-right-block{
-    display: flex;
-    justify-content: right;
-  }
-
-  .footer-left-block{
-    display: flex;
-    justify-content: left;
-  }
-
-  .footer-end-block{
-    display: flex;
-    justify-content: left;
-  }
-
-  h4 {
-    @apply text-white;
-    font-weight: bold;
-    text-align: left;
-
   }
 
   & > .footer-row:first-of-type {

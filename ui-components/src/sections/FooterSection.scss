@@ -1,9 +1,5 @@
 .footer-row__section {
+  @apply max-w-5xl;
+  @apply m-auto;
   @apply px-2;
-  margin-right: 5%;
-  margin-left: 5%;
-  margin-top: 3%;
-  display: flex;
-  
-
 }
