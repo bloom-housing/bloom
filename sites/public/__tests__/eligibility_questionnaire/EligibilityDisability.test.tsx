@@ -35,7 +35,7 @@ describe("<EligibilityDisability>", () => {
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/income")
+    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/accessibility")
   })
 
   it("Clicks the Next button", async () => {
@@ -46,7 +46,7 @@ describe("<EligibilityDisability>", () => {
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/income")
+    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/accessibility")
   })
 
   it("Clicks the Finish button", async () => {
