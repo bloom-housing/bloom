@@ -56,7 +56,3 @@ Cypress.Commands.add("verifyAlertBox", () => {
     "Please resolve any errors before saving or publishing your listing."
   )
 })
-
-Cypress.Commands.add("getByTestId", (testId) => {
-  return cy.get(`[data-test-id="${testId}"]`)
-})
