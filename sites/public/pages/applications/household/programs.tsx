@@ -87,7 +87,7 @@ const ApplicationPrograms = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
-          mounted={OnClientSide()}
+          mounted={clientLoaded}
         />
       </FormCard>
 
