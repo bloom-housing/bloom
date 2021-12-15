@@ -18,7 +18,9 @@ describe("Listing Management Tests", () => {
           subjectType: "input",
         }
       )
-      cy.get('[data-label="File Name"]').contains("exygy")
+      cy.get('[data-label="File Name"]').contains(
+        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+      )
       cy.get(".p-4 > .is-primary").contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
       cy.getByID("neighborhood").type(listing["neighborhood"])
@@ -137,7 +139,9 @@ describe("Listing Management Tests", () => {
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
       cy.get("#name").contains(listing["name"])
       cy.get("#developer").contains(listing["developer"])
-      cy.get('[data-label="File Name"]').contains("exygy")
+      cy.get('[data-label="File Name"]').contains(
+        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+      )
       cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
       cy.get("#neighborhood").contains(listing.neighborhood)
       cy.get("#neighborhood").contains(listing.neighborhood)
