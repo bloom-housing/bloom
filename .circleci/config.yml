@@ -36,6 +36,7 @@ executors:
       REDIS_URL: "redis://localhost:6379/0"
       REDIS_USE_TLS: "0"
       CLOUDINARY_SIGNED_PRESET: "fake_secret"
+      CLOUDINARY_SECRET: "fake_secret"
       CLOUDINARY_KEY: "fake_key"
       CLOUDINARY_CLOUD_NAME: "exygy"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
@@ -109,6 +110,7 @@ jobs:
             CLOUDINARY_SIGNED_PRESET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
             CLOUDINARY_CLOUD_NAME: "exygy"
+            CLOUDINARY_SECRET: "fake_secret"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
