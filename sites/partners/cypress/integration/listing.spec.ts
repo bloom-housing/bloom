@@ -220,11 +220,8 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("nameField").type(" (Edited)")
     cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
     cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
-  })
-
-  it("verify the changes saved successfully", () => {
     cy.fixture("listing").then((listing) => {
-      cy.get("#name").contains(`${listing["name"]}`)
+      cy.get("#name").contains(`${listing["name"]} (Edited)`)
     })
   })
 })
