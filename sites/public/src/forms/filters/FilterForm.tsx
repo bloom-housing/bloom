@@ -161,7 +161,7 @@ const FilterForm = (props: FilterFormProps) => {
             label= {t("eligibility.accessibility.elevator")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.elevator),
             }}
           />
           <Field
@@ -171,7 +171,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.wheelchairRamp")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.wheelchairRamp),
             }}
           />
           <Field
@@ -181,7 +181,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.serviceAnimalsAllowed")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.serviceAnimalsAllowed),
             }}
           />
           <Field
@@ -191,7 +191,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.accessibleParking")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.accessibleParking),
             }}
           />
           <Field
@@ -201,7 +201,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.parkingOnSite")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.parkingOnSite),
             }}
           />
           <Field
@@ -211,7 +211,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.inUnitWasherDryer")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.inUnitWasherDryer),
             }}
           />
           </div>
@@ -223,7 +223,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.laundryInBuilding")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.laundryInBuilding),
             }}
           />
           <Field
@@ -233,7 +233,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.barrierFreeEntrance")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.barrierFreeEntrance),
             }}
           />
           <Field
@@ -243,7 +243,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.rollInShower")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.rollInShower),
             }}
           />
           <Field
@@ -253,7 +253,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.grabBars")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.grabBars),
             }}
           />
           <Field
@@ -263,7 +263,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.heatingInUnit")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.heatingInUnit),
             }}
           />
           <Field
@@ -273,7 +273,7 @@ const FilterForm = (props: FilterFormProps) => {
             label={t("eligibility.accessibility.acInUnit")}
             register={register}
             inputProps={{
-              defaultChecked: false,
+              defaultChecked: Boolean(props.filterState?.acInUnit),
             }}
           />
         </div>
