@@ -79,7 +79,10 @@ const Layout = (props) => {
             <p>
               {t("footer.header")}
               <br />
-              <a href={t("footer.headerUrl")} target="_blank">
+              <a
+                href="https://detroitmi.gov/departments/housing-and-revitalization-department"
+                target="_blank"
+              >
                 {t("footer.headerLink")}
               </a>
             </p>
