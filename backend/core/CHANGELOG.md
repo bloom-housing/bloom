@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.39...@bloom-housing/backend-core@3.0.1-alpha.40) (2021-12-15)
+
+
+### Features
+
+* **backend:** refactor applications module ([#2279](https://github.com/bloom-housing/bloom/issues/2279)) ([e0b4523](https://github.com/bloom-housing/bloom/commit/e0b4523817c7d3863c3802d8a9f61d1a1c8685d4))
+
+
+
+
+
 ## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.38...@bloom-housing/backend-core@3.0.1-alpha.39) (2021-12-14)
 
 
