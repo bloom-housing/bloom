@@ -30,12 +30,17 @@ const SignIn = () => {
       await login(email, password)
       await router.push("/")
     } catch (err) {
-      const { status } = err.response || {}
+      const {
+        status,
+        data: { message },
+      } = err.response || {}
       if (status === 401) {
+        const errMessage = message === "Unauthorized" ? "cantFindAccount" : message
         console.warn(err.message)
+        console.log(err.response)
         setError("authentication", {
           type: "manual",
-          message: t("authentication.signIn.cantFindAccount"),
+          message: t(`authentication.signIn.${errMessage}`),
         })
       } else {
         console.error(err)

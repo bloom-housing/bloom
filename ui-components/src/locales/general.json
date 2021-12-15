@@ -831,7 +831,8 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "forgotPassword": "Forgot password?",
-      "success": "Welcome back, %{name}!"
+      "success": "Welcome back, %{name}!",
+      "passwordOutdated": "Your password has expired. Please reset your password."
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
