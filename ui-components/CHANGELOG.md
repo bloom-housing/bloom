@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.48...@bloom-housing/ui-components@3.0.1-alpha.49) (2021-12-15)
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/bloom-housing/bloom/issues/2288)) ([4f6945f](https://github.com/bloom-housing/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+
+
+
+
+
 ## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.47...@bloom-housing/ui-components@3.0.1-alpha.48) (2021-12-15)
 
 
