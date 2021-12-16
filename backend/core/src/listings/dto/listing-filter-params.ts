@@ -237,5 +237,15 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.acInUnit]?: boolean
+  [ListingFilterKeys.acInUnit]?: boolean;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: "Forest Park, Elmwood Park",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.neighborhood]?: string
 }

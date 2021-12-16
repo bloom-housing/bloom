@@ -23,6 +23,7 @@ export enum ListingFilterKeys {
   grabBars = "grabBars",
   heatingInUnit = "heatingInUnit",
   acInUnit = "acInUnit",
+  neighborhood = "neighborhood",
 }
 
 export enum AvailabilityFilterEnum {

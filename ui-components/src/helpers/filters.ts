@@ -28,6 +28,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
       return EnumListingFilterParamsComparison["<="]
     case ListingFilterKeys.bedrooms:
     case ListingFilterKeys.zipcode:
+    case ListingFilterKeys.neighborhood:
       return EnumListingFilterParamsComparison["IN"]
     case ListingFilterKeys.seniorHousing:
     case ListingFilterKeys.independentLivingHousing:
@@ -101,6 +102,7 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.grabBars]?: string | boolean
   [FrontendListingFilterStateKeys.heatingInUnit]?: string | boolean
   [FrontendListingFilterStateKeys.acInUnit]?: string | boolean
+  [FrontendListingFilterStateKeys.neighborhood]?: string
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"
