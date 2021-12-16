@@ -152,8 +152,8 @@ const FilterForm = (props: FilterFormProps) => {
             }}
           />
         </div>
-        <label className="field-label">{t("eligibility.accessibility.title")}</label>
-        <div className="flex flex-row bedroom-selector">
+        <label className="field-label">{t("eligibility.accessibility.title")}</label> 
+        <div className="accessibility-filter-selector">
           <Field
             id="elevator"
             name={FrontendListingFilterStateKeys.elevator}
@@ -163,7 +163,7 @@ const FilterForm = (props: FilterFormProps) => {
             inputProps={{
               defaultChecked: Boolean(props.filterState?.elevator),
             }}
-          />
+          /> 
           <Field
             id="wheelchairRamp"
             name={FrontendListingFilterStateKeys.wheelchairRamp}
@@ -214,8 +214,6 @@ const FilterForm = (props: FilterFormProps) => {
               defaultChecked: Boolean(props.filterState?.inUnitWasherDryer),
             }}
           />
-          </div>
-          <div className="flex flex-row bedroom-selector">
           <Field
             id="laundryInBuilding"
             name={FrontendListingFilterStateKeys.laundryInBuilding}
