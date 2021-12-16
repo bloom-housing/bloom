@@ -7,6 +7,9 @@ import {
   imageUrlFromListing,
   getSummariesTableFromUnitSummary,
   getSummariesTableFromUnitsSummary,
+  IconTypes,
+  IconSize,
+  IconProps,
 } from "@bloom-housing/ui-components"
 import React from "react"
 
@@ -40,13 +43,29 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
-// TODO(#773): Determine the best way of surfacing accessibility-related
-// information in listing views.
-export const getImageTagFromListing = (listing: Listing) => {
+export const getImageTagLabelFromListing = (listing: Listing) => {
   const reservedCommunityTypeName = listing.reservedCommunityType?.name
-  return reservedCommunityTypeName && reservedCommunityTypeName !== "specialNeeds"
-    ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+  return reservedCommunityTypeName
+    ? t(`listings.reservedCommunityTypes.${reservedCommunityTypeName}`)
     : undefined
+}
+
+export const getImageTagIconFromListing = (listing: Listing): IconProps | null => {
+  const reservedCommunityTypeName = listing.reservedCommunityType?.name
+
+  // The "specialNeeds" adds an accessible icon to the tag.
+  if (reservedCommunityTypeName === "specialNeeds") {
+    const tagIconSymbol: IconTypes = "accessible"
+    const tagIconSize: IconSize = "medium"
+    const tagIconFill = "#000000"
+    return {
+      symbol: tagIconSymbol,
+      size: tagIconSize,
+      fill: tagIconFill,
+    }
+  }
+
+  return null
 }
 
 const getListingTableData = (listing: Listing) => {
@@ -74,7 +93,8 @@ export const getListings = (listings) => {
           subtitle: getListingCardSubtitle(listing.buildingAddress),
           title: listing.name,
           href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: getImageTagFromListing(listing),
+          tagLabel: getImageTagLabelFromListing(listing),
+          tagIcon: getImageTagIconFromListing(listing),
         }}
         tableProps={{
           headers: unitSummariesHeaders,

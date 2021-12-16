@@ -66,7 +66,7 @@ export class ListingsController {
   @UsePipes(new ListingCreateValidationPipe(defaultValidationPipeOptions))
   async create(@Body() listingDto: ListingCreateDto): Promise<ListingDto> {
     const listing = await this.listingsService.create(listingDto)
-    await this.cacheManager.reset()
+    await this.cacheManager.del("/listings")
     return mapTo(ListingDto, listing)
   }
 
@@ -96,7 +96,7 @@ export class ListingsController {
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
-    await this.cacheManager.reset()
+    await this.cacheManager.del("/listings")
     return mapTo(ListingDto, listing)
   }
 
@@ -105,6 +105,6 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async delete(@Param("listingId") listingId: string) {
     await this.listingsService.delete(listingId)
-    await this.cacheManager.reset()
+    await this.cacheManager.del("/listings")
   }
 }

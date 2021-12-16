@@ -57,10 +57,14 @@ const ListingsPage = ({ initialListings }) => {
       >
         <FilterForm onSubmit={(data) => onSubmit(/*page=*/ 1, data)} />
       </Modal>
-      <div className="container max-w-3xl px-4 content-start mx-auto">
+      <div className="flex container content-center max-w-5xl px-4 pt-8 mx-auto">
+        <h3 className="text-3xl text-primary-darker font-bold">All rentals</h3>
         <Button
-          className="mx-2 mt-6"
-          size={AppearanceSizeType.small}
+          className="mx-5"
+          size={AppearanceSizeType.normal}
+          icon="filter"
+          iconPlacement="left"
+          iconSize="base"
           onClick={() => setFilterModalVisible(true)}
         >
           {t("listingFilters.buttonTitle")}

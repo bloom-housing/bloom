@@ -6,6 +6,7 @@ import Redis from "redis"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
 import { Listing } from "./entities/listing.entity"
+import { ListingsNotificationsConsumer } from "./listings-notifications"
 import { Unit } from "../units/entities/unit.entity"
 import { Preference } from "../preferences/entities/preference.entity"
 import { AuthModule } from "../auth/auth.module"
@@ -13,6 +14,8 @@ import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
 import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
+import { BullModule } from "@nestjs/bull"
+import { SmsModule } from "../sms/sms.module"
 import { ListingFeatures } from "./entities/listing-features.entity"
 
 interface RedisCache extends Cache {
@@ -53,8 +56,10 @@ if (process.env.REDIS_USE_TLS !== "0") {
     ]),
     AuthModule,
     TranslationsModule,
+    BullModule.registerQueue({ name: "listings-notifications" }),
+    SmsModule,
   ],
-  providers: [ListingsService],
+  providers: [ListingsService, ListingsNotificationsConsumer],
   exports: [ListingsService],
   controllers: [ListingsController],
 })

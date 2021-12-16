@@ -11,6 +11,9 @@ import { AvailabilityFilterEnum } from "./types/listing-filter-keys-enum"
 import { ListingStatus } from "./types/listing-status-enum"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
+import { getQueueToken } from "@nestjs/bull"
+import { ListingCreateDto } from "./dto/listing-create.dto"
+import { ListingUpdateType } from "./listings-notifications"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -96,7 +99,31 @@ const mockQueryBuilder = {
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
+  create: jest.fn(),
 }
+const mockListingsCreateDto: ListingCreateDto = {
+  applicationMethods: [],
+  preferences: [],
+  applicationDropOffAddress: null,
+  applicationMailingAddress: null,
+  events: [],
+  units: [],
+  buildingAddress: null,
+  jurisdiction: null,
+  assets: [],
+  name: null,
+  status: null,
+  displayWaitlistSize: false,
+  CSVFormattingType: null,
+  hasId: null,
+  save: jest.fn(),
+  remove: jest.fn(),
+  softRemove: jest.fn(),
+  recover: jest.fn(),
+  reload: jest.fn(),
+}
+
+const mockListingsNotificationsQueue = { add: jest.fn() }
 
 describe("ListingsService", () => {
   beforeEach(async () => {
@@ -116,6 +143,10 @@ describe("ListingsService", () => {
         {
           provide: TranslationsService,
           useValue: { translateListing: jest.fn() },
+        },
+        {
+          provide: getQueueToken("listings-notifications"),
+          useValue: mockListingsNotificationsQueue,
         },
       ],
     }).compile()
@@ -430,6 +461,22 @@ describe("ListingsService", () => {
         "ASC",
         "NULLS LAST"
       )
+    })
+  })
+
+  describe("createListing", () => {
+    it("should trigger a notification upon new listing creation", async () => {
+      const mockSavedListing = { id: "some fake ID" }
+      const mockCreatedListing = { save: jest.fn().mockReturnValue(mockSavedListing) }
+      mockListingsRepo.create.mockReturnValueOnce(mockCreatedListing)
+
+      await service.create(mockListingsCreateDto)
+
+      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(1)
+      expect(mockListingsNotificationsQueue.add).toHaveBeenLastCalledWith({
+        listing: mockSavedListing,
+        updateType: ListingUpdateType.CREATE,
+      })
     })
   })
 })

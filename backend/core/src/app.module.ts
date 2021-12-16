@@ -43,6 +43,7 @@ import { PaperApplicationsModule } from "./paper-applications/paper-applications
 import { SmsModule } from "./sms/sms.module"
 import { ScheduleModule } from "@nestjs/schedule"
 import { CronModule } from "./cron/cron.module"
+import { BullModule } from "@nestjs/bull"
 
 export function applicationSetup(app: INestApplication) {
   app.enableCors()
@@ -89,6 +90,9 @@ export class AppModule {
         ApplicationsModule,
         AssetsModule,
         AuthModule,
+        BullModule.forRoot({
+          redis: redis.options,
+        }),
         JurisdictionsModule,
         ListingsModule,
         CronModule,

@@ -1,6 +1,7 @@
 import * as React from "react"
 import "./Icon.scss"
 import {
+  Accessible,
   Application,
   ArrowBack,
   ArrowDown,
@@ -25,6 +26,7 @@ import {
   Eye,
   Favorite,
   File,
+  Filter,
   Forward,
   Globe,
   Hamburger,
@@ -59,6 +61,7 @@ import {
 } from "./Icons"
 
 const IconMap = {
+  accessible: Accessible,
   application: Application,
   arrowBack: ArrowBack,
   arrowForward: ArrowForward,
@@ -83,6 +86,7 @@ const IconMap = {
   eye: Eye,
   favorite: Favorite,
   file: File,
+  filter: Filter,
   forward: Forward,
   globe: Globe,
   hamburger: Hamburger,

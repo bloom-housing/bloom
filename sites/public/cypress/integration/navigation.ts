@@ -31,7 +31,7 @@ describe("Navigating around the site", () => {
     cy.contains("Endorsement Disclaimers")
 
     // Click on the listings page link in the header nav
-    cy.get(".navbar").contains("Log in").click()
+    cy.get(".navbar").contains("Sign in").click()
 
     // Should be on the listings page
     cy.location("pathname").should("equal", "/sign-in")

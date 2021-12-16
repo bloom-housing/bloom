@@ -1,0 +1,20 @@
+.eligibility_header {
+  background-color: #004445;
+  text-align: center;
+  color: white;
+  font-weight: 700;
+
+  font-size: 18px;
+  line-height: 41.5px;
+  padding: 21px 0px;
+
+  @screen md {
+    font-size: 28px;
+    line-height: 41.5px;
+    padding: 41px 0px;
+  }
+}
+
+.eligibility_contents {
+  max-width: 500px;
+}

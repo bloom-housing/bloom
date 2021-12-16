@@ -778,7 +778,7 @@
             "senior55": "Mayores de 55 años",
             "senior62": "Mayores 62+",
             "partiallySenior": "Parcialmente Mayores",
-            "specialNeeds": "Necesidades especiales"
+            "specialNeeds": "Accesible"
         },
         "reservedFor": "Reservado para% {type}",
         "reservedCommunityType": "Tipo de comunidad reservada",
@@ -982,8 +982,9 @@
         "myApplications": "mis aplicaciónes",
         "myDashboard": "Mi tablero",
         "mySettings": "Mi configuración",
-        "signIn": "Iniciar sesión",
-        "signOut": "Cerrar sesión",
+        "signIn": "Registrarse",
+        "signOut": "desconectar",
+        "signUp": "Inscribirse",
         "siteTitle": "Portal de vivienda",
         "siteTitlePartners": "Portal de socios",
         "skip": "Saltar al contenido principal",
@@ -1001,9 +1002,9 @@
         "welcomeEnglish": "Bienvenidos",
         "welcomeSpanish": "Bienvenido",
         "welcomeVietnamese": "vietnamita",
-        "about": "Sobre nosotras",
+        "about": "Acerca de",
         "feedback": "Realimentación",
-        "resources": "Recursos para residentes"
+        "resources": "Recursos"
     },
     "pageDescription": {
         "welcome": "Busque y solicite viviendas asequibles en el portal de viviendas de% {regionName}",
@@ -1232,8 +1233,10 @@
         "default": "El agente de la propiedad se pondrá en contacto con los solicitantes en orden de clasificación hasta que se llenen las vacantes. Se verificará toda la información que haya proporcionado y se confirmará su elegibilidad. Su solicitud será eliminada de la lista de espera si ha realizado declaraciones fraudulentas. Si no podemos verificar una preferencia de vivienda que ha reclamado, no recibirá la preferencia, pero no será penalizado de otra manera. Si se elige su solicitud, esté preparado para completar una solicitud más detallada y proporcionar los documentos de respaldo requeridos."
     },
     "listingFilters": {
-        "buttonTitle": "Filtrar listados",
-        "buttonTitleWithNumber": "Filtrar listados (% {number})",
+        "buttonTitle": "Filtrar",
+        "buttonTitleWithNumber": "Filtrar (% {number})",
+        "loading": "Cargando...",
+        "rentalsFound": "%{smart_count} alquiler encontrado|||| %{smart_count} alquileres encontrados",
         "resetButton": "Reiniciar",
         "modalTitle": "Filtrar resultados",
         "modalHeader": "Utilice estas opciones para refinar su lista de propiedades.",
@@ -1257,7 +1260,7 @@
         "applyFilters": "Aplicar filtros",
         "noResults": "No hay resultados",
         "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados.",
-        "includeUnknowns": "Incluir resultados con información incompleta",
+        "includeUnknowns": "Mostrar casas en las que falta información",
         "senior": "Vivienda para personas mayores (62+)",
         "independentLivingHousing": "Comunidad de vida independiente",
         "minAmiPercentageLabel": "Unidades reservadas para personas con ingresos de",
@@ -1282,7 +1285,7 @@
     },
     "eligibility": {
         "progress": {
-            "header": "Busquemos tu próxima casa",
+            "header": "Encuentra alquileres para mí",
             "sections": {
                 "welcome": "Bienvenidos",
                 "household": "Hogar",
@@ -1312,25 +1315,32 @@
         },
         "age": {
             "prompt": "¿Cuántos años tienes?",
-            "description": "Algunas propiedades solo aceptan personas mayores de 62 años.",
+            "description": "Puede elegir varios rangos de edad. Algunos alquileres tienen requisitos de edad mínima.",
             "lessThan55": "< 55",
             "55to61": "55 - 61",
             "62plus": "62+"
         },
         "disability": {
             "prompt": "¿Tienes alguna discapacidad?",
-            "description": "Algunas propiedades están destinadas a residentes con discapacidades. Algunas casas pueden solicitar una prueba de discapacidad con su solicitud."
+            "description": "Es posible que deba proporcionar un comprobante de discapacidad cuando solicite algunas viviendas."
         },
         "income": {
-            "prompt": "¿Cuál es el ingreso anual total de su hogar?",
-            "description": "Incluya los ingresos de todas las personas que vivirán en su hogar, incluido usted mismo. Los ingresos incluyen seguridad social, cuentas de jubilación y salarios.",
+            "prompt": "¿Cuál es el ingreso anual total estimado para todas las personas que vivirán con usted, incluido usted mismo?",
+            "description": "Incluya los ingresos de los últimos 12 meses para usted y todos los que vivirán con usted. Cuando solicite un alquiler, las propiedades también considerarán otros factores para determinar si su ingreso anual estimado cumple con los requisitos de elegibilidad. Ejemplos de ingresos:",
+            "examples": {
+                "wages": "Salarios y propinas",
+                "socialSecurity": "Seguridad Social",
+                "retirement": "Ingreso de jubilación",
+                "unemployment": "Compensacion por desempleo"
+            },
             "label": "Rango de ingresos",
             "ranges": {
-                "below10k": "Por debajo de $ 10,000",
-                "10kTo20k": "$10,000 - $20,000",
-                "30kTo40k": "$30,000 - $40,000",
-                "40kTo50k": "$40,000 - $50,000",
-                "over50k": "Más de $ 50,000"
+                "below10k": "$0 - $9,999",
+                "10kTo20k": "$10,000 - $19,999",
+                "20kTo30k": "$20,000 - $29,999",
+                "30kTo40k": "$30,000 - $39,999",
+                "40kTo50k": "$40,000 - $49,999",
+                "over50k": "$50,000 o más"
             }
         },
         "accessibility": {

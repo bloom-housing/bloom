@@ -25,12 +25,12 @@ const Layout = (props) => {
 
   const menuLinks: MenuLink[] = [
     {
-      title: t("pageTitle.resources"),
-      href: "/resources",
-    },
-    {
       title: t("pageTitle.about"),
       href: "/about",
+    },
+    {
+      title: t("pageTitle.resources"),
+      href: "/resources",
     },
   ]
   if (profile) {
@@ -59,6 +59,12 @@ const Layout = (props) => {
     menuLinks.push({
       title: t("nav.signIn"),
       href: "/sign-in",
+      class: "navbar-link__sign-in",
+    })
+    menuLinks.push({
+      title: t("nav.signUp"),
+      href: "/create-account",
+      class: "navbar-link__sign-up",
     })
   }
 
@@ -72,6 +78,7 @@ const Layout = (props) => {
           logoSrc="/images/detroit-logo.png"
           homeURL="/"
           title={t("nav.siteTitle")}
+          subtitle="City of Detroit"
           logoWidth={"medium"}
           languages={languages.map((lang) => {
             return {
@@ -82,6 +89,7 @@ const Layout = (props) => {
             }
           })}
           menuLinks={menuLinks}
+          desktopMinWidth={1024}
         />
         <main id="main-content">{props.children}</main>
       </div>

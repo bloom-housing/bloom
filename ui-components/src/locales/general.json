@@ -931,7 +931,7 @@
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
       "partiallySenior": "Partially Seniors",
-      "specialNeeds": "Special Needs"
+      "specialNeeds": "Accessible"
     },
     "reservedFor": "Reserved for %{type}",
     "reservedCommunityType": "Reserved Community Type",
@@ -1148,8 +1148,9 @@
     "myApplications": "My Applications",
     "myDashboard": "My Dashboard",
     "mySettings": "My Settings",
-    "signIn": "Log in",
-    "signOut": "Log out",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signUp": "Sign up",
     "siteTitle": "Housing Portal",
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
@@ -1167,9 +1168,9 @@
     "welcomeEnglish": "Welcome",
     "welcomeSpanish": "Bienvenido",
     "welcomeVietnamese": "Tiếng Việt",
-    "about": "About Us",
+    "about": "About",
     "feedback": "Feedback",
-    "resources": "Resident Resources"
+    "resources": "Resources"
   },
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
@@ -1408,8 +1409,10 @@
     "default": "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents."
   },
   "listingFilters": {
-    "buttonTitle": "Filter listings",
-    "buttonTitleWithNumber": "Filter listings (%{number})",
+    "buttonTitle": "Filter",
+    "buttonTitleWithNumber": "Filter (%{number})",
+    "loading": "Loading...",
+    "rentalsFound": "%{smart_count} rental found |||| %{smart_count} rentals found",
     "resetButton": "Reset",
     "modalTitle": "Filter results",
     "modalHeader": "Use these options to refine your list of properties.",
@@ -1433,7 +1436,7 @@
     "applyFilters": "Apply filters",
     "noResults": "No results",
     "noResultsSubtitle": "Edit or remove filters for best results.",
-    "includeUnknowns": "Include Results with Incomplete Information",
+    "includeUnknowns": "Show homes with missing information",
     "senior": "Senior housing (62+)",
     "independentLivingHousing": "Independent living community",
     "minAmiPercentageLabel": "Units set aside for people with incomes of",
@@ -1470,7 +1473,7 @@
   },
   "eligibility": {
     "progress": {
-      "header": "Let's find your next home",
+      "header": "Find rentals for me",
       "sections": {
         "welcome": "Welcome",
         "household": "Household",
@@ -1501,25 +1504,32 @@
     },
     "age": {
       "prompt": "How old are you?",
-      "description": "Some properties only accept individuals over 62 years of age.",
+      "description": "You can choose multiple age ranges. Some rentals have minimum age requirements.",
       "lessThan55": "< 55",
       "55to61": "55 - 61",
       "62plus": "62+"
     },
     "disability": {
       "prompt": "Do you have a disability?",
-      "description": "Some properties are meant for residents with disabilities. Some homes might request proof of disability with your application."
+      "description": "You might need to provide proof of disability when you apply for some homes."
     },
     "income": {
-      "prompt": "What is your total household annual income?",
-      "description": "Include income for everyone who will be living in your household including yourself. Income includes social security, retirement accounts and wages.",
+      "prompt": "What is the estimated total annual income for everyone who will live with you, including yourself?",
+      "description": "Include income from the last 12 months for yourself and everyone who will live with you. When you apply for a rental, properties will also consider other factors to determine if your estimated annual income meets eligibility requirements.  Examples of income:",
+      "examples": {
+        "wages": "Wages and tips",
+        "socialSecurity": "Social Security",
+        "retirement": "Retirement income",
+        "unemployment": "Unemployment compensation"
+      },
       "label": "Income range",
       "ranges": {
-        "below10k": "Below $10,000",
-        "10kTo20k": "$10,000 - $20,000",
-        "30kTo40k": "$30,000 - $40,000",
-        "40kTo50k": "$40,000 - $50,000",
-        "over50k": "Over $50,000"
+        "below10k": "$0 - $9,999",
+        "10kTo20k": "$10,000 - $19,999",
+        "20kTo30k": "$20,000 - $29,999",
+        "30kTo40k": "$30,000 - $39,999",
+        "40kTo50k": "$40,000 - $49,999",
+        "over50k": "$50,000 or more"
       }
     },
     "accessibility": {
