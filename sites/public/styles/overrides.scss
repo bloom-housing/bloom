@@ -366,10 +366,9 @@ li.progress-nav__item {
 }
 
 .hero__button__first {
-  margin-bottom: 1rem;
   background-color: white;
-  margin-right: 20px;
-  width: 20%;
+  width: 210px;
+  margin: 10px;
 
   @screen sm {
     border-radius: 30px;
@@ -382,7 +381,8 @@ li.progress-nav__item {
   }
 }
 .hero__button__second {
-  width: 20%;
+  width: 265px;
+  margin: 10px;
 
   @screen sm {
     border-left-width: 1px;
