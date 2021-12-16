@@ -101,7 +101,6 @@ export class UserController {
 
   @Put("update-password")
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
-  @UseInterceptors(ActivityLogInterceptor)
   async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
     const accessToken = await this.userService.updatePassword(dto)
     return mapTo(LoginResponseDto, { accessToken })
