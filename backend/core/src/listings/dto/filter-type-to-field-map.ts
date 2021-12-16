@@ -52,5 +52,5 @@ export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   rollInShower: "features.rollInShower",
   grabBars: "features.grabBars",
   heatingInUnit: "features.heatingInUnit",
-  acInUnit: "features.acInUnit"
+  acInUnit: "features.acInUnit",
 }

@@ -9,18 +9,18 @@ export enum AgeRangeType {
 }
 
 export enum AccessibilityFeatures {
-  "elevator"= "elevator",
-  "wheelchairRamp"= "wheelchairRamp",
-  "serviceAnimalsAllowed"= "serviceAnimalsAllowed",
-  "accessibleParking"= "accessibleParking",
-  "parkingOnSite"= "parkingOnSite",
-  "inUnitWasherDryer"= "inUnitWasherDryer",
-  "laundryInBuilding"= "laundryInBuilding",
-  "barrierFreeEntrance"= "barrierFreeEntrance",
-  "rollInShower"= "rollInShower",
-  "grabBars"= "grabBars",
-  "heatingInUnit"= "heatingInUnit",
-  "acInUnit"= "acInUnit",
+  "elevator" = "elevator",
+  "wheelchairRamp" = "wheelchairRamp",
+  "serviceAnimalsAllowed" = "serviceAnimalsAllowed",
+  "accessibleParking" = "accessibleParking",
+  "parkingOnSite" = "parkingOnSite",
+  "inUnitWasherDryer" = "inUnitWasherDryer",
+  "laundryInBuilding" = "laundryInBuilding",
+  "barrierFreeEntrance" = "barrierFreeEntrance",
+  "rollInShower" = "rollInShower",
+  "grabBars" = "grabBars",
+  "heatingInUnit" = "heatingInUnit",
+  "acInUnit" = "acInUnit",
 }
 
 class EligibilityRequirements {
@@ -42,11 +42,24 @@ class EligibilityRequirements {
   acInUnit: boolean
   completedSections: number
 
-  
-
-  constructor(age: AgeRangeType, householdSizeCount: number, income: string, disability: string, elevator: boolean, wheelchairRamp: boolean,
-  serviceAnimalsAllowed: boolean, accessibleParking: boolean, parkingOnSite: boolean, inUnitWasherDryer: boolean, laundryInBuilding: boolean,
-  barrierFreeEntrance: boolean, rollInShower: boolean, grabBars: boolean, heatingInUnit: boolean, acInUnit: boolean) {
+  constructor(
+    age: AgeRangeType,
+    householdSizeCount: number,
+    income: string,
+    disability: string,
+    elevator: boolean,
+    wheelchairRamp: boolean,
+    serviceAnimalsAllowed: boolean,
+    accessibleParking: boolean,
+    parkingOnSite: boolean,
+    inUnitWasherDryer: boolean,
+    laundryInBuilding: boolean,
+    barrierFreeEntrance: boolean,
+    rollInShower: boolean,
+    grabBars: boolean,
+    heatingInUnit: boolean,
+    acInUnit: boolean
+  ) {
     this.age = age
     this.householdSizeCount = householdSizeCount
     this.income = income
@@ -77,51 +90,51 @@ class EligibilityRequirements {
     this.income = income
   }
 
-  setElevator(elevator: boolean){
+  setElevator(elevator: boolean) {
     this.elevator = elevator
   }
 
-  setWheelchairRamp(wheelchairRamp: boolean){
+  setWheelchairRamp(wheelchairRamp: boolean) {
     this.wheelchairRamp = wheelchairRamp
   }
 
-  setServiceAnimalsAllowed(serviceAnimalsAllowed: boolean){
+  setServiceAnimalsAllowed(serviceAnimalsAllowed: boolean) {
     this.serviceAnimalsAllowed = serviceAnimalsAllowed
   }
 
-  setAccessibleParking(accessibleParking: boolean){
+  setAccessibleParking(accessibleParking: boolean) {
     this.accessibleParking = accessibleParking
   }
 
-  setParkingOnSite(parkingOnSite: boolean){
+  setParkingOnSite(parkingOnSite: boolean) {
     this.parkingOnSite = parkingOnSite
   }
 
-  setInUnitWasherDryer(inUnitWasherDryer: boolean){
+  setInUnitWasherDryer(inUnitWasherDryer: boolean) {
     this.inUnitWasherDryer = inUnitWasherDryer
   }
 
-  setLaundryInBuilding(laundryInBuilding: boolean){
+  setLaundryInBuilding(laundryInBuilding: boolean) {
     this.laundryInBuilding = laundryInBuilding
   }
 
-  setBarrierFreeEntrance(barrierFreeEntrance: boolean){
+  setBarrierFreeEntrance(barrierFreeEntrance: boolean) {
     this.barrierFreeEntrance = barrierFreeEntrance
   }
 
-  setRollInShower(rollInShower: boolean){
+  setRollInShower(rollInShower: boolean) {
     this.rollInShower = rollInShower
   }
 
-  setGrabBars(grabBars: boolean){
+  setGrabBars(grabBars: boolean) {
     this.grabBars = grabBars
   }
 
-  setHeatingInUnit(heatingInUnit: boolean){
+  setHeatingInUnit(heatingInUnit: boolean) {
     this.heatingInUnit = heatingInUnit
   }
 
-  setaAcInUnit(acInUnit: boolean){
+  setaAcInUnit(acInUnit: boolean) {
     this.acInUnit = acInUnit
   }
 
@@ -135,7 +148,24 @@ class EligibilityRequirements {
 }
 
 export const blankEligibilityRequirements = () => {
-  return new EligibilityRequirements(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+  return new EligibilityRequirements(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  )
 }
 
 export const EligibilityContext = React.createContext({

@@ -152,18 +152,18 @@ const FilterForm = (props: FilterFormProps) => {
             }}
           />
         </div>
-        <label className="field-label">{t("eligibility.accessibility.title")}</label> 
+        <label className="field-label">{t("eligibility.accessibility.title")}</label>
         <div className="accessibility-filter-selector">
           <Field
             id="elevator"
             name={FrontendListingFilterStateKeys.elevator}
             type="checkbox"
-            label= {t("eligibility.accessibility.elevator")}
+            label={t("eligibility.accessibility.elevator")}
             register={register}
             inputProps={{
               defaultChecked: Boolean(props.filterState?.elevator),
             }}
-          /> 
+          />
           <Field
             id="wheelchairRamp"
             name={FrontendListingFilterStateKeys.wheelchairRamp}

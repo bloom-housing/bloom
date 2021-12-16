@@ -117,7 +117,7 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.minAmiPercentage]?: number
+  [ListingFilterKeys.minAmiPercentage]?: number;
 
   @Expose()
   @ApiProperty({
@@ -138,7 +138,7 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.wheelchairRamp]?: boolean;
-  
+
   @Expose()
   @ApiProperty({
     type: Boolean,
@@ -178,7 +178,7 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.inUnitWasherDryer]?: boolean;
-  
+
   @Expose()
   @ApiProperty({
     type: Boolean,
@@ -188,7 +188,7 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.laundryInBuilding]?: boolean;
-  
+
   @Expose()
   @ApiProperty({
     type: Boolean,
@@ -237,6 +237,5 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.acInUnit]?: boolean;
-
+  [ListingFilterKeys.acInUnit]?: boolean
 }
