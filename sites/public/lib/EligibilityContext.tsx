@@ -44,35 +44,25 @@ class EligibilityRequirements {
 
   
 
-  constructor(age: AgeRangeType, householdSizeCount: number, income: string, disability: string, elevator: boolean,
-    wheelchairRamp: boolean,
-    serviceAnimalsAllowed: boolean,
-    accessibleParking: boolean,
-    parkingOnSite: boolean,
-    inUnitWasherDryer: boolean,
-    laundryInBuilding: boolean,
-    barrierFreeEntrance: boolean,
-    rollInShower: boolean,
-    grabBars: boolean,
-    heatingInUnit: boolean,
-    acInUnit: boolean) {
+  constructor(age: AgeRangeType, householdSizeCount: number, income: string, disability: string, elevator: boolean, wheelchairRamp: boolean,
+  serviceAnimalsAllowed: boolean, accessibleParking: boolean, parkingOnSite: boolean, inUnitWasherDryer: boolean, laundryInBuilding: boolean,
+  barrierFreeEntrance: boolean, rollInShower: boolean, grabBars: boolean, heatingInUnit: boolean, acInUnit: boolean) {
     this.age = age
     this.householdSizeCount = householdSizeCount
     this.income = income
     this.disability = disability
     this.elevator = elevator
-      this.wheelchairRamp = wheelchairRamp
-      this.serviceAnimalsAllowed = serviceAnimalsAllowed
-      this.accessibleParking = accessibleParking
-      this.parkingOnSite = parkingOnSite
-      this.inUnitWasherDryer = inUnitWasherDryer
-      this.laundryInBuilding = laundryInBuilding
-      this.barrierFreeEntrance = barrierFreeEntrance
-      this.rollInShower = rollInShower
-      this.grabBars = grabBars
-      this.heatingInUnit = heatingInUnit
-      this.acInUnit = acInUnit
-
+    this.wheelchairRamp = wheelchairRamp
+    this.serviceAnimalsAllowed = serviceAnimalsAllowed
+    this.accessibleParking = accessibleParking
+    this.parkingOnSite = parkingOnSite
+    this.inUnitWasherDryer = inUnitWasherDryer
+    this.laundryInBuilding = laundryInBuilding
+    this.barrierFreeEntrance = barrierFreeEntrance
+    this.rollInShower = rollInShower
+    this.grabBars = grabBars
+    this.heatingInUnit = heatingInUnit
+    this.acInUnit = acInUnit
     this.completedSections = 0
   }
 
