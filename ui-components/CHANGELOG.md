@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.47...@bloom-housing/ui-components@3.0.1-alpha.48) (2021-12-15)
+
+
+### Bug Fixes
+
+* add mailThin icon to stories ([ba8400b](https://github.com/bloom-housing/bloom/commit/ba8400bed4e9d653f85ec38ef4bca3b74df371dd))
+* make mailThin background transparent ([87b372b](https://github.com/bloom-housing/bloom/commit/87b372b28e1b44c5a450544a2d15f09a84de2ebb))
+
+
+
+
+
+## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.46...@bloom-housing/ui-components@3.0.1-alpha.47) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.45...@bloom-housing/ui-components@3.0.1-alpha.46) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.44...@bloom-housing/ui-components@3.0.1-alpha.45) (2021-12-14)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.43...@bloom-housing/ui-components@3.0.1-alpha.44) (2021-12-14)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

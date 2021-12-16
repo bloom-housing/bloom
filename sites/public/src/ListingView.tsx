@@ -310,6 +310,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
+        listingStatus={listing.status}
       />
       <SubmitApplication
         applicationMailingAddress={listing.applicationMailingAddress}
@@ -325,6 +326,7 @@ export const ListingView = (props: ListingProps) => {
             `MMM. DD, YYYY [${t("t.at")}] h A`
           ),
         }}
+        listingStatus={listing.status}
       />
     </>
   )

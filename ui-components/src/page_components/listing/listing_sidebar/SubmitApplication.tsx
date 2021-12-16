@@ -4,6 +4,7 @@ import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
 import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 export interface PostmarkedApplication {
   postmarkedApplicationsReceivedByDate: string
@@ -17,9 +18,14 @@ export interface ApplicationAddressesProps {
   applicationDropOffAddressOfficeHours?: string
   applicationOrganization?: string
   postmarkedApplicationData?: PostmarkedApplication
+  listingStatus?: ListingStatus
 }
 
 const SubmitApplication = (props: ApplicationAddressesProps) => {
+  if (props.listingStatus === ListingStatus.closed) {
+    return null
+  }
+
   return (
     <>
       {(props.applicationMailingAddress ||

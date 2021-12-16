@@ -22,8 +22,9 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { authzActions } from "../../auth/enum/authz-actions.enum"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
-import { PaginatedApplicationListQueryParams } from "../applications.controller"
-import { ApplicationCreateDto, ApplicationUpdateDto } from "../dto/application.dto"
+import { PaginatedApplicationListQueryParams } from "../dto/paginated-application-list-query-params"
+import { ApplicationCreateDto } from "../dto/application-create.dto"
+import { ApplicationUpdateDto } from "../dto/application-update.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {

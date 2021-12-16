@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.39...@bloom-housing/backend-core@3.0.1-alpha.40) (2021-12-15)
+
+
+### Features
+
+* **backend:** refactor applications module ([#2279](https://github.com/bloom-housing/bloom/issues/2279)) ([e0b4523](https://github.com/bloom-housing/bloom/commit/e0b4523817c7d3863c3802d8a9f61d1a1c8685d4))
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.38...@bloom-housing/backend-core@3.0.1-alpha.39) (2021-12-14)
+
+
+### Features
+
+* removes ListingLangCacheInterceptor from get by id ([7acbd82](https://github.com/bloom-housing/bloom/commit/7acbd82485edfa9a8aa5a82473d5bbe5cee571e7))
+
+
+
+
+
 ## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.37...@bloom-housing/backend-core@3.0.1-alpha.38) (2021-12-14)
 
 

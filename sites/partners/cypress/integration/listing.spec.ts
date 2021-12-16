@@ -214,4 +214,14 @@ describe("Listing Management Tests", () => {
       cy.getByID("openhouseHeader").contains("11:05:00 PM")
     })
   })
+
+  it("verify open listing warning happens", () => {
+    cy.getByTestId("listingEditButton").contains("Edit").click()
+    cy.getByTestId("nameField").type(" (Edited)")
+    cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
+    cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
+    cy.fixture("listing").then((listing) => {
+      cy.get("#name").contains(`${listing["name"]} (Edited)`)
+    })
+  })
 })

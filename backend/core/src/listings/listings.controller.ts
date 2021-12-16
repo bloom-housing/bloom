@@ -34,7 +34,6 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
-import { ListingLangCacheInterceptor } from "../shared/interceptors/listing-lang-cache.interceptor"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
 import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 
@@ -75,7 +74,7 @@ export class ListingsController {
 
   @Get(`:id`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,

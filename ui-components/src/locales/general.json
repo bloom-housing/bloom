@@ -1319,7 +1319,8 @@
     },
     "units": "Listing Units",
     "unitsDescription": "Select the building units that are available through the listing.",
-    "unitTypesOrIndividual": "Do you want to show unit types or individual units?"
+    "unitTypesOrIndividual": "Do you want to show unit types or individual units?",
+    "listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal."
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",

@@ -4,6 +4,7 @@ import {
   Listing,
   ListingReviewOrder,
   UnitsSummarized,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
@@ -57,7 +58,10 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
     formattedDate = openDate.format("MMM. D, YYYY")
     content = t("listings.applicationOpenPeriod")
   } else {
-    if (listing.applicationDueDate) {
+    if (listing.status === ListingStatus.closed) {
+      appStatus = ApplicationStatusType.Closed
+      content = t("listings.applicationsClosed")
+    } else if (listing.applicationDueDate) {
       const dueDate = moment(listing.applicationDueDate)
       const dueTime = moment(listing.applicationDueTime)
       formattedDate = dueDate.format("MMM. DD, YYYY")
