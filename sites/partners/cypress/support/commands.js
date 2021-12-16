@@ -31,6 +31,10 @@ Cypress.Commands.add("getByID", (id, ...args) => {
   return cy.get(`#${CSS.escape(id)}`, ...args)
 })
 
+Cypress.Commands.add("getByTestId", (testId) => {
+  return cy.get(`[data-test-id="${testId}"]`)
+})
+
 Cypress.Commands.add("login", () => {
   cy.visit("/")
   cy.fixture("user").then((user) => {
