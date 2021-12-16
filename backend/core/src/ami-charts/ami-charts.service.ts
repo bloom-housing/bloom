@@ -4,8 +4,8 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 import { QueryOneOptions } from "../shared/services/abstract-service"
 import { NotFoundException } from "@nestjs/common"
-import { assignDefined } from "../shared/assign-defined"
 import { AmiChartListQueryParams } from "./dto/ami-chart-list-query-params"
+import { assignDefined } from "../shared/utils/assign-defined"
 
 export class AmiChartsService {
   constructor(
