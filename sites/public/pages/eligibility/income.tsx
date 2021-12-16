@@ -41,15 +41,7 @@ const EligibilityIncome = () => {
   }
 
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={6}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={6}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}

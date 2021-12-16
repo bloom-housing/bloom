@@ -19,6 +19,7 @@ import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/co
 import { EligibilityContext, AccessibilityFeatures } from "../../lib/EligibilityContext"
 import FormBackLink from "../../src/forms/applications/FormBackLink"
 import { eligibilityRoute } from "../../lib/helpers"
+import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityAccessibility = () => {
   const router = useRouter()
@@ -64,16 +65,10 @@ const EligibilityAccessibility = () => {
     eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
   }
 
+
+
   return (
-    <FormsLayout>
-      <FormCard header={t("eligibility.progress.header")}>
-        <ProgressNav
-          currentPageSection={5}
-          completedSections={eligibilityRequirements.completedSections}
-          labels={ELIGIBILITY_SECTIONS.map((label) => t(`eligibility.progress.sections.${label}`))}
-          routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
-        />
-      </FormCard>
+    <EligibilityLayout currentPageSection={5}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}
@@ -227,7 +222,7 @@ const EligibilityAccessibility = () => {
           </div>
         </Form>
       </FormCard>
-    </FormsLayout>
+    </EligibilityLayout>
   )
 }
 
