@@ -372,7 +372,7 @@ li.progress-nav__item {
   width: 20%;
 
   @screen sm {
-    border-radius: 30px 30px 30px 30px;
+    border-radius: 30px;
     border-right-width: 1px;
     margin-bottom: 0;
   }
@@ -386,7 +386,7 @@ li.progress-nav__item {
 
   @screen sm {
     border-left-width: 1px;
-    border-radius: 30px 30px 30px 30px;
+    border-radius: 30px;
   }
 
   &:focus {
