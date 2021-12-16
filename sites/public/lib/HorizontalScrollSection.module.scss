@@ -73,7 +73,11 @@ $icon-large: 40px;
 }
 
 .title button.title__button[disabled] svg {
-  fill-opacity: 40%;
+  fill-opacity: 20%;
+}
+
+.title button.title__button:hover svg {
+  fill: $tailwind-primary-darker;
 }
 
 .content {
