@@ -8,7 +8,6 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
-  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -301,7 +300,7 @@ export const ListingView = (props: ListingProps) => {
         applicationsDueDate={moment(listing.applicationDueDate).format(
           `MMM. DD, YYYY [${t("t.at")}] h A`
         )}
-        applicationsOpen={!appOpenInFuture && listing.status !== ListingStatus.closed}
+        applicationsOpen={!appOpenInFuture}
         applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
@@ -311,6 +310,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
+        listingStatus={listing.status}
       />
       <SubmitApplication
         applicationMailingAddress={listing.applicationMailingAddress}
@@ -326,6 +326,7 @@ export const ListingView = (props: ListingProps) => {
             `MMM. DD, YYYY [${t("t.at")}] h A`
           ),
         }}
+        listingStatus={listing.status}
       />
     </>
   )
