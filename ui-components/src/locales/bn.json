@@ -1382,7 +1382,7 @@
         "hasAvailability": "প্রাপ্যতা আছে",
         "noAvailability": "সক্ষমতা নেই",
         "waitlist": "প্রতীক্ষার তালিকা",
-        "applyFilters": "ফিল্টার প্রয়োগ করুন",
+        "applyFilter": "ফিল্টার প্রয়োগ করুন",
         "noResults": "কোন ফলাফল নেই",
         "noResultsSubtitle": "সেরা ফলাফলের জন্য ফিল্টার সম্পাদনা বা অপসারণ করুন।",
         "includeUnknowns": "অনুপস্থিত তথ্য সহ বাড়ি দেখান",
