@@ -65,8 +65,6 @@ const EligibilityAccessibility = () => {
     eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
   }
 
-
-
   return (
     <EligibilityLayout currentPageSection={5}>
       <FormCard>
