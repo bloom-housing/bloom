@@ -1225,7 +1225,7 @@
         "findRentalsForMe": "Encuentra alquileres para mí",
         "latestListings": "Últimos listados",
         "lastUpdated": "Última actualización %{date}",
-        "neighborhoods": "Barrios",
+        "cityRegions": "Regiones de la ciudad",
         "subTitle": "Haga clic en el botón a continuación para encontrar viviendas de alquiler según sus ingresos y las necesidades de su hogar."
     },
     "whatToExpect": {
