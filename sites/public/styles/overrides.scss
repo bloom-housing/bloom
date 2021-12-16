@@ -255,8 +255,8 @@ $header-desktop-min-size: 1024px;
 
 li.progress-nav__item,
 h1.form-card__header_title {
-  text-transform: capitalize;
   padding: 0;
+  text-transform: capitalize;
 }
 
 // For the eligibility questionnaire, there are five headers, so give each 20% of the full navbar
@@ -530,9 +530,9 @@ a.button.is-primary:hover {
 .button {
   @apply text-sm;
   border-radius: 60px;
-  text-transform: initial;
   letter-spacing: initial;
   padding: 0.5rem 1rem;
+  text-transform: initial;
 
   @screen md {
     @apply text-base;
@@ -553,12 +553,12 @@ a.button.is-primary:hover {
     }
 
     &.ui-base svg {
-      width: 1rem;
       height: 1rem;
+      width: 1rem;
 
       @screen md {
-        width: 1.5rem;
         height: 1.5rem;
+        width: 1.5rem;
       }
     }
 
@@ -569,8 +569,8 @@ a.button.is-primary:hover {
 }
 
 .button.is-secondary {
-  color: $tailwind-primary-darker;
   border-color: $tailwind-primary-darker;
+  color: $tailwind-primary-darker;
 
   &:hover {
     background-color: $tailwind-primary-darker;
@@ -610,19 +610,19 @@ a.button.is-primary:hover {
     padding-inline-end: 10px;
 
     svg {
-      width: 20px;
       height: 20px;
+      width: 20px;
     }
   }
 }
 
 /** Filter Modal */
 .modal {
+  border-radius: 0;
   height: 100%;
   max-height: 100vh;
-  min-width: 20rem;
-  border-radius: 0;
   max-width: initial;
+  min-width: 20rem;
   width: 100%;
 
   @screen md {
@@ -633,11 +633,11 @@ a.button.is-primary:hover {
   .modal__title {
     @apply text-2xl font-bold;
   }
-  
+
   .modal__close svg {
-    fill: #5F6368;
+    fill: #5f6368;
   }
-  
+
   .modal__inner {
     padding: 1rem 1.5rem;
 
@@ -647,8 +647,8 @@ a.button.is-primary:hover {
   }
 
   .form-card__group {
-    padding: 0;
     margin: 0;
+    padding: 0;
   }
 
   .filter-section label,
@@ -658,11 +658,6 @@ a.button.is-primary:hover {
 
   .bedroom-selector {
     margin-bottom: 1rem;
-
-    @screen md {
-      display: flex;
-      // margin-bottom: 0;
-    }
   }
 
   .rent-range {
