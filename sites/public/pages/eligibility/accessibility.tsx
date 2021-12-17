@@ -84,6 +84,7 @@ const EligibilityAccessibility = () => {
             <p className="field-note mb-4" id="accessibility-description">
               {t("eligibility.accessibility.description")}
             </p>
+            <div className="accessibility-eligibility-selector">
             <Field
               id="elevator"
               name="elevator"
@@ -204,6 +205,7 @@ const EligibilityAccessibility = () => {
               }}
               register={register}
             />
+            </div>
           </div>
           <div className="form-card__pager">
             <div className="form-card__pager-row primary">

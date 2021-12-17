@@ -407,6 +407,21 @@ li.progress-nav__item {
 .accessibility-filter-selector {
   column-count: 2;
   margin-top: 10px;
+  margin-bottom: 20px;
+  .field{
+    margin-bottom: 3.5px;
+  }
+}
+
+.accessibility-eligibility-selector {
+  column-count: 2;
+  font-size: small;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .field{
+    margin-bottom: 3.5px;
+  }
+  
 }
 
 .page-header__title {
