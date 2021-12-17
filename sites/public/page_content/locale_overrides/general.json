@@ -11,11 +11,12 @@
   },
   "footer": {
     "copyright": "City of Detroit © 2021 • All Rights Reserved",
-    "header": "Detroit Home Connect is a project of the",
-    "headerUrl": "https://detroitmi.gov/departments/housing-and-revitalization-department",
-    "headerLink": "City of Detroit - Housing and Revitalization Department",
-    "forGeneralInquiries": "For general program inquiries, you may call the City of Detroit HRD at (313) 224-6380.",
-    "forListingQuestions": "For listing and application questions, please contact the Property Agent displayed on each listing."
+    "header": "Detroit Home Connect",
+    "headerLink": "City of Detroit",
+    "forGeneralInquiries": "For general program inquiries:",
+    "youMayCall": "You may call the City of Detroit HRD at:",
+    "forListingQuestions": "For listing and application questions:",
+    "pleaseContact": "Please contact the Property Agent displayed on each listing."
   },
   "leasingAgent": {
     "contact": "Management Company",

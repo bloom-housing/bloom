@@ -95,23 +95,49 @@ const Layout = (props) => {
       </div>
 
       <SiteFooter>
-        <h2 className="sr-only">{t("footer.srHeading")}</h2>
-        <FooterSection>
-          <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
-        </FooterSection>
-        <FooterSection>
-          <h3 className="sr-only">{t("footer.srProjectInformation")}</h3>
-          <p>
-            {t("footer.header")}
-            <br />
-            <a href={t("footer.headerUrl")} target="_blank">
-              {t("footer.headerLink")}
-            </a>
-          </p>
-          <h3 className="sr-only">{t("footer.srContactInformation")}</h3>
-          <p className="mt-10 text-tiny">{t("footer.forListingQuestions")}</p>
-          <p className="text-tiny">{t("footer.forGeneralInquiries")}</p>
-        </FooterSection>
+        <div className="footer-sections">
+          <div className="footer-logo">
+            <h2 className="sr-only">{t("footer.srHeading")}</h2>
+            <FooterSection small={true}>
+              <div className="flex justify-center pb-7">
+                <img src="/images/detroit-logo-white.png" alt="City of Detroit logo" />
+                <div className="flex flex-col justify-center text-white ml-2">
+                  <h4 className="text-left text-base font-bold md:text-lg">{t("footer.header")}</h4>
+                  <a
+                    className="text-left text-xs md:text-base"
+                    href="https://detroitmi.gov/departments/housing-and-revitalization-department"
+                    target="_blank"
+                  >
+                    {t("footer.headerLink")}
+                  </a>
+                </div>
+              </div>
+            </FooterSection>
+          </div>
+          <div className="footer-info">
+            <FooterSection small={true} className="footer-info__column">
+              <div className="flex flex-col justify-center px-4 text-white">
+                <h5 className="text-sm font-bold text-left mb-3">
+                  {t("footer.forListingQuestions")}
+                </h5>
+                <p className="text-sm text-left">{t("footer.pleaseContact")}</p>
+              </div>
+            </FooterSection>
+            <FooterSection small={true} className="footer-info__column">
+              <div className="flex flex-col justify-center px-4 text-white">
+                <h5 className="text-sm font-bold text-left mb-3">
+                  {t("footer.forGeneralInquiries")}
+                </h5>
+                <p className="text-sm text-left">
+                  {t("footer.youMayCall")}{" "}
+                  <a className="font-bold" href="tel:313-224-6380">
+                    (313) 224-6380
+                  </a>
+                </p>
+              </div>
+            </FooterSection>
+          </div>
+        </div>
         <FooterNav copyright={t("footer.copyright")}>
           <Link href="/feedback">
             <a>{t("pageTitle.feedback")}</a>
