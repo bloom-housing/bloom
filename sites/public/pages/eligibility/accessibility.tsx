@@ -85,126 +85,126 @@ const EligibilityAccessibility = () => {
               {t("eligibility.accessibility.description")}
             </p>
             <div className="accessibility-eligibility-selector">
-            <Field
-              id="elevator"
-              name="elevator"
-              type="checkbox"
-              label={t("eligibility.accessibility.elevator")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements?.elevator,
-              }}
-              register={register}
-            />
-            <Field
-              id="wheelchairRamp"
-              name="wheelchairRamp"
-              type="checkbox"
-              label={t("eligibility.accessibility.wheelchairRamp")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.wheelchairRamp,
-              }}
-              register={register}
-            />
-            <Field
-              id="serviceAnimalsAllowed"
-              name="serviceAnimalsAllowed"
-              type="checkbox"
-              label={t("eligibility.accessibility.serviceAnimalsAllowed")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.serviceAnimalsAllowed,
-              }}
-              register={register}
-            />
-            <Field
-              id="accessibleParking"
-              name="accessibleParking"
-              type="checkbox"
-              label={t("eligibility.accessibility.accessibleParking")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.accessibleParking,
-              }}
-              register={register}
-            />
-            <Field
-              id="parkingOnSite"
-              name="parkingOnSite"
-              type="checkbox"
-              label={t("eligibility.accessibility.parkingOnSite")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.parkingOnSite,
-              }}
-              register={register}
-            />
-            <Field
-              id="inUnitWasherDryer"
-              name="inUnitWasherDryer"
-              type="checkbox"
-              label={t("eligibility.accessibility.inUnitWasherDryer")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.inUnitWasherDryer,
-              }}
-              register={register}
-            />
-            <Field
-              id="laundryInBuilding"
-              name="laundryInBuilding"
-              type="checkbox"
-              label={t("eligibility.accessibility.laundryInBuilding")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.laundryInBuilding,
-              }}
-              register={register}
-            />
-            <Field
-              id="barrierFreeEntrance"
-              name="barrierFreeEntrance"
-              type="checkbox"
-              label={t("eligibility.accessibility.barrierFreeEntrance")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.barrierFreeEntrance,
-              }}
-              register={register}
-            />
-            <Field
-              id="rollInShower"
-              name="rollInShower"
-              type="checkbox"
-              label={t("eligibility.accessibility.rollInShower")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.rollInShower,
-              }}
-              register={register}
-            />
-            <Field
-              id="grabBars"
-              name="grabBars"
-              type="checkbox"
-              label={t("eligibility.accessibility.grabBars")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.grabBars,
-              }}
-              register={register}
-            />
-            <Field
-              id="heatingInUnit"
-              name="heatingInUnit"
-              type="checkbox"
-              label={t("eligibility.accessibility.heatingInUnit")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.heatingInUnit,
-              }}
-              register={register}
-            />
-            <Field
-              id="acInUnit"
-              name="acInUnit"
-              type="checkbox"
-              label={t("eligibility.accessibility.acInUnit")}
-              inputProps={{
-                defaultChecked: eligibilityRequirements.acInUnit,
-              }}
-              register={register}
-            />
+              <Field
+                id="elevator"
+                name="elevator"
+                type="checkbox"
+                label={t("eligibility.accessibility.elevator")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements?.elevator,
+                }}
+                register={register}
+              />
+              <Field
+                id="wheelchairRamp"
+                name="wheelchairRamp"
+                type="checkbox"
+                label={t("eligibility.accessibility.wheelchairRamp")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.wheelchairRamp,
+                }}
+                register={register}
+              />
+              <Field
+                id="serviceAnimalsAllowed"
+                name="serviceAnimalsAllowed"
+                type="checkbox"
+                label={t("eligibility.accessibility.serviceAnimalsAllowed")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.serviceAnimalsAllowed,
+                }}
+                register={register}
+              />
+              <Field
+                id="accessibleParking"
+                name="accessibleParking"
+                type="checkbox"
+                label={t("eligibility.accessibility.accessibleParking")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.accessibleParking,
+                }}
+                register={register}
+              />
+              <Field
+                id="parkingOnSite"
+                name="parkingOnSite"
+                type="checkbox"
+                label={t("eligibility.accessibility.parkingOnSite")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.parkingOnSite,
+                }}
+                register={register}
+              />
+              <Field
+                id="inUnitWasherDryer"
+                name="inUnitWasherDryer"
+                type="checkbox"
+                label={t("eligibility.accessibility.inUnitWasherDryer")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.inUnitWasherDryer,
+                }}
+                register={register}
+              />
+              <Field
+                id="laundryInBuilding"
+                name="laundryInBuilding"
+                type="checkbox"
+                label={t("eligibility.accessibility.laundryInBuilding")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.laundryInBuilding,
+                }}
+                register={register}
+              />
+              <Field
+                id="barrierFreeEntrance"
+                name="barrierFreeEntrance"
+                type="checkbox"
+                label={t("eligibility.accessibility.barrierFreeEntrance")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.barrierFreeEntrance,
+                }}
+                register={register}
+              />
+              <Field
+                id="rollInShower"
+                name="rollInShower"
+                type="checkbox"
+                label={t("eligibility.accessibility.rollInShower")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.rollInShower,
+                }}
+                register={register}
+              />
+              <Field
+                id="grabBars"
+                name="grabBars"
+                type="checkbox"
+                label={t("eligibility.accessibility.grabBars")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.grabBars,
+                }}
+                register={register}
+              />
+              <Field
+                id="heatingInUnit"
+                name="heatingInUnit"
+                type="checkbox"
+                label={t("eligibility.accessibility.heatingInUnit")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.heatingInUnit,
+                }}
+                register={register}
+              />
+              <Field
+                id="acInUnit"
+                name="acInUnit"
+                type="checkbox"
+                label={t("eligibility.accessibility.acInUnit")}
+                inputProps={{
+                  defaultChecked: eligibilityRequirements.acInUnit,
+                }}
+                register={register}
+              />
             </div>
           </div>
           <div className="form-card__pager">
