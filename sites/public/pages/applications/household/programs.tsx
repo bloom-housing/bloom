@@ -10,7 +10,6 @@ import {
   t,
   Button,
   AppearanceStyleType,
-  OnClientSide,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -19,6 +18,7 @@ import {
   mapProgramToApi,
   getProgramOptionName,
   getProgramOptionDescription,
+  OnClientSide,
 } from "@bloom-housing/shared-helpers"
 
 const ApplicationPrograms = () => {
@@ -87,6 +87,7 @@ const ApplicationPrograms = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={clientLoaded}
         />
       </FormCard>
 
