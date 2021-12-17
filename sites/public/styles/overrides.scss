@@ -326,6 +326,7 @@ li.progress-nav__item {
 .hero__title {
   max-width: 35rem;
   text-shadow: 0 0 20px black;
+  margin-bottom: 3.25rem;
 }
 
 .hero__inset {
@@ -354,6 +355,8 @@ li.progress-nav__item {
   max-width: 100%;
   padding: 12px;
   width: 14rem;
+  margin: 0 1.25rem;
+  padding: 0.875rem 2.25rem;
 
   @screen sm {
     width: 12rem;
@@ -367,11 +370,10 @@ li.progress-nav__item {
 
 .hero__button__first {
   background-color: white;
-  width: 210px;
-  margin: 10px;
+  width: auto;
+  border-radius: 40px;
 
   @screen sm {
-    border-radius: 30px;
     border-right-width: 1px;
     margin-bottom: 0;
   }
@@ -381,13 +383,8 @@ li.progress-nav__item {
   }
 }
 .hero__button__second {
-  width: 265px;
-  margin: 10px;
-
-  @screen sm {
-    border-left-width: 1px;
-    border-radius: 30px;
-  }
+  width: auto;
+  border-radius: 40px;
 
   &:focus {
     border-left-width: 0;
