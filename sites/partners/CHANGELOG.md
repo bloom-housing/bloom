@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.67](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.65...@bloom-housing/partners@3.0.1-alpha.67) (2021-12-17)
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/bloom-housing/bloom/issues/2108)) ([1d0c1f3](https://github.com/bloom-housing/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/bloom-housing/bloom/issues/2288)) ([4f6945f](https://github.com/bloom-housing/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
 ## [3.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.64...@bloom-housing/partners@3.0.1-alpha.65) (2021-12-15)
 
 **Note:** Version bump only for package @bloom-housing/partners
