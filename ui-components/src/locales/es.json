@@ -1300,7 +1300,7 @@
             "description": "¡Bienvenido a Detroit Home Connect! Sabemos que encontrar una vivienda puede resultar complicado. Estamos aquí para ayudar. Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos cuatro preguntas simples. Algunas viviendas asequibles solo aceptan personas de ciertas edades o ciertos ingresos, por lo que queremos asegurarnos de que solicite propiedades que funcionen para su hogar."
         },
         "household": {
-            "prompt": "¿Cuántas personas vivirán en esta propiedad?",
+            "prompt": "¿Cuántas personas vivirán en su próximo alquiler, incluido usted mismo?",
             "srCountLabel": "Tamaño del hogar",
             "ranges": {
                 "one": "1 miembro",
@@ -1321,7 +1321,7 @@
             "62plus": "62+"
         },
         "disability": {
-            "prompt": "¿Tienes alguna discapacidad?",
+            "prompt": "¿Alguien en su hogar tiene alguna discapacidad?",
             "description": "Es posible que deba proporcionar un comprobante de discapacidad cuando solicite algunas viviendas."
         },
         "income": {

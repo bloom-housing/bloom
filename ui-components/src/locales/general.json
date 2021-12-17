@@ -1476,7 +1476,7 @@
       "description": "Welcome to Detroit Home Connect! We know that finding housing can be difficult. We are here to help. To find you a home that best fits your needs, let's answer four simple questions first. Some affordable housing only accepts people of certain ages or certain incomes, so we want to make sure you are applying to properties that work for your household."
     },
     "household": {
-      "prompt": "How many people will be living in this property?",
+      "prompt": "How many people will live in your next rental, including yourself?",
       "srCountLabel": "Household Size",
       "ranges": {
         "one": "1 Member",
@@ -1497,7 +1497,7 @@
       "62plus": "62+"
     },
     "disability": {
-      "prompt": "Do you have a disability?",
+      "prompt": "Does anyone in your household have a disability?",
       "description": "You might need to provide proof of disability when you apply for some homes."
     },
     "income": {
