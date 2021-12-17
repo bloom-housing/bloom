@@ -255,8 +255,8 @@ $header-desktop-min-size: 1024px;
 
 li.progress-nav__item,
 h1.form-card__header_title {
-  text-transform: capitalize;
   padding: 0;
+  text-transform: capitalize;
 }
 
 // For the eligibility questionnaire, there are five headers, so give each 20% of the full navbar
@@ -324,6 +324,7 @@ li.progress-nav__item {
 }
 
 .hero__title {
+  margin-bottom: 3.25rem;
   max-width: 35rem;
   text-shadow: 0 0 20px black;
 }
@@ -347,12 +348,15 @@ li.progress-nav__item {
 .hero__button {
   background-color: #ffbe42;
   border-radius: 15px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   color: black;
   display: inline-block;
   font-size: large;
+  margin: 0 1.25rem;
   margin-right: 0;
   max-width: 100%;
   padding: 12px;
+  padding: 0.875rem 2.25rem;
   width: 14rem;
 
   @screen sm {
@@ -366,26 +370,22 @@ li.progress-nav__item {
 }
 
 .hero__button__first {
-  margin-bottom: 1rem;
+  background-color: white;
+  border-radius: 40px;
+  width: auto;
 
   @screen sm {
-    border-radius: 30px 0 0 30px;
-    border-right-width: 1px;
     margin-bottom: 0;
   }
-
-  &:focus {
-    border-right-width: 0;
-  }
 }
-.hero__button__second {
-  @screen sm {
-    border-left-width: 1px;
-    border-radius: 0 30px 30px 0;
-  }
 
-  &:focus {
-    border-left-width: 0;
+.hero__button__second {
+  border-radius: 40px;
+  margin-top: 1rem;
+  width: auto;
+
+  @screen sm {
+    margin-top: 0;
   }
 }
 
