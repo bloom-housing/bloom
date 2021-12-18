@@ -1457,7 +1457,19 @@
       "amiOption125": "125% of AMI or more",
       "amiOption140": "140% of AMI or more",
       "amiOption150": "150% of AMI or more"
-    }
+    },
+      "elevator": "Elevator",
+      "wheelchairRamp": "Wheelchair Ramp",
+      "serviceAnimalsAllowed": "Service Animals Allowed",
+      "accessibleParking": "Accessible Parking",
+      "parkingOnSite": "Parking On Site",
+      "inUnitWasherDryer": "In Unit Washer Dryer",
+      "laundryInBuilding": "Laundry in Building",
+      "barrierFreeEntrance": "Barrier Free Entrance",
+      "rollInShower": "Roll in Shower",
+      "grabBars": "Grab Bars",
+      "heatingInUnit": "Heating in Unit",
+      "acInUnit": "AC in Unit"
   },
   "eligibility": {
     "progress": {
@@ -1467,6 +1479,7 @@
         "household": "Household",
         "age": "Age",
         "disability": "Disability",
+        "accessibility": "Accessibility",
         "income": "Income",
         "disclaimer": "Disclaimer"
       }
@@ -1518,6 +1531,23 @@
         "40kTo50k": "$40,000 - $49,999",
         "over50k": "$50,000 or more"
       }
+    },
+    "accessibility": {
+      "title": "Accessibility Features",
+      "prompt": "Do you require additional accessibility features?",
+      "description": "Some properties have accessibility features that others may not have.",
+      "elevator": "Elevator",
+      "wheelchairRamp": "Wheelchair Ramp",
+      "serviceAnimalsAllowed": "Service Animals Allowed",
+      "accessibleParking": "Accessible Parking",
+      "parkingOnSite": "Parking On Site",
+      "inUnitWasherDryer": "In Unit Washer Dryer",
+      "laundryInBuilding": "Laundry in Building",
+      "barrierFreeEntrance": "Barrier Free Entrance",
+      "rollInShower": "Roll in Shower",
+      "grabBars": "Grab Bars",
+      "heatingInUnit": "Heating in Unit",
+      "acInUnit": "AC in Unit"
     },
     "disclaimer": {
       "description": "Thank you for checking how you qualify for affordable housing. Because affordable housing can be reserved for certain age groups or income levels, we have filtered our property listings based on your household characteristics. We hope you find housing that meets your needs. It's important to note that a good portion of affordable housing has a waitlist, but calling properties you're interested in is a good way to get on waitlists or learn of immediate openings."

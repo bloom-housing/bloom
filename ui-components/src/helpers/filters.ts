@@ -32,6 +32,18 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.seniorHousing:
     case ListingFilterKeys.independentLivingHousing:
     case ListingFilterKeys.availability:
+    case ListingFilterKeys.elevator:
+    case ListingFilterKeys.wheelchairRamp:
+    case ListingFilterKeys.serviceAnimalsAllowed:
+    case ListingFilterKeys.accessibleParking:
+    case ListingFilterKeys.parkingOnSite:
+    case ListingFilterKeys.inUnitWasherDryer:
+    case ListingFilterKeys.laundryInBuilding:
+    case ListingFilterKeys.barrierFreeEntrance:
+    case ListingFilterKeys.rollInShower:
+    case ListingFilterKeys.grabBars:
+    case ListingFilterKeys.heatingInUnit:
+    case ListingFilterKeys.acInUnit:
     case ListingFilterKeys.minAmiPercentage:
       return EnumListingFilterParamsComparison["NA"]
     default: {
@@ -77,6 +89,18 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.twoBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.threeBdrm]?: string | boolean
   [FrontendListingFilterStateKeys.fourPlusBdrm]?: string | boolean
+  [FrontendListingFilterStateKeys.elevator]?: string | boolean
+  [FrontendListingFilterStateKeys.wheelchairRamp]?: string | boolean
+  [FrontendListingFilterStateKeys.serviceAnimalsAllowed]?: string | boolean
+  [FrontendListingFilterStateKeys.accessibleParking]?: string | boolean
+  [FrontendListingFilterStateKeys.parkingOnSite]?: string | boolean
+  [FrontendListingFilterStateKeys.inUnitWasherDryer]?: string | boolean
+  [FrontendListingFilterStateKeys.laundryInBuilding]?: string | boolean
+  [FrontendListingFilterStateKeys.barrierFreeEntrance]?: string | boolean
+  [FrontendListingFilterStateKeys.rollInShower]?: string | boolean
+  [FrontendListingFilterStateKeys.grabBars]?: string | boolean
+  [FrontendListingFilterStateKeys.heatingInUnit]?: string | boolean
+  [FrontendListingFilterStateKeys.acInUnit]?: string | boolean
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"

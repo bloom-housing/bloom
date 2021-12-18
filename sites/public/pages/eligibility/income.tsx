@@ -22,7 +22,7 @@ const EligibilityIncome = () => {
   const { eligibilityRequirements } = useContext(EligibilityContext)
 
   const incomeRanges = ["below10k", "10kTo20k", "30kTo40k", "40kTo50k", "over50k"]
-  const CURRENT_PAGE = 4
+  const CURRENT_PAGE = 5
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -41,7 +41,7 @@ const EligibilityIncome = () => {
   }
 
   return (
-    <EligibilityLayout currentPageSection={5}>
+    <EligibilityLayout currentPageSection={6}>
       <FormCard>
         <FormBackLink
           url={eligibilityRoute(CURRENT_PAGE - 1)}

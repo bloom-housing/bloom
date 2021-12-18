@@ -1292,6 +1292,7 @@
                 "age": "Edad",
                 "disability": "Invalidez",
                 "income": "Ingreso",
+                "accessibility": "Accesibilidad",
                 "disclaimer": "Descargo de responsabilidad"
             }
         },
@@ -1343,6 +1344,23 @@
                 "over50k": "$50,000 o más"
             }
         },
+        "accessibility": {
+            "title": "Funciones de accesibilidad",
+            "prompt": "¿Necesita funciones de accesibilidad adicionales?",
+            "description": "Algunas propiedades tienen funciones de accesibilidad que otras pueden no tener.",
+            "elevator": "Ascensor",
+            "wheelchairRamp": "Rampa para sillas de ruedas",
+            "serviceAnimalsAllowed": "Se admiten animales de servicio",
+            "accessParking": "Estacionamiento accesible",
+            "parkingOnSite": "Aparcamiento en el sitio",
+            "inUnitWasherDryer": "Lavadora secadora en la unidad",
+            "laundryInBuilding": "Lavandería en el edificio",
+            "barrierFreeEntrance": "Entrada sin barreras",
+            "rollInShower": "Rodar en la ducha",
+            "grabBars": "Barras de apoyo",
+            "heatingInUnit": "Calefacción en unidad",
+            "acInUnit": "Aire acondicionado en la unidad"
+          },
         "disclaimer": {
             "description": "Gracias por verificar cómo califica para una vivienda asequible. Debido a que las viviendas asequibles se pueden reservar para ciertos grupos de edad o niveles de ingresos, hemos filtrado nuestros listados de propiedades en función de las características de su hogar. Esperamos que encuentre una vivienda que satisfaga sus necesidades. Es importante tener en cuenta que una buena parte de las viviendas asequibles tiene una lista de espera, pero llamar a las propiedades que le interesan es una buena manera de ingresar a las listas de espera o conocer las vacantes inmediatas."
         },

@@ -152,6 +152,129 @@ const FilterForm = (props: FilterFormProps) => {
             }}
           />
         </div>
+        <label className="field-label">{t("eligibility.accessibility.title")}</label>
+        <div className="accessibility-filter-selector">
+          <Field
+            id="elevator"
+            name={FrontendListingFilterStateKeys.elevator}
+            type="checkbox"
+            label={t("eligibility.accessibility.elevator")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.elevator),
+            }}
+          />
+          <Field
+            id="wheelchairRamp"
+            name={FrontendListingFilterStateKeys.wheelchairRamp}
+            type="checkbox"
+            label={t("eligibility.accessibility.wheelchairRamp")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.wheelchairRamp),
+            }}
+          />
+          <Field
+            id="serviceAnimalsAllowed"
+            name={FrontendListingFilterStateKeys.serviceAnimalsAllowed}
+            type="checkbox"
+            label={t("eligibility.accessibility.serviceAnimalsAllowed")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.serviceAnimalsAllowed),
+            }}
+          />
+          <Field
+            id="accessibleParking"
+            name={FrontendListingFilterStateKeys.accessibleParking}
+            type="checkbox"
+            label={t("eligibility.accessibility.accessibleParking")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.accessibleParking),
+            }}
+          />
+          <Field
+            id="parkingOnSite"
+            name={FrontendListingFilterStateKeys.parkingOnSite}
+            type="checkbox"
+            label={t("eligibility.accessibility.parkingOnSite")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.parkingOnSite),
+            }}
+          />
+          <Field
+            id="inUnitWasherDryer"
+            name={FrontendListingFilterStateKeys.inUnitWasherDryer}
+            type="checkbox"
+            label={t("eligibility.accessibility.inUnitWasherDryer")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.inUnitWasherDryer),
+            }}
+          />
+          <Field
+            id="laundryInBuilding"
+            name={FrontendListingFilterStateKeys.laundryInBuilding}
+            type="checkbox"
+            label={t("eligibility.accessibility.laundryInBuilding")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.laundryInBuilding),
+            }}
+          />
+          <Field
+            id="barrierFreeEntrance"
+            name={FrontendListingFilterStateKeys.barrierFreeEntrance}
+            type="checkbox"
+            label={t("eligibility.accessibility.barrierFreeEntrance")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.barrierFreeEntrance),
+            }}
+          />
+          <Field
+            id="rollInShower"
+            name={FrontendListingFilterStateKeys.rollInShower}
+            type="checkbox"
+            label={t("eligibility.accessibility.rollInShower")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.rollInShower),
+            }}
+          />
+          <Field
+            id="grabBars"
+            name={FrontendListingFilterStateKeys.grabBars}
+            type="checkbox"
+            label={t("eligibility.accessibility.grabBars")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.grabBars),
+            }}
+          />
+          <Field
+            id="heatingInUnit"
+            name={FrontendListingFilterStateKeys.heatingInUnit}
+            type="checkbox"
+            label={t("eligibility.accessibility.heatingInUnit")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.heatingInUnit),
+            }}
+          />
+          <Field
+            id="acInUnit"
+            name={FrontendListingFilterStateKeys.acInUnit}
+            type="checkbox"
+            label={t("eligibility.accessibility.acInUnit")}
+            register={register}
+            inputProps={{
+              defaultChecked: Boolean(props.filterState?.acInUnit),
+            }}
+          />
+        </div>
         <Field
           id="zipCodeField"
           name={FrontendListingFilterStateKeys.zipcode}
