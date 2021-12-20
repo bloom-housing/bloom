@@ -7,6 +7,7 @@ import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
 import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 export interface PaperApplication {
   fileURL: string
@@ -24,11 +25,16 @@ export interface ApplicationsProps {
   applicationPickUpAddressOfficeHours?: string
   applicationPickUpAddress?: Address
   preview?: boolean
+  listingStatus?: ListingStatus
 }
 
 const GetApplication = (props: ApplicationsProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
+
+  if (props.listingStatus === ListingStatus.closed) {
+    return null
+  }
 
   return (
     <section className="aside-block">

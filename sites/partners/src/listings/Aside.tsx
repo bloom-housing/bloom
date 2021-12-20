@@ -2,7 +2,6 @@ import React, { useContext, useMemo, useCallback } from "react"
 import moment from "moment"
 import { useFormContext } from "react-hook-form"
 import {
-  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -14,6 +13,7 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { createDate } from "../../lib/helpers"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
@@ -91,6 +91,7 @@ const Aside = ({
               fullWidth
               onClick={() => false}
               type="button"
+              dataTestId="listingEditButton"
             >
               {t("t.edit")}
             </Button>
@@ -133,7 +134,8 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => saveAndExit()}
+            onClick={() => submitFormWithStatus(true, listing.status)}
+            dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
           </Button>

@@ -37,13 +37,16 @@ import {
   UnitTables,
   Waitlist,
   WhatToExpect,
-  cloudinaryPdfFromId,
-  getOccupancyDescription,
   getSummariesTable,
-  imageUrlFromListing,
-  occupancyTable,
   t,
 } from "@bloom-housing/ui-components"
+import {
+  cloudinaryPdfFromId,
+  getOccupancyDescription,
+  imageUrlFromListing,
+  occupancyTable,
+  pdfUrlFromListingEvents,
+} from "@bloom-housing/shared-helpers"
 import moment from "moment"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
@@ -310,6 +313,7 @@ export const ListingView = (props: ListingProps) => {
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
+        listingStatus={listing.status}
       />
       <SubmitApplication
         applicationMailingAddress={listing.applicationMailingAddress}
@@ -325,6 +329,7 @@ export const ListingView = (props: ListingProps) => {
             `MMM. DD, YYYY [${t("t.at")}] h A`
           ),
         }}
+        listingStatus={listing.status}
       />
     </>
   )
@@ -398,7 +403,11 @@ export const ListingView = (props: ListingProps) => {
         <div className="mx-4">
           <DownloadLotteryResults
             event={lotteryResults}
-            cloudName={process.env.cloudinaryCloudName}
+            pdfUrl={pdfUrlFromListingEvents(
+              [lotteryResults],
+              ListingEventType.lotteryResults,
+              process.env.cloudinaryCloudName
+            )}
           />
           {!applicationsClosed && (
             <Waitlist
@@ -512,7 +521,11 @@ export const ListingView = (props: ListingProps) => {
               <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
               <DownloadLotteryResults
                 event={lotteryResults}
-                cloudName={process.env.cloudinaryCloudName}
+                pdfUrl={pdfUrlFromListingEvents(
+                  [lotteryResults],
+                  ListingEventType.lotteryResults,
+                  process.env.cloudinaryCloudName
+                )}
               />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
               {!applicationsClosed && (
