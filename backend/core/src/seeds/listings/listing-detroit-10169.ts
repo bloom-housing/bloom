@@ -82,7 +82,8 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
-        fileId: "https://cdngeneralcf.rentcafe.com/dmslivecafe/3/601734/01_Home_Hero_28G.jpg?quality=85&scale=both&",
+        fileId:
+          "https://cdngeneralcf.rentcafe.com/dmslivecafe/3/601734/01_Home_Hero_28G.jpg?quality=85&scale=both&",
       },
     ]
 
