@@ -17,7 +17,9 @@ describe("<EligibilityDisability>", () => {
     act(() => {
       render(<EligibilityDisability />)
     })
-    expect(screen.getByRole("heading", { name: "Do you have a disability?" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: "Does anyone in your household have a disability?" })
+    ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
   })
 

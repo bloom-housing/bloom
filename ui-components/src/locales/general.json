@@ -1489,7 +1489,7 @@
       "description": "Welcome to Detroit Home Connect! To see rentals that you may qualify for, just answer four questions."
     },
     "household": {
-      "prompt": "How many people will be living in this property?",
+      "prompt": "How many people will live in your next rental, including yourself?",
       "srCountLabel": "Household Size",
       "ranges": {
         "one": "1 Member",
@@ -1510,7 +1510,7 @@
       "62plus": "62+"
     },
     "disability": {
-      "prompt": "Do you have a disability?",
+      "prompt": "Does anyone in your household have a disability?",
       "description": "You might need to provide proof of disability when you apply for some homes."
     },
     "income": {

@@ -1301,7 +1301,7 @@
             "description": "¡Bienvenido a Detroit Home Connect! Para ver los alquileres para los que puede calificar, solo responda cuatro preguntas."
         },
         "household": {
-            "prompt": "¿Cuántas personas vivirán en esta propiedad?",
+            "prompt": "¿Cuántas personas vivirán en su próximo alquiler, incluido usted mismo?",
             "srCountLabel": "Tamaño del hogar",
             "ranges": {
                 "one": "1 miembro",
@@ -1322,7 +1322,7 @@
             "62plus": "62+"
         },
         "disability": {
-            "prompt": "¿Tienes alguna discapacidad?",
+            "prompt": "¿Alguien en su hogar tiene alguna discapacidad?",
             "description": "Es posible que deba proporcionar un comprobante de discapacidad cuando solicite algunas viviendas."
         },
         "income": {
