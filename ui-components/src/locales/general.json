@@ -1427,6 +1427,7 @@
     },
     "zipCode": "Zip code",
     "zipCodeDescription": "Enter zip code",
+    "region": "Region",
     "adaCompliant": "Accessible Features for Residents with Disabilities?",
     "rentRange": "Rent range",
     "availability": "Unit availability",

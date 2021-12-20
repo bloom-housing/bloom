@@ -11,6 +11,7 @@ import {
   ListingFilterState,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
+import { Region } from "../../utils/regionNeighborhoodMap"
 
 const isValidZipCodeOrEmpty = (value: string) => {
   // Empty strings or whitespace are valid and will reset the filter.
@@ -152,8 +153,14 @@ const FilterForm = (props: FilterFormProps) => {
             }}
           />
         </div>
-        <label className="field-label">{t("eligibility.accessibility.title")}</label>
-        <div className="accessibility-filter-selector">
+        <label className="field-label filter-header">{t("listingFilters.region")}</label>
+        <div className="checkbox-filter-group">
+          {Object.entries(Region).map((r) => (
+            <Field id={r[0]} name={r[1]} type="checkbox" label={r[1]}></Field>
+          ))}
+        </div>
+        <label className="field-label filter-header">{t("eligibility.accessibility.title")}</label>
+        <div className="checkbox-filter-group">
           <Field
             id="elevator"
             name={FrontendListingFilterStateKeys.elevator}
@@ -275,21 +282,6 @@ const FilterForm = (props: FilterFormProps) => {
             }}
           />
         </div>
-        <Field
-          id="zipCodeField"
-          name={FrontendListingFilterStateKeys.zipcode}
-          label={t("listingFilters.zipCode")}
-          register={register}
-          controlClassName="control"
-          placeholder={t("listingFilters.zipCodeDescription")}
-          validation={{
-            validate: (value) => isValidZipCodeOrEmpty(value),
-          }}
-          error={errors?.[FrontendListingFilterStateKeys.zipcode]}
-          errorMessage={t("errors.multipleZipCodeError")}
-          defaultValue={props.filterState?.zipcode}
-          className="filter-section"
-        />
         <label className="field-label filter-header">{t("listingFilters.rentRange")}</label>
         <div className="flex flex-row rent-range">
           <Field
