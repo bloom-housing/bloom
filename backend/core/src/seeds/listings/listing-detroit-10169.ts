@@ -7,7 +7,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
 
-const nccProperty: PropertySeedType = {
+const grandRivProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
   amenities: "Parking, Elevator in Building",
   buildingAddress: {
@@ -26,7 +26,7 @@ const nccProperty: PropertySeedType = {
   yearBuilt: 1929,
 }
 
-const nccListing: ListingSeedType = {
+const grandRivListing: ListingSeedType = {
   applicationDropOffAddress: null,
   applicationFee: "25",
   applicationMailingAddress: null,
@@ -76,7 +76,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
 
     const property = await this.propertyRepository.save({
-      ...nccProperty,
+      ...grandRivProperty,
     })
 
     const assets: Array<AssetDtoSeedType> = [
@@ -90,7 +90,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
-      ...nccListing,
+      ...grandRivListing,
       applicationMethods: [],
       assets: JSON.parse(JSON.stringify(assets)),
       events: [],
