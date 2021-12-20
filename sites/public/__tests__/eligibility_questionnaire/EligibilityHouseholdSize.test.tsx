@@ -25,7 +25,7 @@ describe("<EligibilityHouseholdSize>", () => {
       render(<EligibilityHouseholdSize />)
     })
     expect(
-      screen.getByRole("heading", { name: "How many people will be living in this property?" })
+      screen.getByRole("heading", { name: "How many people will live in your next rental, including yourself?" })
     ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Next" })).toBeInTheDocument()
   })
