@@ -11,7 +11,7 @@ import {
   ListingFilterState,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { Region } from "../../utils/regionNeighborhoodMap"
+import { Region } from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
 
 const isValidZipCodeOrEmpty = (value: string) => {
   // Empty strings or whitespace are valid and will reset the filter.
@@ -155,8 +155,15 @@ const FilterForm = (props: FilterFormProps) => {
         </div>
         <label className="field-label filter-header">{t("listingFilters.region")}</label>
         <div className="checkbox-filter-group">
-          {Object.entries(Region).map((r) => (
-            <Field id={r[0]} name={r[1]} type="checkbox" label={r[1]}></Field>
+          {Object.entries(Region).map((region) => (
+            <Field
+              id={region[0]}
+              name={region[0]}
+              type="checkbox"
+              label={region[1]}
+              register={register}
+              inputProps={{ defaultChecked: Boolean(props.filterState?.[region[0]]) }}
+            ></Field>
           ))}
         </div>
         <label className="field-label filter-header">{t("eligibility.accessibility.title")}</label>

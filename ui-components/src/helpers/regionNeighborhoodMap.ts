@@ -214,10 +214,12 @@ export const Neighborhoods: Neighborhood[] = [
   { name: "Yorkshire Woods", region: Region.eastside },
 ]
 
-export const regionNeighborhoodMap: Map<Region, Neighborhood> = Neighborhoods.reduce(
+export const regionNeighborhoodMap: Map<Region, Neighborhood[]> = Neighborhoods.reduce(
   (m, neighborhood) => {
-    m[neighborhood.region] ? m[neighborhood.region].push(neighborhood.name) : [neighborhood.name]
+    m.has(neighborhood.region)
+      ? m.get(neighborhood.region)?.push(neighborhood)
+      : m.set(neighborhood.region, [neighborhood])
     return m
   },
-  new Map()
+  new Map<Region, Neighborhood[]>()
 )
