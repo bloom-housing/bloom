@@ -1376,6 +1376,7 @@
         },
         "zipCode": "জিপ কোড",
         "zipCodeDescription": "জিপ কোড প্রবেশ",
+        "region": "অঞ্চল",
         "adaCompliant": "विकलांग निवासियों के लिए सुलभ सुविधाएँ?",
         "rentRange": "ভাড়া পরিসীমা",
         "availability": "ইউনিট প্রাপ্যতা",

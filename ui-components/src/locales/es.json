@@ -1251,6 +1251,7 @@
         },
         "zipCode": "Código postal",
         "zipCodeDescription": "Introduzca código postal",
+        "region": "Región",
         "adaCompliant": "¿Funciones accesibles para residentes con discapacidades?",
         "rentRange": "Rango de alquiler",
         "availability": "Disponibilidad de la unidad",
