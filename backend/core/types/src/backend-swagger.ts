@@ -4862,6 +4862,9 @@ export interface ListingFilterParams {
 
   /**  */
   acInUnit?: boolean
+
+  /**  */
+  neighborhood?: string
 }
 
 export interface PaginatedListing {

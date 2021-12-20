@@ -27,6 +27,7 @@ import { ListingUpdateDto } from "../../src/listings/dto/listing-update.dto"
 import { ListingPublishedCreateDto } from "../../src/listings/dto/listing-published-create.dto"
 import { UnitCreateDto } from "../../src/units/dto/unit-create.dto"
 import { AddressCreateDto } from "../../src/shared/dto/address.dto"
+import { threadId } from "worker_threads"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -124,6 +125,26 @@ describe("Listings", () => {
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
     expect(res.body.items.length).toBeGreaterThanOrEqual(2)
+  })
+
+  it("should return listings with matching neighborhoods", async () => {
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "IN",
+          neighborhood: "Forest Park",
+        },
+      ],
+    }
+    const query = qs.stringify(queryParams)
+
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+
+    expect(res.body.items.length).toBeGreaterThanOrEqual(1)
+    for (const listing of res.body.items) {
+      expect(listing.neighborhood).toEqual("Forest Park")
+    }
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {

@@ -228,6 +228,34 @@ describe("ListingsService", () => {
       )
     })
 
+    it("should support filtering on neighborhoods", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+      const neighborhoodString = "neighborhood 1, , neighborhood 2," // intentional extra and trailing commas for test
+      // lowercased, trimmed spaces, filtered empty
+      const expectedNeighborhoodArray = ["neighborhood 1", "neighborhood 2"]
+
+      const queryParams: ListingsQueryParams = {
+        filter: [
+          {
+            $comparison: Compare["IN"],
+            neighborhood: neighborhoodString,
+          },
+        ],
+      }
+
+      const listings = await service.list(queryParams)
+
+      expect(listings.items).toEqual(mockListings)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
+        "(LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0))",
+        {
+          neighborhood_0: expectedNeighborhoodArray,
+        }
+      )
+    })
+
     it("should include listings with missing data if $include_nulls is true", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)
