@@ -582,7 +582,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           const result = editMode
             ? await listingsService.update(
                 {
-                  listingId: listing.id,
+                  id: listing.id,
                   body: { id: listing.id, ...formattedData },
                 },
                 { headers: { "x-purge-cache": true } }
