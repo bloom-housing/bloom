@@ -76,9 +76,8 @@ export class Listing10151Seed extends ListingDefaultSeed {
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
-        // NOTE: this is not an actual image of the property.
         fileId:
-          "https://images.unsplash.com/photo-1629371997433-d11e6161a8b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80",
+          "https://images1.apartments.com/i2/Lzldwt350ozz-zuJtBQf3-V7EB0-hqEaz5ssWS4sCAI/112/martin-luther-king-apartments-detroit-mi-primary-photo.jpg?p=1",
       },
     ]
 

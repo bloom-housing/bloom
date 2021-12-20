@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType } from "./listings"
+import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
 import { ListingStatus } from "../../listings/types/listing-status-enum"
 import { CountyCode } from "../../shared/types/county-code"
 import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
@@ -68,6 +68,14 @@ export class Listing10147Seed extends ListingDefaultSeed {
     const property = await this.propertyRepository.save({
       ...mshProperty,
     })
+    
+    const assets: Array<AssetDtoSeedType> = [
+      {
+        label: "building",
+        fileId:
+          "http://www.vanguarddetroit.org/wp-content/uploads/2020/05/West-Oakland-Homes-Photo-e1590008403971.jpg",
+      },
+    ]
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -75,7 +83,7 @@ export class Listing10147Seed extends ListingDefaultSeed {
     > = {
       ...mshListing,
       applicationMethods: [],
-      assets: [],
+      assets: JSON.parse(JSON.stringify(assets)),
       events: [],
       property: property,
       preferences: [],

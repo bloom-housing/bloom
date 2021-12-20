@@ -82,7 +82,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
-        fileId: "https://s3.amazonaws.com/photos.rentlinx.com/L800/4275662.jpg",
+        fileId: "https://ginosko.com/wp-content/uploads/2018/06/ncc-2.jpg",
       },
     ]
 
