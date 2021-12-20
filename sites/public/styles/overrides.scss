@@ -549,9 +549,9 @@ a.button.is-primary:hover {
 .button {
   @apply text-sm;
   border-radius: 60px;
-  text-transform: initial;
   letter-spacing: initial;
   padding: 0.5rem 1rem;
+  text-transform: initial;
 
   @screen md {
     @apply text-base;
@@ -572,12 +572,12 @@ a.button.is-primary:hover {
     }
 
     &.ui-base svg {
-      width: 1rem;
       height: 1rem;
+      width: 1rem;
 
       @screen md {
-        width: 1.5rem;
         height: 1.5rem;
+        width: 1.5rem;
       }
     }
 
@@ -588,8 +588,8 @@ a.button.is-primary:hover {
 }
 
 .button.is-secondary {
-  color: $tailwind-primary-darker;
   border-color: $tailwind-primary-darker;
+  color: $tailwind-primary-darker;
 
   &:hover {
     background-color: $tailwind-primary-darker;
@@ -629,8 +629,76 @@ a.button.is-primary:hover {
     padding-inline-end: 10px;
 
     svg {
-      width: 20px;
       height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+/** Filter Modal */
+.modal {
+  border-radius: 0;
+  height: 100%;
+  max-height: 100vh;
+  max-width: initial;
+  min-width: 20rem;
+  width: 100%;
+
+  @screen md {
+    height: initial;
+    max-width: 32rem;
+  }
+
+  .modal__title {
+    @apply text-2xl font-bold;
+  }
+
+  .modal__close svg {
+    fill: #5f6368;
+  }
+
+  .modal__inner {
+    padding: 1rem 1.5rem;
+
+    @screen md {
+      padding: 1rem 2.25rem;
+    }
+  }
+
+  .form-card__group {
+    margin: 0;
+    padding: 0;
+  }
+
+  .filter-section label,
+  .filter-header {
+    @apply text-base font-bold;
+  }
+
+  .bedroom-selector {
+    margin-bottom: 1rem;
+  }
+
+  .rent-range {
+    margin: 0.5rem 0 1.25rem;
+  }
+
+  .rent-range .field {
+    margin: 0;
+  }
+  .rent-range .control {
+    margin: 0;
+  }
+
+  button.button {
+    padding: 1rem 3rem;
+  }
+
+  .bedroom-selector .field {
+    margin: 0;
+
+    @screen md {
+      margin-inline-end: 1rem;
     }
   }
 }

@@ -1382,7 +1382,7 @@
         "hasAvailability": "لديها توافر",
         "noAvailability": "لا يوجد توافر",
         "waitlist": "قائمة الانتظار",
-        "applyFilters": "تطبيق المرشحات",
+        "applyFilter": "تطبيق مرشح",
         "noResults": "لا نتائج",
         "noResultsSubtitle": "تحرير أو إزالة عوامل التصفية للحصول على أفضل النتائج.",
         "includeUnknowns": "عرض المنازل مع المعلومات المفقودة",

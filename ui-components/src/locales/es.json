@@ -1257,7 +1257,7 @@
         "hasAvailability": "Tiene disponibilidad",
         "noAvailability": "No disponible",
         "waitlist": "Lista de espera",
-        "applyFilters": "Aplicar filtros",
+        "applyFilter": "Aplicar filtro",
         "noResults": "No hay resultados",
         "noResultsSubtitle": "Edite o elimine filtros para obtener mejores resultados.",
         "includeUnknowns": "Mostrar casas en las que falta información",

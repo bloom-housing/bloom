@@ -1433,7 +1433,7 @@
     "hasAvailability": "Has availability",
     "noAvailability": "No availability",
     "waitlist": "Waitlist",
-    "applyFilters": "Apply filters",
+    "applyFilter": "Apply filter",
     "noResults": "No results",
     "noResultsSubtitle": "Edit or remove filters for best results.",
     "includeUnknowns": "Show homes with missing information",

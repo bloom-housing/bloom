@@ -89,7 +89,6 @@ const FilterForm = (props: FilterFormProps) => {
   return (
     <Form onSubmit={handleSubmit(props.onSubmit)}>
       <div className="form-card__group">
-        <p className="field-note mb-4">{t("listingFilters.modalHeader")}</p>
         <Select
           id={"availability"}
           name={FrontendListingFilterStateKeys.availability}
@@ -98,9 +97,10 @@ const FilterForm = (props: FilterFormProps) => {
           controlClassName="control"
           options={availabilityOptions}
           defaultValue={props.filterState?.availability}
+          labelClassName="filter-header"
         />
-        <label className="field-label">{t("listingFilters.bedrooms")}</label>
-        <div className="flex flex-row bedroom-selector">
+        <label className="field-label filter-header">{t("listingFilters.bedrooms")}</label>
+        <div className="flex flex-col bedroom-selector">
           <Field
             id="studio"
             name={FrontendListingFilterStateKeys.studio}
@@ -288,9 +288,10 @@ const FilterForm = (props: FilterFormProps) => {
           error={errors?.[FrontendListingFilterStateKeys.zipcode]}
           errorMessage={t("errors.multipleZipCodeError")}
           defaultValue={props.filterState?.zipcode}
+          className="filter-section"
         />
-        <label className="field-label">{t("listingFilters.rentRange")}</label>
-        <div className="flex flex-row">
+        <label className="field-label filter-header">{t("listingFilters.rentRange")}</label>
+        <div className="flex flex-row rent-range">
           <Field
             id="minRent"
             name={FrontendListingFilterStateKeys.minRent}
@@ -300,7 +301,7 @@ const FilterForm = (props: FilterFormProps) => {
             prepend="$"
             defaultValue={props.filterState?.minRent}
           />
-          <div className="flex items-center p-3">{t("t.to")}</div>
+          <div className="flex items-center px-9">{t("t.to")}</div>
           <Field
             id="maxRent"
             name={FrontendListingFilterStateKeys.maxRent}
@@ -318,6 +319,7 @@ const FilterForm = (props: FilterFormProps) => {
           register={register}
           controlClassName="control"
           options={adaCompliantOptions}
+          labelClassName="filter-header"
         />
         <Select
           id="seniorHousing"
@@ -327,6 +329,7 @@ const FilterForm = (props: FilterFormProps) => {
           controlClassName="control"
           options={seniorHousingOptions}
           defaultValue={props.filterState?.seniorHousing?.toString()}
+          labelClassName="filter-header"
         />
         {/* TODO(#515): Add more explanation and an ami percentage
         calculator to this filter */}
@@ -338,6 +341,7 @@ const FilterForm = (props: FilterFormProps) => {
           controlClassName="control"
           options={amiOptions}
           defaultValue={props.filterState?.minAmiPercentage?.toString()}
+          labelClassName="filter-header"
         />
         <Field
           id="includeNulls"
@@ -350,9 +354,9 @@ const FilterForm = (props: FilterFormProps) => {
           }}
         />
       </div>
-      <div className="text-center mt-6">
+      <div className="text-center mt-8 mb-5">
         <Button type="submit" styleType={AppearanceStyleType.primary}>
-          {t("listingFilters.applyFilters")}
+          {t("listingFilters.applyFilter")}
         </Button>
       </div>
     </Form>
