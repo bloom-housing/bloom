@@ -45,11 +45,8 @@ describe("Verifying the eligibility questionnaire flow", () => {
     // Select "$30k to $40k"
     cy.get("#30kTo40k").click()
 
-    // Click "Finish"
-    cy.contains("Finish").click()
-    cy.url().should("include", "/eligibility/disclaimer")
-
-    cy.contains("View Listings").click()
+    // Click "See results now"
+    cy.get("#seeResultsNow").click()
     cy.url().should("include", "/listings")
   })
 

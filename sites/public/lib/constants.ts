@@ -8,4 +8,3 @@ export const ELIGIBILITY_SECTIONS = [
   "income",
 ]
 export const ELIGIBILITY_ROUTE = "eligibility"
-export const ELIGIBILITY_DISCLAIMER_ROUTE = `/${ELIGIBILITY_ROUTE}/disclaimer`

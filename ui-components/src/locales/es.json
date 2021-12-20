@@ -1298,7 +1298,7 @@
         },
         "welcome": {
             "header": "Bienvenidos",
-            "description": "¡Bienvenido a Detroit Home Connect! Sabemos que encontrar una vivienda puede resultar complicado. Estamos aquí para ayudar. Para encontrarle la casa que mejor se adapte a sus necesidades, primero respondamos cuatro preguntas simples. Algunas viviendas asequibles solo aceptan personas de ciertas edades o ciertos ingresos, por lo que queremos asegurarnos de que solicite propiedades que funcionen para su hogar."
+            "description": "¡Bienvenido a Detroit Home Connect! Para ver los alquileres para los que puede calificar, solo responda cuatro preguntas."
         },
         "household": {
             "prompt": "¿Cuántas personas vivirán en esta propiedad?",
@@ -1362,7 +1362,7 @@
             "acInUnit": "Aire acondicionado en la unidad"
           },
         "disclaimer": {
-            "description": "Gracias por verificar cómo califica para una vivienda asequible. Debido a que las viviendas asequibles se pueden reservar para ciertos grupos de edad o niveles de ingresos, hemos filtrado nuestros listados de propiedades en función de las características de su hogar. Esperamos que encuentre una vivienda que satisfaga sus necesidades. Es importante tener en cuenta que una buena parte de las viviendas asequibles tiene una lista de espera, pero llamar a las propiedades que le interesan es una buena manera de ingresar a las listas de espera o conocer las vacantes inmediatas."
+            "description": "Gracias por responder estas preguntas. Al hacer clic o tocar \"Ver resultados ahora \", verá alquileres que podrían adaptarse a sus necesidades según sus respuestas. Múltiples factores pueden afectar la elegibilidad para alquileres específicos, por lo que si ve un alquiler que le interesa, comuníquese con el Agente de la propiedad en el listado. Pueden ayudarlo a determinar si es elegible para ese alquiler."
         },
         "preferNotToSay": "Prefiero no decirlo"
     },

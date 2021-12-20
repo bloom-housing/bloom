@@ -41,15 +41,15 @@ describe("<EligibilityHouseholdSize>", () => {
     expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/age")
   })
 
-  it("Clicks the Finish button", async () => {
+  it("Clicks the See results now button", async () => {
     await act(async () => {
       render(<EligibilityHouseholdSize />)
       userEvent.selectOptions(screen.getByRole("combobox"), "two")
-      fireEvent.click(screen.getByRole("button", { name: "Finish" }))
+      fireEvent.click(screen.getByRole("button", { name: "See results now" }))
     })
 
     expect(mockRouter.push.mock.calls.length).toBe(1)
-    expect(mockRouter.push.mock.calls[0][0]).toBe("/eligibility/disclaimer")
+    expect(mockRouter.push.mock.calls[0][0]).toContain("/listings")
   })
 
   afterEach(() => {

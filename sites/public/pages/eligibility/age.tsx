@@ -2,43 +2,21 @@
 Age
 Prompts the user for their age to filter for properties that are age dependent.
 */
-import {
-  AppearanceStyleType,
-  Button,
-  FormCard,
-  t,
-  Form,
-  ProgressNav,
-  FieldGroup,
-} from "@bloom-housing/ui-components"
-import FormsLayout from "../../layouts/forms"
+import { t, FieldGroup } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import styles from "./EligibilityAge.module.scss"
 import React, { useContext } from "react"
-import { useRouter } from "next/router"
-import { ELIGIBILITY_DISCLAIMER_ROUTE, ELIGIBILITY_SECTIONS } from "../../lib/constants"
 import { AgeRangeType, EligibilityContext } from "../../lib/EligibilityContext"
-import FormBackLink from "../../src/forms/applications/FormBackLink"
-import { eligibilityRoute } from "../../lib/helpers"
-import { getFilterUrlLink } from "../../lib/filterUrlLink"
 import EligibilityLayout from "../../layouts/eligibility"
 
 const EligibilityAge = () => {
-  const router = useRouter()
-  const CURRENT_PAGE = 2
   const { eligibilityRequirements } = useContext(EligibilityContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { handleSubmit, register } = useForm()
+  const formMethods = useForm()
 
-  const onSubmit = async (data) => {
+  const onSubmitAge = (data) => {
     eligibilityRequirements.setAge(data.age)
-    await router.push(eligibilityRoute(CURRENT_PAGE + 1))
-  }
-
-  const onClick = async (data) => {
-    eligibilityRequirements.setAge(data.age)
-    await router.push(ELIGIBILITY_DISCLAIMER_ROUTE)
   }
 
   const ageValues = [
@@ -68,50 +46,26 @@ const EligibilityAge = () => {
     },
   ]
 
-  if (eligibilityRequirements.completedSections <= CURRENT_PAGE) {
-    eligibilityRequirements.setCompletedSections(CURRENT_PAGE + 1)
-  }
-
   return (
-    <EligibilityLayout currentPageSection={3}>
-      <FormCard>
-        <FormBackLink
-          url={eligibilityRoute(CURRENT_PAGE - 1)}
-          onClick={() => {
-            // Not extra actions needed.
-          }}
+    <EligibilityLayout
+      title={t("eligibility.age.prompt")}
+      currentPage={2}
+      formMethods={formMethods}
+      onFinishStep={onSubmitAge}
+    >
+      <div className="form-card__group px-0 mx-0">
+        <p className="mb-4" id="age-description">
+          {t("eligibility.age.description")}
+        </p>
+        <FieldGroup
+          type="radio"
+          fieldGroupClassName={styles.age_field}
+          name="age"
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          register={formMethods.register}
+          fields={ageValues}
         />
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__lead pb-0 pt-8">
-            <h2 className="form-card__title is-borderless">{t("eligibility.age.prompt")}</h2>
-          </div>
-          <div className="form-card__group is-borderless">
-            <p className="field-note mb-4" id="age-description">
-              {t("eligibility.age.description")}
-            </p>
-            <FieldGroup
-              type="radio"
-              fieldGroupClassName={styles.age_field}
-              name="age"
-              register={register}
-              fields={ageValues}
-            />
-          </div>
-          <div className="form-card__pager">
-            <div className="form-card__pager-row primary">
-              <Button styleType={AppearanceStyleType.primary}>{t("t.next")}</Button>
-              <Button
-                type="button"
-                onClick={handleSubmit(onClick)}
-                className="mx-2 mt-6"
-                styleType={AppearanceStyleType.primary}
-              >
-                {t("t.finish")}
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </FormCard>
+      </div>
     </EligibilityLayout>
   )
 }
