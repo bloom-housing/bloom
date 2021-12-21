@@ -308,7 +308,7 @@ export const ListingView = (props: ListingProps) => {
           hideHeader={true}
           desktopClass="header-hidden"
         >
-          <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 h-full md:border border-gray-400 bg-white">
+          <aside className="w-full static md:absolute md:right-0 md:w-1/3 md:top-0 sm:w-2/3 md:ml-2 md:border border-gray-400 bg-white">
             <div className="hidden md:block">
               <ListingUpdated listingUpdated={listing.updatedAt} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
@@ -339,7 +339,12 @@ export const ListingView = (props: ListingProps) => {
                 website: listing.managementWebsite,
               }}
             />
-            {hasNonReferralMethods && !applicationsClosed && applySidebar()}
+            {listing.neighborhood && (
+              <section className="hidden md:block aside-block">
+                <h4 className="text-caps-underline">{t("listings.sections.neighborhoodTitle")}</h4>
+                <p>{listing.neighborhood}</p>
+              </section>
+            )}
           </aside>
         </ListingDetailItem>
 
