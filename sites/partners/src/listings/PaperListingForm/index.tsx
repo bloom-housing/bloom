@@ -39,7 +39,7 @@ import {
   ListingProgram,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import dayjs from "dayjs"
 import { nanoid } from "nanoid"
 
 import Aside from "../Aside"
@@ -149,7 +149,7 @@ const defaults: FormListing = {
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
-  applicationOpenDate: new Date(moment().subtract(10).format()),
+  applicationOpenDate: new Date(dayjs().subtract(10).format()),
   applicationOrganization: "",
   applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",

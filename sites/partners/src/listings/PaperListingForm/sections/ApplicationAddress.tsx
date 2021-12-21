@@ -15,7 +15,7 @@ import {
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../index"
-import moment from "moment"
+import dayjs from "dayjs"
 import { isNullOrUndefined } from "../../../../lib/helpers"
 
 type ApplicationAddressProps = {
@@ -123,7 +123,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     })
   }
 
-  const momentizedDate = moment(new Date(listing?.postmarkedApplicationsReceivedByDate))
+  const momentizedDate = dayjs(new Date(listing?.postmarkedApplicationsReceivedByDate))
 
   return (
     <div>

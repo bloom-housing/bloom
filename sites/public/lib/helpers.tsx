@@ -1,4 +1,4 @@
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   Address,
   Listing,
@@ -33,8 +33,8 @@ export const getGenericAddress = (bloomAddress: Address) => {
 }
 
 export const openInFuture = (listing: Listing) => {
-  const nowTime = moment()
-  return listing.applicationOpenDate && nowTime < moment(listing.applicationOpenDate)
+  const nowTime = dayjs()
+  return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
 }
 
 const getListingCardSubtitle = (address: Address) => {
@@ -54,7 +54,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
 
   if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
-    const openDate = moment(date)
+    const openDate = dayjs(date)
     formattedDate = openDate.format("MMM. D, YYYY")
     content = t("listings.applicationOpenPeriod")
   } else {
@@ -62,8 +62,8 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
       appStatus = ApplicationStatusType.Closed
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
-      const dueDate = moment(listing.applicationDueDate)
-      const dueTime = moment(listing.applicationDueTime)
+      const dueDate = dayjs(listing.applicationDueDate)
+      const dueTime = dayjs(listing.applicationDueTime)
       formattedDate = dueDate.format("MMM. DD, YYYY")
 
       if (listing.applicationDueTime) {
@@ -71,7 +71,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
       }
 
       // if due date is in future, listing is open
-      if (moment() < dueDate) {
+      if (dayjs() < dueDate) {
         content = t("listings.applicationDeadline")
       } else {
         appStatus = ApplicationStatusType.Closed

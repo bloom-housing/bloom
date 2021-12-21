@@ -44,7 +44,7 @@ import {
   occupancyTable,
   t,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
 import { getGenericAddress, openInFuture } from "../lib/helpers"
@@ -207,7 +207,7 @@ export const ListingView = (props: ListingProps) => {
   let lotterySection
   if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
     lotterySection = <PublicLotteryEvent event={publicLottery} />
-    if (moment(publicLottery.startTime) < moment() && lotteryResults && !lotteryResults.url) {
+    if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
       lotterySection = <LotteryResultsEvent event={lotteryResults} />
     }
   }
@@ -297,14 +297,14 @@ export const ListingView = (props: ListingProps) => {
     <>
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
-        applicationsDueDate={moment(listing.applicationDueDate).format(
+        applicationsDueDate={dayjs(listing.applicationDueDate).format(
           `MMM. DD, YYYY [${t("t.at")}] h A`
         )}
         applicationsOpen={!appOpenInFuture}
-        applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        applicationsOpenDate={dayjs(listing.applicationOpenDate).format("MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
-        postmarkedApplicationsReceivedByDate={moment(
+        postmarkedApplicationsReceivedByDate={dayjs(
           listing.postmarkedApplicationsReceivedByDate
         ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
@@ -318,11 +318,11 @@ export const ListingView = (props: ListingProps) => {
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}
         postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: moment(
+          postmarkedApplicationsReceivedByDate: dayjs(
             listing.postmarkedApplicationsReceivedByDate
           ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
           developer: listing.developer,
-          applicationsDueDate: moment(listing.applicationDueDate).format(
+          applicationsDueDate: dayjs(listing.applicationDueDate).format(
             `MMM. DD, YYYY [${t("t.at")}] h A`
           ),
         }}
@@ -331,7 +331,7 @@ export const ListingView = (props: ListingProps) => {
     </>
   )
 
-  const applicationsClosed = moment() > moment(listing.applicationDueDate)
+  const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">

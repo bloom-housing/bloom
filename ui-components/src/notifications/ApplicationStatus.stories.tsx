@@ -1,6 +1,9 @@
 import * as React from "react"
 
-import moment from "moment"
+import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
+dayjs.extend(advancedFormat)
+
 import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
@@ -14,15 +17,15 @@ export default {
 
 function formatDateTime(date: Date, showTime?: boolean) {
   return (
-    moment(date).format("MMMM D, YYYY") +
-    (showTime ? ` ${t("t.at")} ` + moment(date).format("h:mm A") : "")
+    dayjs(date).format("MMMM D, YYYY") +
+    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mm A") : "")
   )
 }
 
 const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""
 let days = 10
-listing.applicationDueDate = moment().add(days, "days").format()
+listing.applicationDueDate = dayjs().add(days, "days").format()
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
@@ -52,7 +55,7 @@ export const pastDue = () => (
   />
 )
 
-listingPast.applicationDueDate = moment().subtract(days, "days").format()
+listingPast.applicationDueDate = dayjs().subtract(days, "days").format()
 export const pastDueAndVivid = () => (
   <ApplicationStatus
     content={
@@ -65,7 +68,7 @@ export const pastDueAndVivid = () => (
 
 const listing2 = Object.assign({}, Archer) as any
 days = 10
-listing2.applicationDueDate = moment().add(days, "days").format()
+listing2.applicationDueDate = dayjs().add(days, "days").format()
 export const openSoon = () => (
   <ApplicationStatus
     content={
@@ -77,7 +80,7 @@ export const openSoon = () => (
 
 const listing3 = Object.assign({}, Archer) as any
 days = 10
-listing3.applicationDueDate = moment().add(days, "days").format()
+listing3.applicationDueDate = dayjs().add(days, "days").format()
 export const openedAlready = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing3.applicationDueDate)}
@@ -103,7 +106,7 @@ export const openedWithFCFSVivid = () => (
 
 export const postLottery = () => (
   <ApplicationStatus
-    content={"Post-lottery content: " + moment().format("MMMM Do, Y")}
+    content={"Post-lottery content: " + dayjs().format("MMMM Do, YYYY")}
     status={ApplicationStatusType.PostLottery}
     withIcon={false}
   />

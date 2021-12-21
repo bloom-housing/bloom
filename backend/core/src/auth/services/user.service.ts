@@ -10,7 +10,7 @@ import { InjectRepository } from "@nestjs/typeorm"
 import { DeepPartial, FindConditions, Repository } from "typeorm"
 import { paginate, Pagination } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
-import moment from "moment"
+import dayjs from "dayjs"
 import crypto from "crypto"
 import { User } from "../entities/user.entity"
 import { ConfirmDto } from "../dto/confirm.dto"
@@ -38,6 +38,9 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
+
+import advancedFormat from "dayjs/plugin/advancedFormat"
+dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
@@ -193,7 +196,7 @@ export class UserService {
     const payload = {
       id: userId,
       email,
-      exp: Number.parseInt(moment().add(24, "hours").format("X")),
+      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
     }
     return encode(payload, process.env.APP_SECRET)
   }
@@ -298,7 +301,7 @@ export class UserService {
     }
 
     // Token expires in 1 hour
-    const payload = { id: user.id, exp: Number.parseInt(moment().add(1, "hour").format("X")) }
+    const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
     user.resetToken = encode(payload, process.env.APP_SECRET)
     await this.userRepository.save(user)
     await this.emailService.forgotPassword(user, dto.appUrl)

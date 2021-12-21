@@ -21,7 +21,7 @@ import {
 
 import { TempEvent } from "./index"
 import { createDate, createTime } from "../../../lib/helpers"
-import moment from "moment"
+import dayjs from "dayjs"
 
 type OpenHouseFormProps = {
   onSubmit: (data: TempEvent) => void
@@ -51,7 +51,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
     endTime && Object.assign(values, { endTime: formatDateToTimeField(endTime) })
 
     if (startTime) {
-      const dateObj = moment(startTime)
+      const dateObj = dayjs(startTime)
 
       const date = {
         day: dateObj.format("DD"),

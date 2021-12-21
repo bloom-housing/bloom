@@ -1,7 +1,7 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import moment from "moment"
+import dayjs from "dayjs"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -128,7 +128,7 @@ export class ListingDto extends OmitType(Listing, [
   @Transform(
     (_value, listing) => {
       if (
-        moment(listing.applicationDueDate).isBefore() &&
+        dayjs(listing.applicationDueDate).isBefore(dayjs()) &&
         listing.status !== ListingStatus.pending
       ) {
         listing.status = ListingStatus.closed

@@ -2,7 +2,7 @@ import * as React from "react"
 import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
 import { t } from "../../../../helpers/translator"
 import { pdfUrlFromListingEvents } from "../../../../helpers/pdfs"
-import moment from "moment"
+import dayjs from "dayjs"
 
 const DownloadLotteryResults = (props: { event: ListingEvent; cloudName: string }) => {
   const { event, cloudName } = props
@@ -15,7 +15,7 @@ const DownloadLotteryResults = (props: { event: ListingEvent; cloudName: string 
         <section className="aside-block text-center">
           <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
           <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
-            {moment(event.startTime).format("MMMM D, YYYY")}
+            {dayjs(event.startTime).format("MMMM D, YYYY")}
           </p>
           <a
             className="button is-primary w-full mb-2"

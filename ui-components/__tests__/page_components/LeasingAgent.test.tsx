@@ -3,7 +3,7 @@ import { render, cleanup } from "@testing-library/react"
 import { LeasingAgent } from "../../src/page_components/listing/listing_sidebar/LeasingAgent"
 import { ArcherListing } from "@bloom-housing/backend-core/types/src/archer-listing"
 import { Listing } from "@bloom-housing/backend-core/types"
-import moment from "moment"
+import dayjs from "dayjs"
 
 afterEach(cleanup)
 

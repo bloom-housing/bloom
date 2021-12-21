@@ -5,7 +5,9 @@ import {
   CloudinaryUpload,
   TimeFieldPeriod,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import {
   ApplicationSubmissionType,
   AssetsService,
@@ -78,7 +80,7 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 
   if (type === ApplicationSubmissionType.paper) {
-    const momentDate = moment(dateObj)
+    const momentDate = dayjs(dateObj)
 
     const date = momentDate.utc().format("MM/DD/YYYY")
     const time = momentDate.utc().format("hh:mm:ss A")

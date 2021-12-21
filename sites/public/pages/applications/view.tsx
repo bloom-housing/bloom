@@ -3,7 +3,7 @@
 Optional application summary
 */
 import Link from "next/link"
-import moment from "moment"
+import dayjs from "dayjs"
 import { FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
@@ -15,7 +15,7 @@ const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
 
   const confirmationDate = useMemo(() => {
-    return moment().format(DATE_FORMAT)
+    return dayjs().format(DATE_FORMAT)
   }, [])
 
   return (

@@ -1,5 +1,7 @@
 import React, { useContext } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { getLotteryEvent } from "../../../../lib/helpers"
@@ -35,13 +37,13 @@ const DetailRankingsAndResults = () => {
         <>
           <GridSection columns={3}>
             <ViewItem id="lotteryEvent.startTime.date" label={t("listings.lotteryDateQuestion")}>
-              {moment(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
+              {dayjs(new Date(lotteryEvent?.startTime)).utc().format("MM/DD/YYYY")}
             </ViewItem>
             <ViewItem id="lotteryEvent.startTime.time" label={t("listings.lotteryStartTime")}>
-              {moment(new Date(lotteryEvent?.startTime)).format("hh:mm A")}
+              {dayjs(new Date(lotteryEvent?.startTime)).format("hh:mm A")}
             </ViewItem>
             <ViewItem id="lotteryEvent.lotteryEndTime.time" label={t("listings.lotteryEndTime")}>
-              {moment(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
+              {dayjs(new Date(lotteryEvent?.endTime)).format("hh:mm A")}
             </ViewItem>
           </GridSection>
           <GridSection columns={2}>

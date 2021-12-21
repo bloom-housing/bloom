@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useCallback } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import { useFormContext } from "react-hook-form"
 import {
   pdfUrlFromListingEvents,
@@ -42,28 +42,10 @@ const Aside = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = moment(listing.updatedAt)
+    const momentDate = dayjs(listing.updatedAt)
 
     return momentDate.format("MMMM DD, YYYY")
   }, [listing])
-
-  const saveAndExit = useCallback(() => {
-    const applicationDueDateField = getValues()?.applicationDueDateField
-    const applicationDueDateFormatted = createDate(applicationDueDateField)
-
-    const newStatus = (() => {
-      if (
-        listing.status === ListingStatus.closed &&
-        moment(applicationDueDateFormatted).isAfter()
-      ) {
-        return ListingStatus.active
-      }
-
-      return listing.status
-    })()
-
-    submitFormWithStatus(false, newStatus)
-  }, [getValues, listing, submitFormWithStatus])
 
   const actions = useMemo(() => {
     const elements = []
@@ -196,7 +178,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {moment(
+              {dayjs(
                 listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}
@@ -258,7 +240,6 @@ const Aside = ({
   }, [
     listing,
     listingId,
-    saveAndExit,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,
