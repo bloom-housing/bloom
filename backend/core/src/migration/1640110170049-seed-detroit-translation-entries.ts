@@ -82,7 +82,7 @@ export class seedDetroitTranslationEntries1640110170049 implements MigrationInte
       `SELECT id FROM jurisdictions where name='Detroit'`
     )
     await queryRunner.query(
-      `INSERT into "translations" (jurisdiction_id, language, translations) VALUES ($1, $2, $3)`,
+      `UPDATE "translations" (jurisdiction_id, language, translations) VALUES ($1, $2, $3)`,
       [detroit_jurisdiction_id, Language.en, defaultTranslation]
     )
   }
