@@ -101,6 +101,10 @@ export class UserService {
     return result
   }
 
+  public async listAllUsers(): Promise<User[]> {
+    return await this.userRepository.find()
+  }
+
   async update(dto: UserUpdateDto, authContext: AuthContext) {
     const user = await this.find({
       id: dto.id,

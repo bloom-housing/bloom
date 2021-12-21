@@ -20,11 +20,11 @@ export class ListingNotificationInfo {
 export class ListingsNotificationsConsumer {
   constructor(private readonly smsService: SmsService) {}
   @Process()
-  sendListingNotifications(job: Job<ListingNotificationInfo>): StatusDto {
+  async sendListingNotifications(job: Job<ListingNotificationInfo>): Promise<StatusDto> {
     const listing: Listing = job.data.listing
     let status: StatusDto
     if (job.data.updateType === ListingUpdateType.CREATE) {
-      status = this.smsService.sendNewListingNotification(listing)
+      status = await this.smsService.sendNewListingNotification(listing)
 
       // TODO(https://github.com/CityOfDetroit/bloom/issues/698): call out to the
       // emailService to send email notifications.
