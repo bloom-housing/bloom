@@ -101,7 +101,7 @@ const FilterForm = (props: FilterFormProps) => {
           labelClassName="filter-header"
         />
         <label className="field-label filter-header">{t("listingFilters.bedrooms")}</label>
-        <div className="flex flex-col bedroom-selector">
+        <div className="checkbox-filter-group">
           <Field
             id="studio"
             name={FrontendListingFilterStateKeys.studio}
