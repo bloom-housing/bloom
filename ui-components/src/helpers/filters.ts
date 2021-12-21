@@ -4,6 +4,7 @@ import {
   ListingFilterKeys,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
+import { Neighborhoods, Region, regionNeighborhoodMap } from "./regionNeighborhoodMap"
 
 // TODO(#629): Refactor filter state storage strategy
 // Currently, the knowledge of "what a filter is" is spread across multiple
@@ -57,7 +58,8 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
 // Define the keys we expect to see in the frontend URL. These are also used for
 // the filter state object, ListingFilterState.
 // We exclude bedrooms, since that is constructed from studio, oneBdrm, and so on
-const { bedrooms, ...IncludedBackendKeys } = ListingFilterKeys
+// We exclude neighborhood, since we map to neighborhoods from the region filter
+const { bedrooms, neighborhood, ...IncludedBackendKeys } = ListingFilterKeys
 enum BedroomFields {
   studio = "studio",
   oneBdrm = "oneBdrm",
@@ -68,6 +70,7 @@ enum BedroomFields {
 export const FrontendListingFilterStateKeys = {
   ...IncludedBackendKeys,
   ...BedroomFields,
+  ...Region,
   includeNulls: "includeNulls" as const,
 }
 
@@ -102,7 +105,11 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.grabBars]?: string | boolean
   [FrontendListingFilterStateKeys.heatingInUnit]?: string | boolean
   [FrontendListingFilterStateKeys.acInUnit]?: string | boolean
-  [FrontendListingFilterStateKeys.neighborhood]?: string
+  [FrontendListingFilterStateKeys.downtown]?: string | boolean
+  [FrontendListingFilterStateKeys.eastside]?: string | boolean
+  [FrontendListingFilterStateKeys.midtownNewCenter]?: string | boolean
+  [FrontendListingFilterStateKeys.southwest]?: string | boolean
+  [FrontendListingFilterStateKeys.westside]?: string | boolean
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"
@@ -160,6 +167,22 @@ export function encodeToBackendFilterArray(filterState: ListingFilterState) {
       ...(includeNulls && { $include_nulls: includeNulls }),
     })
   }
+
+  // Special-case the region filters, since they are mapped to neighborhoods.
+  const neighborhoods = []
+  for (const region in Region) {
+    if (filterState[region]) {
+      neighborhoods.push(regionNeighborhoodMap.get(Region[region])?.map((n) => n.name))
+    }
+  }
+  if (neighborhoods.length > 0) {
+    filterArray.push({
+      $comparison: getComparisonForFilter(ListingFilterKeys.neighborhood),
+      [ListingFilterKeys.neighborhood]: neighborhoods.join(),
+      ...(includeNulls && { $include_nulls: includeNulls }),
+    })
+  }
+
   return filterArray
 }
 
