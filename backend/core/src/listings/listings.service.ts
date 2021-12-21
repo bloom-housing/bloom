@@ -70,6 +70,7 @@ export class ListingsService {
       .leftJoin("listings.unitsSummary", "unitsSummary")
       .leftJoin("unitsSummary.unitType", "summaryUnitType")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
+      .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
       .orderBy(getOrderByCondition(params))
 

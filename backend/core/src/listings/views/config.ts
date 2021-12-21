@@ -222,6 +222,7 @@ views.full = {
     ["listings.unitsSummary", "unitsSummary"],
     ["unitsSummary.unitType", "summaryUnitType"],
     ["unitsSummary.priorityType", "summaryPriorityType"],
+    ["listings.features", "listing_features"],
   ],
 }
 

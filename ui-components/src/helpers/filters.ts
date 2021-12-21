@@ -22,18 +22,6 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.name:
     case ListingFilterKeys.status:
     case ListingFilterKeys.leasingAgents:
-      return EnumListingFilterParamsComparison["="]
-    case ListingFilterKeys.minRent:
-      return EnumListingFilterParamsComparison[">="]
-    case ListingFilterKeys.maxRent:
-      return EnumListingFilterParamsComparison["<="]
-    case ListingFilterKeys.bedrooms:
-    case ListingFilterKeys.zipcode:
-    case ListingFilterKeys.neighborhood:
-      return EnumListingFilterParamsComparison["IN"]
-    case ListingFilterKeys.seniorHousing:
-    case ListingFilterKeys.independentLivingHousing:
-    case ListingFilterKeys.availability:
     case ListingFilterKeys.elevator:
     case ListingFilterKeys.wheelchairRamp:
     case ListingFilterKeys.serviceAnimalsAllowed:
@@ -47,6 +35,18 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.heatingInUnit:
     case ListingFilterKeys.acInUnit:
     case ListingFilterKeys.minAmiPercentage:
+      return EnumListingFilterParamsComparison["="]
+    case ListingFilterKeys.minRent:
+      return EnumListingFilterParamsComparison[">="]
+    case ListingFilterKeys.maxRent:
+      return EnumListingFilterParamsComparison["<="]
+    case ListingFilterKeys.bedrooms:
+    case ListingFilterKeys.zipcode:
+    case ListingFilterKeys.neighborhood:
+      return EnumListingFilterParamsComparison["IN"]
+    case ListingFilterKeys.seniorHousing:
+    case ListingFilterKeys.independentLivingHousing:
+    case ListingFilterKeys.availability:
       return EnumListingFilterParamsComparison["NA"]
     default: {
       const _exhaustiveCheck: never = filterKey

@@ -74,7 +74,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
               includeNulls ? ` OR ${filterField} IS NULL` : ""
             })`,
             {
-              [whereParameterName]: filterValue
+              [whereParameterName]: String(filterValue)
                 .split(",")
                 .map((s) => s.trim().toLowerCase())
                 .filter((s) => s.length !== 0),

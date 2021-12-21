@@ -256,6 +256,31 @@ describe("ListingsService", () => {
       )
     })
 
+    it("should support filtering on features", async () => {
+      mockListingsRepo.createQueryBuilder
+        .mockReturnValueOnce(mockInnerQueryBuilder)
+        .mockReturnValueOnce(mockQueryBuilder)
+
+      const queryParams: ListingsQueryParams = {
+        filter: [
+          {
+            $comparison: Compare["IN"],
+            elevator: true,
+          },
+        ],
+      }
+
+      const listings = await service.list(queryParams)
+
+      expect(listings.items).toEqual(mockListings)
+      expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
+        "(LOWER(CAST(listing_features.elevator as text)) IN (:...elevator_0))",
+        {
+          elevator_0: ["true"],
+        }
+      )
+    })
+
     it("should include listings with missing data if $include_nulls is true", async () => {
       mockListingsRepo.createQueryBuilder
         .mockReturnValueOnce(mockInnerQueryBuilder)

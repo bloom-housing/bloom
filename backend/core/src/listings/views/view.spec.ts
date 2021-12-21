@@ -80,7 +80,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(28)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(29)
     })
   })
 
