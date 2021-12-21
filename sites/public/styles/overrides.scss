@@ -398,26 +398,11 @@ li.progress-nav__item {
   text-align: center;
 }
 
-.bedroom-selector > .field {
-  label {
-    margin-top: 10px;
-  }
-}
-
-.checkbox-filter-group {
-  column-count: 2;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  .field {
-    margin-bottom: 3.5px;
-  }
-}
-
 .accessibility-eligibility-selector {
   column-count: 2;
   font-size: small;
-  margin-top: 10px;
   margin-bottom: 20px;
+  margin-top: 10px;
   .field {
     margin-bottom: 3.5px;
   }
@@ -645,7 +630,7 @@ a.button.is-primary:hover {
   width: 100%;
 
   @screen md {
-    height: initial;
+    max-height: 80vh;
     max-width: 32rem;
   }
 
@@ -675,8 +660,15 @@ a.button.is-primary:hover {
     @apply text-base font-bold;
   }
 
-  .bedroom-selector {
-    margin-bottom: 1rem;
+  .checkbox-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.5rem 0 1rem;
+
+    .field {
+      flex: 0 0 50%;
+      margin-bottom: 0.25rem;
+    }
   }
 
   .rent-range {
@@ -692,14 +684,6 @@ a.button.is-primary:hover {
 
   button.button {
     padding: 1rem 3rem;
-  }
-
-  .bedroom-selector .field {
-    margin: 0;
-
-    @screen md {
-      margin-inline-end: 1rem;
-    }
   }
 }
 
@@ -731,12 +715,12 @@ footer.site-footer > .footer-row:first-of-type {
 }
 
 footer.site-footer img {
-  width: 50px;
   margin-top: -16px; // Negative margin to center around shield
+  width: 50px;
 
   @screen md {
-    width: 74px;
     margin-top: -23px;
+    width: 74px;
   }
 }
 
@@ -777,9 +761,9 @@ footer.site-footer img {
   }
 
   .footer-nav a {
-    width: auto;
     display: inline;
     margin-left: 2.25rem;
+    width: auto;
   }
 }
 
