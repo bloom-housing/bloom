@@ -147,6 +147,26 @@ describe("Listings", () => {
     }
   })
 
+  it("should return listings with matching features", async () => {
+    const queryParams = {
+      limit: "all",
+      filter: [
+        {
+          $comparison: "IN",
+          elevator: true,
+        },
+      ],
+    }
+    const query = qs.stringify(queryParams)
+
+    const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
+
+    expect(res.body.items.length).toBeGreaterThanOrEqual(1)
+    for (const listing of res.body.items) {
+      expect(listing.features.elevator).toBe(true)
+    }
+  })
+
   it("should modify property related fields of a listing and return a modified value", async () => {
     const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
 
