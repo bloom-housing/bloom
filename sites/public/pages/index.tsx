@@ -10,6 +10,10 @@ import styles from "./index.module.scss"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { getListings } from "../lib/helpers"
 import moment from "moment"
+import {
+  Region,
+  regionImageUrls,
+} from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
 
 export default function Home({ latestListings }) {
   const blankAlertInfo = {
@@ -51,13 +55,13 @@ export default function Home({ latestListings }) {
   }
 
   // TODO(#674): Fill out region buttons with real data
-  const RegionButton = (props: { label: string; image?: string }) => (
+  const RegionButton = (props: { region: [string, Region] }) => (
     <a
       className={styles.region}
-      href="/listings"
-      style={{ backgroundImage: `url(${props.image})` }}
+      href={`/listings/filtered?page=1&${props.region[0]}=true`}
+      style={{ backgroundImage: `url(${regionImageUrls.get(props.region[1])})` }}
     >
-      <p className={styles.region__text}>{props.label}</p>
+      <p className={styles.region__text}>{props.region[1]}</p>
     </a>
   )
 
@@ -101,27 +105,9 @@ export default function Home({ latestListings }) {
         icon="map"
         className={styles.regions}
       >
-        {/* TODO(#674): Get official hosted images */}
-        <RegionButton
-          label="Downtown"
-          image="https://pbs.twimg.com/media/DSzZwQKVAAASkw_?format=jpg&name=large"
-        />
-        <RegionButton
-          label="Eastside"
-          image="https://d12kp1agyyb87s.cloudfront.net/wp-content/uploads/2019/10/image001.jpg"
-        />
-        <RegionButton
-          label="Westside"
-          image="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Atkinson_avenue_historic_district.JPG/1920px-Atkinson_avenue_historic_district.JPG"
-        />
-        <RegionButton
-          label="Southwest"
-          image="https://www.theneighborhoods.org/sites/the-neighborhoods/files/2020-10/Southwest-Mural_1.jpg"
-        />
-        <RegionButton
-          label="Midtown - New Center"
-          image="https://cdn.pixabay.com/photo/2019/03/17/04/00/detroit-4060269_960_720.jpg"
-        />
+        {Object.entries(Region).map((region) => (
+          <RegionButton region={region} />
+        ))}
       </HorizontalScrollSection>
       <ConfirmationModal
         setSiteAlertMessage={(alertMessage, alertType) => setAlertInfo({ alertMessage, alertType })}

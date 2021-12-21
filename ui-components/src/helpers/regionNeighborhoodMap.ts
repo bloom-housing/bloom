@@ -6,6 +6,27 @@ export enum Region {
   westside = "Westside",
 }
 
+// TODO(#674): Get official hosted images
+export const regionImageUrls: Map<Region, string> = new Map([
+  [Region.downtown, "https://pbs.twimg.com/media/DSzZwQKVAAASkw_?format=jpg&name=large"],
+  [
+    Region.eastside,
+    "https://d12kp1agyyb87s.cloudfront.net/wp-content/uploads/2019/10/image001.jpg",
+  ],
+  [
+    Region.midtownNewCenter,
+    "https://cdn.pixabay.com/photo/2019/03/17/04/00/detroit-4060269_960_720.jpg",
+  ],
+  [
+    Region.southwest,
+    "https://www.theneighborhoods.org/sites/the-neighborhoods/files/2020-10/Southwest-Mural_1.jpg",
+  ],
+  [
+    Region.westside,
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Atkinson_avenue_historic_district.JPG/1920px-Atkinson_avenue_historic_district.JPG",
+  ],
+])
+
 export interface Neighborhood {
   name: string
   region: Region
