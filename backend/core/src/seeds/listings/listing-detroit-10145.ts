@@ -77,9 +77,8 @@ export class Listing10145Seed extends ListingDefaultSeed {
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
-        // NOTE: this is not an actual image of the property
         fileId:
-          "https://images.unsplash.com/photo-1612637968894-660373e23b03?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
+          "https://images.squarespace-cdn.com/content/v1/5e7510a49787c5207b777036/1588191604480-OSLU4ZCW3CHUQH0B2ERS/Medical+Center+Village.jpg?format=750w",
       },
     ]
 

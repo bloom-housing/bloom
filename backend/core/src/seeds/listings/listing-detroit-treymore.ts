@@ -84,7 +84,7 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
-        fileId: "https://s3.amazonaws.com/photos.rentlinx.com/L800/51354687.jpg",
+        fileId: "http://www.dailydetroit.com/wp-content/uploads/2016/12/DSC03993.jpg",
       },
     ]
 

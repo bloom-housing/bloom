@@ -76,7 +76,7 @@ export class Listing10159Seed extends ListingDefaultSeed {
       {
         label: "building",
         fileId:
-          "https://static.wixstatic.com/media/eb2e58_2e54166bcc1c4a07a50d03fb3522a385~mv2.jpg/v1/fill/w_297,h_199,al_c,lg_1,q_80/eb2e58_2e54166bcc1c4a07a50d03fb3522a385~mv2.webp",
+          "https://rentpath-res.cloudinary.com/t_rp,cs_tinysrgb,fl_force_strip,w_400,h_240,c_fill,q_auto:low,dpr_1.0/e_unsharp_mask:50/ed25c8ac2a650c47de36884830f2cf2d",
       },
     ]
 
