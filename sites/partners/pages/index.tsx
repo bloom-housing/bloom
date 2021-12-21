@@ -3,7 +3,6 @@ import Head from "next/head"
 import {
   PageHeader,
   t,
-  lRoute,
   AuthContext,
   Button,
   LocalizedLink,
@@ -24,7 +23,7 @@ class formatLinkCell {
   init(params) {
     this.link = document.createElement("a")
     this.link.classList.add("text-blue-700")
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
     this.link.innerText = params.valueFormatted || params.value
   }
 
@@ -36,14 +35,14 @@ class formatLinkCell {
 class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
   }
 }
 
 class ListingsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
+    this.link.setAttribute("href", `/listings/${params.data.id}`)
   }
 }
 

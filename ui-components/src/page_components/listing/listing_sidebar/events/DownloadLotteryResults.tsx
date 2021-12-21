@@ -1,14 +1,11 @@
 import * as React from "react"
-import { ListingEvent, ListingEventType } from "@bloom-housing/backend-core/types"
+import { ListingEvent } from "@bloom-housing/backend-core/types"
 import { t } from "../../../../helpers/translator"
-import { pdfUrlFromListingEvents } from "../../../../helpers/pdfs"
 import dayjs from "dayjs"
 
-const DownloadLotteryResults = (props: { event: ListingEvent; cloudName: string }) => {
-  const { event, cloudName } = props
-  const eventUrl = event
-    ? pdfUrlFromListingEvents([event], ListingEventType.lotteryResults, cloudName)
-    : null
+const DownloadLotteryResults = (props: { event: ListingEvent; pdfUrl: string }) => {
+  const { event, pdfUrl } = props
+  const eventUrl = event ? pdfUrl : null
   return (
     <>
       {eventUrl && (

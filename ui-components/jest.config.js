@@ -9,7 +9,6 @@ module.exports = {
     "**/*.tsx",
     "!**/*.stories.tsx",
     "<rootDir>/ui-components/src/helpers/*.ts",
-    "!<rootDir>/ui-components/src/helpers/blankApplication.ts",
   ],
   coverageReporters: ["lcov", "text"],
   coverageDirectory: "test-coverage",
