@@ -6,6 +6,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { getDate } from "./shared"
 
 const grandRivProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -28,6 +29,8 @@ const grandRivProperty: PropertySeedType = {
 
 const grandRivListing: ListingSeedType = {
   applicationDropOffAddress: null,
+  applicationOpenDate: getDate(1000),
+  applicationDueDate: getDate(1500),
   applicationFee: "25",
   applicationMailingAddress: null,
   countyCode: CountyCode.detroit,
@@ -41,7 +44,7 @@ const grandRivListing: ListingSeedType = {
   managementCompany: "Rock Management Company",
   managementWebsite: "www.28granddetroit.com",
   name: "Capitol Park Micro Units",
-  status: ListingStatus.pending,
+  status: ListingStatus.active,
   image: undefined,
   digitalApplication: undefined,
   paperApplication: undefined,
