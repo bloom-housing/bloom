@@ -68,7 +68,7 @@ export class Listing10147Seed extends ListingDefaultSeed {
     const property = await this.propertyRepository.save({
       ...mshProperty,
     })
-    
+
     const assets: Array<AssetDtoSeedType> = [
       {
         label: "building",
