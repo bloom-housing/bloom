@@ -356,9 +356,9 @@
                     </tr>
                     <tr>
                       <td>
-                        <h1>Reminder to update your listing<br />{{listing.name}}</h1>
+                        <h1>{{t "updateListing.title"}}<br />{{listing.name}}</h1>
 
-                        <h2>Verify the following information is correct.</h2>                        
+                        <h2>{{t "updateListing.verifyMsg"}}</h2>                        
                          <table
                           role="presentation"
                           border="1px"
@@ -369,25 +369,25 @@
                           <tbody>
                             <tr>
                               <td width="30%">
-                                <strong>Listing</strong>
+                                <strong>{{t "updateListing.listingLabel"}}</strong>
                               </td>
                               <td>{{listing.name}}</td>
                             </tr>
                             <tr>
                               <td width="30%">
-                                <strong>Address</strong>
+                                <strong>{{t "updateListing.addressLabel"}}</strong>
                               </td>
                               <td>{{listing.property.buildingAddress.street}}, {{listing.property.buildingAddress.city}}, {{listing.property.buildingAddress.state}}, {{listing.property.buildingAddress.zipCode}}</td>
                             </tr>
                             <tr>
                               <td>
-                                <strong>Units</strong>
+                                <strong>{{t "updateListing.unitsLabel"}}</strong>
                               </td>
                               <td>{{listing.property.unitsAvailable}}</td>
                             </tr>
                             <tr>
                               <td width="30%">
-                                <strong>Rent</strong>
+                                <strong>{{t "updateListing.listingLabel"}}</strong>
                               </td>
                               <td>{{rent}}</td>
                             </tr>
@@ -402,7 +402,7 @@
                                   class="btn btn-primary"
                                   href="http://htmlemail.io"
                                   target="_blank"
-                                  >See Listing</a
+                                  >{{t "updateListing.seeListingLabel"}}</a
                                 >
                               </td>
                             </tr>
@@ -424,14 +424,14 @@
                 <tr>
                   <td class="content-block">
                     <span class="apple-link"
-                      >Detroit Home Connect is a project of the</span
+                      >{{t "t.dhcProjectLabel"}}</span
                     >
-                    <br /><span class="apple-link">Housing & Revitalization Department of the City of Detroit</span>
+                    <br /><span class="apple-link">{{t "t.hrdLabel"}}</span>
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block">
-                    <a href="ADD OPT OUT TEXT">Unsubscribe from list</a>
+                    <a href="ADD OPT OUT TEXT">{{t "t.unsubscribeMsg"}}</a>
                   </td>
                 </tr>
               </table>
