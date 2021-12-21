@@ -169,19 +169,18 @@ export class EmailService {
     )
   }
 
-  public async updateListingReminder(listing: Listing, user: User) {
-    await this.loadTranslationsForUser(user)
+  public async updateListingReminder(listing: Listing, users: string[]) {
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
         `Preparing to send a reminder to update listing email to ${
-          user.email
+          users
         } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
     const rentRange = this.getRentRange(listing)
-    await this.send(
-      user.email,
+    await this.sendMultiple(
+      users,
       "Update Listing",
       this.template("update-listing")({
         listing: listing,
@@ -253,6 +252,28 @@ export class EmailService {
           console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
           if (retry > 0) {
             void this.send(to, subject, body, retry - 1)
+          }
+        }
+      }
+    )
+  }
+
+  private async sendMultiple(to: string [], subject: string, body: string, retry = 3) {
+    await this.sendGrid.sendMultiple(
+      {
+        to: to,
+        from: this.configService.get<string>("EMAIL_FROM_ADDRESS"),
+        subject: subject,
+        html: body,
+      },
+
+      (error) => {
+        if (error instanceof ResponseError) {
+          const { response } = error
+          const { body: errBody } = response
+          console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
+          if (retry > 0) {
+            void this.sendMultiple(to, subject, body, retry - 1)
           }
         }
       }
