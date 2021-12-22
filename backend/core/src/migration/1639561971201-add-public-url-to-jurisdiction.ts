@@ -15,6 +15,7 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
     const alamedaJurisdiction = jurisdictions.find((j) => j.name === CountyCode.alameda)
     const sanJoseJurisdiction = jurisdictions.find((j) => j.name === CountyCode.san_jose)
     const sanMateoJurisdiction = jurisdictions.find((j) => j.name === CountyCode.san_mateo)
+    const detroitJurisdiction = jurisdictions.find((j) => j.name === CountyCode.detroit)
 
     if (process.env.PARTNERS_PORTAL_URL === "https://partners.housingbayarea.bloom.exygy.dev") {
       // staging
@@ -31,9 +32,10 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
       alamedaJurisdiction.public_url = "https://dev-bloom.netlify.app"
       sanJoseJurisdiction.public_url = "https://dev-bloom.netlify.app"
       sanMateoJurisdiction.public_url = "https://dev-bloom.netlify.app"
+      detroitJurisdiction.public_url = "https://detroit-public-dev.netlify.app"
     }
 
-    for (const jurisdiction of [alamedaJurisdiction, sanJoseJurisdiction, sanMateoJurisdiction]) {
+    for (const jurisdiction of [alamedaJurisdiction, sanJoseJurisdiction, sanMateoJurisdiction, detroitJurisdiction]) {
       await queryRunner.query(`UPDATE jurisdictions SET public_url = $1 WHERE id = $2`, [
         jurisdiction.public_url,
         jurisdiction.id,
