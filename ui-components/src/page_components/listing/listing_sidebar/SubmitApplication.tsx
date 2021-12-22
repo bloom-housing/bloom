@@ -4,6 +4,7 @@ import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
 import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 export interface PostmarkedApplication {
   postmarkedApplicationsReceivedByDate: string
@@ -17,19 +18,28 @@ export interface ApplicationAddressesProps {
   applicationDropOffAddressOfficeHours?: string
   applicationOrganization?: string
   postmarkedApplicationData?: PostmarkedApplication
+  listingStatus?: ListingStatus
 }
 
 const SubmitApplication = (props: ApplicationAddressesProps) => {
+  if (props.listingStatus === ListingStatus.closed) {
+    return null
+  }
+
   return (
     <>
-      {(props.applicationMailingAddress || props.applicationDropOffAddress) && (
+      {(props.applicationMailingAddress ||
+        props.applicationDropOffAddress ||
+        props.postmarkedApplicationData) && (
         <section className="aside-block is-tinted bg-gray-100">
           <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {props.applicationMailingAddress && (
+          {(props.applicationMailingAddress || props.postmarkedApplicationData) && (
             <>
               <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
               <p className="text-gray-700">{props.applicationOrganization}</p>
-              <SidebarAddress address={props.applicationMailingAddress} />
+              {props.applicationMailingAddress && (
+                <SidebarAddress address={props.applicationMailingAddress} />
+              )}
               <p className="mt-4 text-tiny text-gray-750">
                 {props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate
                   ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {

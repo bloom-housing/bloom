@@ -5,7 +5,6 @@ import {
   AppearanceBorderType,
   AppearanceStyleType,
   Button,
-  cloudinaryUrlFromId,
   Drawer,
   Dropzone,
   Field,
@@ -15,6 +14,7 @@ import {
   TableThumbnail,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 const LotteryResults = () => {

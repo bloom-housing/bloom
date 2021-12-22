@@ -127,6 +127,7 @@
       "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "Thật đáng tiếc, có vẻ như quý vị không đủ điều kiện cho danh sách nhà này.",
       "dontQualifyInfo": "Vui lòng thực hiện các thay đổi nếu quý vị cho rằng mình có thể đã nhầm lẫn. Lưu ý rằng nếu quý vị giả mạo bất kỳ thông tin nào trong đơn ghi danh của mình, quý vị sẽ bị loại. Nếu thông tin quý vị đã nhập là chính xác, chúng tôi đề nghị quý vị nên kiểm tra lại trong tương lai khi có thêm các bất động sản.",
+      "genericSubtitle": "Nếu đơn của quý vị được chọn, hãy chuẩn bị cung cấp tài liệu hỗ trợ.",
       "addMembers": {
         "addHouseholdMember": "+ Thêm Thành viên Hộ Gia đình",
         "done": "Thêm xong thành viên",
@@ -143,6 +144,7 @@
       "preferredUnit": {
         "preferredUnitType": "Loại Căn nhà Ưa thích",
         "title": "Kích thước căn nhà mà quý vị quan tâm là gì?",
+        "subTitle": "Mặc dù các kích thước nhà ở thường dựa vào mức độ sử dụng nhưng vui lòng cho biết kích thước nhà ở mà quý vị yêu thích để xác định ưu tiên của quý vị trong cơ hội này hoặc lập danh sách chờ (chỉ dành cho cơ hội này)",
         "optionsLabel": "Đánh dấu tất cả các lựa chọn phù hợp:",
         "options": {
           "studio": "Một phòng kiểu studio",
@@ -151,6 +153,14 @@
           "threeBdrm": "3 Phòng ngủ",
           "fourBdrm": "3 Phòng ngủ trở lên"
         }
+      },
+      "expectingChanges": {
+        "title": "Dự Kiến Những Thay Đổi Trong Hộ Gia Đình",
+        "question": "Quý vị có dự đoán bất kỳ thay đổi nào trong hộ gia đình mình trong 12 tháng tới không?"
+      },
+      "householdStudent": {
+        "title": "Hộ Gia Đình Có Sinh Viên hoặc Thành Viên Sắp 18 Tuổi",
+        "question": "Có ai đó trong hộ gia đình quý vị là sinh viên chính quy hoặc sắp đủ 18 tuổi trong vòng 60 ngày không?"
       },
       "member": {
         "cancelAddingThisPerson": "Hủy bỏ việc thêm người này",
@@ -275,7 +285,20 @@
           "americanIndianAlaskanNativeAndWhite": "Thổ dân Mỹ/Bản địa Alaska và Người Da Trắng",
           "asianAndWhite": "Người Châu Á và Người Da Trắng",
           "blackAfricanAmericanAndWhite": "Người Da đen/ Mỹ gốc Phi và Người Da Trắng",
-          "otherMutliracial": "Khác / Đa chủng tộc"
+          "otherMutliracial": "Khác / Đa chủng tộc",
+          "asian-otherAsian": "Người Châu Á Khác",
+          "asian-chinese": "Người Trung Quốc",
+          "asian-asianIndian": "Người Ấn Độ Châu Á",
+          "declineToRespond": "Từ chối phản hồi",
+          "asian-filipino": "Người Philippines",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Người Guam hoặc Chamorro",
+          "asian-japanese": "Người Nhật Bản",
+          "asian-korean": "Người Hàn Quốc",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Người Hawaii Bản Địa",
+          "otherMultiracial": "Khác / Đa chủng tộc",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Người Dân Đảo Thái Bình Dương Khác",
+          "nativeHawaiianOtherPacificIslander-samoan": "Người Samoa",
+          "asian-vietnamese": "Người Việt Nam"
         },
         "genderOptions": {
           "female": "Nữ",
@@ -370,7 +393,14 @@
       "anEmailHasBeenSent": "Một email đã được gửi tới %{email}",
       "confirmationInstruction": "Hãy nhấp vào đường liên kết trong email mà chúng tôi gửi cho quý vị để hoàn thành việc lập tài khoản.",
       "confirmationNeeded": "Cần xác nhận",
-      "resendTheEmail": "Gửi lại Email"
+      "resendTheEmail": "Gửi lại Email",
+      "password": "Mật khẩu",
+      "noAccount": "Không có tài khoản?",
+      "reEnterEmail": "Nhập lại địa chỉ Email",
+      "passwordInfo": "Phải có ít nhất 8 ký tự và bao gồm ít nhất 1 chữ cái và ít nhất một số",
+      "reEnterPassword": "Nhập lại mật khẩu của bạn",
+      "mustBe8Chars": "phải có 8 ký tự",
+      "yourName": "Tên Quý vị"
     }
   },
   "config": {
@@ -577,6 +607,7 @@
   "nav": {
     "accountSettings": "Thiết lập Tài khoản",
     "browseProperties": "Duyệt các Bất động sản",
+    "getFeedback": "Chúng tôi rất muốn nhận được phản hồi của bạn",
     "getAssistance": "Nhận Hỗ trợ",
     "listings": "Các danh sách nhà",
     "properties": "Các bất động sản",
@@ -683,6 +714,7 @@
     "edit": "Hiệu đính",
     "email": "Email",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "Nhập mô tả",
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",
@@ -711,6 +743,7 @@
     "phone": "Điện thoại",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Vui lòng chọn một.",
+    "pleaseSelectYesNo": "Vui lòng chọn có hoặc không.",
     "preferences": "Các lựa chọn ưu tiên",
     "propertyAmenities": "Các tiện ích của Bất động sản",
     "range": "%{from} đến %{to}",
@@ -746,7 +779,11 @@
     "seeRentalListings": "Xem Thông tin Thuê nhà",
     "title": "Ghi danh nhà ở giá phải chăng tại",
     "seeMoreOpportunities": "Xem thêm cơ hội thuê nhà và sở hữu nhà ở",
-    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung"
+    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung",
+    "seeMoreOpportunitiesTruncated": "Xem thêm các cơ hội và nguồn hỗ trợ về nhà ở",
+    "viewAdditionalHousingTruncated": "Xem các Cơ Hội và Nguồn Hỗ Trợ",
+    "signUp": "Nhận email mỗi khi có danh sách mới được đăng",
+    "signUpToday": "Đăng Ký Ngay Hôm Nay"
   },
   "whatToExpect": {
     "label": "Những điều Sẽ xảy ra",

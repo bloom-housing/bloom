@@ -2439,6 +2439,9 @@ export interface Jurisdiction {
 
   /**  */
   languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
 }
 
 export interface AmiChart {
@@ -4200,6 +4203,9 @@ export interface JurisdictionCreate {
   languages: EnumJurisdictionCreateLanguages[]
 
   /**  */
+  partnerTerms?: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4224,6 +4230,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  partnerTerms?: string
 
   /**  */
   programs: Id[]

@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  NotFoundException,
   Scope,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -18,12 +19,13 @@ import { AuthzService } from "../../auth/services/authz.service"
 import { ListingsService } from "../../listings/listings.service"
 import { Application } from "../entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import { PaginatedApplicationListQueryParams } from "../applications.controller"
 import { authzActions } from "../../auth/enum/authz-actions.enum"
-import { ApplicationCreateDto, ApplicationUpdateDto } from "../dto/application.dto"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
 import { getView } from "../views/view"
+import { PaginatedApplicationListQueryParams } from "../dto/paginated-application-list-query-params"
+import { ApplicationCreateDto } from "../dto/application-create.dto"
+import { ApplicationUpdateDto } from "../dto/application-update.dto"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -61,7 +63,13 @@ export class ApplicationsService {
     qb.groupBy(
       "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, preferredUnit.id"
     )
-    return await qb.getRawMany()
+    const applications = await qb.getRawMany()
+    await Promise.all(
+      applications.map(async (application) => {
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+      })
+    )
+    return applications
   }
 
   async listPaginated(
@@ -144,17 +152,19 @@ export class ApplicationsService {
       where: {
         id: applicationId,
       },
+      relations: ["user"],
     })
     await this.authorizeUserAction(this.req.user, application, authzActions.read)
     return application
   }
 
-  async update(applicationUpdateDto: ApplicationUpdateDto, existing?: Application) {
-    const application =
-      existing ||
-      (await this.repository.findOneOrFail({
-        where: { id: applicationUpdateDto.id },
-      }))
+  async update(applicationUpdateDto: ApplicationUpdateDto) {
+    const application = await this.repository.findOne({
+      where: { id: applicationUpdateDto.id },
+    })
+    if (!application) {
+      throw new NotFoundException()
+    }
     await this.authorizeUserAction(this.req.user, application, authzActions.update)
     assignDefined(application, {
       ...applicationUpdateDto,
@@ -177,7 +187,8 @@ export class ApplicationsService {
   }
 
   async delete(applicationId: string) {
-    await this.findOne(applicationId)
+    const application = await this.findOne(applicationId)
+    await this.authorizeUserAction(this.req.user, application, authzActions.delete)
     return await this.repository.softRemove({ id: applicationId })
   }
 
@@ -311,7 +322,6 @@ export class ApplicationsService {
     if (app instanceof Application) {
       resource = {
         ...app,
-        user_id: app.userId,
         listing_id: app.listingId,
       }
     } else if (app instanceof ApplicationCreateDto) {

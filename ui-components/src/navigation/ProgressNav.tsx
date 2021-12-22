@@ -1,5 +1,4 @@
 import React from "react"
-import { OnClientSide } from "../helpers/nextjs"
 import "./ProgressNav.scss"
 import { t } from "../helpers/translator"
 
@@ -8,9 +7,10 @@ const ProgressNavItem = (props: {
   currentPageSection: number
   completedSections: number
   label: string
+  mounted: boolean
 }) => {
   let bgColor = "is-disabled"
-  if (OnClientSide()) {
+  if (props.mounted) {
     if (props.section === props.currentPageSection) {
       bgColor = "is-active"
     } else if (props.completedSections >= props.section) {
@@ -39,11 +39,12 @@ const ProgressNav = (props: {
   currentPageSection: number
   completedSections: number
   labels: string[]
+  mounted: boolean
 }) => {
   return (
     <div>
       <h2 className="sr-only">{t("progressNav.srHeading")}</h2>
-      <ul className={!OnClientSide() ? "invisible" : "progress-nav"}>
+      <ul className={!props.mounted ? "invisible" : "progress-nav"}>
         {props.labels.map((label, i) => (
           <ProgressNavItem
             key={label}
@@ -52,6 +53,7 @@ const ProgressNav = (props: {
             currentPageSection={props.currentPageSection}
             completedSections={props.completedSections}
             label={label}
+            mounted={props.mounted}
           />
         ))}
       </ul>

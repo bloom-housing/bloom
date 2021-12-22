@@ -3,7 +3,6 @@ import { useContext, useState } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
-  blankApplication,
   AppearanceStyleType,
   Button,
   Form,
@@ -11,6 +10,7 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { blankApplication, OnClientSide } from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
@@ -27,6 +27,8 @@ export default () => {
   const currentPageSection = 1
   let useDetails = false
 
+  const mounted = OnClientSide()
+
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => {
@@ -42,7 +44,7 @@ export default () => {
         conductor.application = withUpdatedLang
       } else {
         const newApplication = {
-          ...blankApplication(),
+          ...blankApplication,
           language: conductor.application.language,
         }
         conductor.application = newApplication
@@ -84,9 +86,9 @@ export default () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={mounted}
         />
       </FormCard>
-
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless mt-4">

@@ -14,10 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import {
-  createUnitTypeId,
-  getUniqueUnitTypes,
-} from "@bloom-housing/ui-components/src/helpers/unitTypes"
+import { createUnitTypeId, getUniqueUnitTypes, OnClientSide } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -62,9 +59,9 @@ const ApplicationPreferredUnits = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}
