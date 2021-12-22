@@ -172,9 +172,9 @@ export class EmailService {
   public async updateListingReminder(listing: Listing, users: string[]) {
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a reminder to update listing email to ${
-          users
-        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a reminder to update listing email to ${users} from ${this.configService.get<
+          string
+        >("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
@@ -258,7 +258,7 @@ export class EmailService {
     )
   }
 
-  private async sendMultiple(to: string [], subject: string, body: string, retry = 3) {
+  private async sendMultiple(to: string[], subject: string, body: string, retry = 3) {
     await this.sendGrid.sendMultiple(
       {
         to: to,

@@ -44,6 +44,5 @@ export class CronService {
       }
       await this.emailService.updateListingReminder(listing, recipients)
     }
-    
   }
 }
