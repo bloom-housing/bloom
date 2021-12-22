@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1-alpha.76](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.73...@bloom-housing/public@3.0.1-alpha.76) (2021-12-22)
+
+
+### Bug Fixes
+
+* closed listings allowed apps ([#2317](https://github.com/bloom-housing/bloom/issues/2317)) ([bb69347](https://github.com/bloom-housing/bloom/commit/bb693473aeb8757d6a09282c9331d356430b1f81))
+* removes more closed listing application paths ([#2319](https://github.com/bloom-housing/bloom/issues/2319)) ([ff50205](https://github.com/bloom-housing/bloom/commit/ff50205f371ebd63d07168b290733d0f1e2d493c))
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/bloom-housing/bloom/issues/2108)) ([1d0c1f3](https://github.com/bloom-housing/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
 ## [3.0.1-alpha.73](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.72...@bloom-housing/public@3.0.1-alpha.73) (2021-12-15)
 
 **Note:** Version bump only for package @bloom-housing/public
