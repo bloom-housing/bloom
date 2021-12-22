@@ -37,7 +37,12 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
       }
     }
 
-    for (const jurisdiction of [alamedaJurisdiction, sanJoseJurisdiction, sanMateoJurisdiction, detroitJurisdiction]) {
+    for (const jurisdiction of [
+      alamedaJurisdiction,
+      sanJoseJurisdiction,
+      sanMateoJurisdiction,
+      detroitJurisdiction,
+    ]) {
       if (jurisdiction) {
         await queryRunner.query(`UPDATE jurisdictions SET public_url = $1 WHERE id = $2`, [
           jurisdiction.public_url,
