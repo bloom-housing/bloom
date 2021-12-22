@@ -4532,6 +4532,17 @@ export interface ListingPreference {
   ordinal?: number
 }
 
+export interface JurisdictionSlim {
+  /**  */
+  id: string
+
+  /**  */
+  name: string
+
+  /**  */
+  publicUrl: string
+}
+
 export interface ReservedCommunityType {
   /**  */
   jurisdiction: Jurisdiction
@@ -4777,7 +4788,7 @@ export interface Listing {
   listingPreferences: ListingPreference[]
 
   /**  */
-  jurisdiction: IdName
+  jurisdiction: JurisdictionSlim
 
   /**  */
   reservedCommunityType?: ReservedCommunityType

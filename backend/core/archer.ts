@@ -267,6 +267,7 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "San Jose",
+    publicUrl: "",
   },
   depositMax: "",
   disableUnitsAccordion: false,

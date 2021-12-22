@@ -32,14 +32,18 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
       alamedaJurisdiction.public_url = "https://dev-bloom.netlify.app"
       sanJoseJurisdiction.public_url = "https://dev-bloom.netlify.app"
       sanMateoJurisdiction.public_url = "https://dev-bloom.netlify.app"
-      detroitJurisdiction.public_url = "https://detroit-public-dev.netlify.app"
+      if (detroitJurisdiction) {
+        detroitJurisdiction.public_url = "https://detroit-public-dev.netlify.app"
+      }
     }
 
     for (const jurisdiction of [alamedaJurisdiction, sanJoseJurisdiction, sanMateoJurisdiction, detroitJurisdiction]) {
-      await queryRunner.query(`UPDATE jurisdictions SET public_url = $1 WHERE id = $2`, [
-        jurisdiction.public_url,
-        jurisdiction.id,
-      ])
+      if (jurisdiction) {
+        await queryRunner.query(`UPDATE jurisdictions SET public_url = $1 WHERE id = $2`, [
+          jurisdiction.public_url,
+          jurisdiction.id,
+        ])
+      }
     }
   }
 

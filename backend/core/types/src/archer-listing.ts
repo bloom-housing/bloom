@@ -596,6 +596,7 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "Alameda",
+    publicUrl: "",
   },
   events: [],
   urlSlug: "listing-slug-abcdef",

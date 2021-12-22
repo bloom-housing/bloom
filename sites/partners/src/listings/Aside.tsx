@@ -223,7 +223,10 @@ const Aside = ({
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
-          <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
+          <a
+            target="_blank"
+            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
             </Button>
