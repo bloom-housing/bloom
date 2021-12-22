@@ -174,9 +174,7 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, Language.en))
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a reminder to update listing email to batch of users from ${this.configService.get<
-          string
-        >("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a reminder to update listing email to batch of users.`
       )
     }
 
@@ -273,7 +271,7 @@ export class EmailService {
         if (error instanceof ResponseError) {
           const { response } = error
           const { body: errBody } = response
-          console.error(`Error sending email to: batch users! Error body: ${errBody}`)
+          console.error(`Error sending email to users! Error body: ${errBody}`)
           if (retry > 0) {
             void this.sendMultiple(to, subject, body, retry - 1)
           }
