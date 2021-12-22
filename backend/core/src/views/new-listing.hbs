@@ -349,7 +349,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <h1>Rental opportunity at <br />{{listing.name}}</h1>
+                        <h1>{{t "newListing.title"}}<br />{{listing.name}}</h1>
 
                         <table
                           role="presentation"
@@ -361,25 +361,25 @@
                           <tbody>
                             <tr>
                               <td width="30%">
-                                <strong>Application Due</strong>
+                                <strong>{{t "newListing.applicationDue"}}</strong>
                               </td>
                               <td>{{listing.applicationDueDate}}</td>
                             </tr>
                             <tr>
                               <td width="30%">
-                                <strong>Address</strong>
+                                <strong>{{t "newListing.addressLabel"}}</strong>
                               </td>
                               <td>{{listing.property.buildingAddress.street}}, {{listing.property.buildingAddress.city}}, {{listing.property.buildingAddress.state}}, {{listing.property.buildingAddress.zipCode}}</td>
                             </tr>
                             <tr>
                               <td>
-                                <strong>Units</strong>
+                                <strong>{{t "newListing.unitsLabel"}}</strong>
                               </td>
                               <td>{{listing.property.unitsAvailable}}</td>
                             </tr>
                             <tr>
                               <td width="30%">
-                                <strong>Rent</strong>
+                                <strong>{{t "newListing.rentLabel"}}</strong>
                               </td>
                               <td>{{rent}}</td>
                             </tr>
@@ -394,7 +394,7 @@
                                   class="btn btn-primary"
                                   href="http://htmlemail.io"
                                   target="_blank"
-                                  >See Listing and Apply</a
+                                  >{{t "newListing.seeListingLabel"}}</a
                                 >
                               </td>
                             </tr>
@@ -416,14 +416,14 @@
                 <tr>
                   <td class="content-block">
                     <span class="apple-link"
-                      >Detroit Home Connect is a project of the</span
+                      >{{t "newListing.dhcProjectLabel"}}</span
                     >
-                    <br /><span class="apple-link">Housing & Revitalization Department of the City of Detroit</span>
+                    <br /><span class="apple-link">{{t "newListing.hrdLabel"}}</span>
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block">
-                    <a href="INSERT LINK TO UNSUBSCRIBE">Unsubscribe from list </a>
+                    <a href="INSERT LINK TO UNSUBSCRIBE">{{t "newListing.unsubscribeMsg"}} </a>
                   </td>
                 </tr>
               </table>
