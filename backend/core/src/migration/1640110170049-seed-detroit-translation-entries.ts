@@ -30,10 +30,10 @@ export class seedDetroitTranslationEntries1640110170049 implements MigrationInte
     }
     const translations = await queryRunner.query(`SELECT * from translations`)
     for (const t of translations) {
-    await queryRunner.query(
-      `UPDATE "translations" SET translations = ($1) WHERE id = ($2)`,
-      [{ ...t.translations, listingEmail },
-        t.id,])
+      await queryRunner.query(`UPDATE "translations" SET translations = ($1) WHERE id = ($2)`, [
+        { ...t.translations, listingEmail },
+        t.id,
+      ])
     }
   }
 
