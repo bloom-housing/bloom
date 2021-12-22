@@ -170,6 +170,8 @@ export class EmailService {
   }
 
   public async updateListingReminder(listing: Listing, users: string[]) {
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    void (await this.loadTranslations(jurisdiction, Language.en))
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
         `Preparing to send a reminder to update listing email to ${users} from ${this.configService.get<
