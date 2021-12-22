@@ -174,9 +174,9 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, Language.en))
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a reminder to update listing email to ${users.toString} from ${this.configService.get<
-          string
-        >("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a reminder to update listing email to ${
+          users.toString
+        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
