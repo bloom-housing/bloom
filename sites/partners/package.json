@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^3.0.1-alpha.40",
-    "@bloom-housing/shared-helpers": "^3.0.1-alpha.",
+    "@bloom-housing/shared-helpers": "^3.0.1-alpha.47",
     "@bloom-housing/ui-components": "^3.0.1-alpha.48",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
