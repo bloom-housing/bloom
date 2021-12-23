@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.0) (2021-12-23)
+
+
+### Bug Fixes
+
+* make primary buttons primary background ([1b44435](https://github.com/seanmalbert/bloom/commit/1b44435aef22d814a0b511d7d63129d73a7b78ac))
+
+
+
+
+
 # [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.48...@bloom-housing/ui-components@4.0.0) (2021-12-22)
 
 
