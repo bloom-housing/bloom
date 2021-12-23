@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.0) (2021-12-23)
+
+
+### Bug Fixes
+
+* Update hardcoded translations ([c58bf25](https://github.com/bloom-housing/bloom/commit/c58bf25bb7243ea357e208aef88e74af4a968e97)), closes [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+* Update translation ([f8d2604](https://github.com/bloom-housing/bloom/commit/f8d2604b5244ca9c5bc92665d056f5e58d32f978))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
 # [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.48...@bloom-housing/ui-components@4.0.0) (2021-12-22)
 
 
