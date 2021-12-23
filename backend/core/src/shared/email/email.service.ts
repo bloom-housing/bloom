@@ -34,8 +34,13 @@ export class EmailService {
     ) {
       return polyglot.t(phrase, options)
     })
-    const parts = this.partials()
-    Handlebars.registerPartial(parts)
+
+    try {
+      const parts = this.partials()
+      Handlebars.registerPartial(parts)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   public async welcome(user: User, appUrl: string, confirmationUrl: string) {
