@@ -503,6 +503,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
 
+  /**
+   * Save already-live modal
+   */
+  const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -536,8 +541,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     status?: ListingStatus,
     newData?: Partial<FormListing>
   ) => {
-    if (confirm) {
-      setPublishModal(true)
+    if (confirm && status === ListingStatus.active) {
+      if (listing?.status === ListingStatus.active) {
+        setListingIsAlreadyLiveModal(true)
+      } else {
+        setPublishModal(true)
+      }
       return
     }
     let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
@@ -891,6 +900,39 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.publishThisListing")}
+      </Modal>
+
+      <Modal
+        open={listingIsAlreadyLiveModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.listingIsAlreadyLive")}
+        onClose={() => setListingIsAlreadyLiveModal(false)}
+        actions={[
+          <Button
+            id="saveAlreadyLiveListingButtonConfirm"
+            type="button"
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.active)
+            }}
+            dataTestId={"listingIsAlreadyLiveButton"}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.listingIsAlreadyLive")}
       </Modal>
     </>
   )

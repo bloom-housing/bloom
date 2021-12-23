@@ -3,6 +3,67 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1-alpha.65...@bloom-housing/partners@4.0.0) (2021-12-22)
+
+
+### Bug Fixes
+
+* partners shared-helpers version ([50f4a06](https://github.com/seanmalbert/bloom/commit/50f4a0658761b8675064a98f316b2dd35b0d3fe0))
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/seanmalbert/bloom/issues/2108)) ([1d0c1f3](https://github.com/seanmalbert/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([4f6945f](https://github.com/seanmalbert/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
+## [3.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.64...@bloom-housing/partners@3.0.1-alpha.65) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.63...@bloom-housing/partners@3.0.1-alpha.64) (2021-12-15)
+
+
+### Features
+
+* filter partner users ([63566f2](https://github.com/bloom-housing/bloom/commit/63566f206b154031a143b649b986aaecd5181313))
+
+
+
+
+
+## [3.0.1-alpha.63](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.62...@bloom-housing/partners@3.0.1-alpha.63) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.62](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.61...@bloom-housing/partners@3.0.1-alpha.62) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.60...@bloom-housing/partners@3.0.1-alpha.61) (2021-12-14)
 
 **Note:** Version bump only for package @bloom-housing/partners

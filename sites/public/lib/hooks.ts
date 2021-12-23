@@ -4,7 +4,12 @@ import moment from "moment"
 import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
-import { Jurisdiction, Listing, ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import {
+  Jurisdiction,
+  Listing,
+  ListingReviewOrder,
+  ListingStatus,
+} from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
 import { openInFuture } from "../lib/helpers"
@@ -63,6 +68,9 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
         } else {
           content = t("listings.applicationsClosed")
         }
+      }
+      if (listing.status === ListingStatus.closed) {
+        content = t("listings.applicationsClosed")
       }
     }
     content = formattedDate !== "" ? `${content}: ${formattedDate}` : content

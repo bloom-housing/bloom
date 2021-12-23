@@ -1,32 +1,21 @@
 import React from "react"
 import { cleanup } from "@testing-library/react"
-import { occupancyTable, getOccupancyDescription } from "../../src/helpers/occupancyFormatting"
-import Archer from "../../__tests__/fixtures/archer.json"
-import { t } from "../../src/helpers/translator"
-import { Listing } from "@bloom-housing/backend-core/types"
+import { occupancyTable, getOccupancyDescription } from "../src/occupancyFormatting"
+import { t } from "@bloom-housing/ui-components"
+import { Listing, UnitsSummarized, UnitType } from "@bloom-housing/backend-core/types"
 
-let ArcherListing: Listing = Object.assign({}, Archer) as any
-// @ts-ignore
-ArcherListing.unitsSummarized = {
+const testListing: Listing = {} as Listing
+testListing.unitsSummarized = {
   unitTypes: [
     {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       name: "threeBdrm",
       numBedrooms: 3,
     },
     {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       name: "twoBdrm",
       numBedrooms: 2,
     },
     {
-      id: "",
-      createdAt: new Date(),
-      updatedAt: new Date(),
       name: "SRO",
       numBedrooms: 1,
     },
@@ -34,9 +23,6 @@ ArcherListing.unitsSummarized = {
   byUnitType: [
     {
       unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "threeBdrm",
         numBedrooms: 3,
       },
@@ -64,9 +50,6 @@ ArcherListing.unitsSummarized = {
     },
     {
       unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "twoBdrm",
         numBedrooms: 2,
       },
@@ -76,8 +59,6 @@ ArcherListing.unitsSummarized = {
       },
       occupancyRange: {
         min: 1,
-        // TODO null is allowed on frontend but not in backend defined types
-        // @ts-ignore
         max: null,
       },
       rentAsPercentIncomeRange: {
@@ -96,9 +77,6 @@ ArcherListing.unitsSummarized = {
     },
     {
       unitType: {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "SRO",
         numBedrooms: 1,
       },
@@ -125,13 +103,13 @@ ArcherListing.unitsSummarized = {
       },
     },
   ],
-}
+} as UnitsSummarized
 
 afterEach(cleanup)
 
 describe("occupancy formatting helper", () => {
   it("properly creates occupany table", () => {
-    expect(occupancyTable(ArcherListing)).toStrictEqual([
+    expect(occupancyTable(testListing)).toStrictEqual([
       {
         occupancy: "2-6 people",
         unitType: <strong>3 BR</strong>,
@@ -147,39 +125,30 @@ describe("occupancy formatting helper", () => {
     ])
   })
   it("properly creates occupany description for some SRO", () => {
-    expect(getOccupancyDescription(ArcherListing)).toBe(t("listings.occupancyDescriptionSomeSro"))
+    expect(getOccupancyDescription(testListing)).toBe(t("listings.occupancyDescriptionSomeSro"))
   })
   it("properly creates occupany description for no SRO", () => {
-    const NewListing = ArcherListing
-    NewListing.unitsSummarized.unitTypes = [
+    const testListing2 = testListing
+    testListing2.unitsSummarized.unitTypes = [
       {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "threeBdrm",
         numBedrooms: 3,
       },
       {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "twoBdrm",
         numBedrooms: 2,
       },
-    ]
-    expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionNoSro"))
+    ] as UnitType[]
+    expect(getOccupancyDescription(testListing2)).toBe(t("listings.occupancyDescriptionNoSro"))
   })
   it("properly creates occupany description for all SRO", () => {
-    const NewListing = ArcherListing
-    NewListing.unitsSummarized.unitTypes = [
+    const testListing3 = testListing
+    testListing3.unitsSummarized.unitTypes = [
       {
-        id: "",
-        createdAt: new Date(),
-        updatedAt: new Date(),
         name: "SRO",
         numBedrooms: 1,
       },
-    ]
-    expect(getOccupancyDescription(NewListing)).toBe(t("listings.occupancyDescriptionAllSro"))
+    ] as UnitType[]
+    expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
   })
 })

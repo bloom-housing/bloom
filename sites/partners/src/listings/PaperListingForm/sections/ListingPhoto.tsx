@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
-  cloudinaryUrlFromId,
   t,
   AppearanceStyleType,
   AppearanceBorderType,
@@ -13,6 +12,8 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {

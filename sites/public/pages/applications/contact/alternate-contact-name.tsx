@@ -16,6 +16,7 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 
 export default () => {
   const { conductor, application, listing } = useFormConductor("alternateContactName")
@@ -44,6 +45,7 @@ export default () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
       <FormCard>

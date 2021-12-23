@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -188,7 +188,7 @@ export default class ApplicationConductor {
   }
 
   reset() {
-    this.application = blankApplication()
+    this.application = { ...blankApplication }
     this.listing = {} as Listing
     this.currentStepIndex = 0
     if (typeof window != "undefined") {

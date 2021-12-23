@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.48...@bloom-housing/ui-components@4.0.0) (2021-12-22)
+
+
+### Bug Fixes
+
+* removes more closed listing application paths ([#2319](https://github.com/seanmalbert/bloom/issues/2319)) ([ff50205](https://github.com/seanmalbert/bloom/commit/ff50205f371ebd63d07168b290733d0f1e2d493c))
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/seanmalbert/bloom/issues/2108)) ([1d0c1f3](https://github.com/seanmalbert/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([4f6945f](https://github.com/seanmalbert/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+* make page header title optional ([6ce7707](https://github.com/seanmalbert/bloom/commit/6ce770790120fe3d472bca2a937a9b9d3faaa943))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.47...@bloom-housing/ui-components@3.0.1-alpha.48) (2021-12-15)
+
+
+### Bug Fixes
+
+* add mailThin icon to stories ([ba8400b](https://github.com/bloom-housing/bloom/commit/ba8400bed4e9d653f85ec38ef4bca3b74df371dd))
+* make mailThin background transparent ([87b372b](https://github.com/bloom-housing/bloom/commit/87b372b28e1b44c5a450544a2d15f09a84de2ebb))
+
+
+
+
+
+## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.46...@bloom-housing/ui-components@3.0.1-alpha.47) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [3.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.45...@bloom-housing/ui-components@3.0.1-alpha.46) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.44...@bloom-housing/ui-components@3.0.1-alpha.45) (2021-12-14)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

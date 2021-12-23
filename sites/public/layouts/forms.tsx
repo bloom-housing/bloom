@@ -1,7 +1,10 @@
 import Layout from "./application"
 import { ApplicationTimeout } from "../src/forms/applications/ApplicationTimeout"
 
-const FormLayout = (props) => {
+interface FormLayoutProps {
+  children?: React.ReactNode
+}
+const FormLayout = (props: FormLayoutProps) => {
   return (
     <>
       <ApplicationTimeout />
