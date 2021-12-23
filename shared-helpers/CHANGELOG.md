@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/shared-helpers@4.0.0...@bloom-housing/shared-helpers@4.0.1-alpha.1) (2021-12-23)
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
 ## [4.0.1-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/shared-helpers@4.0.0...@bloom-housing/shared-helpers@4.0.1-alpha.0) (2021-12-23)
 
 
