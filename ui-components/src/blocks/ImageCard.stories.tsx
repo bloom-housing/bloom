@@ -100,7 +100,7 @@ export const withCustomIconType = () => (
         status: ApplicationStatusType.Matched,
         content: "Matched",
         iconType: "check",
-      }
+      },
     ]}
   />
 )
