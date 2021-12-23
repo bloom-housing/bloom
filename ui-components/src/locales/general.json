@@ -831,7 +831,15 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "forgotPassword": "Forgot password?",
-      "success": "Welcome back, %{name}!"
+      "success": "Welcome back, %{name}!",
+      "accountHasBeenLocked": "For security reasons, this account has been locked.",
+      "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
+      "enterValidEmailAndPassword": "Please enter a valid email and password.",
+      "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
+      "partnersSignIn": "Partners Sign In",
+      "dontHaveAccount": "Don't have an account",
+      "enterLoginPassword": "Please enter your login password",
+      "enterLoginEmail": "Please enter your login email"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",

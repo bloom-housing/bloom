@@ -118,7 +118,7 @@ export class UserService {
         // Validation is handled at DTO definition level
         throw new BadRequestException()
       }
-      if (!(await this.passwordService.verifyUserPassword(user, dto.currentPassword))) {
+      if (!(await this.passwordService.isPasswordValid(user, dto.currentPassword))) {
         throw new UnauthorizedException("invalidPassword")
       }
 
