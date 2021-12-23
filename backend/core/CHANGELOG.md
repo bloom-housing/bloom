@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.0) (2021-12-23)
+
+
+### Features
+
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/seanmalbert/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+
+
+
+
+
 ## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.40...@bloom-housing/backend-core@3.0.1) (2021-12-22)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
