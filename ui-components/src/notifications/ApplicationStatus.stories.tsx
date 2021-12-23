@@ -5,7 +5,7 @@ import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
-import { IconCheck } from '../icons/Icon.stories';
+import { IconCheck } from "../icons/Icon.stories"
 
 export default {
   component: ApplicationStatus,
