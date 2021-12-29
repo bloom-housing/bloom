@@ -90,20 +90,13 @@ export const inlineBlockWith2actionsAsLinks = () => (
     header="Find more listings on our website:"
     background="primary-darker"
     layout={ActionBlockLayout.inline}
-    actions={[      <a
-      className="button"
-      key="action-1"
-
-      href={"https://google.com"}
-    >
-      {"First come, first served"}
-    </a>,
-    <a
-      className="button"
-      key="action-2"
-      href={"https://google.com"}
-    >
-      {"City Second loan program"}
-    </a>,]}
+    actions={[
+      <a className="button" key="action-1" href={"https://google.com"}>
+        {"First come, first served"}
+      </a>,
+      <a className="button" key="action-2" href={"https://google.com"}>
+        {"City Second loan program"}
+      </a>,
+    ]}
   ></ActionBlock>
 )
