@@ -45,24 +45,29 @@ const AlertBox = (props: AlertBoxProps) => {
 
   let innerSection = (
     <>
-      <span className="alert-box__icon">
-        <Icon
-          size="medium"
-          symbol={icons[props.type || "alert"]}
-          fill={props.inverted ? IconFillColors.white : undefined}
-        />
-      </span>
-      <span className="alert-box__body">
-        {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
-      </span>
-      {closeable && (
-        <button
-          className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
-          onClick={onClose}
-        >
-          &times;
-        </button>
-      )}
+      <div className="alert-box__head">
+        <div className="alert-box__title">
+          <span className="alert-box__icon">
+            <Icon
+              size="medium"
+              symbol={icons[props.type || "alert"]}
+              fill={props.inverted ? IconFillColors.white : undefined}
+            />
+          </span>
+          <span className="alert-box__body">
+            {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
+          </span>
+        </div>
+
+        {closeable && (
+          <button
+            className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
+            onClick={onClose}
+          >
+            &times;
+          </button>
+        )}
+      </div>
     </>
   )
   if (props.boundToLayoutWidth) {

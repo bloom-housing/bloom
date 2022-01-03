@@ -136,4 +136,14 @@ export class User {
   @ManyToMany(() => Jurisdiction, { cascade: true, eager: true })
   @JoinTable()
   jurisdictions: Jurisdiction[]
+
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  lastLoginAt?: Date
+
+  @Column({ default: 0 })
+  @Expose()
+  @Type(() => Date)
+  failedLoginAttemptsCount?: number
 }

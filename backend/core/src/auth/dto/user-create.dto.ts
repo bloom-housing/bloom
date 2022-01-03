@@ -18,6 +18,8 @@ export class UserCreateDto extends OmitType(UserDto, [
   "email",
   "passwordUpdatedAt",
   "passwordValidForDays",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

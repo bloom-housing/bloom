@@ -15,7 +15,7 @@ export const errorHouseholdSizeField = () => {
       clearErrors={() => {
         alert("clearErrors called")
       }}
-      error={{ message: "Uh oh!", type: "string" }}
+      error={{ message: "Uh oh!", type: "validate" }}
       householdSize={1}
       householdSizeMax={3}
       householdSizeMin={2}

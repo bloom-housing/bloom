@@ -3,6 +3,99 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.1) (2021-12-23)
+
+
+### Bug Fixes
+
+* make numbered list breakpoint match config ([326df54](https://github.com/seanmalbert/bloom/commit/326df5404d2a967f1a36f8ba7635d4cb92d37742))
+* make primary buttons primary background ([1b44435](https://github.com/seanmalbert/bloom/commit/1b44435aef22d814a0b511d7d63129d73a7b78ac))
+* Update hardcoded translations ([c58bf25](https://github.com/seanmalbert/bloom/commit/c58bf25bb7243ea357e208aef88e74af4a968e97)), closes [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+* Update translation ([f8d2604](https://github.com/seanmalbert/bloom/commit/f8d2604b5244ca9c5bc92665d056f5e58d32f978))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### Features
+
+* add matched style to ApplicationStatus ([a54fb97](https://github.com/seanmalbert/bloom/commit/a54fb9769b68c9362e5f312a1021f5d0ba3d17a7))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+## [4.0.1-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.0) (2021-12-23)
+
+
+### Bug Fixes
+
+* make numbered list breakpoint match config ([326df54](https://github.com/seanmalbert/bloom/commit/326df5404d2a967f1a36f8ba7635d4cb92d37742))
+* make primary buttons primary background ([1b44435](https://github.com/seanmalbert/bloom/commit/1b44435aef22d814a0b511d7d63129d73a7b78ac))
+* Update hardcoded translations ([c58bf25](https://github.com/seanmalbert/bloom/commit/c58bf25bb7243ea357e208aef88e74af4a968e97)), closes [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+* Update translation ([f8d2604](https://github.com/seanmalbert/bloom/commit/f8d2604b5244ca9c5bc92665d056f5e58d32f978))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### Features
+
+* add matched style to ApplicationStatus ([a54fb97](https://github.com/seanmalbert/bloom/commit/a54fb9769b68c9362e5f312a1021f5d0ba3d17a7))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+# [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.48...@bloom-housing/ui-components@4.0.0) (2021-12-22)
+
+
+### Bug Fixes
+
+* removes more closed listing application paths ([#2319](https://github.com/seanmalbert/bloom/issues/2319)) ([ff50205](https://github.com/seanmalbert/bloom/commit/ff50205f371ebd63d07168b290733d0f1e2d493c))
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/seanmalbert/bloom/issues/2108)) ([1d0c1f3](https://github.com/seanmalbert/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([4f6945f](https://github.com/seanmalbert/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+* make page header title optional ([6ce7707](https://github.com/seanmalbert/bloom/commit/6ce770790120fe3d472bca2a937a9b9d3faaa943))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.47...@bloom-housing/ui-components@3.0.1-alpha.48) (2021-12-15)
+
+
+### Bug Fixes
+
+* add mailThin icon to stories ([ba8400b](https://github.com/bloom-housing/bloom/commit/ba8400bed4e9d653f85ec38ef4bca3b74df371dd))
+* make mailThin background transparent ([87b372b](https://github.com/bloom-housing/bloom/commit/87b372b28e1b44c5a450544a2d15f09a84de2ebb))
+
+
+
+
+
 ## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.46...@bloom-housing/ui-components@3.0.1-alpha.47) (2021-12-15)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
