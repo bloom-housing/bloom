@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.8...@bloom-housing/partners@4.0.1-alpha.9) (2022-01-03)
+
+
+### Bug Fixes
+
+* cypress coverage configs ([eec74ee](https://github.com/bloom-housing/bloom/commit/eec74eef138f6af275ae3cfe16262ed215b16907))
+
+
+
+
+
 ## [4.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.7...@bloom-housing/partners@4.0.1-alpha.8) (2022-01-03)
 
 **Note:** Version bump only for package @bloom-housing/partners
