@@ -5,14 +5,6 @@ import { addressTypes } from "../formTypes"
 export default class BooleansFormatter extends Formatter {
   /** Format all of the Yes/No questions in the form */
   process() {
-    this.processBoolean("postmarkedApplicationsReceivedByDate", {
-      when: this.data.postMarkDate && this.data.arePostmarksConsidered === YesNoAnswer.Yes,
-      trueCase: () =>
-        new Date(
-          `${this.data.postMarkDate.year}-${this.data.postMarkDate.month}-${this.data.postMarkDate.day}`
-        ),
-    })
-
     this.processBoolean("applicationDropOffAddressType", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&

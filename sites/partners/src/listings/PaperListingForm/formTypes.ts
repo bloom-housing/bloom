@@ -29,6 +29,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
+  postmarkByDateDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  postmarkByDateTimeField?: {
+    hours: string
+    minutes: string
+    period: TimeFieldPeriod
+  }
   arePaperAppsMailedToAnotherAddress?: YesNoAnswer
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer

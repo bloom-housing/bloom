@@ -14,18 +14,6 @@ const formatData = (data) => {
 }
 
 describe("BooleansFormatter", () => {
-  it("should format postmarkedApplicationsReceivedByDate", () => {
-    const data = {} as FormListing
-
-    expect(formatData(data).postmarkedApplicationsReceivedByDate).toBeNull()
-
-    data.postMarkDate = { year: "2021", month: "03", day: "06" }
-    data.arePostmarksConsidered = YesNoAnswer.Yes
-    expect(formatData(data).postmarkedApplicationsReceivedByDate.toISOString()).toEqual(
-      "2021-03-06T00:00:00.000Z"
-    )
-  })
-
   it("should format applicationDropOffAddressType", () => {
     const data = {} as FormListing
 
