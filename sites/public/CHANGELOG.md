@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.9...@bloom-housing/public@4.0.1-alpha.10) (2022-01-03)
+
+
+### Bug Fixes
+
+* remove next dependency from ui-components ([#2352](https://github.com/bloom-housing/bloom/issues/2352)) ([136e8a1](https://github.com/bloom-housing/bloom/commit/136e8a1af2b4f285644caa9a18d60121f4d82566))
+
+
+
+
+
 ## [4.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.8...@bloom-housing/public@4.0.1-alpha.9) (2022-01-03)
 
 
