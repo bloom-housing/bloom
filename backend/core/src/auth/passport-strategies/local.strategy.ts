@@ -28,24 +28,26 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     })
 
     if (user) {
-      const retryAfter = new Date(
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        user.lastLoginAt.getTime() + this.configService.get<number>("AUTH_LOCK_LOGIN_COOLDOWN_MS")
-      )
-      if (
-        user.failedLoginAttemptsCount >=
-          this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
-        retryAfter > new Date()
-      ) {
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.TOO_MANY_REQUESTS,
-            error: "Too Many Requests",
-            message: "Failed login attempts exceeded.",
-            retryAfter,
-          },
-          429
+      if (user.lastLoginAt) {
+        const retryAfter = new Date(
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          user.lastLoginAt.getTime() + this.configService.get<number>("AUTH_LOCK_LOGIN_COOLDOWN_MS")
         )
+        if (
+          user.failedLoginAttemptsCount >=
+            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
+          retryAfter > new Date()
+        ) {
+          throw new HttpException(
+            {
+              statusCode: HttpStatus.TOO_MANY_REQUESTS,
+              error: "Too Many Requests",
+              message: "Failed login attempts exceeded.",
+              retryAfter,
+            },
+            429
+          )
+        }
       }
 
       user.lastLoginAt = new Date()
