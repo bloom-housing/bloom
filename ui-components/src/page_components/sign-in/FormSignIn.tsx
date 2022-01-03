@@ -1,5 +1,4 @@
-import React from "react"
-import Link from "next/link"
+import React, { useContext } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -16,6 +15,8 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import type { NetworkErrorValue, NetworkErrorReset } from "@bloom-housing/shared-helpers"
+
+import { NavigationContext } from "../../config/NavigationContext"
 
 export type FormSignInProps = {
   control: FormSignInControl
@@ -49,6 +50,7 @@ const FormSignIn = ({
   const onError = () => {
     window.scrollTo(0, 0)
   }
+  const { LinkComponent } = useContext(NavigationContext)
 
   return (
     <FormCard>
@@ -90,9 +92,9 @@ const FormSignIn = ({
           />
 
           <aside className="float-right text-tiny font-semibold">
-            <Link href="/forgot-password">
+            <LinkComponent href="/forgot-password">
               <a>{t("authentication.signIn.forgotPassword")}</a>
-            </Link>
+            </LinkComponent>
           </aside>
 
           <Field
