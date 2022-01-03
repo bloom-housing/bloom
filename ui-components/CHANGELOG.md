@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.7...@bloom-housing/ui-components@4.0.1-alpha.8) (2022-01-03)
+
+
+### Bug Fixes
+
+* apply action block style to button class not component ([#2348](https://github.com/bloom-housing/bloom/issues/2348)) ([cd79ee5](https://github.com/bloom-housing/bloom/commit/cd79ee558554815f4b8421740e4850484a97ad21))
+
+
+
+
+
 ## [4.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.7) (2022-01-03)
 
 
