@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods } from "react-hook-form"
@@ -17,6 +17,7 @@ interface FieldSingle {
   subFields?: FieldSingle[]
   type?: string
   additionalText?: boolean
+  dataTestId?: string
 }
 
 interface FieldGroupProps {
@@ -85,7 +86,7 @@ const FieldGroup = ({
           defaultChecked={item.defaultChecked || false}
           ref={register(validation)}
           {...item.inputProps}
-          data-test-id={dataTestId}
+          data-test-id={item.dataTestId || dataTestId}
         />
         <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
           {item.label}
@@ -103,22 +104,25 @@ const FieldGroup = ({
     )
   }
 
-  const checkSelected = (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
-    formFields?.forEach((field) => {
-      if (field.defaultChecked) {
-        checkedValues.push(field.label)
-      }
-      if (field.subFields) {
-        checkSelected(field.subFields, checkedValues)
-      }
-    })
-  }
+  const checkSelected = useCallback(
+    (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
+      formFields?.forEach((field) => {
+        if (field.defaultChecked) {
+          checkedValues.push(field.label)
+        }
+        if (field.subFields) {
+          checkSelected(field.subFields, checkedValues)
+        }
+      })
+    },
+    []
+  )
 
   useEffect(() => {
     const initialValues: string[] = []
     checkSelected(fields, initialValues)
     setCheckedInputs([...initialValues])
-  }, [])
+  }, [checkSelected, setCheckedInputs, fields])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {
     return (
@@ -133,6 +137,7 @@ const FieldGroup = ({
             defaultValue={item.defaultText}
             placeholder={t("t.description")}
             className={"mb-4"}
+            dataTestId={item.dataTestId}
           />
         )}
       </div>

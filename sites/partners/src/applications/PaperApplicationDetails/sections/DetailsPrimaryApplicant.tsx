@@ -16,25 +16,25 @@ const DetailsPrimaryApplicant = () => {
     >
       <GridSection columns={3}>
         <GridCell>
-          <ViewItem label={t("application.name.firstName")}>
+          <ViewItem label={t("application.name.firstName")} dataTestId="firstName">
             {application.applicant.firstName || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.middleName")}>
+          <ViewItem label={t("application.name.middleName")} dataTestId="middleName">
             {application.applicant.middleName || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.name.lastName")}>
+          <ViewItem label={t("application.name.lastName")} dataTestId="lastName">
             {application.applicant.lastName || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.household.member.dateOfBirth")}>
+          <ViewItem label={t("application.household.member.dateOfBirth")} dataTestId="dateOfBirth">
             {(() => {
               const { birthMonth, birthDay, birthYear } = application?.applicant
 
@@ -48,7 +48,7 @@ const DetailsPrimaryApplicant = () => {
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("t.email")} truncated>
+          <ViewItem label={t("t.email")} truncated dataTestId="emailAddress">
             {application.applicant.emailAddress || t("t.n/a")}
           </ViewItem>
         </GridCell>
@@ -60,6 +60,7 @@ const DetailsPrimaryApplicant = () => {
               application.applicant.phoneNumberType &&
               t(`application.contact.phoneNumberTypes.${application.applicant.phoneNumberType}`)
             }
+            dataTestId="phoneNumber"
           >
             {application.applicant.phoneNumber || t("t.n/a")}
           </ViewItem>
@@ -72,13 +73,14 @@ const DetailsPrimaryApplicant = () => {
               application.additionalPhoneNumber &&
               t(`application.contact.phoneNumberTypes.${application.additionalPhoneNumberType}`)
             }
+            dataTestId="additionalPhoneNumber"
           >
             {application.additionalPhoneNumber || t("t.n/a")}
           </ViewItem>
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.preferredContact")}>
+          <ViewItem label={t("application.details.preferredContact")} dataTestId="preferredContact">
             {(() => {
               if (!application.contactPreferences.length) return t("t.n/a")
 
@@ -93,7 +95,7 @@ const DetailsPrimaryApplicant = () => {
         </GridCell>
 
         <GridCell>
-          <ViewItem label={t("application.details.workInRegion")}>
+          <ViewItem label={t("application.details.workInRegion")} dataTestId="workInRegion">
             {(() => {
               if (!application.applicant.workInRegion) return t("t.n/a")
 
@@ -104,15 +106,27 @@ const DetailsPrimaryApplicant = () => {
       </GridSection>
 
       <GridSection subtitle={t("application.details.residenceAddress")} columns={3}>
-        <DetailsAddressColumns type={AddressColsType.residence} application={application} />
+        <DetailsAddressColumns
+          type={AddressColsType.residence}
+          application={application}
+          dataTestId="residenceAddress"
+        />
       </GridSection>
 
       <GridSection subtitle={t("application.contact.mailingAddress")} columns={3}>
-        <DetailsAddressColumns type={AddressColsType.mailing} application={application} />
+        <DetailsAddressColumns
+          type={AddressColsType.mailing}
+          application={application}
+          dataTestId="mailingAddress"
+        />
       </GridSection>
 
       <GridSection subtitle={t("application.contact.workAddress")} columns={3}>
-        <DetailsAddressColumns type={AddressColsType.work} application={application} />
+        <DetailsAddressColumns
+          type={AddressColsType.work}
+          application={application}
+          dataTestId="workAddress"
+        />
       </GridSection>
     </GridSection>
   )

@@ -56,3 +56,285 @@ Cypress.Commands.add("verifyAlertBox", () => {
     "Please resolve any errors before saving or publishing your listing."
   )
 })
+
+Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) => {
+  const fieldsToType = [
+    { id: "application.applicant.firstName", fieldKey: "applicant.firstName" },
+    { id: "application.applicant.middleName", fieldKey: "applicant.middleName" },
+    { id: "application.applicant.lastName", fieldKey: "applicant.lastName" },
+    { id: "dateOfBirth.birthMonth", fieldKey: "dateOfBirth.birthMonth" },
+    { id: "dateOfBirth.birthDay", fieldKey: "dateOfBirth.birthDay" },
+    { id: "dateOfBirth.birthYear", fieldKey: "dateOfBirth.birthYear" },
+    { id: "application.applicant.emailAddress", fieldKey: "applicant.emailAddress" },
+    { id: "phoneNumber", fieldKey: "phoneNumber" },
+    { id: "application.additionalPhoneNumber", fieldKey: "additionalPhoneNumber" },
+    { id: "application.applicant.address.street", fieldKey: "applicant.address.street" },
+    { id: "application.applicant.address.street2", fieldKey: "applicant.address.street2" },
+    { id: "application.applicant.address.city", fieldKey: "applicant.address.city" },
+    { id: "application.applicant.address.zipCode", fieldKey: "applicant.address.zipCode" },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  const fieldsToSelect = [
+    { id: "application.language", fieldKey: "language" },
+    { id: "application.applicant.phoneNumberType", fieldKey: "applicant.phoneNumberType" },
+    { id: "application.additionalPhoneNumberType", fieldKey: "additionalPhoneNumberType" },
+    { id: "application.applicant.address.state", fieldKey: "applicant.address.state" },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  const fieldsToClick = [
+    {
+      id: "application.applicant.workInRegion",
+      fieldKey: `application.applicant.workInRegion${application["applicant.workInRegion"]}`,
+    },
+    { id: "email", fieldKey: "email" },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  fieldsToType.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).type(application[fieldKey])
+  })
+  fieldsToSelect.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).select(application[fieldKey])
+  })
+  fieldsToClick.forEach(({ fieldKey }) => {
+    cy.getByID(fieldKey).click()
+  })
+})
+
+Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) => {
+  const fieldsToType = [
+    { id: "application.alternateContact.firstName", fieldKey: "alternateContact.firstName" },
+    { id: "application.alternateContact.lastName", fieldKey: "alternateContact.lastName" },
+    { id: "application.alternateContact.agency", fieldKey: "alternateContact.agency" },
+    { id: "application.alternateContact.emailAddress", fieldKey: "alternateContact.emailAddress" },
+    { id: "application.alternateContact.phoneNumber", fieldKey: "alternateContact.phoneNumber" },
+    {
+      id: "application.alternateContact.mailingAddress.street",
+      fieldKey: "alternateContact.mailingAddress.street",
+    },
+    {
+      id: "application.alternateContact.mailingAddress.street2",
+      fieldKey: "alternateContact.mailingAddress.street2",
+    },
+    {
+      id: "application.alternateContact.mailingAddress.city",
+      fieldKey: "alternateContact.mailingAddress.city",
+    },
+    {
+      id: "application.alternateContact.mailingAddress.zipCode",
+      fieldKey: "alternateContact.mailingAddress.zipCode",
+    },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  const fieldsToSelect = [
+    { id: "application.alternateContact.type", fieldKey: "alternateContact.type" },
+    {
+      id: "application.alternateContact.mailingAddress.state",
+      fieldKey: "alternateContact.mailingAddress.state",
+    },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  fieldsToType.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).type(application[fieldKey])
+  })
+  fieldsToSelect.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).select(application[fieldKey])
+  })
+})
+
+Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => {
+  cy.getByTestId("addHouseholdMemberButton").click()
+
+  const fieldsToType = [
+    { id: "firstName", fieldKey: "firstName" },
+    { id: "middleName", fieldKey: "middleName" },
+    { id: "lastName", fieldKey: "lastName" },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  const fieldsToSelect = [{ id: "relationship", fieldKey: "relationship" }].filter(
+    ({ id }) => !fieldsToSkip.includes(id)
+  )
+
+  const fieldsToClick = [
+    {
+      id: "sameAddress",
+      fieldKey: `sameAddress${application["sameAddress"]}`,
+    },
+    { id: "workInRegion", fieldKey: `workInRegion${application["workInRegion"]}` },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+
+  fieldsToType.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).type(application[fieldKey])
+  })
+
+  if (!fieldsToSkip.includes("dob-field-month")) {
+    cy.getByTestId("dob-field-month").eq(1).type(application["dob-field-month"])
+  }
+  if (!fieldsToSkip.includes("dob-field-day")) {
+    cy.getByTestId("dob-field-day").eq(1).type(application["dob-field-day"])
+  }
+  if (!fieldsToSkip.includes("dob-field-year")) {
+    cy.getByTestId("dob-field-year").eq(1).type(application["dob-field-year"])
+  }
+
+  fieldsToSelect.forEach(({ id, fieldKey }) => {
+    cy.getByID(id).select(application[fieldKey])
+  })
+  fieldsToClick.forEach(({ fieldKey }) => {
+    cy.getByID(fieldKey).click()
+  })
+  cy.getByTestId("submitAddMemberForm").click()
+})
+
+Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) => {
+  const fieldsToClick = [
+    {
+      id: "application.householdExpectingChanges",
+      fieldKey: `application.householdExpectingChanges${application["householdExpectingChanges"]}`,
+    },
+    {
+      id: "application.householdStudent",
+      fieldKey: `application.householdStudent${application["householdStudent"]}`,
+    },
+  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  fieldsToClick.forEach(({ fieldKey }) => {
+    cy.getByID(fieldKey).click()
+  })
+  cy.getByTestId(`preferredUnit.${application["preferredUnit"]}`).click()
+})
+
+Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => {
+  if (!fieldsToSkip.includes("application.incomePeriod")) {
+    cy.getByID(`application.incomePeriod${application["incomePeriod"]}`).click()
+  }
+  if (!fieldsToSkip.includes("incomeMonth")) {
+    cy.getByID("incomeMonth").type(application["incomeMonth"])
+  }
+  if (!fieldsToSkip.includes("application.incomeVouchers")) {
+    cy.getByID("application.incomeVouchers").select(application["incomeVouchers"])
+  }
+})
+
+Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
+  if (!fieldsToSkip.includes("application.demographics.ethnicity")) {
+    cy.getByID("application.demographics.ethnicity").select(application["demographics.ethnicity"])
+  }
+  if (!fieldsToSkip.includes("americanIndianAlaskanNative")) {
+    cy.getByID("americanIndianAlaskanNative").click()
+  }
+  if (!fieldsToSkip.includes("jurisdictionWebsite")) {
+    cy.getByID("jurisdictionWebsite").click()
+  }
+})
+
+Cypress.Commands.add("fillTerms", (application, submit) => {
+  cy.getByID(`application.acceptedTerms${application["acceptedTerms"]}`).click()
+  if (submit) {
+    cy.getByTestId("submitApplicationButton").click()
+  }
+})
+
+const verifyHelper = (application, listOfFields, fieldsToSkip) => {
+  const fields = listOfFields.filter(({ id }) => !fieldsToSkip.includes(id))
+  fields.forEach(({ id, fieldKey }) => {
+    cy.getByTestId(id).contains(application[fieldKey])
+  })
+}
+
+Cypress.Commands.add("verifyApplicationData", (application, fieldsToSkip = []) => {
+  cy.getByTestId("number").should("not.be.empty")
+  cy.getByTestId("totalSize").should("not.be.empty")
+  const fields = [
+    { id: "type", fieldKey: "applicationType" },
+    { id: "submittedDate", fieldKey: "submittedDate" },
+    { id: "timeDate", fieldKey: "timeDate" },
+    { id: "language", fieldKey: "language" },
+    { id: "submittedBy", fieldKey: "submittedBy" },
+  ]
+  verifyHelper(application, fields, fieldsToSkip)
+})
+
+Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) => {
+  cy.getByTestId("emailAddress").contains(application["applicant.emailAddress"].toLowerCase())
+  const fields = [
+    { id: "firstName", fieldKey: "applicant.firstName" },
+    { id: "middleName", fieldKey: "applicant.middleName" },
+    { id: "lastName", fieldKey: "applicant.lastName" },
+    { id: "dateOfBirth", fieldKey: "dateOfBirth" },
+    { id: "phoneNumber", fieldKey: "formattedPhoneNumber" },
+    { id: "additionalPhoneNumber", fieldKey: "formattedAdditionalPhoneNumber" },
+    { id: "preferredContact", fieldKey: "preferredContact" },
+    { id: "workInRegion", fieldKey: "applicant.workInRegion" },
+    { id: "residenceAddress.streetAddress", fieldKey: "applicant.address.street" },
+    { id: "residenceAddress.street2", fieldKey: "applicant.address.street2" },
+    { id: "residenceAddress.city", fieldKey: "applicant.address.city" },
+    { id: "residenceAddress.state", fieldKey: "applicant.address.stateCode" },
+    { id: "residenceAddress.zipCode", fieldKey: "applicant.address.zipCode" },
+    { id: "mailingAddress.streetAddress", fieldKey: "applicant.address.street" },
+    { id: "mailingAddress.street2", fieldKey: "applicant.address.street2" },
+    { id: "mailingAddress.city", fieldKey: "applicant.address.city" },
+    { id: "mailingAddress.state", fieldKey: "applicant.address.stateCode" },
+    { id: "mailingAddress.zipCode", fieldKey: "applicant.address.zipCode" },
+    { id: "workAddress.streetAddress", fieldKey: "workAddress.streetAddress" },
+    { id: "workAddress.street2", fieldKey: "workAddress.street2" },
+    { id: "workAddress.city", fieldKey: "workAddress.city" },
+    { id: "workAddress.state", fieldKey: "workAddress.state" },
+    { id: "workAddress.zipCode", fieldKey: "workAddress.zipCode" },
+  ]
+  verifyHelper(application, fields, fieldsToSkip)
+})
+
+Cypress.Commands.add("verifyAlternateContact", (application, fieldsToSkip = []) => {
+  cy.getByTestId("alternateContact.emailAddress").contains(
+    application["alternateContact.emailAddress"].toLowerCase()
+  )
+  const fields = [
+    { id: "alternateContact.firstName", fieldKey: "alternateContact.firstName" },
+    { id: "alternateContact.lastName", fieldKey: "alternateContact.lastName" },
+    { id: "relationship", fieldKey: "alternateContact.type" },
+    { id: "alternateContact.agency", fieldKey: "alternateContact.agency" },
+    { id: "alternateContact.phoneNumber", fieldKey: "alternateContact.formattedPhoneNumber" },
+    { id: "alternateContact.streetAddress", fieldKey: "alternateContact.mailingAddress.street" },
+    { id: "alternateContact.street2", fieldKey: "alternateContact.mailingAddress.street2" },
+    { id: "alternateContact.city", fieldKey: "alternateContact.mailingAddress.city" },
+    { id: "alternateContact.state", fieldKey: "alternateContact.mailingAddress.stateCode" },
+    { id: "alternateContact.zipCode", fieldKey: "alternateContact.mailingAddress.zipCode" },
+  ]
+  verifyHelper(application, fields, fieldsToSkip)
+})
+
+Cypress.Commands.add("verifyHouseholdMembers", (application, fieldsToSkip = []) => {
+  ;[
+    { id: `[data-label="Name"]`, fieldKey: "householdMemberName" },
+    { id: `[data-label="Date of Birth"]`, fieldKey: "householdMemberDoB" },
+    { id: `[data-label="Relationship"]`, fieldKey: "relationship" },
+    { id: `[data-label="Same Residence"]`, fieldKey: "sameAddress" },
+    { id: `[data-label="Work in Region"]`, fieldKey: "workInRegion" },
+  ]
+    .filter(({ id }) => !fieldsToSkip.includes(id))
+    .forEach(({ id, fieldKey }) => {
+      cy.get(id).contains(application[fieldKey])
+    })
+})
+
+Cypress.Commands.add("verifyHouseholdDetails", (application, fieldsToSkip = []) => {
+  const fields = [
+    { id: "preferredUnitSizes", fieldKey: "preferredUnitSize" },
+    { id: "adaPriorities", fieldKey: "adaPriorities" },
+    { id: "expectingChanges", fieldKey: "householdExpectingChanges" },
+    { id: "householdStudent", fieldKey: "householdStudent" },
+  ]
+  verifyHelper(application, fields, fieldsToSkip)
+})
+
+Cypress.Commands.add("verifyHouseholdIncome", (application, fieldsToSkip = []) => {
+  const fields = [
+    { id: "annualIncome", fieldKey: "annualIncome" },
+    { id: "monthlyIncome", fieldKey: "formattedMonthlyIncome" },
+    { id: "vouchers", fieldKey: "incomeVouchers" },
+  ]
+  verifyHelper(application, fields, fieldsToSkip)
+})
+
+Cypress.Commands.add("verifyTerms", (application) => {
+  cy.getByTestId("signatureOnTerms").contains(application["acceptedTerms"])
+})
