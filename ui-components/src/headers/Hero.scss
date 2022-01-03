@@ -20,6 +20,13 @@
   width: 100%;
 }
 
+.hero__buttons {
+  @apply grid;
+  @apply md:grid-cols-4;
+  @apply gap-5;
+  @apply max-w-screen-md;
+  @apply m-auto;
+}
 .hero__title {
   @apply text-4xl;
   @apply mb-5;

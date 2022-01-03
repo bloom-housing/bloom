@@ -1,5 +1,5 @@
 import { cleanup } from "@testing-library/react"
-import { getUniqueUnitTypes, sortUnitTypes } from "../../src/helpers/unitTypes"
+import { getUniqueUnitTypes, sortUnitTypes } from "../src/unitTypes"
 import { UnitStatus } from "@bloom-housing/backend-core/types"
 
 afterEach(cleanup)

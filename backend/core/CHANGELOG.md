@@ -3,6 +3,211 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.7...@bloom-housing/backend-core@3.0.2-alpha.8) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.7) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* check for user lastLoginAt ([d78745a](https://github.com/bloom-housing/bloom/commit/d78745a4c8b770864c4f5e6140ee602e745b8bec))
+
+
+### Features
+
+* **backend:** add appropriate http exception for password outdated login failure ([e5df66e](https://github.com/bloom-housing/bloom/commit/e5df66e4fe0f937f507d014f3b25c6c9b4b5deff))
+* **backend:** add password outdating only to users which are either admins or partners ([754546d](https://github.com/bloom-housing/bloom/commit/754546dfd5194f8c30e12963031791818566d22d))
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/bloom-housing/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+* **backend:** remove activity log interceptor from update-password ([2e56b98](https://github.com/bloom-housing/bloom/commit/2e56b9878969604bec2f7694a83dbf7061af9df2))
+
+
+
+
+
+## [3.0.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* check for user lastLoginAt ([d78745a](https://github.com/bloom-housing/bloom/commit/d78745a4c8b770864c4f5e6140ee602e745b8bec))
+
+
+### Features
+
+* **backend:** add appropriate http exception for password outdated login failure ([e5df66e](https://github.com/bloom-housing/bloom/commit/e5df66e4fe0f937f507d014f3b25c6c9b4b5deff))
+* **backend:** add password outdating only to users which are either admins or partners ([754546d](https://github.com/bloom-housing/bloom/commit/754546dfd5194f8c30e12963031791818566d22d))
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/bloom-housing/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+* **backend:** remove activity log interceptor from update-password ([2e56b98](https://github.com/bloom-housing/bloom/commit/2e56b9878969604bec2f7694a83dbf7061af9df2))
+
+
+
+
+
+## [3.0.2-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.0...@bloom-housing/backend-core@3.0.2-alpha.1) (2021-12-23)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.0) (2021-12-23)
+
+
+### Features
+
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/seanmalbert/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+
+
+
+
+
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.40...@bloom-housing/backend-core@3.0.1) (2021-12-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.39...@bloom-housing/backend-core@3.0.1-alpha.40) (2021-12-15)
+
+
+### Features
+
+* **backend:** refactor applications module ([#2279](https://github.com/bloom-housing/bloom/issues/2279)) ([e0b4523](https://github.com/bloom-housing/bloom/commit/e0b4523817c7d3863c3802d8a9f61d1a1c8685d4))
+
+
+
+
+
+## [3.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.38...@bloom-housing/backend-core@3.0.1-alpha.39) (2021-12-14)
+
+
+### Features
+
+* removes ListingLangCacheInterceptor from get by id ([7acbd82](https://github.com/bloom-housing/bloom/commit/7acbd82485edfa9a8aa5a82473d5bbe5cee571e7))
+
+
+
+
+
+## [3.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.37...@bloom-housing/backend-core@3.0.1-alpha.38) (2021-12-14)
+
+
+### Features
+
+* **backend:** add partnerTerms to jurisdiction entity ([#2301](https://github.com/bloom-housing/bloom/issues/2301)) ([7ecf3ef](https://github.com/bloom-housing/bloom/commit/7ecf3ef24f261bf6b42fc38cf0080251a3c60e89))
+
+
+
+
+
+## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.36...@bloom-housing/backend-core@3.0.1-alpha.37) (2021-12-13)
+
+
+### Features
+
+* **backend:** all programs to csv export ([#2302](https://github.com/bloom-housing/bloom/issues/2302)) ([f4d6a62](https://github.com/bloom-housing/bloom/commit/f4d6a62920e3b859310898e3a040f8116b43cab3))
+
+
+
+
+
+## [3.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.35...@bloom-housing/backend-core@3.0.1-alpha.36) (2021-12-13)
+
+
+### Features
+
+* **backend:** add activity logging to listings module ([#2190](https://github.com/bloom-housing/bloom/issues/2190)) ([88d60e3](https://github.com/bloom-housing/bloom/commit/88d60e32d77381d6e830158ce77c058b1cfcc022))
+
+
+
+
+
+## [3.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.34...@bloom-housing/backend-core@3.0.1-alpha.35) (2021-12-10)
+
+
+### Features
+
+* adds whatToExpect to GTrans ([#2303](https://github.com/bloom-housing/bloom/issues/2303)) ([6d7305b](https://github.com/bloom-housing/bloom/commit/6d7305b8e3b7e1c3a9776123e8e6d370ab803af0))
+
+
+
+
+
+## [3.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.33...@bloom-housing/backend-core@3.0.1-alpha.34) (2021-12-09)
+
+
+### Bug Fixes
+
+* units with invalid ami chart ([#2290](https://github.com/bloom-housing/bloom/issues/2290)) ([a6516e1](https://github.com/bloom-housing/bloom/commit/a6516e142ec13db5c3c8d2bb4f726be681e172e3))
+
+
+
+
+
+## [3.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.32...@bloom-housing/backend-core@3.0.1-alpha.33) (2021-12-07)
+
+
+### Features
+
+* overrides fallback to english, tagalog support ([#2262](https://github.com/bloom-housing/bloom/issues/2262)) ([679ab9b](https://github.com/bloom-housing/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+
+
+
+
+
+## [3.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.31...@bloom-housing/backend-core@3.0.1-alpha.32) (2021-12-06)
+
+
+### Features
+
+* **backend:** add listings closing routine ([#2213](https://github.com/bloom-housing/bloom/issues/2213)) ([a747806](https://github.com/bloom-housing/bloom/commit/a747806282f80c92bd9a171a2b4d5c9b74d3b49a))
+
+
+
+
+
+## [3.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.30...@bloom-housing/backend-core@3.0.1-alpha.31) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.29...@bloom-housing/backend-core@3.0.1-alpha.30) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.28...@bloom-housing/backend-core@3.0.1-alpha.29) (2021-12-03)
+
+
+### Features
+
+* **backend:** add storing listing translations ([#2215](https://github.com/bloom-housing/bloom/issues/2215)) ([6ac63ea](https://github.com/bloom-housing/bloom/commit/6ac63eae82e14ab32d541b907c7e5dc800c1971f))
+
+
+
+
+
 ## [3.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.27...@bloom-housing/backend-core@3.0.1-alpha.28) (2021-12-01)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

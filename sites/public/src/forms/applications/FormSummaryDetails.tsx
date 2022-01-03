@@ -1,8 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { LocalizedLink, MultiLineAddress, ViewItem, t } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes } from "@bloom-housing/ui-components/src/helpers/unitTypes"
+import { getUniqueUnitTypes, getProgramOptionName } from "@bloom-housing/shared-helpers"
 import { Address, AllExtraDataTypes, InputType, Listing } from "@bloom-housing/backend-core/types"
-import { getProgramOptionName } from "@bloom-housing/shared-helpers"
 
 type FormSummaryDetailsProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -107,7 +106,7 @@ const FormSummaryDetails = ({
 
   const preferredUnits = application.preferredUnit?.map((unit) => {
     const unitDetails = allListingUnitTypes?.find((unitType) => unitType.id === unit.id)
-    return unitDetails?.name
+    return unitDetails?.name || unit.name
   })
 
   return (

@@ -6,6 +6,7 @@
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "allowJs": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "module": "esnext",

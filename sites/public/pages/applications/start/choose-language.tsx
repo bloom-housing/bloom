@@ -8,13 +8,14 @@ import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
-  imageUrlFromListing,
   LinkButton,
   FormCard,
-  ProgressNav,
   AuthContext,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, OnClientSide } from "@bloom-housing/shared-helpers"
+
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
@@ -22,9 +23,7 @@ import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
 const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
-    headers: { language: context.locale },
-  })
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`)
   conductor.listing = response.data
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig
@@ -42,6 +41,7 @@ const ApplicationChooseLanguage = () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
+    conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
       void router.push("/")
@@ -89,9 +89,9 @@ const ApplicationChooseLanguage = () => {
               "Review",
             ]
           }
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">

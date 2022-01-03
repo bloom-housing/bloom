@@ -3,6 +3,327 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.9...@bloom-housing/partners@4.0.1-alpha.10) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.8...@bloom-housing/partners@4.0.1-alpha.9) (2022-01-03)
+
+
+### Bug Fixes
+
+* cypress coverage configs ([eec74ee](https://github.com/bloom-housing/bloom/commit/eec74eef138f6af275ae3cfe16262ed215b16907))
+
+
+
+
+
+## [4.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.7...@bloom-housing/partners@4.0.1-alpha.8) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.0...@bloom-housing/partners@4.0.1-alpha.7) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### Features
+
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* password reset message ([0cba6e6](https://github.com/bloom-housing/bloom/commit/0cba6e62b45622a430612672daef5c97c1e6b140))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+## [4.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.0...@bloom-housing/partners@4.0.1-alpha.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### Features
+
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* password reset message ([0cba6e6](https://github.com/bloom-housing/bloom/commit/0cba6e62b45622a430612672daef5c97c1e6b140))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+## [4.0.1-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.0...@bloom-housing/partners@4.0.1-alpha.1) (2021-12-23)
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+## [4.0.1-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.0...@bloom-housing/partners@4.0.1-alpha.0) (2021-12-23)
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/seanmalbert/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+# [4.0.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1-alpha.65...@bloom-housing/partners@4.0.0) (2021-12-22)
+
+
+### Bug Fixes
+
+* partners shared-helpers version ([50f4a06](https://github.com/seanmalbert/bloom/commit/50f4a0658761b8675064a98f316b2dd35b0d3fe0))
+
+
+### Code Refactoring
+
+* removing helpers from ui-components that are backend dependent ([#2108](https://github.com/seanmalbert/bloom/issues/2108)) ([1d0c1f3](https://github.com/seanmalbert/bloom/commit/1d0c1f340781a3ba76c89462d8bee954dd40b889))
+
+
+### Features
+
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([4f6945f](https://github.com/seanmalbert/bloom/commit/4f6945f04d797fad1b3140bcdc74b134ea42810a))
+
+
+### BREAKING CHANGES
+
+* moved some helpers from ui-components to shared-helpers
+
+
+
+
+
+## [3.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.64...@bloom-housing/partners@3.0.1-alpha.65) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.63...@bloom-housing/partners@3.0.1-alpha.64) (2021-12-15)
+
+
+### Features
+
+* filter partner users ([63566f2](https://github.com/bloom-housing/bloom/commit/63566f206b154031a143b649b986aaecd5181313))
+
+
+
+
+
+## [3.0.1-alpha.63](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.62...@bloom-housing/partners@3.0.1-alpha.63) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.62](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.61...@bloom-housing/partners@3.0.1-alpha.62) (2021-12-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.60...@bloom-housing/partners@3.0.1-alpha.61) (2021-12-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.60](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.59...@bloom-housing/partners@3.0.1-alpha.60) (2021-12-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.59](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.58...@bloom-housing/partners@3.0.1-alpha.59) (2021-12-13)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.56...@bloom-housing/partners@3.0.1-alpha.58) (2021-12-13)
+
+
+### Bug Fixes
+
+* versioning issues ([#2311](https://github.com/bloom-housing/bloom/issues/2311)) ([0b1d143](https://github.com/bloom-housing/bloom/commit/0b1d143ab8b17add9d52533560f28d7a1f6dfd3d))
+
+
+
+
+
+## [3.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.55...@bloom-housing/partners@3.0.1-alpha.56) (2021-12-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.54...@bloom-housing/partners@3.0.1-alpha.55) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.53...@bloom-housing/partners@3.0.1-alpha.54) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.52...@bloom-housing/partners@3.0.1-alpha.53) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.51...@bloom-housing/partners@3.0.1-alpha.52) (2021-12-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.50...@bloom-housing/partners@3.0.1-alpha.51) (2021-12-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.49...@bloom-housing/partners@3.0.1-alpha.50) (2021-12-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.48...@bloom-housing/partners@3.0.1-alpha.49) (2021-12-07)
+
+
+### Features
+
+* overrides fallback to english, tagalog support ([#2262](https://github.com/bloom-housing/bloom/issues/2262)) ([679ab9b](https://github.com/bloom-housing/bloom/commit/679ab9b1816d5934f48f02ca5f5696952ef88ae7))
+
+
+
+
+
+## [3.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.47...@bloom-housing/partners@3.0.1-alpha.48) (2021-12-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.46...@bloom-housing/partners@3.0.1-alpha.47) (2021-12-06)
+
+
+### Bug Fixes
+
+* Remove description for the partners programs ([#2234](https://github.com/bloom-housing/bloom/issues/2234)) ([2bbbeb5](https://github.com/bloom-housing/bloom/commit/2bbbeb52868d8f4b5ee6723018fa34619073017b)), closes [#1901](https://github.com/bloom-housing/bloom/issues/1901)
+
+
+
+
+
+## [3.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.45...@bloom-housing/partners@3.0.1-alpha.46) (2021-12-06)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.44...@bloom-housing/partners@3.0.1-alpha.45) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.43...@bloom-housing/partners@3.0.1-alpha.44) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.42...@bloom-housing/partners@3.0.1-alpha.43) (2021-12-03)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.41...@bloom-housing/partners@3.0.1-alpha.42) (2021-12-01)
 
 **Note:** Version bump only for package @bloom-housing/partners

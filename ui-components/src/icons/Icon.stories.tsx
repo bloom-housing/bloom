@@ -40,6 +40,7 @@ export const IconLink = () => <Icon size="large" symbol="link" />
 export const IconList = () => <Icon size="large" symbol="list" />
 export const IconLock = () => <Icon size="large" symbol="lock" />
 export const IconMail = () => <Icon size="large" symbol="mail" />
+export const IconMailThin = () => <Icon size="large" symbol="mailThin" />
 export const IconMap = () => <Icon size="large" symbol="map" />
 export const IconMapThin = () => <Icon size="large" symbol="mapThin" />
 export const IconMenu = () => <Icon size="large" symbol="menu" />
