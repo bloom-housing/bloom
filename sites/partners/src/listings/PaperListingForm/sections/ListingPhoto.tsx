@@ -16,6 +16,8 @@ import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 

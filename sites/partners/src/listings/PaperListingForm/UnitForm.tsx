@@ -34,6 +34,8 @@ type UnitFormProps = {
   draft: boolean
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function, max-lines */
 const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 

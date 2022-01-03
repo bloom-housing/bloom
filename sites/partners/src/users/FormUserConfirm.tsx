@@ -62,7 +62,6 @@ const FormUserConfirm = () => {
         setLoginLoading(true)
         await loginWithToken(accessToken)
         setLoginLoading(false)
-
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
         void router.push("/")
       }

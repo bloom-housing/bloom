@@ -24,6 +24,8 @@ type UnitProps = {
   disableUnitsAccordion: boolean
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const [unitDrawerOpen, setUnitDrawerOpen] = useState(false)
   const [unitDeleteModal, setUnitDeleteModal] = useState<number | null>(null)

@@ -35,6 +35,8 @@ type ApplicationsListSortOptions = {
   order: EnumApplicationsApiExtraModelOrder
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const ApplicationsList = () => {
   const COLUMN_STATE_KEY = "column-state"
 

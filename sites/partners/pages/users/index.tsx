@@ -26,6 +26,8 @@ type UserDrawerValue = {
   user?: User
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const Users = () => {
   /* Add user drawer */
   const [userDrawer, setUserDrawer] = useState<UserDrawerValue | null>(null)

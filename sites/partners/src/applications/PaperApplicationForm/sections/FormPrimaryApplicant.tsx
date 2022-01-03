@@ -16,6 +16,7 @@ import {
 import { phoneNumberKeys, contactPreferencesKeys, stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
+/* eslint-disable max-lines-per-function */
 const FormPrimaryApplicant = () => {
   const formMethods = useFormContext()
 

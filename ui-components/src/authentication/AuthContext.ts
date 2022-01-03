@@ -160,6 +160,8 @@ const reducer = createReducer(
 )
 
 export const AuthContext = createContext<Partial<ContextProps>>({})
+
+/* eslint-disable max-lines-per-function */
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const { apiUrl, storageType } = useContext(ConfigContext)
   const { router } = useContext(NavigationContext)

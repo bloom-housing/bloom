@@ -32,6 +32,21 @@ class formatLinkCell {
   }
 }
 
+class formatWaitlistStatus {
+  text: HTMLSpanElement
+
+  init({ data }) {
+    const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
+
+    this.text = document.createElement("span")
+    this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
+  }
+
+  getGui() {
+    return this.text
+  }
+}
+
 class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
@@ -56,21 +71,6 @@ export default function ListingsList() {
 
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
-
-  class formatWaitlistStatus {
-    text: HTMLSpanElement
-
-    init({ data }) {
-      const isWaitlistOpen = data.waitlistCurrentSize < data.waitlistMaxSize
-
-      this.text = document.createElement("span")
-      this.text.innerHTML = isWaitlistOpen ? t("t.yes") : t("t.no")
-    }
-
-    getGui() {
-      return this.text
-    }
-  }
 
   const gridOptions: GridOptions = {
     components: {

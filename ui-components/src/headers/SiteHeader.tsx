@@ -39,6 +39,8 @@ export interface SiteHeaderProps {
   title?: string
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function, max-lines */
 const SiteHeader = (props: SiteHeaderProps) => {
   const [activeMenus, setActiveMenus] = useState<string[]>([])
   const [activeMobileMenus, setActiveMobileMenus] = useState<string[]>([])

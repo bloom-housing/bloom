@@ -1,6 +1,6 @@
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { UnitAmiChartOverride } from "../units/entities/unit-ami-chart-override.entity"
-import { mergeAmiChartWithOverrides } from "./units-transformations"
+import { mergeAmiChartWithOverrides } from "./hmi-data"
 import { Language } from "./types/language-enum"
 
 describe("Unit Transformations", () => {

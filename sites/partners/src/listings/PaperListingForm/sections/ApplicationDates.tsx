@@ -21,64 +21,65 @@ import {
 import { FormListing, TempEvent } from "../formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 
+const openHouseHeaders = {
+  date: "t.date",
+  startTime: "t.startTime",
+  endTime: "t.endTime",
+  url: "t.link",
+  action: "",
+}
+
+const openHouseTableRows = (openHouseEvents, setDrawerOpenHouse, setModalDeleteOpenHouse) => {
+  return openHouseEvents.map((event) => {
+    const { startTime, endTime, url, tempId } = event
+
+    return {
+      date: startTime && getDetailFieldDate(startTime),
+      startTime: startTime && getDetailFieldTime(startTime),
+      endTime: endTime && getDetailFieldTime(endTime),
+      url: url.length ? (
+        <LinkButton className="mx-0 my-0" href={url} unstyled>
+          {t("t.url")}
+        </LinkButton>
+      ) : (
+        t("t.n/a")
+      ),
+      action: (
+        <div className="flex">
+          <Button
+            type="button"
+            className="front-semibold uppercase"
+            onClick={() => setDrawerOpenHouse(event)}
+            unstyled
+          >
+            {t("t.edit")}
+          </Button>
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => setModalDeleteOpenHouse(tempId)}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        </div>
+      ),
+    }
+  })
+}
+
 type ApplicationDatesProps = {
   openHouseEvents: TempEvent[]
   setOpenHouseEvents: (events: TempEvent[]) => void
   listing?: FormListing
 }
 
+/* eslint-disable max-lines-per-function */
 const ApplicationDates = ({
   listing,
   openHouseEvents,
   setOpenHouseEvents,
 }: ApplicationDatesProps) => {
-  const openHouseHeaders = {
-    date: "t.date",
-    startTime: "t.startTime",
-    endTime: "t.endTime",
-    url: "t.link",
-    action: "",
-  }
-
-  const openHouseTableData = useMemo(() => {
-    return openHouseEvents.map((event) => {
-      const { startTime, endTime, url, tempId } = event
-
-      return {
-        date: startTime && getDetailFieldDate(startTime),
-        startTime: startTime && getDetailFieldTime(startTime),
-        endTime: endTime && getDetailFieldTime(endTime),
-        url: url.length ? (
-          <LinkButton className="mx-0 my-0" href={url} unstyled>
-            {t("t.url")}
-          </LinkButton>
-        ) : (
-          t("t.n/a")
-        ),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase"
-              onClick={() => setDrawerOpenHouse(event)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => setModalDeleteOpenHouse(tempId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      }
-    })
-  }, [openHouseEvents])
-
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -110,6 +111,10 @@ const ApplicationDates = ({
     setOpenHouseEvents(newEvents)
     setModalDeleteOpenHouse(null)
   }
+
+  const openHouseTableData = useMemo(() => {
+    return openHouseTableRows(openHouseEvents, setDrawerOpenHouse, setModalDeleteOpenHouse)
+  }, [openHouseEvents])
 
   return (
     <>

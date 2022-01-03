@@ -26,6 +26,8 @@ type AlertMessage = {
   message: string
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const Edit = () => {
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method

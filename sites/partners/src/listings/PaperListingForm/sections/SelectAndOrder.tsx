@@ -33,6 +33,8 @@ type SelectAndOrderProps = {
   formKey: string
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const SelectAndOrder = ({
   listingData,
   setListingData,

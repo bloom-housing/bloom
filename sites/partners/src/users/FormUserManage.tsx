@@ -49,6 +49,8 @@ const determineUserRole = (roles: UserRolesCreate) => {
   return RoleOption.Partner
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function, max-lines */
 const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageProps) => {
   const { userService } = useContext(AuthContext)
 

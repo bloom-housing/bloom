@@ -22,6 +22,8 @@ type ApplicationAddressProps = {
   listing?: FormListing
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function, max-lines */
 const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const formMethods = useFormContext()
 

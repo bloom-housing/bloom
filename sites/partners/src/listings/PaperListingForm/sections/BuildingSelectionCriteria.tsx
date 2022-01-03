@@ -17,7 +17,9 @@ import {
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
-const LotteryResults = () => {
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
+const BuildingSelectionCriteria = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
@@ -309,4 +311,4 @@ const LotteryResults = () => {
   )
 }
 
-export default LotteryResults
+export default BuildingSelectionCriteria

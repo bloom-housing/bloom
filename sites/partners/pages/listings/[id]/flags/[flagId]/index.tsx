@@ -22,6 +22,8 @@ import {
   ApplicationFlaggedSet,
 } from "@bloom-housing/backend-core/types"
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 const Flag = () => {
   const { applicationFlaggedSetsService } = useContext(AuthContext)
 

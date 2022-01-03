@@ -25,6 +25,7 @@ type AsideProps = {
 
 type AsideType = "add" | "edit" | "details"
 
+/* eslint-disable max-lines-per-function */
 const Aside = ({
   type,
   showCloseListingModal,

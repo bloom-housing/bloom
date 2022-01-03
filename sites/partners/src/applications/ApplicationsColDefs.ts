@@ -32,6 +32,7 @@ function compareStrings(a, b, node, nextNode, isInverted) {
   }
 }
 
+/* eslint-disable max-lines-per-function, max-lines */
 export function getColDefs(maxHouseholdSize: number, countyCode: string) {
   const defs = [
     {

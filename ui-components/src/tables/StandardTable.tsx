@@ -71,6 +71,8 @@ const headerClassName = (header: string | TableHeadersOptions) => {
   }
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 export const StandardTable = (props: StandardTableProps) => {
   const { headers = {}, cellClassName } = props
 

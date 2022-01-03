@@ -38,6 +38,7 @@ type BuildingDetailsProps = {
   setCustomMapPositionChosen?: (customMapPosition: boolean) => void
 }
 
+/* eslint-disable max-lines-per-function */
 const BuildingDetails = ({
   listing,
   setLatLong,

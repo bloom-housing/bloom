@@ -33,6 +33,7 @@ const application = {
 }
 let sendMock
 
+/* eslint-disable max-lines-per-function */
 describe("EmailService", () => {
   let service: EmailService
   let module: TestingModule

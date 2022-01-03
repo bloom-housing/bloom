@@ -41,7 +41,36 @@ module.exports = {
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-return": "off",
+    "max-lines": [
+      "error",
+      {
+        max: 400,
+      },
+    ],
+    "max-lines-per-function": [
+      "error",
+      {
+        max: 140,
+      },
+    ],
   },
+  overrides: [
+    {
+      files: [
+        "backend/core/test/**/*.ts",
+        "backend/core/types/**/*.ts",
+        "backend/core/src/seeder/**/*.ts",
+        "backend/core/src/listings/tests/**/*.ts",
+        "sites/partners/cypress/integration/**/*.ts",
+        "sites/public/cypress/**/*.{ts,js}",
+        "sites/public/pages/applications/**/*.tsx",
+      ],
+      rules: {
+        "max-lines": "off",
+        "max-lines-per-function": "off",
+      },
+    },
+  ],
   ignorePatterns: [
     "node_modules",
     "storybook-static",

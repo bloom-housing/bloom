@@ -21,6 +21,8 @@ import FormsLayout from "../layouts/forms"
 import moment from "moment"
 import { useRouter } from "next/router"
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function */
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
   const [confirmationResent, setConfirmationResent] = useState<boolean>(false)

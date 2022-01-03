@@ -26,6 +26,7 @@ type ApplicationFormMemberProps = {
   editedMemberId?: number
 }
 
+/* eslint-disable max-lines-per-function */
 const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationFormMemberProps) => {
   const currentlyEdited = useMemo(() => {
     return members.filter((member) => member.orderId === editedMemberId)[0]

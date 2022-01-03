@@ -21,6 +21,7 @@ type RankingsAndResultsProps = {
   listing?: FormListing
 }
 
+/* eslint-disable max-lines-per-function */
 const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
   const formMethods = useFormContext()
 

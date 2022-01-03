@@ -47,6 +47,7 @@ const reformatAddress = (address: Address) => {
   return newAddress
 }
 
+/* eslint-disable max-lines-per-function, max-lines */
 const FormSummaryDetails = ({
   application,
   listing,

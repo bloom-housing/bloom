@@ -37,6 +37,7 @@ export type OpenHouseFormValues = {
   note?: string
 }
 
+/* eslint-disable max-lines-per-function */
 const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
   const defaultValues = (() => {
     if (!currentEvent) return null

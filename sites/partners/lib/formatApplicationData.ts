@@ -14,6 +14,8 @@ import {
   TimeFieldPeriod,
   mapPreferencesToApi,
   mapApiToPreferencesForm,
+  DateFieldValues,
+  TimeFieldValues,
 } from "@bloom-housing/ui-components"
 import {
   fieldGroupObjectToArray,
@@ -55,6 +57,28 @@ const getYesNoValue = (applicationField: boolean) => {
 
 const mapEmptyStringToNull = (value: string) => (value === "" ? null : value)
 
+const formatSubmissionDate = (
+  dateSubmitted: DateFieldValues | undefined,
+  timeSubmitted: TimeFieldValues | undefined
+) => {
+  const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
+
+  // rename default (wrong property names)
+  const { day: submissionDay, month: submissionMonth, year: submissionYear } = dateSubmitted || {}
+  const { hours, minutes = 0, seconds = 0, period } = timeSubmitted || {}
+
+  if (!submissionDay || !submissionMonth || !submissionYear) return null
+
+  const dateString = moment(
+    `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
+    "MM/DD/YYYY hh:mm:ss A"
+  ).format(TIME_24H_FORMAT)
+
+  const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
+
+  return formattedDate
+}
+
 interface FormData extends FormTypes {
   householdMembers: HouseholdMember[]
   submissionType: ApplicationSubmissionType
@@ -67,32 +91,13 @@ type mapFormToApiProps = {
   programs: Program[]
 }
 
-/*
-  Format data which comes from react-hook-form into correct API format.
-*/
-
+/**
+ * Format data which comes from react-hook-form into correct API format.
+ */
 export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToApiProps) => {
   const language: Language | null = data.application?.language ? data.application?.language : null
 
-  const submissionDate: Date | null = (() => {
-    const TIME_24H_FORMAT = "MM/DD/YYYY HH:mm:ss"
-
-    // rename default (wrong property names)
-    const { day: submissionDay, month: submissionMonth, year: submissionYear } =
-      data.dateSubmitted || {}
-    const { hours, minutes = 0, seconds = 0, period } = data?.timeSubmitted || {}
-
-    if (!submissionDay || !submissionMonth || !submissionYear) return null
-
-    const dateString = moment(
-      `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
-      "MM/DD/YYYY hh:mm:ss A"
-    ).format(TIME_24H_FORMAT)
-
-    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
-
-    return formattedDate
-  })()
+  const submissionDate = formatSubmissionDate(data.dateSubmitted, data.timeSubmitted)
 
   // create applicant
   const applicant = ((): ApplicantUpdate => {
@@ -230,10 +235,9 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
   return result
 }
 
-/*
-  Format data which comes from the API into correct react-hook-form format.
-*/
-
+/**
+ * Format data which comes from the API into correct react-hook-form format.
+ */
 export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
     ? moment(new Date(applicationData.submissionDate)).utc()

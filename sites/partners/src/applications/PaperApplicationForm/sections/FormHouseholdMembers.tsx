@@ -14,6 +14,73 @@ import { HouseholdMember } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../FormTypes"
 import { FormMember } from "../FormMember"
 
+const chooseAddressStatus = (value: YesNoAnswer | null) => {
+  switch (value) {
+    case YesNoAnswer.Yes:
+      return t("t.yes")
+    case YesNoAnswer.No:
+      return t("t.no")
+    default:
+      return t("t.n/a")
+  }
+}
+
+const memberTableHeaders = {
+  name: t("t.name"),
+  relationship: t("t.relationship"),
+  dob: t("application.household.member.dateOfBirth"),
+  sameResidence: t("application.add.sameResidence"),
+  workInRegion: t("application.details.workInRegion"),
+  action: "",
+}
+
+const memberTableRows = (
+  householdMembers: HouseholdMember[],
+  editMember: (orderId: number) => void,
+  setMembersDeleteModal: React.Dispatch<React.SetStateAction<number>>
+) => {
+  return householdMembers.map((member) => {
+    const { birthMonth, birthDay, birthYear } = member
+    const sameResidence = member.sameAddress as YesNoAnswer
+    const workInRegion = member.workInRegion as YesNoAnswer
+
+    return {
+      name: (member.firstName + member.lastName).length
+        ? `${member.firstName} ${member.lastName}`
+        : t("t.n/a"),
+      relationship: member.relationship
+        ? t(`application.form.options.relationship.${member.relationship}`)
+        : t("t.n/a"),
+      dob:
+        birthMonth && birthDay && birthYear
+          ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
+          : t("t.n/a"),
+      sameResidence: chooseAddressStatus(sameResidence),
+      workInRegion: chooseAddressStatus(workInRegion),
+      action: (
+        <div className="flex">
+          <Button
+            type="button"
+            className="font-semibold uppercase"
+            onClick={() => editMember(member.orderId)}
+            unstyled
+          >
+            {t("t.edit")}
+          </Button>
+          <Button
+            type="button"
+            className="font-semibold uppercase text-red-700"
+            onClick={() => setMembersDeleteModal(member.orderId)}
+            unstyled
+          >
+            {t("t.delete")}
+          </Button>
+        </div>
+      ),
+    }
+  })
+}
+
 type FormHouseholdMembersProps = {
   householdMembers: HouseholdMember[]
   setHouseholdMembers: (members: HouseholdMember[]) => void
@@ -25,15 +92,6 @@ const FormHouseholdMembers = ({
 }: FormHouseholdMembersProps) => {
   const [membersDrawer, setMembersDrawer] = useState<number | null>(null)
   const [membersDeleteModal, setMembersDeleteModal] = useState<number | null>(null)
-
-  const memberTableHeaders = {
-    name: t("t.name"),
-    relationship: t("t.relationship"),
-    dob: t("application.household.member.dateOfBirth"),
-    sameResidence: t("application.add.sameResidence"),
-    workInRegion: t("application.details.workInRegion"),
-    action: "",
-  }
 
   const editMember = useCallback(
     (orderId: number) => {
@@ -72,57 +130,7 @@ const FormHouseholdMembers = ({
   }
 
   const memberTableData = useMemo(() => {
-    const chooseAddressStatus = (value: YesNoAnswer | null) => {
-      switch (value) {
-        case YesNoAnswer.Yes:
-          return t("t.yes")
-        case YesNoAnswer.No:
-          return t("t.no")
-        default:
-          return t("t.n/a")
-      }
-    }
-
-    return householdMembers.map((member) => {
-      const { birthMonth, birthDay, birthYear } = member
-      const sameResidence = member.sameAddress as YesNoAnswer
-      const workInRegion = member.workInRegion as YesNoAnswer
-
-      return {
-        name: (member.firstName + member.lastName).length
-          ? `${member.firstName} ${member.lastName}`
-          : t("t.n/a"),
-        relationship: member.relationship
-          ? t(`application.form.options.relationship.${member.relationship}`)
-          : t("t.n/a"),
-        dob:
-          birthMonth && birthDay && birthYear
-            ? `${member.birthMonth}/${member.birthDay}/${member.birthYear}`
-            : t("t.n/a"),
-        sameResidence: chooseAddressStatus(sameResidence),
-        workInRegion: chooseAddressStatus(workInRegion),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="font-semibold uppercase"
-              onClick={() => editMember(member.orderId)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="font-semibold uppercase text-red-700"
-              onClick={() => setMembersDeleteModal(member.orderId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
-      }
-    })
+    return memberTableRows(householdMembers, editMember, setMembersDeleteModal)
   }, [editMember, householdMembers])
 
   return (

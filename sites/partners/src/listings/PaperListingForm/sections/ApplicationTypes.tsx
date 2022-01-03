@@ -32,6 +32,8 @@ interface Methods {
   referral: ApplicationMethodCreate
 }
 
+// TODO: see if there's a way to break this one function up
+/* eslint-disable max-lines-per-function, max-lines */
 const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors } = useFormContext()

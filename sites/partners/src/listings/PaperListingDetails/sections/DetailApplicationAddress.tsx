@@ -5,6 +5,7 @@ import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types
 import { getDetailFieldString, getDetailFieldTime } from "./helpers"
 import moment from "moment"
 
+/* eslint-disable max-lines-per-function */
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
 

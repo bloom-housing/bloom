@@ -57,6 +57,7 @@ interface ListingProps {
   preview?: boolean
 }
 
+/* eslint-disable max-lines-per-function, max-lines */
 export const ListingView = (props: ListingProps) => {
   let buildingSelectionCriteria, preferencesSection
   const { listing } = props

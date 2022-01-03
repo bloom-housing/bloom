@@ -37,6 +37,7 @@ type ApplicationFormProps = {
 
 type AlertErrorType = "api" | "form"
 
+/* eslint-disable max-lines-per-function */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormProps) => {
   const { listingDto } = useSingleListingData(listingId)
