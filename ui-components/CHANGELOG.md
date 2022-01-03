@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* make numbered list breakpoint match config ([326df54](https://github.com/bloom-housing/bloom/commit/326df5404d2a967f1a36f8ba7635d4cb92d37742))
+* make primary buttons primary background ([1b44435](https://github.com/bloom-housing/bloom/commit/1b44435aef22d814a0b511d7d63129d73a7b78ac))
+* propagate custom icon type to ImageCard prop ([afb045d](https://github.com/bloom-housing/bloom/commit/afb045dfea0937c89bdc90886d161f0e4e27d880))
+* Update hardcoded translations ([c58bf25](https://github.com/bloom-housing/bloom/commit/c58bf25bb7243ea357e208aef88e74af4a968e97)), closes [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+* Update translation ([f8d2604](https://github.com/bloom-housing/bloom/commit/f8d2604b5244ca9c5bc92665d056f5e58d32f978))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### Features
+
+* add matched style to ApplicationStatus ([a54fb97](https://github.com/bloom-housing/bloom/commit/a54fb9769b68c9362e5f312a1021f5d0ba3d17a7))
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* password reset message ([0cba6e6](https://github.com/bloom-housing/bloom/commit/0cba6e62b45622a430612672daef5c97c1e6b140))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
 ## [4.0.1-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.0...@bloom-housing/ui-components@4.0.1-alpha.1) (2021-12-23)
 
 
