@@ -50,6 +50,8 @@ describe("LocalStrategy", () => {
       mockUser = {
         lastLoginAt: new Date(),
         failedLoginAttemptsCount: 0,
+        passwordUpdatedAt: new Date(),
+        confirmedAt: new Date(),
       }
       mockUserRepository.findOne.mockResolvedValue(mockUser)
       mockPasswordService.isPasswordValid.mockResolvedValue(false)
@@ -64,7 +66,6 @@ describe("LocalStrategy", () => {
       // Reset cooldown
       mockUser.lastLoginAt = new Date(0)
       await expect(localStrategy.validate("", "")).rejects.toThrow(UnauthorizedException)
-
       // Failed login attempts count should not be reset so next login attempt should lock out an
       //  account for next cooldown period
       await expect(localStrategy.validate("", "")).rejects.toThrow(HttpException)
