@@ -861,6 +861,50 @@ export class UserService {
     })
   }
   /**
+   * Get user by id
+   */
+  retrieve(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<User> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Delete user by id
+   */
+  delete(
+    params: {
+      /**  */
+      id: string
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
+
+      let data = null
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
    * List users
    */
   list(
@@ -901,50 +945,6 @@ export class UserService {
       const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
 
       let data = params.body
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Get user by id
-   */
-  retrieve(
-    params: {
-      /**  */
-      userId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<User> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{userId}"
-      url = url.replace("{userId}", params["userId"] + "")
-
-      const configs: IRequestConfig = getConfigs("get", "application/json", url, options)
-
-      let data = null
-
-      configs.data = data
-      axios(configs, resolve, reject)
-    })
-  }
-  /**
-   * Delete user by id
-   */
-  delete(
-    params: {
-      /**  */
-      userId: string
-    } = {} as any,
-    options: IRequestOptions = {}
-  ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let url = basePath + "/user/{userId}"
-      url = url.replace("{userId}", params["userId"] + "")
-
-      const configs: IRequestConfig = getConfigs("delete", "application/json", url, options)
-
-      let data = null
 
       configs.data = data
       axios(configs, resolve, reject)
@@ -2439,6 +2439,9 @@ export interface Jurisdiction {
 
   /**  */
   languages: EnumJurisdictionLanguages[]
+
+  /**  */
+  partnerTerms?: string
 }
 
 export interface AmiChart {
@@ -3873,6 +3876,12 @@ export interface User {
   id: string
 
   /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3898,6 +3907,12 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
 }
 
 export interface UserCreate {
@@ -3958,6 +3973,12 @@ export interface UserBasic {
   id: string
 
   /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3983,6 +4004,12 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
 }
 
 export interface Email {
@@ -4200,6 +4227,9 @@ export interface JurisdictionCreate {
   languages: EnumJurisdictionCreateLanguages[]
 
   /**  */
+  partnerTerms?: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4224,6 +4254,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  partnerTerms?: string
 
   /**  */
   programs: Id[]
@@ -6194,6 +6227,7 @@ export enum EnumJurisdictionLanguages {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum IncomePeriod {
   "perMonth" = "perMonth",
@@ -6211,6 +6245,7 @@ export enum Language {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 
 export enum ApplicationSubmissionType {
@@ -6261,12 +6296,14 @@ export enum EnumJurisdictionCreateLanguages {
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum EnumJurisdictionUpdateLanguages {
   "en" = "en",
   "es" = "es",
   "vi" = "vi",
   "zh" = "zh",
+  "tl" = "tl",
 }
 export enum EnumListingFilterParamsComparison {
   "=" = "=",

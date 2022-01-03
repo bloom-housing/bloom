@@ -7,7 +7,6 @@ import {
   t,
   Button,
   debounce,
-  lRoute,
   LocalizedLink,
   AuthContext,
   SiteAlert,
@@ -166,7 +165,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/application/${applicationId}`))
+        void router.push(`/application/${applicationId}`)
       })
     }
 

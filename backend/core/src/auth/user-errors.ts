@@ -7,4 +7,5 @@ export const USER_ERRORS = {
   TOKEN_EXPIRED: { message: "tokenExpired", status: HttpStatus.BAD_REQUEST },
   TOKEN_MISSING: { message: "tokenMissing", status: HttpStatus.BAD_REQUEST },
   EMAIL_IN_USE: { message: "emailInUse", status: HttpStatus.BAD_REQUEST },
+  PASSWORD_OUTDATED: { message: "passwordOutdated", status: HttpStatus.UNAUTHORIZED },
 }

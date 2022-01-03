@@ -81,6 +81,16 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
+  postmarkByDateDateField?: {
+    month: string
+    day: string
+    year: string
+  }
+  postmarkByDateTimeField?: {
+    hours: string
+    minutes: string
+    period: TimeFieldPeriod
+  }
   arePaperAppsMailedToAnotherAddress?: YesNoAnswer
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer
@@ -251,6 +261,20 @@ const formatFormData = (
     data.applicationDueTimeField
   )
 
+  let postmarkByDateTimeFormatted = null
+
+  if (data.arePostmarksConsidered === YesNoAnswer.Yes && data.postmarkByDateDateField) {
+    const postmarkByDateFormatted = createDate(data.postmarkByDateDateField)
+    if (data.postmarkByDateTimeField?.hours) {
+      postmarkByDateTimeFormatted = createTime(
+        postmarkByDateFormatted,
+        data.postmarkByDateTimeField
+      )
+    } else {
+      postmarkByDateTimeFormatted = postmarkByDateFormatted
+    }
+  }
+
   units.forEach((unit) => {
     switch (unit.unitType?.name) {
       case "fourBdrm":
@@ -370,10 +394,7 @@ const formatFormData = (
       data.waitlistOpenSpots && data.waitlistOpenQuestion === YesNoAnswer.Yes
         ? Number(data.waitlistOpenSpots)
         : null,
-    postmarkedApplicationsReceivedByDate:
-      data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
-        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
-        : null,
+    postmarkedApplicationsReceivedByDate: postmarkByDateTimeFormatted,
     applicationDropOffAddressType:
       data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
       addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
@@ -482,6 +503,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
 
+  /**
+   * Save already-live modal
+   */
+  const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
+
   useEffect(() => {
     if (listing?.units) {
       const tempUnits = listing.units.map((unit, i) => ({
@@ -515,8 +541,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     status?: ListingStatus,
     newData?: Partial<FormListing>
   ) => {
-    if (confirm) {
-      setPublishModal(true)
+    if (confirm && status === ListingStatus.active) {
+      if (listing?.status === ListingStatus.active) {
+        setListingIsAlreadyLiveModal(true)
+      } else {
+        setPublishModal(true)
+      }
       return
     }
     let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
@@ -870,6 +900,39 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.publishThisListing")}
+      </Modal>
+
+      <Modal
+        open={listingIsAlreadyLiveModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.listingIsAlreadyLive")}
+        onClose={() => setListingIsAlreadyLiveModal(false)}
+        actions={[
+          <Button
+            id="saveAlreadyLiveListingButtonConfirm"
+            type="button"
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.active)
+            }}
+            dataTestId={"listingIsAlreadyLiveButton"}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.listingIsAlreadyLive")}
       </Modal>
     </>
   )

@@ -1,8 +1,6 @@
-import React, { useContext, useMemo, useCallback } from "react"
+import React, { useContext, useMemo } from "react"
 import moment from "moment"
-import { useFormContext } from "react-hook-form"
 import {
-  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -14,8 +12,8 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
-import { createDate } from "../../lib/helpers"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
@@ -34,8 +32,6 @@ const Aside = ({
   submitFormWithStatus,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues } = useFormContext() || {}
 
   const listingId = listing?.id
 
@@ -46,24 +42,6 @@ const Aside = ({
 
     return momentDate.format("MMMM DD, YYYY")
   }, [listing])
-
-  const saveAndExit = useCallback(() => {
-    const applicationDueDateField = getValues()?.applicationDueDateField
-    const applicationDueDateFormatted = createDate(applicationDueDateField)
-
-    const newStatus = (() => {
-      if (
-        listing.status === ListingStatus.closed &&
-        moment(applicationDueDateFormatted).isAfter()
-      ) {
-        return ListingStatus.active
-      }
-
-      return listing.status
-    })()
-
-    submitFormWithStatus(false, newStatus)
-  }, [getValues, listing, submitFormWithStatus])
 
   const actions = useMemo(() => {
     const elements = []
@@ -91,6 +69,7 @@ const Aside = ({
               fullWidth
               onClick={() => false}
               type="button"
+              dataTestId="listingEditButton"
             >
               {t("t.edit")}
             </Button>
@@ -133,7 +112,8 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => saveAndExit()}
+            onClick={() => submitFormWithStatus(true, listing.status)}
+            dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
           </Button>
@@ -256,7 +236,6 @@ const Aside = ({
   }, [
     listing,
     listingId,
-    saveAndExit,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,

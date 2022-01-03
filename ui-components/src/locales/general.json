@@ -127,7 +127,7 @@
       "displacedAddress": "Displaced Address"
     },
     "referralApplication": {
-      "instructions": "The permanent supportive housing units are referred directly through <COUNTY> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
+      "instructions": "The permanent supportive housing units are referred directly through <JURISDICTION> Coordinated Entry System. Households experiencing homelessness can call <PHONE_NUMBER> in order to get connected to an Access Point to learn more about the coordinated entry system and access housing-related resources and information.",
       "furtherInformation": "For further information",
       "phoneNumber": "211"
     },
@@ -831,7 +831,16 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "forgotPassword": "Forgot password?",
-      "success": "Welcome back, %{name}!"
+      "success": "Welcome back, %{name}!",
+      "passwordOutdated": "Your password has expired. Please reset your password.",
+      "accountHasBeenLocked": "For security reasons, this account has been locked.",
+      "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
+      "enterValidEmailAndPassword": "Please enter a valid email and password.",
+      "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
+      "partnersSignIn": "Partners Sign In",
+      "dontHaveAccount": "Don't have an account",
+      "enterLoginPassword": "Please enter your login password",
+      "enterLoginEmail": "Please enter your login email"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -843,6 +852,7 @@
       "firstName": "First Name",
       "middleNameOptional": "Middle Name (optional)",
       "middleName": "Middle Name",
+      "noAccount": "Don't have an account?",
       "lastName": "Last Name",
       "yourDateOfBirth": "Your Date of Birth",
       "email": "Email",
@@ -922,7 +932,7 @@
     "forGeneralQuestions": "For general program inquiries, you may call us at 000-000-0000.",
     "giveFeedback": "Give Feedback",
     "privacyPolicy": "Privacy Policy",
-    "copyright": "Demonstration County © 2020 • All Rights Reserved"
+    "copyright": "Demonstration Jurisdiction © 2021 • All Rights Reserved"
   },
   "housingCounselors": {
     "subtitle": "Talk with a local housing counselor specific to your needs.",
@@ -934,7 +944,8 @@
     "en": "English",
     "es": "Español",
     "zh": "中文",
-    "vi": "Tiếng Việt"
+    "vi": "Tiếng Việt",
+    "tl": "Tagalog"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
@@ -1097,6 +1108,7 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "pickupAddress": "Pickup Address",
     "postmarkByDate": "Postmark by Date",
+    "postmarkByTime": "Postmark by Time",
     "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
@@ -1316,7 +1328,8 @@
     },
     "units": "Listing Units",
     "unitsDescription": "Select the building units that are available through the listing.",
-    "unitTypesOrIndividual": "Do you want to show unit types or individual units?"
+    "unitTypesOrIndividual": "Do you want to show unit types or individual units?",
+    "listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal."
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",

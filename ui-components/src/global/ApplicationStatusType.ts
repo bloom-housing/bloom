@@ -3,4 +3,5 @@ export enum ApplicationStatusType {
   Closed,
   PreLottery,
   PostLottery,
+  Matched,
 }

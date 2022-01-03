@@ -4,15 +4,16 @@ import {
   Listing,
   ListingReviewOrder,
   UnitsSummarized,
+  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   t,
   ListingCard,
-  imageUrlFromListing,
   ApplicationStatusType,
   getSummariesTable,
   StatusBarType,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -57,7 +58,10 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
     formattedDate = openDate.format("MMM. D, YYYY")
     content = t("listings.applicationOpenPeriod")
   } else {
-    if (listing.applicationDueDate) {
+    if (listing.status === ListingStatus.closed) {
+      appStatus = ApplicationStatusType.Closed
+      content = t("listings.applicationsClosed")
+    } else if (listing.applicationDueDate) {
       const dueDate = moment(listing.applicationDueDate)
       const dueTime = moment(listing.applicationDueTime)
       formattedDate = dueDate.format("MMM. DD, YYYY")

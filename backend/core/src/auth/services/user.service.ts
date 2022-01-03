@@ -66,6 +66,15 @@ export class UserService {
     })
   }
 
+  public static isPasswordOutdated(user: User) {
+    return (
+      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
+        new Date() &&
+      user.roles &&
+      (user.roles.isAdmin || user.roles.isPartner)
+    )
+  }
+
   public async findOneOrFail(options: FindConditions<User>) {
     const user = await this.find(options)
     if (!user) {
@@ -113,16 +122,18 @@ export class UserService {
     }
 
     let passwordHash
+    let passwordUpdatedAt
     if (dto.password) {
       if (!dto.currentPassword) {
         // Validation is handled at DTO definition level
         throw new BadRequestException()
       }
-      if (!(await this.passwordService.verifyUserPassword(user, dto.currentPassword))) {
+      if (!(await this.passwordService.isPasswordValid(user, dto.currentPassword))) {
         throw new UnauthorizedException("invalidPassword")
       }
 
       passwordHash = await this.passwordService.passwordToHash(dto.password)
+      passwordUpdatedAt = new Date()
       delete dto.password
     }
 
@@ -152,6 +163,7 @@ export class UserService {
     assignDefined(user, {
       ...dto,
       passwordHash,
+      passwordUpdatedAt,
     })
 
     return await this.userRepository.save(user)
@@ -176,6 +188,7 @@ export class UserService {
 
     if (dto.password) {
       user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+      user.passwordUpdatedAt = new Date()
     }
 
     try {
@@ -317,6 +330,7 @@ export class UserService {
     }
 
     user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+    user.passwordUpdatedAt = new Date()
     user.resetToken = null
     await this.userRepository.save(user)
     return this.authService.generateAccessToken(user)

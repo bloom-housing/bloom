@@ -28,6 +28,7 @@ export type TimeFieldProps = {
   required?: boolean
   watch: UseFormMethods["watch"]
   seconds?: boolean
+  dataTestId?: string
 }
 
 export const formatDateToTimeField = (date: Date) => {
@@ -54,6 +55,7 @@ const TimeField = ({
   seconds,
   defaultValues,
   disabled,
+  dataTestId,
 }: TimeFieldProps) => {
   const fieldName = (baseName: string) => {
     return [name, baseName].filter((item) => item).join(".")
@@ -99,6 +101,7 @@ const TimeField = ({
           register={register}
           describedBy={`${id}-error`}
           disabled={disabled}
+          dataTestId={dataTestId ? `${dataTestId}-hours` : undefined}
         />
 
         <Field
@@ -122,6 +125,7 @@ const TimeField = ({
           register={register}
           describedBy={`${id}-error`}
           disabled={disabled}
+          dataTestId={dataTestId ? `${dataTestId}-minutes` : undefined}
         />
 
         {seconds && (
@@ -146,6 +150,7 @@ const TimeField = ({
             register={register}
             describedBy={`${id}-error`}
             disabled={disabled}
+            dataTestId={dataTestId ? `${dataTestId}-seconds` : undefined}
           />
         )}
 
@@ -161,6 +166,7 @@ const TimeField = ({
           error={error}
           describedBy={`${id}-error`}
           disabled={disabled}
+          dataTestId={dataTestId ? `${dataTestId}-period` : undefined}
         />
       </div>
 

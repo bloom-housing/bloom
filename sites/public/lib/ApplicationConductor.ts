@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -13,19 +13,6 @@ import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
 import ProgramsStep from "./ProgramsStep"
-
-export const loadApplicationFromAutosave = () => {
-  if (typeof window != "undefined") {
-    const autosavedApplication = window.sessionStorage.getItem("bloom-app-autosave")
-    if (autosavedApplication) {
-      const application = JSON.parse(autosavedApplication)
-      application.loaded = true
-      return application
-    }
-  }
-
-  return null
-}
 
 export const loadSavedListing = () => {
   if (typeof window != "undefined") {
@@ -84,15 +71,15 @@ export default class ApplicationConductor {
     adaHouseholdMembers: {
       url: "/applications/household/ada",
     },
-    programs: {
-      url: "/applications/household/programs",
-      definition: ProgramsStep,
-    },
     householdChanges: {
       url: "/applications/household/changes",
     },
     householdStudent: {
       url: "/applications/household/student",
+    },
+    programs: {
+      url: "/applications/household/programs",
+      definition: ProgramsStep,
     },
     vouchersSubsidies: {
       url: "/applications/financial/vouchers",
@@ -194,7 +181,6 @@ export default class ApplicationConductor {
     // NOTE: had to remove timeout because of Next doing full-page reloads in
     // some cases. Need to revisit after upgrading to v10
     if (typeof window != "undefined") {
-      window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
       if (this.listing) {
         window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
       }
@@ -202,11 +188,10 @@ export default class ApplicationConductor {
   }
 
   reset() {
-    this.application = blankApplication()
+    this.application = { ...blankApplication }
     this.listing = {} as Listing
-
+    this.currentStepIndex = 0
     if (typeof window != "undefined") {
-      window.sessionStorage.removeItem("bloom-app-autosave")
       window.sessionStorage.removeItem("bloom-app-listing")
     }
   }

@@ -2,7 +2,6 @@
   "extends": "../tsconfig.json" /* TODO: is this worth connecting? */,
   "compilerOptions": {
     "outDir": "build/lib",
-    // "module": "es2015",
     "module": "esnext",
     "esModuleInterop": true,
     "target": "es5",
