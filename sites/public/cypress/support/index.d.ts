@@ -2,8 +2,8 @@ declare namespace Cypress {
   type Application = import("@bloom-housing/backend-core/types").Application
 
   interface Chainable {
-    beginApplication(listingName: string): Chainable
     beginApplicationRejectAutofill(listingName: string): Chainable
+    beginApplicationSignedIn(listingName: string): Chainable
     checkErrorAlert(command: string): Chainable
     checkErrorMessages(command: string): Chainable
     getByTestId(testId: string): Chainable<Element>
@@ -30,6 +30,6 @@ declare namespace Cypress {
     step17Demographics(application: Application): Chainable
     step18Summary(application: Application): Chainable
     step19TermsAndSubmit(application: Application): Chainable
-    submitApplication(listingName: string, application: Application, autofill?: boolean)
+    submitApplication(listingName: string, application: Application, signedIn: boolean)
   }
 }

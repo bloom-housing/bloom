@@ -83,7 +83,7 @@ const ApplicationName = () => {
         )}
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group border-b">
+          <div className="form-card__group border-b" data-test-id={"application-initial-page"}>
             <fieldset>
               <legend className="field-label--caps">
                 {t("application.name.yourName")}
