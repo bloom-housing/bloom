@@ -30,15 +30,18 @@ describe("Jurisdictions", () => {
 
   beforeAll(async () => {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    const testEmailService = { confirmation: async () => {} }
+    const testEmailService = {
+      confirmation: async () => {
+      }
+    }
     /* eslint-enable @typescript-eslint/no-empty-function */
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
         AuthModule,
         JurisdictionsModule,
-        TypeOrmModule.forFeature([Preference, Program]),
-      ],
+        TypeOrmModule.forFeature([Preference, Program])
+      ]
     })
       .overrideProvider(EmailService)
       .useValue(testEmailService)
@@ -64,13 +67,13 @@ describe("Jurisdictions", () => {
       title: "TestTitle",
       subtitle: "TestSubtitle",
       description: "TestDescription",
-      links: [],
+      links: []
     })
     const newProgram = await programsRepository.save({
       question: "TestQuestion",
       subtitle: "TestSubtitle",
       description: "TestDescription",
-      subdescription: "TestDescription",
+      subdescription: "TestDescription"
     })
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
@@ -80,8 +83,10 @@ describe("Jurisdictions", () => {
         languages: [Language.en],
         preferences: [newPreference],
         programs: [newProgram],
+        publicUrl: ""
       })
       .expect(201)
+      
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
     expect(res.body).toHaveProperty("updatedAt")
@@ -108,8 +113,8 @@ describe("Jurisdictions", () => {
     const res = await supertest(app.getHttpServer())
       .post(`/jurisdictions`)
       .set(...setAuthorization(adminAccesstoken))
-      .send({ name: "test2", languages: [Language.en], preferences: [] })
-      .send({ name: "test2", programs: [], languages: [Language.en], preferences: [] })
+      .send({ name: "test2", languages: [Language.en], preferences: [], publicUrl: "" })
+      .send({ name: "test2", programs: [], languages: [Language.en], preferences: [], publicUrl: "" })
       .expect(201)
     expect(res.body).toHaveProperty("id")
     expect(res.body).toHaveProperty("createdAt")
