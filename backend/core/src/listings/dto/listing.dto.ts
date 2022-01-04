@@ -11,7 +11,7 @@ import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/rese
 import { AssetDto } from "../../assets/dto/asset.dto"
 import { ListingEventDto } from "./listing-event.dto"
 import { listingUrlSlug } from "../../shared/url-helper"
-import { IdNameDto } from "../../shared/dto/idName.dto"
+import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
@@ -108,8 +108,8 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdNameDto)
-  jurisdiction: IdNameDto
+  @Type(() => JurisdictionSlimDto)
+  jurisdiction: JurisdictionSlimDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
