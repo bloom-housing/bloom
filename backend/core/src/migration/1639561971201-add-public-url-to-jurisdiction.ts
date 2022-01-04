@@ -39,7 +39,7 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
       if (sanMateoJurisdiction) {
         sanMateoJurisdiction.public_url = "https://smc.housingbayarea.org"
       }
-    } else if (process.env.PARTNERS_PORTAL_URL === "https://dev-partners-bloom.netlify.app"){
+    } else if (process.env.PARTNERS_PORTAL_URL === "https://dev-partners-bloom.netlify.app") {
       // dev
       if (alamedaJurisdiction) {
         alamedaJurisdiction.public_url = "https://dev-bloom.netlify.app"
@@ -53,7 +53,7 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
       if (detroitJurisdiction) {
         detroitJurisdiction.public_url = "https://detroit-public-dev.netlify.app"
       }
-    } else if (process.env.PARTNERS_PORTAL_URL === "http://localhost:3001"){
+    } else if (process.env.PARTNERS_PORTAL_URL === "http://localhost:3001") {
       // local
       if (alamedaJurisdiction) {
         alamedaJurisdiction.public_url = "http://localhost:3000"
