@@ -70,6 +70,7 @@
   },
   "dependencies": {
     "@bloom-housing/backend-core": "^3.0.2-alpha.10",
+    "@bloom-housing/shared-helpers": "4.0.1-alpha.13",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
