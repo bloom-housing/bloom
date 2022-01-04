@@ -56,7 +56,7 @@ type ListingFormProps = {
   editMode?: boolean
 }
 
-/* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines, max-lines-per-function */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const defaultValues = editMode ? listing : formDefaults
