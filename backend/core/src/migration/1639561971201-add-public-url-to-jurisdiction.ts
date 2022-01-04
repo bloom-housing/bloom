@@ -19,21 +19,53 @@ export class addPublicUrlToJurisdiction1639561971201 implements MigrationInterfa
 
     if (process.env.PARTNERS_PORTAL_URL === "https://partners.housingbayarea.bloom.exygy.dev") {
       // staging
-      alamedaJurisdiction.public_url = "https://ala.bloom.exygy.dev"
-      sanJoseJurisdiction.public_url = "https://sj.bloom.exygy.dev"
-      sanMateoJurisdiction.public_url = "https://smc.bloom.exygy.dev"
+      if (alamedaJurisdiction) {
+        alamedaJurisdiction.public_url = "https://ala.bloom.exygy.dev"
+      }
+      if (sanJoseJurisdiction) {
+        sanJoseJurisdiction.public_url = "https://sj.bloom.exygy.dev"
+      }
+      if (sanMateoJurisdiction) {
+        sanMateoJurisdiction.public_url = "https://smc.bloom.exygy.dev"
+      }
     } else if (process.env.PARTNERS_PORTAL_URL === "https://partners.housingbayarea.org") {
       // production
-      alamedaJurisdiction.public_url = "https://housing.acgov.org"
-      sanJoseJurisdiction.public_url = "https://housing.sanjoseca.gov"
-      sanMateoJurisdiction.public_url = "https://smc.housingbayarea.org"
-    } else {
-      // local and dev
-      alamedaJurisdiction.public_url = "https://dev-bloom.netlify.app"
-      sanJoseJurisdiction.public_url = "https://dev-bloom.netlify.app"
-      sanMateoJurisdiction.public_url = "https://dev-bloom.netlify.app"
+      if (alamedaJurisdiction) {
+        alamedaJurisdiction.public_url = "https://housing.acgov.org"
+      }
+      if (sanJoseJurisdiction) {
+        sanJoseJurisdiction.public_url = "https://housing.sanjoseca.gov"
+      }
+      if (sanMateoJurisdiction) {
+        sanMateoJurisdiction.public_url = "https://smc.housingbayarea.org"
+      }
+    } else if (process.env.PARTNERS_PORTAL_URL === "https://dev-partners-bloom.netlify.app"){
+      // dev
+      if (alamedaJurisdiction) {
+        alamedaJurisdiction.public_url = "https://dev-bloom.netlify.app"
+      }
+      if (sanJoseJurisdiction) {
+        sanJoseJurisdiction.public_url = "https://dev-bloom.netlify.app"
+      }
+      if (sanMateoJurisdiction) {
+        sanMateoJurisdiction.public_url = "https://dev-bloom.netlify.app"
+      }
       if (detroitJurisdiction) {
         detroitJurisdiction.public_url = "https://detroit-public-dev.netlify.app"
+      }
+    } else if (process.env.PARTNERS_PORTAL_URL === "http://localhost:3001"){
+      // local
+      if (alamedaJurisdiction) {
+        alamedaJurisdiction.public_url = "http://localhost:3000"
+      }
+      if (sanJoseJurisdiction) {
+        sanJoseJurisdiction.public_url = "http://localhost:3000"
+      }
+      if (sanMateoJurisdiction) {
+        sanMateoJurisdiction.public_url = "http://localhost:3000"
+      }
+      if (detroitJurisdiction) {
+        detroitJurisdiction.public_url = "http://localhost:3000"
       }
     }
 
