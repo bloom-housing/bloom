@@ -66,5 +66,11 @@
   "workAddress.zipCode": "n/a",
   "adaPriorities": "No",
   "annualIncome": "n/a",
-  "applicationType": "Paper"
+  "applicationType": "Paper",
+  "mailingAddress.street": "2325 w example trail",
+  "mailingAddress.street2": "test",
+  "mailingAddress.city": "San Francisco",
+  "mailingAddress.state": "California",
+  "mailingAddress.stateCode": "CA",
+  "mailingAddress.zipCode": "85755"
 }

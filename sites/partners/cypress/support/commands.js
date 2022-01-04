@@ -57,6 +57,32 @@ Cypress.Commands.add("verifyAlertBox", () => {
   )
 })
 
+const fillFields = (application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip) => {
+  if (fieldsToType.length) {
+    fieldsToType
+      .filter(({ id }) => !fieldsToSkip.includes(id))
+      .forEach(({ id, fieldKey }) => {
+        cy.getByID(id).type(application[fieldKey])
+      })
+  }
+
+  if (fieldsToSelect.length) {
+    fieldsToSelect
+      .filter(({ id }) => !fieldsToSkip.includes(id))
+      .forEach(({ id, fieldKey }) => {
+        cy.getByID(id).select(application[fieldKey])
+      })
+  }
+
+  if (fieldsToClick.length) {
+    fieldsToClick
+      .filter(({ id }) => !fieldsToSkip.includes(id))
+      .forEach(({ fieldKey }) => {
+        cy.getByID(fieldKey).click()
+      })
+  }
+}
+
 Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) => {
   const fieldsToType = [
     { id: "application.applicant.firstName", fieldKey: "applicant.firstName" },
@@ -72,14 +98,14 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
     { id: "application.applicant.address.street2", fieldKey: "applicant.address.street2" },
     { id: "application.applicant.address.city", fieldKey: "applicant.address.city" },
     { id: "application.applicant.address.zipCode", fieldKey: "applicant.address.zipCode" },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
   const fieldsToSelect = [
     { id: "application.language", fieldKey: "language" },
     { id: "application.applicant.phoneNumberType", fieldKey: "applicant.phoneNumberType" },
     { id: "application.additionalPhoneNumberType", fieldKey: "additionalPhoneNumberType" },
     { id: "application.applicant.address.state", fieldKey: "applicant.address.state" },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
   const fieldsToClick = [
     {
@@ -87,17 +113,9 @@ Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) =>
       fieldKey: `application.applicant.workInRegion${application["applicant.workInRegion"]}`,
     },
     { id: "email", fieldKey: "email" },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
-  fieldsToType.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).type(application[fieldKey])
-  })
-  fieldsToSelect.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).select(application[fieldKey])
-  })
-  fieldsToClick.forEach(({ fieldKey }) => {
-    cy.getByID(fieldKey).click()
-  })
+  fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
 })
 
 Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) => {
@@ -123,7 +141,7 @@ Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) =>
       id: "application.alternateContact.mailingAddress.zipCode",
       fieldKey: "alternateContact.mailingAddress.zipCode",
     },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
   const fieldsToSelect = [
     { id: "application.alternateContact.type", fieldKey: "alternateContact.type" },
@@ -131,14 +149,9 @@ Cypress.Commands.add("fillAlternateContact", (application, fieldsToSkip = []) =>
       id: "application.alternateContact.mailingAddress.state",
       fieldKey: "alternateContact.mailingAddress.state",
     },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
-  fieldsToType.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).type(application[fieldKey])
-  })
-  fieldsToSelect.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).select(application[fieldKey])
-  })
+  fillFields(application, fieldsToType, fieldsToSelect, [], fieldsToSkip)
 })
 
 Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => {
@@ -148,11 +161,9 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
     { id: "firstName", fieldKey: "firstName" },
     { id: "middleName", fieldKey: "middleName" },
     { id: "lastName", fieldKey: "lastName" },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
-  const fieldsToSelect = [{ id: "relationship", fieldKey: "relationship" }].filter(
-    ({ id }) => !fieldsToSkip.includes(id)
-  )
+  const fieldsToSelect = [{ id: "relationship", fieldKey: "relationship" }]
 
   const fieldsToClick = [
     {
@@ -160,11 +171,9 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
       fieldKey: `sameAddress${application["sameAddress"]}`,
     },
     { id: "workInRegion", fieldKey: `workInRegion${application["workInRegion"]}` },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
+  ]
 
-  fieldsToType.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).type(application[fieldKey])
-  })
+  fillFields(application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip)
 
   if (!fieldsToSkip.includes("dob-field-month")) {
     cy.getByTestId("dob-field-month").eq(1).type(application["dob-field-month"])
@@ -176,12 +185,6 @@ Cypress.Commands.add("fillHouseholdMember", (application, fieldsToSkip = []) => 
     cy.getByTestId("dob-field-year").eq(1).type(application["dob-field-year"])
   }
 
-  fieldsToSelect.forEach(({ id, fieldKey }) => {
-    cy.getByID(id).select(application[fieldKey])
-  })
-  fieldsToClick.forEach(({ fieldKey }) => {
-    cy.getByID(fieldKey).click()
-  })
   cy.getByTestId("submitAddMemberForm").click()
 })
 
@@ -195,10 +198,8 @@ Cypress.Commands.add("fillHouseholdDetails", (application, fieldsToSkip = []) =>
       id: "application.householdStudent",
       fieldKey: `application.householdStudent${application["householdStudent"]}`,
     },
-  ].filter(({ id }) => !fieldsToSkip.includes(id))
-  fieldsToClick.forEach(({ fieldKey }) => {
-    cy.getByID(fieldKey).click()
-  })
+  ]
+  fillFields(application, [], [], fieldsToClick, fieldsToSkip)
   cy.getByTestId(`preferredUnit.${application["preferredUnit"]}`).click()
 })
 
@@ -208,6 +209,8 @@ Cypress.Commands.add("fillHouseholdIncome", (application, fieldsToSkip = []) => 
   }
   if (!fieldsToSkip.includes("incomeMonth")) {
     cy.getByID("incomeMonth").type(application["incomeMonth"])
+  } else if (!fieldsToSkip.includes("incomeYear")) {
+    cy.getByID("incomeYear").type(application["incomeYear"])
   }
   if (!fieldsToSkip.includes("application.incomeVouchers")) {
     cy.getByID("application.incomeVouchers").select(application["incomeVouchers"])
@@ -224,6 +227,23 @@ Cypress.Commands.add("fillDemographics", (application, fieldsToSkip = []) => {
   if (!fieldsToSkip.includes("jurisdictionWebsite")) {
     cy.getByID("jurisdictionWebsite").click()
   }
+})
+
+Cypress.Commands.add("fillMailingAddress", (application, fieldsToSkip = []) => {
+  cy.getByID("application.sendMailToMailingAddress").click()
+
+  const fieldsToType = [
+    { id: "application.mailingAddress.street", fieldKey: "mailingAddress.street" },
+    { id: "application.mailingAddress.street2", fieldKey: "mailingAddress.street2" },
+    { id: "application.mailingAddress.city", fieldKey: "mailingAddress.city" },
+    { id: "application.mailingAddress.zipCode", fieldKey: "mailingAddress.zipCode" },
+  ]
+
+  const fieldsToSelect = [
+    { id: "application.mailingAddress.state", fieldKey: "mailingAddress.state" },
+  ]
+
+  fillFields(application, fieldsToType, fieldsToSelect, [], fieldsToSkip)
 })
 
 Cypress.Commands.add("fillTerms", (application, submit) => {
@@ -269,11 +289,11 @@ Cypress.Commands.add("verifyPrimaryApplicant", (application, fieldsToSkip = []) 
     { id: "residenceAddress.city", fieldKey: "applicant.address.city" },
     { id: "residenceAddress.state", fieldKey: "applicant.address.stateCode" },
     { id: "residenceAddress.zipCode", fieldKey: "applicant.address.zipCode" },
-    { id: "mailingAddress.streetAddress", fieldKey: "applicant.address.street" },
-    { id: "mailingAddress.street2", fieldKey: "applicant.address.street2" },
-    { id: "mailingAddress.city", fieldKey: "applicant.address.city" },
-    { id: "mailingAddress.state", fieldKey: "applicant.address.stateCode" },
-    { id: "mailingAddress.zipCode", fieldKey: "applicant.address.zipCode" },
+    { id: "mailingAddress.streetAddress", fieldKey: "mailingAddress.street" },
+    { id: "mailingAddress.street2", fieldKey: "mailingAddress.street2" },
+    { id: "mailingAddress.city", fieldKey: "mailingAddress.city" },
+    { id: "mailingAddress.state", fieldKey: "mailingAddress.stateCode" },
+    { id: "mailingAddress.zipCode", fieldKey: "mailingAddress.zipCode" },
     { id: "workAddress.streetAddress", fieldKey: "workAddress.streetAddress" },
     { id: "workAddress.street2", fieldKey: "workAddress.street2" },
     { id: "workAddress.city", fieldKey: "workAddress.city" },

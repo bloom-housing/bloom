@@ -46,4 +46,21 @@ describe("Paper Application Tests", () => {
       cy.verifyTerms(application)
     })
   })
+
+  it("submit different data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("partialApplicationA").then((application) => {
+      cy.fillMailingAddress(application)
+      cy.fillHouseholdIncome(application, ["incomeMonth"])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
 })
