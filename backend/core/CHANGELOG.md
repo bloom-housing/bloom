@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.9...@bloom-housing/backend-core@3.0.2-alpha.10) (2022-01-04)
+
+
+### Bug Fixes
+
+* fix sortig on applications partner grid ([f097037](https://github.com/bloom-housing/bloom/commit/f097037afd896eec8bb90cc5e2de07f222907870))
+* fixes linting error ([aaaf858](https://github.com/bloom-housing/bloom/commit/aaaf85822e3b03224fb336bae66209a2b6b88d1d))
+* fixes some issues with the deployment ([a0042ba](https://github.com/bloom-housing/bloom/commit/a0042badc5474dde413e41a7f4f84c8ee7b2f8f1))
+* fixes tests and also issue with user grid ([da07ba4](https://github.com/bloom-housing/bloom/commit/da07ba49459f77fe77e3f72555eb50a0cbaab095))
+
+
+
+
+
 ## [3.0.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.8...@bloom-housing/backend-core@3.0.2-alpha.9) (2022-01-04)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
