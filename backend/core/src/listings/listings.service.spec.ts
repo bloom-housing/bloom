@@ -14,6 +14,7 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { getQueueToken } from "@nestjs/bull"
 import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateType } from "./listings-notifications"
+import { ListingUpdateDto } from "./dto/listing-update.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -91,15 +92,18 @@ const mockQueryBuilder = {
   leftJoin: jest.fn().mockReturnThis(),
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   getMany: jest.fn().mockReturnValue(mockListings),
+  getOne: jest.fn(),
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
   create: jest.fn(),
+  save: jest.fn(),
 }
 const mockListingsCreateDto: ListingCreateDto = {
   applicationMethods: [],
@@ -113,6 +117,28 @@ const mockListingsCreateDto: ListingCreateDto = {
   assets: [],
   name: null,
   status: null,
+  displayWaitlistSize: false,
+  CSVFormattingType: null,
+  hasId: null,
+  save: jest.fn(),
+  remove: jest.fn(),
+  softRemove: jest.fn(),
+  recover: jest.fn(),
+  reload: jest.fn(),
+}
+const mockListingsUpdateDto: ListingUpdateDto = {
+  applicationMethods: [],
+  preferences: [],
+  applicationDropOffAddress: null,
+  applicationMailingAddress: null,
+  events: [],
+  units: [],
+  unitsSummary: [],
+  buildingAddress: null,
+  jurisdiction: null,
+  assets: [],
+  name: null,
+  status: ListingStatus.pending,
   displayWaitlistSize: false,
   CSVFormattingType: null,
   hasId: null,
@@ -517,7 +543,7 @@ describe("ListingsService", () => {
     })
   })
 
-  describe("createListing", () => {
+  describe("listing notifications", () => {
     it("should trigger a notification upon new listing creation", async () => {
       const mockSavedListing = { id: "some fake ID" }
       const mockCreatedListing = { save: jest.fn().mockReturnValue(mockSavedListing) }
@@ -530,6 +556,61 @@ describe("ListingsService", () => {
         listing: mockSavedListing,
         updateType: ListingUpdateType.CREATE,
       })
+    })
+
+    it("should trigger a notification when a listing is updated from 'pending' to 'active'", async () => {
+      // Simulate the DB lookup retrieving the already-existing listing, with status 'pending'.
+      mockQueryBuilder.getOne.mockReturnValueOnce({
+        id: "mock-listing-id",
+        property: { id: "mock-property-id" },
+        status: ListingStatus.pending,
+      })
+
+      // Simulate the new saved listing having status 'active'.
+      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.active }
+      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
+
+      await service.update(mockListingsUpdateDto)
+
+      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(1)
+      expect(mockListingsNotificationsQueue.add).toHaveBeenLastCalledWith({
+        listing: mockSavedListing,
+        updateType: ListingUpdateType.MODIFY,
+      })
+    })
+
+    it("should not trigger a notification when a listing is updated but the status is 'active' before and after", async () => {
+      // Simulate the DB lookup retrieving the already-existing listing, with status 'active'.
+      mockQueryBuilder.getOne.mockReturnValueOnce({
+        id: "mock-listing-id",
+        property: { id: "mock-property-id" },
+        status: ListingStatus.active,
+      })
+
+      // Simulate the new saved listing having status 'active'.
+      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.active }
+      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
+
+      await service.update(mockListingsUpdateDto)
+
+      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(0)
+    })
+
+    it("should not trigger a notification when a listing is updated from 'closed' to 'pending'", async () => {
+      // Simulate the DB lookup retrieving the already-existing listing, with status 'closed'.
+      mockQueryBuilder.getOne.mockReturnValueOnce({
+        id: "mock-listing-id",
+        property: { id: "mock-property-id" },
+        status: ListingStatus.closed,
+      })
+
+      // Simulate the new saved listing having status 'pending'.
+      const mockSavedListing = { id: "mock-listing-id", status: ListingStatus.pending }
+      mockListingsRepo.save.mockReturnValueOnce(mockSavedListing)
+
+      await service.update(mockListingsUpdateDto)
+
+      expect(mockListingsNotificationsQueue.add).toHaveBeenCalledTimes(0)
     })
   })
 })

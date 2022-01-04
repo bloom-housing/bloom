@@ -22,6 +22,7 @@ import { Queue } from "bull"
 import { InjectQueue } from "@nestjs/bull"
 import { ListingNotificationInfo, ListingUpdateType } from "./listings-notifications"
 import { mapTo } from "../../src/shared/mapTo"
+import { ListingStatus } from "./types/listing-status-enum"
 
 @Injectable()
 export class ListingsService {
@@ -173,6 +174,7 @@ export class ListingsService {
     const qb = this.getFullyJoinedQueryBuilder()
     qb.where("listings.id = :id", { id: listingDto.id })
     const listing = await qb.getOne()
+    const previousListingStatus: ListingStatus = listing.status
 
     if (!listing) {
       throw new NotFoundException()
@@ -202,7 +204,15 @@ export class ListingsService {
       ),
     })
 
-    return await this.listingRepository.save(listing)
+    const saveResult: Listing = await this.listingRepository.save(listing)
+    const newListingStatus: ListingStatus = saveResult.status
+    if (newListingStatus !== previousListingStatus && newListingStatus === ListingStatus.active) {
+      await this.listingsNotificationsQueue.add({
+        listing: saveResult,
+        updateType: ListingUpdateType.MODIFY,
+      })
+    }
+    return saveResult
   }
 
   async delete(listingId: string) {
