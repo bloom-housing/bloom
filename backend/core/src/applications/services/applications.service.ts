@@ -75,50 +75,35 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    if (!params.listingId) {
-      const qb = this._getQb(params)
-      const result = await paginate(qb, {
-        limit: params.limit,
-        page: params.page,
-        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
+    const qb = this._getQb(params, params.listingId ? "partnerList" : undefined)
+
+    const applicationIDQB = this._getQb(params, params.listingId ? "partnerList" : undefined, false)
+    applicationIDQB.select("application.id")
+    applicationIDQB.groupBy("application.id")
+    if (params.orderBy) {
+      applicationIDQB.addSelect(params.orderBy)
+      applicationIDQB.addGroupBy(params.orderBy)
+    }
+    const applicationIDResult = await paginate<Application>(applicationIDQB, {
+      limit: params.limit,
+      page: params.page,
+      paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
+    })
+
+    qb.andWhere("application.id IN (:...applicationIDs)", {
+      applicationIDs: applicationIDResult.items.map((elem) => elem.id),
+    })
+
+    const result = await qb.getMany()
+
+    await Promise.all(
+      result.map(async (application) => {
+        await this.authorizeUserAction(this.req.user, application, authzActions.read)
       })
-      await Promise.all(
-        result.items.map(async (application) => {
-          await this.authorizeUserAction(this.req.user, application, authzActions.read)
-        })
-      )
-      return result
-    } else {
-      const qb = this._getQb(params, "partnerList")
-
-      const applicationIDQB = this._getQb(params, "partnerList", false)
-      applicationIDQB.select("application.id")
-      applicationIDQB.groupBy("application.id")
-      if (params.orderBy) {
-        applicationIDQB.addSelect(params.orderBy)
-        applicationIDQB.addGroupBy(params.orderBy)
-      }
-      const applicationIDResult = await paginate<Application>(applicationIDQB, {
-        limit: params.limit,
-        page: params.page,
-        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
-      })
-
-      qb.andWhere("application.id IN (:...applicationIDs)", {
-        applicationIDs: applicationIDResult.items.map((elem) => elem.id),
-      })
-
-      const result = await qb.getMany()
-
-      await Promise.all(
-        result.map(async (application) => {
-          await this.authorizeUserAction(this.req.user, application, authzActions.read)
-        })
-      )
-      return {
-        ...applicationIDResult,
-        items: result,
-      }
+    )
+    return {
+      ...applicationIDResult,
+      items: result,
     }
   }
 
