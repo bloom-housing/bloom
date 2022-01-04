@@ -1,7 +1,6 @@
 import React from "react"
 import "./Modal.scss"
 import { Icon } from "../icons/Icon"
-import { GridCell, GridSection } from "../sections/GridSection"
 import { Overlay, OverlayProps } from "./Overlay"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {

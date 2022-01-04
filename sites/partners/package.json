@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/partners",
-  "version": "3.0.1-alpha.66",
+  "version": "4.0.1-alpha.11",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Partners app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -15,6 +15,7 @@
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
+    "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "export": "next export",
     "start": "next start",
     "dev:listings": "cd ../../backend/core && yarn dev",
@@ -22,9 +23,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^3.0.1-alpha.40",
-    "@bloom-housing/shared-helpers": "^3.0.1-alpha.47",
-    "@bloom-housing/ui-components": "^3.0.1-alpha.48",
+    "@bloom-housing/backend-core": "^3.0.2-alpha.8",
+    "@bloom-housing/shared-helpers": "^4.0.1-alpha.11",
+    "@bloom-housing/ui-components": "^4.0.1-alpha.11",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "ag-grid-community": "^26.0.0",
     "ag-grid-react": "^26.0.0",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
+    "@cypress/code-coverage": "^3.9.12",
     "@cypress/webpack-preprocessor": "^5.4.6",
     "@next/bundle-analyzer": "^10.1.0",
     "@types/mapbox__mapbox-sdk": "^0.13.2",
@@ -58,6 +60,7 @@
     "cypress-file-upload": "^5.0.8",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^8.0.0",
+    "nyc": "^15.1.0",
     "postcss": "^8.3.6",
     "sass-loader": "^10.0.3",
     "typescript": "^3.9.7",

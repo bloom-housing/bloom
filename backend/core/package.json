@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.1-alpha.40",
+  "version": "3.0.2-alpha.8",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
@@ -126,5 +126,5 @@
     "node": "14",
     "yarn": "^1.22"
   },
-  "gitHead": "5f7694e3f2baff2a1a7a22e0676e487dda781a3e"
+  "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
 }

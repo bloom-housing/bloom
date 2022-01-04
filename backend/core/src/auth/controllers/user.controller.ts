@@ -42,6 +42,7 @@ import { authzActions } from "../enum/authz-actions.enum"
 import { UserCreateQueryParams } from "../dto/user-create-query-params"
 import { UserFilterParams } from "../dto/user-filter-params"
 import { DefaultAuthGuard } from "../guards/default.guard"
+import { UserProfileAuthzGuard } from "../guards/user-profile-authz.guard"
 import { ActivityLogInterceptor } from "../../activity-log/interceptors/activity-log.interceptor"
 
 @Controller("user")
@@ -53,7 +54,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(DefaultAuthGuard, AuthzGuard)
+  @UseGuards(DefaultAuthGuard, UserProfileAuthzGuard)
   profile(@Request() req): UserDto {
     return mapTo(UserDto, req.user)
   }
@@ -100,7 +101,6 @@ export class UserController {
 
   @Put("update-password")
   @ApiOperation({ summary: "Update Password", operationId: "update-password" })
-  @UseInterceptors(ActivityLogInterceptor)
   async updatePassword(@Body() dto: UpdatePasswordDto): Promise<LoginResponseDto> {
     const accessToken = await this.userService.updatePassword(dto)
     return mapTo(LoginResponseDto, { accessToken })
@@ -142,6 +142,7 @@ export class UserController {
 
   @Get(`:id`)
   @ApiOperation({ summary: "Get user by id", operationId: "retrieve" })
+  @UseGuards(DefaultAuthGuard, AuthzGuard)
   async retrieve(@Param("id") userId: string): Promise<UserDto> {
     return mapTo(UserDto, await this.userService.findOneOrFail({ id: userId }))
   }

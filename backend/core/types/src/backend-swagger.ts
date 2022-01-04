@@ -3879,6 +3879,12 @@ export interface User {
   id: string
 
   /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3904,6 +3910,12 @@ export interface User {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
 }
 
 export interface UserCreate {
@@ -3964,6 +3976,12 @@ export interface UserBasic {
   id: string
 
   /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
   confirmedAt?: Date
 
   /**  */
@@ -3989,6 +4007,12 @@ export interface UserBasic {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
 }
 
 export interface Email {

@@ -21,6 +21,8 @@ import Joi from "joi"
         CLOUDINARY_SECRET: Joi.string().required(),
         CLOUDINARY_KEY: Joi.string().required(),
         PARTNERS_PORTAL_URL: Joi.string().required(),
+        AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: Joi.number().default(5),
+        AUTH_LOCK_LOGIN_COOLDOWN_MS: Joi.number().default(1000 * 60 * 30),
       }),
     }),
   ],

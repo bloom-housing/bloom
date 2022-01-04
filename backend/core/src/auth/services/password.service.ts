@@ -19,7 +19,7 @@ export class PasswordService {
       .getOne()
   }
 
-  public async verifyUserPassword(user: User, password: string) {
+  public async isPasswordValid(user: User, password: string) {
     const userWithPassword = await this.getUserWithPassword(user)
     const [salt, savedPasswordHash] = userWithPassword.passwordHash.split("#")
     const verifyPasswordHash = await this.hashPassword(password, Buffer.from(salt, "hex"))
