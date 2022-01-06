@@ -7,9 +7,9 @@ import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 export interface PostmarkedApplication {
-  postmarkedApplicationsReceivedByDate: string
+  postmarkedApplicationsReceivedByDate: string | null
   developer: string
-  applicationsDueDate: string
+  applicationsDueDate: string | null
 }
 
 export interface ApplicationAddressesProps {
