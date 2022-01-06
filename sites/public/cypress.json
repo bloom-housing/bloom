@@ -5,6 +5,7 @@
   "pageLoadTimeout": 100000,
   "video": true,
   "videoUploadOnPasses": false,
+  "numTestsKeptInMemory": 0,
   "env": {
     "codeCoverage": {
       "url": "/api/__coverage__"

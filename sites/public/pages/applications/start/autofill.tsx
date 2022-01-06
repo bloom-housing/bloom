@@ -105,7 +105,7 @@ export default () => {
           hidePreferences={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager">
+          <div className="form-card__pager" data-test-id={"application-initial-page"}>
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
@@ -124,7 +124,7 @@ export default () => {
                 onClick={() => {
                   useDetails = false
                 }}
-                data-test-id={"autofill-decline"}
+                dataTestId={"autofill-decline"}
               >
                 {t("application.autofill.reset")}
               </Button>
