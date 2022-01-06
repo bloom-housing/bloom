@@ -9,7 +9,6 @@ export const AllFields = () => {
   return (
     <GetApplication
       onlineApplicationURL={"online-app-url"}
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[
@@ -35,7 +34,6 @@ export const Preview = () => {
   return (
     <GetApplication
       onlineApplicationURL={"online-app-url"}
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[
@@ -61,7 +59,6 @@ export const OpenInFuture = () => {
   return (
     <GetApplication
       onlineApplicationURL={"online-app-url"}
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={false}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[
@@ -86,7 +83,6 @@ export const OpenInFuture = () => {
 export const Pickup = () => {
   return (
     <GetApplication
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[]}
@@ -109,7 +105,6 @@ export const OnlineAndNoPickUp = () => {
   return (
     <GetApplication
       onlineApplicationURL={"online-app-url"}
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[]}
@@ -123,7 +118,6 @@ export const OnlineAndNoPickUp = () => {
 export const PaperAndPickup = () => {
   return (
     <GetApplication
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[
@@ -148,7 +142,6 @@ export const PaperAndPickup = () => {
 export const PaperAndNoPickup = () => {
   return (
     <GetApplication
-      applicationsDueDate={"November 30th, 2021"}
       applicationsOpen={true}
       applicationsOpenDate={"November 20th, 2021"}
       paperApplications={[

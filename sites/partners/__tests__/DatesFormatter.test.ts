@@ -27,7 +27,7 @@ describe("DatesFormatter", () => {
       applicationDueTimeField: dueTime,
     }
     const applicationDueDate = formatData(data).applicationDueDate
-    expect(applicationDueDate).toEqual(createDate(dueDate))
+    expect(applicationDueDate).toEqual(createTime(applicationDueDate, dueTime))
     expect(formatData(data).applicationDueTime).toEqual(createTime(applicationDueDate, dueTime))
   })
 
