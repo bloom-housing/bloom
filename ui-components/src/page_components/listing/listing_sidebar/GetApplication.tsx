@@ -16,7 +16,6 @@ export interface PaperApplication {
 
 export interface ApplicationsProps {
   onlineApplicationURL?: string
-  applicationsDueDate?: string
   applicationsOpen: boolean
   applicationsOpenDate?: string
   paperApplications?: PaperApplication[]

@@ -39,7 +39,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-  arePaperAppsMailedToAnotherAddress?: YesNoAnswer
+  arePaperAppsMailedToAnotherAddress?: boolean
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer
   canPaperApplicationsBePickedUp?: YesNoAnswer

@@ -30,7 +30,7 @@ export default class BooleansFormatter extends Formatter {
       trueCase: () => this.data.applicationPickUpAddress,
     })
     this.processBoolean("applicationMailingAddress", {
-      when: this.data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes,
+      when: this.data.arePaperAppsMailedToAnotherAddress === true,
       trueCase: () => this.data.applicationMailingAddress,
     })
 

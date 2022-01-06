@@ -22,50 +22,61 @@ export interface ApplicationAddressesProps {
 }
 
 const SubmitApplication = (props: ApplicationAddressesProps) => {
-  if (props.listingStatus === ListingStatus.closed) {
+  if (
+    props.listingStatus === ListingStatus.closed ||
+    !(props.applicationMailingAddress || props.applicationDropOffAddress)
+  ) {
     return null
+  }
+
+  const getPostmarkString = () => {
+    const applicationDueDate = props.postmarkedApplicationData?.applicationsDueDate
+    const postmarkReceivedByDate =
+      props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate
+    const developer = props.postmarkedApplicationData?.developer
+    if (applicationDueDate) {
+      return postmarkReceivedByDate
+        ? t("listings.apply.submitPaperDueDatePostMark", {
+            applicationDueDate,
+            postmarkReceivedByDate,
+            developer,
+          })
+        : t("listings.apply.submitPaperDueDateNoPostMark", {
+            applicationDueDate,
+            developer,
+          })
+    } else {
+      return postmarkReceivedByDate
+        ? t("listings.apply.submitPaperNoDueDatePostMark", { postmarkReceivedByDate, developer })
+        : t("listings.apply.submitPaperNoDueDateNoPostMark", { developer })
+    }
   }
 
   return (
     <>
-      {(props.applicationMailingAddress ||
-        props.applicationDropOffAddress ||
-        props.postmarkedApplicationData) && (
-        <section className="aside-block is-tinted bg-gray-100">
-          <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {(props.applicationMailingAddress || props.postmarkedApplicationData) && (
+      <section className="aside-block is-tinted bg-gray-100">
+        <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
+        {props.applicationMailingAddress && (
+          <>
+            <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
             <>
-              <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
               <p className="text-gray-700">{props.applicationOrganization}</p>
-              {props.applicationMailingAddress && (
-                <SidebarAddress address={props.applicationMailingAddress} />
-              )}
-              <p className="mt-4 text-tiny text-gray-750">
-                {props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate
-                  ? t("listings.apply.postmarkedApplicationsMustBeReceivedByDate", {
-                      applicationDueDate: props.postmarkedApplicationData?.applicationsDueDate,
-                      postmarkReceivedByDate:
-                        props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate,
-                      developer: props.postmarkedApplicationData?.developer,
-                    })
-                  : t("listings.apply.applicationsMustBeReceivedByDeadline")}
-              </p>
+              <SidebarAddress address={props.applicationMailingAddress} />
             </>
-          )}
-          {props.applicationMailingAddress && props.applicationDropOffAddress && (
-            <OrDivider bgColor="gray-100" />
-          )}
-          {props.applicationDropOffAddress && (
-            <>
-              <h3 className="text-caps-tiny">{t("listings.apply.dropOffApplication")}</h3>
-              <SidebarAddress
-                address={props.applicationDropOffAddress}
-                officeHours={props.applicationDropOffAddressOfficeHours}
-              />
-            </>
-          )}
-        </section>
-      )}
+            <p className="mt-4 text-tiny text-gray-750">{getPostmarkString()}</p>
+          </>
+        )}
+        {props.applicationDropOffAddress && (
+          <>
+            {props.applicationMailingAddress && <OrDivider bgColor="gray-100" />}
+            <h3 className="text-caps-tiny">{t("listings.apply.dropOffApplication")}</h3>
+            <SidebarAddress
+              address={props.applicationDropOffAddress}
+              officeHours={props.applicationDropOffAddressOfficeHours}
+            />
+          </>
+        )}
+      </section>
     </>
   )
 }

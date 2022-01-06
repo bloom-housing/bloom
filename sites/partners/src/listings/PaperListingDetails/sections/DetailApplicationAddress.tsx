@@ -52,7 +52,11 @@ const DetailApplicationAddress = () => {
         <hr className={"mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem id="applicationMailingAddress" label={t("listings.paperDifferentAddress")}>
+          <ViewItem
+            id="applicationMailingAddress"
+            label={t("listings.paperDifferentAddress")}
+            dataTestId={"mailing-address-checkbox"}
+          >
             {listing.applicationMailingAddress ? t("t.yes") : t("t.no")}
           </ViewItem>
         </GridSection>
@@ -63,23 +67,40 @@ const DetailApplicationAddress = () => {
               <ViewItem
                 id="applicationMailingAddress.street"
                 label={t("listings.streetAddressOrPOBox")}
+                dataTestId={"mailing-address-street"}
               >
                 {listing.applicationMailingAddress?.street}
               </ViewItem>
-              <ViewItem id="applicationMailingAddress.street2" label={t("application.contact.apt")}>
+              <ViewItem
+                id="applicationMailingAddress.street2"
+                label={t("application.contact.apt")}
+                dataTestId={"mailing-address-street2"}
+              >
                 {listing.applicationMailingAddress?.street2}
               </ViewItem>
             </GridSection>
             <GridSection columns={6}>
               <GridCell span={2}>
-                <ViewItem id="applicationMailingAddress.city" label={t("application.contact.city")}>
+                <ViewItem
+                  id="applicationMailingAddress.city"
+                  label={t("application.contact.city")}
+                  dataTestId={"mailing-address-city"}
+                >
                   {listing.applicationMailingAddress?.city}
                 </ViewItem>
               </GridCell>
-              <ViewItem id="applicationMailingAddress.state" label={t("application.contact.state")}>
+              <ViewItem
+                id="applicationMailingAddress.state"
+                label={t("application.contact.state")}
+                dataTestId={"mailing-address-state"}
+              >
                 {listing.applicationMailingAddress?.state}
               </ViewItem>
-              <ViewItem id="applicationMailingAddress.zipCode" label={t("application.contact.zip")}>
+              <ViewItem
+                id="applicationMailingAddress.zipCode"
+                label={t("application.contact.zip")}
+                dataTestId={"mailing-address-zip"}
+              >
                 {listing.applicationMailingAddress?.zipCode}
               </ViewItem>
             </GridSection>
