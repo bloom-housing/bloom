@@ -5,11 +5,12 @@ import { createDate, createTime } from "../../../../lib/helpers"
 export default class DatesFormatter extends Formatter {
   /** Set dates/times for certain fields */
   process() {
-    this.data.applicationDueDate = createDate(this.data.applicationDueDateField)
-    this.data.applicationDueTime = createTime(
-      this.data.applicationDueDate,
+    const appDueDate = createTime(
+      createDate(this.data.applicationDueDateField),
       this.data.applicationDueTimeField
     )
+    this.data.applicationDueTime = appDueDate
+    this.data.applicationDueDate = appDueDate
 
     if (this.data.arePostmarksConsidered === YesNoAnswer.Yes && this.data.postmarkByDateDateField) {
       const postmarkByDateFormatted = createDate(this.data.postmarkByDateDateField)

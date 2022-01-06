@@ -296,20 +296,22 @@ export const ListingView = (props: ListingProps) => {
 
   // Move the above methods into our shared helper library when setup
 
+  const getDateString = (date: Date, format: string) => {
+    return date ? moment(date).format(format) : null
+  }
+
   const applySidebar = () => (
     <>
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
-        applicationsDueDate={moment(listing.applicationDueDate).format(
-          `MMM. DD, YYYY [${t("t.at")}] h A`
-        )}
         applicationsOpen={!appOpenInFuture}
-        applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
-        postmarkedApplicationsReceivedByDate={moment(
-          listing.postmarkedApplicationsReceivedByDate
-        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
+        postmarkedApplicationsReceivedByDate={getDateString(
+          listing.postmarkedApplicationsReceivedByDate,
+          `MMM. DD, YYYY [${t("t.at")}] h A`
+        )}
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
@@ -321,11 +323,13 @@ export const ListingView = (props: ListingProps) => {
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}
         postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: moment(
-            listing.postmarkedApplicationsReceivedByDate
-          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          postmarkedApplicationsReceivedByDate: getDateString(
+            listing.postmarkedApplicationsReceivedByDate,
+            `MMM. DD, YYYY [${t("t.at")}] h A`
+          ),
           developer: listing.developer,
-          applicationsDueDate: moment(listing.applicationDueDate).format(
+          applicationsDueDate: getDateString(
+            listing.applicationDueDate,
             `MMM. DD, YYYY [${t("t.at")}] h A`
           ),
         }}

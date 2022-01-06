@@ -476,7 +476,7 @@
       "howToApply": "Cách Ghi danh",
       "paperApplicationsMustBeMailed": "Mẫu đơn ghi danh Giấy phải được gửi thư bưu điện Hoa Kỳ và không thể nộp trực tiếp.",
       "pickUpAnApplication": "Nhận đơn ghi danh",
-      "postmarkedApplicationsMustBeReceivedByDate": "Đơn ghi danh phải được nhận trước thời hạn. Nếu gửi qua đường bưu điện U.S Mail, đơn ghi danh phải được đóng dấu bưu điện trước %{applicationDueDate} và nhận qua thư trước ngày %{postmarkReceiveByDate}. Các đơn ghi danh nhận được sau %{postmarkReceiveByDate} qua đường bưu điện sẽ không được chấp nhận ngay cả khi chúng được đóng dấu bưu điện trước %{applicationDueDate}. %{developer} không chịu trách nhiệm về thư bị thất lạc hoặc bị trễ.",
+      "submitPaperDueDatePostMark": "Đơn ghi danh phải được nhận trước thời hạn. Nếu gửi qua đường bưu điện U.S Mail, đơn ghi danh phải được đóng dấu bưu điện trước %{applicationDueDate} và nhận qua thư trước ngày %{postmarkReceiveByDate}. Các đơn ghi danh nhận được sau %{postmarkReceiveByDate} qua đường bưu điện sẽ không được chấp nhận ngay cả khi chúng được đóng dấu bưu điện trước %{applicationDueDate}. %{developer} không chịu trách nhiệm về thư bị thất lạc hoặc bị trễ.",
       "sendByUsMail": "Gửi Đơn ghi danh qua đường bưu điện US Mail",
       "submitAPaperApplication": "Gửi Giấy ghi danh"
     },

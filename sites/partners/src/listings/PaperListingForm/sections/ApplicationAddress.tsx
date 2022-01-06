@@ -192,6 +192,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             inputProps={{
               defaultChecked: listing && listing?.applicationMailingAddress !== null,
             }}
+            dataTestId={"mailing-address-checkbox"}
           />
         </GridSection>
         {paperMailedToAnotherAddress && (
@@ -203,6 +204,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 id={"applicationMailingAddress.street"}
                 register={register}
                 placeholder={t("application.contact.streetAddress")}
+                dataTestId={"mailing-address-street"}
               />
               <Field
                 label={t("application.contact.apt")}
@@ -210,6 +212,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 id={"applicationMailingAddress.street2"}
                 register={register}
                 placeholder={t("application.contact.apt")}
+                dataTestId={"mailing-address-street2"}
               />
             </GridSection>
             <GridSection columns={6}>
@@ -220,6 +223,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   id={"applicationMailingAddress.city"}
                   register={register}
                   placeholder={t("application.contact.city")}
+                  dataTestId={"mailing-address-city"}
                 />
               </GridCell>
               <ViewItem label={t("application.contact.state")} className="mb-0">
@@ -233,6 +237,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   options={stateKeys}
                   keyPrefix="states"
                   errorMessage={t("errors.stateError")}
+                  dataTestId={"mailing-address-state"}
                 />
               </ViewItem>
               <Field
@@ -242,6 +247,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 placeholder={t("application.contact.zip")}
                 errorMessage={t("errors.zipCodeError")}
                 register={register}
+                dataTestId={"mailing-address-zip"}
               />
             </GridSection>
           </GridSection>
