@@ -94,7 +94,7 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").type(listing["leasingAgentAddress.zipCode"])
       cy.getByID("leasingAgentAddress.state").select(listing["leasingAgentAddress.state"])
 
-      cy.getByTestId("mailing-address-checkbox")
+      cy.getByTestId("mailing-address-checkbox").check()
       cy.getByTestId("mailing-address-street").type(listing["leasingAgentAddress.street"])
       cy.getByTestId("mailing-address-street2").type(listing["leasingAgentAddress.street2"])
       cy.getByTestId("mailing-address-city").type(listing["leasingAgentAddress.city"])
@@ -209,7 +209,7 @@ describe("Listing Management Tests", () => {
       cy.getByTestId("mailing-address-street2").contains(listing["leasingAgentAddress.street2"])
       cy.getByTestId("mailing-address-city").contains(listing["leasingAgentAddress.city"])
       cy.getByTestId("mailing-address-zip").contains(listing["leasingAgentAddress.zipCode"])
-      cy.getByTestId("mailing-address-state").contains(listing["CA"])
+      cy.getByTestId("mailing-address-state").contains("CA")
       cy.get("#applicationDropOffQuestion").contains("No")
       cy.get("#postmarksConsideredQuestion").contains("Yes")
       cy.getByTestId("postmark-date").contains("12")
