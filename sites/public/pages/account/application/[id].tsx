@@ -18,11 +18,11 @@ export default () => {
   useEffect(() => {
     if (profile) {
       applicationsService
-        .retrieve({ applicationId })
+        .retrieve({ id: applicationId })
         .then((app) => {
           setApplication(app)
           listingsService
-            ?.retrieve({ listingId: app.listing.id })
+            ?.retrieve({ id: app.listing.id })
             .then((retrievedListing) => {
               setListing(retrievedListing)
             })

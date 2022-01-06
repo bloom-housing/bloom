@@ -8,6 +8,7 @@ import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
+import { IconCheck } from "../icons/Icon.stories"
 
 export default {
   component: ApplicationStatus,
@@ -109,5 +110,14 @@ export const postLottery = () => (
     content={"Post-lottery content: " + dayjs().format("MMMM Do, YYYY")}
     status={ApplicationStatusType.PostLottery}
     withIcon={false}
+  />
+)
+
+export const matched = () => (
+  <ApplicationStatus
+    content={"Matched"}
+    status={ApplicationStatusType.Matched}
+    withIcon={true}
+    iconType={"check"}
   />
 )

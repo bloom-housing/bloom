@@ -66,13 +66,13 @@
 
 @mixin filled-appearances() {
   &.is-primary {
-    @apply bg-primary-dark;
-    @apply border-primary-dark;
+    @apply bg-primary;
+    @apply border-primary;
     @apply text-white;
 
     &:hover {
-      @apply bg-primary-darker;
-      @apply border-primary-darker;
+      @apply bg-primary-dark;
+      @apply border-primary-dark;
     }
   }
 

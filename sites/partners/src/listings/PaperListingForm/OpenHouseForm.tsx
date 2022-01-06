@@ -19,7 +19,7 @@ import {
   urlRegex,
 } from "@bloom-housing/ui-components"
 
-import { TempEvent } from "./index"
+import { TempEvent } from "./formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
 import dayjs from "dayjs"
 

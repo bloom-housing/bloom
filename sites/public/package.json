@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/public",
-  "version": "3.0.1-alpha.74",
+  "version": "4.0.1-alpha.14",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Public web app reference implementation for the Bloom affordable housing system",
   "main": "index.js",
@@ -15,6 +15,7 @@
     "build": "next build",
     "test": "concurrently \"yarn dev\" \"cypress open\"",
     "test:headless": "concurrently \"yarn dev\" \"cypress run\"",
+    "test:coverage": "yarn nyc report --reporter=text-summary --check-coverage",
     "start": "next start -p ${NEXTJS_PORT:-3000}",
     "dev:listings": "cd ../../backend/core && yarn dev",
     "dev:server-wait": "wait-on \"http-get://localhost:${PORT:-3100}/listings\"  --httpTimeout 60000 --tcpTimeout 1500 -v --interval 15000 && yarn dev",
@@ -23,9 +24,9 @@
     "dev:all": "concurrently \"yarn dev:listings\" \"yarn dev:server-wait\""
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^3.0.1-alpha.40",
-    "@bloom-housing/shared-helpers": "^3.0.1-alpha.47",
-    "@bloom-housing/ui-components": "^3.0.1-alpha.48",
+    "@bloom-housing/backend-core": "^3.0.2-alpha.10",
+    "@bloom-housing/shared-helpers": "^4.0.1-alpha.14",
+    "@bloom-housing/ui-components": "^4.0.1-alpha.14",
     "autoprefixer": "^10.3.4",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
+    "@cypress/code-coverage": "^3.9.12",
     "@cypress/webpack-preprocessor": "^4.1.0",
     "@next/bundle-analyzer": "^10.1.0",
     "@types/markdown-to-jsx": "^6.11.2",
@@ -54,6 +56,7 @@
     "cypress": "^4.12.1",
     "js-levenshtein": "^1.1.6",
     "next-transpile-modules": "^8.0.0",
+    "nyc": "^15.1.0",
     "postcss": "^8.3.6",
     "sass-loader": "^10.0.3",
     "ts-loader": "^6.0.3",

@@ -15,7 +15,7 @@ import {
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
-import { TempUnit } from "../"
+import { TempUnit } from "../formTypes"
 import { fieldHasError } from "../../../../lib/helpers"
 
 type UnitProps = {

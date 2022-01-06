@@ -11,7 +11,7 @@ import {
   ListingEvent,
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
-import { TempUnit, FormListing } from "../src/listings/PaperListingForm"
+import { TempUnit, FormListing } from "../src/listings/PaperListingForm/formTypes"
 import { FieldError } from "react-hook-form"
 
 type DateTimePST = {

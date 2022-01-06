@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Icon, IconFillColors } from "../icons/Icon"
+import { Icon, IconFillColors, IconTypes } from "../icons/Icon"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import "./ApplicationStatus.scss"
 
@@ -9,6 +9,7 @@ export interface ApplicationStatusProps {
   status?: ApplicationStatusType
   vivid?: boolean
   withIcon?: boolean
+  iconType?: IconTypes
 }
 
 const ApplicationStatus = (props: ApplicationStatusProps) => {
@@ -21,13 +22,15 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   const status = props.status || ApplicationStatusType.Open
   const content = props.content
   const withIcon = props.withIcon ?? true
+  const iconType = props.iconType ?? "clock"
 
   let icon
 
   if (withIcon) {
     icon = (
       <span>
-        <Icon size="medium" symbol="clock" fill={vivid ? IconFillColors.white : undefined} /> &nbsp;
+        <Icon size="medium" symbol={iconType} fill={vivid ? IconFillColors.white : undefined} />{" "}
+        &nbsp;
       </span>
     )
   }
@@ -41,6 +44,10 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
       break
     case ApplicationStatusType.PostLottery:
       bgColor = "bg-gray-850"
+      textColor = "text-white"
+      break
+    case ApplicationStatusType.Matched:
+      bgColor = "bg-green-700"
       textColor = "text-white"
       break
     default:

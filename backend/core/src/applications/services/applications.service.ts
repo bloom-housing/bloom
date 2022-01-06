@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { QueryFailedError, Repository } from "typeorm"
-import { paginate, Pagination } from "nestjs-typeorm-paginate"
+import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
 import retry from "async-retry"
@@ -22,6 +22,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { authzActions } from "../../auth/enum/authz-actions.enum"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
+import { getView } from "../views/view"
 import { PaginatedApplicationListQueryParams } from "../dto/paginated-application-list-query-params"
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
@@ -74,14 +75,51 @@ export class ApplicationsService {
   async listPaginated(
     params: PaginatedApplicationListQueryParams
   ): Promise<Pagination<Application>> {
-    const qb = this._getQb(params)
-    const result = await paginate(qb, { limit: params.limit, page: params.page })
-    await Promise.all(
-      result.items.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
+    if (!params.listingId) {
+      const qb = this._getQb(params)
+      const result = await paginate(qb, {
+        limit: params.limit,
+        page: params.page,
+        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
       })
-    )
-    return result
+      await Promise.all(
+        result.items.map(async (application) => {
+          await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        })
+      )
+      return result
+    } else {
+      const qb = this._getQb(params, "partnerList")
+
+      const applicationIDQB = this._getQb(params, "partnerList", false)
+      applicationIDQB.select("application.id")
+      applicationIDQB.groupBy("application.id")
+      if (params.orderBy) {
+        applicationIDQB.addSelect(params.orderBy)
+        applicationIDQB.addGroupBy(params.orderBy)
+      }
+      const applicationIDResult = await paginate<Application>(applicationIDQB, {
+        limit: params.limit,
+        page: params.page,
+        paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
+      })
+
+      qb.andWhere("application.id IN (:...applicationIDs)", {
+        applicationIDs: applicationIDResult.items.map((elem) => elem.id),
+      })
+
+      const result = await qb.getMany()
+
+      await Promise.all(
+        result.map(async (application) => {
+          await this.authorizeUserAction(this.req.user, application, authzActions.read)
+        })
+      )
+      return {
+        ...applicationIDResult,
+        items: result,
+      }
+    }
   }
 
   // Submitting an application from public
@@ -154,7 +192,7 @@ export class ApplicationsService {
     return await this.repository.softRemove({ id: applicationId })
   }
 
-  private _getQb(params: PaginatedApplicationListQueryParams) {
+  private _getQb(params: PaginatedApplicationListQueryParams, view = "base", withSelect = true) {
     /**
      * Map used to generate proper parts
      * of query builder.
@@ -178,20 +216,8 @@ export class ApplicationsService {
     }
 
     // --> Build main query
-    const qb = this.repository.createQueryBuilder("application")
-    qb.leftJoinAndSelect("application.applicant", "applicant")
-    qb.leftJoinAndSelect("applicant.address", "applicant_address")
-    qb.leftJoinAndSelect("applicant.workAddress", "applicant_workAddress")
-    qb.leftJoinAndSelect("application.alternateAddress", "alternateAddress")
-    qb.leftJoinAndSelect("application.mailingAddress", "mailingAddress")
-    qb.leftJoinAndSelect("application.alternateContact", "alternateContact")
-    qb.leftJoinAndSelect("alternateContact.mailingAddress", "alternateContact_mailingAddress")
-    qb.leftJoinAndSelect("application.accessibility", "accessibility")
-    qb.leftJoinAndSelect("application.demographics", "demographics")
-    qb.leftJoinAndSelect("application.householdMembers", "householdMembers")
-    qb.leftJoinAndSelect("householdMembers.address", "householdMembers_address")
-    qb.leftJoinAndSelect("householdMembers.workAddress", "householdMembers_workAddress")
-    qb.leftJoinAndSelect("application.preferredUnit", "preferredUnit")
+    const qbView = getView(this.repository.createQueryBuilder("application"), view)
+    const qb = qbView.getViewQb(withSelect)
     qb.where("application.id IS NOT NULL")
 
     // --> Build additional query builder parts

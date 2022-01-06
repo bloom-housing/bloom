@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { FormListing, addressTypes } from "../index"
+import { FormListing, addressTypes } from "../formTypes"
 import dayjs from "dayjs"
 import { isNullOrUndefined } from "../../../../lib/helpers"
 
