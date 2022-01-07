@@ -225,12 +225,10 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
   }, [createUserBody, onDrawerClose, updateUser, userService, user])
 
   const onDelete = () => {
-    const userId = user.id
-
     void deleteUser(() =>
       userService
         .delete({
-          userId,
+          id: user.id,
         })
         .then(() => {
           setSiteAlertMessage(t(`users.userDeleted`), "success")

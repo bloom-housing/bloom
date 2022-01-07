@@ -22,6 +22,7 @@ export const SanMateoHUD2019: AmiChart = {
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
+    publicUrl: "",
   },
   items: [
     {
@@ -266,6 +267,7 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "San Jose",
+    publicUrl: "",
   },
   depositMax: "",
   disableUnitsAccordion: false,

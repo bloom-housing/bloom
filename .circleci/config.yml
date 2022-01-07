@@ -120,6 +120,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
+  unit-test-partners:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:app:partners:unit
 
 workflows:
   version: 2
@@ -145,6 +151,9 @@ workflows:
           requires:
             - setup
       - build-partners:
+          requires:
+            - setup
+      - unit-test-partners:
           requires:
             - setup
       - cypress/run:

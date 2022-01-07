@@ -1,5 +1,5 @@
 import * as React from "react"
-import { t } from "./translator"
+import { t } from "@bloom-housing/ui-components"
 import { Listing } from "@bloom-housing/backend-core/types"
 
 export const occupancyTable = (listing: Listing) => {

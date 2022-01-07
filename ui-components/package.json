@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/ui-components",
-  "version": "3.0.1-alpha.48",
+  "version": "4.0.1-alpha.14",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Shared user interface components for Bloom affordable housing system",
   "homepage": "https://github.com/bloom-housing/bloom/tree/master/shared/ui-components",
@@ -69,7 +69,7 @@
     "webpack": "^4.44.2"
   },
   "dependencies": {
-    "@bloom-housing/backend-core": "^3.0.1-alpha.40",
+    "@bloom-housing/backend-core": "^3.0.2-alpha.10",
     "@mapbox/mapbox-sdk": "^0.13.0",
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
@@ -100,5 +100,5 @@
     "tailwindcss": "2.2.10",
     "typesafe-actions": "^5.1.0"
   },
-  "gitHead": "5f7694e3f2baff2a1a7a22e0676e487dda781a3e"
+  "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
 }

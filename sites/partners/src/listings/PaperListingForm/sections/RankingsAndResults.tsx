@@ -13,7 +13,7 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { FormListing } from "../index"
+import { FormListing } from "../formTypes"
 import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 

@@ -19,6 +19,7 @@ const path = require("path")
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = (on, config) => {
+  require("@cypress/code-coverage/task")(on, config)
   const options = {
     webpackOptions: {
       module: {
@@ -42,4 +43,6 @@ module.exports = (on, config) => {
   }
 
   on("file:preprocessor", webpack(options))
+
+  return config
 }

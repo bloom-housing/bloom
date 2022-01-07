@@ -13,7 +13,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
 
   useEffect(() => {
     listingsService
-      ?.retrieve({ listingId: props.application.listing.id })
+      ?.retrieve({ id: props.application.listing.id })
       .then((retrievedListing) => {
         setListing(retrievedListing)
       })

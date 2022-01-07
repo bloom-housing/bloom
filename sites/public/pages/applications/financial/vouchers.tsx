@@ -8,14 +8,15 @@ import {
   Button,
   Form,
   FormCard,
-  ProgressNav,
   t,
+  ProgressNav,
   FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 
 const ApplicationVouchers = () => {
   const { conductor, application, listing } = useFormConductor("vouchersSubsidies")
@@ -59,9 +60,9 @@ const ApplicationVouchers = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard>
         <FormBackLink
           url={conductor.determinePreviousUrl()}
