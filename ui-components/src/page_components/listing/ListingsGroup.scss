@@ -37,7 +37,7 @@
   @apply flex-row;
   flex-grow: 2;
 
-  max-width: 100%;
+  @apply max-w-full;
   @screen md {
     max-width: 70%;
   }
@@ -50,11 +50,6 @@
   @apply items-start;
   @apply justify-center;
   @apply h-full;
-
-  // @screen md {
-  //   @apply w-7/12;
-  //   @apply mb-0;
-  // }
 }
 
 .listings-group__info {
