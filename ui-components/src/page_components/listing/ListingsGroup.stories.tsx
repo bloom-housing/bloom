@@ -34,7 +34,7 @@ export const listingsGroupWithInfoLongButton = () => {
   return (
     <ListingsGroup
       listingsCount={2}
-      header="Header"
+      header="Additional Listings"
       showButtonText="Show Additional Listings"
       hideButtonText="Hide Additional Listings"
       info={
