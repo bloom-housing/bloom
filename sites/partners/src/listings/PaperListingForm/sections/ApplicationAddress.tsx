@@ -123,7 +123,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     })
   }
 
-  const momentizedDate = dayjs(new Date(listing?.postmarkedApplicationsReceivedByDate))
+  const dayjsDate = dayjs(new Date(listing?.postmarkedApplicationsReceivedByDate))
 
   return (
     <div>
@@ -503,13 +503,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 watch={watch}
                 defaultDate={{
                   month: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("MM")
+                    ? dayjsDate.format("MM")
                     : null,
                   day: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("DD")
+                    ? dayjsDate.format("DD")
                     : null,
                   year: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("YYYY")
+                    ? dayjsDate.format("YYYY")
                     : null,
                 }}
                 dataTestId={"postmark-date-field"}
@@ -526,13 +526,13 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                 watch={watch}
                 defaultValues={{
                   hours: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("hh")
+                    ? dayjsDate.format("hh")
                     : null,
                   minutes: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("mm")
+                    ? dayjsDate.format("mm")
                     : null,
                   seconds: listing?.postmarkedApplicationsReceivedByDate
-                    ? momentizedDate.format("ss")
+                    ? dayjsDate.format("ss")
                     : null,
                   period:
                     new Date(listing?.postmarkedApplicationsReceivedByDate).getHours() >= 12

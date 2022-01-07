@@ -76,10 +76,10 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 
   if (type === ApplicationSubmissionType.paper) {
-    const momentDate = dayjs(dateObj)
+    const dayjsDate = dayjs(dateObj)
 
-    const date = momentDate.utc().format("MM/DD/YYYY")
-    const time = momentDate.utc().format("hh:mm:ss A")
+    const date = dayjsDate.utc().format("MM/DD/YYYY")
+    const time = dayjsDate.utc().format("hh:mm:ss A")
 
     return {
       date,

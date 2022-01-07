@@ -38,9 +38,9 @@ const Aside = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = dayjs(listing.updatedAt)
+    const dayjsDate = dayjs(listing.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [listing])
 
   const actions = useMemo(() => {

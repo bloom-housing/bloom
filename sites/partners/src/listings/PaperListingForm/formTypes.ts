@@ -92,7 +92,7 @@ export const formDefaults: FormListing = {
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
-  applicationOpenDate: new Date(dayjs().subtract(10).format()),
+  applicationOpenDate: new Date(),
   applicationOrganization: "",
   applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
