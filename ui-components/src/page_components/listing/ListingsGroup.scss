@@ -36,6 +36,7 @@
   @apply flex;
   @apply flex-row;
   flex-grow: 2;
+  margin-right: 15px;
 
   @apply max-w-full;
   @screen md {
