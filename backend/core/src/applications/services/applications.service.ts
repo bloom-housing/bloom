@@ -90,9 +90,11 @@ export class ApplicationsService {
       paginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     })
 
-    qb.andWhere("application.id IN (:...applicationIDs)", {
-      applicationIDs: applicationIDResult.items.map((elem) => elem.id),
-    })
+    if (applicationIDResult.items.length) {
+      qb.andWhere("application.id IN (:...applicationIDs)", {
+        applicationIDs: applicationIDResult.items.map((elem) => elem.id),
+      })
+    }
 
     const result = await qb.getMany()
 
