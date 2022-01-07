@@ -3,7 +3,7 @@ import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components
 import { ListingContext } from "../../ListingContext"
 import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
 import { getDetailFieldString, getDetailFieldTime } from "./helpers"
-import moment from "moment"
+import dayjs from "dayjs"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
@@ -16,7 +16,7 @@ const DetailApplicationAddress = () => {
   }
 
   const postMarkDateFormat = (date: Date) => {
-    return date ? moment(new Date(date)).format("MM/DD/YYYY") : t("t.none")
+    return date ? dayjs(new Date(date)).format("MM/DD/YYYY") : t("t.none")
   }
 
   return (

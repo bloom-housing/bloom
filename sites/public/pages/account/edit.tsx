@@ -1,5 +1,7 @@
 import React, { useContext, useState, useRef } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { useForm } from "react-hook-form"
 import {
   Button,
@@ -64,7 +66,7 @@ const Edit = () => {
       await userProfileService.update({
         body: {
           ...profile,
-          dob: moment(
+          dob: dayjs(
             `${dateOfBirth.birthYear}-${dateOfBirth.birthMonth}-${dateOfBirth.birthDay}`
           ).toDate(),
         },
@@ -198,9 +200,9 @@ const Edit = () => {
                 validateAge18={true}
                 errorMessage={t("errors.dateOfBirthErrorAge")}
                 defaultDOB={{
-                  birthDay: profile ? moment(new Date(profile.dob)).utc().format("DD") : null,
-                  birthMonth: profile ? moment(new Date(profile.dob)).utc().format("MM") : null,
-                  birthYear: profile ? moment(new Date(profile.dob)).utc().format("YYYY") : null,
+                  birthDay: profile ? dayjs(new Date(profile.dob)).utc().format("DD") : null,
+                  birthMonth: profile ? dayjs(new Date(profile.dob)).utc().format("MM") : null,
+                  birthYear: profile ? dayjs(new Date(profile.dob)).utc().format("YYYY") : null,
                 }}
                 label={t("application.name.yourDateOfBirth")}
               />

@@ -2,7 +2,9 @@ import React, { useState, useMemo } from "react"
 import { useWatch, useFormContext } from "react-hook-form"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 
 import {
   t,
@@ -133,13 +135,13 @@ const ApplicationDates = ({
             disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("MM")
+                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("MM")
                 : null,
               day: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("DD")
+                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("DD")
                 : null,
               year: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("YYYY")
+                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("YYYY")
                 : null,
             }}
           />
@@ -152,13 +154,13 @@ const ApplicationDates = ({
             disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
               hours: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("hh")
+                ? dayjs(new Date(listing?.applicationDueTime)).format("hh")
                 : null,
               minutes: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("mm")
+                ? dayjs(new Date(listing?.applicationDueTime)).format("mm")
                 : null,
               seconds: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("ss")
+                ? dayjs(new Date(listing?.applicationDueTime)).format("ss")
                 : null,
               period: new Date(listing?.applicationDueTime).getHours() >= 12 ? "pm" : "am",
             }}

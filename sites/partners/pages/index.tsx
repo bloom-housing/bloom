@@ -9,7 +9,7 @@ import {
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -107,7 +107,7 @@ export default function ListingsList() {
         sortable: false,
         filter: false,
         resizable: true,
-        valueFormatter: ({ value }) => (value ? moment(value).format("MM/DD/YYYY") : t("t.none")),
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {
         headerName: t("listings.availableUnits"),

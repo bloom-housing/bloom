@@ -1,4 +1,4 @@
-import moment from "moment"
+import dayjs from "dayjs"
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   Preference,
@@ -92,7 +92,7 @@ export const formDefaults: FormListing = {
   applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
-  applicationOpenDate: new Date(moment().subtract(10).format()),
+  applicationOpenDate: new Date(),
   applicationOrganization: "",
   applicationPickUpAddress: null,
   applicationPickUpAddressOfficeHours: "",
