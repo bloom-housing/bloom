@@ -33,6 +33,7 @@
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
     "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test",
     "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test:headless",
+    "test:app:partners:unit": "cd sites/partners && yarn test:unit",
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",

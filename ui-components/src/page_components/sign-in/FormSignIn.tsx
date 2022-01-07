@@ -14,9 +14,16 @@ import {
   ErrorMessage,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import type { NetworkErrorValue, NetworkErrorReset } from "@bloom-housing/shared-helpers"
-
 import { NavigationContext } from "../../config/NavigationContext"
+
+export type NetworkErrorValue = {
+  title: string
+  content: string
+} | null
+
+export type NetworkErrorDetermineError = (status: number, error: Error) => void
+
+export type NetworkErrorReset = () => void
 
 export type FormSignInProps = {
   control: FormSignInControl

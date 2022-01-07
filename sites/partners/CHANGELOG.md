@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.15...@bloom-housing/partners@4.0.1-alpha.16) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.14...@bloom-housing/partners@4.0.1-alpha.15) (2022-01-04)
+
+
+### Bug Fixes
+
+* applications drop off address ([d73cdf6](https://github.com/bloom-housing/bloom/commit/d73cdf69fa550bf178a7f433ca9a1bbe2ce678a2))
+* helper imports of form types ([e58ed71](https://github.com/bloom-housing/bloom/commit/e58ed71c703a53a7ab4284e6d7e2c1857cb8ed7b))
+* jest tests in partners now allows jsx ([3fef534](https://github.com/bloom-housing/bloom/commit/3fef534925f8fee6a63a2a99def692b59df83bdd))
+
+
+
+
+
+## [4.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.13...@bloom-housing/partners@4.0.1-alpha.14) (2022-01-04)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.12...@bloom-housing/partners@4.0.1-alpha.13) (2022-01-04)
 
 **Note:** Version bump only for package @bloom-housing/partners
