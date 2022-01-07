@@ -243,7 +243,7 @@ export const Cross = (props: IconProps) => {
   )
 }
 
-export const DoubleCross = (props: IconProps) => {
+export const DoubleHouse = (props: IconProps) => {
   return (
     <svg viewBox="0 0 32 32" fill={props.fill ?? "currentColor"}>
       <path d="M8.68 24.053c0.173 0 0.347-0.080 0.48-0.213 0.12-0.12 0.187-0.28 0.187-0.467 0-0.16-0.067-0.333-0.187-0.469-0.253-0.251-0.707-0.24-0.947 0-0.12 0.122-0.2 0.294-0.2 0.469 0 0.187 0.080 0.347 0.2 0.478 0.12 0.122 0.293 0.202 0.467 0.202z"></path>
