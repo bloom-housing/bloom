@@ -6,14 +6,40 @@ export default {
   title: "Listing/Listings Group",
 }
 
-export const showListingsGroup = () => {
+export const listingsGroup = () => {
+  return (
+    <ListingsGroup listingsCount={2} header="Header" showButtonText="Show" hideButtonText="Hide">
+      Listings Go Here
+    </ListingsGroup>
+  )
+}
+
+export const listingsGroupWithInfo = () => {
   return (
     <ListingsGroup
       listingsCount={2}
       header="Header"
       showButtonText="Show"
       hideButtonText="Hide"
-      info={"Info Text"}
+      info={
+        "We know you may have options about how many people will live with you. Here are listings for other household sizes and income levels."
+      }
+    >
+      Listings Go Here
+    </ListingsGroup>
+  )
+}
+
+export const listingsGroupWithInfoLongButton = () => {
+  return (
+    <ListingsGroup
+      listingsCount={2}
+      header="Header"
+      showButtonText="Show Additional Listings"
+      hideButtonText="Hide Additional Listings"
+      info={
+        "We know you may have options about how many people will live with you. Here are listings for other household sizes and income levels."
+      }
     >
       Listings Go Here
     </ListingsGroup>
