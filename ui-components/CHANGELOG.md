@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.16...@bloom-housing/ui-components@4.0.1-alpha.17) (2022-01-07)
+
+
+### Bug Fixes
+
+* listings group expandable section css updates ([#2377](https://github.com/bloom-housing/bloom/issues/2377)) ([fba77ef](https://github.com/bloom-housing/bloom/commit/fba77efc25ccb213a0e18a8b58ddf8ada07fbb8c))
+
+
+
+
+
 ## [4.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.15...@bloom-housing/ui-components@4.0.1-alpha.16) (2022-01-07)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
