@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   t,
   StatusAside,
@@ -38,9 +38,9 @@ const Aside = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = moment(listing.updatedAt)
+    const dayjsDate = dayjs(listing.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [listing])
 
   const actions = useMemo(() => {
@@ -174,7 +174,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {moment(
+              {dayjs(
                 listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}

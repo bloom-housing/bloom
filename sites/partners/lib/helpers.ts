@@ -1,7 +1,9 @@
 import { SetStateAction } from "react"
 import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import {
   ApplicationSubmissionType,
   AssetsService,
@@ -74,10 +76,10 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 
   if (type === ApplicationSubmissionType.paper) {
-    const momentDate = moment(dateObj)
+    const dayjsDate = dayjs(dateObj)
 
-    const date = momentDate.utc().format("MM/DD/YYYY")
-    const time = momentDate.utc().format("hh:mm:ss A")
+    const date = dayjsDate.utc().format("MM/DD/YYYY")
+    const time = dayjsDate.utc().format("hh:mm:ss A")
 
     return {
       date,
