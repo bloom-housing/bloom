@@ -19,6 +19,8 @@ import {
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
 
 export default () => {

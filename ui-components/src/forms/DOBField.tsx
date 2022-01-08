@@ -2,6 +2,8 @@ import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
 import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
 export type DOBFieldValues = {
