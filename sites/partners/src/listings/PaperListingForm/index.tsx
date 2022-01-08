@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import {
   AuthContext,
   t,
@@ -138,11 +139,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               endTime: new Date(event.endTime),
             }
           })
-          .sort((a, b) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            return a.startTime - b.startTime
-          })
+          .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
   }, [listing, setUnits, setOpenHouseEvents])

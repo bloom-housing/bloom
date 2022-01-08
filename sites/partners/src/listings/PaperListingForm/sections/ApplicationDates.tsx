@@ -102,11 +102,9 @@ const ApplicationDates = ({
     })
 
     setOpenHouseEvents(
-      [...eventsWithoutEdited, event].sort((a, b) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return a.startTime - b.startTime
-      })
+      [...eventsWithoutEdited, event].sort((a, b) =>
+        dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1
+      )
     )
   }
 
