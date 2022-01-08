@@ -2,6 +2,8 @@ import React, { useContext, useState, useRef } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { useForm } from "react-hook-form"
 import {
   Button,

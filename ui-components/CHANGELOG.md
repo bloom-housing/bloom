@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.17...@bloom-housing/ui-components@4.0.1-alpha.18) (2022-01-08)
+
+
+### Bug Fixes
+
+* ensure dayjs parsing strings will work as expected ([eb44939](https://github.com/bloom-housing/bloom/commit/eb449395ebea3a3b4b58eb217df1e1313c722a0d))
+
+
+
+
+
 ## [4.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.16...@bloom-housing/ui-components@4.0.1-alpha.17) (2022-01-07)
 
 

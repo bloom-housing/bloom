@@ -29,6 +29,8 @@ import {
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
