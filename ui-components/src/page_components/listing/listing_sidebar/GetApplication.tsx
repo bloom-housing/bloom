@@ -5,7 +5,6 @@ import { LinkButton } from "../../../actions/LinkButton"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
-import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -66,7 +65,7 @@ const GetApplication = (props: ApplicationsProps) => {
       {props.applicationsOpen && props.paperMethod && (
         <>
           {props.onlineApplicationURL && <OrDivider bgColor="white" />}
-          <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
+          <div className="text-serif-lg">{t("listings.apply.getAPaperApplication")}</div>
           <Button
             styleType={
               !props.preview && props.onlineApplicationURL ? AppearanceStyleType.primary : undefined

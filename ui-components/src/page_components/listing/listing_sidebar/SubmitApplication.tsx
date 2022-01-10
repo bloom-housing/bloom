@@ -2,7 +2,6 @@ import * as React from "react"
 import { t } from "../../../helpers/translator"
 import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
-import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
 import { ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -55,7 +54,7 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
   return (
     <>
       <section className="aside-block is-tinted bg-gray-100">
-        <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
+        <div className="text-serif-lg">{t("listings.apply.submitAPaperApplication")}</div>
         {props.applicationMailingAddress && (
           <>
             <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
