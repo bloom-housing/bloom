@@ -28,7 +28,7 @@ describe("DatesFormatter", () => {
     }
     const applicationDueDate = formatData(data).applicationDueDate
     expect(applicationDueDate).toEqual(createTime(applicationDueDate, dueTime))
-    expect(formatData(data).applicationDueTime).toEqual(createTime(applicationDueDate, dueTime))
+    expect(formatData(data).applicationDueDate).toEqual(createTime(applicationDueDate, dueTime))
   })
 
   it("should format postmarkedApplicationsReceivedByDate", () => {

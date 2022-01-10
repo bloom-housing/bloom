@@ -150,16 +150,16 @@ const ApplicationDates = ({
             watch={watch}
             disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
-              hours: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("hh")
+              hours: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
                 : null,
-              minutes: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("mm")
+              minutes: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
                 : null,
-              seconds: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("ss")
+              seconds: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
                 : null,
-              period: new Date(listing?.applicationDueTime).getHours() >= 12 ? "pm" : "am",
+              period: new Date(listing?.applicationDueDate).getHours() >= 12 ? "pm" : "am",
             }}
           />
         </GridSection>

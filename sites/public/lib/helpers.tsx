@@ -63,12 +63,8 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
-      const dueTime = dayjs(listing.applicationDueTime)
       formattedDate = dueDate.format("MMM. DD, YYYY")
-
-      if (listing.applicationDueTime) {
-        formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
-      }
+      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {

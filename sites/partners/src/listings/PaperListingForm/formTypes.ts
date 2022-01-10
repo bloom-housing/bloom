@@ -89,7 +89,6 @@ export const formDefaults: FormListing = {
   createdAt: undefined,
   updatedAt: undefined,
   applicationDueDate: null,
-  applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
   applicationOpenDate: new Date(),

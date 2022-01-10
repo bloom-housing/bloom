@@ -5,26 +5,22 @@ import { createDate, createTime } from "../../../../lib/helpers"
 export default class DatesFormatter extends Formatter {
   /** Set dates/times for certain fields */
   process() {
-    // If there is an application due time, save it on the due date field as well
-    const appDueDate = createDate(this.data.applicationDueDateField)
-    const appDueTime =
+    const dueDate = createDate(this.data.applicationDueDateField)
+    this.data.applicationDueDate =
       this.data.applicationDueTimeField.hours && this.data.applicationDueTimeField.minutes
-        ? createTime(appDueDate, this.data.applicationDueTimeField)
-        : undefined
-
-    this.data.applicationDueTime = appDueTime
-    this.data.applicationDueDate = appDueTime ?? appDueDate
+        ? createTime(dueDate, this.data.applicationDueTimeField)
+        : createTime(dueDate, {
+            hours: "05",
+            minutes: "00",
+            period: "pm",
+          })
 
     if (this.data.arePostmarksConsidered === YesNoAnswer.Yes && this.data.postmarkByDateDateField) {
       const postmarkByDateFormatted = createDate(this.data.postmarkByDateDateField)
-      if (this.data.postmarkByDateTimeField?.hours) {
-        this.data.postmarkedApplicationsReceivedByDate = createTime(
-          postmarkByDateFormatted,
-          this.data.postmarkByDateTimeField
-        )
-      } else {
-        this.data.postmarkedApplicationsReceivedByDate = postmarkByDateFormatted
-      }
+      this.data.postmarkedApplicationsReceivedByDate =
+        this.data.postmarkByDateTimeField?.hours && this.data.postmarkByDateTimeField?.minutes
+          ? createTime(postmarkByDateFormatted, this.data.postmarkByDateTimeField)
+          : postmarkByDateFormatted
     } else {
       this.data.postmarkedApplicationsReceivedByDate = null
     }
