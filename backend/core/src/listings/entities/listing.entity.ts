@@ -160,13 +160,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  applicationDueTime?: Date | null
-
-  @Column({ type: "timestamptz", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
   applicationOpenDate?: Date | null
 
   @Column({ type: "text", nullable: true })

@@ -24,7 +24,6 @@ const getMockListing = () => {
     applicationDropOffAddressOfficeHours: undefined,
     applicationDropOffAddressType: undefined,
     applicationDueDate: undefined,
-    applicationDueTime: undefined,
     applicationFee: undefined,
     applicationMailingAddress: undefined,
     applicationMethods: [],

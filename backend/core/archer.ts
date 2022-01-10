@@ -257,7 +257,6 @@ export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationDueTime: new Date(),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
   applicationDropOffAddress: null,
