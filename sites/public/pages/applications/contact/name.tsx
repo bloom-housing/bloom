@@ -171,7 +171,7 @@ const ApplicationName = () => {
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
-              validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
+              validation={{ required: !noEmail, pattern: emailRegex }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               register={register}
