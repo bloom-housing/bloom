@@ -16,12 +16,15 @@
       "return": "Return to applications"
     },
     "settings": {
+      "resetYourPassword": "Reset your Password",
+      "needUpdatePassword": "You'll need to update your password in order to log in to your account.",
       "passwordSuccess": "Password successfully updated",
       "update": "Update",
       "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmNewPassword": "Confirm new password",
+      "updatePassword": "Update password",
       "alerts": {
         "genericError": "There was an error. Please try again, or contact support for help.",
         "nameSuccess": "Name update successful",
@@ -924,7 +927,9 @@
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
     "requiredFieldError": "This field is required",
-    "requiredFieldsError": "These fields are required"
+    "requiredFieldsError": "These fields are required",
+    "enterNewLoginPassword": "Please enter new login password",
+    "passwordConfirmationMismatch": "Password confirmation does not match"
   },
   "footer": {
     "contact": "Contact",
