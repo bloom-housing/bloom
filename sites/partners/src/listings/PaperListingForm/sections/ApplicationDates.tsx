@@ -3,8 +3,6 @@ import { useWatch, useFormContext } from "react-hook-form"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
 
 import {
   t,
@@ -132,13 +130,13 @@ const ApplicationDates = ({
             disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("MM")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
                 : null,
               day: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("DD")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
                 : null,
               year: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("YYYY")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
                 : null,
             }}
           />

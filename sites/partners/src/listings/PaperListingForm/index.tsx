@@ -143,6 +143,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
   }, [listing, setUnits, setOpenHouseEvents])
 
+  console.log("from index", listing)
+
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 

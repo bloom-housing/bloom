@@ -71,20 +71,18 @@ const DetailApplicationDates = () => {
         grid={false}
         inset
       >
-        {listing.applicationDueDate && (
-          <GridSection columns={3}>
-            <GridCell>
-              <ViewItem id="applicationDeadline" label={t("listings.applicationDeadline")}>
-                {getDetailFieldDate(listing.applicationDueDate)}
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem id="applicationDueTime" label={t("listings.applicationDueTime")}>
-                {getDetailFieldTime(listing.applicationDueDate)}
-              </ViewItem>
-            </GridCell>
-          </GridSection>
-        )}
+        <GridSection columns={3}>
+          <GridCell>
+            <ViewItem id="applicationDeadline" label={t("listings.applicationDeadline")}>
+              {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
+            </ViewItem>
+          </GridCell>
+          <GridCell>
+            <ViewItem id="applicationDueTime" label={t("listings.applicationDueTime")}>
+              {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
+            </ViewItem>
+          </GridCell>
+        </GridSection>
 
         {!!openHouseEvents.length && (
           <GridSection columns={1}>
