@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from "react"
-
+import dayjs from "dayjs"
 import {
   t,
   GridSection,
@@ -32,6 +32,7 @@ const DetailApplicationDates = () => {
     () =>
       listing.events
         .filter((item) => item.type === ListingEventType.openHouse)
+        .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
         .map((event) => {
           const { startTime, endTime, url } = event
 

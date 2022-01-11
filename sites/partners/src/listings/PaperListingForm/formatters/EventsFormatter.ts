@@ -10,7 +10,11 @@ export default class EventsFormatter extends Formatter {
   /** Process public lottery and open house events */
   process() {
     const events: ListingEventCreate[] = this.data.events?.filter(
-      (event) => !(event?.type === ListingEventType.publicLottery)
+      (event) =>
+        !(
+          event?.type === ListingEventType.publicLottery ||
+          event?.type === ListingEventType.openHouse
+        )
     )
     if (
       this.data.lotteryDate &&
