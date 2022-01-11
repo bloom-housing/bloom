@@ -227,6 +227,16 @@ class Listing extends BaseEntity {
   @Type(() => Address)
   applicationMailingAddress?: Address | null
 
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
+  })
+  applicationMailingAddressType?: ListingApplicationAddressType | null
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

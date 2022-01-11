@@ -4767,6 +4767,9 @@ export interface Listing {
   applicationDropOffAddressType?: ListingApplicationAddressType
 
   /**  */
+  applicationMailingAddressType?: ListingApplicationAddressType
+
+  /**  */
   status: ListingStatus
 
   /**  */
@@ -5188,6 +5191,9 @@ export interface ListingCreate {
   applicationDropOffAddressType?: ListingApplicationAddressType
 
   /**  */
+  applicationMailingAddressType?: ListingApplicationAddressType
+
+  /**  */
   status: ListingStatus
 
   /**  */
@@ -5595,6 +5601,9 @@ export interface ListingUpdate {
 
   /**  */
   applicationDropOffAddressType?: ListingApplicationAddressType
+
+  /**  */
+  applicationMailingAddressType?: ListingApplicationAddressType
 
   /**  */
   status: ListingStatus
@@ -6335,7 +6344,6 @@ export enum OrderByFieldsEnum {
 
 export enum ListingApplicationAddressType {
   "leasingAgent" = "leasingAgent",
-  "mailingAddress" = "mailingAddress",
 }
 
 export enum ListingStatus {

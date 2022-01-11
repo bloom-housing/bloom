@@ -37,6 +37,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         : YesNoAnswer.No,
   })
 
+  const applicationsMailedIn: YesNoAnswer = useWatch({
+    control,
+    name: "canApplicationsBeMailedIn",
+    defaultValue:
+      listing?.applicationMailingAddress || listing?.applicationMailingAddressType
+        ? YesNoAnswer.Yes
+        : YesNoAnswer.No,
+  })
+
   const applicationsPickedUp: YesNoAnswer = useWatch({
     control,
     name: "canPaperApplicationsBePickedUp",
@@ -55,6 +64,16 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         : YesNoAnswer.No,
   })
 
+  const mailedInAddressType = useWatch({
+    control,
+    name: "whereApplicationsMailedIn",
+    defaultValue: listing?.applicationMailingAddressType
+      ? listing?.applicationMailingAddressType
+      : listing?.applicationMailingAddress
+      ? addressTypes.anotherAddress
+      : null,
+  })
+
   const pickedUpAddressType = useWatch({
     control,
     name: "whereApplicationsPickedUp",
@@ -63,12 +82,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
       : listing?.applicationPickUpAddress
       ? addressTypes.anotherAddress
       : null,
-  })
-
-  const paperMailedToAnotherAddress = useWatch({
-    control,
-    name: "arePaperAppsMailedToAnotherAddress",
-    defaultValue: listing && listing?.applicationMailingAddress !== null,
   })
 
   const droppedOffAddressType = useWatch({
@@ -110,13 +123,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         value: addressTypes.anotherAddress,
       },
     ]
-    if (paperMailedToAnotherAddress) {
-      locationRadioOptions.splice(1, 0, {
-        label: t("listings.atMailingAddress"),
-        defaultChecked: addressType === addressTypes.mailingAddress,
-        value: addressTypes.mailingAddress,
-      })
-    }
     return locationRadioOptions.map((option) => {
       const optionID = `${prefix}${option.value[0].toUpperCase() + option.value.slice(1)}`
       return { ...option, id: optionID }
@@ -128,9 +134,9 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   return (
     <div>
       <hr className="mt-6 mb-6" />
-      <span className="form-section__title">{t("listings.sections.applicationAddressTitle")}</span>
+      <span className="form-section__title">{"Leasing Agent"}</span>
       <span className="form-section__description">
-        {t("listings.sections.applicationAddressSubtitle")}
+        {"Provide details about the leasing agent who will be managing the process."}
       </span>
       <GridSection grid={false} subtitle={t("listings.leasingAgentAddress")}>
         <GridSection columns={3}>
@@ -181,78 +187,40 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             register={register}
           />
         </GridSection>
-        <GridSection columns={1}>
-          <Field
-            className={"font-semibold"}
-            id="arePaperAppsMailedToAnotherAddress"
-            name="arePaperAppsMailedToAnotherAddress"
-            type="checkbox"
-            label={t("listings.paperDifferentAddress")}
-            register={register}
-            inputProps={{
-              defaultChecked: listing && listing?.applicationMailingAddress !== null,
-            }}
-            dataTestId={"mailing-address-checkbox"}
-          />
-        </GridSection>
-        {paperMailedToAnotherAddress && (
-          <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
-            <GridSection columns={3}>
-              <Field
-                label={t("listings.streetAddressOrPOBox")}
-                name={"applicationMailingAddress.street"}
-                id={"applicationMailingAddress.street"}
-                register={register}
-                placeholder={t("application.contact.streetAddress")}
-                dataTestId={"mailing-address-street"}
-              />
-              <Field
-                label={t("application.contact.apt")}
-                name={"applicationMailingAddress.street2"}
-                id={"applicationMailingAddress.street2"}
-                register={register}
-                placeholder={t("application.contact.apt")}
-                dataTestId={"mailing-address-street2"}
-              />
-            </GridSection>
-            <GridSection columns={6}>
-              <GridCell span={2}>
-                <Field
-                  label={t("application.contact.city")}
-                  name={"applicationMailingAddress.city"}
-                  id={"applicationMailingAddress.city"}
-                  register={register}
-                  placeholder={t("application.contact.city")}
-                  dataTestId={"mailing-address-city"}
-                />
-              </GridCell>
-              <ViewItem label={t("application.contact.state")} className="mb-0">
-                <Select
-                  id={`applicationMailingAddress.state`}
-                  name={`applicationMailingAddress.state`}
-                  label={t("application.contact.state")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={stateKeys}
-                  keyPrefix="states"
-                  errorMessage={t("errors.stateError")}
-                  dataTestId={"mailing-address-state"}
-                />
-              </ViewItem>
-              <Field
-                label={t("application.contact.zip")}
-                name={"applicationMailingAddress.zipCode"}
-                id={"applicationMailingAddress.zipCode"}
-                placeholder={t("application.contact.zip")}
-                errorMessage={t("errors.zipCodeError")}
-                register={register}
-                dataTestId={"mailing-address-zip"}
-              />
-            </GridSection>
-          </GridSection>
-        )}
-        <GridSection columns={2}>
+        <hr className="mt-6 mb-6" />
+        <span className="form-section__title">{"Application Address"}</span>
+        <span className="form-section__description">
+          {
+            "In the event of paper applications, where do you want applications mailed or dropped off?"
+          }
+        </span>
+        <GridSection columns={3}>
+          <GridCell>
+            <GridCell span={2}>
+              <p className="field-label m-4 ml-0">{"Can applications be mailed in?"}</p>
+            </GridCell>
+            <FieldGroup
+              name="canApplicationsBeMailedIn"
+              type="radio"
+              register={register}
+              fields={[
+                {
+                  ...yesNoRadioOptions[0],
+                  id: "applicationsMailedInYes",
+                  defaultChecked:
+                    isNullOrUndefined(listing?.applicationMailingAddress) === false ||
+                    isNullOrUndefined(listing?.applicationMailingAddressType) === false,
+                },
+                {
+                  ...yesNoRadioOptions[1],
+                  id: "applicationsMailedInNo",
+                  defaultChecked:
+                    listing?.applicationMailingAddress === null &&
+                    listing?.applicationMailingAddressType === null,
+                },
+              ]}
+            />
+          </GridCell>
           <GridCell>
             <GridCell span={2}>
               <p className="field-label m-4 ml-0">{t("listings.applicationPickupQuestion")}</p>
@@ -306,32 +274,52 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
             />
           </GridCell>
         </GridSection>
-        <GridSection columns={2}>
-          {applicationsPickedUp === YesNoAnswer.Yes && (
-            <GridCell>
-              <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
-              <FieldGroup
-                name="whereApplicationsPickedUp"
-                type="radio"
-                register={register}
-                fields={getLocationOptions(
-                  "pickUp",
-                  listing?.applicationPickUpAddressType,
-                  isNullOrUndefined(listing?.applicationPickUpAddress) === false
-                )}
-              />
-            </GridCell>
-          )}
-          {applicationsDroppedOff === YesNoAnswer.Yes && (
-            <>
-              {applicationsPickedUp === YesNoAnswer.No && (
-                <GridCell>
-                  <></>
-                </GridCell>
-              )}
-              <GridCell>
+        <GridSection columns={3}>
+          <GridCell>
+            {applicationsMailedIn === YesNoAnswer.Yes && (
+              <>
+                <p className="field-label m-4 ml-0">{"Where are applications mailed in?"}</p>
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  name="whereApplicationsMailedIn"
+                  type="radio"
+                  register={register}
+                  fields={getLocationOptions(
+                    "mailIn",
+                    listing?.applicationMailingAddressType,
+                    isNullOrUndefined(listing?.applicationMailingAddress) === false
+                  )}
+                />
+              </>
+            )}
+          </GridCell>
+          <GridCell>
+            {applicationsPickedUp === YesNoAnswer.Yes && (
+              <>
+                <p className="field-label m-4 ml-0">{t("listings.wherePickupQuestion")}</p>
+                <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
+                  name="whereApplicationsPickedUp"
+                  type="radio"
+                  register={register}
+                  fields={getLocationOptions(
+                    "pickUp",
+                    listing?.applicationPickUpAddressType,
+                    isNullOrUndefined(listing?.applicationPickUpAddress) === false
+                  )}
+                />
+              </>
+            )}
+          </GridCell>
+          <GridCell>
+            {applicationsDroppedOff === YesNoAnswer.Yes && (
+              <>
                 <p className="field-label m-4 ml-0">{t("listings.whereDropOffQuestion")}</p>
                 <FieldGroup
+                  fieldGroupClassName="grid grid-cols-1"
+                  fieldClassName="ml-0"
                   name="whereApplicationsDroppedOff"
                   type="radio"
                   register={register}
@@ -341,11 +329,68 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     isNullOrUndefined(listing?.applicationDropOffAddress) === false
                   )}
                 />
-              </GridCell>
-            </>
-          )}
+              </>
+            )}
+          </GridCell>
         </GridSection>
-
+        {applicationsMailedIn === YesNoAnswer.Yes &&
+          mailedInAddressType === addressTypes.anotherAddress && (
+            <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
+              <GridSection columns={3}>
+                <Field
+                  label={t("listings.streetAddressOrPOBox")}
+                  name={"applicationMailingAddress.street"}
+                  id={"applicationMailingAddress.street"}
+                  register={register}
+                  placeholder={t("application.contact.streetAddress")}
+                  dataTestId={"mailing-address-street"}
+                />
+                <Field
+                  label={t("application.contact.apt")}
+                  name={"applicationMailingAddress.street2"}
+                  id={"applicationMailingAddress.street2"}
+                  register={register}
+                  placeholder={t("application.contact.apt")}
+                  dataTestId={"mailing-address-street2"}
+                />
+              </GridSection>
+              <GridSection columns={6}>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.city")}
+                    name={"applicationMailingAddress.city"}
+                    id={"applicationMailingAddress.city"}
+                    register={register}
+                    placeholder={t("application.contact.city")}
+                    dataTestId={"mailing-address-city"}
+                  />
+                </GridCell>
+                <ViewItem label={t("application.contact.state")} className="mb-0">
+                  <Select
+                    id={`applicationMailingAddress.state`}
+                    name={`applicationMailingAddress.state`}
+                    label={t("application.contact.state")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={stateKeys}
+                    keyPrefix="states"
+                    errorMessage={t("errors.stateError")}
+                    dataTestId={"mailing-address-state"}
+                  />
+                </ViewItem>
+                <Field
+                  label={t("application.contact.zip")}
+                  name={"applicationMailingAddress.zipCode"}
+                  id={"applicationMailingAddress.zipCode"}
+                  placeholder={t("application.contact.zip")}
+                  errorMessage={t("errors.zipCodeError")}
+                  register={register}
+                  dataTestId={"mailing-address-zip"}
+                />
+              </GridSection>
+            </GridSection>
+          )}
         {applicationsPickedUp === YesNoAnswer.Yes &&
           pickedUpAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
