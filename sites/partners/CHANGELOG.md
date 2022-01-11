@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.20...@bloom-housing/partners@4.0.1-alpha.21) (2022-01-11)
+
+
+### Bug Fixes
+
+* open house events can now be edited and work cross-browser ([#2320](https://github.com/bloom-housing/bloom/issues/2320)) ([4af6efd](https://github.com/bloom-housing/bloom/commit/4af6efdd29787a93faf1a314073e2e201584214f))
+
+
+
+
+
 ## [4.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.19...@bloom-housing/partners@4.0.1-alpha.20) (2022-01-11)
 
 
