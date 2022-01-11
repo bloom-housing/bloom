@@ -5,6 +5,6 @@
     "jsx": "preserve",
     "allowJs": true
   },
-  "exclude": ["node_modules", "cypress"],
+  "exclude": ["node_modules", "cypress", "cypress-file-upload"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
