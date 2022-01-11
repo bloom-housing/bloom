@@ -10,7 +10,7 @@ import {
   t,
   LoadingOverlay,
 } from "@bloom-housing/ui-components"
-import { BaseDataLayerArgs, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
@@ -25,7 +25,7 @@ const Applications = () => {
 
   useEffect(() => {
     if (profile) {
-      pushGtmEvent<BaseDataLayerArgs>({
+      pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: t("nav.myApplications"),
         status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,

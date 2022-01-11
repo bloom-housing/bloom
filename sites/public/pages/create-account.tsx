@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -17,9 +17,11 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../layouts/forms"
 import moment from "moment"
 import { useRouter } from "next/router"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { USER_STATUS } from "../lib/constants"
+import FormsLayout from "../layouts/forms"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -35,6 +37,14 @@ export default () => {
   const password = useRef({})
   email.current = watch("email", "")
   password.current = watch("password", "")
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: t("account.createAccount"),
+      status: USER_STATUS.NotLoggedIn,
+    })
+  }, [])
 
   const onSubmit = async (data) => {
     try {

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react"
+import React, { useContext, useState, useRef, useEffect } from "react"
 import moment from "moment"
 import { useForm } from "react-hook-form"
 import {
@@ -19,6 +19,8 @@ import {
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { USER_STATUS } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 
 type AlertMessage = {
@@ -38,6 +40,16 @@ const Edit = () => {
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
   password.current = watch("password", "")
+
+  useEffect(() => {
+    if (profile) {
+      pushGtmEvent<PageView>({
+        event: "pageView",
+        pageTitle: t("account.accountSettings"),
+        status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+      })
+    }
+  }, [profile])
 
   const onNameSubmit = async (data: {
     firstName: string

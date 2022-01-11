@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import {
@@ -15,8 +15,10 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
+import { USER_STATUS } from "../lib/constants"
 
 const SignIn = () => {
   const { login } = useContext(AuthContext)
@@ -27,6 +29,14 @@ const SignIn = () => {
   const { register, handleSubmit, errors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const [requestError, setRequestError] = useState<string>()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: t("nav.signIn"),
+      status: USER_STATUS.NotLoggedIn,
+    })
+  }, [])
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data

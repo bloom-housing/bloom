@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
@@ -14,6 +14,8 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { USER_STATUS } from "../lib/constants"
 import { emailRegex } from "../lib/helpers"
 import FormsLayout from "../layouts/forms"
 
@@ -28,6 +30,14 @@ const ForgotPassword = () => {
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
 
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: t("authentication.forgotPassword.sendEmail"),
+      status: USER_STATUS.NotLoggedIn,
+    })
+  }, [])
+
   const onSubmit = async (data: { email: string }) => {
     const { email } = data
 
@@ -37,7 +47,7 @@ const ForgotPassword = () => {
       await router.push("/")
     } catch (err) {
       const { status, data } = err.response || {}
-      if (status === 400) {
+      if (status === 404) {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)

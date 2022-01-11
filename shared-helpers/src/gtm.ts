@@ -4,26 +4,26 @@ declare global {
   }
 }
 
-export type BaseDataLayerArgs = {
+export type PageView = {
   event: string
   pageTitle: string
   status: string
 }
 
-export type ListingList = BaseDataLayerArgs & {
-  numberOfListings?: string
-  listingIDs?: string[]
+export type ListingList = PageView & {
+  numberOfListings: string
+  listingIds: string[]
 }
 
-export type ListingDetail = BaseDataLayerArgs & {
-  listingStartDate?: string
-  listingStatus?: string
-  listingID?: string
-  applicationDueDate?: string
-  paperApplication?: string
+export type ListingDetail = PageView & {
+  listingStartDate: string
+  listingStatus: string
+  listingID: string
+  applicationDueDate: string
+  paperApplication: boolean
 }
 
-type DataLayerArgsUnion = BaseDataLayerArgs | BaseDataLayerArgs | BaseDataLayerArgs
+type DataLayerArgsUnion = PageView | ListingList | ListingDetail
 
 export function pushGtmEvent<T extends DataLayerArgsUnion>(args: T): void {
   if (!window) return
