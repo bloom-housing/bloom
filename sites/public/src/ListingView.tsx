@@ -234,7 +234,13 @@ export const ListingView = (props: ListingProps) => {
     return applicationMethods.find((method) => method.type == type)
   }
 
-  type AddressLocation = "dropOff" | "pickUp"
+  type AddressLocation = "dropOff" | "pickUp" | "mailIn"
+
+  const addressMap = {
+    dropOff: listing.applicationDropOffAddress,
+    pickUp: listing.applicationPickUpAddress,
+    mailIn: listing.applicationMailingAddress,
+  }
 
   const getAddress = (
     addressType: ListingApplicationAddressType | undefined,
@@ -243,14 +249,7 @@ export const ListingView = (props: ListingProps) => {
     if (addressType === ListingApplicationAddressType.leasingAgent) {
       return listing.leasingAgentAddress
     }
-    if (addressType === ListingApplicationAddressType.mailingAddress) {
-      return listing.applicationMailingAddress
-    }
-    if (location === "dropOff") {
-      return listing.applicationDropOffAddress
-    } else {
-      return listing.applicationPickUpAddress
-    }
+    return addressMap[location]
   }
 
   const getOnlineApplicationURL = () => {
@@ -318,7 +317,7 @@ export const ListingView = (props: ListingProps) => {
         listingStatus={listing.status}
       />
       <SubmitApplication
-        applicationMailingAddress={listing.applicationMailingAddress}
+        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
         applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}

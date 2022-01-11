@@ -17,7 +17,7 @@ export default class BooleansFormatter extends Formatter {
         addressTypes[this.data.whereApplicationsPickedUp] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsPickedUp],
     })
-    this.processBoolean("  applicationMailingAddressType", {
+    this.processBoolean("applicationMailingAddressType", {
       when:
         this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
         addressTypes[this.data.whereApplicationsMailedIn] !== addressTypes.anotherAddress,

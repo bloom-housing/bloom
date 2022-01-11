@@ -32,6 +32,7 @@ const getMockListing = () => {
     applicationPickUpAddress: undefined,
     applicationPickUpAddressOfficeHours: undefined,
     applicationPickUpAddressType: undefined,
+    applicationMailingAddressType: undefined,
     applications: [],
     assets: [],
     buildingSelectionCriteria: undefined,

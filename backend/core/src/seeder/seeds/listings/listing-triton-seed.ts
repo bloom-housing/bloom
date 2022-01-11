@@ -240,6 +240,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...tritonListing,
+      name: "Test: Triton 2",
       property: property,
       assets: getDefaultAssets(),
       listingPreferences: [
@@ -394,6 +395,7 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...tritonListing,
+      name: "Test: Triton 1",
       property: property,
       assets: getDefaultAssets(),
       events: [],

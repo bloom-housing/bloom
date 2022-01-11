@@ -1,19 +1,11 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
 import { getDetailFieldString, getDetailFieldTime } from "./helpers"
 import dayjs from "dayjs"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
-
-  const getAddressString = (addressType: ListingApplicationAddressType): string | undefined => {
-    if (addressType === ListingApplicationAddressType.leasingAgent)
-      return t("listings.leasingAgentAddress")
-    if (addressType === ListingApplicationAddressType.mailingAddress)
-      return t("application.contact.mailingAddress")
-  }
 
   const postMarkDateFormat = (date: Date) => {
     return date ? dayjs(new Date(date)).format("MM/DD/YYYY") : t("t.none")
@@ -49,16 +41,22 @@ const DetailApplicationAddress = () => {
           </ViewItem>
         </GridSection>
 
-        <hr className={"mb-4"} />
+        <hr className={"mt-4 mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem
-            id="applicationMailingAddress"
-            label={t("listings.paperDifferentAddress")}
-            dataTestId={"mailing-address-checkbox"}
-          >
-            {listing.applicationMailingAddress ? t("t.yes") : t("t.no")}
+          <ViewItem id="applicationMailingSection" label={"Can applications be mailed in?"}>
+            {listing.applicationMailingAddress || listing.applicationMailingAddressType
+              ? t("t.yes")
+              : t("t.no")}
           </ViewItem>
+          {listing.applicationMailingAddressType && (
+            <ViewItem
+              id="applicationMailingAddressType"
+              label={"Where can applications be mailed in?"}
+            >
+              {t("listings.leasingAgentAddress")}
+            </ViewItem>
+          )}
         </GridSection>
 
         {listing.applicationMailingAddress && (
@@ -117,7 +115,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationPickUpAddressType && (
             <ViewItem id="applicationPickUpAddressType" label={t("listings.wherePickupQuestion")}>
-              {getAddressString(listing.applicationPickUpAddressType)}
+              {t("listings.leasingAgentAddress")}
             </ViewItem>
           )}
         </GridSection>
@@ -174,7 +172,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationDropOffAddressType && (
             <ViewItem id="applicationDropOffAddressType" label={t("listings.whereDropOffQuestion")}>
-              {getAddressString(listing.applicationDropOffAddressType)}
+              {t("listings.leasingAgentAddress")}
             </ViewItem>
           )}
         </GridSection>
