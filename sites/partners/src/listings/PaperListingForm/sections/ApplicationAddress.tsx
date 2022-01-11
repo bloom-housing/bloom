@@ -547,7 +547,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           <GridCell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <DateField
-                label={t("listings.postmarkByDate")}
+                label={t("listings.receivedByDate")}
                 name={"postmarkByDateDateField"}
                 id={"postmarkByDateDateField"}
                 register={register}
@@ -570,7 +570,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           <GridCell className={"mt-4"}>
             {postmarksConsidered === YesNoAnswer.Yes && (
               <TimeField
-                label={t("listings.postmarkByTime")}
+                label={t("listings.receivedByTime")}
                 name={"postmarkByDateTimeField"}
                 id={"postmarkByDateTimeField"}
                 register={register}

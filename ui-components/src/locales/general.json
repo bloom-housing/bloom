@@ -1111,6 +1111,8 @@
     "pickupAddress": "Pickup Address",
     "postmarkByDate": "Postmark by Date",
     "postmarkByTime": "Postmark by Time",
+    "receivedByDate": "Received by Date",
+    "receivedByTime": "Received by Time",
     "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",

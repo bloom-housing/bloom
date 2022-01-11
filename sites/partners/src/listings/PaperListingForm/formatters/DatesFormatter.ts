@@ -7,7 +7,7 @@ export default class DatesFormatter extends Formatter {
   process() {
     const dueDate = createDate(this.data.applicationDueDateField)
     this.data.applicationDueDate =
-      this.data.applicationDueTimeField.hours && this.data.applicationDueTimeField.minutes
+      this.data.applicationDueTimeField?.hours && this.data.applicationDueTimeField?.minutes
         ? createTime(dueDate, this.data.applicationDueTimeField)
         : createTime(dueDate, {
             hours: "05",

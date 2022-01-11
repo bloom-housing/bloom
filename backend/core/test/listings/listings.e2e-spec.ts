@@ -296,9 +296,9 @@ describe("Listings", () => {
     // (5 days in the future). Between the two, Triton appears first because it has
     // the earlier applicationOpenDate.
     const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton")
+    expect(secondListing.name).toBe("Test: Triton 2")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Triton")
+    expect(thirdListing.name).toBe("Test: Triton 1")
     const fourthListing = listings[3]
     expect(fourthListing.name).toBe("Test: Default, No Preferences")
 

@@ -232,7 +232,7 @@ const DetailApplicationAddress = () => {
             <GridCell span={2}>
               <ViewItem
                 id="postmarkedApplicationsReceivedByDate"
-                label={t("listings.postmarkByDate")}
+                label={t("listings.receivedByDate")}
                 dataTestId={"postmark-date"}
               >
                 {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
@@ -241,7 +241,7 @@ const DetailApplicationAddress = () => {
             <GridCell span={2}>
               <ViewItem
                 id="postmarkedApplicationsReceivedByDateTime"
-                label={t("listings.postmarkByTime")}
+                label={t("listings.receivedByTime")}
                 dataTestId={"postmark-time"}
               >
                 {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
