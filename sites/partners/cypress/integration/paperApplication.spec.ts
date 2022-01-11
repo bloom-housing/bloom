@@ -17,11 +17,6 @@ describe("Paper Application Tests", () => {
       cy.fillHouseholdIncome(application)
       cy.fillDemographics(application)
       cy.fillTerms(application, true)
-    })
-  })
-
-  it("verify application submit", () => {
-    cy.fixture("application").then((application) => {
       cy.verifyApplicationData(application)
       cy.verifyPrimaryApplicant(application)
       cy.verifyAlternateContact(application)
@@ -54,6 +49,107 @@ describe("Paper Application Tests", () => {
     cy.fixture("partialApplicationA").then((application) => {
       cy.fillMailingAddress(application)
       cy.fillHouseholdIncome(application, ["incomeMonth"])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only applicant data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("applicantOnlyData").then((application) => {
+      cy.fillPrimaryApplicant(application, [
+        "application.additionalPhoneNumber",
+        "application.additionalPhoneNumberType",
+        "application.applicant.address.street2",
+      ])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only alternate contact data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("alternateContactOnlyData").then((application) => {
+      cy.fillAlternateContact(application, ["alternateContact.mailingAddress.street2"])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only household member data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("householdMemberOnlyData").then((application) => {
+      cy.fillHouseholdMember(application, [])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdMembers(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only household detail data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("householdDetailsOnlyData").then((application) => {
+      cy.fillHouseholdDetails(application, [])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only household income data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("householdIncomeOnlyData").then((application) => {
+      cy.fillHouseholdIncome(application, [])
+      cy.fillTerms(application, true)
+      cy.verifyApplicationData(application)
+      cy.verifyPrimaryApplicant(application)
+      cy.verifyAlternateContact(application)
+      cy.verifyHouseholdDetails(application)
+      cy.verifyHouseholdIncome(application)
+      cy.verifyTerms(application)
+    })
+  })
+
+  it("fill only demographic data", () => {
+    cy.visit("/")
+    cy.get(`[col-id="status"] > a`).eq(1).click()
+    cy.getByTestId("addApplicationButton").contains("Add Application").click()
+    cy.fixture("demographicsOnlyData").then((application) => {
+      cy.fillDemographics(application, [])
       cy.fillTerms(application, true)
       cy.verifyApplicationData(application)
       cy.verifyPrimaryApplicant(application)
