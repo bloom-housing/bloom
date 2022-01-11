@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.19...@bloom-housing/partners@4.0.1-alpha.20) (2022-01-11)
+
+
+### Bug Fixes
+
+* add test id ([d4b0ed2](https://github.com/bloom-housing/bloom/commit/d4b0ed2426b7f8aced3b2dd44baf2a438410838d))
+* update naming ([b9c645c](https://github.com/bloom-housing/bloom/commit/b9c645cd1460567f9c35a54c7fd93bc5957d593e))
+* use drag n drop ([a354904](https://github.com/bloom-housing/bloom/commit/a3549045d4f0da64692318f84f0336f1287ad48a))
+
+
+
+
+
 ## [4.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.18...@bloom-housing/partners@4.0.1-alpha.19) (2022-01-08)
 
 

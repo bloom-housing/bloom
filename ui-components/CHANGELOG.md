@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.18...@bloom-housing/ui-components@4.0.1-alpha.19) (2022-01-11)
+
+
+### Bug Fixes
+
+* use drag n drop ([a354904](https://github.com/bloom-housing/bloom/commit/a3549045d4f0da64692318f84f0336f1287ad48a))
+
+
+
+
+
 ## [4.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.17...@bloom-housing/ui-components@4.0.1-alpha.18) (2022-01-08)
 
 
