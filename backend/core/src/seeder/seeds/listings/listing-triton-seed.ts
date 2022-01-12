@@ -397,6 +397,7 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       ...tritonListing,
       name: "Test: Triton 1",
       property: property,
+      applicationOpenDate: getDate(-5),
       assets: getDefaultAssets(),
       events: [],
     }
