@@ -309,7 +309,7 @@ export const ListingView = (props: ListingProps) => {
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
         postmarkedApplicationsReceivedByDate={getDateString(
           listing.postmarkedApplicationsReceivedByDate,
-          `MMM. DD, YYYY [${t("t.at")}] hh:mm A`
+          `MMM DD, YYYY [${t("t.at")}] hh:mm A`
         )}
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
@@ -324,12 +324,12 @@ export const ListingView = (props: ListingProps) => {
         postmarkedApplicationData={{
           postmarkedApplicationsReceivedByDate: getDateString(
             listing.postmarkedApplicationsReceivedByDate,
-            `MMM. DD, YYYY [${t("t.at")}] hh:mm A`
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
           ),
           developer: listing.developer,
           applicationsDueDate: getDateString(
             listing.applicationDueDate,
-            `MMM. DD, YYYY [${t("t.at")}] hh:mm A`
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
           ),
         }}
         listingStatus={listing.status}

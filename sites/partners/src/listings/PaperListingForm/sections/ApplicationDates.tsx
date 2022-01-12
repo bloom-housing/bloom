@@ -150,14 +150,24 @@ const ApplicationDates = ({
             defaultValues={{
               hours: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
-                : null,
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "05",
               minutes: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
-                : null,
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
               seconds: listing?.applicationDueDate
                 ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
-                : null,
-              period: new Date(listing?.applicationDueDate).getHours() >= 12 ? "pm" : "am",
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
+              period: listing?.applicationDueDate
+                ? new Date(listing?.applicationDueDate).getHours() >= 12
+                  ? "pm"
+                  : "am"
+                : "pm",
             }}
           />
         </GridSection>
