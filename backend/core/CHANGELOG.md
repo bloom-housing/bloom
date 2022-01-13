@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.12...@bloom-housing/backend-core@3.0.2-alpha.13) (2022-01-13)
+
+
+### Bug Fixes
+
+* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+
+
+
+
 ## [3.0.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.11...@bloom-housing/backend-core@3.0.2-alpha.12) (2022-01-07)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

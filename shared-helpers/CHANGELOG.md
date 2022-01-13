@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@4.0.1-alpha.20...@bloom-housing/shared-helpers@4.0.1-alpha.21) (2022-01-13)
+
+**Note:** Version bump only for package @bloom-housing/shared-helpers
+
+
+
+
+
 ## [4.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@4.0.1-alpha.19...@bloom-housing/shared-helpers@4.0.1-alpha.20) (2022-01-13)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
