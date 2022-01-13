@@ -639,6 +639,20 @@
         "address": "Address",
         "name": "Name",
         "organization": "Name of Organization"
+      },
+      "rosefieldLive": {
+        "title": "Previous Residents of Rosefield Village Relocated Outside of the City of Alameda",
+        "yes": {
+          "label": "At least one member of my household was a previous resident of Rosefield Village",
+          "description": "At least one member of my household was a previous resident of Rosefield Village"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Alameda Unified School District (AUSD) employee",
+        "yes": {
+          "label": "At least one member of my household is an Alameda Unified School District employee",
+          "description": "At least one member of my household is an Alameda Unified School District employee."
+        }
       }
     },
     "review": {
@@ -945,7 +959,7 @@
     "es": "Español",
     "zh": "中文",
     "vi": "Tiếng Việt",
-    "tl": "Tagalog"
+    "tl": "Filipino"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
