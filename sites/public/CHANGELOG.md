@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@3.0.1-alpha.34...@bloom-housing/public@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* 2259/fixes idle timeout not resetting properly ([#2292](https://github.com/seanmalbert/bloom/issues/2292)) ([1b89acb](https://github.com/seanmalbert/bloom/commit/1b89acb21dea913db4ae638b9e4566a444eb7190))
+* applications/view hide prefs ([eed00ab](https://github.com/seanmalbert/bloom/commit/eed00ab591b99c274fe4663c940ac76bc455edfd))
+* change the yes/no radio text to be more descriptive ([c48e6c8](https://github.com/seanmalbert/bloom/commit/c48e6c83070651800bb9a1df0520ad3df14ebdff))
+* choose-language context ([0d655f9](https://github.com/seanmalbert/bloom/commit/0d655f90838c4c76c7b1b6802bc62151adf472a4))
+* closed listings allowed apps ([#2317](https://github.com/seanmalbert/bloom/issues/2317)) ([557fde3](https://github.com/seanmalbert/bloom/commit/557fde3367c1eece8f80d9618b6a6ba7cd6eebbb))
+* demographics howDidYouHear options (2305) ([b80f21c](https://github.com/seanmalbert/bloom/commit/b80f21ca3e75b335222020130b96ef137be6b26f))
+* preference cleanup for avance ([8ff5e6d](https://github.com/seanmalbert/bloom/commit/8ff5e6d1ccb4e93a355bb3e502974c99ada22b66))
+* prefUnits on autofill summary ([#2294](https://github.com/seanmalbert/bloom/issues/2294)) ([c027e96](https://github.com/seanmalbert/bloom/commit/c027e964f8f4e135cbc0fa70db5eaafa389ce53c))
+* remove alameda reference in demographics ([cc6761b](https://github.com/seanmalbert/bloom/commit/cc6761b22616f28ff2a0393766a6273c918376fd))
+* submission tests not running ([78dd21e](https://github.com/seanmalbert/bloom/commit/78dd21ecf82680d38a97f762dfa128df3496fd91))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+* visual improvement to programs form display ([33ef3db](https://github.com/seanmalbert/bloom/commit/33ef3dbdbafd561a79f17b90edb8d80b98a4c035))
+
+
+* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
+
+
+### Features
+
+* adds bottom border to preferences ([60fe76a](https://github.com/seanmalbert/bloom/commit/60fe76af140538216555bcf79b0747df3d565404))
+* adds new preferences, reserved community type ([90c0673](https://github.com/seanmalbert/bloom/commit/90c0673779eeb028041717d0b1e0e69fb0766c71))
+* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* refactor and add public site application flow cypress tests ([a300d69](https://github.com/seanmalbert/bloom/commit/a300d69c895052a6c3c4def6121237fdc80a76c6))
+* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
+* skip preferences if not on listing ([644ba0e](https://github.com/seanmalbert/bloom/commit/644ba0eb7094b5d57c54df80f3cd11dcea0ca4a7))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+### BREAKING CHANGES
+
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+
+
+
+
 ## [3.0.1-alpha.68](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@3.0.1-alpha.67...@bloom-housing/public@3.0.1-alpha.68) (2021-12-13)
 
 **Note:** Version bump only for package @bloom-housing/public

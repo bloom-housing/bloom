@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* app submission w/ no due date ([8e5a81c](https://github.com/seanmalbert/bloom/commit/8e5a81c37c4efc3404e5536bd54c10cd2962bca3))
+* cannot save custom mailing, dropoff, or pickup address ([edcb068](https://github.com/seanmalbert/bloom/commit/edcb068ca23411e0a34f1dc2ff4c77ab489ac0fc))
+* fix for csv dempgraphics and preference patch ([0ffc090](https://github.com/seanmalbert/bloom/commit/0ffc0900fee73b34fd953e5355552e2e763c239c))
+* listings management keep empty strings, remove empty objects ([3aba274](https://github.com/seanmalbert/bloom/commit/3aba274a751cdb2db55b65ade1cda5d1689ca681))
+* recalculate units available on listing update ([9c3967f](https://github.com/seanmalbert/bloom/commit/9c3967f0b74526db39df4f5dbc7ad9a52741a6ea))
+* units with invalid ami chart ([621ff02](https://github.com/seanmalbert/bloom/commit/621ff0227270861047e885467f9ddd77459adec1))
+* updates household member count ([f822713](https://github.com/seanmalbert/bloom/commit/f82271397d02025629d7ea039b40cdac95877c45))
+
+
+* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
+
+
+### Features
+
+* add a phone number column to the user_accounts table ([44881da](https://github.com/seanmalbert/bloom/commit/44881da1a7ccc17b7d4db1fcf79513632c18066d))
+* add SRO unit type ([a4c1403](https://github.com/seanmalbert/bloom/commit/a4c140350a84a5bacfa65fb6714aa594e406945d))
+* adds jurisdictions to pref seeds ([8a70b68](https://github.com/seanmalbert/bloom/commit/8a70b688ec8c6eb785543d5ce91ae182f62af168))
+* adds new preferences, reserved community type ([90c0673](https://github.com/seanmalbert/bloom/commit/90c0673779eeb028041717d0b1e0e69fb0766c71))
+* adds whatToExpect to GTrans ([461961a](https://github.com/seanmalbert/bloom/commit/461961a4dd48d7a1c935e4dc03e9a62d2f455088))
+* ami chart jurisdictionalized ([b2e2537](https://github.com/seanmalbert/bloom/commit/b2e2537818d92ff41ea51fbbeb23d9d7e8c1cf52))
+* **backend:** all programs to csv export ([#2302](https://github.com/seanmalbert/bloom/issues/2302)) ([48b50f9](https://github.com/seanmalbert/bloom/commit/48b50f95be794773cc68ebee3144c1f44db26f04))
+* better seed data for ami-charts ([24eb7e4](https://github.com/seanmalbert/bloom/commit/24eb7e41512963f8dc716b74e8a8684e1272e1b7))
+* feat(backend): make use of new application confirmation codes ([8f386e8](https://github.com/seanmalbert/bloom/commit/8f386e8e656c8d498d41de947f2e5246d3c16b19))
+* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* updates email confirmation for lottery ([768064a](https://github.com/seanmalbert/bloom/commit/768064a985ed858fae681caebcbcdb561319eaf9))
+
+
+### Reverts
+
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+### BREAKING CHANGES
+
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+
+
+
+
 ## [3.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.36...@bloom-housing/backend-core@3.0.1-alpha.37) (2021-12-13)
 
 

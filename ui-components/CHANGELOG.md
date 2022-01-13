@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.22...@bloom-housing/ui-components@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* account translations ([d85997d](https://github.com/seanmalbert/bloom/commit/d85997dfb50d47c3e4cd42ed4cae759985036c88))
+* fix modal styles on mobile ([9cdc8e6](https://github.com/seanmalbert/bloom/commit/9cdc8e63217da345e3101866c8e9a1fd83a0d6ae))
+* mobile notice text wrap issue ([#2308](https://github.com/seanmalbert/bloom/issues/2308)) ([8cbe3cf](https://github.com/seanmalbert/bloom/commit/8cbe3cf25b34362ef7ebceb865bf8b97a3838f20))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+
+
+### Features
+
+* 2165/rosefield preference updates ([#2386](https://github.com/seanmalbert/bloom/issues/2386)) ([54177cb](https://github.com/seanmalbert/bloom/commit/54177cbaf137cd8e5acb1ad9c770e659c89054d6))
+* add SRO unit type ([a4c1403](https://github.com/seanmalbert/bloom/commit/a4c140350a84a5bacfa65fb6714aa594e406945d))
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([d184326](https://github.com/seanmalbert/bloom/commit/d18432610a55a5e54f567ff6157bb863ed61cb21))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* postmark date time fields partners ([#2239](https://github.com/seanmalbert/bloom/issues/2239)) ([cf20b88](https://github.com/seanmalbert/bloom/commit/cf20b88cb613b815c641cad34a38908e22722a4a))
+* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+
+
+
 ## [3.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.42...@bloom-housing/ui-components@3.0.1-alpha.43) (2021-12-13)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

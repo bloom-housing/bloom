@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* adds jurisdictionId to useSWR path ([c7d6adb](https://github.com/seanmalbert/bloom/commit/c7d6adba109aa50f3c1556c89c0ec714fd4c6e50))
+* cannot save custom mailing, dropoff, or pickup address ([edcb068](https://github.com/seanmalbert/bloom/commit/edcb068ca23411e0a34f1dc2ff4c77ab489ac0fc))
+* listings management keep empty strings, remove empty objects ([3aba274](https://github.com/seanmalbert/bloom/commit/3aba274a751cdb2db55b65ade1cda5d1689ca681))
+* lottery results uploads now save ([8c9dd0f](https://github.com/seanmalbert/bloom/commit/8c9dd0f043dd3835f12bc8f087b9a5519cbfd4f8))
+* paper application submission ([384b86b](https://github.com/seanmalbert/bloom/commit/384b86b624392012b56039dc4a289393f24653f5))
+* remove description for the partners programs ([d4478b8](https://github.com/seanmalbert/bloom/commit/d4478b8eaf68efdf4b23c55f15656e82a907dbc4))
+* removes Duplicate identifier fieldGroupObjectToArray ([a3a2f43](https://github.com/seanmalbert/bloom/commit/a3a2f434606628e4ad141250c401405ced10cdf4))
+* retnal assistance eror message ([09f583b](https://github.com/seanmalbert/bloom/commit/09f583be137336c92f7077beb1f1fbab2b82aefb))
+* updates lastName on application save ([a977ffd](https://github.com/seanmalbert/bloom/commit/a977ffd4b81fbf09122c51ccf066d0a3f3f6544c))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+
+
+* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
+
+
+### Features
+
+* adds listing management cypress tests to partner portal ([2e37eec](https://github.com/seanmalbert/bloom/commit/2e37eecf6344f6e25422a24ad7f4563fee4564de))
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([d184326](https://github.com/seanmalbert/bloom/commit/d18432610a55a5e54f567ff6157bb863ed61cb21))
+* ami chart jurisdictionalized ([b2e2537](https://github.com/seanmalbert/bloom/commit/b2e2537818d92ff41ea51fbbeb23d9d7e8c1cf52))
+* filter partner users ([3dd8f9b](https://github.com/seanmalbert/bloom/commit/3dd8f9b3cc1f9f90916d49b7136d5f1f73df5291))
+* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* postmark date time fields partners ([#2239](https://github.com/seanmalbert/bloom/issues/2239)) ([cf20b88](https://github.com/seanmalbert/bloom/commit/cf20b88cb613b815c641cad34a38908e22722a4a))
+* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+### BREAKING CHANGES
+
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+
+
+
+
 ## [3.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.63...@bloom-housing/partners@3.0.1-alpha.64) (2021-12-15)
 
 

@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/shared-helpers@3.0.1-alpha.20...@bloom-housing/shared-helpers@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+
+
+### Features
+
+* add SRO unit type ([a4c1403](https://github.com/seanmalbert/bloom/commit/a4c140350a84a5bacfa65fb6714aa594e406945d))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+
+
+
 ## [3.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/shared-helpers@3.0.1-alpha.41...@bloom-housing/shared-helpers@3.0.1-alpha.42) (2021-12-13)
 
 **Note:** Version bump only for package @bloom-housing/shared-helpers
