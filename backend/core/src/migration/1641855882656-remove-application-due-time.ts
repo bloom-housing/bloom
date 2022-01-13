@@ -23,10 +23,9 @@ export class removeApplicationDueTime1641855882656 implements MigrationInterface
         // Format date into db input format
         const modifiedDateString = dueDate.toISOString()
         const timeDelimiter = modifiedDateString.indexOf("T")
-        dateTimeString = `${modifiedDateString.substr(
-          0,
-          timeDelimiter
-        )} ${modifiedDateString.substr(timeDelimiter + 1)}`
+        const dateString = modifiedDateString.substr(0, timeDelimiter)
+        const timeString = modifiedDateString.substr(timeDelimiter + 1)
+        dateTimeString = `${dateString} ${timeString}`
       }
 
       await queryRunner.query("UPDATE listings SET application_due_date = ($1) WHERE id = ($2)", [
