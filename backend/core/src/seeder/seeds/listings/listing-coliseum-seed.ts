@@ -53,7 +53,7 @@ const coliseumListing: ListingSeedType = {
   applicationDropOffAddress: null,
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
-  applicationDueDate: getDate(1),
+  applicationDueDate: new Date(getDate(1).setHours(17, 0, 0, 0)),
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "John Stewart Company",
