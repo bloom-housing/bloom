@@ -645,10 +645,6 @@
         "yes": {
           "label": "At least one member of my household was a previous resident of Rosefield Village",
           "description": "At least one member of my household was a previous resident of Rosefield Village"
-        },
-        "no": {
-          "label": "No member of my household was a previous resident of Rosefield Village",
-          "description": "No member of my household was a previous resident of Rosefield Village"
         }
       },
       "rosefieldAUSD": {
@@ -656,10 +652,6 @@
         "yes": {
           "label": "At least one member of my household is an Alameda Unified School District employee",
           "description": "At least one member of my household is an Alameda Unified School District employee."
-        },
-        "no": {
-          "label": "No member of my household is an Alameda Unified School District employee",
-          "description": "No member of my household is an Alameda Unified School District employee."
         }
       }
     },
