@@ -52,16 +52,14 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     if (openInFuture(listing)) {
       const date = listing.applicationOpenDate
       const openDate = dayjs(date)
-      formattedDate = openDate.format("MMM. D, YYYY")
+      formattedDate = openDate.format("MMM D, YYYY")
       content = t("listings.applicationOpenPeriod")
     } else {
       if (listing.applicationDueDate) {
         const dueDate = dayjs(listing.applicationDueDate)
-        const dueTime = dayjs(listing.applicationDueTime)
-        formattedDate = dueDate.format("MMM. DD, YYYY")
-        if (listing.applicationDueTime) {
-          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
-        }
+        formattedDate = dueDate.format("MMM DD, YYYY")
+        formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
+
         // if due date is in future, listing is open
         if (dayjs() < dueDate) {
           content = t("listings.applicationDeadline")

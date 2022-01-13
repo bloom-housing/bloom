@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { UseFormMethods } from "react-hook-form"
+import { UseFormMethods, RegisterOptions } from "react-hook-form"
 
 export interface FieldProps {
   error?: boolean
@@ -17,12 +17,12 @@ export interface FieldProps {
   subNote?: string
   label?: string
   defaultValue?: string | number
-  onDrop?: (e: any) => boolean
-  onPaste?: (e: any) => boolean
+  onDrop?: (e: React.DragEvent<HTMLElement>) => boolean
+  onPaste?: (e: React.ClipboardEvent) => boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   register?: UseFormMethods["register"]
-  validation?: Record<string, any>
+  validation?: RegisterOptions
   disabled?: boolean
   prepend?: string
   inputProps?: Record<string, unknown>
@@ -95,7 +95,6 @@ const Field = (props: FieldProps) => {
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
         <input
-          {...props}
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}`}
           aria-invalid={!!props.error || false}
           className="input"

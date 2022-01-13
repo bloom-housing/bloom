@@ -54,7 +54,6 @@ const coliseumListing: ListingSeedType = {
   applicationDropOffAddressOfficeHours: null,
   applicationMailingAddress: null,
   applicationDueDate: getDate(1),
-  applicationDueTime: null,
   applicationFee: "12",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "John Stewart Company",
@@ -78,8 +77,8 @@ const coliseumListing: ListingSeedType = {
   creditHistory:
     "Management staff will request credit histories on each adult member of each applicant household. It is the applicant’s responsibility that at least one household member can demonstrate utilities can be put in their name. For this to be demonstrated, at least one household member must have a credit report that shows no utility accounts in default. Applicants who cannot have utilities put in their name will be considered ineligible. Any currently open bankruptcy proceeding of any of the household members will be considered a disqualifying condition. Applicants will not be considered to have a poor credit history when they were delinquent in rent because they were withholding rent due to substandard housing conditions in a manner consistent with local ordinance; or had a poor rent paying history clearly related to an excessive rent relative to their income, and responsible efforts were made to resolve the non-payment problem. If there is a finding of any kind which would negatively impact an application, the applicant will be notified in writing. The applicant then shall have 14 calendar days in which such a finding may be appealed to staff for consideration.",
   criminalBackground: null,
-  depositMax: "1,781",
-  depositMin: "1,284",
+  depositMax: "200",
+  depositMin: "100",
   disableUnitsAccordion: true,
   displayWaitlistSize: false,
   leasingAgentAddress: {
@@ -92,7 +91,7 @@ const coliseumListing: ListingSeedType = {
     longitude: -122.1968792,
   },
   leasingAgentEmail: "coliseum@jsco.net",
-  leasingAgentName: "",
+  leasingAgentName: "Leasing agent name",
   leasingAgentOfficeHours:
     "Tuesdays & Thursdays, 9:00am to 5:00pm | Persons with disabilities who are unable to access the on-line application may request a Reasonable Accommodation by calling (510) 649-5739 for assistance. A TDD line is available at (415) 345-4470.",
   leasingAgentPhone: "(510) 625-1632",
@@ -102,7 +101,7 @@ const coliseumListing: ListingSeedType = {
   name: "Test: Coliseum",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
-  rentalAssistance: "",
+  rentalAssistance: "Rental assistance",
   rentalHistory: "Two years' landlord history or homeless verification",
   requiredDocuments:
     "Application Document Checklist: https://org-housingbayarea-public-assets.s3-us-west-1.amazonaws.com/Tax+Credit+Application+Interview+Checklist.pdf",

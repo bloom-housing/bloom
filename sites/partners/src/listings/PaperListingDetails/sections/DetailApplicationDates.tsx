@@ -75,12 +75,12 @@ const DetailApplicationDates = () => {
         <GridSection columns={3}>
           <GridCell>
             <ViewItem id="applicationDeadline" label={t("listings.applicationDeadline")}>
-              {listing.applicationDueDate && getDetailFieldDate(listing.applicationDueDate)}
+              {getDetailFieldDate(listing.applicationDueDate) ?? t("t.n/a")}
             </ViewItem>
           </GridCell>
           <GridCell>
             <ViewItem id="applicationDueTime" label={t("listings.applicationDueTime")}>
-              {listing.applicationDueTime && getDetailFieldTime(listing.applicationDueTime)}
+              {getDetailFieldTime(listing.applicationDueDate) ?? t("t.n/a")}
             </ViewItem>
           </GridCell>
         </GridSection>

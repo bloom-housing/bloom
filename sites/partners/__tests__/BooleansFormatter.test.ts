@@ -20,9 +20,9 @@ describe("BooleansFormatter", () => {
     expect(formatData(data).applicationDropOffAddressType).toBeNull()
 
     data.canApplicationsBeDroppedOff = YesNoAnswer.Yes
-    data.whereApplicationsDroppedOff = ListingApplicationAddressType.mailingAddress
+    data.whereApplicationsDroppedOff = ListingApplicationAddressType.leasingAgent
     expect(formatData(data).applicationDropOffAddressType).toEqual(
-      ListingApplicationAddressType.mailingAddress
+      ListingApplicationAddressType.leasingAgent
     )
 
     data.whereApplicationsDroppedOff = AnotherAddressEnum.anotherAddress
