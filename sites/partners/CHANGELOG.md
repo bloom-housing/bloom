@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.23...@bloom-housing/partners@4.0.1-alpha.24) (2022-01-13)
+
+
+### Bug Fixes
+
+* partners render issue ([#2395](https://github.com/bloom-housing/bloom/issues/2395)) ([7fb108d](https://github.com/bloom-housing/bloom/commit/7fb108d744fcafd6b9df42706d2a2f58fbc30f0a))
+
+
+
+
+
 ## [4.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.22...@bloom-housing/partners@4.0.1-alpha.23) (2022-01-13)
 
 
