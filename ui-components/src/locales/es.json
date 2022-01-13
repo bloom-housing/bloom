@@ -258,10 +258,6 @@
         "yes": {
           "label": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village",
           "description": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village"
-        },
-        "no": {
-          "label": "Ningún miembro de mi hogar fue residente anterior de Rosefield Village",
-          "description": "Ningún miembro de mi hogar fue residente anterior de Rosefield Village"
         }
       },
       "rosefieldAUSD": {
@@ -269,10 +265,6 @@
         "yes": {
           "label": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda",
           "description": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
-        },
-        "no": {
-          "label": "Ningún miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda",
-          "description": "Ningún miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
         }
       }
     },
