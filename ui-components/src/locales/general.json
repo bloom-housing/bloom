@@ -242,7 +242,9 @@
       "provideAMailingAddress": "Provide an address where you can receive updates and materials about your application.",
       "doYouWorkIn": "Do you work in %{county} County?",
       "doYouWorkInDescription": "TBD",
-      "workAddress": "Work Address"
+      "workAddress": "Work Address",
+      "verifyAddressTitle": "We have located the following address. Please confirm it's correct.",
+      "suggestedAddress": "Suggested Address:"
     },
     "alternateContact": {
       "type": {
