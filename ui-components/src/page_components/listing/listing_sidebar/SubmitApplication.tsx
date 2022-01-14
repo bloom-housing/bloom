@@ -2,7 +2,6 @@ import * as React from "react"
 import { t } from "../../../helpers/translator"
 import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
-import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
 
 export interface PostmarkedApplication {
@@ -24,10 +23,11 @@ const SubmitApplication = (props: ApplicationAddressesProps) => {
     <>
       {(props.applicationMailingAddress ||
         props.applicationDropOffAddress ||
-        props.postmarkedApplicationData) && (
+        props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate) && (
         <section className="aside-block is-tinted bg-gray-100">
-          <NumberedHeader num={2} text={t("listings.apply.submitAPaperApplication")} />
-          {(props.applicationMailingAddress || props.postmarkedApplicationData) && (
+          <div className="text-serif-lg">{t("listings.apply.submitAPaperApplication")}</div>
+          {(props.applicationMailingAddress ||
+            props.postmarkedApplicationData?.postmarkedApplicationsReceivedByDate) && (
             <>
               <h3 className="text-caps-tiny">{t("listings.apply.sendByUsMail")}</h3>
               <p className="text-gray-700">{props.applicationOrganization}</p>
