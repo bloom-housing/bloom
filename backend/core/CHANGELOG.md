@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.14...@bloom-housing/backend-core@3.0.2-alpha.15) (2022-01-14)
+
+
+### Bug Fixes
+
+* patches translations for preferences ([#2410](https://github.com/bloom-housing/bloom/issues/2410)) ([7906e6b](https://github.com/bloom-housing/bloom/commit/7906e6bc035fab4deea79ea51833a0ef29926d45))
+
+
+
+
+
 ## [3.0.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.13...@bloom-housing/backend-core@3.0.2-alpha.14) (2022-01-13)
 
 
