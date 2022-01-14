@@ -95,31 +95,34 @@ export const NoContent = () => {
 }
 
 const exampleCustomContent = () => {
+  const getHeader = (header: string) => {
+    return (
+      <div
+        className={
+          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2 md:mt-4"
+        }
+      >
+        {header}
+      </div>
+    )
+  }
+  const getContentRow = (prefix: string, content: string) => {
+    return (
+      <div>
+        <span className={"font-semibold"}>{prefix}</span> {content}
+      </div>
+    )
+  }
   return (
     <div className={"text-gray-750"}>
-      <div
-        className={
-          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2"
-        }
-      >
-        Units
+      <div className={"font-alt-sans font-semibold text-base mb-2 text-gray-900"}>
+        Available units
       </div>
-      <div>
-        <span className={"font-semibold"}>2BR:</span> 2 available
-      </div>
-      <div>
-        <span className={"font-semibold"}>3BR:</span> 5 available
-      </div>
-      <div>
-        <span className={"font-semibold"}>4BR:</span> 1 available
-      </div>
-      <div
-        className={
-          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2 mt-4"
-        }
-      >
-        Payments
-      </div>
+      {getHeader("Units")}
+      {getContentRow("2BR:", "2 available")}
+      {getContentRow("3BR:", "5 available")}
+      {getContentRow("4BR:", "1 available")}
+      {getHeader("Payments")}
       <div>
         No down payment, but you do need to complete 500 hours of sweat equity. Your monthly payment
         will be 30% of your income.
