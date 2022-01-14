@@ -9,7 +9,6 @@ import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
-import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { ListingCreateDto } from "./dto/listing-create.dto"
@@ -17,6 +16,7 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
+import { TranslationsService } from "../translations/services/translations.service"
 
 @Injectable()
 export class ListingsService {
