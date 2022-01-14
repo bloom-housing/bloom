@@ -46,7 +46,7 @@ const Edit = () => {
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: t("account.accountSettings"),
-        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+        status: UserStatus.LoggedIn,
       })
     }
   }, [profile])
