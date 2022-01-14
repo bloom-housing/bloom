@@ -9,7 +9,8 @@ export const BasicCard = () => {
   return (
     <ListingCard
       imageCardProps={{
-        imageUrl: "imageURL",
+        imageUrl:
+          "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=640:*",
         subtitle: "subtitle",
         title: "title",
         href: "listing-link",
@@ -38,7 +39,8 @@ export const withStackedTable = () => {
   return (
     <ListingCard
       imageCardProps={{
-        imageUrl: "imageURL",
+        imageUrl:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
         subtitle: "subtitle",
         title: "title",
         href: "listing-link",
@@ -75,5 +77,75 @@ export const withStackedTable = () => {
         stackedTable: true,
       }}
     />
+  )
+}
+
+export const NoContent = () => {
+  return (
+    <ListingCard
+      imageCardProps={{
+        imageUrl:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
+        subtitle: "subtitle",
+        title: "title",
+        href: "listing-link",
+      }}
+    />
+  )
+}
+
+const exampleCustomContent = () => {
+  return (
+    <div className={"text-gray-750"}>
+      <div
+        className={
+          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2"
+        }
+      >
+        Units
+      </div>
+      <div>
+        <span className={"font-semibold"}>2BR:</span> 2 available
+      </div>
+      <div>
+        <span className={"font-semibold"}>3BR:</span> 5 available
+      </div>
+      <div>
+        <span className={"font-semibold"}>4BR:</span> 1 available
+      </div>
+      <div
+        className={
+          "font-sans font-semibold text-base uppercase text-gray-750 tracking-wider border-0 border-b pb-2 mb-2 mt-4"
+        }
+      >
+        Payments
+      </div>
+      <div>
+        No down payment, but you do need to complete 500 hours of sweat equity. Your monthly payment
+        will be 30% of your income.
+      </div>
+      <div className={"mt-4  border-0 border-b pb-2 mb-2"}>
+        You will need to attend an information session.
+      </div>
+    </div>
+  )
+}
+
+export const CustomContent = () => {
+  return (
+    <ListingCard
+      imageCardProps={{
+        imageUrl:
+          "https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/dev/old-oakland-kim-cole-3-1024x768_gdwmzt.jpg",
+        subtitle: "subtitle",
+        title: "title",
+        href: "listing-link",
+        tagLabel: "Habitat for Humanity",
+        statuses: [{ content: "status content" }],
+      }}
+      seeDetailsLink={`see-details-link`}
+    >
+      {exampleCustomContent()}
+    </ListingCard>
   )
 }
