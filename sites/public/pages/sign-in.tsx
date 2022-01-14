@@ -18,7 +18,7 @@ import {
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 
 const SignIn = () => {
   const { login } = useContext(AuthContext)
@@ -34,7 +34,7 @@ const SignIn = () => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: t("nav.signIn"),
-      status: USER_STATUS.NotLoggedIn,
+      status: UserStatus.NotLoggedIn,
     })
   }, [])
 

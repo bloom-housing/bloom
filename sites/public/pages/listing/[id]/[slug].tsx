@@ -4,7 +4,7 @@ import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
 import { AuthContext, imageUrlFromListing, t } from "@bloom-housing/ui-components"
 import { ListingDetail, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../../../lib/constants"
+import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
 import { MetaTags } from "../../../src/MetaTags"
@@ -25,7 +25,7 @@ export default function ListingPage(props: ListingProps) {
     pushGtmEvent<ListingDetail>({
       event: "pageView",
       pageTitle: pageTitle,
-      status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       listingStartDate: listing.applicationOpenDate,
       listingStatus: listing.status,
       listingID: listing.id,

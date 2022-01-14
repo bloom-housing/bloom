@@ -3,7 +3,7 @@ import Head from "next/head"
 import { AuthContext, ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
 import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import { getListings } from "../lib/helpers"
@@ -49,9 +49,9 @@ export default function ListingsPage(props: ListingsProps) {
     pushGtmEvent<ListingList>({
       event: "pageView",
       pageTitle: pageTitle,
-      status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       numberOfListings: props.openListings.length,
-      listingIDs: props.openListings.map((listing) => listing.id),
+      listingIds: props.openListings.map((listing) => listing.id),
     })
   }, [pageTitle, profile, props.openListings])
 

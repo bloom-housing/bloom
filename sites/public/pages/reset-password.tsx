@@ -15,7 +15,7 @@ import {
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
@@ -33,7 +33,7 @@ const ResetPassword = () => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: t("authentication.forgotPassword.changePassword"),
-      status: USER_STATUS.NotLoggedIn,
+      status: UserStatus.NotLoggedIn,
     })
   }, [])
 

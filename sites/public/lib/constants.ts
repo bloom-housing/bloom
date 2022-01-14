@@ -1,6 +1,6 @@
 export const DATE_FORMAT = "MMMM D, YYYY"
 
-export enum USER_STATUS {
+export enum UserStatus {
   LoggedIn = "logged in",
   NotLoggedIn = "not logged in",
 }

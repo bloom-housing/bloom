@@ -11,15 +11,15 @@ export type PageView = {
 }
 
 export type ListingList = PageView & {
-  numberOfListings: string
+  numberOfListings: number
   listingIds: string[]
 }
 
 export type ListingDetail = PageView & {
-  listingStartDate: string
+  listingStartDate: Date
   listingStatus: string
   listingID: string
-  applicationDueDate: string
+  applicationDueDate: Date
   paperApplication: boolean
 }
 

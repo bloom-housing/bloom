@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react"
 import { AuthContext, PageHeader, MarkdownSection, t } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import pageContent from "../page_content/disclaimer.md"
 
@@ -13,7 +13,7 @@ const Disclaimer = () => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: t("pageTitle.disclaimer"),
-      status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
 

@@ -15,7 +15,7 @@ import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
-import { USER_STATUS } from "../../lib/constants"
+import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
   const { applicationsService, profile } = useContext(AuthContext)
@@ -28,7 +28,7 @@ const Applications = () => {
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: t("nav.myApplications"),
-        status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       })
       applicationsService
         .list({ userId: profile.id })

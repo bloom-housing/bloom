@@ -20,7 +20,7 @@ import {
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../../lib/constants"
+import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 
 type AlertMessage = {
@@ -46,7 +46,7 @@ const Edit = () => {
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: t("account.accountSettings"),
-        status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       })
     }
   }, [profile])

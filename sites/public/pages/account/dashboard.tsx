@@ -15,7 +15,7 @@ import {
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { MetaTags } from "../../src/MetaTags"
-import { USER_STATUS } from "../../lib/constants"
+import { UserStatus } from "../../lib/constants"
 
 interface DashboardProps {
   router: NextRouter
@@ -30,7 +30,7 @@ function Dashboard(props: DashboardProps) {
       pushGtmEvent<PageView>({
         event: "pageView",
         pageTitle: t("nav.myDashboard"),
-        status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       })
     }
     setAlertMessage(props.router.query?.alert)

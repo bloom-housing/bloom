@@ -12,7 +12,7 @@ import {
   Icon,
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
@@ -34,7 +34,7 @@ export default function Home(props: IndexProps) {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: t("nav.siteTitle"),
-      status: profile ? USER_STATUS.LoggedIn : USER_STATUS.NotLoggedIn,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
 

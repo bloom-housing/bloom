@@ -20,7 +20,7 @@ import {
 import moment from "moment"
 import { useRouter } from "next/router"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
-import { USER_STATUS } from "../lib/constants"
+import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
 export default () => {
@@ -42,7 +42,7 @@ export default () => {
     pushGtmEvent<PageView>({
       event: "pageView",
       pageTitle: t("account.createAccount"),
-      status: USER_STATUS.NotLoggedIn,
+      status: UserStatus.NotLoggedIn,
     })
   }, [])
 
