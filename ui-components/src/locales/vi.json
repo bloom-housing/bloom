@@ -249,6 +249,20 @@
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",
         "preamble": "Quý vị sẽ thuộc nhóm các ứng viên chung."
+      },
+      "rosefieldLive": {
+        "title": "Cư dân trước đây của Làng Rosefield đã tái định cư bên ngoài Thành phố Alameda",
+        "yes": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là cư dân trước đây của Làng Rosefield",
+          "description": "Ít nhất một thành viên trong gia đình tôi là cư dân trước đây của Làng Rosefield"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Nhân viên của Học khu Thống nhất Alameda (AUSD)",
+        "yes": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda",
+          "description": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda"
+        }
       }
     },
     "review": {

@@ -252,6 +252,20 @@
       "general": {
         "title": "En base a la información que usted ingresó, su hogar no ha solicitado ninguna preferencia de vivienda.",
         "preamble": "Estará en el grupo general de solicitantes."
+      },
+      "rosefieldLive": {
+        "title": "Anterior Residentes de Rosefield Village reubicados fuera de la ciudad de Alameda",
+        "yes": {
+          "label": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village",
+          "description": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Empleado(a) del Distrito Escolar Unificado Alameda (AUSD)",
+        "yes": {
+          "label": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda",
+          "description": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
+        }
       }
     },
     "review": {
