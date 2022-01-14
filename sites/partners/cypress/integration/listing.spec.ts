@@ -237,7 +237,7 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
     cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
     cy.fixture("listing").then((listing) => {
-      cy.get("#name").contains(`${listing["name"]} (Edited)`)
+      cy.contains(`${listing["name"]} (Edited)`)
     })
   })
 })
