@@ -279,7 +279,16 @@ export class UserService {
       })
     }
     const existingUser = await this.findByEmail(dto.email)
-    if (existingUser) {
+
+    if (existingUser && !(existingUser.roles || existingUser.leasingAgentInListings.length)) {
+      return await this.userRepository.save({
+        ...existingUser,
+        roles: dto.roles,
+        leasingAgentInListings: dto.leasingAgentInListings,
+        confirmationToken: dto.confirmationToken,
+        confirmedAt: dto.confirmedAt,
+      })
+    } else if (existingUser) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
 
