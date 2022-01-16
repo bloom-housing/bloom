@@ -34,13 +34,16 @@ import {
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
-interface FoundAddress extends Address {
-  unknown?: boolean
+interface FoundAddress {
+  newAddress?: Address
+  originalAddress?: Address
+  invalid?: boolean
 }
 
 const findValidatedAddress = (
   address: Address,
-  setFoundAddress: React.Dispatch<React.SetStateAction<FoundAddress>>
+  setFoundAddress: React.Dispatch<React.SetStateAction<FoundAddress>>,
+  setNewAddressSelected: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const geocodingClient = GeocodeService({
     accessToken: process.env.mapBoxToken || process.env.MAPBOX_TOKEN,
@@ -54,27 +57,37 @@ const findValidatedAddress = (
     .send()
     .then((response) => {
       const [street, city, region] = response.body.features[0].place_name.split(", ")
-      const zipCode = region.split(" ")[1]
+      const regionElements = region.split(" ")
+      const zipCode = regionElements[regionElements.length - 1]
 
       if (!zipCode) {
-        setFoundAddress({ unknown: true })
+        setNewAddressSelected(false)
+        setFoundAddress({ invalid: true, originalAddress: address })
       } else {
+        setNewAddressSelected(true)
         setFoundAddress({
-          unknown: false,
-          street,
-          street2: address.street2 && address.street2 !== "" ? address.street2 : undefined,
-          city,
-          state: address.state,
-          zipCode,
+          originalAddress: address,
+          newAddress: {
+            street,
+            street2: address.street2 && address.street2 !== "" ? address.street2 : undefined,
+            city,
+            state: address.state,
+            zipCode,
+          },
         })
       }
     })
-    .catch((err) => console.error(`Error calling Mapbox API: ${err}`))
+    .catch((err) => {
+      console.error(`Error calling Mapbox API: ${err}`)
+      setNewAddressSelected(false)
+      setFoundAddress({ invalid: true, originalAddress: address })
+    })
 }
 
 const ApplicationAddress = () => {
   const [verifyAddress, setVerifyAddress] = useState(false)
-  const [foundAddress, setFoundAddress] = useState<FoundAddress>({ unknown: true })
+  const [foundAddress, setFoundAddress] = useState<FoundAddress>({})
+  const [newAddressSelected, setNewAddressSelected] = useState(true)
 
   const { conductor, application, listing } = useFormConductor("primaryApplicantAddress")
   const currentPageSection = 1
@@ -97,18 +110,19 @@ const ApplicationAddress = () => {
   )
   const onSubmit = (data) => {
     if (!verifyAddress) {
+      setFoundAddress({})
       setVerifyAddress(true)
-      findValidatedAddress(data.applicant.address, setFoundAddress)
+      findValidatedAddress(data.applicant.address, setFoundAddress, setNewAddressSelected)
 
       return // Skip rest of the submit process
     }
 
     mergeDeep(application, data)
 
-    if (!foundAddress.unknown) {
-      application.applicant.address.street = foundAddress.street
-      application.applicant.address.city = foundAddress.city
-      application.applicant.address.zipCode = foundAddress.zipCode
+    if (newAddressSelected && foundAddress.newAddress) {
+      application.applicant.address.street = foundAddress.newAddress.street
+      application.applicant.address.city = foundAddress.newAddress.city
+      application.applicant.address.zipCode = foundAddress.newAddress.zipCode
     }
 
     if (application.applicant.noPhone) {
@@ -602,38 +616,78 @@ const ApplicationAddress = () => {
           {verifyAddress && (
             <>
               <div className="form-card__group">
-                <fieldset>
-                  <legend className="field-label--caps">
-                    {t("application.contact.suggestedAddress")}
-                  </legend>
+                {foundAddress.newAddress && (
+                  <fieldset>
+                    <legend className="field-note mb-4">
+                      {t("application.contact.suggestedAddress")}
+                    </legend>
 
-                  <div className="flex items-start">
                     <div className="field field--inline">
-                      <input type="radio" id="foundaddress" checked />
-                      <label htmlFor="foundaddress" className="font-semibold">
+                      <input
+                        type="radio"
+                        name="chooseaddress"
+                        id="foundaddress"
+                        value="found"
+                        checked={newAddressSelected}
+                        onChange={(e) => setNewAddressSelected(e.target.checked)}
+                      />
+                      <label htmlFor="foundaddress" className="font-alt-sans font-semibold">
                         <MultiLineAddress
                           address={{
-                            street: foundAddress.street2
-                              ? `${foundAddress.street}<br/>${foundAddress.street2}`
-                              : foundAddress.street,
-                            city: foundAddress.city,
-                            state: foundAddress.state,
-                            zipCode: foundAddress.zipCode,
+                            street: foundAddress.newAddress.street2
+                              ? `${foundAddress.newAddress.street}<br/>${foundAddress.newAddress.street2}`
+                              : foundAddress.newAddress.street,
+                            city: foundAddress.newAddress.city,
+                            state: foundAddress.newAddress.state,
+                            zipCode: foundAddress.newAddress.zipCode,
                           }}
                         />
                       </label>
                     </div>
-                    <Button
-                      unstyled
-                      className="font-alt-sans uppercase font-semibold mt-0 mr-0"
-                      onClick={() => {
-                        setVerifyAddress(false)
-                      }}
-                    >
-                      {t("t.edit")}
-                    </Button>
-                  </div>
-                </fieldset>
+                  </fieldset>
+                )}
+                {foundAddress.invalid && <p>[couldn't find a verified address]</p>}
+                {foundAddress.originalAddress && (
+                  <fieldset className="mt-6">
+                    <legend className="field-note mb-4">
+                      {t("application.contact.youEntered")}
+                    </legend>
+
+                    <div className="flex items-start">
+                      <div className="field field--inline">
+                        <input
+                          type="radio"
+                          name="chooseaddress"
+                          id="originaladdress"
+                          value="original"
+                          checked={!newAddressSelected}
+                          onChange={(e) => setNewAddressSelected(!e.target.checked)}
+                        />
+                        <label htmlFor="originaladdress" className="font-alt-sans font-semibold">
+                          <MultiLineAddress
+                            address={{
+                              street: foundAddress.originalAddress.street2
+                                ? `${foundAddress.originalAddress.street}<br/>${foundAddress.originalAddress.street2}`
+                                : foundAddress.originalAddress.street,
+                              city: foundAddress.originalAddress.city,
+                              state: foundAddress.originalAddress.state,
+                              zipCode: foundAddress.originalAddress.zipCode,
+                            }}
+                          />
+                        </label>
+                      </div>
+                      <Button
+                        unstyled
+                        className="font-alt-sans uppercase font-semibold mt-0 mr-0"
+                        onClick={() => {
+                          setVerifyAddress(false)
+                        }}
+                      >
+                        {t("t.edit")}
+                      </Button>
+                    </div>
+                  </fieldset>
+                )}
               </div>
             </>
           )}

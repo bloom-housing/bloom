@@ -244,7 +244,8 @@
       "doYouWorkInDescription": "TBD",
       "workAddress": "Work Address",
       "verifyAddressTitle": "We have located the following address. Please confirm it's correct.",
-      "suggestedAddress": "Suggested Address:"
+      "suggestedAddress": "Suggested Address:",
+      "youEntered": "You Entered:"
     },
     "alternateContact": {
       "type": {
