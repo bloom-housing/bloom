@@ -74,8 +74,13 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               value="found"
               checked={newAddressSelected}
               onChange={(e) => setNewAddressSelected(e.target.checked)}
+              data-test-id="app-found-address-choice"
             />
-            <label htmlFor="foundaddress" className="font-alt-sans font-semibold">
+            <label
+              htmlFor="foundaddress"
+              className="font-alt-sans font-semibold"
+              data-test-id="app-found-address-label"
+            >
               <MultiLineAddress
                 address={{
                   street: foundAddress.newAddress.street2

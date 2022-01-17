@@ -23,4 +23,21 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-primary-additional-phone").should("be.disabled")
     cy.reload()
   })
+
+  it("should provide a way to validate address via API", function () {
+    cy.getByTestId("app-primary-no-phone").check()
+
+    cy.getByTestId("app-primary-address-street").type("600 Mongomery St")
+    cy.getByTestId("app-primary-address-city").type("San Francisco")
+    cy.getByTestId("app-primary-address-state").select("CA")
+    cy.getByTestId("app-primary-address-zip").type("94112")
+
+    cy.getByTestId("app-primary-contact-preference").eq(0).check()
+    cy.getByTestId("app-primary-work-in-region-no").check()
+
+    cy.goNext()
+    cy.getByTestId("app-found-address-choice").should("be.visible")
+    cy.getByTestId("app-found-address-label").should("include.text", "Montgomery St")
+    cy.getByTestId("app-found-address-label").should("include.text", "94111")
+  })
 })
