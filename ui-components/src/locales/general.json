@@ -930,7 +930,8 @@
     "requiredFieldError": "This field is required",
     "requiredFieldsError": "These fields are required",
     "enterNewLoginPassword": "Please enter new login password",
-    "passwordConfirmationMismatch": "Password confirmation does not match"
+    "passwordConfirmationMismatch": "Password confirmation does not match",
+    "somethingWentWrong": "Oops! Looks like something went wrong."
   },
   "footer": {
     "contact": "Contact",

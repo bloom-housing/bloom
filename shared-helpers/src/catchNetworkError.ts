@@ -52,7 +52,7 @@ export const useCatchNetworkError = () => {
         break
       default:
         setNetworkError({
-          title: t("authentication.signIn.error"),
+          title: t("errors.somethingWentWrong"),
           content: t("authentication.signIn.errorGenericMessage"),
         })
     }
