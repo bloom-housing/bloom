@@ -166,8 +166,12 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
         .then(() => {
           setSiteAlertMessage(t(`users.inviteSent`), "success")
         })
-        .catch(() => {
-          setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+        .catch((e) => {
+          if (e?.response?.status === 409) {
+            setSiteAlertMessage(t(`errors.alert.emailConflict`), "alert")
+          } else {
+            setSiteAlertMessage(t(`errors.alert.badRequest`), "alert")
+          }
         })
         .finally(() => {
           onDrawerClose()
