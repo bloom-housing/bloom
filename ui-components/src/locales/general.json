@@ -843,7 +843,8 @@
       "partnersSignIn": "Partners Sign In",
       "dontHaveAccount": "Don't have an account",
       "enterLoginPassword": "Please enter your login password",
-      "enterLoginEmail": "Please enter your login email"
+      "enterLoginEmail": "Please enter your login email",
+      "changeYourPassword": "You can change your password"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -1477,6 +1478,7 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "here": "here",
     "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",
