@@ -30,7 +30,11 @@ const AlertNotice = (props: AlertNoticeProps) => {
       )}
 
       <div className="alert-notice__body">
-        {typeof props.children === "string" ? <p>{props.children}</p> : props.children}
+        {typeof props.children === "string" ? (
+          <p dangerouslySetInnerHTML={{ __html: props.children }} />
+        ) : (
+          props.children
+        )}
       </div>
     </div>
   )
