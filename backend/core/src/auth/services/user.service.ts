@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
   Scope,
-  UnauthorizedException,
+  UnauthorizedException
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { DeepPartial, FindConditions, Repository } from "typeorm"
@@ -46,6 +46,7 @@ import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
+
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
@@ -426,10 +427,7 @@ export class UserService {
   }
 
   private static hasUsedMfaInThePast(user: User): boolean {
-    const result = !!user.mfaCodeUpdatedAt
-    console.log(user.mfaCodeUpdatedAt)
-    console.log(result)
-    return result
+    return !!user.mfaCodeUpdatedAt
   }
 
   async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {

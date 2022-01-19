@@ -80,7 +80,6 @@ export class EmailService {
   }
 
   public async sendMfaCode(user: User, email: string, mfaCode: string) {
-    console.log("Sending mfa code through email")
     await this.loadTranslationsForUser(user)
     await this.send(
       "michalp@airnauts.com",
