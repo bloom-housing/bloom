@@ -1,6 +1,12 @@
 import { Strategy } from "passport-custom"
 import { PassportStrategy } from "@nestjs/passport"
-import { HttpException, HttpStatus, Injectable, UnauthorizedException, ValidationPipe } from "@nestjs/common"
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+  ValidationPipe,
+} from "@nestjs/common"
 import { User } from "../entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
@@ -25,12 +31,12 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     const validationPipe = new ValidationPipe(defaultValidationPipeOptions)
     const loginDto: LoginDto = await validationPipe.transform(req.body, {
       type: "body",
-      metatype: LoginDto
+      metatype: LoginDto,
     })
 
     const user = await this.userRepository.findOne({
       where: { email: loginDto.email.toLowerCase() },
-      relations: ["leasingAgentInListings"]
+      relations: ["leasingAgentInListings"],
     })
 
     if (user) {
@@ -41,7 +47,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
         )
         if (
           user.failedLoginAttemptsCount >=
-          this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
+            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
           retryAfter > new Date()
         ) {
           throw new HttpException(
@@ -49,7 +55,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
               statusCode: HttpStatus.TOO_MANY_REQUESTS,
               error: "Too Many Requests",
               message: "Failed login attempts exceeded.",
-              retryAfter
+              retryAfter,
             },
             429
           )

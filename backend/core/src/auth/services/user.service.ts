@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
   Scope,
-  UnauthorizedException
+  UnauthorizedException,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { DeepPartial, FindConditions, Repository } from "typeorm"
@@ -438,10 +438,7 @@ export class UserService {
       throw new UnauthorizedException()
     }
 
-    const validPassword = await this.passwordService.isPasswordValid(
-      user,
-      getMfaInfoDto.password
-    )
+    const validPassword = await this.passwordService.isPasswordValid(user, getMfaInfoDto.password)
     if (!validPassword) {
       throw new UnauthorizedException()
     }

@@ -818,7 +818,6 @@ describe("Applications", () => {
     user.mfaEnabled = true
     user = await usersRepository.save(user)
 
-
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
       .send({ token: user.confirmationToken })
