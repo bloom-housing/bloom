@@ -1,17 +1,14 @@
 import React, { useContext } from "react"
 import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
-import { ListingApplicationAddressType } from "@bloom-housing/backend-core/types"
-import { getDetailFieldString } from "./helpers"
+import { getDetailFieldString, getDetailFieldTime } from "./helpers"
+import dayjs from "dayjs"
 
 const DetailApplicationAddress = () => {
   const listing = useContext(ListingContext)
 
-  const getAddressString = (addressType: ListingApplicationAddressType): string | undefined => {
-    if (addressType === ListingApplicationAddressType.leasingAgent)
-      return t("listings.leasingAgentAddress")
-    if (addressType === ListingApplicationAddressType.mailingAddress)
-      return t("application.contact.mailingAddress")
+  const postMarkDateFormat = (date: Date) => {
+    return date ? dayjs(new Date(date)).format("MM/DD/YYYY") : t("t.none")
   }
 
   return (
@@ -44,12 +41,22 @@ const DetailApplicationAddress = () => {
           </ViewItem>
         </GridSection>
 
-        <hr className={"mb-4"} />
+        <hr className={"mt-4 mb-4"} />
 
         <GridSection columns={3}>
-          <ViewItem id="applicationMailingAddress" label={t("listings.paperDifferentAddress")}>
-            {listing.applicationMailingAddress ? t("t.yes") : t("t.no")}
+          <ViewItem id="applicationMailingSection" label={"Can applications be mailed in?"}>
+            {listing.applicationMailingAddress || listing.applicationMailingAddressType
+              ? t("t.yes")
+              : t("t.no")}
           </ViewItem>
+          {listing.applicationMailingAddressType && (
+            <ViewItem
+              id="applicationMailingAddressType"
+              label={"Where can applications be mailed in?"}
+            >
+              {t("listings.leasingAgentAddress")}
+            </ViewItem>
+          )}
         </GridSection>
 
         {listing.applicationMailingAddress && (
@@ -58,23 +65,40 @@ const DetailApplicationAddress = () => {
               <ViewItem
                 id="applicationMailingAddress.street"
                 label={t("listings.streetAddressOrPOBox")}
+                dataTestId={"mailing-address-street"}
               >
                 {listing.applicationMailingAddress?.street}
               </ViewItem>
-              <ViewItem id="applicationMailingAddress.street2" label={t("application.contact.apt")}>
+              <ViewItem
+                id="applicationMailingAddress.street2"
+                label={t("application.contact.apt")}
+                dataTestId={"mailing-address-street2"}
+              >
                 {listing.applicationMailingAddress?.street2}
               </ViewItem>
             </GridSection>
             <GridSection columns={6}>
               <GridCell span={2}>
-                <ViewItem id="applicationMailingAddress.city" label={t("application.contact.city")}>
+                <ViewItem
+                  id="applicationMailingAddress.city"
+                  label={t("application.contact.city")}
+                  dataTestId={"mailing-address-city"}
+                >
                   {listing.applicationMailingAddress?.city}
                 </ViewItem>
               </GridCell>
-              <ViewItem id="applicationMailingAddress.state" label={t("application.contact.state")}>
+              <ViewItem
+                id="applicationMailingAddress.state"
+                label={t("application.contact.state")}
+                dataTestId={"mailing-address-state"}
+              >
                 {listing.applicationMailingAddress?.state}
               </ViewItem>
-              <ViewItem id="applicationMailingAddress.zipCode" label={t("application.contact.zip")}>
+              <ViewItem
+                id="applicationMailingAddress.zipCode"
+                label={t("application.contact.zip")}
+                dataTestId={"mailing-address-zip"}
+              >
                 {listing.applicationMailingAddress?.zipCode}
               </ViewItem>
             </GridSection>
@@ -91,7 +115,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationPickUpAddressType && (
             <ViewItem id="applicationPickUpAddressType" label={t("listings.wherePickupQuestion")}>
-              {getAddressString(listing.applicationPickUpAddressType)}
+              {t("listings.leasingAgentAddress")}
             </ViewItem>
           )}
         </GridSection>
@@ -148,7 +172,7 @@ const DetailApplicationAddress = () => {
           </ViewItem>
           {listing.applicationDropOffAddressType && (
             <ViewItem id="applicationDropOffAddressType" label={t("listings.whereDropOffQuestion")}>
-              {getAddressString(listing.applicationDropOffAddressType)}
+              {t("listings.leasingAgentAddress")}
             </ViewItem>
           )}
         </GridSection>
@@ -208,9 +232,19 @@ const DetailApplicationAddress = () => {
             <GridCell span={2}>
               <ViewItem
                 id="postmarkedApplicationsReceivedByDate"
-                label={t("listings.postmarkByDate")}
+                label={t("listings.receivedByDate")}
+                dataTestId={"postmark-date"}
               >
-                {new Date(listing.postmarkedApplicationsReceivedByDate).toDateString()}
+                {postMarkDateFormat(listing.postmarkedApplicationsReceivedByDate)}
+              </ViewItem>
+            </GridCell>
+            <GridCell span={2}>
+              <ViewItem
+                id="postmarkedApplicationsReceivedByDateTime"
+                label={t("listings.receivedByTime")}
+                dataTestId={"postmark-time"}
+              >
+                {getDetailFieldTime(listing.postmarkedApplicationsReceivedByDate)}
               </ViewItem>
             </GridCell>
           </GridSection>

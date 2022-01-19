@@ -26,6 +26,8 @@ import Joi from "joi"
         TWILIO_ACCOUNT_SID: Joi.string().default("AC_dummy_account_sid"),
         TWILIO_AUTH_TOKEN: Joi.string().default("dummy_auth_token"),
         TWILIO_PHONE_NUMBER: Joi.string().default("dummy_phone_number"),
+        AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS: Joi.number().default(5),
+        AUTH_LOCK_LOGIN_COOLDOWN_MS: Joi.number().default(1000 * 60 * 30),
       }),
     }),
   ],

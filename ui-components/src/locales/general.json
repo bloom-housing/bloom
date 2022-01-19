@@ -639,6 +639,20 @@
         "address": "Address",
         "name": "Name",
         "organization": "Name of Organization"
+      },
+      "rosefieldLive": {
+        "title": "Previous Residents of Rosefield Village Relocated Outside of the City of Alameda",
+        "yes": {
+          "label": "At least one member of my household was a previous resident of Rosefield Village",
+          "description": "At least one member of my household was a previous resident of Rosefield Village"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Alameda Unified School District (AUSD) employee",
+        "yes": {
+          "label": "At least one member of my household is an Alameda Unified School District employee",
+          "description": "At least one member of my household is an Alameda Unified School District employee."
+        }
       }
     },
     "review": {
@@ -831,7 +845,16 @@
       "error": "There was an error signing you in",
       "errorGenericMessage": "Please try again, or contact support for help.",
       "forgotPassword": "Forgot password?",
-      "success": "Welcome back, %{name}!"
+      "success": "Welcome back, %{name}!",
+      "passwordOutdated": "Your password has expired. Please reset your password.",
+      "accountHasBeenLocked": "For security reasons, this account has been locked.",
+      "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
+      "enterValidEmailAndPassword": "Please enter a valid email and password.",
+      "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
+      "partnersSignIn": "Partners Sign In",
+      "dontHaveAccount": "Don't have an account",
+      "enterLoginPassword": "Please enter your login password",
+      "enterLoginEmail": "Please enter your login email"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -843,6 +866,7 @@
       "firstName": "First Name",
       "middleNameOptional": "Middle Name (optional)",
       "middleName": "Middle Name",
+      "noAccount": "Don't have an account?",
       "lastName": "Last Name",
       "yourDateOfBirth": "Your Date of Birth",
       "email": "Email",
@@ -935,7 +959,7 @@
     "es": "Español",
     "zh": "中文",
     "vi": "Tiếng Việt",
-    "tl": "Tagalog"
+    "tl": "Filipino"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
@@ -992,7 +1016,6 @@
     "applicationsClosed": "Applications Closed",
     "applicationDropOffQuestion": "Can applications be dropped off?",
     "apply": {
-      "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
       "applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
       "applyOnline": "Apply Online",
       "downloadApplication": "Download Application",
@@ -1002,9 +1025,12 @@
       "howToApply": "How to Apply",
       "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
       "pickUpAnApplication": "Pick up an application",
-      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
-      "submitAPaperApplication": "Submit a Paper Application"
+      "submitAPaperApplication": "Submit a Paper Application",
+      "submitPaperDueDateNoPostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",     
+      "submitPaperDueDatePostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
+      "submitPaperNoDueDateNoPostMark": "%{developer} is not responsible for lost or delayed mail.",
+      "submitPaperNoDueDatePostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted. %{developer} is not responsible for lost or delayed mail."
     },
     "atAnotherAddress": "At another address",
     "atLeasingAgentAddress": "At the leasing agent address",
@@ -1098,6 +1124,9 @@
     "percentAMIUnit": "%{percent}% AMI Unit",
     "pickupAddress": "Pickup Address",
     "postmarkByDate": "Postmark by Date",
+    "postmarkByTime": "Postmark by Time",
+    "receivedByDate": "Received by Date",
+    "receivedByTime": "Received by Time",
     "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",
@@ -1317,7 +1346,8 @@
     },
     "units": "Listing Units",
     "unitsDescription": "Select the building units that are available through the listing.",
-    "unitTypesOrIndividual": "Do you want to show unit types or individual units?"
+    "unitTypesOrIndividual": "Do you want to show unit types or individual units?",
+    "listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal."
   },
   "lottery": {
     "applicationsThatQualifyForPreference": "Applications that qualify for this preference will be given a higher priority.",

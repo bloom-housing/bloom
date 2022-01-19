@@ -20,6 +20,7 @@ const TRANSLATION_KEYS = [
   "rentalHistory",
   "requiredDocuments",
   "specialNotes",
+  "whatToExpect",
   {
     events: ["note", "label"],
     property: [
@@ -95,8 +96,25 @@ export class TranslationsService extends AbstractServiceFactory<
       console.warn("listing translation requested, but google translate service is not configured")
       return
     }
-
     const keysAndValuesToBeTranslated = this.fetchKeysAndValuesToBeTranslated(listing)
+    /**
+     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
+     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
+     */
+    if (listing.listingPreferences) {
+      listing.listingPreferences.forEach((val) => {
+        keysAndValuesToBeTranslated.keys.push(
+          "preferences.title",
+          "preferences.description",
+          "preferences.subtitle"
+        )
+        keysAndValuesToBeTranslated.values.push(
+          val.preference.title,
+          val.preference.description,
+          val.preference.subtitle
+        )
+      })
+    }
     if (
       !keysAndValuesToBeTranslated?.values ||
       (keysAndValuesToBeTranslated?.values && keysAndValuesToBeTranslated.values.length === 0)
@@ -106,6 +124,7 @@ export class TranslationsService extends AbstractServiceFactory<
 
     let persistedTranslatedValues
     persistedTranslatedValues = await this.getPersistedTranslatedValues(listing, language)
+
     if (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt) {
       const newTranslations = await this.googleTranslateService.fetch(
         keysAndValuesToBeTranslated.values,
@@ -118,9 +137,25 @@ export class TranslationsService extends AbstractServiceFactory<
         newTranslations
       )
     }
-
+    /**
+     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
+     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
+     */
+    let preferenceIndex = 0
     keysAndValuesToBeTranslated.keys.forEach((key, index) => {
-      this.setValue(listing, key, persistedTranslatedValues.translations[0][index])
+      if (key === "preferences.title") {
+        listing.listingPreferences[preferenceIndex].preference.title =
+          persistedTranslatedValues.translations[0][index]
+      } else if (key === "preferences.description") {
+        listing.listingPreferences[preferenceIndex].preference.description =
+          persistedTranslatedValues.translations[0][index]
+      } else if (key === "preferences.subtitle") {
+        listing.listingPreferences[preferenceIndex].preference.subtitle =
+          persistedTranslatedValues.translations[0][index]
+        preferenceIndex++
+      } else {
+        this.setValue(listing, key, persistedTranslatedValues.translations[0][index])
+      }
     })
     return listing
   }

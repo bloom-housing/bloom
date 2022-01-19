@@ -19,15 +19,13 @@ import { SmsMfaService } from "./sms-mfa.service"
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
 declare const expect: jest.Expect
 
-const mockedUser = { id: "123", email: "abc@xyz.com" }
-const mockUserRepo = { findOne: jest.fn().mockResolvedValue(mockedUser), save: jest.fn() }
-const mockApplicationRepo = {
-  createQueryBuilder: jest.fn().mockResolvedValue(mockedUser),
-  save: jest.fn(),
-}
-
 describe("UserService", () => {
   let service: UserService
+  const mockUserRepo = { findOne: jest.fn(), save: jest.fn() }
+  const mockApplicationRepo = {
+    createQueryBuilder: jest.fn(),
+    save: jest.fn(),
+  }
 
   beforeEach(async () => {
     process.env.APP_SECRET = "SECRET"
@@ -69,12 +67,18 @@ describe("UserService", () => {
     service = await module.resolve(UserService)
   })
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   it("should be defined", () => {
     expect(service).toBeDefined()
   })
 
   describe("createUser", () => {
     it("should return EMAIL_IN_USE error if email is already in use", async () => {
+      const mockedUser = { id: "123", email: "abc@xyz.com" }
+      mockUserRepo.findOne.mockResolvedValueOnce(mockedUser)
       const user: UserCreateDto = {
         email: "abc@xyz.com",
         emailConfirmation: "abc@xyz.com",
@@ -119,6 +123,7 @@ describe("UserService", () => {
     })
 
     it("should set resetToken", async () => {
+      const mockedUser = { id: "123", email: "abc@xyz.com" }
       mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser, resetToken: null })
       const user = await service.forgotPassword({ email: "abc@xyz.com" })
       expect(user["resetToken"]).toBeDefined()
@@ -135,7 +140,8 @@ describe("UserService", () => {
     })
 
     it("should set resetToken", async () => {
-      mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...mockedUser })
+      const mockedUser = { id: "123", email: "abc@xyz.com" }
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(mockedUser)
       // Sets resetToken
       await service.forgotPassword({ email: "abc@xyz.com" })
       const accessToken = await service.updatePassword(updateDto)

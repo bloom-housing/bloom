@@ -44,7 +44,7 @@ export default function ApplicationsList() {
 
   async function deleteApplication() {
     try {
-      await applicationsService.delete({ applicationId })
+      await applicationsService.delete({ id: applicationId })
       void router.push(`/listings/${application?.listing?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)

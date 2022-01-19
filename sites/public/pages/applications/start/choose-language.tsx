@@ -8,21 +8,24 @@ import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
-  imageUrlFromListing,
   LinkButton,
   FormCard,
-  ProgressNav,
   AuthContext,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, OnClientSide } from "@bloom-housing/shared-helpers"
+
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
-const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`)
+const loadListing = async (listingId, stateFunction, conductor, context, language) => {
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
+    headers: { language },
+  })
   conductor.listing = response.data
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig
@@ -33,6 +36,7 @@ const loadListing = async (listingId, stateFunction, conductor, context) => {
 const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
+  const [language, setLanguage] = useState("en")
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const { conductor, application } = context
@@ -40,6 +44,7 @@ const ApplicationChooseLanguage = () => {
   const listingId = router.query.listingId
 
   useEffect(() => {
+    conductor.reset()
     if (!router.isReady && !listingId) return
     if (router.isReady && !listingId) {
       void router.push("/")
@@ -47,11 +52,17 @@ const ApplicationChooseLanguage = () => {
     }
 
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context)
+      void loadListing(listingId, setListing, conductor, context, "en")
     } else {
       setListing(context.listing)
     }
   }, [router, conductor, context, listingId])
+
+  useEffect(() => {
+    if (language !== "en") {
+      void loadListing(listingId, setListing, conductor, context, language)
+    }
+  }, [conductor, context, language, listingId])
 
   const currentPageSection = 1
 
@@ -63,7 +74,7 @@ const ApplicationChooseLanguage = () => {
     conductor.currentStep.save({
       language,
     })
-
+    setLanguage(language)
     const newLocale = language == "en" ? "" : `/${language}`
     void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
       window.scrollTo(0, 0)
@@ -87,9 +98,9 @@ const ApplicationChooseLanguage = () => {
               "Review",
             ]
           }
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">

@@ -25,6 +25,7 @@ import { User } from "../../src/auth/entities/user.entity"
 import { EnumUserFilterParamsComparison } from "../../types"
 import { getTestAppBody } from "../lib/get-test-app-body"
 import { Application } from "../../src/applications/entities/application.entity"
+import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
 import { MfaType } from "../../src/auth/types/mfa-type"
 
@@ -49,10 +50,11 @@ describe("Applications", () => {
 
   const testEmailService = {
     /* eslint-disable @typescript-eslint/no-empty-function */
-    confirmation: jest.fn(),
-    welcome: jest.fn(),
-    invite: jest.fn(),
-    changeEmail: jest.fn(),
+    confirmation: async () => {},
+    welcome: async () => {},
+    invite: async () => {},
+    changeEmail: async () => {},
+    forgotPassword: async () => {},
     sendMfaCode: jest.fn(),
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
@@ -187,6 +189,9 @@ describe("Applications", () => {
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
+    expect(res.body).toHaveProperty("passwordUpdatedAt")
+    expect(res.body).toHaveProperty("passwordValidForDays")
+    expect(res.body.passwordValidForDays).toBe(180)
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
@@ -813,6 +818,7 @@ describe("Applications", () => {
     user.mfaEnabled = true
     user = await usersRepository.save(user)
 
+
     await supertest(app.getHttpServer())
       .put(`/user/confirm/`)
       .send({ token: user.confirmationToken })
@@ -865,5 +871,86 @@ describe("Applications", () => {
       })
       .expect(201)
     expect(getMfaInfoResponse.body.mfaUsedInThePast).toBe(true)
+  })
+
+  it("should prevent user access if password is outdated", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "password-outdated@b.com",
+      emailConfirmation: "password-outdated@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    // User should be able to fetch it's own profile now
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+
+    // Put password updated at date 190 days in the past
+    user = await userService.findByEmail(userCreateDto.email)
+    user.roles = { isAdmin: true, isPartner: false } as UserRoles
+    user.passwordUpdatedAt = new Date(user.passwordUpdatedAt.getTime() - 190 * 24 * 60 * 60 * 1000)
+
+    await usersRepository.save(user)
+
+    // Confirm that both login and using existing access tokens stopped authenticating
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(userAccessToken))
+      .expect(401)
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    // Start password reset flow
+    await supertest(app.getHttpServer())
+      .put(`/user/forgot-password`)
+      .send({ email: user.email })
+      .expect(200)
+
+    user = await usersRepository.findOne({ email: user.email })
+
+    const newPassword = "Abcefghjijk90!"
+    await supertest(app.getHttpServer())
+      .put(`/user/update-password`)
+      .send({ token: user.resetToken, password: newPassword, passwordConfirmation: newPassword })
+      .expect(200)
+
+    // Confirm that login works again (passwordUpdateAt timestamp has been refreshed)
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: newPassword })
+      .expect(201)
   })
 })

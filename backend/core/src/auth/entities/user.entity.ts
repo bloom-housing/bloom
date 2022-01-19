@@ -42,6 +42,15 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  passwordUpdatedAt: Date
+
+  @Column({ default: 180 })
+  @Expose()
+  passwordValidForDays: number
+
   @Column("varchar", { nullable: true })
   resetToken: string
 
@@ -146,4 +155,14 @@ export class User {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   mfaCodeUpdatedAt?: Date | null
+
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  lastLoginAt?: Date
+
+  @Column({ default: 0 })
+  @Expose()
+  @Type(() => Date)
+  failedLoginAttemptsCount?: number
 }

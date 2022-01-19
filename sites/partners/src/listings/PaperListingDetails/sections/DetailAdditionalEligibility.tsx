@@ -5,9 +5,9 @@ import {
   ViewItem,
   GridCell,
   MinimalTable,
-  cloudinaryUrlFromId,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -77,7 +77,7 @@ const DetailAdditionalEligibility = () => {
             ) : (
               <MinimalTable
                 id="buildingSelectionCriteriaTable"
-                headers={{ url: t("t.url") }}
+                headers={{ url: "t.url" }}
                 data={[
                   {
                     url: listing.buildingSelectionCriteria,

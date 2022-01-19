@@ -4,6 +4,7 @@ import { PassportModule } from "@nestjs/passport"
 import { AuthService } from "../services/auth.service"
 import { UserService } from "../services/user.service"
 import { AuthzService } from "../services/authz.service"
+import { ActivityLogService } from "../../activity-log/services/activity-log.service"
 import { EmailService } from "../../email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -22,6 +23,7 @@ describe("User Controller", () => {
         { provide: AuthzService, useValue: {} },
         { provide: UserService, useValue: {} },
         { provide: EmailService, useValue: {} },
+        { provide: ActivityLogService, useValue: {} },
       ],
       controllers: [UserController],
     }).compile()

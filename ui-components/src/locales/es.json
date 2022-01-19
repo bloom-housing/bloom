@@ -130,6 +130,7 @@
       "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "Desafortunadamente, parece que usted no reúne los requisitos de este listado.",
       "dontQualifyInfo": "Por favor haga cambios si usted cree haber cometido algún error. Tenga presente que si usted falsifica cualquier tipo de información en su solicitud será descalificado(a). Si la información que usted ingresó es correcta, lo invitamos a visitarnos en el futuro a medida que otras propiedades están disponibles.",
+      "genericSubtitle": "Si se eligiera su solicitud, esté preparado para proporcionar documentación respaldatoria.",
       "addMembers": {
         "addHouseholdMember": "+ Añadir a un miembro del hogar",
         "done": "Ya terminó de añadir personas",
@@ -146,6 +147,7 @@
       "preferredUnit": {
         "preferredUnitType": "Tipo de vivienda preferida",
         "title": "¿Cuáles son los tamaños de vivienda que le interesan?",
+        "subTitle": "Aunque los tamaños de las unidades en general se basen en la ocupación, indique el tamaño de unidad que desee para determinar su preferencia en esta oportunidad o establecer una lista de espera (solo por esta oportunidad).",
         "optionsLabel": "Marque todas las opciones que correspondan:",
         "options": {
           "studio": "Estudio",
@@ -154,6 +156,14 @@
           "threeBdrm": "3 dormitorios",
           "fourBdrm": "+ de 3 dormitorios"
         }
+      },
+      "expectingChanges": {
+        "title": "Espera cambios en su grupo familiar",
+        "question": "¿Espera que haya cambios en su grupo familiar en los próximos 12 meses?"
+      },
+      "householdStudent": {
+        "title":  "El grupo familiar incluye un estudiante o miembro que está por cumplir 18 años",
+        "question": "¿Alguien de su grupo familiar es estudiante a tiempo completo o cumplirá 18 años en los próximos 60 días?"
       },
       "member": {
         "cancelAddingThisPerson": "Cancelar añadir a esta persona",
@@ -242,6 +252,20 @@
       "general": {
         "title": "En base a la información que usted ingresó, su hogar no ha solicitado ninguna preferencia de vivienda.",
         "preamble": "Estará en el grupo general de solicitantes."
+      },
+      "rosefieldLive": {
+        "title": "Anterior Residentes de Rosefield Village reubicados fuera de la ciudad de Alameda",
+        "yes": {
+          "label": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village",
+          "description": "Al menos un miembro de mi hogar fue residente anterior de Rosefield Village"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Empleado(a) del Distrito Escolar Unificado Alameda (AUSD)",
+        "yes": {
+          "label": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda",
+          "description": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
+        }
       }
     },
     "review": {
@@ -278,7 +302,21 @@
           "americanIndianAlaskanNativeAndWhite": "Indígena norteamericano o nativo de Alaska y blanco",
           "asianAndWhite": "Asiático y blanco",
           "blackAfricanAmericanAndWhite": "Negro o afroamericano y blanco",
-          "otherMutliracial": "Otro / Multirracial"
+          "otherMutliracial": "Otro / Multirracial",
+          "asian-otherAsian": "De otro país asiático",
+          "asian-chinese": "Chino",
+          "asian-asianIndian": "Indio asiático",
+          "declineToRespond": "No desea responder",
+          "asian-filipino": "Filipino",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Guameño o chamorro",
+          "asian-japanese": "Japonés",
+          "asian-korean": "Coreano",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Nativo hawaiano",
+          "otherMultiracial": "Otro/multirracial",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Otro habitante de una isla del Pacífico",
+          "nativeHawaiianOtherPacificIslander-samoan": "Samoano",
+          "asian-vietnamese": "Vietnamita"
+
         },
         "genderOptions": {
           "female": "Mujer",
@@ -370,10 +408,17 @@
     },
     "createAccount": {
       "accountConfirmed": "Su cuenta ha sido confirmada correctamente.",
+      "password": "Contraseña",
+      "noAccount": "No tienes una cuenta?",
       "anEmailHasBeenSent": "Se ha enviado un email a %{email}",
       "confirmationInstruction": "Por favor haga clic en el enlace del email que le hemos enviado para completar la creación de su cuenta.",
       "confirmationNeeded": "Se necesita confirmación",
-      "resendTheEmail": "Volver a enviar el email"
+      "resendTheEmail": "Volver a enviar el email",
+      "reEnterEmail": "Vuelva a introducir la dirección de correo electrónico",
+      "passwordInfo": "Debe tener al menos 8 caracteres e incluir al menos 1 letra y al menos un número",
+      "reEnterPassword": "Reingresa tu contraseña",
+      "mustBe8Chars": "debe tener 8 caracteres",
+      "yourName": "Su nombre"
     }
   },
   "errors": {
@@ -446,7 +491,7 @@
       "howToApply": "Cómo presentar una Solicitud",
       "paperApplicationsMustBeMailed": "Las solicitudes impresas deben ser enviadas a través del Servicio Postal de los EE.UU. y no pueden ser entregadas en persona.",
       "pickUpAnApplication": "Recoja una solicitud.",
-      "postmarkedApplicationsMustBeReceivedByDate": "Las solicitudes deben recibirse para la fecha límite. Si envía la solicitud a través del Servicio Postal de los EE.UU., la solicitud debe llevar el matasellos a más tardar del %{applicationDueDate} y ser recibida por correo a más tardar el %{postmarkReceivedByDate}. Las solicitudes recibidas por correo después del %{postmarkReceivedByDate} no serán aceptadas incluso si el matasellos lleva una fecha de a más tardar el %{applicationDueDate}. %{developer} no es responsable de correo extraviado o demorado.",
+      "submitPaperDueDatePostMark": "Las solicitudes deben recibirse para la fecha límite. Si envía la solicitud a través del Servicio Postal de los EE.UU., la solicitud debe llevar el matasellos a más tardar del %{applicationDueDate} y ser recibida por correo a más tardar el %{postmarkReceivedByDate}. Las solicitudes recibidas por correo después del %{postmarkReceivedByDate} no serán aceptadas incluso si el matasellos lleva una fecha de a más tardar el %{applicationDueDate}. %{developer} no es responsable de correo extraviado o demorado.",
       "sendByUsMail": "Enviar la Solicitud a través del Servicio Postal de los EE.UU.",
       "submitAPaperApplication": "Envíe una Solicitud impresa"
     },
@@ -576,7 +621,8 @@
   },
   "nav": {
     "accountSettings": "Configuraciones de la cuenta",
-    "browseProperties": "Ver Propiedades",
+    "browseProperties": "Buscar Propiedades",
+    "getFeedback": "Nos encantaría recibir sus comentarios",
     "getAssistance": "Obtener asistencia",
     "listings": "Listados",
     "properties": "Propiedades",
@@ -683,6 +729,7 @@
     "edit": "Editar",
     "email": "Email",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "Ingrese descripción",
     "floor": "piso",
     "floors": "pisos",
     "getDirections": "Obtener instrucciones para llegar",
@@ -711,6 +758,7 @@
     "phone": "Teléfono",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Por favor seleccione una opción.",
+    "pleaseSelectYesNo": "Elija “sí” o “no”.",
     "preferences": "Preferencias",
     "propertyAmenities": "Servicios en la propiedad",
     "range": "%{from} a %{to}",
@@ -746,7 +794,11 @@
     "seeRentalListings": "Ver viviendas en alquiler",
     "title": "Haga su solicitud de vivienda de precio accesible en",
     "seeMoreOpportunities": "Ver más oportunidades de alquiler y propiedad de vivienda",
-    "viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda"
+    "viewAdditionalHousing": "Vea Oportunidades y recursos adicionales de vivienda",
+    "seeMoreOpportunitiesTruncated": "Ver más oportunidades y recursos de vivienda",
+    "viewAdditionalHousingTruncated": "Ver oportunidades y recursos",
+    "signUp": "Reciba correos electrónicos cuando se publique un anuncio nuevo",
+    "signUpToday": "Regístrese hoy"
   },
   "whatToExpect": {
     "label": "Lo que puede esperar",

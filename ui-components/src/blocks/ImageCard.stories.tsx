@@ -88,3 +88,19 @@ export const withMultipleAppStatus = () => (
     ]}
   />
 )
+
+export const withCustomIconType = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="Matched"
+    statuses={[
+      {
+        status: ApplicationStatusType.Matched,
+        content: "Matched",
+        iconType: "check",
+      },
+    ]}
+  />
+)

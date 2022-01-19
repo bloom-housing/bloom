@@ -9,15 +9,15 @@ import {
   Form,
   Field,
   FormCard,
-  ProgressNav,
   t,
+  ProgressNav,
   emailRegex,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { stateKeys } from "@bloom-housing/shared-helpers"
+import { OnClientSide, stateKeys } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
 
@@ -52,6 +52,7 @@ export default () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
       <FormCard>

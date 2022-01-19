@@ -9,163 +9,35 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common"
-import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger"
+import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { OptionalAuthGuard } from "../auth/guards/optional-auth.guard"
-import { AuthzGuard } from "../auth/guards/authz.guard"
 import { ResourceType } from "../auth/decorators/resource-type.decorator"
 import { mapTo } from "../shared/mapTo"
-import {
-  ApplicationCreateDto,
-  ApplicationDto,
-  ApplicationUpdateDto,
-  PaginatedApplicationDto,
-} from "./dto/application.dto"
-import { Expose, Transform } from "class-transformer"
-import { IsBoolean, IsOptional, IsString, IsIn } from "class-validator"
-import { PaginationQueryParams } from "../shared/dto/pagination.dto"
+import { ApplicationDto } from "./dto/application.dto"
 import { ValidationsGroupsEnum } from "../shared/types/validations-groups-enum"
 import { defaultValidationPipeOptions } from "../shared/default-validation-pipe-options"
-import { applicationPreferenceApiExtraModels } from "./application-preference-api-extra-models"
+import { applicationPreferenceApiExtraModels } from "./types/application-preference-api-extra-models"
 import { ListingsService } from "../listings/listings.service"
 import { ApplicationCsvExporterService } from "./services/application-csv-exporter.service"
 import { ApplicationsService } from "./services/applications.service"
-
-export enum OrderByParam {
-  firstName = "applicant.firstName",
-  lastName = "applicant.lastName",
-  submissionDate = "application.submissionDate",
-  createdAt = "application.createdAt",
-}
-
-export enum OrderParam {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
-class ApplicationsApiExtraModel {
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(OrderByParam),
-    example: "createdAt",
-    default: "createdAt",
-    required: false,
-  })
-  orderBy?: OrderByParam
-
-  @Expose()
-  @ApiProperty({
-    enum: OrderParam,
-    example: "DESC",
-    default: "DESC",
-    required: false,
-  })
-  order?: OrderParam
-}
-
-export class PaginatedApplicationListQueryParams extends PaginationQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "listingId",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  listingId?: string
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "search",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  search?: string
-
-  @Expose()
-  @ApiProperty({
-    type: String,
-    example: "userId",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  userId?: string
-
-  @Expose()
-  @ApiProperty({
-    enum: Object.keys(OrderByParam),
-    example: "createdAt",
-    default: "createdAt",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.values(OrderByParam), { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) =>
-    value ? (OrderByParam[value] ? OrderByParam[value] : value) : OrderByParam.createdAt
-  )
-  orderBy?: OrderByParam
-
-  @Expose()
-  @ApiProperty({
-    enum: OrderParam,
-    example: "DESC",
-    default: "DESC",
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @IsIn(Object.keys(OrderParam), { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? value : OrderParam.DESC))
-  order?: OrderParam
-
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value: string | undefined) => {
-      switch (value) {
-        case "true":
-          return true
-        case "false":
-          return false
-        default:
-          return undefined
-      }
-    },
-    { toClassOnly: true }
-  )
-  markedAsDuplicate?: boolean
-}
-
-export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
-  @Expose()
-  @ApiProperty({
-    type: Boolean,
-    example: true,
-    required: false,
-  })
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => value === "true", { toClassOnly: true })
-  includeDemographics?: boolean
-}
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
+import { PaginatedApplicationListQueryParams } from "./dto/paginated-application-list-query-params"
+import { ApplicationsCsvListQueryParams } from "./dto/applications-csv-list-query-params"
+import { ApplicationsApiExtraModel } from "./types/applications-api-extra-model"
+import { PaginatedApplicationDto } from "./dto/paginated-application.dto"
+import { ApplicationCreateDto } from "./dto/application-create.dto"
+import { ApplicationUpdateDto } from "./dto/application-update.dto"
 
 @Controller("applications")
 @ApiTags("applications")
 @ApiBearerAuth()
 @ResourceType("application")
-@UseGuards(OptionalAuthGuard, AuthzGuard)
+@UseGuards(OptionalAuthGuard)
+@UseInterceptors(ActivityLogInterceptor)
 @UsePipes(
   new ValidationPipe({
     ...defaultValidationPipeOptions,
@@ -206,25 +78,25 @@ export class ApplicationsController {
     return mapTo(ApplicationDto, application)
   }
 
-  @Get(`:applicationId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get application by id", operationId: "retrieve" })
-  async retrieve(@Param("applicationId") applicationId: string): Promise<ApplicationDto> {
+  async retrieve(@Param("id") applicationId: string): Promise<ApplicationDto> {
     const app = await this.applicationsService.findOne(applicationId)
     return mapTo(ApplicationDto, app)
   }
 
-  @Put(`:applicationId`)
+  @Put(`:id`)
   @ApiOperation({ summary: "Update application by id", operationId: "update" })
   async update(
-    @Param("applicationId") applicationId: string,
+    @Param("id") applicationId: string,
     @Body() applicationUpdateDto: ApplicationUpdateDto
   ): Promise<ApplicationDto> {
     return mapTo(ApplicationDto, await this.applicationsService.update(applicationUpdateDto))
   }
 
-  @Delete(`:applicationId`)
+  @Delete(`:id`)
   @ApiOperation({ summary: "Delete application by id", operationId: "delete" })
-  async delete(@Param("applicationId") applicationId: string) {
+  async delete(@Param("id") applicationId: string) {
     await this.applicationsService.delete(applicationId)
   }
 }

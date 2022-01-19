@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
 import { LocalMfaStrategy } from "./passport-strategies/local-mfa.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
@@ -17,6 +17,7 @@ import { PasswordService } from "./services/password.service"
 import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
+import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
 import { SmsMfaService } from "./services/sms-mfa.service"
 import { TwilioModule } from "nestjs-twilio"
@@ -46,6 +47,7 @@ import { TwilioModule } from "nestjs-twilio"
     SharedModule,
     JurisdictionsModule,
     EmailModule,
+    forwardRef(() => ActivityLogModule),
   ],
   providers: [
     LocalMfaStrategy,

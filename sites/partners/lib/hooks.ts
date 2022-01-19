@@ -9,6 +9,7 @@ import {
   EnumListingFilterParamsComparison,
   EnumPreferencesFilterParamsComparison,
   EnumProgramsFilterParamsComparison,
+  EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
 interface PaginationProps {
@@ -28,7 +29,7 @@ type UseListingsDataProps = PaginationProps & {
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.retrieve({ listingId })
+  const fetcher = () => listingsService.retrieve({ id: listingId })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
@@ -125,7 +126,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
 
-  const fetcher = () => applicationsService.retrieve({ applicationId })
+  const fetcher = () => applicationsService.retrieve({ id: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {
@@ -353,13 +354,12 @@ export function useUserList({ page, limit }: UseUserListProps) {
     userService.list({
       page,
       limit,
-      // TODO: temporary disabled, because it occurs an issue with data fetching (501 - Filter Not Implemented)
-      // filter: [
-      //   {
-      //     isPartner: true,
-      //     $comparison: EnumUserFilterParamsComparison["="],
-      //   },
-      // ],
+      filter: [
+        {
+          isPartner: true,
+          $comparison: EnumUserFilterParamsComparison["="],
+        },
+      ],
     })
 
   const { data, error } = useSWR(

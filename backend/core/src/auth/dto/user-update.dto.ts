@@ -28,6 +28,10 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "mfaEnabled",
+  "passwordUpdatedAt",
+  "passwordValidForDays",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

@@ -1,7 +1,7 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import moment from "moment"
+import dayjs from "dayjs"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -11,7 +11,7 @@ import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/rese
 import { AssetDto } from "../../assets/dto/asset.dto"
 import { ListingEventDto } from "./listing-event.dto"
 import { listingUrlSlug } from "../../shared/url-helper"
-import { IdNameDto } from "../../shared/dto/idName.dto"
+import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
@@ -108,8 +108,8 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdNameDto)
-  jurisdiction: IdNameDto
+  @Type(() => JurisdictionSlimDto)
+  jurisdiction: JurisdictionSlimDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -128,7 +128,7 @@ export class ListingDto extends OmitType(Listing, [
   @Transform(
     (_value, listing) => {
       if (
-        moment(listing.applicationDueDate).isBefore() &&
+        dayjs(listing.applicationDueDate).isBefore(dayjs()) &&
         listing.status !== ListingStatus.pending
       ) {
         listing.status = ListingStatus.closed

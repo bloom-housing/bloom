@@ -5,7 +5,6 @@ const withTM = require("next-transpile-modules")([
   "@bloom-housing/shared-helpers",
   "@bloom-housing/ui-components",
   "@bloom-housing/backend-core",
-  "@bloom-housing/shared-helpers",
 ])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
@@ -44,7 +43,6 @@ module.exports = withBundleAnalyzer(
       listingServiceUrl: BACKEND_API_BASE + LISTINGS_QUERY,
       idleTimeout: process.env.IDLE_TIMEOUT,
       showDuplicates: process.env.SHOW_DUPLICATES === "TRUE",
-      publicBaseUrl: process.env.PUBLIC_BASE_URL,
       cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
       cloudinaryKey: process.env.CLOUDINARY_KEY,
       cloudinarySignedPreset: process.env.CLOUDINARY_SIGNED_PRESET,

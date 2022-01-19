@@ -127,6 +127,7 @@
       "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "很遺憾，您似乎不符合這次上市名單的申請資格。",
       "dontQualifyInfo": "如果您認為自己可能填寫錯誤，請更改資料。請注意，如果您偽造任何申請資料，您將會被取消資格。如果您填寫的資料正確無誤，我們建議您日後再回來查看，因為會有更多可供申請的物業。",
+      "genericSubtitle": "如果您的申請被選中，請準備提供必要文件。 ",
       "addMembers": {
         "addHouseholdMember": "+ 加入家庭成員",
         "done": "完成加入成員",
@@ -143,6 +144,7 @@
       "preferredUnit": {
         "preferredUnitType": "首選單位類型",
         "title": "您對哪類單位面積感興趣？",
+        "subTitle": "雖然單位尺寸通常根據入住率分配，但請提供您的首選單位尺寸，以確定您在此機會的偏好或建立候補名單（僅針對此機會）",
         "optionsLabel": "請勾選所有適用的單位：",
         "options": {
           "studio": "套房",
@@ -151,6 +153,14 @@
           "threeBdrm": "3 間臥室",
           "fourBdrm": "3+ 間卧室"
         }
+      },
+      "expectingChanges": {
+        "title": "預計家庭變化",
+        "question": "您預計家庭在接下來的 12 個月內可能發生什麼變化？"
+      },
+      "householdStudent": {
+        "title": "家人包括接近 18 歲的學生或成員",
+        "question": "您的家人是否有全日制學生或在 60 天內年滿 18 歲？"
       },
       "member": {
         "cancelAddingThisPerson": "取消加入此人",
@@ -239,6 +249,20 @@
       "general": {
         "title": "根據您填寫的資料，您的家庭沒有要求任何住房優先權。",
         "preamble": "您將被分配到一般申請人組別。"
+      },
+      "rosefieldLive": {
+        "title": "罗斯菲尔德村以前的居民搬迁到阿拉米达市外",
+        "yes": {
+          "label": "我的至少一名家庭成员曾是罗斯菲尔德村的居民",
+          "description": "我的至少一名家庭成员曾是罗斯菲尔德村的居民"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "阿拉米达联合学区 (AUSD) 员工",
+        "yes": {
+          "label": "我的至少一名家庭成员是阿拉米达联合学区的雇员",
+          "description": "我的至少一名家庭成员是阿拉米达联合学区的雇员"
+        }
       }
     },
     "review": {
@@ -275,7 +299,20 @@
           "americanIndianAlaskanNativeAndWhite": "美國印第安人／阿拉斯加原住民和白人",
           "asianAndWhite": "亞洲人和白人",
           "blackAfricanAmericanAndWhite": "黑人／非裔美國人和白人",
-          "otherMutliracial": "其他／混血"
+          "otherMutliracial": "其他／混血",
+          "asian-otherAsian": "其他亞裔",
+          "asian-chinese": "中國人",
+          "asian-asianIndian": "亞洲 印度人",
+          "declineToRespond": "拒絕回答",
+          "asian-filipino": "菲律賓人",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "關島或查莫羅",
+          "asian-japanese": "日本人",
+          "asian-korean": "韓國人",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "夏威夷原住民",
+          "otherMultiracial": "其他／多種族",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "其他太平洋島民",
+          "nativeHawaiianOtherPacificIslander-samoan": "薩摩亞",
+          "asian-vietnamese": "越南人"
         },
         "genderOptions": {
           "female": "女",
@@ -370,7 +407,14 @@
       "anEmailHasBeenSent": "本電郵已發送至 %{email}",
       "confirmationInstruction": "請按一下我們發送的電子郵件內連結，並完成建立帳戶程序。",
       "confirmationNeeded": "需要確認",
-      "resendTheEmail": "重新發送電子郵件"
+      "resendTheEmail": "重新發送電子郵件",
+      "password": "密碼",
+      "noAccount": "沒有賬戶？",
+      "reEnterEmail": "重新輸入電子郵件地址",
+      "passwordInfo": "必須至少為 8 個字符，並且至少包含 1 個字母和至少一個數字",
+      "reEnterPassword": "重新輸入您的密碼",
+      "mustBe8Chars": "必須是 8 個字符",
+      "yourName": "您的姓名"
     }
   },
   "config": {
@@ -446,7 +490,7 @@
       "howToApply": "如何申請",
       "paperApplicationsMustBeMailed": "紙本申請表必須經由美國郵政寄回，並且不能親自提交。",
       "pickUpAnApplication": "領取申請表",
-      "postmarkedApplicationsMustBeReceivedByDate": "申請表必須在截止日期前收到。如果經由美國郵政寄送，則申請表上的郵戳日期必須在 %{applicationDueDate} 前，郵件最遲要在 %{postmarkReceivedByDate} 前寄達。我們不會受理在 %{postmarkReceivedByDate} 之後郵寄送達的申請表，即使郵戳日期在 %{applicationDueDate} 之前也一樣。若郵件有任何遺失或延誤，%{developer} 概不負責。",
+      "submitPaperDueDatePostMark": "申請表必須在截止日期前收到。如果經由美國郵政寄送，則申請表上的郵戳日期必須在 %{applicationDueDate} 前，郵件最遲要在 %{postmarkReceivedByDate} 前寄達。我們不會受理在 %{postmarkReceivedByDate} 之後郵寄送達的申請表，即使郵戳日期在 %{applicationDueDate} 之前也一樣。若郵件有任何遺失或延誤，%{developer} 概不負責。",
       "sendByUsMail": "用美國郵政寄送申請表",
       "submitAPaperApplication": "提交紙本申請表"
     },
@@ -576,8 +620,9 @@
   },
   "nav": {
     "accountSettings": "帳戶設定",
+    "getFeedback": "我們希望得到您的回饋",
     "browseProperties": "瀏覽物業",
-    "getAssistance": "尋求協助",
+    "getAssistance": "獲得協助",
     "listings": "好屋推薦",
     "properties": "物業",
     "applications": "申請資訊",
@@ -683,6 +728,7 @@
     "edit": "編輯",
     "email": "電子郵件",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "輸入說明",
     "floor": "樓層",
     "floors": "樓層",
     "getDirections": "取得路線",
@@ -711,6 +757,7 @@
     "phone": "電話號碼",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "請選取一項。",
+    "pleaseSelectYesNo": "請選擇是或否。",
     "preferences": "優先權",
     "propertyAmenities": "物業便利設施",
     "range": "由 %{from} 至 %{to}",
@@ -746,7 +793,11 @@
     "seeRentalListings": "查看租賃部分",
     "title": "申請此地的可負擔房屋：",
     "seeMoreOpportunities": "查看更多租賃和自購住房的機會",
-    "viewAdditionalHousing": "瀏覽其他住房機會和資源"
+    "viewAdditionalHousing": "瀏覽其他住房機會和資源",
+    "seeMoreOpportunitiesTruncated": "查看更多住屋機會及資源",
+    "viewAdditionalHousingTruncated": "查看機會及資源",
+    "signUp": "發佈新清單即收到電子郵件",
+    "signUpToday": "立即註冊"
   },
   "whatToExpect": {
     "label": "預期事項",

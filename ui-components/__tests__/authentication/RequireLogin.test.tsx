@@ -26,6 +26,8 @@ const mockUser: User = {
   updatedAt: new Date("2020-01-01"),
   jurisdictions: [],
   mfaEnabled: false,
+  passwordUpdatedAt: new Date("2020-01-01"),
+  passwordValidForDays: 180,
 }
 
 let initialStateLoaded = false
