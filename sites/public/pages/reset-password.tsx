@@ -32,7 +32,7 @@ const ResetPassword = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("authentication.forgotPassword.changePassword"),
+      pageTitle: "Reset Password",
       status: UserStatus.NotLoggedIn,
     })
   }, [])

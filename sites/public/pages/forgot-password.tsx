@@ -33,7 +33,7 @@ const ForgotPassword = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("authentication.forgotPassword.sendEmail"),
+      pageTitle: "Forgot Password",
       status: UserStatus.NotLoggedIn,
     })
   }, [])

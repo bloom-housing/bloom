@@ -33,7 +33,7 @@ const SignIn = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("nav.signIn"),
+      pageTitle: "Sign In",
       status: UserStatus.NotLoggedIn,
     })
   }, [])

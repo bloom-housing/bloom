@@ -33,7 +33,7 @@ export default function Home(props: IndexProps) {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("nav.siteTitle"),
+      pageTitle: "Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])

@@ -27,8 +27,8 @@ const Applications = () => {
     if (profile) {
       pushGtmEvent<PageView>({
         event: "pageView",
-        pageTitle: t("nav.myApplications"),
-        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+        pageTitle: "My Applications",
+        status: UserStatus.LoggedIn,
       })
       applicationsService
         .list({ userId: profile.id })

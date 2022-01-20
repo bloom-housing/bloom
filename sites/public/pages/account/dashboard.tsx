@@ -29,8 +29,8 @@ function Dashboard(props: DashboardProps) {
     if (profile) {
       pushGtmEvent<PageView>({
         event: "pageView",
-        pageTitle: t("nav.myDashboard"),
-        status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+        pageTitle: "My Dashboard",
+        status: UserStatus.LoggedIn,
       })
     }
     setAlertMessage(props.router.query?.alert)

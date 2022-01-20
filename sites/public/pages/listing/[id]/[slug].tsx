@@ -24,7 +24,7 @@ export default function ListingPage(props: ListingProps) {
     if (!listing.id) return
     pushGtmEvent<ListingDetail>({
       event: "pageView",
-      pageTitle: pageTitle,
+      pageTitle: `${listing.name} - Housing Portal`,
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       listingStartDate: listing.applicationOpenDate,
       listingStatus: listing.status,
@@ -36,9 +36,9 @@ export default function ListingPage(props: ListingProps) {
     listing.applicationDueDate,
     listing.applicationOpenDate,
     listing.id,
+    listing.name,
     listing.paperApplication,
     listing.status,
-    pageTitle,
     profile,
   ])
 

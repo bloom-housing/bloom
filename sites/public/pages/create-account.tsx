@@ -41,7 +41,7 @@ export default () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("account.createAccount"),
+      pageTitle: "Create Account",
       status: UserStatus.NotLoggedIn,
     })
   }, [])

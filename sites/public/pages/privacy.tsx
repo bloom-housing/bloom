@@ -12,7 +12,7 @@ const Privacy = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("pageTitle.privacy"),
+      pageTitle: "Privacy",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])

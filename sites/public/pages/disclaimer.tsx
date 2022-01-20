@@ -12,7 +12,7 @@ const Disclaimer = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: t("pageTitle.disclaimer"),
+      pageTitle: "Disclaimer",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])

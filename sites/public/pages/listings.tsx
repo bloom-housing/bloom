@@ -48,12 +48,12 @@ export default function ListingsPage(props: ListingsProps) {
   useEffect(() => {
     pushGtmEvent<ListingList>({
       event: "pageView",
-      pageTitle: pageTitle,
+      pageTitle: "Rent Affordable Housing - Housing Portal",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
       numberOfListings: props.openListings.length,
       listingIds: props.openListings.map((listing) => listing.id),
     })
-  }, [pageTitle, profile, props.openListings])
+  }, [profile, props.openListings])
 
   return (
     <Layout>
