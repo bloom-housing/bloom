@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.23...@bloom-housing/ui-components@4.0.1-alpha.24) (2022-01-20)
+
+
+### Features
+
+* listing card takes optional children ([#2407](https://github.com/bloom-housing/bloom/issues/2407)) ([3c73a11](https://github.com/bloom-housing/bloom/commit/3c73a1144748fca6d50e5e0b220230eb8bf48dc6))
+
+
+
+
+
 ## [4.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.22...@bloom-housing/ui-components@4.0.1-alpha.23) (2022-01-14)
 
 
