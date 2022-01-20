@@ -1,4 +1,5 @@
 import React from "react"
+import Markdown from "markdown-to-jsx"
 import type { ReactNode } from "react"
 import type { AlertTypes } from "./alertTypes"
 import { colorClasses } from "./alertTypes"
@@ -31,7 +32,7 @@ const AlertNotice = (props: AlertNoticeProps) => {
 
       <div className="alert-notice__body">
         {typeof props.children === "string" ? (
-          <p dangerouslySetInnerHTML={{ __html: props.children }} />
+          <Markdown>{props.children}</Markdown>
         ) : (
           props.children
         )}
