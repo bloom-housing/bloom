@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.1-alpha.40",
+  "version": "3.0.2-alpha.15",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
@@ -66,10 +66,9 @@
     "ioredis": "^4.24.4",
     "joi": "^17.3.0",
     "jwt-simple": "^0.5.6",
-    "moment": "^2.29.1",
     "nanoid": "^3.1.12",
     "nestjs-throttler-storage-redis": "^0.1.11",
-    "nestjs-typeorm-paginate": "^2.2.1",
+    "nestjs-typeorm-paginate": "^3.1.3",
     "newrelic": "7.5.1",
     "node-polyglot": "^2.4.0",
     "passport": "^0.4.1",
@@ -126,5 +125,5 @@
     "node": "14",
     "yarn": "^1.22"
   },
-  "gitHead": "5f7694e3f2baff2a1a7a22e0676e487dda781a3e"
+  "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
 }

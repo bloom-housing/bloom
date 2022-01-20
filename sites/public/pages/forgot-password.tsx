@@ -74,7 +74,7 @@ const ForgotPassword = () => {
             <Field
               caps={true}
               name="email"
-              label="Email"
+              label={t("t.email")}
               validation={{ required: true, pattern: emailRegex }}
               error={errors.email}
               errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}

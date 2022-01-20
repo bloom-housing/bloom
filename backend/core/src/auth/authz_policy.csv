@@ -5,8 +5,8 @@ p, anonymous, application, true, submit
 
 p, admin, user, true, .*
 p, admin, userProfile, true, .*
-p, user, user, !r.obj || (r.sub == r.obj.id), read
-p, user, userProfile, !r.obj || (r.sub == r.obj.id), (read|update)
+p, user, user, !!r.obj && (r.sub == r.obj.id), read
+p, user, userProfile, !!r.obj && (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*

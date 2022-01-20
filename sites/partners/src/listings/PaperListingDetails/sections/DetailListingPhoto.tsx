@@ -1,12 +1,12 @@
 import React, { useContext } from "react"
 import {
-  cloudinaryUrlFromId,
   t,
   GridSection,
   GridCell,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 
 const DetailListingPhoto = () => {

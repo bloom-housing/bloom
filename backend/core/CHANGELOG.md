@@ -3,6 +3,161 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.14...@bloom-housing/backend-core@3.0.2-alpha.15) (2022-01-14)
+
+
+### Bug Fixes
+
+* patches translations for preferences ([#2410](https://github.com/bloom-housing/bloom/issues/2410)) ([7906e6b](https://github.com/bloom-housing/bloom/commit/7906e6bc035fab4deea79ea51833a0ef29926d45))
+
+
+
+
+
+## [3.0.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.13...@bloom-housing/backend-core@3.0.2-alpha.14) (2022-01-13)
+
+
+### Bug Fixes
+
+* partners render issue ([#2395](https://github.com/bloom-housing/bloom/issues/2395)) ([7fb108d](https://github.com/bloom-housing/bloom/commit/7fb108d744fcafd6b9df42706d2a2f58fbc30f0a))
+
+
+
+
+
+## [3.0.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.12...@bloom-housing/backend-core@3.0.2-alpha.13) (2022-01-13)
+
+
+### Bug Fixes
+
+* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+
+
+
+
+## [3.0.2-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.11...@bloom-housing/backend-core@3.0.2-alpha.12) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.10...@bloom-housing/backend-core@3.0.2-alpha.11) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.9...@bloom-housing/backend-core@3.0.2-alpha.10) (2022-01-04)
+
+
+### Bug Fixes
+
+* fix sortig on applications partner grid ([f097037](https://github.com/bloom-housing/bloom/commit/f097037afd896eec8bb90cc5e2de07f222907870))
+* fixes linting error ([aaaf858](https://github.com/bloom-housing/bloom/commit/aaaf85822e3b03224fb336bae66209a2b6b88d1d))
+* fixes some issues with the deployment ([a0042ba](https://github.com/bloom-housing/bloom/commit/a0042badc5474dde413e41a7f4f84c8ee7b2f8f1))
+* fixes tests and also issue with user grid ([da07ba4](https://github.com/bloom-housing/bloom/commit/da07ba49459f77fe77e3f72555eb50a0cbaab095))
+
+
+
+
+
+## [3.0.2-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.8...@bloom-housing/backend-core@3.0.2-alpha.9) (2022-01-04)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.7...@bloom-housing/backend-core@3.0.2-alpha.8) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.7) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* check for user lastLoginAt ([d78745a](https://github.com/bloom-housing/bloom/commit/d78745a4c8b770864c4f5e6140ee602e745b8bec))
+
+
+### Features
+
+* **backend:** add appropriate http exception for password outdated login failure ([e5df66e](https://github.com/bloom-housing/bloom/commit/e5df66e4fe0f937f507d014f3b25c6c9b4b5deff))
+* **backend:** add password outdating only to users which are either admins or partners ([754546d](https://github.com/bloom-housing/bloom/commit/754546dfd5194f8c30e12963031791818566d22d))
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/bloom-housing/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+* **backend:** remove activity log interceptor from update-password ([2e56b98](https://github.com/bloom-housing/bloom/commit/2e56b9878969604bec2f7694a83dbf7061af9df2))
+
+
+
+
+
+## [3.0.2-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+* check for user lastLoginAt ([d78745a](https://github.com/bloom-housing/bloom/commit/d78745a4c8b770864c4f5e6140ee602e745b8bec))
+
+
+### Features
+
+* **backend:** add appropriate http exception for password outdated login failure ([e5df66e](https://github.com/bloom-housing/bloom/commit/e5df66e4fe0f937f507d014f3b25c6c9b4b5deff))
+* **backend:** add password outdating only to users which are either admins or partners ([754546d](https://github.com/bloom-housing/bloom/commit/754546dfd5194f8c30e12963031791818566d22d))
+* **backend:** add user password expiration ([107c2f0](https://github.com/bloom-housing/bloom/commit/107c2f06e2f8367b52cb7cc8f00e6d9aef751fe0))
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/bloom-housing/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+* **backend:** remove activity log interceptor from update-password ([2e56b98](https://github.com/bloom-housing/bloom/commit/2e56b9878969604bec2f7694a83dbf7061af9df2))
+
+
+
+
+
+## [3.0.2-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.0...@bloom-housing/backend-core@3.0.2-alpha.1) (2021-12-23)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1...@bloom-housing/backend-core@3.0.2-alpha.0) (2021-12-23)
+
+
+### Features
+
+* **backend:** lock failed login attempts ([a8370ce](https://github.com/seanmalbert/bloom/commit/a8370ce1516f75180796d190a9a9f2697723e181))
+
+
+
+
+
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.40...@bloom-housing/backend-core@3.0.1) (2021-12-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [3.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.39...@bloom-housing/backend-core@3.0.1-alpha.40) (2021-12-15)
 
 

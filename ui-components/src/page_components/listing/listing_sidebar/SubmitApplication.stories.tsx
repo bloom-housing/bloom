@@ -64,6 +64,11 @@ export const MailingNoPostmarks = () => {
       applicationDropOffAddress={undefined}
       applicationDropOffAddressOfficeHours={undefined}
       applicationOrganization={undefined}
+      postmarkedApplicationData={{
+        postmarkedApplicationsReceivedByDate: null,
+        developer: "Developer",
+        applicationsDueDate: null,
+      }}
     />
   )
 }
@@ -83,8 +88,52 @@ export const MailingWithPostmarks = () => {
       applicationOrganization={undefined}
       postmarkedApplicationData={{
         postmarkedApplicationsReceivedByDate: "November 30th, 2021",
-        developer: "Listing Developer",
+        developer: "Developer",
         applicationsDueDate: "November 29th, 2021",
+      }}
+    />
+  )
+}
+
+export const MailingNoPostmarksYesDueDate = () => {
+  return (
+    <SubmitApplication
+      applicationMailingAddress={{
+        city: "City",
+        state: "State",
+        street2: "Street 2",
+        street: "Mailing Address Street",
+        zipCode: "90210",
+      }}
+      applicationDropOffAddress={undefined}
+      applicationDropOffAddressOfficeHours={undefined}
+      applicationOrganization={undefined}
+      postmarkedApplicationData={{
+        postmarkedApplicationsReceivedByDate: null,
+        developer: "Developer",
+        applicationsDueDate: "November 29th, 2021",
+      }}
+    />
+  )
+}
+
+export const MailingYesPostmarksNoDueDate = () => {
+  return (
+    <SubmitApplication
+      applicationMailingAddress={{
+        city: "City",
+        state: "State",
+        street2: "Street 2",
+        street: "Mailing Address Street",
+        zipCode: "90210",
+      }}
+      applicationDropOffAddress={undefined}
+      applicationDropOffAddressOfficeHours={undefined}
+      applicationOrganization={undefined}
+      postmarkedApplicationData={{
+        postmarkedApplicationsReceivedByDate: "November 30th, 2021",
+        developer: "Developer",
+        applicationsDueDate: null,
       }}
     />
   )

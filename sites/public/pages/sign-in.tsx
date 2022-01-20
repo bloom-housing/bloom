@@ -1,23 +1,9 @@
-import React, { useEffect, useState, useContext } from "react"
-import Link from "next/link"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import {
-  AppearanceStyleType,
-  Button,
-  Field,
-  Form,
-  FormCard,
-  Icon,
-  LinkButton,
-  AuthContext,
-  t,
-  AlertBox,
-  SiteAlert,
-  setSiteAlertMessage,
-} from "@bloom-housing/ui-components"
-import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { AuthContext, t, setSiteAlertMessage, FormSignIn } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
+import { PageView, pushGtmEvent, useCatchNetworkError } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 
 const SignIn = () => {
@@ -28,7 +14,7 @@ const SignIn = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
-  const [requestError, setRequestError] = useState<string>()
+  const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -45,76 +31,20 @@ const SignIn = () => {
       const user = await login(email, password)
       setSiteAlertMessage(t(`authentication.signIn.success`, { name: user.firstName }), "success")
       await redirectToPage()
-    } catch (err) {
-      const { status } = err.response || {}
-      if (status === 401) {
-        setRequestError(`${t("authentication.signIn.error")}: ${err.message}`)
-      } else {
-        console.error(err)
-        setRequestError(
-          `${t("authentication.signIn.error")}. ${t("authentication.signIn.errorGenericMessage")}`
-        )
-      }
+    } catch (error) {
+      const { status } = error.response || {}
+      determineNetworkError(status, error)
     }
   }
 
   return (
     <FormsLayout>
-      <FormCard>
-        <div className="form-card__lead text-center border-b mx-0">
-          <Icon size="2xl" symbol="profile" />
-          <h2 className="form-card__title">{t("nav.signIn")}</h2>
-        </div>
-        {requestError && (
-          <AlertBox className="" onClose={() => setRequestError(undefined)} type="alert">
-            {requestError}
-          </AlertBox>
-        )}
-        <SiteAlert type="notice" dismissable />
-        <div className="form-card__group pt-0 border-b">
-          <Form id="sign-in" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-            <Field
-              caps={true}
-              name="email"
-              label={t("t.email")}
-              validation={{ required: true }}
-              error={errors.email}
-              errorMessage="Please enter your login email"
-              register={register}
-              dataTestId="sign-in-email-field"
-            />
-
-            <aside className="float-right text-tiny font-semibold">
-              <Link href="/forgot-password">
-                <a>{t("authentication.signIn.forgotPassword")}</a>
-              </Link>
-            </aside>
-
-            <Field
-              caps={true}
-              name="password"
-              label={t("authentication.createAccount.password")}
-              validation={{ required: true }}
-              error={errors.password}
-              errorMessage="Please enter your login password"
-              register={register}
-              type="password"
-              dataTestId="sign-in-password-field"
-            />
-
-            <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary} data-test-id="sign-in-button">
-                {t("nav.signIn")}
-              </Button>
-            </div>
-          </Form>
-        </div>
-        <div className="form-card__group text-center">
-          <h2 className="mb-6">{t("authentication.createAccount.noAccount")}</h2>
-
-          <LinkButton href="/create-account">{t("account.createAccount")}</LinkButton>
-        </div>
-      </FormCard>
+      <FormSignIn
+        onSubmit={onSubmit}
+        control={{ register, errors, handleSubmit }}
+        networkError={{ error: networkError, reset: resetNetworkError }}
+        showRegisterBtn={true}
+      />
     </FormsLayout>
   )
 }

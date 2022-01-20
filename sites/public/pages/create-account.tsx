@@ -17,7 +17,9 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
@@ -51,7 +53,7 @@ export default () => {
       const { dob, ...rest } = data
       await createUser({
         ...rest,
-        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
         language,
       })
 

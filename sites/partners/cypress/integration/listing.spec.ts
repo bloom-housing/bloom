@@ -12,11 +12,13 @@ describe("Listing Management Tests", () => {
       cy.get("#name").type(listing["name"])
       cy.get("#developer").type(listing["developer"])
       cy.getByID("addPhotoButton").contains("Add Photo").click()
-      cy.getByID("listing-photo-upload").attachFile("exygy.jpeg", {
-        subjectType: "input",
-      })
-      cy.get('[data-label="File Name"]').contains("exygy")
-      cy.get(".p-4 > .is-primary").contains("Save").click()
+      cy.get(`[data-test-id="dropzone-input"]`).attachFile(
+        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96.jpeg",
+        {
+          subjectType: "drag-n-drop",
+        }
+      )
+      cy.get(`[data-test-id="listing-photo-uploaded"]`).contains("Save").click()
       cy.getByID("buildingAddress.street").type(listing["buildingAddress.street"])
       cy.getByID("neighborhood").type(listing["neighborhood"])
       cy.getByID("buildingAddress.city").type(listing["buildingAddress.city"])
@@ -94,6 +96,13 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").type(listing["leasingAgentAddress.zipCode"])
       cy.getByID("leasingAgentAddress.state").select(listing["leasingAgentAddress.state"])
 
+      cy.getByTestId("mailing-address-checkbox").check()
+      cy.getByTestId("mailing-address-street").type(listing["leasingAgentAddress.street"])
+      cy.getByTestId("mailing-address-street2").type(listing["leasingAgentAddress.street2"])
+      cy.getByTestId("mailing-address-city").type(listing["leasingAgentAddress.city"])
+      cy.getByTestId("mailing-address-zip").type(listing["leasingAgentAddress.zipCode"])
+      cy.getByTestId("mailing-address-state").select(listing["leasingAgentAddress.state"])
+
       cy.get("#applicationsPickedUpNo").check()
       cy.get("#applicationsDroppedOffNo").check()
       cy.get("#postmarksConsideredYes").check()
@@ -134,7 +143,9 @@ describe("Listing Management Tests", () => {
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
       cy.get("#name").contains(listing["name"])
       cy.get("#developer").contains(listing["developer"])
-      cy.get('[data-label="File Name"]').contains("exygy")
+      cy.get('[data-label="File Name"]').contains(
+        "cypress-automated-image-upload-071e2ab9-5a52-4f34-85f0-e41f696f4b96"
+      )
       cy.getByID("buildingAddress.street").contains(listing["buildingAddress.street"])
       cy.get("#neighborhood").contains(listing.neighborhood)
       cy.get("#neighborhood").contains(listing.neighborhood)
@@ -197,7 +208,12 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.state").contains("CA")
       cy.getByID("leasingAgentAddress.zipCode").contains(listing["leasingAgentAddress.zipCode"])
       cy.get("#applicationPickupQuestion").contains("No")
-      cy.get("#applicationMailingAddress").contains("No")
+      cy.getByTestId("mailing-address-checkbox").contains("Yes")
+      cy.getByTestId("mailing-address-street").contains(listing["leasingAgentAddress.street"])
+      cy.getByTestId("mailing-address-street2").contains(listing["leasingAgentAddress.street2"])
+      cy.getByTestId("mailing-address-city").contains(listing["leasingAgentAddress.city"])
+      cy.getByTestId("mailing-address-zip").contains(listing["leasingAgentAddress.zipCode"])
+      cy.getByTestId("mailing-address-state").contains("CA")
       cy.get("#applicationDropOffQuestion").contains("No")
       cy.get("#postmarksConsideredQuestion").contains("Yes")
       cy.getByTestId("postmark-date").contains("12")
@@ -212,6 +228,16 @@ describe("Listing Management Tests", () => {
       cy.getByID("openhouseHeader").contains("10/04/2022")
       cy.getByID("openhouseHeader").contains("10:04:00 AM")
       cy.getByID("openhouseHeader").contains("11:05:00 PM")
+    })
+  })
+
+  it("verify open listing warning happens", () => {
+    cy.getByTestId("listingEditButton").contains("Edit").click()
+    cy.getByTestId("nameField").type(" (Edited)")
+    cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
+    cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
+    cy.fixture("listing").then((listing) => {
+      cy.get("#name").contains(`${listing["name"]} (Edited)`)
     })
   })
 })

@@ -2,5 +2,10 @@
   "baseUrl": "http://localhost:3001",
   "defaultCommandTimeout": 10000,
   "projectId": "bloom-partners-reference",
-  "numTestsKeptInMemory": 0
+  "numTestsKeptInMemory": 0,
+  "env": {
+    "codeCoverage": {
+      "url": "/api/__coverage__"
+    }
+  }
 }

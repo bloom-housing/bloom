@@ -1,8 +1,6 @@
-import React, { useContext, useMemo, useCallback } from "react"
-import moment from "moment"
-import { useFormContext } from "react-hook-form"
+import React, { useContext, useMemo } from "react"
+import dayjs from "dayjs"
 import {
-  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -14,8 +12,8 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
-import { createDate } from "../../lib/helpers"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
 type AsideProps = {
@@ -34,36 +32,16 @@ const Aside = ({
   submitFormWithStatus,
 }: AsideProps) => {
   const listing = useContext(ListingContext)
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getValues } = useFormContext() || {}
 
   const listingId = listing?.id
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = moment(listing.updatedAt)
+    const dayjsDate = dayjs(listing.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [listing])
-
-  const saveAndExit = useCallback(() => {
-    const applicationDueDateField = getValues()?.applicationDueDateField
-    const applicationDueDateFormatted = createDate(applicationDueDateField)
-
-    const newStatus = (() => {
-      if (
-        listing.status === ListingStatus.closed &&
-        moment(applicationDueDateFormatted).isAfter()
-      ) {
-        return ListingStatus.active
-      }
-
-      return listing.status
-    })()
-
-    submitFormWithStatus(false, newStatus)
-  }, [getValues, listing, submitFormWithStatus])
 
   const actions = useMemo(() => {
     const elements = []
@@ -91,6 +69,7 @@ const Aside = ({
               fullWidth
               onClick={() => false}
               type="button"
+              dataTestId="listingEditButton"
             >
               {t("t.edit")}
             </Button>
@@ -133,7 +112,8 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => saveAndExit()}
+            onClick={() => submitFormWithStatus(true, listing.status)}
+            dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
           </Button>
@@ -194,7 +174,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {moment(
+              {dayjs(
                 listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}
@@ -221,7 +201,10 @@ const Aside = ({
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
-          <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
+          <a
+            target="_blank"
+            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
             </Button>
@@ -256,7 +239,6 @@ const Aside = ({
   }, [
     listing,
     listingId,
-    saveAndExit,
     showCloseListingModal,
     showLotteryResultsDrawer,
     submitFormWithStatus,

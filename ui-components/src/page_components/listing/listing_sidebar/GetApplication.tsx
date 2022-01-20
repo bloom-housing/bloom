@@ -5,8 +5,8 @@ import { LinkButton } from "../../../actions/LinkButton"
 import { AppearanceStyleType } from "../../../global/AppearanceTypes"
 import { Address } from "../../../helpers/address"
 import { SidebarAddress } from "./SidebarAddress"
-import { NumberedHeader } from "./NumberedHeader"
 import { OrDivider } from "./OrDivider"
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 
 export interface PaperApplication {
   fileURL: string
@@ -15,7 +15,6 @@ export interface PaperApplication {
 
 export interface ApplicationsProps {
   onlineApplicationURL?: string
-  applicationsDueDate?: string
   applicationsOpen: boolean
   applicationsOpenDate?: string
   paperApplications?: PaperApplication[]
@@ -24,11 +23,16 @@ export interface ApplicationsProps {
   applicationPickUpAddressOfficeHours?: string
   applicationPickUpAddress?: Address
   preview?: boolean
+  listingStatus?: ListingStatus
 }
 
 const GetApplication = (props: ApplicationsProps) => {
   const [showDownload, setShowDownload] = useState(false)
   const toggleDownload = () => setShowDownload(!showDownload)
+
+  if (props.listingStatus === ListingStatus.closed) {
+    return null
+  }
 
   return (
     <section className="aside-block">
@@ -61,7 +65,7 @@ const GetApplication = (props: ApplicationsProps) => {
       {props.applicationsOpen && props.paperMethod && (
         <>
           {props.onlineApplicationURL && <OrDivider bgColor="white" />}
-          <NumberedHeader num={1} text={t("listings.apply.getAPaperApplication")} />
+          <div className="text-serif-lg">{t("listings.apply.getAPaperApplication")}</div>
           <Button
             styleType={
               !props.preview && props.onlineApplicationURL ? AppearanceStyleType.primary : undefined

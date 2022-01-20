@@ -1,6 +1,6 @@
 import { createContext } from "react"
 import ApplicationConductor from "./ApplicationConductor"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { Listing } from "@bloom-housing/backend-core/types"
 
 export const retrieveApplicationConfig = (listing: Listing) => {
@@ -99,7 +99,7 @@ export const retrieveApplicationConfig = (listing: Listing) => {
 
 export const AppSubmissionContext = createContext({
   conductor: {} as ApplicationConductor,
-  application: blankApplication(),
+  application: { ...blankApplication },
   listing: null as Listing,
   /* eslint-disable */
   syncApplication: (data) => {},
