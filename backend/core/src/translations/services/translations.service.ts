@@ -8,41 +8,13 @@ import { Language } from "../../shared/types/language-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { GoogleTranslateService } from "./google-translate.service"
 import { GeneratedListingTranslation } from "../entities/generated-listing-translation.entity"
-import { isEmpty } from "../../shared/utils/is-empty"
-
-const TRANSLATION_KEYS = [
-  "applicationPickUpAddressOfficeHours",
-  "costsNotIncluded",
-  "creditHistory",
-  "criminalBackground",
-  "programRules",
-  "rentalAssistance",
-  "rentalHistory",
-  "requiredDocuments",
-  "specialNotes",
-  "whatToExpect",
-  {
-    events: ["note", "label"],
-    property: [
-      "accessibility",
-      "amenities",
-      "neighborhood",
-      "petPolicy",
-      "servicesOffered",
-      "smokingPolicy",
-      "unitAmenities",
-    ],
-    whatToExpect: ["applicantsWillBeContacted", "allInfoWillBeVerified", "bePreparedIfChosen"],
-    preferences: ["title", "description", "subtitle"],
-  },
-]
+import * as lodash from "lodash"
 
 @Injectable()
-export class TranslationsService extends AbstractServiceFactory<
-  Translation,
+export class TranslationsService extends AbstractServiceFactory<Translation,
   TranslationCreateDto,
-  TranslationUpdateDto
->(Translation) {
+  TranslationUpdateDto>(Translation) {
+
   constructor(
     @InjectRepository(GeneratedListingTranslation)
     private readonly generatedListingTranslationRepository: Repository<GeneratedListingTranslation>,
@@ -61,13 +33,13 @@ export class TranslationsService extends AbstractServiceFactory<
           language,
           ...(jurisdictionId && {
             jurisdiction: {
-              id: jurisdictionId,
-            },
+              id: jurisdictionId
+            }
           }),
           ...(!jurisdictionId && {
-            jurisdiction: null,
-          }),
-        },
+            jurisdiction: null
+          })
+        }
       })
     } catch (e) {
       if (e instanceof NotFoundException && language != Language.en) {
@@ -77,17 +49,27 @@ export class TranslationsService extends AbstractServiceFactory<
             language: Language.en,
             ...(jurisdictionId && {
               jurisdiction: {
-                id: jurisdictionId,
-              },
+                id: jurisdictionId
+              }
             }),
             ...(!jurisdictionId && {
-              jurisdiction: null,
-            }),
-          },
+              jurisdiction: null
+            })
+          }
         })
       } else {
         throw e
       }
+    }
+  }
+
+  private logUnmatchedPatterns(patterns: Array<RegExp>, patternsMatchMap: { [key: string]: true }) {
+    if (Object.keys(patternsMatchMap).length != patterns.length) {
+      const a = new Set(patterns.map(pattern => pattern.toString()))
+      const b = new Set(Object.keys(patternsMatchMap))
+      let a_minus_b = new Set([...a].filter(x => !b.has(x)))
+      console.warn("some patterns did not match any object key while translating a listing")
+      console.warn(a_minus_b)
     }
   }
 
@@ -96,38 +78,78 @@ export class TranslationsService extends AbstractServiceFactory<
       console.warn("listing translation requested, but google translate service is not configured")
       return
     }
-    const keysAndValuesToBeTranslated = this.fetchKeysAndValuesToBeTranslated(listing)
-    /**
-     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
-     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
+
+    /*
+      Convert a listing object to the following flattened format:
+        ...
+        status: 'active',
+        reviewOrderType: 'lottery',
+        'applicationMethods[0].id': 'b8e3b1e3-ace8-486f-9adb-ba041afc0e30',
+        'applicationMethods[0].type': 'Internal',
+        'applicationMethods[0].label': 'Label',
+        'image.id': '9237bc00-1ac2-4a3b-a05e-6b59e294d091',
+        'image.fileId': 'fileid',
+        'image.label': 'test_label',
+        'events[0].id': '6bcb16b5-d1f0-428b-986c-fecf78f1bb5b',
+        'events[0].type': 'openHouse',
+        ...
+      which is basically a [path:value] dict.
      */
-    if (listing.listingPreferences) {
-      listing.listingPreferences.forEach((val) => {
-        keysAndValuesToBeTranslated.keys.push(
-          "preferences.title",
-          "preferences.description",
-          "preferences.subtitle"
-        )
-        keysAndValuesToBeTranslated.values.push(
-          val.preference.title,
-          val.preference.description,
-          val.preference.subtitle
-        )
-      })
-    }
-    if (
-      !keysAndValuesToBeTranslated?.values ||
-      (keysAndValuesToBeTranslated?.values && keysAndValuesToBeTranslated.values.length === 0)
-    ) {
-      return
+
+    const flattenedListingFull = this.flatten(listing)
+
+    /*
+      Filter out flattened paths matching hardcoded path regexps.
+     */
+    const pathPatternsToFilter = [
+      /applicationPickUpAddressOfficeHours/g,
+      /costsNotIncluded/g,
+      /creditHistory/g,
+      /criminalBackground/g,
+      /programRules/g,
+      /rentalAssistance/g,
+      /rentalHistory/g,
+      /requiredDocuments/g,
+      /specialNotes/g,
+      /whatToExpect/g,
+      /events\[\d+\]\.note/g,
+      /events\[\d+\]\.label/g,
+      /property\.accessibility/g,
+      /property\.amenities/g,
+      /property\.neighborhood/g,
+      /property\.petPolicy/g,
+      /property\.servicesOffered/g,
+      /property\.smokingPolicy/g,
+      /property\.unitAmenities/g,
+      /whatToExpect\.applicantsWillBeContacted/g,
+      /whatToExpect\.allInfoWillBeVerified/g,
+      /whatToExpect\.bePreparedIfChosen/g,
+      /listingPreferences\[\d+\]\.preference.title/g,
+      /listingPreferences\[\d+\]\.preference.description/g,
+      /listingPreferences\[\d+\]\.preference.subtitle/g
+    ]
+
+    const regexpMatchedFlattenedListing: { [key: string]: any } = {}
+    const debugPathPatternsMatchedMap: { [key: string]: true } = {}
+    for (const path of Object.keys(flattenedListingFull)) {
+      for (const pathPatternRegexp of pathPatternsToFilter) {
+        if (path.match(pathPatternRegexp)) {
+          regexpMatchedFlattenedListing[path] = flattenedListingFull[path]
+          debugPathPatternsMatchedMap[pathPatternRegexp.toString()] = true
+          break
+        }
+      }
     }
 
+    this.logUnmatchedPatterns(pathPatternsToFilter, debugPathPatternsMatchedMap)
+
+    // Caching
     let persistedTranslatedValues
     persistedTranslatedValues = await this.getPersistedTranslatedValues(listing, language)
 
     if (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt) {
       const newTranslations = await this.googleTranslateService.fetch(
-        keysAndValuesToBeTranslated.values,
+        Object.values(regexpMatchedFlattenedListing),
         language
       )
       persistedTranslatedValues = await this.persistTranslatedValues(
@@ -137,63 +159,43 @@ export class TranslationsService extends AbstractServiceFactory<
         newTranslations
       )
     }
-    /**
-     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
-     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
+
+    /*
+      Paths created earlier are compatible with lodash.set
+      Response array returned by translation service has the same values order as regexpMatchedFlattenedListing
+      So here we can simply reassign them by array index value
      */
-    let preferenceIndex = 0
-    keysAndValuesToBeTranslated.keys.forEach((key, index) => {
-      if (key === "preferences.title") {
-        listing.listingPreferences[preferenceIndex].preference.title =
-          persistedTranslatedValues.translations[0][index]
-      } else if (key === "preferences.description") {
-        listing.listingPreferences[preferenceIndex].preference.description =
-          persistedTranslatedValues.translations[0][index]
-      } else if (key === "preferences.subtitle") {
-        listing.listingPreferences[preferenceIndex].preference.subtitle =
-          persistedTranslatedValues.translations[0][index]
-        preferenceIndex++
-      } else {
-        this.setValue(listing, key, persistedTranslatedValues.translations[0][index])
-      }
-    })
+    for (const [index, path] of Object.keys(regexpMatchedFlattenedListing).entries()) {
+      // accessing 0th index here because google translate service response returns multiple
+      // possible arrays with results, we are interested in first
+      lodash.set(listing, path, persistedTranslatedValues.translations[0][index])
+    }
+
     return listing
   }
 
-  // Sets value to the object by string path. eg. "property.accessibility" or "preferences.0.title"
-  private setValue(object, path, value) {
-    return path
-      .split(".")
-      .reduce(
-        (currentObject, currentPath, index) =>
-          (currentObject[currentPath] =
-            path.split(".").length === ++index ? value : currentObject[currentPath] || {}),
-        object
-      )
-  }
-
-  // Returns not null key-values pairs also from nested properties
-  private findData(translationKeys, object: Listing, results, parent = null) {
-    translationKeys.forEach((key) => {
-      if (typeof key === "string") {
-        if (object[key] && isEmpty(object[key]) === false) {
-          results.keys.push(parent ? [parent, key].join(".") : key)
-          results.values.push(object[key])
-        }
-        return
-      } else {
-        for (const k in key) {
-          if (object[k]) {
-            this.findData(key[k], object[k], results, k)
-          }
-        }
+  private _flatten(obj, prefix, result) {
+    if (!obj) {
+      return result
+    } else if (typeof obj === "string" || typeof obj === "number") {
+      result[prefix] = obj
+    } else if (obj instanceof Array) {
+      for (const [index, item] of obj.entries()) {
+        this._flatten(item, prefix + "[" + index + "]", result)
       }
-    })
+    } else if (typeof obj === "object") {
+      for (const [key, value] of Object.entries(obj)) {
+        this._flatten(value, prefix + "." + key, result)
+      }
+    }
+    return result
   }
 
-  private fetchKeysAndValuesToBeTranslated(listing: Listing) {
-    const result = { keys: [], values: [] }
-    this.findData(TRANSLATION_KEYS, listing, result)
+  private flatten(obj) {
+    const result = {}
+    for (const [key, value] of Object.entries(obj)) {
+      this._flatten(value, key, result)
+    }
     return result
   }
 
@@ -209,7 +211,7 @@ export class TranslationsService extends AbstractServiceFactory<
       jurisdictionId: listing.jurisdiction.id,
       language,
       translations: translatedValues,
-      timestamp: listing.updatedAt,
+      timestamp: listing.updatedAt
     })
   }
 
@@ -218,8 +220,8 @@ export class TranslationsService extends AbstractServiceFactory<
       where: {
         jurisdictionId: listing.jurisdiction.id,
         language,
-        listingId: listing.id,
-      },
+        listingId: listing.id
+      }
     })
   }
 }
