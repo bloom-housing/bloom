@@ -11,10 +11,11 @@ import { GeneratedListingTranslation } from "../entities/generated-listing-trans
 import * as lodash from "lodash"
 
 @Injectable()
-export class TranslationsService extends AbstractServiceFactory<Translation,
+export class TranslationsService extends AbstractServiceFactory<
+  Translation,
   TranslationCreateDto,
-  TranslationUpdateDto>(Translation) {
-
+  TranslationUpdateDto
+>(Translation) {
   constructor(
     @InjectRepository(GeneratedListingTranslation)
     private readonly generatedListingTranslationRepository: Repository<GeneratedListingTranslation>,
@@ -33,13 +34,13 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
           language,
           ...(jurisdictionId && {
             jurisdiction: {
-              id: jurisdictionId
-            }
+              id: jurisdictionId,
+            },
           }),
           ...(!jurisdictionId && {
-            jurisdiction: null
-          })
-        }
+            jurisdiction: null,
+          }),
+        },
       })
     } catch (e) {
       if (e instanceof NotFoundException && language != Language.en) {
@@ -49,13 +50,13 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
             language: Language.en,
             ...(jurisdictionId && {
               jurisdiction: {
-                id: jurisdictionId
-              }
+                id: jurisdictionId,
+              },
             }),
             ...(!jurisdictionId && {
-              jurisdiction: null
-            })
-          }
+              jurisdiction: null,
+            }),
+          },
         })
       } else {
         throw e
@@ -65,9 +66,9 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
 
   private logUnmatchedPatterns(patterns: Array<RegExp>, patternsMatchMap: { [key: string]: true }) {
     if (Object.keys(patternsMatchMap).length != patterns.length) {
-      const a = new Set(patterns.map(pattern => pattern.toString()))
+      const a = new Set(patterns.map((pattern) => pattern.toString()))
       const b = new Set(Object.keys(patternsMatchMap))
-      let a_minus_b = new Set([...a].filter(x => !b.has(x)))
+      let a_minus_b = new Set([...a].filter((x) => !b.has(x)))
       console.warn("some patterns did not match any object key while translating a listing")
       console.warn(a_minus_b)
     }
@@ -126,7 +127,7 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       /whatToExpect\.bePreparedIfChosen/g,
       /listingPreferences\[\d+\]\.preference.title/g,
       /listingPreferences\[\d+\]\.preference.description/g,
-      /listingPreferences\[\d+\]\.preference.subtitle/g
+      /listingPreferences\[\d+\]\.preference.subtitle/g,
     ]
 
     const regexpMatchedFlattenedListing: { [key: string]: any } = {}
@@ -211,7 +212,7 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       jurisdictionId: listing.jurisdiction.id,
       language,
       translations: translatedValues,
-      timestamp: listing.updatedAt
+      timestamp: listing.updatedAt,
     })
   }
 
@@ -220,8 +221,8 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       where: {
         jurisdictionId: listing.jurisdiction.id,
         language,
-        listingId: listing.id
-      }
+        listingId: listing.id,
+      },
     })
   }
 }
