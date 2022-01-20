@@ -1,5 +1,4 @@
-import React from "react"
-import { useRouter } from "next/router"
+import React, { useContext } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -14,6 +13,7 @@ import {
   ErrorMessage,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { NavigationContext } from "../../config/NavigationContext"
 import type { UseFormMethods } from "react-hook-form"
 import type { NetworkErrorReset, NetworkErrorValue } from "@bloom-housing/shared-helpers"
 
@@ -47,7 +47,7 @@ const FormForgotPassword = ({
     window.scrollTo(0, 0)
   }
 
-  const router = useRouter()
+  const { router } = useContext(NavigationContext)
 
   return (
     <FormCard>
