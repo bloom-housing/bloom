@@ -1,10 +1,10 @@
-import React from "react"
+import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { t } from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
-
+import { AuthContext, t } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, ListingDetail, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
 import { MetaTags } from "../../../src/MetaTags"
@@ -17,11 +17,35 @@ interface ListingProps {
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
+  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (!listing.id) return
+    pushGtmEvent<ListingDetail>({
+      event: "pageView",
+      pageTitle: `${listing.name} - Housing Portal`,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+      listingStartDate: listing.applicationOpenDate,
+      listingStatus: listing.status,
+      listingID: listing.id,
+      applicationDueDate: listing.applicationDueDate,
+      paperApplication: listing.paperApplication,
+    })
+  }, [
+    listing.applicationDueDate,
+    listing.applicationOpenDate,
+    listing.id,
+    listing.name,
+    listing.paperApplication,
+    listing.status,
+    profile,
+  ])
+
   if (!listing) {
     return <ErrorPage />
   }
 
-  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
     listingName: listing.name,
