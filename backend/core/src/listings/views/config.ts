@@ -1,14 +1,5 @@
 import { Views } from "./types"
-
-function getBaseAddressSelect(schemas: string[]): string[] {
-  const fields = ["city", "state", "street", "street2", "zipCode", "latitude", "longitude"]
-
-  let select: string[] = []
-  schemas.forEach((schema) => {
-    select = select.concat(fields.map((field) => `${schema}.${field}`))
-  })
-  return select
-}
+import { getBaseAddressSelect } from "../../views/base.view"
 
 const views: Views = {
   base: {
@@ -16,7 +7,6 @@ const views: Views = {
       "listings.id",
       "listings.name",
       "listings.applicationDueDate",
-      "listings.applicationDueTime",
       "listings.applicationOpenDate",
       "listings.reviewOrderType",
       "listings.status",
@@ -73,7 +63,6 @@ views.partnerList = {
     "listings.id",
     "listings.name",
     "listings.applicationDueDate",
-    "listings.applicationDueTime",
     "listings.status",
     "listings.waitlistMaxSize",
     "listings.waitlistCurrentSize",
@@ -92,6 +81,7 @@ views.detail = {
     "listings.applicationPickUpAddressType",
     "listings.applicationDropOffAddressOfficeHours",
     "listings.applicationDropOffAddressType",
+    "listings.applicationMailingAddressType",
     "listings.buildingSelectionCriteria",
     "listings.costsNotIncluded",
     "listings.creditHistory",
@@ -150,6 +140,7 @@ views.detail = {
       "leasingAgentAddress",
       "applicationPickUpAddress",
       "applicationMailingAddress",
+      "applicationDropOffAddress",
     ]),
     "leasingAgents.firstName",
     "leasingAgents.lastName",

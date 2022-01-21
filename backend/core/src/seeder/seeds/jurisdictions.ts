@@ -4,10 +4,10 @@ import { Language } from "../../shared/types/language-enum"
 import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 
 export const defaultJurisdictions: JurisdictionCreateDto[] = [
-  { name: "Alameda", preferences: [], languages: [Language.en], programs: [] },
-  { name: "San Jose", preferences: [], languages: [Language.en], programs: [] },
-  { name: "San Mateo", preferences: [], languages: [Language.en], programs: [] },
-  { name: "Detroit", preferences: [], languages: [Language.en], programs: [] },
+  { name: "Alameda", preferences: [], languages: [Language.en], programs: [], publicUrl: "" },
+  { name: "San Jose", preferences: [], languages: [Language.en], programs: [], publicUrl: "" },
+  { name: "San Mateo", preferences: [], languages: [Language.en], programs: [], publicUrl: "" },
+  { name: "Detroit", preferences: [], languages: [Language.en], programs: [], publicUrl: "" },
 ]
 
 export async function createJurisdictions(app: INestApplicationContext) {

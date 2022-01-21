@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { UseFormMethods } from "react-hook-form"
+import { UseFormMethods, RegisterOptions } from "react-hook-form"
 import { Field } from "./Field"
 import { t } from "../helpers/translator"
 
@@ -30,7 +30,7 @@ interface FieldGroupProps {
   groupNote?: string
   groupSubNote?: string
   register: UseFormMethods["register"]
-  validation?: Record<string, unknown>
+  validation?: RegisterOptions
   fieldGroupClassName?: string
   fieldClassName?: string
   fieldLabelClassName?: string

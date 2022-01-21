@@ -149,7 +149,7 @@ const FormPrimaryApplicant = () => {
               controlClassName="control"
               options={phoneNumberKeys}
               keyPrefix="application.contact.phoneNumberTypes"
-              validation={{ required: phoneValue?.length }}
+              validation={{ required: !!phoneValue?.length }}
               disabled={!phoneValue?.length}
             />
           </ViewItem>
@@ -183,7 +183,7 @@ const FormPrimaryApplicant = () => {
               labelClassName={"sr-only"}
               options={phoneNumberKeys}
               keyPrefix="application.contact.phoneNumberTypes"
-              validation={{ required: additionalPhoneValue?.length }}
+              validation={{ required: !!additionalPhoneValue?.length }}
               disabled={!additionalPhoneValue?.length}
             />
           </ViewItem>

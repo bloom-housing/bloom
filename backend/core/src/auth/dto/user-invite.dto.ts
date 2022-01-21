@@ -13,6 +13,8 @@ export class UserInviteDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "leasingAgentInListings",
+  "passwordUpdatedAt",
+  "passwordValidForDays",
   "lastLoginAt",
   "failedLoginAttemptsCount",
 ] as const) {

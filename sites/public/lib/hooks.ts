@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import moment from "moment"
+import dayjs from "dayjs"
 import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
@@ -51,19 +51,17 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     let formattedDate = ""
     if (openInFuture(listing)) {
       const date = listing.applicationOpenDate
-      const openDate = moment(date)
-      formattedDate = openDate.format("MMM. D, YYYY")
+      const openDate = dayjs(date)
+      formattedDate = openDate.format("MMM D, YYYY")
       content = t("listings.applicationOpenPeriod")
     } else {
       if (listing.applicationDueDate) {
-        const dueDate = moment(listing.applicationDueDate)
-        const dueTime = moment(listing.applicationDueTime)
-        formattedDate = dueDate.format("MMM. DD, YYYY")
-        if (listing.applicationDueTime) {
-          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
-        }
+        const dueDate = dayjs(listing.applicationDueDate)
+        formattedDate = dueDate.format("MMM DD, YYYY")
+        formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
+
         // if due date is in future, listing is open
-        if (moment() < dueDate) {
+        if (dayjs() < dueDate) {
           content = t("listings.applicationDeadline")
         } else {
           content = t("listings.applicationsClosed")

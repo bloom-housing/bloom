@@ -249,6 +249,20 @@
       "general": {
         "title": "根據您填寫的資料，您的家庭沒有要求任何住房優先權。",
         "preamble": "您將被分配到一般申請人組別。"
+      },
+      "rosefieldLive": {
+        "title": "罗斯菲尔德村以前的居民搬迁到阿拉米达市外",
+        "yes": {
+          "label": "我的至少一名家庭成员曾是罗斯菲尔德村的居民",
+          "description": "我的至少一名家庭成员曾是罗斯菲尔德村的居民"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "阿拉米达联合学区 (AUSD) 员工",
+        "yes": {
+          "label": "我的至少一名家庭成员是阿拉米达联合学区的雇员",
+          "description": "我的至少一名家庭成员是阿拉米达联合学区的雇员"
+        }
       }
     },
     "review": {
@@ -476,7 +490,7 @@
       "howToApply": "如何申請",
       "paperApplicationsMustBeMailed": "紙本申請表必須經由美國郵政寄回，並且不能親自提交。",
       "pickUpAnApplication": "領取申請表",
-      "postmarkedApplicationsMustBeReceivedByDate": "申請表必須在截止日期前收到。如果經由美國郵政寄送，則申請表上的郵戳日期必須在 %{applicationDueDate} 前，郵件最遲要在 %{postmarkReceivedByDate} 前寄達。我們不會受理在 %{postmarkReceivedByDate} 之後郵寄送達的申請表，即使郵戳日期在 %{applicationDueDate} 之前也一樣。若郵件有任何遺失或延誤，%{developer} 概不負責。",
+      "submitPaperDueDatePostMark": "申請表必須在截止日期前收到。如果經由美國郵政寄送，則申請表上的郵戳日期必須在 %{applicationDueDate} 前，郵件最遲要在 %{postmarkReceivedByDate} 前寄達。我們不會受理在 %{postmarkReceivedByDate} 之後郵寄送達的申請表，即使郵戳日期在 %{applicationDueDate} 之前也一樣。若郵件有任何遺失或延誤，%{developer} 概不負責。",
       "sendByUsMail": "用美國郵政寄送申請表",
       "submitAPaperApplication": "提交紙本申請表"
     },

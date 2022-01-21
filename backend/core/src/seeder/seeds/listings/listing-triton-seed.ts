@@ -47,7 +47,6 @@ const tritonListing: ListingSeedType = {
   applicationDueDate: getDate(5),
   applicationFee: "38.0",
   applicationOpenDate: getDate(-10),
-  applicationDueTime: null,
   applicationOrganization: "Triton",
   applicationPickUpAddress: {
     city: "Foster City",
@@ -241,6 +240,7 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...tritonListing,
+      name: "Test: Triton 2",
       property: property,
       assets: getDefaultAssets(),
       listingPreferences: [
@@ -395,7 +395,9 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...tritonListing,
+      name: "Test: Triton 1",
       property: property,
+      applicationOpenDate: getDate(-5),
       assets: getDefaultAssets(),
       events: [],
     }

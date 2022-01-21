@@ -29,7 +29,7 @@ type UseListingsDataProps = PaginationProps & {
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.retrieve({ listingId })
+  const fetcher = () => listingsService.retrieve({ id: listingId })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
@@ -126,7 +126,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
 
-  const fetcher = () => applicationsService.retrieve({ applicationId })
+  const fetcher = () => applicationsService.retrieve({ id: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {

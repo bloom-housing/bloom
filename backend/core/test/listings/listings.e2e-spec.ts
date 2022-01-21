@@ -37,7 +37,6 @@ describe("Listings", () => {
   let programsRepository: Repository<Program>
   let adminAccessToken: string
   let jurisdictionsRepository: Repository<Jurisdiction>
-  let listingsRepository: Repository<Listing>
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -59,7 +58,6 @@ describe("Listings", () => {
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
-    listingsRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
   })
 
   it("should return all listings", async () => {
@@ -295,12 +293,12 @@ describe("Listings", () => {
     expect(listings[0].name).toBe("Test: Coliseum")
 
     // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
-    // (5 days in the future). Between the two, Triton appears first because it has
-    // the earlier applicationOpenDate.
+    // (5 days in the future). Between the two, Triton 1 appears first because it has
+    // the closer applicationOpenDate.
     const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton")
+    expect(secondListing.name).toBe("Test: Triton 1")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Triton")
+    expect(thirdListing.name).toBe("Test: Triton 2")
     const fourthListing = listings[3]
     expect(fourthListing.name).toBe("Test: Default, No Preferences")
 
@@ -310,7 +308,7 @@ describe("Listings", () => {
 
     const secondListingAppOpenDate = new Date(secondListing.applicationOpenDate)
     const thirdListingAppOpenDate = new Date(thirdListing.applicationOpenDate)
-    expect(secondListingAppOpenDate.getTime()).toBeLessThanOrEqual(
+    expect(secondListingAppOpenDate.getTime()).toBeGreaterThanOrEqual(
       thirdListingAppOpenDate.getTime()
     )
 

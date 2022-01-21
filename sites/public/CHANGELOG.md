@@ -3,6 +3,230 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.25...@bloom-housing/public@4.0.1-alpha.26) (2022-01-21)
+
+
+### Bug Fixes
+
+* removes unnecessary ternary ([20edcd4](https://github.com/bloom-housing/bloom/commit/20edcd4810ee260f2e1705bfbbbbb69738b5b2f9))
+* user status enum to camel case; gtm types ([fbb8004](https://github.com/bloom-housing/bloom/commit/fbb800496fa1c5f37d3d7738acf28755dd66f1dd))
+
+
+### Features
+
+* adds event logging to most of the pages ([dc88c0a](https://github.com/bloom-housing/bloom/commit/dc88c0a8b6be317cd624921b868bb17e77e31f11))
+* set gtm pageTitle to english only ([09b641c](https://github.com/bloom-housing/bloom/commit/09b641cd22df27c2ae401da1427f090b9a9c97ad))
+* updates for gtm ([0251cd3](https://github.com/bloom-housing/bloom/commit/0251cd3d73be19d60c148aae01d12ab35f29bc85))
+* updates for gtm ([13578bb](https://github.com/bloom-housing/bloom/commit/13578bb864ea1b1918d5908982cb3095756811c7))
+
+
+
+
+
+## [4.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.24...@bloom-housing/public@4.0.1-alpha.25) (2022-01-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.23...@bloom-housing/public@4.0.1-alpha.24) (2022-01-14)
+
+
+### Bug Fixes
+
+* patches translations for preferences ([#2410](https://github.com/bloom-housing/bloom/issues/2410)) ([7906e6b](https://github.com/bloom-housing/bloom/commit/7906e6bc035fab4deea79ea51833a0ef29926d45))
+
+
+
+
+
+## [4.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.22...@bloom-housing/public@4.0.1-alpha.23) (2022-01-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.21...@bloom-housing/public@4.0.1-alpha.22) (2022-01-13)
+
+
+### Bug Fixes
+
+* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+
+
+
+
+## [4.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.20...@bloom-housing/public@4.0.1-alpha.21) (2022-01-13)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.19...@bloom-housing/public@4.0.1-alpha.20) (2022-01-11)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.18...@bloom-housing/public@4.0.1-alpha.19) (2022-01-08)
+
+
+### Bug Fixes
+
+* ensure dayjs parsing strings will work as expected ([eb44939](https://github.com/bloom-housing/bloom/commit/eb449395ebea3a3b4b58eb217df1e1313c722a0d))
+
+
+
+
+
+## [4.0.1-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.17...@bloom-housing/public@4.0.1-alpha.18) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.16...@bloom-housing/public@4.0.1-alpha.17) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.15...@bloom-housing/public@4.0.1-alpha.16) (2022-01-07)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.14...@bloom-housing/public@4.0.1-alpha.15) (2022-01-06)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.13...@bloom-housing/public@4.0.1-alpha.14) (2022-01-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.12...@bloom-housing/public@4.0.1-alpha.13) (2022-01-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.12](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.11...@bloom-housing/public@4.0.1-alpha.12) (2022-01-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.11](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.10...@bloom-housing/public@4.0.1-alpha.11) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.10](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.9...@bloom-housing/public@4.0.1-alpha.10) (2022-01-03)
+
+
+### Bug Fixes
+
+* remove next dependency from ui-components ([#2352](https://github.com/bloom-housing/bloom/issues/2352)) ([136e8a1](https://github.com/bloom-housing/bloom/commit/136e8a1af2b4f285644caa9a18d60121f4d82566))
+
+
+
+
+
+## [4.0.1-alpha.9](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.8...@bloom-housing/public@4.0.1-alpha.9) (2022-01-03)
+
+
+### Bug Fixes
+
+* cypress coverage configs ([eec74ee](https://github.com/bloom-housing/bloom/commit/eec74eef138f6af275ae3cfe16262ed215b16907))
+
+
+
+
+
+## [4.0.1-alpha.8](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.7...@bloom-housing/public@4.0.1-alpha.8) (2022-01-03)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.7](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.0...@bloom-housing/public@4.0.1-alpha.7) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
+## [4.0.1-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.0...@bloom-housing/public@4.0.1-alpha.6) (2022-01-03)
+
+
+### Bug Fixes
+
+* bump version ([#2349](https://github.com/bloom-housing/bloom/issues/2349)) ([b9e3ba1](https://github.com/bloom-housing/bloom/commit/b9e3ba10aebd6534090f8be231a9ea77b3c929b6))
+* bump version ([#2350](https://github.com/bloom-housing/bloom/issues/2350)) ([05863f5](https://github.com/bloom-housing/bloom/commit/05863f55f3939bea4387bd7cf4eb1f34df106124))
+
+
+* 2227/lock login attempts frontend (#2260) ([281ea43](https://github.com/bloom-housing/bloom/commit/281ea435e618a73a73f233a7a494f961fbac8fa2)), closes [#2260](https://github.com/bloom-housing/bloom/issues/2260) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927) [#1927](https://github.com/bloom-housing/bloom/issues/1927)
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+
+
+
+
+
 ## [4.0.1-alpha.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@4.0.0...@bloom-housing/public@4.0.1-alpha.1) (2021-12-23)
 
 
