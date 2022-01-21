@@ -14,6 +14,7 @@ declare namespace Cypress {
     login(): Chainable
     attachFile(command: string, optionalProcessingConfig: attachFileSubjectArgs): Chainable
     verifyAlertBox(): Chainable
+    signOut(): Chainable
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
