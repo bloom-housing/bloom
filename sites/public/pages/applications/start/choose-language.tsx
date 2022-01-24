@@ -54,6 +54,7 @@ const ApplicationChooseLanguage = () => {
     if (!context.listing || context.listing.id !== listingId) {
       void loadListing(listingId, setListing, conductor, context, "en")
     } else {
+      conductor.listing = context.listing
       setListing(context.listing)
     }
   }, [router, conductor, context, listingId])
