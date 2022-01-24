@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.26...@bloom-housing/public@4.0.1-alpha.27) (2022-01-24)
+
+
+### Bug Fixes
+
+* issues with public app and readds auto save ([bb27a56](https://github.com/bloom-housing/bloom/commit/bb27a56835dcd27f2e8a0d7d14f07d0870d0079b))
+* removing console logs ([e8f50aa](https://github.com/bloom-housing/bloom/commit/e8f50aa29140167dae006f98c631baecca96f64b))
+
+
+
+
+
 ## [4.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.25...@bloom-housing/public@4.0.1-alpha.26) (2022-01-21)
 
 
