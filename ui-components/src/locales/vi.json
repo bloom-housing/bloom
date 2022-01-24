@@ -1,4 +1,4 @@
-﻿{
+{
   "account": {
     "accountSettings": "Thiết lập Tài khoản",
     "accountSettingsSubtitle": "Thiết lập Tài khoản, email và mật khẩu",
@@ -472,6 +472,7 @@
     "additionalInformation": "Thông tin Bổ sung",
     "allUnits": "Tất cả các Căn nhà",
     "allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
+    "annualIncome": "%{income} mỗi năm",
     "applicationDeadline": "Hạn nộp Đơn ghi danh",
     "applicationFCFS": "Ai Nộp đơn Trước Được Nhận trước",
     "applicationFee": "Lệ phí Ghi danh",
@@ -524,6 +525,7 @@
     },
     "maxIncomeMonth": "Thu nhập Tối đa / Tháng",
     "maxIncomeYear": "Thu nhập Tối đa / Năm",
+    "monthlyIncome": "%{income} mỗi tháng",
     "moreBuildingSelectionCriteria": "Tìm hiểu thêm về Tiêu chí Lựa chọn Tòa nhà",
     "noAvailableUnits": "Không có căn nhà nào còn trống tại thời điểm này.",
     "noOpenListings": "Không có danh sách nhà nào hiện đang mở nhận đơn ghi danh.",
