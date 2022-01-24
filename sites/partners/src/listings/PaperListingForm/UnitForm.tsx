@@ -159,14 +159,19 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const resetAmiTableValues = (defaultAmiChart?: AmiChartItem[], defaultAmiPercentage?: string) => {
     const chart = defaultAmiChart ?? currentAmiChart
     const percentage = defaultAmiPercentage ?? amiPercentage
-    const newPercentages = chart
+    const newPercentagesByHouseHold = chart
       .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(percentage))
-      .sort(function (a: AmiChartItem, b: AmiChartItem) {
-        return a.householdSize - b.householdSize
-      })
-    newPercentages.forEach((amiValue: AmiChartItem, index: number) => {
-      setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
-    })
+      .reduce((acc, item) => {
+        acc[item.householdSize] = item
+        return acc
+      }, {})
+
+    for (let i = 1; i < 9; i++) {
+      setValue(
+        `maxIncomeHouseholdSize${i}`,
+        newPercentagesByHouseHold[i] ? newPercentagesByHouseHold[i].income.toString() : ""
+      )
+    }
   }
 
   useEffect(() => {
@@ -214,8 +219,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           (item: AmiChartItem) =>
             item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
         )[0]
+
         if (
           data[`maxIncomeHouseholdSize${index + 1}`] &&
+          existingChartValue &&
           parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
         ) {
           delete data[`maxIncomeHouseholdSize${index + 1}`]
