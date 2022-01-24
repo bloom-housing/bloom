@@ -194,8 +194,6 @@ export default class ApplicationConductor {
     // NOTE: had to remove timeout because of Next doing full-page reloads in
     // some cases. Need to revisit after upgrading to v10
     if (typeof window != "undefined") {
-      console.log("this.application = ", this.application)
-      console.log("this.listing = ", this.listing)
       window.sessionStorage.setItem("bloom-app-autosave", JSON.stringify(this.application))
       if (this.listing) {
         window.sessionStorage.setItem("bloom-app-listing", JSON.stringify(this.listing))
