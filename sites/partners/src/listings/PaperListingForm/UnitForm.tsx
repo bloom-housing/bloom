@@ -159,12 +159,12 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const resetAmiTableValues = (defaultAmiChart?: AmiChartItem[], defaultAmiPercentage?: string) => {
     const chart = defaultAmiChart ?? currentAmiChart
     const percentage = defaultAmiPercentage ?? amiPercentage
-    const newPercentagesByHouseHold = chart
-      .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(percentage))
-      .reduce((acc, item) => {
+    const newPercentagesByHouseHold = chart.reduce((acc, item: AmiChartItem) => {
+      if (item.percentOfAmi === parseInt(percentage)) {
         acc[item.householdSize] = item
-        return acc
-      }, {})
+      }
+      return acc
+    }, {})
 
     for (let i = 1; i < 9; i++) {
       setValue(
