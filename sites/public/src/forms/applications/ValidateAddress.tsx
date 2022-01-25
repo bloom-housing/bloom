@@ -96,7 +96,6 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
           </div>
         </fieldset>
       )}
-      {foundAddress.invalid && <p>[couldn't find a verified address]</p>}
       {foundAddress.originalAddress && (
         <fieldset className="mt-6">
           <legend className="field-note mb-4">{t("application.contact.youEntered")}</legend>

@@ -134,7 +134,9 @@ const ApplicationAddress = () => {
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">
             {verifyAddress
-              ? t("application.contact.verifyAddressTitle")
+              ? foundAddress.invalid
+                ? t("application.contact.couldntLocateAddress")
+                : t("application.contact.verifyAddressTitle")
               : t("application.contact.title", { firstName: application.applicant.firstName })}
           </h2>
         </div>
