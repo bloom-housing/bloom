@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
 import axios from "axios"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import {
   AuthContext,
   t,
@@ -26,7 +27,6 @@ import {
   Preference,
   Program,
 } from "@bloom-housing/backend-core/types"
-import { nanoid } from "nanoid"
 import { AlertErrorType, FormListing, TempEvent, TempUnit, formDefaults } from "./formTypes"
 import ListingDataPipeline from "./ListingDataPipeline"
 
@@ -128,20 +128,20 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     if (listing?.events) {
-      const events = listing.events
-        .filter((event) => event.type === ListingEventType.openHouse)
-        .map((event) => ({
-          ...event,
-          startTime: event.startTime,
-          endTime: event.endTime,
-          url: event.url,
-          note: event.note,
-          tempId: nanoid(),
-        }))
-
-      setOpenHouseEvents(events)
+      setOpenHouseEvents(
+        listing.events
+          .filter((event) => event.type === ListingEventType.openHouse)
+          .map((event) => {
+            return {
+              ...event,
+              startTime: new Date(event.startTime),
+              endTime: new Date(event.endTime),
+            }
+          })
+          .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
+      )
     }
-  }, [listing, setUnits, setOpenHouseEvents])
+  }, [listing?.units, listing?.events, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods

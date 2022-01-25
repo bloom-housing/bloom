@@ -10,11 +10,11 @@ export const getDetailFieldString = (listingString: string) => {
 }
 
 export const getDetailFieldDate = (listingDate: Date) => {
-  return listingDate ? dayjs(new Date(listingDate)).utc().format("MM/DD/YYYY") : t("t.none")
+  return listingDate ? dayjs(new Date(listingDate)).format("MM/DD/YYYY") : t("t.none")
 }
 
 export const getDetailFieldTime = (listingTime: Date) => {
-  return listingTime ? dayjs(new Date(listingTime)).format("hh:mm:ss A") : t("t.none")
+  return listingTime ? dayjs(new Date(listingTime)).format("hh:mm A") : t("t.none")
 }
 
 export const getDetailBoolean = (listingBool: boolean) => {

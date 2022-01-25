@@ -1,4 +1,3 @@
-import dayjs from "dayjs"
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
   Preference,
@@ -39,10 +38,10 @@ export type FormListing = Omit<Listing, "countyCode"> & {
     minutes: string
     period: TimeFieldPeriod
   }
-  arePaperAppsMailedToAnotherAddress?: YesNoAnswer
   arePostmarksConsidered?: YesNoAnswer
   canApplicationsBeDroppedOff?: YesNoAnswer
   canPaperApplicationsBePickedUp?: YesNoAnswer
+  canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
@@ -75,6 +74,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   waitlistSizeQuestion?: YesNoAnswer
   whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
+  whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
 }
 
 export const addressTypes = {
@@ -89,7 +89,6 @@ export const formDefaults: FormListing = {
   createdAt: undefined,
   updatedAt: undefined,
   applicationDueDate: null,
-  applicationDueTime: null,
   applicationFee: null,
   applicationMethods: [],
   applicationOpenDate: new Date(),

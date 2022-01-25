@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useEffect, useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
@@ -7,8 +7,9 @@ import {
   setSiteAlertMessage,
   FormForgotPassword,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent, useCatchNetworkError } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
-import { useCatchNetworkError } from "@bloom-housing/shared-helpers"
 
 const ForgotPassword = () => {
   const router = useRouter()
@@ -20,6 +21,14 @@ const ForgotPassword = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Forgot Password",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
 
   const onSubmit = async (data: { email: string }) => {
     const { email } = data

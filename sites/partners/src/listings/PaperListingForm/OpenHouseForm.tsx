@@ -78,12 +78,15 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
 
       const event = {
         ...currentEvent,
-        tempId: currentEvent.tempId ? currentEvent.tempId : nanoid(),
         startTime: createTime(createDate(data.date), data.startTime),
         endTime: createTime(createDate(data.date), data.endTime),
         label: data.label,
         url: data.url,
         note: data.note,
+      }
+
+      if (!currentEvent.id && !currentEvent.tempId) {
+        event.tempId = nanoid()
       }
 
       onSubmit(event)

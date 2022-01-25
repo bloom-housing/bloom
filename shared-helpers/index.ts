@@ -1,5 +1,6 @@
 export * from "./src/blankApplication"
 export * from "./src/formKeys"
+export * from "./src/gtm"
 export * from "./src/nextjs"
 export * from "./src/occupancyFormatting"
 export * from "./src/pdfs"

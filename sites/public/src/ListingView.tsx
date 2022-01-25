@@ -234,7 +234,13 @@ export const ListingView = (props: ListingProps) => {
     return applicationMethods.find((method) => method.type == type)
   }
 
-  type AddressLocation = "dropOff" | "pickUp"
+  type AddressLocation = "dropOff" | "pickUp" | "mailIn"
+
+  const addressMap = {
+    dropOff: listing.applicationDropOffAddress,
+    pickUp: listing.applicationPickUpAddress,
+    mailIn: listing.applicationMailingAddress,
+  }
 
   const getAddress = (
     addressType: ListingApplicationAddressType | undefined,
@@ -243,14 +249,7 @@ export const ListingView = (props: ListingProps) => {
     if (addressType === ListingApplicationAddressType.leasingAgent) {
       return listing.leasingAgentAddress
     }
-    if (addressType === ListingApplicationAddressType.mailingAddress) {
-      return listing.applicationMailingAddress
-    }
-    if (location === "dropOff") {
-      return listing.applicationDropOffAddress
-    } else {
-      return listing.applicationPickUpAddress
-    }
+    return addressMap[location]
   }
 
   const getOnlineApplicationURL = () => {
@@ -296,37 +295,41 @@ export const ListingView = (props: ListingProps) => {
 
   // Move the above methods into our shared helper library when setup
 
+  const getDateString = (date: Date, format: string) => {
+    return date ? dayjs(date).format(format) : null
+  }
+
   const applySidebar = () => (
     <>
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
-        applicationsDueDate={dayjs(listing.applicationDueDate).format(
-          `MMM. DD, YYYY [${t("t.at")}] h A`
-        )}
         applicationsOpen={!appOpenInFuture}
-        applicationsOpenDate={dayjs(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
-        postmarkedApplicationsReceivedByDate={dayjs(
-          listing.postmarkedApplicationsReceivedByDate
-        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
+        postmarkedApplicationsReceivedByDate={getDateString(
+          listing.postmarkedApplicationsReceivedByDate,
+          `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+        )}
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
         listingStatus={listing.status}
       />
       <SubmitApplication
-        applicationMailingAddress={listing.applicationMailingAddress}
+        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
         applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}
         postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: dayjs(
-            listing.postmarkedApplicationsReceivedByDate
-          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          postmarkedApplicationsReceivedByDate: getDateString(
+            listing.postmarkedApplicationsReceivedByDate,
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+          ),
           developer: listing.developer,
-          applicationsDueDate: dayjs(listing.applicationDueDate).format(
-            `MMM. DD, YYYY [${t("t.at")}] h A`
+          applicationsDueDate: getDateString(
+            listing.applicationDueDate,
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
           ),
         }}
         listingStatus={listing.status}
