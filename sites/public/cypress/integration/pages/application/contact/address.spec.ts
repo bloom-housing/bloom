@@ -39,5 +39,36 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-found-address-choice").should("be.visible")
     cy.getByTestId("app-found-address-label").should("include.text", "Montgomery St")
     cy.getByTestId("app-found-address-label").should("include.text", "94111")
+    cy.reload()
+  })
+
+  it("should handle garbage input", function () {
+    cy.getByTestId("app-primary-no-phone").check()
+
+    // Let's add gibberish
+    cy.getByTestId("app-primary-address-street").type("l;iaj;ewlijvlij")
+    cy.getByTestId("app-primary-address-city").type("San Francisco")
+    cy.getByTestId("app-primary-address-state").select("CA")
+    cy.getByTestId("app-primary-address-zip").type("oqr8buoi@@hn")
+
+    cy.getByTestId("app-primary-contact-preference").eq(0).check()
+    cy.getByTestId("app-primary-work-in-region-no").check()
+
+    cy.goNext()
+
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.getByTestId("app-found-address-choice").should("not.be.visible")
+
+    // Let's go back and add other weirdness
+    cy.getByTestId("app-edit-original-address").click()
+    cy.getByTestId("app-primary-address-street").clear().type("98765 NW 10")
+    cy.getByTestId("app-primary-address-zip").clear().type("54321")
+
+    cy.goNext()
+
+    cy.checkErrorAlert("not.exist")
+    cy.checkErrorMessages("not.exist")
+    cy.getByTestId("app-found-address-choice").should("not.be.visible")
   })
 })

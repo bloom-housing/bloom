@@ -142,31 +142,6 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
   cy.getByTestId("app-found-address-choice").should("be.visible")
-})
-
-Cypress.Commands.add("step2bValidateAddress", (application) => {
-  // Let's go back and add gibberish
-  cy.getByTestId("app-edit-original-address").click()
-  cy.getByTestId("app-primary-address-street").clear().type("l;iaj;ewlijvlij")
-  cy.getByTestId("app-primary-address-zip").clear().type("oqr8buoi@@hn")
-  cy.goNext()
-  cy.checkErrorAlert("not.exist")
-  cy.checkErrorMessages("not.exist")
-  cy.getByTestId("app-found-address-choice").should("not.be.visible")
-
-  cy.getByTestId("app-edit-original-address").click()
-  cy.getByTestId("app-primary-address-street").clear().type("98765 NW 10")
-  cy.getByTestId("app-primary-address-zip").clear().type("54321")
-  cy.goNext()
-  cy.checkErrorAlert("not.exist")
-  cy.checkErrorMessages("not.exist")
-  cy.getByTestId("app-found-address-choice").should("not.be.visible")
-
-  cy.getByTestId("app-edit-original-address").click()
-  cy.getByTestId("app-primary-address-street").clear().type(application.applicant.address.street)
-  cy.getByTestId("app-primary-address-zip").clear().type(application.applicant.address.zipCode)
-  cy.goNext()
-  cy.getByTestId("app-found-address-choice").should("be.visible")
 
   cy.goNext() // accept validated address
   cy.isNextRouteValid("primaryApplicantAddress")
@@ -478,7 +453,6 @@ Cypress.Commands.add("submitApplication", (listingName, application, signedIn) =
   }
   cy.step1PrimaryApplicantName(application)
   cy.step2PrimaryApplicantAddresses(application)
-  cy.step2bValidateAddress(application)
   cy.step3AlternateContactType(application)
   if (application.alternateContact.type !== "dontHave") {
     cy.step4AlternateContactName(application)
