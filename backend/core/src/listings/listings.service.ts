@@ -26,7 +26,8 @@ export class ListingsService {
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService
-  ) {}
+  ) {
+  }
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
@@ -44,7 +45,7 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
             "listings.applicationOpenDate": "DESC",
-            "listings.id": "ASC",
+            "listings.id": "ASC"
           }
         default:
           throw new HttpException(
@@ -111,7 +112,7 @@ export class ListingsService {
       itemCount: listings.length,
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
-      totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
+      totalPages: Math.ceil(totalItems / itemsPerPage) // will be 1 if no pagination
     }
 
     // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
@@ -128,8 +129,8 @@ export class ListingsService {
         first: "",
         previous: "",
         next: "",
-        last: "",
-      },
+        last: ""
+      }
     }
     return paginatedListings
   }
@@ -137,7 +138,7 @@ export class ListingsService {
   async create(listingDto: ListingCreateDto) {
     const listing = this.listingRepository.create({
       ...listingDto,
-      property: plainToClass(PropertyCreateDto, listingDto),
+      property: plainToClass(PropertyCreateDto, listingDto)
     })
     const saveResult = await listing.save()
     return saveResult
@@ -160,6 +161,15 @@ export class ListingsService {
         availableUnits++
       }
     })
+
+    if (listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active) {
+      listing.publishedAt = new Date()
+    }
+
+    if (listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed) {
+      listing.closedAt = new Date()
+    }
+
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
@@ -170,17 +180,17 @@ export class ListingsService {
           ...listingDto,
           // NOTE: Since we use the entire listingDto to create a property object the listing ID
           //  would overwrite propertyId fetched from DB
-          id: listing.property.id,
+          id: listing.property.id
         },
         { excludeExtraneousValues: true }
-      ),
+      )
     })
     return await this.listingRepository.save(listing)
   }
 
   async delete(listingId: string) {
     const listing = await this.listingRepository.findOneOrFail({
-      where: { id: listingId },
+      where: { id: listingId }
     })
     return await this.listingRepository.remove(listing)
   }
@@ -190,7 +200,7 @@ export class ListingsService {
     const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
-        "listingPreferences.ordinal": "ASC",
+        "listingPreferences.ordinal": "ASC"
       })
       .getOne()
     if (!result) {
@@ -208,7 +218,7 @@ export class ListingsService {
   private async addUnitsSummarized(listing: Listing) {
     if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
       const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
+        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) }
       })
       listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
     }
@@ -226,6 +236,7 @@ export class ListingsService {
       .getMany()
     for (const listing of listings) {
       listing.status = ListingStatus.closed
+      listing.closedAt = new Date()
     }
 
     await this.listingRepository.save(listings)
