@@ -26,7 +26,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       passReqToCallback: true,
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>("APP_SECRET"),
+      secretOrKey: configService.get<string>("APP_SECRET")
     })
   }
 
@@ -39,10 +39,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const userId = payload.sub
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ["leasingAgentInListings"],
+      relations: ["leasingAgentInListings"]
     })
 
-    if (UserService.isPasswordOutdated(user)) {
+    if (user.hasOutdatedPassword()) {
       throw new HttpException(
         USER_ERRORS.PASSWORD_OUTDATED.message,
         USER_ERRORS.PASSWORD_OUTDATED.status

@@ -5,7 +5,7 @@ import {
   HttpStatus,
   Injectable,
   UnauthorizedException,
-  ValidationPipe,
+  ValidationPipe
 } from "@nestjs/common"
 import { User } from "../entities/user.entity"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -14,7 +14,6 @@ import { PasswordService } from "../services/password.service"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
 import { LoginDto } from "../dto/login.dto"
 import { ConfigService } from "@nestjs/config"
-import { UserService } from "../services/user.service"
 import { USER_ERRORS } from "../user-errors"
 
 @Injectable()
@@ -31,23 +30,23 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
     const validationPipe = new ValidationPipe(defaultValidationPipeOptions)
     const loginDto: LoginDto = await validationPipe.transform(req.body, {
       type: "body",
-      metatype: LoginDto,
+      metatype: LoginDto
     })
 
     const user = await this.userRepository.findOne({
       where: { email: loginDto.email.toLowerCase() },
-      relations: ["leasingAgentInListings"],
+      relations: ["leasingAgentInListings"]
     })
 
     if (user) {
-      if (user.lastLoginAt) {
+      if (user.hasLoggedInAtLeastOnce() && user.isPartnerOrAdmin()) {
         const retryAfter = new Date(
           // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           user.lastLoginAt.getTime() + this.configService.get<number>("AUTH_LOCK_LOGIN_COOLDOWN_MS")
         )
         if (
           user.failedLoginAttemptsCount >=
-            this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
+          this.configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS") &&
           retryAfter > new Date()
         ) {
           throw new HttpException(
@@ -55,7 +54,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
               statusCode: HttpStatus.TOO_MANY_REQUESTS,
               error: "Too Many Requests",
               message: "Failed login attempts exceeded.",
-              retryAfter,
+              retryAfter
             },
             429
           )
@@ -66,7 +65,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
         throw new UnauthorizedException()
       }
 
-      if (UserService.isPasswordOutdated(user)) {
+      if (user.hasOutdatedPassword()) {
         throw new HttpException(
           USER_ERRORS.PASSWORD_OUTDATED.message,
           USER_ERRORS.PASSWORD_OUTDATED.status

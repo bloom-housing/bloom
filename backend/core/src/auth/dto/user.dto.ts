@@ -16,6 +16,9 @@ export class UserDto extends OmitType(User, [
   "jurisdictions",
   "mfaCode",
   "mfaCodeUpdatedAt",
+  "hasOutdatedPassword",
+  "isPartnerOrAdmin",
+  "hasLoggedInAtLeastOnce",
 ] as const) {
   @Expose()
   @IsOptional()

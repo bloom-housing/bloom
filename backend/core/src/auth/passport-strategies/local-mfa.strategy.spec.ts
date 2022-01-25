@@ -4,7 +4,7 @@ import { User } from "../entities/user.entity"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import Joi from "joi"
 import { PasswordService } from "../services/password.service"
-import { LocalStrategy } from "./local.strategy"
+import { LocalMfaStrategy } from "./local-mfa.strategy"
 import { HttpException, UnauthorizedException } from "@nestjs/common"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -39,7 +39,7 @@ describe("LocalStrategy", () => {
       providers: [
         { provide: PasswordService, useValue: mockPasswordService },
         { provide: getRepositoryToken(User), useValue: mockUserRepository },
-        LocalStrategy,
+        LocalMfaStrategy,
       ],
     }).compile()
     configService = module.get<ConfigService>(ConfigService)
@@ -52,29 +52,41 @@ describe("LocalStrategy", () => {
         failedLoginAttemptsCount: 0,
         passwordUpdatedAt: new Date(),
         confirmedAt: new Date(),
+        hasLoggedInAtLeastOnce: jest.fn(),
+        isPartnerOrAdmin: jest.fn(),
+        hasOutdatedPassword: jest.fn(),
+        mfaEnabled: false,
       }
       mockUserRepository.findOne.mockResolvedValue(mockUser)
+      mockUser.hasLoggedInAtLeastOnce.mockReturnValue(true)
+      mockUser.isPartnerOrAdmin.mockReturnValue(true)
+      mockUser.hasOutdatedPassword.mockReturnValue(false)
       mockPasswordService.isPasswordValid.mockResolvedValue(false)
 
-      const localStrategy = module.get<LocalStrategy>(LocalStrategy)
+      const localStrategy = module.get<LocalMfaStrategy>(LocalMfaStrategy)
+
+      const loginRequest = {
+        body: {email: "test@example.com", password: ""}
+      } as any
+
       for (let i = configService.get<number>("AUTH_LOCK_LOGIN_AFTER_FAILED_ATTEMPTS"); i > 0; i--) {
-        await expect(localStrategy.validate("", "")).rejects.toThrow(UnauthorizedException)
+        await expect(localStrategy.validate(loginRequest)).rejects.toThrow(UnauthorizedException)
       }
       // Next attempt should throw a different exception
-      await expect(localStrategy.validate("", "")).rejects.toThrow(HttpException)
+      await expect(localStrategy.validate(loginRequest)).rejects.toThrow(HttpException)
 
       // Reset cooldown
       mockUser.lastLoginAt = new Date(0)
-      await expect(localStrategy.validate("", "")).rejects.toThrow(UnauthorizedException)
+      await expect(localStrategy.validate(loginRequest)).rejects.toThrow(UnauthorizedException)
       // Failed login attempts count should not be reset so next login attempt should lock out an
       //  account for next cooldown period
-      await expect(localStrategy.validate("", "")).rejects.toThrow(HttpException)
-      expect(mockUser.failedLoginAttemptsCount).toBe(6)
+      await expect(localStrategy.validate(loginRequest)).rejects.toThrow(HttpException)
+      expect(mockUser.failedLoginAttemptsCount).toBe(7)
 
       // Check if login with valid credentials is still possible after cooldown
       mockUser.lastLoginAt = new Date(0)
       mockPasswordService.isPasswordValid.mockResolvedValue(true)
-      await expect(localStrategy.validate("", "")).resolves.toBe(mockUser)
+      await expect(localStrategy.validate(loginRequest)).resolves.toBe(mockUser)
       expect(mockUser.failedLoginAttemptsCount).toBe(0)
     })
   })

@@ -165,4 +165,17 @@ export class User {
   @Expose()
   @Type(() => Date)
   failedLoginAttemptsCount?: number
+
+  isPartnerOrAdmin(): boolean {
+    return this.roles && (this.roles.isAdmin || this.roles.isPartner)
+  }
+
+  hasLoggedInAtLeastOnce(): boolean {
+    return !!this.lastLoginAt
+  }
+
+  hasOutdatedPassword(): boolean {
+    return new Date(this.passwordUpdatedAt.getTime() + this.passwordValidForDays * 24 * 60 * 60 * 1000) <
+    new Date() && this.isPartnerOrAdmin()
+  }
 }
