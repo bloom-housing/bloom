@@ -18,8 +18,9 @@ export const findValidatedAddress = (
 
   geocodingClient
     .forwardGeocode({
-      query: `${address.street}, ${address.city}, ${address.state}, ${address.zipCode}`,
+      query: `${address.street}, ${address.city}, ${address.state} ${address.zipCode}, United States`,
       limit: 1,
+      types: ["address"],
     })
     .send()
     .then((response) => {
@@ -129,6 +130,7 @@ export const AddressValidationSelection = (props: AddressValidationSelectionProp
               onClick={() => {
                 setVerifyAddress(false)
               }}
+              data-test-id="app-edit-original-address"
             >
               {t("t.edit")}
             </Button>
