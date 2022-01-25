@@ -43,11 +43,6 @@ const FilterForm = (props: FilterFormProps) => {
     { value: "3", label: t("listingFilters.bedroomsOptions.threePlus") },
     { value: "4", label: t("listingFilters.bedroomsOptions.fourPlus") },
   ]
-  const adaCompliantOptions: SelectOption[] = [
-    EMPTY_OPTION,
-    { value: "y", label: t("t.yes") },
-    { value: "n", label: t("t.no") },
-  ]
 
   const availabilityOptions: SelectOption[] = [
     EMPTY_OPTION,
@@ -311,15 +306,6 @@ const FilterForm = (props: FilterFormProps) => {
             defaultValue={props.filterState?.maxRent}
           />
         </div>
-        <Select
-          id="adaCompliant"
-          name="adaCompliant"
-          label={t("listingFilters.adaCompliant")}
-          register={register}
-          controlClassName="control"
-          options={adaCompliantOptions}
-          labelClassName="filter-header"
-        />
         <Select
           id="seniorHousing"
           name={FrontendListingFilterStateKeys.seniorHousing}
