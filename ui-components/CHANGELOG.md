@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.27...@bloom-housing/ui-components@4.0.1-alpha.28) (2022-01-26)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.26...@bloom-housing/ui-components@4.0.1-alpha.27) (2022-01-26)
+
+
+### Bug Fixes
+
+* Fix infinite page width ([#2434](https://github.com/bloom-housing/bloom/issues/2434)) ([12ac594](https://github.com/bloom-housing/bloom/commit/12ac594a7aa5a04370b20b19d6fff3189c0cfeee)), closes [#2374](https://github.com/bloom-housing/bloom/issues/2374)
+
+
+
+
+
 ## [4.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.25...@bloom-housing/ui-components@4.0.1-alpha.26) (2022-01-24)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
