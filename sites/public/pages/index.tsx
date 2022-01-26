@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { Jurisdiction } from "@bloom-housing/backend-core/types"
 import {
+  AuthContext,
   AlertBox,
   LinkButton,
   Hero,
@@ -10,6 +11,8 @@ import {
   ActionBlock,
   Icon,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
@@ -24,8 +27,16 @@ export default function Home(props: IndexProps) {
     alertMessage: null,
     alertType: null,
   }
-
+  const { profile } = useContext(AuthContext)
   const [alertInfo, setAlertInfo] = useState(blankAlertInfo)
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Housing Portal",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   const heroTitle = (
     <>

@@ -10,10 +10,12 @@ import {
   t,
   LoadingOverlay,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
+import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
   const { applicationsService, profile } = useContext(AuthContext)
@@ -23,6 +25,11 @@ const Applications = () => {
 
   useEffect(() => {
     if (profile) {
+      pushGtmEvent<PageView>({
+        event: "pageView",
+        pageTitle: "My Applications",
+        status: UserStatus.LoggedIn,
+      })
       applicationsService
         .list({ userId: profile.id })
         .then((apps) => {

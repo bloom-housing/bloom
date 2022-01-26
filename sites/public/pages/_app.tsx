@@ -13,7 +13,10 @@ import {
 import { blankApplication } from "@bloom-housing/shared-helpers"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext } from "../lib/AppSubmissionContext"
-import ApplicationConductor, { loadSavedListing } from "../lib/ApplicationConductor"
+import ApplicationConductor, {
+  loadApplicationFromAutosave,
+  loadSavedListing,
+} from "../lib/ApplicationConductor"
 import { translations, overrideTranslations } from "../src/translations"
 import LinkComponent from "../src/LinkComponent"
 
@@ -21,7 +24,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   //  const initialized = useState(true)
   const [application, setApplication] = useState(() => {
-    return { ...blankApplication }
+    return loadApplicationFromAutosave() || { ...blankApplication }
   })
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()

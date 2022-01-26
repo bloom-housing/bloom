@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.30...@bloom-housing/public@4.0.1-alpha.31) (2022-01-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.29...@bloom-housing/public@4.0.1-alpha.30) (2022-01-26)
+
+
+### Bug Fixes
+
+* Fix infinite page width ([#2434](https://github.com/bloom-housing/bloom/issues/2434)) ([12ac594](https://github.com/bloom-housing/bloom/commit/12ac594a7aa5a04370b20b19d6fff3189c0cfeee)), closes [#2374](https://github.com/bloom-housing/bloom/issues/2374)
+
+
+
+
+
+## [4.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.28...@bloom-housing/public@4.0.1-alpha.29) (2022-01-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.27...@bloom-housing/public@4.0.1-alpha.28) (2022-01-24)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.26...@bloom-housing/public@4.0.1-alpha.27) (2022-01-24)
+
+
+### Bug Fixes
+
+* issues with public app and readds auto save ([bb27a56](https://github.com/bloom-housing/bloom/commit/bb27a56835dcd27f2e8a0d7d14f07d0870d0079b))
+* removing console logs ([e8f50aa](https://github.com/bloom-housing/bloom/commit/e8f50aa29140167dae006f98c631baecca96f64b))
+
+
+
+
+
+## [4.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.25...@bloom-housing/public@4.0.1-alpha.26) (2022-01-21)
+
+
+### Bug Fixes
+
+* removes unnecessary ternary ([20edcd4](https://github.com/bloom-housing/bloom/commit/20edcd4810ee260f2e1705bfbbbbb69738b5b2f9))
+* user status enum to camel case; gtm types ([fbb8004](https://github.com/bloom-housing/bloom/commit/fbb800496fa1c5f37d3d7738acf28755dd66f1dd))
+
+
+### Features
+
+* adds event logging to most of the pages ([dc88c0a](https://github.com/bloom-housing/bloom/commit/dc88c0a8b6be317cd624921b868bb17e77e31f11))
+* set gtm pageTitle to english only ([09b641c](https://github.com/bloom-housing/bloom/commit/09b641cd22df27c2ae401da1427f090b9a9c97ad))
+* updates for gtm ([0251cd3](https://github.com/bloom-housing/bloom/commit/0251cd3d73be19d60c148aae01d12ab35f29bc85))
+* updates for gtm ([13578bb](https://github.com/bloom-housing/bloom/commit/13578bb864ea1b1918d5908982cb3095756811c7))
+
+
+
+
+
+## [4.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.24...@bloom-housing/public@4.0.1-alpha.25) (2022-01-20)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [4.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.23...@bloom-housing/public@4.0.1-alpha.24) (2022-01-14)
 
 
