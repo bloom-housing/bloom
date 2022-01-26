@@ -249,6 +249,20 @@
       "general": {
         "title": "根據您填寫的資料，您的家庭沒有要求任何住房優先權。",
         "preamble": "您將被分配到一般申請人組別。"
+      },
+      "rosefieldLive": {
+        "title": "罗斯菲尔德村以前的居民搬迁到阿拉米达市外",
+        "yes": {
+          "label": "我的至少一名家庭成员曾是罗斯菲尔德村的居民",
+          "description": "我的至少一名家庭成员曾是罗斯菲尔德村的居民"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "阿拉米达联合学区 (AUSD) 员工",
+        "yes": {
+          "label": "我的至少一名家庭成员是阿拉米达联合学区的雇员",
+          "description": "我的至少一名家庭成员是阿拉米达联合学区的雇员"
+        }
       }
     },
     "review": {
@@ -458,6 +472,7 @@
     "additionalInformation": "其他資訊",
     "allUnits": "所有單位",
     "allUnitsReservedFor": "保留給 %{type} 的所有單位",
+    "annualIncome": "每年 %{income}",
     "applicationDeadline": "申請截止日期",
     "applicationFCFS": "先申請先服務",
     "applicationFee": "申請費",
@@ -510,6 +525,7 @@
     },
     "maxIncomeMonth": "最高收入 / 月",
     "maxIncomeYear": "最高收入 / 年",
+    "monthlyIncome": "每月 %{income}",
     "moreBuildingSelectionCriteria": "了解「樓宇選擇標準」詳情",
     "noAvailableUnits": "目前並無單位提供。",
     "noOpenListings": "目前沒有上市名單接受申請。",
