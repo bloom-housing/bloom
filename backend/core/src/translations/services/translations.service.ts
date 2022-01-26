@@ -11,9 +11,11 @@ import { GeneratedListingTranslation } from "../entities/generated-listing-trans
 import * as lodash from "lodash"
 
 @Injectable()
-export class TranslationsService extends AbstractServiceFactory<Translation,
+export class TranslationsService extends AbstractServiceFactory<
+  Translation,
   TranslationCreateDto,
-  TranslationUpdateDto>(Translation) {
+  TranslationUpdateDto
+>(Translation) {
   constructor(
     @InjectRepository(GeneratedListingTranslation)
     private readonly generatedListingTranslationRepository: Repository<GeneratedListingTranslation>,
@@ -32,13 +34,13 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
           language,
           ...(jurisdictionId && {
             jurisdiction: {
-              id: jurisdictionId
-            }
+              id: jurisdictionId,
+            },
           }),
           ...(!jurisdictionId && {
-            jurisdiction: null
-          })
-        }
+            jurisdiction: null,
+          }),
+        },
       })
     } catch (e) {
       if (e instanceof NotFoundException && language != Language.en) {
@@ -48,13 +50,13 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
             language: Language.en,
             ...(jurisdictionId && {
               jurisdiction: {
-                id: jurisdictionId
-              }
+                id: jurisdictionId,
+              },
             }),
             ...(!jurisdictionId && {
-              jurisdiction: null
-            })
-          }
+              jurisdiction: null,
+            }),
+          },
         })
       } else {
         throw e
@@ -88,7 +90,7 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       "property.unitAmenities",
       "whatToExpect.applicantsWillBeContacted",
       "whatToExpect.allInfoWillBeVerified",
-      "whatToExpect.bePreparedIfChosen"
+      "whatToExpect.bePreparedIfChosen",
     ]
 
     for (let i = 0; i < listing.events.length; i++) {
@@ -145,7 +147,7 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       jurisdictionId: listing.jurisdiction.id,
       language,
       translations: translatedValues,
-      timestamp: listing.updatedAt
+      timestamp: listing.updatedAt,
     })
   }
 
@@ -154,8 +156,8 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       where: {
         jurisdictionId: listing.jurisdiction.id,
         language,
-        listingId: listing.id
-      }
+        listingId: listing.id,
+      },
     })
   }
 }
