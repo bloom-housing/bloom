@@ -42,4 +42,10 @@ export class FormMetadata {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   hideFromListing?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  type?: string
 }

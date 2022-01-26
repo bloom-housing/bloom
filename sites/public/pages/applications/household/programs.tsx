@@ -124,7 +124,7 @@ const ApplicationPrograms = () => {
                     <FieldGroup
                       fieldGroupClassName="grid grid-cols-1"
                       fieldClassName="ml-0"
-                      type="radio"
+                      type={pageProgram?.formMetadata?.type || "radio"}
                       name={pageProgram?.formMetadata?.key}
                       error={errors[pageProgram?.formMetadata?.key]}
                       errorMessage={t("errors.selectAnOption")}

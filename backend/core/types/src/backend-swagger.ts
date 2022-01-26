@@ -4481,6 +4481,9 @@ export interface FormMetadata {
 
   /**  */
   hideFromListing: boolean
+
+  /**  */
+  type: string
 }
 
 export interface Program {

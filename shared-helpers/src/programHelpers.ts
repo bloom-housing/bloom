@@ -14,20 +14,30 @@ export const mapProgramToApi = (program: Program, data: Record<string, any>) => 
   const [key, value] = Object.entries(data)[0]
   const options = []
 
-  options.push({
-    key: value,
-    checked: true,
-    extraData: [],
-  })
-  program?.formMetadata?.options.forEach((option) => {
-    if (option.key !== value) {
+  if (program?.formMetadata?.type === "checkbox") {
+    value.forEach((option: string) => {
       options.push({
-        key: option.key,
-        checked: false,
+        key: option,
+        checked: true,
         extraData: [],
       })
-    }
-  })
+    })
+  } else {
+    options.push({
+      key: value,
+      checked: true,
+      extraData: [],
+    })
+    program?.formMetadata?.options.forEach((option) => {
+      if (option.key !== value) {
+        options.push({
+          key: option.key,
+          checked: false,
+          extraData: [],
+        })
+      }
+    })
+  }
 
   return {
     key,
