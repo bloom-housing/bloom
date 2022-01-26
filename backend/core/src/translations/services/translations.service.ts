@@ -14,7 +14,6 @@ import * as lodash from "lodash"
 export class TranslationsService extends AbstractServiceFactory<Translation,
   TranslationCreateDto,
   TranslationUpdateDto>(Translation) {
-
   constructor(
     @InjectRepository(GeneratedListingTranslation)
     private readonly generatedListingTranslationRepository: Repository<GeneratedListingTranslation>,
@@ -89,23 +88,23 @@ export class TranslationsService extends AbstractServiceFactory<Translation,
       "property.unitAmenities",
       "whatToExpect.applicantsWillBeContacted",
       "whatToExpect.allInfoWillBeVerified",
-      "whatToExpect.bePreparedIfChosen",
+      "whatToExpect.bePreparedIfChosen"
     ]
 
-    for(let i = 0; i < listing.events.length; i++) {
+    for (let i = 0; i < listing.events.length; i++) {
       pathsToFilter.push(`events[${i}].note`)
       pathsToFilter.push(`events[${i}].label`)
     }
 
-    for(let i = 0; i < listing.listingPreferences.length; i++) {
+    for (let i = 0; i < listing.listingPreferences.length; i++) {
       pathsToFilter.push(`listingPreferences[${i}].preference.title`)
       pathsToFilter.push(`listingPreferences[${i}].preference.description`)
       pathsToFilter.push(`listingPreferences[${i}].preference.subtitle`)
     }
 
     const listingPathsAndValues: { [key: string]: any } = {}
-    for(const path of pathsToFilter)  {
-      listingPathsAndValues[path]  = lodash.get(listing, path)
+    for (const path of pathsToFilter) {
+      listingPathsAndValues[path] = lodash.get(listing, path)
     }
 
     // Caching

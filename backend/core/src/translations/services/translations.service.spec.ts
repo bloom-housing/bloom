@@ -174,7 +174,7 @@ describe("TranslationsService", () => {
       expect(generatedListingTranslationRepositoryMock.findOne).toHaveBeenCalledTimes(1)
       expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(0)
       expect(generatedListingTranslationRepositoryMock.save).toHaveBeenCalledTimes(0)
-      expect(result.costsNotIncluded).toBe(translations[0][0])
+      expect(result.applicationPickUpAddressOfficeHours).toBe(translations[0][0])
     })
 
     it("should fetch translations if timestamp is older than listing updatedAt", async () => {
@@ -200,7 +200,7 @@ describe("TranslationsService", () => {
       expect(generatedListingTranslationRepositoryMock.findOne).toHaveBeenCalledTimes(1)
       expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1)
       expect(generatedListingTranslationRepositoryMock.save).toHaveBeenCalledTimes(1)
-      expect(result.costsNotIncluded).toBe(newTranslations[0][0])
+      expect(result.applicationPickUpAddressOfficeHours).toBe(newTranslations[0][0])
     })
   })
 
