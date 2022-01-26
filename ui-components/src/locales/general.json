@@ -643,6 +643,20 @@
         "address": "Address",
         "name": "Name",
         "organization": "Name of Organization"
+      },
+      "rosefieldLive": {
+        "title": "Previous Residents of Rosefield Village Relocated Outside of the City of Alameda",
+        "yes": {
+          "label": "At least one member of my household was a previous resident of Rosefield Village",
+          "description": "At least one member of my household was a previous resident of Rosefield Village"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Alameda Unified School District (AUSD) employee",
+        "yes": {
+          "label": "At least one member of my household is an Alameda Unified School District employee",
+          "description": "At least one member of my household is an Alameda Unified School District employee."
+        }
       }
     },
     "review": {
@@ -949,7 +963,7 @@
     "es": "Español",
     "zh": "中文",
     "vi": "Tiếng Việt",
-    "tl": "Tagalog"
+    "tl": "Filipino"
   },
   "leasingAgent": {
     "contact": "Contact Leasing Agent",
@@ -1006,7 +1020,6 @@
     "applicationsClosed": "Applications Closed",
     "applicationDropOffQuestion": "Can applications be dropped off?",
     "apply": {
-      "applicationsMustBeReceivedByDeadline": "Applications must be received by the deadline and postmarks will not be considered.",
       "applicationWillBeAvailableOn": "Application will be available for download and pick up on %{openDate}",
       "applyOnline": "Apply Online",
       "downloadApplication": "Download Application",
@@ -1016,9 +1029,12 @@
       "howToApply": "How to Apply",
       "paperApplicationsMustBeMailed": "Paper applications must be sent by US Mail and cannot be submitted in person.",
       "pickUpAnApplication": "Pick up an application",
-      "postmarkedApplicationsMustBeReceivedByDate": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
       "sendByUsMail": "Send Application by US Mail",
-      "submitAPaperApplication": "Submit a Paper Application"
+      "submitAPaperApplication": "Submit a Paper Application",
+      "submitPaperDueDateNoPostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",     
+      "submitPaperDueDatePostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be postmarked by %{applicationDueDate} and received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted even if they are postmarked by %{applicationDueDate}. %{developer} is not responsible for lost or delayed mail.",
+      "submitPaperNoDueDateNoPostMark": "%{developer} is not responsible for lost or delayed mail.",
+      "submitPaperNoDueDatePostMark": "Applications must be received by the deadline. If sending by U.S. Mail, the application must be received by mail no later than %{postmarkReceivedByDate}. Applications received after %{postmarkReceivedByDate} via mail will not be accepted. %{developer} is not responsible for lost or delayed mail."
     },
     "atAnotherAddress": "At another address",
     "atLeasingAgentAddress": "At the leasing agent address",
@@ -1113,6 +1129,8 @@
     "pickupAddress": "Pickup Address",
     "postmarkByDate": "Postmark by Date",
     "postmarkByTime": "Postmark by Time",
+    "receivedByDate": "Received by Date",
+    "receivedByTime": "Received by Time",
     "postmarksConsideredQuestion": "Are postmarks considered?",
     "priorityUnits": "Priority Units",
     "priorityUnitsDescription": "This building has units set aside if any of the following apply to you or someone in your household:",

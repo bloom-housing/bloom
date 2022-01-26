@@ -141,7 +141,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
       )
     }
-  }, [listing.units, listing.events, setUnits, setOpenHouseEvents])
+  }, [listing?.units, listing?.events, setUnits, setOpenHouseEvents])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods

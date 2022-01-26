@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.31...@bloom-housing/partners@4.0.1-alpha.32) (2022-01-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.30...@bloom-housing/partners@4.0.1-alpha.31) (2022-01-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.29...@bloom-housing/partners@4.0.1-alpha.30) (2022-01-24)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.28...@bloom-housing/partners@4.0.1-alpha.29) (2022-01-24)
+
+
+### Bug Fixes
+
+* ami charts without all households ([#2430](https://github.com/bloom-housing/bloom/issues/2430)) ([92dfbad](https://github.com/bloom-housing/bloom/commit/92dfbad32c90d84ee1ec3a3468c084cb110aa8be))
+
+
+
+
+
+## [4.0.1-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.27...@bloom-housing/partners@4.0.1-alpha.28) (2022-01-21)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.26...@bloom-housing/partners@4.0.1-alpha.27) (2022-01-21)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.25...@bloom-housing/partners@4.0.1-alpha.26) (2022-01-20)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.24...@bloom-housing/partners@4.0.1-alpha.25) (2022-01-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.23...@bloom-housing/partners@4.0.1-alpha.24) (2022-01-13)
+
+
+### Bug Fixes
+
+* partners render issue ([#2395](https://github.com/bloom-housing/bloom/issues/2395)) ([7fb108d](https://github.com/bloom-housing/bloom/commit/7fb108d744fcafd6b9df42706d2a2f58fbc30f0a))
+
+
+
+
+
+## [4.0.1-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.22...@bloom-housing/partners@4.0.1-alpha.23) (2022-01-13)
+
+
+### Bug Fixes
+
+* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+
+
+
+
+## [4.0.1-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.21...@bloom-housing/partners@4.0.1-alpha.22) (2022-01-13)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.0.1-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.20...@bloom-housing/partners@4.0.1-alpha.21) (2022-01-11)
 
 

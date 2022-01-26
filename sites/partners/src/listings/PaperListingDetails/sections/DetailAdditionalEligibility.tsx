@@ -77,7 +77,7 @@ const DetailAdditionalEligibility = () => {
             ) : (
               <MinimalTable
                 id="buildingSelectionCriteriaTable"
-                headers={{ url: t("t.url") }}
+                headers={{ url: "t.url" }}
                 data={[
                   {
                     url: listing.buildingSelectionCriteria,

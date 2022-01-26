@@ -3,8 +3,6 @@ import { useWatch, useFormContext } from "react-hook-form"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
 import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
 
 import {
   t,
@@ -133,13 +131,13 @@ const ApplicationDates = ({
             disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("MM")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
                 : null,
               day: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("DD")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
                 : null,
               year: listing?.applicationDueDate
-                ? dayjs(new Date(listing?.applicationDueDate)).utc().format("YYYY")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
                 : null,
             }}
           />
@@ -151,16 +149,26 @@ const ApplicationDates = ({
             watch={watch}
             disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
-              hours: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("hh")
-                : null,
-              minutes: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("mm")
-                : null,
-              seconds: listing?.applicationDueTime
-                ? dayjs(new Date(listing?.applicationDueTime)).format("ss")
-                : null,
-              period: new Date(listing?.applicationDueTime).getHours() >= 12 ? "pm" : "am",
+              hours: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "05",
+              minutes: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
+              seconds: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
+              period: listing?.applicationDueDate
+                ? new Date(listing?.applicationDueDate).getHours() >= 12
+                  ? "pm"
+                  : "am"
+                : "pm",
             }}
           />
         </GridSection>

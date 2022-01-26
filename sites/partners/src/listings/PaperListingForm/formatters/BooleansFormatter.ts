@@ -17,6 +17,12 @@ export default class BooleansFormatter extends Formatter {
         addressTypes[this.data.whereApplicationsPickedUp] !== addressTypes.anotherAddress,
       trueCase: () => addressTypes[this.data.whereApplicationsPickedUp],
     })
+    this.processBoolean("applicationMailingAddressType", {
+      when:
+        this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
+        addressTypes[this.data.whereApplicationsMailedIn] !== addressTypes.anotherAddress,
+      trueCase: () => addressTypes[this.data.whereApplicationsMailedIn],
+    })
     this.processBoolean("applicationDropOffAddress", {
       when:
         this.data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
@@ -30,7 +36,9 @@ export default class BooleansFormatter extends Formatter {
       trueCase: () => this.data.applicationPickUpAddress,
     })
     this.processBoolean("applicationMailingAddress", {
-      when: this.data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes,
+      when:
+        this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
+        this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,
       trueCase: () => this.data.applicationMailingAddress,
     })
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react"
+import React, { useContext, useEffect, useState, useRef } from "react"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
@@ -23,6 +23,8 @@ import {
   DOBFieldValues,
 } from "@bloom-housing/ui-components"
 import Link from "next/link"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../lib/constants"
 import FormsLayout from "../../layouts/forms"
 
 type AlertMessage = {
@@ -42,6 +44,16 @@ const Edit = () => {
   const MIN_PASSWORD_LENGTH = 8
   const password = useRef({})
   password.current = watch("password", "")
+
+  useEffect(() => {
+    if (profile) {
+      pushGtmEvent<PageView>({
+        event: "pageView",
+        pageTitle: "Account Settings",
+        status: UserStatus.LoggedIn,
+      })
+    }
+  }, [profile])
 
   const onNameSubmit = async (data: {
     firstName: string

@@ -1,9 +1,10 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { AuthContext, t, setSiteAlertMessage, FormSignIn } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
-import { useCatchNetworkError } from "@bloom-housing/shared-helpers"
+import { PageView, pushGtmEvent, useCatchNetworkError } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 
 const SignIn = () => {
   const { login } = useContext(AuthContext)
@@ -14,6 +15,14 @@ const SignIn = () => {
   const { register, handleSubmit, errors } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Sign In",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const { email, password } = data
