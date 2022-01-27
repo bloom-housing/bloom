@@ -8,7 +8,6 @@ import {
   ListingApplicationAddressType,
   ApplicationMethod,
   ApplicationMethodType,
-  ListingStatus,
 } from "@bloom-housing/backend-core/types"
 import {
   AdditionalFees,
@@ -341,7 +340,7 @@ export const ListingView = (props: ListingProps) => {
   const applicationsClosed = dayjs() > dayjs(listing.applicationDueDate)
 
   return (
-    <article className="flex flex-wrap relative max-w-5xl m-auto md:overflow-x-hidden">
+    <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
         <ImageCard
           title={listing.name}

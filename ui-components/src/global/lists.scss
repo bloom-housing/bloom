@@ -4,10 +4,11 @@
     @screen md {
       @apply pt-12;
       @apply pb-4;
-      margin-left: -100vw;
-      margin-right: -100vw;
-      padding-left: 100vw;
-      padding-right: 100vw;
+      margin-left: -9999rem;
+      margin-right: -9999rem;
+      /* add back negative margin value */
+      padding-left: 9999rem;
+      padding-right: 9999rem;
     }
   }
 
