@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { IPaginationMeta } from "nestjs-typeorm-paginate/dist/interfaces"
 import { Expose, Transform, Type } from "class-transformer"
-import { IsNumber, IsOptional, registerDecorator, ValidationOptions } from "class-validator"
+import { IsNumber, IsOptional, Min } from "class-validator"
 import { ValidationsGroupsEnum } from "../types/validations-groups-enum"
 import { ClassType } from "class-transformer/ClassTransformer"
 
@@ -45,6 +45,7 @@ export class PaginationQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
   })
@@ -55,11 +56,12 @@ export class PaginationQueryParams {
     type: Number,
     example: 10,
     required: false,
-    default: 10,
+    default: 50,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform((value: string | undefined) => (value ? parseInt(value) : 10), {
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
+  @Transform((value: string | undefined) => (value ? parseInt(value) : 50), {
     toClassOnly: true,
   })
   limit?: number
@@ -75,6 +77,7 @@ export class PaginationAllowsAllQueryParams {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
   @Transform((value: string | undefined) => (value ? parseInt(value) : 1), {
     toClassOnly: true,
   })
@@ -82,43 +85,21 @@ export class PaginationAllowsAllQueryParams {
 
   @Expose()
   @ApiPropertyOptional({
-    type: "number | 'all'",
-    example: 10,
+    type: "number",
+    example: 50,
     required: false,
-    default: 10,
+    default: 50,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberOrAll({ message: "test", groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  @Min(1, { groups: [ValidationsGroupsEnum.default] })
   @Transform(
     (value: string | undefined) => {
-      if (value === "all") {
-        return value
-      }
-      return value ? parseInt(value) : 10
+      return value ? parseInt(value) : 50
     },
     {
       toClassOnly: true,
     }
   )
-  limit?: number | "all"
-}
-
-function IsNumberOrAll(validationOptions?: ValidationOptions) {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  return function (object: Object, propertyName: string) {
-    registerDecorator({
-      name: "isNumberOrAll",
-      target: object.constructor,
-      propertyName: propertyName,
-      options: validationOptions,
-      validator: {
-        validate(value: unknown) {
-          return (
-            (typeof value === "number" && !isNaN(value)) ||
-            (typeof value === "string" && value === "all")
-          )
-        },
-      },
-    })
-  }
+  limit?: number
 }

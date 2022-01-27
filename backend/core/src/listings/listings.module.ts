@@ -4,7 +4,7 @@ import {
   Inject,
   Module,
   OnModuleInit,
-  OnApplicationShutdown,
+  OnApplicationShutdown
 } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
@@ -21,6 +21,7 @@ import { Property } from "../property/entities/property.entity"
 import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
+import { ListingRepository } from "./db/listing.repository"
 
 interface RedisCache extends Cache {
   store: RedisStore
@@ -36,31 +37,33 @@ const cacheConfig = {
   ttl: 24 * 60 * 60,
   store: redisStore,
   url: process.env.REDIS_URL,
-  tls: undefined,
+  tls: undefined
 }
 
 if (process.env.REDIS_USE_TLS !== "0") {
   cacheConfig.url = process.env.REDIS_TLS_URL
   cacheConfig.tls = {
-    rejectUnauthorized: false,
+    rejectUnauthorized: false
   }
 }
 
 @Module({
   imports: [
     CacheModule.register(cacheConfig),
-    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property, AmiChart]),
+    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property, AmiChart, ListingRepository]),
     AuthModule,
     TranslationsModule,
-    ActivityLogModule,
+    ActivityLogModule
   ],
-  providers: [ListingsService],
+  providers: [ListingsService,
+  ],
   exports: [ListingsService],
-  controllers: [ListingsController],
+  controllers: [ListingsController]
 })
 // We have to manually disconnect from redis on app close
 export class ListingsModule implements OnApplicationShutdown, OnModuleInit {
   redisClient: Redis.RedisClient
+
   constructor(@Inject(CACHE_MANAGER) private cacheManager: RedisCache) {
     this.redisClient = this.cacheManager.store.getClient()
 
@@ -68,6 +71,7 @@ export class ListingsModule implements OnApplicationShutdown, OnModuleInit {
       console.log("redis error = ", error)
     })
   }
+
   onApplicationShutdown() {
     console.log("Disconnect from Redis")
     void this.cacheManager.store.reset()

@@ -91,7 +91,7 @@ export class UserService {
     authContext: AuthContext
   ): Promise<Pagination<User>> {
     const options = {
-      limit: params.limit === "all" ? undefined : params.limit,
+      limit: params.limit,
       page: params.page || 10,
       PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }

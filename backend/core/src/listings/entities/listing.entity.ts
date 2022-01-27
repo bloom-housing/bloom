@@ -49,7 +49,7 @@ import { ListingPreference } from "../../preferences/entities/listing-preference
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
-class Listing extends BaseEntity {
+class Listing {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
