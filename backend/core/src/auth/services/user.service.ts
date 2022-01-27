@@ -280,29 +280,20 @@ export class UserService {
     }
     const existingUser = await this.findByEmail(dto.email)
 
-    if (existingUser && !(existingUser.roles || existingUser.leasingAgentInListings.length)) {
+    if (existingUser && !existingUser.roles) {
       return await this.userRepository.save({
         ...existingUser,
         roles: dto.roles,
         leasingAgentInListings: dto.leasingAgentInListings,
-        confirmationToken: dto.confirmationToken,
-        confirmedAt: dto.confirmedAt,
+        confirmationToken: UserService.createConfirmationToken(existingUser.id, existingUser.email),
+        confirmedAt: dto.confirmedAt || null,
       })
     } else if (existingUser) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
     }
-
-    try {
-      let newUser = await this.userRepository.save(dto)
-
-      newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
-      newUser = await this.userRepository.save(newUser)
-
-      return newUser
-    } catch (err) {
-      console.error(err)
-      throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
-    }
+    const newUser = await this.userRepository.save(dto)
+    newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
+    return await this.userRepository.save(newUser)
   }
 
   public async createPublicUser(
