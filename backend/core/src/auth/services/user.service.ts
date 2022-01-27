@@ -285,8 +285,10 @@ export class UserService {
         ...existingUser,
         roles: dto.roles,
         leasingAgentInListings: dto.leasingAgentInListings,
-        confirmationToken: UserService.createConfirmationToken(existingUser.id, existingUser.email),
-        confirmedAt: dto.confirmedAt || null,
+        confirmationToken:
+          existingUser.confirmationToken ||
+          UserService.createConfirmationToken(existingUser.id, existingUser.email),
+        confirmedAt: null,
       })
     } else if (existingUser) {
       throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
