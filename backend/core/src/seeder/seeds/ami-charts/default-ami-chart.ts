@@ -12,6 +12,9 @@ export function getDefaultAmiChart() {
 export const defaultAmiChart: Omit<AmiChartCreateDto, "jurisdiction"> = {
   name: "AlamedaCountyTCAC2021",
   items: [
+    { income: 140900, percentOfAmi: 120, householdSize: 3 },
+    { income: 156600, percentOfAmi: 120, householdSize: 4 },
+    { income: 169140, percentOfAmi: 120, householdSize: 5 },
     {
       percentOfAmi: 80,
       householdSize: 1,

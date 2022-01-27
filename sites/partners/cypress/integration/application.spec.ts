@@ -3,6 +3,10 @@ describe("Application Management Tests", () => {
     cy.login()
   })
 
+  after(() => {
+    cy.signOut()
+  })
+
   it("Application grid should display correct number of results", () => {
     cy.visit("/")
     cy.get(`[col-id="status"]`).eq(1).contains("Accepting Applications").click()
