@@ -76,7 +76,6 @@ const FormUserConfirm = () => {
         setLoginLoading(false)
 
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
-        // If terms, go to terms
         void router.push("/")
       }
     } catch (err) {
