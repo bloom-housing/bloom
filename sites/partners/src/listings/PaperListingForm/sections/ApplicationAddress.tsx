@@ -133,60 +133,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
 
   return (
     <div>
-      <hr className="mt-6 mb-6" />
-      <span className="form-section__title">{"Leasing Agent"}</span>
-      <span className="form-section__description">
-        {"Provide details about the leasing agent who will be managing the process."}
-      </span>
-      <GridSection grid={false} subtitle={t("listings.leasingAgentAddress")}>
-        <GridSection columns={3}>
-          <Field
-            label={t("listings.streetAddressOrPOBox")}
-            name={"leasingAgentAddress.street"}
-            id={"leasingAgentAddress.street"}
-            register={register}
-            placeholder={t("application.contact.streetAddress")}
-          />
-          <Field
-            label={t("application.contact.apt")}
-            name={"leasingAgentAddress.street2"}
-            id={"leasingAgentAddress.street2"}
-            register={register}
-            placeholder={t("application.contact.apt")}
-          />
-        </GridSection>
-        <GridSection columns={6}>
-          <GridCell span={2}>
-            <Field
-              label={t("application.contact.city")}
-              name={"leasingAgentAddress.city"}
-              id={"leasingAgentAddress.city"}
-              register={register}
-              placeholder={t("application.contact.city")}
-            />
-          </GridCell>
-          <ViewItem label={t("application.contact.state")} className="mb-0">
-            <Select
-              id={`leasingAgentAddress.state`}
-              name={`leasingAgentAddress.state`}
-              label={t("application.contact.state")}
-              labelClassName="sr-only"
-              register={register}
-              controlClassName="control"
-              options={stateKeys}
-              keyPrefix="states"
-              errorMessage={t("errors.stateError")}
-            />
-          </ViewItem>
-          <Field
-            label={t("application.contact.zip")}
-            name={"leasingAgentAddress.zipCode"}
-            id={"leasingAgentAddress.zipCode"}
-            placeholder={t("application.contact.zip")}
-            errorMessage={t("errors.zipCodeError")}
-            register={register}
-          />
-        </GridSection>
+      <GridSection grid={false}>
         <hr className="mt-6 mb-6" />
         <span className="form-section__title">{"Application Address"}</span>
         <span className="form-section__description">
@@ -337,14 +284,17 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           mailedInAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("application.contact.mailingAddress")}>
               <GridSection columns={3}>
-                <Field
-                  label={t("listings.streetAddressOrPOBox")}
-                  name={"applicationMailingAddress.street"}
-                  id={"applicationMailingAddress.street"}
-                  register={register}
-                  placeholder={t("application.contact.streetAddress")}
-                  dataTestId={"mailing-address-street"}
-                />
+                <GridCell span={2}>
+                  <Field
+                    label={t("listings.streetAddressOrPOBox")}
+                    name={"applicationMailingAddress.street"}
+                    id={"applicationMailingAddress.street"}
+                    register={register}
+                    placeholder={t("application.contact.streetAddress")}
+                    dataTestId={"mailing-address-street"}
+                  />
+                </GridCell>
+
                 <Field
                   label={t("application.contact.apt")}
                   name={"applicationMailingAddress.street2"}
@@ -354,8 +304,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   dataTestId={"mailing-address-street2"}
                 />
               </GridSection>
-              <GridSection columns={6}>
-                <GridCell span={2}>
+              <GridSection columns={7}>
+                <GridCell span={3}>
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationMailingAddress.city"}
@@ -365,29 +315,33 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     dataTestId={"mailing-address-city"}
                   />
                 </GridCell>
-                <ViewItem label={t("application.contact.state")} className="mb-0">
-                  <Select
-                    id={`applicationMailingAddress.state`}
-                    name={`applicationMailingAddress.state`}
-                    label={t("application.contact.state")}
-                    labelClassName="sr-only"
+                <GridCell span={2}>
+                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                    <Select
+                      id={`applicationMailingAddress.state`}
+                      name={`applicationMailingAddress.state`}
+                      label={t("application.contact.state")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="states"
+                      errorMessage={t("errors.stateError")}
+                      dataTestId={"mailing-address-state"}
+                    />
+                  </ViewItem>
+                </GridCell>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.zip")}
+                    name={"applicationMailingAddress.zipCode"}
+                    id={"applicationMailingAddress.zipCode"}
+                    placeholder={t("application.contact.zip")}
+                    errorMessage={t("errors.zipCodeError")}
                     register={register}
-                    controlClassName="control"
-                    options={stateKeys}
-                    keyPrefix="states"
-                    errorMessage={t("errors.stateError")}
-                    dataTestId={"mailing-address-state"}
+                    dataTestId={"mailing-address-zip"}
                   />
-                </ViewItem>
-                <Field
-                  label={t("application.contact.zip")}
-                  name={"applicationMailingAddress.zipCode"}
-                  id={"applicationMailingAddress.zipCode"}
-                  placeholder={t("application.contact.zip")}
-                  errorMessage={t("errors.zipCodeError")}
-                  register={register}
-                  dataTestId={"mailing-address-zip"}
-                />
+                </GridCell>
               </GridSection>
             </GridSection>
           )}
@@ -395,13 +349,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           pickedUpAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.pickupAddress")}>
               <GridSection columns={3}>
-                <Field
-                  label={t("listings.streetAddressOrPOBox")}
-                  name={"applicationPickUpAddress.street"}
-                  id={"applicationPickUpAddress.street"}
-                  register={register}
-                  placeholder={t("application.contact.streetAddress")}
-                />
+                <GridCell span={2}>
+                  <Field
+                    label={t("listings.streetAddressOrPOBox")}
+                    name={"applicationPickUpAddress.street"}
+                    id={"applicationPickUpAddress.street"}
+                    register={register}
+                    placeholder={t("application.contact.streetAddress")}
+                  />
+                </GridCell>
                 <Field
                   label={t("application.contact.apt")}
                   name={"applicationPickUpAddress.street2"}
@@ -410,8 +366,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   placeholder={t("application.contact.apt")}
                 />
               </GridSection>
-              <GridSection columns={6}>
-                <GridCell span={2}>
+              <GridSection columns={7}>
+                <GridCell span={3}>
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationPickUpAddress.city"}
@@ -420,27 +376,31 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     placeholder={t("application.contact.city")}
                   />
                 </GridCell>
-                <ViewItem label={t("application.contact.state")} className="mb-0">
-                  <Select
-                    id={`applicationPickUpAddress.state`}
-                    name={`applicationPickUpAddress.state`}
-                    label={t("application.contact.state")}
-                    labelClassName="sr-only"
+                <GridCell span={2}>
+                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                    <Select
+                      id={`applicationPickUpAddress.state`}
+                      name={`applicationPickUpAddress.state`}
+                      label={t("application.contact.state")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="states"
+                      errorMessage={t("errors.stateError")}
+                    />
+                  </ViewItem>
+                </GridCell>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.zip")}
+                    name={"applicationPickUpAddress.zipCode"}
+                    id={"applicationPickUpAddress.zipCode"}
+                    placeholder={t("application.contact.zip")}
+                    errorMessage={t("errors.zipCodeError")}
                     register={register}
-                    controlClassName="control"
-                    options={stateKeys}
-                    keyPrefix="states"
-                    errorMessage={t("errors.stateError")}
                   />
-                </ViewItem>
-                <Field
-                  label={t("application.contact.zip")}
-                  name={"applicationPickUpAddress.zipCode"}
-                  id={"applicationPickUpAddress.zipCode"}
-                  placeholder={t("application.contact.zip")}
-                  errorMessage={t("errors.zipCodeError")}
-                  register={register}
-                />
+                </GridCell>
               </GridSection>
               <GridSection columns={3}>
                 <GridCell span={2}>
@@ -460,13 +420,15 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
           droppedOffAddressType === addressTypes.anotherAddress && (
             <GridSection grid={false} subtitle={t("listings.dropOffAddress")}>
               <GridSection columns={3}>
-                <Field
-                  label={t("listings.streetAddressOrPOBox")}
-                  name={"applicationDropOffAddress.street"}
-                  id={"applicationDropOffAddress.street"}
-                  register={register}
-                  placeholder={t("application.contact.streetAddress")}
-                />
+                <GridCell span={2}>
+                  <Field
+                    label={t("listings.streetAddressOrPOBox")}
+                    name={"applicationDropOffAddress.street"}
+                    id={"applicationDropOffAddress.street"}
+                    register={register}
+                    placeholder={t("application.contact.streetAddress")}
+                  />
+                </GridCell>
                 <Field
                   label={t("application.contact.apt")}
                   name={"applicationDropOffAddress.street2"}
@@ -475,8 +437,8 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                   placeholder={t("application.contact.apt")}
                 />
               </GridSection>
-              <GridSection columns={6}>
-                <GridCell span={2}>
+              <GridSection columns={7}>
+                <GridCell span={3}>
                   <Field
                     label={t("application.contact.city")}
                     name={"applicationDropOffAddress.city"}
@@ -485,27 +447,31 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     placeholder={t("application.contact.city")}
                   />
                 </GridCell>
-                <ViewItem label={t("application.contact.state")} className="mb-0">
-                  <Select
-                    id={`applicationDropOffAddress.state`}
-                    name={`applicationDropOffAddress.state`}
-                    label={t("application.contact.state")}
-                    labelClassName="sr-only"
+                <GridCell span={2}>
+                  <ViewItem label={t("application.contact.state")} className="mb-0">
+                    <Select
+                      id={`applicationDropOffAddress.state`}
+                      name={`applicationDropOffAddress.state`}
+                      label={t("application.contact.state")}
+                      labelClassName="sr-only"
+                      register={register}
+                      controlClassName="control"
+                      options={stateKeys}
+                      keyPrefix="states"
+                      errorMessage={t("errors.stateError")}
+                    />
+                  </ViewItem>
+                </GridCell>
+                <GridCell span={2}>
+                  <Field
+                    label={t("application.contact.zip")}
+                    name={"applicationDropOffAddress.zipCode"}
+                    id={"applicationDropOffAddress.zipCode"}
+                    placeholder={t("application.contact.zip")}
+                    errorMessage={t("errors.zipCodeError")}
                     register={register}
-                    controlClassName="control"
-                    options={stateKeys}
-                    keyPrefix="states"
-                    errorMessage={t("errors.stateError")}
                   />
-                </ViewItem>
-                <Field
-                  label={t("application.contact.zip")}
-                  name={"applicationDropOffAddress.zipCode"}
-                  id={"applicationDropOffAddress.zipCode"}
-                  placeholder={t("application.contact.zip")}
-                  errorMessage={t("errors.zipCodeError")}
-                  register={register}
-                />
+                </GridCell>
               </GridSection>
               <GridSection columns={3}>
                 <GridCell span={2}>
