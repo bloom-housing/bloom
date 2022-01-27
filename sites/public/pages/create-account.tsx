@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -17,9 +17,13 @@ import {
   Modal,
   passwordRegex,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../layouts/forms"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
+import FormsLayout from "../layouts/forms"
 
 export default () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -36,12 +40,20 @@ export default () => {
   email.current = watch("email", "")
   password.current = watch("password", "")
 
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Create Account",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
+
   const onSubmit = async (data) => {
     try {
       const { dob, ...rest } = data
       await createUser({
         ...rest,
-        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
         language,
       })
 

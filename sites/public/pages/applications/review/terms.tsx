@@ -7,18 +7,19 @@ import {
   AppearanceStyleType,
   Button,
   FormCard,
-  ProgressNav,
   t,
   AuthContext,
   FieldGroup,
   Form,
   AlertBox,
+  ProgressNav,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import React, { useContext, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import { useFormConductor } from "../../../lib/hooks"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -81,9 +82,9 @@ const ApplicationTerms = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.review.terms.title")}</h2>

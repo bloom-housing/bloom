@@ -1,6 +1,7 @@
 import { render, cleanup } from "@testing-library/react"
 import {
   dueSoonAndVivid,
+  matched,
   pastDueAndVivid,
   pastDue,
   openSoon,
@@ -39,5 +40,9 @@ describe("<ApplicationStatus>", () => {
   it("renders as first come first serve vivid", () => {
     const { getByText } = render(openedWithFCFSVivid())
     expect(getByText("First Come First Serve", { exact: false })).toBeTruthy()
+  })
+  it("renders as matched", () => {
+    const { getByText } = render(matched())
+    expect(getByText("Matched", { exact: false })).toBeTruthy()
   })
 })

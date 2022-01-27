@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.1",
+  "version": "3.0.2-alpha.16",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
@@ -45,10 +45,12 @@
     "@nestjs/jwt": "^7.1.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.6.18",
+    "@nestjs/schedule": "^1.0.2",
     "@nestjs/swagger": "4.7.3",
     "@nestjs/throttler": "^1.1.2",
     "@nestjs/typeorm": "^7.1.0",
     "@types/cache-manager": "^3.4.0",
+    "@types/cron": "^1.7.3",
     "async-retry": "^1.3.1",
     "axios": "0.21.1",
     "cache-manager": "^3.4.0",
@@ -64,10 +66,9 @@
     "ioredis": "^4.24.4",
     "joi": "^17.3.0",
     "jwt-simple": "^0.5.6",
-    "moment": "^2.29.1",
     "nanoid": "^3.1.12",
     "nestjs-throttler-storage-redis": "^0.1.11",
-    "nestjs-typeorm-paginate": "^2.2.1",
+    "nestjs-typeorm-paginate": "^3.1.3",
     "newrelic": "7.5.1",
     "node-polyglot": "^2.4.0",
     "passport": "^0.4.1",
@@ -81,7 +82,8 @@
     "ts-node": "^9.0.0",
     "typeorm": "0.2.34",
     "typeorm-naming-strategies": "^1.1.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -89,6 +91,7 @@
     "@nestjs/schematics": "^7.1.2",
     "@nestjs/testing": "^7.4.4",
     "@types/axios": "^0.14.0",
+    "@types/cron": "^1.7.3",
     "@types/express": "^4.17.8",
     "@types/node": "^12.12.67",
     "@types/passport-jwt": "^3.0.3",
@@ -122,5 +125,5 @@
     "node": "14",
     "yarn": "^1.22"
   },
-  "gitHead": "5f7694e3f2baff2a1a7a22e0676e487dda781a3e"
+  "gitHead": "02379da7dc3cf07b4476a19d5406abddefb47164"
 }

@@ -26,7 +26,11 @@ import {
   ApplicationTypes,
   Address,
 } from "../src/applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 
 /*
   Some of fields are optional, not active, so it occurs 'undefined' as value.
@@ -84,12 +88,12 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
 
     if (!submissionDay || !submissionMonth || !submissionYear) return null
 
-    const dateString = moment(
+    const dateString = dayjs(
       `${submissionMonth}/${submissionDay}/${submissionYear} ${hours}:${minutes}:${seconds} ${period}`,
       "MM/DD/YYYY hh:mm:ss A"
     ).format(TIME_24H_FORMAT)
 
-    const formattedDate = moment(dateString, TIME_24H_FORMAT).utc(true).toDate()
+    const formattedDate = dayjs(dateString, TIME_24H_FORMAT).utc(true).toDate()
 
     return formattedDate
   })()
@@ -236,7 +240,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
 
 export const mapApiToForm = (applicationData: ApplicationUpdate) => {
   const submissionDate = applicationData.submissionDate
-    ? moment(new Date(applicationData.submissionDate)).utc()
+    ? dayjs(new Date(applicationData.submissionDate)).utc()
     : null
 
   const dateOfBirth = (() => {

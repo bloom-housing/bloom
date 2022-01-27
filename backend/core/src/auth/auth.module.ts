@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
 import { LocalStrategy } from "./passport-strategies/local.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
@@ -17,6 +17,7 @@ import { PasswordService } from "./services/password.service"
 import { JurisdictionsModule } from "../jurisdictions/jurisdictions.module"
 import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
+import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
 
 @Module({
@@ -36,6 +37,7 @@ import { EmailModule } from "../email/email.module"
     SharedModule,
     JurisdictionsModule,
     EmailModule,
+    forwardRef(() => ActivityLogModule),
   ],
   providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
   exports: [AuthzService, AuthService, UserService],

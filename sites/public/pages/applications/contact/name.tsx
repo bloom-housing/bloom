@@ -14,11 +14,11 @@ import {
   FormCard,
   Icon,
   IconFillColors,
-  OnClientSide,
-  ProgressNav,
   t,
+  ProgressNav,
   emailRegex,
 } from "@bloom-housing/ui-components"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
@@ -68,9 +68,9 @@ const ApplicationName = () => {
           currentPageSection={currentPageSection}
           completedSections={application.completedSections}
           labels={conductor.config.sections.map((label) => t(`t.${label}`))}
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard>
         <div className="form-card__lead border-b">
           <h2 className="form-card__title is-borderless">{t("application.name.title")}</h2>
@@ -83,7 +83,7 @@ const ApplicationName = () => {
         )}
 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="form-card__group border-b">
+          <div className="form-card__group border-b" data-test-id={"application-initial-page"}>
             <fieldset>
               <legend className="field-label--caps">
                 {t("application.name.yourName")}
@@ -171,7 +171,7 @@ const ApplicationName = () => {
               label={t("application.name.yourEmailAddress")}
               readerOnly={true}
               defaultValue={application.applicant.emailAddress}
-              validation={{ required: !noEmail, pattern: !noEmail ? emailRegex : false }}
+              validation={{ required: !noEmail, pattern: emailRegex }}
               error={errors.applicant?.emailAddress}
               errorMessage={t("errors.emailAddressError")}
               register={register}

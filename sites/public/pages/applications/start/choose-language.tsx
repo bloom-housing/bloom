@@ -8,13 +8,14 @@ import { useRouter } from "next/router"
 import {
   Button,
   ImageCard,
-  imageUrlFromListing,
   LinkButton,
   FormCard,
-  ProgressNav,
   AuthContext,
+  ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, OnClientSide } from "@bloom-housing/shared-helpers"
+
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useContext, useEffect, useState } from "react"
@@ -98,9 +99,9 @@ const ApplicationChooseLanguage = () => {
               "Review",
             ]
           }
+          mounted={OnClientSide()}
         />
       </FormCard>
-
       <FormCard className="overflow-hidden">
         <div className="form-card__lead">
           <h2 className="form-card__title is-borderless">

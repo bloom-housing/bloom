@@ -19,6 +19,7 @@ const amiChart: AmiChart = {
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
+    publicUrl: "",
   },
   items: [
     {
@@ -595,6 +596,7 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "Alameda",
+    publicUrl: "",
   },
   events: [],
   urlSlug: "listing-slug-abcdef",

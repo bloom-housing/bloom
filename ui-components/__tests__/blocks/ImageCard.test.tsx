@@ -61,4 +61,17 @@ describe("<ImageCard>", () => {
     expect(getByText("Applications Closed", { exact: false })).not.toBeNull()
     expect(getByText("Lottery Results Posted Tomorrow", { exact: false })).not.toBeNull()
   })
+  it("renders with custom icon", () => {
+    const { getByText } = render(
+      <ImageCard
+        imageUrl={"/images/listing.jpg"}
+        title={"My Building"}
+        subtitle={"The Address"}
+        statuses={[
+          { status: ApplicationStatusType.Matched, content: "Matched", iconType: "check" },
+        ]}
+      />
+    )
+    expect(getByText("Matched", { exact: false })).not.toBeNull()
+  })
 })

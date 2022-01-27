@@ -19,9 +19,9 @@ import {
   urlRegex,
 } from "@bloom-housing/ui-components"
 
-import { TempEvent } from "./index"
+import { TempEvent } from "./formTypes"
 import { createDate, createTime } from "../../../lib/helpers"
-import moment from "moment"
+import dayjs from "dayjs"
 
 type OpenHouseFormProps = {
   onSubmit: (data: TempEvent) => void
@@ -51,7 +51,7 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
     endTime && Object.assign(values, { endTime: formatDateToTimeField(endTime) })
 
     if (startTime) {
-      const dateObj = moment(startTime)
+      const dateObj = dayjs(startTime)
 
       const date = {
         day: dateObj.format("DD"),
@@ -78,12 +78,15 @@ const OpenHouseForm = ({ onSubmit, currentEvent }: OpenHouseFormProps) => {
 
       const event = {
         ...currentEvent,
-        tempId: currentEvent.tempId ? currentEvent.tempId : nanoid(),
         startTime: createTime(createDate(data.date), data.startTime),
         endTime: createTime(createDate(data.date), data.endTime),
         label: data.label,
         url: data.url,
         note: data.note,
+      }
+
+      if (!currentEvent.id && !currentEvent.tempId) {
+        event.tempId = nanoid()
       }
 
       onSubmit(event)

@@ -21,6 +21,7 @@ export const IconClose = () => <Icon size="large" symbol="close" />
 export const IconCloseRound = () => <Icon size="large" symbol="closeRound" />
 export const IconCloseSmall = () => <Icon size="large" symbol="closeSmall" />
 export const IconCross = () => <Icon size="large" symbol="cross" />
+export const IconDoubleHouse = () => <Icon size="large" symbol="doubleHouse" />
 export const IconDown = () => <Icon size="large" symbol="down" />
 export const IconDownload = () => <Icon size="large" symbol="download" />
 export const IconEdit = () => <Icon size="large" symbol="edit" />
@@ -40,6 +41,7 @@ export const IconLink = () => <Icon size="large" symbol="link" />
 export const IconList = () => <Icon size="large" symbol="list" />
 export const IconLock = () => <Icon size="large" symbol="lock" />
 export const IconMail = () => <Icon size="large" symbol="mail" />
+export const IconMailThin = () => <Icon size="large" symbol="mailThin" />
 export const IconMap = () => <Icon size="large" symbol="map" />
 export const IconMapThin = () => <Icon size="large" symbol="mapThin" />
 export const IconMenu = () => <Icon size="large" symbol="menu" />
