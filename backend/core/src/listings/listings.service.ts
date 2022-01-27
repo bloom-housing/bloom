@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common"
-import { Listing } from "./entities/listing.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, OrderByCondition, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
+import { Interval } from "@nestjs/schedule"
+import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
@@ -16,6 +17,7 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
+import { ListingStatus } from "./types/listing-status-enum"
 import { TranslationsService } from "../translations/services/translations.service"
 
 @Injectable()
@@ -211,5 +213,21 @@ export class ListingsService {
       listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
     }
     return listing
+  }
+
+  @Interval(1000 * 60 * 60)
+  public async changeOverdueListingsStatusCron() {
+    const listings = await this.listingRepository
+      .createQueryBuilder("listings")
+      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
+      .where(`listings.status = '${ListingStatus.active}'`)
+      .andWhere(`listings.applicationDueDate IS NOT NULL`)
+      .andWhere(`listings.applicationDueDate < NOW()`)
+      .getMany()
+    for (const listing of listings) {
+      listing.status = ListingStatus.closed
+    }
+
+    await this.listingRepository.save(listings)
   }
 }

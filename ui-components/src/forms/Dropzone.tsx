@@ -49,7 +49,7 @@ const Dropzone = (props: DropzoneProps) => {
         <progress className="dropzone__progress" max="100" value={props.progress}></progress>
       ) : (
         <div className={dropzoneClasses.join(" ")} {...getRootProps()}>
-          <input id={props.id} {...getInputProps()} />
+          <input id={props.id} {...getInputProps()} data-test-id={"dropzone-input"} />
           {isDragActive ? (
             <p>{t("t.dropFilesHere")}</p>
           ) : (

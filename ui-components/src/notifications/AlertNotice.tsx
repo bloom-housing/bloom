@@ -7,7 +7,7 @@ import "./AlertNotice.scss"
 export interface AlertNoticeProps {
   type?: AlertTypes
   inverted?: boolean
-  title: ReactNode
+  title?: ReactNode
   children: ReactNode
   className?: string
 }
@@ -23,9 +23,11 @@ const AlertNotice = (props: AlertNoticeProps) => {
 
   return (
     <div className={classNames}>
-      <div className={`alert-notice__title ${colorClass}`}>
-        {typeof props.title === "string" ? <p>{props.title}</p> : props.title}
-      </div>
+      {props.title && (
+        <div className={`alert-notice__title ${colorClass}`}>
+          {typeof props.title === "string" ? <p>{props.title}</p> : props.title}
+        </div>
+      )}
 
       <div className="alert-notice__body">
         {typeof props.children === "string" ? <p>{props.children}</p> : props.children}

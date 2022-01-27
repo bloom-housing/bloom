@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo, useContext, useCallback } from "react"
 import { useRouter } from "next/router"
-import moment from "moment"
+import dayjs from "dayjs"
 import Head from "next/head"
 import {
   Field,
   t,
   Button,
   debounce,
-  lRoute,
   LocalizedLink,
   AuthContext,
   SiteAlert,
@@ -137,7 +136,7 @@ const ApplicationsList = () => {
       })
 
       const now = new Date()
-      const dateString = moment(now).format("YYYY-MM-DD_HH:mm:ss")
+      const dateString = dayjs(now).format("YYYY-MM-DD_HH:mm:ss")
 
       const blob = new Blob([content], { type: "text/csv" })
       const fileLink = document.createElement("a")
@@ -166,7 +165,7 @@ const ApplicationsList = () => {
 
       this.linkWithId.addEventListener("click", function () {
         void saveColumnState(params.columnApi)
-        void router.push(lRoute(`/application/${applicationId}`))
+        void router.push(`/application/${applicationId}`)
       })
     }
 

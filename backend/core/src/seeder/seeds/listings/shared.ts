@@ -180,7 +180,6 @@ export const defaultListing: ListingSeedType = {
   paperApplication: false,
   referralOpportunity: false,
   applicationDueDate: getDate(10),
-  applicationDueTime: null,
   applicationFee: "20",
   applicationOpenDate: getDate(-10),
   applicationOrganization: "Application Organization",

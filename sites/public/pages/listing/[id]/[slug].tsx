@@ -1,9 +1,10 @@
-import React from "react"
-import qs from "qs"
+import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { imageUrlFromListing, t } from "@bloom-housing/ui-components"
+import { AuthContext, t } from "@bloom-housing/ui-components"
+import { imageUrlFromListing, ListingDetail, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 import Layout from "../../../layouts/application"
 import { ListingView } from "../../../src/ListingView"
 import { MetaTags } from "../../../src/MetaTags"
@@ -16,11 +17,35 @@ interface ListingProps {
 export default function ListingPage(props: ListingProps) {
   const { listing } = props
 
+  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    if (!listing.id) return
+    pushGtmEvent<ListingDetail>({
+      event: "pageView",
+      pageTitle: `${listing.name} - Housing Portal`,
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+      listingStartDate: listing.applicationOpenDate,
+      listingStatus: listing.status,
+      listingID: listing.id,
+      applicationDueDate: listing.applicationDueDate,
+      paperApplication: listing.paperApplication,
+    })
+  }, [
+    listing.applicationDueDate,
+    listing.applicationOpenDate,
+    listing.id,
+    listing.name,
+    listing.paperApplication,
+    listing.status,
+    profile,
+  ])
+
   if (!listing) {
     return <ErrorPage />
   }
 
-  const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.listing", {
     regionName: t("region.name"),
     listingName: listing.name,
@@ -37,8 +62,11 @@ export default function ListingPage(props: ListingProps) {
     </Layout>
   )
 }
-
-export async function getStaticPaths(context: { locales: Array<string> }) {
+/**
+ *
+ * getStaticPaths and getStaticProps with revalidation isn't actually working on netflify, so we have to use getServerSideProps until it does
+ */
+/* export async function getStaticPaths(context: { locales: Array<string> }) {
   try {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
@@ -65,25 +93,30 @@ export async function getStaticPaths(context: { locales: Array<string> }) {
             }))
           )
         : [],
-      fallback: true,
+      fallback: "blocking",
     }
   } catch (error) {
     console.error("listings getStaticPaths error = ", error)
     return {
       paths: [],
-      fallback: true,
+      fallback: "blocking",
     }
   }
-}
+} */
 
-export async function getStaticProps(context: { params: Record<string, string>; locale: string }) {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
-    headers: { language: context.locale },
-  })
-  return {
-    props: {
-      listing: response.data,
-    },
-    revalidate: process.env.cacheRevalidate,
+export async function getServerSideProps(context: {
+  params: Record<string, string>
+  locale: string
+}) {
+  let response
+
+  try {
+    response = await axios.get(`${process.env.backendApiBase}/listings/${context.params.id}`, {
+      headers: { language: context.locale },
+    })
+  } catch (e) {
+    return { notFound: true }
   }
+
+  return { props: { listing: response.data } }
 }

@@ -23,7 +23,7 @@ const AdditionalDetails = () => {
             id={"requiredDocuments"}
             fullWidth={true}
             register={register}
-            maxLength={600}
+            maxLength={2000}
           />
           <Textarea
             label={t("listings.importantProgramRules")}

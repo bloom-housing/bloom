@@ -9,8 +9,8 @@ import {
   AuthProvider,
   ConfigProvider,
   LoggedInUserIdleTimeout,
-  blankApplication,
 } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { headScript, bodyTopTag, pageChangeHandler } from "../src/customScripts"
 import { AppSubmissionContext } from "../lib/AppSubmissionContext"
 import ApplicationConductor, {
@@ -24,7 +24,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
   const { locale } = router
   //  const initialized = useState(true)
   const [application, setApplication] = useState(() => {
-    return loadApplicationFromAutosave() || blankApplication()
+    return loadApplicationFromAutosave() || { ...blankApplication }
   })
   const [savedListing, setSavedListing] = useState(() => {
     return loadSavedListing()

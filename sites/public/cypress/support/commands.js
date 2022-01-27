@@ -35,7 +35,7 @@ Cypress.Commands.add("checkErrorMessages", (command) => {
   cy.get(`[data-test-id="error-message"]`).should(command)
 })
 
-Cypress.Commands.add("beginApplication", (listingName) => {
+Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
   cy.visit("/listings")
   cy.contains(listingName).click()
   cy.getByTestId("listing-view-apply-button").eq(1).click()
@@ -45,9 +45,20 @@ Cypress.Commands.add("beginApplication", (listingName) => {
   cy.get("[data-test-id=sign-in-button").click()
   cy.getByTestId("app-choose-language-button").eq(0).click()
   cy.getByTestId("app-next-step-button").click()
+  cy.getByTestId("application-initial-page").then(() => {
+    cy.get(".form-card__title").then(($header) => {
+      const headerText = $header.text()
+      if (headerText.includes("Save time by using the details from your last application")) {
+        cy.get(`[data-test-id="autofill-decline"]`).click()
+      } else {
+        cy.getByTestId("app-next-step-button").click()
+      }
+    })
+  })
+  cy.getByTestId("app-next-step-button").click()
 })
 
-Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
+Cypress.Commands.add("beginApplicationSignedIn", (listingName) => {
   cy.visit("/listings")
   cy.contains(listingName).click()
   cy.getByTestId("listing-view-apply-button").eq(1).click()
@@ -130,6 +141,9 @@ Cypress.Commands.add("step2PrimaryApplicantAddresses", (application) => {
   cy.goNext()
   cy.checkErrorAlert("not.exist")
   cy.checkErrorMessages("not.exist")
+  cy.getByTestId("app-found-address-choice").should("be.visible")
+
+  cy.goNext() // accept validated address
   cy.isNextRouteValid("primaryApplicantAddress")
 })
 
@@ -431,14 +445,11 @@ Cypress.Commands.add("step19TermsAndSubmit", () => {
   cy.getByTestId("app-confirmation-id").should("be.visible").and("not.be.empty")
 })
 
-Cypress.Commands.add("submitApplication", (listingName, application, autofill) => {
-  cy.log("submitApplication")
-  if (autofill === false) {
-    cy.log("autofill false")
-    cy.beginApplicationRejectAutofill(listingName)
+Cypress.Commands.add("submitApplication", (listingName, application, signedIn) => {
+  if (signedIn) {
+    cy.beginApplicationSignedIn(listingName)
   } else {
-    cy.log("autofill true")
-    cy.beginApplication(listingName)
+    cy.beginApplicationRejectAutofill(listingName)
   }
   cy.step1PrimaryApplicantName(application)
   cy.step2PrimaryApplicantAddresses(application)

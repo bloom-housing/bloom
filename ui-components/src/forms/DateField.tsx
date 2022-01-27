@@ -1,7 +1,7 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import moment from "moment"
+import dayjs from "dayjs"
 import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
 export type DateFieldValues = {
@@ -97,7 +97,7 @@ const DateField = (props: DateFieldProps) => {
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
-                if (props.required && value && parseInt(value) > moment().year() + 10) return false
+                if (props.required && value && parseInt(value) > dayjs().year() + 10) return false
                 if (!props.required && !value?.length) return true
                 return true
               },

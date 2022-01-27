@@ -1,6 +1,5 @@
 import {
   Body,
-  CacheInterceptor,
   CACHE_MANAGER,
   Controller,
   Delete,
@@ -35,7 +34,8 @@ import { ListingsQueryParams } from "./dto/listings-query-params"
 import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
-import { ListingLangCacheInterceptor } from "../shared/interceptors/listing-lang-cache.interceptor"
+import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
+import { ActivityLogMetadata } from "../activity-log/decorators/activity-log-metadata.decorator"
 
 @Controller("listings")
 @ApiTags("listings")
@@ -43,6 +43,8 @@ import { ListingLangCacheInterceptor } from "../shared/interceptors/listing-lang
 @ResourceType("listing")
 @ApiExtraModels(ListingFilterParams)
 @UseGuards(OptionalAuthGuard, AuthzGuard)
+@ActivityLogMetadata([{ targetPropertyName: "status", propertyPath: "status" }])
+@UseInterceptors(ActivityLogInterceptor)
 export class ListingsController {
   cacheKeys: string[]
   constructor(
@@ -55,7 +57,7 @@ export class ListingsController {
   @ApiExtraModels(ListingFilterParams)
   @ApiOperation({ summary: "List listings", operationId: "list" })
   // ClassSerializerInterceptor has to come after CacheInterceptor
-  @UseInterceptors(CacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   public async getAll(@Query() queryParams: ListingsQueryParams): Promise<PaginatedListingDto> {
     return mapTo(PaginatedListingDto, await this.listingsService.list(queryParams))
@@ -70,13 +72,13 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Get(`:listingId`)
+  @Get(`:id`)
   @ApiOperation({ summary: "Get listing by id", operationId: "retrieve" })
-  @UseInterceptors(ListingLangCacheInterceptor, ClassSerializerInterceptor)
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,
-    @Param("listingId") listingId: string,
+    @Param("id") listingId: string,
     @Query() queryParams: ListingsRetrieveQueryParams
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
@@ -88,11 +90,11 @@ export class ListingsController {
     )
   }
 
-  @Put(`:listingId`)
+  @Put(`:id`)
   @ApiOperation({ summary: "Update listing by id", operationId: "update" })
   @UsePipes(new ListingUpdateValidationPipe(defaultValidationPipeOptions))
   async update(
-    @Param("listingId") listingId: string,
+    @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
     const listing = await this.listingsService.update(listingUpdateDto)
@@ -100,10 +102,10 @@ export class ListingsController {
     return mapTo(ListingDto, listing)
   }
 
-  @Delete(`:listingId`)
+  @Delete(`:id`)
   @ApiOperation({ summary: "Delete listing by id", operationId: "delete" })
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
-  async delete(@Param("listingId") listingId: string) {
+  async delete(@Param("id") listingId: string) {
     await this.listingsService.delete(listingId)
     await this.cacheManager.reset()
   }

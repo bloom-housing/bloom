@@ -22,6 +22,7 @@ export const SanMateoHUD2019: AmiChart = {
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],
+    publicUrl: "",
   },
   items: [
     {
@@ -256,7 +257,6 @@ export const ArcherListing: Listing = {
   id: "Uvbk5qurpB2WI9V6WnNdH",
   applicationConfig: undefined,
   applicationOpenDate: new Date("2019-12-31T15:22:57.000-07:00"),
-  applicationDueTime: new Date(),
   applicationPickUpAddress: undefined,
   applicationPickUpAddressOfficeHours: "",
   applicationDropOffAddress: null,
@@ -266,6 +266,7 @@ export const ArcherListing: Listing = {
   jurisdiction: {
     id: "id",
     name: "San Jose",
+    publicUrl: "",
   },
   depositMax: "",
   disableUnitsAccordion: false,

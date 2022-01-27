@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
-  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -13,6 +12,7 @@ import {
   LinkButton,
   Icon,
 } from "@bloom-housing/ui-components"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -38,9 +38,9 @@ const Aside = ({
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = moment(listing.updatedAt)
+    const dayjsDate = dayjs(listing.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [listing])
 
   const actions = useMemo(() => {
@@ -174,7 +174,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {moment(
+              {dayjs(
                 listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}
@@ -201,7 +201,10 @@ const Aside = ({
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
-          <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
+          <a
+            target="_blank"
+            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
             </Button>
