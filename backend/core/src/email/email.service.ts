@@ -51,7 +51,7 @@ export class EmailService {
     }
     await this.send(
       user.email,
-      "Welcome to Bloom",
+      "Welcome",
       this.template("register-email")({
         user: user,
         confirmationUrl: confirmationUrl,
