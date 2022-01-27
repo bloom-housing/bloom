@@ -1,5 +1,4 @@
-import useSWR from "swr"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect, useCallback } from "react"
 import { Application } from "@bloom-housing/backend-core/types"
 import {
   AuthContext,
@@ -31,7 +30,7 @@ export default () => {
 
   /* Form Handler */
   const { handleSubmit } = useForm()
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (!submitted) {
       // Necessary to avoid infinite rerenders
       setSubmitted(true)
@@ -54,30 +53,30 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
     }
-  }
+  }, [conductor, context, previousApplication, submitted, useDetails])
 
-  const fetcher = async () => {
-    const res = await applicationsService.list({
-      userId: profile.id,
-      orderBy: "createdAt",
-      order: "DESC",
-      limit: 1,
-    })
-    return res
-  }
-  const { data } = useSWR(
-    profile && !previousApplication ? process.env.listingServiceUrl : null,
-    fetcher
-  )
-  if (data) {
-    if (data.items.length > 0) {
-      setPreviousApplication(new AutofillCleaner(data.items[0]).clean())
-    } else {
-      onSubmit()
+  useEffect(() => {
+    if (!profile || previousApplication) {
+      if (initialStateLoaded) {
+        onSubmit()
+      }
+      return
     }
-  } else if (initialStateLoaded && !profile) {
-    onSubmit()
-  }
+    void applicationsService
+      .list({
+        userId: profile.id,
+        orderBy: "createdAt",
+        order: "DESC",
+        limit: 1,
+      })
+      .then((res) => {
+        if (res && res?.items?.length) {
+          setPreviousApplication(new AutofillCleaner(res.items[0]).clean())
+        } else {
+          onSubmit()
+        }
+      })
+  }, [profile, previousApplication, applicationsService, initialStateLoaded, onSubmit])
 
   return previousApplication ? (
     <FormsLayout>
@@ -105,7 +104,7 @@ export default () => {
           hidePreferences={true}
         />
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-card__pager">
+          <div className="form-card__pager" data-test-id={"application-initial-page"}>
             <div className="form-card__pager-row primary">
               <Button
                 styleType={AppearanceStyleType.primary}
@@ -124,7 +123,7 @@ export default () => {
                 onClick={() => {
                   useDetails = false
                 }}
-                data-test-id={"autofill-decline"}
+                dataTestId={"autofill-decline"}
               >
                 {t("application.autofill.reset")}
               </Button>

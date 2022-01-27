@@ -16,6 +16,8 @@ export class UserCreateDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "email",
+  "passwordUpdatedAt",
+  "passwordValidForDays",
   "lastLoginAt",
   "failedLoginAttemptsCount",
 ] as const) {

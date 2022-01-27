@@ -29,6 +29,7 @@ declare namespace Cypress {
     verifyHouseholdIncome(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     verifyTerms(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
     fillMailingAddress(value: Record<string, string>, fieldsToSkip?: string[]): Chainable
+    signOut(): Chainable
   }
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */

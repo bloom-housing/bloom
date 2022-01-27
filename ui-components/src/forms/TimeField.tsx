@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import { t } from "../helpers/translator"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { Field } from "./Field"
@@ -32,7 +32,7 @@ export type TimeFieldProps = {
 }
 
 export const formatDateToTimeField = (date: Date) => {
-  const dateObj = moment(date)
+  const dateObj = dayjs(date)
 
   return {
     hours: dateObj.format("hh"),

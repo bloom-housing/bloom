@@ -45,6 +45,11 @@ Cypress.Commands.add("login", () => {
   })
 })
 
+Cypress.Commands.add("signOut", () => {
+  cy.get("button").contains("Sign Out").click()
+  cy.get("input#email")
+})
+
 Cypress.Commands.add("verifyAlertBox", () => {
   cy.get(".status-aside__buttons > .grid-section > .grid-section__inner > :nth-child(1) > .button")
     .contains("Publish")

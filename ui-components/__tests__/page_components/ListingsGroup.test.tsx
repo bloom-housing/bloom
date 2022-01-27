@@ -32,4 +32,16 @@ describe("<ListingsGroup>", () => {
     fireEvent.click(getByText("Show (2)"))
     expect(getByText("Hide (2)")).toBeTruthy()
   })
+  it("can render info text", () => {
+    const { getByText } = render(
+      <ListingsGroup
+        listingsCount={2}
+        header={"Header Text"}
+        showButtonText={"Show"}
+        hideButtonText={"Hide"}
+        info={"Informational text"}
+      />
+    )
+    expect(getByText("Informational text")).toBeTruthy()
+  })
 })

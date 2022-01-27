@@ -8,9 +8,9 @@ import {
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { DeepPartial, FindConditions, Repository } from "typeorm"
-import { paginate, Pagination } from "nestjs-typeorm-paginate"
+import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { decode, encode } from "jwt-simple"
-import moment from "moment"
+import dayjs from "dayjs"
 import crypto from "crypto"
 import { User } from "../entities/user.entity"
 import { ConfirmDto } from "../dto/confirm.dto"
@@ -39,6 +39,9 @@ import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
 
+import advancedFormat from "dayjs/plugin/advancedFormat"
+dayjs.extend(advancedFormat)
+
 @Injectable({ scope: Scope.REQUEST })
 export class UserService {
   constructor(
@@ -66,6 +69,15 @@ export class UserService {
     })
   }
 
+  public static isPasswordOutdated(user: User) {
+    return (
+      new Date(user.passwordUpdatedAt.getTime() + user.passwordValidForDays * 24 * 60 * 60 * 1000) <
+        new Date() &&
+      user.roles &&
+      (user.roles.isAdmin || user.roles.isPartner)
+    )
+  }
+
   public async findOneOrFail(options: FindConditions<User>) {
     const user = await this.find(options)
     if (!user) {
@@ -81,27 +93,39 @@ export class UserService {
     const options = {
       limit: params.limit === "all" ? undefined : params.limit,
       page: params.page || 10,
+      PaginationType: PaginationTypeEnum.TAKE_AND_SKIP,
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
+    const distinctIDQB = this._getQb(false)
+    distinctIDQB.addSelect("user.id")
+    distinctIDQB.groupBy("user.id")
     const qb = this._getQb()
 
     if (params.filter) {
       const filter = new UserQueryFilter()
+      filter.addFilters(params.filter, userFilterTypeToFieldMap, distinctIDQB)
       filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
     }
+    const distinctIDResult = await paginate<User>(distinctIDQB, options)
 
-    const result = await paginate<User>(qb, options)
+    qb.andWhere("user.id IN (:...distinctIDs)", {
+      distinctIDs: distinctIDResult.items.map((elem) => elem.id),
+    })
+    const result = await qb.getMany()
     /**
      * admin are the only ones that can access all users
      * so this will throw on the first user that isn't their own (non admin users can access themselves)
      */
     await Promise.all(
-      result.items.map(async (user) => {
+      result.map(async (user) => {
         await this.authzService.canOrThrow(authContext.user, "user", authzActions.read, user)
       })
     )
 
-    return result
+    return {
+      ...distinctIDResult,
+      items: result,
+    }
   }
 
   async update(dto: UserUpdateDto, authContext: AuthContext) {
@@ -113,6 +137,7 @@ export class UserService {
     }
 
     let passwordHash
+    let passwordUpdatedAt
     if (dto.password) {
       if (!dto.currentPassword) {
         // Validation is handled at DTO definition level
@@ -123,6 +148,7 @@ export class UserService {
       }
 
       passwordHash = await this.passwordService.passwordToHash(dto.password)
+      passwordUpdatedAt = new Date()
       delete dto.password
     }
 
@@ -152,6 +178,7 @@ export class UserService {
     assignDefined(user, {
       ...dto,
       passwordHash,
+      passwordUpdatedAt,
     })
 
     return await this.userRepository.save(user)
@@ -176,6 +203,7 @@ export class UserService {
 
     if (dto.password) {
       user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+      user.passwordUpdatedAt = new Date()
     }
 
     try {
@@ -193,7 +221,7 @@ export class UserService {
     const payload = {
       id: userId,
       email,
-      exp: Number.parseInt(moment().add(24, "hours").format("X")),
+      exp: Number.parseInt(dayjs().add(24, "hours").format("X")),
     }
     return encode(payload, process.env.APP_SECRET)
   }
@@ -298,7 +326,7 @@ export class UserService {
     }
 
     // Token expires in 1 hour
-    const payload = { id: user.id, exp: Number.parseInt(moment().add(1, "hour").format("X")) }
+    const payload = { id: user.id, exp: Number.parseInt(dayjs().add(1, "hour").format("X")) }
     user.resetToken = encode(payload, process.env.APP_SECRET)
     await this.userRepository.save(user)
     await this.emailService.forgotPassword(user, dto.appUrl)
@@ -317,15 +345,21 @@ export class UserService {
     }
 
     user.passwordHash = await this.passwordService.passwordToHash(dto.password)
+    user.passwordUpdatedAt = new Date()
     user.resetToken = null
     await this.userRepository.save(user)
     return this.authService.generateAccessToken(user)
   }
 
-  private _getQb() {
+  private _getQb(withSelect = true) {
     const qb = this.userRepository.createQueryBuilder("user")
-    qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
-    qb.leftJoinAndSelect("user.roles", "user_roles")
+    if (withSelect) {
+      qb.leftJoinAndSelect("user.leasingAgentInListings", "listings")
+      qb.leftJoinAndSelect("user.roles", "user_roles")
+    } else {
+      qb.leftJoin("user.leasingAgentInListings", "listings")
+      qb.leftJoin("user.roles", "user_roles")
+    }
 
     return qb
   }

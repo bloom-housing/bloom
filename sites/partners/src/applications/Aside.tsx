@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   t,
   StatusAside,
@@ -32,9 +32,9 @@ const Aside = ({ listingId, type, onDelete, triggerSubmitAndRedirect }: AsidePro
   const applicationUpdated = useMemo(() => {
     if (!application) return null
 
-    const momentDate = moment(application.updatedAt)
+    const dayjsDate = dayjs(application.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [application])
 
   const actions = useMemo(() => {

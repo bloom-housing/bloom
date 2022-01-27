@@ -142,7 +142,7 @@ const LotteryResults = () => {
     })
   } else if (listingCriteriaURL && listingCriteriaURL != "") {
     criteriaTableHeaders = {
-      fileName: t("t.url"),
+      fileName: "t.url",
       actions: criteriaTableHeaders.actions,
     }
     criteriaTableRows.push({

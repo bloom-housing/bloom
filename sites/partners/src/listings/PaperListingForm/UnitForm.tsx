@@ -15,7 +15,7 @@ import {
   AuthContext,
 } from "@bloom-housing/ui-components"
 import { useForm, useWatch, useFormContext } from "react-hook-form"
-import { TempUnit } from "."
+import { TempUnit } from "./formTypes"
 import {
   AmiChart,
   AmiChartItem,
@@ -159,14 +159,19 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
   const resetAmiTableValues = (defaultAmiChart?: AmiChartItem[], defaultAmiPercentage?: string) => {
     const chart = defaultAmiChart ?? currentAmiChart
     const percentage = defaultAmiPercentage ?? amiPercentage
-    const newPercentages = chart
-      .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(percentage))
-      .sort(function (a: AmiChartItem, b: AmiChartItem) {
-        return a.householdSize - b.householdSize
-      })
-    newPercentages.forEach((amiValue: AmiChartItem, index: number) => {
-      setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
-    })
+    const newPercentagesByHouseHold = chart.reduce((acc, item: AmiChartItem) => {
+      if (item.percentOfAmi === parseInt(percentage)) {
+        acc[item.householdSize] = item
+      }
+      return acc
+    }, {})
+
+    for (let i = 1; i < 9; i++) {
+      setValue(
+        `maxIncomeHouseholdSize${i}`,
+        newPercentagesByHouseHold[i] ? newPercentagesByHouseHold[i].income.toString() : ""
+      )
+    }
   }
 
   useEffect(() => {
@@ -214,8 +219,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
           (item: AmiChartItem) =>
             item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
         )[0]
+
         if (
           data[`maxIncomeHouseholdSize${index + 1}`] &&
+          existingChartValue &&
           parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
         ) {
           delete data[`maxIncomeHouseholdSize${index + 1}`]

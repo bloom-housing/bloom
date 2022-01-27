@@ -24,7 +24,7 @@ import {
   ApplicationMethodType,
   Language,
 } from "@bloom-housing/backend-core/types"
-import { FormListing } from "../index"
+import { FormListing } from "../formTypes"
 
 interface Methods {
   digital: ApplicationMethodCreate

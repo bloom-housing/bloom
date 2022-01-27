@@ -35,8 +35,6 @@ executors:
       REDIS_TLS_URL: "rediss://localhost:6379/0"
       REDIS_URL: "redis://localhost:6379/0"
       REDIS_USE_TLS: "0"
-      CLOUDINARY_SECRET: "fake_secret"
-      CLOUDINARY_KEY: "fake_key"
       PARTNERS_PORTAL_URL: "http://localhost:3001"
   puppeteer-node:
     docker:
@@ -105,8 +103,10 @@ jobs:
             REDIS_TLS_URL: "rediss://localhost:6379/0"
             REDIS_URL: "redis://localhost:6379/0"
             REDIS_USE_TLS: "0"
-            CLOUDINARY_SECRET: "fake_secret"
+            CLOUDINARY_SIGNED_PRESET: "fake_secret"
             CLOUDINARY_KEY: "fake_key"
+            CLOUDINARY_CLOUD_NAME: "exygy"
+            CLOUDINARY_SECRET: "fake_secret"
             PARTNERS_PORTAL_URL: "http://localhost:3001"
   build-public:
     executor: standard-node
@@ -120,6 +120,12 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn build:app:partners
+  unit-test-partners:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:app:partners:unit
 
 workflows:
   version: 2
@@ -147,7 +153,11 @@ workflows:
       - build-partners:
           requires:
             - setup
+      - unit-test-partners:
+          requires:
+            - setup
       - cypress/run:
+          name: "cypress-public"
           requires:
             - setup
           executor: cypress-node
@@ -157,4 +167,16 @@ workflows:
             yarn test:backend:core:dbsetup
           start: yarn dev:all-cypress
           wait-on: "http://0.0.0.0:3000"
+          store_artifacts: true
+      - cypress/run:
+          name: "cypress-partners"
+          requires:
+            - setup
+          executor: cypress-node
+          working_directory: sites/partners
+          yarn: true
+          build: |
+            yarn test:backend:core:dbsetup
+          start: yarn dev:all-cypress
+          wait-on: "http://0.0.0.0:3001"
           store_artifacts: true

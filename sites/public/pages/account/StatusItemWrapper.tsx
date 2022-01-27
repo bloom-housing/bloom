@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { StatusItem, AuthContext } from "@bloom-housing/ui-components"
-import moment from "moment"
+import dayjs from "dayjs"
 
 interface StatusItemWrapperProps {
   application: Application
@@ -13,7 +13,7 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
 
   useEffect(() => {
     listingsService
-      ?.retrieve({ listingId: props.application.listing.id })
+      ?.retrieve({ id: props.application.listing.id })
       .then((retrievedListing) => {
         setListing(retrievedListing)
       })
@@ -22,9 +22,9 @@ const StatusItemWrapper = (props: StatusItemWrapperProps) => {
 
   return listing ? (
     <StatusItem
-      applicationDueDate={moment(listing.applicationDueDate).format("MMMM D, YYYY")}
+      applicationDueDate={dayjs(listing.applicationDueDate).format("MMMM D, YYYY")}
       applicationURL={`application/${props.application.id}`}
-      applicationUpdatedAt={moment(props.application.updatedAt).format("MMMM D, YYYY")}
+      applicationUpdatedAt={dayjs(props.application.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application.confirmationCode || props.application.id}
       listingName={listing.name}
       listingURL={`/listing/${listing.id}/${listing.urlSlug}`}

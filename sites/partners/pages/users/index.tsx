@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import Head from "next/head"
 import { AgGridReact } from "ag-grid-react"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
   PageHeader,
   AgPagination,
@@ -85,7 +85,7 @@ const Users = () => {
       {
         headerName: t("listings.details.createdDate"),
         field: "createdAt",
-        valueFormatter: ({ value }) => moment(value).format("MM/DD/YYYY"),
+        valueFormatter: ({ value }) => dayjs(value).format("MM/DD/YYYY"),
       },
       {
         headerName: t("listings.unit.status"),

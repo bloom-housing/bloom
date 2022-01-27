@@ -22,8 +22,10 @@ import React, { useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
-const loadListing = async (listingId, stateFunction, conductor, context) => {
-  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`)
+const loadListing = async (listingId, stateFunction, conductor, context, language) => {
+  const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
+    headers: { language },
+  })
   conductor.listing = response.data
   const applicationConfig = retrieveApplicationConfig(conductor.listing) // TODO: load from backend
   conductor.config = applicationConfig
@@ -34,6 +36,7 @@ const loadListing = async (listingId, stateFunction, conductor, context) => {
 const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
+  const [language, setLanguage] = useState("en")
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const { conductor, application } = context
@@ -49,11 +52,18 @@ const ApplicationChooseLanguage = () => {
     }
 
     if (!context.listing || context.listing.id !== listingId) {
-      void loadListing(listingId, setListing, conductor, context)
+      void loadListing(listingId, setListing, conductor, context, "en")
     } else {
+      conductor.listing = context.listing
       setListing(context.listing)
     }
   }, [router, conductor, context, listingId])
+
+  useEffect(() => {
+    if (language !== "en") {
+      void loadListing(listingId, setListing, conductor, context, language)
+    }
+  }, [conductor, context, language, listingId])
 
   const currentPageSection = 1
 
@@ -65,7 +75,7 @@ const ApplicationChooseLanguage = () => {
     conductor.currentStep.save({
       language,
     })
-
+    setLanguage(language)
     const newLocale = language == "en" ? "" : `/${language}`
     void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
       window.scrollTo(0, 0)
