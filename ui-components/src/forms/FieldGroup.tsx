@@ -125,7 +125,6 @@ const FieldGroup = ({
     const initialValues: string[] = []
     checkSelected(fields, initialValues)
     setCheckedInputs([...initialValues])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {

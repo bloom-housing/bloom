@@ -1,4 +1,6 @@
-import { t } from "@bloom-housing/ui-components"
+import React from "react"
+import { AddressUpdate } from "@bloom-housing/backend-core/types"
+import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 
 export const getDetailFieldNumber = (listingNumber: number) => {
@@ -39,4 +41,42 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
       readableMessage = t("errors.phoneNumberError")
   }
   return readableMessage
+}
+
+type AddressType = "leasingAgentAddress" | "mailingAddress" | "pickupAddress" | "dropoffAddress"
+
+export const getDetailAddress = (
+  address: AddressUpdate,
+  addressName: AddressType,
+  subtitle: string
+) => {
+  return (
+    <>
+      <GridSection subtitle={subtitle} columns={6}>
+        <GridCell span={3}>
+          <ViewItem id={`${addressName}.street`} label={t("listings.streetAddressOrPOBox")}>
+            {address?.street}
+          </ViewItem>
+        </GridCell>
+        <GridCell span={3}>
+          <ViewItem id={`${addressName}.street2`} label={t("application.contact.apt")}>
+            {address?.street2}
+          </ViewItem>
+        </GridCell>
+      </GridSection>
+      <GridSection columns={6}>
+        <GridCell span={2}>
+          <ViewItem id={`${addressName}.city`} label={t("application.contact.city")}>
+            {address?.city}
+          </ViewItem>
+        </GridCell>
+        <ViewItem id={`${addressName}.state`} label={t("application.contact.state")}>
+          {address?.state}
+        </ViewItem>
+        <ViewItem id={`${addressName}.zipCode`} label={t("application.contact.zip")}>
+          {address?.zipCode}
+        </ViewItem>
+      </GridSection>
+    </>
+  )
 }
