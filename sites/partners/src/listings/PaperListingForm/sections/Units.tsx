@@ -132,11 +132,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       id: "unitTypes",
       label: t("listings.unit.unitTypes"),
       value: "true",
+      dataTestId: "unit-types",
     },
     {
       id: "individualUnits",
       label: t("listings.unit.individualUnits"),
       value: "false",
+      dataTestId: "individual-units",
     },
   ]
 
