@@ -61,7 +61,7 @@ export const getDetailAddress = (
           <ViewItem
             id={`${addressName}.street`}
             label={t("listings.streetAddressOrPOBox")}
-            data-test-id={`${addressName}.street`}
+            dataTestId={`${addressName}.street`}
           >
             {address?.street}
           </ViewItem>
@@ -70,7 +70,7 @@ export const getDetailAddress = (
           <ViewItem
             id={`${addressName}.street2`}
             label={t("application.contact.apt")}
-            data-test-id={`${addressName}.street2`}
+            dataTestId={`${addressName}.street2`}
           >
             {address?.street2}
           </ViewItem>
@@ -81,7 +81,7 @@ export const getDetailAddress = (
           <ViewItem
             id={`${addressName}.city`}
             label={t("application.contact.city")}
-            data-test-id={`${addressName}.city`}
+            dataTestId={`${addressName}.city`}
           >
             {address?.city}
           </ViewItem>
@@ -89,14 +89,14 @@ export const getDetailAddress = (
         <ViewItem
           id={`${addressName}.state`}
           label={t("application.contact.state")}
-          data-test-id={`${addressName}.state`}
+          dataTestId={`${addressName}.state`}
         >
           {address?.state}
         </ViewItem>
         <ViewItem
           id={`${addressName}.zipCode`}
           label={t("application.contact.zip")}
-          data-test-id={`${addressName}.zipCode`}
+          dataTestId={`${addressName}.zipCode`}
         >
           {address?.zipCode}
         </ViewItem>
