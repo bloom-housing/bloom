@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -26,7 +26,44 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control } = formMethods
+  const { register, watch, control, setValue } = formMethods
+
+  // If leasing agent address does not exist, do not show it as a radio option
+  const leasingAgentAddressStreet = useWatch({
+    control,
+    name: "leasingAgentAddress.street",
+  })
+
+  const leasingAgentAddressCity = useWatch({
+    control,
+    name: "leasingAgentAddress.city",
+  })
+
+  const leasingAgentAddressState = useWatch({
+    control,
+    name: "leasingAgentAddress.state",
+  })
+
+  const leasingAgentAddressZip = useWatch({
+    control,
+    name: "leasingAgentAddress.zipCode",
+  })
+
+  const leasingAgentAddressExists =
+    leasingAgentAddressStreet &&
+    leasingAgentAddressCity &&
+    leasingAgentAddressState &&
+    leasingAgentAddressZip
+
+  // If leasing agent address is selected and becomes null, reset radio options
+  useEffect(() => {
+    if (!leasingAgentAddressExists) {
+      setValue("whereApplicationsMailedIn", null)
+      setValue("whereApplicationsDroppedOff", null)
+      setValue("whereApplicationsPickedUp", null)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [leasingAgentAddressExists])
 
   const postmarksConsidered: YesNoAnswer = useWatch({
     control,
@@ -105,7 +142,6 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
     },
   ]
 
-  // Only show mailing address as an option if they have indicated a mailing address exists
   const getLocationOptions = (
     prefix: string,
     addressType: string,
@@ -116,6 +152,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
         label: t("listings.atLeasingAgentAddress"),
         defaultChecked: addressType === addressTypes.leasingAgent,
         value: addressTypes.leasingAgent,
+        disabled: !leasingAgentAddressExists,
       },
       {
         label: t("listings.atAnotherAddress"),

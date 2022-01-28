@@ -12,6 +12,7 @@ interface FieldSingle {
   defaultChecked?: boolean
   description?: React.ReactNode
   defaultText?: string
+  disabled?: boolean
   note?: string
   inputProps?: Record<string, unknown>
   subFields?: FieldSingle[]
@@ -83,11 +84,17 @@ const FieldGroup = ({
             }
           }}
           defaultChecked={item.defaultChecked || false}
+          disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
           data-test-id={dataTestId}
         />
-        <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
+        <label
+          htmlFor={item.id}
+          className={`font-semibold ${fieldLabelClassName} ${
+            item.disabled && "text-gray-600 cursor-default cursor-not-allowed"
+          }`}
+        >
           {item.label}
         </label>
         {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
@@ -118,6 +125,7 @@ const FieldGroup = ({
     const initialValues: string[] = []
     checkSelected(fields, initialValues)
     setCheckedInputs([...initialValues])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {
@@ -133,6 +141,7 @@ const FieldGroup = ({
             defaultValue={item.defaultText}
             placeholder={t("t.description")}
             className={"mb-4"}
+            disabled={item.disabled}
           />
         )}
       </div>
