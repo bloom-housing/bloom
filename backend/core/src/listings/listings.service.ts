@@ -138,10 +138,11 @@ export class ListingsService {
   async create(listingDto: ListingCreateDto) {
     const listing = this.listingRepository.create({
       ...listingDto,
+      publishedAt: listingDto.status === ListingStatus.active ?? new Date(),
+      closedAt: listingDto.status === ListingStatus.closed ?? new Date(),
       property: plainToClass(PropertyCreateDto, listingDto)
     })
-    const saveResult = await listing.save()
-    return saveResult
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -162,17 +163,11 @@ export class ListingsService {
       }
     })
 
-    if (listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active) {
-      listing.publishedAt = new Date()
-    }
-
-    if (listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed) {
-      listing.closedAt = new Date()
-    }
-
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      publishedAt: (listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active) ? new Date() : listing.publishedAt,
+      closedAt: (listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed) ? new Date() : listing.closedAt,
       property: plainToClass(
         PropertyUpdateDto,
         {
@@ -185,6 +180,7 @@ export class ListingsService {
         { excludeExtraneousValues: true }
       )
     })
+
     return await this.listingRepository.save(listing)
   }
 
