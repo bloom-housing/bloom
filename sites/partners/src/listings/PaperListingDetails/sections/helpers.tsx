@@ -58,26 +58,46 @@ export const getDetailAddress = (
     <>
       <GridSection subtitle={subtitle} columns={6}>
         <GridCell span={3}>
-          <ViewItem id={`${addressName}.street`} label={t("listings.streetAddressOrPOBox")}>
+          <ViewItem
+            id={`${addressName}.street`}
+            label={t("listings.streetAddressOrPOBox")}
+            data-test-id={`${addressName}.street`}
+          >
             {address?.street}
           </ViewItem>
         </GridCell>
         <GridCell span={3}>
-          <ViewItem id={`${addressName}.street2`} label={t("application.contact.apt")}>
+          <ViewItem
+            id={`${addressName}.street2`}
+            label={t("application.contact.apt")}
+            data-test-id={`${addressName}.street2`}
+          >
             {address?.street2}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={6}>
         <GridCell span={2}>
-          <ViewItem id={`${addressName}.city`} label={t("application.contact.city")}>
+          <ViewItem
+            id={`${addressName}.city`}
+            label={t("application.contact.city")}
+            data-test-id={`${addressName}.city`}
+          >
             {address?.city}
           </ViewItem>
         </GridCell>
-        <ViewItem id={`${addressName}.state`} label={t("application.contact.state")}>
+        <ViewItem
+          id={`${addressName}.state`}
+          label={t("application.contact.state")}
+          data-test-id={`${addressName}.state`}
+        >
           {address?.state}
         </ViewItem>
-        <ViewItem id={`${addressName}.zipCode`} label={t("application.contact.zip")}>
+        <ViewItem
+          id={`${addressName}.zipCode`}
+          label={t("application.contact.zip")}
+          data-test-id={`${addressName}.zipCode`}
+        >
           {address?.zipCode}
         </ViewItem>
       </GridSection>
