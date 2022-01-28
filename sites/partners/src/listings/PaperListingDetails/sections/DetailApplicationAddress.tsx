@@ -38,7 +38,7 @@ const DetailApplicationAddress = () => {
         {listing.applicationMailingAddress &&
           getDetailAddress(
             listing.applicationMailingAddress,
-            "mailingAddress",
+            "applicationMailingAddress",
             t("application.contact.mailingAddress")
           )}
 
@@ -61,7 +61,7 @@ const DetailApplicationAddress = () => {
           <>
             {getDetailAddress(
               listing.applicationPickUpAddress,
-              "pickupAddress",
+              "applicationPickUpAddress",
               t("listings.pickupAddress")
             )}
             <GridSection columns={3}>
@@ -99,7 +99,7 @@ const DetailApplicationAddress = () => {
           <>
             {getDetailAddress(
               listing.applicationDropOffAddress,
-              "dropoffAddress",
+              "applicationDropOffAddress",
               t("listings.dropOffAddress")
             )}
             <GridSection columns={3}>

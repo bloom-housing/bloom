@@ -43,7 +43,11 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
   return readableMessage
 }
 
-type AddressType = "leasingAgentAddress" | "mailingAddress" | "pickupAddress" | "dropoffAddress"
+type AddressType =
+  | "leasingAgentAddress"
+  | "applicationMailingAddress"
+  | "applicationPickUpAddress"
+  | "applicationDropOffAddress"
 
 export const getDetailAddress = (
   address: AddressUpdate,
