@@ -9,7 +9,7 @@ interface FieldSingle {
   id: string
   label: string
   value?: string
-  dataTestID?: string
+  dataTestId?: string
   defaultChecked?: boolean
   description?: React.ReactNode
   defaultText?: string
@@ -88,7 +88,7 @@ const FieldGroup = ({
           disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
-          data-test-id={item.dataTestID ?? dataTestId}
+          data-test-id={item.dataTestId ?? dataTestId}
         />
         <label
           htmlFor={item.id}
@@ -142,6 +142,7 @@ const FieldGroup = ({
             placeholder={t("t.description")}
             className={"mb-4"}
             disabled={item.disabled}
+            dataTestId={item.dataTestId}
           />
         )}
       </div>
