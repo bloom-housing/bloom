@@ -255,30 +255,30 @@ export const isObject = (obj: any, key: string) => {
  * @param obj - Any object
  *
  *  End result is an object with these rules for fields:
- *    No empty objects - removed
+ *    No empty objects - set to null
  *    No objects that only have fields with null / empty strings - removed
  *    No null/undefined fields - removed
  *    No empty strings - set to null but still included
  *    Arrays / non-empty strings / Date objects - no changes
  */
-export const removeEmptyObjects = (obj: any, nested?: boolean) => {
+export const formatFormDataForValidation = (obj: any, nested?: boolean) => {
   Object.keys(obj).forEach((key) => {
     if (isObject(obj, key)) {
       if (Object.keys(obj[key]).length === 0) {
         delete obj[key]
       } else {
-        removeEmptyObjects(obj[key], true)
+        formatFormDataForValidation(obj[key], true)
       }
     }
-    if (isObject(obj, key) && Object.keys(obj[key]).length === 0) {
-      delete obj[key]
-    }
+
     if (obj[key] === null || obj[key] === undefined) {
       if (nested) {
         delete obj[key]
       }
     }
-
+    if (isObject(obj, key) && Object.keys(obj[key]).length === 0) {
+      obj[key] = null
+    }
     if (obj[key] === "") {
       if (nested) {
         delete obj[key]

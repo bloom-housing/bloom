@@ -173,6 +173,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           setLoading(true)
           clearErrors()
 
+          console.log({ formData })
           const dataPipeline = new ListingDataPipeline(formData, {
             preferences,
             programs,
@@ -182,7 +183,10 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             latLong,
             customMapPositionChosen,
           })
+
           const formattedData = await dataPipeline.run()
+
+          console.log({ formattedData })
 
           const result = editMode
             ? await listingsService.update(
@@ -221,10 +225,9 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
               "success"
             )
-
-            await router.push(`/listings/${result.id}`)
           }
           setLoading(false)
+          await router.push(`/listings/${result.id}`)
         } catch (err) {
           reset(formData)
           setLoading(false)

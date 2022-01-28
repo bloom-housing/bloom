@@ -101,19 +101,16 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   buildingSelectionCriteriaFile?: AssetUpdateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingEventUpdateDto)
   events: ListingEventUpdateDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   image?: AssetUpdateDto | null
 
@@ -125,13 +122,11 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => IdDto)
   leasingAgents?: IdDto[] | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @ArrayMaxSize(256, { groups: [ValidationsGroupsEnum.default] })
   @Type(() => UnitUpdateDto)
   units: UnitUpdateDto[]
@@ -216,13 +211,11 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => IdDto)
   reservedCommunityType?: IdDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AssetUpdateDto)
   result?: AssetUpdateDto
 

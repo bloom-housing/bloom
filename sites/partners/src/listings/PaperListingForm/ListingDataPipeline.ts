@@ -1,5 +1,5 @@
 import Formatter from "./formatters/Formatter"
-import { removeEmptyObjects } from "../../../lib/helpers"
+import { formatFormDataForValidation } from "../../../lib/helpers"
 import { FormListing, FormMetadata } from "./formTypes"
 
 /**
@@ -19,6 +19,7 @@ export default class ListingDataPipeline {
    * @see importData
    */
   constructor(data: FormListing, metadata: FormMetadata) {
+    console.log("constructor", data)
     this.importData(data, metadata)
   }
 
@@ -49,6 +50,7 @@ export default class ListingDataPipeline {
     this.alreadyFormatted = false
     this.data = { ...data } // make a copy before transformation
     this.metadata = metadata
+    console.log("importData", this.data)
   }
 
   /**
@@ -58,13 +60,16 @@ export default class ListingDataPipeline {
     if (this.alreadyFormatted)
       throw new Error("Cannot run pipeline a second time on the same dataset")
 
+    console.log("start", this.data)
     const formatters = await this.loadFormatters()
 
     formatters.forEach((formatterClass: typeof Formatter) => {
       new formatterClass(this.data, this.metadata).format()
     })
 
-    removeEmptyObjects(this.data)
+    console.log("before formatFormData", this.data.leasingAgentAddress)
+    formatFormDataForValidation(this.data)
+    console.log("after formatFormData", this.data.leasingAgentAddress)
 
     this.alreadyFormatted = true
 
