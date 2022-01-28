@@ -26,8 +26,7 @@ export class ListingsService {
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService
-  ) {
-  }
+  ) {}
 
   private getFullyJoinedQueryBuilder() {
     return getView(this.listingRepository.createQueryBuilder("listings"), "full").getViewQb()
@@ -45,7 +44,7 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
             "listings.applicationOpenDate": "DESC",
-            "listings.id": "ASC"
+            "listings.id": "ASC",
           }
         default:
           throw new HttpException(
@@ -112,7 +111,7 @@ export class ListingsService {
       itemCount: listings.length,
       itemsPerPage: itemsPerPage,
       totalItems: totalItems,
-      totalPages: Math.ceil(totalItems / itemsPerPage) // will be 1 if no pagination
+      totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
     }
 
     // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
@@ -129,8 +128,8 @@ export class ListingsService {
         first: "",
         previous: "",
         next: "",
-        last: ""
-      }
+        last: "",
+      },
     }
     return paginatedListings
   }
@@ -140,7 +139,7 @@ export class ListingsService {
       ...listingDto,
       publishedAt: listingDto.status === ListingStatus.active ?? new Date(),
       closedAt: listingDto.status === ListingStatus.closed ?? new Date(),
-      property: plainToClass(PropertyCreateDto, listingDto)
+      property: plainToClass(PropertyCreateDto, listingDto),
     })
     return await listing.save()
   }
@@ -166,8 +165,14 @@ export class ListingsService {
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
-      publishedAt: (listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active) ? new Date() : listing.publishedAt,
-      closedAt: (listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed) ? new Date() : listing.closedAt,
+      publishedAt:
+        listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
+          ? new Date()
+          : listing.publishedAt,
+      closedAt:
+        listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
+          ? new Date()
+          : listing.closedAt,
       property: plainToClass(
         PropertyUpdateDto,
         {
@@ -175,10 +180,10 @@ export class ListingsService {
           ...listingDto,
           // NOTE: Since we use the entire listingDto to create a property object the listing ID
           //  would overwrite propertyId fetched from DB
-          id: listing.property.id
+          id: listing.property.id,
         },
         { excludeExtraneousValues: true }
-      )
+      ),
     })
 
     return await this.listingRepository.save(listing)
@@ -186,7 +191,7 @@ export class ListingsService {
 
   async delete(listingId: string) {
     const listing = await this.listingRepository.findOneOrFail({
-      where: { id: listingId }
+      where: { id: listingId },
     })
     return await this.listingRepository.remove(listing)
   }
@@ -196,7 +201,7 @@ export class ListingsService {
     const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
-        "listingPreferences.ordinal": "ASC"
+        "listingPreferences.ordinal": "ASC",
       })
       .getOne()
     if (!result) {
@@ -214,7 +219,7 @@ export class ListingsService {
   private async addUnitsSummarized(listing: Listing) {
     if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
       const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) }
+        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
       })
       listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
     }
