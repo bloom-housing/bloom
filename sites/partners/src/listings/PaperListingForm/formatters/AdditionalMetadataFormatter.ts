@@ -17,19 +17,6 @@ export default class AdditionalMetadataFormatter extends Formatter {
       longitude: this.metadata.latLong.longitude ?? null,
     }
 
-    console.log("why1", this.data)
-    console.log("whYYY", this.metadata)
-    console.log(this.data.leasingAgentAddress)
-    if (
-      !this.data.leasingAgentAddress.street &&
-      !this.data.leasingAgentAddress.city &&
-      !this.data.leasingAgentAddress.zipCode &&
-      !this.data.leasingAgentAddress.state
-    ) {
-      console.log("setting leasingAgentAddress to {}")
-      this.data.leasingAgentAddress = {} as AddressUpdate
-    }
-    console.log("why2", this.data)
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
     if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null

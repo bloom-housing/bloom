@@ -35,6 +35,14 @@ export default class BooleansFormatter extends Formatter {
         this.data.whereApplicationsPickedUp === addressTypes.anotherAddress,
       trueCase: () => this.data.applicationPickUpAddress,
     })
+    this.processBoolean("leasingAgentAddress", {
+      when:
+        !!this.data.leasingAgentAddress.street &&
+        !!this.data.leasingAgentAddress.city &&
+        !!this.data.leasingAgentAddress.state &&
+        !!this.data.leasingAgentAddress.zipCode,
+      trueCase: () => this.data.leasingAgentAddress,
+    })
     this.processBoolean("applicationMailingAddress", {
       when:
         this.data.canApplicationsBeMailedIn === YesNoAnswer.Yes &&
