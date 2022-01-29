@@ -51,7 +51,7 @@ export class EmailService {
     }
     await this.send(
       user.email,
-      "Welcome",
+      this.polyglot.t("register.welcome"),
       this.template("register-email")({
         user: user,
         confirmationUrl: confirmationUrl,
