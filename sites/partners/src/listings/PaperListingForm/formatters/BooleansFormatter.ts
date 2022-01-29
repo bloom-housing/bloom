@@ -43,22 +43,22 @@ export default class BooleansFormatter extends Formatter {
     })
     this.processBoolean("leasingAgentAddress", {
       when:
-        !!this.data.leasingAgentAddress.street &&
-        !!this.data.leasingAgentAddress.city &&
-        !!this.data.leasingAgentAddress.state &&
-        !!this.data.leasingAgentAddress.zipCode,
+        !!this.data.leasingAgentAddress?.street &&
+        !!this.data.leasingAgentAddress?.city &&
+        !!this.data.leasingAgentAddress?.state &&
+        !!this.data.leasingAgentAddress?.zipCode,
       trueCase: () => this.data.leasingAgentAddress,
     })
     this.processBoolean("buildingAddress", {
       when:
-        !!this.data.buildingAddress.street &&
-        !!this.data.buildingAddress.city &&
-        !!this.data.buildingAddress.state &&
-        !!this.data.buildingAddress.zipCode,
+        !!this.data.buildingAddress?.street &&
+        !!this.data.buildingAddress?.city &&
+        !!this.data.buildingAddress?.state &&
+        !!this.data.buildingAddress?.zipCode,
       trueCase: () => this.data.buildingAddress,
     })
     this.processBoolean("image", {
-      when: !!this.data.image.fileId && !!this.data.image.label,
+      when: !!this.data.image?.fileId && !!this.data.image?.label,
       trueCase: () => this.data.image,
     })
     this.processBoolean("digitalApplication", {
