@@ -11,11 +11,14 @@ export default class AdditionalMetadataFormatter extends Formatter {
       return { program: { ...program }, ordinal: index + 1 }
     })
 
-    this.data.buildingAddress = {
-      ...this.data.buildingAddress,
-      latitude: this.metadata.latLong.latitude ?? null,
-      longitude: this.metadata.latLong.longitude ?? null,
+    if (this.data.buildingAddress) {
+      this.data.buildingAddress = {
+        ...this.data.buildingAddress,
+        latitude: this.metadata.latLong.latitude ?? null,
+        longitude: this.metadata.latLong.longitude ?? null,
+      }
     }
+
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
     if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null
