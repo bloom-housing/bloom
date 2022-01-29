@@ -25,18 +25,14 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
   const errorDetails = errorMessage.substr(errorMessage.indexOf(" ") + 1)
   let readableMessage = null
   switch (errorDetails) {
-    case "should not be null or undefined":
-    case "must be a string":
-    case "must be an UUID":
-    case "must contain at least 1 elements":
-    case "must be a boolean value":
-      readableMessage = t("errors.requiredFieldError")
-      break
     case "must be an email":
       readableMessage = t("errors.emailAddressError")
       break
     case "must be a valid phone number":
       readableMessage = t("errors.phoneNumberError")
+      break
+    default:
+      readableMessage = t("errors.requiredFieldError")
   }
   return readableMessage
 }

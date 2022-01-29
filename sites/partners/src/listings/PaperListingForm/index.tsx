@@ -236,11 +236,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               const readableError = getReadableErrorMessage(errorMessage)
               if (readableError) {
                 setError(fieldName, { message: readableError })
-                if (fieldName === "buildingAddress") {
-                  setError(`${fieldName}.city`, { message: readableError })
-                  setError(`${fieldName}.state`, { message: readableError })
-                  setError(`${fieldName}.street`, { message: readableError })
-                  setError(`${fieldName}.zipCode`, { message: readableError })
+                if (fieldName === "buildingAddress" || fieldName === "buildingAddress.nested") {
+                  const setIfEmpty = (
+                    fieldName: string,
+                    fieldValue: string,
+                    errorMessage: string
+                  ) => {
+                    if (!fieldValue) {
+                      setError(fieldName, { message: errorMessage })
+                    }
+                  }
+                  const address = formData.buildingAddress
+                  setIfEmpty(`buildingAddress.city`, address.city, readableError)
+                  setIfEmpty(`buildingAddress.state`, address.state, readableError)
+                  setIfEmpty(`buildingAddress.street`, address.street, readableError)
+                  setIfEmpty(`buildingAddress.zipCode`, address.zipCode, readableError)
                 }
               }
             })
