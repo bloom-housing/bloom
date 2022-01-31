@@ -88,9 +88,6 @@ export class TranslationsService extends AbstractServiceFactory<
       "property.servicesOffered",
       "property.smokingPolicy",
       "property.unitAmenities",
-      "whatToExpect.applicantsWillBeContacted",
-      "whatToExpect.allInfoWillBeVerified",
-      "whatToExpect.bePreparedIfChosen",
     ]
 
     for (let i = 0; i < listing.events.length; i++) {
@@ -106,7 +103,10 @@ export class TranslationsService extends AbstractServiceFactory<
 
     const listingPathsAndValues: { [key: string]: any } = {}
     for (const path of pathsToFilter) {
-      listingPathsAndValues[path] = lodash.get(listing, path)
+      const value = lodash.get(listing, path)
+      if (value) {
+        listingPathsAndValues[path] = lodash.get(listing, path)
+      }
     }
 
     // Caching
