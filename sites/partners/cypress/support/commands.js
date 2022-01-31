@@ -45,6 +45,19 @@ Cypress.Commands.add("login", () => {
   })
 })
 
+Cypress.Commands.add("loginWithMfa", () => {
+  cy.visit("/")
+  cy.fixture("mfaUser").then((user) => {
+    cy.get("input#email").type(user.email)
+    cy.get("input#password").type(user.password)
+    cy.get(".button").contains("Sign In").click()
+    cy.getByTestId("verify-by-email").click()
+    cy.getByTestId("sign-in-mfa-code-field").type(user.mfaCode)
+    cy.getByTestId("verify-and-sign-in").click()
+    cy.contains("Listings")
+  })
+})
+
 Cypress.Commands.add("signOut", () => {
   cy.get("button").contains("Sign Out").click()
   cy.get("input#email")

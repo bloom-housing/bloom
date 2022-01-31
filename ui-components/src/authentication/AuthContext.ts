@@ -17,6 +17,8 @@ import {
   PreferencesService,
   JurisdictionsService,
   ProgramsService,
+  RequestMfaCodeResponse,
+  EnumRequestMfaCodeMfaType,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -48,7 +50,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
-  login: (email: string, password: string) => Promise<User | undefined>
+  login: (email: string, password: string, mfaCode?: string) => Promise<User | undefined>
   loginWithToken: (token: string) => Promise<User | undefined>
   resetPassword: (
     token: string,
@@ -64,6 +66,12 @@ type ContextProps = {
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
+  requestMfaCode: (
+    email: string,
+    password: string,
+    mfaType: EnumRequestMfaCodeMfaType,
+    phoneNumber?: string
+  ) => Promise<RequestMfaCodeResponse | undefined>
 }
 
 // Internal Provider State
@@ -240,11 +248,11 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
-    login: async (email, password) => {
+    login: async (email, password, mfaCode: string | undefined = undefined) => {
       dispatch(signOut())
       dispatch(startLoading())
       try {
-        const response = await authService?.login({ body: { email, password } })
+        const response = await authService?.login({ body: { email, password, mfaCode } })
         if (response) {
           dispatch(saveToken({ accessToken: response.accessToken, apiUrl, dispatch }))
           const profile = await userService?.userControllerProfile()
@@ -338,6 +346,16 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
           body: { email, appUrl: window.location.origin },
         })
         return response?.message
+      } finally {
+        dispatch(stopLoading())
+      }
+    },
+    requestMfaCode: async (email, password, mfaType, phoneNumber) => {
+      dispatch(startLoading())
+      try {
+        return await authService?.requestMfaCode({
+          body: { email, password, mfaType, phoneNumber },
+        })
       } finally {
         dispatch(stopLoading())
       }

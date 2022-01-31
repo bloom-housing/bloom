@@ -78,7 +78,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       let mfaAuthSuccessful = true
       if (user.mfaEnabled) {
         if (!loginDto.mfaCode || !user.mfaCode || !user.mfaCodeUpdatedAt) {
-          throw new UnauthorizedException()
+          throw new UnauthorizedException({ name: "mfaCodeIsMissing" })
         }
         if (
           new Date(

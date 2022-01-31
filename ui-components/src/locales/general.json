@@ -1375,7 +1375,23 @@
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
     "flags": "Flags",
-    "users": "Users"
+    "users": "Users",
+    "signInMFA": {
+      "verificationChoiceMainTitle": "How would you like us to verify that its you?",
+      "verificationChoiceSecondaryTitle": "We can send a code to your email or phone number",
+      "verifyByEmail": "verify with Email",
+      "verifyByPhone": "verify with phone number",
+      "addNumberMainTitle": "Add a phone number",
+      "addNumberSecondaryTitle": "Enter your phone number and we'll send you a code that you can use to sign in.",
+      "numberFieldLabel": "your phone number",
+      "addNumber": "Add a phone number",
+      "signIn": "verify and sign in",
+      "addPhoneNumber": "your phone number",
+      "noMFAType":"please select MFA Type",
+      "phoneNumber": "Phone Number",
+      "code": "Code",
+      "noMFACode": "please enter your code"
+    }
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",

@@ -275,6 +275,21 @@ async function seed() {
     new AuthContext(null)
   )
 
+  const mfaUser = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "mfaUser@bloom.com",
+      emailConfirmation: "mfaUser@bloom.com",
+      firstName: "I",
+      middleName: "Use",
+      lastName: "MFA",
+      dob: new Date(),
+      password: "abcdef12",
+      passwordConfirmation: "abcdef12",
+      jurisdictions,
+    }),
+    new AuthContext(null)
+  )
+
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 
   const unitTypes = await unitTypesService.list()
@@ -289,10 +304,14 @@ async function seed() {
   }
 
   await userRepo.save(admin)
+  await userRepo.save({ ...mfaUser, mfaEnabled: true, mfaCode: "123456" })
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
   await rolesRepo.save(roles)
+  await rolesRepo.save(mfaRoles)
 
   await userService.confirm({ token: admin.confirmationToken })
+  await userService.confirm({ token: mfaUser.confirmationToken })
   await app.close()
 }
 

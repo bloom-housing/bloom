@@ -1,0 +1,94 @@
+import React from "react"
+import {
+  AppearanceStyleType,
+  Button,
+  Form,
+  FormCard,
+  Icon,
+  t,
+  AlertBox,
+  SiteAlert,
+  AlertNotice,
+  ErrorMessage,
+  PhoneField,
+} from "@bloom-housing/ui-components"
+import type { UseFormMethods } from "react-hook-form"
+import { FormSignInNetworkError } from "./FormSignIn"
+
+export type FormSignInAddPhoneProps = {
+  control: FormSignInAddPhoneControl
+  onSubmit: (data: FormSignInAddPhoneValues) => void
+  networkError: FormSignInNetworkError
+}
+
+export type FormSignInAddPhoneControl = {
+  errors: UseFormMethods["errors"]
+  handleSubmit: UseFormMethods["handleSubmit"]
+  control: UseFormMethods["control"]
+}
+
+export type FormSignInAddPhoneValues = {
+  phoneNumber: string
+}
+
+const FormSignInAddPhone = ({ onSubmit, networkError, control }: FormSignInAddPhoneProps) => {
+  const onError = () => {
+    window.scrollTo(0, 0)
+  }
+  const { errors, handleSubmit } = control
+  return (
+    <FormCard>
+      <div className="form-card__lead text-center border-b mx-0">
+        <Icon size="2xl" symbol="profile" />
+        <h2 className="form-card__title">{t("nav.signInMFA.addNumber")}</h2>
+        <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>
+      </div>
+      {Object.entries(errors).length > 0 && !networkError.error && (
+        <AlertBox type="alert" inverted closeable>
+          {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
+        </AlertBox>
+      )}
+
+      {!!networkError.error && Object.entries(errors).length === 0 && (
+        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
+          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
+            {networkError.error.title}
+          </AlertBox>
+
+          <AlertNotice title="" type="alert" inverted>
+            {networkError.error.content}
+          </AlertNotice>
+        </ErrorMessage>
+      )}
+
+      <SiteAlert type="notice" dismissable />
+      <div className="form-card__group pt-0 border-b">
+        <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
+          <PhoneField
+            label={t("nav.signInMFA.phoneNumber")}
+            caps={true}
+            required={true}
+            id="phoneNumber"
+            name="phoneNumber"
+            error={errors.phoneNumber}
+            errorMessage={t("errors.phoneNumberError")}
+            controlClassName="control"
+            control={control.control}
+            dataTestId={"sign-in-phone-number-field"}
+          />
+
+          <div className="text-center mt-6">
+            <Button
+              styleType={AppearanceStyleType.primary}
+              data-test-id="request-mfa-code-and-add-phone"
+            >
+              {t("nav.signInMFA.addPhoneNumber")}
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </FormCard>
+  )
+}
+
+export { FormSignInAddPhone as default, FormSignInAddPhone }
