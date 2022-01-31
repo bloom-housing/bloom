@@ -106,9 +106,7 @@ const Users = () => {
   })
 
   /* Fetch listings */
-  const { listingDtos } = useListingsData({
-    limit: "all",
-  })
+  const { listingDtos } = useListingsData({})
 
   const resetPagination = () => {
     setCurrentPage(1)

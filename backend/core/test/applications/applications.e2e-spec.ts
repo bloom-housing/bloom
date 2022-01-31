@@ -106,7 +106,7 @@ describe("Applications", () => {
     ).body
 
     const res = await supertest(app.getHttpServer())
-      .get("/listings?limit=all&view=full")
+      .get("/listings")
       .expect(200)
     // Finding listings corresponding to leasing agents (permission wise)
     listing1Id = res.body.items.filter((listing: ListingDto) => {

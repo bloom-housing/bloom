@@ -90,7 +90,6 @@ export async function fetchBaseListingData() {
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
-        limit: "all",
         filter: [
           {
             $comparison: "<>",

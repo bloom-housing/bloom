@@ -27,11 +27,8 @@ export abstract class GenericQueryBuilder<T extends { id: string }> extends Sele
         .skip((this.pageValue - 1) * this.limitValue)
     }
 
-    this.innerFilterSubQuery = this.innerFilterSubQuery.select([`${this.innerFilterSubQuery.alias}.id`])
-
     const [filteredEntities, filteredQueryCount] = await SelectQueryBuilder.prototype.getManyAndCount.call(
-      this.innerFilterSubQuery,
-      [`${this.innerFilterSubQuery.alias}.id`]
+      this.innerFilterSubQuery
     )
 
     this.andWhereInIds(filteredEntities.map(e => e.id))

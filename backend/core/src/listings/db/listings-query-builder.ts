@@ -7,10 +7,12 @@ import { filterTypeToFieldMap } from "../dto/filter-type-to-field-map"
 import { GenericQueryBuilder } from "../../shared/db/generic-query-builder"
 
 export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
+
   public leftJoinRelationsForFilters() {
     return this
-      .leftJoin(`listings.property`, "property")
-      .leftJoin("listings.leasingAgents", "leasingAgents")
+      .leftJoin(`${this.alias}.property`, "property")
+      .leftJoin(`${this.alias}.jurisdiction`, "jurisdiction")
+      .leftJoin(`${this.alias}.leasingAgents`, "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("property.units", "units")
       .leftJoin("units.unitType", "unitTypeRef")
@@ -18,22 +20,22 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
 
   public leftJoinAndSelectAll() {
     return this
-      .leftJoinAndSelect("listings.applicationMethods", "applicationMethods")
+      .leftJoinAndSelect(`${this.alias}.applicationMethods`, "applicationMethods")
       .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
       .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
-      .leftJoinAndSelect("listings.image", "image")
-      .leftJoinAndSelect("listings.buildingSelectionCriteriaFile", "buildingSelectionCriteriaFile")
-      .leftJoinAndSelect("listings.events", "listingEvents")
+      .leftJoinAndSelect(`${this.alias}.image`, "image")
+      .leftJoinAndSelect(`${this.alias}.buildingSelectionCriteriaFile`, "buildingSelectionCriteriaFile")
+      .leftJoinAndSelect(`${this.alias}.events`, "listingEvents")
       .leftJoinAndSelect("listingEvents.file", "listingEventFile")
-      .leftJoinAndSelect("listings.result", "result")
-      .leftJoinAndSelect("listings.leasingAgentAddress", "leasingAgentAddress")
-      .leftJoinAndSelect("listings.applicationPickUpAddress", "applicationPickUpAddress")
-      .leftJoinAndSelect("listings.applicationMailingAddress", "applicationMailingAddress")
-      .leftJoinAndSelect("listings.applicationDropOffAddress", "applicationDropOffAddress")
-      .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
-      .leftJoinAndSelect("listings.listingPreferences", "listingPreferences")
+      .leftJoinAndSelect(`${this.alias}.result`, "result")
+      .leftJoinAndSelect(`${this.alias}.leasingAgentAddress`, "leasingAgentAddress")
+      .leftJoinAndSelect(`${this.alias}.applicationPickUpAddress`, "applicationPickUpAddress")
+      .leftJoinAndSelect(`${this.alias}.applicationMailingAddress`, "applicationMailingAddress")
+      .leftJoinAndSelect(`${this.alias}.applicationDropOffAddress`, "applicationDropOffAddress")
+      .leftJoinAndSelect(`${this.alias}.leasingAgents`, "leasingAgents")
+      .leftJoinAndSelect(`${this.alias}.listingPreferences`, "listingPreferences")
       .leftJoinAndSelect("listingPreferences.preference", "listingPreferencesPreference")
-      .leftJoinAndSelect("listings.property", "property")
+      .leftJoinAndSelect(`${this.alias}.property`, "property")
       .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
       .leftJoinAndSelect("property.units", "units")
       .leftJoinAndSelect("units.amiChartOverride", "amiChartOverride")
@@ -41,14 +43,16 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
       .leftJoinAndSelect("units.unitRentType", "unitRentType")
       .leftJoinAndSelect("units.priorityType", "priorityType")
       .leftJoinAndSelect("units.amiChart", "amiChart")
-      .leftJoinAndSelect("listings.jurisdiction", "jurisdiction")
-      .leftJoinAndSelect("listings.reservedCommunityType", "reservedCommunityType")
-      .leftJoinAndSelect("listings.listingPrograms", "listingPrograms")
+      .leftJoinAndSelect(`${this.alias}.jurisdiction`, "jurisdiction")
+      .leftJoinAndSelect(`${this.alias}.reservedCommunityType`, "reservedCommunityType")
+      .leftJoinAndSelect(`${this.alias}.listingPrograms`, "listingPrograms")
       .leftJoinAndSelect("listingPrograms.program", "listingProgramsProgram")
   }
 
   addFilters(filters?: ListingFilterParams[]) {
-    if (!filters) return this
+    if (!filters) {
+      return this
+    }
     addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
       filters,
       filterTypeToFieldMap,
@@ -60,15 +64,15 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
   public addOrderFromFieldEnum(orderBy: OrderByFieldsEnum) {
     switch (orderBy) {
       case OrderByFieldsEnum.mostRecentlyUpdated:
-        return this.orderBy({ "listings.updated_at": "DESC" })
+        return this.orderBy({ [`${this.alias}.updatedAt`]: "DESC" })
       case OrderByFieldsEnum.applicationDates:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
         // and applicationOpenDate) if no orderBy param is specified.
         return this.orderBy({
-          "listings.applicationDueDate": "ASC",
-          "listings.applicationOpenDate": "DESC",
-          "listings.id": "ASC"
+          [`${this.alias}.applicationDueDate`]: "ASC",
+          [`${this.alias}.applicationOpenDate`]: "DESC",
+          [`${this.alias}.id`]: "ASC"
         })
       default:
         throw new HttpException(
@@ -76,9 +80,5 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
           HttpStatus.NOT_IMPLEMENTED
         )
     }
-  }
-
-  public addDefaultOrderBy() {
-    return this.addOrderBy("listingPreferences.ordinal", "ASC")
   }
 }

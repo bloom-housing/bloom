@@ -14,7 +14,7 @@ import {
 
 interface PaginationProps {
   page?: number
-  limit: number | "all"
+  limit?: number
 }
 
 interface UseSingleApplicationDataProps extends PaginationProps {

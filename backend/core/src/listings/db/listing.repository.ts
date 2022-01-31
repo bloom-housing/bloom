@@ -10,11 +10,12 @@ import { GenericRepository } from "../../shared/db/generic.repository"
 @EntityRepository(Listing)
 export class ListingRepository extends GenericRepository<Listing> {
   public async list(queryParams: ListingsQueryParams): Promise<Pagination<Listing>> {
-    let innerFilteredQuery = this.getListingsQueryBuilder()
+    let innerFilteredQuery = this.createQueryBuilder()
       .leftJoinRelationsForFilters()
       .addFilters(queryParams.filter)
+      .addOrderFromFieldEnum(queryParams.orderBy)
 
-    let qb = this.getListingsQueryBuilder()
+    let qb = this.createQueryBuilder()
     qb = qb.leftJoinAndSelectAll()
       .addInnerFilterSubQuery(innerFilteredQuery)
       .addOrderFromFieldEnum(queryParams.orderBy)
@@ -34,8 +35,8 @@ export class ListingRepository extends GenericRepository<Listing> {
     return paginatedResult
   }
 
-  public async listOverdueListings(): Promise<Array<{id: string, applicationDueDate?: Date, status: ListingStatus}>> {
-    return await this.getListingsQueryBuilder()
+  public async listOverdueListings(): Promise<Array<{ id: string, applicationDueDate?: Date, status: ListingStatus }>> {
+    return await this.createQueryBuilder()
       .select(["listings.id", "listings.applicationDueDate", "listings.status"])
       .where(`listings.status = '${ListingStatus.active}'`)
       .andWhere(`listings.applicationDueDate IS NOT NULL`)
@@ -44,14 +45,14 @@ export class ListingRepository extends GenericRepository<Listing> {
   }
 
   public async getListingById(id: string) {
-    return this.getListingsQueryBuilder()
+    return this.createQueryBuilder()
       .leftJoinAndSelectAll()
       .where("listings.id = :id", { id })
-      .addDefaultOrderBy()
+      .addOrderBy("listingPreferences.ordinal", "ASC")
       .getOne()
   }
 
-  private getListingsQueryBuilder() {
-    return new ListingsQueryBuilder(this.createQueryBuilder("listings"))
+  public createQueryBuilder() {
+    return new ListingsQueryBuilder(super.createQueryBuilder("listings"))
   }
 }

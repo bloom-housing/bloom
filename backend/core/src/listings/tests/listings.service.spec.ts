@@ -8,6 +8,8 @@ import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ListingsQueryParams } from "../dto/listings-query-params"
 import { Compare } from "../../shared/dto/filter.dto"
 import { ListingFilterParams } from "../dto/listing-filter-params"
+import { ListingRepository } from "../db/listing.repository"
+import { ListingsQueryBuilder } from "../db/listings-query-builder"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
@@ -22,79 +24,96 @@ const mockListings = [
     property: { id: "test-property1", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf2",
     property: { id: "test-property2", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf3",
     property: { id: "test-property3", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf4",
     property: { id: "test-property4", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf5",
     property: { id: "test-property5", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf6",
     property: { id: "test-property6", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
+    unitsSummarized: { byUnitTypeAndRent: [] }
   },
   {
     id: "asdf7",
     property: { id: "test-property7", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] },
-  },
+    unitsSummarized: { byUnitTypeAndRent: [] }
+  }
 ]
 const mockFilteredListings = mockListings.slice(0, 2)
 const mockInnerQueryBuilder = {
+  alias: "listings",
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
+  skip: jest.fn().mockReturnThis(),
+  take: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   groupBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
-  offset: jest.fn().mockReturnThis(),
-  limit: jest.fn().mockReturnThis(),
   getParameters: jest.fn().mockReturnValue({ param1: "param1value" }),
   getQuery: jest.fn().mockReturnValue("innerQuery"),
   getCount: jest.fn().mockReturnValue(7),
+  leftJoinAndSelectAll: jest.fn().mockReturnThis(),
+  leftJoinRelationsForFilters: jest.fn().mockReturnThis(),
+  addFilters: ListingsQueryBuilder.prototype.addFilters,
+  addOrderFromFieldEnum: ListingsQueryBuilder.prototype.addOrderFromFieldEnum,
+  getMany: jest.fn().mockReturnValue(mockListings),
+  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length])
 }
 const mockQueryBuilder = {
+  alias: "listings",
   select: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
+  skip: jest.fn().mockReturnThis(),
+  take: jest.fn().mockReturnThis(),
   leftJoinAndSelect: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   setParameters: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
+  leftJoinAndSelectAll: jest.fn().mockReturnThis(),
+  leftJoinRelationsForFilters: jest.fn().mockReturnThis(),
+  addOrderFromFieldEnum: ListingsQueryBuilder.prototype.addOrderFromFieldEnum,
+  addInnerFilterSubQuery: jest.fn().mockReturnThis(),
+  paginate: ListingsQueryBuilder.prototype.paginate,
   getMany: jest.fn().mockReturnValue(mockListings),
+  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length])
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
   save: jest.fn(),
+  list: ListingRepository.prototype.list
 }
 
 describe("ListingsService", () => {
@@ -106,17 +125,17 @@ describe("ListingsService", () => {
         ListingsService,
         {
           provide: getRepositoryToken(Listing),
-          useValue: mockListingsRepo,
+          useValue: mockListingsRepo
         },
         {
           provide: getRepositoryToken(AmiChart),
-          useValue: jest.fn(),
+          useValue: jest.fn()
         },
         {
           provide: TranslationsService,
-          useValue: { translateListing: jest.fn() },
-        },
-      ],
+          useValue: { translateListing: jest.fn() }
+        }
+      ]
     }).compile()
 
     service = module.get(ListingsService)
@@ -152,9 +171,9 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["="],
-            neighborhood: expectedNeighborhood,
-          },
-        ],
+            neighborhood: expectedNeighborhood
+          }
+        ]
       }
 
       const listings = await service.list(queryParams)
@@ -163,7 +182,7 @@ describe("ListingsService", () => {
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
-          neighborhood_0: expectedNeighborhood,
+          neighborhood_0: expectedNeighborhood
         }
       )
     })
@@ -180,9 +199,9 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["IN"],
-            neighborhood: expectedNeighborhoodString,
-          },
-        ],
+            neighborhood: expectedNeighborhoodString
+          }
+        ]
       }
 
       const listings = await service.list(queryParams)
@@ -191,7 +210,7 @@ describe("ListingsService", () => {
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
         {
-          neighborhood_0: expectedNeighborhoodArray,
+          neighborhood_0: expectedNeighborhoodArray
         }
       )
     })
@@ -203,11 +222,11 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["="],
-            otherField: "otherField",
+            otherField: "otherField"
             // The querystring can contain unknown fields that aren't on the
             // ListingFilterParams type, so we force it to the type for testing.
-          } as ListingFilterParams,
-        ],
+          } as ListingFilterParams
+        ]
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
@@ -226,9 +245,9 @@ describe("ListingsService", () => {
             // and the type system trusts that whatever is provided is correct,
             // so we force it to an invalid type for testing.
             $comparison: "); DROP TABLE Students;" as Compare,
-            name: "test name",
-          } as ListingFilterParams,
-        ],
+            name: "test name"
+          } as ListingFilterParams
+        ]
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
@@ -236,115 +255,37 @@ describe("ListingsService", () => {
       )
     })
 
-    it("should not call limit() and offset() if pagination params are not specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
 
-      // Empty params (no pagination) -> no limit/offset
-      const params = {}
-      const listings = await service.list(params)
+    describe("ListingsService.list sorting", () => {
+      it("defaults to ordering by application dates when no orderBy param is set", async () => {
+        mockListingsRepo.createQueryBuilder
+          .mockReturnValueOnce(mockInnerQueryBuilder)
+          .mockReturnValueOnce(mockQueryBuilder)
 
-      expect(listings.items).toEqual(mockListings)
-      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
-      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
-    })
+        await service.list({})
 
-    it("should not call limit() and offset() if incomplete pagination params are specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
+        const expectedOrderByArgument = {
+          "listings.applicationDueDate": "ASC",
+          "listings.applicationOpenDate": "DESC",
+          "listings.id": "ASC"
+        }
 
-      // Invalid pagination params (page specified, but not limit) -> no limit/offset
-      const params = { page: 3 }
-      const listings = await service.list(params)
+        // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)
+        expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
+        expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
 
-      expect(listings.items).toEqual(mockListings)
-      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
-      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
-      expect(listings.meta).toEqual({
-        currentPage: 1,
-        itemCount: mockListings.length,
-        itemsPerPage: mockListings.length,
-        totalItems: mockListings.length,
-        totalPages: 1,
+        // The full query must be ordered so that the ordering is applied within a page (if pagination is requested)
+        expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
+        expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
+
+        // The full query is additionally ordered by the number of bedrooms (or max_occupancy) at the unit level.
+        expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
+        expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
+          "units.maxOccupancy",
+          "ASC",
+          "NULLS LAST"
+        )
       })
-    })
-
-    it("should not call limit() and offset() if invalid pagination params are specified", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
-
-      // Invalid pagination params (page specified, but not limit) -> no limit/offset
-      const params = { page: ("hello" as unknown) as number } // force the type for testing
-      const listings = await service.list(params)
-
-      expect(listings.items).toEqual(mockListings)
-      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledTimes(0)
-      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledTimes(0)
-      expect(listings.meta).toEqual({
-        currentPage: 1,
-        itemCount: mockListings.length,
-        itemsPerPage: mockListings.length,
-        totalItems: mockListings.length,
-        totalPages: 1,
-      })
-    })
-
-    it("should call limit() and offset() if pagination params are specified", async () => {
-      mockQueryBuilder.getMany.mockReturnValueOnce(mockFilteredListings)
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
-
-      // Valid pagination params -> offset and limit called appropriately
-      const params = { page: 3, limit: 2 }
-      const listings = await service.list(params)
-
-      expect(listings.items).toEqual(mockFilteredListings)
-      expect(mockInnerQueryBuilder.limit).toHaveBeenCalledWith(2)
-      expect(mockInnerQueryBuilder.offset).toHaveBeenCalledWith(4)
-      expect(mockInnerQueryBuilder.getCount).toHaveBeenCalledTimes(1)
-      expect(listings.meta).toEqual({
-        currentPage: 3,
-        itemCount: 2,
-        itemsPerPage: 2,
-        totalItems: mockListings.length,
-        totalPages: 4,
-      })
-    })
-  })
-
-  describe("ListingsService.list sorting", () => {
-    it("defaults to ordering by application dates when no orderBy param is set", async () => {
-      mockListingsRepo.createQueryBuilder
-        .mockReturnValueOnce(mockInnerQueryBuilder)
-        .mockReturnValueOnce(mockQueryBuilder)
-
-      await service.list({})
-
-      const expectedOrderByArgument = {
-        "listings.applicationDueDate": "ASC",
-        "listings.applicationOpenDate": "DESC",
-        "listings.id": "ASC",
-      }
-
-      // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-
-      // The full query must be ordered so that the ordering is applied within a page (if pagination is requested)
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
-
-      // The full query is additionally ordered by the number of bedrooms (or max_occupancy) at the unit level.
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
-        "units.max_occupancy",
-        "ASC",
-        "NULLS LAST"
-      )
     })
 
     it("orders by the orderBy param (when set)", async () => {
@@ -354,7 +295,7 @@ describe("ListingsService", () => {
 
       await service.list({ orderBy: OrderByFieldsEnum.mostRecentlyUpdated })
 
-      const expectedOrderByArgument = { "listings.updated_at": "DESC" }
+      const expectedOrderByArgument = { "listings.updatedAt": "DESC" }
 
       expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledTimes(1)
       expect(mockInnerQueryBuilder.orderBy).toHaveBeenCalledWith(expectedOrderByArgument)
@@ -366,7 +307,7 @@ describe("ListingsService", () => {
       // (or max_occupancy) at the unit level.
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledTimes(1)
       expect(mockQueryBuilder.addOrderBy).toHaveBeenCalledWith(
-        "units.max_occupancy",
+        "units.maxOccupancy",
         "ASC",
         "NULLS LAST"
       )

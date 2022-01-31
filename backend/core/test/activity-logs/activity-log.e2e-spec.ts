@@ -65,7 +65,7 @@ describe("Programs", () => {
     listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
 
     const listingsRes = await supertest(app.getHttpServer())
-      .get("/listings?limit=all&view=full")
+      .get("/listings")
       .expect(200)
     const appBody = getTestAppBody(listingsRes.body.items[0].id)
     await supertest(app.getHttpServer())
