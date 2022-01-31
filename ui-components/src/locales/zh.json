@@ -156,7 +156,7 @@
       },
       "expectingChanges": {
         "title": "預計家庭變化",
-        "question": "您預計家庭在接下來的 12 個月內可能發生什麼變化？"
+        "question": "在未來12個月中，您預期您的住家會發生什麼變化嗎，例如家庭人數？"
       },
       "householdStudent": {
         "title": "家人包括接近 18 歲的學生或成員",

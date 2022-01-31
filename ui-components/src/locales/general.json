@@ -295,7 +295,7 @@
       },
       "expectingChanges": {
         "title": "Expecting Household Changes",
-        "question": "Do you anticipate any changes in your household in the next 12 months?"
+        "question": "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
       },
       "householdStudent": {
         "title":  "Household Includes Student or Member Nearing 18",
