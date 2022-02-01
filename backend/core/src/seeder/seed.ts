@@ -304,7 +304,12 @@ async function seed() {
   }
 
   await userRepo.save(admin)
-  await userRepo.save({ ...mfaUser, mfaEnabled: true, mfaCode: "123456" })
+  await userRepo.save({
+    ...mfaUser,
+    mfaEnabled: true,
+    mfaCode: "123456",
+    mfaCodeUpdatedAt: new Date(),
+  })
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
   const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
   await rolesRepo.save(roles)

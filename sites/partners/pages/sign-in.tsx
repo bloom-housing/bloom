@@ -87,7 +87,7 @@ const SignIn = () => {
         await router.push("/")
       } catch (error) {
         const { status } = error.response || {}
-        determineNetworkError(status, error)
+        determineNetworkError(status, error, true)
       }
     },
     [email, password, determineNetworkError, login, router]

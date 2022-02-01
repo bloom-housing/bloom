@@ -37,10 +37,8 @@ const FormSignInMFACode = ({
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
         <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.verificationChoiceMainTitle")}</h2>
-        <p className="form-card__sub-title">
-          {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
-        </p>
+        <h2 className="form-card__title">{t("nav.signInMFA.verifyTitle")}</h2>
+        <p className="form-card__sub-title">{t("nav.signInMFA.haveSentCode")}</p>
       </div>
       {Object.entries(errors).length > 0 && !networkError.error && (
         <AlertBox type="alert" inverted closeable>

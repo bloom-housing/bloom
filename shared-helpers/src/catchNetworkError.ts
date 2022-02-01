@@ -6,7 +6,11 @@ export type NetworkErrorValue = {
   content: string
 } | null
 
-export type NetworkErrorDetermineError = (status: number, error: Error) => void
+export type NetworkErrorDetermineError = (
+  status: number,
+  error: Error,
+  mfaEnabled?: boolean
+) => void
 
 export type NetworkErrorReset = () => void
 
@@ -16,10 +20,12 @@ export type NetworkErrorReset = () => void
 export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkErrorValue>(null)
 
-  const determineNetworkError: NetworkErrorDetermineError = (status, error) => {
+  const determineNetworkError: NetworkErrorDetermineError = (status, error, mfaEnabled) => {
     if (status === 401) {
       setNetworkError({
-        title: t("authentication.signIn.enterValidEmailAndPassword"),
+        title: mfaEnabled
+          ? t("authentication.signIn.enterValidEmailAndPasswordAndMFA")
+          : t("authentication.signIn.enterValidEmailAndPassword"),
         content: t("authentication.signIn.afterFailedAttempts"),
       })
     } else if (status === 429) {
