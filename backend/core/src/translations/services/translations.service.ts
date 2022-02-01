@@ -8,34 +8,7 @@ import { Language } from "../../shared/types/language-enum"
 import { Listing } from "../../listings/entities/listing.entity"
 import { GoogleTranslateService } from "./google-translate.service"
 import { GeneratedListingTranslation } from "../entities/generated-listing-translation.entity"
-import { isEmpty } from "../../shared/utils/is-empty"
-
-const TRANSLATION_KEYS = [
-  "applicationPickUpAddressOfficeHours",
-  "costsNotIncluded",
-  "creditHistory",
-  "criminalBackground",
-  "programRules",
-  "rentalAssistance",
-  "rentalHistory",
-  "requiredDocuments",
-  "specialNotes",
-  "whatToExpect",
-  {
-    events: ["note", "label"],
-    property: [
-      "accessibility",
-      "amenities",
-      "neighborhood",
-      "petPolicy",
-      "servicesOffered",
-      "smokingPolicy",
-      "unitAmenities",
-    ],
-    whatToExpect: ["applicantsWillBeContacted", "allInfoWillBeVerified", "bePreparedIfChosen"],
-    preferences: ["title", "description", "subtitle"],
-  },
-]
+import * as lodash from "lodash"
 
 @Injectable()
 export class TranslationsService extends AbstractServiceFactory<
@@ -96,38 +69,53 @@ export class TranslationsService extends AbstractServiceFactory<
       console.warn("listing translation requested, but google translate service is not configured")
       return
     }
-    const keysAndValuesToBeTranslated = this.fetchKeysAndValuesToBeTranslated(listing)
-    /**
-     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
-     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
-     */
-    if (listing.listingPreferences) {
-      listing.listingPreferences.forEach((val) => {
-        keysAndValuesToBeTranslated.keys.push(
-          "preferences.title",
-          "preferences.description",
-          "preferences.subtitle"
-        )
-        keysAndValuesToBeTranslated.values.push(
-          val.preference.title,
-          val.preference.description,
-          val.preference.subtitle
-        )
-      })
-    }
-    if (
-      !keysAndValuesToBeTranslated?.values ||
-      (keysAndValuesToBeTranslated?.values && keysAndValuesToBeTranslated.values.length === 0)
-    ) {
-      return
+
+    const pathsToFilter = [
+      "applicationPickUpAddressOfficeHours",
+      "costsNotIncluded",
+      "creditHistory",
+      "criminalBackground",
+      "programRules",
+      "rentalAssistance",
+      "rentalHistory",
+      "requiredDocuments",
+      "specialNotes",
+      "whatToExpect",
+      "property.accessibility",
+      "property.amenities",
+      "property.neighborhood",
+      "property.petPolicy",
+      "property.servicesOffered",
+      "property.smokingPolicy",
+      "property.unitAmenities",
+    ]
+
+    for (let i = 0; i < listing.events.length; i++) {
+      pathsToFilter.push(`events[${i}].note`)
+      pathsToFilter.push(`events[${i}].label`)
     }
 
+    for (let i = 0; i < listing.listingPreferences.length; i++) {
+      pathsToFilter.push(`listingPreferences[${i}].preference.title`)
+      pathsToFilter.push(`listingPreferences[${i}].preference.description`)
+      pathsToFilter.push(`listingPreferences[${i}].preference.subtitle`)
+    }
+
+    const listingPathsAndValues: { [key: string]: any } = {}
+    for (const path of pathsToFilter) {
+      const value = lodash.get(listing, path)
+      if (value) {
+        listingPathsAndValues[path] = lodash.get(listing, path)
+      }
+    }
+
+    // Caching
     let persistedTranslatedValues
     persistedTranslatedValues = await this.getPersistedTranslatedValues(listing, language)
 
     if (!persistedTranslatedValues || persistedTranslatedValues.timestamp < listing.updatedAt) {
       const newTranslations = await this.googleTranslateService.fetch(
-        keysAndValuesToBeTranslated.values,
+        Object.values(listingPathsAndValues),
         language
       )
       persistedTranslatedValues = await this.persistTranslatedValues(
@@ -137,64 +125,14 @@ export class TranslationsService extends AbstractServiceFactory<
         newTranslations
       )
     }
-    /**
-     * TODO: update findData and setValue to accommodate new preference structure, so we're not mapping.
-     * This is a patch as I don't want to alter findData or setValue under a small time frame. The updates to those functions should include tests, which don't currently exist :(
-     */
-    let preferenceIndex = 0
-    keysAndValuesToBeTranslated.keys.forEach((key, index) => {
-      if (key === "preferences.title") {
-        listing.listingPreferences[preferenceIndex].preference.title =
-          persistedTranslatedValues.translations[0][index]
-      } else if (key === "preferences.description") {
-        listing.listingPreferences[preferenceIndex].preference.description =
-          persistedTranslatedValues.translations[0][index]
-      } else if (key === "preferences.subtitle") {
-        listing.listingPreferences[preferenceIndex].preference.subtitle =
-          persistedTranslatedValues.translations[0][index]
-        preferenceIndex++
-      } else {
-        this.setValue(listing, key, persistedTranslatedValues.translations[0][index])
-      }
-    })
+
+    for (const [index, path] of Object.keys(listingPathsAndValues).entries()) {
+      // accessing 0th index here because google translate service response returns multiple
+      // possible arrays with results, we are interested in first
+      lodash.set(listing, path, persistedTranslatedValues.translations[0][index])
+    }
+
     return listing
-  }
-
-  // Sets value to the object by string path. eg. "property.accessibility" or "preferences.0.title"
-  private setValue(object, path, value) {
-    return path
-      .split(".")
-      .reduce(
-        (currentObject, currentPath, index) =>
-          (currentObject[currentPath] =
-            path.split(".").length === ++index ? value : currentObject[currentPath] || {}),
-        object
-      )
-  }
-
-  // Returns not null key-values pairs also from nested properties
-  private findData(translationKeys, object: Listing, results, parent = null) {
-    translationKeys.forEach((key) => {
-      if (typeof key === "string") {
-        if (object[key] && isEmpty(object[key]) === false) {
-          results.keys.push(parent ? [parent, key].join(".") : key)
-          results.values.push(object[key])
-        }
-        return
-      } else {
-        for (const k in key) {
-          if (object[k]) {
-            this.findData(key[k], object[k], results, k)
-          }
-        }
-      }
-    })
-  }
-
-  private fetchKeysAndValuesToBeTranslated(listing: Listing) {
-    const result = { keys: [], values: [] }
-    this.findData(TRANSLATION_KEYS, listing, result)
-    return result
   }
 
   private async persistTranslatedValues(
