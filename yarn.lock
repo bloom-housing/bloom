@@ -9410,15 +9410,15 @@ capture-exit@^2.0.0:
   dependencies:
     rsvp "^4.8.4"
 
-casbin@^5.1.6:
-  version "5.1.6"
-  resolved "https://registry.yarnpkg.com/casbin/-/casbin-5.1.6.tgz#ef8ad6361359504d26b0d0597a31c7a4d569cdf1"
-  integrity sha512-zqtABqOzkewL/nXCLxHOCTyFQ00wm81XOrC4qCnLignwT3hOp2INyCiaGze1ch4QtiUv6ehiI+/hOm3SnvhTiA==
+casbin@5.13.0:
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/casbin/-/casbin-5.13.0.tgz#286835c79246eb43319d3507371457efe6d2e434"
+  integrity sha512-pN8R37/ALma3OMBx7DP9QPUWs0qI+0t+VHeUHxwM4eIY+GR0bJT74blH/ob0f/hG7WpVuA8YO3he3WSV/MyV9w==
   dependencies:
     await-lock "^2.0.1"
-    expression-eval "^2.0.0"
-    ip "^1.1.5"
-    micromatch "^4.0.2"
+    csv-parse "^4.15.3"
+    expression-eval "^4.0.0"
+    picomatch "^2.2.3"
 
 case-sensitive-paths-webpack-plugin@^2.3.0:
   version "2.4.0"
@@ -10655,6 +10655,11 @@ csstype@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.2.tgz#ee5ff8f208c8cd613b389f7b222c9801ca62b3f7"
   integrity sha512-ofovWglpqoqbfLNOTBNZLSbMuGrblAf1efvvArGKOZMBrIoJeu5UsAipQolkijtyQx5MtAzT/J9IHj/CEY1mJw==
+
+csv-parse@^4.15.3:
+  version "4.16.3"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-4.16.3.tgz#7ca624d517212ebc520a36873c3478fa66efbaf7"
+  integrity sha512-cO1I/zmz4w2dcKHVvpCr7JVRu8/FymG5OEpmvsZYlccYolPBLoVGKUHgNoc4ZGkFeFlWGEDmMyBM+TTqRdW/wg==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -12186,10 +12191,10 @@ express@4.17.1, express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-expression-eval@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/expression-eval/-/expression-eval-2.1.0.tgz#422915caa46140a7c5b5f248650dea8bf8236e62"
-  integrity sha512-FUJO/Akvl/JOWkvlqZaqbkhsEWlCJWDeZG4tzX96UH68D9FeRgYgtb55C2qtqbORC0Q6x5419EDjWu4IT9kQfg==
+expression-eval@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/expression-eval/-/expression-eval-4.0.0.tgz#d6a07c93e8b33e635710419d4a595d9208b9cc5e"
+  integrity sha512-YHSnLTyIb9IKaho2IdQbvlei/pElxnGm48UgaXJ1Fe5au95Ck0R9ftm6rHJQuKw3FguZZ4eXVllJFFFc7LX0WQ==
   dependencies:
     jsep "^0.3.0"
 
