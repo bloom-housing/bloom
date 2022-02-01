@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.42...@bloom-housing/public@4.0.1-alpha.43) (2022-02-01)
+
+
+### Bug Fixes
+
+* infinite page width ([#2459](https://github.com/bloom-housing/bloom/issues/2459)) ([190ff9a](https://github.com/bloom-housing/bloom/commit/190ff9a4760b0b64485094964c3e7a52fec12467))
+
+
+
+
+
 ## [4.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.41...@bloom-housing/public@4.0.1-alpha.42) (2022-02-01)
 
 **Note:** Version bump only for package @bloom-housing/public
