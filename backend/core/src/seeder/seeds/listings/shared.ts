@@ -17,6 +17,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
+import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
@@ -439,7 +440,7 @@ export const flatRentAndRentBasedOnIncomeProgram: ProgramSeedType = {
   description: "Do you want to apply for apartments with flat rent and rent based on income?",
   formMetadata: {
     key: "rentBasedOnIncome",
-    type: "checkbox",
+    type: FormMetaDataType.checkbox,
     options: [
       {
         key: "flatRent",

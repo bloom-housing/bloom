@@ -668,15 +668,6 @@
           "label": "At least one member of my household is an Alameda Unified School District employee",
           "description": "At least one member of my household is an Alameda Unified School District employee."
         }
-      },
-      "alamedaLive": {
-        "title": "Live or Work in the County of Alameda",
-        "live": {
-          "label": "At least one member of my household lives in the County of Alameda"
-        },
-        "work": {
-          "label": "At least one member of my household works in the County of Alameda"
-        }
       }
     },
     "review": {
