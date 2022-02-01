@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.2-alpha.16",
+  "version": "3.0.2-alpha.21",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,
@@ -13,7 +13,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "rimraf dist && nest build",
-    "start": "node dist/src/main",
+    "start": "node --max-old-space-size=4096 dist/src/main",
     "dev": "NODE_ENV=development nest start --watch --preserveWatchOutput",
     "debug": "nest start --debug --watch",
     "db:drop": "psql -c 'DROP DATABASE IF EXISTS bloom;'",
@@ -66,6 +66,7 @@
     "ioredis": "^4.24.4",
     "joi": "^17.3.0",
     "jwt-simple": "^0.5.6",
+    "lodash": "^4.17.21",
     "nanoid": "^3.1.12",
     "nestjs-throttler-storage-redis": "^0.1.11",
     "nestjs-typeorm-paginate": "^3.1.3",

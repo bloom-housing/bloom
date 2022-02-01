@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.37...@bloom-housing/public@4.0.1-alpha.38) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.36...@bloom-housing/public@4.0.1-alpha.37) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.35...@bloom-housing/public@4.0.1-alpha.36) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.34...@bloom-housing/public@4.0.1-alpha.35) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.33...@bloom-housing/public@4.0.1-alpha.34) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.32...@bloom-housing/public@4.0.1-alpha.33) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.31...@bloom-housing/public@4.0.1-alpha.32) (2022-01-27)
+
+
+### Features
+
+* outdated password messaging updates ([b14e19d](https://github.com/bloom-housing/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
+
+
+
+
+
+## [4.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.30...@bloom-housing/public@4.0.1-alpha.31) (2022-01-26)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.29...@bloom-housing/public@4.0.1-alpha.30) (2022-01-26)
+
+
+### Bug Fixes
+
+* Fix infinite page width ([#2434](https://github.com/bloom-housing/bloom/issues/2434)) ([12ac594](https://github.com/bloom-housing/bloom/commit/12ac594a7aa5a04370b20b19d6fff3189c0cfeee)), closes [#2374](https://github.com/bloom-housing/bloom/issues/2374)
+
+
+
+
+
 ## [4.0.1-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.28...@bloom-housing/public@4.0.1-alpha.29) (2022-01-24)
 
 **Note:** Version bump only for package @bloom-housing/public
