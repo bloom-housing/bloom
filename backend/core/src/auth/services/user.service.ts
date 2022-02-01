@@ -280,18 +280,22 @@ export class UserService {
     }
     const existingUser = await this.findByEmail(dto.email)
 
-    if (existingUser && !existingUser.roles) {
-      return await this.userRepository.save({
-        ...existingUser,
-        roles: dto.roles,
-        leasingAgentInListings: dto.leasingAgentInListings,
-        confirmationToken:
-          existingUser.confirmationToken ||
-          UserService.createConfirmationToken(existingUser.id, existingUser.email),
-        confirmedAt: null,
-      })
-    } else if (existingUser) {
-      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+    if (existingUser) {
+      if (!existingUser.roles && dto.roles) {
+        // existing user && public user && user will get roles -> trying to grant partner access to a public user
+        return await this.userRepository.save({
+          ...existingUser,
+          roles: dto.roles,
+          leasingAgentInListings: dto.leasingAgentInListings,
+          confirmationToken:
+            existingUser.confirmationToken ||
+            UserService.createConfirmationToken(existingUser.id, existingUser.email),
+          confirmedAt: null,
+        })
+      } else {
+        // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
+        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      }
     }
     const newUser = await this.userRepository.save(dto)
     newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
