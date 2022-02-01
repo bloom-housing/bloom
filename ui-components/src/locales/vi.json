@@ -1,4 +1,4 @@
-﻿{
+{
   "account": {
     "accountSettings": "Thiết lập Tài khoản",
     "accountSettingsSubtitle": "Thiết lập Tài khoản, email và mật khẩu",
@@ -156,7 +156,7 @@
       },
       "expectingChanges": {
         "title": "Dự Kiến Những Thay Đổi Trong Hộ Gia Đình",
-        "question": "Quý vị có dự đoán bất kỳ thay đổi nào trong hộ gia đình mình trong 12 tháng tới không?"
+        "question": "Bạn có dự kiến bất kỳ thay đổi nào trong hộ gia đình của bạn trong 12 tháng tới không, chẳng hạn như số người?"
       },
       "householdStudent": {
         "title": "Hộ Gia Đình Có Sinh Viên hoặc Thành Viên Sắp 18 Tuổi",
@@ -472,6 +472,7 @@
     "additionalInformation": "Thông tin Bổ sung",
     "allUnits": "Tất cả các Căn nhà",
     "allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
+    "annualIncome": "%{income} mỗi năm",
     "applicationDeadline": "Hạn nộp Đơn ghi danh",
     "applicationFCFS": "Ai Nộp đơn Trước Được Nhận trước",
     "applicationFee": "Lệ phí Ghi danh",
@@ -524,6 +525,7 @@
     },
     "maxIncomeMonth": "Thu nhập Tối đa / Tháng",
     "maxIncomeYear": "Thu nhập Tối đa / Năm",
+    "monthlyIncome": "%{income} mỗi tháng",
     "moreBuildingSelectionCriteria": "Tìm hiểu thêm về Tiêu chí Lựa chọn Tòa nhà",
     "noAvailableUnits": "Không có căn nhà nào còn trống tại thời điểm này.",
     "noOpenListings": "Không có danh sách nhà nào hiện đang mở nhận đơn ghi danh.",

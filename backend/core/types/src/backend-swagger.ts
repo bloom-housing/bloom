@@ -5109,6 +5109,12 @@ export interface Listing {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  publishedAt?: Date
+
+  /**  */
+  closedAt?: Date
 }
 
 export interface PaginatedListing {

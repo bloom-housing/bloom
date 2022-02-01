@@ -3,6 +3,10 @@ describe("Listing Management Tests", () => {
     cy.login()
   })
 
+  after(() => {
+    cy.signOut()
+  })
+
   it("full listing publish", () => {
     cy.visit("/")
     cy.get("a > .button").contains("Add Listing").click()
@@ -96,7 +100,8 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").type(listing["leasingAgentAddress.zipCode"])
       cy.getByID("leasingAgentAddress.state").select(listing["leasingAgentAddress.state"])
 
-      cy.getByTestId("mailing-address-checkbox").check()
+      cy.get("#applicationsMailedInYes").check()
+      cy.get("#mailInAnotherAddress").check()
       cy.getByTestId("mailing-address-street").type(listing["leasingAgentAddress.street"])
       cy.getByTestId("mailing-address-street2").type(listing["leasingAgentAddress.street2"])
       cy.getByTestId("mailing-address-city").type(listing["leasingAgentAddress.city"])
@@ -153,8 +158,8 @@ describe("Listing Management Tests", () => {
       cy.getByID("buildingAddress.state").contains("CA")
       cy.getByID("buildingAddress.zipCode").contains(listing["buildingAddress.zipCode"])
       cy.get("#yearBuilt").contains(listing["yearBuilt"])
-      cy.get("#longitude").contains("-122.400783")
-      cy.get("#latitude").contains("37.790057")
+      cy.get("#longitude").contains("-122.40078")
+      cy.get("#latitude").contains("37.79006")
       cy.get("#reservedCommunityType").contains(listing["reservedCommunityType.id"])
       cy.get("#reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
       cy.get("#unitTable").contains(listing["number"])
@@ -207,13 +212,19 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.city").contains(listing["leasingAgentAddress.city"])
       cy.getByID("leasingAgentAddress.state").contains("CA")
       cy.getByID("leasingAgentAddress.zipCode").contains(listing["leasingAgentAddress.zipCode"])
-      cy.get("#applicationPickupQuestion").contains("No")
-      cy.getByTestId("mailing-address-checkbox").contains("Yes")
-      cy.getByTestId("mailing-address-street").contains(listing["leasingAgentAddress.street"])
-      cy.getByTestId("mailing-address-street2").contains(listing["leasingAgentAddress.street2"])
-      cy.getByTestId("mailing-address-city").contains(listing["leasingAgentAddress.city"])
-      cy.getByTestId("mailing-address-zip").contains(listing["leasingAgentAddress.zipCode"])
-      cy.getByTestId("mailing-address-state").contains("CA")
+      cy.getByID("applicationPickupQuestion").contains("No")
+      cy.getByID("applicationMailingSection").contains("Yes")
+      cy.getByTestId("applicationMailingAddress.street").contains(
+        listing["leasingAgentAddress.street"]
+      )
+      cy.getByTestId("applicationMailingAddress.street2").contains(
+        listing["leasingAgentAddress.street2"]
+      )
+      cy.getByTestId("applicationMailingAddress.city").contains(listing["leasingAgentAddress.city"])
+      cy.getByTestId("applicationMailingAddress.zipCode").contains(
+        listing["leasingAgentAddress.zipCode"]
+      )
+      cy.getByTestId("applicationMailingAddress.state").contains("CA")
       cy.get("#applicationDropOffQuestion").contains("No")
       cy.get("#postmarksConsideredQuestion").contains("Yes")
       cy.getByTestId("postmark-date").contains("12")
@@ -226,8 +237,8 @@ describe("Listing Management Tests", () => {
         listing["additionalApplicationSubmissionNotes"]
       )
       cy.getByID("openhouseHeader").contains("10/04/2022")
-      cy.getByID("openhouseHeader").contains("10:04:00 AM")
-      cy.getByID("openhouseHeader").contains("11:05:00 PM")
+      cy.getByID("openhouseHeader").contains("10:04 AM")
+      cy.getByID("openhouseHeader").contains("11:05 PM")
     })
   })
 
@@ -237,7 +248,7 @@ describe("Listing Management Tests", () => {
     cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
     cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
     cy.fixture("listing").then((listing) => {
-      cy.get("#name").contains(`${listing["name"]} (Edited)`)
+      cy.contains(`${listing["name"]} (Edited)`)
     })
   })
 })
