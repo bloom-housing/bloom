@@ -123,6 +123,7 @@ export * from "./src/page_components/sign-in/FormSignIn"
 export * from "./src/page_components/sign-in/FormSignInMFAType"
 export * from "./src/page_components/sign-in/FormSignInMFACode"
 export * from "./src/page_components/sign-in/FormSignInAddPhone"
+export * from "./src/page_components/forgot-password/FormForgotPassword"
 
 /* Responsive Wrappers */
 export * from "./src/sections/ResponsiveWrappers"

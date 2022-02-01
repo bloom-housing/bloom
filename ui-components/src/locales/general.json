@@ -16,12 +16,15 @@
       "return": "Return to applications"
     },
     "settings": {
+      "resetYourPassword": "Reset your Password",
+      "needUpdatePassword": "You'll need to update your password in order to log in to your account.",
       "passwordSuccess": "Password successfully updated",
       "update": "Update",
       "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmNewPassword": "Confirm new password",
+      "updatePassword": "Update password",
       "alerts": {
         "genericError": "There was an error. Please try again, or contact support for help.",
         "nameSuccess": "Name update successful",
@@ -292,7 +295,7 @@
       },
       "expectingChanges": {
         "title": "Expecting Household Changes",
-        "question": "Do you anticipate any changes in your household in the next 12 months?"
+        "question": "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
       },
       "householdStudent": {
         "title":  "Household Includes Student or Member Nearing 18",
@@ -859,7 +862,8 @@
       "partnersSignIn": "Partners Sign In",
       "dontHaveAccount": "Don't have an account",
       "enterLoginPassword": "Please enter your login password",
-      "enterLoginEmail": "Please enter your login email"
+      "enterLoginEmail": "Please enter your login email",
+      "changeYourPassword": "You can change your password"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -943,7 +947,10 @@
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
     "requiredFieldError": "This field is required",
-    "requiredFieldsError": "These fields are required"
+    "requiredFieldsError": "These fields are required",
+    "enterNewLoginPassword": "Please enter new login password",
+    "passwordConfirmationMismatch": "Password confirmation does not match",
+    "somethingWentWrong": "Oops! Looks like something went wrong."
   },
   "footer": {
     "contact": "Contact",
@@ -1513,6 +1520,7 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "here": "here",
     "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",

@@ -214,11 +214,17 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").contains(listing["leasingAgentAddress.zipCode"])
       cy.getByID("applicationPickupQuestion").contains("No")
       cy.getByID("applicationMailingSection").contains("Yes")
-      cy.getByTestId("mailing-address-street").contains(listing["leasingAgentAddress.street"])
-      cy.getByTestId("mailing-address-street2").contains(listing["leasingAgentAddress.street2"])
-      cy.getByTestId("mailing-address-city").contains(listing["leasingAgentAddress.city"])
-      cy.getByTestId("mailing-address-zip").contains(listing["leasingAgentAddress.zipCode"])
-      cy.getByTestId("mailing-address-state").contains("CA")
+      cy.getByTestId("applicationMailingAddress.street").contains(
+        listing["leasingAgentAddress.street"]
+      )
+      cy.getByTestId("applicationMailingAddress.street2").contains(
+        listing["leasingAgentAddress.street2"]
+      )
+      cy.getByTestId("applicationMailingAddress.city").contains(listing["leasingAgentAddress.city"])
+      cy.getByTestId("applicationMailingAddress.zipCode").contains(
+        listing["leasingAgentAddress.zipCode"]
+      )
+      cy.getByTestId("applicationMailingAddress.state").contains("CA")
       cy.get("#applicationDropOffQuestion").contains("No")
       cy.get("#postmarksConsideredQuestion").contains("Yes")
       cy.getByTestId("postmark-date").contains("12")
