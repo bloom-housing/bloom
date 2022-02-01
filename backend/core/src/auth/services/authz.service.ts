@@ -61,7 +61,8 @@ export class AuthzService {
         })
       )
     }
-    return e.enforce(user ? user.id : "anonymous", type, action, obj)
+
+    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
   /**
