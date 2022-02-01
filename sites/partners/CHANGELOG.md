@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.37...@bloom-housing/partners@4.0.1-alpha.38) (2022-02-01)
+
+
+### Features
+
+* **backend:** add publishedAt and closedAt to listing entity ([#2432](https://github.com/bloom-housing/bloom/issues/2432)) ([f3b0f86](https://github.com/bloom-housing/bloom/commit/f3b0f864a6d5d2ad3d886e828743454c3e8fca71))
+
+
+
+
+
 ## [4.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.36...@bloom-housing/partners@4.0.1-alpha.37) (2022-02-01)
 
 **Note:** Version bump only for package @bloom-housing/partners
