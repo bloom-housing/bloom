@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.17...@bloom-housing/backend-core@3.0.2-alpha.18) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.16...@bloom-housing/backend-core@3.0.2-alpha.17) (2022-01-27)
+
+
+### Features
+
+* outdated password messaging updates ([b14e19d](https://github.com/bloom-housing/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
+
+
+
+
+
+## [3.0.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.15...@bloom-housing/backend-core@3.0.2-alpha.16) (2022-01-24)
+
+
+### Bug Fixes
+
+* ami charts without all households ([#2430](https://github.com/bloom-housing/bloom/issues/2430)) ([92dfbad](https://github.com/bloom-housing/bloom/commit/92dfbad32c90d84ee1ec3a3468c084cb110aa8be))
+
+
+
+
+
 ## [3.0.2-alpha.15](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.14...@bloom-housing/backend-core@3.0.2-alpha.15) (2022-01-14)
 
 

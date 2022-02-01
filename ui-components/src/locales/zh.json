@@ -156,7 +156,7 @@
       },
       "expectingChanges": {
         "title": "預計家庭變化",
-        "question": "您預計家庭在接下來的 12 個月內可能發生什麼變化？"
+        "question": "在未來12個月中，您預期您的住家會發生什麼變化嗎，例如家庭人數？"
       },
       "householdStudent": {
         "title": "家人包括接近 18 歲的學生或成員",
@@ -472,6 +472,7 @@
     "additionalInformation": "其他資訊",
     "allUnits": "所有單位",
     "allUnitsReservedFor": "保留給 %{type} 的所有單位",
+    "annualIncome": "每年 %{income}",
     "applicationDeadline": "申請截止日期",
     "applicationFCFS": "先申請先服務",
     "applicationFee": "申請費",
@@ -524,6 +525,7 @@
     },
     "maxIncomeMonth": "最高收入 / 月",
     "maxIncomeYear": "最高收入 / 年",
+    "monthlyIncome": "每月 %{income}",
     "moreBuildingSelectionCriteria": "了解「樓宇選擇標準」詳情",
     "noAvailableUnits": "目前並無單位提供。",
     "noOpenListings": "目前沒有上市名單接受申請。",
