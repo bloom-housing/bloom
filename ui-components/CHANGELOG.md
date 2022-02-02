@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.43...@bloom-housing/ui-components@4.0.1-alpha.44) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
 ## [4.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.42...@bloom-housing/ui-components@4.0.1-alpha.43) (2022-02-02)
 
 **Note:** Version bump only for package @bloom-housing/ui-components

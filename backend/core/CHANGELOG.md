@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.28...@bloom-housing/backend-core@3.0.2-alpha.29) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
 ## [3.0.2-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.27...@bloom-housing/backend-core@3.0.2-alpha.28) (2022-02-02)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

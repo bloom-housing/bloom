@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.48...@bloom-housing/partners@4.0.1-alpha.49) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
 ## [4.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.47...@bloom-housing/partners@4.0.1-alpha.48) (2022-02-02)
 
 **Note:** Version bump only for package @bloom-housing/partners
