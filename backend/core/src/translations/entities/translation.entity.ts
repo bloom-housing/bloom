@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
-import { IsEnum, IsJSON } from "class-validator"
+import { IsDefined, IsEnum } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ApiProperty } from "@nestjs/swagger"
 import { Language } from "../../shared/types/language-enum"
@@ -23,6 +23,6 @@ export class Translation extends AbstractEntity {
 
   @Column({ type: "jsonb" })
   @Expose()
-  @IsJSON({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   translations: TranslationsType
 }
