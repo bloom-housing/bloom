@@ -120,7 +120,11 @@ const ApplicationPrograms = () => {
               <div key={pageProgram.id}>
                 <div className="form-card__group field text-lg">
                   <fieldset>
-                    <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+                    <p className="field-note mb-4">
+                      {pageProgram?.formMetadata?.type === FormMetaDataType.checkbox
+                        ? t("errors.selectAllThatApply")
+                        : t("t.pleaseSelectOne")}
+                    </p>
 
                     <FieldGroup
                       fieldGroupClassName="grid grid-cols-1"

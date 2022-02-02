@@ -68,10 +68,17 @@ export const mapApiToProgramsPaperForm = (programs: ApplicationProgram[]) => {
 
   programs?.forEach((program) => {
     const key = program.key
-    const selectedOption = program.options.find((item) => item.checked === true)?.key
 
+    const selectedOption = program.options.reduce((accum, item) => {
+      if (item.checked) {
+        return [...accum, item.key]
+      }
+      return accum
+    }, [])
     if (program.claimed) {
-      Object.assign(result, { [key]: selectedOption })
+      Object.assign(result, {
+        [key]: selectedOption.length === 1 ? selectedOption[0] : selectedOption,
+      })
     }
   })
 
