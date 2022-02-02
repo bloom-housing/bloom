@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.26...@bloom-housing/backend-core@3.0.2-alpha.27) (2022-02-02)
+
+
+### Bug Fixes
+
+* **backend:** translations input validator ([#2466](https://github.com/bloom-housing/bloom/issues/2466)) ([603c3dc](https://github.com/bloom-housing/bloom/commit/603c3dc52a400db815c4d81552a5aa74f397fe0f))
+
+
+
+
+
+## [3.0.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.25...@bloom-housing/backend-core@3.0.2-alpha.26) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.24...@bloom-housing/backend-core@3.0.2-alpha.25) (2022-02-01)
+
+
+### Bug Fixes
+
+* date validation issue ([#2464](https://github.com/bloom-housing/bloom/issues/2464)) ([158f7bf](https://github.com/bloom-housing/bloom/commit/158f7bf7fdc59954aebfebbd1ad3741239ed1a35))
+
+
+
+
+
 ## [3.0.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.23...@bloom-housing/backend-core@3.0.2-alpha.24) (2022-02-01)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
