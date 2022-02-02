@@ -428,6 +428,17 @@
         "doNotConsider": {
           "label": "No"
         }
+      },
+      "rentBasedOnIncome": {
+        "summary": "Flat Rent & Rent Based on Income",
+        "flatRent": {
+          "label": "Affordable apartment with flat rent",
+          "description": "I would like to apply for an affordable flat rent apartment, which has a set monthly rent amount that is below market rate. Note - applicants with Section 8 Mobile Housing Choice Vouchers (HCV) are welcome to apply."
+        },
+        "30Percent": {
+          "label": "Project based affordable apartments with a rent at 30% of your income",
+          "description": "I would like to apply for an apartment with Project-Based subsidy. These apartments require initial screening and yearly certification by the Housing Authority. The Housing Authority will calculate my monthly rent payment to approximately 30% of monthly income."
+        }
       }
     },
     "preferences": {

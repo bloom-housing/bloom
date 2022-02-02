@@ -1,7 +1,7 @@
 import React from "react"
 import { t, GridSection, ViewItem, GridCell, FieldGroup } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
-import { ListingProgram } from "@bloom-housing/backend-core/types"
+import { FormMetaDataType, ListingProgram } from "@bloom-housing/backend-core/types"
 import { getProgramOptionName } from "@bloom-housing/shared-helpers"
 
 type FormProgramsProps = {
@@ -32,7 +32,7 @@ const FormPrograms = ({ county, programs }: FormProgramsProps) => {
                   <FieldGroup
                     fieldGroupClassName="grid grid-cols-1"
                     fieldClassName="ml-0"
-                    type="radio"
+                    type={listingProgram?.program.formMetadata?.type || FormMetaDataType.radio}
                     name={`application.programs.${listingProgram?.program.formMetadata?.key}`}
                     register={register}
                     fields={listingProgram?.program.formMetadata?.options?.map((option) => {

@@ -4481,6 +4481,9 @@ export interface FormMetadata {
 
   /**  */
   hideFromListing: boolean
+
+  /**  */
+  type: FormMetaDataType
 }
 
 export interface Program {
@@ -6367,6 +6370,11 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
+}
+
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
 }
 
 export enum UnitStatus {
