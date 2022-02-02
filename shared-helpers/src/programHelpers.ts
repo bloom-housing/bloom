@@ -1,4 +1,4 @@
-import { ApplicationProgram, Program } from "@bloom-housing/backend-core/types"
+import { ApplicationProgram, Program, FormMetaDataType } from "@bloom-housing/backend-core/types"
 
 export const PROGRAMS_FORM_PATH = "application.programs"
 
@@ -14,7 +14,7 @@ export const mapProgramToApi = (program: Program, data: Record<string, any>) => 
   const [key, value] = Object.entries(data)[0]
   const options = []
 
-  if (program?.formMetadata?.type === "checkbox") {
+  if (program?.formMetadata?.type === FormMetaDataType.checkbox) {
     value.forEach((option: string) => {
       options.push({
         key: option,

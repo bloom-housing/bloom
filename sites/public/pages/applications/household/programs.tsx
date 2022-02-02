@@ -20,6 +20,7 @@ import {
   getProgramOptionDescription,
   OnClientSide,
 } from "@bloom-housing/shared-helpers"
+import { FormMetaDataType } from "@bloom-housing/backend-core/types"
 
 const ApplicationPrograms = () => {
   const clientLoaded = OnClientSide()
@@ -124,7 +125,7 @@ const ApplicationPrograms = () => {
                     <FieldGroup
                       fieldGroupClassName="grid grid-cols-1"
                       fieldClassName="ml-0"
-                      type={pageProgram?.formMetadata?.type || "radio"}
+                      type={pageProgram?.formMetadata?.type || FormMetaDataType.radio}
                       name={pageProgram?.formMetadata?.key}
                       error={errors[pageProgram?.formMetadata?.key]}
                       errorMessage={t("errors.selectAnOption")}
