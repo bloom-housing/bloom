@@ -50,7 +50,6 @@ export class FormMetadata {
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
+  @ApiProperty({ enum: FormMetaDataType, enumName: "FormMetaDataType" })
   type?: FormMetaDataType
 }
