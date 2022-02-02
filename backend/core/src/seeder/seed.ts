@@ -49,6 +49,7 @@ import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationMethodsService } from "../application-methods/application-methods.service"
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
+import dayjs from "dayjs"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -333,7 +334,7 @@ async function seed() {
     ...mfaUser,
     mfaEnabled: true,
     mfaCode: "123456",
-    mfaCodeUpdatedAt: new Date(),
+    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
   })
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
   const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
