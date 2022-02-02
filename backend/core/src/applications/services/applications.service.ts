@@ -52,12 +52,7 @@ export class ApplicationsService {
   }
 
   public async rawListWithFlagged(params: ApplicationsCsvListQueryParams) {
-    /**
-     * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
-     */
-    await this.authzService.canOrThrow(this.req.user, "listing", authzActions.update, {
-      listing_id: params.listingId,
-    })
+    await this.authorizeCSVExport(this.req.user, params.listingId)
     const qb = this._getQb(params)
     qb.leftJoin(
       "application_flagged_set_applications_applications",
@@ -271,7 +266,7 @@ export class ApplicationsService {
               bail(e)
               return
             }
-            // throw e
+            throw e
           }
         },
         { retries: 6, minTimeout: 200 }
@@ -321,6 +316,15 @@ export class ApplicationsService {
       }
     }
     return this.authzService.canOrThrow(user, "application", action, resource)
+  }
+
+  private async authorizeCSVExport(user, listingId) {
+    /**
+     * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
+     */
+    return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
+      listing_id: listingId,
+    })
   }
 
   public static generateConfirmationCode(): string {
