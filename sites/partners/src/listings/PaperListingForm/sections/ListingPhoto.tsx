@@ -14,7 +14,7 @@ import {
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
-import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
   const formMethods = useFormContext()
@@ -174,7 +174,7 @@ const ListingPhoto = () => {
       </GridSection>
       <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
       {fieldHasError(errors?.image) && (
-        <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
+        <span className={"text-sm text-alert"}>{errors?.image?.nested?.message}</span>
       )}
 
       <Drawer
