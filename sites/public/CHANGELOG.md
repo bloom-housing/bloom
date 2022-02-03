@@ -3,6 +3,104 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@3.0.1-alpha.34...@bloom-housing/public@4.0.1) (2022-02-03)
+
+
+### Bug Fixes
+
+* 2259/fixes idle timeout not resetting properly ([#2292](https://github.com/seanmalbert/bloom/issues/2292)) ([1b89acb](https://github.com/seanmalbert/bloom/commit/1b89acb21dea913db4ae638b9e4566a444eb7190))
+* applications/view hide prefs ([eed00ab](https://github.com/seanmalbert/bloom/commit/eed00ab591b99c274fe4663c940ac76bc455edfd))
+* change the yes/no radio text to be more descriptive ([c48e6c8](https://github.com/seanmalbert/bloom/commit/c48e6c83070651800bb9a1df0520ad3df14ebdff))
+* choose-language context ([0d655f9](https://github.com/seanmalbert/bloom/commit/0d655f90838c4c76c7b1b6802bc62151adf472a4))
+* closed listings allowed apps ([#2317](https://github.com/seanmalbert/bloom/issues/2317)) ([557fde3](https://github.com/seanmalbert/bloom/commit/557fde3367c1eece8f80d9618b6a6ba7cd6eebbb))
+* demographics howDidYouHear options (2305) ([b80f21c](https://github.com/seanmalbert/bloom/commit/b80f21ca3e75b335222020130b96ef137be6b26f))
+* issues with public app and readds auto save (2428) ([ea5975f](https://github.com/seanmalbert/bloom/commit/ea5975f2fad9584766ab8f8f54c11f754440d1c1))
+* load blank application ([b28e9a3](https://github.com/seanmalbert/bloom/commit/b28e9a3d2258a8fd4e9fddc17599f614b382e172))
+* patches translations for preferences ([#2410](https://github.com/seanmalbert/bloom/issues/2410)) ([21f517e](https://github.com/seanmalbert/bloom/commit/21f517e3f62dc5fefc8b4031d8915c8d7690677d))
+* preference cleanup for avance ([8ff5e6d](https://github.com/seanmalbert/bloom/commit/8ff5e6d1ccb4e93a355bb3e502974c99ada22b66))
+* prefUnits on autofill summary ([#2294](https://github.com/seanmalbert/bloom/issues/2294)) ([c027e96](https://github.com/seanmalbert/bloom/commit/c027e964f8f4e135cbc0fa70db5eaafa389ce53c))
+* remove alameda reference in demographics ([cc6761b](https://github.com/seanmalbert/bloom/commit/cc6761b22616f28ff2a0393766a6273c918376fd))
+* submission tests not running ([78dd21e](https://github.com/seanmalbert/bloom/commit/78dd21ecf82680d38a97f762dfa128df3496fd91))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+* visual improvement to programs form display ([33ef3db](https://github.com/seanmalbert/bloom/commit/33ef3dbdbafd561a79f17b90edb8d80b98a4c035))
+
+
+* 2022-01-27 release (#2439) ([860f6af](https://github.com/seanmalbert/bloom/commit/860f6af6204903e4dcddf671d7ba54f3ec04f121)), closes [#2439](https://github.com/seanmalbert/bloom/issues/2439) [#2196](https://github.com/seanmalbert/bloom/issues/2196) [#2238](https://github.com/seanmalbert/bloom/issues/2238) [#2226](https://github.com/seanmalbert/bloom/issues/2226) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2243](https://github.com/seanmalbert/bloom/issues/2243) [#2195](https://github.com/seanmalbert/bloom/issues/2195) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2266](https://github.com/seanmalbert/bloom/issues/2266) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2270](https://github.com/seanmalbert/bloom/issues/2270) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2213](https://github.com/seanmalbert/bloom/issues/2213) [#2234](https://github.com/seanmalbert/bloom/issues/2234) [#1901](https://github.com/seanmalbert/bloom/issues/1901) [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2280](https://github.com/seanmalbert/bloom/issues/2280) [#2253](https://github.com/seanmalbert/bloom/issues/2253) [#2276](https://github.com/seanmalbert/bloom/issues/2276) [#2282](https://github.com/seanmalbert/bloom/issues/2282) [#2262](https://github.com/seanmalbert/bloom/issues/2262) [#2278](https://github.com/seanmalbert/bloom/issues/2278) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2290](https://github.com/seanmalbert/bloom/issues/2290) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2305](https://github.com/seanmalbert/bloom/issues/2305) [#2306](https://github.com/seanmalbert/bloom/issues/2306) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2190](https://github.com/seanmalbert/bloom/issues/2190) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2301](https://github.com/seanmalbert/bloom/issues/2301) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2313](https://github.com/seanmalbert/bloom/issues/2313) [#2289](https://github.com/seanmalbert/bloom/issues/2289) [#2279](https://github.com/seanmalbert/bloom/issues/2279) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2434](https://github.com/seanmalbert/bloom/issues/2434)
+* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
+
+
+### Features
+
+* adds bottom border to preferences ([60fe76a](https://github.com/seanmalbert/bloom/commit/60fe76af140538216555bcf79b0747df3d565404))
+* adds new preferences, reserved community type ([90c0673](https://github.com/seanmalbert/bloom/commit/90c0673779eeb028041717d0b1e0e69fb0766c71))
+* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* refactor and add public site application flow cypress tests ([a300d69](https://github.com/seanmalbert/bloom/commit/a300d69c895052a6c3c4def6121237fdc80a76c6))
+* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
+* skip preferences if not on listing ([644ba0e](https://github.com/seanmalbert/bloom/commit/644ba0eb7094b5d57c54df80f3cd11dcea0ca4a7))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+### BREAKING CHANGES
+
+* sign-in pages have been updated
+* moved some helpers from ui-components to shared-helpers
+* remove applicationDueTime field and consolidated into applicationDueDate
+
+* chore(release): version
+
+ - @bloom-housing/backend-core@3.0.2-alpha.13
+ - @bloom-housing/shared-helpers@4.0.1-alpha.21
+ - @bloom-housing/partners@4.0.1-alpha.23
+ - @bloom-housing/public@4.0.1-alpha.22
+ - @bloom-housing/ui-components@4.0.1-alpha.21
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
+
+
+
+
+
 ## [4.0.1-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.30...@bloom-housing/public@4.0.1-alpha.31) (2022-01-26)
 
 **Note:** Version bump only for package @bloom-housing/public
