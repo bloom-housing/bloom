@@ -42,7 +42,6 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
       .leftJoinAndSelect("units.unitType", "unitTypeRef")
       .leftJoinAndSelect("units.unitRentType", "unitRentType")
       .leftJoinAndSelect("units.priorityType", "priorityType")
-      .leftJoinAndSelect("units.amiChart", "amiChart")
       .leftJoinAndSelect(`${this.alias}.jurisdiction`, "jurisdiction")
       .leftJoinAndSelect(`${this.alias}.reservedCommunityType`, "reservedCommunityType")
       .leftJoinAndSelect(`${this.alias}.listingPrograms`, "listingPrograms")
