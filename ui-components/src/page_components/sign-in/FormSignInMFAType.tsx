@@ -7,10 +7,8 @@ import {
   FormCard,
   Icon,
   t,
-  AlertBox,
   SiteAlert,
-  AlertNotice,
-  ErrorMessage,
+  FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { FormSignInNetworkError } from "./FormSignIn"
@@ -51,23 +49,7 @@ const FormSignInMFAType = ({
           {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
         </p>
       </div>
-      {Object.entries(errors).length > 0 && !networkError.error && (
-        <AlertBox type="alert" inverted closeable>
-          {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
-        </AlertBox>
-      )}
-
-      {!!networkError.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
-          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
-            {networkError.error.title}
-          </AlertBox>
-
-          <AlertNotice title="" type="alert" inverted>
-            {networkError.error.content}
-          </AlertNotice>
-        </ErrorMessage>
-      )}
+      <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-type"} />
 
       <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0 border-b">

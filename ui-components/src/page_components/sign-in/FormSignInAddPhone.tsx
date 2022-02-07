@@ -6,11 +6,9 @@ import {
   FormCard,
   Icon,
   t,
-  AlertBox,
   SiteAlert,
-  AlertNotice,
-  ErrorMessage,
   PhoneField,
+  FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { FormSignInNetworkError } from "./FormSignIn"
@@ -43,23 +41,11 @@ const FormSignInAddPhone = ({ onSubmit, networkError, control }: FormSignInAddPh
         <h2 className="form-card__title">{t("nav.signInMFA.addNumber")}</h2>
         <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>
       </div>
-      {Object.entries(errors).length > 0 && !networkError.error && (
-        <AlertBox type="alert" inverted closeable>
-          {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}
-        </AlertBox>
-      )}
-
-      {!!networkError.error && Object.entries(errors).length === 0 && (
-        <ErrorMessage id={"householdsize-error"} error={!!networkError.error}>
-          <AlertBox type="alert" inverted onClose={() => networkError.reset()}>
-            {networkError.error.title}
-          </AlertBox>
-
-          <AlertNotice title="" type="alert" inverted>
-            {networkError.error.content}
-          </AlertNotice>
-        </ErrorMessage>
-      )}
+      <FormSignInErrorBox
+        errors={errors}
+        networkError={networkError}
+        errorMessageId={"add-phone"}
+      />
 
       <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0 border-b">
