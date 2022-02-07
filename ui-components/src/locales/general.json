@@ -922,7 +922,8 @@
   "errors": {
     "alert": {
       "badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
-      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
+      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again.",
+      "emailConflict": "That email is already in use"
     },
     "notFound": {
       "title": "Page Not Found",
