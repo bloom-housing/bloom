@@ -63,7 +63,10 @@ export class ApplicationsController {
   @Get(`csv`)
   @ApiOperation({ summary: "List applications as csv", operationId: "listAsCsv" })
   @Header("Content-Type", "text/csv")
-  async listAsCsv(@Query() queryParams: ApplicationsCsvListQueryParams): Promise<string> {
+  async listAsCsv(
+    @Query(new ValidationPipe(defaultValidationPipeOptions))
+    queryParams: ApplicationsCsvListQueryParams
+  ): Promise<string> {
     const applications = await this.applicationsService.rawListWithFlagged(queryParams)
     return this.applicationCsvExporter.exportFromObject(
       applications,

@@ -13,6 +13,8 @@ const views: Views = {
       "listings.waitlistMaxSize",
       "listings.waitlistCurrentSize",
       "listings.assets",
+      "listings.closedAt",
+      "listings.publishedAt",
       "image.id",
       "image.fileId",
       "image.label",

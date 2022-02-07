@@ -1,10 +1,20 @@
 import { PaginatedApplicationListQueryParams } from "./paginated-application-list-query-params"
 import { Expose, Transform } from "class-transformer"
-import { ApiProperty } from "@nestjs/swagger"
-import { IsBoolean, IsOptional } from "class-validator"
+import { ApiProperty, OmitType } from "@nestjs/swagger"
+import { IsBoolean, IsOptional, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 
-export class ApplicationsCsvListQueryParams extends PaginatedApplicationListQueryParams {
+export class ApplicationsCsvListQueryParams extends OmitType(PaginatedApplicationListQueryParams, [
+  "listingId",
+]) {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    required: true,
+  })
+  @IsUUID()
+  listingId: string
+
   @Expose()
   @ApiProperty({
     type: Boolean,

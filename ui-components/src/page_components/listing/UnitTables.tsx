@@ -66,7 +66,13 @@ const UnitTables = (props: UnitTablesProps) => {
             number: unit.number,
             sqFeet: (
               <>
-                <strong>{unit.sqFeet}</strong> {t("t.sqFeet")}
+                {unit.sqFeet ? (
+                  <>
+                    <strong>{parseInt(unit.sqFeet)}</strong> {t("t.sqFeet")}
+                  </>
+                ) : (
+                  <></>
+                )}
               </>
             ),
             numBathrooms: <strong>{unit.numBathrooms}</strong>,

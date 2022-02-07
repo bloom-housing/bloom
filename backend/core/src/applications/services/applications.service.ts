@@ -26,6 +26,7 @@ import { getView } from "../views/view"
 import { PaginatedApplicationListQueryParams } from "../dto/paginated-application-list-query-params"
 import { ApplicationCreateDto } from "../dto/application-create.dto"
 import { ApplicationUpdateDto } from "../dto/application-update.dto"
+import { ApplicationsCsvListQueryParams } from "../dto/applications-csv-list-query-params"
 
 @Injectable({ scope: Scope.REQUEST })
 export class ApplicationsService {
@@ -50,7 +51,8 @@ export class ApplicationsService {
     return result
   }
 
-  public async rawListWithFlagged(params: PaginatedApplicationListQueryParams) {
+  public async rawListWithFlagged(params: ApplicationsCsvListQueryParams) {
+    await this.authorizeCSVExport(this.req.user, params.listingId)
     const qb = this._getQb(params)
     qb.leftJoin(
       "application_flagged_set_applications_applications",
@@ -64,11 +66,7 @@ export class ApplicationsService {
       "application.id, applicant.id, applicant_address.id, applicant_workAddress.id, alternateAddress.id, mailingAddress.id, alternateContact.id, alternateContact_mailingAddress.id, accessibility.id, demographics.id, householdMembers.id, householdMembers_address.id, householdMembers_workAddress.id, preferredUnit.id"
     )
     const applications = await qb.getRawMany()
-    await Promise.all(
-      applications.map(async (application) => {
-        await this.authorizeUserAction(this.req.user, application, authzActions.read)
-      })
-    )
+
     return applications
   }
 
@@ -318,6 +316,15 @@ export class ApplicationsService {
       }
     }
     return this.authzService.canOrThrow(user, "application", action, resource)
+  }
+
+  private async authorizeCSVExport(user, listingId) {
+    /**
+     * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
+     */
+    return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
+      listing_id: listingId,
+    })
   }
 
   public static generateConfirmationCode(): string {

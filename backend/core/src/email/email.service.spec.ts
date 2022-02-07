@@ -166,7 +166,7 @@ describe("EmailService", () => {
       await service.welcome(user, "http://localhost:3000", "http://localhost:3000/?token=")
       expect(sendMock).toHaveBeenCalled()
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
-      expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome to Bloom")
+      expect(sendMock.mock.calls[0][0].subject).toEqual("Welcome")
       // Check if translation is working correctly
       expect(sendMock.mock.calls[0][0].html).toContain(
         "Alameda County - Housing and Community Development (HCD) Department"

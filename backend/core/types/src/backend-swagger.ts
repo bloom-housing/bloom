@@ -459,8 +459,6 @@ export class ApplicationsService {
       /**  */
       limit?: number
       /**  */
-      listingId?: string
-      /**  */
       search?: string
       /**  */
       userId?: string
@@ -470,6 +468,8 @@ export class ApplicationsService {
       order?: string
       /**  */
       markedAsDuplicate?: boolean
+      /**  */
+      listingId: string
       /**  */
       includeDemographics?: boolean
     } = {} as any,
@@ -482,12 +482,12 @@ export class ApplicationsService {
       configs.params = {
         page: params["page"],
         limit: params["limit"],
-        listingId: params["listingId"],
         search: params["search"],
         userId: params["userId"],
         orderBy: params["orderBy"],
         order: params["order"],
         markedAsDuplicate: params["markedAsDuplicate"],
+        listingId: params["listingId"],
         includeDemographics: params["includeDemographics"],
       }
       let data = null
@@ -4481,6 +4481,9 @@ export interface FormMetadata {
 
   /**  */
   hideFromListing: boolean
+
+  /**  */
+  type: FormMetaDataType
 }
 
 export interface Program {
@@ -5014,6 +5017,12 @@ export interface Listing {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  publishedAt?: Date
+
+  /**  */
+  closedAt?: Date
 }
 
 export interface PaginatedListing {
@@ -6361,6 +6370,11 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
+}
+
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
 }
 
 export enum UnitStatus {

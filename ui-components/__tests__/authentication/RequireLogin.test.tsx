@@ -10,6 +10,7 @@ import { GenericRouter, NavigationContext } from "../../src/config/NavigationCon
 const mockRouter: GenericRouter = {
   pathname: "",
   asPath: "",
+  back: () => {},
   push(url: string) {
     this.pathname = url
     this.asPath = url

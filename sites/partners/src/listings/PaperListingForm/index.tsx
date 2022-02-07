@@ -185,17 +185,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           const formattedData = await dataPipeline.run()
 
           const result = editMode
-            ? await listingsService.update(
-                {
-                  id: listing.id,
-                  body: { id: listing.id, ...formattedData },
-                },
-                { headers: { "x-purge-cache": true } }
-              )
-            : await listingsService.create(
-                { body: formattedData },
-                { headers: { "x-purge-cache": true } }
-              )
+            ? await listingsService.update({
+                id: listing.id,
+                body: { id: listing.id, ...formattedData },
+              })
+            : await listingsService.create({ body: formattedData })
           reset(formData)
 
           if (result) {
