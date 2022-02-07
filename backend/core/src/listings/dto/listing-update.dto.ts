@@ -60,6 +60,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "referralApplication",
   "listingPreferences",
   "listingPrograms",
+  "publishedAt",
+  "closedAt",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

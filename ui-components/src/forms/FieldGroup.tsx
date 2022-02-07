@@ -9,15 +9,16 @@ interface FieldSingle {
   id: string
   label: string
   value?: string
+  dataTestId?: string
   defaultChecked?: boolean
   description?: React.ReactNode
   defaultText?: string
+  disabled?: boolean
   note?: string
   inputProps?: Record<string, unknown>
   subFields?: FieldSingle[]
   type?: string
   additionalText?: boolean
-  dataTestId?: string
 }
 
 interface FieldGroupProps {
@@ -84,11 +85,17 @@ const FieldGroup = ({
             }
           }}
           defaultChecked={item.defaultChecked || false}
+          disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
-          data-test-id={item.dataTestId || dataTestId}
+          data-test-id={item.dataTestId ?? dataTestId}
         />
-        <label htmlFor={item.id} className={`font-semibold ${fieldLabelClassName}`}>
+        <label
+          htmlFor={item.id}
+          className={`font-semibold ${fieldLabelClassName} ${
+            item.disabled && "text-gray-600 cursor-default cursor-not-allowed"
+          }`}
+        >
           {item.label}
         </label>
         {item.note && <span className={"field-note font-normal"}>{item.note}</span>}
@@ -137,6 +144,7 @@ const FieldGroup = ({
             defaultValue={item.defaultText}
             placeholder={t("t.description")}
             className={"mb-4"}
+            disabled={item.disabled}
             dataTestId={item.dataTestId}
           />
         )}

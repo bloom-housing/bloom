@@ -17,6 +17,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingReviewOrder } from "../../../listings/types/listing-review-order-enum"
 import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { InputType } from "../../../shared/types/input-type"
+import { FormMetaDataType } from "../../../applications/types/form-metadata/form-metadata"
 export const getDate = (days: number) => {
   const someDate = new Date()
   someDate.setDate(someDate.getDate() + days)
@@ -402,6 +403,10 @@ export function getServedInMilitaryProgram() {
   return JSON.parse(JSON.stringify(servedInMilitaryProgram))
 }
 
+export function getFlatRentAndRentBasedOnIncomeProgram() {
+  return JSON.parse(JSON.stringify(flatRentAndRentBasedOnIncomeProgram))
+}
+
 export const servedInMilitaryProgram: ProgramSeedType = {
   title: "Veteran",
   subtitle: "Should your application be chosen, be prepared to provide supporting documentation.",
@@ -422,6 +427,29 @@ export const servedInMilitaryProgram: ProgramSeedType = {
       {
         key: "preferNotToSay",
         description: false,
+        extraData: [],
+      },
+    ],
+  },
+}
+
+export const flatRentAndRentBasedOnIncomeProgram: ProgramSeedType = {
+  title: "Flat Rent & Rent Based on Income",
+  subtitle:
+    "This property includes two types of affordable housing programs. You can choose to apply for one or both programs. Each program will have its own applicant list. Your choice will tell us which list(s) to put your name on. Additional information on each of the two types of housing opportunities are below.",
+  description: "Do you want to apply for apartments with flat rent and rent based on income?",
+  formMetadata: {
+    key: "rentBasedOnIncome",
+    type: FormMetaDataType.checkbox,
+    options: [
+      {
+        key: "flatRent",
+        description: true,
+        extraData: [],
+      },
+      {
+        key: "30Percent",
+        description: true,
         extraData: [],
       },
     ],

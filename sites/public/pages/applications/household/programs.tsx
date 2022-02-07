@@ -20,6 +20,7 @@ import {
   getProgramOptionDescription,
   OnClientSide,
 } from "@bloom-housing/shared-helpers"
+import { FormMetaDataType } from "@bloom-housing/backend-core/types"
 
 const ApplicationPrograms = () => {
   const clientLoaded = OnClientSide()
@@ -119,12 +120,16 @@ const ApplicationPrograms = () => {
               <div key={pageProgram.id}>
                 <div className="form-card__group field text-lg">
                   <fieldset>
-                    <p className="field-note mb-4">{t("t.pleaseSelectOne")}</p>
+                    <p className="field-note mb-4">
+                      {pageProgram?.formMetadata?.type === FormMetaDataType.checkbox
+                        ? t("errors.selectAllThatApply")
+                        : t("t.pleaseSelectOne")}
+                    </p>
 
                     <FieldGroup
                       fieldGroupClassName="grid grid-cols-1"
                       fieldClassName="ml-0"
-                      type="radio"
+                      type={pageProgram?.formMetadata?.type || FormMetaDataType.radio}
                       name={pageProgram?.formMetadata?.key}
                       error={errors[pageProgram?.formMetadata?.key]}
                       errorMessage={t("errors.selectAnOption")}

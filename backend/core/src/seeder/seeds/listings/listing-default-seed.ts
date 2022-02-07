@@ -14,6 +14,7 @@ import {
   getServedInMilitaryProgram,
   getTayProgram,
   PriorityTypes,
+  getFlatRentAndRentBasedOnIncomeProgram,
 } from "./shared"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitAccessibilityPriorityType } from "../../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
@@ -151,6 +152,12 @@ export class ListingDefaultSeed {
             title: getHousingSituationProgram().title,
           }),
           ordinal: 4,
+        },
+        {
+          program: await this.programsRepository.findOneOrFail({
+            title: getFlatRentAndRentBasedOnIncomeProgram().title,
+          }),
+          ordinal: 5,
         },
       ],
       jurisdictionName: "Alameda",

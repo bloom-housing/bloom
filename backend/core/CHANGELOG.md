@@ -3,6 +3,136 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.29...@bloom-housing/backend-core@3.0.2-alpha.30) (2022-02-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.28...@bloom-housing/backend-core@3.0.2-alpha.29) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
+## [3.0.2-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.27...@bloom-housing/backend-core@3.0.2-alpha.28) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.26...@bloom-housing/backend-core@3.0.2-alpha.27) (2022-02-02)
+
+
+### Bug Fixes
+
+* **backend:** translations input validator ([#2466](https://github.com/bloom-housing/bloom/issues/2466)) ([603c3dc](https://github.com/bloom-housing/bloom/commit/603c3dc52a400db815c4d81552a5aa74f397fe0f))
+
+
+
+
+
+## [3.0.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.25...@bloom-housing/backend-core@3.0.2-alpha.26) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.24...@bloom-housing/backend-core@3.0.2-alpha.25) (2022-02-01)
+
+
+### Bug Fixes
+
+* date validation issue ([#2464](https://github.com/bloom-housing/bloom/issues/2464)) ([158f7bf](https://github.com/bloom-housing/bloom/commit/158f7bf7fdc59954aebfebbd1ad3741239ed1a35))
+
+
+
+
+
+## [3.0.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.23...@bloom-housing/backend-core@3.0.2-alpha.24) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.22...@bloom-housing/backend-core@3.0.2-alpha.23) (2022-02-01)
+
+
+### Bug Fixes
+
+* await casbin enforcer ([4feacec](https://github.com/bloom-housing/bloom/commit/4feacec44635135bc5469c0edd02a3424a2697cc))
+
+
+
+
+
+## [3.0.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.21...@bloom-housing/backend-core@3.0.2-alpha.22) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.20...@bloom-housing/backend-core@3.0.2-alpha.21) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.19...@bloom-housing/backend-core@3.0.2-alpha.20) (2022-02-01)
+
+
+### Features
+
+* **backend:** add publishedAt and closedAt to listing entity ([#2432](https://github.com/bloom-housing/bloom/issues/2432)) ([f3b0f86](https://github.com/bloom-housing/bloom/commit/f3b0f864a6d5d2ad3d886e828743454c3e8fca71))
+
+
+
+
+
+## [3.0.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.18...@bloom-housing/backend-core@3.0.2-alpha.19) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.17...@bloom-housing/backend-core@3.0.2-alpha.18) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.16...@bloom-housing/backend-core@3.0.2-alpha.17) (2022-01-27)
+
+
+### Features
+
+* outdated password messaging updates ([b14e19d](https://github.com/bloom-housing/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
+
+
+
+
+
 ## [3.0.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.15...@bloom-housing/backend-core@3.0.2-alpha.16) (2022-01-24)
 
 

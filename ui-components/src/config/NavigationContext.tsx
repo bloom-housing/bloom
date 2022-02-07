@@ -23,6 +23,7 @@ export interface GenericRouterOptions {
 
 export interface GenericRouter {
   push: (url: Url, as?: Url, options?: GenericRouterOptions) => void
+  back(): void
   pathname: string
   asPath: string
   locale?: string
@@ -41,6 +42,9 @@ export const NavigationContext = createContext<NavigationContextProps>({
   ),
   router: {
     push: () => {
+      // no-op
+    },
+    back: () => {
       // no-op
     },
     pathname: "",

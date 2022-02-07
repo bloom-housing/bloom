@@ -492,6 +492,20 @@ export const minimalDataApplication: Application = {
         },
       ],
     },
+    {
+      key: "rentBasedOnIncome",
+      claimed: true,
+      options: [
+        {
+          key: "flatRent",
+          checked: true,
+        },
+        {
+          key: "30Percent",
+          checked: true,
+        },
+      ],
+    },
   ],
   confirmationCode: "",
   status: ApplicationStatus.draft,

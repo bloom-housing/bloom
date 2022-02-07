@@ -16,12 +16,15 @@
       "return": "Return to applications"
     },
     "settings": {
+      "resetYourPassword": "Reset your Password",
+      "needUpdatePassword": "You'll need to update your password in order to log in to your account.",
       "passwordSuccess": "Password successfully updated",
       "update": "Update",
       "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmNewPassword": "Confirm new password",
+      "updatePassword": "Update password",
       "alerts": {
         "genericError": "There was an error. Please try again, or contact support for help.",
         "nameSuccess": "Name update successful",
@@ -292,7 +295,7 @@
       },
       "expectingChanges": {
         "title": "Expecting Household Changes",
-        "question": "Do you anticipate any changes in your household in the next 12 months?"
+        "question": "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
       },
       "householdStudent": {
         "title":  "Household Includes Student or Member Nearing 18",
@@ -424,6 +427,17 @@
         },
         "doNotConsider": {
           "label": "No"
+        }
+      },
+      "rentBasedOnIncome": {
+        "summary": "Flat Rent & Rent Based on Income",
+        "flatRent": {
+          "label": "Affordable apartment with flat rent",
+          "description": "I would like to apply for an affordable flat rent apartment, which has a set monthly rent amount that is below market rate. Note - applicants with Section 8 Mobile Housing Choice Vouchers (HCV) are welcome to apply."
+        },
+        "30Percent": {
+          "label": "Project based affordable apartments with a rent at 30% of your income",
+          "description": "I would like to apply for an apartment with Project-Based subsidy. These apartments require initial screening and yearly certification by the Housing Authority. The Housing Authority will calculate my monthly rent payment to approximately 30% of monthly income."
         }
       }
     },
@@ -858,7 +872,8 @@
       "partnersSignIn": "Partners Sign In",
       "dontHaveAccount": "Don't have an account",
       "enterLoginPassword": "Please enter your login password",
-      "enterLoginEmail": "Please enter your login email"
+      "enterLoginEmail": "Please enter your login email",
+      "changeYourPassword": "You can change your password"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -907,7 +922,8 @@
   "errors": {
     "alert": {
       "badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
-      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
+      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again.",
+      "emailConflict": "That email is already in use"
     },
     "notFound": {
       "title": "Page Not Found",
@@ -942,7 +958,10 @@
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
     "requiredFieldError": "This field is required",
-    "requiredFieldsError": "These fields are required"
+    "requiredFieldsError": "These fields are required",
+    "enterNewLoginPassword": "Please enter new login password",
+    "passwordConfirmationMismatch": "Password confirmation does not match",
+    "somethingWentWrong": "Oops! Looks like something went wrong."
   },
   "footer": {
     "contact": "Contact",
@@ -1494,6 +1513,7 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "here": "here",
     "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",
