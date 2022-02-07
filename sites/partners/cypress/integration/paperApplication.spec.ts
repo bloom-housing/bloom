@@ -3,8 +3,9 @@ describe("Paper Application Tests", () => {
     cy.login()
   })
 
-  it("navigate to paper listing form", () => {
-    cy.get(`[col-id="status"] > a`).eq(1).click()
+  beforeEach(() => {
+    cy.visit("/")
+    cy.getByTestId("listing-status-cell").eq(1).click()
     cy.getByTestId("addApplicationButton").contains("Add Application").click()
   })
 
@@ -28,9 +29,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("submit with no data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("emptyApplication").then((application) => {
       cy.fillTerms(application, true)
       cy.verifyApplicationData(application)
@@ -43,9 +41,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("submit different data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("partialApplicationA").then((application) => {
       cy.fillMailingAddress(application)
       cy.fillHouseholdIncome(application, ["incomeMonth"])
@@ -60,9 +55,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only applicant data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("applicantOnlyData").then((application) => {
       cy.fillPrimaryApplicant(application, [
         "application.additionalPhoneNumber",
@@ -80,9 +72,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only alternate contact data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("alternateContactOnlyData").then((application) => {
       cy.fillAlternateContact(application, ["alternateContact.mailingAddress.street2"])
       cy.fillTerms(application, true)
@@ -96,9 +85,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only household member data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("householdMemberOnlyData").then((application) => {
       cy.fillHouseholdMember(application, [])
       cy.fillTerms(application, true)
@@ -113,9 +99,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only household detail data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("householdDetailsOnlyData").then((application) => {
       cy.fillHouseholdDetails(application, [])
       cy.fillTerms(application, true)
@@ -129,9 +112,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only household income data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("householdIncomeOnlyData").then((application) => {
       cy.fillHouseholdIncome(application, [])
       cy.fillTerms(application, true)
@@ -145,9 +125,6 @@ describe("Paper Application Tests", () => {
   })
 
   it("fill only demographic data", () => {
-    cy.visit("/")
-    cy.get(`[col-id="status"] > a`).eq(1).click()
-    cy.getByTestId("addApplicationButton").contains("Add Application").click()
     cy.fixture("demographicsOnlyData").then((application) => {
       cy.fillDemographics(application, [])
       cy.fillTerms(application, true)

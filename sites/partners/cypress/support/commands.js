@@ -64,27 +64,27 @@ Cypress.Commands.add("verifyAlertBox", () => {
 
 const fillFields = (application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip) => {
   if (fieldsToType.length) {
-    fieldsToType
-      .filter(({ id }) => !fieldsToSkip.includes(id))
-      .forEach(({ id, fieldKey }) => {
+    fieldsToType.forEach(({ id, fieldKey }) => {
+      if (!fieldsToSkip.includes(id)) {
         cy.getByID(id).type(application[fieldKey])
-      })
+      }
+    })
   }
 
   if (fieldsToSelect.length) {
-    fieldsToSelect
-      .filter(({ id }) => !fieldsToSkip.includes(id))
-      .forEach(({ id, fieldKey }) => {
+    fieldsToSelect.forEach(({ id, fieldKey }) => {
+      if (!fieldsToSkip.includes(id)) {
         cy.getByID(id).select(application[fieldKey])
-      })
+      }
+    })
   }
 
   if (fieldsToClick.length) {
-    fieldsToClick
-      .filter(({ id }) => !fieldsToSkip.includes(id))
-      .forEach(({ fieldKey }) => {
+    fieldsToClick.forEach(({ id, fieldKey }) => {
+      if (!fieldsToSkip.includes(id)) {
         cy.getByID(fieldKey).click()
-      })
+      }
+    })
   }
 }
 
