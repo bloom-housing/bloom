@@ -79,7 +79,7 @@ export class ListingDefaultSeed {
           property: {
             id: property.id,
           },
-          amiChart,
+          amiChartId: amiChart.id,
         }
       }
     )

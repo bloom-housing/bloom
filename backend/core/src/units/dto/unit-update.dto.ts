@@ -12,7 +12,6 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "amiChart",
   "unitType",
   "unitRentType",
   "priorityType",
@@ -34,12 +33,6 @@ export class UnitUpdateDto extends OmitType(UnitDto, [
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   updatedAt?: Date
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  amiChart?: IdDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

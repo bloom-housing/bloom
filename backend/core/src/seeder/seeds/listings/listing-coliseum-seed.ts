@@ -154,7 +154,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
 
     const coliseumUnits: Array<UnitSeedType> = [
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "36990",
         annualIncomeMin: "0",
@@ -172,7 +172,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "36990",
         annualIncomeMin: "0",
@@ -190,7 +190,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "36990",
         annualIncomeMin: "0",
@@ -208,7 +208,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "61650",
         annualIncomeMin: "38520",
@@ -226,7 +226,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -244,7 +244,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -262,7 +262,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -280,7 +280,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -298,7 +298,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -316,7 +316,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -334,7 +334,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -352,7 +352,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -370,7 +370,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -388,7 +388,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "30",
         annualIncomeMax: "44400",
         annualIncomeMin: "0",
@@ -406,7 +406,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "45",
         annualIncomeMax: "66600",
         annualIncomeMin: "41616",
@@ -424,7 +424,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "45",
         annualIncomeMax: "66600",
         annualIncomeMin: "41616",
@@ -442,7 +442,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -460,7 +460,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -478,7 +478,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -496,7 +496,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -514,7 +514,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -532,7 +532,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -550,7 +550,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -568,7 +568,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -586,7 +586,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -604,7 +604,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -622,7 +622,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "74000",
         annualIncomeMin: "46236",
@@ -640,7 +640,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "20",
         annualIncomeMax: "31800",
         annualIncomeMin: "0",
@@ -658,7 +658,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "20",
         annualIncomeMax: "31800",
         annualIncomeMin: "0",
@@ -676,7 +676,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "20",
         annualIncomeMax: "31800",
         annualIncomeMin: "0",
@@ -694,7 +694,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "45",
         annualIncomeMax: "71550",
         annualIncomeMin: "0",
@@ -712,7 +712,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "45",
         annualIncomeMax: "71550",
         annualIncomeMin: "0",
@@ -730,7 +730,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "45",
         annualIncomeMax: "71550",
         annualIncomeMin: "0",
@@ -748,7 +748,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -766,7 +766,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -784,7 +784,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -802,7 +802,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -820,7 +820,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -838,7 +838,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "79500",
         annualIncomeMin: "0",
@@ -856,7 +856,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -874,7 +874,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -892,7 +892,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -910,7 +910,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -928,7 +928,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -946,7 +946,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",
@@ -964,7 +964,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "84950",
         annualIncomeMin: "53436",

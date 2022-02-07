@@ -51,11 +51,10 @@ class Unit {
   @Type(() => Date)
   updatedAt: Date
 
-  @ManyToOne(() => AmiChart, { eager: false, nullable: true })
-  amiChart?: AmiChart | null
-
-  @RelationId((unit: Unit) => unit.amiChart)
+  @Column({ nullable: true, type: "uuid" })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
   amiChartId?: string
 
   @Column({ nullable: true, type: "text" })

@@ -104,7 +104,6 @@ export function getDefaultUnits() {
 
 export const defaultUnits: Array<UnitSeedType> = [
   {
-    amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
     annualIncomeMax: "45600",
     annualIncomeMin: "36168",
@@ -122,7 +121,6 @@ export const defaultUnits: Array<UnitSeedType> = [
     status: UnitStatus.available,
   },
   {
-    amiChart: defaultAmiChart as AmiChart,
     amiPercentage: "30",
     annualIncomeMax: "66600",
     annualIncomeMin: "41616",

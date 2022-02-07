@@ -10,17 +10,11 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   "id",
   "createdAt",
   "updatedAt",
-  "amiChart",
   "unitType",
   "unitRentType",
   "priorityType",
   "amiChartOverride",
 ] as const) {
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdDto)
-  amiChart?: IdDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

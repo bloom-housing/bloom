@@ -30,7 +30,7 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
 
     const multipleAMIUnits: Array<UnitSeedType> = [
       {
-        amiChart: amiChartOne,
+        amiChartId: amiChartOne.id,
         amiPercentage: "30",
         annualIncomeMax: "45600",
         annualIncomeMin: "36168",
@@ -48,7 +48,7 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChartTwo,
+        amiChartId: amiChartTwo.id,
         amiPercentage: "30",
         annualIncomeMax: "45600",
         annualIncomeMin: "36168",
@@ -66,7 +66,7 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChartOne,
+        amiChartId: amiChartOne.id,
         amiPercentage: "50",
         annualIncomeMax: "66600",
         annualIncomeMin: "41616",
@@ -84,7 +84,7 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
         status: UnitStatus.available,
       },
       {
-        amiChart: amiChartTwo,
+        amiChartId: amiChartTwo.id,
         amiPercentage: "50",
         annualIncomeMax: "66600",
         annualIncomeMin: "41616",

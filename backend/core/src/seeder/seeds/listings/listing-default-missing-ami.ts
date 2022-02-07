@@ -27,7 +27,7 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
 
     const missingAmiLevelsUnits: Array<UnitSeedType> = [
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "177300.0",
         annualIncomeMin: "84696.0",
@@ -45,7 +45,7 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         status: UnitStatus.occupied,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "103350.0",
         annualIncomeMin: "58152.0",
@@ -63,7 +63,7 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         status: UnitStatus.occupied,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "103350.0",
         annualIncomeMin: "58152.0",
@@ -81,7 +81,7 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         status: UnitStatus.occupied,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "103350.0",
         annualIncomeMin: "58152.0",
@@ -99,7 +99,7 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
         status: UnitStatus.occupied,
       },
       {
-        amiChart: amiChart,
+        amiChartId: amiChart.id,
         amiPercentage: "50",
         annualIncomeMax: "103350.0",
         annualIncomeMin: "38952.0",

@@ -36,7 +36,7 @@ export class ListingDefaultBmrChartSeed extends ListingDefaultSeed {
         property: {
           id: property.id,
         },
-        amiChart,
+        amiChartId: amiChart.id,
       }
     })
 

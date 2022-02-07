@@ -33,7 +33,7 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
           property: {
             id: property.id,
           },
-          amiChart: index % 2 === 0 ? amiChartOne : amiChartTwo,
+          amiChartId: index % 2 === 0 ? amiChartOne.id : amiChartTwo.id,
         }
       }
     )
