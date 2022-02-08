@@ -122,10 +122,13 @@ export class ApplicationsService {
       throw new BadRequestException("Listing is not open for application submission.")
     }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    return await this._create({
-      ...applicationCreateDto,
-      user: this.req.user,
-    }, true)
+    return await this._create(
+      {
+        ...applicationCreateDto,
+        user: this.req.user,
+      },
+      true
+    )
   }
 
   async create(applicationCreateDto: ApplicationCreateDto) {
