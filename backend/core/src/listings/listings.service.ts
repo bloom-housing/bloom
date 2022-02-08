@@ -76,7 +76,7 @@ export class ListingsService {
     return await this.listingRepository.remove(listing)
   }
 
-  async findOne(listingId: string, lang: Language = Language.en, view = "full") {
+  async findOne(listingId: string, lang: Language = Language.en) {
     const result = await this.listingRepository.getListingById(listingId)
     if (!result) {
       throw new NotFoundException()

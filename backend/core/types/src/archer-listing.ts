@@ -717,7 +717,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-07-09T21:20:05.783Z"),
       updatedAt: new Date("2019-08-14T23:05:43.913Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "Cq870hwYXcPxCYT4_uW_3",
@@ -740,7 +740,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.982Z"),
       updatedAt: new Date("2019-08-14T23:06:59.015Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "9XQrfuAPOn8wtD7HlhCTR",
@@ -763,7 +763,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.758Z"),
       updatedAt: new Date("2019-08-14T23:06:59.023Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "bamrJpZA9JmnLSMEbTlI4",
@@ -786,7 +786,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.766Z"),
       updatedAt: new Date("2019-08-14T23:06:59.031Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "BCwOFAHJDpyPbKcVBjIUM",
@@ -809,7 +809,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.771Z"),
       updatedAt: new Date("2019-08-14T23:06:59.039Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "5t56gXJdJLZiksBuX8BtL",
@@ -832,7 +832,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.777Z"),
       updatedAt: new Date("2019-08-14T23:06:59.046Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "7mmAuJ0x7l_2VxJLoSzX5",
@@ -855,7 +855,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.783Z"),
       updatedAt: new Date("2019-08-14T23:06:59.053Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "LVsJ-_PYy8x2rn5V8Deo9",
@@ -878,7 +878,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.976Z"),
       updatedAt: new Date("2019-08-14T23:06:59.161Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "neDXHUzJkL2YZ2CQOZx1i",
@@ -901,7 +901,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.976Z"),
       updatedAt: new Date("2019-08-14T23:06:59.167Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "3_cr3dd76rGY7tDYlvfEO",
@@ -924,7 +924,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-07-09T21:24:14.122Z"),
       updatedAt: new Date("2019-08-14T23:06:59.173Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "_38QsH2XMgHEzn_Sn4b2r",
@@ -947,7 +947,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.950Z"),
       updatedAt: new Date("2019-08-14T23:06:59.179Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "gTHXtJ37uP8R8zkOp7wOt",
@@ -970,7 +970,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.956Z"),
       updatedAt: new Date("2019-08-14T23:06:59.186Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "me-MRbUEn6ox-OYpzosO1",
@@ -993,7 +993,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.961Z"),
       updatedAt: new Date("2019-08-14T23:06:59.192Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "ZOtuFSb79LX7p6CVW3H4w",
@@ -1016,7 +1016,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.967Z"),
       updatedAt: new Date("2019-08-14T23:06:59.198Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "nISGOCiWoCzQXkMZGV5bV",
@@ -1039,7 +1039,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.972Z"),
       updatedAt: new Date("2019-08-14T23:06:59.204Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "Ppne-7ChrEht1HxwfO0gc",
@@ -1062,7 +1062,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.978Z"),
       updatedAt: new Date("2019-08-14T23:06:59.210Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "78hBgnEoHw3aW5r4Mn2Jf",
@@ -1085,7 +1085,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:55:22.984Z"),
       updatedAt: new Date("2019-08-14T23:06:59.216Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "0RtHf-Iogw3x643r46y-a",
@@ -1108,7 +1108,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.563Z"),
       updatedAt: new Date("2019-08-14T23:06:59.222Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "ENMVc3sX0kmD3G4762naM",
@@ -1131,7 +1131,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.570Z"),
       updatedAt: new Date("2019-08-14T23:06:59.229Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "O9OSAiIFTSA5SimFlCbd7",
@@ -1154,7 +1154,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.575Z"),
       updatedAt: new Date("2019-08-14T23:06:59.235Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "d_7SUFpxe1rZZ5dIgMgTG",
@@ -1177,7 +1177,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.580Z"),
       updatedAt: new Date("2019-08-14T23:06:59.241Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "bR17hir7729c22LyVbQ3m",
@@ -1200,7 +1200,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.587Z"),
       updatedAt: new Date("2019-08-14T23:06:59.247Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "B62kKSz7qwAA7aM6tzwtB",
@@ -1223,7 +1223,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.593Z"),
       updatedAt: new Date("2019-08-14T23:06:59.254Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "C3YePWy05Or9fDeVuRPTF",
@@ -1246,7 +1246,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.606Z"),
       updatedAt: new Date("2019-08-14T23:06:59.260Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "Logk3eY0iXtf3oCOctxqT",
@@ -1269,7 +1269,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:56:06.612Z"),
       updatedAt: new Date("2019-08-14T23:06:59.267Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "nIYojGurvtF7xelaeT0tN",
@@ -1292,7 +1292,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.790Z"),
       updatedAt: new Date("2019-08-14T23:06:59.060Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "omzU7rRoirKXq8SQfaShf",
@@ -1315,7 +1315,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.796Z"),
       updatedAt: new Date("2019-08-14T23:06:59.067Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "IzVtblU-KMTHf3wPGzx2g",
@@ -1338,7 +1338,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.802Z"),
       updatedAt: new Date("2019-08-14T23:06:59.074Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "7g-6eFE_Q6Xi5K2xT2bE5",
@@ -1361,7 +1361,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.807Z"),
       updatedAt: new Date("2019-08-14T23:06:59.080Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "4Br-28LII41R3pINIzLwe",
@@ -1384,7 +1384,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.813Z"),
       updatedAt: new Date("2019-08-14T23:06:59.086Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "5bvjTW2ATEpxwsKppCh0l",
@@ -1407,7 +1407,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:52:08.819Z"),
       updatedAt: new Date("2019-08-14T23:06:59.093Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "BZlMmnCXwT4bChrcaNUW3",
@@ -1430,7 +1430,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.921Z"),
       updatedAt: new Date("2019-08-14T23:06:59.099Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "j2hU6Qv5ayOHMKPLQBolz",
@@ -1453,7 +1453,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.927Z"),
       updatedAt: new Date("2019-08-14T23:06:59.105Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "w2-TtBySVELMWyL1cLTkA",
@@ -1476,7 +1476,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.933Z"),
       updatedAt: new Date("2019-08-14T23:06:59.111Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "YhC6LoOIT6hxPfk4uKU3m",
@@ -1499,7 +1499,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.938Z"),
       updatedAt: new Date("2019-08-14T23:06:59.118Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "5CuSFqgGgFX245JQsnG84",
@@ -1522,7 +1522,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.944Z"),
       updatedAt: new Date("2019-08-14T23:06:59.124Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "WoD20A8q1CZm8NmGvLHUn",
@@ -1545,7 +1545,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.950Z"),
       updatedAt: new Date("2019-08-14T23:06:59.130Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "srzDhzV5HQpqR5vuyHKlQ",
@@ -1568,7 +1568,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.955Z"),
       updatedAt: new Date("2019-08-14T23:06:59.136Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "b9jo7kYEOQcATHWBjwJ6r",
@@ -1591,7 +1591,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.960Z"),
       updatedAt: new Date("2019-08-14T23:06:59.142Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "i5tQbXCZRrU_X3ultDSii",
@@ -1614,7 +1614,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.965Z"),
       updatedAt: new Date("2019-08-14T23:06:59.148Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
     {
       id: "mrRtN0rArISKnE-PFomth",
@@ -1637,9 +1637,7 @@ export const ArcherListing: Listing = {
       },
       createdAt: new Date("2019-08-14T22:53:09.970Z"),
       updatedAt: new Date("2019-08-14T23:06:59.155Z"),
-      amiChart,
+      amiChartId: amiChart.id,
     },
   ],
-  // TODO confirm not used anywhere
-  // totalUnits: 2,
 }

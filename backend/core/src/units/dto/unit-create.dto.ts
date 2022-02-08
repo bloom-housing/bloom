@@ -15,7 +15,6 @@ export class UnitCreateDto extends OmitType(UnitDto, [
   "priorityType",
   "amiChartOverride",
 ] as const) {
-
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

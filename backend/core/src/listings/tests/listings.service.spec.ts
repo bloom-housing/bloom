@@ -12,6 +12,8 @@ import { ListingRepository } from "../db/listing.repository"
 import { ListingsQueryBuilder } from "../db/listings-query-builder"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
 
+/* eslint-disable @typescript-eslint/unbound-method */
+
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
 // see: https://github.com/cypress-io/cypress/issues/1319#issuecomment-593500345
@@ -24,50 +26,50 @@ const mockListings = [
     property: { id: "test-property1", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf2",
     property: { id: "test-property2", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf3",
     property: { id: "test-property3", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf4",
     property: { id: "test-property4", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf5",
     property: { id: "test-property5", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf6",
     property: { id: "test-property6", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
+    unitsSummarized: { byUnitTypeAndRent: [] },
   },
   {
     id: "asdf7",
     property: { id: "test-property7", units: [] },
     preferences: [],
     status: "closed",
-    unitsSummarized: { byUnitTypeAndRent: [] }
-  }
+    unitsSummarized: { byUnitTypeAndRent: [] },
+  },
 ]
 const mockFilteredListings = mockListings.slice(0, 2)
 const mockInnerQueryBuilder = {
@@ -88,7 +90,7 @@ const mockInnerQueryBuilder = {
   addFilters: ListingsQueryBuilder.prototype.addFilters,
   addOrderFromFieldEnum: ListingsQueryBuilder.prototype.addOrderFromFieldEnum,
   getMany: jest.fn().mockReturnValue(mockListings),
-  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length])
+  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length]),
 }
 const mockQueryBuilder = {
   alias: "listings",
@@ -107,13 +109,13 @@ const mockQueryBuilder = {
   addInnerFilterSubQuery: jest.fn().mockReturnThis(),
   paginate: ListingsQueryBuilder.prototype.paginate,
   getMany: jest.fn().mockReturnValue(mockListings),
-  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length])
+  getManyAndCount: jest.fn().mockReturnValue([mockListings, mockListings.length]),
 }
 const mockListingsRepo = {
   createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   count: jest.fn().mockReturnValue(100),
   save: jest.fn(),
-  list: ListingRepository.prototype.list
+  list: ListingRepository.prototype.list,
 }
 
 describe("ListingsService", () => {
@@ -125,17 +127,17 @@ describe("ListingsService", () => {
         ListingsService,
         {
           provide: getRepositoryToken(Listing),
-          useValue: mockListingsRepo
+          useValue: mockListingsRepo,
         },
         {
           provide: getRepositoryToken(AmiChart),
-          useValue: jest.fn()
+          useValue: jest.fn(),
         },
         {
           provide: TranslationsService,
-          useValue: { translateListing: jest.fn() }
-        }
-      ]
+          useValue: { translateListing: jest.fn() },
+        },
+      ],
     }).compile()
 
     service = module.get(ListingsService)
@@ -171,9 +173,9 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["="],
-            neighborhood: expectedNeighborhood
-          }
-        ]
+            neighborhood: expectedNeighborhood,
+          },
+        ],
       }
 
       const listings = await service.list(queryParams)
@@ -182,7 +184,7 @@ describe("ListingsService", () => {
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) = LOWER(:neighborhood_0)",
         {
-          neighborhood_0: expectedNeighborhood
+          neighborhood_0: expectedNeighborhood,
         }
       )
     })
@@ -199,9 +201,9 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["IN"],
-            neighborhood: expectedNeighborhoodString
-          }
-        ]
+            neighborhood: expectedNeighborhoodString,
+          },
+        ],
       }
 
       const listings = await service.list(queryParams)
@@ -210,7 +212,7 @@ describe("ListingsService", () => {
       expect(mockInnerQueryBuilder.andWhere).toHaveBeenCalledWith(
         "LOWER(CAST(property.neighborhood as text)) IN (:...neighborhood_0)",
         {
-          neighborhood_0: expectedNeighborhoodArray
+          neighborhood_0: expectedNeighborhoodArray,
         }
       )
     })
@@ -222,11 +224,11 @@ describe("ListingsService", () => {
         filter: [
           {
             $comparison: Compare["="],
-            otherField: "otherField"
+            otherField: "otherField",
             // The querystring can contain unknown fields that aren't on the
             // ListingFilterParams type, so we force it to the type for testing.
-          } as ListingFilterParams
-        ]
+          } as ListingFilterParams,
+        ],
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
@@ -245,16 +247,15 @@ describe("ListingsService", () => {
             // and the type system trusts that whatever is provided is correct,
             // so we force it to an invalid type for testing.
             $comparison: "); DROP TABLE Students;" as Compare,
-            name: "test name"
-          } as ListingFilterParams
-        ]
+            name: "test name",
+          } as ListingFilterParams,
+        ],
       }
 
       await expect(service.list(queryParams)).rejects.toThrow(
         new HttpException("Comparison Not Implemented", HttpStatus.NOT_IMPLEMENTED)
       )
     })
-
 
     describe("ListingsService.list sorting", () => {
       it("defaults to ordering by application dates when no orderBy param is set", async () => {
@@ -267,7 +268,7 @@ describe("ListingsService", () => {
         const expectedOrderByArgument = {
           "listings.applicationDueDate": "ASC",
           "listings.applicationOpenDate": "DESC",
-          "listings.id": "ASC"
+          "listings.id": "ASC",
         }
 
         // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)

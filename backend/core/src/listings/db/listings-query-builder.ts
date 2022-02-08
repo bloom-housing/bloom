@@ -7,10 +7,8 @@ import { filterTypeToFieldMap } from "../dto/filter-type-to-field-map"
 import { GenericQueryBuilder } from "../../shared/db/generic-query-builder"
 
 export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
-
   public leftJoinRelationsForFilters() {
-    return this
-      .leftJoin(`${this.alias}.property`, "property")
+    return this.leftJoin(`${this.alias}.property`, "property")
       .leftJoin(`${this.alias}.jurisdiction`, "jurisdiction")
       .leftJoin(`${this.alias}.leasingAgents`, "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
@@ -19,12 +17,14 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
   }
 
   public leftJoinAndSelectAll() {
-    return this
-      .leftJoinAndSelect(`${this.alias}.applicationMethods`, "applicationMethods")
+    return this.leftJoinAndSelect(`${this.alias}.applicationMethods`, "applicationMethods")
       .leftJoinAndSelect("applicationMethods.paperApplications", "paperApplications")
       .leftJoinAndSelect("paperApplications.file", "paperApplicationFile")
       .leftJoinAndSelect(`${this.alias}.image`, "image")
-      .leftJoinAndSelect(`${this.alias}.buildingSelectionCriteriaFile`, "buildingSelectionCriteriaFile")
+      .leftJoinAndSelect(
+        `${this.alias}.buildingSelectionCriteriaFile`,
+        "buildingSelectionCriteriaFile"
+      )
       .leftJoinAndSelect(`${this.alias}.events`, "listingEvents")
       .leftJoinAndSelect("listingEvents.file", "listingEventFile")
       .leftJoinAndSelect(`${this.alias}.result`, "result")
@@ -71,7 +71,7 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
         return this.orderBy({
           [`${this.alias}.applicationDueDate`]: "ASC",
           [`${this.alias}.applicationOpenDate`]: "DESC",
-          [`${this.alias}.id`]: "ASC"
+          [`${this.alias}.id`]: "ASC",
         })
       default:
         throw new HttpException(

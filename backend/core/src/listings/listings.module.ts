@@ -4,7 +4,7 @@ import {
   Inject,
   Module,
   OnModuleInit,
-  OnApplicationShutdown
+  OnApplicationShutdown,
 } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
@@ -37,28 +37,35 @@ const cacheConfig = {
   ttl: 24 * 60 * 60,
   store: redisStore,
   url: process.env.REDIS_URL,
-  tls: undefined
+  tls: undefined,
 }
 
 if (process.env.REDIS_USE_TLS !== "0") {
   cacheConfig.url = process.env.REDIS_TLS_URL
   cacheConfig.tls = {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
   }
 }
 
 @Module({
   imports: [
     CacheModule.register(cacheConfig),
-    TypeOrmModule.forFeature([Listing, Preference, Unit, User, Property, AmiChart, ListingRepository]),
+    TypeOrmModule.forFeature([
+      Listing,
+      Preference,
+      Unit,
+      User,
+      Property,
+      AmiChart,
+      ListingRepository,
+    ]),
     AuthModule,
     TranslationsModule,
-    ActivityLogModule
+    ActivityLogModule,
   ],
-  providers: [ListingsService,
-  ],
+  providers: [ListingsService],
   exports: [ListingsService],
-  controllers: [ListingsController]
+  controllers: [ListingsController],
 })
 // We have to manually disconnect from redis on app close
 export class ListingsModule implements OnApplicationShutdown, OnModuleInit {

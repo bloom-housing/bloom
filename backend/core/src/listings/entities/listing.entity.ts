@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,8 +7,8 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn, RelationId,
-  UpdateDateColumn
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"

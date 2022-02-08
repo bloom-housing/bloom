@@ -5,14 +5,15 @@ import Listing from "../src/listings/entities/listing.entity"
 
 async function main() {
   const conn = new Connection({
-    ...dbOptions
+    ...dbOptions,
   })
 
   await conn.connect()
   const limit = 10
   const page = 2
 
-  const qb = conn.createQueryBuilder(Listing, "listings")
+  const qb = conn
+    .createQueryBuilder(Listing, "listings")
     .leftJoinAndSelect("listings.property", "property")
     .leftJoinAndSelect("listings.leasingAgents", "leasingAgents")
     .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
@@ -21,9 +22,10 @@ async function main() {
     .orderBy({
       "listings.applicationDueDate": "ASC",
       "listings.applicationOpenDate": "DESC",
-      "listings.id": "ASC"
+      "listings.id": "ASC",
     })
-    .take(limit).skip((page - 1) * limit)
+    .take(limit)
+    .skip((page - 1) * limit)
   const [result, count] = await qb.getManyAndCount()
   for (const l of result) {
     console.log(l.id)
@@ -31,4 +33,4 @@ async function main() {
   console.log(count)
 }
 
-main()
+void main()

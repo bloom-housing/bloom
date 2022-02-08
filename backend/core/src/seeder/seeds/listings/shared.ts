@@ -7,10 +7,8 @@ import {
   PropertySeedType,
   UnitSeedType,
 } from "./listings"
-import { defaultAmiChart } from "../ami-charts/default-ami-chart"
 import { ListingEventCreateDto } from "../../../listings/dto/listing-event.dto"
 import { ListingEventType } from "../../../listings/types/listing-event-type-enum"
-import { AmiChart } from "../../../ami-charts/entities/ami-chart.entity"
 import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UserCreateDto } from "../../../auth/dto/user-create.dto"
 import { CountyCode } from "../../../shared/types/county-code"

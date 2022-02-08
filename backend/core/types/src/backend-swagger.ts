@@ -912,7 +912,7 @@ export class UserService {
       /**  */
       page?: number
       /**  */
-      limit?: number | "all"
+      limit?: number
       /**  */
       filter?: UserFilterParams[]
     } = {} as any,
@@ -1111,7 +1111,7 @@ export class ListingsService {
       /**  */
       page?: number
       /**  */
-      limit?: number | "all"
+      limit?: number
       /**  */
       filter?: ListingFilterParams[]
       /**  */
@@ -4634,9 +4634,6 @@ export interface Unit {
   status: UnitStatus
 
   /**  */
-  amiChart?: Id
-
-  /**  */
   unitType?: UnitType
 
   /**  */
@@ -4656,6 +4653,9 @@ export interface Unit {
 
   /**  */
   updatedAt: Date
+
+  /**  */
+  amiChartId?: string
 
   /**  */
   amiPercentage?: string
@@ -5057,9 +5057,6 @@ export interface UnitCreate {
   status: UnitStatus
 
   /**  */
-  amiChart?: Id
-
-  /**  */
   unitType?: Id
 
   /**  */
@@ -5070,6 +5067,9 @@ export interface UnitCreate {
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideCreate
+
+  /**  */
+  amiChartId?: string
 
   /**  */
   amiPercentage?: string
@@ -5482,9 +5482,6 @@ export interface UnitUpdate {
   updatedAt?: Date
 
   /**  */
-  amiChart?: Id
-
-  /**  */
   unitType?: Id
 
   /**  */
@@ -5495,6 +5492,9 @@ export interface UnitUpdate {
 
   /**  */
   amiChartOverride?: UnitAmiChartOverrideUpdate
+
+  /**  */
+  amiChartId?: string
 
   /**  */
   amiPercentage?: string

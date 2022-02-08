@@ -31,7 +31,6 @@ import { ListingCreateDto } from "./dto/listing-create.dto"
 import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
-import { ListingsRetrieveQueryParams } from "./dto/listings-retrieve-query-params"
 import { ListingCreateValidationPipe } from "./validation-pipes/listing-create-validation-pipe"
 import { ListingUpdateValidationPipe } from "./validation-pipes/listing-update-validation-pipe"
 import { ActivityLogInterceptor } from "../activity-log/interceptors/activity-log.interceptor"
@@ -78,16 +77,12 @@ export class ListingsController {
   @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
   async retrieve(
     @Headers("language") language: Language,
-    @Param("id") listingId: string,
-    @Query() queryParams: ListingsRetrieveQueryParams
+    @Param("id") listingId: string
   ): Promise<ListingDto> {
     if (listingId === undefined || listingId === "undefined") {
       return mapTo(ListingDto, {})
     }
-    return mapTo(
-      ListingDto,
-      await this.listingsService.findOne(listingId, language, queryParams.view)
-    )
+    return mapTo(ListingDto, await this.listingsService.findOne(listingId, language))
   }
 
   @Put(`:id`)

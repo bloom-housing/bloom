@@ -2,7 +2,12 @@ import { Repository } from "typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 
 export class GenericRepository<Entity> extends Repository<Entity> {
-  protected static buildPagination<T>(items: T[], pageParam, limitParam, totalItems): Pagination<T> {
+  protected static buildPagination<T>(
+    items: T[],
+    pageParam,
+    limitParam,
+    totalItems
+  ): Pagination<T> {
     return {
       items: items,
       meta: {
@@ -10,14 +15,14 @@ export class GenericRepository<Entity> extends Repository<Entity> {
         itemCount: items.length,
         itemsPerPage: limitParam,
         totalItems: totalItems,
-        totalPages: Math.ceil(totalItems / limitParam)
+        totalPages: Math.ceil(totalItems / limitParam),
       },
       links: {
         first: "",
         previous: "",
         next: "",
-        last: ""
-      }
+        last: "",
+      },
     }
   }
 }
