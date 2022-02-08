@@ -6349,6 +6349,7 @@ export enum EnumListingFilterParamsStatus {
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
+  "mostRecentlyClosed" = "mostRecentlyClosed",
 }
 
 export enum ListingApplicationAddressType {
