@@ -31,7 +31,7 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "applicationPickUpAddress",
   "applicationMethods",
   "buildingSelectionCriteriaFile",
-  "image",
+  "images",
   "events",
   "leasingAgentAddress",
   "urlSlug",
@@ -115,9 +115,9 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetUpdateDto)
-  image?: AssetUpdateDto | null
+  images?: AssetUpdateDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

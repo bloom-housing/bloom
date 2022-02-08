@@ -4803,7 +4803,7 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: Asset[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5227,7 +5227,7 @@ export interface ListingCreate {
   events: ListingEventCreate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: AssetCreate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5648,7 +5648,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: AssetUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -6388,7 +6388,6 @@ export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
-export type CombinedImageTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate

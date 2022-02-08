@@ -193,7 +193,7 @@ describe("Listings", () => {
       fileId: fileId,
       label: label,
     }
-    listing.image = image
+    listing.images = [image]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -202,11 +202,11 @@ describe("Listings", () => {
       .expect(200)
     const modifiedListing: ListingDto = putResponse.body
 
-    expect(modifiedListing.image.fileId).toBe(fileId)
-    expect(modifiedListing.image.label).toBe(label)
-    expect(modifiedListing.image).toHaveProperty("id")
-    expect(modifiedListing.image).toHaveProperty("createdAt")
-    expect(modifiedListing.image).toHaveProperty("updatedAt")
+    expect(modifiedListing.images[0].fileId).toBe(fileId)
+    expect(modifiedListing.images[0].label).toBe(label)
+    expect(modifiedListing.images[0]).toHaveProperty("id")
+    expect(modifiedListing.images[0]).toHaveProperty("createdAt")
+    expect(modifiedListing.images[0]).toHaveProperty("updatedAt")
   })
 
   it("should add/overwrite application methods in existing listing", async () => {

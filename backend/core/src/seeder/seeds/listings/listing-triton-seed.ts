@@ -56,10 +56,10 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
-  image: {
+  images: [{
     label: "test_label",
     fileId: "fileid",
-  },
+  }],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria:
     "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/The_Triton_BMR_rental_information.pdf",

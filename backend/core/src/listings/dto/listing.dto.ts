@@ -26,7 +26,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
   "buildingSelectionCriteriaFile",
   "events",
-  "image",
+  "images",
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
@@ -75,9 +75,9 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetDto)
-  image?: AssetDto | null
+  images?: AssetDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

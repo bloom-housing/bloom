@@ -51,7 +51,7 @@ const getMockListing = () => {
     displayWaitlistSize: false,
     events: [],
     id: "",
-    image: undefined,
+    images: [],
     isWaitlistOpen: undefined,
     jurisdiction: { id: "abcd" } as Jurisdiction,
     leasingAgentAddress: undefined,

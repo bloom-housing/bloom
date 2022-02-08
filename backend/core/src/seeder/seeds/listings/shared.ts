@@ -202,10 +202,10 @@ export const defaultListing: ListingSeedType = {
   depositMin: "500",
   disableUnitsAccordion: true,
   displayWaitlistSize: false,
-  image: {
+  images: [{
     label: "test_label",
     fileId: "fileid",
-  },
+  }],
   leasingAgentAddress: {
     city: "San Francisco",
     state: "CA",

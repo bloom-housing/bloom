@@ -27,7 +27,7 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "depositMin",
   "developer",
   "digitalApplication",
-  "image",
+  "images",
   "isWaitlistOpen",
   "leasingAgentEmail",
   "leasingAgentName",
@@ -71,9 +71,9 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => AssetUpdateDto)
-  image: AssetUpdateDto
+  images: AssetUpdateDto[]
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

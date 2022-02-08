@@ -463,12 +463,13 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
 
-  @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
+  @ManyToMany(() => Asset, { eager: true, nullable: true, cascade: true })
+  @JoinTable()
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => Asset)
-  image?: Asset | null
+  images?: Asset[] | null
 
   @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
   @Expose()
