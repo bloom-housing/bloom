@@ -82,7 +82,7 @@ export class EmailService {
   public async sendMfaCode(user: User, email: string, mfaCode: string) {
     await this.loadTranslationsForUser(user)
     await this.send(
-      "michalp@airnauts.com",
+      email,
       "Bloom account access token",
       this.template("mfa-code")({
         user: user,

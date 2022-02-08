@@ -11,11 +11,13 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import { FormSignInNetworkError, FormSignInControl } from "./FormSignIn"
+import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFACodeProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInMFACodeValues) => void
   networkError: FormSignInNetworkError
+  mfaType: EnumRequestMfaCodeMfaType
 }
 
 export type FormSignInMFACodeValues = {
@@ -26,6 +28,7 @@ const FormSignInMFACode = ({
   onSubmit,
   networkError,
   control: { errors, register, handleSubmit },
+  mfaType,
 }: FormSignInMFACodeProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
@@ -36,7 +39,11 @@ const FormSignInMFACode = ({
       <div className="form-card__lead text-center border-b mx-0">
         <Icon size="2xl" symbol="profile" />
         <h2 className="form-card__title">{t("nav.signInMFA.verifyTitle")}</h2>
-        <p className="form-card__sub-title">{t("nav.signInMFA.haveSentCode")}</p>
+        <p className="form-card__sub-title">
+          {mfaType === EnumRequestMfaCodeMfaType.sms
+            ? t("nav.signInMFA.haveSentCodeToPhone")
+            : t("nav.signInMFA.haveSentCodeToEmail")}
+        </p>
       </div>
       <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-code"} />
 

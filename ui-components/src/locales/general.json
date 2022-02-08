@@ -1385,7 +1385,7 @@
     "flags": "Flags",
     "users": "Users",
     "signInMFA": {
-      "verificationChoiceMainTitle": "How would you like us to verify that its you?",
+      "verificationChoiceMainTitle": "How would you like us to verify that it's you?",
       "verificationChoiceSecondaryTitle": "We can send a code to your email or phone number",
       "verifyByEmail": "verify with Email",
       "verifyByPhone": "verify with phone number",
@@ -1399,8 +1399,9 @@
       "phoneNumber": "Phone Number",
       "code": "Code",
       "noMFACode": "please enter your code",
-      "verifyTitle": "Verify that its you",
-      "haveSentCode": "We sent a code to your phone. Please enter the number below."
+      "verifyTitle": "Verify that it's you",
+      "haveSentCodeToPhone": "We sent a code to your phone. Please enter the number below.",
+      "haveSentCodeToEmail": "We sent a code to your email. Please enter the number below."
     }
   },
   "pageTitle": {

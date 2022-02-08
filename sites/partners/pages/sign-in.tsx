@@ -79,6 +79,7 @@ const SignIn = () => {
         onSubmit={onSubmitMfaCode(email, password, determineNetworkError, login, router)}
         control={{ register, errors, handleSubmit }}
         networkError={{ error: networkError, reset: resetNetworkError }}
+        mfaType={mfaType}
       />
     )
   }

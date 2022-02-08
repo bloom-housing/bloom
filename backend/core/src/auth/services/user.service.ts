@@ -470,25 +470,20 @@ export class UserService {
       throw new UnauthorizedException()
     }
 
-    if (requestMfaCodeDto.phoneNumber && requestMfaCodeDto.mfaType === MfaType.sms) {
-      if (user.phoneNumber) {
-        throw new UnauthorizedException(
-          "phone number can only be specified the first time using mfa"
+    if (requestMfaCodeDto.mfaType === MfaType.sms) {
+      if (requestMfaCodeDto.phoneNumber) {
+        if (user.phoneNumber) {
+          throw new UnauthorizedException(
+            "phone number can only be specified the first time using mfa"
+          )
+        }
+        user.phoneNumber = requestMfaCodeDto.phoneNumber
+      } else if (!requestMfaCodeDto.phoneNumber && !user.phoneNumber) {
+        throw new HttpException(
+          { name: "phoneNumberMissing", message: "no valid phone number was found" },
+          400
         )
       }
-      if (user.phoneNumber && user.phoneNumber !== requestMfaCodeDto.phoneNumber) {
-        throw new UnauthorizedException("user and mfa request phone numbers differ")
-      }
-      user.phoneNumber = requestMfaCodeDto.phoneNumber
-    } else if (
-      requestMfaCodeDto.mfaType === MfaType.sms &&
-      !requestMfaCodeDto.phoneNumber &&
-      !user.phoneNumber
-    ) {
-      throw new HttpException(
-        { name: "phoneNumberMissing", message: "no valid phone number was found" },
-        400
-      )
     }
     const mfaCode = this.generateMfaCode()
     user.mfaCode = mfaCode
