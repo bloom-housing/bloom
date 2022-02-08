@@ -62,30 +62,26 @@ Cypress.Commands.add("verifyAlertBox", () => {
   )
 })
 
+const processSet = (application, set, fieldsToSkip, command) => {
+  if (set.length) {
+    set.forEach(({ id, fieldKey }) => {
+      if (!fieldsToSkip.includes(id)) {
+        if (command === "type") {
+          cy.getByID(id).type(application[fieldKey])
+        } else if (command === "select") {
+          cy.getByID(id).select(application[fieldKey])
+        } else if (command === "click") {
+          cy.getByID(fieldKey).click()
+        }
+      }
+    })
+  }
+}
+
 const fillFields = (application, fieldsToType, fieldsToSelect, fieldsToClick, fieldsToSkip) => {
-  if (fieldsToType.length) {
-    fieldsToType.forEach(({ id, fieldKey }) => {
-      if (!fieldsToSkip.includes(id)) {
-        cy.getByID(id).type(application[fieldKey])
-      }
-    })
-  }
-
-  if (fieldsToSelect.length) {
-    fieldsToSelect.forEach(({ id, fieldKey }) => {
-      if (!fieldsToSkip.includes(id)) {
-        cy.getByID(id).select(application[fieldKey])
-      }
-    })
-  }
-
-  if (fieldsToClick.length) {
-    fieldsToClick.forEach(({ id, fieldKey }) => {
-      if (!fieldsToSkip.includes(id)) {
-        cy.getByID(fieldKey).click()
-      }
-    })
-  }
+  processSet(application, fieldsToType, fieldsToSkip, "type")
+  processSet(application, fieldsToSelect, fieldsToSkip, "select")
+  processSet(application, fieldsToClick, fieldsToSkip, "click")
 }
 
 Cypress.Commands.add("fillPrimaryApplicant", (application, fieldsToSkip = []) => {
