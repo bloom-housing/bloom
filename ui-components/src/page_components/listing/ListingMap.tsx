@@ -36,8 +36,12 @@ const isValidLongitude = (longitude: number) => {
 }
 
 const ListingMap = (props: ListingMapProps) => {
-  // Lazy load the map component only when it's visible on screen
-  const { setIntersectingElement, intersecting } = useIntersect({ rootMargin: "500px" })
+  // Lazy load the map component only when it will become visible on screen
+  const { setIntersectingElement, intersecting } = useIntersect({
+    // `window` isn't set for SSR, so we'll use `global` instead—doesn't really
+    // matter because the map won't ever get rendered in SSR anyway
+    rootMargin: `${global.innerHeight || 0}px`,
+  })
   const [hasIntersected, setHasIntersected] = useState(false)
   if (intersecting && !hasIntersected) setHasIntersected(true)
 
