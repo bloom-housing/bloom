@@ -69,16 +69,19 @@ export class ListingCreateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationPickUpAddress?: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationDropOffAddress: AddressCreateDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   applicationMailingAddress: AddressCreateDto | null
 
@@ -102,6 +105,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   leasingAgentAddress?: AddressCreateDto | null
 
@@ -132,6 +136,7 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressCreateDto)
   buildingAddress?: AddressCreateDto | null
 

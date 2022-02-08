@@ -19,6 +19,26 @@ export default class AdditionalMetadataFormatter extends Formatter {
       }
     }
 
+    const cleanAddress = (fieldName: string) => {
+      if (this.data[fieldName]) {
+        delete this.data[fieldName].id
+        if (
+          !this.data[fieldName].street &&
+          !this.data[fieldName].city &&
+          !this.data[fieldName].state &&
+          !this.data[fieldName].zipCode
+        ) {
+          this.data[fieldName] = null
+        }
+      }
+    }
+
+    cleanAddress("leasingAgentAddress")
+    cleanAddress("buildingAddress")
+    cleanAddress("applicationMailingAddress")
+    cleanAddress("applicationPickUpAddress")
+    cleanAddress("applicationDropOffAddress")
+
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
     if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null

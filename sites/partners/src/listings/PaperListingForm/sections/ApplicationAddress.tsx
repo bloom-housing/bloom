@@ -16,7 +16,7 @@ import { stateKeys } from "@bloom-housing/shared-helpers"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { FormListing, addressTypes } from "../formTypes"
 import dayjs from "dayjs"
-import { isNullOrUndefined } from "../../../../lib/helpers"
+import { isNullOrUndefined, fieldHasError } from "../../../../lib/helpers"
 
 type ApplicationAddressProps = {
   listing?: FormListing
@@ -26,7 +26,7 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, control, setValue } = formMethods
+  const { register, watch, control, setValue, errors, getValues, clearErrors } = formMethods
 
   // If leasing agent address does not exist, do not show it as a radio option
   const leasingAgentAddressStreet = useWatch({
@@ -58,9 +58,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
   // If leasing agent address is selected and becomes null, reset radio options
   useEffect(() => {
     if (!leasingAgentAddressExists) {
-      setValue("whereApplicationsMailedIn", null)
-      setValue("whereApplicationsDroppedOff", null)
-      setValue("whereApplicationsPickedUp", null)
+      if (mailedInAddressType === addressTypes.leasingAgent)
+        setValue("whereApplicationsMailedIn", null)
+      if (droppedOffAddressType === addressTypes.leasingAgent)
+        setValue("whereApplicationsDroppedOff", null)
+      if (pickedUpAddressType === addressTypes.leasingAgent)
+        setValue("whereApplicationsPickedUp", null)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leasingAgentAddressExists])
@@ -130,6 +133,12 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
       ? addressTypes.anotherAddress
       : null,
   })
+
+  const getPartialError = (fieldKey: string, fieldSubKey: string) => {
+    if (fieldHasError(errors[fieldKey]) && !getValues(fieldSubKey)) {
+      return "Cannot enter a partial address"
+    }
+  }
 
   const yesNoRadioOptions = [
     {
@@ -329,6 +338,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     register={register}
                     placeholder={t("application.contact.streetAddress")}
                     dataTestId={"mailing-address-street"}
+                    errorMessage={getPartialError(
+                      "applicationMailingAddress",
+                      "applicationMailingAddress.street"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationMailingAddress",
+                        "applicationMailingAddress.street"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationMailingAddress"),
+                    }}
                   />
                 </GridCell>
 
@@ -350,6 +372,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     register={register}
                     placeholder={t("application.contact.city")}
                     dataTestId={"mailing-address-city"}
+                    errorMessage={getPartialError(
+                      "applicationMailingAddress",
+                      "applicationMailingAddress.city"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationMailingAddress",
+                        "applicationMailingAddress.city"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationMailingAddress"),
+                    }}
                   />
                 </GridCell>
                 <GridCell span={2}>
@@ -363,8 +398,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       controlClassName="control"
                       options={stateKeys}
                       keyPrefix="states"
-                      errorMessage={t("errors.stateError")}
                       dataTestId={"mailing-address-state"}
+                      errorMessage={getPartialError(
+                        "applicationMailingAddress",
+                        "applicationMailingAddress.state"
+                      )}
+                      error={
+                        !!getPartialError(
+                          "applicationMailingAddress",
+                          "applicationMailingAddress.state"
+                        )
+                      }
+                      inputProps={{
+                        onChange: () => clearErrors("applicationMailingAddress"),
+                      }}
                     />
                   </ViewItem>
                 </GridCell>
@@ -374,9 +421,21 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     name={"applicationMailingAddress.zipCode"}
                     id={"applicationMailingAddress.zipCode"}
                     placeholder={t("application.contact.zip")}
-                    errorMessage={t("errors.zipCodeError")}
                     register={register}
                     dataTestId={"mailing-address-zip"}
+                    errorMessage={getPartialError(
+                      "applicationMailingAddress",
+                      "applicationMailingAddress.zipCode"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationMailingAddress",
+                        "applicationMailingAddress.zipCode"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationMailingAddress"),
+                    }}
                   />
                 </GridCell>
               </GridSection>
@@ -393,6 +452,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     id={"applicationPickUpAddress.street"}
                     register={register}
                     placeholder={t("application.contact.streetAddress")}
+                    errorMessage={getPartialError(
+                      "applicationPickUpAddress",
+                      "applicationPickUpAddress.street"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationPickUpAddress",
+                        "applicationPickUpAddress.street"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationPickUpAddress"),
+                    }}
                   />
                 </GridCell>
                 <Field
@@ -411,6 +483,16 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     id={"applicationPickUpAddress.city"}
                     register={register}
                     placeholder={t("application.contact.city")}
+                    errorMessage={getPartialError(
+                      "applicationPickUpAddress",
+                      "applicationPickUpAddress.city"
+                    )}
+                    error={
+                      !!getPartialError("applicationPickUpAddress", "applicationPickUpAddress.city")
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationPickUpAddress"),
+                    }}
                   />
                 </GridCell>
                 <GridCell span={2}>
@@ -424,7 +506,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       controlClassName="control"
                       options={stateKeys}
                       keyPrefix="states"
-                      errorMessage={t("errors.stateError")}
+                      errorMessage={getPartialError(
+                        "applicationPickUpAddress",
+                        "applicationPickUpAddress.state"
+                      )}
+                      error={
+                        !!getPartialError(
+                          "applicationPickUpAddress",
+                          "applicationPickUpAddress.state"
+                        )
+                      }
+                      inputProps={{
+                        onChange: () => clearErrors("applicationPickUpAddress"),
+                      }}
                     />
                   </ViewItem>
                 </GridCell>
@@ -434,8 +528,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     name={"applicationPickUpAddress.zipCode"}
                     id={"applicationPickUpAddress.zipCode"}
                     placeholder={t("application.contact.zip")}
-                    errorMessage={t("errors.zipCodeError")}
                     register={register}
+                    errorMessage={getPartialError(
+                      "applicationPickUpAddress",
+                      "applicationPickUpAddress.zipCode"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationPickUpAddress",
+                        "applicationPickUpAddress.zipCode"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationPickUpAddress"),
+                    }}
                   />
                 </GridCell>
               </GridSection>
@@ -464,6 +570,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     id={"applicationDropOffAddress.street"}
                     register={register}
                     placeholder={t("application.contact.streetAddress")}
+                    errorMessage={getPartialError(
+                      "applicationDropOffAddress",
+                      "applicationDropOffAddress.street"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationDropOffAddress",
+                        "applicationDropOffAddress.street"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationDropOffAddress"),
+                    }}
                   />
                 </GridCell>
                 <Field
@@ -482,6 +601,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     id={"applicationDropOffAddress.city"}
                     register={register}
                     placeholder={t("application.contact.city")}
+                    errorMessage={getPartialError(
+                      "applicationDropOffAddress",
+                      "applicationDropOffAddress.city"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationDropOffAddress",
+                        "applicationDropOffAddress.city"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationDropOffAddress"),
+                    }}
                   />
                 </GridCell>
                 <GridCell span={2}>
@@ -495,7 +627,19 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                       controlClassName="control"
                       options={stateKeys}
                       keyPrefix="states"
-                      errorMessage={t("errors.stateError")}
+                      errorMessage={getPartialError(
+                        "applicationDropOffAddress",
+                        "applicationDropOffAddress.state"
+                      )}
+                      error={
+                        !!getPartialError(
+                          "applicationDropOffAddress",
+                          "applicationDropOffAddress.state"
+                        )
+                      }
+                      inputProps={{
+                        onChange: () => clearErrors("applicationDropOffAddress"),
+                      }}
                     />
                   </ViewItem>
                 </GridCell>
@@ -505,8 +649,20 @@ const ApplicationAddress = ({ listing }: ApplicationAddressProps) => {
                     name={"applicationDropOffAddress.zipCode"}
                     id={"applicationDropOffAddress.zipCode"}
                     placeholder={t("application.contact.zip")}
-                    errorMessage={t("errors.zipCodeError")}
                     register={register}
+                    errorMessage={getPartialError(
+                      "applicationDropOffAddress",
+                      "applicationDropOffAddress.zipCode"
+                    )}
+                    error={
+                      !!getPartialError(
+                        "applicationDropOffAddress",
+                        "applicationDropOffAddress.zipCode"
+                      )
+                    }
+                    inputProps={{
+                      onChange: () => clearErrors("applicationDropOffAddress"),
+                    }}
                   />
                 </GridCell>
               </GridSection>
