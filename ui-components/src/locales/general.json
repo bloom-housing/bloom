@@ -671,6 +671,30 @@
           "label": "At least one member of my household is an Alameda Unified School District employee",
           "description": "At least one member of my household is an Alameda Unified School District employee."
         }
+      },
+      "dublinHousing": {
+        "title": "Alameda Unified School District (AUSD) employee",
+        "liveInDublin": {
+          "label": "At least one member of my household lives in Dublin (3 points)"
+        },
+        "immediateFamily": {
+          "label": "At least one member of my household has an immediate family member in Dublin (1 point)"
+        },
+        "displacedResident": {
+          "label": "At least one member of my household was required to relocate from current Dublin residence due to demolition of dwelling or conversation of dwelling from rental to for-sale unit (1 point)"
+        },
+        "worksInDublin": {
+          "label": "At least one member of my household works full-time in Dublin (3 points)"
+        },
+        "publicServiceEmployee": {
+          "label": "At least one member of my household is a public service employee in Dublin (1 additional point)"
+        },
+        "permanentlyDisabled": {
+          "label": "At least one member of my household is permanently disabled (1 point)"
+        },
+        "senior": {
+          "label": "At least one member of my household is a senior, defined as age 62 and older (1 point)"
+        }
       }
     },
     "review": {
