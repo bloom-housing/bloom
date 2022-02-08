@@ -25,7 +25,10 @@ const DetailsHouseholdDetails = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.preferredUnitSizes")}>
+        <ViewItem
+          label={t("application.details.preferredUnitSizes")}
+          dataTestId="preferredUnitSizes"
+        >
           {(() => {
             if (!preferredUnits.length) return t("t.n/a")
 
@@ -40,7 +43,7 @@ const DetailsHouseholdDetails = () => {
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.details.adaPriorities")}>
+        <ViewItem label={t("application.details.adaPriorities")} dataTestId="adaPriorities">
           {accessibilityLabels(application.accessibility).map((item) => (
             <Fragment key={item}>
               {item}
@@ -50,13 +53,21 @@ const DetailsHouseholdDetails = () => {
         </ViewItem>
       </GridCell>
       <GridCell>
-        <ViewItem id="householdChanges" label={t("application.household.expectingChanges.title")}>
+        <ViewItem
+          id="householdChanges"
+          label={t("application.household.expectingChanges.title")}
+          dataTestId="expectingChanges"
+        >
           {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
         </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem id="householdStudent" label={t("application.household.householdStudent.title")}>
+        <ViewItem
+          id="householdStudent"
+          label={t("application.household.householdStudent.title")}
+          dataTestId="householdStudent"
+        >
           {application.householdStudent ? t("t.yes") : t("t.no")}
         </ViewItem>
       </GridCell>

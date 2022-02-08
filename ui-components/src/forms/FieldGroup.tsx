@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
@@ -111,22 +111,25 @@ const FieldGroup = ({
     )
   }
 
-  const checkSelected = (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
-    formFields?.forEach((field) => {
-      if (field.defaultChecked) {
-        checkedValues.push(field.label)
-      }
-      if (field.subFields) {
-        checkSelected(field.subFields, checkedValues)
-      }
-    })
-  }
+  const checkSelected = useCallback(
+    (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
+      formFields?.forEach((field) => {
+        if (field.defaultChecked) {
+          checkedValues.push(field.label)
+        }
+        if (field.subFields) {
+          checkSelected(field.subFields, checkedValues)
+        }
+      })
+    },
+    []
+  )
 
   useEffect(() => {
     const initialValues: string[] = []
     checkSelected(fields, initialValues)
     setCheckedInputs([...initialValues])
-  }, [])
+  }, [checkSelected, setCheckedInputs, fields])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {
     return (

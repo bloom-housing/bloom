@@ -29,6 +29,7 @@ const FormHouseholdDetails = ({
       label: t(`application.household.preferredUnit.options.${item.name}`),
       value: item.id,
       defaultChecked: isChecked,
+      dataTestId: `preferredUnit.${item.name}`,
     }
   })
 
