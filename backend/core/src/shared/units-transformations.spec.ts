@@ -36,6 +36,7 @@ describe("Unit Transformations", () => {
         languages: [Language.en],
         preferences: [],
         publicUrl: "",
+        emailFromAddress: "email from address",
       },
     }
 
