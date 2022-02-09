@@ -268,6 +268,29 @@
           "description": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
         }
       },
+      "dublinHousing": {
+        "liveInDublin": {
+          "label": "Al menos un miembro de mi hogar vive en Dublín (3 puntos)"
+        },
+        "immediateFamily": {
+          "label": "Al menos un miembro de mi hogar tiene un familiar directo en Dublín (1 punto)"
+        },
+        "displacedResident": {
+          "label": "Se requirió que al menos un miembro de mi hogar se mudara de la residencia actual de Dublín debido a la demolición de la vivienda o la conversión de la vivienda de alquiler a unidad de venta (1 punto)"
+        },
+        "worksInDublin": {
+          "label": "Al menos un miembro de mi hogar trabaja a tiempo completo en Dublín (3 puntos)"
+        },
+        "publicServiceEmployee": {
+          "label": "Al menos un miembro de mi hogar es un empleado del servicio público en Dublín (1 punto adicional)"
+        },
+        "permanentlyDisabled": {
+          "label": "Al menos un miembro de mi hogar tiene una discapacidad permanente (1 punto)"
+        },
+        "senior": {
+          "label": "Al menos un miembro de mi hogar es una persona mayor, definida como de 62 años o más (1 punto)"
+        }
+      },
       "terminationOfAffordability": {
         "atLeastOne": {
           "label": "Al menos un miembro de mi hogar está sujeto a la terminación de las restricciones de asequibilidad"

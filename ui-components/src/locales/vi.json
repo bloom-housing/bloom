@@ -265,9 +265,32 @@
           "description": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda"
         }
       },
+      "dublinHousing": {
+        "liveInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Dublin (3 điểm)"
+        },
+        "immediateFamily": {
+          "label": "Ít nhất một thành viên trong gia đình của tôi có người thân trong gia đình ở Dublin (1 điểm)"
+        },
+        "displacedResident": {
+          "label": "Ít nhất một thành viên trong gia đình tôi đã phải di dời khỏi nơi ở hiện tại ở Dublin do việc phá dỡ nhà ở hoặc chuyển nhà từ cho thuê sang bán (1 điểm)"
+        },
+        "worksInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc toàn thời gian ở Dublin (3 điểm)"
+        },
+        "publicServiceEmployee": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên dịch vụ công cộng ở Dublin (1 điểm bổ sung)"
+        },
+        "permanentlyDisabled": {
+          "label": "Ít nhất một thành viên trong gia đình tôi bị tàn tật vĩnh viễn (1 điểm)"
+        },
+        "senior": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là người cao tuổi, được xác định là từ 62 tuổi trở lên (1 điểm)"
+        }
+      },
       "terminationOfAffordability": {
         "atLeastOne": {
-          "label": "Ít nhất một thành viên trong gia đình tôi phải chấm dứt các hạn chế về khả năng chi trả"
+          "label": "Ít nhất một thành viên trong gia đình, tôi phải sử dụng các hạn chế về chi trả khả năng"
         }
       },
       "liveWorkFosterCity": {
