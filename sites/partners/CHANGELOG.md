@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.53...@bloom-housing/partners@4.0.1-alpha.54) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.52...@bloom-housing/partners@4.0.1-alpha.53) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.51...@bloom-housing/partners@4.0.1-alpha.52) (2022-02-09)
+
+
+### Bug Fixes
+
+* cannot remove some fields in listings management ([#2455](https://github.com/bloom-housing/bloom/issues/2455)) ([acd9b51](https://github.com/bloom-housing/bloom/commit/acd9b51bb49581b4728b445d56c5c0a3c43e2777))
+
+
+
+
+
 ## [4.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.50...@bloom-housing/partners@4.0.1-alpha.51) (2022-02-08)
 
 **Note:** Version bump only for package @bloom-housing/partners

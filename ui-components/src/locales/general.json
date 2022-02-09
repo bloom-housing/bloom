@@ -695,6 +695,81 @@
         "senior": {
           "label": "At least one member of my household is a senior, defined as age 62 and older (1 point)"
         }
+      },
+      "terminationOfAffordability": {
+        "title": "Persons subject to termination of affordability restrictions",
+        "atLeastOne": {
+          "label": "At least one member of my household is subject to termination of affordability restrictions"
+        }
+      },
+      "liveWorkFosterCity": {
+        "title": "Persons who live and work in Foster City.",
+        "live": {
+          "label": "At least one member of my household lives in Foster City"
+        },
+        "work": {
+          "label": "At least one member of my household works in Foster City"
+        }
+      },
+      "liveFosterCity": {
+        "title": "Persons who live in Foster City.",
+        "live": {
+          "label": "At least one member of my household lives in Foster City"
+        }
+      },
+      "fosterCityEmployee": {
+        "title": "Employees of the City of Foster City.",
+        "employed": {
+          "label": "At least one member of my household is an employee of the City of Foster City"
+        }
+      },
+      "fosterCitySchoolEmployee": {
+        "title": "School District Employees",
+        "employed": {
+          "label": "At least one member of my household is a school district employee"
+        }
+      },
+      "workFosterCity": {
+        "title": "Work in Foster City",
+        "work": {
+          "label": "At least one member of my household works in Foster City"
+        }
+      },
+      "liveWorkSanMateo": {
+        "title": "Live or work in the City of San Mateo",
+        "live": {
+          "label": "At least one member of my household lives in the City of San Mateo"
+        },
+        "work": {
+          "label": "At least one member of my household works in the City of San Mateo"
+        }
+      },
+      "liveWorkEastPaloAlto": {
+        "title": "Live or work in the City of East Palo Alto",
+        "live": {
+          "label": "At least one member of my household lives in the City of East Palo Alto"
+        },
+        "work": {
+          "label": "At least one member of my household works 20 hours per week or more in the City of East Palo Alto"
+        }
+      },
+      "displaceeEastPaloAlto": {
+        "title": "Involuntary Displacement from East Palo Alto",
+        "naturalDisaster": {
+          "label": "Natural Disaster declared by Governor"
+        },
+        "domesticViolence": {
+          "label": "Domestic Violence"
+        },
+        "codeEnforcement": {
+          "label": "City Code Enforcement Activity"
+        },
+        "noFaultEviction": {
+          "label": "A \"No Fault\" Eviction from a rental unit in East Palo Alto within the last year of this application"
+        },
+        "increasedRent": {
+          "label": "A 10% or higher increase in rent in the last 12 months"
+        }
       }
     },
     "review": {

@@ -17,9 +17,15 @@ const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors, clearErrors, watch } = formMethods
+  const { register, control, errors, clearErrors, watch, getValues } = formMethods
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
+
+  const getErrorMessage = (fieldKey: string) => {
+    if (fieldHasError(errors?.leasingAgentAddress) && !getValues(fieldKey)) {
+      return "Cannot enter a partial address"
+    }
+  }
 
   useEffect(() => {
     clearErrors("leasingAgentPhone")
@@ -97,6 +103,11 @@ const LeasingAgent = () => {
               id={"leasingAgentAddress.street"}
               register={register}
               placeholder={t("application.contact.streetAddress")}
+              errorMessage={getErrorMessage("leasingAgentAddress.street")}
+              error={!!getErrorMessage("leasingAgentAddress.street")}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentAddress"),
+              }}
             />
           </GridCell>
           <Field
@@ -115,6 +126,11 @@ const LeasingAgent = () => {
               id={"leasingAgentAddress.city"}
               register={register}
               placeholder={t("application.contact.city")}
+              errorMessage={getErrorMessage("leasingAgentAddress.city")}
+              error={!!getErrorMessage("leasingAgentAddress.city")}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentAddress"),
+              }}
             />
           </GridCell>
           <GridCell span={2}>
@@ -128,7 +144,11 @@ const LeasingAgent = () => {
                 controlClassName="control"
                 options={stateKeys}
                 keyPrefix="states"
-                errorMessage={t("errors.stateError")}
+                errorMessage={getErrorMessage("leasingAgentAddress.state")}
+                error={!!getErrorMessage("leasingAgentAddress.state")}
+                inputProps={{
+                  onChange: () => clearErrors("leasingAgentAddress"),
+                }}
               />
             </ViewItem>
           </GridCell>
@@ -138,8 +158,12 @@ const LeasingAgent = () => {
               name={"leasingAgentAddress.zipCode"}
               id={"leasingAgentAddress.zipCode"}
               placeholder={t("application.contact.zip")}
-              errorMessage={t("errors.zipCodeError")}
+              errorMessage={getErrorMessage("leasingAgentAddress.zipCode")}
+              error={!!getErrorMessage("leasingAgentAddress.zipCode")}
               register={register}
+              inputProps={{
+                onChange: () => clearErrors("leasingAgentAddress"),
+              }}
             />
           </GridCell>
         </GridSection>
