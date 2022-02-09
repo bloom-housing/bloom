@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.0.1...@bloom-housing/backend-core@4.0.2) (2022-02-09)
+
+
+### Bug Fixes
+
+* updates partner check for listing perm ([#2484](https://github.com/seanmalbert/bloom/issues/2484)) ([c2ab01f](https://github.com/seanmalbert/bloom/commit/c2ab01f6520b138bead01dec7352618b90635432))
+
+
+
+
+
 ## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@4.0.1) (2022-02-03)
 
 

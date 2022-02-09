@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.1...@bloom-housing/partners@4.0.2) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1...@bloom-housing/partners@4.0.1) (2022-02-03)
 
 

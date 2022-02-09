@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.1...@bloom-housing/ui-components@4.0.2) (2022-02-09)
+
+
+### Features
+
+* 2419/adding SMC preferences ([#2482](https://github.com/seanmalbert/bloom/issues/2482)) ([bbb16c9](https://github.com/seanmalbert/bloom/commit/bbb16c934c956eb8f2684fc691322db8a6dfefef))
+* 2468/adding dublin preferences ([#2483](https://github.com/seanmalbert/bloom/issues/2483)) ([d797ed4](https://github.com/seanmalbert/bloom/commit/d797ed4309c7bca2e577aa9adcad2350b4ef48fb))
+
+
+
+
+
 ## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@3.0.1-alpha.22...@bloom-housing/ui-components@4.0.1) (2022-02-03)
 
 
