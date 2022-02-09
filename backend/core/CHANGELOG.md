@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.32...@bloom-housing/backend-core@3.0.2-alpha.33) (2022-02-09)
+
+
+### Features
+
+* **backend:** remove assigning partner user as an application owner ([#2476](https://github.com/bloom-housing/bloom/issues/2476)) ([4f6edf7](https://github.com/bloom-housing/bloom/commit/4f6edf7ed882ae926e363e4db4e40e6f19ed4746))
+
+
+
+
+
 ## [3.0.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.31...@bloom-housing/backend-core@3.0.2-alpha.32) (2022-02-09)
 
 
