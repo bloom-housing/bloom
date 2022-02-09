@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.31...@bloom-housing/backend-core@3.0.2-alpha.32) (2022-02-09)
+
+
+### Bug Fixes
+
+* updates partner check for listing perm ([#2484](https://github.com/bloom-housing/bloom/issues/2484)) ([9b0a6f5](https://github.com/bloom-housing/bloom/commit/9b0a6f560ec5dd95f846b330afb71eed40cbfa1b))
+
+
+
+
+
 ## [3.0.2-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.30...@bloom-housing/backend-core@3.0.2-alpha.31) (2022-02-09)
 
 
