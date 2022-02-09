@@ -55,7 +55,7 @@ export class AuthzService {
           void e.addPermissionForUser(
             user.id,
             "listing",
-            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            `!r.obj || r.obj.id == '${listing.id}'`,
             `(${authzActions.read}|${authzActions.update})`
           )
         })
