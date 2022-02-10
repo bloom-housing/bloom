@@ -323,7 +323,7 @@ export class ApplicationsService {
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
-      listing_id: listingId,
+      id: listingId,
     })
   }
 
