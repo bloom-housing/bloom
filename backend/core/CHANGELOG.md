@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.34...@bloom-housing/backend-core@3.0.2-alpha.35) (2022-02-10)
+
+
+### Bug Fixes
+
+* csv export auth check ([#2488](https://github.com/bloom-housing/bloom/issues/2488)) ([2471d4a](https://github.com/bloom-housing/bloom/commit/2471d4afdd747843f58c0c154d6e94a9c76d733d))
+
+
+
+
+
 ## [3.0.2-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.33...@bloom-housing/backend-core@3.0.2-alpha.34) (2022-02-10)
 
 **Note:** Version bump only for package @bloom-housing/backend-core
