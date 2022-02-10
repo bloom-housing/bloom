@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.52...@bloom-housing/ui-components@4.0.1-alpha.53) (2022-02-10)
+
+
+### Features
+
+* only show MapBox map when it's in the viewport ([#2470](https://github.com/bloom-housing/bloom/issues/2470)) ([86f9d6c](https://github.com/bloom-housing/bloom/commit/86f9d6cccd7de7e635ae4eab5b1e1358faf834e4))
+
+
+
+
+
 ## [4.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.51...@bloom-housing/ui-components@4.0.1-alpha.52) (2022-02-10)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
