@@ -18,6 +18,9 @@ export type FormSignInMFACodeProps = {
   onSubmit: (data: FormSignInMFACodeValues) => void
   networkError: FormSignInNetworkError
   mfaType: EnumRequestMfaCodeMfaType
+  allowPhoneNumberEdit: boolean
+  phoneNumber: string
+  goBackToPhone: () => void
 }
 
 export type FormSignInMFACodeValues = {
@@ -29,9 +32,25 @@ const FormSignInMFACode = ({
   networkError,
   control: { errors, register, handleSubmit },
   mfaType,
+  allowPhoneNumberEdit,
+  phoneNumber,
+  goBackToPhone,
 }: FormSignInMFACodeProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
+  }
+
+  let subNote
+  if (allowPhoneNumberEdit) {
+    subNote = (
+      <span className="field-sub-note">
+        <p>
+          {" "}
+          {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
+          <a onClick={() => goBackToPhone()}> {t("nav.signInMFA.editPhoneNumber")} </a>
+        </p>
+      </span>
+    )
   }
 
   return (
@@ -59,8 +78,8 @@ const FormSignInMFACode = ({
             errorMessage={t("nav.signInMFA.noMFACode")}
             register={register}
             dataTestId="sign-in-mfa-code-field"
+            helperElement={subNote}
           />
-
           <div className="text-center mt-6">
             <Button styleType={AppearanceStyleType.primary} data-test-id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}

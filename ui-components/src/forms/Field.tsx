@@ -31,6 +31,7 @@ export interface FieldProps {
   setValue?: UseFormMethods["setValue"]
   dataTestId?: string
   hidden?: boolean
+  helperElement?: JSX.Element
 }
 
 const Field = (props: FieldProps) => {
@@ -95,6 +96,7 @@ const Field = (props: FieldProps) => {
       {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
+        {props.helperElement && props.helperElement}
         <input
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}`}
           aria-invalid={!!props.error || false}

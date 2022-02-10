@@ -32,6 +32,8 @@ const SignIn = () => {
   const [renderStep, setRenderStep] = useState<EnumRenderStep | undefined>(
     EnumRenderStep.emailAndPassword
   )
+  const [allowPhoneNumberEdit, setAllowPhoneNumberEdit] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState("")
 
   let formToRender: JSX.Element
 
@@ -59,7 +61,9 @@ const SignIn = () => {
           setMfaType,
           setRenderStep,
           requestMfaCode,
-          determineNetworkError
+          determineNetworkError,
+          setAllowPhoneNumberEdit,
+          setPhoneNumber
         )}
         control={{ register, errors, handleSubmit, setValue }}
         networkError={{ error: networkError, reset: resetNetworkError }}
@@ -68,18 +72,30 @@ const SignIn = () => {
   } else if (renderStep === EnumRenderStep.phoneNumber) {
     formToRender = (
       <FormSignInAddPhone
-        onSubmit={onSubmitMfaCodeWithPhone(email, password, mfaType, setRenderStep, requestMfaCode)}
+        onSubmit={onSubmitMfaCodeWithPhone(
+          email,
+          password,
+          mfaType,
+          setRenderStep,
+          requestMfaCode,
+          setAllowPhoneNumberEdit,
+          setPhoneNumber
+        )}
         control={{ errors, handleSubmit, control }}
         networkError={{ error: networkError, reset: resetNetworkError }}
+        phoneNumber={phoneNumber}
       />
     )
   } else if (renderStep === EnumRenderStep.enterCode) {
     formToRender = (
       <FormSignInMFACode
-        onSubmit={onSubmitMfaCode(email, password, determineNetworkError, login, router)}
+        onSubmit={onSubmitMfaCode(email, password, determineNetworkError, login, router, mfaType)}
         control={{ register, errors, handleSubmit }}
         networkError={{ error: networkError, reset: resetNetworkError }}
         mfaType={mfaType}
+        allowPhoneNumberEdit={allowPhoneNumberEdit}
+        phoneNumber={phoneNumber}
+        goBackToPhone={() => setRenderStep(EnumRenderStep.phoneNumber)}
       />
     )
   }

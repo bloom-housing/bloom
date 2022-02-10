@@ -3881,6 +3881,9 @@ export interface Login {
 
   /**  */
   mfaCode?: string
+
+  /**  */
+  mfaType?: EnumLoginMfaType
 }
 
 export interface LoginResponse {
@@ -3904,10 +3907,13 @@ export interface RequestMfaCode {
 
 export interface RequestMfaCodeResponse {
   /**  */
-  maskedPhoneNumber?: string
+  phoneNumber?: string
 
   /**  */
   email?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface GetMfaInfo {
@@ -3920,7 +3926,7 @@ export interface GetMfaInfo {
 
 export interface GetMfaInfoResponse {
   /**  */
-  maskedPhoneNumber?: string
+  phoneNumber?: string
 
   /**  */
   email?: string
@@ -4008,6 +4014,9 @@ export interface User {
 
   /**  */
   failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserCreate {
@@ -4049,6 +4058,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserBasic {
@@ -4108,6 +4120,9 @@ export interface UserBasic {
 
   /**  */
   failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface Email {
@@ -4206,6 +4221,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserFilterParams {
@@ -4268,6 +4286,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserProfileUpdate {
@@ -6403,6 +6424,10 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
+}
+export enum EnumLoginMfaType {
+  "sms" = "sms",
+  "email" = "email",
 }
 export enum EnumRequestMfaCodeMfaType {
   "sms" = "sms",

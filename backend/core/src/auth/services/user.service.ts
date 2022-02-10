@@ -414,18 +414,6 @@ export class UserService {
     return out
   }
 
-  private static maskPhoneNumber(phoneNumber: string) {
-    let maskedPhoneNumber = ""
-    for (let i = 0; i < phoneNumber.length; i++) {
-      if (i < 3 || i > phoneNumber.length - 3) {
-        maskedPhoneNumber += phoneNumber[i]
-      } else {
-        maskedPhoneNumber += "*"
-      }
-    }
-    return maskedPhoneNumber
-  }
-
   private static hasUsedMfaInThePast(user: User): boolean {
     return !!user.mfaCodeUpdatedAt
   }
@@ -445,9 +433,7 @@ export class UserService {
 
     return {
       email: user.email,
-      maskedPhoneNumber: user.phoneNumber
-        ? UserService.maskPhoneNumber(user.phoneNumber)
-        : undefined,
+      phoneNumber: user.phoneNumber ?? undefined,
       isMfaEnabled: user.mfaEnabled,
       mfaUsedInThePast: UserService.hasUsedMfaInThePast(user),
     }
@@ -472,7 +458,7 @@ export class UserService {
 
     if (requestMfaCodeDto.mfaType === MfaType.sms) {
       if (requestMfaCodeDto.phoneNumber) {
-        if (user.phoneNumber) {
+        if (user.phoneNumberVerified) {
           throw new UnauthorizedException(
             "phone number can only be specified the first time using mfa"
           )
@@ -501,7 +487,10 @@ export class UserService {
     })
 
     return requestMfaCodeDto.mfaType === MfaType.email
-      ? { email: user.email }
-      : { maskedPhoneNumber: UserService.maskPhoneNumber(user.phoneNumber) }
+      ? { email: user.email, phoneNumberVerified: user.phoneNumberVerified }
+      : {
+          phoneNumber: user.phoneNumber,
+          phoneNumberVerified: user.phoneNumberVerified,
+        }
   }
 }

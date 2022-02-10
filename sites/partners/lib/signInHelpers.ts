@@ -37,11 +37,17 @@ export const onSubmitMfaType = (
   setMfaType,
   setRenderStep,
   requestMfaCode,
-  determineNetworkError
+  determineNetworkError,
+  setAllowPhoneNumberEdit,
+  setPhoneNumber
 ) => async (data: { mfaType: EnumRequestMfaCodeMfaType }) => {
   const { mfaType: incomingMfaType } = data
   try {
-    await requestMfaCode(email, password, incomingMfaType)
+    const res = await requestMfaCode(email, password, incomingMfaType)
+    if (!res.phoneNumberVerified) {
+      setAllowPhoneNumberEdit(true)
+      setPhoneNumber(res.phoneNumber)
+    }
     setMfaType(incomingMfaType)
     setRenderStep(EnumRenderStep.enterCode)
   } catch (error) {
@@ -60,11 +66,15 @@ export const onSubmitMfaCodeWithPhone = (
   password,
   mfaType,
   setRenderStep,
-  requestMfaCode
+  requestMfaCode,
+  setAllowPhoneNumberEdit,
+  setPhoneNumber
 ) => async (data: { phoneNumber: string }) => {
   const { phoneNumber } = data
   await requestMfaCode(email, password, mfaType, phoneNumber)
   setRenderStep(EnumRenderStep.enterCode)
+  setAllowPhoneNumberEdit(true)
+  setPhoneNumber(phoneNumber)
 }
 
 export const onSubmitMfaCode = (
@@ -72,11 +82,12 @@ export const onSubmitMfaCode = (
   password,
   determineNetworkError,
   login,
-  router
+  router,
+  mfaType
 ) => async (data: { mfaCode: string }) => {
   const { mfaCode } = data
   try {
-    await login(email, password, mfaCode)
+    await login(email, password, mfaCode, mfaType)
     await router.push("/")
   } catch (error) {
     const { status } = error.response || {}

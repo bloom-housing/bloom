@@ -2,7 +2,7 @@ import { Expose } from "class-transformer"
 
 export class GetMfaInfoResponseDto {
   @Expose()
-  maskedPhoneNumber?: string
+  phoneNumber?: string
 
   @Expose()
   email?: string

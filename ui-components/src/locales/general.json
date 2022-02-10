@@ -1401,7 +1401,9 @@
       "noMFACode": "please enter your code",
       "verifyTitle": "Verify that it's you",
       "haveSentCodeToPhone": "We sent a code to your phone. Please enter the number below.",
-      "haveSentCodeToEmail": "We sent a code to your email. Please enter the number below."
+      "haveSentCodeToEmail": "We sent a code to your email. Please enter the number below.",
+      "sentTo": "Code sent to: %{phoneNumber}",
+      "editPhoneNumber": "Edit phone number"
     }
   },
   "pageTitle": {

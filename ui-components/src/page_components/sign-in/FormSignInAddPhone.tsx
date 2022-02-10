@@ -17,6 +17,7 @@ export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl
   onSubmit: (data: FormSignInAddPhoneValues) => void
   networkError: FormSignInNetworkError
+  phoneNumber: string
 }
 
 export type FormSignInAddPhoneControl = {
@@ -29,7 +30,12 @@ export type FormSignInAddPhoneValues = {
   phoneNumber: string
 }
 
-const FormSignInAddPhone = ({ onSubmit, networkError, control }: FormSignInAddPhoneProps) => {
+const FormSignInAddPhone = ({
+  onSubmit,
+  networkError,
+  control,
+  phoneNumber,
+}: FormSignInAddPhoneProps) => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
@@ -61,6 +67,7 @@ const FormSignInAddPhone = ({ onSubmit, networkError, control }: FormSignInAddPh
             controlClassName="control"
             control={control.control}
             dataTestId={"sign-in-phone-number-field"}
+            defaultValue={phoneNumber}
           />
 
           <div className="text-center mt-6">
