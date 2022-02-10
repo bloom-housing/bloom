@@ -97,7 +97,7 @@ export async function fetchBaseListingData({
   let listings = []
   try {
     const { id: jurisdictionId } = await fetchJurisdictionByName()
-    console.log("jurisdictionId = ", jurisdictionId)
+
     if (!jurisdictionId) {
       return listings
     }
