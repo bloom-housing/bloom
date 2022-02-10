@@ -5,10 +5,14 @@ import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
 import {
+  EnumListingFilterParamsComparison,
+  EnumListingFilterParamsStatus,
   Jurisdiction,
   Listing,
+  ListingFilterParams,
   ListingReviewOrder,
   ListingStatus,
+  OrderByFieldsEnum,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -83,25 +87,45 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-export async function fetchBaseListingData() {
+export async function fetchBaseListingData({
+  additionalFilters,
+  orderBy,
+}: {
+  additionalFilters?: ListingFilterParams[]
+  orderBy?: OrderByFieldsEnum
+}) {
   let listings = []
   try {
     const { id: jurisdictionId } = await fetchJurisdictionByName()
-    const response = await axios.get(process.env.listingServiceUrl, {
-      params: {
-        view: "base",
-        limit: "all",
-        filter: [
-          {
-            $comparison: "<>",
-            status: "pending",
-          },
-          {
-            $comparison: "=",
-            jurisdiction: jurisdictionId,
-          },
-        ],
+    console.log("jurisdictionId = ", jurisdictionId)
+    if (!jurisdictionId) {
+      return listings
+    }
+    let filter: ListingFilterParams[] = [
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        jurisdiction: jurisdictionId,
       },
+    ]
+
+    if (additionalFilters) {
+      filter = filter.concat(additionalFilters)
+    }
+    const params: {
+      view: string
+      limit: string
+      filter: ListingFilterParams[]
+      orderBy?: OrderByFieldsEnum
+    } = {
+      view: "base",
+      limit: "all",
+      filter,
+    }
+    if (orderBy) {
+      params.orderBy = orderBy
+    }
+    const response = await axios.get(process.env.listingServiceUrl, {
+      params,
       paramsSerializer: (params) => {
         return qs.stringify(params)
       },
@@ -113,6 +137,29 @@ export async function fetchBaseListingData() {
   }
 
   return listings
+}
+
+export async function fetchOpenListings() {
+  return await fetchBaseListingData({
+    additionalFilters: [
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        status: EnumListingFilterParamsStatus.active,
+      },
+    ],
+  })
+}
+
+export async function fetchClosedListings() {
+  return await fetchBaseListingData({
+    additionalFilters: [
+      {
+        $comparison: EnumListingFilterParamsComparison["="],
+        status: EnumListingFilterParamsStatus.closed,
+      },
+    ],
+    orderBy: OrderByFieldsEnum.mostRecentlyClosed,
+  })
 }
 
 let jurisdiction: Jurisdiction | null = null

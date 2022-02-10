@@ -1,13 +1,13 @@
 import React, { useEffect, useContext } from "react"
 import Head from "next/head"
 import { AuthContext, ListingsGroup, PageHeader, t } from "@bloom-housing/ui-components"
-import { Listing, ListingStatus } from "@bloom-housing/backend-core/types"
+import { Listing } from "@bloom-housing/backend-core/types"
 import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
 import { getListings } from "../lib/helpers"
-import { fetchBaseListingData } from "../lib/hooks"
+import { fetchClosedListings, fetchOpenListings } from "../lib/hooks"
 
 export interface ListingsProps {
   openListings: Listing[]
@@ -72,13 +72,11 @@ export default function ListingsPage(props: ListingsProps) {
 }
 
 export async function getStaticProps() {
-  const listings = await fetchBaseListingData()
-  const openListings = listings.filter(
-    (listing: Listing) => listing.status === ListingStatus.active
-  )
-  const closedListings = listings.filter(
-    (listing: Listing) => listing.status === ListingStatus.closed
-  )
+  const openListings = fetchOpenListings()
+  const closedListings = fetchClosedListings()
 
-  return { props: { openListings, closedListings }, revalidate: process.env.cacheRevalidate }
+  return {
+    props: { openListings: await openListings, closedListings: await closedListings },
+    revalidate: process.env.cacheRevalidate,
+  }
 }
