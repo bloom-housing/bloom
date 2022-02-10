@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.54...@bloom-housing/ui-components@4.0.1-alpha.55) (2022-02-10)
+
+
+### Bug Fixes
+
+* image gradient obscures image on mobile, is harsh in safari ([#2487](https://github.com/bloom-housing/bloom/issues/2487)) ([78785ff](https://github.com/bloom-housing/bloom/commit/78785ff0646e94fa751584ee090eacaec1994e36))
+
+
+
+
+
 ## [4.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.53...@bloom-housing/ui-components@4.0.1-alpha.54) (2022-02-10)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
