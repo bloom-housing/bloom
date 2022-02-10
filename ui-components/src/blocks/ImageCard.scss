@@ -36,20 +36,22 @@
 }
 
 .image-card__overlay {
-  background: rgb(0, 0, 0);
   background: linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.9374124649859944) 0%,
-    rgba(0, 0, 0, 0.665703781512605) 80%,
-    rgba(255, 255, 255, 0) 100%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.8) 10%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.3) 90%,
+    rgba(0, 0, 0, 0) 100%
   );
   @screen md {
-    background: rgb(0, 0, 0);
     background: linear-gradient(
       0deg,
-      rgba(0, 0, 0, 0.9374124649859944) 20%,
-      rgba(0, 0, 0, 0.665703781512605) 40%,
-      rgba(255, 255, 255, 0) 60%
+      rgba(0, 0, 0, 0.9) 20%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.2) 65%,
+      rgba(0, 0, 0, 0.1) 70%,
+      rgba(0, 0, 0, 0) 80%
     );
   }
   position: absolute;
