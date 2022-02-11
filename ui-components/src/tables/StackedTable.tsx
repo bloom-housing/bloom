@@ -24,7 +24,7 @@ const StackedTable = (props: StackedTableProps) => {
     const dataCell = Object.keys(dataRow).reduce((acc, item) => {
       acc[item] = (
         <div
-          className={`md:flex md:flex-col ${
+          className={`md:flex md:flex-col w-1/2 md:w-full ${
             props.headersHiddenDesktop?.includes(item) && "md:hidden"
           }`}
         >
