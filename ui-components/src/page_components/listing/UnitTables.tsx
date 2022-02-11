@@ -109,9 +109,19 @@ const UnitTables = (props: UnitTablesProps) => {
                 {!props.disableAccordion && (
                   <>
                     {accordion ? (
-                      <Icon symbol={"closeSmall"} size={"base"} fill={IconFillColors.primary} />
+                      <Icon
+                        symbol={"closeSmall"}
+                        size={"base"}
+                        fill={IconFillColors.primary}
+                        dataTestId={"unit-table-accordion-close"}
+                      />
                     ) : (
-                      <Icon symbol={"arrowDown"} size={"base"} fill={IconFillColors.primary} />
+                      <Icon
+                        symbol={"arrowDown"}
+                        size={"base"}
+                        fill={IconFillColors.primary}
+                        dataTestId={"unit-table-accordion-open"}
+                      />
                     )}
                   </>
                 )}

@@ -116,33 +116,33 @@ const summaries: {
 
 describe("<UnitTables>", () => {
   it("renders with accordion", () => {
-    const { getAllByText, getByRole, container } = render(
+    const { getByRole, getByTestId, getByText } = render(
       <UnitTables units={archer.units} unitSummaries={summaries.byUnitType} />
     )
-    /*
-      * TODO: this had to have been a result of a bad merge, this test doesn't make sense
-      expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
-      summaries.byUnitType[0].totalAvailable
-    ) */
-    expect(container.getElementsByClassName("hidden").length).toBe(1)
+    expect(getByText("Studio", { exact: false }))
+    expect(getByText("41 units", { exact: false }))
+    expect(getByText("285 square feet", { exact: false }))
+    expect(getByText("2nd - 3rd floors", { exact: false }))
+    expect(getByTestId("unit-table-accordion-open")).toBeTruthy()
     fireEvent.click(getByRole("button"))
-    expect(container.getElementsByClassName("hidden").length).toBe(0)
+    expect(getByTestId("unit-table-accordion-close")).toBeTruthy()
   })
   it("renders without accordion", () => {
-    const { getAllByText, getByRole, container } = render(
+    const { queryByTestId, getByRole, getByText } = render(
       <UnitTables
         units={archer.units}
         unitSummaries={summaries.byUnitType}
         disableAccordion={true}
       />
     )
-    /*
-      * TODO: this had to have been a result of a bad merge, this test doesn't make sense
-      expect(getAllByText(summaries.byUnitType[0].areaRange.min).length).toBe(
-      summaries.byUnitType[0].totalAvailable
-    ) */
-    expect(container.getElementsByClassName("hidden").length).toBe(1)
+    expect(getByText("Studio", { exact: false }))
+    expect(getByText("41 units", { exact: false }))
+    expect(getByText("285 square feet", { exact: false }))
+    expect(getByText("2nd - 3rd floors", { exact: false }))
+    expect(queryByTestId("unit-table-accordion-open")).toBeFalsy()
+    expect(queryByTestId("unit-table-accordion-close")).toBeFalsy()
     fireEvent.click(getByRole("button"))
-    expect(container.getElementsByClassName("hidden").length).toBe(1)
+    expect(queryByTestId("unit-table-accordion-open")).toBeFalsy()
+    expect(queryByTestId("unit-table-accordion-close")).toBeFalsy()
   })
 })
