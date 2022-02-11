@@ -46,6 +46,7 @@ import { ApplicationMethodType } from "../../application-methods/types/applicati
 import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
+import { ListingImage } from "./listing-image.entity"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -463,13 +464,15 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   reservedCommunityMinAge?: number | null
 
-  @ManyToMany(() => Asset, { eager: true, nullable: true, cascade: true })
-  @JoinTable()
+  @OneToMany(() => ListingImage, (listingImage) => listingImage.listing, {
+    cascade: true,
+    eager: true,
+  })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Asset)
-  images?: Asset[] | null
+  @Type(() => ListingImage)
+  images?: ListingImage[] | null
 
   @ManyToOne(() => Asset, { eager: true, nullable: true, cascade: true })
   @Expose()

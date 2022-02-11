@@ -193,7 +193,13 @@ describe("Listings", () => {
       fileId: fileId,
       label: label,
     }
-    listing.images = [image]
+
+    const assetCreateResponse = await supertest(app.getHttpServer())
+      .post(`/assets`)
+      .send(image)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+    listing.images = [{ image: assetCreateResponse.body, ordinal: 1 }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -202,11 +208,7 @@ describe("Listings", () => {
       .expect(200)
     const modifiedListing: ListingDto = putResponse.body
 
-    expect(modifiedListing.images[0].fileId).toBe(fileId)
-    expect(modifiedListing.images[0].label).toBe(label)
-    expect(modifiedListing.images[0]).toHaveProperty("id")
-    expect(modifiedListing.images[0]).toHaveProperty("createdAt")
-    expect(modifiedListing.images[0]).toHaveProperty("updatedAt")
+    expect(modifiedListing.images[0].image.id).toBe(assetCreateResponse.body.id)
   })
 
   it("should add/overwrite application methods in existing listing", async () => {

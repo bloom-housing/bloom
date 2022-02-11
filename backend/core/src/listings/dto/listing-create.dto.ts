@@ -19,6 +19,7 @@ import { ApplicationMethodCreateDto } from "../../application-methods/dto/applic
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { ListingPreferenceUpdateDto } from "../../preferences/dto/listing-preference-update.dto"
 import { ListingProgramUpdateDto } from "../../program/dto/listing-program-update.dto"
+import { ListingImageUpdateDto } from "./listing-image-update.dto"
 
 export class ListingCreateDto extends OmitType(ListingDto, [
   "id",
@@ -97,8 +98,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetCreateDto)
-  images?: AssetCreateDto[] | null
+  @Type(() => ListingImageUpdateDto)
+  images?: ListingImageUpdateDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

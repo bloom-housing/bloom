@@ -50,6 +50,7 @@ import { AmiDefaultTriton } from "../seeder/seeds/ami-charts/triton-ami-chart"
 import { AmiDefaultTritonDetroit } from "../seeder/seeds/ami-charts/triton-ami-chart-detroit"
 import { AmiDefaultSanJose } from "../seeder/seeds/ami-charts/default-ami-chart-san-jose"
 import { AmiDefaultSanMateo } from "../seeder/seeds/ami-charts/default-ami-chart-san-mateo"
+import { Asset } from "../assets/entities/asset.entity"
 
 @Module({})
 export class SeederModule {
@@ -64,6 +65,7 @@ export class SeederModule {
           ...dbConfig,
         }),
         TypeOrmModule.forFeature([
+          Asset,
           Listing,
           Preference,
           UnitAccessibilityPriorityType,

@@ -19,6 +19,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { OmitType } from "@nestjs/swagger"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { ListingImageUpdateDto } from "./listing-image-update.dto"
 
 export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   "assets",
@@ -72,8 +73,8 @@ export class ListingPublishedCreateDto extends OmitType(ListingCreateDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetCreateDto)
-  images: AssetCreateDto[]
+  @Type(() => ListingImageUpdateDto)
+  images: ListingImageUpdateDto[]
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })

@@ -66,10 +66,7 @@ const coliseumListing: ListingSeedType = {
     latitude: 37.7549632,
     longitude: -122.1968792,
   },
-  images: [{
-    label: "test_label",
-    fileId: "fileid",
-  }],
+  images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria: null,
   costsNotIncluded:

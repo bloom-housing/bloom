@@ -19,6 +19,7 @@ import { OmitType } from "@nestjs/swagger"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
 import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { ListingImageUpdateDto } from "./listing-image-update.dto"
 
 export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   "assets",
@@ -72,8 +73,8 @@ export class ListingPublishedUpdateDto extends OmitType(ListingUpdateDto, [
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => AssetUpdateDto)
-  images: AssetUpdateDto[]
+  @Type(() => ListingImageUpdateDto)
+  images: ListingImageUpdateDto[]
 
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
