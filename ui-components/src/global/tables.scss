@@ -147,13 +147,15 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
       @apply block;
       @apply text-right;
       border: 0px;
+      display: flex;
     }
 
     td:before {
       @apply font-bold;
       @apply uppercase;
-      @apply float-left;
       content: attr(data-label);
+      text-align: left;
+      width: 50%;
     }
 
     td:last-child {
