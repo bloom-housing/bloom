@@ -59,6 +59,7 @@ const listingsFetcher = function () {
   ) => {
     const res = await axios.get(url, {
       params: {
+        view: "base",
         page: page,
         limit: limit,
         filter: encodeToBackendFilterArray(filters),
