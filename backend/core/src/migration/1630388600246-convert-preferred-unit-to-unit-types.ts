@@ -16,7 +16,6 @@ export class convertPreferredUnitToUnitTypes1630388600246 implements MigrationIn
     // get applications
     const applications = await queryRunner.query(`SELECT id, preferred_unit FROM applications`)
     // insert into applications_preferred_unit_unit_types
-    console.log("applications = ", applications)
     for (const application of applications) {
       if (!applications?.preferred_unit) continue
       for (const unit of applications.preferred_unit) {

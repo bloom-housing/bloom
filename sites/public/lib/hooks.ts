@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import moment from "moment"
+import dayjs from "dayjs"
 import qs from "qs"
 import { useRouter } from "next/router"
 import useSWR from "swr"
@@ -11,9 +11,15 @@ import {
   encodeToBackendFilterArray,
   ListingFilterState,
 } from "@bloom-housing/ui-components"
-import { Listing, ListingReviewOrder, OrderByFieldsEnum } from "@bloom-housing/backend-core/types"
-import { AppSubmissionContext } from "./AppSubmissionContext"
+import {
+  Listing,
+  ListingReviewOrder,
+  OrderByFieldsEnum,
+  ListingStatus,
+  Jurisdiction,
+} from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
+import { AppSubmissionContext } from "./AppSubmissionContext"
 import { openInFuture } from "../lib/helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
@@ -95,23 +101,24 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
     let formattedDate = ""
     if (openInFuture(listing)) {
       const date = listing.applicationOpenDate
-      const openDate = moment(date)
-      formattedDate = openDate.format("MMM. D, YYYY")
+      const openDate = dayjs(date)
+      formattedDate = openDate.format("MMM D, YYYY")
       content = t("listings.applicationOpenPeriod")
     } else {
       if (listing.applicationDueDate) {
-        const dueDate = moment(listing.applicationDueDate)
-        const dueTime = moment(listing.applicationDueTime)
-        formattedDate = dueDate.format("MMM. DD, YYYY")
-        if (listing.applicationDueTime) {
-          formattedDate = formattedDate + ` ${t("t.at")} ` + dueTime.format("h:mm A")
-        }
+        const dueDate = dayjs(listing.applicationDueDate)
+        formattedDate = dueDate.format("MMM DD, YYYY")
+        formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
+
         // if due date is in future, listing is open
-        if (moment() < dueDate) {
+        if (dayjs() < dueDate) {
           content = t("listings.applicationDeadline")
         } else {
           content = t("listings.applicationsClosed")
         }
+      }
+      if (listing.status === ListingStatus.closed) {
+        content = t("listings.applicationsClosed")
       }
     }
     content = formattedDate !== "" ? `${content}: ${formattedDate}` : content
@@ -126,15 +133,11 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
   return props
 }
 
-/**
- * This is fired server side by getStaticProps
- * By setting listingData here, we can continue to serve listings if the fetch fails.
- * This more of a temporary solution.
- */
-let listingData = []
-
 export async function fetchBaseListingData() {
+  let listings = []
   try {
+    const { id: jurisdictionId } = await fetchJurisdictionByName()
+    console.log("jurisdictionId = ", jurisdictionId)
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
@@ -146,6 +149,10 @@ export async function fetchBaseListingData() {
             $comparison: "<>",
             status: "pending",
           },
+          {
+            $comparison: "=",
+            jurisdiction: jurisdictionId,
+          },
         ],
       },
       paramsSerializer: (params) => {
@@ -153,10 +160,30 @@ export async function fetchBaseListingData() {
       },
     })
 
-    listingData = response.data ?? []
-  } catch (error) {
-    console.log("fetchBaseListingData error = ", error)
+    listings = response.data ?? []
+  } catch (e) {
+    console.log("fetchBaseListingData error: ", e)
   }
 
-  return listingData
+  return listings
+}
+
+let jurisdiction: Jurisdiction | null = null
+
+export async function fetchJurisdictionByName() {
+  try {
+    if (jurisdiction) {
+      return jurisdiction
+    }
+
+    const jurisdictionName = process.env.jurisdictionName
+    const jurisdictionRes = await axios.get(
+      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
+    )
+    jurisdiction = jurisdictionRes?.data
+  } catch (error) {
+    console.log("error = ", error)
+  }
+
+  return jurisdiction
 }

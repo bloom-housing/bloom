@@ -14,11 +14,13 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
 
   const application = useContext(ApplicationContext)
 
-  const listingPreferences = listingDto?.preferences
+  const listingPreferences = listingDto?.listingPreferences
   const preferences = application?.preferences
 
   const hasMetaData = useMemo(() => {
-    return !!listingPreferences?.filter((preference) => preference?.formMetadata)?.length
+    return !!listingPreferences?.filter(
+      (listingPreference) => listingPreference.preference?.formMetadata
+    )?.length
   }, [listingPreferences])
 
   if (!hasMetaData) {
@@ -33,11 +35,11 @@ const DetailsPreferences = ({ listingId }: DetailsPreferencesProps) => {
       columns={2}
     >
       {listingPreferences?.map((listingPreference) => {
-        const metaKey = listingPreference?.formMetadata?.key
+        const metaKey = listingPreference?.preference?.formMetadata?.key
         const optionDetails = preferences.find((item) => item.key === metaKey)
 
         return (
-          <GridCell key={listingPreference.id}>
+          <GridCell key={listingPreference.preference.id}>
             <ViewItem
               label={t(`application.preferences.${metaKey}.title`, {
                 county: listingDto?.countyCode,

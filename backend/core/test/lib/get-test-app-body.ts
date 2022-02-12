@@ -93,7 +93,7 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     },
     demographics: {
       ethnicity: "",
-      race: "",
+      race: [],
       gender: "",
       sexualOrientation: "",
       howDidYouHear: [],
@@ -101,6 +101,8 @@ export const getTestAppBody: (listingId?: string) => ApplicationUpdate = (listin
     incomeVouchers: true,
     income: "100.00",
     incomePeriod: IncomePeriod.perMonth,
+    householdStudent: false,
+    householdExpectingChanges: false,
     householdMembers: [],
     preferredUnit: [],
     preferences: [],

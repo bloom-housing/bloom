@@ -35,6 +35,8 @@ const ExpandableText = (props: ExpandableTextProps) => {
   const maxLength = props.maxLength || 350
   let button
 
+  if (!props.children) return null
+
   if (props.children.length > maxLength) {
     button = moreLessButton(expanded, setExpanded)
   }

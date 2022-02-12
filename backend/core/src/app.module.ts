@@ -13,11 +13,8 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import { AuthModule } from "./auth/auth.module"
-
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
-import { EntityNotFoundExceptionFilter } from "./filters/entity-not-found-exception.filter"
-import { logger } from "./middleware/logger.middleware"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
 import { PropertyGroupsModule } from "./property-groups/property-groups.module"
@@ -31,7 +28,7 @@ import Redis from "ioredis"
 import { SharedModule } from "./shared/shared.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { TranslationsModule } from "./translations/translations.module"
-import { Reflector } from "@nestjs/core"
+import { HttpAdapterHost, Reflector } from "@nestjs/core"
 import { AssetsModule } from "./assets/assets.module"
 import { JurisdictionsModule } from "./jurisdictions/jurisdictions.module"
 import { ReservedCommunityTypesModule } from "./reserved-community-type/reserved-community-types.module"
@@ -44,11 +41,16 @@ import { SmsModule } from "./sms/sms.module"
 import { ScheduleModule } from "@nestjs/schedule"
 import { CronModule } from "./cron/cron.module"
 import { BullModule } from "@nestjs/bull"
+import { ProgramsModule } from "./program/programs.module"
+import { ActivityLogModule } from "./activity-log/activity-log.module"
+import { logger } from "./shared/middlewares/logger.middleware"
+import { CatchAllFilter } from "./shared/filters/catch-all-filter"
 
 export function applicationSetup(app: INestApplication) {
+  const { httpAdapter } = app.get(HttpAdapterHost)
   app.enableCors()
   app.use(logger)
-  app.useGlobalFilters(new EntityNotFoundExceptionFilter())
+  app.useGlobalFilters(new CatchAllFilter(httpAdapter))
   app.use(bodyParser.json({ limit: "50mb" }))
   app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }))
   app.useGlobalInterceptors(
@@ -57,7 +59,9 @@ export function applicationSetup(app: INestApplication) {
   return app
 }
 
-@Module({})
+@Module({
+  imports: [ActivityLogModule],
+})
 export class AppModule {
   static register(dbOptions): DynamicModule {
     /**
@@ -98,8 +102,10 @@ export class AppModule {
         CronModule,
         PaperApplicationsModule,
         PreferencesModule,
+        ProgramsModule,
         PropertiesModule,
         PropertyGroupsModule,
+        ProgramsModule,
         ReservedCommunityTypesModule,
         ScheduleModule.forRoot(),
         SharedModule,

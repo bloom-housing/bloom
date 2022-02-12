@@ -91,30 +91,65 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
   const uniquePercentageChartSet: ChartAndPercentage[] = [
     ...new Set(
       units
+        .filter((unit) => amiChartMap[unit.amiChartId])
         .map((unit) => {
           let amiChart = amiChartMap[unit.amiChartId]
           if (unit.amiChartOverride) {
             amiChart = mergeAmiChartWithOverrides(amiChart, unit.amiChartOverride)
           }
-          return {
+          return JSON.stringify({
             percentage: parseInt(unit.amiPercentage, 10),
             chart: amiChart,
-          }
+          })
         })
-        .map((item) => JSON.stringify(item))
     ),
   ].map((uniqueSetString) => JSON.parse(uniqueSetString))
 
   const hmiHeaders = {
     sizeColumn: showUnitType ? "t.unitType" : "listings.householdSize",
   } as AnyDict
-  const bmrHeaders = [
+
+  let bmrHeaders = [
+    "listings.unitTypes.SRO",
     "listings.unitTypes.studio",
     "listings.unitTypes.oneBdrm",
     "listings.unitTypes.twoBdrm",
     "listings.unitTypes.threeBdrm",
     "listings.unitTypes.fourBdrm",
   ]
+  // this is to map currentHouseholdSize to a units max occupancy
+  const unitOccupancy = []
+  if (showUnitType) {
+    // the unit types used by the listing
+    const selectedUnitTypes = units.reduce((obj, unit) => {
+      if (unit.unitType) {
+        obj[unit.unitType.name] = {
+          rooms: unit.unitType.numBedrooms,
+          maxOccupancy: unit.maxOccupancy,
+        }
+      }
+      return obj
+    }, {})
+    const sortedUnitTypeNames = Object.keys(selectedUnitTypes).sort((a, b) =>
+      selectedUnitTypes[a].rooms < selectedUnitTypes[b].rooms
+        ? -1
+        : selectedUnitTypes[a].rooms > selectedUnitTypes[b].rooms
+        ? 1
+        : 0
+    )
+    // setbmrHeaders based on the actual units
+    bmrHeaders = sortedUnitTypeNames.map((type) => `listings.unitTypes.${type}`)
+
+    // set unitOccupancy based off of a units max occupancy
+    sortedUnitTypeNames.forEach((name) => {
+      unitOccupancy.push(selectedUnitTypes[name].maxOccupancy)
+    })
+
+    // if showUnitType, we want to set the maxHouseholdSize to the largest unit.maxOccupancy
+    const largestBedroom = Math.max(...units.map((unit) => unit.unitType?.numBedrooms || 0))
+    maxHouseholdSize = largestBedroom + 1
+  }
+
   const hmiRows = [] as AnyDict[]
 
   // 1. If there are multiple AMI levels, show each AMI level (max income per
@@ -147,7 +182,7 @@ const hmiData = (units: Units, maxHouseholdSize: number, amiCharts: AmiChart[]) 
 
   // Build row data by household size
   new Array(maxHouseholdSize).fill(maxHouseholdSize).forEach((_, index) => {
-    const currentHouseholdSize = index + 1
+    const currentHouseholdSize = showUnitType ? unitOccupancy[index] : index + 1
     const rowData = {
       sizeColumn: showUnitType ? bmrHeaders[index] : currentHouseholdSize,
     }
@@ -279,7 +314,7 @@ type UnitMap = {
   [key: string]: Unit[]
 }
 
-const UnitTypeSort = ["studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm", "fiveBdrm"]
+const UnitTypeSort = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm", "fourBdrm", "fiveBdrm"]
 
 // Allows for multiples rows under one unit type if the rent methods differ
 export const summarizeUnitsByTypeAndRent = (units: Units): UnitSummary[] => {

@@ -1,8 +1,16 @@
-import { CacheModule, CACHE_MANAGER, Inject, Module, OnModuleDestroy } from "@nestjs/common"
+import {
+  CacheModule,
+  CACHE_MANAGER,
+  Inject,
+  Module,
+  OnModuleInit,
+  OnApplicationShutdown,
+} from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import * as redisStore from "cache-manager-redis-store"
 import { Store } from "cache-manager"
 import Redis from "redis"
+import { BullModule } from "@nestjs/bull"
 import { ListingsService } from "./listings.service"
 import { ListingsController } from "./listings.controller"
 import { Listing } from "./entities/listing.entity"
@@ -14,9 +22,9 @@ import { User } from "../auth/entities/user.entity"
 import { Property } from "../property/entities/property.entity"
 import { TranslationsModule } from "../translations/translations.module"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
-import { BullModule } from "@nestjs/bull"
 import { SmsModule } from "../sms/sms.module"
 import { ListingFeatures } from "./entities/listing-features.entity"
+import { ActivityLogModule } from "../activity-log/activity-log.module"
 
 interface RedisCache extends Cache {
   store: RedisStore
@@ -58,13 +66,14 @@ if (process.env.REDIS_USE_TLS !== "0") {
     TranslationsModule,
     BullModule.registerQueue({ name: "listings-notifications" }),
     SmsModule,
+    ActivityLogModule,
   ],
   providers: [ListingsService, ListingsNotificationsConsumer],
   exports: [ListingsService],
   controllers: [ListingsController],
 })
 // We have to manually disconnect from redis on app close
-export class ListingsModule implements OnModuleDestroy {
+export class ListingsModule implements OnApplicationShutdown, OnModuleInit {
   redisClient: Redis.RedisClient
   constructor(@Inject(CACHE_MANAGER) private cacheManager: RedisCache) {
     this.redisClient = this.cacheManager.store.getClient()
@@ -73,8 +82,9 @@ export class ListingsModule implements OnModuleDestroy {
       console.log("redis error = ", error)
     })
   }
-  onModuleDestroy() {
+  onApplicationShutdown() {
     console.log("Disconnect from Redis")
+    void this.cacheManager.store.reset()
     this.redisClient.quit()
   }
 

@@ -13,28 +13,38 @@ const DetailBuildingDetails = () => {
     >
       <GridSection columns={3}>
         <GridCell span={2}>
-          <ViewItem label={t("application.contact.streetAddress")}>
+          <ViewItem id="buildingAddress.street" label={t("application.contact.streetAddress")}>
             {listing.buildingAddress?.street}
           </ViewItem>
         </GridCell>
-        <ViewItem label={t("t.neighborhood")}>{listing?.neighborhood}</ViewItem>
+        <ViewItem id="neighborhood" label={t("t.neighborhood")}>
+          {listing?.neighborhood}
+        </ViewItem>
       </GridSection>
       <GridSection columns={6}>
         <GridCell span={2}>
-          <ViewItem label={t("application.contact.city")}>{listing.buildingAddress?.city}</ViewItem>
+          <ViewItem id="buildingAddress.city" label={t("application.contact.city")}>
+            {listing.buildingAddress?.city}
+          </ViewItem>
         </GridCell>
-        <ViewItem label={t("application.contact.state")}>{listing.buildingAddress?.state}</ViewItem>
-        <ViewItem label={t("application.contact.zip")}>{listing.buildingAddress?.zipCode}</ViewItem>
+        <ViewItem id="buildingAddress.state" label={t("application.contact.state")}>
+          {listing.buildingAddress?.state}
+        </ViewItem>
+        <ViewItem id="buildingAddress.zipCode" label={t("application.contact.zip")}>
+          {listing.buildingAddress?.zipCode}
+        </ViewItem>
 
         <GridCell span={2}>
-          <ViewItem label={t("listings.yearBuilt")}>{listing.yearBuilt}</ViewItem>
+          <ViewItem id="yearBuilt" label={t("listings.yearBuilt")}>
+            {listing.yearBuilt}
+          </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={3}>
-        <ViewItem label={t("listings.longitude")}>
+        <ViewItem id="longitude" label={t("listings.longitude")}>
           {listing.buildingAddress?.longitude && listing.buildingAddress.longitude.toString()}
         </ViewItem>
-        <ViewItem label={t("listings.latitude")}>
+        <ViewItem id="latitude" label={t("listings.latitude")}>
           {listing.buildingAddress?.latitude && listing.buildingAddress.latitude.toString()}
         </ViewItem>
       </GridSection>

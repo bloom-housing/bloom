@@ -1,11 +1,12 @@
 import { SetStateAction } from "react"
-import {
-  t,
-  cloudinaryUrlFromId,
-  CloudinaryUpload,
-  TimeFieldPeriod,
-} from "@bloom-housing/ui-components"
-import moment from "moment"
+import { t, CloudinaryUpload, TimeFieldPeriod } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
+
 import {
   AmiChart,
   ApplicationSubmissionType,
@@ -14,7 +15,7 @@ import {
   ListingEvent,
   IncomePeriod,
 } from "@bloom-housing/backend-core/types"
-import { TempUnit, FormListing, TempUnitsSummary } from "../src/listings/PaperListingForm"
+import { TempUnit, FormListing, TempUnitsSummary } from "../src/listings/PaperListingForm/formTypes"
 import { FieldError } from "react-hook-form"
 
 type DateTimePST = {
@@ -79,10 +80,10 @@ export const convertDataToPst = (dateObj: Date, type: ApplicationSubmissionType)
   }
 
   if (type === ApplicationSubmissionType.paper) {
-    const momentDate = moment(dateObj)
+    const dayjsDate = dayjs(dateObj)
 
-    const date = momentDate.utc().format("MM/DD/YYYY")
-    const time = momentDate.utc().format("hh:mm:ss A")
+    const date = dayjsDate.utc().format("MM/DD/YYYY")
+    const time = dayjsDate.utc().format("hh:mm:ss A")
 
     return {
       date,
@@ -163,10 +164,8 @@ export const createTime = (
   date: Date,
   formTime: { hours: string; minutes: string; period: TimeFieldPeriod }
 ) => {
-  if (!formTime?.hours || !date) return null
-  // date should be cloned, operations in the reference directly can occur unexpected changes
-  const dateClone = new Date(date.getTime())
-  if (!dateClone || (!formTime.hours && !formTime.minutes)) return null
+  if (!formTime?.hours || !formTime.minutes || !date) return null
+
   let formattedHours = parseInt(formTime.hours)
   if (formTime.period === "am" && formattedHours === 12) {
     formattedHours = 0
@@ -174,8 +173,8 @@ export const createTime = (
   if (formTime.period === "pm" && formattedHours !== 12) {
     formattedHours = formattedHours + 12
   }
-  dateClone.setHours(formattedHours, parseInt(formTime.minutes), 0)
-  return dateClone
+
+  return dayjs(date).hour(formattedHours).minute(parseInt(formTime.minutes)).toDate()
 }
 
 /**
@@ -183,7 +182,8 @@ export const createTime = (
  */
 export const createDate = (formDate: { year: string; month: string; day: string }) => {
   if (!formDate || !formDate?.year || !formDate?.month || !formDate?.day) return null
-  return new Date(`${formDate.month}-${formDate.day}-${formDate.year}`)
+
+  return dayjs(`${formDate.year}-${formDate.month}-${formDate.day}`, "YYYY-MM-DD").toDate()
 }
 
 interface FileUploaderParams {

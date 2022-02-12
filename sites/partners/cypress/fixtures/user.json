@@ -1,4 +1,9 @@
 {
   "email": "admin@example.com",
-  "password": "abcdef"
+  "emailConfirmation": "admin@example.com",
+  "password": "abcdef",
+  "passwordConfirmation": "abcdef",
+  "firstName": "Test",
+  "lastName": "User",
+  "dob": "1980-01-01"
 }

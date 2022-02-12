@@ -35,6 +35,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.heatingInUnit:
     case ListingFilterKeys.acInUnit:
     case ListingFilterKeys.minAmiPercentage:
+    case ListingFilterKeys.jurisdiction:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]

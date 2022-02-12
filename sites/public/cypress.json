@@ -6,5 +6,11 @@
   "video": true,
   "videoUploadOnPasses": false,
   "viewportHeight": 800,
-  "viewportWidth": 1280
+  "viewportWidth": 1280,
+  "numTestsKeptInMemory": 0,
+  "env": {
+    "codeCoverage": {
+      "url": "/api/__coverage__"
+    }
+  }
 }

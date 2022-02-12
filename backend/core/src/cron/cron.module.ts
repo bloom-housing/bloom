@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common"
 import { AuthModule } from "../auth/auth.module"
 import { ListingsModule } from "../listings/listings.module"
-import { EmailModule } from "../shared/email/email.module"
+import { EmailModule } from "../email/email.module"
 import { CronService } from "./cron.service"
 
 @Module({

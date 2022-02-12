@@ -1,3 +1,4 @@
+import React, { useEffect, useContext, useState } from "react"
 import Head from "next/head"
 import {
   PageHeader,
@@ -9,22 +10,24 @@ import {
   encodeToFrontendFilterString,
   ListingFilterState,
   FrontendListingFilterStateKeys,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { MetaTags } from "../src/MetaTags"
-import React, { useState } from "react"
 import { useRouter } from "next/router"
 import FilterForm from "../src/forms/filters/FilterForm"
 import { getListings } from "../lib/helpers"
 import { fetchBaseListingData } from "../lib/hooks"
 import FindRentalsForMeLink from "../lib/FindRentalsForMeLink"
+import { ListingList, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 
 const ListingsPage = ({ initialListings }) => {
   const router = useRouter()
 
   // Filter state
   const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false)
-
+  const { profile } = useContext(AuthContext)
   const pageTitle = `${t("pageTitle.rent")} - ${t("nav.siteTitle")}`
   const metaDescription = t("pageDescription.welcome", { regionName: t("region.name") })
   const metaImage = "" // TODO: replace with hero image
@@ -36,6 +39,15 @@ const ListingsPage = ({ initialListings }) => {
     setFilterModalVisible(false)
     void router.push(`/listings/filtered?page=${page}${encodeToFrontendFilterString(data)}`)
   }
+  useEffect(() => {
+    pushGtmEvent<ListingList>({
+      event: "pageView",
+      pageTitle: "Rent Affordable Housing - Housing Portal",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+      numberOfListings: initialListings?.meta?.totalItems,
+      listingIds: initialListings?.items.map((listing) => listing.id),
+    })
+  }, [profile, initialListings?.meta?.totalItems, initialListings?.items])
 
   return (
     <Layout>
@@ -99,6 +111,7 @@ const ListingsPage = ({ initialListings }) => {
 
 export async function getStaticProps() {
   const initialListings = await fetchBaseListingData()
+  console.log("initialListings = ", initialListings)
   return { props: { initialListings }, revalidate: process.env.cacheRevalidate }
 }
 

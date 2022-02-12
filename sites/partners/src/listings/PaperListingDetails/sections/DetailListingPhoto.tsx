@@ -1,12 +1,12 @@
 import React, { useContext } from "react"
 import {
-  cloudinaryUrlFromId,
   t,
   GridSection,
   GridCell,
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 
 const DetailListingPhoto = () => {
@@ -51,7 +51,11 @@ const DetailListingPhoto = () => {
       <GridSection>
         <GridCell span={2}>
           {listingPhotoUrl ? (
-            <MinimalTable headers={photoTableHeaders} data={photoTableData} />
+            <MinimalTable
+              id="listingPhotoTable"
+              headers={photoTableHeaders}
+              data={photoTableData}
+            />
           ) : (
             <span className={"view-item__value"}>{t("t.none")}</span>
           )}

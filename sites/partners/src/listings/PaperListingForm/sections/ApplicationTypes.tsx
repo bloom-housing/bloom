@@ -24,7 +24,7 @@ import {
   ApplicationMethodType,
   Language,
 } from "@bloom-housing/backend-core/types"
-import { FormListing } from "../index"
+import { FormListing } from "../formTypes"
 
 interface Methods {
   digital: ApplicationMethodCreate
@@ -375,7 +375,7 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
                     fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
-                    langauge: t(`languages.${item.language}`),
+                    language: t(`languages.${item.language}`),
                     actions: (
                       <div className="flex">
                         <Button

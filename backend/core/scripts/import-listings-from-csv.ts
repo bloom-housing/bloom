@@ -3,12 +3,7 @@ import fs from "fs"
 import axios from "axios"
 import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
 import * as client from "../types/src/backend-swagger"
-import {
-  AddressCreate,
-  CSVFormattingType,
-  ListingStatus,
-  serviceOptions,
-} from "../types/src/backend-swagger"
+import { AddressCreate, ListingStatus, serviceOptions } from "../types/src/backend-swagger"
 import { ListingReviewOrder } from "../src/listings/types/listing-review-order-enum"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
@@ -194,9 +189,7 @@ async function main() {
 
       // The following fields are only set because they are required
       units: [],
-      CSVFormattingType: CSVFormattingType.basic,
       applicationMethods: [],
-      preferences: [],
       applicationDropOffAddress: null,
       applicationMailingAddress: null,
       events: [],
@@ -215,6 +208,7 @@ async function main() {
       referralOpportunity: false,
       rentalAssistance: "",
       reviewOrderType: ListingReviewOrder.firstComeFirstServe,
+      listingPreferences: [],
     }
 
     try {

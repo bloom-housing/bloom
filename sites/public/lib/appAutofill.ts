@@ -4,7 +4,7 @@ import {
   ApplicationStatus,
   ApplicationSubmissionType,
 } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 
 class AutofillCleaner {
   application: Application = null
@@ -28,7 +28,7 @@ class AutofillCleaner {
       delete this.application[key]
     })
 
-    this.application["confirmationId"] = "" // only used on frontend
+    this.application["confirmationCode"] = "" // only used on frontend
     this.application["completedSections"] = 0 // only used on frontend
     this.application["autofilled"] = true // only used on frontend
     this.application.submissionType = ApplicationSubmissionType.electronical
@@ -74,7 +74,7 @@ class AutofillCleaner {
 
   removeLiveWorkAddresses() {
     this.application.applicant.workInRegion = null
-    this.application.applicant.workAddress = blankApplication().applicant.workAddress as Address
+    this.application.applicant.workAddress = blankApplication.applicant.workAddress as Address
 
     return this
   }

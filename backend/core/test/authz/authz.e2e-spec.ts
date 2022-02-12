@@ -9,6 +9,14 @@ import { applicationSetup, AppModule } from "../../src/app.module"
 import { getUserAccessToken } from "../utils/get-user-access-token"
 import { setAuthorization } from "../utils/set-authorization-helper"
 import { UserDto } from "../../src/auth/dto/user.dto"
+import { v4 as uuidv4 } from "uuid"
+import { Repository } from "typeorm"
+import { Application } from "../../src/applications/entities/application.entity"
+import { getRepositoryToken } from "@nestjs/typeorm"
+import { getTestAppBody } from "../lib/get-test-app-body"
+import { Listing } from "../../src/listings/entities/listing.entity"
+import { ApplicationDto } from "../../src/applications/dto/application.dto"
+
 jest.setTimeout(30000)
 
 describe("Authz", () => {
@@ -19,6 +27,9 @@ describe("Authz", () => {
   const applicationsEndpoint = "/applications"
   const listingsEndpoint = "/listings"
   const userEndpoint = "/user"
+  let applicationsRepository: Repository<Application>
+  let listingsRepository: Repository<Listing>
+  let app1: ApplicationDto
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -33,6 +44,17 @@ describe("Authz", () => {
     userProfile = (
       await supertest(app.getHttpServer())
         .get("/user")
+        .set(...setAuthorization(userAccessToken))
+    ).body
+    applicationsRepository = app.get<Repository<Application>>(getRepositoryToken(Application))
+    listingsRepository = app.get<Repository<Listing>>(getRepositoryToken(Listing))
+    const listings = await listingsRepository.find({ take: 1 })
+    const listing1Application = getTestAppBody(listings[0].id)
+    app1 = (
+      await supertest(app.getHttpServer())
+        .post(`/applications/submit`)
+        .send(listing1Application)
+        .set("jurisdictionName", "Detroit")
         .set(...setAuthorization(userAccessToken))
     ).body
   })
@@ -53,11 +75,11 @@ describe("Authz", () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous
         await supertest(app.getHttpServer())
-          .get(endpoint + "/fake_id")
+          .get(endpoint + `/${uuidv4()}`)
           .expect(403)
         // logged in normal user
         await supertest(app.getHttpServer())
-          .get(endpoint + "/fake_id")
+          .get(endpoint + `/${uuidv4()}`)
           .set(...setAuthorization(userAccessToken))
           .expect(403)
       }
@@ -78,12 +100,12 @@ describe("Authz", () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous
         await supertest(app.getHttpServer())
-          .put(endpoint + "/fake_id")
+          .put(endpoint + `/${uuidv4()}`)
           .send({})
           .expect(403)
         // logged in normal user
         await supertest(app.getHttpServer())
-          .put(endpoint + "/fake_id")
+          .put(endpoint + `/${uuidv4()}`)
           .send({})
           .set(...setAuthorization(userAccessToken))
           .expect(403)
@@ -93,11 +115,11 @@ describe("Authz", () => {
       for (const endpoint of adminOnlyEndpoints) {
         // anonymous
         await supertest(app.getHttpServer())
-          .delete(endpoint + "/fake_id")
+          .delete(endpoint + `/${uuidv4()}`)
           .expect(403)
         // logged in normal user
         await supertest(app.getHttpServer())
-          .delete(endpoint + "/fake_id")
+          .delete(endpoint + `/${uuidv4()}`)
           .set(...setAuthorization(userAccessToken))
           .expect(403)
       }
@@ -137,33 +159,37 @@ describe("Authz", () => {
         .expect(403)
     })
     it("should not allow anonymous user to GET applications by ID", async () => {
+      const applications = await applicationsRepository.find({ take: 1 })
       await supertest(app.getHttpServer())
-        .get(applicationsEndpoint + "/fake_id")
+        .get(applicationsEndpoint + `/${applications[0].id}`)
         .expect(403)
     })
     it(`should not allow normal/anonymous user to DELETE applications`, async () => {
       // anonymous
+      const applications = await applicationsRepository.find({ take: 1 })
       await supertest(app.getHttpServer())
-        .delete(applicationsEndpoint + "/fake_id")
+        .delete(applicationsEndpoint + `/${applications[0].id}`)
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .delete(applicationsEndpoint + "/fake_id")
+        .delete(applicationsEndpoint + `/${applications[0].id}`)
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
     it(`should not allow normal/anonymous user to PUT applications`, async () => {
       // anonymous
       await supertest(app.getHttpServer())
-        .put(applicationsEndpoint + "/fake_id")
+        .put(applicationsEndpoint + `/${app1.id}`)
+        .send(app1)
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .put(applicationsEndpoint + "/fake_id")
+        .put(applicationsEndpoint + `/${app1.id}`)
         .set(...setAuthorization(userAccessToken))
+        .send(app1)
         .expect(403)
     })
-    it(`should allow normal/anonymous user to POST applications`, async () => {
+    it.skip(`should allow normal/anonymous user to POST applications`, async () => {
       // anonymous
       await supertest(app.getHttpServer())
         .post(applicationsEndpoint + "/submit")
@@ -188,22 +214,22 @@ describe("Authz", () => {
     it(`should not allow normal/anonymous user to DELETE listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer())
-        .delete(listingsEndpoint + "/fake_id")
+        .delete(listingsEndpoint + `/${uuidv4()}`)
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .delete(listingsEndpoint + "/fake_id")
+        .delete(listingsEndpoint + `/${uuidv4()}`)
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })
     it(`should not allow normal/anonymous user to PUT listings`, async () => {
       // anonymous
       await supertest(app.getHttpServer())
-        .put(listingsEndpoint + "/fake_id")
+        .put(listingsEndpoint + `/${uuidv4()}`)
         .expect(403)
       // logged in normal user
       await supertest(app.getHttpServer())
-        .put(listingsEndpoint + "/fake_id")
+        .put(listingsEndpoint + `/${uuidv4()}`)
         .set(...setAuthorization(userAccessToken))
         .expect(403)
     })

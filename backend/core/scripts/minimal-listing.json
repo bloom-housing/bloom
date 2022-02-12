@@ -1,9 +1,8 @@
 {
   "name": "Minimal Listing",
   "status": "active",
-  "CSVFormattingType": "basic",
   "countyCode": "Alameda",
-  "preferences": [],
+  "listingPreferences": [],
   "buildingAddress": {
     "city": "Oakland",
     "state": "CA",

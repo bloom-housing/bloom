@@ -1,7 +1,7 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import moment from "moment"
+import dayjs from "dayjs"
 import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
 export type DateFieldValues = {
@@ -24,6 +24,7 @@ export interface DateFieldProps {
   register: UseFormMethods["register"]
   required?: boolean
   watch: UseFormMethods["watch"]
+  dataTestId?: string
 }
 
 const DateField = (props: DateFieldProps) => {
@@ -60,6 +61,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-month` : undefined}
         />
         <Field
           name={getFieldName("day")}
@@ -80,6 +82,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-day` : undefined}
         />
         <Field
           name={getFieldName("year")}
@@ -94,7 +97,7 @@ const DateField = (props: DateFieldProps) => {
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
-                if (props.required && value && parseInt(value) > moment().year() + 10) return false
+                if (props.required && value && parseInt(value) > dayjs().year() + 10) return false
                 if (!props.required && !value?.length) return true
                 return true
               },
@@ -102,6 +105,7 @@ const DateField = (props: DateFieldProps) => {
           }}
           inputProps={{ maxLength: 4 }}
           register={register}
+          dataTestId={props.dataTestId ? `${props.dataTestId}-year` : undefined}
         />
       </div>
       {props.note && <p className="field-note mb-2 mt-4">{props.note}</p>}

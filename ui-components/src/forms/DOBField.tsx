@@ -1,7 +1,9 @@
 import React from "react"
 import { t } from "../helpers/translator"
 import { Field } from "./Field"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { UseFormMethods, FieldError, DeepMap } from "react-hook-form"
 
 export type DOBFieldValues = {
@@ -39,7 +41,7 @@ const DOBField = (props: DOBFieldProps) => {
   const validateAge = (value: string) => {
     return (
       parseInt(value) > 1900 &&
-      moment(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") < moment().subtract(18, "years")
+      dayjs(`${birthMonth}/${birthDay}/${value}`, "MM/DD/YYYY") < dayjs().subtract(18, "years")
     )
   }
 
@@ -71,6 +73,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={"dob-field-month"}
         />
         <Field
           name={getFieldName("birthDay")}
@@ -92,6 +95,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 2 }}
           register={register}
+          dataTestId={"dob-field-day"}
         />
         <Field
           name={getFieldName("birthYear")}
@@ -106,7 +110,7 @@ const DOBField = (props: DOBFieldProps) => {
             validate: {
               yearRange: (value: string) => {
                 if (props.required && value && parseInt(value) < 1900) return false
-                if (props.required && value && parseInt(value) > moment().year() + 10) return false
+                if (props.required && value && parseInt(value) > dayjs().year() + 10) return false
                 if (!props.required && !value?.length) return true
                 if (value?.length && validateAge18) return validateAge(value)
                 return true
@@ -115,6 +119,7 @@ const DOBField = (props: DOBFieldProps) => {
           }}
           inputProps={{ maxLength: 4 }}
           register={register}
+          dataTestId={"dob-field-year"}
         />
       </div>
 
