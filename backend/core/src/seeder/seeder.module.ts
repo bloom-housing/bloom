@@ -41,6 +41,7 @@ import { ListingDefaultReservedSeed } from "../seeder/seeds/listings/listing-def
 import { ListingDefaultMultipleAMI } from "../seeder/seeds/listings/listing-default-multiple-ami"
 import { ListingDefaultMultipleAMIAndPercentages } from "../seeder/seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultLottery } from "./seeds/listings/listing-default-lottery-results"
+import { ListingDefaultLotteryPending } from "./seeds/listings/listing-default-lottery-pending"
 import { ListingDefaultMissingAMI } from "../seeder/seeds/listings/listing-default-missing-ami"
 import { UnitTypesModule } from "../unit-types/unit-types.module"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
@@ -109,6 +110,7 @@ export class SeederModule {
         ListingDefaultMultipleAMIAndPercentages,
         ListingDefaultMissingAMI,
         ListingDefaultLottery,
+        ListingDefaultLotteryPending,
         ListingDefaultSanJoseSeed,
         ListingTritonSeedDetroit,
         AmiChartDefaultSeed,

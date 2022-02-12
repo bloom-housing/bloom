@@ -2,12 +2,12 @@ import { ListingEventType } from "../../../../types/src/backend-swagger"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { getDate } from "./shared"
 
-export class ListingDefaultLottery extends ListingDefaultSeed {
+export class ListingDefaultLotteryPending extends ListingDefaultSeed {
   async seed() {
     const listing = await super.seed()
     return await this.listingRepository.save({
       ...listing,
-      name: "Test: Default, Lottery Results",
+      name: "Test: Default, Lottery Results Pending",
       applicationOpenDate: getDate(30),
       applicationDueDate: getDate(60),
       events: JSON.parse(
@@ -35,8 +35,8 @@ export class ListingDefaultLottery extends ListingDefaultSeed {
             label: "Custom Event URL Label",
           },
           {
-            startTime: getDate(10),
-            endTime: getDate(10),
+            startTime: getDate(-10),
+            endTime: getDate(-10),
             type: ListingEventType.publicLottery,
             url: "https://www.example2.com",
             label: "Custom Event URL Label",
@@ -45,7 +45,6 @@ export class ListingDefaultLottery extends ListingDefaultSeed {
             startTime: getDate(15),
             endTime: getDate(15),
             type: ListingEventType.lotteryResults,
-            url: "https://www.example2.com",
             label: "Custom Event URL Label",
           },
         ])

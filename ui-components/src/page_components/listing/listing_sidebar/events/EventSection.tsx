@@ -24,9 +24,9 @@ const EventSection = (props: EventSectionProps) => {
         </h4>
       )}
       {props.events.map((event, index) => (
-        <div key={`events-${index}`}>
+        <div key={`events-${index}`} className={`${index !== props.events.length - 1 && "pb-3"}`}>
           {event.dateString && (
-            <p className="text text-gray-800 pb-3 flex justify-between items-center">
+            <p className="text text-gray-800 pb-2 flex justify-between items-center">
               <span className="inline-block text-tiny uppercase">{event.dateString}</span>
               {event.timeString && (
                 <span className="inline-block text-sm font-bold ml-5 font-alt-sans">
@@ -36,11 +36,15 @@ const EventSection = (props: EventSectionProps) => {
             </p>
           )}
           {event.linkURL && event.linkText && (
-            <p className="text text-gray-800 pb-3">
+            <p className="pb-2 text-tiny">
               <a href={event.linkURL}>{event.linkText}</a>
             </p>
           )}
-          {event.note && <p className="text-tiny text-gray-700">{event.note}</p>}
+          {event.note && (
+            <p className={`text-tiny text-gray-700 ${index !== props.events.length - 1 && "pb-3"}`}>
+              {event.note}
+            </p>
+          )}
         </div>
       ))}
     </section>

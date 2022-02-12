@@ -233,10 +233,7 @@ export const ListingView = (props: ListingProps) => {
           events={[
             getEvent(
               lotteryResults,
-              lotteryResults.note ||
-                t("listings.lotteryResults.completeResultsWillBePosted", {
-                  hour: dayjs(lotteryResults.startTime).format("h a"),
-                })
+              lotteryResults.note || t("listings.lotteryResults.completeResultsWillBePosted")
             ),
           ]}
         />
@@ -434,7 +431,7 @@ export const ListingView = (props: ListingProps) => {
         <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
         <div className="mx-4">
           <DownloadLotteryResults
-            resultsDate={dayjs(lotteryResults.startTime).format("MMMM D, YYYY")}
+            resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
             pdfURL={pdfUrlFromListingEvents(
               [lotteryResults],
               ListingEventType.lotteryResults,
@@ -553,7 +550,7 @@ export const ListingView = (props: ListingProps) => {
             <div className="hidden md:block">
               <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
               <DownloadLotteryResults
-                resultsDate={dayjs(lotteryResults.startTime).format("MMMM D, YYYY")}
+                resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
                 pdfURL={pdfUrlFromListingEvents(
                   [lotteryResults],
                   ListingEventType.lotteryResults,
