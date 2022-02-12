@@ -127,3 +127,9 @@ export const getListings = (listings) => {
     )
   })
 }
+
+export const getTimeRangeString = (start: Date, end: Date) => {
+  const startTime = dayjs(start).format("hh:mma")
+  const endTime = dayjs(end).format("hh:mma")
+  return startTime === endTime ? startTime : `${startTime} - ${endTime}`
+}
