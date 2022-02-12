@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.55...@bloom-housing/ui-components@4.0.1-alpha.56) (2022-02-12)
+
+
+### Bug Fixes
+
+* allow headers in responsive mobile tables to wrap text ([#2496](https://github.com/bloom-housing/bloom/issues/2496)) ([7d5a73e](https://github.com/bloom-housing/bloom/commit/7d5a73e5ee2213fb126fced86d94a55668941ed9))
+
+
+
+
+
 ## [4.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.54...@bloom-housing/ui-components@4.0.1-alpha.55) (2022-02-10)
 
 
