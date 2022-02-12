@@ -57,7 +57,6 @@ export class ListingsService {
           return {
             "listings.applicationDueDate": "ASC",
             "listings.applicationOpenDate": "DESC",
-            "listings.id": "ASC",
           }
         default:
           throw new HttpException(
@@ -73,7 +72,6 @@ export class ListingsService {
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
-      .leftJoin("listings.jurisdiction", "jurisdiction")
       .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
@@ -105,7 +103,7 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await view
+    const listings = await view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
@@ -117,11 +115,8 @@ export class ListingsService {
       // given listing, its unitSummaries or units are sorted from lowest to highest
       // bedroom count.
       .addOrderBy("summaryUnitType.num_bedrooms", "ASC", "NULLS LAST")
-      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 
-    // get summarized units from view
-    listings = view.mapUnitSummary(listings)
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
