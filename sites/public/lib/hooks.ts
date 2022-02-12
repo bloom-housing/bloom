@@ -16,7 +16,6 @@ import {
   ListingReviewOrder,
   OrderByFieldsEnum,
   ListingStatus,
-  Jurisdiction,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -137,24 +136,12 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
 export async function fetchBaseListingData() {
   let listings = []
   try {
-    const { id: jurisdictionId } = await fetchJurisdictionByName()
-    console.log("jurisdictionId = ", jurisdictionId)
     const response = await axios.get(process.env.listingServiceUrl, {
       params: {
         view: "base",
         limit: "10",
         page: "1",
         orderBy: OrderByFieldsEnum.mostRecentlyUpdated,
-        filter: [
-          {
-            $comparison: "<>",
-            status: "pending",
-          },
-          {
-            $comparison: "=",
-            jurisdiction: jurisdictionId,
-          },
-        ],
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)
@@ -167,24 +154,4 @@ export async function fetchBaseListingData() {
   }
 
   return listings
-}
-
-let jurisdiction: Jurisdiction | null = null
-
-export async function fetchJurisdictionByName() {
-  try {
-    if (jurisdiction) {
-      return jurisdiction
-    }
-
-    const jurisdictionName = process.env.jurisdictionName
-    const jurisdictionRes = await axios.get(
-      `${process.env.backendApiBase}/jurisdictions/byName/${jurisdictionName}`
-    )
-    jurisdiction = jurisdictionRes?.data
-  } catch (error) {
-    console.log("error = ", error)
-  }
-
-  return jurisdiction
 }
