@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.57](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.56...@bloom-housing/ui-components@4.0.1-alpha.57) (2022-02-14)
+
+
+### Bug Fixes
+
+* remove shared-helpers dependency from FormForgotPassword ([#2498](https://github.com/bloom-housing/bloom/issues/2498)) ([779707d](https://github.com/bloom-housing/bloom/commit/779707d9087b3330a1b4cd65d5bde31521fa7d6a))
+
+
+
+
+
 ## [4.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.55...@bloom-housing/ui-components@4.0.1-alpha.56) (2022-02-12)
 
 
