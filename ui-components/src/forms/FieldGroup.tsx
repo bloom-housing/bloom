@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { ExpandableContent } from "../actions/ExpandableContent"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { UseFormMethods, RegisterOptions } from "react-hook-form"
@@ -9,6 +9,7 @@ interface FieldSingle {
   id: string
   label: string
   value?: string
+  dataTestId?: string
   defaultChecked?: boolean
   description?: React.ReactNode
   defaultText?: string
@@ -87,7 +88,7 @@ const FieldGroup = ({
           disabled={item.disabled}
           ref={register(validation)}
           {...item.inputProps}
-          data-test-id={dataTestId}
+          data-test-id={item.dataTestId ?? dataTestId}
         />
         <label
           htmlFor={item.id}
@@ -110,22 +111,25 @@ const FieldGroup = ({
     )
   }
 
-  const checkSelected = (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
-    formFields?.forEach((field) => {
-      if (field.defaultChecked) {
-        checkedValues.push(field.label)
-      }
-      if (field.subFields) {
-        checkSelected(field.subFields, checkedValues)
-      }
-    })
-  }
+  const checkSelected = useCallback(
+    (formFields: FieldSingle[] | undefined, checkedValues: string[]) => {
+      formFields?.forEach((field) => {
+        if (field.defaultChecked) {
+          checkedValues.push(field.label)
+        }
+        if (field.subFields) {
+          checkSelected(field.subFields, checkedValues)
+        }
+      })
+    },
+    []
+  )
 
   useEffect(() => {
     const initialValues: string[] = []
     checkSelected(fields, initialValues)
     setCheckedInputs([...initialValues])
-  }, [])
+  }, [checkSelected, setCheckedInputs, fields])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {
     return (
@@ -141,6 +145,7 @@ const FieldGroup = ({
             placeholder={t("t.description")}
             className={"mb-4"}
             disabled={item.disabled}
+            dataTestId={item.dataTestId}
           />
         )}
       </div>

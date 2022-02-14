@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.34...@bloom-housing/backend-core@3.0.2-alpha.35) (2022-02-10)
+
+
+### Bug Fixes
+
+* csv export auth check ([#2488](https://github.com/bloom-housing/bloom/issues/2488)) ([2471d4a](https://github.com/bloom-housing/bloom/commit/2471d4afdd747843f58c0c154d6e94a9c76d733d))
+
+
+
+
+
+## [3.0.2-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.33...@bloom-housing/backend-core@3.0.2-alpha.34) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.32...@bloom-housing/backend-core@3.0.2-alpha.33) (2022-02-09)
+
+
+### Features
+
+* **backend:** remove assigning partner user as an application owner ([#2476](https://github.com/bloom-housing/bloom/issues/2476)) ([4f6edf7](https://github.com/bloom-housing/bloom/commit/4f6edf7ed882ae926e363e4db4e40e6f19ed4746))
+
+
+
+
+
+## [3.0.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.31...@bloom-housing/backend-core@3.0.2-alpha.32) (2022-02-09)
+
+
+### Bug Fixes
+
+* updates partner check for listing perm ([#2484](https://github.com/bloom-housing/bloom/issues/2484)) ([9b0a6f5](https://github.com/bloom-housing/bloom/commit/9b0a6f560ec5dd95f846b330afb71eed40cbfa1b))
+
+
+
+
+
+## [3.0.2-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.30...@bloom-housing/backend-core@3.0.2-alpha.31) (2022-02-09)
+
+
+### Bug Fixes
+
+* cannot remove some fields in listings management ([#2455](https://github.com/bloom-housing/bloom/issues/2455)) ([acd9b51](https://github.com/bloom-housing/bloom/commit/acd9b51bb49581b4728b445d56c5c0a3c43e2777))
+
+
+
+
+
+## [3.0.2-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.29...@bloom-housing/backend-core@3.0.2-alpha.30) (2022-02-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.28...@bloom-housing/backend-core@3.0.2-alpha.29) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
+## [3.0.2-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.27...@bloom-housing/backend-core@3.0.2-alpha.28) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
 ## [3.0.2-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.26...@bloom-housing/backend-core@3.0.2-alpha.27) (2022-02-02)
 
 

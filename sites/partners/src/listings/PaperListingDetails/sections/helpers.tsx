@@ -27,18 +27,14 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
   const errorDetails = errorMessage.substr(errorMessage.indexOf(" ") + 1)
   let readableMessage = null
   switch (errorDetails) {
-    case "should not be null or undefined":
-    case "must be a string":
-    case "must be an UUID":
-    case "must contain at least 1 elements":
-    case "must be a boolean value":
-      readableMessage = t("errors.requiredFieldError")
-      break
     case "must be an email":
       readableMessage = t("errors.emailAddressError")
       break
     case "must be a valid phone number":
       readableMessage = t("errors.phoneNumberError")
+      break
+    default:
+      readableMessage = t("errors.requiredFieldError")
   }
   return readableMessage
 }
@@ -54,6 +50,13 @@ export const getDetailAddress = (
   addressName: AddressType,
   subtitle: string
 ) => {
+  if (!address) {
+    return (
+      <ViewItem>
+        <GridSection subtitle={subtitle}>{getDetailFieldString(null)}</GridSection>
+      </ViewItem>
+    )
+  }
   return (
     <>
       <GridSection subtitle={subtitle} columns={6}>
@@ -63,7 +66,7 @@ export const getDetailAddress = (
             label={t("listings.streetAddressOrPOBox")}
             dataTestId={`${addressName}.street`}
           >
-            {address?.street}
+            {getDetailFieldString(address?.street)}
           </ViewItem>
         </GridCell>
         <GridCell span={3}>
@@ -72,7 +75,7 @@ export const getDetailAddress = (
             label={t("application.contact.apt")}
             dataTestId={`${addressName}.street2`}
           >
-            {address?.street2}
+            {getDetailFieldString(address?.street2)}
           </ViewItem>
         </GridCell>
       </GridSection>
@@ -83,7 +86,7 @@ export const getDetailAddress = (
             label={t("application.contact.city")}
             dataTestId={`${addressName}.city`}
           >
-            {address?.city}
+            {getDetailFieldString(address?.city)}
           </ViewItem>
         </GridCell>
         <ViewItem
@@ -91,14 +94,14 @@ export const getDetailAddress = (
           label={t("application.contact.state")}
           dataTestId={`${addressName}.state`}
         >
-          {address?.state}
+          {getDetailFieldString(address?.state)}
         </ViewItem>
         <ViewItem
           id={`${addressName}.zipCode`}
           label={t("application.contact.zip")}
           dataTestId={`${addressName}.zipCode`}
         >
-          {address?.zipCode}
+          {getDetailFieldString(address?.zipCode)}
         </ViewItem>
       </GridSection>
     </>

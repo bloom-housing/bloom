@@ -1,4 +1,4 @@
-import { ApplicationProgram, Program } from "@bloom-housing/backend-core/types"
+import { ApplicationProgram, Program, FormMetaDataType } from "@bloom-housing/backend-core/types"
 
 export const PROGRAMS_FORM_PATH = "application.programs"
 
@@ -14,20 +14,30 @@ export const mapProgramToApi = (program: Program, data: Record<string, any>) => 
   const [key, value] = Object.entries(data)[0]
   const options = []
 
-  options.push({
-    key: value,
-    checked: true,
-    extraData: [],
-  })
-  program?.formMetadata?.options.forEach((option) => {
-    if (option.key !== value) {
+  if (program?.formMetadata?.type === FormMetaDataType.checkbox) {
+    value.forEach((option: string) => {
       options.push({
-        key: option.key,
-        checked: false,
+        key: option,
+        checked: true,
         extraData: [],
       })
-    }
-  })
+    })
+  } else {
+    options.push({
+      key: value,
+      checked: true,
+      extraData: [],
+    })
+    program?.formMetadata?.options.forEach((option) => {
+      if (option.key !== value) {
+        options.push({
+          key: option.key,
+          checked: false,
+          extraData: [],
+        })
+      }
+    })
+  }
 
   return {
     key,
@@ -58,10 +68,17 @@ export const mapApiToProgramsPaperForm = (programs: ApplicationProgram[]) => {
 
   programs?.forEach((program) => {
     const key = program.key
-    const selectedOption = program.options.find((item) => item.checked === true)?.key
 
+    const selectedOption = program.options.reduce((accum, item) => {
+      if (item.checked) {
+        return [...accum, item.key]
+      }
+      return accum
+    }, [])
     if (program.claimed) {
-      Object.assign(result, { [key]: selectedOption })
+      Object.assign(result, {
+        [key]: selectedOption.length === 1 ? selectedOption[0] : selectedOption,
+      })
     }
   })
 

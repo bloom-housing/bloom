@@ -228,6 +228,7 @@
       "preamble": "Nếu quý vị hội đủ điều kiện cho lựa chọn ưu tiên này, quý vị sẽ được xếp ở thứ hạng cao hơn.",
       "selectBelow": "Nếu quý vị có một trong những lựa chọn ưu tiên nhà ở này, hãy chọn ưu tiên đó bên dưới:",
       "dontWant": "Tôi không muốn lựa chọn ưu tiên này",
+      "dontWantSingular": "Tôi không muốn lựa chọn ưu tiên này",
       "stillHaveOpportunity": "Quý vị vẫn sẽ có cơ hội yêu cầu các lựa chọn ưu tiên khác.",
       "youHaveClaimed": "Quý vị đã xác nhận:",
       "liveWork": {
@@ -262,6 +263,95 @@
         "yes": {
           "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda",
           "description": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda"
+        }
+      },
+      "dublinHousing": {
+        "liveInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Dublin (3 điểm)"
+        },
+        "immediateFamily": {
+          "label": "Ít nhất một thành viên trong gia đình của tôi có người thân trong gia đình ở Dublin (1 điểm)"
+        },
+        "displacedResident": {
+          "label": "Ít nhất một thành viên trong gia đình tôi đã phải di dời khỏi nơi ở hiện tại ở Dublin do việc phá dỡ nhà ở hoặc chuyển nhà từ cho thuê sang bán (1 điểm)"
+        },
+        "worksInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc toàn thời gian ở Dublin (3 điểm)"
+        },
+        "publicServiceEmployee": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên dịch vụ công cộng ở Dublin (1 điểm bổ sung)"
+        },
+        "permanentlyDisabled": {
+          "label": "Ít nhất một thành viên trong gia đình tôi bị tàn tật vĩnh viễn (1 điểm)"
+        },
+        "senior": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là người cao tuổi, được xác định là từ 62 tuổi trở lên (1 điểm)"
+        }
+      },
+      "terminationOfAffordability": {
+        "atLeastOne": {
+          "label": "Ít nhất một thành viên trong gia đình, tôi phải sử dụng các hạn chế về chi trả khả năng"
+        }
+      },
+      "liveWorkFosterCity": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Foster City"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Foster City"
+        }
+      },
+      "liveFosterCity": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Foster City"
+        }
+      },
+      "fosterCityEmployee": {
+        "employed": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Thành phố Foster City"
+        }
+      },
+      "fosterCitySchoolEmployee": {
+        "employed": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên khu học chánh"
+        }
+      },
+      "workFosterCity": {
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Foster City"
+        }
+      },
+      "liveWorkSanMateo": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Thành phố San Mateo"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Thành phố San Mateo"
+        }
+      },
+      "liveWorkEastPaloAlto": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Thành phố Đông Palo Alto"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc 20 giờ mỗi tuần hoặc hơn ở Thành phố Đông Palo Alto"
+        }
+      },
+      "displaceeEastPaloAlto": {
+        "naturalDisaster": {
+          "label": "Thiên tai do Thống đốc tuyên bố"
+        },
+        "domesticViolence": {
+          "label": "Bạo lực gia đình"
+        },
+        "codeEnforcement": {
+          "label": "Hoạt động thực thi mã thành phố"
+        },
+        "noFaultEviction": {
+          "label": "A \"Không có lỗi\" Trục xuất khỏi một đơn vị cho thuê ở East Palo Alto trong năm ngoái của ứng dụng này"
+        },
+        "increasedRent": {
+          "label": "Giá thuê tăng 10% hoặc cao hơn trong 12 tháng qua"
         }
       }
     },

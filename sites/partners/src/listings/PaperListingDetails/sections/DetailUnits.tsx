@@ -55,6 +55,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     >
       <ViewItem
         id="unitTypesOrIndividual"
+        dataTestId={"unit-types-or-individual"}
         label={t("listings.unitTypesOrIndividual")}
         children={
           listing.disableUnitsAccordion

@@ -28,6 +28,7 @@ import {
   getPbvPreference,
   getServedInMilitaryProgram,
   getTayProgram,
+  getFlatRentAndRentBasedOnIncomeProgram,
 } from "./seeds/listings/shared"
 import { UserCreateDto } from "../auth/dto/user-create.dto"
 import { AmiDefaultSanJose } from "./seeds/ami-charts/default-ami-chart-san-jose"
@@ -154,6 +155,7 @@ export async function createPrograms(app: INestApplicationContext, jurisdictions
     getTayProgram(),
     getDisabilityOrMentalIllnessProgram(),
     getHousingSituationProgram(),
+    getFlatRentAndRentBasedOnIncomeProgram(),
   ])
 
   for (const jurisdiction of jurisdictions) {

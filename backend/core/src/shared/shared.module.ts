@@ -11,7 +11,6 @@ import Joi from "joi"
           .valid("development", "staging", "production", "test")
           .default("development"),
         EMAIL_API_KEY: Joi.string().required(),
-        EMAIL_FROM_ADDRESS: Joi.string().required(),
         DATABASE_URL: Joi.string().required(),
         REDIS_TLS_URL: Joi.string().required(),
         REDIS_USE_TLS: Joi.number().required(),

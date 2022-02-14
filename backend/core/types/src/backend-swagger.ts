@@ -2487,6 +2487,9 @@ export interface Jurisdiction {
 
   /**  */
   publicUrl: string
+
+  /**  */
+  emailFromAddress: string
 }
 
 export interface AmiChart {
@@ -4352,6 +4355,9 @@ export interface JurisdictionCreate {
   publicUrl: string
 
   /**  */
+  emailFromAddress: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4382,6 +4388,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   publicUrl: string
+
+  /**  */
+  emailFromAddress: string
 
   /**  */
   programs: Id[]
@@ -4597,6 +4606,9 @@ export interface FormMetadata {
 
   /**  */
   hideFromListing: boolean
+
+  /**  */
+  type: FormMetaDataType
 }
 
 export interface Program {
@@ -6491,6 +6503,11 @@ export enum ListingEventType {
   "openHouse" = "openHouse",
   "publicLottery" = "publicLottery",
   "lotteryResults" = "lotteryResults",
+}
+
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
 }
 
 export enum UnitStatus {

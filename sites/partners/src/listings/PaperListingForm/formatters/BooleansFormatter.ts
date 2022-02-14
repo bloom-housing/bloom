@@ -41,7 +41,10 @@ export default class BooleansFormatter extends Formatter {
         this.data.whereApplicationsMailedIn === addressTypes.anotherAddress,
       trueCase: () => this.data.applicationMailingAddress,
     })
-
+    this.processBoolean("image", {
+      when: !!this.data.image?.fileId && !!this.data.image?.label,
+      trueCase: () => this.data.image,
+    })
     this.processBoolean("digitalApplication", {
       when: this.data.digitalApplicationChoice === YesNoAnswer.Yes,
       falseCase: () => (this.data.digitalApplicationChoice === YesNoAnswer.No ? false : null),

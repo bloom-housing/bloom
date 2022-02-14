@@ -41,12 +41,11 @@ export class EmailService {
   }
 
   public async welcome(user: User, appUrl: string, confirmationUrl: string) {
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     await this.loadTranslationsForUser(user)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
-        `Preparing to send a welcome email to ${user.email} from ${this.configService.get<string>(
-          "EMAIL_FROM_ADDRESS"
-        )}...`
+        `Preparing to send a welcome email to ${user.email} from ${jurisdiction.emailFromAddress}...`
       )
     }
     await this.send(
@@ -100,9 +99,7 @@ export class EmailService {
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a confirmation email to ${
-          application.applicant.emailAddress
-        } from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a confirmation email to ${application.applicant.emailAddress} from ${jurisdiction.emailFromAddress}...`
       )
     }
 
@@ -145,9 +142,7 @@ export class EmailService {
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a forget password email to ${user.email} from ${this.configService.get<
-          string
-        >("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a forget password email to ${user.email} from ${jurisdiction.emailFromAddress}...`
       )
     }
 
@@ -209,10 +204,11 @@ export class EmailService {
   }
 
   private async send(to: string, subject: string, body: string, retry = 3) {
+    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
     await this.sendGrid.send(
       {
         to: to,
-        from: this.configService.get<string>("EMAIL_FROM_ADDRESS"),
+        from: jurisdiction.emailFromAddress,
         subject: subject,
         html: body,
       },

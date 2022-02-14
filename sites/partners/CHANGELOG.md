@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.60...@bloom-housing/partners@4.0.1-alpha.61) (2022-02-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.60](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.59...@bloom-housing/partners@4.0.1-alpha.60) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.59](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.58...@bloom-housing/partners@4.0.1-alpha.59) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.57...@bloom-housing/partners@4.0.1-alpha.58) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.57](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.56...@bloom-housing/partners@4.0.1-alpha.57) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.55...@bloom-housing/partners@4.0.1-alpha.56) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.54...@bloom-housing/partners@4.0.1-alpha.55) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.53...@bloom-housing/partners@4.0.1-alpha.54) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.52...@bloom-housing/partners@4.0.1-alpha.53) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.51...@bloom-housing/partners@4.0.1-alpha.52) (2022-02-09)
+
+
+### Bug Fixes
+
+* cannot remove some fields in listings management ([#2455](https://github.com/bloom-housing/bloom/issues/2455)) ([acd9b51](https://github.com/bloom-housing/bloom/commit/acd9b51bb49581b4728b445d56c5c0a3c43e2777))
+
+
+
+
+
+## [4.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.50...@bloom-housing/partners@4.0.1-alpha.51) (2022-02-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.49...@bloom-housing/partners@4.0.1-alpha.50) (2022-02-07)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.48...@bloom-housing/partners@4.0.1-alpha.49) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
+## [4.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.47...@bloom-housing/partners@4.0.1-alpha.48) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.46...@bloom-housing/partners@4.0.1-alpha.47) (2022-02-02)
 
 **Note:** Version bump only for package @bloom-housing/partners

@@ -139,6 +139,7 @@ const FormHouseholdMembers = ({
             type="button"
             size={AppearanceSizeType.normal}
             onClick={() => setMembersDrawer(householdMembers.length + 1)}
+            dataTestId={"addHouseholdMemberButton"}
           >
             {t("application.add.addHouseholdMember")}
           </Button>
