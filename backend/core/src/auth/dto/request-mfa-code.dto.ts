@@ -1,5 +1,5 @@
 import { Expose } from "class-transformer"
-import { IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString, MinLength } from "class-validator"
+import { IsEmail, IsEnum, IsOptional, IsString } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { MfaType } from "../types/mfa-type"

@@ -414,18 +414,6 @@ export class UserService {
     return out
   }
 
-  private static maskPhoneNumber(phoneNumber: string) {
-    let maskedPhoneNumber = ""
-    for (let i = 0; i < phoneNumber.length; i++) {
-      if (i < 3 || i > phoneNumber.length - 3) {
-        maskedPhoneNumber += phoneNumber[i]
-      } else {
-        maskedPhoneNumber += "*"
-      }
-    }
-    return maskedPhoneNumber
-  }
-
   private static hasUsedMfaInThePast(user: User): boolean {
     return !!user.mfaCodeUpdatedAt
   }
@@ -445,9 +433,7 @@ export class UserService {
 
     return {
       email: user.email,
-      maskedPhoneNumber: user.phoneNumber
-        ? UserService.maskPhoneNumber(user.phoneNumber)
-        : undefined,
+      phoneNumber: user.phoneNumber ?? undefined,
       isMfaEnabled: user.mfaEnabled,
       mfaUsedInThePast: UserService.hasUsedMfaInThePast(user),
     }
@@ -470,16 +456,20 @@ export class UserService {
       throw new UnauthorizedException()
     }
 
-    if (requestMfaCodeDto.phoneNumber && requestMfaCodeDto.mfaType === MfaType.sms) {
-      if (UserService.hasUsedMfaInThePast(user)) {
-        throw new UnauthorizedException(
-          "phone number can only be specified the first time using mfa"
+    if (requestMfaCodeDto.mfaType === MfaType.sms) {
+      if (requestMfaCodeDto.phoneNumber) {
+        if (user.phoneNumberVerified) {
+          throw new UnauthorizedException(
+            "phone number can only be specified the first time using mfa"
+          )
+        }
+        user.phoneNumber = requestMfaCodeDto.phoneNumber
+      } else if (!requestMfaCodeDto.phoneNumber && !user.phoneNumber) {
+        throw new HttpException(
+          { name: "phoneNumberMissing", message: "no valid phone number was found" },
+          400
         )
       }
-      if (user.phoneNumber && user.phoneNumber !== requestMfaCodeDto.phoneNumber) {
-        throw new UnauthorizedException("user and mfa request phone numbers differ")
-      }
-      user.phoneNumber = requestMfaCodeDto.phoneNumber
     }
     const mfaCode = this.generateMfaCode()
     user.mfaCode = mfaCode
@@ -497,7 +487,10 @@ export class UserService {
     })
 
     return requestMfaCodeDto.mfaType === MfaType.email
-      ? { email: user.email }
-      : { maskedPhoneNumber: UserService.maskPhoneNumber(user.phoneNumber) }
+      ? { email: user.email, phoneNumberVerified: user.phoneNumberVerified }
+      : {
+          phoneNumber: user.phoneNumber,
+          phoneNumberVerified: user.phoneNumberVerified,
+        }
   }
 }

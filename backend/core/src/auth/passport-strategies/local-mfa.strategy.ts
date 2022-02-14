@@ -16,6 +16,7 @@ import { LoginDto } from "../dto/login.dto"
 import { ConfigService } from "@nestjs/config"
 import { UserService } from "../services/user.service"
 import { USER_ERRORS } from "../user-errors"
+import { MfaType } from "../types/mfa-type"
 
 @Injectable()
 export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
@@ -78,7 +79,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       let mfaAuthSuccessful = true
       if (user.mfaEnabled) {
         if (!loginDto.mfaCode || !user.mfaCode || !user.mfaCodeUpdatedAt) {
-          throw new UnauthorizedException()
+          throw new UnauthorizedException({ name: "mfaCodeIsMissing" })
         }
         if (
           new Date(
@@ -95,6 +96,9 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
 
       if (validPassword && mfaAuthSuccessful) {
         user.failedLoginAttemptsCount = 0
+        if (!user.phoneNumberVerified && loginDto.mfaType === MfaType.sms) {
+          user.phoneNumberVerified = true
+        }
       } else {
         user.failedLoginAttemptsCount += 1
       }

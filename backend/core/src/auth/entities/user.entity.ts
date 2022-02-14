@@ -165,4 +165,10 @@ export class User {
   @Expose()
   @Type(() => Date)
   failedLoginAttemptsCount?: number
+
+  @Column({ type: "bool", nullable: true, default: false })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  phoneNumberVerified?: boolean
 }
