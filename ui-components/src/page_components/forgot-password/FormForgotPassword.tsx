@@ -15,13 +15,19 @@ import {
 } from "@bloom-housing/ui-components"
 import { NavigationContext } from "../../config/NavigationContext"
 import type { UseFormMethods } from "react-hook-form"
-import type { NetworkErrorReset, NetworkErrorValue } from "@bloom-housing/shared-helpers"
 
 export type FormForgotPasswordProps = {
   control: FormForgotPasswordControl
   onSubmit: (data: FormForgotPasswordValues) => void
   networkError: FormForgotPasswordNetworkError
 }
+
+export type NetworkErrorReset = () => void
+
+export type NetworkErrorValue = {
+  title: string
+  content: string
+} | null
 
 export type FormForgotPasswordNetworkError = {
   error: NetworkErrorValue
