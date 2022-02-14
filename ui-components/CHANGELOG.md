@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.57...@bloom-housing/ui-components@4.0.1-alpha.58) (2022-02-14)
+
+
+### Bug Fixes
+
+* remove shared-helpers dependency from FormSignIn ([#2499](https://github.com/bloom-housing/bloom/issues/2499)) ([de4e696](https://github.com/bloom-housing/bloom/commit/de4e696957935de7f7834ef5bbe5c6edd3262a8b))
+
+
+
+
+
 ## [4.0.1-alpha.57](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.56...@bloom-housing/ui-components@4.0.1-alpha.57) (2022-02-14)
 
 
