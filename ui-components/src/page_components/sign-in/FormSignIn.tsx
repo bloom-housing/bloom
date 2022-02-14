@@ -15,7 +15,7 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NavigationContext } from "../../config/NavigationContext"
-import type { NetworkErrorReset, NetworkErrorValue } from "@bloom-housing/shared-helpers"
+import type { NetworkErrorReset, NetworkErrorValue } from "../forgot-password/FormForgotPassword"
 
 export type NetworkErrorDetermineError = (status: number, error: Error) => void
 
