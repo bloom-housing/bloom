@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.36...@bloom-housing/backend-core@3.0.2-alpha.37) (2022-02-15)
+
+
+### Bug Fixes
+
+* **backend:** mfa_enabled migration fix ([#2503](https://github.com/bloom-housing/bloom/issues/2503)) ([a5b9a60](https://github.com/bloom-housing/bloom/commit/a5b9a604faccef55775dbbc54441251e29999fa4))
+
+
+
+
+
 ## [3.0.2-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.35...@bloom-housing/backend-core@3.0.2-alpha.36) (2022-02-15)
 
 
