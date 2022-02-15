@@ -32,6 +32,20 @@ export const withShortImageLongTitle = () => {
         imageUrl="https://bit.ly/3jzVfwP
   "
         subtitle="55 Triton Park Lane, Foster City CA, 94404"
+        title="Here is the name of a long listing"
+      />
+    </div>
+  )
+}
+
+export const withShortImageLongerTitle = () => {
+  return (
+    <div style={{ maxWidth: "500px" }}>
+      <ImageCard
+        href="/listings"
+        imageUrl="https://bit.ly/3jzVfwP
+  "
+        subtitle="55 Triton Park Lane, Foster City CA, 94404"
         title="Here is the name of a long listing, it should wrap"
       />
     </div>

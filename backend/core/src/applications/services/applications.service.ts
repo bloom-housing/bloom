@@ -8,7 +8,7 @@ import {
   Scope,
 } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { QueryFailedError, Repository } from "typeorm"
+import { DeepPartial, QueryFailedError, Repository } from "typeorm"
 import { paginate, Pagination, PaginationTypeEnum } from "nestjs-typeorm-paginate"
 import { Request as ExpressRequest } from "express"
 import { REQUEST } from "@nestjs/core"
@@ -107,7 +107,6 @@ export class ApplicationsService {
     }
   }
 
-  // Submitting an application from public
   async submit(applicationCreateDto: ApplicationCreateDto) {
     applicationCreateDto.submissionDate = new Date()
     const listing = await this.listingsRepository
@@ -123,10 +122,15 @@ export class ApplicationsService {
       throw new BadRequestException("Listing is not open for application submission.")
     }
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.submit)
-    return await this._create(applicationCreateDto, true)
+    return await this._create(
+      {
+        ...applicationCreateDto,
+        user: this.req.user,
+      },
+      true
+    )
   }
 
-  // Entering a paper application from partners
   async create(applicationCreateDto: ApplicationCreateDto) {
     await this.authorizeUserAction(this.req.user, applicationCreateDto, authzActions.create)
     return this._create(applicationCreateDto, false)
@@ -215,14 +219,13 @@ export class ApplicationsService {
     return qb
   }
 
-  private async _createApplication(applicationCreateDto: ApplicationUpdateDto) {
+  private async _createApplication(applicationCreateDto: DeepPartial<Application>) {
     return await this.repository.manager.transaction(
       "SERIALIZABLE",
       async (transactionalEntityManager) => {
         const applicationsRepository = transactionalEntityManager.getRepository(Application)
         const application = await applicationsRepository.save({
           ...applicationCreateDto,
-          user: this.req.user,
           confirmationCode: ApplicationsService.generateConfirmationCode(),
         })
         await this.applicationFlaggedSetsService.onApplicationSave(
@@ -235,7 +238,7 @@ export class ApplicationsService {
   }
 
   private async _create(
-    applicationCreateDto: ApplicationUpdateDto,
+    applicationCreateDto: DeepPartial<Application>,
     shouldSendConfirmation: boolean
   ) {
     let application: Application
@@ -323,7 +326,7 @@ export class ApplicationsService {
      * Checking authorization for each application is very expensive. By making lisitngId required, we can check if the user has update permissions for the listing, since right now if a user has that they also can run the export for that listing
      */
     return await this.authzService.canOrThrow(user, "listing", authzActions.update, {
-      listing_id: listingId,
+      id: listingId,
     })
   }
 

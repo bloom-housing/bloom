@@ -2445,6 +2445,9 @@ export interface Jurisdiction {
 
   /**  */
   publicUrl: string
+
+  /**  */
+  emailFromAddress: string
 }
 
 export interface AmiChart {
@@ -4236,6 +4239,9 @@ export interface JurisdictionCreate {
   publicUrl: string
 
   /**  */
+  emailFromAddress: string
+
+  /**  */
   programs: Id[]
 
   /**  */
@@ -4266,6 +4272,9 @@ export interface JurisdictionUpdate {
 
   /**  */
   publicUrl: string
+
+  /**  */
+  emailFromAddress: string
 
   /**  */
   programs: Id[]

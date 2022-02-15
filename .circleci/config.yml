@@ -26,7 +26,6 @@ executors:
     environment:
       PORT: "3100"
       EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
-      EMAIL_FROM_ADDRESS: "Bloom Dev Housing Portal <bloom-no-reply@exygy.dev>"
       APP_SECRET: "CI-LONG-SECRET-KEY"
       # DB URL for migration and seeds:
       DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"
@@ -94,7 +93,6 @@ jobs:
           environment:
             PORT: "3100"
             EMAIL_API_KEY: "SG.SOME-LONG-SECRET-KEY"
-            EMAIL_FROM_ADDRESS: "Bloom Dev Housing Portal <bloom-no-reply@exygy.dev>"
             APP_SECRET: "CI-LONG-SECRET-KEY"
             # DB URL for migration and seeds:
             DATABASE_URL: "postgres://bloom-ci@localhost:5432/bloom"

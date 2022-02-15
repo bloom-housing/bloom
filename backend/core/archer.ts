@@ -19,6 +19,7 @@ export const SanMateoHUD2019: AmiChart = {
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    emailFromAddress: "Alameda Housing Email",
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],

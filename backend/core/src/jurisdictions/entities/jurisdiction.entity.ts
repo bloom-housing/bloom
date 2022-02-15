@@ -60,4 +60,9 @@ export class Jurisdiction extends AbstractEntity {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   publicUrl: string
+
+  @Column({ nullable: true, type: "text" })
+  @Expose()
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  emailFromAddress: string
 }

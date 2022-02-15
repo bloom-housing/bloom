@@ -217,14 +217,7 @@ export default () => {
             />
 
             <div className="text-center mt-10">
-              <Button
-                styleType={AppearanceStyleType.primary}
-                onClick={() => {
-                  console.info("button has been clicked!")
-                }}
-              >
-                {t("account.createAccount")}
-              </Button>
+              <Button styleType={AppearanceStyleType.primary}>{t("account.createAccount")}</Button>
             </div>
           </div>
         </Form>

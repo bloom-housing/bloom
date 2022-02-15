@@ -231,6 +231,7 @@
       "preamble": "Si reúne los requisitos de esta preferencia, recibirá una clasificación más alta.",
       "selectBelow": "Si usted tiene una de estas preferencias de vivienda, selecciónela abajo:",
       "dontWant": "No deseo esta preferencia",
+      "dontWantSingular": "No deseo esta preferencia",
       "stillHaveOpportunity": "Usted seguirá tendiendo la oportunidad de solicitar otras preferencias.",
       "youHaveClaimed": "Usted ha solicitado:",
       "liveWork": {
@@ -265,6 +266,95 @@
         "yes": {
           "label": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda",
           "description": "Al menos un miembro de mi hogar es empleado del Distrito Escolar Unificado de Alameda"
+        }
+      },
+      "dublinHousing": {
+        "liveInDublin": {
+          "label": "Al menos un miembro de mi hogar vive en Dublín (3 puntos)"
+        },
+        "immediateFamily": {
+          "label": "Al menos un miembro de mi hogar tiene un familiar directo en Dublín (1 punto)"
+        },
+        "displacedResident": {
+          "label": "Se requirió que al menos un miembro de mi hogar se mudara de la residencia actual de Dublín debido a la demolición de la vivienda o la conversión de la vivienda de alquiler a unidad de venta (1 punto)"
+        },
+        "worksInDublin": {
+          "label": "Al menos un miembro de mi hogar trabaja a tiempo completo en Dublín (3 puntos)"
+        },
+        "publicServiceEmployee": {
+          "label": "Al menos un miembro de mi hogar es un empleado del servicio público en Dublín (1 punto adicional)"
+        },
+        "permanentlyDisabled": {
+          "label": "Al menos un miembro de mi hogar tiene una discapacidad permanente (1 punto)"
+        },
+        "senior": {
+          "label": "Al menos un miembro de mi hogar es una persona mayor, definida como de 62 años o más (1 punto)"
+        }
+      },
+      "terminationOfAffordability": {
+        "atLeastOne": {
+          "label": "Al menos un miembro de mi hogar está sujeto a la terminación de las restricciones de asequibilidad"
+        }
+      },
+      "liveWorkFosterCity": {
+        "live": {
+          "label": "Al menos un miembro de mi hogar vive en Foster City"
+        },
+        "work": {
+          "label": "Al menos un miembro de mi hogar trabaja en Foster City"
+        }
+      },
+      "liveFosterCity": {
+        "live": {
+          "label": "Al menos un miembro de mi hogar vive en Foster City"
+        }
+      },
+      "fosterCityEmployee": {
+        "employed": {
+          "label": "Al menos un miembro de mi hogar es un empleado de la Ciudad de Foster City"
+        }
+      },
+      "fosterCitySchoolEmployee": {
+        "employed": {
+          "label": "Al menos un miembro de mi hogar es un empleado del distrito escolar"
+        }
+      },
+      "workFosterCity": {
+        "work": {
+          "label": "Al menos un miembro de mi hogar trabaja en Foster City"
+        }
+      },
+      "liveWorkSanMateo": {
+        "live": {
+          "label": "Al menos un miembro de mi hogar vive en la Ciudad de San Mateo"
+        },
+        "work": {
+          "label": "Al menos un miembro de mi hogar trabaja en la Ciudad de San Mateo"
+        }
+      },
+      "liveWorkEastPaloAlto": {
+        "live": {
+          "label": "Al menos un miembro de mi hogar trabaja en la Ciudad de San Mateo"
+        },
+        "work": {
+          "label": "Al menos un miembro de mi hogar trabaja 20 horas por semana o más en la ciudad de East Palo Alto"
+        }
+      },
+      "displaceeEastPaloAlto": {
+        "naturalDisaster": {
+          "label": "Desastre natural declarado por el gobernador"
+        },
+        "domesticViolence": {
+          "label": "Violencia doméstica"
+        },
+        "codeEnforcement": {
+          "label": "Actividad de Cumplimiento del Código de la Ciudad"
+        },
+        "noFaultEviction": {
+          "label": "Un desalojo \"Sin Culpa\" de una unidad de alquiler en East Palo Alto dentro del último año de esta solicitud"
+        },
+        "increasedRent": {
+          "label": "Un aumento del 10% o más en el alquiler en los últimos 12 meses"
         }
       }
     },

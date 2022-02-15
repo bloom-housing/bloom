@@ -3,6 +3,125 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.57...@bloom-housing/ui-components@4.0.1-alpha.58) (2022-02-14)
+
+
+### Bug Fixes
+
+* remove shared-helpers dependency from FormSignIn ([#2499](https://github.com/bloom-housing/bloom/issues/2499)) ([de4e696](https://github.com/bloom-housing/bloom/commit/de4e696957935de7f7834ef5bbe5c6edd3262a8b))
+
+
+
+
+
+## [4.0.1-alpha.57](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.56...@bloom-housing/ui-components@4.0.1-alpha.57) (2022-02-14)
+
+
+### Bug Fixes
+
+* remove shared-helpers dependency from FormForgotPassword ([#2498](https://github.com/bloom-housing/bloom/issues/2498)) ([779707d](https://github.com/bloom-housing/bloom/commit/779707d9087b3330a1b4cd65d5bde31521fa7d6a))
+
+
+
+
+
+## [4.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.55...@bloom-housing/ui-components@4.0.1-alpha.56) (2022-02-12)
+
+
+### Bug Fixes
+
+* allow headers in responsive mobile tables to wrap text ([#2496](https://github.com/bloom-housing/bloom/issues/2496)) ([7d5a73e](https://github.com/bloom-housing/bloom/commit/7d5a73e5ee2213fb126fced86d94a55668941ed9))
+
+
+
+
+
+## [4.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.54...@bloom-housing/ui-components@4.0.1-alpha.55) (2022-02-10)
+
+
+### Bug Fixes
+
+* image gradient obscures image on mobile, is harsh in safari ([#2487](https://github.com/bloom-housing/bloom/issues/2487)) ([78785ff](https://github.com/bloom-housing/bloom/commit/78785ff0646e94fa751584ee090eacaec1994e36))
+
+
+
+
+
+## [4.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.53...@bloom-housing/ui-components@4.0.1-alpha.54) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.52...@bloom-housing/ui-components@4.0.1-alpha.53) (2022-02-10)
+
+
+### Features
+
+* only show MapBox map when it's in the viewport ([#2470](https://github.com/bloom-housing/bloom/issues/2470)) ([86f9d6c](https://github.com/bloom-housing/bloom/commit/86f9d6cccd7de7e635ae4eab5b1e1358faf834e4))
+
+
+
+
+
+## [4.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.51...@bloom-housing/ui-components@4.0.1-alpha.52) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.50...@bloom-housing/ui-components@4.0.1-alpha.51) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.49...@bloom-housing/ui-components@4.0.1-alpha.50) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.48...@bloom-housing/ui-components@4.0.1-alpha.49) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.47...@bloom-housing/ui-components@4.0.1-alpha.48) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.46...@bloom-housing/ui-components@4.0.1-alpha.47) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.45...@bloom-housing/ui-components@4.0.1-alpha.46) (2022-02-08)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [4.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.44...@bloom-housing/ui-components@4.0.1-alpha.45) (2022-02-07)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
