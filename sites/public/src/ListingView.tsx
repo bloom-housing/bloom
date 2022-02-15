@@ -45,11 +45,12 @@ import {
   imageUrlFromListing,
   occupancyTable,
   pdfUrlFromListingEvents,
+  getTimeRangeString,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
 import { useGetApplicationStatusProps } from "../lib/hooks"
-import { getGenericAddress, openInFuture, getTimeRangeString } from "../lib/helpers"
+import { getGenericAddress, openInFuture } from "../lib/helpers"
 
 interface ListingProps {
   listing: Listing
