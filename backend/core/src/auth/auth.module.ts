@@ -1,6 +1,6 @@
 import { forwardRef, Module } from "@nestjs/common"
 import { JwtModule } from "@nestjs/jwt"
-import { LocalStrategy } from "./passport-strategies/local.strategy"
+import { LocalMfaStrategy } from "./passport-strategies/local-mfa.strategy"
 import { JwtStrategy } from "./passport-strategies/jwt.strategy"
 import { PassportModule } from "@nestjs/passport"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -19,6 +19,8 @@ import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
+import { SmsMfaService } from "./services/sms-mfa.service"
+import { TwilioModule } from "nestjs-twilio"
 
 @Module({
   imports: [
@@ -33,13 +35,29 @@ import { EmailModule } from "../email/email.module"
         },
       }),
     }),
+    TwilioModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        accountSid: configService.get("TWILIO_ACCOUNT_SID"),
+        authToken: configService.get("TWILIO_AUTH_TOKEN"),
+      }),
+      inject: [ConfigService],
+    }),
     TypeOrmModule.forFeature([RevokedToken, User, Application]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,
     forwardRef(() => ActivityLogModule),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
+  providers: [
+    LocalMfaStrategy,
+    JwtStrategy,
+    AuthService,
+    AuthzService,
+    UserService,
+    PasswordService,
+    SmsMfaService,
+  ],
   exports: [AuthzService, AuthService, UserService],
   controllers: [AuthController, UserController, UserProfileController],
 })

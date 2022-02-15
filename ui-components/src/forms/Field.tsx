@@ -30,6 +30,8 @@ export interface FieldProps {
   getValues?: UseFormMethods["getValues"]
   setValue?: UseFormMethods["setValue"]
   dataTestId?: string
+  hidden?: boolean
+  helperElement?: JSX.Element
 }
 
 const Field = (props: FieldProps) => {
@@ -90,10 +92,11 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {!isRadioOrCheckbox && label}
+      {!isRadioOrCheckbox && !props.hidden && label}
       {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
+        {props.helperElement && props.helperElement}
         <input
           aria-describedby={props.describedBy ? props.describedBy : `${idOrName}`}
           aria-invalid={!!props.error || false}
@@ -110,6 +113,7 @@ const Field = (props: FieldProps) => {
           onChange={props.onChange}
           data-test-id={props.dataTestId}
           {...inputProps}
+          hidden={props.hidden}
         />
         {isRadioOrCheckbox && label}
       </div>

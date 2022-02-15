@@ -14,6 +14,8 @@ export class UserBasicDto extends OmitType(User, [
   "resetToken",
   "roles",
   "jurisdictions",
+  "mfaCode",
+  "mfaCodeUpdatedAt",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

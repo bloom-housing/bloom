@@ -50,6 +50,7 @@ import { Listing } from "../listings/entities/listing.entity"
 import { ApplicationMethodsService } from "../application-methods/application-methods.service"
 import { ApplicationMethodType } from "../application-methods/types/application-method-type-enum"
 import { UnitTypesService } from "../unit-types/unit-types.service"
+import dayjs from "dayjs"
 
 const argv = yargs.scriptName("seed").options({
   test: { type: "boolean", default: false },
@@ -302,6 +303,21 @@ async function seed() {
     new AuthContext(null)
   )
 
+  const mfaUser = await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "mfaUser@bloom.com",
+      emailConfirmation: "mfaUser@bloom.com",
+      firstName: "I",
+      middleName: "Use",
+      lastName: "MFA",
+      dob: new Date(),
+      password: "abcdef12",
+      passwordConfirmation: "abcdef12",
+      jurisdictions,
+    }),
+    new AuthContext(null)
+  )
+
   const unitTypesService = await app.resolve<UnitTypesService>(UnitTypesService)
 
   const unitTypes = await unitTypesService.list()
@@ -316,10 +332,19 @@ async function seed() {
   }
 
   await userRepo.save(admin)
+  await userRepo.save({
+    ...mfaUser,
+    mfaEnabled: true,
+    mfaCode: "123456",
+    mfaCodeUpdatedAt: dayjs(new Date()).add(1, "day"),
+  })
   const roles: UserRoles = { user: admin, isPartner: true, isAdmin: true }
+  const mfaRoles: UserRoles = { user: mfaUser, isPartner: true, isAdmin: true }
   await rolesRepo.save(roles)
+  await rolesRepo.save(mfaRoles)
 
   await userService.confirm({ token: admin.confirmationToken })
+  await userService.confirm({ token: mfaUser.confirmationToken })
   await app.close()
 }
 

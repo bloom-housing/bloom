@@ -967,6 +967,7 @@
       "accountHasBeenLocked": "For security reasons, this account has been locked.",
       "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
       "enterValidEmailAndPassword": "Please enter a valid email and password.",
+      "enterValidEmailAndPasswordAndMFA": "Please enter a valid email, password, and code.",
       "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
       "partnersSignIn": "Partners Sign In",
       "dontHaveAccount": "Don't have an account",
@@ -1493,7 +1494,28 @@
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
     "flags": "Flags",
-    "users": "Users"
+    "users": "Users",
+    "signInMFA": {
+      "verificationChoiceMainTitle": "How would you like us to verify that it's you?",
+      "verificationChoiceSecondaryTitle": "We can send a code to your email or phone number",
+      "verifyByEmail": "verify with Email",
+      "verifyByPhone": "verify with phone number",
+      "addNumberMainTitle": "Add a phone number",
+      "addNumberSecondaryTitle": "Enter your phone number and we'll send you a code that you can use to sign in.",
+      "numberFieldLabel": "your phone number",
+      "addNumber": "Add a phone number",
+      "signIn": "verify and sign in",
+      "addPhoneNumber": "your phone number",
+      "noMFAType":"please select MFA Type",
+      "phoneNumber": "Phone Number",
+      "code": "Code",
+      "noMFACode": "please enter your code",
+      "verifyTitle": "Verify that it's you",
+      "haveSentCodeToPhone": "We sent a code to your phone. Please enter the number below.",
+      "haveSentCodeToEmail": "We sent a code to your email. Please enter the number below.",
+      "sentTo": "Code sent to: %{phoneNumber}",
+      "editPhoneNumber": "Edit phone number"
+    }
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",

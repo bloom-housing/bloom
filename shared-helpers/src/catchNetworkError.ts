@@ -7,7 +7,11 @@ export type NetworkErrorValue = {
   content: string
 } | null
 
-export type NetworkErrorDetermineError = (status: number, error: Error | AxiosError) => void
+export type NetworkErrorDetermineError = (
+  status: number,
+  error: Error | AxiosError,
+  mfaEnabled?: boolean
+) => void
 
 export type NetworkErrorReset = () => void
 
@@ -21,10 +25,12 @@ export enum NetworkErrorMessage {
 export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkErrorValue>(null)
 
-  const check401Error = (message: string) => {
+  const check401Error = (message: string, mfaEnabled?: boolean) => {
     if (message === NetworkErrorMessage.PasswordOutdated) {
       setNetworkError({
-        title: t("authentication.signIn.passwordOutdated"),
+        title: mfaEnabled
+          ? t("authentication.signIn.enterValidEmailAndPasswordAndMFA")
+          : t("authentication.signIn.passwordOutdated"),
         content: `${t("authentication.signIn.changeYourPassword")} <a href="/forgot-password">${t(
           "t.here"
         )}</a>`,
