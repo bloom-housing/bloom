@@ -5,7 +5,6 @@ import {
   getDefaultAssets,
   getDefaultListing,
   getDefaultListingEvents,
-  getDefaultProperty,
   getDefaultUnits,
   getDisplaceePreference,
   getLiveWorkPreference,
@@ -16,7 +15,6 @@ import { UnitAccessibilityPriorityType } from "../../../unit-accessbility-priori
 import { UnitType } from "../../../unit-types/entities/unit-type.entity"
 import { ReservedCommunityType } from "../../../reserved-community-type/entities/reserved-community-type.entity"
 import { AmiChart } from "../../../ami-charts/entities/ami-chart.entity"
-import { Property } from "../../../property/entities/property.entity"
 import { Unit } from "../../../units/entities/unit.entity"
 import { User } from "../../../auth/entities/user.entity"
 import { ApplicationMethod } from "../../../application-methods/entities/application-method.entity"
@@ -35,7 +33,6 @@ export class ListingDefaultSanJoseSeed {
     @InjectRepository(ReservedCommunityType)
     protected readonly reservedTypeRepository: Repository<ReservedCommunityType>,
     @InjectRepository(AmiChart) protected readonly amiChartRepository: Repository<AmiChart>,
-    @InjectRepository(Property) protected readonly propertyRepository: Repository<Property>,
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
@@ -58,17 +55,10 @@ export class ListingDefaultSanJoseSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = getDefaultUnits().map(
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
           amiChart,
         }
       }
@@ -98,7 +88,6 @@ export class ListingDefaultSanJoseSeed {
         },
       ],
       name: "Test: Default, Two Preferences (San Jose)",
-      property: property,
       assets: getDefaultAssets(),
       preferences: [
         getLiveWorkPreference(alamedaJurisdiction.name),

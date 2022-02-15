@@ -18,8 +18,6 @@ import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 import { PreferencesModule } from "./preferences/preferences.module"
 import { UnitsModule } from "./units/units.module"
-import { PropertyGroupsModule } from "./property-groups/property-groups.module"
-import { PropertiesModule } from "./property/properties.module"
 import { AmiChartsModule } from "./ami-charts/ami-charts.module"
 import { ApplicationFlaggedSetsModule } from "./application-flagged-sets/application-flagged-sets.module"
 import * as bodyParser from "body-parser"
@@ -94,8 +92,6 @@ export class AppModule {
         ListingsModule,
         PaperApplicationsModule,
         PreferencesModule,
-        PropertiesModule,
-        PropertyGroupsModule,
         ProgramsModule,
         ReservedCommunityTypesModule,
         SharedModule,

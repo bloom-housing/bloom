@@ -8,11 +8,10 @@ import { GenericQueryBuilder } from "../../shared/db/generic-query-builder"
 
 export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
   public leftJoinRelationsForFilters() {
-    return this.leftJoin(`${this.alias}.property`, "property")
-      .leftJoin(`${this.alias}.jurisdiction`, "jurisdiction")
+    return this.leftJoin(`${this.alias}.jurisdiction`, "jurisdiction")
       .leftJoin(`${this.alias}.leasingAgents`, "leasingAgents")
-      .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("property.units", "units")
+      .leftJoin(`${this.alias}.buildingAddress`, "buildingAddress")
+      .leftJoin(`${this.alias}.units`, "units")
       .leftJoin("units.unitType", "unitTypeRef")
   }
 
@@ -35,9 +34,8 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
       .leftJoinAndSelect(`${this.alias}.leasingAgents`, "leasingAgents")
       .leftJoinAndSelect(`${this.alias}.listingPreferences`, "listingPreferences")
       .leftJoinAndSelect("listingPreferences.preference", "listingPreferencesPreference")
-      .leftJoinAndSelect(`${this.alias}.property`, "property")
-      .leftJoinAndSelect("property.buildingAddress", "buildingAddress")
-      .leftJoinAndSelect("property.units", "units")
+      .leftJoinAndSelect(`${this.alias}.buildingAddress`, "buildingAddress")
+      .leftJoinAndSelect(`${this.alias}.units`, "units")
       .leftJoinAndSelect("units.amiChartOverride", "amiChartOverride")
       .leftJoinAndSelect("units.unitType", "unitTypeRef")
       .leftJoinAndSelect("units.unitRentType", "unitRentType")
@@ -71,7 +69,7 @@ export class ListingsQueryBuilder extends GenericQueryBuilder<Listing> {
         return this.orderBy({
           [`${this.alias}.applicationDueDate`]: "ASC",
           [`${this.alias}.applicationOpenDate`]: "DESC",
-          [`${this.alias}.id`]: "ASC",
+          [`${this.alias}.id`]: "ASC"
         })
       default:
         throw new HttpException(

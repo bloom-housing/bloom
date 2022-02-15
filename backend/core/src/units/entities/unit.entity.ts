@@ -6,7 +6,6 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
-  RelationId,
   UpdateDateColumn,
 } from "typeorm"
 import {
@@ -21,8 +20,6 @@ import {
   ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
-import { Property } from "../../property/entities/property.entity"
-import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitStatus } from "../types/unit-status-enum"
 import { ApiProperty } from "@nestjs/swagger"
@@ -30,6 +27,7 @@ import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitRentType } from "../../unit-rent-types/entities/unit-rent-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { UnitAmiChartOverride } from "../../units/entities/unit-ami-chart-override.entity"
+import Listing from "../../listings/entities/listing.entity"
 
 @Entity({ name: "units" })
 class Unit {
@@ -145,11 +143,11 @@ class Unit {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   monthlyRentAsPercentOfIncome?: string | null
 
-  @ManyToOne(() => Property, (property) => property.units, {
+  @ManyToOne(() => Listing, (listing) => listing.units, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  property: Property
+  listing: Listing
 
   @Column({ type: "boolean", nullable: true })
   @Expose()

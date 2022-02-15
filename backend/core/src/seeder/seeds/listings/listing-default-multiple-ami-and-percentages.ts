@@ -1,5 +1,4 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { CountyCode } from "../../../shared/types/county-code"
@@ -24,9 +23,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
 
     const multipleAMIUnits: Array<UnitSeedType> = [
       {
@@ -107,9 +103,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
         }
       }
     )
@@ -123,7 +116,6 @@ export class ListingDefaultMultipleAMIAndPercentages extends ListingDefaultSeed 
 
     return await this.listingRepository.save({
       ...listing,
-      property: property,
       name: "Test: Default, Multiple AMI and Percentages",
     })
   }

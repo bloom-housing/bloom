@@ -3,8 +3,6 @@ import { Listing } from "./entities/listing.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, Repository } from "typeorm"
-import { plainToClass } from "class-transformer"
-import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
@@ -29,10 +27,7 @@ export class ListingsService {
   }
 
   async create(listingDto: ListingCreateDto) {
-    const listing = this.listingRepository.create({
-      ...listingDto,
-      property: plainToClass(PropertyCreateDto, listingDto),
-    })
+    const listing = this.listingRepository.create(listingDto)
     return await this.listingRepository.save(listing)
   }
 
@@ -51,20 +46,9 @@ export class ListingsService {
       }
     })
     listingDto.unitsAvailable = availableUnits
-    Object.assign(listing, {
-      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
-      property: plainToClass(
-        PropertyUpdateDto,
-        {
-          // NOTE: Create a property out of fields encapsulated in listingDto
-          ...listingDto,
-          // NOTE: Since we use the entire listingDto to create a property object the listing ID
-          //  would overwrite propertyId fetched from DB
-          id: listing.property.id,
-        },
-        { excludeExtraneousValues: true }
-      ),
-    })
+
+    Object.assign(listing, listingDto)
+
     return await this.listingRepository.save(listing)
   }
 
@@ -91,11 +75,11 @@ export class ListingsService {
   }
 
   private async addUnitsSummarized(listing: Listing) {
-    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
+    if (Array.isArray(listing.units) && listing.units.length > 0) {
       const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
+        where: { id: In(listing.units.map((unit) => unit.amiChartId)) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+      listing.unitsSummarized = summarizeUnits(listing.units, amiCharts)
     }
     return listing
   }

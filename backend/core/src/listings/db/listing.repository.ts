@@ -39,7 +39,7 @@ export class ListingRepository extends GenericRepository<Listing> {
         hmi: undefined,
         priorityTypes: [],
         unitTypes: [],
-        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
+        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.units),
       }
     }
 

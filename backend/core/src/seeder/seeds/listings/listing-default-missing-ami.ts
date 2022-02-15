@@ -1,5 +1,4 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultProperty } from "./shared"
 import { BaseEntity } from "typeorm"
 import { UnitSeedType } from "./listings"
 import { CountyCode } from "../../../shared/types/county-code"
@@ -19,10 +18,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "Missing Household Ami Levels",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
     })
 
     const missingAmiLevelsUnits: Array<UnitSeedType> = [
@@ -124,9 +119,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
     >> = missingAmiLevelsUnits.map((unit) => {
       return {
         ...unit,
-        property: {
-          id: property.id,
-        },
         amiChart,
       }
     })
@@ -139,7 +131,6 @@ export class ListingDefaultMissingAMI extends ListingDefaultSeed {
 
     return await this.listingRepository.save({
       ...listing,
-      property: property,
       name: "Test: Default, Missing Household Levels in AMI",
     })
   }
