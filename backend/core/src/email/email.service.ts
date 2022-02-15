@@ -15,6 +15,7 @@ import { Application } from "../applications/entities/application.entity"
 import { ListingReviewOrder } from "../listings/types/listing-review-order-enum"
 import { Jurisdiction } from "../jurisdictions/entities/jurisdiction.entity"
 import { Language } from "../shared/types/language-enum"
+import { JurisdictionsService } from "../jurisdictions/services/jurisdictions.service"
 
 @Injectable({ scope: Scope.REQUEST })
 export class EmailService {
@@ -24,7 +25,8 @@ export class EmailService {
     private readonly sendGrid: SendGridService,
     private readonly configService: ConfigService,
     private readonly translationService: TranslationsService,
-    private readonly jurisdictionResolverService: JurisdictionResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService,
+    private readonly jurisdictionService: JurisdictionsService
   ) {
     this.polyglot = new Polyglot({
       phrases: {},
@@ -41,7 +43,7 @@ export class EmailService {
   }
 
   public async welcome(user: User, appUrl: string, confirmationUrl: string) {
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    const jurisdiction = await this.getUserJurisdiction(user)
     await this.loadTranslationsForUser(user)
     if (this.configService.get<string>("NODE_ENV") === "production") {
       Logger.log(
@@ -50,6 +52,7 @@ export class EmailService {
     }
     await this.send(
       user.email,
+      jurisdiction.emailFromAddress,
       this.polyglot.t("register.welcome"),
       this.template("register-email")({
         user: user,
@@ -59,16 +62,37 @@ export class EmailService {
     )
   }
 
+  private async getUserJurisdiction(user?: User) {
+    let jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    if (!jurisdiction && user?.jurisdictions) {
+      jurisdiction = await this.jurisdictionService.findOne({
+        where: { id: user.jurisdictions[0].id },
+      })
+    }
+    return jurisdiction
+  }
+
+  private async getListingJurisdiction(listing?: Listing) {
+    let jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    if (!jurisdiction && listing?.jurisdiction) {
+      jurisdiction = listing.jurisdiction
+    }
+
+    return jurisdiction
+  }
+
   private async loadTranslationsForUser(user: User) {
     const language = user.language || Language.en
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, language))
   }
 
   public async changeEmail(user: User, appUrl: string, confirmationUrl: string, newEmail: string) {
+    const jurisdiction = await this.getUserJurisdiction(user)
     await this.loadTranslationsForUser(user)
     await this.send(
       newEmail,
+      jurisdiction.emailFromAddress,
       "Bloom email change request",
       this.template("change-email")({
         user: user,
@@ -79,9 +103,11 @@ export class EmailService {
   }
 
   public async sendMfaCode(user: User, email: string, mfaCode: string) {
+    const jurisdiction = await this.getUserJurisdiction(user)
     await this.loadTranslationsForUser(user)
     await this.send(
       email,
+      jurisdiction.emailFromAddress,
       "Bloom account access token",
       this.template("mfa-code")({
         user: user,
@@ -91,7 +117,7 @@ export class EmailService {
   }
 
   public async confirmation(listing: Listing, application: Application, appUrl: string) {
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    const jurisdiction = await this.getListingJurisdiction(listing)
     void (await this.loadTranslations(jurisdiction, application.language || Language.en))
     let whatToExpectText
     const listingUrl = `${appUrl}/listing/${listing.id}`
@@ -123,6 +149,7 @@ export class EmailService {
     }
     await this.send(
       application.applicant.emailAddress,
+      jurisdiction.emailFromAddress,
       this.polyglot.t("confirmation.subject"),
       compiledTemplate({
         listing: listing,
@@ -135,7 +162,7 @@ export class EmailService {
   }
 
   public async forgotPassword(user: User, appUrl: string) {
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+    const jurisdiction = await this.getUserJurisdiction(user)
     void (await this.loadTranslations(jurisdiction, user.language))
     const compiledTemplate = this.template("forgot-password")
     const resetUrl = `${appUrl}/reset-password?token=${user.resetToken}`
@@ -148,6 +175,7 @@ export class EmailService {
 
     await this.send(
       user.email,
+      jurisdiction.emailFromAddress,
       this.polyglot.t("forgotPassword.subject"),
       compiledTemplate({
         resetUrl: resetUrl,
@@ -203,12 +231,11 @@ export class EmailService {
     return partials
   }
 
-  private async send(to: string, subject: string, body: string, retry = 3) {
-    const jurisdiction = await this.jurisdictionResolverService.getJurisdiction()
+  private async send(to: string, from: string, subject: string, body: string, retry = 3) {
     await this.sendGrid.send(
       {
         to: to,
-        from: jurisdiction.emailFromAddress,
+        from,
         subject: subject,
         html: body,
       },
@@ -219,7 +246,7 @@ export class EmailService {
           const { body: errBody } = response
           console.error(`Error sending email to: ${to}! Error body: ${errBody}`)
           if (retry > 0) {
-            void this.send(to, subject, body, retry - 1)
+            void this.send(to, from, subject, body, retry - 1)
           }
         }
       }
@@ -231,8 +258,10 @@ export class EmailService {
       user.jurisdictions?.length === 1 ? user.jurisdictions[0] : null,
       user.language || Language.en
     ))
+    const jurisdiction = await this.getUserJurisdiction(user)
     await this.send(
       user.email,
+      jurisdiction.emailFromAddress,
       this.polyglot.t("invite.hello"),
       this.template("invite")({
         user: user,

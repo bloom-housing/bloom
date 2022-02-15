@@ -138,10 +138,10 @@ export class User {
   @JoinTable()
   jurisdictions: Jurisdiction[]
 
-  @Column({ type: "bool" })
+  @Column({ type: "bool", default: false })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
-  mfaEnabled: boolean
+  mfaEnabled?: boolean
 
   @Column("varchar", { nullable: true })
   @Expose()

@@ -4010,7 +4010,7 @@ export interface User {
   updatedAt: Date
 
   /**  */
-  mfaEnabled: boolean
+  mfaEnabled?: boolean
 
   /**  */
   lastLoginAt?: Date
@@ -4116,7 +4116,7 @@ export interface UserBasic {
   updatedAt: Date
 
   /**  */
-  mfaEnabled: boolean
+  mfaEnabled?: boolean
 
   /**  */
   lastLoginAt?: Date
