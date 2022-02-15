@@ -91,7 +91,7 @@ Vendor Plugins
 
 ### Accessibility Considerations
 
-- Storybook A11t test suite runs on all PRs
+- Storybook A11Y test suite runs on all PRs
 - Storybook AXE panel when looking at an individual component can be useful
 - Keyboard accessibility
   - Consider aria roles, focus state
