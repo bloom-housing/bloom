@@ -88,7 +88,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toEqual(1)
+    expect(res.body.items.length).toEqual(3)
   })
 
   it("should return listings with matching zipcodes", async () => {
@@ -121,7 +121,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(13)
+    expect(res.body.items.length).toBe(15)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
