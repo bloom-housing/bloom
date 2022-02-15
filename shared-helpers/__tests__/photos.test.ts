@@ -27,10 +27,15 @@ describe("photos helper", () => {
     process.env.CLOUDINARY_CLOUD_NAME = "exygy"
 
     const testListing = {
-      image: {
-        fileId: "1234",
-        label: "cloudinaryBuilding",
-      },
+      images: [
+        {
+          ordinal: 0,
+          image: {
+            fileId: "1234",
+            label: "cloudinaryBuilding",
+          },
+        },
+      ],
     } as Listing
 
     expect(imageUrlFromListing(testListing)).toBe(

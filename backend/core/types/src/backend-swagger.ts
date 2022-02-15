@@ -4569,6 +4569,14 @@ export interface ListingEvent {
   file?: Asset
 }
 
+export interface ListingImage {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
+}
+
 export interface FormMetadataExtraData {
   /**  */
   type: InputType
@@ -4928,7 +4936,7 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImage[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5181,6 +5189,14 @@ export interface ListingEventCreate {
   label?: string
 }
 
+export interface ListingImageUpdate {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
+}
+
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -5352,7 +5368,7 @@ export interface ListingCreate {
   events: ListingEventCreate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5773,7 +5789,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -6521,7 +6537,6 @@ export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
-export type CombinedImageTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate
