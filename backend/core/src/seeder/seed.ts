@@ -14,6 +14,8 @@ import { ListingTritonSeed, ListingTritonSeedDetroit } from "./seeds/listings/li
 import { ListingDefaultReservedSeed } from "./seeds/listings/listing-default-reserved-seed"
 import { ListingDefaultFCFSSeed } from "./seeds/listings/listing-default-fcfs-seed"
 import { ListingDefaultMultipleAMI } from "./seeds/listings/listing-default-multiple-ami"
+import { ListingDefaultLottery } from "./seeds/listings/listing-default-lottery-results"
+import { ListingDefaultLotteryPending } from "./seeds/listings/listing-default-lottery-pending"
 import { ListingDefaultMultipleAMIAndPercentages } from "./seeds/listings/listing-default-multiple-ami-and-percentages"
 import { ListingDefaultMissingAMI } from "./seeds/listings/listing-default-missing-ami"
 import { ListingDefaultSanJoseSeed } from "./seeds/listings/listing-default-sanjose-seed"
@@ -72,6 +74,8 @@ const listingSeeds: any[] = [
   ListingDefaultMultipleAMI,
   ListingDefaultMultipleAMIAndPercentages,
   ListingDefaultMissingAMI,
+  ListingDefaultLottery,
+  ListingDefaultLotteryPending,
   ListingDefaultSanJoseSeed,
   ListingTritonSeedDetroit,
 ]
