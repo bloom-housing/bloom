@@ -27,9 +27,19 @@ const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""
 let days = 10
 listing.applicationDueDate = dayjs().add(days, "days").format()
+
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
+    status={ApplicationStatusType.Open}
+    vivid
+  />
+)
+
+export const withSubContent = () => (
+  <ApplicationStatus
+    content="First Come First Served (and a really long string to test wrapping on smaller sizes)"
+    subContent="Application Due Date: July 10th"
     status={ApplicationStatusType.Open}
     vivid
   />
@@ -47,6 +57,7 @@ export const dueSoonWithTime = () => (
 const listingPast = Object.assign({}, Archer) as any
 listingPast.applicationOpenDate = ""
 days = 10
+
 export const pastDue = () => (
   <ApplicationStatus
     content={
@@ -57,6 +68,7 @@ export const pastDue = () => (
 )
 
 listingPast.applicationDueDate = dayjs().subtract(days, "days").format()
+
 export const pastDueAndVivid = () => (
   <ApplicationStatus
     content={
@@ -70,6 +82,7 @@ export const pastDueAndVivid = () => (
 const listing2 = Object.assign({}, Archer) as any
 days = 10
 listing2.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openSoon = () => (
   <ApplicationStatus
     content={
@@ -82,6 +95,7 @@ export const openSoon = () => (
 const listing3 = Object.assign({}, Archer) as any
 days = 10
 listing3.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openedAlready = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing3.applicationDueDate)}
