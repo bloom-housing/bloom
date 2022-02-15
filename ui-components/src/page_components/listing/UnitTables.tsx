@@ -99,7 +99,7 @@ const UnitTables = (props: UnitTablesProps) => {
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
-              <div className="toggle-header">
+              <div className={`toggle-header ${!props.disableAccordion && "pb-3"}`}>
                 <h3 className={"toggle-header-content"}>
                   <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
                   {unitsLabel(units)}
