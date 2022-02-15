@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.59](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.58...@bloom-housing/ui-components@4.0.1-alpha.59) (2022-02-15)
+
+
+### Features
+
+* **backend:** add partners portal users multi factor authentication ([#2291](https://github.com/bloom-housing/bloom/issues/2291)) ([5b10098](https://github.com/bloom-housing/bloom/commit/5b10098d8668f9f42c60e90236db16d6cc517793)), closes [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485)
+
+
+
+
+
 ## [4.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.57...@bloom-housing/ui-components@4.0.1-alpha.58) (2022-02-14)
 
 

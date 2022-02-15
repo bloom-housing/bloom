@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.35...@bloom-housing/backend-core@3.0.2-alpha.36) (2022-02-15)
+
+
+### Features
+
+* **backend:** add partners portal users multi factor authentication ([#2291](https://github.com/bloom-housing/bloom/issues/2291)) ([5b10098](https://github.com/bloom-housing/bloom/commit/5b10098d8668f9f42c60e90236db16d6cc517793)), closes [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485)
+
+
+
+
+
 ## [3.0.2-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.34...@bloom-housing/backend-core@3.0.2-alpha.35) (2022-02-10)
 
 
