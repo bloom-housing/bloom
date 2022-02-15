@@ -4444,6 +4444,14 @@ export interface ListingEvent {
   file?: Asset
 }
 
+export interface ListingImage {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
+}
+
 export interface FormMetadataExtraData {
   /**  */
   type: InputType
@@ -4803,7 +4811,7 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  images?: Asset[]
+  images?: ListingImage[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5056,6 +5064,14 @@ export interface ListingEventCreate {
   label?: string
 }
 
+export interface ListingImageUpdate {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
+}
+
 export interface UnitAmiChartOverrideCreate {
   /**  */
   items: AmiChartItem[]
@@ -5227,7 +5243,7 @@ export interface ListingCreate {
   events: ListingEventCreate[]
 
   /**  */
-  images?: AssetCreate[]
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5648,7 +5664,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  images?: AssetUpdate[]
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes

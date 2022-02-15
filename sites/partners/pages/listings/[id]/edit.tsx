@@ -20,13 +20,12 @@ const EditListing = () => {
 
   if (!listingDto) return false
 
-  // Set listing photo from assets if necessary:
-  if (listingDto.image == null && listingDto.assets.length > 0) {
-    listingDto.image = listingDto.assets.find((asset) => asset.label == "building")
-  }
-  // If that didn't do the trick, set a default:
-  if (listingDto.image == null) {
-    listingDto.image = { fileId: "", label: "" }
+  /**
+   * purposely leaving out the assets fallback, so when this gets to production
+   * a user can easily see the old asset on the detail, but not here, so we can upload it properly (this should only apply to older listings)
+   */
+  if (listingDto.images.length === 0) {
+    listingDto.images = [{ ordinal: 0, image: { fileId: "", label: "" } }]
   }
 
   return (

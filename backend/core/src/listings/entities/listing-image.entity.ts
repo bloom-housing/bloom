@@ -2,7 +2,7 @@ import { Column, Entity, Index, ManyToOne } from "typeorm"
 import { Expose, Type } from "class-transformer"
 import { IsNumber, IsOptional } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
-import Listing from "./listing.entity"
+import { Listing } from "./listing.entity"
 import { Asset } from "../../assets/entities/asset.entity"
 
 @Entity({ name: "listing_images" })
@@ -18,6 +18,7 @@ export class ListingImage {
   @ManyToOne(() => Asset, {
     primary: true,
     eager: true,
+    cascade: true,
   })
   @Expose()
   @Type(() => Asset)
