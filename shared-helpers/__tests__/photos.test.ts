@@ -33,8 +33,8 @@ describe("photos helper", () => {
           image: {
             fileId: "1234",
             label: "cloudinaryBuilding",
-          }
-        }
+          },
+        },
       ],
     } as Listing
 
