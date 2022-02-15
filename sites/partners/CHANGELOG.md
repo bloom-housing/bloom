@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.68](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.67...@bloom-housing/partners@4.0.1-alpha.68) (2022-02-15)
+
+
+### Features
+
+* **backend:** make listing image an array ([#2477](https://github.com/bloom-housing/bloom/issues/2477)) ([cab9800](https://github.com/bloom-housing/bloom/commit/cab98003e640c880be2218fa42321eadeec35e9c))
+
+
+
+
+
 ## [4.0.1-alpha.67](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.66...@bloom-housing/partners@4.0.1-alpha.67) (2022-02-15)
 
 **Note:** Version bump only for package @bloom-housing/partners
