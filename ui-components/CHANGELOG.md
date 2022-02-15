@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.62](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.61...@bloom-housing/ui-components@4.0.1-alpha.62) (2022-02-15)
+
+
+### Code Refactoring
+
+* remove backend dependencies from events components, consolidate ([#2495](https://github.com/bloom-housing/bloom/issues/2495)) ([d884689](https://github.com/bloom-housing/bloom/commit/d88468965bc67c74b8b3eaced20c77472e90331f))
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+
+
+
+
 ## [4.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.60...@bloom-housing/ui-components@4.0.1-alpha.61) (2022-02-15)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
