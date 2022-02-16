@@ -52,7 +52,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
     "mockdate": "^3.0.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "postcss": "^8.3.6",
     "postcss-loader": "^4.3",
     "preact": "^10.5.14",
