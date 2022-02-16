@@ -1,8 +1,7 @@
 import { AmiChart } from "./entities/ami-chart.entity"
 import { AmiChartCreateDto, AmiChartUpdateDto } from "./dto/ami-chart.dto"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
-import { QueryOneOptions } from "../shared/services/abstract-service"
+import { FindOneOptions, Repository } from "typeorm"
 import { NotFoundException } from "@nestjs/common"
 import { AmiChartListQueryParams } from "./dto/ami-chart-list-query-params"
 import { assignDefined } from "../shared/utils/assign-defined"
@@ -33,8 +32,8 @@ export class AmiChartsService {
     return await this.repository.save(dto)
   }
 
-  async findOne(queryOneOptions: QueryOneOptions<AmiChart>): Promise<AmiChart> {
-    const obj = await this.repository.findOne(queryOneOptions)
+  async findOne(findOneOptions: FindOneOptions<AmiChart>): Promise<AmiChart> {
+    const obj = await this.repository.findOne(findOneOptions)
     if (!obj) {
       throw new NotFoundException()
     }

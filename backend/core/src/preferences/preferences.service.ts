@@ -1,10 +1,9 @@
 import { Preference } from "./entities/preference.entity"
-import { QueryOneOptions } from "../shared/services/abstract-service"
 import { PreferenceCreateDto } from "./dto/preference-create.dto"
 import { PreferenceUpdateDto } from "./dto/preference-update.dto"
 import { NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { FindOneOptions, Repository } from "typeorm"
 import { addFilters } from "../shared/query-filter"
 import { PreferencesListQueryParams } from "./dto/preferences-list-query-params"
 import { PreferencesFilterParams } from "./dto/preferences-filter-params"
@@ -34,8 +33,8 @@ export class PreferencesService {
     return await this.repository.save(dto)
   }
 
-  async findOne(queryOneOptions: QueryOneOptions<Preference>): Promise<Preference> {
-    const obj = await this.repository.findOne(queryOneOptions)
+  async findOne(findOneOptions: FindOneOptions<Preference>): Promise<Preference> {
+    const obj = await this.repository.findOne(findOneOptions)
     if (!obj) {
       throw new NotFoundException()
     }

@@ -1,9 +1,8 @@
 import { NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { FindOneOptions, Repository } from "typeorm"
 import { Jurisdiction } from "../entities/jurisdiction.entity"
 import { JurisdictionCreateDto } from "../dto/jurisdiction-create.dto"
-import { QueryOneOptions } from "../../shared/services/abstract-service"
 import { JurisdictionUpdateDto } from "../dto/jurisdiction-update.dto"
 import { assignDefined } from "../../shared/utils/assign-defined"
 
@@ -30,8 +29,8 @@ export class JurisdictionsService {
     return await this.repository.save(dto)
   }
 
-  async findOne(queryOneOptions: QueryOneOptions<Jurisdiction>): Promise<Jurisdiction> {
-    const obj = await this.repository.findOne({ ...queryOneOptions, join: this.joinOptions })
+  async findOne(findOneOptions: FindOneOptions<Jurisdiction>): Promise<Jurisdiction> {
+    const obj = await this.repository.findOne({ ...findOneOptions, join: this.joinOptions })
     if (!obj) {
       throw new NotFoundException()
     }

@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToOne } from "typeorm"
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
 import { IsDefined, IsEnum } from "class-validator"
@@ -11,8 +11,11 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 @Entity({ name: "translations" })
 @Index(["jurisdiction", "language"], { unique: true })
 export class Translation extends AbstractEntity {
-  @OneToOne(() => Jurisdiction)
-  @JoinColumn()
+  @ManyToOne(() => Jurisdiction, {
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
+    eager: true,
+  })
   jurisdiction: Jurisdiction
 
   @Column({ enum: Language })
