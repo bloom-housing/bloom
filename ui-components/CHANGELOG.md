@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.67](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.66...@bloom-housing/ui-components@4.0.1-alpha.67) (2022-02-16)
+
+
+### Features
+
+* alert-box line-height ([3e8aafb](https://github.com/bloom-housing/bloom/commit/3e8aafb8272c05670c81aeef5809d88f1d1ba18e))
+
+
+
+
+
 ## [4.0.1-alpha.66](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.65...@bloom-housing/ui-components@4.0.1-alpha.66) (2022-02-16)
 
 
