@@ -1,8 +1,7 @@
-import { QueryOneOptions } from "../shared/services/abstract-service"
 import { NotFoundException } from "@nestjs/common"
 import { ReservedCommunityType } from "./entities/reserved-community-type.entity"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { FindOneOptions, Repository } from "typeorm"
 import {
   ReservedCommunityTypeCreateDto,
   ReservedCommunityTypeUpdateDto,
@@ -35,9 +34,9 @@ export class ReservedCommunityTypesService {
   }
 
   async findOne(
-    queryOneOptions: QueryOneOptions<ReservedCommunityType>
+    findOneOptions: FindOneOptions<ReservedCommunityType>
   ): Promise<ReservedCommunityType> {
-    const obj = await this.repository.findOne(queryOneOptions)
+    const obj = await this.repository.findOne(findOneOptions)
     if (!obj) {
       throw new NotFoundException()
     }

@@ -1,4 +1,4 @@
-import { Repository } from "typeorm"
+import { FindManyOptions, FindOneOptions, Repository } from "typeorm"
 import { Inject, NotFoundException } from "@nestjs/common"
 import { FindConditions } from "typeorm/find-options/FindConditions"
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
@@ -11,19 +11,10 @@ export interface GenericUpdateDto {
   id?: string
 }
 
-export interface QueryOneOptions<T> {
-  where: FindConditions<T>[] | FindConditions<T> | ObjectLiteral | string
-}
-
-export interface QueryManyOptions<T = any> extends QueryOneOptions<T> {
-  skip?: number
-  take?: number
-}
-
 export interface AbstractService<T, TCreateDto, TUpdateDto> {
-  list(queryManyOptions?: QueryManyOptions<T>): Promise<T[]>
+  list(findConditions?: FindManyOptions<T>): Promise<T[]>
   create(dto: TCreateDto): Promise<T>
-  findOne(queryOneOptions: QueryOneOptions<T>): Promise<T>
+  findOne(findConditions: FindOneOptions<T>): Promise<T>
   delete(objId: string): Promise<void>
   update(dto: TUpdateDto): Promise<T>
 }
@@ -34,16 +25,16 @@ export function AbstractServiceFactory<T, TCreateDto, TUpdateDto extends Generic
   class AbstractServiceHost<T> implements AbstractService<T, TCreateDto, TUpdateDto> {
     @Inject(getRepositoryToken(entity)) repository: Repository<T>
 
-    list(queryManyOptions?: QueryManyOptions<T>): Promise<T[]> {
-      return this.repository.find(queryManyOptions)
+    list(findConditions?: FindManyOptions<T>): Promise<T[]> {
+      return this.repository.find(findConditions)
     }
 
     async create(dto: TCreateDto): Promise<T> {
       return await this.repository.save(dto)
     }
 
-    async findOne(queryOneOptions: QueryOneOptions<T>): Promise<T> {
-      const obj = await this.repository.findOne(queryOneOptions)
+    async findOne(findConditions: FindOneOptions<T>): Promise<T> {
+      const obj = await this.repository.findOne(findConditions)
       if (!obj) {
         throw new NotFoundException()
       }
