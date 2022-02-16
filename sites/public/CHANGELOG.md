@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.70](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.69...@bloom-housing/public@4.0.1-alpha.70) (2022-02-16)
+
+
+### Bug Fixes
+
+* use the correct AlertBox component for preview listing notice ([#2497](https://github.com/bloom-housing/bloom/issues/2497)) ([f985c44](https://github.com/bloom-housing/bloom/commit/f985c444aaed31504a1e1ce7173c6e15194e2af6))
+
+
+
+
+
 ## [4.0.1-alpha.69](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.68...@bloom-housing/public@4.0.1-alpha.69) (2022-02-16)
 
 **Note:** Version bump only for package @bloom-housing/public
