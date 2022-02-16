@@ -3,7 +3,7 @@ import { t } from "./translator"
 import { UnitSummary } from "@bloom-housing/backend-core/types"
 
 export const unitSummariesTable = (summaries: UnitSummary[]) => {
-  const unitSummaries = summaries.map((unitSummary) => {
+  const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
       unitSummary.minIncomeRange.min == unitSummary.minIncomeRange.max ? (

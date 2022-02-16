@@ -1,10 +1,11 @@
-import * as React from "react"
+import React, { useState } from "react"
 import { nanoid } from "nanoid"
 import { MinMax, UnitSummary, Unit } from "@bloom-housing/backend-core/types"
 
 import { StandardTable } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
 import { numberOrdinal } from "../../helpers/numberOrdinal"
+import { Icon, IconFillColors } from "../../icons/Icon"
 
 const formatRange = (range: MinMax, ordinalize?: boolean) => {
   let min: string | number = range.min
@@ -34,6 +35,7 @@ interface UnitTablesProps {
 }
 
 const UnitTables = (props: UnitTablesProps) => {
+  const [accordionOpen, setAccordionOpen] = useState(false)
   const unitSummaries = props.unitSummaries || []
 
   const unitsHeaders = {
@@ -43,9 +45,9 @@ const UnitTables = (props: UnitTablesProps) => {
     floor: "t.floor",
   }
 
-  const toggleTable = (event: React.MouseEvent) => {
+  const toggleTable = () => {
     if (!props.disableAccordion) {
-      event.currentTarget.parentElement?.querySelector(".unit-table")?.classList?.toggle("hidden")
+      setAccordionOpen(!accordionOpen)
     }
   }
 
@@ -97,16 +99,39 @@ const UnitTables = (props: UnitTablesProps) => {
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
-              <h3 className="toggle-header">
-                <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
-                {unitsLabel(units)}
-                {areaRangeSection}
-                {floorSection}
-              </h3>
+              <div className={`toggle-header ${!props.disableAccordion && "pb-3"}`}>
+                <h3 className={"toggle-header-content"}>
+                  <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
+                  {unitsLabel(units)}
+                  {areaRangeSection}
+                  {floorSection}
+                </h3>
+                {!props.disableAccordion && (
+                  <>
+                    {accordionOpen ? (
+                      <Icon
+                        symbol={"closeSmall"}
+                        size={"base"}
+                        fill={IconFillColors.primary}
+                        dataTestId={"unit-table-accordion-close"}
+                      />
+                    ) : (
+                      <Icon
+                        symbol={"arrowDown"}
+                        size={"base"}
+                        fill={IconFillColors.primary}
+                        dataTestId={"unit-table-accordion-open"}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
             </button>
-            <div className="unit-table hidden">
-              <StandardTable headers={unitsHeaders} data={unitsFormatted} />
-            </div>
+            {accordionOpen && (
+              <div className="unit-table">
+                <StandardTable headers={unitsHeaders} data={unitsFormatted} />
+              </div>
+            )}
           </div>
         )
       })}
