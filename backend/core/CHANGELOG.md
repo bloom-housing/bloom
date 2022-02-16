@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.40...@bloom-housing/backend-core@3.0.2-alpha.41) (2022-02-16)
+
+
+### Features
+
+* **backend:** fix translations table relation to jurisdiction (make … ([#2506](https://github.com/bloom-housing/bloom/issues/2506)) ([8e1e3a9](https://github.com/bloom-housing/bloom/commit/8e1e3a9eb0ff76412831e122390ac25ad7754645))
+
+
+
+
+
 ## [3.0.2-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.39...@bloom-housing/backend-core@3.0.2-alpha.40) (2022-02-16)
 
 
