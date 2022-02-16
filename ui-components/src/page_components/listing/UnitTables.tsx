@@ -35,7 +35,7 @@ interface UnitTablesProps {
 }
 
 const UnitTables = (props: UnitTablesProps) => {
-  const [accordion, setAccordion] = useState(false)
+  const [accordionOpen, setAccordionOpen] = useState(false)
   const unitSummaries = props.unitSummaries || []
 
   const unitsHeaders = {
@@ -47,7 +47,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   const toggleTable = () => {
     if (!props.disableAccordion) {
-      setAccordion(!accordion)
+      setAccordionOpen(!accordionOpen)
     }
   }
 
@@ -108,7 +108,7 @@ const UnitTables = (props: UnitTablesProps) => {
                 </h3>
                 {!props.disableAccordion && (
                   <>
-                    {accordion ? (
+                    {accordionOpen ? (
                       <Icon
                         symbol={"closeSmall"}
                         size={"base"}
@@ -127,7 +127,7 @@ const UnitTables = (props: UnitTablesProps) => {
                 )}
               </div>
             </button>
-            {accordion && (
+            {accordionOpen && (
               <div className="unit-table">
                 <StandardTable headers={unitsHeaders} data={unitsFormatted} />
               </div>
