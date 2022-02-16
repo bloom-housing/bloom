@@ -52,6 +52,7 @@ const AlertBox = (props: AlertBoxProps) => {
               size="medium"
               symbol={icons[props.type || "alert"]}
               fill={props.inverted ? IconFillColors.white : undefined}
+              ariaHidden={true}
             />
           </span>
           <span className="alert-box__body">
@@ -63,8 +64,9 @@ const AlertBox = (props: AlertBoxProps) => {
           <button
             className={`alert-box__close ${props.inverted ? "text-white" : ""}`}
             onClick={onClose}
+            aria-label="close alert"
           >
-            &times;
+            <span aria-hidden={true}>&times;</span>
           </button>
         )}
       </div>
