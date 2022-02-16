@@ -203,7 +203,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               register={register}
               error={fieldHasError(errors?.digitalApplication) && digitalApplicationChoice === null}
               errorMessage={fieldMessage(errors?.digitalApplication)}
-              groupSubNote={t("listings.requiredToPublish")}
               fields={[
                 {
                   ...yesNoRadioOptions[0],
@@ -328,7 +327,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
             <FieldGroup
               name="paperApplicationChoice"
               type="radio"
-              groupSubNote={t("listings.requiredToPublish")}
               error={fieldHasError(errors?.paperApplication) && paperApplicationChoice === null}
               errorMessage={fieldMessage(errors?.paperApplication)}
               register={register}
@@ -433,7 +431,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               name="referralOpportunityChoice"
               type="radio"
               register={register}
-              groupSubNote={t("listings.requiredToPublish")}
               error={
                 fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
               }

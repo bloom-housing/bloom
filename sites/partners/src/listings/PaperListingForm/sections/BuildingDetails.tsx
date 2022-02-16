@@ -398,7 +398,6 @@ const BuildingDetails = ({
             register={register}
             validation={{ required: true }}
           />
-          <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
         </GridCell>
         <ViewItem
           label={t("application.contact.state")}
