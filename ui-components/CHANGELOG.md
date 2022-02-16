@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.64...@bloom-housing/ui-components@4.0.1-alpha.65) (2022-02-16)
+
+
+### Bug Fixes
+
+* add icons to unit accordions if enabled ([#2372](https://github.com/bloom-housing/bloom/issues/2372)) ([#2489](https://github.com/bloom-housing/bloom/issues/2489)) ([55e4dc9](https://github.com/bloom-housing/bloom/commit/55e4dc9a95b9fe9125153b43556fd64d06506f24))
+
+
+
+
+
 ## [4.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.63...@bloom-housing/ui-components@4.0.1-alpha.64) (2022-02-16)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
