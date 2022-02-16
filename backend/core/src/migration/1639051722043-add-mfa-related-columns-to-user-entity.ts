@@ -4,9 +4,11 @@ export class addMfaRelatedColumnsToUserEntity1639051722043 implements MigrationI
   name = "addMfaRelatedColumnsToUserEntity1639051722043"
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "user_accounts" ADD "mfa_enabled" boolean NOT NULL DEFAULT FALSE`)
+    await queryRunner.query(
+      `ALTER TABLE "user_accounts" ADD "mfa_enabled" boolean NOT NULL DEFAULT FALSE`
+    )
     await queryRunner.query(`ALTER TABLE "user_accounts" ADD "mfa_code" character varying`)
-    await  queryRunner.query(`
+    await queryRunner.query(`
         UPDATE user_accounts
         SET mfa_enabled = true
         WHERE id IN
