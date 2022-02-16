@@ -20,7 +20,7 @@ export class convertListingImageToArray1644581761889 implements MigrationInterfa
       `ALTER TABLE "listing_images" ADD CONSTRAINT "FK_6fc0fefe11fb46d5ee863ed483a" FOREIGN KEY ("image_id") REFERENCES "assets"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     )
     const listings: [{ id: string; image_id: string }] = await queryRunner.query(
-      `SELECT id, image_id FROM listings`
+      `SELECT id, image_id FROM listings where image_id is not null`
     )
     for (const l of listings) {
       await queryRunner.query(`INSERT INTO listing_images (listing_id, image_id) VALUES ($1, $2)`, [
