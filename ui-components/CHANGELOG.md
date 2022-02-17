@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.72](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.71...@bloom-housing/ui-components@4.0.1-alpha.72) (2022-02-17)
+
+
+### Bug Fixes
+
+* support text wrapping in ApplicationStatus ([#2504](https://github.com/bloom-housing/bloom/issues/2504)) ([d730fa9](https://github.com/bloom-housing/bloom/commit/d730fa9fc6df7d9e99bb5b7fad65b1ab743776b4))
+
+
+
+
+
 ## [4.0.1-alpha.71](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.70...@bloom-housing/ui-components@4.0.1-alpha.71) (2022-02-17)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
