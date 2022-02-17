@@ -39,8 +39,8 @@ export class ListingsService {
           return { "listings.updated_at": "DESC" }
         case OrderByFieldsEnum.mostRecentlyClosed:
           return {
-            "listings.closedAt": "DESC",
-            "listings.publishedAt": "DESC",
+            "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+            "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
           }
         case OrderByFieldsEnum.applicationDates:
         case undefined:
