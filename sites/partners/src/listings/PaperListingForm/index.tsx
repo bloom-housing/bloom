@@ -31,7 +31,9 @@ import {
   ListingReviewOrder,
   User,
   Program,
+  ListingFeatures,
 } from "@bloom-housing/backend-core/types"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 import {
   AlertErrorType,
   FormListing,
@@ -405,7 +407,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             formKey={"program"}
                           />
                           <AdditionalFees />
-                          <BuildingFeatures />
+                          <BuildingFeatures existingFeatures={listing?.features} />
                           <AdditionalEligibility />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />

@@ -149,7 +149,7 @@ export default function ListingsList() {
         image={metaImage}
         description={metaDescription}
       />
-      <PageHeader title={t("nav.listings")} />
+      <PageHeader title={t("nav.listings")} className={"md:pt-16"} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">
