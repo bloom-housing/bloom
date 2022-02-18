@@ -4,9 +4,13 @@ import { Language } from "../shared/types/language-enum"
 export class updateSanJoseEmailTranslations1645051898243 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // First update the existing English translation for San Jose:
-    const [{ id: sanJoseJurisdiction }] = await queryRunner.query(
+    let sanJoseJurisdiction = await queryRunner.query(
       `SELECT id FROM jurisdictions WHERE name = 'San Jose' LIMIT 1`
     )
+
+    if (sanJoseJurisdiction.length === 0) return
+
+    sanJoseJurisdiction = sanJoseJurisdiction[0].id
 
     let sanJoseTranslation = await queryRunner.query(
       `SELECT translations FROM translations WHERE jurisdiction_id = ($1) AND language = ($2)`,

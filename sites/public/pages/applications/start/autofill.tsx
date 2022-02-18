@@ -15,8 +15,10 @@ import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/appAutofill"
+import { useRouter } from "next/router"
 
 export default () => {
+  const router = useRouter()
   const context = useFormConductor("autofill")
   const { conductor, application, listing } = context
   const { initialStateLoaded, profile, applicationsService } = useContext(AuthContext)
@@ -37,14 +39,14 @@ export default () => {
       if (previousApplication && useDetails) {
         const withUpdatedLang = {
           ...previousApplication,
-          language: conductor.application.language,
+          language: router.locale,
         }
 
         conductor.application = withUpdatedLang
       } else {
         const newApplication = {
           ...blankApplication,
-          language: conductor.application.language,
+          language: router.locale,
         }
         conductor.application = newApplication
       }
@@ -53,7 +55,7 @@ export default () => {
       conductor.sync()
       conductor.routeToNextOrReturnUrl()
     }
-  }, [conductor, context, previousApplication, submitted, useDetails])
+  }, [submitted, previousApplication, useDetails, context, conductor, router])
 
   useEffect(() => {
     if (!profile || previousApplication) {
