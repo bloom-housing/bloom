@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.42...@bloom-housing/backend-core@3.0.2-alpha.43) (2022-02-17)
+
+
+### Features
+
+* adds NULLS LAST to mostRecentlyClosed ([#2521](https://github.com/bloom-housing/bloom/issues/2521)) ([39737a3](https://github.com/bloom-housing/bloom/commit/39737a3207e22815d184fc19cb2eaf6b6390dda8))
+
+
+
+
+
+## [3.0.2-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.41...@bloom-housing/backend-core@3.0.2-alpha.42) (2022-02-17)
+
+
+### Features
+
+* **backend:** add listing order by mostRecentlyClosed param ([#2478](https://github.com/bloom-housing/bloom/issues/2478)) ([0f177c1](https://github.com/bloom-housing/bloom/commit/0f177c1847ac254f63837b0aca7fa8a705e3632c))
+
+
+
+
+
 ## [3.0.2-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.40...@bloom-housing/backend-core@3.0.2-alpha.41) (2022-02-16)
 
 

@@ -37,6 +37,11 @@ export class ListingsService {
       switch (params.orderBy) {
         case OrderByFieldsEnum.mostRecentlyUpdated:
           return { "listings.updated_at": "DESC" }
+        case OrderByFieldsEnum.mostRecentlyClosed:
+          return {
+            "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+            "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
+          }
         case OrderByFieldsEnum.applicationDates:
         case undefined:
           // Default to ordering by applicationDates (i.e. applicationDueDate

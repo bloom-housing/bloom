@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.77](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.76...@bloom-housing/public@4.0.1-alpha.77) (2022-02-18)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.76](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.75...@bloom-housing/public@4.0.1-alpha.76) (2022-02-17)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.75](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.74...@bloom-housing/public@4.0.1-alpha.75) (2022-02-17)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.0.1-alpha.74](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.73...@bloom-housing/public@4.0.1-alpha.74) (2022-02-17)
+
+
+### Features
+
+* **backend:** add listing order by mostRecentlyClosed param ([#2478](https://github.com/bloom-housing/bloom/issues/2478)) ([0f177c1](https://github.com/bloom-housing/bloom/commit/0f177c1847ac254f63837b0aca7fa8a705e3632c))
+
+
+
+
+
 ## [4.0.1-alpha.73](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.72...@bloom-housing/public@4.0.1-alpha.73) (2022-02-16)
 
 **Note:** Version bump only for package @bloom-housing/public
