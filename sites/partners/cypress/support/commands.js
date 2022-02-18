@@ -270,7 +270,7 @@ Cypress.Commands.add("fillTerms", (application, submit) => {
 const verifyHelper = (application, listOfFields, fieldsToSkip) => {
   const fields = listOfFields.filter(({ id }) => !fieldsToSkip.includes(id))
   fields.forEach(({ id, fieldKey }) => {
-    cy.getByTestId(id).contains(application[fieldKey])
+    cy.getByTestId(id).contains(application[fieldKey]).should("have.text", application[fieldKey])
   })
 }
 
