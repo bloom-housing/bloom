@@ -13,16 +13,16 @@ interface UnitTablesProps {
 export type AccordionTheme = "blue" | "gray"
 
 /**
- * An accordion that consists of a header bar and an expandable content section
- * Two existing themes under our design system are available as is flexibility to add custom styles
+ * An accordion that consists of header bar content and expandable content
+ * Two existing themes under our design system are available
  */
 const ContentAccordion = (props: UnitTablesProps) => {
   const [accordionOpen, setAccordionOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  const toggleTable = async () => {
+  const toggleTable = () => {
     if (!props.disableAccordion) {
-      await setAccordionOpen(!accordionOpen)
+      setAccordionOpen(!accordionOpen)
       buttonRef?.current?.focus()
     }
   }
@@ -34,6 +34,7 @@ const ContentAccordion = (props: UnitTablesProps) => {
         className={`w-full text-left ${props.disableAccordion && "cursor-default"}`}
         ref={buttonRef}
         aria-expanded={accordionOpen}
+        data-test-id={"content-accordion-button"}
       >
         <div
           className={`flex justify-between ${props.barClass} ${
@@ -51,6 +52,7 @@ const ContentAccordion = (props: UnitTablesProps) => {
                   size={"base"}
                   fill={IconFillColors.primary}
                   dataTestId={"accordion-close"}
+                  className={"pt-1"}
                 />
               ) : (
                 <Icon

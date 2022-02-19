@@ -4,7 +4,7 @@ import ContentAccordion from "./ContentAccordion"
 import { StandardTable } from "../../tables/StandardTable"
 
 export default {
-  title: "Listing/Accordion",
+  title: "Listing/Content Accordion",
 }
 
 const barContent = () => {
@@ -94,34 +94,16 @@ export const grayThemeFilled = () => {
       </span>
     )
   }
+
   const customExpandedContent = () => {
     return <div className={"border border-gray-400 border-t-0 p-4"}>Content</div>
   }
+
   return (
     <ContentAccordion
       customBarContent={customBarContent()}
       customExpandedContent={customExpandedContent()}
       accordionTheme={"gray"}
-    />
-  )
-}
-
-export const custom = () => {
-  const expandedContent = () => {
-    return <div className={"p-5 bg-gray-100 font-serif text-primary"}>Expanded Content</div>
-  }
-  const barContent = () => {
-    return (
-      <div className={"uppercase text-base font-sans font-semibold text-primary"}>
-        Header Content
-      </div>
-    )
-  }
-  return (
-    <ContentAccordion
-      customBarContent={barContent()}
-      customExpandedContent={expandedContent()}
-      barClass={"p-5  bg-gray-400"}
     />
   )
 }
