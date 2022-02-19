@@ -99,6 +99,7 @@ export * from "./src/overlays/LoadingOverlay"
 
 /* Page Components */
 export * from "./src/page_components/listing/AdditionalFees"
+export * from "./src/page_components/listing/ContentAccordion"
 export * from "./src/page_components/listing/ListingCard"
 export * from "./src/page_components/listing/ListingDetailHeader"
 export * from "./src/page_components/listing/ListingDetails"
