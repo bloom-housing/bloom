@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.80](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.79...@bloom-housing/partners@4.0.1-alpha.80) (2022-02-22)
+
+
+### Features
+
+* updates cache clear to separate individual and lists ([#2529](https://github.com/bloom-housing/bloom/issues/2529)) ([1521191](https://github.com/bloom-housing/bloom/commit/15211918b8bf0741ff6a25265b1bf3a60d5678b2))
+
+
+
+
+
 ## [4.0.1-alpha.79](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.78...@bloom-housing/partners@4.0.1-alpha.79) (2022-02-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
