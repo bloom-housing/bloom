@@ -196,8 +196,6 @@ export type TempEvent = ListingEvent & {
 export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
-  preferences: Preference[]
-  programs: Program[]
   units: TempUnit[]
   unitsSummaries: TempUnitsSummary[]
   openHouseEvents: TempEvent[]

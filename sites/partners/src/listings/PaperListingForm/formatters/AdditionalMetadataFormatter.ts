@@ -5,13 +5,6 @@ import Formatter from "./Formatter"
 export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
   process() {
-    this.data.listingPreferences = this.metadata.preferences.map((preference, index) => {
-      return { preference, ordinal: index + 1 }
-    })
-    this.data.listingPrograms = this.metadata.programs.map((program, index) => {
-      return { program: { ...program }, ordinal: index + 1 }
-    })
-
     this.data.buildingAddress = {
       ...this.data.buildingAddress,
       latitude: this.metadata.latLong.latitude ?? null,

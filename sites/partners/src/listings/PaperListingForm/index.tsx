@@ -87,16 +87,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [unitsSummaries, setUnitsSummaries] = useState<TempUnitsSummary[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(
-    listing?.listingPreferences.map((listingPref) => {
-      return { ...listingPref.preference }
-    }) ?? []
-  )
-  const [programs, setPrograms] = useState<Program[]>(
-    listing?.listingPrograms.map((program) => {
-      return program.program
-    }) ?? []
-  )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
@@ -204,8 +194,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
           clearErrors()
 
           const dataPipeline = new ListingDataPipeline(formData, {
-            preferences,
-            programs,
             units,
             unitsSummaries,
             openHouseEvents,
@@ -290,8 +278,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       listingsService,
       listing,
       router,
-      preferences,
-      programs,
       latLong,
       customMapPositionChosen,
       clearErrors,
@@ -379,32 +365,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             unitsSummaries={unitsSummaries}
                             setSummaries={setUnitsSummaries}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
-                          />
-                          <SelectAndOrder
-                            addText={t("listings.addPreference")}
-                            drawerTitle={t("listings.addPreferences")}
-                            editText={t("listings.editPreferences")}
-                            listingData={preferences}
-                            setListingData={setPreferences}
-                            subtitle={t("listings.sections.housingPreferencesSubtext")}
-                            title={t("listings.sections.housingPreferencesTitle")}
-                            drawerButtonText={t("listings.selectPreferences")}
-                            dataFetcher={useJurisdictionalPreferenceList}
-                            formKey={"preference"}
-                          />
-                          <SelectAndOrder
-                            addText={"Add program"}
-                            drawerTitle={"Add programs"}
-                            editText={"Edit programs"}
-                            listingData={programs}
-                            setListingData={setPrograms}
-                            subtitle={
-                              "Tell us about any additional housing programs related to this listing."
-                            }
-                            title={"Housing Programs"}
-                            drawerButtonText={"Select programs"}
-                            dataFetcher={useJurisdictionalProgramList}
-                            formKey={"program"}
                           />
                           <AdditionalFees />
                           <BuildingFeatures existingFeatures={listing?.features} />
