@@ -204,7 +204,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
               try {
                 // clear individual listing's cache
                 await axios.request({
-                  url: `${process.env.backendProxyBase}/listings/${result.id}`,
+                  url: `${process.env.backendProxyBase}/listings/${result.id}*`,
                   method: "purge",
                 })
                 // clear list caches if published
