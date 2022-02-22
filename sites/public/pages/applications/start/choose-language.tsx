@@ -18,7 +18,7 @@ import { imageUrlFromListing, OnClientSide } from "@bloom-housing/shared-helpers
 
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
 
@@ -36,7 +36,6 @@ const loadListing = async (listingId, stateFunction, conductor, context, languag
 const ApplicationChooseLanguage = () => {
   const router = useRouter()
   const [listing, setListing] = useState(null)
-  const [language, setLanguage] = useState("en")
   const context = useContext(AppSubmissionContext)
   const { initialStateLoaded, profile } = useContext(AuthContext)
   const { conductor, application } = context
@@ -59,28 +58,26 @@ const ApplicationChooseLanguage = () => {
     }
   }, [router, conductor, context, listingId])
 
-  useEffect(() => {
-    if (language !== "en") {
-      void loadListing(listingId, setListing, conductor, context, language)
-    }
-  }, [conductor, context, language, listingId])
-
   const currentPageSection = 1
 
   const imageUrl = listing?.assets
     ? imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))
     : ""
 
-  const onLanguageSelect = (language: Language) => {
-    conductor.currentStep.save({
-      language,
-    })
-    setLanguage(language)
-    const newLocale = language == "en" ? "" : `/${language}`
-    void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
-      window.scrollTo(0, 0)
-    })
-  }
+  const onLanguageSelect = useCallback(
+    (language: Language) => {
+      conductor.currentStep.save({
+        language,
+      })
+      void loadListing(listingId, setListing, conductor, context, language).then(() => {
+        const newLocale = language == "en" ? "" : `/${language}`
+        void router.push(`${newLocale}${conductor.determineNextUrl()}`).then(() => {
+          window.scrollTo(0, 0)
+        })
+      })
+    },
+    [conductor, context, listingId, router]
+  )
 
   const { content: appStatusContent } = useGetApplicationStatusProps(listing)
 
