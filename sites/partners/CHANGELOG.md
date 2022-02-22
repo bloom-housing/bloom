@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.81](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.80...@bloom-housing/partners@4.0.1-alpha.81) (2022-02-22)
+
+
+### Bug Fixes
+
+* purge listing detail with wildcard ([4fd2137](https://github.com/bloom-housing/bloom/commit/4fd21374c2dc213dfe1b8dde004d41895126c1d6))
+
+
+
+
+
 ## [4.0.1-alpha.80](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.79...@bloom-housing/partners@4.0.1-alpha.80) (2022-02-22)
 
 
