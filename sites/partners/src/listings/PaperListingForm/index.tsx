@@ -208,7 +208,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                   method: "purge",
                 })
                 // clear list caches if published
-                if (result.status === ListingStatus.active) {
+                if (result.status !== ListingStatus.pending) {
                   await axios.request({
                     url: `${process.env.backendProxyBase}/listings?*`,
                     method: "purge",
