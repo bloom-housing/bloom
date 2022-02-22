@@ -202,10 +202,18 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
              */
             if (process.env.backendProxyBase) {
               try {
+                // clear individual listing's cache
                 await axios.request({
-                  url: `${process.env.backendProxyBase}/listings*`,
+                  url: `${process.env.backendProxyBase}/listings/${result.id}`,
                   method: "purge",
                 })
+                // clear list caches if published
+                if (result.status !== ListingStatus.pending) {
+                  await axios.request({
+                    url: `${process.env.backendProxyBase}/listings?*`,
+                    method: "purge",
+                  })
+                }
               } catch (e) {
                 console.log("purge error = ", e)
               }
