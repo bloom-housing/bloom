@@ -43,7 +43,7 @@ const FormSignInMFACode = ({
   let subNote
   if (allowPhoneNumberEdit) {
     subNote = (
-      <span className="field-sub-note">
+      <span className="field-sub-note field-helper-element">
         <p>
           {" "}
           {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
@@ -56,8 +56,8 @@ const FormSignInMFACode = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.verifyTitle")}</h2>
+        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
         <p className="form-card__sub-title">
           {mfaType === EnumRequestMfaCodeMfaType.sms
             ? t("nav.signInMFA.haveSentCodeToPhone")
@@ -80,7 +80,7 @@ const FormSignInMFACode = ({
             dataTestId="sign-in-mfa-code-field"
             helperElement={subNote}
           />
-          <div className="text-center mt-6">
+          <div className="text-center mt-6 p-8">
             <Button styleType={AppearanceStyleType.primary} data-test-id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}
             </Button>

@@ -43,8 +43,10 @@ const FormSignInMFAType = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.verificationChoiceMainTitle")}</h2>
+        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <h2 className="form-card__title is-borderless">
+          {t("nav.signInMFA.verificationChoiceMainTitle")}
+        </h2>
         <p className="form-card__sub-title">
           {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
         </p>

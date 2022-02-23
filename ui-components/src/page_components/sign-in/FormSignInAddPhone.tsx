@@ -43,8 +43,8 @@ const FormSignInAddPhone = ({
   return (
     <FormCard>
       <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.addNumber")}</h2>
+        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <h2 className="form-card__title is-borderless">{t("nav.signInMFA.addNumber")}</h2>
         <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>
       </div>
       <FormSignInErrorBox
@@ -70,7 +70,7 @@ const FormSignInAddPhone = ({
             defaultValue={phoneNumber}
           />
 
-          <div className="text-center mt-6">
+          <div className="text-center mt-6 p-8">
             <Button
               styleType={AppearanceStyleType.primary}
               data-test-id="request-mfa-code-and-add-phone"
