@@ -74,4 +74,19 @@ describe("<ImageCard>", () => {
     )
     expect(getByText("Matched", { exact: false })).not.toBeNull()
   })
+
+  it("renders with image tags", () => {
+    const { getByText } = render(
+      <ImageCard
+        imageUrl={"/images/listing.jpg"}
+        title={"My Building"}
+        tags={[
+          { text: "This is a long label", iconType: "mail" },
+          { text: "This is another longer label" },
+        ]}
+      />
+    )
+    expect(getByText("This is a long label")).not.toBeNull()
+    expect(getByText("This is another longer label")).not.toBeNull()
+  })
 })

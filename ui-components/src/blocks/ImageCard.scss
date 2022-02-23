@@ -19,12 +19,13 @@
   @apply absolute;
   @apply z-10;
   @apply w-full;
-  @apply mt-4;
+  @apply mt-1;
+  @apply px-4;
+  @apply flex-wrap;
 
   @screen md {
     @apply items-start;
     @apply justify-start;
-    @apply ml-4;
   }
 }
 

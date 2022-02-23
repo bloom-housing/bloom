@@ -6,7 +6,7 @@ import { Tag } from "../text/Tag"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { AppearanceStyleType } from "../global/AppearanceTypes"
 import { t } from "../helpers/translator"
-import { IconTypes } from "../icons/Icon"
+import { Icon, IconFillColors, IconTypes } from "../icons/Icon"
 
 export interface StatusBarType {
   status?: ApplicationStatusType
@@ -16,13 +16,19 @@ export interface StatusBarType {
   iconType?: IconTypes
 }
 
+export interface ImageTag {
+  text?: string
+  iconType?: IconTypes
+  iconColor?: string
+}
+
 export interface ImageCardProps {
   imageUrl?: string
   subtitle?: string
   title: string
   href?: string
   description?: string
-  tagLabel?: string
+  tags?: ImageTag[]
   statuses?: StatusBarType[]
 }
 
@@ -46,11 +52,25 @@ const ImageCard = (props: ImageCardProps) => {
 
   const image = (
     <div className="image-card__wrapper">
-      {props.tagLabel && (
-        <div className="image-card-tag__wrapper">
-          <Tag styleType={AppearanceStyleType.warning}>{props.tagLabel}</Tag>
-        </div>
-      )}
+      <div className="image-card-tag__wrapper">
+        {props.tags?.map((tag, index) => {
+          return (
+            <React.Fragment key={index}>
+              <Tag styleType={AppearanceStyleType.warning} className={"mt-3 mr-2 ml-2"}>
+                {tag.iconType && (
+                  <Icon
+                    size={"medium"}
+                    symbol={tag.iconType}
+                    fill={tag.iconColor ?? IconFillColors.primary}
+                    className={"mr-2"}
+                  />
+                )}
+                {tag.text}
+              </Tag>
+            </React.Fragment>
+          )
+        })}
+      </div>
       <figure className="image-card">
         {props.imageUrl ? (
           <img src={props.imageUrl} alt={props.description || t("listings.buildingImageAltText")} />

@@ -2,6 +2,7 @@ import * as React from "react"
 import { ImageCard } from "./ImageCard"
 import { t } from "../helpers/translator"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
+import { IconFillColors } from "../icons/Icon"
 
 export default {
   title: "Blocks/Image Card",
@@ -75,7 +76,51 @@ export const withOneStatusAndTag = () => (
     imageUrl="/images/listing.jpg"
     title="Hello World"
     subtitle="55 Triton Park Lane, Foster City CA, 94404"
-    tagLabel="Label"
+    tags={[{ text: "Label" }]}
+    statuses={[{ status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") }]}
+  />
+)
+export const withMultipleTags = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+    tags={[{ text: "Label" }, { text: "Label2" }]}
+    statuses={[{ status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") }]}
+  />
+)
+
+export const withLongTagsAndIcons = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+    tags={[
+      { text: "This is a long label", iconType: "mail", iconColor: IconFillColors.white },
+      { text: "This is another longer label" },
+    ]}
+    statuses={[{ status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") }]}
+  />
+)
+
+export const withManyTags = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="55 Triton Park Lane, Foster City CA, 94404"
+    tags={[
+      { text: "Label 1" },
+      { text: "Label 2" },
+      { text: "Label 3" },
+      { text: "Label 4" },
+      { text: "Label 5" },
+      { text: "Label 6" },
+      { text: "Label 7" },
+      { text: "Label 8" },
+    ]}
     statuses={[{ status: ApplicationStatusType.Closed, content: t("listings.applicationsClosed") }]}
   />
 )
@@ -86,7 +131,7 @@ export const withMultipleAppStatus = () => (
     imageUrl="/images/listing.jpg"
     title="Hello World"
     subtitle="55 Triton Park Lane, Foster City CA, 94404"
-    tagLabel="Label"
+    tags={[{ text: "Label" }]}
     statuses={[
       {
         status: ApplicationStatusType.Open,
