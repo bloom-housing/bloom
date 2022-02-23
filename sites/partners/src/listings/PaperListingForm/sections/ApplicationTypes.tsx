@@ -13,9 +13,6 @@ import {
   Field,
   MinimalTable,
   Select,
-  Textarea,
-  PhoneField,
-  PhoneMask,
 } from "@bloom-housing/ui-components"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
@@ -39,7 +36,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
   const digitalApplicationChoice = watch("digitalApplicationChoice")
   const commonDigitalApplicationChoice = watch("commonDigitalApplicationChoice")
   const paperApplicationChoice = watch("paperApplicationChoice")
-  const referralOpportunityChoice = watch("referralOpportunityChoice")
   /*
     Set state for methods, drawer, upload progress, and more
   */
@@ -411,113 +407,6 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
               >
                 {t("listings.addPaperApplication")}
               </Button>
-            </GridCell>
-          </GridSection>
-        )}
-
-        <GridSection columns={1}>
-          <GridCell>
-            <p
-              className={`field-label m-4 ml-0 ${
-                fieldHasError(errors?.referralOpportunity) &&
-                referralOpportunityChoice === null &&
-                "text-alert"
-              }`}
-            >
-              {t("listings.isReferralOpportunity")}
-            </p>
-
-            <FieldGroup
-              name="referralOpportunityChoice"
-              type="radio"
-              register={register}
-              error={
-                fieldHasError(errors?.referralOpportunity) && referralOpportunityChoice === null
-              }
-              errorMessage={fieldMessage(errors?.referralOpportunity)}
-              fields={[
-                {
-                  ...yesNoRadioOptions[0],
-                  id: "referralOpportunityYes",
-                  defaultChecked: listing?.referralOpportunity === true ?? null,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          type: ApplicationMethodType.Referral,
-                        },
-                      })
-                    },
-                  },
-                },
-                {
-                  ...yesNoRadioOptions[1],
-                  id: "referralOpportunityNo",
-                  defaultChecked: listing?.referralOpportunity === false ?? null,
-                  inputProps: {
-                    onChange: () => {
-                      setMethods({
-                        ...methods,
-                        referral: null,
-                      })
-                    },
-                  },
-                },
-              ]}
-            />
-          </GridCell>
-        </GridSection>
-        {referralOpportunityChoice === YesNoAnswer.Yes && (
-          <GridSection columns={3}>
-            <GridCell>
-              <PhoneField
-                label={t("listings.referralContactPhone")}
-                name="referralContactPhone"
-                id="referralContactPhone"
-                placeholder={t("t.phoneNumberPlaceholder")}
-                mask={() => (
-                  <PhoneMask
-                    name="referralContactPhone"
-                    value={methods.referral ? methods.referral.phoneNumber : ""}
-                    placeholder={t("t.phoneNumberPlaceholder")}
-                    onChange={(e) => {
-                      setMethods({
-                        ...methods,
-                        referral: {
-                          ...methods.referral,
-                          phoneNumber: e.target.value,
-                        },
-                      })
-                    }}
-                  />
-                )}
-                controlClassName={"control"}
-              />
-            </GridCell>
-            <GridCell span={2}>
-              <Textarea
-                label={t("listings.referralSummary")}
-                rows={3}
-                fullWidth={true}
-                placeholder={t("t.descriptionTitle")}
-                name="referralSummary"
-                id="referralSummary"
-                maxLength={500}
-                inputProps={{
-                  value: methods.referral ? methods.referral.externalReference : "",
-                  onChange: (e) => {
-                    setMethods({
-                      ...methods,
-                      referral: {
-                        ...methods.referral,
-                        externalReference: e.target.value,
-                      },
-                    })
-                  },
-                }}
-              />
             </GridCell>
           </GridSection>
         )}
