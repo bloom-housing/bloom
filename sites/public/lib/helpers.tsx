@@ -108,9 +108,13 @@ export const getListings = (listings) => {
           subtitle: getListingCardSubtitle(listing.buildingAddress),
           title: listing.name,
           href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: listing.reservedCommunityType
-            ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
-            : undefined,
+          tags: [
+            {
+              text: listing.reservedCommunityType
+                ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
+                : undefined,
+            },
+          ],
           statuses: [getListingApplicationStatus(listing)],
         }}
         tableProps={{

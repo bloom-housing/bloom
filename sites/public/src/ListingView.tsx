@@ -372,11 +372,13 @@ export const ListingView = (props: ListingProps) => {
         <ImageCard
           title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-          tagLabel={
-            listing.reservedCommunityType
-              ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
-              : undefined
-          }
+          tags={[
+            {
+              text: listing.reservedCommunityType
+                ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
+                : undefined,
+            },
+          ]}
         />
         <div className="p-3">
           <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">

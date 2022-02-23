@@ -13,7 +13,7 @@ describe("<ListingCard>", () => {
           subtitle: "subtitle",
           title: "title",
           href: "listing-link",
-          tagLabel: "reserved community tag",
+          tags: [{ text: "reserved community tag" }],
           statuses: [{ content: "status content" }],
         }}
         tableProps={{

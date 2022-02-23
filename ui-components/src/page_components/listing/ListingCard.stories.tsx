@@ -14,7 +14,7 @@ export const BasicCard = () => {
         subtitle: "subtitle",
         title: "title",
         href: "listing-link",
-        tagLabel: "reserved community tag",
+        tags: [{ text: "reserved community tag" }],
         statuses: [{ content: "status content" }],
       }}
       tableProps={{
@@ -44,7 +44,7 @@ export const withStackedTable = () => {
         subtitle: "subtitle",
         title: "title",
         href: "listing-link",
-        tagLabel: "reserved community tag",
+        tags: [{ text: "reserved community tag" }],
         statuses: [{ content: "status content" }],
       }}
       tableProps={{
@@ -143,7 +143,7 @@ export const CustomContent = () => {
         subtitle: "subtitle",
         title: "title",
         href: "listing-link",
-        tagLabel: "Habitat for Humanity",
+        tags: [{ text: "Habitat for Humanity" }],
         statuses: [{ content: "status content" }],
       }}
       seeDetailsLink={`see-details-link`}
