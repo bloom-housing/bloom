@@ -46,8 +46,7 @@ const UnitTables = (props: UnitTablesProps) => {
 
   return (
     <>
-      {unitSummaries.map((unitSummary: UnitSummary) => {
-        const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
+      {unitSummaries.map((unitSummary: UnitSummary, index) => {
         const units = props.units.filter(
           (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
         )
@@ -111,6 +110,7 @@ const UnitTables = (props: UnitTablesProps) => {
             customExpandedContent={getExpandableContent()}
             disableAccordion={props.disableAccordion}
             accordionTheme={"blue"}
+            key={index}
           />
         )
       })}

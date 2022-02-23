@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 import { Icon, IconFillColors } from "../../icons/Icon"
 import "./ContentAccordion.scss"
 
-interface UnitTablesProps {
+interface ContentAccordionProps {
   customBarContent?: React.ReactNode
   customExpandedContent?: React.ReactNode
   disableAccordion?: boolean
@@ -16,7 +16,7 @@ export type AccordionTheme = "blue" | "gray"
  * An accordion that consists of header bar content and expandable content
  * Two existing themes under our design system are available
  */
-const ContentAccordion = (props: UnitTablesProps) => {
+const ContentAccordion = (props: ContentAccordionProps) => {
   const [accordionOpen, setAccordionOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
@@ -51,15 +51,18 @@ const ContentAccordion = (props: UnitTablesProps) => {
                   symbol={"closeSmall"}
                   size={"base"}
                   fill={IconFillColors.primary}
+                  className={"pt-1 flex items-center"}
                   dataTestId={"accordion-close"}
-                  className={"pt-1"}
+                  key={"accordion-close"}
                 />
               ) : (
                 <Icon
                   symbol={"arrowDown"}
                   size={"base"}
                   fill={IconFillColors.primary}
+                  className={"flex items-center"}
                   dataTestId={"accordion-open"}
+                  key={"accordion-open"}
                 />
               )}
             </>
