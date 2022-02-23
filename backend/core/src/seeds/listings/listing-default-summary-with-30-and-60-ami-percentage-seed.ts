@@ -1,5 +1,7 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { DeepPartial } from "typeorm"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { MonthlyRentDeterminationType } from "../../units-summary/types/monthly-rent-determination.enum"
 
 export class ListingDefaultSummaryWith30And60AmiPercentageSeed extends ListingDefaultSeed {
   async seed() {
@@ -7,26 +9,33 @@ export class ListingDefaultSummaryWith30And60AmiPercentageSeed extends ListingDe
 
     const newListing = await this.listingRepository.save({
       ...listing,
-      name: "Test: Default, Summary With 30 and 60 Ami Percentage",
+      name: "Test: Default, Summary With 30 and 60 Ami Percentage"
     })
 
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
 
-    const unitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const unitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
 
-    const twoBdrm30AmiUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrm30AmiUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 8,
-      listing: listing,
-      amiPercentage: 30,
+      amiLevels: [{
+        amiPercentage: 30,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 1000
+      }]
     }
     unitsSummaryToBeCreated.push(twoBdrm30AmiUnitsSummary)
 
-    const twoBdrm60AmiUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrm60AmiUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 8,
       listing: listing,
-      amiPercentage: 60,
+      amiLevels: [{
+        amiPercentage: 60,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 1000
+      }],
     }
     unitsSummaryToBeCreated.push(twoBdrm60AmiUnitsSummary)
 

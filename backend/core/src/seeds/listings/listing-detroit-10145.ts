@@ -5,7 +5,7 @@ import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 const mcvProperty: PropertySeedType = {
   buildingAddress: {
@@ -99,24 +99,24 @@ export class Listing10145Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const mcvUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const mcvUnitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 28,
       listing: listing,
     }
     mcvUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 142,
       listing: listing,
     }
     mcvUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
 
-    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeThreeBdrm,
+    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeThreeBdrm],
       totalCount: 24,
       listing: listing,
     }

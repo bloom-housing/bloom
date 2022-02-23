@@ -5,7 +5,7 @@ import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 const mshProperty: PropertySeedType = {
   buildingAddress: {
@@ -91,17 +91,17 @@ export class Listing10147Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const mshUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const mshUnitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
 
-    const fourBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeFourBdrm,
+    const fourBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeFourBdrm],
       totalCount: 15,
       listing: listing,
     }
     mshUnitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
 
-    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeThreeBdrm,
+    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeThreeBdrm],
       totalCount: 9,
       listing: listing,
     }

@@ -5,7 +5,8 @@ import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { MonthlyRentDeterminationType } from "../../units-summary/types/monthly-rent-determination.enum"
 
 const nccProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -100,31 +101,43 @@ export class Listing10157Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const nccUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const nccUnitsSummaryToBeCreated: DeepPartial<UnitsSummary>[] = []
 
-    const zeroBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeStudio,
+    const zeroBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeStudio],
       totalCount: 1,
-      monthlyRentMin: 470,
+      amiLevels: [{
+        amiPercentage: 10,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 650
+      }],
       listing: listing,
       sqFeetMax: "550",
     }
     nccUnitsSummaryToBeCreated.push(zeroBdrmUnitsSummary)
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 2,
-      monthlyRentMin: 650,
+      amiLevels: [{
+        amiPercentage: 10,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 650
+      }],
       listing: listing,
       sqFeetMin: "800",
       sqFeetMax: "1000",
     }
     nccUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 2,
-      monthlyRentMin: 750,
+      amiLevels: [{
+        amiPercentage: 10,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 750
+      }],
       listing: listing,
       sqFeetMin: "900",
       sqFeetMax: "1100",

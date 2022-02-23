@@ -11,7 +11,7 @@ export class TwilioService {
   client: TwilioClient
 
   constructor() {
-    this.client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
+    // this.client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
   }
 
   async send(message: string, recipientPhoneNumber: string): Promise<MessageInstance> {

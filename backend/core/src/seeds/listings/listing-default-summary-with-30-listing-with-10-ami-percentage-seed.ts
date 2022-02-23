@@ -1,5 +1,7 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { DeepPartial } from "typeorm"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { MonthlyRentDeterminationType } from "../../units-summary/types/monthly-rent-determination.enum"
 
 export class ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed extends ListingDefaultSeed {
   async seed() {
@@ -13,13 +15,17 @@ export class ListingDefaultSummaryWith30ListingWith10AmiPercentageSeed extends L
 
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
 
-    const unitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const unitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
 
-    const twoBdrm30AmiUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrm30AmiUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 8,
       listing: listing,
-      amiPercentage: 30,
+      amiLevels: [{
+        amiPercentage: 30,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 1000
+      }]
     }
     unitsSummaryToBeCreated.push(twoBdrm30AmiUnitsSummary)
 

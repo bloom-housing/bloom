@@ -5,7 +5,7 @@ import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -97,38 +97,38 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const unitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const unitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
 
-    const studioUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeStudio,
+    const studioUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeStudio],
       totalCount: 8,
       listing: listing,
     }
     unitsSummaryToBeCreated.push(studioUnitsSummary)
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 100,
       listing: listing,
     }
     unitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 118,
       listing: listing,
     }
     unitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
 
-    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeThreeBdrm,
+    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeThreeBdrm],
       totalCount: 54,
       listing: listing,
     }
     unitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
 
-    const fourBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeFourBdrm,
+    const fourBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeFourBdrm],
       totalCount: 32,
       listing: listing,
     }
