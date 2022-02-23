@@ -44,7 +44,7 @@ export const onSubmitMfaType = (
   const { mfaType: incomingMfaType } = data
   try {
     const res = await requestMfaCode(email, password, incomingMfaType)
-    if (!res.phoneNumberVerified) {
+    if (!res.phoneNumberVerified && incomingMfaType === EnumRequestMfaCodeMfaType.sms) {
       setAllowPhoneNumberEdit(true)
       setPhoneNumber(res.phoneNumber)
     }
