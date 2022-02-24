@@ -4351,30 +4351,35 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitsSummary {
-  /**  */
-  unitType: UnitType
-
+export interface UnitsSummaryAmiLevel {
   /**  */
   id: string
 
   /**  */
-  monthlyRentMin?: number
+  amiChartId?: string
 
   /**  */
-  monthlyRentMax?: number
+  amiPercentage: number
 
   /**  */
-  monthlyRentAsPercentOfIncome?: string
+  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType
 
   /**  */
-  amiPercentage?: number
+  flatRentValue?: number
 
   /**  */
-  minimumIncomeMin?: string
+  percentageOfIncomeValue?: number
+}
+
+export interface UnitsSummary {
+  /**  */
+  unitType: UnitType[]
 
   /**  */
-  minimumIncomeMax?: string
+  amiLevels: UnitsSummaryAmiLevel[]
+
+  /**  */
+  id: string
 
   /**  */
   maxOccupancy?: number
@@ -4402,6 +4407,15 @@ export interface UnitsSummary {
 
   /**  */
   totalAvailable?: number
+
+  /**  */
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist: boolean
 }
 
 export interface ListingFeatures {
@@ -4949,6 +4963,9 @@ export interface UserFilterParams {
   $comparison: EnumUserFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   isPartner?: boolean
 
   /**  */
@@ -5114,6 +5131,9 @@ export interface JurisdictionUpdate {
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   name?: string
@@ -5289,24 +5309,29 @@ export interface UnitCreate {
   bmrProgramChart?: boolean
 }
 
+export interface UnitsSummaryAmiLevelCreate {
+  /**  */
+  amiChartId?: string
+
+  /**  */
+  amiPercentage: number
+
+  /**  */
+  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelCreateMonthlyRentDeterminationType
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  percentageOfIncomeValue?: number
+}
+
 export interface UnitsSummaryCreate {
   /**  */
-  monthlyRentMin?: number
+  unitType: Id[]
 
   /**  */
-  monthlyRentMax?: number
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
-
-  /**  */
-  amiPercentage?: number
-
-  /**  */
-  minimumIncomeMin?: string
-
-  /**  */
-  minimumIncomeMax?: string
+  amiLevels: UnitsSummaryAmiLevelCreate[]
 
   /**  */
   maxOccupancy?: number
@@ -5336,7 +5361,13 @@ export interface UnitsSummaryCreate {
   totalAvailable?: number
 
   /**  */
-  unitType: UnitType
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist: boolean
 }
 
 export interface ListingPreferenceUpdate {
@@ -5738,27 +5769,32 @@ export interface UnitUpdate {
   bmrProgramChart?: boolean
 }
 
+export interface UnitsSummaryAmiLevelUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  amiChartId?: string
+
+  /**  */
+  amiPercentage: number
+
+  /**  */
+  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelUpdateMonthlyRentDeterminationType
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  percentageOfIncomeValue?: number
+}
+
 export interface UnitsSummaryUpdate {
   /**  */
   id?: string
 
   /**  */
-  monthlyRentMin?: number
-
-  /**  */
-  monthlyRentMax?: number
-
-  /**  */
-  monthlyRentAsPercentOfIncome?: string
-
-  /**  */
-  amiPercentage?: number
-
-  /**  */
-  minimumIncomeMin?: string
-
-  /**  */
-  minimumIncomeMax?: string
+  amiLevels: UnitsSummaryAmiLevelUpdate[]
 
   /**  */
   maxOccupancy?: number
@@ -5788,7 +5824,16 @@ export interface UnitsSummaryUpdate {
   totalAvailable?: number
 
   /**  */
-  unitType: UnitType
+  bathroomMin?: number
+
+  /**  */
+  bathroomMax?: number
+
+  /**  */
+  openWaitlist: boolean
+
+  /**  */
+  unitType: Id[]
 }
 
 export interface ListingUpdate {
@@ -6068,6 +6113,9 @@ export interface PreferencesFilterParams {
   $comparison: EnumPreferencesFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   jurisdiction?: string
 }
 
@@ -6111,6 +6159,9 @@ export interface PreferenceUpdate {
 export interface ProgramsFilterParams {
   /**  */
   $comparison: EnumProgramsFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   jurisdiction?: string
@@ -6563,6 +6614,10 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
+export enum EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
@@ -6577,6 +6632,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
@@ -6598,6 +6654,7 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
@@ -6614,11 +6671,20 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
 }
+export enum EnumUnitsSummaryAmiLevelCreateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
+export enum EnumUnitsSummaryAmiLevelUpdateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export enum EnumPreferencesFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumProgramsFilterParamsComparison {
@@ -6626,5 +6692,6 @@ export enum EnumProgramsFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
