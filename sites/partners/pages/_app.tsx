@@ -31,7 +31,7 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     if (locale && locale !== "en" && translations[locale]) {
       addTranslation(translations[locale])
     }
-
+    addTranslation(overrideTranslations.en)
     if (overrideTranslations[locale]) {
       addTranslation(overrideTranslations[locale])
     }
