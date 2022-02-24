@@ -70,7 +70,7 @@ const FormSignInAddPhone = ({
             defaultValue={phoneNumber}
           />
 
-          <div className="text-center mt-6 p-8">
+          <div className="text-center mt-10">
             <Button
               styleType={AppearanceStyleType.primary}
               data-test-id="request-mfa-code-and-add-phone"

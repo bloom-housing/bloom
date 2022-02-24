@@ -77,7 +77,7 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       const validPassword = await this.passwordService.isPasswordValid(user, loginDto.password)
 
       let mfaAuthSuccessful = true
-      if (user.mfaEnabled) {
+      if (validPassword && user.mfaEnabled) {
         if (!loginDto.mfaCode || !user.mfaCode || !user.mfaCodeUpdatedAt) {
           throw new UnauthorizedException({ name: "mfaCodeIsMissing" })
         }

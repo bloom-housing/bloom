@@ -40,22 +40,22 @@ const FormSignInMFACode = ({
     window.scrollTo(0, 0)
   }
 
-  let subNote
+  let note
   if (allowPhoneNumberEdit) {
-    subNote = (
-      <span className="field-sub-note field-helper-element">
-        <p>
+    note = (
+      <>
+        {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
+        <a className="underline" onClick={() => goBackToPhone()}>
           {" "}
-          {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
-          <a onClick={() => goBackToPhone()}> {t("nav.signInMFA.editPhoneNumber")} </a>
-        </p>
-      </span>
+          {t("nav.signInMFA.editPhoneNumber")}{" "}
+        </a>
+      </>
     )
   }
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
+      <div className="form-card__lead text-center border-b">
         <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
         <p className="form-card__sub-title">
@@ -78,9 +78,9 @@ const FormSignInMFACode = ({
             errorMessage={t("nav.signInMFA.noMFACode")}
             register={register}
             dataTestId="sign-in-mfa-code-field"
-            helperElement={subNote}
+            note={note}
           />
-          <div className="text-center mt-6 p-8">
+          <div className="text-center mt-10">
             <Button styleType={AppearanceStyleType.primary} data-test-id="verify-and-sign-in">
               {t("nav.signInMFA.signIn")}
             </Button>
