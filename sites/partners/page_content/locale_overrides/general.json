@@ -5,6 +5,13 @@
   "application": {
     "details": {
       "countyName": "Alameda County"
+    },
+    "review": {
+      "demographics": {
+        "howDidYouHearOptions": {
+          "jurisdictionWebsite": "HCD Website"
+        }
+      }
     }
   }
 }
