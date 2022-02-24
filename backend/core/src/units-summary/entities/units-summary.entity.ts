@@ -1,18 +1,25 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import {
-  IsBoolean, IsDefined,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm"
+import {
+  IsBoolean,
+  IsDefined,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { Expose, Type } from "class-transformer"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
-import {
-  UnitAccessibilityPriorityType
-} from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
+import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UnitsSummaryAmiLevel } from "./units-summary-ami-level.entity"
 
@@ -35,7 +42,11 @@ export class UnitsSummary {
   @ManyToOne(() => Listing, (listing) => listing.unitsSummary, {})
   listing: Listing
 
-  @OneToMany(() => UnitsSummaryAmiLevel, (unitsSummaryAmiLevel => unitsSummaryAmiLevel.unitsSummary),{ eager: true, cascade: true })
+  @OneToMany(
+    () => UnitsSummaryAmiLevel,
+    (unitsSummaryAmiLevel) => unitsSummaryAmiLevel.unitsSummary,
+    { eager: true, cascade: true }
+  )
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
