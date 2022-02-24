@@ -27,12 +27,13 @@ export class ListingDto extends OmitType(Listing, [
   "buildingSelectionCriteriaFile",
   "events",
   "image",
+  "units",
+  "buildingAddress",
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
   "listingPreferences",
   "listingPrograms",
-  "property",
   "reservedCommunityType",
   "result",
   "unitsSummary",
@@ -142,167 +143,77 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @Type(() => UnitDto)
-  @Transform(
-    (value, obj: Listing) => {
-      return plainToClass(UnitDto, obj.property?.units)
-    },
-    { toClassOnly: true }
-  )
   units: UnitDto[]
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.accessibility
-    },
-    { toClassOnly: true }
-  )
   accessibility?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.amenities
-    },
-    { toClassOnly: true }
-  )
   amenities?: string | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => AddressDto)
-  @Transform(
-    (value, obj: Listing) => {
-      return plainToClass(AddressDto, obj.property.buildingAddress)
-    },
-    { toClassOnly: true }
-  )
   buildingAddress: AddressDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.buildingTotalUnits
-    },
-    { toClassOnly: true }
-  )
   buildingTotalUnits?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.developer
-    },
-    { toClassOnly: true }
-  )
   developer?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.householdSizeMax
-    },
-    { toClassOnly: true }
-  )
   householdSizeMax?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.householdSizeMin
-    },
-    { toClassOnly: true }
-  )
   householdSizeMin?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.neighborhood
-    },
-    { toClassOnly: true }
-  )
   neighborhood?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.petPolicy
-    },
-    { toClassOnly: true }
-  )
   petPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.smokingPolicy
-    },
-    { toClassOnly: true }
-  )
   smokingPolicy?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.unitsAvailable
-    },
-    { toClassOnly: true }
-  )
   unitsAvailable?: number | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.unitAmenities
-    },
-    { toClassOnly: true }
-  )
   unitAmenities?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.servicesOffered
-    },
-    { toClassOnly: true }
-  )
   servicesOffered?: string | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  @Transform(
-    (value, obj: Listing) => {
-      return obj.property?.yearBuilt
-    },
-    { toClassOnly: true }
-  )
   yearBuilt?: number | null
 
   @Expose()

@@ -1,4 +1,4 @@
-import { ListingSeedType, PropertySeedType, UnitSeedType } from "./listings"
+import { ListingSeedType, UnitSeedType } from "./listings"
 import { getDate, getDefaultAssets, getLiveWorkPreference } from "./shared"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
@@ -8,31 +8,6 @@ import { ListingStatus } from "../../../listings/types/listing-status-enum"
 import { UnitStatus } from "../../../units/types/unit-status-enum"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
 import { Listing } from "../../../listings/entities/listing.entity"
-
-const tritonProperty: PropertySeedType = {
-  accessibility:
-    "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
-  amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
-  buildingAddress: {
-    city: "Foster City",
-    county: "San Mateo",
-    state: "CA",
-    street: "55 Triton Park Lane",
-    zipCode: "94404",
-    latitude: 37.5658152,
-    longitude: -122.2704286,
-  },
-  buildingTotalUnits: 48,
-  developer: "Thompson Dorfman, LLC",
-  neighborhood: "Foster City",
-  petPolicy:
-    "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 50 pound weight limit. 2 pets per household limit. $500 pet deposit per pet. $60 pet rent per pet.",
-  servicesOffered: null,
-  smokingPolicy: "Non-Smoking",
-  unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
-  unitsAvailable: 4,
-  yearBuilt: 2021,
-}
 
 const tritonListing: ListingSeedType = {
   jurisdictionName: "Alameda",
@@ -102,6 +77,28 @@ const tritonListing: ListingSeedType = {
   waitlistOpenSpots: 200,
   isWaitlistOpen: true,
   whatToExpect: null,
+  accessibility:
+    "Accessibility features in common areas like lobby – wheelchair ramps, wheelchair accessible bathrooms and elevators.",
+  amenities: "Gym, Clubhouse, Business Lounge, View Lounge, Pool, Spa",
+  buildingAddress: {
+    city: "Foster City",
+    county: "San Mateo",
+    state: "CA",
+    street: "55 Triton Park Lane",
+    zipCode: "94404",
+    latitude: 37.5658152,
+    longitude: -122.2704286,
+  },
+  buildingTotalUnits: 48,
+  developer: "Thompson Dorfman, LLC",
+  neighborhood: "Foster City",
+  petPolicy:
+    "Pets allowed except the following; pit bull, malamute, akita, rottweiler, doberman, staffordshire terrier, presa canario, chowchow, american bull dog, karelian bear dog, st bernard, german shepherd, husky, great dane, any hybrid or mixed breed of the aforementioned breeds. 50 pound weight limit. 2 pets per household limit. $500 pet deposit per pet. $60 pet rent per pet.",
+  servicesOffered: null,
+  smokingPolicy: "Non-Smoking",
+  unitAmenities: "Washer and dryer, AC and Heater, Gas Stove",
+  unitsAvailable: 4,
+  yearBuilt: 2021,
 }
 
 export class ListingTritonSeed extends ListingDefaultSeed {
@@ -116,10 +113,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     const amiChart = await this.amiChartRepository.findOneOrFail({
       name: "San Jose TCAC 2019",
       jurisdiction: alamedaJurisdiction,
-    })
-
-    const property = await this.propertyRepository.save({
-      ...tritonProperty,
     })
 
     const tritonUnits: Array<UnitSeedType> = [
@@ -219,9 +212,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
           amiChart,
         }
       }
@@ -241,7 +231,6 @@ export class ListingTritonSeed extends ListingDefaultSeed {
     > = {
       ...tritonListing,
       name: "Test: Triton 2",
-      property: property,
       assets: getDefaultAssets(),
       listingPreferences: [
         {
@@ -271,12 +260,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       jurisdiction: detroitJurisdiction,
     })
 
-    const property = await this.propertyRepository.findOneOrFail({
-      developer: "Thompson Dorfman, LLC",
-      neighborhood: "Foster City",
-      smokingPolicy: "Non-Smoking",
-    })
-
     const tritonUnits: Array<UnitSeedType> = [
       {
         amiChartId: amiChart.id,
@@ -374,9 +357,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
       (unit) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
           amiChart,
         }
       }
@@ -396,7 +376,6 @@ export class ListingTritonSeedDetroit extends ListingDefaultSeed {
     > = {
       ...tritonListing,
       name: "Test: Triton 1",
-      property: property,
       applicationOpenDate: getDate(-5),
       assets: getDefaultAssets(),
       events: [],

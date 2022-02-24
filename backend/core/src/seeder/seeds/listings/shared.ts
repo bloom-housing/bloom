@@ -4,7 +4,6 @@ import {
   ListingSeedType,
   PreferenceSeedType,
   ProgramSeedType,
-  PropertySeedType,
   UnitSeedType,
 } from "./listings"
 import { ListingEventCreateDto } from "../../../listings/dto/listing-event.dto"
@@ -67,33 +66,6 @@ export const defaultAssets: Array<AssetDtoSeedType> = [
       "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/thetriton.png",
   },
 ]
-// Properties
-export function getDefaultProperty() {
-  return JSON.parse(JSON.stringify(defaultProperty))
-}
-
-export const defaultProperty: PropertySeedType = {
-  accessibility: "Custom accessibility text",
-  amenities: "Custom property amenities text",
-  buildingAddress: {
-    city: "San Francisco",
-    state: "CA",
-    street: "548 Market Street",
-    street2: "Suite #59930",
-    zipCode: "94104",
-    latitude: 37.789673,
-    longitude: -122.40151,
-  },
-  buildingTotalUnits: 100,
-  developer: "Developer",
-  neighborhood: "Custom neighborhood text",
-  petPolicy: "Custom pet text",
-  servicesOffered: "Custom services offered text",
-  smokingPolicy: "Custom smoking text",
-  unitAmenities: "Custom unit amenities text",
-  unitsAvailable: 2,
-  yearBuilt: 2021,
-}
 
 // Unit Sets
 export function getDefaultUnits() {
@@ -231,6 +203,26 @@ export const defaultListing: ListingSeedType = {
   isWaitlistOpen: false,
   waitlistMaxSize: null,
   whatToExpect: "Custom what to expect text",
+  accessibility: "Custom accessibility text",
+  amenities: "Custom property amenities text",
+  buildingAddress: {
+    city: "San Francisco",
+    state: "CA",
+    street: "548 Market Street",
+    street2: "Suite #59930",
+    zipCode: "94104",
+    latitude: 37.789673,
+    longitude: -122.40151,
+  },
+  buildingTotalUnits: 100,
+  developer: "Developer",
+  neighborhood: "Custom neighborhood text",
+  petPolicy: "Custom pet text",
+  servicesOffered: "Custom services offered text",
+  smokingPolicy: "Custom smoking text",
+  unitAmenities: "Custom unit amenities text",
+  unitsAvailable: 2,
+  yearBuilt: 2021,
 }
 
 // Preferences

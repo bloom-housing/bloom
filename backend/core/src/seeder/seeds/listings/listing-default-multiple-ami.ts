@@ -1,5 +1,5 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
-import { getDefaultUnits, getDefaultProperty } from "./shared"
+import { getDefaultUnits } from "./shared"
 import { BaseEntity } from "typeorm"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
@@ -22,17 +22,10 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
       jurisdiction: alamedaJurisdiction,
     })
 
-    const property = await this.propertyRepository.save({
-      ...getDefaultProperty(),
-    })
-
     const unitsToBeCreated: Array<Omit<UnitCreateDto, keyof BaseEntity>> = getDefaultUnits().map(
       (unit, index) => {
         return {
           ...unit,
-          property: {
-            id: property.id,
-          },
           amiChartId: index % 2 === 0 ? amiChartOne.id : amiChartTwo.id,
         }
       }
@@ -45,7 +38,6 @@ export class ListingDefaultMultipleAMI extends ListingDefaultSeed {
 
     return await this.listingRepository.save({
       ...listing,
-      property: property,
       name: "Test: Default, Multiple AMI",
     })
   }
