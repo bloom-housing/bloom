@@ -1,6 +1,16 @@
 {
   "packages": ["sites/public", "sites/partners", "backend/core", "shared-helpers", "ui-components"],
-  "version": "1.0.5",
+  "version": "independent",
   "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "command": {
+    "publish": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish"
+    },
+    "version": {
+      "conventionalCommits": true,
+      "message": "chore(release): version"
+    }
+  }
 }

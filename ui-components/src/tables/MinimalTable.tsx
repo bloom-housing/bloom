@@ -10,6 +10,8 @@ export interface MinimalTableProps {
   flushRight?: boolean
   responsiveCollapse?: boolean
   className?: string
+  cellClassName?: string
+  id?: string
 }
 
 const MinimalTable = (props: MinimalTableProps) => {
@@ -23,8 +25,9 @@ const MinimalTable = (props: MinimalTableProps) => {
       headers={props.headers}
       data={props.data}
       tableClassName={tableClasses.join(" ")}
-      cellClassName="px-5 py-3"
+      cellClassName={`${props.cellClassName ? props.cellClassName : `px-5 py-3`}`}
       responsiveCollapse={props.responsiveCollapse}
+      id={props.id}
     />
   )
 }

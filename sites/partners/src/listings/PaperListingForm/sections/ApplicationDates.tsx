@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react"
 import { useWatch, useFormContext } from "react-hook-form"
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
 import { getDetailFieldDate, getDetailFieldTime } from "../../PaperListingDetails/sections/helpers"
-import moment from "moment"
+import dayjs from "dayjs"
 
 import {
   t,
@@ -18,7 +18,7 @@ import {
   AppearanceStyleType,
   AppearanceBorderType,
 } from "@bloom-housing/ui-components"
-import { FormListing, TempEvent } from "../index"
+import { FormListing, TempEvent } from "../formTypes"
 import { OpenHouseForm } from "../OpenHouseForm"
 
 type ApplicationDatesProps = {
@@ -42,7 +42,7 @@ const ApplicationDates = ({
 
   const openHouseTableData = useMemo(() => {
     return openHouseEvents.map((event) => {
-      const { startTime, endTime, url, tempId } = event
+      const { startTime, endTime, url } = event
 
       return {
         date: startTime && getDetailFieldDate(startTime),
@@ -68,7 +68,7 @@ const ApplicationDates = ({
             <Button
               type="button"
               className="font-semibold uppercase text-red-700"
-              onClick={() => setModalDeleteOpenHouse(tempId)}
+              onClick={() => setModalDeleteOpenHouse(event)}
               unstyled
             >
               {t("t.delete")}
@@ -90,23 +90,24 @@ const ApplicationDates = ({
   })
 
   const [drawerOpenHouse, setDrawerOpenHouse] = useState<TempEvent | boolean>(false)
-  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<string | null>(null)
+  const [modalDeleteOpenHouse, setModalDeleteOpenHouse] = useState<TempEvent | null>(null)
 
   const onOpenHouseEventsSubmit = (event: TempEvent) => {
     setDrawerOpenHouse(false)
 
-    const eventsWithoutEdited = openHouseEvents.filter((item) => item.tempId !== event.tempId)
+    const eventsWithoutEdited = openHouseEvents.filter((item) => {
+      return event.id ? event.id !== item.id : event.tempId !== item.tempId
+    })
 
-    // determine if event is currently edited
-    if (eventsWithoutEdited.length !== openHouseEvents.length) {
-      setOpenHouseEvents([...eventsWithoutEdited, event])
-    } else {
-      setOpenHouseEvents([...openHouseEvents, event])
-    }
+    setOpenHouseEvents(
+      [...eventsWithoutEdited, event].sort((a, b) =>
+        dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1
+      )
+    )
   }
 
-  const onOpenHouseEventDelete = (tempId: string) => {
-    const newEvents = openHouseEvents.filter((event) => event.tempId !== tempId)
+  const onOpenHouseEventDelete = (eventToDelete: TempEvent) => {
+    const newEvents = openHouseEvents.filter((event) => event !== eventToDelete)
     setOpenHouseEvents(newEvents)
     setModalDeleteOpenHouse(null)
   }
@@ -130,13 +131,13 @@ const ApplicationDates = ({
             disabled={enableDueDate === YesNoAnswer.No}
             defaultDate={{
               month: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("MM")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("MM")
                 : null,
               day: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("DD")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("DD")
                 : null,
               year: listing?.applicationDueDate
-                ? moment(new Date(listing?.applicationDueDate)).utc().format("YYYY")
+                ? dayjs(new Date(listing?.applicationDueDate)).format("YYYY")
                 : null,
             }}
           />
@@ -148,16 +149,26 @@ const ApplicationDates = ({
             watch={watch}
             disabled={enableDueDate === YesNoAnswer.No}
             defaultValues={{
-              hours: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("hh")
-                : null,
-              minutes: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("mm")
-                : null,
-              seconds: listing?.applicationDueTime
-                ? moment(new Date(listing?.applicationDueTime)).format("ss")
-                : null,
-              period: new Date(listing?.applicationDueTime).getHours() >= 12 ? "pm" : "am",
+              hours: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("hh")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "05",
+              minutes: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("mm")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
+              seconds: listing?.applicationDueDate
+                ? dayjs(new Date(listing?.applicationDueDate)).format("ss")
+                : enableDueDate === YesNoAnswer.No
+                ? null
+                : "00",
+              period: listing?.applicationDueDate
+                ? new Date(listing?.applicationDueDate).getHours() >= 12
+                  ? "pm"
+                  : "am"
+                : "pm",
             }}
           />
         </GridSection>
@@ -170,6 +181,7 @@ const ApplicationDates = ({
             )}
 
             <Button
+              id="addOpenHouseButton"
               type="button"
               size={AppearanceSizeType.normal}
               onClick={() => setDrawerOpenHouse(true)}

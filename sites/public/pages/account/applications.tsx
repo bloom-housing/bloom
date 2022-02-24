@@ -10,10 +10,12 @@ import {
   t,
   LoadingOverlay,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
 import { PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
+import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
   const { applicationsService, profile } = useContext(AuthContext)
@@ -23,6 +25,11 @@ const Applications = () => {
 
   useEffect(() => {
     if (profile) {
+      pushGtmEvent<PageView>({
+        event: "pageView",
+        pageTitle: "My Applications",
+        status: UserStatus.LoggedIn,
+      })
       applicationsService
         .list({ userId: profile.id })
         .then((apps) => {
@@ -57,7 +64,7 @@ const Applications = () => {
           <title>{t("nav.myApplications")}</title>
         </Head>
         <MetaTags title={t("nav.myApplications")} description="" />
-        <section className="bg-gray-300">
+        <section className="bg-gray-300 border-t border-gray-450">
           <LoadingOverlay isLoading={loading}>
             <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
               <DashBlocks>

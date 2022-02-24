@@ -23,7 +23,9 @@ const DetailsApplicationData = () => {
       inset
     >
       <GridCell>
-        <ViewItem label={t("application.details.number")}>{application.id}</ViewItem>
+        <ViewItem label={t("application.details.number")}>
+          {application.confirmationCode || application.id}
+        </ViewItem>
       </GridCell>
 
       {application.submissionType && (

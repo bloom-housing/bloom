@@ -1,6 +1,6 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { OnClientSide } from "../helpers/nextjs"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 import "./ProgressNav.scss"
 import { t } from "../helpers/translator"
 

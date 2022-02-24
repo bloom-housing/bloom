@@ -1,0 +1,113 @@
+import { AssetDtoSeedType, ListingSeedType, PropertySeedType } from "./listings"
+import { ListingStatus } from "../../../listings/types/listing-status-enum"
+import { CountyCode } from "../../../shared/types/county-code"
+import { ListingDefaultSeed } from "./listing-default-seed"
+import { BaseEntity, DeepPartial } from "typeorm"
+import { Listing } from "../../../listings/entities/listing.entity"
+import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+
+const mshProperty: PropertySeedType = {
+  buildingAddress: {
+    city: "Detroit",
+    state: "MI",
+    street: "7335 Melrose St",
+    zipCode: "48211",
+    latitude: 42.37442,
+    longitude: -83.06363,
+  },
+  buildingTotalUnits: 24,
+  neighborhood: "North End",
+}
+
+const mshListing: ListingSeedType = {
+  applicationDropOffAddress: null,
+  applicationMailingAddress: null,
+  countyCode: CountyCode.detroit,
+  disableUnitsAccordion: true,
+  displayWaitlistSize: false,
+  hrdId: "HRD10147",
+  leasingAgentName: "Kim Hagood",
+  leasingAgentPhone: "248-228-1340",
+  managementCompany: "Elite Property Management LLC",
+  managementWebsite: "www.elitep-m.com",
+  name: "Melrose Square Homes",
+  status: ListingStatus.active,
+  image: undefined,
+  digitalApplication: undefined,
+  paperApplication: undefined,
+  referralOpportunity: undefined,
+  depositMin: undefined,
+  depositMax: undefined,
+  leasingAgentEmail: undefined,
+  rentalAssistance: undefined,
+  reviewOrderType: undefined,
+  isWaitlistOpen: undefined,
+  features: {
+    elevator: false,
+    wheelchairRamp: true,
+    serviceAnimalsAllowed: true,
+    accessibleParking: true,
+    parkingOnSite: true,
+    inUnitWasherDryer: true,
+    laundryInBuilding: false,
+    barrierFreeEntrance: true,
+    rollInShower: false,
+    grabBars: false,
+    heatingInUnit: true,
+    acInUnit: true,
+  },
+  listingPreferences: [],
+  jurisdictionName: "Detroit",
+}
+
+export class Listing10147Seed extends ListingDefaultSeed {
+  async seed() {
+    const unitTypeThreeBdrm = await this.unitTypeRepository.findOneOrFail({ name: "threeBdrm" })
+    const unitTypeFourBdrm = await this.unitTypeRepository.findOneOrFail({ name: "fourBdrm" })
+
+    const property = await this.propertyRepository.save({
+      ...mshProperty,
+    })
+
+    const assets: Array<AssetDtoSeedType> = [
+      {
+        label: "building",
+        fileId:
+          "http://www.vanguarddetroit.org/wp-content/uploads/2020/05/West-Oakland-Homes-Photo-e1590008403971.jpg",
+      },
+    ]
+
+    const listingCreateDto: Omit<
+      DeepPartial<Listing>,
+      keyof BaseEntity | "urlSlug" | "showWaitlist"
+    > = {
+      ...mshListing,
+      applicationMethods: [],
+      assets: JSON.parse(JSON.stringify(assets)),
+      events: [],
+      property: property,
+    }
+
+    const listing = await this.listingRepository.save(listingCreateDto)
+
+    const mshUnitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
+
+    const fourBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeFourBdrm],
+      totalCount: 15,
+      listing: listing,
+    }
+    mshUnitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
+
+    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeThreeBdrm],
+      totalCount: 9,
+      listing: listing,
+    }
+    mshUnitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
+
+    await this.unitsSummaryRepository.save(mshUnitsSummaryToBeCreated)
+
+    return listing
+  }
+}

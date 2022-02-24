@@ -1,4 +1,5 @@
-/// <reference types="cypress" />
+/*eslint-env node*/
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -9,39 +10,14 @@
 // https://on.cypress.io/plugins-guide
 // ***********************************************************
 
-// Use Webpack to compile Typescript files so that we can use TypeScript in tests
-// eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
-const webpack = require("@cypress/webpack-preprocessor")
+// This function is called when a project is opened or re-opened (e.g. due to
+// the project's config changing)
 
-/**
- * @type {Cypress.PluginConfig}
- */
-export default (on) => {
-  const options = {
-    webpackOptions: {
-      resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
-      },
-      module: {
-        rules: [
-          {
-            test: /\.tsx?$/,
-            use: "ts-loader",
-            exclude: /node_modules/,
-          },
-          // Ignore imported css files when building cypress tests (this doesn't affect the actual website build,
-          // just the tests & utilities themselves)
-          {
-            test: /\.(sa|sc|c)ss$/,
-            loader: "ignore-loader",
-          },
-        ],
-      },
-    },
-    watchOptions: {},
-  }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+module.exports = (on, config) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("@cypress/code-coverage/task")(on, config)
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  on("file:preprocessor", webpack(options))
+  return config
 }

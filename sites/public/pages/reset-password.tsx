@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
 import {
@@ -14,6 +14,8 @@ import {
   SiteAlert,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 import FormsLayout from "../layouts/forms"
 
 const ResetPassword = () => {
@@ -26,6 +28,14 @@ const ResetPassword = () => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, handleSubmit, errors } = useForm()
   const [requestError, setRequestError] = useState<string>()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Reset Password",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
 
   const onSubmit = async (data: { password: string; passwordConfirmation: string }) => {
     const { password, passwordConfirmation } = data

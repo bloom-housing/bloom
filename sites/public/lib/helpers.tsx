@@ -1,20 +1,20 @@
+import React from "react"
 import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "./constants"
-import moment from "moment"
+
+export const eligibilityRoute = (page: number) =>
+  `/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[page]}`
+import dayjs from "dayjs"
 import { Address, Listing } from "@bloom-housing/backend-core/types"
 import {
   t,
   ListingCard,
-  imageUrlFromListing,
   getSummariesTableFromUnitSummary,
   getSummariesTableFromUnitsSummary,
   IconTypes,
   IconSize,
   IconProps,
 } from "@bloom-housing/ui-components"
-import React from "react"
-
-export const eligibilityRoute = (page: number) =>
-  `/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[page]}`
+import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -34,8 +34,8 @@ export const getGenericAddress = (bloomAddress: Address) => {
 }
 
 export const openInFuture = (listing: Listing) => {
-  const nowTime = moment()
-  return listing.applicationOpenDate && nowTime < moment(listing.applicationOpenDate)
+  const nowTime = dayjs()
+  return listing.applicationOpenDate && nowTime < dayjs(listing.applicationOpenDate)
 }
 
 const getListingCardSubtitle = (address: Address) => {

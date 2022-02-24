@@ -12,8 +12,8 @@ import {
   LatitudeLongitude,
   SelectOption,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers/src/formKeys"
-import { FormListing } from "../index"
+import { stateKeys } from "@bloom-housing/shared-helpers"
+import { FormListing } from "../formTypes"
 import GeocodeService, {
   GeocodeService as GeocodeServiceType,
 } from "@mapbox/mapbox-sdk/services/geocoding"

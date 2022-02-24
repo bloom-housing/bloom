@@ -86,7 +86,7 @@ async function main(): Promise<void> {
   })
 
   const listingsService = new client.ListingsService()
-  const listing = await listingsService.retrieve({ listingId: args.listingId })
+  const listing = await listingsService.retrieve({ id: args.listingId })
   if (!listing.waitlistMaxSize) {
     // If there's no specified maximum waitlist size, we assume it's "unbounded".
     // Max int in SQL is 2 ** 31 - 1, so we use that to represent "unbounded".
@@ -96,7 +96,7 @@ async function main(): Promise<void> {
   console.log(
     `Updating "${listing.name}" listing with new waitlist size ${listing.waitlistCurrentSize} (out of ${listing.waitlistMaxSize})`
   )
-  await listingsService.update({ listingId: args.listingId, body: listing })
+  await listingsService.update({ id: args.listingId, body: listing })
 }
 
 void main()

@@ -16,15 +16,6 @@ export default Factory.define<Listing>(({ sequence, factories }) => ({
   applicationOpenDate: null,
   applicationFee: "30.0",
   applicationOrganization: `Triton-${sequence}`,
-  applicationAddress: {
-    city: `Foster City-${sequence}`,
-    street: "55 Triton Park Lane",
-    zipCode: "94404",
-    state: "CA",
-    county: "San Jose",
-    latitude: 37.55695,
-    longitude: -122.27521,
-  },
   blankPaperApplicationCanBePickedUp: true,
   buildingAddress: {
     city: `Foster City-${sequence}`,

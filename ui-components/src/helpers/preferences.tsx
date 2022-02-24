@@ -4,6 +4,7 @@ import {
   ApplicationPreference,
   FormMetadataOptions,
   Preference,
+  ListingPreference,
 } from "@bloom-housing/backend-core/types"
 import { UseFormMethods } from "react-hook-form"
 import {
@@ -16,7 +17,6 @@ import {
   SelectOption,
   resolveObject,
 } from "@bloom-housing/ui-components"
-import { stateKeys } from "@bloom-housing/shared-helpers"
 
 type ExtraFieldProps = {
   metaKey: string
@@ -27,6 +27,7 @@ type ExtraFieldProps = {
   errors?: UseFormMethods["errors"]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hhMembersOptions?: SelectOption[]
+  stateKeys: string[]
 }
 
 type FormAddressProps = {
@@ -36,6 +37,7 @@ type FormAddressProps = {
   register: UseFormMethods["register"]
   errors?: UseFormMethods["errors"]
   required?: boolean
+  stateKeys: string[]
 }
 
 type AddressType =
@@ -62,6 +64,7 @@ export const ExtraField = ({
   register,
   errors,
   hhMembersOptions,
+  stateKeys,
 }: ExtraFieldProps) => {
   const FIELD_NAME = `${PREFERENCES_FORM_PATH}.${metaKey}.${optionKey}.${extraKey}`
 
@@ -91,6 +94,7 @@ export const ExtraField = ({
                 register={register}
                 errors={errors}
                 required={true}
+                stateKeys={stateKeys}
               />
             </div>
           )
@@ -140,6 +144,7 @@ export const FormAddress = ({
   register,
   errors,
   required,
+  stateKeys,
 }: FormAddressProps) => {
   return (
     <>
@@ -369,20 +374,25 @@ export type ExclusiveKey = {
 /*
   Create an array of all exclusive keys from a preference set
 */
-export const getExclusiveKeys = (preferences: Preference[]) => {
+export const getExclusiveKeys = (preferences: ListingPreference[]) => {
   const exclusive: ExclusiveKey[] = []
-  preferences?.forEach((preference) => {
-    preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
+  preferences?.forEach((listingPreference) => {
+    listingPreference.preference?.formMetadata?.options.forEach((option: FormMetadataOptions) => {
       if (option.exclusive)
         exclusive.push({
-          optionKey: getPreferenceOptionName(option.key, preference?.formMetadata?.key ?? ""),
-          preferenceKey: preference?.formMetadata?.key,
+          optionKey: getPreferenceOptionName(
+            option.key,
+            listingPreference.preference?.formMetadata?.key ?? ""
+          ),
+          preferenceKey: listingPreference.preference?.formMetadata?.key,
         })
     })
-    if (!preference?.formMetadata?.hideGenericDecline)
+    if (!listingPreference.preference?.formMetadata?.hideGenericDecline)
       exclusive.push({
-        optionKey: getExclusivePreferenceOptionName(preference?.formMetadata?.key),
-        preferenceKey: preference?.formMetadata?.key,
+        optionKey: getExclusivePreferenceOptionName(
+          listingPreference.preference?.formMetadata?.key
+        ),
+        preferenceKey: listingPreference.preference?.formMetadata?.key,
       })
   })
   return exclusive

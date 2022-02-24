@@ -27,6 +27,7 @@ import { DetailsAlternateContact } from "../../../src/applications/PaperApplicat
 import { DetailsHouseholdMembers } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdMembers"
 import { DetailsHouseholdDetails } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdDetails"
 import { DetailsPreferences } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPreferences"
+import { DetailsPrograms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsPrograms"
 import { DetailsHouseholdIncome } from "../../../src/applications/PaperApplicationDetails/sections/DetailsHouseholdIncome"
 import { DetailsTerms } from "../../../src/applications/PaperApplicationDetails/sections/DetailsTerms"
 import { Aside } from "../../../src/applications/Aside"
@@ -43,7 +44,7 @@ export default function ApplicationsList() {
 
   async function deleteApplication() {
     try {
-      await applicationsService.delete({ applicationId })
+      await applicationsService.delete({ id: applicationId })
       void router.push(`/listings/${application?.listing?.id}/applications`)
     } catch (err) {
       setErrorAlert(true)
@@ -90,7 +91,9 @@ export default function ApplicationsList() {
                 {application.applicant.firstName} {application.applicant.lastName}
               </p>
 
-              <p className="font-sans text-base mt-1">{application.id}</p>
+              <p className="font-sans text-base mt-1">
+                {application.confirmationCode || application.id}
+              </p>
             </>
           }
         >
@@ -138,6 +141,8 @@ export default function ApplicationsList() {
                 <DetailsHouseholdDetails />
 
                 <DetailsPreferences listingId={application?.listing?.id} />
+
+                <DetailsPrograms listingId={application?.listing?.id} />
 
                 <DetailsHouseholdIncome />
 

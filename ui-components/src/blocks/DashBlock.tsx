@@ -7,6 +7,7 @@ interface DashBlockProps {
   subtitle?: string
   icon: React.ReactNode
   children?: React.ReactNode
+  dataTestId?: string
 }
 const DashBlock = (props: DashBlockProps) => {
   const { href, title, subtitle, icon, children } = props
@@ -37,6 +38,10 @@ const DashBlock = (props: DashBlockProps) => {
       </>
     )
   }
-  return <div className="dash-block">{wrapper}</div>
+  return (
+    <div className="dash-block" data-test-id={props.dataTestId}>
+      {wrapper}
+    </div>
+  )
 }
 export { DashBlock as default, DashBlock }

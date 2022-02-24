@@ -27,6 +27,10 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "leasingAgentInListings",
   "roles",
   "jurisdictions",
+  "passwordUpdatedAt",
+  "passwordValidForDays",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

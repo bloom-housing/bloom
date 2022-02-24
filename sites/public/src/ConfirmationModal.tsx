@@ -51,7 +51,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
         .then(() => {
           void router.push({
             pathname: "/account/dashboard",
-            query: { alert: t(`authentication.createAccount.accountConfirmed`) },
+            query: { alert: `authentication.createAccount.accountConfirmed` },
           })
           window.scrollTo(0, 0)
         })

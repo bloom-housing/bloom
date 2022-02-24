@@ -5,9 +5,9 @@ import {
   ViewItem,
   GridCell,
   MinimalTable,
-  cloudinaryUrlFromId,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "../../ListingContext"
 import { getDetailFieldString } from "./helpers"
 
@@ -23,28 +23,28 @@ const DetailAdditionalEligibility = () => {
     >
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.creditHistory")}>
+          <ViewItem id="creditHistory" label={t("listings.creditHistory")}>
             {getDetailFieldString(listing.creditHistory)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.rentalHistory")}>
+          <ViewItem id="rentalHistory" label={t("listings.rentalHistory")}>
             {getDetailFieldString(listing.rentalHistory)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.criminalBackground")}>
+          <ViewItem id="criminalBackground" label={t("listings.criminalBackground")}>
             {getDetailFieldString(listing.criminalBackground)}
           </ViewItem>
         </GridCell>
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem label={t("listings.sections.rentalAssistanceTitle")}>
+          <ViewItem id="rentalAssistance" label={t("listings.sections.rentalAssistanceTitle")}>
             {getDetailFieldString(listing.rentalAssistance)}
           </ViewItem>
         </GridCell>
@@ -55,6 +55,7 @@ const DetailAdditionalEligibility = () => {
             <ViewItem label={t("listings.buildingSelectionCriteria")} />
             {listing.buildingSelectionCriteriaFile?.fileId ? (
               <MinimalTable
+                id="buildingSelectionCriteriaTable"
                 headers={{ preview: "t.preview", fileName: "t.fileName" }}
                 data={[
                   {
@@ -75,7 +76,8 @@ const DetailAdditionalEligibility = () => {
               />
             ) : (
               <MinimalTable
-                headers={{ url: t("t.url") }}
+                id="buildingSelectionCriteriaTable"
+                headers={{ url: "t.url" }}
                 data={[
                   {
                     url: listing.buildingSelectionCriteria,

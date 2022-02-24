@@ -10,6 +10,7 @@ export interface ViewItemProps {
   className?: string
   truncated?: boolean
   error?: boolean
+  dataTestId?: string
 }
 
 const ViewItem = (props: ViewItemProps) => {
@@ -22,7 +23,7 @@ const ViewItem = (props: ViewItemProps) => {
   if (props.truncated) valueClassName += " is-truncated"
 
   return (
-    <div id={props.id} className={viewItemClasses.join(" ")}>
+    <div id={props.id} className={viewItemClasses.join(" ")} data-test-id={props.dataTestId}>
       {props.label && (
         <span className={`view-item__label ${props.error ? "text-alert text-tiny" : ""}`}>
           {props.label}

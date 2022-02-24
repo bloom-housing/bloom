@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-named-as-default
 import Router from "next/router"
 import { Listing } from "@bloom-housing/backend-core/types"
-import { blankApplication } from "@bloom-housing/ui-components"
+import { blankApplication } from "@bloom-housing/shared-helpers"
 import { ApplicationFormConfig, StepRoute } from "./configInterfaces"
 import StepDefinition from "./StepDefinition"
 import AlternateContactStep from "./AlternateContactStep"
@@ -12,6 +12,7 @@ import LiveAloneStep from "./LiveAloneStep"
 import HouseholdMemberStep from "./HouseholdMemberStep"
 import SelectedPreferencesStep from "./SelectedPreferencesStep"
 import PreferencesAllStep from "./PreferencesAllStep"
+import ProgramsStep from "./ProgramsStep"
 
 export const loadApplicationFromAutosave = () => {
   if (typeof window != "undefined") {
@@ -82,6 +83,16 @@ export default class ApplicationConductor {
     },
     adaHouseholdMembers: {
       url: "/applications/household/ada",
+    },
+    householdChanges: {
+      url: "/applications/household/changes",
+    },
+    householdStudent: {
+      url: "/applications/household/student",
+    },
+    programs: {
+      url: "/applications/household/programs",
+      definition: ProgramsStep,
     },
     vouchersSubsidies: {
       url: "/applications/financial/vouchers",
@@ -191,9 +202,9 @@ export default class ApplicationConductor {
   }
 
   reset() {
-    this.application = blankApplication()
+    this.application = { ...blankApplication }
     this.listing = {} as Listing
-
+    this.currentStepIndex = 0
     if (typeof window != "undefined") {
       window.sessionStorage.removeItem("bloom-app-autosave")
       window.sessionStorage.removeItem("bloom-app-listing")

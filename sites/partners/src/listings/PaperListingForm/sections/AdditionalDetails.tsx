@@ -23,6 +23,7 @@ const AdditionalDetails = () => {
             id={"requiredDocuments"}
             fullWidth={true}
             register={register}
+            maxLength={2000}
           />
           <Textarea
             label={t("listings.importantProgramRules")}
@@ -30,6 +31,7 @@ const AdditionalDetails = () => {
             id={"programRules"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -39,6 +41,7 @@ const AdditionalDetails = () => {
             id={"specialNotes"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
       </GridSection>
