@@ -10,6 +10,7 @@ import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
 import React, { useContext } from "react"
+import Markdown from "markdown-to-jsx"
 
 const ApplicationConfirmation = () => {
   const { application, listing } = useContext(AppSubmissionContext)
@@ -45,43 +46,28 @@ const ApplicationConfirmation = () => {
           <p className="field-note">{t("application.review.confirmation.pleaseWriteNumber")}</p>
         </div>
 
-        <div className="form-card__group border-b">
-          <h3 className="form-card__paragraph-title">
-            {t("application.review.confirmation.whatExpectTitle")}
-          </h3>
-
-          <p className="field-note mt-2">
-            {t("application.review.confirmation.whatExpectSecondparagraph")}
-          </p>
+        <div className="form-card__group border-b markdown markdown-informational">
+          <Markdown options={{ disableParsingRawHTML: true }}>
+            {t("application.review.confirmation.whatHappensNext")}
+          </Markdown>
         </div>
 
-        <div className="form-card__group border-b">
-          <h3 className="form-card__paragraph-title">
-            {t("application.review.confirmation.doNotSubmitTitle")}
-          </h3>
-
-          <p className="field-note mt-1">{t("application.review.confirmation.needToUpdate")}</p>
-
-          {listing && (
-            <p className="field-note mt-2">
-              {listing.leasingAgentName}
-              <br />
-              {listing.leasingAgentPhone}
-              <br />
-              {listing.leasingAgentEmail}
-            </p>
-          )}
+        <div className="form-card__group border-b markdown markdown-informational">
+          <Markdown options={{ disableParsingRawHTML: true }}>
+            {t("application.review.confirmation.needToMakeUpdates", {
+              agentName: listing?.leasingAgentName || "",
+              agentPhone: listing?.leasingAgentPhone || "",
+              agentEmail: listing?.leasingAgentEmail || "",
+              agentOfficeHours: listing?.leasingAgentOfficeHours || "",
+            })}
+          </Markdown>
         </div>
 
         {initialStateLoaded && !profile && (
-          <div className="form-card__group">
-            <h3 className="form-card__paragraph-title">
-              {t("application.review.confirmation.createAccountTitle")}
-            </h3>
-
-            <p className="field-note mt-1">
-              {t("application.review.confirmation.createAccountParagraph")}
-            </p>
+          <div className="form-card__group markdown markdown-informational">
+            <Markdown options={{ disableParsingRawHTML: true }}>
+              {t("application.review.confirmation.createAccount")}
+            </Markdown>
           </div>
         )}
 
