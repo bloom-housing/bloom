@@ -1276,14 +1276,16 @@
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs",
-      "developmentalDisability": "Developmental Disability"
+      "developmentalDisability": "Developmental Disability",
+      "veteran": "Veteran"
     },
     "reservedCommunityTypeDescriptions": {
       "senior": "Seniors",
       "senior55": "Seniors 55+",
       "senior62": "Seniors 62+",
       "specialNeeds": "Special Needs",
-      "developmentalDisability": "People with Developmental Disabilities"
+      "developmentalDisability": "People with Developmental Disabilities",
+      "veteran": "Veteran"
     },
     "reservedFor": "Reserved for %{type}",
     "reservedCommunityType": "Reserved Community Type",
