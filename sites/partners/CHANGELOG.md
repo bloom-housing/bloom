@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.2...@bloom-housing/partners@4.0.3) (2022-02-25)
+
+
+### Features
+
+* overrides partner app website trans ([#2534](https://github.com/seanmalbert/bloom/issues/2534)) ([16c7a4e](https://github.com/seanmalbert/bloom/commit/16c7a4eb8f5ae05dbea9380702c2150a922ca3f0))
+
+
+
+
+
 ## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.1...@bloom-housing/partners@4.0.2) (2022-02-09)
 
 **Note:** Version bump only for package @bloom-housing/partners

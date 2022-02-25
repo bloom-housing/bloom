@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.2...@bloom-housing/ui-components@4.0.3) (2022-02-25)
+
+
+### Features
+
+* adds veteran to reserved community types translations ([#2544](https://github.com/seanmalbert/bloom/issues/2544)) ([96c08bf](https://github.com/seanmalbert/bloom/commit/96c08bffd749d9c0a97d06e40808ef9d2960eaf5))
+
+
+
+
+
 ## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.0.1...@bloom-housing/ui-components@4.0.2) (2022-02-09)
 
 

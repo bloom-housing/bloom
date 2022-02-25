@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@4.0.2...@bloom-housing/public@4.0.3) (2022-02-25)
+
+
+### Features
+
+* Add San Jose email translations ([#2519](https://github.com/seanmalbert/bloom/issues/2519)) ([d1db032](https://github.com/seanmalbert/bloom/commit/d1db032672f40d325eba9e4a833d24f8b02464cc))
+
+
+
+
+
 ## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/public@4.0.1...@bloom-housing/public@4.0.2) (2022-02-09)
 
 **Note:** Version bump only for package @bloom-housing/public
