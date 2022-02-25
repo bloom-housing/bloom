@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.75](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.74...@bloom-housing/ui-components@4.0.1-alpha.75) (2022-02-25)
+
+
+### Features
+
+* accordion component cleanup ([#2528](https://github.com/bloom-housing/bloom/issues/2528)) ([704a15a](https://github.com/bloom-housing/bloom/commit/704a15af400de8958b20498feedd35942ee0b78e))
+
+
+
+
+
 ## [4.0.1-alpha.74](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.73...@bloom-housing/ui-components@4.0.1-alpha.74) (2022-02-22)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
