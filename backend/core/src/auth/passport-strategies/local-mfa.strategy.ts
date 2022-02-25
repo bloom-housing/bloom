@@ -107,6 +107,8 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
 
       if (validPassword && mfaAuthSuccessful) {
         return user
+      } else if (validPassword && user.mfaEnabled && !mfaAuthSuccessful) {
+        throw new UnauthorizedException({ message: "mfaUnauthorized" })
       }
     }
 

@@ -54,7 +54,7 @@ const FormSignInMFAType = ({
       <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-type"} />
 
       <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}

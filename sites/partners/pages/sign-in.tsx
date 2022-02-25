@@ -37,6 +37,10 @@ const SignIn = () => {
 
   let formToRender: JSX.Element
 
+  if (Object.keys(errors).length && !!networkError) {
+    resetNetworkError()
+  }
+
   if (renderStep === EnumRenderStep.emailAndPassword) {
     formToRender = (
       <FormSignIn

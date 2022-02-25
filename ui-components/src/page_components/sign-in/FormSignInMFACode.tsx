@@ -45,10 +45,14 @@ const FormSignInMFACode = ({
     note = (
       <>
         {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
-        <a className="underline cursor-pointer" tabIndex={1} onClick={() => goBackToPhone()}>
+        <Button
+          unstyled={true}
+          className=".field-note underline cursor-pointer font-semibold m-0"
+          onClick={() => goBackToPhone()}
+        >
           {" "}
           {t("nav.signInMFA.editPhoneNumber")}{" "}
-        </a>
+        </Button>
       </>
     )
   }
@@ -67,14 +71,14 @@ const FormSignInMFACode = ({
       <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-code"} />
 
       <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
             name="mfaCode"
             label={t("nav.signInMFA.code")}
             validation={{ required: true }}
-            error={errors.mfaType}
+            error={errors.mfaCode}
             errorMessage={t("nav.signInMFA.noMFACode")}
             register={register}
             dataTestId="sign-in-mfa-code-field"

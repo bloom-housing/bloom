@@ -54,7 +54,7 @@ const FormSignInAddPhone = ({
       />
 
       <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <PhoneField
             label={t("nav.signInMFA.phoneNumber")}
