@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.76](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.75...@bloom-housing/ui-components@4.0.1-alpha.76) (2022-02-25)
+
+
+### Features
+
+* adds veteran to reserved community types translations ([#2544](https://github.com/bloom-housing/bloom/issues/2544)) ([f973f1a](https://github.com/bloom-housing/bloom/commit/f973f1af71487b0e032b1a11fda35b21890060a0))
+
+
+
+
+
 ## [4.0.1-alpha.75](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.74...@bloom-housing/ui-components@4.0.1-alpha.75) (2022-02-25)
 
 
