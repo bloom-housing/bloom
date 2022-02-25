@@ -42,7 +42,7 @@ const FormSignInAddPhone = ({
   const { errors, handleSubmit } = control
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
+      <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.addNumber")}</h2>
         <p className="form-card__sub-title">{t("nav.signInMFA.addNumberSecondaryTitle")}</p>

@@ -45,7 +45,7 @@ const FormSignInMFACode = ({
     note = (
       <>
         {t("nav.signInMFA.sentTo", { phoneNumber })}{" "}
-        <a className="underline" onClick={() => goBackToPhone()}>
+        <a className="underline cursor-pointer" tabIndex={1} onClick={() => goBackToPhone()}>
           {" "}
           {t("nav.signInMFA.editPhoneNumber")}{" "}
         </a>
@@ -55,7 +55,7 @@ const FormSignInMFACode = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b">
+      <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
         <h2 className="form-card__title is-borderless">{t("nav.signInMFA.verifyTitle")}</h2>
         <p className="form-card__sub-title">

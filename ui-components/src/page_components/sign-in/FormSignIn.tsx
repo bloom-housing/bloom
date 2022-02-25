@@ -52,7 +52,7 @@ const FormSignIn = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
+      <div className="form-card__lead text-center">
         <Icon size="2xl" symbol="profile" />
         <h2 className="form-card__title">{t(`nav.signIn`)}</h2>
       </div>

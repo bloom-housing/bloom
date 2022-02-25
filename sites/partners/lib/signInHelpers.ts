@@ -13,7 +13,8 @@ export const onSubmitEmailAndPassword = (
   setRenderStep,
   determineNetworkError,
   login,
-  router
+  router,
+  resetNetworkError
 ) => async (data: { email: string; password: string }) => {
   const { email, password } = data
   try {
@@ -23,6 +24,7 @@ export const onSubmitEmailAndPassword = (
     if (error?.response?.data?.name === "mfaCodeIsMissing") {
       setEmail(email)
       setPassword(password)
+      resetNetworkError()
       setRenderStep(EnumRenderStep.mfaType)
     } else {
       const { status } = error.response || {}
@@ -39,7 +41,8 @@ export const onSubmitMfaType = (
   requestMfaCode,
   determineNetworkError,
   setAllowPhoneNumberEdit,
-  setPhoneNumber
+  setPhoneNumber,
+  resetNetworkError
 ) => async (data: { mfaType: EnumRequestMfaCodeMfaType }) => {
   const { mfaType: incomingMfaType } = data
   try {
@@ -49,6 +52,7 @@ export const onSubmitMfaType = (
       setPhoneNumber(res.phoneNumber)
     }
     setMfaType(incomingMfaType)
+    resetNetworkError()
     setRenderStep(EnumRenderStep.enterCode)
   } catch (error) {
     if (error?.response?.data?.name === "phoneNumberMissing") {
@@ -68,10 +72,12 @@ export const onSubmitMfaCodeWithPhone = (
   setRenderStep,
   requestMfaCode,
   setAllowPhoneNumberEdit,
-  setPhoneNumber
+  setPhoneNumber,
+  resetNetworkError
 ) => async (data: { phoneNumber: string }) => {
   const { phoneNumber } = data
   await requestMfaCode(email, password, mfaType, phoneNumber)
+  resetNetworkError()
   setRenderStep(EnumRenderStep.enterCode)
   setAllowPhoneNumberEdit(true)
   setPhoneNumber(phoneNumber)
@@ -83,11 +89,13 @@ export const onSubmitMfaCode = (
   determineNetworkError,
   login,
   router,
-  mfaType
+  mfaType,
+  resetNetworkError
 ) => async (data: { mfaCode: string }) => {
   const { mfaCode } = data
   try {
     await login(email, password, mfaCode, mfaType)
+    resetNetworkError()
     await router.push("/")
   } catch (error) {
     const { status } = error.response || {}
