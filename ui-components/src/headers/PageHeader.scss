@@ -1,16 +1,25 @@
 .page-header {
-  padding: var(--bloom-s8) 0;
-  background-color: var(--bloom-color-primary-lighter);
-  border-top: 1px solid var(--bloom-color-gray-450);
+  /* Component Variables */
+  --background-color: var(--bloom-color-primary-lighter);
+  --border-color: var(--bloom-color-gray-450);
+  --text-color: inherit;
+  --title-font-size: var(--bloom-font-size-5xl);
 
-  @media (min-width: $tailwind-screen-sm) {
+  /* Base Styles */
+  padding: var(--bloom-s8) 0;
+  background-color: var(--background-color);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
+
+  @media (min-width: $screen-sm) {
     padding: var(--bloom-s10) 0;
   }
 
+  /* Variants */
   &.is-inverse {
-    color: var(--bloom-color-white);
-    background-color: var(--bloom-color-primary-dark);
-    border-color: var(--bloom-color-primary);
+    --background-color: var(--bloom-color-primary-dark);
+    --border-color: var(--bloom-color-primary);
+    --text-color: var(--bloom-color-white);
   }
 }
 
@@ -23,8 +32,8 @@
 .page-header__title {
   text-align: center;
 
-  @media (min-width: $tailwind-screen-md) {
-    font-size: var(--bloom-font-size-5xl);
+  @media (min-width: $screen-md) {
+    font-size: var(--title-font-size);
     text-align: left;
   }
 }

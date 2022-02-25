@@ -74,6 +74,7 @@
     "@types/body-scroll-lock": "^2.6.1",
     "@types/jwt-decode": "^2.2.1",
     "@types/markdown-to-jsx": "^6.11.2",
+    "@types/mdx": "^2.0.1",
     "@types/node": "^12.12.67",
     "@types/node-polyglot": "^2.4.1",
     "@types/react-beautiful-dnd": "^13.1.1",

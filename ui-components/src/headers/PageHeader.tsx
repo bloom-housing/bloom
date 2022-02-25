@@ -12,8 +12,8 @@ export interface PageHeaderProps {
 
 const PageHeader = (props: PageHeaderProps) => {
   const classNames = ["page-header"]
-  if (props.className) classNames.push(...props.className.split(" "))
   if (props.inverse) classNames.push("is-inverse")
+  if (props.className) classNames.push(...props.className.split(" "))
 
   return (
     <header className={classNames.join(" ")}>
