@@ -71,12 +71,11 @@ export default function ListingsPage(props: ListingsProps) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const openListings = fetchOpenListings()
   const closedListings = fetchClosedListings()
 
   return {
     props: { openListings: await openListings, closedListings: await closedListings },
-    revalidate: process.env.cacheRevalidate,
   }
 }

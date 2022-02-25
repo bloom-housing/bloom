@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.82](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.81...@bloom-housing/partners@4.0.1-alpha.82) (2022-02-24)
+
+
+### Features
+
+* overrides partner app website trans ([#2534](https://github.com/bloom-housing/bloom/issues/2534)) ([9e09b0b](https://github.com/bloom-housing/bloom/commit/9e09b0bbb3e394c92dcce18bb0cba74db03c49fa))
+
+
+
+
+
+## [4.0.1-alpha.81](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.80...@bloom-housing/partners@4.0.1-alpha.81) (2022-02-22)
+
+
+### Bug Fixes
+
+* purge listing detail with wildcard ([4fd2137](https://github.com/bloom-housing/bloom/commit/4fd21374c2dc213dfe1b8dde004d41895126c1d6))
+
+
+
+
+
+## [4.0.1-alpha.80](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.79...@bloom-housing/partners@4.0.1-alpha.80) (2022-02-22)
+
+
+### Features
+
+* updates cache clear to separate individual and lists ([#2529](https://github.com/bloom-housing/bloom/issues/2529)) ([1521191](https://github.com/bloom-housing/bloom/commit/15211918b8bf0741ff6a25265b1bf3a60d5678b2))
+
+
+
+
+
 ## [4.0.1-alpha.79](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.78...@bloom-housing/partners@4.0.1-alpha.79) (2022-02-22)
 
 **Note:** Version bump only for package @bloom-housing/partners
