@@ -1532,6 +1532,7 @@
     "welcomeVietnamese": "Tiếng Việt"
   },
   "pageDescription": {
+    "additionalResources": "We encourage you to browse other affordable housing resources.",
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
   },

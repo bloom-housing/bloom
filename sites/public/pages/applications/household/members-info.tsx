@@ -11,14 +11,18 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { useContext, useEffect } from "react"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationMembersInfo = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("householdMemberInfo")
   const router = useRouter()
   const currentPageSection = 2
@@ -33,6 +37,14 @@ const ApplicationMembersInfo = () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Household Member Info",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

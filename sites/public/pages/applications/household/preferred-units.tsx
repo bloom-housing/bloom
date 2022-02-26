@@ -11,14 +11,24 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import { createUnitTypeId, getUniqueUnitTypes, OnClientSide } from "@bloom-housing/shared-helpers"
+import {
+  createUnitTypeId,
+  getUniqueUnitTypes,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { useContext, useEffect } from "react"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferredUnits = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("preferredUnitSize")
   const currentPageSection = 2
 
@@ -51,6 +61,14 @@ const ApplicationPreferredUnits = () => {
     value: item.id,
     defaultChecked: !!application.preferredUnit?.find((unit) => unit.id === item.id),
   }))
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Preferred Unit Size",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

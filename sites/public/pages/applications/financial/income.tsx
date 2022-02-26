@@ -2,7 +2,7 @@
 3.2 Income
 Total pre-tax household income from all sources
 */
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Listing } from "@bloom-housing/backend-core/types"
 import {
   AppearanceStyleType,
@@ -15,12 +15,14 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 type IncomeError = "low" | "high" | null
 type IncomePeriod = "perMonth" | "perYear"
@@ -51,6 +53,7 @@ function verifyIncome(listing: Listing, income: number, period: IncomePeriod): I
 }
 
 const ApplicationIncome = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("income")
   const [incomeError, setIncomeError] = useState<IncomeError>(null)
   const currentPageSection = 3
@@ -97,6 +100,14 @@ const ApplicationIncome = () => {
       label: t("t.perYear"),
     },
   ]
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Income",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

@@ -12,14 +12,18 @@ import {
   HouseholdSizeField,
   Form,
   ProgressNav,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { useContext, useEffect } from "react"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAddMembers = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("addMembers")
   const router = useRouter()
   const currentPageSection = 2
@@ -64,6 +68,14 @@ const ApplicationAddMembers = () => {
       />
     )
   })
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Add household members",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

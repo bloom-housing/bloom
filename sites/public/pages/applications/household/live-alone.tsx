@@ -2,9 +2,10 @@
 2.1 - Live Alone
 Asks whether the applicant will be adding any additional household members
 */
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
   AppearanceSizeType,
+  AuthContext,
   Button,
   Form,
   FormCard,
@@ -16,9 +17,11 @@ import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationLiveAlone = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("liveAlone")
   const [validateHousehold, setValidateHousehold] = useState(true)
   const currentPageSection = 2
@@ -30,6 +33,14 @@ const ApplicationLiveAlone = () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Live Alone",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>
