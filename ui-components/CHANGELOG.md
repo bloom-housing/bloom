@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.77](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.76...@bloom-housing/ui-components@4.0.1-alpha.77) (2022-02-26)
+
+
+### Features
+
+* adds gtm tracking to rest of pages ([#2545](https://github.com/bloom-housing/bloom/issues/2545)) ([1c96f71](https://github.com/bloom-housing/bloom/commit/1c96f7101017aefd8bca70731265f6efb1ab5cf0))
+
+
+
+
+
 ## [4.0.1-alpha.76](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.75...@bloom-housing/ui-components@4.0.1-alpha.76) (2022-02-25)
 
 

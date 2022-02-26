@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.82](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.81...@bloom-housing/public@4.0.1-alpha.82) (2022-02-26)
+
+
+### Features
+
+* adds gtm tracking to rest of pages ([#2545](https://github.com/bloom-housing/bloom/issues/2545)) ([1c96f71](https://github.com/bloom-housing/bloom/commit/1c96f7101017aefd8bca70731265f6efb1ab5cf0))
+
+
+
+
+
 ## [4.0.1-alpha.81](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.0.1-alpha.80...@bloom-housing/public@4.0.1-alpha.81) (2022-02-25)
 
 **Note:** Version bump only for package @bloom-housing/public
