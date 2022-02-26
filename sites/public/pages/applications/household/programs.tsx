@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { useForm } from "react-hook-form"
 import { Program } from "@bloom-housing/backend-core"
 import {
@@ -10,6 +10,7 @@ import {
   t,
   Button,
   AppearanceStyleType,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
@@ -19,11 +20,15 @@ import {
   getProgramOptionName,
   getProgramOptionDescription,
   OnClientSide,
+  PageView,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import { FormMetaDataType } from "@bloom-housing/backend-core/types"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPrograms = () => {
   const clientLoaded = OnClientSide()
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("programs")
   const programs = listing?.listingPrograms
   const uniquePages = new Set(programs?.map((item) => item.ordinal)).size
@@ -76,6 +81,14 @@ const ApplicationPrograms = () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Programs",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   if (!clientLoaded) {
     return null
