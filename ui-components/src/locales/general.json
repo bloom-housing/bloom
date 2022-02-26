@@ -870,7 +870,10 @@
         "createAccountParagraph": "Creating an account will save your information for future applications, and you can check the status of this application anytime.",
         "imdone": "No thanks, I'm done.",
         "browseMore": "Browse more listings",
-        "print": "View submitted application and print a copy."
+        "print": "View submitted application and print a copy.",
+        "applicationReceived": "Application  \nreceived",
+        "applicationsClosed": "Applications  \nclosed",
+        "applicationsRanked": "Applications  \nranked"
       }
     },
     "confirmation": {
