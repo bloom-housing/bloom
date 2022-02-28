@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.78](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.77...@bloom-housing/ui-components@4.0.1-alpha.78) (2022-02-28)
+
+
+### Bug Fixes
+
+* more style tweaks for AlertBox ([#2526](https://github.com/bloom-housing/bloom/issues/2526)) ([bce3920](https://github.com/bloom-housing/bloom/commit/bce3920b7638be3def05d852d0192ab0cbb2e749))
+
+
+
+
+
 ## [4.0.1-alpha.77](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.76...@bloom-housing/ui-components@4.0.1-alpha.77) (2022-02-26)
 
 
