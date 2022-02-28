@@ -42,9 +42,11 @@ const FormSignInMFAType = ({
 
   return (
     <FormCard>
-      <div className="form-card__lead text-center border-b mx-0">
-        <Icon size="2xl" symbol="profile" />
-        <h2 className="form-card__title">{t("nav.signInMFA.verificationChoiceMainTitle")}</h2>
+      <div className="form-card__lead text-center">
+        <Icon size="2xl" symbol="profile" className="form-card__header-icon" />
+        <h2 className="form-card__title is-borderless">
+          {t("nav.signInMFA.verificationChoiceMainTitle")}
+        </h2>
         <p className="form-card__sub-title">
           {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
         </p>
@@ -52,7 +54,7 @@ const FormSignInMFAType = ({
       <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-type"} />
 
       <SiteAlert type="notice" dismissable />
-      <div className="form-card__group pt-0 border-b">
+      <div className="form-card__group pt-0">
         <Form id="sign-in-mfa" className="mt-10" onSubmit={handleSubmit(onSubmit, onError)}>
           <Field
             caps={true}
