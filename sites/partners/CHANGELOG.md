@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1-alpha.87](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.86...@bloom-housing/partners@4.0.1-alpha.87) (2022-02-28)
+
+
+### Features
+
+* updates to mfa styling ([#2532](https://github.com/bloom-housing/bloom/issues/2532)) ([7654efc](https://github.com/bloom-housing/bloom/commit/7654efc8a7c5cba0f7436fda62b886f646fe8a03))
+
+
+
+
+
 ## [4.0.1-alpha.86](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.85...@bloom-housing/partners@4.0.1-alpha.86) (2022-02-28)
 
 **Note:** Version bump only for package @bloom-housing/partners
