@@ -122,14 +122,14 @@
 }
 
 @mixin outlined-appearances() {
-  @apply bg-white;
-  @apply text-primary;
-  @apply border-2;
-  @apply border-primary;
+  background-color: var(--bloom-color-white);
+  color: var(--bloom-color-primary);
+  border-width: var(--bloom-border-2);
+  border-color: var(--bloom-color-primary);
 
   &:hover {
-    @apply bg-primary-dark;
-    @apply text-white;
+    background-color: var(--bloom-color-primary-dark);
+    color: var(--bloom-color-white);
   }
 
   &.is-outlined {

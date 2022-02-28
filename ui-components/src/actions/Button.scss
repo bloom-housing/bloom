@@ -1,27 +1,25 @@
 @import "../global/mixins.scss";
 
 .button {
-  @apply relative;
-  @apply rounded;
-  @apply px-6;
-  @apply py-4;
-  @apply text-lg;
-  @apply text-center;
-  @apply uppercase;
-  @apply font-alt-sans;
-  @apply inline-block;
-  @apply tracking-widest;
-  @apply text-sm;
-  @apply font-bold;
-  @apply leading-snug;
+  position: relative;
+  border-radius: var(--bloom-rounded);
+  padding: var(--bloom-s4) var(--bloom-s6);
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--bloom-font-alt-sans);
+  display: inline-block;
+  letter-spacing: var(--bloom-letter-spacing-widest);
+  font-size: var(--bloom-font-size-sm);
+  font-weight: bold;
+  line-height: var(--bloom-line-height-snug);
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px $tailwind-accent-cool;
+    box-shadow: 0 0 0 2px #fff, 0 0 3px 4px var(--bloom-color-accent-cool);
   }
 
   &:hover {
-    @apply border-primary-dark;
+    border-color: var(--bloom-color-primary-dark);
   }
 
   &:disabled {
@@ -42,18 +40,16 @@
   }
 
   &.is-small {
-    @apply text-xs;
-    @apply px-6;
-    @apply py-3;
+    font-size: var(--bloom-font-size-xs);
+    padding: var(--bloom-s3) var(--bloom-s6);
   }
 
   &.is-big {
-    @apply px-6;
-    @apply py-6;
+    padding: var(--bloom-s6);
   }
 
   &.is-normal-case {
-    @apply normal-case;
+    text-transform: none;
   }
 
   &.is-unstyled {
@@ -62,15 +58,15 @@
 
   &.is-unstyled,
   &.is-inline {
-    @apply normal-case;
-    @apply border-0;
-    @apply p-0;
-    @apply font-sans;
-    @apply tracking-normal;
-    @apply font-normal;
-    @apply underline;
-    @apply m-4;
-    @apply text-tiny;
+    text-transform: none;
+    border: none;
+    padding: 0;
+    font-family: var(--bloom-font-sans);
+    letter-spacing: var(--bloom-letter-spacing-normal);
+    font-weight: 400;
+    text-decoration: underline;
+    margin: var(--bloom-s4);
+    font-size: var(--bloom-font-size-tiny);
 
     &:hover {
       @apply text-primary;
