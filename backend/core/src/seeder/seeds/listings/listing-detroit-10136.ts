@@ -102,13 +102,26 @@ export class Listing10136Seed extends ListingDefaultSeed {
       unitType: [unitTypeStudio],
       totalCount: 8,
       listing: listing,
+      minOccupancy: 1,
+      maxOccupancy: 2,
     }
     unitsSummaryToBeCreated.push(studioUnitsSummary)
+
+    const studioTwoUnitsSummary: DeepPartial<UnitsSummary> = {
+      unitType: [unitTypeStudio],
+      totalCount: 5,
+      listing: listing,
+      minOccupancy: 2,
+      maxOccupancy: 3,
+    }
+    unitsSummaryToBeCreated.push(studioTwoUnitsSummary)
 
     const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
       unitType: [unitTypeOneBdrm],
       totalCount: 100,
       listing: listing,
+      minOccupancy: 1,
+      maxOccupancy: 2,
     }
     unitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
 
@@ -116,6 +129,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
       unitType: [unitTypeTwoBdrm],
       totalCount: 118,
       listing: listing,
+      minOccupancy: 2,
+      maxOccupancy: 4,
     }
     unitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
 
@@ -123,6 +138,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
       unitType: [unitTypeThreeBdrm],
       totalCount: 54,
       listing: listing,
+      minOccupancy: 2,
+      maxOccupancy: 6,
     }
     unitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
 
@@ -130,6 +147,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
       unitType: [unitTypeFourBdrm],
       totalCount: 32,
       listing: listing,
+      minOccupancy: 3,
+      maxOccupancy: 8,
     }
     unitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
 

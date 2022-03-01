@@ -1,4 +1,4 @@
-import { AnyDict } from "../../shared/units-transformations"
+import { AnyDict } from "../../shared/units-transformations-deprecated"
 import { ApiProperty } from "@nestjs/swagger"
 
 export class HMI {

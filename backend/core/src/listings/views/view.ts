@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from "typeorm"
-import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
+import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations-deprecated"
 import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
 import { View, BaseView } from "../../views/base.view"
