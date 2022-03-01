@@ -15,7 +15,7 @@ const NewApplication = () => {
         <title>{t("nav.siteTitlePartners")}</title>
       </Head>
 
-      <PageHeader className="relative" title={t("applications.newApplication")}>
+      <PageHeader className={"relative md:pt-16"} title={t("applications.newApplication")}>
         <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
           <SiteAlert type="success" timeout={5000} dismissable />
         </div>

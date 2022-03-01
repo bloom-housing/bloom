@@ -44,6 +44,7 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   canPaperApplicationsBePickedUp?: YesNoAnswer
   canApplicationsBeMailedIn?: YesNoAnswer
   digitalApplicationChoice?: YesNoAnswer
+  listingFeatures?: string[]
   commonDigitalApplicationChoice?: YesNoAnswer
   paperApplicationChoice?: YesNoAnswer
   referralOpportunityChoice?: YesNoAnswer
@@ -113,6 +114,8 @@ export const formDefaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
+  listingFeatures: [],
+  features: {},
   image: null,
   leasingAgentAddress: null,
   leasingAgentEmail: null,
@@ -193,8 +196,6 @@ export type TempEvent = ListingEvent & {
 export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
-  preferences: Preference[]
-  programs: Program[]
   units: TempUnit[]
   unitsSummaries: TempUnitsSummary[]
   openHouseEvents: TempEvent[]

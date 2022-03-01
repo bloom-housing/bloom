@@ -55,8 +55,8 @@ export default class BooleansFormatter extends Formatter {
     })
 
     this.processBoolean("referralOpportunity", {
-      when: this.data.referralOpportunityChoice === YesNoAnswer.Yes,
-      falseCase: () => (this.data.referralOpportunityChoice === YesNoAnswer.No ? false : null),
+      when: false,
+      falseCase: () => false,
     })
   }
 }

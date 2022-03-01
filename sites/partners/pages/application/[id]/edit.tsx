@@ -34,6 +34,7 @@ const NewApplication = () => {
               </p>
             </>
           }
+          className={"md:pt-16"}
         />
 
         <PaperApplicationForm

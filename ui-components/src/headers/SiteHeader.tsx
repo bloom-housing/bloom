@@ -444,7 +444,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </div>
 
       <nav className="navbar-container" role="navigation" aria-label="main navigation">
-        <div className="navbar">
+        <div className="navbar m-h-24 h-24">
           {getLogo()}
           <div className="navbar-menu">{isDesktop ? getDesktopHeader() : getMobileHeader()}</div>
         </div>
