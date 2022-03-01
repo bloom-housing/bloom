@@ -15,7 +15,7 @@ import Joi from "joi"
         REDIS_TLS_URL: Joi.string().required(),
         REDIS_USE_TLS: Joi.number().required(),
         THROTTLE_TTL: Joi.number().default(1),
-        THROTTLE_LIMIT: Joi.number().default(9999999999999999),
+        THROTTLE_LIMIT: Joi.number().default(100),
         APP_SECRET: Joi.string().required().min(16),
         CLOUDINARY_SECRET: Joi.string().required(),
         CLOUDINARY_KEY: Joi.string().required(),
