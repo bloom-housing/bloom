@@ -10,14 +10,18 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { useContext, useEffect } from "react"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationHouseholdChanges = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("householdChanges")
   const currentPageSection = 2
 
@@ -52,6 +56,14 @@ const ApplicationHouseholdChanges = () => {
       label: t("t.no"),
     },
   ]
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Expecting Household Changes",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

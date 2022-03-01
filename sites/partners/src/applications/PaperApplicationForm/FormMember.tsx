@@ -233,6 +233,7 @@ const FormMember = ({ onSubmit, onClose, members, editedMemberId }: ApplicationF
           type="button"
           onClick={() => onFormSubmit()}
           styleType={AppearanceStyleType.primary}
+          dataTestId={"submitAddMemberForm"}
         >
           {t("t.submit")}
         </Button>

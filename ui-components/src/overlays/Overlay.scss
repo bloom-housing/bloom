@@ -48,3 +48,11 @@
 
   @include transition-timing;
 }
+
+.fixed-overlay__inner-slim {
+  width: 75vw;
+
+  @screen md {
+    width: 50vw;
+  }
+}

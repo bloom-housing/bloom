@@ -2,6 +2,7 @@
 5.3 Terms
 View of application terms with checkbox
 */
+import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import {
   AppearanceStyleType,
@@ -14,12 +15,12 @@ import {
   AlertBox,
   ProgressNav,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
-import React, { useContext, useState } from "react"
 import Markdown from "markdown-to-jsx"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationTerms = () => {
   const router = useRouter()
@@ -74,6 +75,14 @@ const ApplicationTerms = () => {
       label: t("application.review.terms.confirmCheckboxText"),
     },
   ]
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Terms",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

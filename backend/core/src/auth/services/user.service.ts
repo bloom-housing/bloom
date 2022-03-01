@@ -38,8 +38,15 @@ import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
+import { RequestMfaCodeDto } from "../dto/request-mfa-code.dto"
+import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
+import { MfaType } from "../types/mfa-type"
+import { SmsMfaService } from "./sms-mfa.service"
+import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
+import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
+
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
@@ -52,7 +59,8 @@ export class UserService {
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
-    private readonly jurisdictionResolverService: JurisdictionResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService,
+    private readonly smsMfaService: SmsMfaService
   ) {}
 
   public async findByEmail(email: string) {
@@ -279,21 +287,27 @@ export class UserService {
       })
     }
     const existingUser = await this.findByEmail(dto.email)
+
     if (existingUser) {
-      throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      if (!existingUser.roles && dto.roles) {
+        // existing user && public user && user will get roles -> trying to grant partner access to a public user
+        return await this.userRepository.save({
+          ...existingUser,
+          roles: dto.roles,
+          leasingAgentInListings: dto.leasingAgentInListings,
+          confirmationToken:
+            existingUser.confirmationToken ||
+            UserService.createConfirmationToken(existingUser.id, existingUser.email),
+          confirmedAt: null,
+        })
+      } else {
+        // existing user && ((partner user -> trying to recreate user) || (public user -> trying to recreate a public user))
+        throw new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      }
     }
-
-    try {
-      let newUser = await this.userRepository.save(dto)
-
-      newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
-      newUser = await this.userRepository.save(newUser)
-
-      return newUser
-    } catch (err) {
-      console.error(err)
-      throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
-    }
+    const newUser = await this.userRepository.save(dto)
+    newUser.confirmationToken = UserService.createConfirmationToken(newUser.id, newUser.email)
+    return await this.userRepository.save(newUser)
   }
 
   public async createPublicUser(
@@ -308,6 +322,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        mfaEnabled: false,
       },
       authContext
     )
@@ -375,6 +390,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
+        mfaEnabled: true,
       },
       authContext
     )
@@ -393,5 +409,94 @@ export class UserService {
       throw new NotFoundException()
     }
     await this.userRepository.remove(user)
+  }
+
+  generateMfaCode() {
+    let out = ""
+    const characters = "0123456789"
+    for (let i = 0; i < this.configService.get<number>("MFA_CODE_LENGTH"); i++) {
+      out += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+    return out
+  }
+
+  private static hasUsedMfaInThePast(user: User): boolean {
+    return !!user.mfaCodeUpdatedAt
+  }
+
+  async getMfaInfo(getMfaInfoDto: GetMfaInfoDto): Promise<GetMfaInfoResponseDto> {
+    const user = await this.userRepository.findOne({
+      where: { email: getMfaInfoDto.email.toLowerCase() },
+    })
+    if (!user) {
+      throw new UnauthorizedException()
+    }
+
+    const validPassword = await this.passwordService.isPasswordValid(user, getMfaInfoDto.password)
+    if (!validPassword) {
+      throw new UnauthorizedException()
+    }
+
+    return {
+      email: user.email,
+      phoneNumber: user.phoneNumber ?? undefined,
+      isMfaEnabled: user.mfaEnabled,
+      mfaUsedInThePast: UserService.hasUsedMfaInThePast(user),
+    }
+  }
+
+  async requestMfaCode(requestMfaCodeDto: RequestMfaCodeDto): Promise<RequestMfaCodeResponseDto> {
+    let user = await this.userRepository.findOne({
+      where: { email: requestMfaCodeDto.email.toLowerCase() },
+    })
+
+    if (!user || !user.mfaEnabled) {
+      throw new UnauthorizedException()
+    }
+
+    const validPassword = await this.passwordService.isPasswordValid(
+      user,
+      requestMfaCodeDto.password
+    )
+    if (!validPassword) {
+      throw new UnauthorizedException()
+    }
+
+    if (requestMfaCodeDto.mfaType === MfaType.sms) {
+      if (requestMfaCodeDto.phoneNumber) {
+        if (user.phoneNumberVerified) {
+          throw new UnauthorizedException(
+            "phone number can only be specified the first time using mfa"
+          )
+        }
+        user.phoneNumber = requestMfaCodeDto.phoneNumber
+      } else if (!requestMfaCodeDto.phoneNumber && !user.phoneNumber) {
+        throw new HttpException(
+          { name: "phoneNumberMissing", message: "no valid phone number was found" },
+          400
+        )
+      }
+    }
+    const mfaCode = this.generateMfaCode()
+    user.mfaCode = mfaCode
+    user.mfaCodeUpdatedAt = new Date()
+
+    user = await this.userRepository.manager.transaction(async (entityManager) => {
+      const transactionalRepository = entityManager.getRepository(User)
+      await transactionalRepository.save(user)
+      if (requestMfaCodeDto.mfaType === MfaType.email) {
+        await this.emailService.sendMfaCode(user, user.email, mfaCode)
+      } else if (requestMfaCodeDto.mfaType === MfaType.sms) {
+        await this.smsMfaService.sendMfaCode(user, user.phoneNumber, mfaCode)
+      }
+      return user
+    })
+
+    return requestMfaCodeDto.mfaType === MfaType.email
+      ? { email: user.email, phoneNumberVerified: user.phoneNumberVerified }
+      : {
+          phoneNumber: user.phoneNumber,
+          phoneNumberVerified: user.phoneNumberVerified,
+        }
   }
 }

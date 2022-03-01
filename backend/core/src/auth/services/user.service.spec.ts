@@ -12,6 +12,8 @@ import { ConfigService } from "@nestjs/config"
 import { UserCreateDto } from "../dto/user-create.dto"
 import { Application } from "../../applications/entities/application.entity"
 import { EmailService } from "../../email/email.service"
+import { SmsMfaService } from "./sms-mfa.service"
+import { UserInviteDto } from "../dto/user-invite.dto"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -41,7 +43,7 @@ describe("UserService", () => {
         },
         {
           provide: EmailService,
-          useValue: { forgotPassword: jest.fn() },
+          useValue: { forgotPassword: jest.fn(), invite: jest.fn() },
         },
         {
           provide: AuthService,
@@ -54,6 +56,7 @@ describe("UserService", () => {
           },
         },
         AuthzService,
+        { provide: SmsMfaService, useValue: { sendMfaCode: jest.fn() } },
         PasswordService,
         {
           provide: ConfigService,
@@ -102,9 +105,135 @@ describe("UserService", () => {
         dob: new Date(),
       }
       mockUserRepo.findOne = jest.fn().mockResolvedValue(null)
-      mockUserRepo.save = jest.fn().mockRejectedValue(new Error("failed to save"))
+      mockUserRepo.save = jest.fn().mockRejectedValue(new Error(USER_ERRORS.ERROR_SAVING.message))
       await expect(service.createPublicUser(user, null, null)).rejects.toThrow(
         new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      )
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
+
+    it("should return EMAIL_IN_USE if attempting to resave existing public user", async () => {
+      const user: UserCreateDto = {
+        email: "new@email.com",
+        emailConfirmation: "new@email.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      mockUserRepo.findOne = jest.fn().mockResolvedValue({ ...user, confirmedAt: new Date() })
+      await expect(service._createUser(user, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      )
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
+
+    it("should return EMAIL_IN_USE if attempting to create public user from existing partner user", async () => {
+      const existingUser: User = {
+        id: "mock id",
+        email: "new@email.com",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+        confirmedAt: new Date(),
+        passwordHash: "",
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 0,
+        resetToken: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        jurisdictions: [],
+      }
+      existingUser.roles = { user: existingUser }
+
+      const user: UserCreateDto = {
+        email: "new@email.com",
+        emailConfirmation: "new@email.com",
+        password: "qwerty",
+        passwordConfirmation: "qwerty",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+      }
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(existingUser)
+      await expect(service._createUser(user, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
+      )
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
+
+    it("should save successfully if attempting to create partner user from public user", async () => {
+      const existingUser: User = {
+        id: "mock id",
+        email: "new@email.com",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+        confirmedAt: new Date(),
+        passwordHash: "",
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 0,
+        resetToken: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        jurisdictions: [],
+      }
+
+      const user: UserInviteDto = {
+        email: "new@email.com",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+        roles: { isPartner: true },
+        jurisdictions: [],
+      }
+
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(existingUser)
+      mockUserRepo.save = jest.fn().mockResolvedValue(user)
+      const savedUser = await service.invitePartnersPortalUser(user, null)
+      expect(savedUser).toBe(user)
+
+      // Reset mockUserRepo.save
+      mockUserRepo.save = jest.fn()
+    })
+
+    it("should return EMAIL_IN_USE if attempting to recreate existing partner user", async () => {
+      const existingUser: User = {
+        id: "mock id",
+        email: "new@email.com",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+        confirmedAt: new Date(),
+        passwordHash: "",
+        passwordUpdatedAt: new Date(),
+        passwordValidForDays: 0,
+        resetToken: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        jurisdictions: [],
+      }
+      existingUser.roles = { user: existingUser }
+
+      const user: UserInviteDto = {
+        email: "new@email.com",
+        firstName: "First",
+        lastName: "Last",
+        dob: new Date(),
+        roles: { isPartner: true },
+        jurisdictions: [],
+      }
+
+      mockUserRepo.findOne = jest.fn().mockResolvedValue(existingUser)
+      await expect(service._createUser(user, null)).rejects.toThrow(
+        new HttpException(USER_ERRORS.EMAIL_IN_USE.message, USER_ERRORS.EMAIL_IN_USE.status)
       )
 
       // Reset mockUserRepo.save

@@ -27,12 +27,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   let icon
 
   if (withIcon) {
-    icon = (
-      <span>
-        <Icon size="medium" symbol={iconType} fill={vivid ? IconFillColors.white : undefined} />{" "}
-        &nbsp;
-      </span>
-    )
+    icon = <Icon size="medium" symbol={iconType} fill={vivid ? IconFillColors.white : undefined} />
   }
 
   switch (status) {
@@ -57,13 +52,15 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   return (
     <div className={`application-status ${textSize} ${textColor} ${bgColor}`}>
       {icon}
-      {content}
-      {props.subContent && (
-        <>
-          <br />
-          <span className={"application-status__sub-content"}>{props.subContent}</span>
-        </>
-      )}
+      <span>
+        {content}
+        {props.subContent && (
+          <>
+            <br />
+            {props.subContent}
+          </>
+        )}
+      </span>
     </div>
   )
 }

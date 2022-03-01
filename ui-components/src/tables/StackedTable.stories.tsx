@@ -31,6 +31,11 @@ const basicTableRows = [
     two: { cellText: "Cell 2" },
     three: { cellText: "Cell 3" },
   },
+  {
+    one: { cellText: "Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1" },
+    two: { cellText: "Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2" },
+    three: { cellText: "Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3" },
+  },
 ]
 
 const basicTableRowsHiddenDesktop = [
@@ -46,6 +51,24 @@ const basicTableRowsHiddenDesktop = [
     three: { cellText: "Cell 3", cellSubText: "Subtext 3" },
     four: { cellText: "Cell 4", cellSubText: "Subtext 4" },
   },
+  {
+    one: {
+      cellText: "Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1",
+      cellSubText: "Subtext 1 Subtext 1 Subtext 1 Subtext 1 Subtext 1 Subtext 1",
+    },
+    two: {
+      cellText: "Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2",
+      cellSubText: "Subtext 2 Subtext 2 Subtext 2 Subtext 2 Subtext 2 Subtext 2",
+    },
+    three: {
+      cellText: "Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3",
+      cellSubText: "Subtext 3 Subtext 3 Subtext 3 Subtext 3 Subtext 3 Subtext 3",
+    },
+    four: {
+      cellText: "Cell 4 Cell 4 Cell 4 Cell 4 Cell 4 Cell 4 Cell 4",
+      cellSubText: "Subtext 4 Subtext 4 Subtext 4 Subtext 4 Subtext 4 Subtext 4 Subtext 4",
+    },
+  },
 ]
 
 const basicTableRowsSubtext = [
@@ -58,6 +81,20 @@ const basicTableRowsSubtext = [
     one: { cellText: "Cell 1", cellSubText: "Subtext 1" },
     two: { cellText: "Cell 2", cellSubText: "Subtext 2" },
     three: { cellText: "Cell 3", cellSubText: "Subtext 3" },
+  },
+  {
+    one: {
+      cellText: "Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1 Cell 1",
+      cellSubText: "Subtext 1 Subtext 1 Subtext 1 Subtext 1 Subtext 1 Subtext 1",
+    },
+    two: {
+      cellText: "Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2 Cell 2",
+      cellSubText: "Subtext 2 Subtext 2 Subtext 2 Subtext 2 Subtext 2 Subtext 2",
+    },
+    three: {
+      cellText: "Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3 Cell 3",
+      cellSubText: "Subtext 3 Subtext 3 Subtext 3 Subtext 3 Subtext 3 Subtext 3",
+    },
   },
 ]
 

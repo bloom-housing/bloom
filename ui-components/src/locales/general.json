@@ -16,12 +16,15 @@
       "return": "Return to applications"
     },
     "settings": {
+      "resetYourPassword": "Reset your Password",
+      "needUpdatePassword": "You'll need to update your password in order to log in to your account.",
       "passwordSuccess": "Password successfully updated",
       "update": "Update",
       "passwordRemember": "When changing your password make sure you make note of it so you remember it in the future.",
       "currentPassword": "Current password",
       "newPassword": "New password",
       "confirmNewPassword": "Confirm new password",
+      "updatePassword": "Update password",
       "alerts": {
         "genericError": "There was an error. Please try again, or contact support for help.",
         "nameSuccess": "Name update successful",
@@ -292,7 +295,7 @@
       },
       "expectingChanges": {
         "title": "Expecting Household Changes",
-        "question": "Do you anticipate any changes in your household in the next 12 months?"
+        "question": "Do you anticipate any changes in your household in the next 12 months, such as the number of people?"
       },
       "householdStudent": {
         "title":  "Household Includes Student or Member Nearing 18",
@@ -964,11 +967,13 @@
       "accountHasBeenLocked": "For security reasons, this account has been locked.",
       "youHaveToWait": "You’ll have to wait 30 minutes since the last failed attempt before trying again.",
       "enterValidEmailAndPassword": "Please enter a valid email and password.",
+      "enterValidEmailAndPasswordAndMFA": "Please enter a valid code.",
       "afterFailedAttempts": "For security reasons, after 5 failed attempts, you’ll have to wait 30 minutes before trying again.",
       "partnersSignIn": "Partners Sign In",
       "dontHaveAccount": "Don't have an account",
       "enterLoginPassword": "Please enter your login password",
-      "enterLoginEmail": "Please enter your login email"
+      "enterLoginEmail": "Please enter your login email",
+      "changeYourPassword": "You can change your password"
     },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
@@ -1017,7 +1022,8 @@
   "errors": {
     "alert": {
       "badRequest": "Looks like something went wrong. Please try again. \n\nContact your housing department if you're still experiencing issues.",
-      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again."
+      "timeoutPleaseTryAgain": "Oops! Looks like something went wrong. Please try again.",
+      "emailConflict": "That email is already in use"
     },
     "notFound": {
       "title": "Page Not Found",
@@ -1052,7 +1058,10 @@
     "dateError": "Please enter a valid date",
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
     "requiredFieldError": "This field is required",
-    "requiredFieldsError": "These fields are required"
+    "requiredFieldsError": "These fields are required",
+    "enterNewLoginPassword": "Please enter new login password",
+    "passwordConfirmationMismatch": "Password confirmation does not match",
+    "somethingWentWrong": "Oops! Looks like something went wrong."
   },
   "footer": {
     "contact": "Contact",
@@ -1487,7 +1496,28 @@
     "siteTitlePartners": "Partners Portal",
     "skip": "Skip to main content",
     "flags": "Flags",
-    "users": "Users"
+    "users": "Users",
+    "signInMFA": {
+      "verificationChoiceMainTitle": "How would you like us to verify that it's you?",
+      "verificationChoiceSecondaryTitle": "We can send a code to your email or phone number",
+      "verifyByEmail": "verify with Email",
+      "verifyByPhone": "verify with phone number",
+      "addNumberMainTitle": "Add a phone number",
+      "addNumberSecondaryTitle": "Enter your phone number and we'll send you a code that you can use to sign in.",
+      "numberFieldLabel": "your phone number",
+      "addNumber": "Add a phone number",
+      "signIn": "verify and sign in",
+      "addPhoneNumber": "your phone number",
+      "noMFAType":"please select MFA Type",
+      "phoneNumber": "Phone Number",
+      "code": "Code",
+      "noMFACode": "please enter your code",
+      "verifyTitle": "Verify that it's you",
+      "haveSentCodeToPhone": "We sent a code to your phone. Please enter the number below.",
+      "haveSentCodeToEmail": "We sent a code to your email. Please enter the number below.",
+      "sentTo": "Code sent to: %{phoneNumber}",
+      "editPhoneNumber": "Edit phone number"
+    }
   },
   "pageTitle": {
     "additionalResources": "More Housing Opportunities",
@@ -1502,6 +1532,7 @@
     "welcomeVietnamese": "Tiếng Việt"
   },
   "pageDescription": {
+    "additionalResources": "We encourage you to browse other affordable housing resources.",
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
     "listing": "Apply for affordable housing at %{listingName} in %{regionName}, built in partnership with Exygy."
   },
@@ -1606,6 +1637,7 @@
     "floor": "floor",
     "floors": "floors",
     "getDirections": "Get Directions",
+    "here": "here",
     "homePage": "Home page",
     "hour": "Hour",
     "household": "Household",

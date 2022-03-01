@@ -15,9 +15,10 @@ import {
   FieldGroup,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
@@ -27,6 +28,8 @@ import {
   stateKeys,
   blankApplication,
   OnClientSide,
+  PageView,
+  pushGtmEvent,
 } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
@@ -35,8 +38,10 @@ import {
   findValidatedAddress,
   AddressValidationSelection,
 } from "../../../src/forms/applications/ValidateAddress"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAddress = () => {
+  const { profile } = useContext(AuthContext)
   const [verifyAddress, setVerifyAddress] = useState(false)
   const [foundAddress, setFoundAddress] = useState<FoundAddress>({})
   const [newAddressSelected, setNewAddressSelected] = useState(true)
@@ -114,6 +119,14 @@ const ApplicationAddress = () => {
     label: t(`t.${item.id}`),
     defaultChecked: application?.contactPreferences?.includes(item.id) || false,
   }))
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Contact Address",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useMemo } from "react"
 import "mapbox-gl/dist/mapbox-gl.css"
 import MapGL, { Marker } from "react-map-gl"
 
 import "./ListingMap.scss"
 import { MultiLineAddress, Address } from "../../helpers/address"
+import { useIntersect } from "../../.."
 
 export interface ListingMapProps {
   address?: Address
@@ -35,6 +36,15 @@ const isValidLongitude = (longitude: number) => {
 }
 
 const ListingMap = (props: ListingMapProps) => {
+  // Lazy load the map component only when it will become visible on screen
+  const { setIntersectingElement, intersecting } = useIntersect({
+    // `window` isn't set for SSR, so we'll use `global` instead—doesn't really
+    // matter because the map won't ever get rendered in SSR anyway
+    rootMargin: `${global.innerHeight || 0}px`,
+  })
+  const [hasIntersected, setHasIntersected] = useState(false)
+  if (intersecting && !hasIntersected) setHasIntersected(true)
+
   const [marker, setMarker] = useState({
     latitude: props.address?.latitude,
     longitude: props.address?.longitude,
@@ -95,12 +105,12 @@ const ListingMap = (props: ListingMapProps) => {
     return null
 
   return (
-    <div className="listing-map">
+    <div className="listing-map" ref={setIntersectingElement}>
       <div className="addressPopup">
         {props.listingName && <h3 className="text-caps-tiny">{props.listingName}</h3>}
         <MultiLineAddress address={props.address} />
       </div>
-      {(process.env.mapBoxToken || process.env.MAPBOX_TOKEN) && (
+      {(process.env.mapBoxToken || process.env.MAPBOX_TOKEN) && hasIntersected && (
         <MapGL
           mapboxApiAccessToken={process.env.mapBoxToken || process.env.MAPBOX_TOKEN}
           mapStyle="mapbox://styles/mapbox/streets-v11"

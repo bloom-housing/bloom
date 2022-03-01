@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.44...@bloom-housing/backend-core@3.0.2-alpha.45) (2022-02-28)
+
+
+### Features
+
+* updates to mfa styling ([#2532](https://github.com/bloom-housing/bloom/issues/2532)) ([7654efc](https://github.com/bloom-housing/bloom/commit/7654efc8a7c5cba0f7436fda62b886f646fe8a03))
+
+
+
+
+
 ## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.0.2...@bloom-housing/backend-core@4.0.3) (2022-02-25)
 
 
@@ -10,12 +21,130 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * csv export auth check ([#2488](https://github.com/seanmalbert/bloom/issues/2488)) ([6faf8f5](https://github.com/seanmalbert/bloom/commit/6faf8f59b115adf73e70d56c855ba5b6d325d22a))
 
-
 ### Features
 
 * Add San Jose email translations ([#2519](https://github.com/seanmalbert/bloom/issues/2519)) ([d1db032](https://github.com/seanmalbert/bloom/commit/d1db032672f40d325eba9e4a833d24f8b02464cc))
 * **backend:** fix translations table relation to jurisdiction ([#2506](https://github.com/seanmalbert/bloom/issues/2506)) ([22b9f23](https://github.com/seanmalbert/bloom/commit/22b9f23eb405f701796193515dff35058cc4f7dc))
 
+
+
+
+
+## [3.0.2-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.43...@bloom-housing/backend-core@3.0.2-alpha.44) (2022-02-22)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.42...@bloom-housing/backend-core@3.0.2-alpha.43) (2022-02-17)
+
+
+### Features
+
+* adds NULLS LAST to mostRecentlyClosed ([#2521](https://github.com/bloom-housing/bloom/issues/2521)) ([39737a3](https://github.com/bloom-housing/bloom/commit/39737a3207e22815d184fc19cb2eaf6b6390dda8))
+
+
+
+
+
+## [3.0.2-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.41...@bloom-housing/backend-core@3.0.2-alpha.42) (2022-02-17)
+
+
+### Features
+
+* **backend:** add listing order by mostRecentlyClosed param ([#2478](https://github.com/bloom-housing/bloom/issues/2478)) ([0f177c1](https://github.com/bloom-housing/bloom/commit/0f177c1847ac254f63837b0aca7fa8a705e3632c))
+
+
+
+
+
+## [3.0.2-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.40...@bloom-housing/backend-core@3.0.2-alpha.41) (2022-02-16)
+
+
+### Features
+
+* **backend:** fix translations table relation to jurisdiction (make … ([#2506](https://github.com/bloom-housing/bloom/issues/2506)) ([8e1e3a9](https://github.com/bloom-housing/bloom/commit/8e1e3a9eb0ff76412831e122390ac25ad7754645))
+
+
+
+
+
+## [3.0.2-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.39...@bloom-housing/backend-core@3.0.2-alpha.40) (2022-02-16)
+
+
+### Bug Fixes
+
+* checks for existance of image_id ([#2505](https://github.com/bloom-housing/bloom/issues/2505)) ([d2051af](https://github.com/bloom-housing/bloom/commit/d2051afa188ce62c42f3d6bf737fd2059f9b7599))
+
+
+
+
+
+## [3.0.2-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.38...@bloom-housing/backend-core@3.0.2-alpha.39) (2022-02-15)
+
+
+### Features
+
+* **backend:** make listing image an array ([#2477](https://github.com/bloom-housing/bloom/issues/2477)) ([cab9800](https://github.com/bloom-housing/bloom/commit/cab98003e640c880be2218fa42321eadeec35e9c))
+
+
+
+
+
+## [3.0.2-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.37...@bloom-housing/backend-core@3.0.2-alpha.38) (2022-02-15)
+
+
+### Code Refactoring
+
+* remove backend dependencies from events components, consolidate ([#2495](https://github.com/bloom-housing/bloom/issues/2495)) ([d884689](https://github.com/bloom-housing/bloom/commit/d88468965bc67c74b8b3eaced20c77472e90331f))
+
+
+### BREAKING CHANGES
+
+* consolidated all event section components in one new component, uptake will require removing the deprecated components and uptaking EventSection
+
+
+
+
+
+## [3.0.2-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.36...@bloom-housing/backend-core@3.0.2-alpha.37) (2022-02-15)
+
+
+### Bug Fixes
+
+* **backend:** mfa_enabled migration fix ([#2503](https://github.com/bloom-housing/bloom/issues/2503)) ([a5b9a60](https://github.com/bloom-housing/bloom/commit/a5b9a604faccef55775dbbc54441251e29999fa4))
+
+
+
+
+
+## [3.0.2-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.35...@bloom-housing/backend-core@3.0.2-alpha.36) (2022-02-15)
+
+
+### Features
+
+* **backend:** add partners portal users multi factor authentication ([#2291](https://github.com/bloom-housing/bloom/issues/2291)) ([5b10098](https://github.com/bloom-housing/bloom/commit/5b10098d8668f9f42c60e90236db16d6cc517793)), closes [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485)
+
+
+
+
+
+## [3.0.2-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.34...@bloom-housing/backend-core@3.0.2-alpha.35) (2022-02-10)
+
+
+### Bug Fixes
+
+* csv export auth check ([#2488](https://github.com/bloom-housing/bloom/issues/2488)) ([2471d4a](https://github.com/bloom-housing/bloom/commit/2471d4afdd747843f58c0c154d6e94a9c76d733d))
+
+
+
+
+
+## [3.0.2-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.33...@bloom-housing/backend-core@3.0.2-alpha.34) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
 
 
 
@@ -31,8 +160,47 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@4.0.1) (2022-02-03)
+## [3.0.2-alpha.33](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.32...@bloom-housing/backend-core@3.0.2-alpha.33) (2022-02-09)
 
+
+### Features
+
+* **backend:** remove assigning partner user as an application owner ([#2476](https://github.com/bloom-housing/bloom/issues/2476)) ([4f6edf7](https://github.com/bloom-housing/bloom/commit/4f6edf7ed882ae926e363e4db4e40e6f19ed4746))
+
+
+
+
+
+## [3.0.2-alpha.32](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.31...@bloom-housing/backend-core@3.0.2-alpha.32) (2022-02-09)
+
+
+### Bug Fixes
+
+* updates partner check for listing perm ([#2484](https://github.com/bloom-housing/bloom/issues/2484)) ([9b0a6f5](https://github.com/bloom-housing/bloom/commit/9b0a6f560ec5dd95f846b330afb71eed40cbfa1b))
+
+
+
+
+
+## [3.0.2-alpha.31](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.30...@bloom-housing/backend-core@3.0.2-alpha.31) (2022-02-09)
+
+
+### Bug Fixes
+
+* cannot remove some fields in listings management ([#2455](https://github.com/bloom-housing/bloom/issues/2455)) ([acd9b51](https://github.com/bloom-housing/bloom/commit/acd9b51bb49581b4728b445d56c5c0a3c43e2777))
+
+
+
+
+
+## [3.0.2-alpha.30](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.29...@bloom-housing/backend-core@3.0.2-alpha.30) (2022-02-07)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.1-alpha.23...@bloom-housing/backend-core@4.0.1) (2022-02-03)
 
 ### Bug Fixes
 
@@ -50,7 +218,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * 2022-01-27 release (#2439) ([860f6af](https://github.com/seanmalbert/bloom/commit/860f6af6204903e4dcddf671d7ba54f3ec04f121)), closes [#2439](https://github.com/seanmalbert/bloom/issues/2439) [#2196](https://github.com/seanmalbert/bloom/issues/2196) [#2238](https://github.com/seanmalbert/bloom/issues/2238) [#2226](https://github.com/seanmalbert/bloom/issues/2226) [#2230](https://github.com/seanmalbert/bloom/issues/2230) [#2243](https://github.com/seanmalbert/bloom/issues/2243) [#2195](https://github.com/seanmalbert/bloom/issues/2195) [#2215](https://github.com/seanmalbert/bloom/issues/2215) [#2266](https://github.com/seanmalbert/bloom/issues/2266) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2270](https://github.com/seanmalbert/bloom/issues/2270) [#2188](https://github.com/seanmalbert/bloom/issues/2188) [#2213](https://github.com/seanmalbert/bloom/issues/2213) [#2234](https://github.com/seanmalbert/bloom/issues/2234) [#1901](https://github.com/seanmalbert/bloom/issues/1901) [#2260](https://github.com/seanmalbert/bloom/issues/2260) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2280](https://github.com/seanmalbert/bloom/issues/2280) [#2253](https://github.com/seanmalbert/bloom/issues/2253) [#2276](https://github.com/seanmalbert/bloom/issues/2276) [#2282](https://github.com/seanmalbert/bloom/issues/2282) [#2262](https://github.com/seanmalbert/bloom/issues/2262) [#2278](https://github.com/seanmalbert/bloom/issues/2278) [#2293](https://github.com/seanmalbert/bloom/issues/2293) [#2295](https://github.com/seanmalbert/bloom/issues/2295) [#2296](https://github.com/seanmalbert/bloom/issues/2296) [#2294](https://github.com/seanmalbert/bloom/issues/2294) [#2277](https://github.com/seanmalbert/bloom/issues/2277) [#2290](https://github.com/seanmalbert/bloom/issues/2290) [#2299](https://github.com/seanmalbert/bloom/issues/2299) [#2292](https://github.com/seanmalbert/bloom/issues/2292) [#2303](https://github.com/seanmalbert/bloom/issues/2303) [#2305](https://github.com/seanmalbert/bloom/issues/2305) [#2306](https://github.com/seanmalbert/bloom/issues/2306) [#2308](https://github.com/seanmalbert/bloom/issues/2308) [#2190](https://github.com/seanmalbert/bloom/issues/2190) [#2239](https://github.com/seanmalbert/bloom/issues/2239) [#2311](https://github.com/seanmalbert/bloom/issues/2311) [#2302](https://github.com/seanmalbert/bloom/issues/2302) [#2301](https://github.com/seanmalbert/bloom/issues/2301) [#1927](https://github.com/seanmalbert/bloom/issues/1927) [#2313](https://github.com/seanmalbert/bloom/issues/2313) [#2289](https://github.com/seanmalbert/bloom/issues/2289) [#2279](https://github.com/seanmalbert/bloom/issues/2279) [#2288](https://github.com/seanmalbert/bloom/issues/2288) [#2317](https://github.com/seanmalbert/bloom/issues/2317) [#2319](https://github.com/seanmalbert/bloom/issues/2319) [#2108](https://github.com/seanmalbert/bloom/issues/2108) [#2326](https://github.com/seanmalbert/bloom/issues/2326) [#2349](https://github.com/seanmalbert/bloom/issues/2349) [#2350](https://github.com/seanmalbert/bloom/issues/2350) [#2351](https://github.com/seanmalbert/bloom/issues/2351) [#2348](https://github.com/seanmalbert/bloom/issues/2348) [#2352](https://github.com/seanmalbert/bloom/issues/2352) [#2316](https://github.com/seanmalbert/bloom/issues/2316) [#2356](https://github.com/seanmalbert/bloom/issues/2356) [#2353](https://github.com/seanmalbert/bloom/issues/2353) [#2338](https://github.com/seanmalbert/bloom/issues/2338) [#2377](https://github.com/seanmalbert/bloom/issues/2377) [#2320](https://github.com/seanmalbert/bloom/issues/2320) [#2386](https://github.com/seanmalbert/bloom/issues/2386) [#2362](https://github.com/seanmalbert/bloom/issues/2362) [#2395](https://github.com/seanmalbert/bloom/issues/2395) [#2410](https://github.com/seanmalbert/bloom/issues/2410) [#2407](https://github.com/seanmalbert/bloom/issues/2407) [#2430](https://github.com/seanmalbert/bloom/issues/2430) [#2418](https://github.com/seanmalbert/bloom/issues/2418) [#2434](https://github.com/seanmalbert/bloom/issues/2434) [#2374](https://github.com/seanmalbert/bloom/issues/2374) [#2435](https://github.com/seanmalbert/bloom/issues/2435) [#2420](https://github.com/seanmalbert/bloom/issues/2420) [#2412](https://github.com/seanmalbert/bloom/issues/2412) [#2434](https://github.com/seanmalbert/bloom/issues/2434)
 * Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
-
 
 ### Features
 
@@ -75,7 +242,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
 * Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
-
 
 ### BREAKING CHANGES
 
@@ -130,7 +296,132 @@ picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
 
 
 
+## [3.0.2-alpha.29](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.28...@bloom-housing/backend-core@3.0.2-alpha.29) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
+## [3.0.2-alpha.28](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.27...@bloom-housing/backend-core@3.0.2-alpha.28) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.27](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.26...@bloom-housing/backend-core@3.0.2-alpha.27) (2022-02-02)
+
+
+### Bug Fixes
+
+* **backend:** translations input validator ([#2466](https://github.com/bloom-housing/bloom/issues/2466)) ([603c3dc](https://github.com/bloom-housing/bloom/commit/603c3dc52a400db815c4d81552a5aa74f397fe0f))
+
+
+
+
+
+## [3.0.2-alpha.26](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.25...@bloom-housing/backend-core@3.0.2-alpha.26) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.24...@bloom-housing/backend-core@3.0.2-alpha.25) (2022-02-01)
+
+
+### Bug Fixes
+
+* date validation issue ([#2464](https://github.com/bloom-housing/bloom/issues/2464)) ([158f7bf](https://github.com/bloom-housing/bloom/commit/158f7bf7fdc59954aebfebbd1ad3741239ed1a35))
+
+
+
+
+
+## [3.0.2-alpha.24](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.23...@bloom-housing/backend-core@3.0.2-alpha.24) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.23](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.22...@bloom-housing/backend-core@3.0.2-alpha.23) (2022-02-01)
+
+
+### Bug Fixes
+
+* await casbin enforcer ([4feacec](https://github.com/bloom-housing/bloom/commit/4feacec44635135bc5469c0edd02a3424a2697cc))
+
+
+
+
+
+## [3.0.2-alpha.22](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.21...@bloom-housing/backend-core@3.0.2-alpha.22) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.21](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.20...@bloom-housing/backend-core@3.0.2-alpha.21) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.20](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.19...@bloom-housing/backend-core@3.0.2-alpha.20) (2022-02-01)
+
+
+### Features
+
+* **backend:** add publishedAt and closedAt to listing entity ([#2432](https://github.com/bloom-housing/bloom/issues/2432)) ([f3b0f86](https://github.com/bloom-housing/bloom/commit/f3b0f864a6d5d2ad3d886e828743454c3e8fca71))
+
+
+
+
+
+## [3.0.2-alpha.19](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.18...@bloom-housing/backend-core@3.0.2-alpha.19) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.18](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.17...@bloom-housing/backend-core@3.0.2-alpha.18) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2-alpha.17](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.16...@bloom-housing/backend-core@3.0.2-alpha.17) (2022-01-27)
+
+
+### Features
+
+* outdated password messaging updates ([b14e19d](https://github.com/bloom-housing/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
+
+
+
+
+
 ## [3.0.2-alpha.16](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.15...@bloom-housing/backend-core@3.0.2-alpha.16) (2022-01-24)
+
+
+### Bug Fixes
 
 * ami charts without all households ([#2430](https://github.com/bloom-housing/bloom/issues/2430)) ([92dfbad](https://github.com/bloom-housing/bloom/commit/92dfbad32c90d84ee1ec3a3468c084cb110aa8be))
 
@@ -144,34 +435,6 @@ picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
 ### Bug Fixes
 
 * patches translations for preferences ([#2410](https://github.com/bloom-housing/bloom/issues/2410)) ([7906e6b](https://github.com/bloom-housing/bloom/commit/7906e6bc035fab4deea79ea51833a0ef29926d45))
-
-
-
-
-
-## [3.0.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.13...@bloom-housing/backend-core@3.0.2-alpha.14) (2022-01-13)
-
-
-### Bug Fixes
-
-* partners render issue ([#2395](https://github.com/bloom-housing/bloom/issues/2395)) ([7fb108d](https://github.com/bloom-housing/bloom/commit/7fb108d744fcafd6b9df42706d2a2f58fbc30f0a))
-
-
-
-
-
-## [3.0.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.12...@bloom-housing/backend-core@3.0.2-alpha.13) (2022-01-13)
-
-
-### Bug Fixes
-
-* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
-
-### Breaking Changes
-
-* remove applicationDueTime field and consolidated into applicationDueDate
-
-
 
 
 
@@ -190,7 +453,6 @@ picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
 
 
 * Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
-
 
 ### Features
 
@@ -252,6 +514,33 @@ picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
 * fix: fix lisitng e2e tests
 
 * fix: fix member tests
+
+
+
+
+
+## [3.0.2-alpha.14](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.13...@bloom-housing/backend-core@3.0.2-alpha.14) (2022-01-13)
+
+
+### Bug Fixes
+
+* partners render issue ([#2395](https://github.com/bloom-housing/bloom/issues/2395)) ([7fb108d](https://github.com/bloom-housing/bloom/commit/7fb108d744fcafd6b9df42706d2a2f58fbc30f0a))
+
+
+
+
+
+## [3.0.2-alpha.13](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.12...@bloom-housing/backend-core@3.0.2-alpha.13) (2022-01-13)
+
+
+### Bug Fixes
+
+* dates showing as invalid in send by mail section ([#2362](https://github.com/bloom-housing/bloom/issues/2362)) ([3567388](https://github.com/bloom-housing/bloom/commit/35673882d87e2b524b2c94d1fb7b40c9d777f0a3))
+
+
+### BREAKING CHANGES
+
+* remove applicationDueTime field and consolidated into applicationDueDate
 
 
 

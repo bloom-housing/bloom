@@ -14,6 +14,8 @@ export class UserDto extends OmitType(User, [
   "confirmationToken",
   "roles",
   "jurisdictions",
+  "mfaCode",
+  "mfaCodeUpdatedAt",
 ] as const) {
   @Expose()
   @IsOptional()

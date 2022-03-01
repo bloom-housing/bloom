@@ -13,7 +13,7 @@ export interface FieldProps {
   type?: string
   id?: string
   name: string
-  note?: string
+  note?: string | JSX.Element
   subNote?: string
   label?: string
   defaultValue?: string | number
@@ -30,6 +30,7 @@ export interface FieldProps {
   getValues?: UseFormMethods["getValues"]
   setValue?: UseFormMethods["setValue"]
   dataTestId?: string
+  hidden?: boolean
 }
 
 const Field = (props: FieldProps) => {
@@ -90,7 +91,7 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {!isRadioOrCheckbox && label}
+      {!isRadioOrCheckbox && !props.hidden && label}
       {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
@@ -110,6 +111,7 @@ const Field = (props: FieldProps) => {
           onChange={props.onChange}
           data-test-id={props.dataTestId}
           {...inputProps}
+          hidden={props.hidden}
         />
         {isRadioOrCheckbox && label}
       </div>

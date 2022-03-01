@@ -1,30 +1,29 @@
 import * as React from "react"
-import { ListingEvent } from "@bloom-housing/backend-core/types"
 import { t } from "../../../../helpers/translator"
-import dayjs from "dayjs"
 
-const DownloadLotteryResults = (props: { event: ListingEvent; pdfUrl: string }) => {
-  const { event, pdfUrl } = props
-  const eventUrl = event ? pdfUrl : null
+type DownloadLotteryResultsProps = {
+  resultsDate?: string
+  buttonText?: string
+  pdfURL?: string
+}
+
+const DownloadLotteryResults = (props: DownloadLotteryResultsProps) => {
+  if (!props.pdfURL) return null
   return (
-    <>
-      {eventUrl && (
-        <section className="aside-block text-center">
-          <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
-          <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">
-            {dayjs(event.startTime).format("MMMM D, YYYY")}
-          </p>
-          <a
-            className="button is-primary w-full mb-2"
-            href={eventUrl}
-            title={t("listings.lotteryResults.downloadResults")}
-            target="_blank"
-          >
-            {t("listings.lotteryResults.downloadResults")}
-          </a>
-        </section>
+    <section className="aside-block text-center">
+      <h2 className="text-caps pb-4">{t("listings.lotteryResults.header")}</h2>
+      {props.resultsDate && (
+        <p className="uppercase text-gray-800 text-tiny font-semibold pb-4">{props.resultsDate}</p>
       )}
-    </>
+      <a
+        className="button is-primary w-full mb-2"
+        href={props.pdfURL}
+        title={props.buttonText}
+        target="_blank"
+      >
+        {props.buttonText ?? t("listings.lotteryResults.downloadResults")}
+      </a>
+    </section>
   )
 }
 

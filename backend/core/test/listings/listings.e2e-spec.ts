@@ -88,7 +88,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toEqual(1)
+    expect(res.body.items.length).toEqual(3)
   })
 
   it("should return listings with matching zipcodes", async () => {
@@ -121,7 +121,7 @@ describe("Listings", () => {
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toBe(13)
+    expect(res.body.items.length).toBe(15)
   })
 
   it("should return listings with matching San Jose jurisdiction", async () => {
@@ -193,7 +193,13 @@ describe("Listings", () => {
       fileId: fileId,
       label: label,
     }
-    listing.image = image
+
+    const assetCreateResponse = await supertest(app.getHttpServer())
+      .post(`/assets`)
+      .send(image)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(201)
+    listing.images = [{ image: assetCreateResponse.body, ordinal: 1 }]
 
     const putResponse = await supertest(app.getHttpServer())
       .put(`/listings/${listing.id}`)
@@ -202,11 +208,7 @@ describe("Listings", () => {
       .expect(200)
     const modifiedListing: ListingDto = putResponse.body
 
-    expect(modifiedListing.image.fileId).toBe(fileId)
-    expect(modifiedListing.image.label).toBe(label)
-    expect(modifiedListing.image).toHaveProperty("id")
-    expect(modifiedListing.image).toHaveProperty("createdAt")
-    expect(modifiedListing.image).toHaveProperty("updatedAt")
+    expect(modifiedListing.images[0].image.id).toBe(assetCreateResponse.body.id)
   })
 
   it("should add/overwrite application methods in existing listing", async () => {

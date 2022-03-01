@@ -8,6 +8,7 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   actions?: React.ReactNode[]
   hideCloseIcon?: boolean
   children?: React.ReactNode
+  slim?: boolean
 }
 
 const ModalHeader = (props: { title: string }) => (
@@ -34,6 +35,7 @@ export const Modal = (props: ModalProps) => {
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
+      slim={props.slim}
     >
       <div className="modal">
         <ModalHeader title={props.title} />

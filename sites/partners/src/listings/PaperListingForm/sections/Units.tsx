@@ -32,7 +32,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
 
   const formMethods = useFormContext()
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, setValue, errors, clearErrors } = formMethods
+  const { register, errors, clearErrors, reset, getValues } = formMethods
 
   const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
 
@@ -48,8 +48,9 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   }
 
   useEffect(() => {
-    setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
-  }, [disableUnitsAccordion, setValue])
+    reset({ ...getValues(), disableUnitsAccordion: disableUnitsAccordion ? "true" : "false" })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (units && units.length > 0 && !units[0].tempId) {
@@ -131,11 +132,13 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
       id: "unitTypes",
       label: t("listings.unit.unitTypes"),
       value: "true",
+      dataTestId: "unit-types",
     },
     {
       id: "individualUnits",
       label: t("listings.unit.individualUnits"),
       value: "false",
+      dataTestId: "individual-units",
     },
   ]
 

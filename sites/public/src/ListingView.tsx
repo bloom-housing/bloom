@@ -24,12 +24,10 @@ import {
   ListingDetailItem,
   ListingDetails,
   ListingMap,
-  LotteryResultsEvent,
   Message,
   OneLineAddress,
-  OpenHouseEvent,
+  EventSection,
   PreferencesList,
-  PublicLotteryEvent,
   ReferralApplication,
   StandardTable,
   SubmitApplication,
@@ -39,6 +37,7 @@ import {
   WhatToExpect,
   getSummariesTable,
   t,
+  EventType,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -46,6 +45,7 @@ import {
   imageUrlFromListing,
   occupancyTable,
   pdfUrlFromListingEvents,
+  getTimeRangeString,
 } from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
@@ -185,7 +185,17 @@ export const ListingView = (props: ListingProps) => {
     )
   }
 
-  let openHouseEvents: ListingEvent[] | null = null
+  const getEvent = (event: ListingEvent, note?: string | React.ReactNode): EventType => {
+    return {
+      timeString: getTimeRangeString(event.startTime, event.endTime),
+      dateString: dayjs(event.startTime).format("MMMM D, YYYY"),
+      linkURL: event.url,
+      linkText: event.label || t("listings.openHouseEvent.seeVideo"),
+      note: note || event.note,
+    }
+  }
+
+  let openHouseEvents: EventType[] | null = null
   let publicLottery: ListingEvent | null = null
   let lotteryResults: ListingEvent | null = null
   if (Array.isArray(listing.events)) {
@@ -195,7 +205,7 @@ export const ListingView = (props: ListingProps) => {
           if (!openHouseEvents) {
             openHouseEvents = []
           }
-          openHouseEvents.push(event)
+          openHouseEvents.push(getEvent(event))
           break
         case ListingEventType.publicLottery:
           publicLottery = event
@@ -209,9 +219,26 @@ export const ListingView = (props: ListingProps) => {
 
   let lotterySection
   if (publicLottery && (!lotteryResults || (lotteryResults && !lotteryResults.url))) {
-    lotterySection = <PublicLotteryEvent event={publicLottery} />
+    lotterySection = (
+      <EventSection
+        headerText={t("listings.publicLottery.header")}
+        sectionHeader={true}
+        events={[getEvent(publicLottery)]}
+      />
+    )
     if (dayjs(publicLottery.startTime) < dayjs() && lotteryResults && !lotteryResults.url) {
-      lotterySection = <LotteryResultsEvent event={lotteryResults} />
+      lotterySection = (
+        <EventSection
+          headerText={t("listings.lotteryResults.header")}
+          sectionHeader={true}
+          events={[
+            getEvent(
+              lotteryResults,
+              lotteryResults.note || t("listings.lotteryResults.completeResultsWillBePosted")
+            ),
+          ]}
+        />
+      )
     }
   }
 
@@ -405,12 +432,13 @@ export const ListingView = (props: ListingProps) => {
         <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
         <div className="mx-4">
           <DownloadLotteryResults
-            event={lotteryResults}
-            pdfUrl={pdfUrlFromListingEvents(
+            resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
+            pdfURL={pdfUrlFromListingEvents(
               [lotteryResults],
               ListingEventType.lotteryResults,
               process.env.cloudinaryCloudName
             )}
+            buttonText={t("listings.lotteryResults.downloadResults")}
           />
           {!applicationsClosed && (
             <Waitlist
@@ -523,14 +551,20 @@ export const ListingView = (props: ListingProps) => {
             <div className="hidden md:block">
               <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
               <DownloadLotteryResults
-                event={lotteryResults}
-                pdfUrl={pdfUrlFromListingEvents(
+                resultsDate={dayjs(lotteryResults?.startTime).format("MMMM D, YYYY")}
+                pdfURL={pdfUrlFromListingEvents(
                   [lotteryResults],
                   ListingEventType.lotteryResults,
                   process.env.cloudinaryCloudName
                 )}
+                buttonText={t("listings.lotteryResults.downloadResults")}
               />
-              {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
+              {openHouseEvents && (
+                <EventSection
+                  events={openHouseEvents}
+                  headerText={t("listings.openHouseEvent.header")}
+                />
+              )}
               {!applicationsClosed && (
                 <Waitlist
                   isWaitlistOpen={listing.isWaitlistOpen}
@@ -557,7 +591,10 @@ export const ListingView = (props: ListingProps) => {
 
             {openHouseEvents && (
               <div className="mb-2 md:hidden">
-                <OpenHouseEvent events={openHouseEvents} />
+                <EventSection
+                  events={openHouseEvents}
+                  headerText={t("listings.openHouseEvent.header")}
+                />
               </div>
             )}
             {lotterySection}

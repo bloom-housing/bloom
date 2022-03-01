@@ -2,6 +2,7 @@
 5.2 Summary
 Display a summary of application fields with edit links per section
 */
+import React, { useContext, useEffect } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -9,20 +10,31 @@ import {
   t,
   Form,
   ProgressNav,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationSummary = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("summary")
   const currentPageSection = 5
 
   /* Form Handler */
   const { handleSubmit } = useForm()
   const onSubmit = () => conductor.routeToNextOrReturnUrl()
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Summary",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

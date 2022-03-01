@@ -3,10 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.2...@bloom-housing/partners@4.0.3) (2022-02-25)
+## [4.0.1-alpha.87](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.86...@bloom-housing/partners@4.0.1-alpha.87) (2022-02-28)
 
 
 ### Features
+
+* updates to mfa styling ([#2532](https://github.com/bloom-housing/bloom/issues/2532)) ([7654efc](https://github.com/bloom-housing/bloom/commit/7654efc8a7c5cba0f7436fda62b886f646fe8a03))
+
+
+
+
+
+## [4.0.1-alpha.86](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.85...@bloom-housing/partners@4.0.1-alpha.86) (2022-02-28)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.85](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.84...@bloom-housing/partners@4.0.1-alpha.85) (2022-02-26)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.3](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.2...@bloom-housing/partners@4.0.3) (2022-02-25)
+
+## Features
 
 * overrides partner app website trans ([#2534](https://github.com/seanmalbert/bloom/issues/2534)) ([16c7a4e](https://github.com/seanmalbert/bloom/commit/16c7a4eb8f5ae05dbea9380702c2150a922ca3f0))
 
@@ -14,7 +40,303 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.0.1-alpha.84](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.83...@bloom-housing/partners@4.0.1-alpha.84) (2022-02-25)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.83](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.82...@bloom-housing/partners@4.0.1-alpha.83) (2022-02-25)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.82](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.81...@bloom-housing/partners@4.0.1-alpha.82) (2022-02-24)
+
+
+### Features
+
+* overrides partner app website trans ([#2534](https://github.com/bloom-housing/bloom/issues/2534)) ([9e09b0b](https://github.com/bloom-housing/bloom/commit/9e09b0bbb3e394c92dcce18bb0cba74db03c49fa))
+
+
+
+
+
+## [4.0.1-alpha.81](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.80...@bloom-housing/partners@4.0.1-alpha.81) (2022-02-22)
+
+
+### Bug Fixes
+
+* purge listing detail with wildcard ([4fd2137](https://github.com/bloom-housing/bloom/commit/4fd21374c2dc213dfe1b8dde004d41895126c1d6))
+
+
+
+
+
+## [4.0.1-alpha.80](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.79...@bloom-housing/partners@4.0.1-alpha.80) (2022-02-22)
+
+
+### Features
+
+* updates cache clear to separate individual and lists ([#2529](https://github.com/bloom-housing/bloom/issues/2529)) ([1521191](https://github.com/bloom-housing/bloom/commit/15211918b8bf0741ff6a25265b1bf3a60d5678b2))
+
+
+
+
+
+## [4.0.1-alpha.79](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.78...@bloom-housing/partners@4.0.1-alpha.79) (2022-02-22)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.78](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.77...@bloom-housing/partners@4.0.1-alpha.78) (2022-02-18)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.77](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.76...@bloom-housing/partners@4.0.1-alpha.77) (2022-02-17)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.76](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.75...@bloom-housing/partners@4.0.1-alpha.76) (2022-02-17)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.75](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.74...@bloom-housing/partners@4.0.1-alpha.75) (2022-02-17)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.74](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.73...@bloom-housing/partners@4.0.1-alpha.74) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.73](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.72...@bloom-housing/partners@4.0.1-alpha.73) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.72](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.71...@bloom-housing/partners@4.0.1-alpha.72) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.71](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.70...@bloom-housing/partners@4.0.1-alpha.71) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.70](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.69...@bloom-housing/partners@4.0.1-alpha.70) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.69](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.68...@bloom-housing/partners@4.0.1-alpha.69) (2022-02-16)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.68](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.67...@bloom-housing/partners@4.0.1-alpha.68) (2022-02-15)
+
+
+### Features
+
+* **backend:** make listing image an array ([#2477](https://github.com/bloom-housing/bloom/issues/2477)) ([cab9800](https://github.com/bloom-housing/bloom/commit/cab98003e640c880be2218fa42321eadeec35e9c))
+
+
+
+
+
+## [4.0.1-alpha.67](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.66...@bloom-housing/partners@4.0.1-alpha.67) (2022-02-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.66](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.65...@bloom-housing/partners@4.0.1-alpha.66) (2022-02-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.64...@bloom-housing/partners@4.0.1-alpha.65) (2022-02-15)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.64](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.63...@bloom-housing/partners@4.0.1-alpha.64) (2022-02-15)
+
+
+### Features
+
+* **backend:** add partners portal users multi factor authentication ([#2291](https://github.com/bloom-housing/bloom/issues/2291)) ([5b10098](https://github.com/bloom-housing/bloom/commit/5b10098d8668f9f42c60e90236db16d6cc517793)), closes [#2461](https://github.com/bloom-housing/bloom/issues/2461) [#2485](https://github.com/bloom-housing/bloom/issues/2485)
+
+
+
+
+
+## [4.0.1-alpha.63](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.62...@bloom-housing/partners@4.0.1-alpha.63) (2022-02-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.62](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.61...@bloom-housing/partners@4.0.1-alpha.62) (2022-02-14)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.61](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.60...@bloom-housing/partners@4.0.1-alpha.61) (2022-02-12)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.60](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.59...@bloom-housing/partners@4.0.1-alpha.60) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.59](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.58...@bloom-housing/partners@4.0.1-alpha.59) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.58](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.57...@bloom-housing/partners@4.0.1-alpha.58) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.57](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.56...@bloom-housing/partners@4.0.1-alpha.57) (2022-02-10)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 ## [4.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.1...@bloom-housing/partners@4.0.2) (2022-02-09)
+
+
+
+
+
+## [4.0.1-alpha.56](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.55...@bloom-housing/partners@4.0.1-alpha.56) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.55](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.54...@bloom-housing/partners@4.0.1-alpha.55) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.54](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.53...@bloom-housing/partners@4.0.1-alpha.54) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.53](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.52...@bloom-housing/partners@4.0.1-alpha.53) (2022-02-09)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.52](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.51...@bloom-housing/partners@4.0.1-alpha.52) (2022-02-09)
+
+
+### Bug Fixes
+
+* cannot remove some fields in listings management ([#2455](https://github.com/bloom-housing/bloom/issues/2455)) ([acd9b51](https://github.com/bloom-housing/bloom/commit/acd9b51bb49581b4728b445d56c5c0a3c43e2777))
+
+
+
+
+
+## [4.0.1-alpha.51](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.50...@bloom-housing/partners@4.0.1-alpha.51) (2022-02-08)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.50](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.49...@bloom-housing/partners@4.0.1-alpha.50) (2022-02-07)
 
 **Note:** Version bump only for package @bloom-housing/partners
 
@@ -24,8 +346,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1...@bloom-housing/partners@4.0.1) (2022-02-03)
 
-
-### Bug Fixes
+## Bug Fixes
 
 * ami charts without all households ([#2430](https://github.com/seanmalbert/bloom/issues/2430)) ([5e18eba](https://github.com/seanmalbert/bloom/commit/5e18eba1d24bff038b192477b72d9d3f1f05a39d))
 
@@ -46,6 +367,146 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
  - @bloom-housing/partners@4.0.1-alpha.23
  - @bloom-housing/public@4.0.1-alpha.22
  - @bloom-housing/ui-components@4.0.1-alpha.21
+
+
+
+
+
+## [4.0.1-alpha.49](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.48...@bloom-housing/partners@4.0.1-alpha.49) (2022-02-02)
+
+
+### Bug Fixes
+
+* unit accordion radio button not showing default value ([#2451](https://github.com/bloom-housing/bloom/issues/2451)) ([4ed8103](https://github.com/bloom-housing/bloom/commit/4ed81039b9130d0433b11df2bdabc495ce2b9f24))
+
+
+
+
+
+## [4.0.1-alpha.48](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.47...@bloom-housing/partners@4.0.1-alpha.48) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.47](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.46...@bloom-housing/partners@4.0.1-alpha.47) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.46](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.45...@bloom-housing/partners@4.0.1-alpha.46) (2022-02-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.45](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.44...@bloom-housing/partners@4.0.1-alpha.45) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.44](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.43...@bloom-housing/partners@4.0.1-alpha.44) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.43](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.42...@bloom-housing/partners@4.0.1-alpha.43) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.42](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.41...@bloom-housing/partners@4.0.1-alpha.42) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.41](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.40...@bloom-housing/partners@4.0.1-alpha.41) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.40](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.39...@bloom-housing/partners@4.0.1-alpha.40) (2022-02-01)
+
+
+### Features
+
+* partners terms page ([#2440](https://github.com/bloom-housing/bloom/issues/2440)) ([63105bc](https://github.com/bloom-housing/bloom/commit/63105bcedfe371a4a9995e25b1e5aba67d06ad0c))
+
+
+
+
+
+## [4.0.1-alpha.39](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.38...@bloom-housing/partners@4.0.1-alpha.39) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.38](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.37...@bloom-housing/partners@4.0.1-alpha.38) (2022-02-01)
+
+
+### Features
+
+* **backend:** add publishedAt and closedAt to listing entity ([#2432](https://github.com/bloom-housing/bloom/issues/2432)) ([f3b0f86](https://github.com/bloom-housing/bloom/commit/f3b0f864a6d5d2ad3d886e828743454c3e8fca71))
+
+
+
+
+
+## [4.0.1-alpha.37](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.36...@bloom-housing/partners@4.0.1-alpha.37) (2022-02-01)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.36](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.35...@bloom-housing/partners@4.0.1-alpha.36) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.35](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.34...@bloom-housing/partners@4.0.1-alpha.35) (2022-01-31)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [4.0.1-alpha.34](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.33...@bloom-housing/partners@4.0.1-alpha.34) (2022-01-27)
+
+
+### Features
+
+* outdated password messaging updates ([b14e19d](https://github.com/bloom-housing/bloom/commit/b14e19d43099af2ba721d8aaaeeb2be886d05111))
 
 
 
@@ -121,6 +582,90 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [4.0.1-alpha.25](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.0.1-alpha.24...@bloom-housing/partners@4.0.1-alpha.25) (2022-01-14)
 
 **Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
+## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1) (2022-01-13)
+
+
+### Bug Fixes
+
+* adds jurisdictionId to useSWR path ([c7d6adb](https://github.com/seanmalbert/bloom/commit/c7d6adba109aa50f3c1556c89c0ec714fd4c6e50))
+* cannot save custom mailing, dropoff, or pickup address ([edcb068](https://github.com/seanmalbert/bloom/commit/edcb068ca23411e0a34f1dc2ff4c77ab489ac0fc))
+* listings management keep empty strings, remove empty objects ([3aba274](https://github.com/seanmalbert/bloom/commit/3aba274a751cdb2db55b65ade1cda5d1689ca681))
+* lottery results uploads now save ([8c9dd0f](https://github.com/seanmalbert/bloom/commit/8c9dd0f043dd3835f12bc8f087b9a5519cbfd4f8))
+* paper application submission ([384b86b](https://github.com/seanmalbert/bloom/commit/384b86b624392012b56039dc4a289393f24653f5))
+* remove description for the partners programs ([d4478b8](https://github.com/seanmalbert/bloom/commit/d4478b8eaf68efdf4b23c55f15656e82a907dbc4))
+* removes Duplicate identifier fieldGroupObjectToArray ([a3a2f43](https://github.com/seanmalbert/bloom/commit/a3a2f434606628e4ad141250c401405ced10cdf4))
+* retnal assistance eror message ([09f583b](https://github.com/seanmalbert/bloom/commit/09f583be137336c92f7077beb1f1fbab2b82aefb))
+* updates lastName on application save ([a977ffd](https://github.com/seanmalbert/bloom/commit/a977ffd4b81fbf09122c51ccf066d0a3f3f6544c))
+* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
+
+
+* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
+
+
+
+### Features
+
+* adds listing management cypress tests to partner portal ([2e37eec](https://github.com/seanmalbert/bloom/commit/2e37eecf6344f6e25422a24ad7f4563fee4564de))
+* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([d184326](https://github.com/seanmalbert/bloom/commit/d18432610a55a5e54f567ff6157bb863ed61cb21))
+* ami chart jurisdictionalized ([b2e2537](https://github.com/seanmalbert/bloom/commit/b2e2537818d92ff41ea51fbbeb23d9d7e8c1cf52))
+* filter partner users ([3dd8f9b](https://github.com/seanmalbert/bloom/commit/3dd8f9b3cc1f9f90916d49b7136d5f1f73df5291))
+* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
+* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
+* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
+* postmark date time fields partners ([#2239](https://github.com/seanmalbert/bloom/issues/2239)) ([cf20b88](https://github.com/seanmalbert/bloom/commit/cf20b88cb613b815c641cad34a38908e22722a4a))
+* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
+
+
+### Reverts
+
+* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
+* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
+* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
+
+
+
+### BREAKING CHANGES
+
+* preferences model and relationships changed
+
+* feat: feat(backend): extend UserUpdateDto to support email change
+
+picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
+
+* fix: 2056/user account edit fix
+
+picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
+
+* refactor: 2085/adds top level catchAll exception filter
+
+picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
+
+* feat: feat: Change unit number field type to text
+
+picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
+
+* feat(backend): improve application flagged set saving efficiency
+
+* fix: fix: updates address order
+
+picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
+
+* fix: sets programs to optoinal and updates versions
+
+* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
+
+* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
+
+* fix: adds programs service
+
+* fix: fix lisitng e2e tests
+
+* fix: fix member tests
 
 
 
@@ -401,90 +946,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## [3.0.1-alpha.65](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@3.0.1-alpha.64...@bloom-housing/partners@3.0.1-alpha.65) (2021-12-15)
 
 **Note:** Version bump only for package @bloom-housing/partners
-
-
-
-
-
-## [3.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@3.0.1-alpha.34...@bloom-housing/partners@3.0.1) (2022-01-13)
-
-
-### Bug Fixes
-
-* adds jurisdictionId to useSWR path ([c7d6adb](https://github.com/seanmalbert/bloom/commit/c7d6adba109aa50f3c1556c89c0ec714fd4c6e50))
-* cannot save custom mailing, dropoff, or pickup address ([edcb068](https://github.com/seanmalbert/bloom/commit/edcb068ca23411e0a34f1dc2ff4c77ab489ac0fc))
-* listings management keep empty strings, remove empty objects ([3aba274](https://github.com/seanmalbert/bloom/commit/3aba274a751cdb2db55b65ade1cda5d1689ca681))
-* lottery results uploads now save ([8c9dd0f](https://github.com/seanmalbert/bloom/commit/8c9dd0f043dd3835f12bc8f087b9a5519cbfd4f8))
-* paper application submission ([384b86b](https://github.com/seanmalbert/bloom/commit/384b86b624392012b56039dc4a289393f24653f5))
-* remove description for the partners programs ([d4478b8](https://github.com/seanmalbert/bloom/commit/d4478b8eaf68efdf4b23c55f15656e82a907dbc4))
-* removes Duplicate identifier fieldGroupObjectToArray ([a3a2f43](https://github.com/seanmalbert/bloom/commit/a3a2f434606628e4ad141250c401405ced10cdf4))
-* retnal assistance eror message ([09f583b](https://github.com/seanmalbert/bloom/commit/09f583be137336c92f7077beb1f1fbab2b82aefb))
-* updates lastName on application save ([a977ffd](https://github.com/seanmalbert/bloom/commit/a977ffd4b81fbf09122c51ccf066d0a3f3f6544c))
-* versioning issues ([#2311](https://github.com/seanmalbert/bloom/issues/2311)) ([c274a29](https://github.com/seanmalbert/bloom/commit/c274a2985061b389c2cae6386137a4caacd7f7c0))
-
-
-* Release 11 11 21 (#2162) ([4847469](https://github.com/seanmalbert/bloom/commit/484746982e440c1c1c87c85089d86cd5968f1cae)), closes [#2162](https://github.com/seanmalbert/bloom/issues/2162)
-
-
-
-### Features
-
-* adds listing management cypress tests to partner portal ([2e37eec](https://github.com/seanmalbert/bloom/commit/2e37eecf6344f6e25422a24ad7f4563fee4564de))
-* adds updating open listing modal ([#2288](https://github.com/seanmalbert/bloom/issues/2288)) ([d184326](https://github.com/seanmalbert/bloom/commit/d18432610a55a5e54f567ff6157bb863ed61cb21))
-* ami chart jurisdictionalized ([b2e2537](https://github.com/seanmalbert/bloom/commit/b2e2537818d92ff41ea51fbbeb23d9d7e8c1cf52))
-* filter partner users ([3dd8f9b](https://github.com/seanmalbert/bloom/commit/3dd8f9b3cc1f9f90916d49b7136d5f1f73df5291))
-* new demographics sub-race questions ([910df6a](https://github.com/seanmalbert/bloom/commit/910df6ad3985980becdc2798076ed5dfeeb310b5))
-* one month rent ([319743d](https://github.com/seanmalbert/bloom/commit/319743d23268f5b55e129c0878510edb4204b668))
-* overrides fallback to english, tagalog support ([b79fd10](https://github.com/seanmalbert/bloom/commit/b79fd1018619f618bd9be8e870d35c1180b81dfb))
-* postmark date time fields partners ([#2239](https://github.com/seanmalbert/bloom/issues/2239)) ([cf20b88](https://github.com/seanmalbert/bloom/commit/cf20b88cb613b815c641cad34a38908e22722a4a))
-* simplify Waitlist component and use more flexible schema ([aa8e006](https://github.com/seanmalbert/bloom/commit/aa8e00616d886e8d57316b2362d35c0c550007c6))
-
-
-### Reverts
-
-* Revert "chore(release): version" ([47a2c67](https://github.com/seanmalbert/bloom/commit/47a2c67af5c7c41f360fafc6c5386476866ea403))
-* Revert "chore: removes application program partners" ([91e22d8](https://github.com/seanmalbert/bloom/commit/91e22d891104e8d4fc024d709a6a14cec1400733))
-* Revert "chore: removes application program display" ([740cf00](https://github.com/seanmalbert/bloom/commit/740cf00dc3a729eed037d56a8dfc5988decd2651))
-
-
-
-### BREAKING CHANGES
-
-* preferences model and relationships changed
-
-* feat: feat(backend): extend UserUpdateDto to support email change
-
-picked from dev 3e1fdbd0ea91d4773973d5c485a5ba61303db90a
-
-* fix: 2056/user account edit fix
-
-picked from dev a15618c0cb548ff5b2ae913b802c9e08bb673f30
-
-* refactor: 2085/adds top level catchAll exception filter
-
-picked from dev aeaa63d1af1fa3d11671e169cb3bd23d356fface
-
-* feat: feat: Change unit number field type to text
-
-picked from dev f54be7c7ba6aac8e00fee610dc86584b60cc212d
-
-* feat(backend): improve application flagged set saving efficiency
-
-* fix: fix: updates address order
-
-picked from dev 252e014dcbd2e4c305384ed552135f5a8e4e4767
-
-* fix: sets programs to optoinal and updates versions
-
-* chore: chore(deps): bump electron from 13.1.7 to 13.3.0
-
-* chore: chore(deps): bump axios from 0.21.1 to 0.21.2
-
-* fix: adds programs service
-
-* fix: fix lisitng e2e tests
-
-* fix: fix member tests
 
 
 

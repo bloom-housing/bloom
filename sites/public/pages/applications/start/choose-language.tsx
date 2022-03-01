@@ -14,13 +14,19 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import { imageUrlFromListing, OnClientSide } from "@bloom-housing/shared-helpers"
+import {
+  imageUrlFromListing,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 
 import FormsLayout from "../../../layouts/forms"
 import { AppSubmissionContext, retrieveApplicationConfig } from "../../../lib/AppSubmissionContext"
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Language } from "@bloom-housing/backend-core/types"
 import { useGetApplicationStatusProps } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 
 const loadListing = async (listingId, stateFunction, conductor, context, language) => {
   const response = await axios.get(`${process.env.backendApiBase}/listings/${listingId}`, {
@@ -41,6 +47,14 @@ const ApplicationChooseLanguage = () => {
   const { conductor, application } = context
 
   const listingId = router.query.listingId
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Choose Language",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   useEffect(() => {
     conductor.reset()

@@ -12,16 +12,20 @@ import {
   t,
   ProgressNav,
   emailRegex,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
 import { PhoneField } from "@bloom-housing/ui-components/src/forms/PhoneField"
-import { OnClientSide, stateKeys } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent, stateKeys } from "@bloom-housing/shared-helpers"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { useContext, useEffect } from "react"
+import { UserStatus } from "../../../lib/constants"
 
 export default () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactInfo")
   const currentPageSection = 1
 
@@ -44,6 +48,14 @@ export default () => {
   const onError = () => {
     window.scrollTo(0, 0)
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Alternate Contact",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

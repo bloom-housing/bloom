@@ -37,6 +37,11 @@ export class ListingsService {
       switch (params.orderBy) {
         case OrderByFieldsEnum.mostRecentlyUpdated:
           return { "listings.updated_at": "DESC" }
+        case OrderByFieldsEnum.mostRecentlyClosed:
+          return {
+            "listings.closedAt": { order: "DESC", nulls: "NULLS LAST" },
+            "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
+          }
         case OrderByFieldsEnum.applicationDates:
         case undefined:
           // Default to ordering by applicationDates (i.e. applicationDueDate
@@ -137,10 +142,11 @@ export class ListingsService {
   async create(listingDto: ListingCreateDto) {
     const listing = this.listingRepository.create({
       ...listingDto,
+      publishedAt: listingDto.status === ListingStatus.active ? new Date() : null,
+      closedAt: listingDto.status === ListingStatus.closed ? new Date() : null,
       property: plainToClass(PropertyCreateDto, listingDto),
     })
-    const saveResult = await listing.save()
-    return saveResult
+    return await listing.save()
   }
 
   async update(listingDto: ListingUpdateDto) {
@@ -160,9 +166,18 @@ export class ListingsService {
         availableUnits++
       }
     })
+
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
       ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      publishedAt:
+        listing.status !== ListingStatus.active && listingDto.status === ListingStatus.active
+          ? new Date()
+          : listing.publishedAt,
+      closedAt:
+        listing.status !== ListingStatus.closed && listingDto.status === ListingStatus.closed
+          ? new Date()
+          : listing.closedAt,
       property: plainToClass(
         PropertyUpdateDto,
         {
@@ -175,6 +190,7 @@ export class ListingsService {
         { excludeExtraneousValues: true }
       ),
     })
+
     return await this.listingRepository.save(listing)
   }
 
@@ -226,6 +242,7 @@ export class ListingsService {
       .getMany()
     for (const listing of listings) {
       listing.status = ListingStatus.closed
+      listing.closedAt = new Date()
     }
 
     await this.listingRepository.save(listings)
