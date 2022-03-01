@@ -97,11 +97,11 @@ export function addMinAmiPercentageFilter(
 
   // Check the listing.ami_percentage field iff the field is not set on the Units Summary table.
   qb.andWhere(
-    `((unitsSummary.ami_percentage IS NOT NULL AND unitsSummary.ami_percentage >= :${whereParameterName}) ` +
-      `OR (unitsSummary.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2})
+    `((unitsSummaryAmiLevels.ami_percentage IS NOT NULL AND unitsSummaryAmiLevels.ami_percentage >= :${whereParameterName}) ` +
+      `OR (unitsSummaryAmiLevels.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2})
       ${
         includeNulls
-          ? `OR unitsSummary.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
+          ? `OR unitsSummaryAmiLevels.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
           : ""
       })`,
     {

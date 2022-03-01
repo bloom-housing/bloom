@@ -46,12 +46,7 @@ const views: Views = {
       "unitType.name",
       "unitsSummary.id",
       "summaryUnitType.name",
-      "unitsSummary.monthlyRentMin",
-      "unitsSummary.monthlyRentMax",
-      "unitsSummary.monthlyRentAsPercentOfIncome",
-      "unitsSummary.amiPercentage",
-      "unitsSummary.minimumIncomeMin",
-      "unitsSummary.minimumIncomeMax",
+      "summaryUnitType.numBedrooms",
       "unitsSummary.maxOccupancy",
       "unitsSummary.minOccupancy",
       "unitsSummary.floorMin",
@@ -61,6 +56,7 @@ const views: Views = {
       "priorityType.id",
       "unitsSummary.totalCount",
       "unitsSummary.totalAvailable",
+      "unitsSummaryAmiLevels.amiPercentage",
     ],
     leftJoins: [
       { join: "listings.jurisdiction", alias: "jurisdiction" },
@@ -75,6 +71,7 @@ const views: Views = {
       { join: "listings.unitsSummary", alias: "unitsSummary" },
       { join: "unitsSummary.unitType", alias: "summaryUnitType" },
       { join: "unitsSummary.priorityType", alias: "priorityType" },
+      { join: "unitsSummary.amiLevels", alias: "unitsSummaryAmiLevels" },
     ],
   },
 }
@@ -222,6 +219,7 @@ views.full = {
     ["listings.unitsSummary", "unitsSummary"],
     ["unitsSummary.unitType", "summaryUnitType"],
     ["unitsSummary.priorityType", "summaryPriorityType"],
+    ["unitsSummary.amiLevels", "unitsSummaryAmiLevels"],
     ["listings.features", "listing_features"],
   ],
 }
