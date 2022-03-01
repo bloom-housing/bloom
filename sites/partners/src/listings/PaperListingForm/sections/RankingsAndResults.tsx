@@ -1,5 +1,7 @@
 import React from "react"
-import moment from "moment"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+dayjs.extend(utc)
 import { useFormContext, useWatch } from "react-hook-form"
 import {
   t,
@@ -13,7 +15,7 @@ import {
 } from "@bloom-housing/ui-components"
 
 import { YesNoAnswer } from "../../../applications/PaperApplicationForm/FormTypes"
-import { FormListing } from "../index"
+import { FormListing } from "../formTypes"
 import { getLotteryEvent, fieldHasError, fieldMessage } from "../../../../lib/helpers"
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
 
@@ -37,12 +39,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
       : listing?.isWaitlistOpen === false
       ? YesNoAnswer.No
       : null,
-  })
-
-  const showWaitlistSize = useWatch({
-    control,
-    name: "waitlistSizeQuestion",
-    defaultValue: listing?.waitlistMaxSize ? YesNoAnswer.Yes : YesNoAnswer.No,
   })
 
   const reviewOrder = useWatch({
@@ -132,13 +128,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   watch={watch}
                   defaultDate={{
                     month: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("MM")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("MM")
                       : null,
                     day: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("DD")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("DD")
                       : null,
                     year: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).utc().format("YYYY")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).utc().format("YYYY")
                       : null,
                   }}
                 />
@@ -152,13 +148,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   watch={watch}
                   defaultValues={{
                     hours: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).format("hh")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).format("hh")
                       : null,
                     minutes: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).format("mm")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).format("mm")
                       : null,
                     seconds: lotteryEvent?.startTime
-                      ? moment(new Date(lotteryEvent?.startTime)).format("ss")
+                      ? dayjs(new Date(lotteryEvent?.startTime)).format("ss")
                       : null,
                     period: new Date(lotteryEvent?.startTime).getHours() >= 12 ? "pm" : "am",
                   }}
@@ -173,13 +169,13 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   watch={watch}
                   defaultValues={{
                     hours: lotteryEvent?.endTime
-                      ? moment(new Date(lotteryEvent?.endTime)).format("hh")
+                      ? dayjs(new Date(lotteryEvent?.endTime)).format("hh")
                       : null,
                     minutes: lotteryEvent?.endTime
-                      ? moment(new Date(lotteryEvent?.endTime)).format("mm")
+                      ? dayjs(new Date(lotteryEvent?.endTime)).format("mm")
                       : null,
                     seconds: lotteryEvent?.endTime
-                      ? moment(new Date(lotteryEvent?.endTime)).format("ss")
+                      ? dayjs(new Date(lotteryEvent?.endTime)).format("ss")
                       : null,
                     period: new Date(lotteryEvent?.endTime).getHours() >= 12 ? "pm" : "am",
                   }}
@@ -197,7 +193,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
                   fullWidth={true}
                   register={register}
                   defaultValue={lotteryEvent ? lotteryEvent.note : null}
-                  maxLength={150}
                 />
               </GridCell>
             </GridSection>
@@ -236,30 +231,6 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
           </GridCell>
         </GridSection>
         {waitlistOpen === YesNoAnswer.Yes && (
-          <GridSection columns={2} className={"flex items-center"}>
-            <GridCell>
-              <p className="field-label m-4 ml-0">{t("listings.waitlist.sizeQuestion")}</p>
-              <FieldGroup
-                name="waitlistSizeQuestion"
-                type="radio"
-                register={register}
-                fields={[
-                  {
-                    ...yesNoRadioOptions[0],
-                    id: "showWaitlistSizeYes",
-                    defaultChecked: listing && listing.waitlistMaxSize !== null,
-                  },
-                  {
-                    ...yesNoRadioOptions[1],
-                    id: "showWaitlistSizeNo",
-                    defaultChecked: listing && !listing.waitlistMaxSize,
-                  },
-                ]}
-              />
-            </GridCell>
-          </GridSection>
-        )}
-        {showWaitlistSize === YesNoAnswer.Yes && waitlistOpen === YesNoAnswer.Yes && (
           <GridSection columns={3}>
             <Field
               name="waitlistMaxSize"
@@ -268,6 +239,7 @@ const RankingsAndResults = ({ listing }: RankingsAndResultsProps) => {
               label={t("listings.waitlist.maxSizeQuestion")}
               placeholder={t("listings.waitlist.maxSize")}
               type={"number"}
+              subNote={t("listings.recommended")}
             />
             <Field
               name="waitlistCurrentSize"

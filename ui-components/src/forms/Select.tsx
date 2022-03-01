@@ -1,7 +1,7 @@
 import React from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
 import { FormOptions } from "../helpers/formOptions"
-import { UseFormMethods } from "react-hook-form"
+import { UseFormMethods, RegisterOptions } from "react-hook-form"
 
 export interface SelectOption {
   value: string
@@ -21,12 +21,13 @@ interface SelectProps {
   defaultValue?: string
   placeholder?: string
   register?: UseFormMethods["register"]
-  validation?: Record<string, unknown>
+  validation?: RegisterOptions
   disabled?: boolean
   options: (string | SelectOption)[]
   keyPrefix?: string
   describedBy?: string
   inputProps?: Record<string, unknown>
+  dataTestId?: string
 }
 
 export const Select = ({
@@ -47,6 +48,7 @@ export const Select = ({
   inputProps,
   defaultValue,
   subNote,
+  dataTestId,
 }: SelectProps) => {
   return (
     <div className={`field ${error ? "error" : ""}`}>
@@ -58,8 +60,10 @@ export const Select = ({
           className="input"
           id={id || name}
           name={name}
+          data-test-id={dataTestId}
           aria-describedby={describedBy ? describedBy : `${id}-error`}
           aria-invalid={!!error || false}
+          aria-label={label}
           ref={register && register(validation)}
           disabled={disabled}
           defaultValue={defaultValue ?? ""}

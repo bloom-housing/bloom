@@ -17,7 +17,9 @@ export class UnitsSummaryAmiLevel {
   @ManyToOne(() => AmiChart, { eager: false, nullable: true })
   amiChart?: AmiChart | null
 
-  @RelationId((unitsSummaryAmiLevelEntity: UnitsSummaryAmiLevel) => unitsSummaryAmiLevelEntity.amiChart)
+  @RelationId(
+    (unitsSummaryAmiLevelEntity: UnitsSummaryAmiLevel) => unitsSummaryAmiLevelEntity.amiChart
+  )
   @Expose()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   amiChartId?: string | null

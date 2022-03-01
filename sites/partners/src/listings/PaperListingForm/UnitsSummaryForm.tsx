@@ -14,7 +14,7 @@ import {
   numberOptions,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
-import { TempUnitsSummary } from "."
+import { TempUnitsSummary } from "./formTypes"
 import { UnitAccessibilityPriorityType, UnitType } from "@bloom-housing/backend-core/types"
 import { useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
 import { arrayToFormOptions, getRentTypeFromUnitsSummary } from "../../../lib/helpers"

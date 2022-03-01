@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useEffect, useContext, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -18,10 +18,14 @@ import {
   passwordRegex,
   PhoneField,
 } from "@bloom-housing/ui-components"
-import FormsLayout from "../layouts/forms"
-import moment from "moment"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+dayjs.extend(customParseFormat)
 import { useRouter } from "next/router"
 import { usToIntlPhone } from "../lib/helpers"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
+import FormsLayout from "../layouts/forms"
 
 const CreateAccount = () => {
   const { createUser, resendConfirmation } = useContext(AuthContext)
@@ -38,15 +42,23 @@ const CreateAccount = () => {
   email.current = watch("email", "")
   password.current = watch("password", "")
 
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Create Account",
+      status: UserStatus.NotLoggedIn,
+    })
+  }, [])
+
   const onSubmit = async (data) => {
     try {
       const { dob, phoneNumber, smsSubscription, emailSubscription, ...rest } = data
       await createUser({
         ...rest,
-        dob: moment(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        dob: dayjs(`${dob.birthYear}-${dob.birthMonth}-${dob.birthDay}`),
+        language,
         // Convert (123) 456-7890 to E.164 format with US country code: +11234567890
         phoneNumber: usToIntlPhone(phoneNumber),
-        language,
         preferences: {
           sendEmailNotifications: emailSubscription,
           sendSmsNotifications: smsSubscription,
@@ -83,13 +95,13 @@ const CreateAccount = () => {
         <Form id="create-account" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-card__group border-b">
             <label className="field-label--caps" htmlFor="firstName">
-              {t("authentication.createAccount.yourName")}
+              {t("application.name.yourName")}
             </label>
 
             <Field
               controlClassName="mt-2"
               name="firstName"
-              placeholder={t("authentication.createAccount.firstName")}
+              placeholder={t("application.name.firstName")}
               validation={{ required: true }}
               error={errors.firstName}
               errorMessage={t("errors.firstNameError")}
@@ -98,13 +110,13 @@ const CreateAccount = () => {
 
             <Field
               name="middleName"
-              placeholder={t("authentication.createAccount.middleNameOptional")}
+              placeholder={t("application.name.middleNameOptional")}
               register={register}
             />
 
             <Field
               name="lastName"
-              placeholder={t("authentication.createAccount.lastName")}
+              placeholder={t("application.name.lastName")}
               validation={{ required: true }}
               error={errors.lastName}
               errorMessage={t("errors.lastNameError")}
@@ -122,7 +134,7 @@ const CreateAccount = () => {
               watch={watch}
               validateAge18={true}
               errorMessage={t("errors.dateOfBirthErrorAge")}
-              label={t("authentication.createAccount.yourDateOfBirth")}
+              label={t("application.name.yourDateOfBirth")}
             />
           </div>
 
@@ -131,7 +143,7 @@ const CreateAccount = () => {
               caps={true}
               type="email"
               name="email"
-              label={t("authentication.createAccount.email")}
+              label={t("t.email")}
               placeholder="example@web.com"
               validation={{ required: true, pattern: emailRegex }}
               error={errors.email}

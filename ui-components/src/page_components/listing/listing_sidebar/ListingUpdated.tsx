@@ -1,6 +1,6 @@
 import * as React from "react"
 import { t } from "../../../helpers/translator"
-import moment from "moment"
+import dayjs from "dayjs"
 
 interface ListingUpdatedProps {
   listingUpdated: Date
@@ -11,7 +11,7 @@ const ListingUpdated = (props: ListingUpdatedProps) => {
   return (
     <section className="aside-block">
       <p className="text-tiny text-gray-800">
-        {`${t("listings.listingUpdated")}: ${moment(listingUpdated).format("MMMM DD, YYYY")}`}
+        {`${t("listings.listingUpdated")}: ${dayjs(listingUpdated).format("MMMM DD, YYYY")}`}
       </p>
     </section>
   )

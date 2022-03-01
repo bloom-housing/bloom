@@ -1,12 +1,14 @@
 import { ExtractJwt, Strategy } from "passport-jwt"
 import { PassportStrategy } from "@nestjs/passport"
-import { Injectable, UnauthorizedException } from "@nestjs/common"
+import { HttpException, Injectable, UnauthorizedException } from "@nestjs/common"
 import { Request } from "express"
 import { ConfigService } from "@nestjs/config"
 import { AuthService } from "../services/auth.service"
 import { InjectRepository } from "@nestjs/typeorm"
 import { User } from "../entities/user.entity"
 import { Repository } from "typeorm"
+import { UserService } from "../services/user.service"
+import { USER_ERRORS } from "../user-errors"
 
 function extractTokenFromAuthHeader(req: Request) {
   const authHeader = req.get("Authorization")
@@ -35,9 +37,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException()
     }
     const userId = payload.sub
-    return this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: ["leasingAgentInListings"],
     })
+
+    if (UserService.isPasswordOutdated(user)) {
+      throw new HttpException(
+        USER_ERRORS.PASSWORD_OUTDATED.message,
+        USER_ERRORS.PASSWORD_OUTDATED.status
+      )
+    }
+
+    return user
   }
 }

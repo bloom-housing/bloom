@@ -1,4 +1,4 @@
-import { BaseView, FullView, getView } from "./view"
+import { BaseListingView, FullView, getView } from "./view"
 import { views } from "./config"
 
 const mockQueryBuilder = {
@@ -47,23 +47,23 @@ describe("listing views", () => {
 
   describe("BaseView", () => {
     it("should create a new BaseView with qb view properties", () => {
-      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+      const view = new BaseListingView(mockListingsRepo.createQueryBuilder())
 
       expect(view.qb).toEqual(mockQueryBuilder)
       expect(view.view).toEqual(views.base)
     })
 
     it("should call getView qb select and leftJoin", () => {
-      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+      const view = new BaseListingView(mockListingsRepo.createQueryBuilder())
 
       view.getViewQb()
 
       expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(13)
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(15)
     })
 
     it("should map unitSummary to listings", () => {
-      const view = new BaseView(mockListingsRepo.createQueryBuilder())
+      const view = new BaseListingView(mockListingsRepo.createQueryBuilder())
 
       const listings = view.mapUnitSummary(mockListings)
 
@@ -80,7 +80,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(30)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(31)
     })
   })
 

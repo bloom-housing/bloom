@@ -35,6 +35,7 @@ import DetailApplicationTypes from "../../../src/listings/PaperListingDetails/se
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
 import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
 import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
+import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -123,6 +124,7 @@ export default function ApplicationsList() {
                     <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />
                     <DetailPreferences />
+                    <DetailPrograms />
                     <DetailAdditionalFees />
                     <DetailBuildingFeatures />
                     <DetailAdditionalEligibility />

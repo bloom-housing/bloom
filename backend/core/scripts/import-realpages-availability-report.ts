@@ -116,7 +116,7 @@ async function main(): Promise<void> {
   }
 
   const listingsService = new client.ListingsService()
-  const listing = await listingsService.retrieve({ listingId: args.listingId })
+  const listing = await listingsService.retrieve({ id: args.listingId })
   const listingUnitTypeNameSummaryMap = listing.unitsSummary.reduce((a, s) => {
     return { ...a, [s.unitType.name]: s }
   }, {})
@@ -156,7 +156,7 @@ async function main(): Promise<void> {
   }
   console.log(`Updating listing "${listing.name}" with new availabilities:`)
   console.log(newUnitTypeNameAvailabilityMap)
-  await listingsService.update({ listingId: args.listingId, body: listing })
+  await listingsService.update({ id: args.listingId, body: listing })
 }
 
 void main()

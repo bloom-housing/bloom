@@ -18,11 +18,11 @@ const AccountApplication = () => {
   useEffect(() => {
     if (profile) {
       applicationsService
-        .retrieve({ applicationId })
+        .retrieve({ id: applicationId })
         .then((app) => {
           setApplication(app)
           listingsService
-            ?.retrieve({ listingId: app.listing.id })
+            ?.retrieve({ id: app.listing.id })
             .then((retrievedListing) => {
               setListing(retrievedListing)
             })
@@ -95,7 +95,9 @@ const AccountApplication = () => {
                     {t("application.confirmation.lotteryNumber")}
                   </h3>
 
-                  <p className="font-serif text-3xl my-0">{application.id}</p>
+                  <p className="font-serif text-3xl my-0">
+                    {application.confirmationCode || application.id}
+                  </p>
                 </div>
 
                 <FormSummaryDetails listing={listing} application={application} />

@@ -12,5 +12,6 @@ export const Default = () => (
     currentPageSection={2}
     completedSections={1}
     labels={["You", "Household", "Income", "Preferences", "Review"]}
+    mounted={true}
   />
 )

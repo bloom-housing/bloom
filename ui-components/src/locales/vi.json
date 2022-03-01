@@ -1,4 +1,4 @@
-﻿{
+{
   "account": {
     "accountSettings": "Thiết lập Tài khoản",
     "accountSettingsSubtitle": "Thiết lập Tài khoản, email và mật khẩu",
@@ -127,10 +127,12 @@
       "assistanceUrl": "https://exygy.com/",
       "dontQualifyHeader": "Thật đáng tiếc, có vẻ như quý vị không đủ điều kiện cho danh sách nhà này.",
       "dontQualifyInfo": "Vui lòng thực hiện các thay đổi nếu quý vị cho rằng mình có thể đã nhầm lẫn. Lưu ý rằng nếu quý vị giả mạo bất kỳ thông tin nào trong đơn ghi danh của mình, quý vị sẽ bị loại. Nếu thông tin quý vị đã nhập là chính xác, chúng tôi đề nghị quý vị nên kiểm tra lại trong tương lai khi có thêm các bất động sản.",
+      "genericSubtitle": "Nếu đơn của quý vị được chọn, hãy chuẩn bị cung cấp tài liệu hỗ trợ.",
       "addMembers": {
         "addHouseholdMember": "+ Thêm Thành viên Hộ Gia đình",
         "done": "Thêm xong thành viên",
-        "title": "Hãy cho chúng tôi biết về hộ gia đình của quý vị."
+        "title": "Hãy cho chúng tôi biết về hộ gia đình của quý vị.",
+        "doubleCheck": "Hãy kiểm tra lại thông tin cho mỗi thành viên hộ gia đình."
       },
       "householdMember": "Thành viên Hộ Gia đình",
       "householdMembers": "Các Thành viên Hộ Gia đình",
@@ -142,7 +144,7 @@
       "preferredUnit": {
         "preferredUnitType": "Loại Căn nhà Ưa thích",
         "title": "Kích thước căn nhà mà quý vị quan tâm là gì?",
-        "subTitle": "Loại căn nhà quý vị đã chọn sẽ tùy thuộc vào tình trạng sẵn có.",
+        "subTitle": "Mặc dù các kích thước nhà ở thường dựa vào mức độ sử dụng nhưng vui lòng cho biết kích thước nhà ở mà quý vị yêu thích để xác định ưu tiên của quý vị trong cơ hội này hoặc lập danh sách chờ (chỉ dành cho cơ hội này)",
         "optionsLabel": "Đánh dấu tất cả các lựa chọn phù hợp:",
         "options": {
           "studio": "Một phòng kiểu studio",
@@ -151,6 +153,14 @@
           "threeBdrm": "3 Phòng ngủ",
           "fourBdrm": "3 Phòng ngủ trở lên"
         }
+      },
+      "expectingChanges": {
+        "title": "Dự Kiến Những Thay Đổi Trong Hộ Gia Đình",
+        "question": "Quý vị có dự đoán bất kỳ thay đổi nào trong hộ gia đình mình trong 12 tháng tới không?"
+      },
+      "householdStudent": {
+        "title": "Hộ Gia Đình Có Sinh Viên hoặc Thành Viên Sắp 18 Tuổi",
+        "question": "Có ai đó trong hộ gia đình quý vị là sinh viên chính quy hoặc sắp đủ 18 tuổi trong vòng 60 ngày không?"
       },
       "member": {
         "cancelAddingThisPerson": "Hủy bỏ việc thêm người này",
@@ -218,6 +228,7 @@
       "preamble": "Nếu quý vị hội đủ điều kiện cho lựa chọn ưu tiên này, quý vị sẽ được xếp ở thứ hạng cao hơn.",
       "selectBelow": "Nếu quý vị có một trong những lựa chọn ưu tiên nhà ở này, hãy chọn ưu tiên đó bên dưới:",
       "dontWant": "Tôi không muốn lựa chọn ưu tiên này",
+      "dontWantSingular": "Tôi không muốn lựa chọn ưu tiên này",
       "stillHaveOpportunity": "Quý vị vẫn sẽ có cơ hội yêu cầu các lựa chọn ưu tiên khác.",
       "youHaveClaimed": "Quý vị đã xác nhận:",
       "liveWork": {
@@ -239,6 +250,109 @@
       "general": {
         "title": "Dựa trên thông tin quý vị đã nhập, hộ gia đình của quý vị chưa yêu cầu bất kỳ lựa chọn ưu tiên nhà ở nào.",
         "preamble": "Quý vị sẽ thuộc nhóm các ứng viên chung."
+      },
+      "rosefieldLive": {
+        "title": "Cư dân trước đây của Làng Rosefield đã tái định cư bên ngoài Thành phố Alameda",
+        "yes": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là cư dân trước đây của Làng Rosefield",
+          "description": "Ít nhất một thành viên trong gia đình tôi là cư dân trước đây của Làng Rosefield"
+        }
+      },
+      "rosefieldAUSD": {
+        "title": "Nhân viên của Học khu Thống nhất Alameda (AUSD)",
+        "yes": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda",
+          "description": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Học khu Thống nhất Alameda"
+        }
+      },
+      "dublinHousing": {
+        "liveInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Dublin (3 điểm)"
+        },
+        "immediateFamily": {
+          "label": "Ít nhất một thành viên trong gia đình của tôi có người thân trong gia đình ở Dublin (1 điểm)"
+        },
+        "displacedResident": {
+          "label": "Ít nhất một thành viên trong gia đình tôi đã phải di dời khỏi nơi ở hiện tại ở Dublin do việc phá dỡ nhà ở hoặc chuyển nhà từ cho thuê sang bán (1 điểm)"
+        },
+        "worksInDublin": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc toàn thời gian ở Dublin (3 điểm)"
+        },
+        "publicServiceEmployee": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên dịch vụ công cộng ở Dublin (1 điểm bổ sung)"
+        },
+        "permanentlyDisabled": {
+          "label": "Ít nhất một thành viên trong gia đình tôi bị tàn tật vĩnh viễn (1 điểm)"
+        },
+        "senior": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là người cao tuổi, được xác định là từ 62 tuổi trở lên (1 điểm)"
+        }
+      },
+      "terminationOfAffordability": {
+        "atLeastOne": {
+          "label": "Ít nhất một thành viên trong gia đình, tôi phải sử dụng các hạn chế về chi trả khả năng"
+        }
+      },
+      "liveWorkFosterCity": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Foster City"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Foster City"
+        }
+      },
+      "liveFosterCity": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Foster City"
+        }
+      },
+      "fosterCityEmployee": {
+        "employed": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên của Thành phố Foster City"
+        }
+      },
+      "fosterCitySchoolEmployee": {
+        "employed": {
+          "label": "Ít nhất một thành viên trong gia đình tôi là nhân viên khu học chánh"
+        }
+      },
+      "workFosterCity": {
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Foster City"
+        }
+      },
+      "liveWorkSanMateo": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Thành phố San Mateo"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc ở Thành phố San Mateo"
+        }
+      },
+      "liveWorkEastPaloAlto": {
+        "live": {
+          "label": "Ít nhất một thành viên trong gia đình tôi sống ở Thành phố Đông Palo Alto"
+        },
+        "work": {
+          "label": "Ít nhất một thành viên trong gia đình tôi làm việc 20 giờ mỗi tuần hoặc hơn ở Thành phố Đông Palo Alto"
+        }
+      },
+      "displaceeEastPaloAlto": {
+        "naturalDisaster": {
+          "label": "Thiên tai do Thống đốc tuyên bố"
+        },
+        "domesticViolence": {
+          "label": "Bạo lực gia đình"
+        },
+        "codeEnforcement": {
+          "label": "Hoạt động thực thi mã thành phố"
+        },
+        "noFaultEviction": {
+          "label": "A \"Không có lỗi\" Trục xuất khỏi một đơn vị cho thuê ở East Palo Alto trong năm ngoái của ứng dụng này"
+        },
+        "increasedRent": {
+          "label": "Giá thuê tăng 10% hoặc cao hơn trong 12 tháng qua"
+        }
       }
     },
     "review": {
@@ -250,7 +364,6 @@
       "lastChanceToEdit": "Đây là cơ hội cuối cùng để quý vị chỉnh sửa trước khi nộp đơn.",
       "terms": {
         "title": "Các điều khoản",
-        "text": "Đơn ghi danh này phải được gửi trước %{applicationDueDate}.<br><br>Người nộp đơn sẽ được nhân viên đại diện liên lạc theo thứ tự xếp hạng rút thăm và thứ tự lựa chọn ưu tiên cho đến khi hết chỗ trống.<br><br>Tất cả thông tin quý vị đã cung cấp sẽ được xác nhận và tình trạng hội đủ điều kiện quý vị được xác nhận. Đơn ghi danh của quý vị sẽ bị loại khỏi cuộc rút thăm nếu quý vị có bất kỳ tuyên bố sai sự thật nào, hoặc nếu bất kỳ thành viên nào trong gia đình có tên xuất hiện cho nhiều hơn một đơn ghi danh cho danh sách này. Nếu chúng tôi không thể xác nhận lựa chọn ưu tiên rút thăm nhà ở mà quý vị đã yêu cầu, quý vị sẽ không nhận được lựa chọn ưu tiên đó nhưng sẽ không bị phạt.<br><br>Tất cả thông tin quý vị đã cung cấp sẽ được xác nhận và tình trạng hội đủ điều kiện quý vị được xác nhận. Đơn ghi danh của quý vị sẽ bị loại khỏi danh sách chờ nếu quý vị có bất kỳ tuyên bố sai sự thật nào, hoặc nếu bất kỳ thành viên nào trong gia đình có tên xuất hiện cho nhiều đơn hơn một đơn ghi danh cho danh sách nhà này. Nếu chúng tôi không thể xác nhận lựa chọn ưu tiên nhà ở mà quý vị đã yêu cầu, quý vị sẽ không nhận được lựa chọn ưu tiên đó nhưng sẽ không bị phạt.<br><br>Nếu đơn ghi danh của quý vị được lựa chọn từ cuộc rút thăm, hãy chuẩn bị để điền vào đơn ghi danh gồm các thông tin chi tiết hơn và cung cấp các tài liệu hỗ trợ cần thiết trong vòng 5 ngày làm việc kể từ khi được liên lạc. Để biết thêm thông tin, vui lòng liên lạc với cơ quan phát triển nhà hoặc nhân viên đại diện được đăng trong danh sách. Việc hoàn thành đơn ghi danh rút thăm này không giúp quý vị có nhà ở hoặc cho biết quý vị hội đủ điều kiện nhận nhà. Tất cả những người nộp đơn sẽ được sàng lọc như đã nêu trong Tiêu chí Lựa chọn Cư dân của bất động sản.<br><br>Quý vị không thể thay đổi đơn ghi danh trực tuyến của mình sau khi đã gửi.<br><br>Tôi cam đoan rằng những điều đã khai ở trên là đúng và chính xác, đồng thời xác nhận rằng bất kỳ tuyên bố sai sự thật do gian lận hoặc cẩu thả nào trên đơn ghi danh này sẽ khiến tôi bị loại khỏi cuộc rút thăm.<br><br>",
         "confirmCheckboxText": "Tôi đồng ý và hiểu rằng tôi không thể thay đổi bất cứ thông tin nào sau khi tôi nộp đơn."
       },
       "demographics": {
@@ -276,7 +389,20 @@
           "americanIndianAlaskanNativeAndWhite": "Thổ dân Mỹ/Bản địa Alaska và Người Da Trắng",
           "asianAndWhite": "Người Châu Á và Người Da Trắng",
           "blackAfricanAmericanAndWhite": "Người Da đen/ Mỹ gốc Phi và Người Da Trắng",
-          "otherMutliracial": "Khác / Đa chủng tộc"
+          "otherMutliracial": "Khác / Đa chủng tộc",
+          "asian-otherAsian": "Người Châu Á Khác",
+          "asian-chinese": "Người Trung Quốc",
+          "asian-asianIndian": "Người Ấn Độ Châu Á",
+          "declineToRespond": "Từ chối phản hồi",
+          "asian-filipino": "Người Philippines",
+          "nativeHawaiianOtherPacificIslander-guamanianOrChamorro": "Người Guam hoặc Chamorro",
+          "asian-japanese": "Người Nhật Bản",
+          "asian-korean": "Người Hàn Quốc",
+          "nativeHawaiianOtherPacificIslander-nativeHawaiian": "Người Hawaii Bản Địa",
+          "otherMultiracial": "Khác / Đa chủng tộc",
+          "nativeHawaiianOtherPacificIslander-otherPacificIslander": "Người Dân Đảo Thái Bình Dương Khác",
+          "nativeHawaiianOtherPacificIslander-samoan": "Người Samoa",
+          "asian-vietnamese": "Người Việt Nam"
         },
         "genderOptions": {
           "female": "Nữ",
@@ -294,7 +420,7 @@
           "notListed": "Không được Liệt kê"
         },
         "howDidYouHearOptions": {
-          "alamedaCountyHCDWebsite": "Trang web HCD của Quận Alameda",
+          "jurisdictionWebsite": "Trang web HCD của Quận Alameda",
           "developerWebsite": "Trang web của Cơ quan phát triển nhà",
           "flyer": "Tờ rơi",
           "emailAlert": "Thông báo qua Email",
@@ -363,7 +489,22 @@
     "signIn": {
       "error": "Đã xảy ra lỗi khi quý vị đăng nhập",
       "errorGenericMessage": "Vui lòng thử lại hoặc liên lạc với bộ phận hỗ trợ để được trợ giúp.",
+      "forgotPassword": "Quên mật khẩu",
       "success": "Chào mừng quý vị trở lại, %{name}!"
+    },
+    "createAccount": {
+      "accountConfirmed": "Tài khoản của quý vị đã được xác nhận.",
+      "anEmailHasBeenSent": "Một email đã được gửi tới %{email}",
+      "confirmationInstruction": "Hãy nhấp vào đường liên kết trong email mà chúng tôi gửi cho quý vị để hoàn thành việc lập tài khoản.",
+      "confirmationNeeded": "Cần xác nhận",
+      "resendTheEmail": "Gửi lại Email",
+      "password": "Mật khẩu",
+      "noAccount": "Không có tài khoản?",
+      "reEnterEmail": "Nhập lại địa chỉ Email",
+      "passwordInfo": "Phải có ít nhất 8 ký tự và bao gồm ít nhất 1 chữ cái và ít nhất một số",
+      "reEnterPassword": "Nhập lại mật khẩu của bạn",
+      "mustBe8Chars": "phải có 8 ký tự",
+      "yourName": "Tên Quý vị"
     }
   },
   "config": {
@@ -406,7 +547,7 @@
     "forGeneralQuestions": "Đối với các thắc mắc chung về chương trình, quý vị có thể gọi cho chúng tôi theo số 000-000-0000.",
     "giveFeedback": "Đưa ra Phản hồi",
     "privacyPolicy": "Chính sách Quyền Riêng tư",
-    "copyright": "Demonstration County © 2020 • Giữ Mọi Bản quyền"
+    "copyright": "Demonstration Jurisdiction © 2021 • Giữ Mọi Bản quyền"
   },
   "housingCounselors": {
     "subtitle": "Nói chuyện với một cố vấn gia cư địa phương cụ thể cho nhu cầu của quý vị.",
@@ -423,6 +564,7 @@
     "additionalInformation": "Thông tin Bổ sung",
     "allUnits": "Tất cả các Căn nhà",
     "allUnitsReservedFor": "Tất cả các căn nhà được dành cho %{type}",
+    "annualIncome": "%{income} mỗi năm",
     "applicationDeadline": "Hạn nộp Đơn ghi danh",
     "applicationFCFS": "Ai Nộp đơn Trước Được Nhận trước",
     "applicationFee": "Lệ phí Ghi danh",
@@ -441,7 +583,7 @@
       "howToApply": "Cách Ghi danh",
       "paperApplicationsMustBeMailed": "Mẫu đơn ghi danh Giấy phải được gửi thư bưu điện Hoa Kỳ và không thể nộp trực tiếp.",
       "pickUpAnApplication": "Nhận đơn ghi danh",
-      "postmarkedApplicationsMustBeReceivedByDate": "Đơn ghi danh phải được nhận trước thời hạn. Nếu gửi qua đường bưu điện U.S Mail, đơn ghi danh phải được đóng dấu bưu điện trước %{applicationDueDate} và nhận qua thư trước ngày %{postmarkReceiveByDate}. Các đơn ghi danh nhận được sau %{postmarkReceiveByDate} qua đường bưu điện sẽ không được chấp nhận ngay cả khi chúng được đóng dấu bưu điện trước %{applicationDueDate}. %{developer} không chịu trách nhiệm về thư bị thất lạc hoặc bị trễ.",
+      "submitPaperDueDatePostMark": "Đơn ghi danh phải được nhận trước thời hạn. Nếu gửi qua đường bưu điện U.S Mail, đơn ghi danh phải được đóng dấu bưu điện trước %{applicationDueDate} và nhận qua thư trước ngày %{postmarkReceiveByDate}. Các đơn ghi danh nhận được sau %{postmarkReceiveByDate} qua đường bưu điện sẽ không được chấp nhận ngay cả khi chúng được đóng dấu bưu điện trước %{applicationDueDate}. %{developer} không chịu trách nhiệm về thư bị thất lạc hoặc bị trễ.",
       "sendByUsMail": "Gửi Đơn ghi danh qua đường bưu điện US Mail",
       "submitAPaperApplication": "Gửi Giấy ghi danh"
     },
@@ -475,6 +617,7 @@
     },
     "maxIncomeMonth": "Thu nhập Tối đa / Tháng",
     "maxIncomeYear": "Thu nhập Tối đa / Năm",
+    "monthlyIncome": "%{income} mỗi tháng",
     "moreBuildingSelectionCriteria": "Tìm hiểu thêm về Tiêu chí Lựa chọn Tòa nhà",
     "noAvailableUnits": "Không có căn nhà nào còn trống tại thời điểm này.",
     "noOpenListings": "Không có danh sách nhà nào hiện đang mở nhận đơn ghi danh.",
@@ -596,6 +739,7 @@
   "nav": {
     "accountSettings": "Thiết lập Tài khoản",
     "browseProperties": "Duyệt các Bất động sản",
+    "getFeedback": "Chúng tôi rất muốn nhận được phản hồi của bạn",
     "getAssistance": "Nhận Hỗ trợ",
     "listings": "Các danh sách nhà",
     "properties": "Các bất động sản",
@@ -702,6 +846,7 @@
     "edit": "Hiệu đính",
     "email": "Email",
     "emailAddressPlaceholder": "you@myemail.com",
+    "description": "Nhập mô tả",
     "floor": "sàn",
     "floors": "các sàn",
     "getDirections": "Lấy hướng dẫn chỉ đường",
@@ -732,6 +877,7 @@
     "phone": "Điện thoại",
     "phoneNumberPlaceholder": "(555) 555-5555",
     "pleaseSelectOne": "Vui lòng chọn một.",
+    "pleaseSelectYesNo": "Vui lòng chọn có hoặc không.",
     "preferences": "Các lựa chọn ưu tiên",
     "propertyAmenities": "Các tiện ích của Bất động sản",
     "range": "%{from} đến %{to}",
@@ -768,7 +914,11 @@
     "seeRentalListings": "Xem Thông tin Thuê nhà",
     "title": "Ghi danh nhà ở giá phải chăng tại",
     "seeMoreOpportunities": "Xem thêm cơ hội thuê nhà và sở hữu nhà ở",
-    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung"
+    "viewAdditionalHousing": "Xem Các Cơ hội Nhà ở và các Nguồn Hỗ trợ Bổ sung",
+    "seeMoreOpportunitiesTruncated": "Xem thêm các cơ hội và nguồn hỗ trợ về nhà ở",
+    "viewAdditionalHousingTruncated": "Xem các Cơ Hội và Nguồn Hỗ Trợ",
+    "signUp": "Nhận email mỗi khi có danh sách mới được đăng",
+    "signUpToday": "Đăng Ký Ngay Hôm Nay"
   },
   "whatToExpect": {
     "label": "Những điều Sẽ xảy ra",

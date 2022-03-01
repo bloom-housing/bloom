@@ -1,5 +1,6 @@
 import React, { useContext, Fragment } from "react"
-import { t, GridSection, ViewItem, GridCell, sortUnitTypes } from "@bloom-housing/ui-components"
+import { t, GridSection, ViewItem, GridCell } from "@bloom-housing/ui-components"
+import { sortUnitTypes } from "@bloom-housing/shared-helpers"
 import { ApplicationContext } from "../../ApplicationContext"
 
 const DetailsHouseholdDetails = () => {
@@ -22,7 +23,6 @@ const DetailsHouseholdDetails = () => {
       className="bg-primary-lighter"
       title={t("application.review.householdDetails")}
       inset
-      columns={3}
     >
       <GridCell>
         <ViewItem label={t("application.details.preferredUnitSizes")}>
@@ -47,6 +47,17 @@ const DetailsHouseholdDetails = () => {
               <br />
             </Fragment>
           ))}
+        </ViewItem>
+      </GridCell>
+      <GridCell>
+        <ViewItem id="householdChanges" label={t("application.household.expectingChanges.title")}>
+          {application.householdExpectingChanges ? t("t.yes") : t("t.no")}
+        </ViewItem>
+      </GridCell>
+
+      <GridCell>
+        <ViewItem id="householdStudent" label={t("application.household.householdStudent.title")}>
+          {application.householdStudent ? t("t.yes") : t("t.no")}
         </ViewItem>
       </GridCell>
     </GridSection>

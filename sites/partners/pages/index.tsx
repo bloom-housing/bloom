@@ -3,14 +3,13 @@ import Head from "next/head"
 import {
   PageHeader,
   t,
-  lRoute,
   AuthContext,
   Button,
   LocalizedLink,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
+import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -24,7 +23,7 @@ class formatLinkCell {
   init(params) {
     this.link = document.createElement("a")
     this.link.classList.add("text-blue-700")
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/edit`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
     this.link.innerText = params.valueFormatted || params.value
   }
 
@@ -36,14 +35,14 @@ class formatLinkCell {
 class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
   }
 }
 
 class ListingsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
+    this.link.setAttribute("href", `/listings/${params.data.id}`)
   }
 }
 
@@ -110,6 +109,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         flex: 1,
+        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
       },
       {
         headerName: t("listings.availableUnits"),

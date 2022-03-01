@@ -1,6 +1,7 @@
 {
   "name": "bloom-housing",
-  "version": "1.0.5",
+  "version": "2.0.0-pre-tailwind",
+  "author": "Sean Albert <sean.albert@exygy.com>",
   "description": "Bloom is a system to manage processes for affordable housing",
   "workspaces": {
     "packages": [
@@ -17,14 +18,19 @@
   "repository": "https://github.com/CityOfDetroit/bloom.git",
   "license": "Apache-2.0",
   "private": true,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "dev:app:public": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/public && yarn dev",
     "test:app:public": "cd sites/public && yarn test",
     "test:app:public:headless": "cd sites/public && yarn test:headless",
     "build:app:public": "cd sites/public && yarn build",
     "dev:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn dev",
-    "test:app:partners": "cd sites/partners && yarn test",
-    "test:app:partners:headless": "cd sites/partners && yarn test:headless",
+    "test:app:partners": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test",
+    "test:app:partners:headless": "wait-on \"http-get://localhost:${PORT:-3100}/listings\" && cd sites/partners && yarn test:headless",
+    "test:app:partners:unit": "cd sites/partners && yarn test:unit",
     "build:app:partners": "cd sites/partners && yarn build",
     "dev:backend": "cd backend/core && yarn dev",
     "dev:all": "concurrently --names \" BACKEND_CORE,APP_PUBLIC,APP_PARTNERS\" --prefix \"{name}\" \"yarn dev:backend\" \"yarn dev:app:public\" \"yarn dev:app:partners\"",
@@ -67,7 +73,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "husky": "^4.3.0",
     "jest": "^26.5.3",
-    "lerna": "^3.22.1",
+    "lerna": "^4.0.0",
     "lint-staged": "^10.4.0",
     "prettier": "^2.1.0",
     "react": "^17.0.2",

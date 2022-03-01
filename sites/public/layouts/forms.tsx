@@ -2,12 +2,15 @@ import Layout from "./application"
 import { ApplicationTimeout } from "../src/forms/applications/ApplicationTimeout"
 import React from "react"
 
-const FormLayout = (props) => {
+interface FormLayoutProps {
+  children?: React.ReactNode
+}
+const FormLayout = (props: FormLayoutProps) => {
   return (
     <>
       <ApplicationTimeout />
       <Layout>
-        <section className="bg-gray-300">
+        <section className="bg-gray-300 border-t border-gray-450">
           <div className="md:mb-20 md:mt-12 mx-auto max-w-lg print:my-0 print:max-w-full">
             {props.children}
           </div>

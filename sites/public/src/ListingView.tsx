@@ -14,11 +14,9 @@ import {
   AdditionalFees,
   Description,
   GroupedTable,
-  GroupedTableGroup,
   getSummariesTableFromUnitSummary,
   getSummariesTableFromUnitsSummary,
   ImageCard,
-  imageUrlFromListing,
   GetApplication,
   LeasingAgent,
   ListingDetailItem,
@@ -30,11 +28,12 @@ import {
   SubmitApplication,
   UnitTables,
   Waitlist,
-  cloudinaryPdfFromId,
-  t,
   ListingUpdated,
   Message,
+  t,
 } from "@bloom-housing/ui-components"
+import { cloudinaryPdfFromId, imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
 import {
   getGenericAddress,
@@ -133,7 +132,13 @@ export const ListingView = (props: ListingProps) => {
     return applicationMethods.find((method) => method.type == type)
   }
 
-  type AddressLocation = "dropOff" | "pickUp"
+  type AddressLocation = "dropOff" | "pickUp" | "mailIn"
+
+  const addressMap = {
+    dropOff: listing.applicationDropOffAddress,
+    pickUp: listing.applicationPickUpAddress,
+    mailIn: listing.applicationMailingAddress,
+  }
 
   const getAddress = (
     addressType: ListingApplicationAddressType | undefined,
@@ -142,14 +147,7 @@ export const ListingView = (props: ListingProps) => {
     if (addressType === ListingApplicationAddressType.leasingAgent) {
       return listing.leasingAgentAddress
     }
-    if (addressType === ListingApplicationAddressType.mailingAddress) {
-      return listing.applicationMailingAddress
-    }
-    if (location === "dropOff") {
-      return listing.applicationDropOffAddress
-    } else {
-      return listing.applicationPickUpAddress
-    }
+    return addressMap[location]
   }
 
   const getOnlineApplicationURL = () => {
@@ -195,45 +193,44 @@ export const ListingView = (props: ListingProps) => {
 
   // Move the above methods into our shared helper library when setup
 
+  const getDateString = (date: Date, format: string) => {
+    return date ? dayjs(date).format(format) : null
+  }
+
   const applySidebar = () => (
     <>
-      <Waitlist
-        isWaitlistOpen={listing.isWaitlistOpen}
-        waitlistMaxSize={listing.waitlistMaxSize}
-        waitlistCurrentSize={listing.waitlistCurrentSize}
-        waitlistOpenSpots={listing.waitlistOpenSpots}
-        unitsAvailable={listing.unitsAvailable}
-      />
       <GetApplication
         onlineApplicationURL={getOnlineApplicationURL()}
-        applicationsDueDate={moment(listing.applicationDueDate).format(
-          `MMM. DD, YYYY [${t("t.at")}] h A`
-        )}
         applicationsOpen={!appOpenInFuture}
-        applicationsOpenDate={moment(listing.applicationOpenDate).format("MMMM D, YYYY")}
+        applicationsOpenDate={getDateString(listing.applicationOpenDate, "MMMM D, YYYY")}
         paperApplications={getPaperApplications()}
         paperMethod={!!getMethod(listing.applicationMethods, ApplicationMethodType.FileDownload)}
-        postmarkedApplicationsReceivedByDate={moment(
-          listing.postmarkedApplicationsReceivedByDate
-        ).format(`MMM. DD, YYYY [${t("t.at")}] h A`)}
+        postmarkedApplicationsReceivedByDate={getDateString(
+          listing.postmarkedApplicationsReceivedByDate,
+          `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+        )}
         applicationPickUpAddressOfficeHours={listing.applicationPickUpAddressOfficeHours}
         applicationPickUpAddress={getAddress(listing.applicationPickUpAddressType, "pickUp")}
         preview={props.preview}
+        listingStatus={listing.status}
       />
       <SubmitApplication
-        applicationMailingAddress={listing.applicationMailingAddress}
+        applicationMailingAddress={getAddress(listing.applicationMailingAddressType, "mailIn")}
         applicationDropOffAddress={getAddress(listing.applicationDropOffAddressType, "dropOff")}
         applicationDropOffAddressOfficeHours={listing.applicationDropOffAddressOfficeHours}
         applicationOrganization={listing.applicationOrganization}
         postmarkedApplicationData={{
-          postmarkedApplicationsReceivedByDate: moment(
-            listing.postmarkedApplicationsReceivedByDate
-          ).format(`MMM. DD, YYYY [${t("t.at")}] h A`),
+          postmarkedApplicationsReceivedByDate: getDateString(
+            listing.postmarkedApplicationsReceivedByDate,
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
+          ),
           developer: listing.developer,
-          applicationsDueDate: moment(listing.applicationDueDate).format(
-            `MMM. DD, YYYY [${t("t.at")}] h A`
+          applicationsDueDate: getDateString(
+            listing.applicationDueDate,
+            `MMM DD, YYYY [${t("t.at")}] hh:mm A`
           ),
         }}
+        listingStatus={listing.status}
       />
     </>
   )
@@ -280,7 +277,9 @@ export const ListingView = (props: ListingProps) => {
         {listing.reservedCommunityType && (
           <Message warning={true}>
             {t("listings.reservedFor", {
-              type: t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`),
+              type: t(
+                `listings.reservedCommunityTypeDescriptions.${listing.reservedCommunityType.name}`
+              ),
             })}
           </Message>
         )}
@@ -312,6 +311,14 @@ export const ListingView = (props: ListingProps) => {
             <div className="hidden md:block">
               <ListingUpdated listingUpdated={listing.updatedAt} />
               {openHouseEvents && <OpenHouseEvent events={openHouseEvents} />}
+              {!applicationsClosed && (
+                <Waitlist
+                  isWaitlistOpen={listing.isWaitlistOpen}
+                  waitlistMaxSize={listing.waitlistMaxSize}
+                  waitlistCurrentSize={listing.waitlistCurrentSize}
+                  waitlistOpenSpots={listing.waitlistOpenSpots}
+                />
+              )}
               {hasNonReferralMethods && !applicationsClosed && applySidebar()}
               {listing?.referralApplication && (
                 <ReferralApplication

@@ -4,7 +4,7 @@ import { t, GridSection, GridCell, ViewItem, Select, Textarea } from "@bloom-hou
 import { useReservedCommunityTypeList } from "../../../../lib/hooks"
 import { arrayToFormOptions } from "../../../../lib/helpers"
 import { ReservedCommunityType } from "@bloom-housing/backend-core/types"
-import { FormListing } from "../index"
+import { FormListing } from "../formTypes"
 
 type CommunityTypeProps = {
   listing?: FormListing
@@ -58,7 +58,6 @@ const CommunityType = ({ listing }: CommunityTypeProps) => {
             id={"reservedCommunityDescription"}
             fullWidth={true}
             register={register}
-            maxLength={150}
           />
         </GridCell>
       </GridSection>

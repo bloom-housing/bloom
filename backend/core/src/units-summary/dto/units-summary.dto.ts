@@ -7,11 +7,15 @@ import { UnitsSummary } from "../entities/units-summary.entity"
 import {
   UnitsSummaryAmiLevelCreateDto,
   UnitsSummaryAmiLevelDto,
-  UnitsSummaryAmiLevelUpdateDto
+  UnitsSummaryAmiLevelUpdateDto,
 } from "./units-summary-ami-level.dto"
 import { IdDto } from "../../shared/dto/id.dto"
 
-export class UnitsSummaryDto extends OmitType(UnitsSummary, ["listing", "unitType", "amiLevels"] as const) {
+export class UnitsSummaryDto extends OmitType(UnitsSummary, [
+  "listing",
+  "unitType",
+  "amiLevels",
+] as const) {
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitTypeDto)
@@ -24,7 +28,11 @@ export class UnitsSummaryDto extends OmitType(UnitsSummary, ["listing", "unitTyp
   amiLevels: UnitsSummaryAmiLevelDto[]
 }
 
-export class UnitsSummaryCreateDto extends OmitType(UnitsSummaryDto, ["id", "unitType", "amiLevels"] as const) {
+export class UnitsSummaryCreateDto extends OmitType(UnitsSummaryDto, [
+  "id",
+  "unitType",
+  "amiLevels",
+] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })

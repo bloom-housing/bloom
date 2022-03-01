@@ -24,14 +24,19 @@ export const withLink = () => (
 
 export const withNoImage = () => <ImageCard href="/listings" title="Hello World" />
 
-export const withShortImageLongTitle = () => (
-  <ImageCard
-    href="/listings"
-    imageUrl="https://res.cloudinary.com/exygy/image/upload/w_1302,c_limit,q_65/BBA_Renderings_jpeg_zmypjv.jpg
+export const withShortImageLongTitle = () => {
+  return (
+    <div style={{ maxWidth: "500px" }}>
+      <ImageCard
+        href="/listings"
+        imageUrl="https://bit.ly/3jzVfwP
   "
-    title="Here is the name of a long listing, it should wrap onto multiple lines"
-  />
-)
+        subtitle="55 Triton Park Lane, Foster City CA, 94404"
+        title="Here is the name of a long listing, it should wrap"
+      />
+    </div>
+  )
+}
 
 export const withOneStatus = () => (
   <ImageCard
@@ -79,6 +84,22 @@ export const withMultipleAppStatus = () => (
         status: ApplicationStatusType.PostLottery,
         content: "Lottery Results Posted: September 3rd",
         hideIcon: true,
+      },
+    ]}
+  />
+)
+
+export const withCustomIconType = () => (
+  <ImageCard
+    href="/listings"
+    imageUrl="/images/listing.jpg"
+    title="Hello World"
+    subtitle="Matched"
+    statuses={[
+      {
+        status: ApplicationStatusType.Matched,
+        content: "Matched",
+        iconType: "check",
       },
     ]}
   />

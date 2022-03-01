@@ -3,7 +3,7 @@ import { Cron, CronExpression } from "@nestjs/schedule"
 import { UserListQueryParams } from "../auth/dto/user-list-query-params"
 import { AuthContext } from "../auth/types/auth-context"
 import { Compare } from "../shared/dto/filter.dto"
-import { EmailService } from "../shared/email/email.service"
+import { EmailService } from "../email/email.service"
 import { ListingsService } from "../listings/listings.service"
 import { UserService } from "../auth/services/user.service"
 

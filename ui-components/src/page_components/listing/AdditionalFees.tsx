@@ -6,6 +6,7 @@ export interface AdditionalFeesProps {
   depositMax?: string
   applicationFee?: string
   costsNotIncluded?: string
+  depositHelperText?: string
 }
 
 const AdditionalFees = (props: AdditionalFeesProps) => {
@@ -37,7 +38,7 @@ const AdditionalFees = (props: AdditionalFeesProps) => {
           <div className="info-card__column">
             <div className="text-base">{t("t.deposit")}</div>
             <div className="text-xl font-bold">{getDeposit()}</div>
-            <div>{t("listings.depositOrMonthsRent")}</div>
+            {props.depositHelperText && <div>{props.depositHelperText}</div>}
           </div>
         )}
       </div>

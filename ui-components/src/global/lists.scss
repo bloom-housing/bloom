@@ -48,7 +48,7 @@
 .numbered-list li:last-of-type {
   margin-bottom: 0.5rem;
 }
-@media only screen and (min-width: 60.0625em) {
+@screen md {
   .numbered-list li {
     margin: 0 0 1.5rem 2.5rem;
   }

@@ -34,10 +34,10 @@ export class Demographics extends AbstractEntity {
   @MaxLength(64, { groups: [ValidationsGroupsEnum.default], each: true })
   howDidYouHear: string[]
 
-  @Column({ type: "text", nullable: true })
+  @Column({ array: true, type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.partners] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @MaxLength(64, { groups: [ValidationsGroupsEnum.default] })
-  race?: string | null
+  @ArrayMaxSize(64, { groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default], each: true })
+  race?: string[] | null
 }
