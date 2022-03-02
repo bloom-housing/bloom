@@ -8,7 +8,7 @@ import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
 import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
-import { summarizeUnits } from "../shared/units-transformations-deprecated"
+import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
@@ -247,7 +247,7 @@ export class ListingsService {
       const amiCharts = await this.amiChartsRepository.find({
         where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+      listing.unitsSummarized = summarizeUnits(listing.unitsSummary, amiCharts)
     }
     return listing
   }

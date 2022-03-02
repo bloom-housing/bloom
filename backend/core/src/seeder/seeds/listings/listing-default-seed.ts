@@ -31,6 +31,7 @@ import { Preference } from "../../../preferences/entities/preference.entity"
 import { Program } from "../../../program/entities/program.entity"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
+import { UnitsSummaryAmiLevel } from "../../../units-summary/entities/units-summary-ami-level.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -47,6 +48,8 @@ export class ListingDefaultSeed {
     @InjectRepository(Unit) protected readonly unitsRepository: Repository<Unit>,
     @InjectRepository(UnitsSummary)
     protected readonly unitsSummaryRepository: Repository<UnitsSummary>,
+    @InjectRepository(UnitsSummary)
+    protected readonly unitsSummaryAmiLevelRepository: Repository<UnitsSummaryAmiLevel>,
     @InjectRepository(User) protected readonly userRepository: Repository<User>,
     @InjectRepository(ApplicationMethod)
     protected readonly applicationMethodRepository: Repository<ApplicationMethod>,

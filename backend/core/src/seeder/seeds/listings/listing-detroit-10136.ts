@@ -5,6 +5,8 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitsSummaryAmiLevel } from "../../../units-summary/entities/units-summary-ami-level.entity"
+import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -96,63 +98,57 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const unitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
+    const unitSummaries: Omit<UnitsSummary, "id">[] = [
+      {
+        amiLevels: [],
+        unitType: [unitTypeStudio, unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 2,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "500",
+        sqFeetMax: "550",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+    ]
 
-    const studioUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeStudio],
-      totalCount: 8,
-      listing: listing,
-      minOccupancy: 1,
-      maxOccupancy: 2,
-    }
-    unitsSummaryToBeCreated.push(studioUnitsSummary)
+    const savedUnitSummaries = await this.unitsSummaryRepository.save(unitSummaries)
 
-    const studioTwoUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeStudio],
-      totalCount: 5,
-      listing: listing,
-      minOccupancy: 2,
-      maxOccupancy: 3,
-    }
-    unitsSummaryToBeCreated.push(studioTwoUnitsSummary)
+    const amiLevels: Omit<UnitsSummaryAmiLevel, "id">[] = [
+      {
+        amiChartId: "1234",
+        amiPercentage: 30,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+        flatRentValue: 2500,
+        unitsSummary: savedUnitSummaries[0],
+      },
+      {
+        amiChartId: "1234",
+        amiPercentage: 40,
+        monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+        flatRentValue: 30,
+        unitsSummary: savedUnitSummaries[1],
+      },
+    ]
 
-    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeOneBdrm],
-      totalCount: 100,
-      listing: listing,
-      minOccupancy: 1,
-      maxOccupancy: 2,
-    }
-    unitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
-
-    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeTwoBdrm],
-      totalCount: 118,
-      listing: listing,
-      minOccupancy: 2,
-      maxOccupancy: 4,
-    }
-    unitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
-
-    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeThreeBdrm],
-      totalCount: 54,
-      listing: listing,
-      minOccupancy: 2,
-      maxOccupancy: 6,
-    }
-    unitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
-
-    const fourBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
-      unitType: [unitTypeFourBdrm],
-      totalCount: 32,
-      listing: listing,
-      minOccupancy: 3,
-      maxOccupancy: 8,
-    }
-    unitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
-
-    await this.unitsSummaryRepository.save(unitsSummaryToBeCreated)
+    await this.unitsSummaryAmiLevelRepository.save(amiLevels)
 
     return listing
   }

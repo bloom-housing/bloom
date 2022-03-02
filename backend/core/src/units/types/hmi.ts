@@ -1,10 +1,9 @@
-import { AnyDict } from "../../shared/units-transformations-deprecated"
 import { ApiProperty } from "@nestjs/swagger"
 
 export class HMI {
   @ApiProperty()
-  columns: AnyDict
+  columns: { [key: string]: unknown }
 
   @ApiProperty({ type: [Object] })
-  rows: AnyDict[]
+  rows: { [key: string]: unknown }[]
 }
