@@ -112,7 +112,7 @@ export const formDefaults: FormListing = {
   disableUnitsAccordion: false,
   displayWaitlistSize: false,
   events: [],
-  image: null,
+  images: [],
   leasingAgentAddress: null,
   leasingAgentEmail: null,
   leasingAgentName: null,

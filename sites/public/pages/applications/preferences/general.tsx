@@ -2,7 +2,7 @@
 4.3 General Pool
 If all preferences are opted out the applicant is shown a screen confirming their placement in the General Pool
 */
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   AppearanceStyleType,
@@ -11,13 +11,16 @@ import {
   t,
   Form,
   ProgressNav,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationPreferencesGeneral = () => {
+  const { profile } = useContext(AuthContext)
   const [hideReviewButton, setHideReviewButton] = useState(false)
   const { conductor, application, listing } = useFormConductor("generalPool")
   const currentPageSection = 4
@@ -30,6 +33,14 @@ const ApplicationPreferencesGeneral = () => {
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - General Preferences",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

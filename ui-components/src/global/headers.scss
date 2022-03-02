@@ -79,11 +79,15 @@
 }
 
 .toggle-header {
-  @apply font-sans;
-  @apply text-tiny;
   @apply bg-primary-light;
   @apply p-4;
-  @apply text-gray-800;
   @apply border-b;
   @apply border-primary;
+  display: flex;
+  justify-content: space-between;
+}
+.toggle-header-content {
+  @apply font-sans;
+  @apply text-tiny;
+  @apply text-gray-800;
 }

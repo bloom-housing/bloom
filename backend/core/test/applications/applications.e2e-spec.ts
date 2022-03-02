@@ -657,6 +657,25 @@ describe("Applications", () => {
     expect(listApplicationsRes.body.items[0].id).toBe(appSubmisionRes.body.id)
   })
 
+  it(`should not assign a user relation when partner submits an application`, async () => {
+    const body = getTestAppBody(listing1Id)
+    let appSubmisionRes = await supertest(app.getHttpServer())
+      .post(`/applications`)
+      .set(...setAuthorization(adminAccessToken))
+      .send(body)
+      .expect(201)
+
+    expect(appSubmisionRes.body.user).toBeFalsy()
+
+    appSubmisionRes = await supertest(app.getHttpServer())
+      .post(`/applications/submit`)
+      .set(...setAuthorization(user1AccessToken))
+      .send(body)
+      .expect(201)
+
+    expect(appSubmisionRes.body.user).toBeTruthy()
+  })
+
   afterEach(async () => {
     await householdMembersRepository.createQueryBuilder().delete().execute()
     await applicationsRepository.createQueryBuilder().delete().execute()

@@ -30,6 +30,7 @@ import { Preference } from "../../../preferences/entities/preference.entity"
 import { Program } from "../../../program/entities/program.entity"
 import { CountyCode } from "../../../shared/types/county-code"
 import { UnitCreateDto } from "../../../units/dto/unit-create.dto"
+import { Asset } from "../../../assets/entities/asset.entity"
 
 export class ListingDefaultSeed {
   constructor(
@@ -52,7 +53,8 @@ export class ListingDefaultSeed {
     @InjectRepository(Preference)
     protected readonly preferencesRepository: Repository<Preference>,
     @InjectRepository(Program)
-    protected readonly programsRepository: Repository<Program>
+    protected readonly programsRepository: Repository<Program>,
+    @InjectRepository(Asset) protected readonly assetsRepository: Repository<Asset>
   ) {}
 
   async seed() {
@@ -90,6 +92,8 @@ export class ListingDefaultSeed {
     unitsToBeCreated[0].unitType = unitTypeOneBdrm
     unitsToBeCreated[1].unitType = unitTypeTwoBdrm
     const newUnits = await this.unitsRepository.save(unitsToBeCreated)
+
+    const defaultImage = await this.assetsRepository.save(getDefaultAssets()[0])
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -158,6 +162,12 @@ export class ListingDefaultSeed {
             title: getFlatRentAndRentBasedOnIncomeProgram().title,
           }),
           ordinal: 5,
+        },
+      ],
+      images: [
+        {
+          image: defaultImage,
+          ordinal: 1,
         },
       ],
       jurisdictionName: "Alameda",

@@ -62,6 +62,9 @@ export default () => {
       const { status, data } = err.response || {}
       if (status === 400) {
         setRequestError(`${t(`authentication.createAccount.errors.${data.message}`)}`)
+      } else if (status === 409) {
+        console.error(err)
+        setRequestError(`${t("authentication.createAccount.errors.emailInUse")}`)
       } else {
         console.error(err)
         setRequestError(`${t("authentication.createAccount.errors.generic")}`)

@@ -2,7 +2,7 @@
 1.4 - Alternate Contact
 Type of alternate contact
 */
-import React, { Fragment } from "react"
+import React, { Fragment, useContext, useEffect } from "react"
 import {
   AppearanceStyleType,
   AlertBox,
@@ -13,14 +13,22 @@ import {
   FormCard,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
-import { altContactRelationshipKeys, OnClientSide } from "@bloom-housing/shared-helpers"
+import {
+  altContactRelationshipKeys,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import FormBackLink from "../../../src/forms/applications/FormBackLink"
 import { useFormConductor } from "../../../lib/hooks"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationAlternateContactType = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("alternateContactType")
   const currentPageSection = 1
 
@@ -42,6 +50,14 @@ const ApplicationAlternateContactType = () => {
     window.scrollTo(0, 0)
   }
   const type = watch("type", application.alternateContact.type)
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Alternate Contact Type",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

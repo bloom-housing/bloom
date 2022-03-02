@@ -17,6 +17,7 @@ import { ApplicationMethodDto } from "../../application-methods/dto/application-
 import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
+import { ListingImageDto } from "./listing-image.dto"
 
 export class ListingDto extends OmitType(Listing, [
   "applicationPickUpAddress",
@@ -26,7 +27,7 @@ export class ListingDto extends OmitType(Listing, [
   "applicationMethods",
   "buildingSelectionCriteriaFile",
   "events",
-  "image",
+  "images",
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
@@ -75,9 +76,9 @@ export class ListingDto extends OmitType(Listing, [
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AssetDto)
-  image?: AssetDto | null
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingImageDto)
+  images?: ListingImageDto[] | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

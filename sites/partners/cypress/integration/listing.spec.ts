@@ -32,7 +32,7 @@ describe("Listing Management Tests", () => {
       cy.get(".addressPopup").contains(listing["buildingAddress.street"])
       cy.getByID("reservedCommunityType.id").select(listing["reservedCommunityType.id"])
       cy.getByID("reservedCommunityDescription").type(listing["reservedCommunityDescription"])
-      cy.get("#unitTypes").check()
+      cy.getByTestId("unit-types").check()
       cy.get("#addUnitsButton").contains("Add Unit").click()
       cy.getByID("number").type(listing["number"])
       cy.getByID("unitType.id").select(listing["unitType.id"])
@@ -143,6 +143,7 @@ describe("Listing Management Tests", () => {
     })
   })
 
+  // TODO: make this not dependent on the previous test
   it("verify details page", () => {
     cy.fixture("listing").then((listing) => {
       cy.getByID("jurisdiction.name").contains(listing["jurisdiction.id"])
@@ -162,6 +163,7 @@ describe("Listing Management Tests", () => {
       cy.get("#latitude").contains("37.79006")
       cy.get("#reservedCommunityType").contains(listing["reservedCommunityType.id"])
       cy.get("#reservedCommunityDescription").contains(listing["reservedCommunityDescription"])
+      cy.getByTestId("unit-types-or-individual").contains("Unit Types")
       cy.get("#unitTable").contains(listing["number"])
       cy.get("#unitTable").contains(listing["monthlyRent"])
       cy.get("#unitTable").contains(listing["sqFeet"])
@@ -214,11 +216,17 @@ describe("Listing Management Tests", () => {
       cy.getByID("leasingAgentAddress.zipCode").contains(listing["leasingAgentAddress.zipCode"])
       cy.getByID("applicationPickupQuestion").contains("No")
       cy.getByID("applicationMailingSection").contains("Yes")
-      cy.getByTestId("mailing-address-street").contains(listing["leasingAgentAddress.street"])
-      cy.getByTestId("mailing-address-street2").contains(listing["leasingAgentAddress.street2"])
-      cy.getByTestId("mailing-address-city").contains(listing["leasingAgentAddress.city"])
-      cy.getByTestId("mailing-address-zip").contains(listing["leasingAgentAddress.zipCode"])
-      cy.getByTestId("mailing-address-state").contains("CA")
+      cy.getByTestId("applicationMailingAddress.street").contains(
+        listing["leasingAgentAddress.street"]
+      )
+      cy.getByTestId("applicationMailingAddress.street2").contains(
+        listing["leasingAgentAddress.street2"]
+      )
+      cy.getByTestId("applicationMailingAddress.city").contains(listing["leasingAgentAddress.city"])
+      cy.getByTestId("applicationMailingAddress.zipCode").contains(
+        listing["leasingAgentAddress.zipCode"]
+      )
+      cy.getByTestId("applicationMailingAddress.state").contains("CA")
       cy.get("#applicationDropOffQuestion").contains("No")
       cy.get("#postmarksConsideredQuestion").contains("Yes")
       cy.getByTestId("postmark-date").contains("12")
@@ -236,23 +244,14 @@ describe("Listing Management Tests", () => {
     })
   })
 
+  // TODO: make this not dependent on the previous test
   it("verify open listing warning happens", () => {
-    cy.getByTestId("listingEditButton").contains("Edit").click()
-    cy.getByTestId("nameField").type(" (Edited)")
-    cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
-    cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
     cy.fixture("listing").then((listing) => {
-      cy.contains(`${listing["name"]} (Edited)`)
-    })
-  })
-
-  it("verify open listing warning happens", () => {
-    cy.getByTestId("listingEditButton").contains("Edit").click()
-    cy.getByTestId("nameField").type(" (Edited)")
-    cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
-    cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
-    cy.fixture("listing").then((listing) => {
-      cy.get("#name").contains(`${listing["name"]} (Edited)`)
+      cy.getByTestId("listingEditButton").contains("Edit").click()
+      cy.getByTestId("nameField").type(" (Edited)")
+      cy.getByTestId("saveAndExitButton").contains("Save & Exit").click()
+      cy.getByTestId("listingIsAlreadyLiveButton").contains("Save").click()
+      cy.getByTestId("page-header-text").should("have.text", `${listing["name"]} (Edited)`)
     })
   })
 })

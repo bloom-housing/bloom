@@ -27,6 +27,7 @@ export class UserUpdateDto extends OmitType(UserDto, [
   "leasingAgentInListings",
   "roles",
   "jurisdictions",
+  "mfaEnabled",
   "passwordUpdatedAt",
   "passwordValidForDays",
   "lastLoginAt",

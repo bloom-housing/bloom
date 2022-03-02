@@ -714,6 +714,48 @@ export class AuthService {
       axios(configs, resolve, reject)
     })
   }
+  /**
+   * Request mfa code
+   */
+  requestMfaCode(
+    params: {
+      /** requestBody */
+      body?: RequestMfaCode
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<RequestMfaCodeResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/request-mfa-code"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Get mfa info
+   */
+  getMfaInfo(
+    params: {
+      /** requestBody */
+      body?: GetMfaInfo
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GetMfaInfoResponse> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/auth/mfa-info"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
 }
 
 export class UserService {
@@ -3839,11 +3881,64 @@ export interface Login {
 
   /**  */
   password: string
+
+  /**  */
+  mfaCode?: string
+
+  /**  */
+  mfaType?: EnumLoginMfaType
 }
 
 export interface LoginResponse {
   /**  */
   accessToken: string
+}
+
+export interface RequestMfaCode {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+
+  /**  */
+  mfaType: EnumRequestMfaCodeMfaType
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface RequestMfaCodeResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
+}
+
+export interface GetMfaInfo {
+  /**  */
+  email: string
+
+  /**  */
+  password: string
+}
+
+export interface GetMfaInfoResponse {
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  isMfaEnabled: boolean
+
+  /**  */
+  mfaUsedInThePast: boolean
 }
 
 export interface IdName {
@@ -3915,10 +4010,16 @@ export interface User {
   updatedAt: Date
 
   /**  */
+  mfaEnabled?: boolean
+
+  /**  */
   lastLoginAt?: Date
 
   /**  */
   failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserCreate {
@@ -3960,6 +4061,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserBasic {
@@ -4012,10 +4116,16 @@ export interface UserBasic {
   updatedAt: Date
 
   /**  */
+  mfaEnabled?: boolean
+
+  /**  */
   lastLoginAt?: Date
 
   /**  */
   failedLoginAttemptsCount?: number
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface Email {
@@ -4114,6 +4224,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserFilterParams {
@@ -4176,6 +4289,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  phoneNumberVerified?: boolean
 }
 
 export interface UserProfileUpdate {
@@ -4451,6 +4567,14 @@ export interface ListingEvent {
 
   /**  */
   file?: Asset
+}
+
+export interface ListingImage {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
 }
 
 export interface FormMetadataExtraData {
@@ -4812,7 +4936,7 @@ export interface Listing {
   events: ListingEvent[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImage[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5026,6 +5150,12 @@ export interface Listing {
 
   /**  */
   customMapPin?: boolean
+
+  /**  */
+  publishedAt?: Date
+
+  /**  */
+  closedAt?: Date
 }
 
 export interface PaginatedListing {
@@ -5057,6 +5187,14 @@ export interface ListingEventCreate {
 
   /**  */
   label?: string
+}
+
+export interface ListingImageUpdate {
+  /**  */
+  image: AssetUpdate
+
+  /**  */
+  ordinal?: number
 }
 
 export interface UnitAmiChartOverrideCreate {
@@ -5230,7 +5368,7 @@ export interface ListingCreate {
   events: ListingEventCreate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -5651,7 +5789,7 @@ export interface ListingUpdate {
   events: ListingEventUpdate[]
 
   /**  */
-  image?: CombinedImageTypes
+  images?: ListingImageUpdate[]
 
   /**  */
   leasingAgentAddress?: CombinedLeasingAgentAddressTypes
@@ -6315,6 +6453,14 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
+export enum EnumLoginMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
+export enum EnumRequestMfaCodeMfaType {
+  "sms" = "sms",
+  "email" = "email",
+}
 export type CombinedRolesTypes = UserRolesCreate
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
@@ -6352,6 +6498,7 @@ export enum EnumListingFilterParamsStatus {
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
+  "mostRecentlyClosed" = "mostRecentlyClosed",
 }
 
 export enum ListingApplicationAddressType {
@@ -6391,7 +6538,6 @@ export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
 export type CombinedApplicationMailingAddressTypes = AddressUpdate
 export type CombinedBuildingSelectionCriteriaFileTypes = AssetUpdate
-export type CombinedImageTypes = AssetUpdate
 export type CombinedLeasingAgentAddressTypes = AddressUpdate
 export type CombinedResultTypes = AssetCreate
 export type CombinedBuildingAddressTypes = AddressUpdate

@@ -1,9 +1,22 @@
+import React, { useEffect, useContext } from "react"
 import Layout from "../layouts/application"
 import Head from "next/head"
-import { Hero, LinkButton, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { AuthContext, Hero, LinkButton, MarkdownSection, t } from "@bloom-housing/ui-components"
+import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../lib/constants"
 
 const ErrorPage = () => {
   const pageTitle = t("errors.notFound.title")
+
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Page Not Found",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <Layout>

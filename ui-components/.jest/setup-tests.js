@@ -18,6 +18,14 @@ window.matchMedia = jest.fn().mockImplementation((query) => {
   }
 })
 
+window.IntersectionObserver = class {
+  constructor(root, options) {
+    // no-op
+  }
+  observe = jest.fn()
+  disconnect = jest.fn()
+}
+
 addTranslation(general)
 
 configure({ testIdAttribute: "data-test-id" })

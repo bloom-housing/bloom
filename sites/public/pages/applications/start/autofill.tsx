@@ -9,13 +9,19 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
-import { blankApplication, OnClientSide } from "@bloom-housing/shared-helpers"
+import {
+  blankApplication,
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+} from "@bloom-housing/shared-helpers"
 import { useForm } from "react-hook-form"
 import FormsLayout from "../../../layouts/forms"
 import { useFormConductor } from "../../../lib/hooks"
 import FormSummaryDetails from "../../../src/forms/applications/FormSummaryDetails"
 import AutofillCleaner from "../../../lib/appAutofill"
 import { useRouter } from "next/router"
+import { UserStatus } from "../../../lib/constants"
 
 export default () => {
   const router = useRouter()
@@ -56,6 +62,14 @@ export default () => {
       conductor.routeToNextOrReturnUrl()
     }
   }, [submitted, previousApplication, useDetails, context, conductor, router])
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Autofill",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   useEffect(() => {
     if (!profile || previousApplication) {

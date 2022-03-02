@@ -187,6 +187,8 @@
 
 .form-card__sub-title {
   @apply mb-0;
+  @apply text-gray-700;
+  @apply py-3;
 }
 
 .form-card__paragraph-title {
@@ -198,4 +200,14 @@
   @apply text-tiny;
   @apply mb-2;
   @apply inline-block;
+}
+
+.form-card__header-icon {
+  @apply pr-4;
+  @apply pl-4;
+  @apply pb-4;
+  @apply inline-block;
+  @apply border-b-4;
+  @apply border-primary;
+  @apply mb-4;
 }

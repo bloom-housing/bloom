@@ -35,6 +35,15 @@ export const dueSoonAndVivid = () => (
   />
 )
 
+export const withSubContent = () => (
+  <ApplicationStatus
+    content="First Come First Served (and a really long string to test wrapping on smaller sizes)"
+    subContent="Application Due Date: July 10th"
+    status={ApplicationStatusType.Open}
+    vivid
+  />
+)
+
 export const dueSoonWithTime = () => (
   <ApplicationStatus
     content={
@@ -47,6 +56,7 @@ export const dueSoonWithTime = () => (
 const listingPast = Object.assign({}, Archer) as any
 listingPast.applicationOpenDate = ""
 days = 10
+
 export const pastDue = () => (
   <ApplicationStatus
     content={

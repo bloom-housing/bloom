@@ -13,6 +13,7 @@ export class UserInviteDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "leasingAgentInListings",
+  "mfaEnabled",
   "passwordUpdatedAt",
   "passwordValidForDays",
   "lastLoginAt",

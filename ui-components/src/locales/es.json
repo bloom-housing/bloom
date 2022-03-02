@@ -159,7 +159,7 @@
       },
       "expectingChanges": {
         "title": "Espera cambios en su grupo familiar",
-        "question": "¿Espera que haya cambios en su grupo familiar en los próximos 12 meses?"
+        "question": "¿Prevé algún cambio en su hogar en los próximos 12 meses, como el número de personas?"
       },
       "householdStudent": {
         "title":  "El grupo familiar incluye un estudiante o miembro que está por cumplir 18 años",
