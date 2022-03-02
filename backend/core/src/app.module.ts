@@ -13,7 +13,6 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
 import { AuthModule } from "./auth/auth.module"
-
 import { ListingsModule } from "./listings/listings.module"
 import { ApplicationsModule } from "./applications/applications.module"
 import { PreferencesModule } from "./preferences/preferences.module"
@@ -94,6 +93,7 @@ export class AppModule {
         ListingsModule,
         PaperApplicationsModule,
         PreferencesModule,
+        ProgramsModule,
         PropertiesModule,
         PropertyGroupsModule,
         ProgramsModule,

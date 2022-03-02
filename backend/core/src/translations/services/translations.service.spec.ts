@@ -197,7 +197,6 @@ describe("TranslationsService", () => {
       googleTranslateServiceMock.fetch.mockResolvedValueOnce(newTranslations)
 
       const result = await service.translateListing(mockListing as Listing, Language.es)
-
       expect(generatedListingTranslationRepositoryMock.findOne).toHaveBeenCalledTimes(1)
       expect(googleTranslateServiceMock.fetch).toHaveBeenCalledTimes(1)
       expect(generatedListingTranslationRepositoryMock.save).toHaveBeenCalledTimes(1)
