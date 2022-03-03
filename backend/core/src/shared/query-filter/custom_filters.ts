@@ -54,8 +54,8 @@ export function addAvailabilityQuery(
   switch (filterValue) {
     case AvailabilityFilterEnum.hasAvailability:
       qb.andWhere(
-        `(unitGroup.total_available >= :${whereParameterName}${
-          includeNulls ? ` OR unitGroup.total_available IS NULL` : ""
+        `(unitGroups.total_available >= :${whereParameterName}${
+          includeNulls ? ` OR unitGroups.total_available IS NULL` : ""
         })`,
         {
           [whereParameterName]: 1,
@@ -64,8 +64,8 @@ export function addAvailabilityQuery(
       return
     case AvailabilityFilterEnum.noAvailability:
       qb.andWhere(
-        `(unitGroup.total_available = :${whereParameterName}${
-          includeNulls ? ` OR unitGroup.total_available IS NULL` : ""
+        `(unitGroups.total_available = :${whereParameterName}${
+          includeNulls ? ` OR unitGroups.total_available IS NULL` : ""
         })`,
         {
           [whereParameterName]: 0,
@@ -92,16 +92,16 @@ export function addMinAmiPercentageFilter(
   filterValue: number,
   includeNulls?: boolean
 ) {
-  const whereParameterName = "amiPercentage_unitGroup"
+  const whereParameterName = "amiPercentage_unitGroups"
   const whereParameterName2 = "amiPercentage_listings"
 
-  // Check the listing.ami_percentage field iff the field is not set on the Units Summary table.
+  // Check the listing.ami_percentage field iff the field is not set on the Unit Groups table.
   qb.andWhere(
-    `((unitGroupAmiLevels.ami_percentage IS NOT NULL AND unitGroupAmiLevels.ami_percentage >= :${whereParameterName}) ` +
+    `((unitGroupsAmiLevels.ami_percentage IS NOT NULL AND unitGroupsAmiLevels.ami_percentage >= :${whereParameterName}) ` +
       `OR (unitGroupAmiLevels.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2})
       ${
         includeNulls
-          ? `OR unitGroupAmiLevels.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
+          ? `OR unitGroupsAmiLevels.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
           : ""
       })`,
     {

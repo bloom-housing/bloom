@@ -51,7 +51,7 @@ export type ListingSeedType = Omit<
   | "unitAmenities"
   | "servicesOffered"
   | "yearBuilt"
-  | "unitGroup"
+  | "unitGroups"
   | "unitSummaries"
   | "amiChartOverrides"
   | "jurisdiction"
