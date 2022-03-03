@@ -4,8 +4,8 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
-import { UnitsSummaryAmiLevel } from "../../../units-summary/entities/units-summary-ami-level.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { UnitGroupAmiLevel } from "../../../units-summary/entities/unit-group-ami-level.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const propertySeed: PropertySeedType = {
@@ -98,7 +98,7 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const unitSummaries: Omit<UnitsSummary, "id">[] = [
+    const unitGroups: Omit<UnitGroup, "id">[] = [
       {
         amiLevels: [],
         unitType: [unitTypeStudio, unitTypeOneBdrm],
@@ -129,26 +129,26 @@ export class Listing10136Seed extends ListingDefaultSeed {
       },
     ]
 
-    const savedUnitSummaries = await this.unitsSummaryRepository.save(unitSummaries)
+    const savedUnitGroups = await this.unitGroupRepository.save(unitGroups)
 
-    const amiLevels: Omit<UnitsSummaryAmiLevel, "id">[] = [
+    const amiLevels: Omit<UnitGroupAmiLevel, "id">[] = [
       {
         amiChartId: "1234",
         amiPercentage: 30,
         monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
         flatRentValue: 2500,
-        unitsSummary: savedUnitSummaries[0],
+        unitGroup: savedUnitGroups[0],
       },
       {
         amiChartId: "1234",
         amiPercentage: 40,
         monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
         flatRentValue: 30,
-        unitsSummary: savedUnitSummaries[1],
+        unitGroup: savedUnitGroups[1],
       },
     ]
 
-    await this.unitsSummaryAmiLevelRepository.save(amiLevels)
+    await this.unitGroupAmiLevelRepository.save(amiLevels)
 
     return listing
   }

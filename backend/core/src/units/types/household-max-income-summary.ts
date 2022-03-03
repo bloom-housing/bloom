@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
 
-export class HMI {
+export class HouseholdMaxIncomeSummary {
   @ApiProperty()
   columns: { [key: string]: unknown }
 

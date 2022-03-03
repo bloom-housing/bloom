@@ -54,8 +54,8 @@ export function addAvailabilityQuery(
   switch (filterValue) {
     case AvailabilityFilterEnum.hasAvailability:
       qb.andWhere(
-        `(unitsSummary.total_available >= :${whereParameterName}${
-          includeNulls ? ` OR unitsSummary.total_available IS NULL` : ""
+        `(unitGroup.total_available >= :${whereParameterName}${
+          includeNulls ? ` OR unitGroup.total_available IS NULL` : ""
         })`,
         {
           [whereParameterName]: 1,
@@ -64,8 +64,8 @@ export function addAvailabilityQuery(
       return
     case AvailabilityFilterEnum.noAvailability:
       qb.andWhere(
-        `(unitsSummary.total_available = :${whereParameterName}${
-          includeNulls ? ` OR unitsSummary.total_available IS NULL` : ""
+        `(unitGroup.total_available = :${whereParameterName}${
+          includeNulls ? ` OR unitGroup.total_available IS NULL` : ""
         })`,
         {
           [whereParameterName]: 0,
@@ -92,16 +92,16 @@ export function addMinAmiPercentageFilter(
   filterValue: number,
   includeNulls?: boolean
 ) {
-  const whereParameterName = "amiPercentage_unitsSummary"
+  const whereParameterName = "amiPercentage_unitGroup"
   const whereParameterName2 = "amiPercentage_listings"
 
   // Check the listing.ami_percentage field iff the field is not set on the Units Summary table.
   qb.andWhere(
-    `((unitsSummary.ami_percentage IS NOT NULL AND unitsSummary.ami_percentage >= :${whereParameterName}) ` +
-      `OR (unitsSummary.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2})
+    `((unitGroup.ami_percentage IS NOT NULL AND unitGroup.ami_percentage >= :${whereParameterName}) ` +
+      `OR (unitGroup.ami_percentage IS NULL AND listings.ami_percentage_max >= :${whereParameterName2})
       ${
         includeNulls
-          ? `OR unitsSummary.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
+          ? `OR unitGroup.ami_percentage is NULL AND listings.ami_percentage_max is NULL`
           : ""
       })`,
     {

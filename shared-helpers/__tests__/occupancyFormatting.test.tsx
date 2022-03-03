@@ -2,7 +2,7 @@ import React from "react"
 import { cleanup } from "@testing-library/react"
 import { occupancyTable, getOccupancyDescription } from "../src/occupancyFormatting"
 import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitsSummarized, UnitType } from "@bloom-housing/backend-core/types"
+import { Listing, UnitSummaries, UnitType } from "@bloom-housing/backend-core/types"
 
 const testListing: Listing = {} as Listing
 testListing.unitsSummarized = {
@@ -106,7 +106,7 @@ testListing.unitsSummarized = {
       },
     },
   ],
-} as UnitsSummarized
+} as UnitSummaries
 
 afterEach(cleanup)
 

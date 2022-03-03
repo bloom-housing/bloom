@@ -5,7 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { getDate } from "./shared"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const grandRivProperty: PropertySeedType = {
@@ -104,9 +104,9 @@ export class Listing10157Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const nccUnitsSummaryToBeCreated: DeepPartial<UnitsSummary>[] = []
+    const nccUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const zeroBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const zeroBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeStudio],
       totalCount: 1,
       amiLevels: [
@@ -119,9 +119,9 @@ export class Listing10157Seed extends ListingDefaultSeed {
       listing: listing,
       sqFeetMax: "550",
     }
-    nccUnitsSummaryToBeCreated.push(zeroBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(zeroBdrmUnitGroup)
 
-    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeOneBdrm],
       totalCount: 2,
       amiLevels: [
@@ -135,9 +135,9 @@ export class Listing10157Seed extends ListingDefaultSeed {
       sqFeetMin: "800",
       sqFeetMax: "1000",
     }
-    nccUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
-    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeTwoBdrm],
       totalCount: 2,
       amiLevels: [
@@ -151,9 +151,9 @@ export class Listing10157Seed extends ListingDefaultSeed {
       sqFeetMin: "900",
       sqFeetMax: "1100",
     }
-    nccUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(nccUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(nccUnitGroupToBeCreated)
 
     return listing
   }

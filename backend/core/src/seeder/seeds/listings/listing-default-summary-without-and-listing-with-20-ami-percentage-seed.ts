@@ -1,6 +1,6 @@
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { DeepPartial } from "typeorm"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 export class ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed extends ListingDefaultSeed {
   async seed() {
@@ -14,23 +14,23 @@ export class ListingDefaultSummaryWithoutAndListingWith20AmiPercentageSeed exten
 
     const unitTypeTwoBdrm = await this.unitTypeRepository.findOneOrFail({ name: "twoBdrm" })
 
-    const unitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
+    const unitGroupToBeCreated: Array<DeepPartial<UnitGroup>> = []
 
-    const twoBdrm30AmiUnitsSummary: DeepPartial<UnitsSummary> = {
+    const twoBdrm30AmiUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeTwoBdrm],
       totalCount: 8,
       listing: listing,
     }
-    unitsSummaryToBeCreated.push(twoBdrm30AmiUnitsSummary)
+    unitGroupToBeCreated.push(twoBdrm30AmiUnitGroup)
 
-    const twoBdrm60AmiUnitsSummary: DeepPartial<UnitsSummary> = {
+    const twoBdrm60AmiUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeTwoBdrm],
       totalCount: 8,
       listing: listing,
     }
-    unitsSummaryToBeCreated.push(twoBdrm60AmiUnitsSummary)
+    unitGroupToBeCreated.push(twoBdrm60AmiUnitGroup)
 
-    await this.unitsSummaryRepository.save(unitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(unitGroupToBeCreated)
 
     return newListing
   }

@@ -4,10 +4,10 @@ import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { MonthlyRentDeterminationType } from "../types/monthly-rent-determination.enum"
 import { AmiChart } from "../../ami-charts/entities/ami-chart.entity"
-import { UnitsSummary } from "./units-summary.entity"
+import { UnitGroup } from "./unit-group.entity"
 
-@Entity({ name: "units_summary_ami_levels" })
-export class UnitsSummaryAmiLevel {
+@Entity({ name: "unit_group_ami_levels" })
+export class UnitGroupAmiLevel {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
@@ -18,14 +18,14 @@ export class UnitsSummaryAmiLevel {
   amiChart?: AmiChart | null
 
   @RelationId(
-    (unitsSummaryAmiLevelEntity: UnitsSummaryAmiLevel) => unitsSummaryAmiLevelEntity.amiChart
+    (unitsSummaryAmiLevelEntity: UnitGroupAmiLevel) => unitsSummaryAmiLevelEntity.amiChart
   )
   @Expose()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   amiChartId?: string | null
 
-  @ManyToOne(() => UnitsSummary, (unitsSummary: UnitsSummary) => unitsSummary.amiLevels)
-  unitsSummary: UnitsSummary
+  @ManyToOne(() => UnitGroup, (unitGroup: UnitGroup) => unitGroup.amiLevels)
+  unitGroup: UnitGroup
 
   @Column({ type: "integer", nullable: false })
   @Expose()

@@ -3886,18 +3886,12 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
-export interface UnitAccessibilityPriorityType {
+export interface MinMax {
   /**  */
-  name: string
+  min: number
 
   /**  */
-  id: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
+  max: number
 }
 
 export interface MinMaxCurrency {
@@ -3908,23 +3902,9 @@ export interface MinMaxCurrency {
   max: string
 }
 
-export interface MinMax {
+export interface UnitGroupSummary {
   /**  */
-  min: number
-
-  /**  */
-  max: number
-}
-
-export interface UnitSummary {
-  /**  */
-  unitType: UnitType
-
-  /**  */
-  minIncomeRange: MinMaxCurrency
-
-  /**  */
-  occupancyRange: MinMax
+  unitTypes: string[]
 
   /**  */
   rentAsPercentIncomeRange: MinMax
@@ -3933,27 +3913,30 @@ export interface UnitSummary {
   rentRange: MinMaxCurrency
 
   /**  */
-  totalAvailable: number
+  amiPercentageRange: MinMax
 
   /**  */
-  totalCount: number
+  unitVacancies: number
+}
+
+export interface UnitTypeSummary {
+  /**  */
+  unitTypes: string[]
+
+  /**  */
+  occupancyRange: MinMax
 
   /**  */
   areaRange: MinMax
 
   /**  */
   floorRange?: MinMax
-}
-
-export interface UnitSummaryByAMI {
-  /**  */
-  percent: string
 
   /**  */
-  byUnitType: UnitSummary[]
+  bathroomRange?: MinMax
 }
 
-export interface HMI {
+export interface HouseholdMaxIncomeSummary {
   /**  */
   columns: object
 
@@ -3961,27 +3944,15 @@ export interface HMI {
   rows: object[]
 }
 
-export interface UnitsSummarized {
+export interface UnitSummaries {
   /**  */
-  unitTypes: UnitType[]
+  unitGroupSummary: UnitGroupSummary[]
 
   /**  */
-  priorityTypes: UnitAccessibilityPriorityType[]
+  unitTypeSummary: UnitTypeSummary[]
 
   /**  */
-  amiPercentages: string[]
-
-  /**  */
-  byUnitTypeAndRent: UnitSummary[]
-
-  /**  */
-  byUnitType: UnitSummary[]
-
-  /**  */
-  byAMI: UnitSummaryByAMI[]
-
-  /**  */
-  hmi: HMI
+  householdMaxIncomeSummary: HouseholdMaxIncomeSummary
 }
 
 export interface Asset {
@@ -4351,33 +4322,21 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
-export interface UnitsSummaryAmiLevel {
+export interface UnitAccessibilityPriorityType {
+  /**  */
+  name: string
+
   /**  */
   id: string
 
   /**  */
-  amiChartId?: string
+  createdAt: Date
 
   /**  */
-  amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType
-
-  /**  */
-  flatRentValue?: number
-
-  /**  */
-  percentageOfIncomeValue?: number
+  updatedAt: Date
 }
 
-export interface UnitsSummary {
-  /**  */
-  unitType: UnitType[]
-
-  /**  */
-  amiLevels: UnitsSummaryAmiLevel[]
-
+export interface UnitGroup {
   /**  */
   id: string
 
@@ -4479,7 +4438,7 @@ export interface Listing {
   showWaitlist: boolean
 
   /**  */
-  unitsSummarized: UnitsSummarized
+  unitSummaries: UnitSummaries
 
   /**  */
   applicationMethods: ApplicationMethod[]
@@ -4572,7 +4531,7 @@ export interface Listing {
   urlSlug: string
 
   /**  */
-  unitsSummary?: UnitsSummary[]
+  unitGroups?: UnitGroup[]
 
   /**  */
   countyCode?: string
@@ -5309,30 +5268,7 @@ export interface UnitCreate {
   bmrProgramChart?: boolean
 }
 
-export interface UnitsSummaryAmiLevelCreate {
-  /**  */
-  amiChartId?: string
-
-  /**  */
-  amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelCreateMonthlyRentDeterminationType
-
-  /**  */
-  flatRentValue?: number
-
-  /**  */
-  percentageOfIncomeValue?: number
-}
-
-export interface UnitsSummaryCreate {
-  /**  */
-  unitType: Id[]
-
-  /**  */
-  amiLevels: UnitsSummaryAmiLevelCreate[]
-
+export interface UnitGroupCreate {
   /**  */
   maxOccupancy?: number
 
@@ -5484,7 +5420,7 @@ export interface ListingCreate {
   result?: CombinedResultTypes
 
   /**  */
-  unitsSummary?: UnitsSummaryCreate[]
+  unitGroups?: UnitGroupCreate[]
 
   /**  */
   listingPreferences: ListingPreferenceUpdate[]
@@ -5769,33 +5705,7 @@ export interface UnitUpdate {
   bmrProgramChart?: boolean
 }
 
-export interface UnitsSummaryAmiLevelUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  amiChartId?: string
-
-  /**  */
-  amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitsSummaryAmiLevelUpdateMonthlyRentDeterminationType
-
-  /**  */
-  flatRentValue?: number
-
-  /**  */
-  percentageOfIncomeValue?: number
-}
-
-export interface UnitsSummaryUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  amiLevels: UnitsSummaryAmiLevelUpdate[]
-
+export interface UnitGroupUpdate {
   /**  */
   maxOccupancy?: number
 
@@ -5831,9 +5741,6 @@ export interface UnitsSummaryUpdate {
 
   /**  */
   openWaitlist: boolean
-
-  /**  */
-  unitType: Id[]
 }
 
 export interface ListingUpdate {
@@ -5940,7 +5847,7 @@ export interface ListingUpdate {
   result?: AssetUpdate
 
   /**  */
-  unitsSummary?: UnitsSummaryUpdate[]
+  unitGroups?: UnitGroupUpdate[]
 
   /**  */
   listingPreferences: ListingPreferenceUpdate[]
@@ -6614,10 +6521,6 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
-export enum EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
-}
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
@@ -6670,14 +6573,6 @@ export enum EnumListingFilterParamsAvailability {
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
-}
-export enum EnumUnitsSummaryAmiLevelCreateMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
-}
-export enum EnumUnitsSummaryAmiLevelUpdateMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
 }
 export enum EnumPreferencesFilterParamsComparison {
   "=" = "=",

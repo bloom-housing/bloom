@@ -6,7 +6,7 @@ import { ApplicationMethodType } from "../../../application-methods/types/applic
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -106,12 +106,12 @@ export class Listing10168Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const oneBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeOneBdrm],
       totalCount: 10,
       listing: listing,
     }
-    await this.unitsSummaryRepository.save([oneBdrmUnitsSummary])
+    await this.unitGroupRepository.save([oneBdrmUnitGroup])
 
     return listing
   }

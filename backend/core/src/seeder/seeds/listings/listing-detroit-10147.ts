@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 const mshProperty: PropertySeedType = {
   buildingAddress: {
@@ -90,23 +90,23 @@ export class Listing10147Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const mshUnitsSummaryToBeCreated: Array<DeepPartial<UnitsSummary>> = []
+    const mshUnitGroupToBeCreated: Array<DeepPartial<UnitGroup>> = []
 
-    const fourBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const fourBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeFourBdrm],
       totalCount: 15,
       listing: listing,
     }
-    mshUnitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
+    mshUnitGroupToBeCreated.push(fourBdrmUnitGroup)
 
-    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const threeBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeThreeBdrm],
       totalCount: 9,
       listing: listing,
     }
-    mshUnitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
+    mshUnitGroupToBeCreated.push(threeBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(mshUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(mshUnitGroupToBeCreated)
 
     return listing
   }

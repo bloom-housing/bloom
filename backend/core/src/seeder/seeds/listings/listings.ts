@@ -15,7 +15,7 @@ export type PropertySeedType = Omit<
   | "propertyGroups"
   | "listings"
   | "units"
-  | "unitsSummarized"
+  | "unitSummaries"
   | "householdSizeMin"
   | "householdSizeMax"
 >
@@ -51,8 +51,8 @@ export type ListingSeedType = Omit<
   | "unitAmenities"
   | "servicesOffered"
   | "yearBuilt"
-  | "unitsSummary"
-  | "unitsSummarized"
+  | "unitGroup"
+  | "unitSummaries"
   | "amiChartOverrides"
   | "jurisdiction"
 > & {
