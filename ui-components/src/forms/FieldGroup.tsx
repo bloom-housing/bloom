@@ -147,7 +147,7 @@ const FieldGroup = ({
 
       <div className={`field ${error && "error"} ${fieldGroupClassName || ""} mb-0`}>
         {fields?.map((item) => (
-          <div className={`field ${fieldClassName || ""} mb-1`} key={item.id}>
+          <div className={`field ${fieldClassName || ""} mb-1 mr-2`} key={item.id}>
             {getInputSet(item)}
             {item.subFields && checkedInputs.indexOf(item.label) >= 0 && (
               <div className={"ml-8"} key={`${item.value}-subfields`}>

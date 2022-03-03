@@ -123,8 +123,6 @@ export default function ApplicationsList() {
                     <DetailBuildingDetails />
                     <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />
-                    <DetailPreferences />
-                    <DetailPrograms />
                     <DetailAdditionalFees />
                     <DetailBuildingFeatures />
                     <DetailAdditionalEligibility />

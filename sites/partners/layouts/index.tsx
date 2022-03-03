@@ -59,6 +59,7 @@ const Layout = (props) => {
           logoWidth={"wide"}
           menuLinks={menuLinks}
           homeURL={"/"}
+          logoClass={"md:h-36 md:mt-0"}
           languages={languages.map((lang) => {
             return {
               label: lang.label,

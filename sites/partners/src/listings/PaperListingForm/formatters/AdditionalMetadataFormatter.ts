@@ -1,16 +1,10 @@
 import { ListingReviewOrder } from "@bloom-housing/backend-core/types"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
 import Formatter from "./Formatter"
 
 export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
   process() {
-    this.data.listingPreferences = this.metadata.preferences.map((preference, index) => {
-      return { preference, ordinal: index + 1 }
-    })
-    this.data.listingPrograms = this.metadata.programs.map((program, index) => {
-      return { program: { ...program }, ordinal: index + 1 }
-    })
-
     this.data.buildingAddress = {
       ...this.data.buildingAddress,
       latitude: this.metadata.latLong.latitude ?? null,
@@ -23,5 +17,12 @@ export default class AdditionalMetadataFormatter extends Formatter {
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
         : ListingReviewOrder.firstComeFirstServe
+
+    this.data.features = Object.keys(listingFeatures).reduce((acc, current) => {
+      return {
+        ...acc,
+        [current]: this.data.listingFeatures && this.data.listingFeatures.indexOf(current) >= 0,
+      }
+    }, {})
   }
 }

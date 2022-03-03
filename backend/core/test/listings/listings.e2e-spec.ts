@@ -484,7 +484,7 @@ describe("Listings", () => {
       expect(
         listings.map((listing) => {
           listing.unitsSummary.find((unit) => {
-            unit.unitType.numBedrooms >= 1
+            unit.unitType.some((unitType) => unitType.numBedrooms >= 1)
           }) !== undefined
         })
       ).not.toContain(false)
@@ -511,7 +511,7 @@ describe("Listings", () => {
       expect(
         listings.map((listing) => {
           listing.unitsSummary.find((unit) => {
-            unit.unitType.numBedrooms == 1
+            unit.unitType.some((unitType) => unitType.numBedrooms >= 1)
           }) !== undefined
         })
       ).not.toContain(false)
@@ -669,22 +669,6 @@ describe("Listings", () => {
         expect(lastListingOnFirstPageUpdateTimestamp.getTime()).toBeGreaterThan(
           secondPageListingUpdateTimestamp.getTime()
         )
-      }
-    })
-
-    it("sorts listing.unitsSummary by number of bedrooms (ascending)", async () => {
-      const listings = await supertest(app.getHttpServer()).get("/listings?limit=all").expect(200)
-
-      for (const listing of listings.body.items) {
-        if (listing.unitsSummary.length > 1) {
-          for (let i = 0; i < listing.unitsSummary.length - 1; ++i) {
-            const currentUnitsSummary = listing.unitsSummary[i]
-            const nextUnitsSummary = listing.unitsSummary[i + 1]
-            expect(currentUnitsSummary.unitType.numBedrooms).toBeLessThanOrEqual(
-              nextUnitsSummary.unitType.numBedrooms
-            )
-          }
-        }
       }
     })
   })
