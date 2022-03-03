@@ -12,6 +12,7 @@ import {
   addIndependentLivingHousingQuery,
 } from "./custom_filters"
 import { UserFilterKeys } from "../../auth/types/user-filter-keys"
+import { addIsPortalUserQuery } from "../../auth/filters/user-query-filter"
 
 export interface IBaseQueryFilter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,6 +61,7 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
       const filterValue = filter[filterKey]
       // Handle custom filters here, before dropping into generic filter handler
       switch (filterKey) {
+        // custom listing filters
         case ListingFilterKeys.seniorHousing:
           addSeniorHousingQuery(qb, filterValue)
           continue
@@ -71,6 +73,10 @@ export function addFilters<FilterParams extends Array<any>, FilterFieldMap>(
           continue
         case ListingFilterKeys.minAmiPercentage:
           addMinAmiPercentageFilter(qb, parseInt(filterValue), includeNulls)
+          continue
+        // custom user filters
+        case UserFilterKeys.isPortalUser:
+          addIsPortalUserQuery(qb, filterValue)
           continue
       }
 

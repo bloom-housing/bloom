@@ -3,6 +3,7 @@ import { Brackets, WhereExpression } from "typeorm"
 import { UserFilterKeys } from "../types/user-filter-keys"
 import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 
+// UseQueryFilter isn't used here anymore
 export class UserQueryFilter extends BaseQueryFilter {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addFilters<FilterParams extends any[], FilterFieldMap>(
@@ -50,5 +51,30 @@ export class UserQueryFilter extends BaseQueryFilter {
         })
       )
     }
+  }
+}
+
+export function addIsPortalUserQuery(qb: WhereExpression, filterValue: string) {
+  const userRolesColumnName = userFilterTypeToFieldMap[UserFilterKeys.isPortalUser]
+  if (filterValue == "true") {
+    qb.andWhere(
+      new Brackets((subQb) => {
+        subQb.where(`${userRolesColumnName}.isPartner = true`)
+        subQb.orWhere(`${userRolesColumnName}.isAdmin = true`)
+      })
+    )
+  } else if (filterValue == "false") {
+    qb.andWhere(
+      new Brackets((subQb) => {
+        subQb.where(`${userRolesColumnName}.isPartner IS NULL`)
+        subQb.orWhere(`${userRolesColumnName}.isPartner = false`)
+      })
+    )
+    qb.andWhere(
+      new Brackets((subQb) => {
+        subQb.where(`${userRolesColumnName}.isAdmin IS NULL`)
+        subQb.orWhere(`${userRolesColumnName}.isAdmin = false`)
+      })
+    )
   }
 }

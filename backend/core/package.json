@@ -32,7 +32,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./jest-e2e.json --runInBand --forceExit",
     "test:e2e:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --config ./jest-e2e.json --forceExit",
-    "test:e2e:local": "yarn test:db:setup && yarn run test:e2e",
+    "test:e2e:local": "yarn test:db:setup && yarn run test:e2e --verbose false",
     "test:db:setup": "psql -c 'DROP DATABASE IF EXISTS bloom_test' && psql -c 'CREATE DATABASE bloom_test' && psql -d bloom_test -c 'CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";' && ts-node ./node_modules/.bin/typeorm --config ./ormconfig.test.ts migration:run && ts-node src/seeder/seed.ts --test",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "herokusetup": "node heroku.setup.js",
