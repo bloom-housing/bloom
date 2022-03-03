@@ -333,6 +333,12 @@
         margin: 20px 0;
       }
 
+      .sr-only {
+        position: absolute;
+        left: -999em;
+        right: auto;
+      }
+
       /* -------------------------------------
           RESPONSIVE AND MOBILE FRIENDLY STYLES
       ------------------------------------- */
@@ -427,7 +433,7 @@
                         <tbody>
                           <tr>
                             <td align="center">
-                              <img src="https://housing.acgov.org/images/logo.png" />
+                              <img src="https://housing.acgov.org/images/logo.png" alt="" />
                             </td>
                           </tr>
                         </tbody>
@@ -451,14 +457,14 @@
                                   <table class="steps mb1" role="presentation" border="0" cellpadding="0" cellspacing="0">
                                     <tbody>
                                       <tr>
-                                        <td class="step step-complete"><img src="steps/step-left-active.png" /></td>
-                                        <td class="step"><img src="steps/step-center-default.png" /></span></td>
-                                        <td class="step"><img src="steps/step-right-default.png" /></span></td>
+                                        <td class="step step-complete"><img src="steps/step-left-active.png" alt="indication of step completed" /></td>
+                                        <td class="step"><img src="steps/step-center-default.png" alt="indication of step not completed" /></span></td>
+                                        <td class="step"><img src="steps/step-right-default.png" alt="indication of step not completed" /></span></td>
                                       </tr>
                                       <tr>
-                                        <td class="step step-complete"><span class="step-label">Application <br />received</span></td>
-                                        <td class="step"><span class="step-label">Application <br />closed</span></td>
-                                        <td class="step"><span class="step-label">Application <br />ranked</span></td>
+                                        <td class="step step-complete"><span class="step-label" aria-current="true">Application <br />received<span class="sr-only"> completed</span></span></td>
+                                        <td class="step"><span class="step-label">Application <br />closed<span class="sr-only"> not completed</span></span></td>
+                                        <td class="step"><span class="step-label">Application <br />ranked<span class="sr-only"> not completed</span></span></td>
                                       </tr>
                                     </tbody>
                                   </table>
