@@ -249,6 +249,7 @@ async function seed() {
     }),
     new AuthContext(null)
   )
+
   await userService.confirm({ token: user1.confirmationToken })
 
   const user2 = await userService.createPublicUser(
@@ -266,6 +267,22 @@ async function seed() {
     new AuthContext(null)
   )
   await userService.confirm({ token: user2.confirmationToken })
+
+  // create not confirmed user
+  await userService.createPublicUser(
+    plainToClass(UserCreateDto, {
+      email: "user+notconfirmed@example.com",
+      emailConfirmation: "user+notconfirmed@example.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+      password: "abcdef",
+      passwordConfirmation: "abcdef",
+      jurisdictions: [jurisdictions[0]],
+    }),
+    new AuthContext(null)
+  )
 
   // create user with expired password
   const userExpiredPassword = await userService.createPublicUser(
