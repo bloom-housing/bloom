@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const treymoreProperty: PropertySeedType = {
@@ -96,17 +96,17 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const treymoreUnitsSummaryToBeCreated: DeepPartial<UnitsSummary>[] = []
+    const treymoreUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const studioUnitsSummary: DeepPartial<UnitsSummary> = {
+    const studioUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeStudio],
       totalCount: 2,
       listing: listing,
       totalAvailable: 0,
     }
-    treymoreUnitsSummaryToBeCreated.push(studioUnitsSummary)
+    treymoreUnitGroupToBeCreated.push(studioUnitGroup)
 
-    const twoBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeTwoBdrm],
       totalCount: 4,
       amiLevels: [
@@ -121,9 +121,9 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       sqFeetMax: "1003",
       totalAvailable: 4,
     }
-    treymoreUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    treymoreUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(treymoreUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(treymoreUnitGroupToBeCreated)
 
     return listing
   }

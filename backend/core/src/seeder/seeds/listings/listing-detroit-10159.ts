@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummary } from "../../../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -93,12 +93,12 @@ export class Listing10159Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const threeBdrmUnitsSummary: DeepPartial<UnitsSummary> = {
+    const threeBdrmUnitGroup: DeepPartial<UnitGroup> = {
       unitType: [unitTypeThreeBdrm],
       totalCount: 49,
       listing: listing,
     }
-    await this.unitsSummaryRepository.save([threeBdrmUnitsSummary])
+    await this.unitGroupRepository.save([threeBdrmUnitGroup])
 
     return listing
   }

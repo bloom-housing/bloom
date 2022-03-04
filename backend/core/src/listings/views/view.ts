@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from "typeorm"
-import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
+import { getUnitGroupSummary } from "../../shared/units-transformations"
 import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
 import { View, BaseView } from "../../views/base.view"
@@ -37,8 +37,8 @@ export class BaseListingView extends BaseView {
   mapUnitSummary(listings) {
     return listings.map((listing) => ({
       ...listing,
-      unitsSummarized: {
-        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
+      unitSummaries: {
+        byUnitTypeAndRent: getUnitGroupSummary(listing.unitGroups),
       },
     }))
   }

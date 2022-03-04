@@ -4,7 +4,7 @@ import {
   ListingCreate,
   ListingStatus,
   serviceOptions,
-  UnitsSummaryCreate,
+  UnitGroupCreate,
   UnitCreate,
 } from "../types/src/backend-swagger"
 
@@ -31,7 +31,7 @@ export interface ListingImport
   reservedCommunityTypeName?: string
   jurisdictionName?: string
 }
-export interface UnitsSummaryImport extends Omit<UnitsSummaryCreate, "unitType"> {
+export interface UnitsSummaryImport extends Omit<UnitGroupCreate, "unitType"> {
   unitType?: string
 }
 export interface UnitImport extends Omit<UnitCreate, "unitType" | "priorityType"> {
@@ -208,11 +208,11 @@ export async function importListing(
     const unitType = findByName(unitTypes, unit.unitType)
     unitsCreate.push({ ...unit, priorityType: priorityType, unitType: unitType })
   })
-  const unitsSummaryCreate: UnitsSummaryCreate[] = []
+  const unitGroupsCreate: UnitGroupCreate[] = []
   if (listing.unitsSummary) {
     listing.unitsSummary.forEach((summary) => {
       const unitType = findByName(unitTypes, summary.unitType)
-      unitsSummaryCreate.push({ ...summary, unitType: unitType })
+      unitGroupsCreate.push({ ...summary })
     })
   }
 
@@ -226,7 +226,7 @@ export async function importListing(
   // types.
   const listingCreate: ListingCreate = {
     ...listing,
-    unitsSummary: unitsSummaryCreate,
+    unitGroups: unitGroupsCreate,
     units: unitsCreate,
     reservedCommunityType: reservedCommunityType,
     jurisdiction: jurisdiction,

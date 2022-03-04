@@ -665,14 +665,13 @@ export const ArcherListing: Listing = {
   rentalAssistance: "Custom rental assistance",
   rentalHistory:
     "Two years of rental history will be verified with all applicable landlords.  Household family members and/or personal friends are not acceptable landlord references.  Two professional character references may be used in lieu of rental history for applicants with no prior rental history.  An unlawful detainer report will be processed thourhg the U.D. Registry, Inc. Applicants will be disqualified if they have any evictions filing within the last 7 years.  Refer to Tenant Selection Criteria or Qualification Criteria for details related to the qualification process.",
-  preferences: [],
   householdSizeMin: 2,
   householdSizeMax: 3,
   smokingPolicy: "Non-smoking building",
   unitsAvailable: 0,
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  unitsSummarized: {},
+  unitSummaries: {},
   unitAmenities: "Dishwasher",
   developer: "Charities Housing ",
   yearBuilt: 2012,

@@ -30,9 +30,15 @@ import {
   Waitlist,
   ListingUpdated,
   Message,
+  ListSection,
+  StandardTable,
   t,
 } from "@bloom-housing/ui-components"
-import { cloudinaryPdfFromId, imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import {
+  cloudinaryPdfFromId,
+  imageUrlFromListing,
+  occupancyTable,
+} from "@bloom-housing/shared-helpers"
 import dayjs from "dayjs"
 import { ErrorPage } from "../pages/_error"
 import {
@@ -354,6 +360,27 @@ export const ListingView = (props: ListingProps) => {
             )}
           </aside>
         </ListingDetailItem>
+
+        <ListingDetails>
+          <ListingDetailItem
+            imageAlt={t("listings.eligibilityNotebook")}
+            imageSrc="/images/listing-eligibility.svg"
+            title={t("listings.sections.eligibilityTitle")}
+            subtitle={t("listings.sections.eligibilitySubtitle")}
+            desktopClass="bg-primary-lighter"
+          >
+            <ListSection title={t("t.occupancy")} subtitle={"Occupancy description"}>
+              <StandardTable
+                headers={{
+                  unitType: "t.unitType",
+                  occupancy: "t.occupancy",
+                }}
+                data={occupancyTable(listing)}
+                responsiveCollapse={false}
+              />
+            </ListSection>
+          </ListingDetailItem>
+        </ListingDetails>
 
         <ListingDetailItem
           imageAlt={t("listings.featuresCards")}

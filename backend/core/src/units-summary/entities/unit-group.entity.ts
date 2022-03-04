@@ -21,10 +21,10 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { Listing } from "../../listings/entities/listing.entity"
-import { UnitsSummaryAmiLevel } from "./units-summary-ami-level.entity"
+import { UnitGroupAmiLevel } from "./unit-group-ami-level.entity"
 
-@Entity({ name: "units_summary" })
-export class UnitsSummary {
+@Entity({ name: "unit_group" })
+export class UnitGroup {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
@@ -39,19 +39,18 @@ export class UnitsSummary {
   @Type(() => UnitType)
   unitType: UnitType[]
 
-  @ManyToOne(() => Listing, (listing) => listing.unitsSummary, {})
+  @ManyToOne(() => Listing, (listing) => listing.unitGroups, {})
   listing: Listing
 
-  @OneToMany(
-    () => UnitsSummaryAmiLevel,
-    (unitsSummaryAmiLevel) => unitsSummaryAmiLevel.unitsSummary,
-    { eager: true, cascade: true }
-  )
+  @OneToMany(() => UnitGroupAmiLevel, (UnitGroupAmiLevel) => UnitGroupAmiLevel.unitGroup, {
+    eager: true,
+    cascade: true,
+  })
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummaryAmiLevel)
-  amiLevels: UnitsSummaryAmiLevel[]
+  @Type(() => UnitGroupAmiLevel)
+  amiLevels: UnitGroupAmiLevel[]
 
   @Column({ nullable: true, type: "integer" })
   @Expose()

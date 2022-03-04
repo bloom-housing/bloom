@@ -27,10 +27,10 @@ export class EmailService {
     private readonly jurisdictionResolverService: JurisdictionResolverService
   ) {
     this.polyglot = new Polyglot({
-      phrases: {}
+      phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper("t", function(
+    Handlebars.registerHelper("t", function (
       phrase: string,
       options?: number | Polyglot.InterpolationOptions
     ) {
@@ -60,7 +60,7 @@ export class EmailService {
       this.template("register-email")({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl: appUrl }
+        appOptions: { appUrl: appUrl },
       })
     )
   }
@@ -79,7 +79,7 @@ export class EmailService {
       this.template("change-email")({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl: appUrl }
+        appOptions: { appUrl: appUrl },
       })
     )
   }
@@ -102,11 +102,11 @@ export class EmailService {
     if (listing.applicationDueDate) {
       if (listing.reviewOrderType === ListingReviewOrder.lottery) {
         whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
-          lotteryDate: listing.applicationDueDate
+          lotteryDate: listing.applicationDueDate,
         })
       } else {
         whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
-          lotteryDate: listing.applicationDueDate
+          lotteryDate: listing.applicationDueDate,
         })
       }
     } else {
@@ -115,7 +115,7 @@ export class EmailService {
     const user = {
       firstName: application.applicant.firstName,
       middleName: application.applicant.middleName,
-      lastName: application.applicant.lastName
+      lastName: application.applicant.lastName,
     }
     await this.send(
       application.applicant.emailAddress,
@@ -125,7 +125,7 @@ export class EmailService {
         listingUrl: listingUrl,
         application: application,
         whatToExpectText: whatToExpectText,
-        user: user
+        user: user,
       })
     )
   }
@@ -138,7 +138,9 @@ export class EmailService {
 
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a forget password email to ${user.email} from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a forget password email to ${user.email} from ${this.configService.get<
+          string
+        >("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
@@ -148,7 +150,7 @@ export class EmailService {
       compiledTemplate({
         resetUrl: resetUrl,
         resetOptions: { appUrl: appUrl },
-        user: user
+        user: user,
       })
     )
   }
@@ -169,7 +171,7 @@ export class EmailService {
       "New Listing",
       this.template("new-listing")({
         listing: listing,
-        rent: rentRange
+        rent: rentRange,
       })
     )
   }
@@ -179,7 +181,9 @@ export class EmailService {
     void (await this.loadTranslations(jurisdiction, Language.en))
     if (this.configService.get<string>("NODE_ENV") == "production") {
       Logger.log(
-        `Preparing to send a listing email to ${users.toString()} from ${this.configService.get<string>("EMAIL_FROM_ADDRESS")}...`
+        `Preparing to send a listing email to ${users.toString()} from ${this.configService.get<
+          string
+        >("EMAIL_FROM_ADDRESS")}...`
       )
     }
 
@@ -189,15 +193,19 @@ export class EmailService {
       "Update Listing",
       this.template("update-listing")({
         listing: listing,
-        rent: rentRange
+        rent: rentRange,
       })
     )
   }
 
   // function to calculate rent - min of all mins and max of all maxs
   private getRentRange(listing: Listing) {
-    const rentsArrays: Array<Array<number | null>> = listing.unitsSummary.map((a) => a.amiLevels.map(amiLevel => amiLevel.flatRentValue))
-    const flattenedRentsArray: Array<number> = [].concat(...rentsArrays).filter(flatRentValue => flatRentValue)
+    const rentsArrays: Array<Array<number | null>> = listing.unitGroups.map((a) =>
+      a.amiLevels.map((amiLevel) => amiLevel.flatRentValue)
+    )
+    const flattenedRentsArray: Array<number> = []
+      .concat(...rentsArrays)
+      .filter((flatRentValue) => flatRentValue)
 
     if (flattenedRentsArray.length === 0) {
       return "Call"
@@ -259,7 +267,7 @@ export class EmailService {
         to: to,
         from: this.configService.get<string>("EMAIL_FROM_ADDRESS"),
         subject: subject,
-        html: body
+        html: body,
       },
       false,
       (error) => {
@@ -281,7 +289,7 @@ export class EmailService {
         to: to,
         from: this.configService.get<string>("EMAIL_FROM_ADDRESS"),
         subject: subject,
-        html: body
+        html: body,
       },
 
       (error) => {
@@ -308,7 +316,7 @@ export class EmailService {
       this.template("invite")({
         user: user,
         confirmationUrl: confirmationUrl,
-        appOptions: { appUrl }
+        appOptions: { appUrl },
       })
     )
   }

@@ -68,8 +68,8 @@ describe("listing views", () => {
       const listings = view.mapUnitSummary(mockListings)
 
       listings.forEach((listing) => {
-        expect(listing).toHaveProperty("unitsSummarized")
-        expect(listing.unitsSummarized).toHaveProperty("byUnitTypeAndRent")
+        expect(listing).toHaveProperty("unitSummaries")
+        expect(listing.unitSummaries).toHaveProperty("byUnitTypeAndRent")
       })
     })
   })

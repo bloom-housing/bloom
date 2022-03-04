@@ -15,7 +15,7 @@ import { IdDto } from "../../shared/dto/id.dto"
 import { AddressUpdateDto } from "../../shared/dto/address.dto"
 import { ListingEventUpdateDto } from "./listing-event.dto"
 import { AssetUpdateDto } from "../../assets/dto/asset.dto"
-import { UnitsSummaryUpdateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitGroupUpdateDto } from "../../units-summary/dto/unit-group"
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodUpdateDto } from "../../application-methods/dto/application-method.dto"
 import { UnitUpdateDto } from "../../units/dto/unit-update.dto"
@@ -52,11 +52,11 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   "unitAmenities",
   "servicesOffered",
   "yearBuilt",
-  "unitsSummarized",
+  "unitSummaries",
   "jurisdiction",
   "reservedCommunityType",
   "result",
-  "unitsSummary",
+  "unitGroups",
   "referralApplication",
   "listingPreferences",
   "listingPrograms",
@@ -227,8 +227,8 @@ export class ListingUpdateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummaryUpdateDto)
-  unitsSummary?: UnitsSummaryUpdateDto[]
+  @Type(() => UnitGroupUpdateDto)
+  unitGroups?: UnitGroupUpdateDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

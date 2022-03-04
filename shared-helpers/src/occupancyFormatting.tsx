@@ -31,7 +31,7 @@ export const occupancyTable = (listing: Listing) => {
 }
 
 export const getOccupancyDescription = (listing: Listing) => {
-  const unitsSummarized = listing.unitsSummarized
+  const unitsSummarized = listing.unitSummaries
   if (
     unitsSummarized &&
     unitsSummarized.unitTypes &&
