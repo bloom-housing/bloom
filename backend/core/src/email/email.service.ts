@@ -32,12 +32,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper("t", function (
-      phrase: string,
-      options?: number | Polyglot.InterpolationOptions
-    ) {
-      return polyglot.t(phrase, options)
-    })
+    Handlebars.registerHelper(
+      "t",
+      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
+        return polyglot.t(phrase, options)
+      }
+    )
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
@@ -129,17 +129,12 @@ export class EmailService {
       )
     }
 
-    if (listing.applicationDueDate) {
-      if (listing.reviewOrderType === ListingReviewOrder.lottery) {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      } else {
-        whatToExpectText = this.polyglot.t("confirmation.whatToExpect.noLottery", {
-          lotteryDate: listing.applicationDueDate,
-        })
-      }
+    if (listing.reviewOrderType === ListingReviewOrder.lottery) {
+      whatToExpectText = this.polyglot.t("confirmation.whatToExpect.lottery", {
+        lotteryDate: listing.applicationDueDate,
+      })
     } else {
+      // for when listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe
       whatToExpectText = this.polyglot.t("confirmation.whatToExpect.FCFS")
     }
     const user = {
