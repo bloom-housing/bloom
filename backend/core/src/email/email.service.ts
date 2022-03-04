@@ -32,12 +32,12 @@ export class EmailService {
       phrases: {},
     })
     const polyglot = this.polyglot
-    Handlebars.registerHelper(
-      "t",
-      function (phrase: string, options?: number | Polyglot.InterpolationOptions) {
-        return polyglot.t(phrase, options)
-      }
-    )
+    Handlebars.registerHelper("t", function (
+      phrase: string,
+      options?: number | Polyglot.InterpolationOptions
+    ) {
+      return polyglot.t(phrase, options)
+    })
     const parts = this.partials()
     Handlebars.registerPartial(parts)
   }
