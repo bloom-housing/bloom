@@ -42,6 +42,8 @@ import { addFilters } from "../../shared/query-filter"
 import { UserFilterParams } from "../dto/user-filter-params"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
+import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
@@ -54,7 +56,8 @@ export class UserService {
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
-    private readonly jurisdictionResolverService: JurisdictionResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService,
+    private readonly jurisdictionService: JurisdictionsService
   ) {}
 
   public async findByEmail(email: string) {
@@ -388,7 +391,7 @@ export class UserService {
         roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
-          : [await this.jurisdictionResolverService.getJurisdiction()],
+          : [await this.jurisdictionService.findOne({ where: { name: "Detroit" } })],
         preferences: (dto.preferences as unknown) as UserPreferences,
       },
       authContext
