@@ -229,7 +229,7 @@ export const CloseSmall = (props: IconProps) => {
         />
       </mask>
       <g mask="url(#mask0)">
-        <rect x="-2.46191" y="0.177887" width="14.5385" height="11.0769" fill="#0077DA" />
+        <rect x="-2.46191" y="0.177887" width="14.5385" height="11.0769" />
       </g>
     </svg>
   )

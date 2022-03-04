@@ -16,16 +16,25 @@ import {
   FormOptions,
   ProgressNav,
   t,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import { HouseholdMember, Member } from "@bloom-housing/backend-core/types"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { AppSubmissionContext } from "../../../lib/AppSubmissionContext"
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Select } from "@bloom-housing/ui-components/src/forms/Select"
-import { OnClientSide, relationshipKeys, stateKeys } from "@bloom-housing/shared-helpers"
+import {
+  OnClientSide,
+  PageView,
+  pushGtmEvent,
+  relationshipKeys,
+  stateKeys,
+} from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationMember = () => {
+  const { profile } = useContext(AuthContext)
   let memberId, member, saveText, cancelText
   const { conductor, application, listing } = useContext(AppSubmissionContext)
   const router = useRouter()
@@ -96,6 +105,14 @@ const ApplicationMember = () => {
       defaultChecked: member?.workInRegion === "no",
     },
   ]
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Add Household Members",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>

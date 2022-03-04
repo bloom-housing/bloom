@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm"
+import { Column, Entity, Index, ManyToOne } from "typeorm"
 import { AbstractEntity } from "../../shared/entities/abstract.entity"
 import { Expose } from "class-transformer"
 import { IsDefined, IsEnum } from "class-validator"

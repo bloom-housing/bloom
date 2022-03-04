@@ -37,6 +37,10 @@ const SignIn = () => {
 
   let formToRender: JSX.Element
 
+  if (Object.keys(errors).length && !!networkError) {
+    resetNetworkError()
+  }
+
   if (renderStep === EnumRenderStep.emailAndPassword) {
     formToRender = (
       <FormSignIn
@@ -46,7 +50,8 @@ const SignIn = () => {
           setRenderStep,
           determineNetworkError,
           login,
-          router
+          router,
+          resetNetworkError
         )}
         control={{ register, errors, handleSubmit }}
         networkError={{ error: networkError, reset: resetNetworkError }}
@@ -63,7 +68,8 @@ const SignIn = () => {
           requestMfaCode,
           determineNetworkError,
           setAllowPhoneNumberEdit,
-          setPhoneNumber
+          setPhoneNumber,
+          resetNetworkError
         )}
         control={{ register, errors, handleSubmit, setValue }}
         networkError={{ error: networkError, reset: resetNetworkError }}
@@ -79,7 +85,8 @@ const SignIn = () => {
           setRenderStep,
           requestMfaCode,
           setAllowPhoneNumberEdit,
-          setPhoneNumber
+          setPhoneNumber,
+          resetNetworkError
         )}
         control={{ errors, handleSubmit, control }}
         networkError={{ error: networkError, reset: resetNetworkError }}
@@ -89,7 +96,15 @@ const SignIn = () => {
   } else if (renderStep === EnumRenderStep.enterCode) {
     formToRender = (
       <FormSignInMFACode
-        onSubmit={onSubmitMfaCode(email, password, determineNetworkError, login, router, mfaType)}
+        onSubmit={onSubmitMfaCode(
+          email,
+          password,
+          determineNetworkError,
+          login,
+          router,
+          mfaType,
+          resetNetworkError
+        )}
         control={{ register, errors, handleSubmit }}
         networkError={{ error: networkError, reset: resetNetworkError }}
         mfaType={mfaType}

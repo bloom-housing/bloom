@@ -85,9 +85,9 @@
   @apply border-primary;
   display: flex;
   justify-content: space-between;
-  .toggle-header-content {
-    @apply font-sans;
-    @apply text-tiny;
-    @apply text-gray-800;
-  }
+}
+.toggle-header-content {
+  @apply font-sans;
+  @apply text-tiny;
+  @apply text-gray-800;
 }

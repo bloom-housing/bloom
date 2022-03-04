@@ -16,7 +16,7 @@ export type FormSignInErrorBoxControl = {
 
 const FormSignInErrorBox = ({ networkError, errors, errorMessageId }: FormSignInErrorBoxProps) => {
   return (
-    <div>
+    <div className="border-b">
       {Object.entries(errors).length > 0 && !networkError.error && (
         <AlertBox type="alert" inverted closeable>
           {errors.authentication ? errors.authentication.message : t("errors.errorsToResolve")}

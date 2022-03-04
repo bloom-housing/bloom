@@ -2,6 +2,7 @@
 0.2 - What To Expect
 A notice regarding application process and rules
 */
+import React, { useEffect, useContext } from "react"
 import {
   AppearanceStyleType,
   Button,
@@ -9,13 +10,16 @@ import {
   t,
   ProgressNav,
   Form,
+  AuthContext,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
 import { useFormConductor } from "../../../lib/hooks"
-import { OnClientSide } from "@bloom-housing/shared-helpers"
+import { OnClientSide, PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
+import { UserStatus } from "../../../lib/constants"
 
 const ApplicationWhatToExpect = () => {
+  const { profile } = useContext(AuthContext)
   const { conductor, application, listing } = useFormConductor("whatToExpect")
   const currentPageSection = 1
 
@@ -24,6 +28,14 @@ const ApplicationWhatToExpect = () => {
   const onSubmit = () => {
     conductor.routeToNextOrReturnUrl()
   }
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - What to Expect",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   return (
     <FormsLayout>
