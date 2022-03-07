@@ -4322,6 +4322,26 @@ export interface Unit {
   bmrProgramChart?: boolean
 }
 
+export interface UnitGroupAmiLevel {
+  /**  */
+  id: string
+
+  /**  */
+  amiChartId?: string
+
+  /**  */
+  amiPercentage: number
+
+  /**  */
+  monthlyRentDeterminationType: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  percentageOfIncomeValue?: number
+}
+
 export interface UnitAccessibilityPriorityType {
   /**  */
   name: string
@@ -4337,6 +4357,12 @@ export interface UnitAccessibilityPriorityType {
 }
 
 export interface UnitGroup {
+  /**  */
+  unitType: UnitType[]
+
+  /**  */
+  amiLevels: UnitGroupAmiLevel[]
+
   /**  */
   id: string
 
@@ -5268,7 +5294,30 @@ export interface UnitCreate {
   bmrProgramChart?: boolean
 }
 
+export interface UnitGroupAmiLevelCreate {
+  /**  */
+  amiChartId?: string
+
+  /**  */
+  amiPercentage: number
+
+  /**  */
+  monthlyRentDeterminationType: EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  percentageOfIncomeValue?: number
+}
+
 export interface UnitGroupCreate {
+  /**  */
+  unitType: Id[]
+
+  /**  */
+  amiLevels: UnitGroupAmiLevelCreate[]
+
   /**  */
   maxOccupancy?: number
 
@@ -5705,7 +5754,33 @@ export interface UnitUpdate {
   bmrProgramChart?: boolean
 }
 
+export interface UnitGroupAmiLevelUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  amiChartId?: string
+
+  /**  */
+  amiPercentage: number
+
+  /**  */
+  monthlyRentDeterminationType: EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType
+
+  /**  */
+  flatRentValue?: number
+
+  /**  */
+  percentageOfIncomeValue?: number
+}
+
 export interface UnitGroupUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  amiLevels: UnitGroupAmiLevelUpdate[]
+
   /**  */
   maxOccupancy?: number
 
@@ -5741,6 +5816,9 @@ export interface UnitGroupUpdate {
 
   /**  */
   openWaitlist: boolean
+
+  /**  */
+  unitType: Id[]
 }
 
 export interface ListingUpdate {
@@ -6521,6 +6599,10 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
+export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
 export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
 export type CombinedApplicationPickUpAddressTypes = AddressUpdate
 export type CombinedApplicationDropOffAddressTypes = AddressUpdate
@@ -6573,6 +6655,14 @@ export enum EnumListingFilterParamsAvailability {
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
+}
+export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
+export enum EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
 }
 export enum EnumPreferencesFilterParamsComparison {
   "=" = "=",
