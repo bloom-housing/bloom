@@ -5,11 +5,12 @@ import axios, { AxiosError } from "axios"
 export type NetworkErrorValue = {
   title: string
   content: string
+  error: AxiosError
 } | null
 
 export type NetworkErrorDetermineError = (
   status: number,
-  error: Error | AxiosError,
+  error: AxiosError,
   mfaEnabled?: boolean
 ) => void
 
@@ -26,23 +27,26 @@ export enum NetworkErrorMessage {
 export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkErrorValue>(null)
 
-  const check401Error = (message: string) => {
+  const check401Error = (message: string, error: AxiosError) => {
     if (message === NetworkErrorMessage.PasswordOutdated) {
       setNetworkError({
         title: t("authentication.signIn.passwordOutdated"),
         content: `${t("authentication.signIn.changeYourPassword")} <a href="/forgot-password">${t(
           "t.here"
         )}</a>`,
+        error,
       })
     } else if (message === NetworkErrorMessage.MfaUnauthorized) {
       setNetworkError({
         title: t("authentication.signIn.enterValidEmailAndPasswordAndMFA"),
         content: t("authentication.signIn.afterFailedAttempts"),
+        error,
       })
     } else {
       setNetworkError({
         title: t("authentication.signIn.enterValidEmailAndPassword"),
         content: t("authentication.signIn.afterFailedAttempts"),
+        error,
       })
     }
   }
@@ -52,18 +56,20 @@ export const useCatchNetworkError = () => {
 
     switch (status) {
       case 401:
-        check401Error(responseMessage)
+        check401Error(responseMessage, error)
         break
       case 429:
         setNetworkError({
           title: t("authentication.signIn.accountHasBeenLocked"),
           content: t("authentication.signIn.youHaveToWait"),
+          error,
         })
         break
       default:
         setNetworkError({
           title: t("errors.somethingWentWrong"),
           content: t("authentication.signIn.errorGenericMessage"),
+          error,
         })
     }
   }
