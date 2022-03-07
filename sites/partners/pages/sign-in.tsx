@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useRef, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/router"
 import { useCatchNetworkError } from "@bloom-housing/shared-helpers"
@@ -18,12 +18,13 @@ import {
   onSubmitMfaCodeWithPhone,
   onSubmitMfaCode,
 } from "../lib/signInHelpers"
+import { ConfirmationModal } from "../src/ConfirmationModal"
 
 const SignIn = () => {
   const { login, requestMfaCode } = useContext(AuthContext)
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors, setValue, control } = useForm()
+  const { register, handleSubmit, errors, setValue, control, watch } = useForm()
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
   const router = useRouter()
   const [email, setEmail] = useState<string | undefined>(undefined)
@@ -34,6 +35,15 @@ const SignIn = () => {
   )
   const [allowPhoneNumberEdit, setAllowPhoneNumberEdit] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState("")
+
+  const emailValue = useRef({})
+  emailValue.current = watch("email", "")
+
+  // TODO: update message to be an enum value from the backend (not available yet)
+  const isNotConfirmed = useMemo(
+    () => networkError?.error.response.data?.message === "user not confirmed",
+    [networkError]
+  )
 
   let formToRender: JSX.Element
 
@@ -54,7 +64,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ register, errors, handleSubmit }}
-        networkError={{ error: networkError, reset: resetNetworkError }}
+        networkError={{
+          error: isNotConfirmed ? undefined : networkError,
+          reset: resetNetworkError,
+        }}
       />
     )
   } else if (renderStep === EnumRenderStep.mfaType) {
@@ -115,7 +128,18 @@ const SignIn = () => {
     )
   }
 
-  return <FormsLayout>{formToRender}</FormsLayout>
+  return (
+    <>
+      <ConfirmationModal
+        isOpen={isNotConfirmed}
+        onSuccess={() => console.log("success")}
+        onError={() => console.log("error")}
+        onClose={() => resetNetworkError()}
+        initialEmailValue={emailValue.current as string}
+      />
+      <FormsLayout>{formToRender}</FormsLayout>
+    </>
+  )
 }
 
 export default SignIn
