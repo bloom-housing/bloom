@@ -211,8 +211,8 @@ export async function importListing(
   const unitGroupsCreate: UnitGroupCreate[] = []
   if (listing.unitsSummary) {
     listing.unitsSummary.forEach((summary) => {
-      const unitType = findByName(unitTypes, summary.unitType)
-      unitGroupsCreate.push({ ...summary })
+      // const unitType = findByName(unitTypes, summary.unitType)
+      // unitGroupsCreate.push({ ...summary })
     })
   }
 
