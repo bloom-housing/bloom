@@ -7,7 +7,6 @@ import {
   Field,
   useMutate,
   AuthContext,
-  // AlertBox,
 } from "@bloom-housing/ui-components"
 import { useRouter } from "next/router"
 import { useEffect, useMemo, useContext } from "react"
@@ -22,10 +21,16 @@ export type ConfirmationModalProps = {
   onClose: () => void
 }
 
-const ConfirmationModal = ({ isOpen, onClose, initialEmailValue }: ConfirmationModalProps) => {
+const ConfirmationModal = ({
+  isOpen,
+  initialEmailValue,
+  onClose,
+  onSuccess,
+  onError,
+}: ConfirmationModalProps) => {
   const router = useRouter()
   const { userService } = useContext(AuthContext)
-  const { mutate, reset: resetMutate, isSuccess, isLoading, isError } = useMutate<any>()
+  const { mutate, reset: resetMutate, isLoading } = useMutate<any>()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, reset, getValues, trigger } = useForm({
@@ -48,12 +53,17 @@ const ConfirmationModal = ({ isOpen, onClose, initialEmailValue }: ConfirmationM
 
     const { emailResend } = getValues()
 
-    void mutate(() =>
-      userService.resendConfirmation({
-        body: {
-          email: emailResend,
-        },
-      })
+    void mutate(
+      () =>
+        userService.resendConfirmation({
+          body: {
+            email: emailResend,
+          },
+        }),
+      {
+        onSuccess,
+        onError,
+      }
     )
   }
 
@@ -63,6 +73,8 @@ const ConfirmationModal = ({ isOpen, onClose, initialEmailValue }: ConfirmationM
       title={t("authentication.signIn.yourAccountIsNotConfirmed")}
       ariaDescription={t("authentication.createAccount.linkExpired")}
       onClose={() => {
+        void router.push("/")
+        onClose()
         resetMutate()
         window.scrollTo(0, 0)
       }}
@@ -89,7 +101,6 @@ const ConfirmationModal = ({ isOpen, onClose, initialEmailValue }: ConfirmationM
       ]}
     >
       <>
-        {console.log(isSuccess, isError)}
         <Form>
           <Field
             caps={true}
