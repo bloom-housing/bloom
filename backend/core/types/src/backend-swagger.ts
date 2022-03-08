@@ -4888,6 +4888,14 @@ export interface UpdatePassword {
   token: string
 }
 
+export interface UserRolesUpdate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
 export interface UserUpdate {
   /**  */
   language?: Language
@@ -4909,6 +4917,9 @@ export interface UserUpdate {
 
   /**  */
   currentPassword?: string
+
+  /**  */
+  roles?: CombinedRolesTypes
 
   /**  */
   jurisdictions: Id[]
@@ -4947,6 +4958,9 @@ export interface UserUpdate {
 export interface UserFilterParams {
   /**  */
   $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   isPartner?: boolean
@@ -5114,6 +5128,9 @@ export interface JurisdictionUpdate {
 export interface ListingFilterParams {
   /**  */
   $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   name?: string
@@ -6068,6 +6085,9 @@ export interface PreferencesFilterParams {
   $comparison: EnumPreferencesFilterParamsComparison
 
   /**  */
+  $include_nulls?: boolean
+
+  /**  */
   jurisdiction?: string
 }
 
@@ -6111,6 +6131,9 @@ export interface PreferenceUpdate {
 export interface ProgramsFilterParams {
   /**  */
   $comparison: EnumProgramsFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
 
   /**  */
   jurisdiction?: string
@@ -6577,6 +6600,7 @@ export enum EnumUserFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumJurisdictionCreateLanguages {
@@ -6598,6 +6622,7 @@ export enum EnumListingFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumListingFilterParamsStatus {
@@ -6619,6 +6644,7 @@ export enum EnumPreferencesFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }
 export enum EnumProgramsFilterParamsComparison {
@@ -6626,5 +6652,6 @@ export enum EnumProgramsFilterParamsComparison {
   "<>" = "<>",
   "IN" = "IN",
   ">=" = ">=",
+  "<=" = "<=",
   "NA" = "NA",
 }

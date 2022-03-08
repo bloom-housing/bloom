@@ -151,7 +151,6 @@ export class UserService {
     if (!user) {
       throw new NotFoundException()
     }
-
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -166,6 +165,13 @@ export class UserService {
       passwordHash = await this.passwordService.passwordToHash(dto.password)
       passwordUpdatedAt = new Date()
       delete dto.password
+    }
+
+    /**
+     * only admin users can update roles
+     */
+    if (!authContext.user?.roles?.isAdmin) {
+      delete dto.roles
     }
 
     /**
