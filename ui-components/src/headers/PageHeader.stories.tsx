@@ -1,4 +1,5 @@
 import * as React from "react"
+import { BADGES } from "../../.storybook/constants"
 import { PageHeader } from "./PageHeader"
 import PageHeaderDocumentation from "./PageHeader.docs.mdx"
 
@@ -8,6 +9,7 @@ export default {
     docs: {
       page: PageHeaderDocumentation,
     },
+    badges: [BADGES.GEN2],
   },
 }
 

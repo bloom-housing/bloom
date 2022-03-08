@@ -24,18 +24,18 @@
 
   &:disabled {
     pointer-events: none;
-    @apply bg-white;
-    @apply border-gray-450;
-    @apply text-gray-450;
+    background-color: var(--bloom-color-white);
+    border-color: var(--bloom-color-gray-450);
+    color: var(--bloom-color-gray-450);
   }
 
   &.is-secondary {
-    @apply border-gray-700;
-    @apply text-gray-700;
+    border-color: var(--bloom-color-gray-700);
+    color: var(--bloom-color-gray-700);
 
     &:hover {
-      @apply bg-gray-700;
-      @apply text-white;
+      background-color: var(--bloom-color-gray-700);
+      color: var(--bloom-color-white);
     }
   }
 
@@ -62,70 +62,68 @@
     border: none;
     padding: 0;
     font-family: var(--bloom-font-sans);
-    letter-spacing: var(--bloom-letter-spacing-normal);
+    letter-spacing: normal;
     font-weight: 400;
     text-decoration: underline;
     margin: var(--bloom-s4);
     font-size: var(--bloom-font-size-tiny);
 
     &:hover {
-      @apply text-primary;
+      color: var(--bloom-color-primary);
       background: transparent;
     }
   }
 
   &.is-inline {
-    @apply text-primary;
-    @apply font-semibold;
-    @apply text-tiny;
-    @apply m-0;
-    @apply no-underline;
+    color: var(--bloom-color-primary);
+    font-weight: 600;
+    font-size: var(--bloom-font-size-tiny);
+    margin: 0;
+    text-decoration: none;
 
     &.has-icon-left {
       .button__icon {
-        @apply mr-1;
+        margin-right: var(--bloom-s1);
       }
     }
     &.has-icon-right {
       .button__icon {
-        @apply ml-1;
+        margin-left: var(--bloom-s1);
       }
     }
   }
 
   &.has-icon-left {
     .button__icon {
-      @apply mr-3;
+      margin-right: var(--bloom-s3);
     }
   }
   &.has-icon-right {
     .button__icon {
-      @apply ml-3;
+      margin-left: var(--bloom-s3);
     }
   }
 
   &.is-text-caps {
-    @apply text-primary-dark;
-    @apply normal-case;
-    @apply border-0;
-    @apply p-0;
-    @apply font-sans;
-    @apply tracking-normal;
-    @apply font-normal;
-    @apply underline;
-    @apply m-4;
-    @apply uppercase;
-    @apply text-tiny;
-    @apply block;
+    color: var(--bloom-color-primary-dark);
+    border: none;
+    padding: 0;
+    font-family: var(--bloom-font-sans);
+    letter-spacing: normal;
+    text-decoration: underline;
+    margin: var(--bloom-s4);
+    text-transform: uppercase;
+    font-size: var(--bloom-font-size-tiny);
+    display: block;
 
     &:hover {
-      @apply text-primary-dark;
+      color: var(--bloom-color-primary-dark);
       background: transparent;
     }
   }
 
   &.is-fullwidth {
-    @apply w-full;
+    width: 100%;
   }
 
   &.is-loading {

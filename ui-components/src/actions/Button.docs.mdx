@@ -1,0 +1,35 @@
+import { Canvas, Story, Source, ArgsTable } from "@storybook/addon-docs"
+import { Button } from "./Button"
+
+# Button
+
+The button component offers flexible usage with a variety of different appearance options. Size, color, and shape can be controlled via standardized props.
+
+<Canvas>
+  <Button>This is a Button</Button>
+</Canvas>
+
+## Variants
+
+There are several props which accept enums to adjust style type, border, and size. For example, to choose the "primary" style and a "small" size, you would pass the `AppearanceStyleType.primary` enum to `styleType` prop and `AppearanceSizeType.small` enum to `size` prop.
+
+<Canvas>
+  <Story id="actions-button--small-and-primary" />
+</Canvas>
+
+Other variants include appearances which aren't button-like such as `unstyled` and `inline`.
+
+## Component Properties
+
+<ArgsTable of={Button} />
+
+## Theming Variables
+
+You can apply CSS variables to the `.button` selector to customize the appearance of the component. Generally these variables are part of the Bloom global design system, so if you've already overriden these global variables via `:root`, the button styles will update automatically.
+
+| Name                         | Color                                                            | Description                         |
+| ---------------------------- | ---------------------------------------------------------------- | ----------------------------------- |
+| `--bloom-color-primary`      | <span className="bg-primary w-6 inline-block">&nbsp;</span>      | Primary style type color            |
+| `--bloom-color-primary-dark` | <span className="bg-primary-dark w-6 inline-block">&nbsp;</span> | Darker version of the primary color |
+| `--bloom-color-success`      | <span className="bg-success w-6 inline-block">&nbsp;</span>      | Success style type color            |
+| `--bloom-color-success-dark` | <span className="bg-success-dark w-6 inline-block">&nbsp;</span> | Darker version of the success color |

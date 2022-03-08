@@ -1,16 +1,23 @@
 import * as React from "react"
-
 import { withKnobs, text, select } from "@storybook/addon-knobs"
+import { BADGES } from "../../.storybook/constants"
 import { Button } from "../actions/Button"
 import {
   AppearanceBorderType,
   AppearanceSizeType,
   AppearanceStyleType,
 } from "../global/AppearanceTypes"
+import ButtonDocumentation from "./Button.docs.mdx"
 
 export default {
   title: "Actions/Button",
   decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
+  parameters: {
+    docs: {
+      page: ButtonDocumentation,
+    },
+    badges: [BADGES.GEN2],
+  },
 }
 
 const handleClick = (e: React.MouseEvent) => {

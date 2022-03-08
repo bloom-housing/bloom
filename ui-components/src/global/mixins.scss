@@ -13,42 +13,45 @@
 
 // Adds full screen image to pseudo element
 @mixin overlay-image() {
-  @apply block;
-  @apply absolute;
-  @apply inset-0;
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
   content: "";
   z-index: 2;
 }
 
 @mixin clearfix() {
   &::after {
-    @apply table;
-    @apply clear-both;
+    display: table;
+    clear: both;
     content: "";
   }
 }
 
 @mixin has-toggle() {
   &:after {
-    @apply font-bold;
-    @apply inline-block;
-    @apply ml-2;
-    @apply mr-2;
-    @apply text-sm;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: var(--bloom-s2);
+    margin-right: var(--bloom-s2);
+    font-size: var(--bloom-font-size-sm);
     content: "⌃";
     transform: rotate(180deg) translateY(2px);
   }
   &[aria-expanded="true"]:after {
-    @apply mr-5;
+    margin-right: var(--bloom-s5);
     transform: rotate(0deg) translateY(2px);
   }
 }
 
 @mixin has-image-skeleton() {
-  @apply bg-gray-500;
+  background-color: var(--bloom-color-gray-500);
 
   &::before {
-    @apply float-left;
+    float: left;
     content: "";
     width: 1px;
     margin-left: -1px;
@@ -58,65 +61,65 @@
 
   &::after {
     /* to clear float */
-    @apply table;
-    @apply clear-both;
+    display: table;
+    clear: both;
     content: "";
   }
 }
 
 @mixin filled-appearances() {
   &.is-primary {
-    @apply bg-primary;
-    @apply border-primary;
-    @apply text-white;
+    background-color: var(--bloom-color-primary);
+    border-color: var(--bloom-color-primary);
+    color: var(--bloom-color-white);
 
     &:hover {
-      @apply bg-primary-dark;
-      @apply border-primary-dark;
+      background-color: var(--bloom-color-primary-dark);
+      border-color: var(--bloom-color-primary-dark);
     }
   }
 
   &.is-success {
-    @apply bg-success;
-    @apply border-success;
-    @apply text-white;
+    background-color: var(--bloom-color-success);
+    border-color: var(--bloom-color-success);
+    color: var(--bloom-color-white);
 
     &:hover {
-      @apply bg-success-dark;
+      background-color: var(--bloom-color-success-dark);
     }
   }
 
   &.is-alert {
-    @apply bg-alert;
-    @apply border-alert;
-    @apply text-white;
+    background-color: var(--bloom-color-alert);
+    border-color: var(--bloom-color-alert);
+    color: var(--bloom-color-white);
 
     &:hover {
-      @apply bg-alert-dark;
-      @apply border-alert-dark;
+      background-color: var(--bloom-color-alert-dark);
+      border-color: var(--bloom-color-alert-dark);
     }
   }
 
   &.is-warning {
-    @apply bg-warn;
-    @apply border-warn;
-    @apply text-gray-800;
+    background-color: var(--bloom-color-warn);
+    border-color: var(--bloom-color-warn);
+    color: var(--bloom-color-gray-800);
 
     &:hover {
-      @apply text-white;
-      @apply bg-warn-dark;
-      @apply border-warn-dark;
+      color: var(--bloom-color-white);
+      background-color: var(--bloom-color-warn-dark);
+      border-color: var(--bloom-color-warn-dark);
     }
   }
 
   &.is-borderless {
-    @apply text-primary-darker;
+    color: var(--bloom-color-primary-darker);
     border-color: transparent;
     background: transparent;
 
     &:hover {
       background: transparent;
-      @apply text-primary-darker;
+      color: var(--bloom-color-primary-darker);
     }
   }
 }
@@ -136,26 +139,26 @@
     background: transparent;
 
     &.is-success {
-      @apply text-success;
+      color: var(--bloom-color-success);
 
       &:hover {
-        @apply text-white;
+        color: var(--bloom-color-white);
       }
     }
 
     &.is-alert {
-      @apply text-alert;
+      color: var(--bloom-color-alert);
 
       &:hover {
-        @apply text-white;
+        color: var(--bloom-color-white);
       }
     }
 
     &.is-warning {
-      @apply text-gray-800;
+      color: var(--bloom-color-gray-800);
 
       &:hover {
-        @apply text-white;
+        color: var(--bloom-color-white);
       }
     }
   }
