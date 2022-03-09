@@ -15,7 +15,10 @@ import {
   t,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
-import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
+import {
+  EnumRequestMfaCodeMfaType,
+  EnumUserErrorExtraModelUserErrorMessages,
+} from "@bloom-housing/backend-core/types"
 import {
   EnumRenderStep,
   onSubmitEmailAndPassword,
@@ -51,8 +54,10 @@ const SignIn = () => {
   }>()
 
   useEffect(() => {
-    // TODO: update message to be an enum value from the backend (not available yet)
-    if (networkError?.error.response.data?.message === "user not confirmed") {
+    if (
+      networkError?.error.response.data?.message ===
+      EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
+    ) {
       setConfirmationStatusModal(true)
     }
   }, [networkError])
