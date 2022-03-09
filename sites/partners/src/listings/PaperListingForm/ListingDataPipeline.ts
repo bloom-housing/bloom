@@ -35,6 +35,7 @@ export default class ListingDataPipeline {
       import("./formatters/EventsFormatter"),
       import("./formatters/JurisdictionFormatter"),
       import("./formatters/AdditionalMetadataFormatter"),
+      import("./formatters/UnitGroupFormatter"),
     ])
 
     return formatterClasses.map((formatterClass) => formatterClass.default)

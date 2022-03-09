@@ -193,7 +193,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
-          console.log("196:", formattedData)
+
           const result = editMode
             ? await listingsService.update(
                 {

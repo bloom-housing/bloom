@@ -52,8 +52,6 @@ const FormUnits = ({ units, unitsSummaries, setSummaries, disableUnitsAccordion 
     }
   })
 
-  const nextId = units && units.length > 0 ? units[units.length - 1]?.tempId + 1 : 1
-
   const unitSummariesHeaders = {
     unitType: "listings.unit.type",
     units: "listings.unitsSummary.numUnits",
