@@ -8,6 +8,7 @@ export enum AppearanceStyleType {
   accentCool = "is-accent-cool",
   accentWarm = "is-accent-warm",
   closed = "is-closed",
+  accentLight = "is-accent-light",
 }
 
 export enum AppearanceSizeType {

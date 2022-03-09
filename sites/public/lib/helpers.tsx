@@ -14,7 +14,7 @@ import {
   IconSize,
   IconProps,
 } from "@bloom-housing/ui-components"
-import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
+import { imageUrlFromListing, listingFeatures } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
@@ -43,19 +43,26 @@ const getListingCardSubtitle = (address: Address) => {
   return address ? `${street}, ${city} ${state}, ${zipCode}` : null
 }
 
+export const accessibilityFeaturesExist = (listing: Listing) => {
+  if (!listing.features) return false
+  let featuresExist = false
+  Object.keys(listingFeatures).map((feature) => {
+    if (listing.features[feature]) {
+      featuresExist = true
+    }
+  })
+  return featuresExist
+}
+
 export const getImageTagLabelFromListing = (listing: Listing) => {
-  const reservedCommunityTypeName = listing.reservedCommunityType?.name
-  return reservedCommunityTypeName
-    ? t(`listings.reservedCommunityTypes.${reservedCommunityTypeName}`)
+  return accessibilityFeaturesExist(listing)
+    ? t(`listings.reservedCommunityTypes.specialNeeds`)
     : undefined
 }
 
 export const getImageTagIconFromListing = (listing: Listing): IconProps | null => {
-  const reservedCommunityTypeName = listing.reservedCommunityType?.name
-
-  // The "specialNeeds" adds an accessible icon to the tag.
-  if (reservedCommunityTypeName === "specialNeeds") {
-    const tagIconSymbol: IconTypes = "accessible"
+  if (accessibilityFeaturesExist(listing)) {
+    const tagIconSymbol: IconTypes = "universalAccess"
     const tagIconSize: IconSize = "medium"
     const tagIconFill = "#000000"
     return {
@@ -64,7 +71,6 @@ export const getImageTagIconFromListing = (listing: Listing): IconProps | null =
       fill: tagIconFill,
     }
   }
-
   return null
 }
 

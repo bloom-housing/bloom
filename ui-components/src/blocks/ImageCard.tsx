@@ -49,7 +49,7 @@ const ImageCard = (props: ImageCardProps) => {
     <div className="image-card__wrapper">
       {props.tagLabel && (
         <div className="image-card-tag__wrapper">
-          <Tag icon={props.tagIcon} styleType={AppearanceStyleType.warning}>
+          <Tag icon={props.tagIcon} styleType={AppearanceStyleType.accentLight}>
             {props.tagLabel}
           </Tag>
         </div>

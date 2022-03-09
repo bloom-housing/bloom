@@ -58,6 +58,7 @@ import {
   Star,
   Ticket,
   Trash,
+  UniversalAccess,
   Warning,
 } from "./Icons"
 
@@ -119,6 +120,7 @@ const IconMap = {
   star: Star,
   ticket: Ticket,
   trash: Trash,
+  universalAccess: UniversalAccess,
   warning: Warning,
 }
 
