@@ -124,12 +124,12 @@ async function main(): Promise<void> {
   const listingUnitTypeNameSummaryMap = {}
 
   // Make sure that the listing has all specified mapped unit type names.
-  const listingUnitTypeNames = new Set(Object.keys(listingUnitTypeNameSummaryMap))
+  /* const listingUnitTypeNames = new Set(Object.keys(listingUnitTypeNameSummaryMap))
   for (const mappedUnitTypeName of mappedUnitTypeNames) {
     if (!listingUnitTypeNames.has(mappedUnitTypeName)) {
       throw `Listing "${listing.name}" is missing unit type ${mappedUnitTypeName} from unit summaries.`
     }
-  }
+  } */
 
   let newUnitTypeNameAvailabilityMap = {}
   for (const mappedUnitTypeName of mappedUnitTypeNames) {
@@ -144,7 +144,7 @@ async function main(): Promise<void> {
   }
 
   // Make sure that the availability count is < the total count.
-  for (const unitTypeName in newUnitTypeNameAvailabilityMap) {
+  /* for (const unitTypeName in newUnitTypeNameAvailabilityMap) {
     if (
       newUnitTypeNameAvailabilityMap[unitTypeName] >
       listingUnitTypeNameSummaryMap[unitTypeName].totalCount
@@ -159,7 +159,7 @@ async function main(): Promise<void> {
   // }
   console.log(`Updating listing "${listing.name}" with new availabilities:`)
   console.log(newUnitTypeNameAvailabilityMap)
-  // await listingsService.update({ id: args.listingId, body: listing })
+  await listingsService.update({ id: args.listingId, body: listing }) */
 }
 
 void main()

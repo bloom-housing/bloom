@@ -1,6 +1,5 @@
 import { LatitudeLongitude, TimeFieldPeriod } from "@bloom-housing/ui-components"
 import {
-  Preference,
   Program,
   ListingStatus,
   ListingApplicationAddressType,
@@ -202,4 +201,5 @@ export type FormMetadata = {
   profile: User
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
+  programs: Program[]
 }

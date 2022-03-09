@@ -24,5 +24,9 @@
   },
   "listingFilters": {
     "resetButton": "See All Listings"
+  },
+  "listings": {
+    "communityPrograms": "Community Programs",
+    "communityProgramsDescription": "This program includes opportunities for members of specific communities"
   }
 }

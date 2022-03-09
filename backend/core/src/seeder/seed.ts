@@ -241,7 +241,7 @@ async function seed() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User))
   const rolesRepo = app.get<Repository<UserRoles>>(getRepositoryToken(UserRoles))
   const jurisdictions = await createJurisdictions(app)
-  await createPrograms(app, jurisdictions)
+
   await seedAmiCharts(app)
   const listings = await seedListings(app, rolesRepo, jurisdictions)
 

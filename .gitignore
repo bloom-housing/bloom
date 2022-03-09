@@ -91,3 +91,6 @@ test-coverage/
 
 # redis dumps
 dump.rdb
+
+# csv import files
+backend/core/detroit-listings.csv

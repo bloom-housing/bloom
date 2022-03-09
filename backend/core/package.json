@@ -38,7 +38,8 @@
     "herokusetup": "node heroku.setup.js",
     "heroku-postbuild": "rimraf dist && nest build && yarn run db:migration:run",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w types/src/backend-swagger.ts",
-    "migrator": "ts-node migrator.ts"
+    "migrator": "ts-node migrator.ts",
+    "import:listings": "ts-node scripts/import-listings-basic.ts"
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.3.25",
@@ -58,8 +59,8 @@
     "@types/cache-manager": "^3.4.0",
     "@types/cron": "^1.7.3",
     "async-retry": "^1.3.1",
-    "bull": "^4.1.0",
     "axios": "0.21.1",
+    "bull": "^4.1.0",
     "cache-manager": "^3.4.0",
     "cache-manager-redis-store": "^2.0.0",
     "casbin": "5.13.0",
@@ -67,6 +68,7 @@
     "class-validator": "^0.12.2",
     "cloudinary": "^1.25.2",
     "csv-parser": "^3.0.0",
+    "csv-reader": "^1.0.8",
     "dayjs": "^1.10.7",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

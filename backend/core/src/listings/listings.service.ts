@@ -86,6 +86,7 @@ export class ListingsService {
       .leftJoin("listings.leasingAgents", "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("listings.unitGroups", "unitGroups")
+      .leftJoin("unitGroups.amiLevels", "unitGroupsAmiLevels")
       .leftJoin("unitGroups.unitType", "summaryUnitType")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")

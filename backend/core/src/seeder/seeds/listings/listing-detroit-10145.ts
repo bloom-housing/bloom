@@ -74,13 +74,7 @@ export class Listing10145Seed extends ListingDefaultSeed {
 
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "senior62" })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://images.squarespace-cdn.com/content/v1/5e7510a49787c5207b777036/1588191604480-OSLU4ZCW3CHUQH0B2ERS/Medical+Center+Village.jpg?format=750w",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

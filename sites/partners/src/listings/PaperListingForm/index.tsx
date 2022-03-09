@@ -21,19 +21,7 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
-import {
-  ListingStatus,
-  ListingEventType,
-  Preference,
-  UnitsSummary,
-  PaperApplication,
-  PaperApplicationCreate,
-  ListingReviewOrder,
-  User,
-  Program,
-  ListingFeatures,
-} from "@bloom-housing/backend-core/types"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { ListingStatus, ListingEventType, Program } from "@bloom-housing/backend-core/types"
 import {
   AlertErrorType,
   FormListing,
@@ -62,7 +50,7 @@ import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
+import { useJurisdictionalProgramList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -87,6 +75,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [unitsSummaries, setUnitsSummaries] = useState<TempUnitsSummary[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
+
+  const [programs, setPrograms] = useState<Program[]>(
+    listing?.listingPrograms.map((program) => {
+      return program.program
+    }) ?? []
+  )
 
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
@@ -200,6 +194,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             profile,
             latLong,
             customMapPositionChosen,
+            programs,
           })
           const formattedData = await dataPipeline.run()
 
@@ -271,20 +266,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
     },
     [
+      loading,
+      clearErrors,
       units,
       unitsSummaries,
       openHouseEvents,
-      editMode,
-      listingsService,
-      listing,
-      router,
+      profile,
       latLong,
       customMapPositionChosen,
-      clearErrors,
-      loading,
+      programs,
+      editMode,
+      listingsService,
+      listing?.id,
       reset,
+      router,
       setError,
-      profile,
     ]
   )
 
@@ -358,13 +354,29 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             customMapPositionChosen={customMapPositionChosen}
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
                           />
-                          <CommunityType listing={listing} />
                           <Units
                             units={units}
                             setUnits={setUnits}
                             unitsSummaries={unitsSummaries}
                             setSummaries={setUnitsSummaries}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
+                          />
+                          <SelectAndOrder
+                            addText={"Add programs"}
+                            drawerTitle={"Add programs"}
+                            editText={"Edit programs"}
+                            listingData={programs}
+                            setListingData={setPrograms}
+                            subtitle={
+                              "Tell us about any additional community programs related to this listing."
+                            }
+                            title={"Community Programs"}
+                            drawerButtonText={"Select programs"}
+                            dataFetcher={useJurisdictionalProgramList}
+                            formKey={"program"}
+                            subNote={
+                              "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
+                            }
                           />
                           <AdditionalFees />
                           <BuildingFeatures existingFeatures={listing?.features} />
