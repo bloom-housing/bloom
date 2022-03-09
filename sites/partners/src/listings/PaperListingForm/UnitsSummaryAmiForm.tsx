@@ -35,11 +35,10 @@ const UnitsSummaryAmiForm = ({
   amiInfo,
 }: UnitsSummaryFormProps) => {
   const [current, setCurrent] = useState<TempAmiLevel>(null)
-  const [tempId, setTempId] = useState<number | null>(null)
   const [amiPercentageOptions, setAmiPercentageOptions] = useState<SelectOption[]>([])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, reset, watch } = useForm({
+  const { register, errors, trigger, getValues, reset, watch, setValue } = useForm({
     defaultValues: {
       amiChartId: current?.amiChartId,
       amiPercentage: current?.amiPercentage,
@@ -55,15 +54,8 @@ const UnitsSummaryAmiForm = ({
   )
   const amiChartId: string = watch("amiChartId")
 
-  useEffect(() => {
-    setTempId(currentTempId)
-  }, [currentTempId])
-
-  useEffect(() => {
-    if (!amiChartId) {
-      setAmiPercentageOptions([])
-    }
-    const chart = amiInfo.find((ami) => ami.id === amiChartId)
+  const fetchAmiChart = (chartId: string) => {
+    const chart = amiInfo.find((ami) => ami.id === chartId)
     if (chart) {
       setAmiPercentageOptions(
         chart.items.reduce((accum, item) => {
@@ -74,15 +66,18 @@ const UnitsSummaryAmiForm = ({
         }, [] as SelectOption[])
       )
     }
-  }, [amiInfo, amiChartId, setAmiPercentageOptions])
+  }
 
   useEffect(() => {
-    const amilevel = amiLevels.filter((summary) => summary.tempId === tempId)[0]
+    const amilevel = amiLevels.find((summary) => summary.tempId === currentTempId)
+    if (!amilevel?.amiChartId) {
+      setAmiPercentageOptions([])
+    } else {
+      fetchAmiChart(amilevel.amiChartId)
+    }
     setCurrent(amilevel)
-    reset({
-      ...amilevel,
-    })
-  }, [amiLevels, setCurrent, tempId, reset])
+    reset({ ...amilevel })
+  }, [])
 
   async function onFormSubmit() {
     // Triggers validation across the form.
@@ -97,7 +92,7 @@ const UnitsSummaryAmiForm = ({
       ...data,
     }
 
-    const current = amiLevels.find((summary) => summary.tempId === tempId)
+    const current = amiLevels.find((summary) => summary.tempId === currentTempId)
     if (current) {
       onSubmit({ ...formData, id: current.id, tempId: current.tempId })
     } else {
@@ -107,7 +102,6 @@ const UnitsSummaryAmiForm = ({
         tempId: amiLevels.length + 1,
       })
     }
-    setTempId(null)
     onClose()
   }
 
@@ -116,6 +110,7 @@ const UnitsSummaryAmiForm = ({
       id: MonthlyRentDeterminationType.flatRent,
       label: t("listings.unitsSummary.flatRent"),
       value: MonthlyRentDeterminationType.flatRent,
+      defaultChecked: true,
     },
     {
       id: MonthlyRentDeterminationType.percentageOfIncome,
@@ -127,18 +122,25 @@ const UnitsSummaryAmiForm = ({
   return (
     <Form onSubmit={() => false}>
       <div className="border rounded-md p-8 bg-white">
-        <GridSection title={t("listings.unit.details")} columns={4}>
+        <GridSection title={t("listings.unitsSummary.amiLevel")} columns={4}>
           <GridCell>
             <ViewItem label={t("listings.unitsSummary.amiChart")}>
               <Select
                 id="amiChartId"
                 name="amiChartId"
                 label={t("listings.unitsSummary.amiChart")}
-                placeholder={t("listings.unitsSummary.amiChart")}
+                placeholder={t("t.selectOne")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
                 options={amiCharOptions}
+                inputProps={{
+                  onChange: () => {
+                    if (amiChartId) {
+                      void fetchAmiChart(amiChartId)
+                    }
+                  },
+                }}
               />
             </ViewItem>
           </GridCell>
@@ -148,7 +150,7 @@ const UnitsSummaryAmiForm = ({
                 id="amiPercentage"
                 name="amiPercentage"
                 label={t("listings.unitsSummary.percentageOfAmi")}
-                placeholder={t("listings.unitsSummary.percentageOfAmi")}
+                placeholder={t("t.selectOne")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"

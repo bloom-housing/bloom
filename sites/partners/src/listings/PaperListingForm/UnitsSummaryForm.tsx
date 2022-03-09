@@ -51,7 +51,6 @@ const UnitsSummaryForm = ({
   unitTypeOptions,
 }: UnitsSummaryFormProps) => {
   const [current, setCurrent] = useState<TempUnitsSummary>(null)
-  const [tempId, setTempId] = useState<number | null>(null)
   const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
   const [amiDeleteModal, setAmiDeleteModal] = useState<number | null>(null)
   const [options, setOptions] = useState({
@@ -87,18 +86,14 @@ const UnitsSummaryForm = ({
   const { data: amis = [] } = useAmiChartList(jurisdiction)
 
   useEffect(() => {
-    setTempId(currentTempId)
-  }, [currentTempId])
-
-  useEffect(() => {
-    const summary = summaries.find((summary) => summary.tempId === tempId)
+    const summary = summaries.find((summary) => summary.tempId === currentTempId)
     setCurrent(summary)
     reset({
       ...summary,
       // @ts-ignore:next-line
-      unitType: summary?.unitType?.map((elem) => elem.id),
+      unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
     })
-  }, [summaries, setCurrent, tempId, reset])
+  }, [summaries, reset])
 
   async function onFormSubmit(action?: string) {
     // Triggers validation across the form.
@@ -137,7 +132,7 @@ const UnitsSummaryForm = ({
       onSubmit({
         ...formData,
         id: current.id,
-        tempId: current.tempId || tempId,
+        tempId: current.tempId || currentTempId,
         amiLevels,
       })
     } else {
@@ -147,20 +142,7 @@ const UnitsSummaryForm = ({
         tempId: (summaries.length || 0) + 1,
       })
     }
-    setTempId(null)
-    if (action === "copyNew") {
-      setCurrent({
-        ...formData,
-        id: current?.id,
-        tempId: summaries.length + 1,
-      })
-      reset({ ...formData })
-    } else if (action === "saveNew") {
-      setCurrent(null)
-      reset()
-    } else {
-      onClose()
-    }
+    onClose()
   }
 
   useEffect(() => {
@@ -207,18 +189,18 @@ const UnitsSummaryForm = ({
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
         if (ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {
-          rentValue = ami.flatRentValue
+          rentValue = `$${ami.flatRentValue}`
           monthlyRentDeterminationType = t("listings.unitsSummary.flatRent")
         } else if (
           ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
         ) {
-          rentValue = ami.percentageOfIncomeValue
+          rentValue = `${ami.percentageOfIncomeValue}%`
           monthlyRentDeterminationType = t("listings.unitsSummary.percentIncome")
         }
 
         return {
           amiChartName: selectedAmiChart?.label || "",
-          amiPercentage: ami.amiPercentage,
+          amiPercentage: `${ami.amiPercentage}%`,
           monthlyRentDeterminationType: monthlyRentDeterminationType,
           rentValue: rentValue,
           action: (
@@ -286,8 +268,8 @@ const UnitsSummaryForm = ({
     <>
       <Form onSubmit={() => false}>
         <div className="border rounded-md p-8 bg-white">
-          <GridSection title={t("listings.unit.details")} columns={1}>
-            <GridCell>
+          <GridSection title={t("listings.unit.details")} columns={2}>
+            <GridCell span={1}>
               <ViewItem label={t("listings.unit.type")}>
                 <FieldGroup
                   name="unitType"
@@ -295,150 +277,159 @@ const UnitsSummaryForm = ({
                   register={register}
                   fields={unitTypeOptions}
                   fieldClassName="m-0"
-                  fieldGroupClassName="flex h-12 items-center"
                   error={errors?.unitType !== undefined}
                   errorMessage={t("errors.requiredFieldError")}
                   validation={{ required: true }}
+                  fieldGroupClassName="grid grid-cols-2 mt-4"
                 />
               </ViewItem>
             </GridCell>
           </GridSection>
-          <GridSection title={t("listings.unit.details")} columns={2}>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.count")}>
-                <Field
-                  id="totalCount"
-                  name="totalCount"
-                  label={t("listings.unitsSummary.count")}
-                  placeholder={t("listings.unitsSummary.count")}
-                  register={register}
-                  readerOnly
-                  type="number"
-                  error={errors?.totalCount !== undefined}
-                  errorMessage={t("errors.requiredFieldError")}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>{null}</GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unit.minOccupancy")}>
-                <Select
-                  id="minOccupancy"
-                  name="minOccupancy"
-                  label={t("listings.unit.minOccupancy")}
-                  placeholder={t("listings.unit.minOccupancy")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unit.maxOccupancy")}>
-                <Select
-                  id="maxOccupancy"
-                  name="maxOccupancy"
-                  label={t("listings.unit.maxOccupancy")}
-                  placeholder={t("listings.unit.maxOccupancy")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.sqFeetMin")}>
-                <Field
-                  id="sqFeetMin"
-                  name="sqFeetMin"
-                  label={t("listings.unitsSummary.sqFeetMin")}
-                  placeholder={t("listings.unitsSummary.sqFeetMin")}
-                  register={register}
-                  readerOnly
-                  type="number"
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.sqFeetMax")}>
-                <Field
-                  id="sqFeetMax"
-                  name="sqFeetMax"
-                  label={t("listings.unitsSummary.sqFeetMax")}
-                  placeholder={t("listings.unitsSummary.sqFeetMax")}
-                  register={register}
-                  readerOnly
-                  type="number"
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.floorMin")}>
-                <Select
-                  id="floorMin"
-                  name="floorMin"
-                  label={t("listings.unitsSummary.floorMin")}
-                  placeholder={t("listings.unitsSummary.floorMin")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.floorMax")}>
-                <Select
-                  id="floorMax"
-                  name="floorMax"
-                  label={t("listings.unitsSummary.floorMax")}
-                  placeholder={t("listings.unitsSummary.floorMax")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.bathroomsMin")}>
-                <Select
-                  id="bathroomMin"
-                  name="bathroomMin"
-                  label={t("listings.unitsSummary.bathroomsMin")}
-                  placeholder={t("listings.unitsSummary.bathroomsMin")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.bathroomsMax")}>
-                <Select
-                  id="bathroomMax"
-                  name="bathroomMax"
-                  label={t("listings.unitsSummary.bathroomsMax")}
-                  placeholder={t("listings.unitsSummary.bathroomsMax")}
-                  labelClassName="sr-only"
-                  register={register}
-                  controlClassName="control"
-                  options={numberOptions(10)}
-                />
-              </ViewItem>
-            </GridCell>
+          <GridSection title={t("listings.unit.details")} columns={1}>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.count")}>
+                  <Field
+                    id="totalCount"
+                    name="totalCount"
+                    label={t("listings.unitsSummary.count")}
+                    placeholder={"22"}
+                    register={register}
+                    readerOnly
+                    type="number"
+                    error={errors?.totalCount !== undefined}
+                    errorMessage={t("errors.requiredFieldError")}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unit.minOccupancy")}>
+                  <Select
+                    id="minOccupancy"
+                    name="minOccupancy"
+                    placeholder={t("t.selectOne")}
+                    label={t("listings.unit.minOccupancy")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unit.maxOccupancy")}>
+                  <Select
+                    id="maxOccupancy"
+                    name="maxOccupancy"
+                    label={t("listings.unit.maxOccupancy")}
+                    placeholder={t("t.selectOne")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.sqFeetMin")}>
+                  <Field
+                    id="sqFeetMin"
+                    name="sqFeetMin"
+                    label={t("listings.unitsSummary.sqFeetMin")}
+                    placeholder={t("listings.unitsSummary.sqFeetMin")}
+                    register={register}
+                    readerOnly
+                    type="number"
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.sqFeetMax")}>
+                  <Field
+                    id="sqFeetMax"
+                    name="sqFeetMax"
+                    label={t("listings.unitsSummary.sqFeetMax")}
+                    placeholder={t("listings.unitsSummary.sqFeetMax")}
+                    register={register}
+                    readerOnly
+                    type="number"
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.floorMin")}>
+                  <Select
+                    id="floorMin"
+                    name="floorMin"
+                    label={t("listings.unitsSummary.floorMin")}
+                    placeholder={t("t.selectOne")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.floorMax")}>
+                  <Select
+                    id="floorMax"
+                    name="floorMax"
+                    label={t("listings.unitsSummary.floorMax")}
+                    placeholder={t("t.selectOne")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.bathroomsMin")}>
+                  <Select
+                    id="bathroomMin"
+                    name="bathroomMin"
+                    label={t("listings.unitsSummary.bathroomsMin")}
+                    placeholder={t("t.selectOne")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.bathroomsMax")}>
+                  <Select
+                    id="bathroomMax"
+                    name="bathroomMax"
+                    label={t("listings.unitsSummary.bathroomsMax")}
+                    placeholder={t("t.selectOne")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10)}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
           </GridSection>
-          <GridSection title={t("listings.unitsSummary.availability")} columns={2} separator>
-            <GridCell>
-              <ViewItem label={t("listings.unitsSummary.available")}>
+          <GridSection title={t("listings.unitsSummary.availability")} columns={3} separator>
+            <GridCell span={1}>
+              <ViewItem label={t("listings.unitsSummary.vacancies")}>
                 <Field
                   id="totalAvailable"
                   name="totalAvailable"
-                  label={t("listings.unitsSummary.available")}
-                  placeholder={t("listings.unitsSummary.available")}
+                  label={t("listings.unitsSummary.vacancies")}
+                  placeholder={t("listings.unitsSummary.vacancies")}
                   register={register}
                   readerOnly
                   type="number"
@@ -447,7 +438,7 @@ const UnitsSummaryForm = ({
                 />
               </ViewItem>
             </GridCell>
-            <GridCell>
+            <GridCell span={1}>
               <ViewItem label={t("listings.unitsSummary.openWaitlist")}>
                 <FieldGroup
                   name="openWaitlist"
@@ -465,11 +456,15 @@ const UnitsSummaryForm = ({
           <GridSection title={t("listings.unit.eligibility")} columns={1} separator>
             <GridCell>
               <div className="bg-gray-300 px-4 py-5">
-                <MinimalTable
-                  headers={amiSummariesHeaders}
-                  data={amiSummaryTableData}
-                  responsiveCollapse={true}
-                />
+                {current?.amiLevels && (
+                  <div className={"mb-5"}>
+                    <MinimalTable
+                      headers={amiSummariesHeaders}
+                      data={amiSummaryTableData}
+                      responsiveCollapse={true}
+                    />
+                  </div>
+                )}
                 <Button
                   type="button"
                   size={AppearanceSizeType.normal}
@@ -491,7 +486,7 @@ const UnitsSummaryForm = ({
                   id="priorityType.id"
                   name="priorityType.id"
                   label={t("listings.unit.accessibilityPriorityType")}
-                  placeholder={t("listings.unit.accessibilityPriorityType")}
+                  placeholder={t("t.selectOne")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
@@ -502,24 +497,6 @@ const UnitsSummaryForm = ({
           </GridSection>
         </div>
         <div className="mt-6">
-          <Button
-            type="button"
-            onClick={() => onFormSubmit("copyNew")}
-            styleType={AppearanceStyleType.secondary}
-            className="mr-4"
-          >
-            {t("t.copyNew")}
-          </Button>
-
-          <Button
-            type="button"
-            onClick={() => onFormSubmit("saveNew")}
-            styleType={AppearanceStyleType.secondary}
-            className="mr-4"
-          >
-            {t("t.saveNew")}
-          </Button>
-
           <Button
             type="button"
             onClick={() => onFormSubmit()}

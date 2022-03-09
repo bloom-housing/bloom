@@ -28,11 +28,11 @@ function isDefined(item: number | string) {
   return item !== null && item !== undefined && item !== ""
 }
 
-function formatRange(min: string | number, max: string | number, prefix: string) {
+function formatRange(min: string | number, max: string | number, prefix: string, postfix: string) {
   if (!isDefined(min) && !isDefined(max)) return ""
-  if (min == max || !isDefined(max)) return `${prefix}${min}`
-  if (!isDefined(min)) return `${prefix}${max}`
-  return `${prefix}${min} - ${prefix}${max}`
+  if (min == max || !isDefined(max)) return `${prefix}${min}${postfix}`
+  if (!isDefined(min)) return `${prefix}${max}${postfix}`
+  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
 }
 
 const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
@@ -145,13 +145,13 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
         })
 
         return {
-          unitType: types.map((option) => option.label).join(","),
+          unitType: types.map((option) => option.label).join(", "),
           units: summary.totalCount,
-          amiRange: formatRange(amiRange[0], amiRange[1], ""),
-          rentRange: formatRange(rentRange[0], rentRange[1], ""),
-          occupancyRange: formatRange(summary.minOccupancy, summary.maxOccupancy, ""),
-          sqFeetRange: formatRange(summary.sqFeetMin, summary.sqFeetMax, ""),
-          bathRange: formatRange(summary.bathroomMin, summary.bathroomMax, ""),
+          amiRange: formatRange(amiRange[0], amiRange[1], "", "%"),
+          rentRange: formatRange(rentRange[0], rentRange[1], "$", ""),
+          occupancyRange: formatRange(summary.minOccupancy, summary.maxOccupancy, "", ""),
+          sqFeetRange: formatRange(summary.sqFeetMin, summary.sqFeetMax, "", ""),
+          bathRange: formatRange(summary.bathroomMin, summary.bathroomMax, "", ""),
           action: (
             <div className="flex">
               <Button

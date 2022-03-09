@@ -1498,7 +1498,7 @@
       "openWaitlist": "Waitlist Status",
       "open": "Open",
       "closed": "Closed",
-      "addAmi": "Add ami level",
+      "addAmi": "Add AMI level",
       "amiChart" :"AMI Chart",
       "percentageOfAmi" :"Percentage of AMI",
       "monthlyRentDeterminationType" :"How is rent determined?",
@@ -1521,7 +1521,8 @@
       "rentRange": "Rent",
       "occupancyRange": "Occupancy",
       "sqftRange": "SQ Ft",
-      "bathRange": "Bath"
+      "bathRange": "Bath",
+      "vacancies": "Unit Group Vacancies"
     },
     "events": {
       "deleteThisEvent": "Delete this event",
@@ -1529,7 +1530,7 @@
       "openHouseNotes": "Open House Notes"
     },
     "units": "Listing Units",
-    "unitsDescription": "Select the building units that are available through the listing.",
+    "unitsDescription": "Select the building units that are available through this listing.",
     "unitTypesOrIndividual": "Do you want to show unit types or individual units?",
     "listingIsAlreadyLive": "This listing is already live. Updates will affect the applicant experience on the housing portal."
   },
