@@ -131,38 +131,7 @@ export class ListingDefaultSeed {
         },
       ],
       events: getDefaultListingEvents(),
-      listingPrograms: [
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
-          }),
-          ordinal: 1,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
-          }),
-          ordinal: 2,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getDisabilityOrMentalIllnessProgram().title,
-          }),
-          ordinal: 3,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getHousingSituationProgram().title,
-          }),
-          ordinal: 4,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getFlatRentAndRentBasedOnIncomeProgram().title,
-          }),
-          ordinal: 5,
-        },
-      ],
+      listingPrograms: [],
       jurisdictionName: "Alameda",
       jurisdiction: alamedaJurisdiction,
     }

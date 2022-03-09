@@ -5,6 +5,9 @@ import Formatter from "./Formatter"
 export default class AdditionalMetadataFormatter extends Formatter {
   /** Format a final set of various values */
   process() {
+    this.data.listingPrograms = this.metadata.programs.map((program, index) => {
+      return { program: { ...program }, ordinal: index + 1 }
+    })
     this.data.buildingAddress = {
       ...this.data.buildingAddress,
       latitude: this.metadata.latLong.latitude ?? null,
@@ -12,7 +15,7 @@ export default class AdditionalMetadataFormatter extends Formatter {
     }
     this.data.customMapPin = this.metadata.customMapPositionChosen
     this.data.yearBuilt = this.data.yearBuilt ? Number(this.data.yearBuilt) : null
-    if (!this.data.reservedCommunityType.id) this.data.reservedCommunityType = null
+    if (!this.data.reservedCommunityType?.id) this.data.reservedCommunityType = null
     this.data.reviewOrderType =
       this.data.reviewOrderQuestion === "reviewOrderLottery"
         ? ListingReviewOrder.lottery
