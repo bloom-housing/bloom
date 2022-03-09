@@ -15,10 +15,12 @@ import {
   AlertBox,
   Modal,
   FieldGroup,
+  MarkdownSection,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
 import Markdown from "markdown-to-jsx"
+import pageContent from "../../page_content/sj_terms.md"
 
 type FormUserConfirmFields = {
   password: string
@@ -217,16 +219,11 @@ const FormUserConfirm = () => {
         ]}
         slim={true}
       >
-        <Markdown options={{ disableParsingRawHTML: false }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris commodo enim sed felis
-          iaculis, in mattis diam dictum. Quisque consequat tellus lorem, et pharetra nibh facilisis
-          a. Curabitur vel viverra felis, sed vulputate magna. Nunc ut orci iaculis, placerat nunc
-          non, dignissim purus. Vivamus tristique, sapien ac gravida cursus, augue ex fringilla leo,
-          in dignissim lacus quam nec mauris. Cras a lacus quis nisl eleifend ornare. Ut sagittis
-          eros libero, ac accumsan nibh lobortis ut. Mauris tempor mauris ac vulputate bibendum. Ut
-          placerat lacinia molestie. Aliquam diam sem, lobortis ac velit aliquam, feugiat venenatis
-          metus.
-        </Markdown>
+        <div className="overflow-y-auto max-h-96">
+          <MarkdownSection>
+            <Markdown options={{ disableParsingRawHTML: false }}>{pageContent}</Markdown>
+          </MarkdownSection>
+        </div>
       </Modal>
     </>
   )
