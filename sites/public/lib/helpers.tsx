@@ -5,15 +5,7 @@ export const eligibilityRoute = (page: number) =>
   `/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[page]}`
 import dayjs from "dayjs"
 import { Address, Listing } from "@bloom-housing/backend-core/types"
-import {
-  t,
-  ListingCard,
-  getSummariesTableFromUnitSummary,
-  getSummariesTableFromUnitsSummary,
-  IconTypes,
-  IconSize,
-  IconProps,
-} from "@bloom-housing/ui-components"
+import { t, ListingCard, IconTypes, IconSize, IconProps } from "@bloom-housing/ui-components"
 import { imageUrlFromListing } from "@bloom-housing/shared-helpers"
 
 export const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -68,12 +60,8 @@ export const getImageTagIconFromListing = (listing: Listing): IconProps | null =
   return null
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getListingTableData = (listing: Listing) => {
-  if (listing.unitsSummary !== undefined && listing.unitsSummary.length > 0) {
-    return getSummariesTableFromUnitsSummary(listing.unitsSummary)
-  } else if (listing.unitsSummarized !== undefined) {
-    return getSummariesTableFromUnitSummary(listing.unitsSummarized.byUnitTypeAndRent)
-  }
   return []
 }
 

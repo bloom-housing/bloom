@@ -1,6 +1,7 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose } from "class-transformer"
 import { IsOptional, IsUUID } from "class-validator"
+import { AmiChart } from "src/ami-charts/entities/ami-chart.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { UnitGroupAmiLevel } from "../entities/unit-group-ami-level.entity"
 

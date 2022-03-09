@@ -40,13 +40,13 @@ Cypress.Commands.add("login", () => {
   cy.fixture("user").then((user) => {
     cy.get("input#email").type(user.email)
     cy.get("input#password").type(user.password)
-    cy.get(".button").contains("Sign In").click()
+    cy.get(".button").contains("Sign in").click()
     cy.contains("Listings")
   })
 })
 
 Cypress.Commands.add("signOut", () => {
-  cy.get("button").contains("Sign Out").click()
+  cy.get("button").contains("Sign out").click()
   cy.get("input#email")
 })
 

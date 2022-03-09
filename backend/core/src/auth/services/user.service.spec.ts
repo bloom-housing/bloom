@@ -12,6 +12,7 @@ import { ConfigService } from "@nestjs/config"
 import { UserCreateDto } from "../dto/user-create.dto"
 import { Application } from "../../applications/entities/application.entity"
 import { EmailService } from "../../email/email.service"
+import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -51,6 +52,12 @@ describe("UserService", () => {
           provide: JurisdictionResolverService,
           useValue: {
             getJurisdiction: jest.fn(),
+          },
+        },
+        {
+          provide: JurisdictionsService,
+          useValue: {
+            findOne: jest.fn(),
           },
         },
         AuthzService,
@@ -141,6 +148,7 @@ describe("UserService", () => {
       const mockedUser = { id: "123", email: "abc@xyz.com" }
       mockUserRepo.findOne = jest.fn().mockResolvedValue(mockedUser)
       // Sets resetToken
+      console.log({ service })
       await service.forgotPassword({ email: "abc@xyz.com" })
       const accessToken = await service.updatePassword(updateDto)
       expect(accessToken).toBeDefined()

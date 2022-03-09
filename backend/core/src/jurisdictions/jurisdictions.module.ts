@@ -10,6 +10,6 @@ import { JurisdictionResolverService } from "./services/jurisdiction-resolver.se
   imports: [TypeOrmModule.forFeature([Jurisdiction]), forwardRef(() => AuthModule)],
   controllers: [JurisdictionsController],
   providers: [JurisdictionsService, JurisdictionResolverService],
-  exports: [JurisdictionResolverService],
+  exports: [JurisdictionsService, JurisdictionResolverService],
 })
 export class JurisdictionsModule {}

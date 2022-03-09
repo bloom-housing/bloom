@@ -18,6 +18,7 @@ import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { UserDto } from "./user.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { UserRolesUpdateDto } from "./user-roles-update.dto"
 
 export class UserUpdateDto extends OmitType(UserDto, [
   "id",
@@ -68,6 +69,12 @@ export class UserUpdateDto extends OmitType(UserDto, [
   @ValidateIf((o) => o.password, { groups: [ValidationsGroupsEnum.default] })
   @IsNotEmpty({ groups: [ValidationsGroupsEnum.default] })
   currentPassword?: string
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => UserRolesUpdateDto)
+  roles?: UserRolesUpdateDto | null
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

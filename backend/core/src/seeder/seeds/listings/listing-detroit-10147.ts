@@ -69,21 +69,13 @@ export class Listing10147Seed extends ListingDefaultSeed {
       ...mshProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "http://www.vanguarddetroit.org/wp-content/uploads/2020/05/West-Oakland-Homes-Photo-e1590008403971.jpg",
-      },
-    ]
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...mshListing,
       applicationMethods: [],
-      assets: JSON.parse(JSON.stringify(assets)),
+      assets: [],
       events: [],
       property: property,
     }

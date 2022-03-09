@@ -35,7 +35,7 @@ function formatRange(min: string | number, max: string | number, prefix: string)
   return `${prefix}${min} - ${prefix}${max}`
 }
 
-const FormUnits = ({ units, unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
+const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
   const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
   const [summaryDeleteModal, setSummaryDeleteModal] = useState<number | null>(null)
 

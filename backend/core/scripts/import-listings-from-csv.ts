@@ -183,7 +183,7 @@ async function main() {
       amiPercentageMin: amiPercentageMin,
       amiPercentageMax: amiPercentageMax,
       status: ListingStatus.active,
-      unitsSummary: unitsSummaries,
+      // unitsSummary: unitsSummaries,
       jurisdictionName: "Detroit",
       reservedCommunityTypeName: reservedCommunityTypeName,
       neighborhood: listingFields["Neighborhood"],

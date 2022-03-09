@@ -598,6 +598,12 @@ class Listing extends BaseEntity {
     nullable: true,
   })
   favoritedPreferences?: UserPreferences[] | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  temporaryListingId?: number | null
 }
 
 export { Listing as default, Listing }

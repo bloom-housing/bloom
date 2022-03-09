@@ -1,4 +1,4 @@
-import * as React from "react"
+/* import * as React from "react"
 import { t } from "./translator"
 import { MinMax, UnitGroupSummary } from "@bloom-housing/backend-core/types"
 
@@ -100,3 +100,6 @@ export const getSummariesTableFromUnitsSummary = (summaries: UnitGroupSummary[])
   }
   return unitSummaries
 }
+ */
+
+export {}

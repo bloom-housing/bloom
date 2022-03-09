@@ -1050,20 +1050,7 @@ export class ListingColiseumSeed extends ListingDefaultSeed {
         },
       ],
       events: [],
-      listingPrograms: [
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getServedInMilitaryProgram().title,
-          }),
-          ordinal: 1,
-        },
-        {
-          program: await this.programsRepository.findOneOrFail({
-            title: getTayProgram().title,
-          }),
-          ordinal: 2,
-        },
-      ],
+      listingPrograms: [],
     }
 
     return await this.listingRepository.save(listingCreateDto)
