@@ -97,6 +97,7 @@ export class ListingsController {
     @Param("id") listingId: string,
     @Body() listingUpdateDto: ListingUpdateDto
   ): Promise<ListingDto> {
+    console.log("100:", listingUpdateDto)
     const listing = await this.listingsService.update(listingUpdateDto)
     await this.cacheManager.del("/listings")
     return mapTo(ListingDto, listing)

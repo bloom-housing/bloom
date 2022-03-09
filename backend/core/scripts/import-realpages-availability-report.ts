@@ -117,11 +117,9 @@ async function main(): Promise<void> {
 
   const listingsService = new client.ListingsService()
   const listing = await listingsService.retrieve({ id: args.listingId })
-  // TODO: Update with new unit groups model
-  // const listingUnitTypeNameSummaryMap = listing.unitsSummary.reduce((a, s) => {
-  //   return { ...a, [s.unitType.name]: s }
-  // }, {})
-  const listingUnitTypeNameSummaryMap = {}
+  const listingUnitTypeNameSummaryMap = listing.unitGroups.reduce((a, s) => {
+    return { ...a }
+  }, {})
 
   // Make sure that the listing has all specified mapped unit type names.
   const listingUnitTypeNames = new Set(Object.keys(listingUnitTypeNameSummaryMap))
@@ -153,10 +151,9 @@ async function main(): Promise<void> {
     }
   }
 
-  // TODO: Update with new unit groups model
-  // for (const unitSummary of listing.unitsSummary) {
-  //   unitSummary.totalAvailable = newUnitTypeNameAvailabilityMap[unitSummary.unitType.name] || 0
-  // }
+  for (const unitSummary of listing.unitGroups) {
+    // unitSummary.totalAvailable = newUnitTypeNameAvailabilityMap[unitSummary.unitType.name] || 0
+  }
   console.log(`Updating listing "${listing.name}" with new availabilities:`)
   console.log(newUnitTypeNameAvailabilityMap)
   // await listingsService.update({ id: args.listingId, body: listing })

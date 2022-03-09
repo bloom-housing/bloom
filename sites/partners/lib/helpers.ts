@@ -116,15 +116,6 @@ export const getRentType = (unit: TempUnit): string | null => {
     : null
 }
 
-export const getRentTypeFromUnitsSummary = (summary: TempUnitsSummary): string | null => {
-  if (summary?.monthlyRentMin || summary?.monthlyRentMax) {
-    return "fixed"
-  } else if (summary?.monthlyRentAsPercentOfIncome) {
-    return "percentage"
-  }
-  return null
-}
-
 export const getAmiChartId = (chart: AmiChart | string | undefined): string | null => {
   if (chart === undefined) {
     return null

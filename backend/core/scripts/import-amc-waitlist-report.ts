@@ -84,7 +84,8 @@ async function main(): Promise<void> {
       Authorization: `Bearer ${accessToken}`,
     },
   })
-
+  // monthlyRentDeterminationType
+  // EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType
   const listingsService = new client.ListingsService()
   const listing = await listingsService.retrieve({ id: args.listingId })
   if (!listing.waitlistMaxSize) {
@@ -96,7 +97,6 @@ async function main(): Promise<void> {
   console.log(
     `Updating "${listing.name}" listing with new waitlist size ${listing.waitlistCurrentSize} (out of ${listing.waitlistMaxSize})`
   )
-  // TODO: Update with new unit groups model
   // await listingsService.update({ id: args.listingId, body: listing })
 }
 

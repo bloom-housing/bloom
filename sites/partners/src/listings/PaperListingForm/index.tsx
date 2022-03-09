@@ -21,19 +21,7 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
-import {
-  ListingStatus,
-  ListingEventType,
-  Preference,
-  UnitsSummary,
-  PaperApplication,
-  PaperApplicationCreate,
-  ListingReviewOrder,
-  User,
-  Program,
-  ListingFeatures,
-} from "@bloom-housing/backend-core/types"
-import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { ListingStatus, ListingEventType } from "@bloom-housing/backend-core/types"
 import {
   AlertErrorType,
   FormListing,
@@ -58,11 +46,9 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import SelectAndOrder from "./sections/SelectAndOrder"
 import CommunityType from "./sections/CommunityType"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-import { useJurisdictionalPreferenceList, useJurisdictionalProgramList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
@@ -147,8 +133,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     // Use a temp id to track each summary within the form table (prior to submission).
-    if (listing?.unitsSummary) {
-      const tempSummaries = listing.unitsSummary.map((summary, i) => ({
+    if (listing?.unitSummaries) {
+      const tempSummaries = listing.unitGroups.map((summary, i) => ({
         ...summary,
         tempId: i + 1,
       }))
@@ -157,7 +143,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   }, [
     listing?.units,
     listing?.events,
-    listing?.unitsSummary,
+    listing?.unitGroups,
     setUnits,
     setUnitsSummaries,
     setOpenHouseEvents,
@@ -179,7 +165,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
       return
     }
-    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
+    let formData = {
+      ...defaultValues,
+      ...getValues(),
+      ...(newData || {}),
+      // unitGroups: unitsSummaries,
+    }
     if (status) {
       formData = { ...formData, status }
     }
@@ -195,14 +186,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           const dataPipeline = new ListingDataPipeline(formData, {
             units,
-            unitsSummaries,
+            unitGroups: unitsSummaries,
             openHouseEvents,
             profile,
             latLong,
             customMapPositionChosen,
           })
           const formattedData = await dataPipeline.run()
-
+          console.log("196:", formattedData)
           const result = editMode
             ? await listingsService.update(
                 {

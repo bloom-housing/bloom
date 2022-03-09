@@ -4324,6 +4324,9 @@ export interface Unit {
 
 export interface UnitGroupAmiLevel {
   /**  */
+  monthlyRentDeterminationType: MonthlyRentDeterminationType
+
+  /**  */
   id: string
 
   /**  */
@@ -4331,9 +4334,6 @@ export interface UnitGroupAmiLevel {
 
   /**  */
   amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitGroupAmiLevelMonthlyRentDeterminationType
 
   /**  */
   flatRentValue?: number
@@ -5296,13 +5296,13 @@ export interface UnitCreate {
 
 export interface UnitGroupAmiLevelCreate {
   /**  */
+  monthlyRentDeterminationType: MonthlyRentDeterminationType
+
+  /**  */
   amiChartId?: string
 
   /**  */
   amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType
 
   /**  */
   flatRentValue?: number
@@ -5756,6 +5756,9 @@ export interface UnitUpdate {
 
 export interface UnitGroupAmiLevelUpdate {
   /**  */
+  monthlyRentDeterminationType: MonthlyRentDeterminationType
+
+  /**  */
   id?: string
 
   /**  */
@@ -5763,9 +5766,6 @@ export interface UnitGroupAmiLevelUpdate {
 
   /**  */
   amiPercentage: number
-
-  /**  */
-  monthlyRentDeterminationType: EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType
 
   /**  */
   flatRentValue?: number
@@ -6599,7 +6599,8 @@ export enum UnitStatus {
   "occupied" = "occupied",
   "unavailable" = "unavailable",
 }
-export enum EnumUnitGroupAmiLevelMonthlyRentDeterminationType {
+
+export enum MonthlyRentDeterminationType {
   "flatRent" = "flatRent",
   "percentageOfIncome" = "percentageOfIncome",
 }
@@ -6655,14 +6656,6 @@ export enum EnumListingFilterParamsAvailability {
 export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
-}
-export enum EnumUnitGroupAmiLevelCreateMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
-}
-export enum EnumUnitGroupAmiLevelUpdateMonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
 }
 export enum EnumPreferencesFilterParamsComparison {
   "=" = "=",

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { MinMax, UnitSummary, Unit } from "@bloom-housing/backend-core/types"
+import { MinMax, UnitGroupSummary, Unit } from "@bloom-housing/backend-core/types"
 
 import { StandardTable } from "../../tables/StandardTable"
 import { t } from "../../helpers/translator"
@@ -29,7 +29,7 @@ const unitsLabel = (units: Unit[]): string => {
 
 interface UnitTablesProps {
   units: Unit[]
-  unitSummaries: UnitSummary[]
+  unitSummaries: UnitGroupSummary[]
   disableAccordion?: boolean
 }
 
@@ -54,11 +54,9 @@ const UnitTables = (props: UnitTablesProps) => {
 
   return (
     <>
-      {unitSummaries.map((unitSummary: UnitSummary) => {
+      {unitSummaries.map((unitSummary: UnitGroupSummary) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
-        const units = props.units.filter(
-          (unit: Unit) => unit.unitType?.name == unitSummary.unitType.name
-        )
+        const units: Unit[] = []
         const unitsFormatted = [] as Array<Record<string, React.ReactNode>>
         let floorSection
         units.forEach((unit: Unit) => {
@@ -75,24 +73,24 @@ const UnitTables = (props: UnitTablesProps) => {
         })
 
         let areaRangeSection
-        if (unitSummary.areaRange?.min || unitSummary.areaRange?.max) {
-          areaRangeSection = `, ${formatRange(unitSummary.areaRange)} ${t("t.squareFeet")}`
+        if (unitSummary.rentRange) {
+          areaRangeSection = `, ${unitSummary.rentRange} ${t("t.squareFeet")}`
         }
 
-        if (unitSummary.floorRange && unitSummary.floorRange.min) {
-          floorSection = `, ${formatRange(unitSummary.floorRange, true)} 
-              ${
-                unitSummary.floorRange.max > unitSummary.floorRange.min
-                  ? t("t.floors")
-                  : t("t.floor")
-              }`
-        }
+        // if (unitSummary.floorRange && unitSummary.floorRange.min) {
+        //   floorSection = `, ${formatRange(unitSummary.floorRange, true)}
+        //       ${
+        //         unitSummary.floorRange.max > unitSummary.floorRange.min
+        //           ? t("t.floors")
+        //           : t("t.floor")
+        //       }`
+        // }
 
         return (
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="toggle-header">
-                <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;
+                {/* <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp; */}
                 {unitsLabel(units)}
                 {areaRangeSection}
                 {floorSection}

@@ -212,7 +212,7 @@ export async function importListing(
   if (listing.unitsSummary) {
     listing.unitsSummary.forEach((summary) => {
       const unitType = findByName(unitTypes, summary.unitType)
-      unitGroupsCreate.push({ ...summary })
+      // unitGroupsCreate.push({ ...summary })
     })
   }
 
