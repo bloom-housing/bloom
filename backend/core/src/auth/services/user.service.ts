@@ -36,11 +36,14 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
 import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
-import { UserQueryFilter } from "../filters/user-query-filter"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
+import { addFilters } from "../../shared/query-filter"
+import { UserFilterParams } from "../dto/user-filter-params"
 
 import advancedFormat from "dayjs/plugin/advancedFormat"
+import { JurisdictionsService } from "../../jurisdictions/services/jurisdictions.service"
+
 dayjs.extend(advancedFormat)
 
 @Injectable({ scope: Scope.REQUEST })
@@ -53,7 +56,8 @@ export class UserService {
     private readonly authService: AuthService,
     private readonly authzService: AuthzService,
     private readonly passwordService: PasswordService,
-    private readonly jurisdictionResolverService: JurisdictionResolverService
+    private readonly jurisdictionResolverService: JurisdictionResolverService,
+    private readonly jurisdictionService: JurisdictionsService
   ) {}
 
   public async findByEmail(email: string) {
@@ -103,9 +107,16 @@ export class UserService {
     const qb = this._getQb()
 
     if (params.filter) {
-      const filter = new UserQueryFilter()
-      filter.addFilters(params.filter, userFilterTypeToFieldMap, distinctIDQB)
-      filter.addFilters(params.filter, userFilterTypeToFieldMap, qb)
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        distinctIDQB
+      )
+      addFilters<Array<UserFilterParams>, typeof userFilterTypeToFieldMap>(
+        params.filter,
+        userFilterTypeToFieldMap,
+        qb
+      )
     }
     const distinctIDResult = await paginate<User>(distinctIDQB, options)
 
@@ -140,7 +151,6 @@ export class UserService {
     if (!user) {
       throw new NotFoundException()
     }
-
     let passwordHash
     let passwordUpdatedAt
     if (dto.password) {
@@ -155,6 +165,13 @@ export class UserService {
       passwordHash = await this.passwordService.passwordToHash(dto.password)
       passwordUpdatedAt = new Date()
       delete dto.password
+    }
+
+    /**
+     * only admin users can update roles
+     */
+    if (!authContext.user?.roles?.isAdmin) {
+      delete dto.roles
     }
 
     /**
@@ -380,7 +397,7 @@ export class UserService {
         roles: dto.roles as UserRoles,
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
-          : [await this.jurisdictionResolverService.getJurisdiction()],
+          : [await this.jurisdictionService.findOne({ where: { name: "Detroit" } })],
         preferences: (dto.preferences as unknown) as UserPreferences,
       },
       authContext

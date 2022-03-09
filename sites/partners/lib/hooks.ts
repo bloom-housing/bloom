@@ -356,8 +356,8 @@ export function useUserList({ page, limit }: UseUserListProps) {
       limit,
       filter: [
         {
-          isPartner: true,
-          $comparison: EnumUserFilterParamsComparison["="],
+          isPortalUser: true,
+          $comparison: EnumUserFilterParamsComparison["NA"],
         },
       ],
     })

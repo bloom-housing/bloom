@@ -76,20 +76,13 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
       ...treymoreProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId: "http://www.dailydetroit.com/wp-content/uploads/2016/12/DSC03993.jpg",
-      },
-    ]
-
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
       keyof BaseEntity | "urlSlug" | "showWaitlist"
     > = {
       ...treymoreListing,
       applicationMethods: [],
-      assets: JSON.parse(JSON.stringify(assets)),
+      assets: [],
       events: [],
       property: property,
     }
