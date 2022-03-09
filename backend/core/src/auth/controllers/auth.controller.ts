@@ -10,7 +10,7 @@ import {
 import { LocalMfaAuthGuard } from "../guards/local-mfa-auth.guard"
 import { AuthService } from "../services/auth.service"
 import { DefaultAuthGuard } from "../guards/default.guard"
-import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { ApiBody, ApiExtraModels, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { LoginDto } from "../dto/login.dto"
 import { mapTo } from "../../shared/mapTo"
 import { defaultValidationPipeOptions } from "../../shared/default-validation-pipe-options"
@@ -20,10 +20,12 @@ import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
 import { UserService } from "../services/user.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
+import { USER_ERRORS, UserErrorExtraModel, UserErrorMessages } from "../user-errors"
 
 @Controller("auth")
 @ApiTags("auth")
 @UsePipes(new ValidationPipe(defaultValidationPipeOptions))
+@ApiExtraModels(UserErrorExtraModel)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

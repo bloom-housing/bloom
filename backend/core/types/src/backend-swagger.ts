@@ -3875,6 +3875,11 @@ export interface PaginatedAssets {
   meta: PaginationMeta
 }
 
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
+
 export interface Login {
   /**  */
   email: string
@@ -6452,6 +6457,16 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
+}
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
 }
 export enum EnumLoginMfaType {
   "sms" = "sms",
