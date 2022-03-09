@@ -1,8 +1,8 @@
 ### Privacy and Disclosure
 
-The purpose of this statement is to define the City of San Jose’s policy with regards to the collection and use of personally identifiable information (PII). PII is any information relating to an identified or identifiable individual who is the subject of the information. 
+The purpose of this statement is to define the City of San Jose’s policy with regards to the collection and use of personally identifiable information (PII). PII is any information relating to an identified or identifiable individual who is the subject of the information.
 
-The City of San Jose collects two kinds of customer information: (1) anonymous; (2) personally identifiable information (PII). 
+The City of San Jose collects two kinds of customer information: (1) anonymous; (2) personally identifiable information (PII).
 
 **a. Anonymous information**: This type of information does not identify specific individuals and is automatically transmitted by your browser. This information consists of:
 
@@ -14,10 +14,9 @@ The City of San Jose collects two kinds of customer information: (1) anonymous; 
   </ul>
 </div>
 
+This information is used to help improve the Doorway Affordable Housing Portal. None of the information can be linked to an individual.
 
-This information is used to help improve the Doorway Affordable Housing Portal. None of the information can be linked to an individual. 
-
-**b. Personally Identifiable Information (PII)**: This type of information could include name, address, email, address, telephone number, credit/debit card information. The City will make every reasonable effort to protect your privacy. It restricts access to your personal identifiable information to those employees who will respond to your request. The City does not intentionally disclose any personal information about our customers to any third parties or outside the City except as required by law or by the consent of the person providing the information. The City only collects personally identifiable information that is required to provide service. You can decline to provide us with any personal information. However, if you should choose to withhold requested information, the City may not be able to provide you with the online services dependent upon the collection of that information. 
+**b. Personally Identifiable Information (PII)**: This type of information could include name, address, email, address, telephone number, credit/debit card information. The City will make every reasonable effort to protect your privacy. It restricts access to your personal identifiable information to those employees who will respond to your request. The City does not intentionally disclose any personal information about our customers to any third parties or outside the City except as required by law or by the consent of the person providing the information. The City only collects personally identifiable information that is required to provide service. You can decline to provide us with any personal information. However, if you should choose to withhold requested information, the City may not be able to provide you with the online services dependent upon the collection of that information.
 
 <div class="pl-3">
   <ul>
@@ -36,17 +35,14 @@ To ensure that contractors who have access to or provide contractual services fo
 
 The City of San Jose is committed to data security and the data quality of personally identifiable information that is either available from or collected by our web site and has taken reasonable precautions to protect such information from loss, misuse, or alteration. When a City application accepts credit cards or any other particularly sensitive information for any of its services, it encrypts all ordering information, such as your name and credit card number, in order to protect its confidentiality.
 
-### Disclaimer 
+### Disclaimer
 
-The City of San Jose is neither responsible nor liable for any delays, inaccuracies, errors or omissions arising out of your use of the portal or with respect to the material contained on the portal, including without limitation, any material posted on the portal nor for any viruses or other contamination of your system. The Doorway Affordable Housing Portal and all materials contained on it are distributed and transmitted “as is” without warranties of any kind, either express or implied, including without limitations, warranties of title or implied warranties of merchantability or fitness for a particular purpose. The City of San Jose is not responsible for any special, indirect, incidental or consequential damages that may arise from the use of, or the inability to use, the portal and/or the materials contained on the Site whether the materials contained on the portal are provided by the City of San Jose or a third party. The City of San Jose is neither responsible nor liable for any viruses or other contamination of your system. 
+The City of San Jose is neither responsible nor liable for any delays, inaccuracies, errors or omissions arising out of your use of the portal or with respect to the material contained on the portal, including without limitation, any material posted on the portal nor for any viruses or other contamination of your system. The Doorway Affordable Housing Portal and all materials contained on it are distributed and transmitted “as is” without warranties of any kind, either express or implied, including without limitations, warranties of title or implied warranties of merchantability or fitness for a particular purpose. The City of San Jose is not responsible for any special, indirect, incidental or consequential damages that may arise from the use of, or the inability to use, the portal and/or the materials contained on the Site whether the materials contained on the portal are provided by the City of San Jose or a third party. The City of San Jose is neither responsible nor liable for any viruses or other contamination of your system.
 
-### Access to Information 
+### Access to Information
 
-Unless otherwise prohibited by state or federal law, rule or regulation, you will be granted the ability to access and correct any personally identifiable information. The City will take reasonable steps to verify your identity before granting such access. Each City service that collects personally identifiable information will allow or review and update of that information. 
+Unless otherwise prohibited by state or federal law, rule or regulation, you will be granted the ability to access and correct any personally identifiable information. The City will take reasonable steps to verify your identity before granting such access. Each City service that collects personally identifiable information will allow or review and update of that information.
 
-### Non-City Web Sites 
+### Non-City Web Sites
 
 Non-city web sites may be linked through the Doorway Affordable Housing Portal. Many non-city sites may or may not be subject to the Public Records Act and may or may not be subject to other sections of the California Code or federal law. Visitors to such sites are advised to check the privacy statements of such sites and to be cautious about providing personally identifiable information without a clear understanding of how the information will be used. The City is not responsible for, and accepts no liability for, the availability of these outside resources. Linked Web sites are not under the control of, nor maintained by, the City and the City is not responsible for the content of these Web sites, which can and do change frequently; nor for any internal links the displayed Web sites may contain. In addition, inclusion of the linked Web sites does not constitute an endorsement or promotion by the City of any persons or organizations sponsoring the displayed Web sites.
-
-
-
