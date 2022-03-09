@@ -4382,10 +4382,10 @@ export interface UnitGroup {
   floorMax?: number
 
   /**  */
-  sqFeetMin?: string
+  sqFeetMin?: number
 
   /**  */
-  sqFeetMax?: string
+  sqFeetMax?: number
 
   /**  */
   priorityType?: CombinedPriorityTypeTypes
@@ -5360,10 +5360,10 @@ export interface UnitGroupCreate {
   floorMax?: number
 
   /**  */
-  sqFeetMin?: string
+  sqFeetMin?: number
 
   /**  */
-  sqFeetMax?: string
+  sqFeetMax?: number
 
   /**  */
   priorityType?: CombinedPriorityTypeTypes
@@ -5829,10 +5829,10 @@ export interface UnitGroupUpdate {
   floorMax?: number
 
   /**  */
-  sqFeetMin?: string
+  sqFeetMin?: number
 
   /**  */
-  sqFeetMax?: string
+  sqFeetMax?: number
 
   /**  */
   priorityType?: CombinedPriorityTypeTypes

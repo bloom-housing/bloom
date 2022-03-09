@@ -110,8 +110,8 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
         },
       ],
       listing: listing,
-      sqFeetMin: "720",
-      sqFeetMax: "1003",
+      sqFeetMin: 720,
+      sqFeetMax: 1003,
       totalAvailable: 4,
     }
     treymoreUnitGroupToBeCreated.push(twoBdrmUnitGroup)

@@ -117,7 +117,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
         },
       ],
       listing: listing,
-      sqFeetMax: "550",
+      sqFeetMax: 550,
     }
     nccUnitGroupToBeCreated.push(zeroBdrmUnitGroup)
 
@@ -132,8 +132,8 @@ export class Listing10157Seed extends ListingDefaultSeed {
         },
       ],
       listing: listing,
-      sqFeetMin: "800",
-      sqFeetMax: "1000",
+      sqFeetMin: 800,
+      sqFeetMax: 1000,
     }
     nccUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
@@ -148,8 +148,8 @@ export class Listing10157Seed extends ListingDefaultSeed {
         },
       ],
       listing: listing,
-      sqFeetMin: "900",
-      sqFeetMax: "1100",
+      sqFeetMin: 900,
+      sqFeetMax: 1100,
     }
     nccUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 

@@ -15,14 +15,13 @@ export default class UnitGroupFormatter extends Formatter {
         numBedrooms: 0,
       }))
 
-      unit.amiLevels = unit.amiLevels?.map((ami) => ({
-        ...ami,
-        amiPercentage: stringToNumberOrOne(ami.amiPercentage),
-        flatRentValue: stringToNumberOrOne(ami.flatRentValue),
-        amiChartId: ami.amiChartId ?? "",
-      }))
-
-      console.log("(25) unit.amiLevels:", unit.amiLevels)
+      unit.amiLevels =
+        unit.amiLevels?.map((ami) => ({
+          ...ami,
+          amiPercentage: stringToNumberOrOne(ami.amiPercentage),
+          flatRentValue: stringToNumberOrOne(ami.flatRentValue),
+          amiChartId: ami.amiChartId ?? "",
+        })) || []
 
       unit.openWaitlist = stringToBoolean(unit.openWaitlist)
       unit.maxOccupancy = stringToNumberOrOne(unit.maxOccupancy)
@@ -33,6 +32,10 @@ export default class UnitGroupFormatter extends Formatter {
       unit.totalCount = stringToNumberOrOne(unit.totalCount)
       unit.floorMin = stringToNumberOrOne(unit.floorMin)
       unit.floorMax = stringToNumberOrOne(unit.floorMax)
+      unit.sqFeetMin = stringToNumberOrOne(unit.sqFeetMin)
+      unit.sqFeetMax = stringToNumberOrOne(unit.sqFeetMax)
+
+      console.log("38:", unit)
       return unit
     })
   }

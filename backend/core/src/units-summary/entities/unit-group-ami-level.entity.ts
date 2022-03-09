@@ -39,13 +39,13 @@ export class UnitGroupAmiLevel {
   @ApiProperty({ enum: MonthlyRentDeterminationType, enumName: "MonthlyRentDeterminationType" })
   monthlyRentDeterminationType: MonthlyRentDeterminationType
 
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   flatRentValue?: number | null
 
-  @Column({ nullable: true, type: "integer" })
+  @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })

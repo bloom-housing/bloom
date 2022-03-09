@@ -38,7 +38,7 @@ const UnitsSummaryAmiForm = ({
   const [amiPercentageOptions, setAmiPercentageOptions] = useState<SelectOption[]>([])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, reset, watch, setValue } = useForm({
+  const { register, errors, trigger, getValues, reset, watch } = useForm({
     defaultValues: {
       amiChartId: current?.amiChartId,
       amiPercentage: current?.amiPercentage,

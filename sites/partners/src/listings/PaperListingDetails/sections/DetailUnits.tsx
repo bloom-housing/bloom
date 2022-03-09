@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from "react"
 import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
+import { MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -11,11 +12,11 @@ function isDefined(item: number | string) {
   return item !== null && item !== undefined && item !== ""
 }
 
-function formatRange(min: string | number, max: string | number, prefix: string) {
+function formatRange(min: string | number, max: string | number, prefix: string, postfix: string) {
   if (!isDefined(min) && !isDefined(max)) return ""
-  if (min == max || !isDefined(max)) return `${prefix}${min}`
-  if (!isDefined(min)) return `${prefix}${max}`
-  return `${prefix}${min} - ${prefix}${max}`
+  if (min == max || !isDefined(max)) return `${prefix}${min}${postfix}`
+  if (!isDefined(min)) return `${prefix}${max}${postfix}`
+  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
 }
 
 const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
@@ -32,6 +33,13 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
     action: "",
   }
 
+  const commaHelper = (rent, percent) => {
+    if (rent !== undefined && percent !== undefined) {
+      return ", "
+    }
+    return ""
+  }
+
   const unitTableData = useMemo(
     () =>
       listing?.unitGroups.map((unit) => {
@@ -40,6 +48,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
         })
         let amiRange = [undefined, undefined]
         let rentRange = [undefined, undefined]
+        let percentIncomeRange = [undefined, undefined]
         unit?.amiLevels?.forEach((ami) => {
           if (ami.amiPercentage) {
             if (amiRange[0] === undefined) {
@@ -52,7 +61,10 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
               amiRange[1] = ami.amiPercentage
             }
           }
-          if (ami.flatRentValue) {
+          if (
+            ami.flatRentValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
+          ) {
             if (rentRange[0] === undefined) {
               rentRange[0] = ami.flatRentValue
               rentRange[1] = ami.flatRentValue
@@ -62,26 +74,42 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
             } else if (ami.flatRentValue > rentRange[1]) {
               rentRange[1] = ami.flatRentValue
             }
-          } else if (ami.percentageOfIncomeValue) {
-            if (rentRange[0] === undefined) {
-              rentRange[0] = ami.percentageOfIncomeValue
-              rentRange[1] = ami.percentageOfIncomeValue
+          }
+          if (
+            ami.percentageOfIncomeValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
+          ) {
+            if (percentIncomeRange[0] === undefined) {
+              percentIncomeRange[0] = ami.percentageOfIncomeValue
+              percentIncomeRange[1] = ami.percentageOfIncomeValue
             }
-            if (ami.percentageOfIncomeValue < rentRange[0]) {
-              rentRange[0] = ami.percentageOfIncomeValue
-            } else if (ami.percentageOfIncomeValue > rentRange[1]) {
-              rentRange[1] = ami.percentageOfIncomeValue
+            if (ami.percentageOfIncomeValue < percentIncomeRange[0]) {
+              percentIncomeRange[0] = ami.percentageOfIncomeValue
+            } else if (ami.percentageOfIncomeValue > percentIncomeRange[1]) {
+              percentIncomeRange[1] = ami.percentageOfIncomeValue
             }
           }
         })
+        if (amiRange[0] !== undefined) {
+          amiRange.sort((a, b) => a - b)
+        }
+        if (rentRange[0] !== undefined) {
+          rentRange.sort((a, b) => a - b)
+        }
+        if (percentIncomeRange[0] !== undefined) {
+          percentIncomeRange.sort((a, b) => a - b)
+        }
         return {
-          unitType: types.join(","),
+          unitType: types.join(", "),
           units: unit.totalCount,
-          amiRange: formatRange(amiRange[0], amiRange[1], ""),
-          rentRange: formatRange(rentRange[0], rentRange[1], ""),
-          occupancyRange: formatRange(unit.minOccupancy, unit.maxOccupancy, ""),
-          sqFeetRange: formatRange(unit.sqFeetMin, unit.sqFeetMax, ""),
-          bathRange: formatRange(unit.bathroomMin, unit.bathroomMax, ""),
+          amiRange: formatRange(amiRange[0], amiRange[1], "", "%"),
+          rentRange: `${formatRange(rentRange[0], rentRange[1], "$", "")}${commaHelper(
+            rentRange[0],
+            percentIncomeRange[0]
+          )}${formatRange(percentIncomeRange[0], percentIncomeRange[1], "", "%")}`,
+          occupancyRange: formatRange(unit.minOccupancy, unit.maxOccupancy, "", ""),
+          sqFeetRange: formatRange(unit.sqFeetMin, unit.sqFeetMax, "", ""),
+          bathRange: formatRange(unit.bathroomMin, unit.bathroomMax, "", ""),
           action: null,
         }
       }),
@@ -99,10 +127,7 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       {listing.unitGroups.length ? (
         <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
       ) : (
-        <>
-          <hr className={"mt-4 mb-4"} />
-          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-        </>
+        <span className="text-base font-semibold pt-4">{t("t.none")}</span>
       )}
     </GridSection>
   )

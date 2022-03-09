@@ -62,7 +62,7 @@ const UnitsSummaryForm = ({
   const jurisdiction: string = watch("jurisdiction.id")
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, errors, trigger, getValues, reset, clearErrors } = useForm({
+  const { register, errors, trigger, getValues, reset, clearErrors, watch: formWatch } = useForm({
     defaultValues: {
       unitType: current?.unitType,
       floorMin: current?.floorMin,
@@ -78,6 +78,8 @@ const UnitsSummaryForm = ({
       amiLevels: current?.amiLevels,
     },
   })
+
+  const unitType = formWatch("unitType")
 
   /**
    * fetch form options
@@ -189,25 +191,25 @@ const UnitsSummaryForm = ({
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
         if (ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {
-          rentValue = `$${ami.flatRentValue}`
+          rentValue = `${ami.flatRentValue && "$"}${ami.flatRentValue}`
           monthlyRentDeterminationType = t("listings.unitsSummary.flatRent")
         } else if (
           ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
         ) {
-          rentValue = `${ami.percentageOfIncomeValue}%`
+          rentValue = `${ami.percentageOfIncomeValue}${ami.percentageOfIncomeValue && "%"}`
           monthlyRentDeterminationType = t("listings.unitsSummary.percentIncome")
         }
 
         return {
           amiChartName: selectedAmiChart?.label || "",
-          amiPercentage: `${ami.amiPercentage}%`,
+          amiPercentage: `${ami.amiPercentage}${ami.amiPercentage && "%"}`,
           monthlyRentDeterminationType: monthlyRentDeterminationType,
           rentValue: rentValue,
           action: (
-            <div className="flex">
+            <div className="flex-col">
               <Button
                 type="button"
-                className="front-semibold uppercase"
+                className="front-semibold uppercase m-1"
                 onClick={() => editAmi(ami.tempId)}
                 unstyled
               >
@@ -215,7 +217,7 @@ const UnitsSummaryForm = ({
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700"
+                className="front-semibold uppercase text-red-700 m-1"
                 onClick={() => setAmiDeleteModal(ami.tempId)}
                 unstyled
               >
@@ -253,6 +255,7 @@ const UnitsSummaryForm = ({
       id: "closed",
       label: t("listings.unitsSummary.closed"),
       value: "closed",
+      defaultChecked: true,
     },
   ]
 
@@ -263,6 +266,12 @@ const UnitsSummaryForm = ({
     rentValue: "listings.unitsSummary.flatRentValue",
     action: "",
   }
+
+  useEffect(() => {
+    if (unitType?.length && errors?.unitType) {
+      clearErrors("unitType")
+    }
+  }, [unitType, errors])
 
   return (
     <>
@@ -293,7 +302,7 @@ const UnitsSummaryForm = ({
                     id="totalCount"
                     name="totalCount"
                     label={t("listings.unitsSummary.count")}
-                    placeholder={"22"}
+                    placeholder={t("listings.unitsSummary.count")}
                     register={register}
                     readerOnly
                     type="number"
@@ -471,7 +480,6 @@ const UnitsSummaryForm = ({
                   styleType={null}
                   onClick={() => {
                     editAmi((current?.amiLevels?.length || 0) + 1)
-                    clearErrors("unitsSummaries")
                   }}
                 >
                   {t("listings.unitsSummary.addAmi")}

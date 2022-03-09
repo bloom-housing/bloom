@@ -15,6 +15,7 @@ import UnitsSummaryForm from "../UnitsSummaryForm"
 import { TempUnit, TempUnitsSummary } from "../formTypes"
 import { fieldHasError } from "../../../../lib/helpers"
 import { useUnitTypeList } from "../../../../lib/hooks"
+import { MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
 
 type UnitProps = {
   units: TempUnit[]
@@ -101,6 +102,13 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
     }
   }
 
+  const commaHelper = (rent, percent) => {
+    if (rent !== undefined && percent !== undefined) {
+      return ", "
+    }
+    return ""
+  }
+
   const unitsSummaryTableData = useMemo(
     () =>
       unitsSummaries?.map((summary) => {
@@ -109,6 +117,7 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
         )
         let amiRange = [undefined, undefined]
         let rentRange = [undefined, undefined]
+        let percentIncomeRange = [undefined, undefined]
         summary?.amiLevels?.forEach((ami) => {
           if (ami.amiPercentage) {
             if (amiRange[0] === undefined) {
@@ -121,7 +130,10 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
               amiRange[1] = ami.amiPercentage
             }
           }
-          if (ami.flatRentValue) {
+          if (
+            ami.flatRentValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
+          ) {
             if (rentRange[0] === undefined) {
               rentRange[0] = ami.flatRentValue
               rentRange[1] = ami.flatRentValue
@@ -131,32 +143,47 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
             } else if (ami.flatRentValue > rentRange[1]) {
               rentRange[1] = ami.flatRentValue
             }
-          } else if (ami.percentageOfIncomeValue) {
-            if (rentRange[0] === undefined) {
-              rentRange[0] = ami.percentageOfIncomeValue
-              rentRange[1] = ami.percentageOfIncomeValue
+          }
+          if (
+            ami.percentageOfIncomeValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
+          ) {
+            if (percentIncomeRange[0] === undefined) {
+              percentIncomeRange[0] = ami.percentageOfIncomeValue
+              percentIncomeRange[1] = ami.percentageOfIncomeValue
             }
-            if (ami.percentageOfIncomeValue < rentRange[0]) {
-              rentRange[0] = ami.percentageOfIncomeValue
-            } else if (ami.percentageOfIncomeValue > rentRange[1]) {
-              rentRange[1] = ami.percentageOfIncomeValue
+            if (ami.percentageOfIncomeValue < percentIncomeRange[0]) {
+              percentIncomeRange[0] = ami.percentageOfIncomeValue
+            } else if (ami.percentageOfIncomeValue > percentIncomeRange[1]) {
+              percentIncomeRange[1] = ami.percentageOfIncomeValue
             }
           }
         })
-
+        if (amiRange[0] !== undefined) {
+          amiRange.sort((a, b) => a - b)
+        }
+        if (rentRange[0] !== undefined) {
+          rentRange.sort((a, b) => a - b)
+        }
+        if (percentIncomeRange[0] !== undefined) {
+          percentIncomeRange.sort((a, b) => a - b)
+        }
         return {
           unitType: types.map((option) => option.label).join(", "),
           units: summary.totalCount,
           amiRange: formatRange(amiRange[0], amiRange[1], "", "%"),
-          rentRange: formatRange(rentRange[0], rentRange[1], "$", ""),
+          rentRange: `${formatRange(rentRange[0], rentRange[1], "$", "")}${commaHelper(
+            rentRange[0],
+            percentIncomeRange[0]
+          )}${formatRange(percentIncomeRange[0], percentIncomeRange[1], "", "%")}`,
           occupancyRange: formatRange(summary.minOccupancy, summary.maxOccupancy, "", ""),
           sqFeetRange: formatRange(summary.sqFeetMin, summary.sqFeetMax, "", ""),
           bathRange: formatRange(summary.bathroomMin, summary.bathroomMax, "", ""),
           action: (
-            <div className="flex">
+            <div className="flex-col">
               <Button
                 type="button"
-                className="front-semibold uppercase"
+                className="front-semibold uppercase m-1"
                 onClick={() => editSummary(summary.tempId)}
                 unstyled
               >
@@ -164,7 +191,7 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
               </Button>
               <Button
                 type="button"
-                className="front-semibold uppercase text-red-700"
+                className="front-semibold uppercase text-red-700 m-1"
                 onClick={() => setSummaryDeleteModal(summary.tempId)}
                 unstyled
               >
