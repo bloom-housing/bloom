@@ -2,9 +2,11 @@
   --bloom-color-white: #ffffff;
   --bloom-color-black: #000000;
 
+  --bloom-color-red-800: #b21d38;
   --bloom-color-red-700: #e41d3d;
   --bloom-color-red-300: #f9d2d8;
 
+  --bloom-color-green-800: #216e1f;
   --bloom-color-green-700: #2e8540;
   --bloom-color-green-300: #b4e5be;
 
@@ -13,6 +15,10 @@
   --bloom-color-blue-600: #0077da;
   --bloom-color-blue-300: #daeeff;
   --bloom-color-blue-200: #f5f8f9;
+
+  --bloom-color-yellow-800: #e5a000;
+  --bloom-color-yellow-700: #fdb81e;
+  --bloom-color-yellow-300: #fee8b6;
 
   --bloom-color-gray-950: #242c2e;
   --bloom-color-gray-900: #222222;
@@ -35,16 +41,16 @@
   --bloom-color-primary-light: var(--bloom-color-blue-300);
   --bloom-color-primary-lighter: var(--bloom-color-blue-200);
 
-  --bloom-color-secondary: #0067be;
-  --bloom-color-alert: #e41d3d;
-  --bloom-color-alert-light: #f9d2d8;
-  --bloom-color-alert-dark: #b21d38;
-  --bloom-color-success: #2e8540;
-  --bloom-color-success-light: #b4e5be;
-  --bloom-color-success-dark: #216e1f;
-  --bloom-color-warn: #fdb81e;
-  --bloom-color-warn-light: #fee8b6;
-  --bloom-color-warn-dark: #e5a000;
+  --bloom-color-secondary: var(--bloom-color-blue-700);
+  --bloom-color-alert: var(--bloom-color-red-700);
+  --bloom-color-alert-light: var(--bloom-color-red-300);
+  --bloom-color-alert-dark: var(--bloom-color-red-800);
+  --bloom-color-success: var(--bloom-color-green-700);
+  --bloom-color-success-light: var(--bloom-color-green-300);
+  --bloom-color-success-dark: var(--bloom-color-green-800);
+  --bloom-color-warn: var(--bloom-color-yellow-700);
+  --bloom-color-warn-light: var(--bloom-color-yellow-300);
+  --bloom-color-warn-dark: var(--bloom-color-yellow-800);
 
   --bloom-color-accent-cool: #00bed5;
   --bloom-color-accent-cool-light: #c8f1ff;

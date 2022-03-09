@@ -122,6 +122,24 @@ export const inlineIcon = () => (
   </>
 )
 
+export const styleOverrides = () => {
+  const cssVarsOverride = `
+    .style-overrides {
+      --bloom-color-primary: maroon;
+      --bloom-color-primary-dark: darkorange;
+    }
+  `
+
+  return (
+    <div className="style-overrides">
+      <Button styleType={AppearanceStyleType.primary} onClick={handleClick}>
+        Custom Styled Button
+      </Button>
+      <style>{cssVarsOverride}</style>
+    </div>
+  )
+}
+
 export const loading = () => (
   <Button styleType={AppearanceStyleType.primary} loading={true} onClick={handleClick}>
     Loading Button
