@@ -14,7 +14,7 @@ import { listingUrlSlug } from "../../shared/url-helper"
 import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
-import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitGroupDto } from "../../units-summary/dto/unit-group.dto"
 import { ListingFeaturesDto } from "./listing-features.dto"
 import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
 import { ListingProgramDto } from "../../program/dto/listing-program.dto"
@@ -36,7 +36,7 @@ export class ListingDto extends OmitType(Listing, [
   "property",
   "reservedCommunityType",
   "result",
-  "unitsSummary",
+  "unitGroups",
   "features",
   "favoritedPreferences",
 ] as const) {
@@ -321,8 +321,8 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummaryDto)
-  unitsSummary?: UnitsSummaryDto[]
+  @Type(() => UnitGroupDto)
+  unitGroups?: UnitGroupDto[]
 
   // Keep countyCode so we don't have to update frontend apps yet
   @Expose()

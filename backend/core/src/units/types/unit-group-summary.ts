@@ -1,69 +1,67 @@
 import { Expose, Type } from "class-transformer"
-import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsDefined, IsNumber, IsString, ValidateNested, IsBoolean } from "class-validator"
+import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { MinMaxCurrency } from "./min-max-currency"
 import { MinMax } from "./min-max"
-import { ApiProperty } from "@nestjs/swagger"
-import { UnitTypeDto } from "../../unit-types/dto/unit-type.dto"
+import { MinMaxString } from "./min-max-string"
 
-export class UnitSummary {
+export class UnitGroupSummary {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty()
-  unitType?: UnitTypeDto | null
+  @ApiProperty({ required: false })
+  unitTypes?: string[] | null
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => MinMax)
+  @ApiProperty({ required: false })
+  rentAsPercentIncomeRange?: MinMax
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MinMaxCurrency)
-  @ApiProperty()
-  minIncomeRange: MinMaxCurrency
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => MinMax)
-  @ApiProperty()
-  occupancyRange: MinMax
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => MinMax)
-  @ApiProperty()
-  rentAsPercentIncomeRange: MinMax
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => MinMaxCurrency)
-  @ApiProperty()
-  rentRange: MinMaxCurrency
+  @ApiProperty({ required: false })
+  rentRange?: MinMaxCurrency
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  totalAvailable: number
+  amiPercentageRange: MinMax
+
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty()
+  openWaitlist: boolean
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
-  totalCount: number
+  unitVacancies: number
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => MinMax)
-  @ApiProperty()
-  areaRange: MinMax
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => MinMax)
-  @ApiProperty({ type: MinMax, required: false })
+  @ApiProperty({ required: false })
   floorRange?: MinMax
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => MinMaxString)
+  @ApiProperty({ required: false })
+  sqFeetRange?: MinMaxString
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => MinMax)
+  @ApiProperty({ required: false })
+  bathroomRange?: MinMax
 }

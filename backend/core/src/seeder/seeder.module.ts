@@ -42,7 +42,7 @@ import { Listing10147Seed } from "./seeds/listings/listing-detroit-10147"
 import { Listing10145Seed } from "./seeds/listings/listing-detroit-10145"
 import { Listing10202Seed } from "./seeds/listings/listing-detroit-10202"
 import { ListingTreymoreSeed } from "./seeds/listings/listing-detroit-treymore"
-import { UnitsSummary } from "../units-summary/entities/units-summary.entity"
+import { UnitGroup } from "../units-summary/entities/unit-group.entity"
 import { Listing10151Seed } from "./seeds/listings/listing-detroit-10151"
 import { Listing10153Seed } from "./seeds/listings/listing-detroit-10153"
 import { Listing10154Seed } from "./seeds/listings/listing-detroit-10154"
@@ -90,7 +90,7 @@ export class SeederModule {
           AmiChart,
           Property,
           Unit,
-          UnitsSummary,
+          UnitGroup,
           User,
           UserRoles,
           ApplicationMethod,

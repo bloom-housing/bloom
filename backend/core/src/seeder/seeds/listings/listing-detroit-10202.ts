@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 //
 const mcvProperty: PropertySeedType = {
@@ -92,23 +92,23 @@ export class Listing10202Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const mcvUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const mcvUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 376,
       listing: listing,
     }
-    mcvUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    mcvUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 96,
       listing: listing,
     }
-    mcvUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    mcvUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(mcvUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(mcvUnitGroupToBeCreated)
 
     return listing
   }

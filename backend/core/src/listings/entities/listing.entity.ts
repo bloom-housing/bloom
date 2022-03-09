@@ -40,8 +40,8 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import { UnitsSummarized } from "../../units/types/units-summarized"
-import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { UnitSummaries } from "../../units/types/unit-summaries"
+import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
@@ -540,8 +540,8 @@ class Listing extends BaseEntity {
   amiPercentageMax?: number | null
 
   @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  unitsSummarized: UnitsSummarized | undefined
+  @ApiProperty({ type: UnitSummaries })
+  unitSummaries: UnitSummaries | undefined
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
@@ -561,7 +561,7 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   region?: string | null
 
-  @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+  @OneToMany(() => UnitGroup, (summary) => summary.listing, {
     nullable: true,
     eager: true,
     cascade: true,
@@ -569,8 +569,8 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummary)
-  unitsSummary: UnitsSummary[]
+  @Type(() => UnitGroup)
+  unitGroups: UnitGroup[]
 
   @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
     cascade: true,
@@ -598,6 +598,12 @@ class Listing extends BaseEntity {
     nullable: true,
   })
   favoritedPreferences?: UserPreferences[] | null
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  temporaryListingId?: number | null
 }
 
 export { Listing as default, Listing }

@@ -1,157 +1,122 @@
 import React from "react"
 import { cleanup } from "@testing-library/react"
-import { occupancyTable, getOccupancyDescription } from "../src/occupancyFormatting"
-import { t } from "@bloom-housing/ui-components"
-import { Listing, UnitsSummarized, UnitType } from "@bloom-housing/backend-core/types"
+import { occupancyTable } from "../src/occupancyFormatting"
+import { Listing, UnitType, UnitGroup } from "@bloom-housing/backend-core/types"
+
+const unitTypeSRO = { name: "SRO", numBedrooms: 0 } as UnitType
+const unitTypeStudio = { name: "studio", numBedrooms: 0 } as UnitType
+const unitTypeOneBdrm = { name: "oneBdrm", numBedrooms: 1 } as UnitType
+const unitTypeTwoBdrm = { name: "twoBdrm", numBedrooms: 2 } as UnitType
+const unitTypeThreeBdrm = { name: "threeBdrm", numBedrooms: 3 } as UnitType
+const unitTypeFourBdrm = { name: "fourBdrm", numBedrooms: 4 } as UnitType
+
+const unitGroups: Omit<UnitGroup, "id" | "listing" | "openWaitlist" | "amiLevels">[] = [
+  {
+    unitType: [unitTypeStudio, unitTypeOneBdrm],
+    minOccupancy: 1,
+    maxOccupancy: 2,
+  },
+  {
+    unitType: [unitTypeOneBdrm],
+    minOccupancy: 1,
+    maxOccupancy: 3,
+  },
+  {
+    unitType: [unitTypeTwoBdrm],
+    minOccupancy: 2,
+    maxOccupancy: 6,
+  },
+  {
+    unitType: [unitTypeTwoBdrm],
+    minOccupancy: 2,
+    maxOccupancy: undefined,
+  },
+  {
+    unitType: [unitTypeTwoBdrm],
+    minOccupancy: undefined,
+    maxOccupancy: 2,
+  },
+  {
+    unitType: [unitTypeFourBdrm],
+    minOccupancy: 1,
+    maxOccupancy: undefined,
+  },
+  {
+    unitType: [unitTypeSRO],
+    minOccupancy: undefined,
+    maxOccupancy: 1,
+  },
+  {
+    unitType: [unitTypeTwoBdrm],
+    minOccupancy: 1,
+    maxOccupancy: 1,
+  },
+  {
+    unitType: [unitTypeThreeBdrm],
+    minOccupancy: 3,
+    maxOccupancy: 3,
+  },
+  {
+    unitType: [unitTypeFourBdrm],
+    minOccupancy: undefined,
+    maxOccupancy: undefined,
+  },
+  {
+    unitType: [unitTypeTwoBdrm, unitTypeOneBdrm],
+    minOccupancy: 1,
+    maxOccupancy: 7,
+  },
+]
 
 const testListing: Listing = {} as Listing
-testListing.unitsSummarized = {
-  unitTypes: [
-    {
-      name: "threeBdrm",
-      numBedrooms: 3,
-    },
-    {
-      name: "twoBdrm",
-      numBedrooms: 2,
-    },
-    {
-      name: "SRO",
-      numBedrooms: 1,
-    },
-  ],
-  byUnitType: [
-    {
-      unitType: {
-        name: "threeBdrm",
-        numBedrooms: 3,
-      },
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 2,
-        max: 6,
-      },
-      rentAsPercentIncomeRange: {
-        min: 15,
-        max: 60,
-      },
-      rentRange: {
-        min: "250",
-        max: "350",
-      },
-      totalAvailable: 8,
-      totalCount: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-    {
-      unitType: {
-        name: "twoBdrm",
-        numBedrooms: 2,
-      },
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 1,
-        max: null,
-      },
-      rentAsPercentIncomeRange: {
-        min: 15,
-        max: 60,
-      },
-      rentRange: {
-        min: "250",
-        max: "350",
-      },
-      totalAvailable: 8,
-      totalCount: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-    {
-      unitType: {
-        name: "SRO",
-        numBedrooms: 1,
-      },
-      minIncomeRange: {
-        min: "10",
-        max: "20",
-      },
-      occupancyRange: {
-        min: 2,
-        max: 1,
-      },
-      rentAsPercentIncomeRange: {
-        min: 15,
-        max: 60,
-      },
-      rentRange: {
-        min: "250",
-        max: "350",
-      },
-      totalAvailable: 8,
-      totalCount: 8,
-      areaRange: {
-        min: 5,
-        max: 60,
-      },
-    },
-  ],
-} as UnitsSummarized
-
+testListing.unitGroups = unitGroups as UnitGroup[]
 afterEach(cleanup)
 
-describe("occupancy formatting helper", () => {
-  it("properly creates occupany table", () => {
-    expect(occupancyTable(testListing)).toStrictEqual([
-      {
-        occupancy: "2-6 people",
-        unitType: <strong>3 BR</strong>,
-      },
-      {
-        occupancy: "at least 1 person",
-        unitType: <strong>2 BR</strong>,
-      },
-      {
-        occupancy: "1 person",
-        unitType: <strong>SRO</strong>,
-      },
-    ])
-  })
-  it("properly creates occupany description for some SRO", () => {
-    expect(getOccupancyDescription(testListing)).toBe(t("listings.occupancyDescriptionSomeSro"))
-  })
-  it("properly creates occupany description for no SRO", () => {
-    const testListing2 = testListing
-    testListing2.unitsSummarized.unitTypes = [
-      {
-        name: "threeBdrm",
-        numBedrooms: 3,
-      },
-      {
-        name: "twoBdrm",
-        numBedrooms: 2,
-      },
-    ] as UnitType[]
-    expect(getOccupancyDescription(testListing2)).toBe(t("listings.occupancyDescriptionNoSro"))
-  })
-  it("properly creates occupany description for all SRO", () => {
-    const testListing3 = testListing
-    testListing3.unitsSummarized.unitTypes = [
-      {
-        name: "SRO",
-        numBedrooms: 1,
-      },
-    ] as UnitType[]
-    expect(getOccupancyDescription(testListing3)).toBe(t("listings.occupancyDescriptionAllSro"))
+describe("occupancy formatting helpers", () => {
+  describe("occupancyTable", () => {
+    it("properly creates occupancy table", () => {
+      expect(occupancyTable(testListing)).toStrictEqual([
+        {
+          occupancy: "1-2 people",
+          unitType: <strong>Studio, 1 BR</strong>,
+        },
+        {
+          occupancy: "at most 1 person",
+          unitType: <strong>SRO</strong>,
+        },
+        {
+          occupancy: "1-3 people",
+          unitType: <strong>1 BR</strong>,
+        },
+        {
+          occupancy: "1-7 people",
+          unitType: <strong>1 BR, 2 BR</strong>,
+        },
+        {
+          occupancy: "2-6 people",
+          unitType: <strong>2 BR</strong>,
+        },
+        {
+          occupancy: "at least 2 people",
+          unitType: <strong>2 BR</strong>,
+        },
+        {
+          occupancy: "at most 2 people",
+          unitType: <strong>2 BR</strong>,
+        },
+        {
+          occupancy: "1 person",
+          unitType: <strong>2 BR</strong>,
+        },
+        {
+          occupancy: "3 people",
+          unitType: <strong>3 BR</strong>,
+        },
+        {
+          occupancy: "at least 1 person",
+          unitType: <strong>4 BR</strong>,
+        },
+      ])
+    })
   })
 })

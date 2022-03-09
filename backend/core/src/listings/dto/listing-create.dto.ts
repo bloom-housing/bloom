@@ -13,7 +13,7 @@ import { IdDto } from "../../shared/dto/id.dto"
 import { AddressCreateDto } from "../../shared/dto/address.dto"
 import { ListingEventCreateDto } from "./listing-event.dto"
 import { AssetCreateDto } from "../../assets/dto/asset.dto"
-import { UnitsSummaryCreateDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitGroupCreateDto } from "../../units-summary/dto/unit-group.dto"
 import { ListingDto } from "./listing.dto"
 import { ApplicationMethodCreateDto } from "../../application-methods/dto/application-method.dto"
 import { UnitCreateDto } from "../../units/dto/unit-create.dto"
@@ -50,11 +50,11 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   "unitAmenities",
   "servicesOffered",
   "yearBuilt",
-  "unitsSummarized",
+  "unitSummaries",
   "jurisdiction",
   "reservedCommunityType",
   "result",
-  "unitsSummary",
+  "unitGroups",
   "referralApplication",
   "listingPreferences",
   "listingPrograms",
@@ -214,8 +214,8 @@ export class ListingCreateDto extends OmitType(ListingDto, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummaryCreateDto)
-  unitsSummary?: UnitsSummaryCreateDto[]
+  @Type(() => UnitGroupCreateDto)
+  unitGroups?: UnitGroupCreateDto[]
 
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

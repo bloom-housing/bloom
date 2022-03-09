@@ -1,7 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm"
+import {
+  IsBoolean,
+  IsDefined,
   IsNumber,
-  IsNumberString,
   IsOptional,
   IsString,
   IsUUID,
@@ -12,60 +21,36 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { UnitType } from "../../unit-types/entities/unit-type.entity"
 import { UnitAccessibilityPriorityType } from "../../unit-accessbility-priority-types/entities/unit-accessibility-priority-type.entity"
 import { Listing } from "../../listings/entities/listing.entity"
+import { UnitGroupAmiLevel } from "./unit-group-ami-level.entity"
 
-@Entity({ name: "units_summary" })
-class UnitsSummary {
+@Entity({ name: "unit_group" })
+export class UnitGroup {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   id: string
 
-  @ManyToOne(() => UnitType, { eager: true })
+  @ManyToMany(() => UnitType, { eager: true })
+  @JoinTable()
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => UnitType)
-  unitType: UnitType
+  unitType: UnitType[]
 
-  @ManyToOne(() => Listing, (listing) => listing.unitsSummary, {})
+  @ManyToOne(() => Listing, (listing) => listing.unitGroups, {})
   listing: Listing
 
-  @Column({ nullable: true, type: "integer" })
+  @OneToMany(() => UnitGroupAmiLevel, (UnitGroupAmiLevel) => UnitGroupAmiLevel.unitGroup, {
+    eager: true,
+    cascade: true,
+  })
   @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRentMin?: number | null
-
-  @Column({ nullable: true, type: "integer" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  monthlyRentMax?: number | null
-
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  monthlyRentAsPercentOfIncome?: string | null
-
-  @Column({ nullable: true, type: "integer" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  amiPercentage?: number | null
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  minimumIncomeMin?: string | null
-
-  @Column({ nullable: true, type: "text" })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsNumberString({}, { groups: [ValidationsGroupsEnum.default] })
-  minimumIncomeMax?: string | null
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => UnitGroupAmiLevel)
+  amiLevels: UnitGroupAmiLevel[]
 
   @Column({ nullable: true, type: "integer" })
   @Expose()
@@ -121,6 +106,21 @@ class UnitsSummary {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   totalAvailable?: number | null
-}
 
-export { UnitsSummary as default, UnitsSummary }
+  @Column({ nullable: true, type: "integer" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  bathroomMin?: number | null
+
+  @Column({ nullable: true, type: "integer" })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  bathroomMax?: number | null
+
+  @Column({ type: "boolean", nullable: false, default: true })
+  @Expose()
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  openWaitlist: boolean
+}

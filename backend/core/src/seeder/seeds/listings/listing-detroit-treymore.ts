@@ -4,7 +4,8 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const treymoreProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/457-Brainard-Street-Detroit-MI-48201
@@ -88,28 +89,34 @@ export class ListingTreymoreSeed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const treymoreUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const treymoreUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const studioUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeStudio,
+    const studioUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeStudio],
       totalCount: 2,
       listing: listing,
       totalAvailable: 0,
     }
-    treymoreUnitsSummaryToBeCreated.push(studioUnitsSummary)
+    treymoreUnitGroupToBeCreated.push(studioUnitGroup)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 4,
-      monthlyRentMin: 707,
+      amiLevels: [
+        {
+          amiPercentage: 10,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 707,
+        },
+      ],
       listing: listing,
       sqFeetMin: "720",
       sqFeetMax: "1003",
       totalAvailable: 4,
     }
-    treymoreUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    treymoreUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(treymoreUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(treymoreUnitGroupToBeCreated)
 
     return listing
   }

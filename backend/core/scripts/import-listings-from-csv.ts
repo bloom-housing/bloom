@@ -107,39 +107,40 @@ async function main() {
 
     // Add data about unitsSummaries
     const unitsSummaries: UnitsSummaryImport[] = []
-    if (listingFields["Number 0BR"]) {
-      unitsSummaries.push({
-        unitType: "studio",
-        totalCount: Number(listingFields["Number 0BR"]),
-      })
-    }
-    if (listingFields["Number 1BR"]) {
-      unitsSummaries.push({
-        unitType: "oneBdrm",
-        totalCount: Number(listingFields["Number 1BR"]),
-      })
-    }
-    if (listingFields["Number 2BR"]) {
-      unitsSummaries.push({
-        unitType: "twoBdrm",
-        totalCount: Number(listingFields["Number 2BR"]),
-      })
-    }
-    if (listingFields["Number 3BR"]) {
-      unitsSummaries.push({
-        unitType: "threeBdrm",
-        totalCount: Number(listingFields["Number 3BR"]),
-      })
-    }
-    // Lump 4BR and 5BR together as "fourBdrm"
-    const numberFourBdrm = listingFields["Number 4BR"] ? parseInt(listingFields["Number 4BR"]) : 0
-    const numberFiveBdrm = listingFields["Number 5BR"] ? parseInt(listingFields["Number 5BR"]) : 0
-    if (numberFourBdrm + numberFiveBdrm > 0) {
-      unitsSummaries.push({
-        unitType: "fourBdrm",
-        totalCount: numberFourBdrm + numberFiveBdrm,
-      })
-    }
+    // TODO: Update with new unit groups model
+    // if (listingFields["Number 0BR"]) {
+    //   unitsSummaries.push({
+    //     unitType: "studio",
+    //     totalCount: Number(listingFields["Number 0BR"]),
+    //   })
+    // }
+    // if (listingFields["Number 1BR"]) {
+    //   unitsSummaries.push({
+    //     unitType: "oneBdrm",
+    //     totalCount: Number(listingFields["Number 1BR"]),
+    //   })
+    // }
+    // if (listingFields["Number 2BR"]) {
+    //   unitsSummaries.push({
+    //     unitType: "twoBdrm",
+    //     totalCount: Number(listingFields["Number 2BR"]),
+    //   })
+    // }
+    // if (listingFields["Number 3BR"]) {
+    //   unitsSummaries.push({
+    //     unitType: "threeBdrm",
+    //     totalCount: Number(listingFields["Number 3BR"]),
+    //   })
+    // }
+    // // Lump 4BR and 5BR together as "fourBdrm"
+    // const numberFourBdrm = listingFields["Number 4BR"] ? parseInt(listingFields["Number 4BR"]) : 0
+    // const numberFiveBdrm = listingFields["Number 5BR"] ? parseInt(listingFields["Number 5BR"]) : 0
+    // if (numberFourBdrm + numberFiveBdrm > 0) {
+    //   unitsSummaries.push({
+    //     unitType: "fourBdrm",
+    //     totalCount: numberFourBdrm + numberFiveBdrm,
+    //   })
+    // }
 
     // Listing affordability details
     let amiPercentageMin, amiPercentageMax
@@ -182,7 +183,7 @@ async function main() {
       amiPercentageMin: amiPercentageMin,
       amiPercentageMax: amiPercentageMax,
       status: ListingStatus.active,
-      unitsSummary: unitsSummaries,
+      // unitsSummary: unitsSummaries,
       jurisdictionName: "Detroit",
       reservedCommunityTypeName: reservedCommunityTypeName,
       neighborhood: listingFields["Neighborhood"],

@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 const ncpProperty: PropertySeedType = {
   amenities: "Parking, Elevator in Building",
@@ -93,23 +93,23 @@ export class Listing10158Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const ncpUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const ncpUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 40,
       listing: listing,
     }
-    ncpUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    ncpUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 36,
       listing: listing,
     }
-    ncpUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    ncpUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(ncpUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(ncpUnitGroupToBeCreated)
 
     return listing
   }

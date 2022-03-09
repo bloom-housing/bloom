@@ -4,7 +4,7 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 
 const mcvProperty: PropertySeedType = {
   buildingAddress: {
@@ -74,13 +74,7 @@ export class Listing10145Seed extends ListingDefaultSeed {
 
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "senior62" })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://images.squarespace-cdn.com/content/v1/5e7510a49787c5207b777036/1588191604480-OSLU4ZCW3CHUQH0B2ERS/Medical+Center+Village.jpg?format=750w",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -98,30 +92,30 @@ export class Listing10145Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const mcvUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const mcvUnitGroupToBeCreated: Array<DeepPartial<UnitGroup>> = []
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 28,
       listing: listing,
     }
-    mcvUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    mcvUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 142,
       listing: listing,
     }
-    mcvUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    mcvUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeThreeBdrm,
+    const threeBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeThreeBdrm],
       totalCount: 24,
       listing: listing,
     }
-    mcvUnitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
+    mcvUnitGroupToBeCreated.push(threeBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(mcvUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(mcvUnitGroupToBeCreated)
 
     return listing
   }

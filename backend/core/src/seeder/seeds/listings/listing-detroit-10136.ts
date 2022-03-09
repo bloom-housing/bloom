@@ -4,7 +4,8 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -96,44 +97,250 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const unitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const detroitJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.detroit,
+    })
 
-    const studioUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeStudio,
-      totalCount: 8,
-      listing: listing,
-    }
-    unitsSummaryToBeCreated.push(studioUnitsSummary)
+    const unitGroups: Omit<UnitGroup, "id">[] = [
+      {
+        amiLevels: [],
+        unitType: [unitTypeStudio, unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 2,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "500",
+        sqFeetMax: "550",
+        openWaitlist: true,
+        listing,
+        totalAvailable: 2,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeThreeBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: false,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeFourBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeTwoBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 2,
+        maxOccupancy: 6,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeTwoBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 2,
+        maxOccupancy: null,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeTwoBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: null,
+        maxOccupancy: 2,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeTwoBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 1,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeThreeBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 3,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeFourBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: null,
+        maxOccupancy: null,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeTwoBdrm, unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 7,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: "600",
+        sqFeetMax: "600",
+        openWaitlist: true,
+        listing,
+      },
+    ]
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
-      totalCount: 100,
-      listing: listing,
-    }
-    unitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    const savedUnitGroups = await this.unitGroupRepository.save(unitGroups)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
-      totalCount: 118,
-      listing: listing,
-    }
-    unitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    const MSHDA = await this.amiChartRepository.findOneOrFail({
+      name: "MSHDA 2021",
+      jurisdiction: detroitJurisdiction,
+    })
+    const HUD = await this.amiChartRepository.findOneOrFail({
+      name: "HUD 2021",
+      jurisdiction: detroitJurisdiction,
+    })
 
-    const threeBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeThreeBdrm,
-      totalCount: 54,
-      listing: listing,
-    }
-    unitsSummaryToBeCreated.push(threeBdrmUnitsSummary)
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[0],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 30,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 2500,
+          unitGroup: savedUnitGroups[0],
+        },
+        {
+          amiChart: HUD,
+          amiChartId: HUD.id,
+          amiPercentage: 40,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 30,
+          unitGroup: savedUnitGroups[0],
+        },
+      ],
+    })
 
-    const fourBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeFourBdrm,
-      totalCount: 32,
-      listing: listing,
-    }
-    unitsSummaryToBeCreated.push(fourBdrmUnitsSummary)
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[1],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 30,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 2500,
+          unitGroup: savedUnitGroups[1],
+        },
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 40,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 30,
+          unitGroup: savedUnitGroups[1],
+        },
+      ],
+    })
 
-    await this.unitsSummaryRepository.save(unitsSummaryToBeCreated)
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[2],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 55,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 1200,
+          unitGroup: savedUnitGroups[2],
+        },
+      ],
+    })
+
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[3],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 55,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 25,
+          unitGroup: savedUnitGroups[3],
+        },
+      ],
+    })
 
     return listing
   }

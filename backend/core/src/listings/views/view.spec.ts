@@ -59,7 +59,7 @@ describe("listing views", () => {
       view.getViewQb()
 
       expect(mockQueryBuilder.select).toHaveBeenCalledTimes(1)
-      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(15)
+      expect(mockQueryBuilder.leftJoin).toHaveBeenCalledTimes(10)
     })
 
     it("should map unitSummary to listings", () => {
@@ -68,8 +68,8 @@ describe("listing views", () => {
       const listings = view.mapUnitSummary(mockListings)
 
       listings.forEach((listing) => {
-        expect(listing).toHaveProperty("unitsSummarized")
-        expect(listing.unitsSummarized).toHaveProperty("byUnitTypeAndRent")
+        expect(listing).toHaveProperty("unitSummaries")
+        expect(listing.unitSummaries).toHaveProperty("byUnitTypeAndRent")
       })
     })
   })
@@ -80,7 +80,7 @@ describe("listing views", () => {
 
       view.getViewQb()
 
-      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(31)
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledTimes(32)
     })
   })
 

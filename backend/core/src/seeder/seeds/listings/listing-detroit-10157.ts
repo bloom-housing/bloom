@@ -4,7 +4,8 @@ import { CountyCode } from "../../../shared/types/county-code"
 import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
-import { UnitsSummaryCreateDto } from "../../../units-summary/dto/units-summary.dto"
+import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const nccProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -99,38 +100,56 @@ export class Listing10157Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
-    const nccUnitsSummaryToBeCreated: UnitsSummaryCreateDto[] = []
+    const nccUnitGroupToBeCreated: DeepPartial<UnitGroup>[] = []
 
-    const zeroBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeStudio,
+    const zeroBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeStudio],
       totalCount: 1,
-      monthlyRentMin: 470,
+      amiLevels: [
+        {
+          amiPercentage: 10,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 650,
+        },
+      ],
       listing: listing,
       sqFeetMax: "550",
     }
-    nccUnitsSummaryToBeCreated.push(zeroBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(zeroBdrmUnitGroup)
 
-    const oneBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeOneBdrm,
+    const oneBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeOneBdrm],
       totalCount: 2,
-      monthlyRentMin: 650,
+      amiLevels: [
+        {
+          amiPercentage: 10,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 650,
+        },
+      ],
       listing: listing,
       sqFeetMin: "800",
       sqFeetMax: "1000",
     }
-    nccUnitsSummaryToBeCreated.push(oneBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(oneBdrmUnitGroup)
 
-    const twoBdrmUnitsSummary: UnitsSummaryCreateDto = {
-      unitType: unitTypeTwoBdrm,
+    const twoBdrmUnitGroup: DeepPartial<UnitGroup> = {
+      unitType: [unitTypeTwoBdrm],
       totalCount: 2,
-      monthlyRentMin: 750,
+      amiLevels: [
+        {
+          amiPercentage: 10,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 750,
+        },
+      ],
       listing: listing,
       sqFeetMin: "900",
       sqFeetMax: "1100",
     }
-    nccUnitsSummaryToBeCreated.push(twoBdrmUnitsSummary)
+    nccUnitGroupToBeCreated.push(twoBdrmUnitGroup)
 
-    await this.unitsSummaryRepository.save(nccUnitsSummaryToBeCreated)
+    await this.unitGroupRepository.save(nccUnitGroupToBeCreated)
 
     return listing
   }
