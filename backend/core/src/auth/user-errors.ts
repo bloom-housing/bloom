@@ -14,19 +14,27 @@ export enum UserErrorMessages {
 }
 
 export const USER_ERRORS = {
-  ACCOUNT_CONFIRMED: { message: UserErrorMessages.accountConfirmed, status: HttpStatus.NOT_ACCEPTABLE },
-  ACCOUNT_NOT_CONFIRMED: { message: UserErrorMessages.accountNotConfirmed, status: HttpStatus.UNAUTHORIZED },
+  ACCOUNT_CONFIRMED: {
+    message: UserErrorMessages.accountConfirmed,
+    status: HttpStatus.NOT_ACCEPTABLE,
+  },
+  ACCOUNT_NOT_CONFIRMED: {
+    message: UserErrorMessages.accountNotConfirmed,
+    status: HttpStatus.UNAUTHORIZED,
+  },
   ERROR_SAVING: { message: UserErrorMessages.errorSaving, status: HttpStatus.BAD_REQUEST },
   NOT_FOUND: { message: UserErrorMessages.emailNotFound, status: HttpStatus.NOT_FOUND },
   TOKEN_EXPIRED: { message: UserErrorMessages.tokenExpired, status: HttpStatus.BAD_REQUEST },
   TOKEN_MISSING: { message: UserErrorMessages.tokenMissing, status: HttpStatus.BAD_REQUEST },
   EMAIL_IN_USE: { message: UserErrorMessages.emailInUse, status: HttpStatus.BAD_REQUEST },
-  PASSWORD_OUTDATED: { message: UserErrorMessages.passwordOutdated, status: HttpStatus.UNAUTHORIZED },
+  PASSWORD_OUTDATED: {
+    message: UserErrorMessages.passwordOutdated,
+    status: HttpStatus.UNAUTHORIZED,
+  },
 }
 
 export class UserErrorExtraModel {
-  @ApiProperty({enum: UserErrorMessages})
+  @ApiProperty({ enum: UserErrorMessages })
   @Expose()
   userErrorMessages: UserErrorMessages
 }
-
