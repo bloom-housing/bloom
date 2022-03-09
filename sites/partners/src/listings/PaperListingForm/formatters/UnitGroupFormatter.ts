@@ -22,8 +22,9 @@ export default class UnitGroupFormatter extends Formatter {
         amiChartId: ami.amiChartId ?? "",
       }))
 
-      unit.openWaitlist = stringToBoolean(unit.openWaitlist)
+      console.log("(25) unit.amiLevels:", unit.amiLevels)
 
+      unit.openWaitlist = stringToBoolean(unit.openWaitlist)
       unit.maxOccupancy = stringToNumberOrOne(unit.maxOccupancy)
       unit.minOccupancy = stringToNumberOrOne(unit.minOccupancy)
       unit.bathroomMin = stringToNumberOrOne(unit.bathroomMin)

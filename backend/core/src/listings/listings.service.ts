@@ -201,7 +201,6 @@ export class ListingsService {
       if (!summary.id) {
         delete summary.id
       }
-      console.log("190:", summary)
     })
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {

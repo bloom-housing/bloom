@@ -4327,6 +4327,9 @@ export interface UnitGroupAmiLevel {
   monthlyRentDeterminationType: MonthlyRentDeterminationType
 
   /**  */
+  amiChart?: Id
+
+  /**  */
   id: string
 
   /**  */
@@ -4439,6 +4442,15 @@ export interface ListingFeatures {
 
   /**  */
   acInUnit?: boolean
+
+  /**  */
+  hearing?: boolean
+
+  /**  */
+  visual?: boolean
+
+  /**  */
+  mobility?: boolean
 }
 
 export interface Listing {
@@ -4726,6 +4738,9 @@ export interface Listing {
 
   /**  */
   region?: string
+
+  /**  */
+  temporaryListingId?: number
 }
 
 export interface UserPreferences {
@@ -5310,6 +5325,9 @@ export interface UnitGroupAmiLevelCreate {
   monthlyRentDeterminationType: MonthlyRentDeterminationType
 
   /**  */
+  amiChart?: Id
+
+  /**  */
   amiChartId?: string
 
   /**  */
@@ -5642,6 +5660,9 @@ export interface ListingCreate {
   region?: string
 
   /**  */
+  temporaryListingId?: number
+
+  /**  */
   countyCode?: string
 
   /**  */
@@ -5771,6 +5792,9 @@ export interface UnitGroupAmiLevelUpdate {
 
   /**  */
   id?: string
+
+  /**  */
+  amiChart?: Id
 
   /**  */
   amiChartId?: string
@@ -6096,6 +6120,9 @@ export interface ListingUpdate {
 
   /**  */
   region?: string
+
+  /**  */
+  temporaryListingId?: number
 
   /**  */
   countyCode?: string

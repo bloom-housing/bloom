@@ -114,6 +114,19 @@ const UnitsSummaryForm = ({
       delete data.priorityType
     }
 
+    let amiLevels
+    if (current) {
+      amiLevels = current.amiLevels?.map((level) => ({
+        ...level,
+        amiChart: amis.find((a) => a.id === level.amiChartId),
+      }))
+    } else if (data?.amiLevels) {
+      data.amiLevels = data.amiLevels.map((level) => ({
+        ...level,
+        amiChart: amis.find((a) => a.id === level.amiChartId),
+      }))
+    }
+
     const formData = {
       createdAt: undefined,
       updatedAt: undefined,
@@ -125,7 +138,7 @@ const UnitsSummaryForm = ({
         ...formData,
         id: current.id,
         tempId: current.tempId || tempId,
-        amiLevels: current.amiLevels,
+        amiLevels,
       })
     } else {
       onSubmit({
