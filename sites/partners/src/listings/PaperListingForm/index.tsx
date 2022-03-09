@@ -109,14 +109,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
 
   useEffect(() => {
-    if (listing?.units) {
-      const tempUnits = listing.units.map((unit, i) => ({
-        ...unit,
-        tempId: i + 1,
-      }))
-      setUnits(tempUnits)
-    }
-
     if (listing?.events) {
       setOpenHouseEvents(
         listing.events
@@ -133,10 +125,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     // Use a temp id to track each summary within the form table (prior to submission).
-    if (listing?.unitSummaries) {
+    if (listing?.unitGroups) {
       const tempSummaries = listing.unitGroups.map((summary, i) => ({
         ...summary,
         tempId: i + 1,
+        amiLevels: summary?.amiLevels?.map((elem, index) => ({ ...elem, tempId: index + 1 })),
       }))
       setUnitsSummaries(tempSummaries)
     }
@@ -169,7 +162,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       ...defaultValues,
       ...getValues(),
       ...(newData || {}),
-      // unitGroups: unitsSummaries,
     }
     if (status) {
       formData = { ...formData, status }

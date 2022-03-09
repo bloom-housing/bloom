@@ -91,12 +91,14 @@ const UnitsSummaryForm = ({
   }, [currentTempId])
 
   useEffect(() => {
-    const summary = summaries.filter((summary) => summary.tempId === tempId)[0]
+    const summary = summaries.find((summary) => summary.tempId === tempId)
     setCurrent(summary)
     reset({
       ...summary,
+      // @ts-ignore:next-line
+      unitType: summary?.unitType?.map((elem) => elem.id),
     })
-  }, [summaries, setCurrent, tempId, reset, options])
+  }, [summaries, setCurrent, tempId, reset])
 
   async function onFormSubmit(action?: string) {
     // Triggers validation across the form.

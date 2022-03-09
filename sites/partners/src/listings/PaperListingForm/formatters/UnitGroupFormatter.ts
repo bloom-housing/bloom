@@ -8,7 +8,7 @@ export default class UnitGroupFormatter extends Formatter {
       const unit = { ...unitGroup }
 
       unit.unitType = unit.unitType.map((type) => ({
-        id: type.toString(),
+        id: type.id ?? type.toString(),
         createdAt: undefined,
         updatedAt: undefined,
         name: "",
@@ -19,6 +19,7 @@ export default class UnitGroupFormatter extends Formatter {
         ...ami,
         amiPercentage: stringToNumberOrOne(ami.amiPercentage),
         flatRentValue: stringToNumberOrOne(ami.flatRentValue),
+        amiChartId: ami.amiChartId ?? "",
       }))
 
       unit.openWaitlist = stringToBoolean(unit.openWaitlist)

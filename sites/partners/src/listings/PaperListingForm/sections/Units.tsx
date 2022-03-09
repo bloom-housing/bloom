@@ -67,14 +67,6 @@ const FormUnits = ({ units, unitsSummaries, setSummaries, disableUnitsAccordion 
     setValue("disableUnitsAccordion", disableUnitsAccordion ? "true" : "false")
   }, [disableUnitsAccordion, setValue])
 
-  useEffect(() => {
-    if (units && units.length > 0 && !units[0].tempId) {
-      units.forEach((unit, index) => {
-        unit.tempId = index + 1
-      })
-    }
-  }, [units])
-
   const editSummary = useCallback(
     (tempId: number) => {
       setSummaryDrawer(tempId)
@@ -113,7 +105,7 @@ const FormUnits = ({ units, unitsSummaries, setSummaries, disableUnitsAccordion 
     () =>
       unitsSummaries?.map((summary) => {
         let types = unitTypeOptions.filter((option) =>
-          summary.unitType.some((type) => option.id === type.toString())
+          summary.unitType.some((type) => option.id === type.toString() || option.id === type.id)
         )
         let amiRange = [undefined, undefined]
         let rentRange = [undefined, undefined]
@@ -182,7 +174,7 @@ const FormUnits = ({ units, unitsSummaries, setSummaries, disableUnitsAccordion 
           ),
         }
       }),
-    [unitsSummaries, editSummary]
+    [unitsSummaries, editSummary, unitTypeOptions]
   )
 
   return (
