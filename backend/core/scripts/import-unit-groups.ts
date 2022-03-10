@@ -11,13 +11,7 @@ import { MSHDA2021 } from "../src/seeder/seeds/ami-charts/MSHDA2021"
 import { MonthlyRentDeterminationType } from "../src/units-summary/types/monthly-rent-determination.enum"
 import dbOptions = require("../ormconfig")
 
-// TODO how to solve 4+BR
-
 type AmiChartNameType = "MSHDA" | "HUD"
-type TAmiChartLevel = {
-  amiChartName: AmiChartNameType
-  amiPercentage: number
-}
 
 const args = process.argv.slice(2)
 
@@ -37,32 +31,22 @@ export class HeaderConstants {
   public static readonly WaitlistOpen: string = "Waitlist Open"
   public static readonly AMIChart: string = "AMI Chart"
   public static readonly AmiChartPercentage: string = "Percent AMIs"
-}
-
-function generateAmiChartLevels(
-  amiChartsColumns: string,
-  amiPercentagesColumn: string | number
-): Array<TAmiChartLevel> {
-  const amiChartLevels = []
-
-  for (const amiChartName of amiChartsColumns.split("/")) {
-    // TODO remove && amiPercentagesColumn when empty AMI percentage column problem is solved
-    if (typeof amiPercentagesColumn === "string" && amiPercentagesColumn) {
-      for (const amiPercentage of amiPercentagesColumn.split(",").map((s) => s.trim())) {
-        amiChartLevels.push({
-          amiChartName,
-          amiPercentage: Number.parseInt(amiPercentage),
-        })
-      }
-    } else if (typeof amiPercentagesColumn === "number") {
-      amiChartLevels.push({
-        amiChartName,
-        amiPercentage: amiPercentagesColumn,
-      })
-    }
-  }
-
-  return amiChartLevels
+  public static readonly Value20: string = "20% (Value)"
+  public static readonly Value25: string = "25% (Value)"
+  public static readonly Value30: string = "30% (Value)"
+  public static readonly Value35: string = "35% (Value)"
+  public static readonly Value40: string = "40% (Value)"
+  public static readonly Value45: string = "45% (Value)"
+  public static readonly Value50: string = "50% (Value)"
+  public static readonly Value55: string = "55% (Value)"
+  public static readonly Value60: string = "60% (Value)"
+  public static readonly Value70: string = "70% (Value)"
+  public static readonly Value80: string = "80% (Value)"
+  public static readonly Value100: string = "100% (Value)"
+  public static readonly Value120: string = "120% (Value)"
+  public static readonly Value125: string = "125% (Value)"
+  public static readonly Value140: string = "140% (Value)"
+  public static readonly Value150: string = "150% (Value)"
 }
 
 function findAmiChartByName(
@@ -79,32 +63,99 @@ function findAmiChartByName(
   )
 }
 
-function getFlatRentValueForAmiChart(amiChart: AmiChart, amiPercentage: number) {
-  return amiChart.items.find((item) => item.percentOfAmi === amiPercentage).percentOfAmi
+function parseAmiStringValue(value: string | number) {
+  if (typeof value === "number") {
+    return value
+  } else if (typeof value === "string") {
+    const retval = Number.parseInt(value.replace(/\$/, "").replace(/,/, ""))
+    if (!retval) {
+      console.log("dollar value")
+      console.log(value)
+      throw new Error("Failed to parse $ (dolar) value")
+    }
+    return retval
+  } else {
+    throw new Error("Unknown ami value type")
+  }
+}
+
+function getAmiValueFromColumn(row, amiPercentage: number, type: "percentage" | "flat") {
+  const mapAmiPercentageToColumnName = {
+    20: HeaderConstants.Value20,
+    25: HeaderConstants.Value25,
+    30: HeaderConstants.Value30,
+    35: HeaderConstants.Value35,
+    40: HeaderConstants.Value40,
+    45: HeaderConstants.Value45,
+    50: HeaderConstants.Value50,
+    55: HeaderConstants.Value55,
+    60: HeaderConstants.Value60,
+    70: HeaderConstants.Value70,
+    80: HeaderConstants.Value80,
+    100: HeaderConstants.Value100,
+    120: HeaderConstants.Value120,
+    125: HeaderConstants.Value125,
+    140: HeaderConstants.Value140,
+    150: HeaderConstants.Value150,
+  }
+  const value = row[mapAmiPercentageToColumnName[amiPercentage]]
+
+  if (value) {
+    const splitValues = value.split("/")
+
+    if (splitValues.length === 1) {
+      return parseAmiStringValue(value)
+    } else if (splitValues.length === 2) {
+      return type === "flat"
+        ? parseAmiStringValue(splitValues[0])
+        : parseAmiStringValue(splitValues[1])
+    }
+
+    throw new Error("This part should not be reached")
+  }
 }
 
 function generateUnitsSummaryAmiLevels(
-  amiCharts: Array<AmiChart>,
-  inputAmiChartLevels: Array<TAmiChartLevel>
+  row,
+  amiChartEntities: Array<AmiChart>,
+  amiChartString: string,
+  amiChartPercentagesString: string
 ) {
+  const amiCharts = amiChartString.split("/")
+
+  let amiPercentages: Array<number> = []
+  if (amiChartPercentagesString && typeof amiChartPercentagesString === "string") {
+    amiPercentages = amiChartPercentagesString
+      .split(",")
+      .map((s) => s.trim())
+      .map((s) => Number.parseInt(s))
+  } else if (amiChartPercentagesString && typeof amiChartPercentagesString === "number") {
+    amiPercentages = [amiChartPercentagesString]
+  }
+
   const amiChartLevels: Array<DeepPartial<UnitGroupAmiLevel>> = []
 
-  for (const inputAmiChartLevel of inputAmiChartLevels) {
-    const amiChart = findAmiChartByName(amiCharts, inputAmiChartLevel.amiChartName)
+  for (const amiChartName of amiCharts) {
+    const amiChartEntity = findAmiChartByName(amiChartEntities, amiChartName as AmiChartNameType)
     const monthlyRentDeterminationType =
-      inputAmiChartLevel.amiChartName === "MSHDA"
+      amiChartName === "MSHDA"
         ? MonthlyRentDeterminationType.flatRent
         : MonthlyRentDeterminationType.percentageOfIncome
 
-    amiChartLevels.push({
-      amiChart: amiChart,
-      amiPercentage: inputAmiChartLevel.amiPercentage,
-      monthlyRentDeterminationType,
-      flatRentValue:
-        monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
-          ? getFlatRentValueForAmiChart(amiChart, inputAmiChartLevel.amiPercentage)
-          : null,
-    })
+    for (const amiPercentage of amiPercentages) {
+      amiChartLevels.push({
+        amiChart: amiChartEntity,
+        amiPercentage:
+          monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
+            ? getAmiValueFromColumn(row, amiPercentage, "percentage")
+            : null,
+        monthlyRentDeterminationType,
+        flatRentValue:
+          monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
+            ? getAmiValueFromColumn(row, amiPercentage, "flat")
+            : null,
+      })
+    }
   }
 
   return amiChartLevels
@@ -170,17 +221,12 @@ async function main() {
           unitTypes.push(unitType)
         }
 
-        const inputAmiChartLevels = generateAmiChartLevels(
-          row[HeaderConstants.AMIChart],
-          row[HeaderConstants.AmiChartPercentage]
-        )
-
         const newUnitsSummary: DeepPartial<UnitGroup> = {
           minOccupancy: row[HeaderConstants.MinOccupancy]
             ? row[HeaderConstants.MinOccupancy]
             : null,
           maxOccupancy: row[HeaderConstants.MaxOccupancy]
-            ? row[HeaderConstants.MinOccupancy]
+            ? row[HeaderConstants.MaxOccupancy]
             : null,
           totalCount: row[HeaderConstants.TotalCount] ? row[HeaderConstants.TotalCount] : null,
           totalAvailable: row[HeaderConstants.TotalAvailable]
@@ -188,7 +234,12 @@ async function main() {
             : null,
           openWaitlist: getOpenWaitlistValue(row),
           unitType: unitTypes,
-          amiLevels: generateUnitsSummaryAmiLevels(amiCharts, inputAmiChartLevels),
+          amiLevels: generateUnitsSummaryAmiLevels(
+            row,
+            amiCharts,
+            row[HeaderConstants.AMIChart],
+            row[HeaderConstants.AmiChartPercentage]
+          ),
         }
         listing.unitGroups.push(newUnitsSummary)
 
