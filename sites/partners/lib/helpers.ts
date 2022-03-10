@@ -96,6 +96,10 @@ export const toNumberOrNull = (obj: string | number | undefined): number => {
   return obj ? Number(obj) : null
 }
 
+export const toNumberOrUndefined = (obj: string | number | undefined): number => {
+  return obj ? Number(obj) : undefined
+}
+
 export const stringToNumberOrOne = (str: string | number | undefined): number => {
   return str ? Number(str) : 1
 }
@@ -114,15 +118,6 @@ export const getRentType = (unit: TempUnit): string | null => {
     : unit?.monthlyRentAsPercentOfIncome
     ? "percentage"
     : null
-}
-
-export const getRentTypeFromUnitsSummary = (summary: TempUnitsSummary): string | null => {
-  if (summary?.monthlyRentMin || summary?.monthlyRentMax) {
-    return "fixed"
-  } else if (summary?.monthlyRentAsPercentOfIncome) {
-    return "percentage"
-  }
-  return null
 }
 
 export const getAmiChartId = (chart: AmiChart | string | undefined): string | null => {
@@ -149,12 +144,18 @@ export function arrayToFormOptions<T>(
   arr: T[],
   label: string,
   value: string,
-  translateLabel?: string
+  translateLabel?: string,
+  addEmpty = false
 ): FormOption[] {
-  return arr.map((val: T) => ({
+  const options = arr.map((val: T) => ({
     label: translateLabel ? t(`${translateLabel}.${val[label]}`) : val[label],
     value: val[value],
   }))
+  if (addEmpty) {
+    options.unshift({ label: "", value: "" })
+  }
+
+  return options
 }
 
 /**

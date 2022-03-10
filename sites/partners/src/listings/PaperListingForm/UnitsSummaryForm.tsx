@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback, useMemo } from "react"
 import {
   t,
   GridSection,
@@ -12,18 +12,35 @@ import {
   Button,
   Form,
   numberOptions,
+  MinimalTable,
+  AppearanceSizeType,
+  Drawer,
+  Modal,
 } from "@bloom-housing/ui-components"
-import { useForm } from "react-hook-form"
-import { TempUnitsSummary } from "./formTypes"
-import { UnitAccessibilityPriorityType, UnitType } from "@bloom-housing/backend-core/types"
-import { useUnitPriorityList, useUnitTypeList } from "../../../lib/hooks"
-import { arrayToFormOptions, getRentTypeFromUnitsSummary } from "../../../lib/helpers"
+import { useForm, useFormContext } from "react-hook-form"
+import { TempUnitsSummary, TempAmiLevel } from "./formTypes"
+import {
+  AmiChart,
+  MonthlyRentDeterminationType,
+  UnitAccessibilityPriorityType,
+} from "@bloom-housing/backend-core/types"
+import { useUnitPriorityList } from "../../../lib/hooks"
+import { arrayToFormOptions } from "../../../lib/helpers"
+import UnitsSummaryAmiForm from "./UnitsSummaryAmiForm"
+import { useAmiChartList } from "../../../lib/hooks"
+
+interface FieldSingle {
+  id: string
+  label: string
+  value?: string
+}
 
 type UnitsSummaryFormProps = {
   onSubmit: (unit: TempUnitsSummary) => void
   onClose: () => void
   summaries: TempUnitsSummary[]
   currentTempId: number
+  unitTypeOptions: FieldSingle[]
 }
 
 const UnitsSummaryForm = ({
@@ -31,22 +48,22 @@ const UnitsSummaryForm = ({
   onClose,
   summaries,
   currentTempId,
+  unitTypeOptions,
 }: UnitsSummaryFormProps) => {
   const [current, setCurrent] = useState<TempUnitsSummary>(null)
-  const [tempId, setTempId] = useState<number | null>(null)
+  const [summaryDrawer, setSummaryDrawer] = useState<number | null>(null)
+  const [amiDeleteModal, setAmiDeleteModal] = useState<number | null>(null)
   const [options, setOptions] = useState({
     unitPriorities: [],
-    unitTypes: [],
+    amiCharts: [],
   })
 
-  /**
-   * fetch form options
-   */
-  const { data: unitPriorities = [] } = useUnitPriorityList()
-  const { data: unitTypes = [] } = useUnitTypeList()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { watch } = useFormContext()
+  const jurisdiction: string = watch("jurisdiction.id")
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch, errors, trigger, getValues, reset } = useForm({
+  const { register, errors, trigger, getValues, reset, clearErrors, watch: formWatch } = useForm({
     defaultValues: {
       unitType: current?.unitType,
       floorMin: current?.floorMin,
@@ -55,46 +72,40 @@ const UnitsSummaryForm = ({
       sqFeetMax: current?.sqFeetMax,
       minOccupancy: current?.minOccupancy,
       maxOccupancy: current?.maxOccupancy,
-      amiPercentage: current?.amiPercentage,
-      monthlyRentMin: current?.monthlyRentMin,
-      monthlyRentMax: current?.monthlyRentMax,
       totalCount: current?.totalCount,
       totalAvailable: current?.totalAvailable,
-      monthlyRentAsPercentOfIncome: current?.monthlyRentAsPercentOfIncome,
       priorityType: current?.priorityType,
-      rentType: getRentTypeFromUnitsSummary(current),
+      openWaitlist: current?.openWaitlist,
+      amiLevels: current?.amiLevels,
     },
   })
 
-  useEffect(() => {
-    setTempId(currentTempId)
-  }, [currentTempId])
+  const unitType = formWatch("unitType")
+
+  /**
+   * fetch form options
+   */
+  const { data: unitPriorities = [] } = useUnitPriorityList()
+  const { data: amis = [] } = useAmiChartList(jurisdiction)
 
   useEffect(() => {
-    const summary = summaries.filter((summary) => summary.tempId === tempId)[0]
+    const summary = summaries.find((summary) => summary.tempId === currentTempId)
     setCurrent(summary)
     reset({
       ...summary,
-      rentType: getRentTypeFromUnitsSummary(summary),
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore:next-line
+      unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
+      openWaitListQuestion: summary?.openWaitlist?.toString(),
     })
-  }, [summaries, setCurrent, tempId, reset, options])
+  }, [summaries, reset, currentTempId, setCurrent])
 
-  const rentType = watch("rentType")
-
-  async function onFormSubmit(action?: string) {
+  async function onFormSubmit() {
     // Triggers validation across the form.
     const validation = await trigger()
-
     if (!validation) return
 
     const data = getValues()
-
-    if (data.rentType === "fixed") {
-      delete data.monthlyRentAsPercentOfIncome
-    } else if (data.rentType === "percentage") {
-      delete data.monthlyRentMin
-      delete data.monthlyRentMax
-    }
 
     if (data.priorityType?.id) {
       const priority = unitPriorities.find((priority) => priority.id === data.priorityType.id)
@@ -103,11 +114,17 @@ const UnitsSummaryForm = ({
       delete data.priorityType
     }
 
-    if (data.unitType?.id) {
-      const type = unitTypes.find((type) => type.id === data.unitType.id)
-      data.unitType = type
-    } else {
-      delete data.unitType
+    let amiLevels
+    if (current) {
+      amiLevels = current.amiLevels?.map((level) => ({
+        ...level,
+        amiChart: amis.find((a) => a.id === level.amiChartId),
+      }))
+    } else if (data?.amiLevels) {
+      data.amiLevels = data.amiLevels.map((level) => ({
+        ...level,
+        amiChart: amis.find((a) => a.id === level.amiChartId),
+      }))
     }
 
     const formData = {
@@ -116,332 +133,431 @@ const UnitsSummaryForm = ({
       ...data,
     }
 
-    const current = summaries.find((summary) => summary.tempId === tempId)
     if (current) {
-      onSubmit({ ...formData, id: current.id, tempId: current.tempId })
+      onSubmit({
+        ...formData,
+        id: current.id,
+        tempId: current.tempId || currentTempId,
+        amiLevels,
+      })
     } else {
       onSubmit({
         ...formData,
         id: undefined,
-        tempId: summaries.length + 1,
+        tempId: (summaries.length || 0) + 1,
       })
     }
-    setTempId(null)
-    if (action === "copyNew") {
-      setCurrent({
-        ...formData,
-        id: current?.id,
-        tempId: summaries.length + 1,
-      })
-      reset({ ...formData })
-    } else if (action === "saveNew") {
-      setCurrent(null)
-      reset()
-    } else {
-      onClose()
-    }
+    onClose()
   }
-
-  const rentTypeOptions = [
-    {
-      id: "fixed",
-      label: t("listings.unit.fixed"),
-      value: "fixed",
-    },
-    {
-      id: "percentage",
-      label: t("listings.unit.percentage"),
-      value: "percentage",
-    },
-  ]
 
   useEffect(() => {
     setOptions({
       unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
         unitPriorities,
         "name",
-        "id"
+        "id",
+        undefined,
+        true
       ),
-      unitTypes: arrayToFormOptions<UnitType>(unitTypes, "name", "id"),
+      amiCharts: arrayToFormOptions<AmiChart>(amis, "name", "id", undefined, true),
     })
-  }, [unitPriorities, unitTypes])
+  }, [unitPriorities, amis])
+
+  const editAmi = useCallback(
+    (tempId: number) => {
+      setSummaryDrawer(tempId)
+    },
+    [setSummaryDrawer]
+  )
+
+  const saveAmiSummary = (newAmiLevel: TempAmiLevel) => {
+    const exists = current?.amiLevels?.some((amiLevel) => amiLevel.tempId === newAmiLevel.tempId)
+    if (exists) {
+      setCurrent({
+        ...current,
+        amiLevels: current.amiLevels.map((amiLevel) =>
+          amiLevel.tempId === newAmiLevel.tempId ? newAmiLevel : amiLevel
+        ),
+      })
+    } else {
+      if (current?.amiLevels) {
+        setCurrent({ ...current, amiLevels: [...current.amiLevels, newAmiLevel] })
+      } else {
+        setCurrent({ ...current, amiLevels: [newAmiLevel] })
+      }
+    }
+  }
+
+  const amiSummaryTableData = useMemo(
+    () =>
+      current?.amiLevels?.map((ami) => {
+        const selectedAmiChart = options.amiCharts.find((chart) => chart.value === ami.amiChartId)
+
+        let rentValue = undefined
+        let monthlyRentDeterminationType = undefined
+        if (ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {
+          rentValue = `${ami.flatRentValue ? `$${ami.flatRentValue}` : ""}`
+          monthlyRentDeterminationType = t("listings.unitsSummary.flatRent")
+        } else if (
+          ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
+        ) {
+          rentValue = `${ami.percentageOfIncomeValue ? `${ami.percentageOfIncomeValue}%` : ""}`
+          monthlyRentDeterminationType = t("listings.unitsSummary.percentIncome")
+        }
+
+        return {
+          amiChartName: selectedAmiChart?.label || "",
+          amiPercentage: `${ami.amiPercentage ? `${ami.amiPercentage}%` : ""}`,
+          monthlyRentDeterminationType: monthlyRentDeterminationType,
+          rentValue: rentValue,
+          action: (
+            <div className="flex-col">
+              <Button
+                type="button"
+                className="front-semibold uppercase m-1"
+                onClick={() => editAmi(ami.tempId)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700 m-1"
+                onClick={() => setAmiDeleteModal(ami.tempId)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        }
+      }),
+    [current, options.amiCharts, editAmi, setAmiDeleteModal]
+  )
+
+  const deleteAmi = useCallback(
+    (tempId: number) => {
+      const updateAmis = current?.amiLevels
+        .filter((summary) => summary.tempId !== tempId)
+        .map((updatedAmi, index) => ({
+          ...updatedAmi,
+          tempId: index + 1,
+        }))
+
+      setCurrent({ ...current, amiLevels: updateAmis })
+      setAmiDeleteModal(null)
+    },
+    [setAmiDeleteModal, setCurrent, current]
+  )
+
+  const openWaitlistOptions = [
+    {
+      id: "true",
+      label: t("listings.unitsSummary.open"),
+      value: "true",
+    },
+    {
+      id: "false",
+      label: t("listings.unitsSummary.closed"),
+      value: "false",
+      defaultChecked: true,
+    },
+  ]
+
+  const amiSummariesHeaders = {
+    amiChartName: "listings.unitsSummary.amiChart",
+    amiPercentage: "listings.unitsSummary.amiLevel",
+    monthlyRentDeterminationType: "listings.unitsSummary.rentType",
+    rentValue: "listings.unitsSummary.flatRentValue",
+    action: "",
+  }
+
+  useEffect(() => {
+    if (unitType?.length && errors?.unitType) {
+      clearErrors("unitType")
+    }
+  }, [unitType, errors, clearErrors])
 
   return (
-    <Form onSubmit={() => false}>
-      <div className="border rounded-md p-8 bg-white">
-        <GridSection title={t("listings.unit.details")} columns={4}>
-          <GridCell>
-            <ViewItem label={t("listings.unit.type")}>
-              <Select
-                id="unitType.id"
-                name="unitType.id"
-                label={t("listings.unit.type")}
-                placeholder={t("listings.unit.type")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={options.unitTypes}
-                error={errors?.unitType !== undefined}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("listings.unitsSummary.floorMin")}>
-              <Select
-                id="floorMin"
-                name="floorMin"
-                label={t("listings.unitsSummary.floorMin")}
-                placeholder={t("listings.unitsSummary.floorMin")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={numberOptions(10)}
-              />
-            </ViewItem>
-            <ViewItem label={t("listings.unitsSummary.floorMax")}>
-              <Select
-                id="floorMax"
-                name="floorMax"
-                label={t("listings.unitsSummary.floorMax")}
-                placeholder={t("listings.unitsSummary.floorMax")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={numberOptions(10)}
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("listings.unitsSummary.sqFeetMin")}>
-              <Field
-                id="sqFeetMin"
-                name="sqFeetMin"
-                label={t("listings.unitsSummary.sqFeetMin")}
-                placeholder={t("listings.unitsSummary.sqFeetMin")}
-                register={register}
-                readerOnly
-                type="number"
-              />
-            </ViewItem>
-            <ViewItem label={t("listings.unitsSummary.sqFeetMax")}>
-              <Field
-                id="sqFeetMax"
-                name="sqFeetMax"
-                label={t("listings.unitsSummary.sqFeetMax")}
-                placeholder={t("listings.unitsSummary.sqFeetMax")}
-                register={register}
-                readerOnly
-                type="number"
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("listings.unit.minOccupancy")}>
-              <Select
-                id="minOccupancy"
-                name="minOccupancy"
-                label={t("listings.unit.minOccupancy")}
-                placeholder={t("listings.unit.minOccupancy")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={numberOptions(10)}
-              />
-            </ViewItem>
-            <ViewItem label={t("listings.unit.maxOccupancy")}>
-              <Select
-                id="maxOccupancy"
-                name="maxOccupancy"
-                label={t("listings.unit.maxOccupancy")}
-                placeholder={t("listings.unit.maxOccupancy")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={numberOptions(10)}
-              />
-            </ViewItem>
-          </GridCell>
-        </GridSection>
-        <GridSection title={t("listings.unitsSummary.availability")} columns={4} separator>
-          <GridCell>
-            <ViewItem label={t("listings.unitsSummary.count")}>
-              <Field
-                id="totalCount"
-                name="totalCount"
-                label={t("listings.unitsSummary.count")}
-                placeholder={t("listings.unitsSummary.count")}
-                register={register}
-                readerOnly
-                type="number"
-                error={errors?.totalCount !== undefined}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("listings.unitsSummary.available")}>
-              <Field
-                id="totalAvailable"
-                name="totalAvailable"
-                label={t("listings.unitsSummary.available")}
-                placeholder={t("listings.unitsSummary.available")}
-                register={register}
-                readerOnly
-                type="number"
-                error={errors?.totalAvailable !== undefined}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-              />
-            </ViewItem>
-          </GridCell>
-        </GridSection>
-        <GridSection title={t("listings.unit.eligibility")} columns={4} separator>
-          <GridCell>
-            <ViewItem label={t("listings.unit.amiPercentage")}>
-              <Field
-                id="amiPercentage"
-                name="amiPercentage"
-                label={t("listings.unit.amiPercentage")}
-                placeholder={t("listings.unit.amiPercentage")}
-                register={register}
-                type="number"
-                readerOnly
-                error={errors?.amiPercentage !== undefined}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-              />
-            </ViewItem>
-          </GridCell>
-          <GridCell>
-            <ViewItem label={t("listings.unit.rentType")}>
-              <FieldGroup
-                name="rentType"
-                type="radio"
-                register={register}
-                fields={rentTypeOptions}
-                fieldClassName="m-0"
-                fieldGroupClassName="flex h-12 items-center"
-                error={errors?.rentType !== undefined}
-                errorMessage={t("errors.requiredFieldError")}
-                validation={{ required: true }}
-              />
-            </ViewItem>
-          </GridCell>
-        </GridSection>
-        <GridSection columns={4} className="pt-6">
-          {rentType === "fixed" && (
-            <>
-              <GridCell>
-                <ViewItem label={t("listings.unitsSummary.monthlyRentMin")}>
+    <>
+      <Form onSubmit={() => false}>
+        <div className="border rounded-md p-8 bg-white">
+          <GridSection title={t("listings.unit.details")} columns={2}>
+            <GridCell span={1}>
+              <ViewItem label={t("listings.unit.type")}>
+                <FieldGroup
+                  name="unitType"
+                  type="checkbox"
+                  register={register}
+                  fields={unitTypeOptions}
+                  fieldClassName="m-0"
+                  error={errors?.unitType !== undefined}
+                  errorMessage={t("errors.requiredFieldError")}
+                  validation={{ required: true }}
+                  fieldGroupClassName="grid grid-cols-2 mt-4"
+                />
+              </ViewItem>
+            </GridCell>
+          </GridSection>
+          <GridSection title={t("listings.unit.details")} columns={1}>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.count")}>
                   <Field
-                    id="monthlyRentMin"
-                    name="monthlyRentMin"
-                    label={t("listings.unitsSummary.monthlyRentMin")}
-                    placeholder="0.00"
+                    id="totalCount"
+                    name="totalCount"
+                    label={t("listings.unitsSummary.count")}
+                    placeholder={t("listings.unitsSummary.count")}
                     register={register}
-                    type="number"
-                    prepend="$"
                     readerOnly
-                    error={errors?.monthlyRentMin !== undefined}
+                    type="number"
+                    error={errors?.totalCount !== undefined}
                     errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
                   />
                 </ViewItem>
               </GridCell>
-              <GridCell>
-                <ViewItem label={t("listings.unitsSummary.monthlyRentMax")}>
-                  <Field
-                    id="monthlyRentMax"
-                    name="monthlyRentMax"
-                    label={t("listings.unitsSummary.monthlyRentMax")}
-                    placeholder="0.00"
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unit.minOccupancy")}>
+                  <Select
+                    id="minOccupancy"
+                    name="minOccupancy"
+                    label={t("listings.unit.minOccupancy")}
+                    labelClassName="sr-only"
                     register={register}
-                    type="number"
-                    prepend="$"
-                    readerOnly
+                    controlClassName="control"
+                    options={numberOptions(8, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
-            </>
-          )}
-          {rentType === "percentage" && (
-            <>
-              <GridCell>
-                <ViewItem label={t("listings.unit.percentage")}>
-                  <Field
-                    id="monthlyRentAsPercentOfIncome"
-                    name="monthlyRentAsPercentOfIncome"
-                    label={t("listings.unit.%incomeRent")}
-                    placeholder={t("listings.unit.percentage")}
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unit.maxOccupancy")}>
+                  <Select
+                    id="maxOccupancy"
+                    name="maxOccupancy"
+                    label={t("listings.unit.maxOccupancy")}
+                    labelClassName="sr-only"
                     register={register}
-                    type="number"
-                    readerOnly
-                    error={errors?.monthlyRentAsPercentOfIncome !== undefined}
-                    errorMessage={t("errors.requiredFieldError")}
-                    validation={{ required: true }}
+                    controlClassName="control"
+                    options={numberOptions(8, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
-            </>
-          )}
-        </GridSection>
-        <GridSection title={t("t.accessibility")} columns={4} separator>
-          <GridCell>
-            <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
-              <Select
-                id="priorityType.id"
-                name="priorityType.id"
-                label={t("listings.unit.accessibilityPriorityType")}
-                placeholder={t("listings.unit.accessibilityPriorityType")}
-                labelClassName="sr-only"
-                register={register}
-                controlClassName="control"
-                options={options.unitPriorities}
-              />
-            </ViewItem>
-          </GridCell>
-        </GridSection>
-      </div>
-      <div className="mt-6">
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("copyNew")}
-          styleType={AppearanceStyleType.secondary}
-          className="mr-4"
-        >
-          {t("t.copyNew")}
-        </Button>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.sqFeetMin")}>
+                  <Field
+                    id="sqFeetMin"
+                    name="sqFeetMin"
+                    label={t("listings.unitsSummary.sqFeetMin")}
+                    placeholder={t("listings.unitsSummary.sqFeetMin")}
+                    register={register}
+                    readerOnly
+                    type="number"
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.sqFeetMax")}>
+                  <Field
+                    id="sqFeetMax"
+                    name="sqFeetMax"
+                    label={t("listings.unitsSummary.sqFeetMax")}
+                    placeholder={t("listings.unitsSummary.sqFeetMax")}
+                    register={register}
+                    readerOnly
+                    type="number"
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.floorMin")}>
+                  <Select
+                    id="floorMin"
+                    name="floorMin"
+                    label={t("listings.unitsSummary.floorMin")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10, 1, true)}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.floorMax")}>
+                  <Select
+                    id="floorMax"
+                    name="floorMax"
+                    label={t("listings.unitsSummary.floorMax")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10, 1, true)}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+            <GridSection columns={3}>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.bathroomsMin")}>
+                  <Select
+                    id="bathroomMin"
+                    name="bathroomMin"
+                    label={t("listings.unitsSummary.bathroomsMin")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10, 1, true)}
+                  />
+                </ViewItem>
+              </GridCell>
+              <GridCell span={1}>
+                <ViewItem label={t("listings.unitsSummary.bathroomsMax")}>
+                  <Select
+                    id="bathroomMax"
+                    name="bathroomMax"
+                    label={t("listings.unitsSummary.bathroomsMax")}
+                    labelClassName="sr-only"
+                    register={register}
+                    controlClassName="control"
+                    options={numberOptions(10, 1, true)}
+                  />
+                </ViewItem>
+              </GridCell>
+            </GridSection>
+          </GridSection>
+          <GridSection title={t("listings.unitsSummary.availability")} columns={3} separator>
+            <GridCell span={1}>
+              <ViewItem label={t("listings.unitsSummary.vacancies")}>
+                <Field
+                  id="totalAvailable"
+                  name="totalAvailable"
+                  label={t("listings.unitsSummary.vacancies")}
+                  placeholder={t("listings.unitsSummary.vacancies")}
+                  register={register}
+                  readerOnly
+                  type="number"
+                  error={errors?.totalAvailable !== undefined}
+                  errorMessage={t("errors.requiredFieldError")}
+                />
+              </ViewItem>
+            </GridCell>
+            <GridCell span={1}>
+              <ViewItem label={t("listings.unitsSummary.openWaitlist")}>
+                <FieldGroup
+                  name="openWaitListQuestion"
+                  type="radio"
+                  register={register}
+                  fields={openWaitlistOptions}
+                  fieldClassName="m-0"
+                  fieldGroupClassName="flex h-12 items-center"
+                  error={errors?.openWaitlist !== undefined}
+                  errorMessage={t("errors.requiredFieldError")}
+                />
+              </ViewItem>
+            </GridCell>
+          </GridSection>
+          <GridSection title={t("listings.unit.eligibility")} columns={1} separator>
+            <GridCell>
+              <div className="bg-gray-300 px-4 py-5">
+                {current?.amiLevels?.length ? (
+                  <div className={"mb-5"}>
+                    <MinimalTable
+                      headers={amiSummariesHeaders}
+                      data={amiSummaryTableData}
+                      responsiveCollapse={true}
+                    />
+                  </div>
+                ) : null}
+                <Button
+                  type="button"
+                  size={AppearanceSizeType.normal}
+                  styleType={null}
+                  onClick={() => {
+                    editAmi((current?.amiLevels?.length || 0) + 1)
+                  }}
+                >
+                  {t("listings.unitsSummary.addAmi")}
+                </Button>
+              </div>
+            </GridCell>
+          </GridSection>
+          <GridSection title={t("t.accessibility")} columns={4} separator>
+            <GridCell>
+              <ViewItem label={t("listings.unit.accessibilityPriorityType")}>
+                <Select
+                  id="priorityType.id"
+                  name="priorityType.id"
+                  label={t("listings.unit.accessibilityPriorityType")}
+                  labelClassName="sr-only"
+                  register={register}
+                  controlClassName="control"
+                  options={options.unitPriorities}
+                />
+              </ViewItem>
+            </GridCell>
+          </GridSection>
+        </div>
+        <div className="mt-6">
+          <Button
+            type="button"
+            onClick={() => onFormSubmit()}
+            styleType={AppearanceStyleType.primary}
+          >
+            {t("t.saveExit")}
+          </Button>
 
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("saveNew")}
-          styleType={AppearanceStyleType.secondary}
-          className="mr-4"
-        >
-          {t("t.saveNew")}
-        </Button>
-
-        <Button
-          type="button"
-          onClick={() => onFormSubmit()}
-          styleType={AppearanceStyleType.primary}
-        >
-          {t("t.saveExit")}
-        </Button>
-
-        <Button
-          type="button"
-          onClick={onClose}
-          styleType={AppearanceStyleType.secondary}
-          border={AppearanceBorderType.borderless}
-        >
-          {t("t.cancel")}
-        </Button>
-      </div>
-    </Form>
+          <Button
+            type="button"
+            onClick={onClose}
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+          >
+            {t("t.cancel")}
+          </Button>
+        </div>
+      </Form>
+      <Drawer
+        open={!!summaryDrawer}
+        title={t("listings.unitsSummary.addAmi")}
+        ariaDescription={t("listings.unitsSummary.addAmi")}
+        onClose={() => setSummaryDrawer(null)}
+      >
+        <UnitsSummaryAmiForm
+          onSubmit={(amiLevel) => saveAmiSummary(amiLevel)}
+          onClose={() => setSummaryDrawer(null)}
+          amiLevels={current?.amiLevels || []}
+          currentTempId={summaryDrawer}
+          amiCharOptions={options.amiCharts}
+          amiInfo={amis}
+        />
+      </Drawer>
+      <Modal
+        open={!!amiDeleteModal}
+        title={t("listings.unitsSummary.deleteAmi")}
+        ariaDescription={t("listings.unitsSummary.deleteAmiConf")}
+        actions={[
+          <Button styleType={AppearanceStyleType.alert} onClick={() => deleteAmi(amiDeleteModal)}>
+            {t("t.delete")}
+          </Button>,
+          <Button
+            styleType={AppearanceStyleType.primary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setAmiDeleteModal(null)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.unitsSummary.deleteAmiConf")}
+      </Modal>
+    </>
   )
 }
 

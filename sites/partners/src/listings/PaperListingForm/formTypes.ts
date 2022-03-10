@@ -9,7 +9,8 @@ import {
   ListingEvent,
   PaperApplication,
   PaperApplicationCreate,
-  UnitsSummary,
+  UnitGroup,
+  UnitGroupAmiLevel,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -17,7 +18,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode"> & {
+export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -76,6 +77,8 @@ export type FormListing = Omit<Listing, "countyCode"> & {
   whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
+  unitGroups?: TempUnitsSummary[]
+  isVerified?: boolean
 }
 
 export const addressTypes = {
@@ -157,19 +160,7 @@ export const formDefaults: FormListing = {
   urlSlug: undefined,
   showWaitlist: false,
   reviewOrderType: null,
-  unitsSummary: [],
-  unitsSummarized: {
-    unitTypes: [],
-    priorityTypes: [],
-    amiPercentages: [],
-    byUnitTypeAndRent: [],
-    byUnitType: [],
-    byAMI: [],
-    hmi: {
-      columns: [],
-      rows: [],
-    },
-  },
+  unitGroups: [],
   isVerified: false,
 }
 
@@ -185,8 +176,14 @@ export type TempUnit = Unit & {
   maxIncomeHouseholdSize8?: string
 }
 
-export type TempUnitsSummary = UnitsSummary & {
+export type TempAmiLevel = UnitGroupAmiLevel & {
   tempId?: number
+}
+
+export interface TempUnitsSummary extends UnitGroup {
+  tempId?: number
+  amiLevels: TempAmiLevel[]
+  openWaitListQuestion?: string
 }
 
 export type TempEvent = ListingEvent & {
@@ -197,10 +194,11 @@ export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
 
 export type FormMetadata = {
   units: TempUnit[]
-  unitsSummaries: TempUnitsSummary[]
+  unitsSummaries?: TempUnitsSummary[]
   openHouseEvents: TempEvent[]
   profile: User
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
+  unitGroups: UnitGroup[]
   programs: Program[]
 }

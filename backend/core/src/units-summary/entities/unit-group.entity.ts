@@ -76,17 +76,17 @@ export class UnitGroup {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   floorMax?: number | null
 
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  sqFeetMin?: string | null
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  sqFeetMin?: number | null
 
-  @Column({ nullable: true, type: "numeric", precision: 8, scale: 2 })
+  @Column({ nullable: true, type: "integer" })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
-  sqFeetMax?: string | null
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  sqFeetMax?: number | null
 
   @ManyToOne(() => UnitAccessibilityPriorityType, { eager: true, nullable: true })
   @Expose()

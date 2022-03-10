@@ -5,6 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { UnitGroupAmiLevel } from "../../../units-summary/entities/unit-group-ami-level.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
 
 const propertySeed: PropertySeedType = {
@@ -75,14 +76,7 @@ export class Listing10136Seed extends ListingDefaultSeed {
       ...propertySeed,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        // NOTE: this is not an actual picture of the property.
-        fileId:
-          "https://images.unsplash.com/photo-1595330449916-e7c3e1962bd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1546&q=80",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
@@ -111,8 +105,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 2,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "500",
-        sqFeetMax: "550",
+        sqFeetMin: 500,
+        sqFeetMax: 550,
         openWaitlist: true,
         listing,
         totalAvailable: 2,
@@ -126,8 +120,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 3,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -140,8 +134,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 3,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: false,
         listing,
       },
@@ -154,8 +148,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 3,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -168,8 +162,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 6,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -182,8 +176,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: null,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -196,8 +190,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 2,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -210,8 +204,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 1,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -224,8 +218,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 3,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -238,8 +232,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: null,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },
@@ -252,8 +246,8 @@ export class Listing10136Seed extends ListingDefaultSeed {
         maxOccupancy: 7,
         bathroomMin: 1,
         bathroomMax: 1,
-        sqFeetMin: "600",
-        sqFeetMax: "600",
+        sqFeetMin: 600,
+        sqFeetMax: 600,
         openWaitlist: true,
         listing,
       },

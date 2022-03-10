@@ -54,11 +54,11 @@ export const accessibilityFeaturesExist = (listing: Listing) => {
 }
 
 export const getImageTagLabelFromListing = (listing: Listing) => {
-  return listing.isVerified ? t("listings.verified") : undefined
+  return listing?.isVerified ? t("listings.verified") : undefined
 }
 
 export const getImageTagIconFromListing = (listing: Listing): IconProps | null => {
-  if (listing.isVerified) {
+  if (listing?.isVerified) {
     const tagIconSymbol: IconTypes = "badgeCheck"
     const tagIconSize: IconSize = "medium"
     const tagIconFill = "#193154"

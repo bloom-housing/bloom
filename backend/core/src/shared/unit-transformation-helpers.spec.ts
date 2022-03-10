@@ -59,4 +59,16 @@ describe("Unit Transformation Helpers", () => {
     expect(testRange.min).toBe(1)
     expect(testRange.max).toBe(5)
   })
+
+  it("SetsMinMax returns range if value is null", () => {
+    let testRange: MinMax = {
+      min: 1,
+      max: 5,
+    }
+
+    testRange = setMinMax(testRange, null)
+
+    expect(testRange.min).toBe(1)
+    expect(testRange.max).toBe(5)
+  })
 })

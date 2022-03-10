@@ -30,15 +30,19 @@ export const occupancyTable = (listing: Listing) => {
     )
     .filter((unitGroup) => unitGroup.maxOccupancy || unitGroup.minOccupancy)
 
-  return sortedUnitGroups?.map((unitGroup) => {
-    const unitTypeString = getUnitTypeString(unitGroup.unitType)
-    const occupancyString = getOccupancyString(unitGroup.minOccupancy, unitGroup.maxOccupancy)
-    if (occupancyString) {
-      return {
-        unitType: unitTypeString,
-        occupancy: occupancyString,
+  const tableRows = sortedUnitGroups?.reduce<{ [key: string]: string | JSX.Element }[]>(
+    (acc, curr) => {
+      const unitTypeString = getUnitTypeString(curr.unitType)
+      const occupancyString = getOccupancyString(curr.minOccupancy, curr.maxOccupancy)
+      if (occupancyString) {
+        acc.push({
+          unitType: unitTypeString,
+          occupancy: occupancyString,
+        })
       }
-    }
-    return null
-  })
+      return acc
+    },
+    []
+  )
+  return tableRows
 }

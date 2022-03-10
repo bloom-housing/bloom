@@ -1,7 +1,9 @@
 import React, { useContext, useMemo } from "react"
-import { t, GridSection, MinimalTable, Button, ViewItem } from "@bloom-housing/ui-components"
+import { t, GridSection, MinimalTable } from "@bloom-housing/ui-components"
 import { ListingContext } from "../../ListingContext"
 import { UnitDrawer } from "../DetailsUnitDrawer"
+import { MinMax, MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
+import { minMaxFinder, formatRange, formatRentRange } from "@bloom-housing/shared-helpers"
 
 type DetailUnitsProps = {
   setUnitDrawer: (unit: UnitDrawer) => void
@@ -11,37 +13,53 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
   const listing = useContext(ListingContext)
 
   const unitTableHeaders = {
-    number: "listings.unit.number",
     unitType: "listings.unit.type",
-    amiPercentage: "listings.unit.ami",
-    monthlyRent: "listings.unit.rent",
-    sqFeet: "listings.unit.sqft",
-    priorityType: "listings.unit.priorityType",
-    status: "listings.unit.status",
+    units: "listings.unitsSummary.numUnits",
+    amiRange: "listings.unitsSummary.amiRange",
+    rentRange: "listings.unitsSummary.rentRange",
+    occupancyRange: "listings.unitsSummary.occupancyRange",
+    sqFeetRange: "listings.unitsSummary.sqftRange",
+    bathRange: "listings.unitsSummary.bathRange",
     action: "",
   }
 
   const unitTableData = useMemo(
     () =>
-      listing?.units.map((unit) => ({
-        number: unit.number,
-        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
-        amiPercentage: unit.amiPercentage,
-        monthlyRent: unit.monthlyRent,
-        sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType?.name,
-        status: t(`listings.unit.statusOptions.${unit.status}`),
-        action: (
-          <Button
-            type="button"
-            className="font-semibold uppercase"
-            onClick={() => setUnitDrawer(unit)}
-            unstyled
-          >
-            {t("t.view")}
-          </Button>
-        ),
-      })),
+      listing?.unitGroups.map((unit) => {
+        const types = unit.unitType.map((type) => {
+          return t(`listings.unitsSummary.${type.name}`)
+        })
+
+        let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
+        unit?.amiLevels?.forEach((ami) => {
+          if (ami.amiPercentage) {
+            amiRange = minMaxFinder(amiRange, ami.amiPercentage)
+          }
+          if (
+            ami.flatRentValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
+          ) {
+            rentRange = minMaxFinder(rentRange, ami.flatRentValue)
+          }
+          if (
+            ami.percentageOfIncomeValue &&
+            ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
+          ) {
+            percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
+          }
+        })
+
+        return {
+          unitType: types.join(", "),
+          units: unit.totalCount,
+          amiRange: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
+          rentRange: formatRentRange(rentRange, percentIncomeRange),
+          occupancyRange: formatRange(unit.minOccupancy, unit.maxOccupancy, "", ""),
+          sqFeetRange: formatRange(unit.sqFeetMin, unit.sqFeetMax, "", ""),
+          bathRange: formatRange(unit.bathroomMin, unit.bathroomMax, "", ""),
+          action: null,
+        }
+      }),
     [listing, setUnitDrawer]
   )
 
@@ -53,23 +71,10 @@ const DetailUnits = ({ setUnitDrawer }: DetailUnitsProps) => {
       tinted
       inset
     >
-      <ViewItem
-        id="unitTypesOrIndividual"
-        label={t("listings.unitTypesOrIndividual")}
-        children={
-          listing.disableUnitsAccordion
-            ? t("listings.unit.unitTypes")
-            : t("listings.unit.individualUnits")
-        }
-      />
-
-      {listing.units.length ? (
+      {listing.unitGroups.length ? (
         <MinimalTable id="unitTable" headers={unitTableHeaders} data={unitTableData} />
       ) : (
-        <>
-          <hr className={"mt-4 mb-4"} />
-          <span className="text-base font-semibold pt-4">{t("t.none")}</span>
-        </>
+        <span className="text-base font-semibold pt-4">{t("t.none")}</span>
       )}
     </GridSection>
   )

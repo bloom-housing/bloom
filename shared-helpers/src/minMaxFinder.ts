@@ -1,7 +1,6 @@
-import { MinMax } from "../units/types/min-max"
+import { MinMax } from "@bloom-housing/backend-core/types"
 
-export function setMinMax(range: MinMax, value: number): MinMax {
-  if (value === null) return range
+export function minMaxFinder(range: MinMax, value: number): MinMax {
   if (range === undefined) {
     return {
       min: value,

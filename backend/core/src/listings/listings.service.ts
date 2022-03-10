@@ -205,7 +205,7 @@ export class ListingsService {
     })
     listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
-      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: false }),
       property: plainToClass(
         PropertyUpdateDto,
         {

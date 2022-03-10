@@ -118,14 +118,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
 
   useEffect(() => {
-    if (listing?.units) {
-      const tempUnits = listing.units.map((unit, i) => ({
-        ...unit,
-        tempId: i + 1,
-      }))
-      setUnits(tempUnits)
-    }
-
     if (listing?.events) {
       setOpenHouseEvents(
         listing.events
@@ -141,27 +133,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       )
     }
 
-    // Use a temp id to track each summary within the form table (prior to submission).
-    if (listing?.unitsSummary) {
-      const tempSummaries = listing.unitsSummary.map((summary, i) => ({
-        ...summary,
-        tempId: i + 1,
-      }))
-      setUnitsSummaries(tempSummaries)
-    }
-
     if (listing?.isVerified === false) {
       setVerifyAlert(true)
     }
-  }, [
-    listing?.units,
-    listing?.events,
-    listing?.unitsSummary,
-    listing?.isVerified,
-    setUnits,
-    setUnitsSummaries,
-    setOpenHouseEvents,
-  ])
+  }, [listing?.events, listing?.isVerified])
+
+  useEffect(() => {
+    if (listing?.unitGroups && !unitsSummaries.length) {
+      const tempSummaries = listing.unitGroups.map((summary, i) => ({
+        ...summary,
+        tempId: i + 1,
+        amiLevels: summary?.amiLevels?.map((elem, index) => ({ ...elem, tempId: index + 1 })),
+      }))
+      setUnitsSummaries(tempSummaries)
+    }
+  }, [])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
@@ -179,7 +165,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
       return
     }
-    let formData = { ...defaultValues, ...getValues(), ...(newData || {}) }
+    let formData = {
+      ...defaultValues,
+      ...getValues(),
+      ...(newData || {}),
+    }
     if (status) {
       formData = { ...formData, status }
     }
@@ -195,7 +185,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
           const dataPipeline = new ListingDataPipeline(formData, {
             units,
-            unitsSummaries,
+            unitGroups: unitsSummaries,
             openHouseEvents,
             profile,
             latLong,
