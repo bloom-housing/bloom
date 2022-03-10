@@ -9,7 +9,6 @@ import {
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
-import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -109,14 +108,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         flex: 1,
-        valueFormatter: ({ value }) => (value ? dayjs(value).format("MM/DD/YYYY") : t("t.none")),
-      },
-      {
-        headerName: t("listings.availableUnits"),
-        field: "unitsAvailable",
-        sortable: false,
-        filter: false,
-        resizable: true,
+        valueFormatter: ({ value }) => (value ? value : t("t.none")),
       },
       {
         headerName: t("listings.waitlist.open"),
