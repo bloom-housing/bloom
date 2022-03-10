@@ -1,5 +1,14 @@
 @import "../global/mixins.scss";
 
+.description__container {
+  @apply w-full;
+  @apply flex;
+  @apply flex-col;
+  @screen md {
+    @apply flex-row;
+  }
+}
+
 // Description
 .description__title {
   @apply font-serif;
@@ -23,13 +32,14 @@
     @apply text-gray-800;
     @apply mb-3;
     clear: left;
+    width: 160px;
+    min-width: 160px;
 
     @screen md {
       @apply pl-4;
       @apply border-l-2;
       @apply border-gray-450;
       @apply float-left;
-      @apply w-1/3;
       @apply pr-3;
       margin-top: 0.15rem;
     }
@@ -38,11 +48,12 @@
   .description__body {
     @apply text-tiny;
     @apply mb-5;
+    @apply ml-2;
 
     @screen md {
       @apply mb-0;
       @apply float-left;
-      @apply w-2/3;
+      @apply w-full;
     }
 
     ul {

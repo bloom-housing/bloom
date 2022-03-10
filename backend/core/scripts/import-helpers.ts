@@ -209,12 +209,12 @@ export async function importListing(
     unitsCreate.push({ ...unit, priorityType: priorityType, unitType: unitType })
   })
   const unitGroupsCreate: UnitGroupCreate[] = []
-  if (listing.unitsSummary) {
+  /* if (listing.unitsSummary) {
     listing.unitsSummary.forEach((summary) => {
       // const unitType = findByName(unitTypes, summary.unitType)
       // unitGroupsCreate.push({ ...summary })
     })
-  }
+  } */
 
   let jurisdiction: client.Jurisdiction = null
   if (listing.jurisdictionName) {

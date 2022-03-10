@@ -3,8 +3,8 @@ import * as React from "react"
 import { UnitTables } from "./UnitTables"
 import { StandardTable } from "../../tables/StandardTable"
 import Archer from "../../../__tests__/fixtures/archer.json"
-import { unitSummariesTable } from "../../helpers/tableSummaries"
-import { UnitSummary, UnitType } from "@bloom-housing/backend-core/types"
+// import { unitSummariesTable } from "../../helpers/tableSummaries"
+import { UnitGroupSummary, UnitType } from "@bloom-housing/backend-core/types"
 
 export default {
   title: "Listing/Unit Summary Tables",
@@ -14,15 +14,17 @@ const archer = Object.assign({}, Archer) as any
 
 // copied from listings service output
 const summaries: {
-  byUnitType: UnitSummary[]
-  byUnitTypeWithoutFloor: UnitSummary[]
+  byUnitType: UnitGroupSummary[]
+  byUnitTypeWithoutFloor: UnitGroupSummary[]
   amiPercentages: string[]
   [key: string]: any
 } = {
   unitTypes: ["studio"],
   priorityTypes: [],
   amiPercentages: ["45.0", "30.0"],
-  byUnitType: [
+  byUnitType: [],
+  byUnitTypeWithoutFloor: [],
+  /* byUnitType: [
     {
       unitType: { name: "studio", numBedrooms: 1 } as UnitType,
       totalAvailable: 0,
@@ -34,8 +36,8 @@ const summaries: {
       floorRange: { min: 2, max: 3 },
       areaRange: { min: 285, max: 285 },
     },
-  ],
-  byUnitTypeWithoutFloor: [
+  ], */
+  /* byUnitTypeWithoutFloor: [
     {
       unitType: { name: "studio", numBedrooms: 1 } as UnitType,
       totalAvailable: 0,
@@ -46,7 +48,7 @@ const summaries: {
       rentRange: { min: "$719", max: "$1,104" },
       areaRange: { min: 285, max: 285 },
     },
-  ],
+  ], */
   byAMI: [
     {
       percent: "45.0",
@@ -126,8 +128,8 @@ export const unitsSummaries = () => {
         const byAMI = summaries.byAMI.find((item: { percent: string }) => {
           return parseInt(item.percent, 10) == percent
         })
-
-        return (
+        return null
+        /* return (
           <div key={index}>
             <h2 className="mt-4 mb-2">{percent}% AMI Unit</h2>
             <StandardTable
@@ -136,7 +138,7 @@ export const unitsSummaries = () => {
               responsiveCollapse={true}
             />
           </div>
-        )
+        ) */
       })}
     </div>
   )

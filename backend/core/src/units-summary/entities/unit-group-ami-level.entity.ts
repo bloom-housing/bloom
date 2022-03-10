@@ -48,6 +48,6 @@ export class UnitGroupAmiLevel {
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   percentageOfIncomeValue?: number | null
 }

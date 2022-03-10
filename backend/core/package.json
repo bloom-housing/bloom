@@ -39,6 +39,7 @@
     "heroku-postbuild": "rimraf dist && nest build && yarn run db:migration:run",
     "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w types/src/backend-swagger.ts",
     "migrator": "ts-node migrator.ts",
+    "import:unit-groups": "ts-node ./scripts/import-unit-groups.ts",
     "import:listings": "ts-node scripts/import-listings-basic.ts"
   },
   "dependencies": {

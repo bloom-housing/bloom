@@ -98,6 +98,10 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const listing = await this.listingRepository.save(listingCreateDto)
 
+    const detroitJurisdiction = await this.jurisdictionRepository.findOneOrFail({
+      name: CountyCode.detroit,
+    })
+
     const unitGroups: Omit<UnitGroup, "id">[] = [
       {
         amiLevels: [],
@@ -112,10 +116,39 @@ export class Listing10136Seed extends ListingDefaultSeed {
         sqFeetMax: 550,
         openWaitlist: true,
         listing,
+        totalAvailable: 2,
       },
       {
         amiLevels: [],
         unitType: [unitTypeOneBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: 600,
+        sqFeetMax: 600,
+        openWaitlist: true,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeThreeBdrm],
+        floorMin: 1,
+        floorMax: 5,
+        minOccupancy: 1,
+        maxOccupancy: 3,
+        bathroomMin: 1,
+        bathroomMax: 1,
+        sqFeetMin: 600,
+        sqFeetMax: 600,
+        openWaitlist: false,
+        listing,
+      },
+      {
+        amiLevels: [],
+        unitType: [unitTypeFourBdrm],
         floorMin: 1,
         floorMax: 5,
         minOccupancy: 1,
@@ -229,24 +262,86 @@ export class Listing10136Seed extends ListingDefaultSeed {
 
     const savedUnitGroups = await this.unitGroupRepository.save(unitGroups)
 
-    const amiLevels: Omit<UnitGroupAmiLevel, "id">[] = [
-      {
-        amiChartId: "1234",
-        amiPercentage: 30,
-        monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
-        flatRentValue: 2500,
-        unitGroup: savedUnitGroups[0],
-      },
-      {
-        amiChartId: "1234",
-        amiPercentage: 40,
-        monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
-        flatRentValue: 30,
-        unitGroup: savedUnitGroups[1],
-      },
-    ]
+    const MSHDA = await this.amiChartRepository.findOneOrFail({
+      name: "MSHDA 2021",
+      jurisdiction: detroitJurisdiction,
+    })
+    const HUD = await this.amiChartRepository.findOneOrFail({
+      name: "HUD 2021",
+      jurisdiction: detroitJurisdiction,
+    })
 
-    await this.unitGroupAmiLevelRepository.save(amiLevels)
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[0],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 30,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 2500,
+          unitGroup: savedUnitGroups[0],
+        },
+        {
+          amiChart: HUD,
+          amiChartId: HUD.id,
+          amiPercentage: 40,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 30,
+          unitGroup: savedUnitGroups[0],
+        },
+      ],
+    })
+
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[1],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 30,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 2500,
+          unitGroup: savedUnitGroups[1],
+        },
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 40,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 30,
+          unitGroup: savedUnitGroups[1],
+        },
+      ],
+    })
+
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[2],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 55,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.flatRent,
+          flatRentValue: 1200,
+          unitGroup: savedUnitGroups[2],
+        },
+      ],
+    })
+
+    await this.unitGroupRepository.save({
+      ...savedUnitGroups[3],
+      amiLevels: [
+        {
+          amiChart: MSHDA,
+          amiChartId: MSHDA.id,
+          amiPercentage: 55,
+          monthlyRentDeterminationType: MonthlyRentDeterminationType.percentageOfIncome,
+          percentageOfIncomeValue: 25,
+          unitGroup: savedUnitGroups[3],
+        },
+      ],
+    })
 
     return listing
   }

@@ -34,7 +34,7 @@ interface UnitTablesProps {
 }
 
 const UnitTables = (props: UnitTablesProps) => {
-  const unitSummaries = props.unitSummaries || []
+  /* const unitSummaries = props.unitSummaries || []
 
   const unitsHeaders = {
     number: "t.unit",
@@ -47,21 +47,29 @@ const UnitTables = (props: UnitTablesProps) => {
     if (!props.disableAccordion) {
       event.currentTarget.parentElement?.querySelector(".unit-table")?.classList?.toggle("hidden")
     }
-  }
+  } */
 
   const buttonClasses = ["w-full", "text-left"]
   if (props.disableAccordion) buttonClasses.push("cursor-default")
-
-  return (
+  return null
+  /* return (
     <>
-      {unitSummaries.map((unitSummary: UnitGroupSummary) => {
+      {unitSummaries.map((group: UnitGroupSummary) => {
         const uniqKey = process.env.NODE_ENV === "test" ? "" : nanoid()
-        const units: Unit[] = []
-        const unitsFormatted = [] as Array<Record<string, React.ReactNode>>
+        const units = group.unitTypes || []
+
+        const formatted: Record<string, React.ReactNode> = {
+          sqFeet: (
+            <>
+              <strong>{group.}</strong> {t("t.sqFeet")}
+            </>
+          ),
+          numBathrooms: <strong>{unit.numBathrooms}</strong>,
+          floor: <strong>{unit.floor}</strong>,
+        }
         let floorSection
-        units.forEach((unit: Unit) => {
+        units.forEach((unit: string) => {
           unitsFormatted.push({
-            number: unit.number,
             sqFeet: (
               <>
                 <strong>{unit.sqFeet}</strong> {t("t.sqFeet")}
@@ -90,7 +98,7 @@ const UnitTables = (props: UnitTablesProps) => {
           <div key={uniqKey} className="mb-4">
             <button onClick={toggleTable} className={buttonClasses.join(" ")}>
               <h3 className="toggle-header">
-                {/* <strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp; */}
+                {<strong>{t("listings.unitTypes." + unitSummary.unitType.name)}</strong>:&nbsp;}
                 {unitsLabel(units)}
                 {areaRangeSection}
                 {floorSection}
@@ -103,7 +111,7 @@ const UnitTables = (props: UnitTablesProps) => {
         )
       })}
     </>
-  )
+  ) */
 }
 
 export { UnitTables as default, UnitTables }
