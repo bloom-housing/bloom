@@ -155,7 +155,9 @@ const UnitsSummaryForm = ({
       unitPriorities: arrayToFormOptions<UnitAccessibilityPriorityType>(
         unitPriorities,
         "name",
-        "id"
+        "id",
+        undefined,
+        true
       ),
       amiCharts: arrayToFormOptions<AmiChart>(amis, "name", "id", undefined, true),
     })
@@ -321,7 +323,6 @@ const UnitsSummaryForm = ({
                   <Select
                     id="minOccupancy"
                     name="minOccupancy"
-                    placeholder={t("t.selectOne")}
                     label={t("listings.unit.minOccupancy")}
                     labelClassName="sr-only"
                     register={register}
@@ -336,7 +337,6 @@ const UnitsSummaryForm = ({
                     id="maxOccupancy"
                     name="maxOccupancy"
                     label={t("listings.unit.maxOccupancy")}
-                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -380,7 +380,6 @@ const UnitsSummaryForm = ({
                     id="floorMin"
                     name="floorMin"
                     label={t("listings.unitsSummary.floorMin")}
-                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -394,7 +393,6 @@ const UnitsSummaryForm = ({
                     id="floorMax"
                     name="floorMax"
                     label={t("listings.unitsSummary.floorMax")}
-                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -410,7 +408,6 @@ const UnitsSummaryForm = ({
                     id="bathroomMin"
                     name="bathroomMin"
                     label={t("listings.unitsSummary.bathroomsMin")}
-                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -424,7 +421,6 @@ const UnitsSummaryForm = ({
                     id="bathroomMax"
                     name="bathroomMax"
                     label={t("listings.unitsSummary.bathroomsMax")}
-                    placeholder={t("t.selectOne")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -497,7 +493,6 @@ const UnitsSummaryForm = ({
                   id="priorityType.id"
                   name="priorityType.id"
                   label={t("listings.unit.accessibilityPriorityType")}
-                  placeholder={t("t.selectOne")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
