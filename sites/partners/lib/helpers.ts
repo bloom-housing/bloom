@@ -145,7 +145,7 @@ export function arrayToFormOptions<T>(
   label: string,
   value: string,
   translateLabel?: string,
-  addEmpty: boolean = false
+  addEmpty = false
 ): FormOption[] {
   const options = arr.map((val: T) => ({
     label: translateLabel ? t(`${translateLabel}.${val[label]}`) : val[label],
