@@ -54,16 +54,14 @@ export const accessibilityFeaturesExist = (listing: Listing) => {
 }
 
 export const getImageTagLabelFromListing = (listing: Listing) => {
-  return accessibilityFeaturesExist(listing)
-    ? t(`listings.reservedCommunityTypes.specialNeeds`)
-    : undefined
+  return listing.isVerified ? t("listings.verified") : undefined
 }
 
 export const getImageTagIconFromListing = (listing: Listing): IconProps | null => {
-  if (accessibilityFeaturesExist(listing)) {
-    const tagIconSymbol: IconTypes = "universalAccess"
+  if (listing.isVerified) {
+    const tagIconSymbol: IconTypes = "badgeCheck"
     const tagIconSize: IconSize = "medium"
-    const tagIconFill = "#000000"
+    const tagIconFill = "#193154"
     return {
       symbol: tagIconSymbol,
       size: tagIconSize,

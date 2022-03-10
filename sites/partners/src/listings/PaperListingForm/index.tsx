@@ -47,7 +47,7 @@ import ApplicationAddress from "./sections/ApplicationAddress"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
 import SelectAndOrder from "./sections/SelectAndOrder"
-import CommunityType from "./sections/CommunityType"
+import Verification from "./sections/Verification"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
 import { useJurisdictionalProgramList } from "../../../lib/hooks"
@@ -75,6 +75,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [unitsSummaries, setUnitsSummaries] = useState<TempUnitsSummary[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
+  const [verifyAlert, setVerifyAlert] = useState<boolean>(false)
 
   const [programs, setPrograms] = useState<Program[]>(
     listing?.listingPrograms.map((program) => {
@@ -148,10 +149,15 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }))
       setUnitsSummaries(tempSummaries)
     }
+
+    if (listing.isVerified === false) {
+      setVerifyAlert(true)
+    }
   }, [
     listing?.units,
     listing?.events,
     listing?.unitsSummary,
+    listing?.isVerified,
     setUnits,
     setUnitsSummaries,
     setOpenHouseEvents,
@@ -323,6 +329,30 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     {alert === "form" ? t("listings.fieldError") : t("errors.alert.badRequest")}
                   </AlertBox>
                 )}
+                {verifyAlert && (
+                  <AlertBox
+                    className="mb-5 bg-blue-300"
+                    onClose={() => setVerifyAlert(false)}
+                    closeable
+                    type="alert"
+                  >
+                    <span className="text-sm font-normal">
+                      Let us know that the listing data is accurate and up to date.{" "}
+                      <a
+                        className="decoration-blue-700 underline"
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          document
+                            .getElementById("isVerifiedContainer")
+                            .scrollIntoView({ behavior: "smooth" })
+                        }}
+                      >
+                        Verify your listing data.
+                      </a>
+                    </span>
+                  </AlertBox>
+                )}
 
                 <Form id="listing-form">
                   <div className="flex flex-row flex-wrap">
@@ -383,6 +413,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                           <AdditionalEligibility />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
+                          <Verification setAlert={setVerifyAlert} />
 
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button

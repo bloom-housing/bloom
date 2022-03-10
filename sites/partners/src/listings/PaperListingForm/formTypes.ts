@@ -170,6 +170,7 @@ export const formDefaults: FormListing = {
       rows: [],
     },
   },
+  isVerified: false,
 }
 
 export type TempUnit = Unit & {
