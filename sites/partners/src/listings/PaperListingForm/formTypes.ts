@@ -18,7 +18,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode"> & {
+export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -160,14 +160,6 @@ export const formDefaults: FormListing = {
   showWaitlist: false,
   reviewOrderType: null,
   unitGroups: [],
-  unitSummaries: {
-    unitGroupSummary: [],
-    unitTypeSummary: [],
-    householdMaxIncomeSummary: {
-      columns: [],
-      rows: [],
-    },
-  },
 }
 
 export type TempUnit = Unit & {

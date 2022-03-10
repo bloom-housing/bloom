@@ -35,7 +35,6 @@ export default class UnitGroupFormatter extends Formatter {
       unit.sqFeetMin = stringToNumberOrOne(unit.sqFeetMin)
       unit.sqFeetMax = stringToNumberOrOne(unit.sqFeetMax)
 
-      console.log("38:", unit)
       return unit
     })
   }
