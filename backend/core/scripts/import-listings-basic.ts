@@ -7,9 +7,14 @@ import dbOptions = require("../ormconfig")
 import { Program } from "../src/program/entities/program.entity"
 import { AddressCreateDto } from "../src/shared/dto/address.dto"
 
-// TODO where are multiple yearbuilt values that are string in format number/number
+var MapboxClient = require('mapbox');
 
+if (!process.env["MAPBOX_TOKEN"]) {
+  throw new Error("environment variable MAPBOX_TOKEN is undefined")
+}
 const args = process.argv.slice(2)
+
+const client = new MapboxClient(process.env["MAPBOX_TOKEN"])
 
 const filePath = args[0]
 if (typeof filePath !== "string" && !fs.existsSync(filePath)) {
@@ -59,6 +64,7 @@ export class HeaderConstants {
   public static readonly RequiredDocuments: string = "Required Documents"
   public static readonly ImportantProgramRules: string = "Important Program Rules"
   public static readonly SpecialNotes: string = "Special Notes"
+
 }
 
 async function fetchDetroitJurisdiction(connection: Connection): Promise<Jurisdiction> {
@@ -98,24 +104,28 @@ function destructureYearBuilt(yearBuilt: string): number {
   }
 
   if (yearBuilt.includes("/")) {
-    const [year1, _] = yearBuilt.split("/")
-    return Number.parseInt(year1)
+    const [year1, year2] = yearBuilt.split("/")
+    return Number.parseInt(year2)
   }
 
   return Number.parseInt(yearBuilt)
 }
 
-function destructureAddressString(addressString: string): AddressCreateDto {
+async function destructureAddressString(addressString: string): Promise<AddressCreateDto> {
   if (!addressString) {
-    return {
-      street: undefined,
-      city: undefined,
-      state: undefined,
-      zipCode: undefined,
-    }
+    return null
   }
 
   const tokens = addressString.split(",").map((addressString) => addressString.trim())
+
+  let latitude
+  let longitude
+
+  const res = await client.geocodeForward(addressString)
+  if (res.entity?.features?.length) {
+    latitude = res.entity.features[0].center[0]
+    longitude = res.entity.features[0].center[1]
+  }
 
   if (tokens.length === 1) {
     return {
@@ -123,6 +133,8 @@ function destructureAddressString(addressString: string): AddressCreateDto {
       city: undefined,
       state: undefined,
       zipCode: undefined,
+      latitude,
+      longitude
     }
   }
 
@@ -133,6 +145,8 @@ function destructureAddressString(addressString: string): AddressCreateDto {
     city: tokens[1],
     state,
     zipCode,
+    latitude,
+    longitude
   }
 }
 
@@ -165,7 +179,6 @@ async function main() {
           temporaryListingId: row[HeaderConstants.TemporaryId],
           assets: [],
           name: row[HeaderConstants.Name],
-          // TODO should displayWaitlistSize be false?
           displayWaitlistSize: false,
           property: {
             developer: row[HeaderConstants.Developer],
@@ -193,7 +206,7 @@ async function main() {
           leasingAgentEmail: row[HeaderConstants.LeasingAgentEmail],
           leasingAgentPhone: row[HeaderConstants.LeasingAgentPhone],
           managementWebsite: row[HeaderConstants.ManagementWebsite],
-          leasingAgentAddress: destructureAddressString(row[HeaderConstants.LeasingAgentAddress]),
+          leasingAgentAddress: await destructureAddressString(row[HeaderConstants.LeasingAgentAddress]),
           applicationFee: row[HeaderConstants.ApplicationFee],
           depositMin: row[HeaderConstants.DepositMin],
           depositMax: row[HeaderConstants.DepositMax],

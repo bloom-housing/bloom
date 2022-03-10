@@ -27,10 +27,11 @@ export class UnitGroupAmiLevel {
   @ManyToOne(() => UnitGroup, (unitGroup: UnitGroup) => unitGroup.amiLevels)
   unitGroup: UnitGroup
 
-  @Column({ type: "integer", nullable: false })
+  @Column({ type: "integer", nullable: true })
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
-  amiPercentage: number
+  amiPercentage: number | null
 
   @Column({ type: "enum", enum: MonthlyRentDeterminationType, nullable: false })
   @Expose()
