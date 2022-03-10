@@ -251,4 +251,7 @@ export const listingFeatures = {
   grabBars: "Grab Bars",
   heatingInUnit: "Heating in Unit",
   acInUnit: "AC in Unit",
+  hearing: "Hearing",
+  mobility: "Mobility",
+  visual: "Visual",
 }

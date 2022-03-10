@@ -41,7 +41,7 @@ const BuildingFeatures = (props: BuildingFeaturesProps) => {
             maxLength={600}
           />
           <Textarea
-            label={t("t.accessibility")}
+            label={t("t.additionalAccessibility")}
             name={"accessibility"}
             id={"accessibility"}
             fullWidth={true}

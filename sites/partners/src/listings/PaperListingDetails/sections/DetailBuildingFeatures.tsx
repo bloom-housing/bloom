@@ -43,7 +43,7 @@ const DetailBuildingFeatures = () => {
       </GridSection>
       <GridSection columns={1}>
         <GridCell>
-          <ViewItem id="accessibility" label={t("t.accessibility")}>
+          <ViewItem id="accessibility" label={t("t.additionalAccessibility")}>
             {getDetailFieldString(listing.accessibility)}
           </ViewItem>
         </GridCell>
