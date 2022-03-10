@@ -114,11 +114,12 @@ export const getHouseholdMaxIncomeSummary = (
     })
   })
 
-  // add additional columns from amiPercentages
-  for (const percentage of amiPercentages) {
-    // preface with percentage to keep insertion order
-    columns[`percentage${percentage}`] = percentage
-  }
+  Array.from(amiPercentages)
+    .sort()
+    .forEach((percentage) => {
+      // preface with percentage to keep insertion order
+      columns[`percentage${percentage}`] = percentage
+    })
 
   const hmiMap = {}
 

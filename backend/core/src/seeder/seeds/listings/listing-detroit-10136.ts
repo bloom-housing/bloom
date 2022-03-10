@@ -76,14 +76,7 @@ export class Listing10136Seed extends ListingDefaultSeed {
       ...propertySeed,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        // NOTE: this is not an actual picture of the property.
-        fileId:
-          "https://images.unsplash.com/photo-1595330449916-e7c3e1962bd3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1546&q=80",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,
