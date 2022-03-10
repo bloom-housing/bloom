@@ -134,7 +134,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     }
 
     // Use a temp id to track each summary within the form table (prior to submission).
-    if (listing?.unitGroups) {
+    if (listing?.unitGroups && !unitsSummaries.length) {
       const tempSummaries = listing.unitGroups.map((summary, i) => ({
         ...summary,
         tempId: i + 1,
@@ -146,15 +146,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     if (listing?.isVerified === false) {
       setVerifyAlert(true)
     }
-  }, [
-    listing?.units,
-    listing?.events,
-    listing?.unitGroups,
-    listing?.isVerified,
-    setUnits,
-    setUnitsSummaries,
-    setOpenHouseEvents,
-  ])
+  }, [listing.events, listing.unitGroups, listing?.isVerified, unitsSummaries.length])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods

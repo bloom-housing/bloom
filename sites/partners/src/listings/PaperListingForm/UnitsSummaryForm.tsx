@@ -58,6 +58,7 @@ const UnitsSummaryForm = ({
     amiCharts: [],
   })
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { watch } = useFormContext()
   const jurisdiction: string = watch("jurisdiction.id")
 
@@ -92,6 +93,7 @@ const UnitsSummaryForm = ({
     setCurrent(summary)
     reset({
       ...summary,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore:next-line
       unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
       openWaitListQuestion: summary?.openWaitlist?.toString(),

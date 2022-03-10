@@ -95,7 +95,7 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
   const unitsSummaryTableData = useMemo(
     () =>
       unitsSummaries?.map((summary) => {
-        let types = unitTypeOptions.filter((option) =>
+        const types = unitTypeOptions.filter((option) =>
           summary.unitType.some((type) => option.id === type.toString() || option.id === type.id)
         )
         let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
