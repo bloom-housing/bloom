@@ -134,8 +134,7 @@ const UnitsSummaryAmiForm = ({
               <Select
                 id="amiChartId"
                 name="amiChartId"
-                label={t("listings.unitsSummary.amiChart")}
-                placeholder={t("t.selectOne")}
+                label={t("t.selectOne")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
@@ -155,8 +154,7 @@ const UnitsSummaryAmiForm = ({
               <Select
                 id="amiPercentage"
                 name="amiPercentage"
-                label={t("listings.unitsSummary.percentageOfAmi")}
-                placeholder={t("t.selectOne")}
+                label={t("t.selectOne")}
                 labelClassName="sr-only"
                 register={register}
                 controlClassName="control"
