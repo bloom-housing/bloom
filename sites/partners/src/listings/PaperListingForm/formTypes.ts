@@ -77,7 +77,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
   whereApplicationsDroppedOff?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
-  unitGroups?: UnitGroup[]
+  unitGroups?: TempUnitsSummary[]
   isVerified?: boolean
 }
 
@@ -183,6 +183,7 @@ export type TempAmiLevel = UnitGroupAmiLevel & {
 export interface TempUnitsSummary extends UnitGroup {
   tempId?: number
   amiLevels: TempAmiLevel[]
+  openWaitListQuestion?: string
 }
 
 export type TempEvent = ListingEvent & {

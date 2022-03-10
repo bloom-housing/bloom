@@ -94,6 +94,7 @@ const UnitsSummaryForm = ({
       ...summary,
       // @ts-ignore:next-line
       unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
+      openWaitListQuestion: summary?.openWaitlist?.toString(),
     })
   }, [summaries, reset, currentTempId, setCurrent])
 
@@ -247,14 +248,14 @@ const UnitsSummaryForm = ({
 
   const openWaitlistOptions = [
     {
-      id: "open",
+      id: "true",
       label: t("listings.unitsSummary.open"),
-      value: "open",
+      value: "true",
     },
     {
-      id: "closed",
+      id: "false",
       label: t("listings.unitsSummary.closed"),
-      value: "closed",
+      value: "false",
       defaultChecked: true,
     },
   ]
@@ -450,7 +451,7 @@ const UnitsSummaryForm = ({
             <GridCell span={1}>
               <ViewItem label={t("listings.unitsSummary.openWaitlist")}>
                 <FieldGroup
-                  name="openWaitlist"
+                  name="openWaitListQuestion"
                   type="radio"
                   register={register}
                   fields={openWaitlistOptions}
@@ -465,7 +466,7 @@ const UnitsSummaryForm = ({
           <GridSection title={t("listings.unit.eligibility")} columns={1} separator>
             <GridCell>
               <div className="bg-gray-300 px-4 py-5">
-                {current?.amiLevels && (
+                {current?.amiLevels?.length ? (
                   <div className={"mb-5"}>
                     <MinimalTable
                       headers={amiSummariesHeaders}
@@ -473,7 +474,7 @@ const UnitsSummaryForm = ({
                       responsiveCollapse={true}
                     />
                   </div>
-                )}
+                ) : null}
                 <Button
                   type="button"
                   size={AppearanceSizeType.normal}

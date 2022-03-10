@@ -1,10 +1,11 @@
 import Formatter from "./Formatter"
 import { stringToBoolean, toNumberOrNull } from "../../../../lib/helpers"
+import { TempUnitsSummary } from "../formTypes"
 
 export default class UnitGroupFormatter extends Formatter {
   /** Format the values within the units array */
   process() {
-    this.data.unitGroups = this.metadata.unitGroups.map((unitGroup) => {
+    this.data.unitGroups = this.metadata.unitGroups.map((unitGroup: TempUnitsSummary) => {
       const unit = { ...unitGroup }
 
       unit.unitType = unit.unitType.map((type) => ({
@@ -24,7 +25,7 @@ export default class UnitGroupFormatter extends Formatter {
           amiChartId: ami.amiChartId ?? "",
         })) || []
 
-      unit.openWaitlist = stringToBoolean(unit.openWaitlist)
+      unit.openWaitlist = stringToBoolean(unit.openWaitListQuestion)
       unit.maxOccupancy = toNumberOrNull(unit.maxOccupancy)
       unit.minOccupancy = toNumberOrNull(unit.minOccupancy)
       unit.bathroomMin = toNumberOrNull(unit.bathroomMin)
