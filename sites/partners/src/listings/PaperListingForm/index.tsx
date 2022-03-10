@@ -150,7 +150,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       setUnitsSummaries(tempSummaries)
     }
 
-    if (listing.isVerified === false) {
+    if (listing?.isVerified === false) {
       setVerifyAlert(true)
     }
   }, [

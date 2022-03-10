@@ -468,24 +468,21 @@ export const ListingView = (props: ListingProps) => {
                     markdown={useMarkdownForUnitAmenities}
                   />
                 )}
-                <Description
-                  term={t("t.accessibility")}
-                  description={
-                    accessibilityFeatures
-                      ? accessibilityFeatures
-                      : listing.accessibility ?? t("t.contactPropertyManagement")
-                  }
-                />
                 {listing.servicesOffered && (
                   <Description
                     term={t("t.servicesOffered")}
                     description={listing.servicesOffered}
                   />
                 )}
-                <Description
-                  term={t("t.accessibility")}
-                  description={listing.accessibility || t("t.contactPropertyManagement")}
-                />
+                {accessibilityFeatures && (
+                  <Description term={t("t.accessibility")} description={accessibilityFeatures} />
+                )}
+                {listing.accessibility && (
+                  <Description
+                    term={t("t.additionalAccessibility")}
+                    description={listing.accessibility}
+                  />
+                )}
                 {/* <Description
                   term={t("t.unitFeatures")}
                   description={
