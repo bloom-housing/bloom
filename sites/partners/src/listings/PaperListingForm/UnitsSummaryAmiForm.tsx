@@ -59,12 +59,15 @@ const UnitsSummaryAmiForm = ({
       const chart = amiInfo.find((ami) => ami.id === chartId)
       if (chart) {
         setAmiPercentageOptions(
-          chart.items.reduce((accum, item) => {
-            if (!accum.some((percentage) => percentage.value === `${item.percentOfAmi}`)) {
-              accum.push({ value: `${item.percentOfAmi}`, label: `${item.percentOfAmi}` })
-            }
-            return accum
-          }, [] as SelectOption[])
+          chart.items.reduce(
+            (accum, item) => {
+              if (!accum.some((percentage) => percentage.value === `${item.percentOfAmi}`)) {
+                accum.push({ value: `${item.percentOfAmi}`, label: `${item.percentOfAmi}` })
+              }
+              return accum
+            },
+            [{ label: "", value: "" }] as SelectOption[]
+          )
         )
       }
     },

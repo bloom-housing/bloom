@@ -144,12 +144,18 @@ export function arrayToFormOptions<T>(
   arr: T[],
   label: string,
   value: string,
-  translateLabel?: string
+  translateLabel?: string,
+  addEmpty: boolean = false
 ): FormOption[] {
-  return arr.map((val: T) => ({
+  const options = arr.map((val: T) => ({
     label: translateLabel ? t(`${translateLabel}.${val[label]}`) : val[label],
     value: val[value],
   }))
+  if (addEmpty) {
+    options.unshift({ label: "", value: "" })
+  }
+
+  return options
 }
 
 /**

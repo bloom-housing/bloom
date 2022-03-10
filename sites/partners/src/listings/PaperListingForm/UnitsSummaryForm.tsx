@@ -157,7 +157,7 @@ const UnitsSummaryForm = ({
         "name",
         "id"
       ),
-      amiCharts: arrayToFormOptions<AmiChart>(amis, "name", "id"),
+      amiCharts: arrayToFormOptions<AmiChart>(amis, "name", "id", undefined, true),
     })
   }, [unitPriorities, amis])
 
@@ -326,7 +326,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(8, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
@@ -340,7 +340,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(8, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
@@ -384,7 +384,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(10, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
@@ -398,7 +398,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(10, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
@@ -414,7 +414,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(10, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
@@ -428,7 +428,7 @@ const UnitsSummaryForm = ({
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
-                    options={numberOptions(10)}
+                    options={numberOptions(10, 1, true)}
                   />
                 </ViewItem>
               </GridCell>
