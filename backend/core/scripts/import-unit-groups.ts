@@ -100,15 +100,19 @@ function getAmiValueFromColumn(row, amiPercentage: number, type: "percentage" | 
   }
   const value = row[mapAmiPercentageToColumnName[amiPercentage]]
 
+
   if (value) {
-    const splitValues = value.split("/")
+    // This is case where $ is added by google spreadsheet because it's a single non % value
+    if (type === "flat" && value.includes('$')) {
+      return Number.parseInt(value.replace(/\$/, "").replace(/,/, ""))
+    }
+
+    const splitValues = value.split(",")
 
     if (splitValues.length === 1) {
-      return parseAmiStringValue(value)
+      return Number.parseInt(value)
     } else if (splitValues.length === 2) {
-      return type === "flat"
-        ? parseAmiStringValue(splitValues[0])
-        : parseAmiStringValue(splitValues[1])
+      return type === "flat" ? Number.parseInt(splitValues[0]) : Number.parseInt(splitValues[1])
     }
 
     throw new Error("This part should not be reached")
@@ -145,7 +149,8 @@ function generateUnitsSummaryAmiLevels(
     for (const amiPercentage of amiPercentages) {
       amiChartLevels.push({
         amiChart: amiChartEntity,
-        amiPercentage:
+        amiPercentage,
+        percentageOfIncomeValue:
           monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
             ? getAmiValueFromColumn(row, amiPercentage, "percentage")
             : null,

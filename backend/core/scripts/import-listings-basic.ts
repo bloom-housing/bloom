@@ -7,7 +7,9 @@ import dbOptions = require("../ormconfig")
 import { Program } from "../src/program/entities/program.entity"
 import { AddressCreateDto } from "../src/shared/dto/address.dto"
 
-var MapboxClient = require('mapbox');
+const getStream = require("get-stream")
+
+var MapboxClient = require("mapbox")
 
 if (!process.env["MAPBOX_TOKEN"]) {
   throw new Error("environment variable MAPBOX_TOKEN is undefined")
@@ -71,8 +73,8 @@ async function fetchDetroitJurisdiction(connection: Connection): Promise<Jurisdi
   const jurisdictionsRepository = connection.getRepository(Jurisdiction)
   return await jurisdictionsRepository.findOneOrFail({
     where: {
-      name: "Detroit",
-    },
+      name: "Detroit"
+    }
   })
 }
 
@@ -111,6 +113,17 @@ function destructureYearBuilt(yearBuilt: string): number {
   return Number.parseInt(yearBuilt)
 }
 
+async function getLatitudeAndLongitude(address: string): Promise<{ latitude: number, longitude: number }> {
+  const res = await client.geocodeForward(address)
+  let latitude
+  let longitude
+  if (res.entity?.features?.length) {
+    latitude = res.entity.features[0].center[0]
+    longitude = res.entity.features[0].center[1]
+  }
+  return { latitude, longitude }
+}
+
 async function destructureAddressString(addressString: string): Promise<AddressCreateDto> {
   if (!addressString) {
     return null
@@ -118,14 +131,7 @@ async function destructureAddressString(addressString: string): Promise<AddressC
 
   const tokens = addressString.split(",").map((addressString) => addressString.trim())
 
-  let latitude
-  let longitude
-
-  const res = await client.geocodeForward(addressString)
-  if (res.entity?.features?.length) {
-    latitude = res.entity.features[0].center[0]
-    longitude = res.entity.features[0].center[1]
-  }
+  let { latitude, longitude } = await getLatitudeAndLongitude(addressString)
 
   if (tokens.length === 1) {
     return {
@@ -158,91 +164,99 @@ async function main() {
 
   const listingsRepository = connection.getRepository(Listing)
 
-  const inputStream = fs.createReadStream(filePath, "utf8")
-
   let rowsCount = 0
   let failedRowsCounts = 0
   const failedRowsIDs = []
 
-  inputStream
-    .pipe(
-      new CsvReadableStream({ parseNumbers: true, parseBooleans: true, trim: true, asObject: true })
-    )
-    .on("data", async (row) => {
-      rowsCount += 1
-      try {
-        console.info(`Importing row ${row[HeaderConstants.TemporaryId]}`)
-        const programsString = row[HeaderConstants.CommunityTypePrograms]
-        const communityTypePrograms = await fetchProgramsOrFail(connection, programsString)
+  const inputRows = await getStream.array(
+    fs.createReadStream(filePath, "utf8")
+      .pipe(new CsvReadableStream({
+          parseNumbers: true,
+          parseBooleans: true,
+          trim: true,
+          asObject: true
+        })
+      ))
 
-        const newListing: DeepPartial<Listing> = {
-          temporaryListingId: row[HeaderConstants.TemporaryId],
-          assets: [],
-          name: row[HeaderConstants.Name],
-          displayWaitlistSize: false,
-          property: {
-            developer: row[HeaderConstants.Developer],
-            accessibility: row[HeaderConstants.AdditionalAccessibility],
-            smokingPolicy: row[HeaderConstants.SmokingPolicy],
-            petPolicy: row[HeaderConstants.PetPolicy],
-            amenities: row[HeaderConstants.PropertyAmenities],
-            buildingAddress: {
-              street: row[HeaderConstants.BuildingAddressStreet],
-              city: row[HeaderConstants.BuildingAddressCity],
-              state: row[HeaderConstants.BuildingAddressState],
-              zipCode: row[HeaderConstants.BuildingAddressZipCode],
-            },
-            neighborhood: row[HeaderConstants.Neighborhood],
-            yearBuilt: destructureYearBuilt(row[HeaderConstants.YearBuilt]),
+  for (const row of inputRows) {
+    rowsCount += 1
+    try {
+      console.info(`Importing row ${row[HeaderConstants.TemporaryId]}`)
+      const programsString = row[HeaderConstants.CommunityTypePrograms]
+      const communityTypePrograms = await fetchProgramsOrFail(connection, programsString)
+      const newListing: DeepPartial<Listing> = {
+        temporaryListingId: row[HeaderConstants.TemporaryId],
+        assets: [],
+        name: row[HeaderConstants.Name],
+        displayWaitlistSize: false,
+        property: {
+          developer: row[HeaderConstants.Developer],
+          accessibility: row[HeaderConstants.AdditionalAccessibility],
+          smokingPolicy: row[HeaderConstants.SmokingPolicy],
+          petPolicy: row[HeaderConstants.PetPolicy],
+          amenities: row[HeaderConstants.PropertyAmenities],
+          buildingAddress: {
+            street: row[HeaderConstants.BuildingAddressStreet],
+            city: row[HeaderConstants.BuildingAddressCity],
+            state: row[HeaderConstants.BuildingAddressState],
+            zipCode: row[HeaderConstants.BuildingAddressZipCode],
+            ...(await getLatitudeAndLongitude([
+                row[HeaderConstants.BuildingAddressStreet],
+                row[HeaderConstants.BuildingAddressCity],
+                row[HeaderConstants.BuildingAddressState],
+                row[HeaderConstants.BuildingAddressZipCode]
+              ].join(" ")
+            ))
           },
-          jurisdiction: detroitJurisdiction,
-          listingPrograms: communityTypePrograms.map((program) => {
-            return {
-              program: program,
-              ordinal: null,
-            }
-          }),
-          leasingAgentName: row[HeaderConstants.LeasingAgentName],
-          leasingAgentEmail: row[HeaderConstants.LeasingAgentEmail],
-          leasingAgentPhone: row[HeaderConstants.LeasingAgentPhone],
-          managementWebsite: row[HeaderConstants.ManagementWebsite],
-          leasingAgentAddress: await destructureAddressString(row[HeaderConstants.LeasingAgentAddress]),
-          applicationFee: row[HeaderConstants.ApplicationFee],
-          depositMin: row[HeaderConstants.DepositMin],
-          depositMax: row[HeaderConstants.DepositMax],
-          depositHelperText: row[HeaderConstants.DepositHelperText],
-          costsNotIncluded: row[HeaderConstants.CostsNotIncluded],
-          features: {
-            heatingInUnit: row[HeaderConstants.HeatingInUnit] === "Yes",
-            acInUnit: row[HeaderConstants.AcInUnit] === "Yes",
-            laundryInBuilding: row[HeaderConstants.LaundryInBuilding] === "Yes",
-            parkingOnSite: row[HeaderConstants.ParkingOnSiteElevator] === "Yes",
-            serviceAnimalsAllowed: row[HeaderConstants.ServiceAnimalsAllowed] === "Yes",
-            rollInShower: row[HeaderConstants.RollInShower] === "Yes",
-            wheelchairRamp: row[HeaderConstants.WheelchairRamp] === "Yes",
-            accessibleParking: row[HeaderConstants.AccessibleParking] === "Yes",
-            inUnitWasherDryer: row[HeaderConstants.InUnitWasherDryer] === "Yes",
-            barrierFreeEntrance: row[HeaderConstants.BarrierFreeEntrance] === "Yes",
-            grabBars: row[HeaderConstants.GrabBars] === "Yes",
-          },
-          requiredDocuments: row[HeaderConstants.RequiredDocuments],
-          programRules: row[HeaderConstants.ImportantProgramRules],
-          specialNotes: row[HeaderConstants.SpecialNotes],
-          rentalAssistance: row[HeaderConstants.RentalAssistance],
-        }
-        await listingsRepository.save(newListing)
-      } catch (e) {
-        console.error(`skipping row: ${row[HeaderConstants.TemporaryId]}`)
-        console.error(e)
-        failedRowsCounts += 1
-        failedRowsIDs.push(row[HeaderConstants.TemporaryId])
+          neighborhood: row[HeaderConstants.Neighborhood],
+          yearBuilt: destructureYearBuilt(row[HeaderConstants.YearBuilt])
+        },
+        jurisdiction: detroitJurisdiction,
+        listingPrograms: communityTypePrograms.map((program) => {
+          return {
+            program: program,
+            ordinal: null
+          }
+        }),
+        leasingAgentName: row[HeaderConstants.LeasingAgentName],
+        leasingAgentEmail: row[HeaderConstants.LeasingAgentEmail],
+        leasingAgentPhone: row[HeaderConstants.LeasingAgentPhone],
+        managementWebsite: row[HeaderConstants.ManagementWebsite],
+        leasingAgentAddress: await destructureAddressString(row[HeaderConstants.LeasingAgentAddress]),
+        applicationFee: row[HeaderConstants.ApplicationFee],
+        depositMin: row[HeaderConstants.DepositMin],
+        depositMax: row[HeaderConstants.DepositMax],
+        depositHelperText: row[HeaderConstants.DepositHelperText],
+        costsNotIncluded: row[HeaderConstants.CostsNotIncluded],
+        features: {
+          heatingInUnit: row[HeaderConstants.HeatingInUnit] === "Yes",
+          acInUnit: row[HeaderConstants.AcInUnit] === "Yes",
+          laundryInBuilding: row[HeaderConstants.LaundryInBuilding] === "Yes",
+          parkingOnSite: row[HeaderConstants.ParkingOnSiteElevator] === "Yes",
+          serviceAnimalsAllowed: row[HeaderConstants.ServiceAnimalsAllowed] === "Yes",
+          rollInShower: row[HeaderConstants.RollInShower] === "Yes",
+          wheelchairRamp: row[HeaderConstants.WheelchairRamp] === "Yes",
+          accessibleParking: row[HeaderConstants.AccessibleParking] === "Yes",
+          inUnitWasherDryer: row[HeaderConstants.InUnitWasherDryer] === "Yes",
+          barrierFreeEntrance: row[HeaderConstants.BarrierFreeEntrance] === "Yes",
+          grabBars: row[HeaderConstants.GrabBars] === "Yes"
+        },
+        requiredDocuments: row[HeaderConstants.RequiredDocuments],
+        programRules: row[HeaderConstants.ImportantProgramRules],
+        specialNotes: row[HeaderConstants.SpecialNotes],
+        rentalAssistance: row[HeaderConstants.RentalAssistance]
       }
-    })
-    .on("end", () => {
-      console.log(`${failedRowsCounts}/${rowsCount} rows failed`)
-      console.log("IDs:")
-      console.log(failedRowsIDs)
-    })
+      await listingsRepository.save(newListing)
+    } catch (e) {
+      console.error(`skipping row: ${row[HeaderConstants.TemporaryId]}`)
+      console.error(e)
+      failedRowsCounts += 1
+      failedRowsIDs.push(row[HeaderConstants.TemporaryId])
+    }
+  }
+  console.log(`${failedRowsCounts}/${rowsCount} rows failed`)
+  console.log("IDs:")
+  console.log(failedRowsIDs)
 }
 
 void main()
