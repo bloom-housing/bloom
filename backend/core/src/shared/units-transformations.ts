@@ -21,9 +21,15 @@ export const getUnitTypeSummary = (unitGroups: UnitGroup[]): UnitTypeSummary[] =
 // One row for every unit group, with rent and ami ranges across all ami levels
 // Used to display the main pricing table
 export const getUnitGroupSummary = (unitGroups: UnitGroup[] = []): UnitGroupSummary[] => {
-  const summary = []
+  const summary: UnitGroupSummary[] = []
 
-  unitGroups.forEach((group) => {
+  const sortedUnitGroups = unitGroups?.sort(
+    (a, b) =>
+      a.unitType.sort((c, d) => c.numBedrooms - d.numBedrooms)[0].numBedrooms -
+      b.unitType.sort((e, f) => e.numBedrooms - f.numBedrooms)[0].numBedrooms
+  )
+
+  sortedUnitGroups.forEach((group) => {
     let rentAsPercentIncomeRange: MinMax, rentRange: MinMax, amiPercentageRange: MinMax
     group.amiLevels.forEach((level) => {
       if (level.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {

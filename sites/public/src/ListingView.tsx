@@ -24,10 +24,8 @@ import {
   OpenHouseEvent,
   ReferralApplication,
   SubmitApplication,
-  UnitTables,
   Waitlist,
   ListingUpdated,
-  Message,
   ListSection,
   StandardTable,
   t,
@@ -76,7 +74,7 @@ export const ListingView = (props: ListingProps) => {
 
   const { headers: hmiHeaders, data: hmiData } = getHmiSummary(listing)
 
-  const occpancyData = occupancyTable(listing)
+  const occupancyData = occupancyTable(listing)
 
   let openHouseEvents: ListingEvent[] | null = null
   if (Array.isArray(listing.events)) {
@@ -391,7 +389,7 @@ export const ListingView = (props: ListingProps) => {
           </aside>
         </ListingDetailItem>
 
-        {hmiData?.length || occpancyData?.length ? (
+        {hmiData?.length || occupancyData?.length ? (
           <ListingDetailItem
             imageAlt={t("listings.eligibilityNotebook")}
             imageSrc="/images/listing-eligibility.svg"
@@ -409,7 +407,7 @@ export const ListingView = (props: ListingProps) => {
                   <StandardTable headers={hmiHeaders} data={hmiData} responsiveCollapse={false} />
                 </ListSection>
               )}
-              {occpancyData?.length && (
+              {occupancyData.length > 0 && (
                 <ListSection
                   title={t("t.occupancy")}
                   subtitle={t("listings.occupancyDescriptionNoSro")}
@@ -419,7 +417,7 @@ export const ListingView = (props: ListingProps) => {
                       unitType: "t.unitType",
                       occupancy: "t.occupancy",
                     }}
-                    data={occupancyTable(listing)}
+                    data={occupancyData}
                     responsiveCollapse={false}
                   />
                 </ListSection>
@@ -427,30 +425,6 @@ export const ListingView = (props: ListingProps) => {
             </ul>
           </ListingDetailItem>
         ) : null}
-
-        <ListingDetailItem
-          imageAlt={t("listings.eligibilityNotebook")}
-          imageSrc="/images/listing-eligibility.svg"
-          title={t("listings.sections.eligibilityTitle")}
-          subtitle={t("listings.sections.eligibilitySubtitle")}
-          desktopClass="bg-primary-lighter"
-        >
-          <ul>
-            <ListSection
-              title={t("t.occupancy")}
-              subtitle={t("listings.occupancyDescriptionNoSro")}
-            >
-              <StandardTable
-                headers={{
-                  unitType: "t.unitType",
-                  occupancy: "t.occupancy",
-                }}
-                data={occupancyTable(listing)}
-                responsiveCollapse={false}
-              />
-            </ListSection>
-          </ul>
-        </ListingDetailItem>
 
         <ListingDetailItem
           imageAlt={t("listings.featuresCards")}
@@ -507,10 +481,6 @@ export const ListingView = (props: ListingProps) => {
                     description={listing.servicesOffered}
                   />
                 )}
-                <Description
-                  term={t("t.accessibility")}
-                  description={listing.accessibility || t("t.contactPropertyManagement")}
-                />
                 {/* <Description
                   term={t("t.unitFeatures")}
                   description={

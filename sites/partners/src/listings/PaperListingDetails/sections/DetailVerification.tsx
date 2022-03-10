@@ -16,7 +16,7 @@ const DetailVerification = () => {
       <GridSection columns={3}>
         <GridCell span={2}>
           <ViewItem id="isVerified" label={t("listings.sections.isVerified")}>
-            {getDetailBoolean(listing.isVerified)}
+            {getDetailBoolean(listing?.isVerified)}
           </ViewItem>
         </GridCell>
       </GridSection>

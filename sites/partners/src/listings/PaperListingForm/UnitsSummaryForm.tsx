@@ -95,7 +95,7 @@ const UnitsSummaryForm = ({
       // @ts-ignore:next-line
       unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
     })
-  }, [summaries, reset, currentTempId, setCurrent, reset])
+  }, [summaries, reset, currentTempId, setCurrent])
 
   async function onFormSubmit() {
     // Triggers validation across the form.
