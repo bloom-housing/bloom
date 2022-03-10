@@ -323,7 +323,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="minOccupancy"
                     name="minOccupancy"
-                    label={t("t.selectOne")}
+                    label={t("listings.unit.minOccupancy")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -336,7 +336,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="maxOccupancy"
                     name="maxOccupancy"
-                    label={t("t.selectOne")}
+                    label={t("listings.unit.maxOccupancy")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -379,7 +379,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="floorMin"
                     name="floorMin"
-                    label={t("t.selectOne")}
+                    label={t("listings.unitsSummary.floorMin")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -392,7 +392,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="floorMax"
                     name="floorMax"
-                    label={t("t.selectOne")}
+                    label={t("listings.unitsSummary.floorMax")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -407,7 +407,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="bathroomMin"
                     name="bathroomMin"
-                    label={t("t.selectOne")}
+                    label={t("listings.unitsSummary.bathroomsMin")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -420,7 +420,7 @@ const UnitsSummaryForm = ({
                   <Select
                     id="bathroomMax"
                     name="bathroomMax"
-                    label={t("t.selectOne")}
+                    label={t("listings.unitsSummary.bathroomsMax")}
                     labelClassName="sr-only"
                     register={register}
                     controlClassName="control"
@@ -492,7 +492,7 @@ const UnitsSummaryForm = ({
                 <Select
                   id="priorityType.id"
                   name="priorityType.id"
-                  label={t("t.selectOne")}
+                  label={t("listings.unit.accessibilityPriorityType")}
                   labelClassName="sr-only"
                   register={register}
                   controlClassName="control"
