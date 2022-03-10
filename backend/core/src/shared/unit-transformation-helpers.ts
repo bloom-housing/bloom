@@ -1,6 +1,7 @@
 import { MinMax } from "../units/types/min-max"
 
 export function setMinMax(range: MinMax, value: number): MinMax {
+  if (value === null) return range
   if (range === undefined) {
     return {
       min: value,

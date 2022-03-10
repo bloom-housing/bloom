@@ -115,6 +115,7 @@ export const getHouseholdMaxIncomeSummary = (
   })
 
   Array.from(amiPercentages)
+    .filter((percentage) => percentage !== null)
     .sort()
     .forEach((percentage) => {
       // preface with percentage to keep insertion order
