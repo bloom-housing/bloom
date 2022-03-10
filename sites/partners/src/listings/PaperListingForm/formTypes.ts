@@ -78,7 +78,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
   whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
   unitGroups?: UnitGroup[]
-  isVerified: boolean
+  isVerified?: boolean
 }
 
 export const addressTypes = {
