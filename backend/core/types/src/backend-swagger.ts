@@ -4805,6 +4805,9 @@ export interface Listing {
   region?: string
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   temporaryListingId?: number
 }
 
@@ -5725,6 +5728,9 @@ export interface ListingCreate {
   region?: string
 
   /**  */
+  isVerified?: boolean
+
+  /**  */
   temporaryListingId?: number
 
   /**  */
@@ -6185,6 +6191,9 @@ export interface ListingUpdate {
 
   /**  */
   region?: string
+
+  /**  */
+  isVerified?: boolean
 
   /**  */
   temporaryListingId?: number

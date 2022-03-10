@@ -11,6 +11,7 @@ const views: Views = {
       "listings.reviewOrderType",
       "listings.status",
       "listings.assets",
+      "listings.isVerified",
       "image.id",
       "image.fileId",
       "image.label",

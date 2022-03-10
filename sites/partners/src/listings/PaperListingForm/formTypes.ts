@@ -78,6 +78,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
   whereApplicationsPickedUp?: ListingApplicationAddressType | AnotherAddressEnum
   whereApplicationsMailedIn?: ListingApplicationAddressType | AnotherAddressEnum
   unitGroups?: UnitGroup[]
+  isVerified: boolean
 }
 
 export const addressTypes = {
@@ -160,6 +161,7 @@ export const formDefaults: FormListing = {
   showWaitlist: false,
   reviewOrderType: null,
   unitGroups: [],
+  isVerified: false,
 }
 
 export type TempUnit = Unit & {

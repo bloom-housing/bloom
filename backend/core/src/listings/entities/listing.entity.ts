@@ -599,6 +599,12 @@ class Listing extends BaseEntity {
   })
   favoritedPreferences?: UserPreferences[] | null
 
+  @Column({ type: "boolean", default: false, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isVerified?: boolean
+
   @Column({ type: "integer", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })

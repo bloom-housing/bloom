@@ -1361,7 +1361,10 @@
       "rentalAssistanceTitle": "Rental Assistance",
       "addOpenHouse": "Add Open House",
       "openHouse": "Open House",
-      "publicProgramNote": "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify."
+      "publicProgramNote": "Affordable housing properties often receive funding to house specific populations, like seniors, residents with disabilities, etc. Properties can serve more than one population. Contact this property if you are unsure if you qualify.",
+      "verification": "Verification",
+      "verificationSubtitle": "Provide verification of listing data accuracty.",
+      "isVerified": "I verify that this listing data is valid."
     },
     "seeMaximumIncomeInformation": "See Maximum Income Information",
     "seePreferenceInformation": "See Preference Information",
@@ -1397,6 +1400,7 @@
     },
     "usingCommonDigitalApplication": "Are you using the common digital application?",
     "usingCommonPaperApplication": "Are you using the common paper application?",
+    "verified": "Verified listing",
     "waitlist": {
       "closed": "Closed waitlist",
       "currentSizeQuestion": "How many people are on the current list?",
