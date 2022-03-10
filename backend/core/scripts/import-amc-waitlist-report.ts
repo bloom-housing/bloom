@@ -84,8 +84,7 @@ async function main(): Promise<void> {
       Authorization: `Bearer ${accessToken}`,
     },
   })
-  // monthlyRentDeterminationType
-  // EnumUnitsSummaryAmiLevelMonthlyRentDeterminationType
+
   const listingsService = new client.ListingsService()
   const listing = await listingsService.retrieve({ id: args.listingId })
   if (!listing.waitlistMaxSize) {

@@ -4,7 +4,6 @@ import { ApiProperty } from "@nestjs/swagger"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { MinMaxCurrency } from "./min-max-currency"
 import { MinMax } from "./min-max"
-import { MinMaxString } from "./min-max-string"
 
 export class UnitGroupSummary {
   @Expose()

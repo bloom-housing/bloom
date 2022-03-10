@@ -15,7 +15,8 @@ import UnitsSummaryForm from "../UnitsSummaryForm"
 import { TempUnit, TempUnitsSummary } from "../formTypes"
 import { fieldHasError } from "../../../../lib/helpers"
 import { useUnitTypeList } from "../../../../lib/hooks"
-import { MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
+import { MinMax, MonthlyRentDeterminationType } from "@bloom-housing/backend-core/types"
+import { minMaxFinder, formatRange, formatRentRange } from "@bloom-housing/shared-helpers"
 
 type UnitProps = {
   units: TempUnit[]
@@ -23,17 +24,6 @@ type UnitProps = {
   setUnits: (units: TempUnit[]) => void
   setSummaries: (summaries: TempUnitsSummary[]) => void
   disableUnitsAccordion: boolean
-}
-
-function isDefined(item: number | string) {
-  return item !== null && item !== undefined && item !== ""
-}
-
-function formatRange(min: string | number, max: string | number, prefix: string, postfix: string) {
-  if (!isDefined(min) && !isDefined(max)) return ""
-  if (min == max || !isDefined(max)) return `${prefix}${min}${postfix}`
-  if (!isDefined(min)) return `${prefix}${max}${postfix}`
-  return `${prefix}${min}${postfix} - ${prefix}${max}${postfix}`
 }
 
 const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: UnitProps) => {
@@ -102,80 +92,36 @@ const FormUnits = ({ unitsSummaries, setSummaries, disableUnitsAccordion }: Unit
     }
   }
 
-  const commaHelper = (rent, percent) => {
-    if (rent !== undefined && percent !== undefined) {
-      return ", "
-    }
-    return ""
-  }
-
   const unitsSummaryTableData = useMemo(
     () =>
       unitsSummaries?.map((summary) => {
         let types = unitTypeOptions.filter((option) =>
           summary.unitType.some((type) => option.id === type.toString() || option.id === type.id)
         )
-        let amiRange = [undefined, undefined]
-        let rentRange = [undefined, undefined]
-        let percentIncomeRange = [undefined, undefined]
+        let amiRange: MinMax, rentRange: MinMax, percentIncomeRange: MinMax
         summary?.amiLevels?.forEach((ami) => {
           if (ami.amiPercentage) {
-            if (amiRange[0] === undefined) {
-              amiRange[0] = ami.amiPercentage
-              amiRange[1] = ami.amiPercentage
-            }
-            if (ami.amiPercentage < amiRange[0]) {
-              amiRange[0] = ami.amiPercentage
-            } else if (ami.amiPercentage > amiRange[1]) {
-              amiRange[1] = ami.amiPercentage
-            }
+            amiRange = minMaxFinder(amiRange, ami.amiPercentage)
           }
           if (
             ami.flatRentValue &&
             ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent
           ) {
-            if (rentRange[0] === undefined) {
-              rentRange[0] = ami.flatRentValue
-              rentRange[1] = ami.flatRentValue
-            }
-            if (ami.flatRentValue < rentRange[0]) {
-              rentRange[0] = ami.flatRentValue
-            } else if (ami.flatRentValue > rentRange[1]) {
-              rentRange[1] = ami.flatRentValue
-            }
+            rentRange = minMaxFinder(rentRange, ami.flatRentValue)
           }
           if (
             ami.percentageOfIncomeValue &&
             ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
           ) {
-            if (percentIncomeRange[0] === undefined) {
-              percentIncomeRange[0] = ami.percentageOfIncomeValue
-              percentIncomeRange[1] = ami.percentageOfIncomeValue
-            }
-            if (ami.percentageOfIncomeValue < percentIncomeRange[0]) {
-              percentIncomeRange[0] = ami.percentageOfIncomeValue
-            } else if (ami.percentageOfIncomeValue > percentIncomeRange[1]) {
-              percentIncomeRange[1] = ami.percentageOfIncomeValue
-            }
+            percentIncomeRange = minMaxFinder(percentIncomeRange, ami.percentageOfIncomeValue)
           }
         })
-        if (amiRange[0] !== undefined) {
-          amiRange.sort((a, b) => a - b)
-        }
-        if (rentRange[0] !== undefined) {
-          rentRange.sort((a, b) => a - b)
-        }
-        if (percentIncomeRange[0] !== undefined) {
-          percentIncomeRange.sort((a, b) => a - b)
-        }
+
         return {
           unitType: types.map((option) => option.label).join(", "),
           units: summary.totalCount,
-          amiRange: formatRange(amiRange[0], amiRange[1], "", "%"),
-          rentRange: `${formatRange(rentRange[0], rentRange[1], "$", "")}${commaHelper(
-            rentRange[0],
-            percentIncomeRange[0]
-          )}${formatRange(percentIncomeRange[0], percentIncomeRange[1], "", "%")}`,
+          amiRange: amiRange && formatRange(amiRange.min, amiRange.max, "", "%"),
+          rentRange: formatRentRange(rentRange, percentIncomeRange),
           occupancyRange: formatRange(summary.minOccupancy, summary.maxOccupancy, "", ""),
           sqFeetRange: formatRange(summary.sqFeetMin, summary.sqFeetMax, "", ""),
           bathRange: formatRange(summary.bathroomMin, summary.bathroomMax, "", ""),

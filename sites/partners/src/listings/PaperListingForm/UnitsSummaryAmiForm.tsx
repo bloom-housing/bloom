@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import {
   t,
   GridSection,
@@ -54,19 +54,22 @@ const UnitsSummaryAmiForm = ({
   )
   const amiChartId: string = watch("amiChartId")
 
-  const fetchAmiChart = (chartId: string) => {
-    const chart = amiInfo.find((ami) => ami.id === chartId)
-    if (chart) {
-      setAmiPercentageOptions(
-        chart.items.reduce((accum, item) => {
-          if (!accum.some((percentage) => percentage.value === `${item.percentOfAmi}`)) {
-            accum.push({ value: `${item.percentOfAmi}`, label: `${item.percentOfAmi}` })
-          }
-          return accum
-        }, [] as SelectOption[])
-      )
-    }
-  }
+  const fetchAmiChart = useCallback(
+    (chartId: string) => {
+      const chart = amiInfo.find((ami) => ami.id === chartId)
+      if (chart) {
+        setAmiPercentageOptions(
+          chart.items.reduce((accum, item) => {
+            if (!accum.some((percentage) => percentage.value === `${item.percentOfAmi}`)) {
+              accum.push({ value: `${item.percentOfAmi}`, label: `${item.percentOfAmi}` })
+            }
+            return accum
+          }, [] as SelectOption[])
+        )
+      }
+    },
+    [amiInfo, setAmiPercentageOptions]
+  )
 
   useEffect(() => {
     const amilevel = amiLevels.find((summary) => summary.tempId === currentTempId)
@@ -77,7 +80,7 @@ const UnitsSummaryAmiForm = ({
     }
     setCurrent(amilevel)
     reset({ ...amilevel })
-  }, [])
+  }, [amiLevels, currentTempId, setAmiPercentageOptions, setCurrent, reset, fetchAmiChart])
 
   async function onFormSubmit() {
     // Triggers validation across the form.

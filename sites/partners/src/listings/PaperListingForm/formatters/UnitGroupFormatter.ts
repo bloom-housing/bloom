@@ -1,5 +1,5 @@
 import Formatter from "./Formatter"
-import { stringToBoolean, stringToNumberOrOne } from "../../../../lib/helpers"
+import { stringToBoolean, toNumberOrNull } from "../../../../lib/helpers"
 
 export default class UnitGroupFormatter extends Formatter {
   /** Format the values within the units array */
@@ -18,22 +18,23 @@ export default class UnitGroupFormatter extends Formatter {
       unit.amiLevels =
         unit.amiLevels?.map((ami) => ({
           ...ami,
-          amiPercentage: stringToNumberOrOne(ami.amiPercentage),
-          flatRentValue: stringToNumberOrOne(ami.flatRentValue),
+          amiPercentage: toNumberOrNull(ami.amiPercentage),
+          flatRentValue: toNumberOrNull(ami.flatRentValue),
+          percentageOfIncomeValue: toNumberOrNull(ami.percentageOfIncomeValue),
           amiChartId: ami.amiChartId ?? "",
         })) || []
 
       unit.openWaitlist = stringToBoolean(unit.openWaitlist)
-      unit.maxOccupancy = stringToNumberOrOne(unit.maxOccupancy)
-      unit.minOccupancy = stringToNumberOrOne(unit.minOccupancy)
-      unit.bathroomMin = stringToNumberOrOne(unit.bathroomMin)
-      unit.bathroomMax = stringToNumberOrOne(unit.bathroomMax)
-      unit.totalAvailable = stringToNumberOrOne(unit.totalAvailable)
-      unit.totalCount = stringToNumberOrOne(unit.totalCount)
-      unit.floorMin = stringToNumberOrOne(unit.floorMin)
-      unit.floorMax = stringToNumberOrOne(unit.floorMax)
-      unit.sqFeetMin = stringToNumberOrOne(unit.sqFeetMin)
-      unit.sqFeetMax = stringToNumberOrOne(unit.sqFeetMax)
+      unit.maxOccupancy = toNumberOrNull(unit.maxOccupancy)
+      unit.minOccupancy = toNumberOrNull(unit.minOccupancy)
+      unit.bathroomMin = toNumberOrNull(unit.bathroomMin)
+      unit.bathroomMax = toNumberOrNull(unit.bathroomMax)
+      unit.totalAvailable = toNumberOrNull(unit.totalAvailable)
+      unit.totalCount = toNumberOrNull(unit.totalCount)
+      unit.floorMin = toNumberOrNull(unit.floorMin)
+      unit.floorMax = toNumberOrNull(unit.floorMax)
+      unit.sqFeetMin = toNumberOrNull(unit.sqFeetMin)
+      unit.sqFeetMax = toNumberOrNull(unit.sqFeetMax)
 
       return unit
     })

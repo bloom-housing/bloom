@@ -95,9 +95,9 @@ const UnitsSummaryForm = ({
       // @ts-ignore:next-line
       unitType: summary?.unitType?.map((elem) => elem.id ?? elem.toString()),
     })
-  }, [summaries, reset])
+  }, [summaries, reset, currentTempId, setCurrent, reset])
 
-  async function onFormSubmit(action?: string) {
+  async function onFormSubmit() {
     // Triggers validation across the form.
     const validation = await trigger()
     if (!validation) return
@@ -227,7 +227,7 @@ const UnitsSummaryForm = ({
           ),
         }
       }),
-    [current, options.amiCharts]
+    [current, options.amiCharts, editAmi, setAmiDeleteModal]
   )
 
   const deleteAmi = useCallback(
@@ -271,7 +271,7 @@ const UnitsSummaryForm = ({
     if (unitType?.length && errors?.unitType) {
       clearErrors("unitType")
     }
-  }, [unitType, errors])
+  }, [unitType, errors, clearErrors])
 
   return (
     <>
