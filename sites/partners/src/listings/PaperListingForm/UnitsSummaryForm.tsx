@@ -194,12 +194,12 @@ const UnitsSummaryForm = ({
         let rentValue = undefined
         let monthlyRentDeterminationType = undefined
         if (ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {
-          rentValue = `${ami.flatRentValue && "$"}${ami.flatRentValue}`
+          rentValue = `${ami.flatRentValue ? `$${ami.flatRentValue}` : ""}`
           monthlyRentDeterminationType = t("listings.unitsSummary.flatRent")
         } else if (
           ami.monthlyRentDeterminationType === MonthlyRentDeterminationType.percentageOfIncome
         ) {
-          rentValue = `${ami.percentageOfIncomeValue}${ami.percentageOfIncomeValue && "%"}`
+          rentValue = `${ami.percentageOfIncomeValue ? `${ami.percentageOfIncomeValue}%` : ""}`
           monthlyRentDeterminationType = t("listings.unitsSummary.percentIncome")
         }
 
