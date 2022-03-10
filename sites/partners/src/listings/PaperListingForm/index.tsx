@@ -146,7 +146,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
     if (listing?.isVerified === false) {
       setVerifyAlert(true)
     }
-  }, [listing.events, listing.unitGroups, listing?.isVerified, unitsSummaries.length])
+  }, [listing?.events, listing?.unitGroups, listing?.isVerified, unitsSummaries?.length])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
