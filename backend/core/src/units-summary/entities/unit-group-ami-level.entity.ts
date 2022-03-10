@@ -22,6 +22,7 @@ export class UnitGroupAmiLevel {
     (unitsSummaryAmiLevelEntity: UnitGroupAmiLevel) => unitsSummaryAmiLevelEntity.amiChart
   )
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsUUID(4, { groups: [ValidationsGroupsEnum.default] })
   amiChartId?: string | null
 

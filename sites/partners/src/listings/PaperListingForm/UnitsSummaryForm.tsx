@@ -205,7 +205,7 @@ const UnitsSummaryForm = ({
 
         return {
           amiChartName: selectedAmiChart?.label || "",
-          amiPercentage: `${ami.amiPercentage}${ami.amiPercentage && "%"}`,
+          amiPercentage: `${ami.amiPercentage ? `${ami.amiPercentage}%` : ""}`,
           monthlyRentDeterminationType: monthlyRentDeterminationType,
           rentValue: rentValue,
           action: (

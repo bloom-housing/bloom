@@ -1,5 +1,5 @@
 import Formatter from "./Formatter"
-import { stringToBoolean, toNumberOrNull } from "../../../../lib/helpers"
+import { stringToBoolean, toNumberOrNull, toNumberOrUndefined } from "../../../../lib/helpers"
 import { TempUnitsSummary } from "../formTypes"
 
 export default class UnitGroupFormatter extends Formatter {
@@ -19,10 +19,10 @@ export default class UnitGroupFormatter extends Formatter {
       unit.amiLevels =
         unit.amiLevels?.map((ami) => ({
           ...ami,
-          amiPercentage: toNumberOrNull(ami.amiPercentage),
+          amiPercentage: toNumberOrUndefined(ami.amiPercentage),
           flatRentValue: toNumberOrNull(ami.flatRentValue),
           percentageOfIncomeValue: toNumberOrNull(ami.percentageOfIncomeValue),
-          amiChartId: ami.amiChartId ?? "",
+          amiChartId: ami.amiChartId || null,
         })) || []
 
       unit.openWaitlist = stringToBoolean(unit.openWaitListQuestion)

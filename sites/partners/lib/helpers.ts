@@ -96,6 +96,10 @@ export const toNumberOrNull = (obj: string | number | undefined): number => {
   return obj ? Number(obj) : null
 }
 
+export const toNumberOrUndefined = (obj: string | number | undefined): number => {
+  return obj ? Number(obj) : undefined
+}
+
 export const stringToNumberOrOne = (str: string | number | undefined): number => {
   return str ? Number(str) : 1
 }
