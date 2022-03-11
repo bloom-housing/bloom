@@ -33,7 +33,7 @@ export const getUnitGroupSummary = (unitGroups: UnitGroup[] = []): UnitGroupSumm
     let rentAsPercentIncomeRange: MinMax, rentRange: MinMax, amiPercentageRange: MinMax
     group.amiLevels.forEach((level) => {
       if (level.monthlyRentDeterminationType === MonthlyRentDeterminationType.flatRent) {
-        rentRange = setMinMax(rentRange, Number(level.flatRentValue))
+        rentRange = setMinMax(rentRange, level.flatRentValue)
       } else {
         rentAsPercentIncomeRange = setMinMax(
           rentAsPercentIncomeRange,
@@ -49,8 +49,8 @@ export const getUnitGroupSummary = (unitGroups: UnitGroup[] = []): UnitGroupSumm
         .map((type) => type.name),
       rentAsPercentIncomeRange,
       rentRange: rentRange && {
-        min: `$${rentRange.min}`,
-        max: `$${rentRange.max}`,
+        min: rentRange.min ? `$${rentRange.min}` : "",
+        max: rentRange.max ? `$${rentRange.max}` : "",
       },
       amiPercentageRange,
       openWaitlist: group.openWaitlist,
