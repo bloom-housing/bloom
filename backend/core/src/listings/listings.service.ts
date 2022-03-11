@@ -86,9 +86,6 @@ export class ListingsService {
       .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("listings.unitGroups", "unitGroups")
-      .leftJoin("unitGroups.amiLevels", "unitGroupsAmiLevels")
-      .leftJoin("unitGroups.unitType", "summaryUnitType")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
@@ -123,10 +120,6 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .orderBy(getOrderByCondition(params))
-      // Order by unitSummary.unitType.numBedrooms and units.maxOccupancy so that, for a
-      // given listing, its unitSummaries or units are sorted from lowest to highest
-      // bedroom count.
-      .addOrderBy("summaryUnitType.num_bedrooms", "ASC", "NULLS LAST")
       .getMany()
 
     // Set pagination info
