@@ -166,7 +166,7 @@ function generateUnitsSummaryAmiLevels(
 
     for (const amiPercentage of amiPercentages) {
       const type = getAmiTypeFromColumn(row, amiPercentage)
-      const splitTypes = type.split(",")
+      const splitTypes = type.split(", ")
 
       splitTypes.forEach((monthlyRentDeterminationType) => {
         amiChartLevels.push({
