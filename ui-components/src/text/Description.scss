@@ -4,6 +4,7 @@
   @apply w-full;
   @apply flex;
   @apply flex-col;
+  @apply mb-3;
   @screen md {
     @apply flex-row;
   }
@@ -17,6 +18,8 @@
 
 .description__body {
   @apply mb-4;
+  @apply flex;
+  @apply items-center;
 
   @screen md {
     padding-top: 0.4em;
@@ -30,10 +33,9 @@
   .description__title {
     @apply text-lg;
     @apply text-gray-800;
-    @apply mb-3;
     clear: left;
-    width: 160px;
-    min-width: 160px;
+    width: 170px;
+    min-width: 170px;
 
     @screen md {
       @apply pl-4;
