@@ -1,10 +1,10 @@
 .alert-box {
   @apply relative;
-  @apply p-4;
+  @apply py-3;
+  @apply px-4;
   @apply leading-snug;
   @apply flex;
   @apply items-center;
-  max-height: 50px;
 
   .alert-box_inner {
     @apply m-auto;
@@ -23,6 +23,9 @@
   // Inverts color scheme of alert
   &.invert {
     @apply text-white;
+    svg {
+      fill: white;
+    }
 
     .close {
       @apply text-white;
@@ -78,9 +81,9 @@
 }
 
 .alert-box__close {
-  @apply text-3xl;
-  line-height: 1rem;
+  @apply text-4xl;
   right: 1rem;
   @apply ml-3;
   @apply p-0;
+  line-height: 1rem;
 }
