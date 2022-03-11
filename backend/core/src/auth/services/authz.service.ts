@@ -55,13 +55,14 @@ export class AuthzService {
           void e.addPermissionForUser(
             user.id,
             "listing",
-            `!r.obj || r.obj.listing_id == '${listing.id}'`,
+            `!r.obj || r.obj.id == '${listing.id}'`,
             `(${authzActions.read}|${authzActions.update})`
           )
         })
       )
     }
-    return e.enforce(user ? user.id : "anonymous", type, action, obj)
+
+    return await e.enforce(user ? user.id : "anonymous", type, action, obj)
   }
 
   /**

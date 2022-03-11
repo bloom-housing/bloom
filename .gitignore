@@ -81,6 +81,7 @@ yarn-error.log
 # IDE configs
 .idea
 .vscode
+*.code-workspace
 
 # VS code debugger config
 launch.json
@@ -90,3 +91,7 @@ test-coverage/
 
 # redis dumps
 dump.rdb
+
+# csv import files
+backend/core/detroit-listings.csv
+backend/core/detroit-listings-units.csv

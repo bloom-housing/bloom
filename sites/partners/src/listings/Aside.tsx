@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import {
-  pdfUrlFromListingEvents,
   t,
   StatusAside,
   Button,
@@ -12,7 +11,9 @@ import {
   LocalizedLink,
   LinkButton,
   Icon,
+  AuthContext,
 } from "@bloom-housing/ui-components"
+import { pdfUrlFromListingEvents } from "@bloom-housing/shared-helpers"
 import { ListingContext } from "./ListingContext"
 import { ListingEventType, ListingStatus } from "@bloom-housing/backend-core/types"
 
@@ -25,22 +26,18 @@ type AsideProps = {
 
 type AsideType = "add" | "edit" | "details"
 
-const Aside = ({
-  type,
-  showCloseListingModal,
-  showLotteryResultsDrawer,
-  submitFormWithStatus,
-}: AsideProps) => {
+const Aside = ({ type, showLotteryResultsDrawer, submitFormWithStatus }: AsideProps) => {
   const listing = useContext(ListingContext)
+  const { profile } = useContext(AuthContext)
 
   const listingId = listing?.id
 
   const recordUpdated = useMemo(() => {
     if (!listing) return null
 
-    const momentDate = moment(listing.updatedAt)
+    const dayjsDate = dayjs(listing.updatedAt)
 
-    return momentDate.format("MMMM DD, YYYY")
+    return dayjsDate.format("MMMM DD, YYYY")
   }, [listing])
 
   const actions = useMemo(() => {
@@ -69,6 +66,7 @@ const Aside = ({
               fullWidth
               onClick={() => false}
               type="button"
+              dataTestId="listingEditButton"
             >
               {t("t.edit")}
             </Button>
@@ -78,19 +76,24 @@ const Aside = ({
     }
 
     if (type === "add") {
+      if (profile?.roles?.isAdmin) {
+        elements.push(
+          <GridCell key="btn-publish">
+            <Button
+              id="publishButton"
+              styleType={AppearanceStyleType.success}
+              type="button"
+              fullWidth
+              onClick={() => {
+                submitFormWithStatus(true, ListingStatus.active)
+              }}
+            >
+              {t("listings.actions.publish")}
+            </Button>
+          </GridCell>
+        )
+      }
       elements.push(
-        <GridCell key="btn-publish">
-          <Button
-            styleType={AppearanceStyleType.success}
-            type="button"
-            fullWidth
-            onClick={() => {
-              submitFormWithStatus(true, ListingStatus.active)
-            }}
-          >
-            {t("listings.actions.publish")}
-          </Button>
-        </GridCell>,
         <GridCell key="btn-draft">
           <Button
             type="button"
@@ -110,19 +113,22 @@ const Aside = ({
             styleType={AppearanceStyleType.primary}
             type="button"
             fullWidth
-            onClick={() => {
-              submitFormWithStatus(false, listing.status)
-            }}
+            onClick={() => submitFormWithStatus(true, listing.status)}
+            dataTestId={"saveAndExitButton"}
           >
             {t("t.saveExit")}
           </Button>
         </GridCell>
       )
 
-      if (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed) {
+      if (
+        profile?.roles?.isAdmin &&
+        (listing.status === ListingStatus.pending || listing.status === ListingStatus.closed)
+      ) {
         elements.push(
           <GridCell key="btn-publish">
             <Button
+              id="publishButton"
               type="button"
               styleType={AppearanceStyleType.success}
               fullWidth
@@ -139,15 +145,6 @@ const Aside = ({
       if (listing.status === ListingStatus.active) {
         elements.push(
           <div className="grid gap-2" key="btn-close-unpublish">
-            <Button
-              type="button"
-              styleType={AppearanceStyleType.secondary}
-              fullWidth
-              onClick={() => showCloseListingModal && showCloseListingModal()}
-            >
-              {t("listings.actions.close")}
-            </Button>
-
             <Button
               styleType={AppearanceStyleType.alert}
               fullWidth
@@ -172,7 +169,7 @@ const Aside = ({
               onClick={() => showLotteryResultsDrawer && showLotteryResultsDrawer()}
             >
               {t("listings.actions.resultsPosted")}{" "}
-              {moment(
+              {dayjs(
                 listing.events.find((event) => event.type === ListingEventType.lotteryResults)
                   ?.startTime
               ).format("MMMM DD, YYYY")}
@@ -199,7 +196,10 @@ const Aside = ({
     if (type === "details") {
       elements.push(
         <GridCell key="btn-preview">
-          <a target="_blank" href={`${process.env.publicBaseUrl}/preview/listings/${listingId}`}>
+          <a
+            target="_blank"
+            href={`${listing.jurisdiction.publicUrl}/preview/listings/${listingId}`}
+          >
             <Button fullWidth onClick={() => false} type="button">
               {t("listings.actions.preview")}
             </Button>
@@ -232,9 +232,11 @@ const Aside = ({
 
     return elements
   }, [
-    listing,
+    listing?.events,
+    listing?.jurisdiction?.publicUrl,
+    listing?.status,
     listingId,
-    showCloseListingModal,
+    profile?.roles?.isAdmin,
     showLotteryResultsDrawer,
     submitFormWithStatus,
     type,

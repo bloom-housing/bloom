@@ -3,8 +3,8 @@ import { INestApplication } from "@nestjs/common"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
 import { applicationSetup } from "../../src/app.module"
 import { AuthModule } from "../../src/auth/auth.module"
-import { EmailService } from "../../src/shared/email/email.service"
 import { getUserAccessToken } from "../utils/get-user-access-token"
+import qs from "qs"
 
 // Use require because of the CommonJS/AMD style export.
 // See https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
@@ -21,6 +21,12 @@ import { Repository } from "typeorm"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
 import { UserProfileUpdateDto } from "../../src/auth/dto/user-profile.dto"
 import { Language } from "../../src/shared/types/language-enum"
+import { User } from "../../src/auth/entities/user.entity"
+import { EnumUserFilterParamsComparison } from "../../types"
+import { getTestAppBody } from "../lib/get-test-app-body"
+import { Application } from "../../src/applications/entities/application.entity"
+import { UserRoles } from "../../src/auth/entities/user-roles.entity"
+import { EmailService } from "../../src/email/email.service"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -34,8 +40,10 @@ describe("Users", () => {
   let user2AccessToken: string
   let user2Profile: UserDto
   let listingRepository: Repository<Listing>
+  let applicationsRepository: Repository<Application>
   let userService: UserService
   let jurisdictionsRepository: Repository<Jurisdiction>
+  let usersRepository: Repository<User>
   let adminAccessToken: string
   let userAccessToken: string
 
@@ -45,6 +53,7 @@ describe("Users", () => {
     welcome: async () => {},
     invite: async () => {},
     changeEmail: async () => {},
+    forgotPassword: async () => {},
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
@@ -56,7 +65,7 @@ describe("Users", () => {
     const moduleRef = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(dbOptions),
-        TypeOrmModule.forFeature([Listing, Jurisdiction]),
+        TypeOrmModule.forFeature([Listing, Jurisdiction, User, Application]),
         AuthModule,
       ],
     })
@@ -76,9 +85,11 @@ describe("Users", () => {
         .set(...setAuthorization(user2AccessToken))
     ).body
     listingRepository = moduleRef.get<Repository<Listing>>(getRepositoryToken(Listing))
+    applicationsRepository = moduleRef.get<Repository<Application>>(getRepositoryToken(Application))
     jurisdictionsRepository = moduleRef.get<Repository<Jurisdiction>>(
       getRepositoryToken(Jurisdiction)
     )
+    usersRepository = moduleRef.get<Repository<User>>(getRepositoryToken(User))
     userService = await moduleRef.resolve<UserService>(UserService)
     adminAccessToken = await getUserAccessToken(app, "admin@example.com", "abcdef")
     userAccessToken = await getUserAccessToken(app, "test@example.com", "abcdef")
@@ -176,6 +187,9 @@ describe("Users", () => {
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
     expect(res.body).not.toHaveProperty("passwordHash")
+    expect(res.body).toHaveProperty("passwordUpdatedAt")
+    expect(res.body).toHaveProperty("passwordValidForDays")
+    expect(res.body.passwordValidForDays).toBe(180)
   })
 
   it("should not allow user to sign in before confirming the account", async () => {
@@ -445,7 +459,7 @@ describe("Users", () => {
       ...userCreateDto,
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
-      phoneNumber: "+11234567890",
+      phoneNumber: "+12025550194",
     }
 
     await supertest(app.getHttpServer())
@@ -530,6 +544,116 @@ describe("Users", () => {
       .send(userAProfileUpdateDto)
       .set(...setAuthorization(adminAccessToken))
       .expect(200)
+  })
+
+  it("should allow filtering by isPartner user role", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "michalp@airnauts.com",
+        firstName: "Michal",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const filters = [
+      {
+        isPartner: true,
+        $comparison: EnumUserFilterParamsComparison["="],
+      },
+    ]
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/list/?${qs.stringify({ filter: filters })}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    expect(res.body.items.map((user) => user.id).includes(user.id)).toBe(true)
+    expect(res.body.items.map((user) => user.roles.isPartner).some((isPartner) => !isPartner)).toBe(
+      false
+    )
+    expect(res.body.items.map((user) => user.roles.isPartner).every((isPartner) => isPartner)).toBe(
+      true
+    )
+  })
+
+  it("should get and delete a user by ID", async () => {
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+
+    const res = await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(res.body.id).toBe(user.id)
+    expect(res.body.email).toBe(user.email)
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(404)
+  })
+
+  it("should create and delete a user with existing application by ID", async () => {
+    const listing = (await listingRepository.find({ take: 1 }))[0]
+    const user = await userService._createUser(
+      {
+        dob: new Date(),
+        email: "test+1@test.com",
+        firstName: "test",
+        jurisdictions: [],
+        language: Language.en,
+        lastName: "",
+        middleName: "",
+        roles: { isPartner: true, isAdmin: false },
+        updatedAt: undefined,
+        passwordHash: "abcd",
+      },
+      null
+    )
+    const applicationUpdate = getTestAppBody(listing.id)
+    const newApp = await applicationsRepository.save({
+      ...applicationUpdate,
+      user,
+      confirmationCode: "abcdefgh",
+    })
+
+    await supertest(app.getHttpServer())
+      .delete(`/user/${user.id}`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const application = await applicationsRepository.findOneOrFail({
+      where: { id: (newApp as Application).id },
+      relations: ["user"],
+    })
+
+    expect(application.user).toBe(null)
   })
 
   it("should lower case email of new user", async () => {
@@ -617,5 +741,132 @@ describe("Users", () => {
       .expect(200)
 
     await getUserAccessToken(app, newEmail, userCreateDto.password)
+  })
+
+  it("should allow filtering by isPortalUser", async () => {
+    const usersRepository = app.get<Repository<User>>(getRepositoryToken(User))
+
+    const totalUsersCount = await usersRepository.count()
+
+    const allUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(allUsersListRes.body.meta.totalItems).toBe(totalUsersCount)
+
+    const portalUsersFilter = [
+      {
+        isPortalUser: true,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const portalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: portalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      portalUsersListRes.body.items.every(
+        (user: UserDto) => user.roles.isAdmin || user.roles.isPartner
+      )
+    )
+    expect(portalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+
+    const nonPortalUsersFilter = [
+      {
+        isPortalUser: false,
+        $comparison: EnumUserFilterParamsComparison["NA"],
+      },
+    ]
+    const nonPortalUsersListRes = await supertest(app.getHttpServer())
+      .get(`/user/list?${qs.stringify({ filter: nonPortalUsersFilter })}&limit=200`)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+    expect(
+      nonPortalUsersListRes.body.items.every(
+        (user: UserDto) => !!user.roles?.isAdmin && !!user.roles?.isPartner
+      )
+    )
+    expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+  })
+
+  it("should prevent user access if password is outdated", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "password-outdated@b.com",
+      emailConfirmation: "password-outdated@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    const userService = await app.resolve<UserService>(UserService)
+    let user = await userService.findByEmail(userCreateDto.email)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    const userAccessToken = await getUserAccessToken(
+      app,
+      userCreateDto.email,
+      userCreateDto.password
+    )
+
+    // User should be able to fetch it's own profile now
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(userAccessToken))
+      .expect(200)
+
+    // Put password updated at date 190 days in the past
+    user = await userService.findByEmail(userCreateDto.email)
+    user.roles = { isAdmin: true, isPartner: false } as UserRoles
+    user.passwordUpdatedAt = new Date(user.passwordUpdatedAt.getTime() - 190 * 24 * 60 * 60 * 1000)
+
+    await usersRepository.save(user)
+
+    // Confirm that both login and using existing access tokens stopped authenticating
+    await supertest(app.getHttpServer())
+      .get(`/user/${user.id}`)
+      .set(...setAuthorization(userAccessToken))
+      .expect(401)
+
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: userCreateDto.password })
+      .expect(401)
+
+    // Start password reset flow
+    await supertest(app.getHttpServer())
+      .put(`/user/forgot-password`)
+      .send({ email: user.email })
+      .expect(200)
+
+    user = await usersRepository.findOne({ email: user.email })
+
+    const newPassword = "Abcefghjijk90!"
+    await supertest(app.getHttpServer())
+      .put(`/user/update-password`)
+      .send({ token: user.resetToken, password: newPassword, passwordConfirmation: newPassword })
+      .expect(200)
+
+    // Confirm that login works again (passwordUpdateAt timestamp has been refreshed)
+    await supertest(app.getHttpServer())
+      .post("/auth/login")
+      .send({ email: userCreateDto.email, password: newPassword })
+      .expect(201)
   })
 })

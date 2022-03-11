@@ -1,12 +1,27 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { useFormContext } from "react-hook-form"
-import { t, GridSection, Textarea } from "@bloom-housing/ui-components"
+import { t, GridSection, Textarea, ViewItem, FieldGroup } from "@bloom-housing/ui-components"
+import { listingFeatures } from "@bloom-housing/shared-helpers"
+import { ListingFeatures } from "@bloom-housing/backend-core/types"
 
-const BuildingFeatures = () => {
+type BuildingFeaturesProps = {
+  existingFeatures: ListingFeatures
+}
+
+const BuildingFeatures = (props: BuildingFeaturesProps) => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register } = formMethods
+
+  const featureOptions = useMemo(() => {
+    return Object.keys(listingFeatures).map((item) => ({
+      id: item,
+      label: listingFeatures[item],
+      defaultChecked: props.existingFeatures ? props.existingFeatures[item] : false,
+      register,
+    }))
+  }, [register])
 
   return (
     <div>
@@ -23,13 +38,15 @@ const BuildingFeatures = () => {
             id={"amenities"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
           <Textarea
-            label={t("t.accessibility")}
+            label={t("t.additionalAccessibility")}
             name={"accessibility"}
             id={"accessibility"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -39,6 +56,7 @@ const BuildingFeatures = () => {
             id={"unitAmenities"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
           <Textarea
             label={t("t.smokingPolicy")}
@@ -46,6 +64,7 @@ const BuildingFeatures = () => {
             id={"smokingPolicy"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
         </GridSection>
         <GridSection columns={2}>
@@ -55,6 +74,7 @@ const BuildingFeatures = () => {
             id={"petPolicy"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
           <Textarea
             label={t("t.servicesOffered")}
@@ -62,7 +82,19 @@ const BuildingFeatures = () => {
             id={"servicesOffered"}
             fullWidth={true}
             register={register}
+            maxLength={600}
           />
+        </GridSection>
+        <GridSection columns={1}>
+          <ViewItem label={"Accessibility Features"}>
+            <FieldGroup
+              type="checkbox"
+              name="listingFeatures"
+              fields={featureOptions}
+              register={register}
+              fieldGroupClassName="grid grid-cols-3 mt-4"
+            />
+          </ViewItem>
         </GridSection>
       </GridSection>
     </div>

@@ -81,25 +81,27 @@ This runs 3 processes for both apps and the backend services on 3 different port
 - 3001 for the partners app
 - 3100 for backend/core
 
-### Versioning
-
-We are using [lerna](https://lerna.js.org/) as a package versioning tool. It helps with keeping multiple package versions in sync for the entire monorepo. In conjunction with Lerna we are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that helps tools like Lerna understand what level of change the commit is so that you can automate things like versioning, releases, and changelogs. On commit, three steps run: (1) linting, (2) a conventional commit CLI, and (3) a verification of the conventional commit standard. If you have trouble with the CLI you may need to install the tool globally with `npm install -g commitizen`.
-
-## Releasing
-
-PRs are opened to our dev branch. Netlify deploy previews are generated and automatically posted to all PRs. We have an application in Netlify for our dev environment that is published on every push to dev.
-
-Approximately weekly or as our roadmap requires us to, we will merge dev to master and then update our jurisdictional branches to get our changeset on a staging environment. Once that has been QA-ed we will publish to our production environment.
-
-`ui-components` is currently released on an ad-hoc basis, but we will soon be implementing a more frequent automatic release.
-
 ## Contributing
 
-Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to these guidelines.
+Contributions to the core Bloom applications and services are welcomed. To help us meet the project's goals around quality and maintainability, we ask that all contributors read, understand, and agree to our guidelines.
 
 ### Issue tracking
 
 Our development tasks are managed through GitHub issues and any development (in the vast majority of cases) should be tied to an issue. Even if you don't plan on implementing an issue yourself, please feel free to submit them if you run into issues. Before creating an issue, check first to see if one already exists. When creating an issue, give it a descriptive title and include screenshots if relevant. Please don't start work on an issue without checking in with the Bloom team first as it may already be in development! If you have questions, feel free to tag us on issues (@seanmalbert, @emilyjablonski) and note that we are also using GitHub discussions.
+
+### Committing, Versioning, and Releasing
+
+We are using [lerna](https://lerna.js.org/) as a monorepo management tool. It automatically versions, releases, and generates a changelog across our packages. In conjunction with lerna we are also using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), a specification for commit messages that helps lerna understand what level of change each commit is in order to automate our processes.
+
+On commit, two steps automatically run: (1) linting and (2) a verification of the conventional commit standard. We recommend not running `git commit` and instead globally installing commitizen (`npm install -g commitizen`) and committing with `git cz` which will run a commit message CLI. The CLI asks a series of questions and builds the commit message for you in the conventional commit format. You can also `git commit` with a message if you are 100% confident you have indicated the right level of change (it will still lint the message format).
+
+In addition to commits needing to be formatted as conventional commits, if you are making version changes across multiple packages, your commits must also be separated by package in order to not improperly version a package.
+
+On every merge to dev, a pre-release of the ui-components package is automatically published to npm, and our Netlify dev environment is updated.
+
+On every merge to master (bi-weekly), a release of the backend/core and ui-components packages are automatically published to npm, and our Netlify staging environment is updated.
+
+Once staging has been QAed, we manually update production.
 
 ### Pull Requests
 

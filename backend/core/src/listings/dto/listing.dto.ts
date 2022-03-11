@@ -1,8 +1,7 @@
 import { Listing } from "../entities/listing.entity"
 import { Expose, plainToClass, Transform, Type } from "class-transformer"
 import { IsDefined, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import moment from "moment"
-import { PreferenceDto } from "../../preferences/dto/preference.dto"
+import dayjs from "dayjs"
 import { OmitType } from "@nestjs/swagger"
 import { AddressDto } from "../../shared/dto/address.dto"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
@@ -12,14 +11,15 @@ import { ReservedCommunityTypeDto } from "../../reserved-community-type/dto/rese
 import { AssetDto } from "../../assets/dto/asset.dto"
 import { ListingEventDto } from "./listing-event.dto"
 import { listingUrlSlug } from "../../shared/url-helper"
-import { IdNameDto } from "../../shared/dto/idName.dto"
+import { JurisdictionSlimDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { UserBasicDto } from "../../auth/dto/user-basic.dto"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
-import { UnitsSummaryDto } from "../../units-summary/dto/units-summary.dto"
+import { UnitGroupDto } from "../../units-summary/dto/unit-group.dto"
 import { ListingFeaturesDto } from "./listing-features.dto"
+import { ListingPreferenceDto } from "../../preferences/dto/listing-preference.dto"
+import { ListingProgramDto } from "../../program/dto/listing-program.dto"
 
 export class ListingDto extends OmitType(Listing, [
-  "applicationAddress",
   "applicationPickUpAddress",
   "applicationDropOffAddress",
   "applicationMailingAddress",
@@ -31,11 +31,12 @@ export class ListingDto extends OmitType(Listing, [
   "jurisdiction",
   "leasingAgents",
   "leasingAgentAddress",
-  "preferences",
+  "listingPreferences",
+  "listingPrograms",
   "property",
   "reservedCommunityType",
   "result",
-  "unitsSummary",
+  "unitGroups",
   "features",
   "favoritedPreferences",
 ] as const) {
@@ -44,18 +45,6 @@ export class ListingDto extends OmitType(Listing, [
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ApplicationMethodDto)
   applicationMethods: ApplicationMethodDto[]
-
-  @Expose()
-  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => PreferenceDto)
-  preferences: PreferenceDto[]
-
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => AddressDto)
-  applicationAddress?: AddressDto | null
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -107,10 +96,23 @@ export class ListingDto extends OmitType(Listing, [
   leasingAgents?: UserBasicDto[] | null
 
   @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgramDto)
+  listingPrograms?: ListingProgramDto[]
+
+  @Expose()
+  @IsDefined({ groups: [ValidationsGroupsEnum.default] })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingPreferenceDto)
+  listingPreferences: ListingPreferenceDto[]
+
+  @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => IdNameDto)
-  jurisdiction: IdNameDto
+  @Type(() => JurisdictionSlimDto)
+  jurisdiction: JurisdictionSlimDto
 
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -128,7 +130,10 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @Transform(
     (_value, listing) => {
-      if (moment(listing.applicationDueDate).isBefore()) {
+      if (
+        dayjs(listing.applicationDueDate).isBefore(dayjs()) &&
+        listing.status !== ListingStatus.pending
+      ) {
         listing.status = ListingStatus.closed
       }
 
@@ -316,8 +321,8 @@ export class ListingDto extends OmitType(Listing, [
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummaryDto)
-  unitsSummary?: UnitsSummaryDto[]
+  @Type(() => UnitGroupDto)
+  unitGroups?: UnitGroupDto[]
 
   // Keep countyCode so we don't have to update frontend apps yet
   @Expose()

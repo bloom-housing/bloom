@@ -44,7 +44,7 @@ If you are just starting to work with the projects it's best to simply run:
 yarn && yarn db:reseed
 ```
 
-which will create the `bloom` DB for you, migrate it to the latest schema, and seed with appropriate dev data. If running the reseed command requires that you input a password for Postgres, set the following environment variables: `PGUSER` to postgres and `PGPASSWORD` to the default password you inputted for the postgres user during Postgres installation.
+which will create the `bloom` DB for you, migrate it to the latest schema, and seed with appropriate dev data. If running the reseed command requires that you input a password for Postgres, set the following environment variables: `PGUSER` to postgres and `PGPASSWORD` to the default password you inputted for the postgres user during Postgres installation. If you get the `FATAL: database "<user>" does not exist` error please run: `createdb <user>` first.
 
 Dropping the DB:
 

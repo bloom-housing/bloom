@@ -4,8 +4,8 @@ import { FindConditions } from "typeorm/find-options/FindConditions"
 import { ObjectLiteral } from "typeorm/common/ObjectLiteral"
 import { getRepositoryToken } from "@nestjs/typeorm"
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type"
-import { assignDefined } from "../assign-defined"
 import { ClassType } from "class-transformer/ClassTransformer"
+import { assignDefined } from "../utils/assign-defined"
 
 export interface GenericUpdateDto {
   id?: string

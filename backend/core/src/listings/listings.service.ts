@@ -1,16 +1,26 @@
-import { Injectable, NotFoundException, HttpException, HttpStatus } from "@nestjs/common"
-import jp from "jsonpath"
-import { Listing } from "./entities/listing.entity"
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from "@nestjs/common"
+import { REQUEST } from "@nestjs/core"
+import { Request as ExpressRequest } from "express"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Pagination } from "nestjs-typeorm-paginate"
 import { In, OrderByCondition, Repository } from "typeorm"
 import { plainToClass } from "class-transformer"
+import { Interval } from "@nestjs/schedule"
+import { Queue } from "bull"
+import { InjectQueue } from "@nestjs/bull"
+import { Listing } from "./entities/listing.entity"
 import { PropertyCreateDto, PropertyUpdateDto } from "../property/dto/property.dto"
-import { addFilters } from "../shared/filter"
+import { addFilters } from "../shared/query-filter"
 import { getView } from "./views/view"
 import { summarizeUnits } from "../shared/units-transformations"
 import { Language } from "../../types"
-import { TranslationsService } from "../translations/translations.service"
 import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { OrderByFieldsEnum } from "./types/listing-orderby-enum"
 import { ListingCreateDto } from "./dto/listing-create.dto"
@@ -18,15 +28,15 @@ import { ListingUpdateDto } from "./dto/listing-update.dto"
 import { ListingFilterParams } from "./dto/listing-filter-params"
 import { ListingsQueryParams } from "./dto/listings-query-params"
 import { filterTypeToFieldMap } from "./dto/filter-type-to-field-map"
-import { Queue } from "bull"
-import { InjectQueue } from "@nestjs/bull"
 import { ListingNotificationInfo, ListingUpdateType } from "./listings-notifications"
-import { mapTo } from "../../src/shared/mapTo"
 import { ListingStatus } from "./types/listing-status-enum"
+import { TranslationsService } from "../translations/services/translations.service"
+import { UnitGroup } from "../units-summary/entities/unit-group.entity"
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ListingsService {
   constructor(
+    @Inject(REQUEST) private req: ExpressRequest,
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
     private readonly translationService: TranslationsService,
@@ -52,8 +62,16 @@ export class ListingsService {
         case OrderByFieldsEnum.mostRecentlyUpdated:
           return { "listings.updated_at": "DESC" }
         case OrderByFieldsEnum.applicationDates:
+        case undefined:
+          // Default to ordering by applicationDates (i.e. applicationDueDate
+          // and applicationOpenDate) if no orderBy param is specified.
+          return {
+            "listings.applicationDueDate": "ASC",
+            "listings.applicationOpenDate": "DESC",
+          }
         default:
           throw new HttpException(
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             `OrderBy parameter (${params.orderBy}) not recognized or not yet implemented.`,
             HttpStatus.NOT_IMPLEMENTED
           )
@@ -68,8 +86,6 @@ export class ListingsService {
       .leftJoin("listings.property", "property")
       .leftJoin("listings.leasingAgents", "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
-      .leftJoin("listings.unitsSummary", "unitsSummary")
-      .leftJoin("unitsSummary.unitType", "summaryUnitType")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
@@ -96,7 +112,7 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    let listings = await view
+    const listings = await view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
@@ -104,15 +120,8 @@ export class ListingsService {
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
       .orderBy(getOrderByCondition(params))
-      // Order by unitSummary.unitType.numBedrooms and units.maxOccupancy so that, for a
-      // given listing, its unitSummaries or units are sorted from lowest to highest
-      // bedroom count.
-      .addOrderBy("summaryUnitType.num_bedrooms", "ASC", "NULLS LAST")
-      .addOrderBy("units.max_occupancy", "ASC", "NULLS LAST")
       .getMany()
 
-    // get summarized units from view
-    listings = view.mapUnitSummary(listings)
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
     const totalItems = paginate ? await innerFilteredQuery.getCount() : listings.length
@@ -123,15 +132,6 @@ export class ListingsService {
       totalItems: totalItems,
       totalPages: Math.ceil(totalItems / itemsPerPage), // will be 1 if no pagination
     }
-
-    // TODO(https://github.com/CityOfDetroit/bloom/issues/135): Decide whether to remove jsonpath
-    if (params.jsonpath) {
-      listings = jp.query(listings, params.jsonpath)
-    }
-
-    // The result of the query above does not produce Listing instances, only objects. To ensure
-    // that `get` accessors work, we need to `mapTo` Listing instances.
-    listings = listings.map((l) => mapTo(Listing, l))
 
     // There is a bug in nestjs-typeorm-paginate's handling of complex, nested
     // queries (https://github.com/nestjsx/nestjs-typeorm-paginate/issues/6) so
@@ -179,18 +179,26 @@ export class ListingsService {
     if (!listing) {
       throw new NotFoundException()
     }
+
+    this.userCanUpdateOrThrow(this.req.user, listingDto, previousListingStatus)
+
+    let availableUnits = 0
     listingDto.units.forEach((unit) => {
       if (!unit.id) {
         delete unit.id
       }
+      if (unit.status === "available") {
+        availableUnits++
+      }
     })
-    listingDto.unitsSummary.forEach((summary) => {
+    listingDto.unitGroups.forEach((summary) => {
       if (!summary.id) {
         delete summary.id
       }
     })
+    listingDto.unitsAvailable = availableUnits
     Object.assign(listing, {
-      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: true }),
+      ...plainToClass(Listing, listingDto, { excludeExtraneousValues: false }),
       property: plainToClass(
         PropertyUpdateDto,
         {
@@ -227,7 +235,7 @@ export class ListingsService {
     const result = await qb
       .where("listings.id = :id", { id: listingId })
       .orderBy({
-        "preferences.ordinal": "ASC",
+        "listingPreferences.ordinal": "ASC",
       })
       .getOne()
     if (!result) {
@@ -238,17 +246,75 @@ export class ListingsService {
       await this.translationService.translateListing(result, lang)
     }
 
-    await this.addUnitsSummarized(result)
+    await this.addUnitSummaries(result)
     return result
   }
 
-  private async addUnitsSummarized(listing: Listing) {
-    if (Array.isArray(listing.property.units) && listing.property.units.length > 0) {
+  private async addUnitSummaries(listing: Listing) {
+    if (Array.isArray(listing.unitGroups) && listing.unitGroups.length > 0) {
+      const amiChartIds = listing.unitGroups.reduce((acc: string[], curr: UnitGroup) => {
+        curr.amiLevels.forEach((level) => {
+          if (acc.includes(level.amiChartId) === false) {
+            acc.push(level.amiChartId)
+          }
+        })
+        return acc
+      }, [])
       const amiCharts = await this.amiChartsRepository.find({
-        where: { id: In(listing.property.units.map((unit) => unit.amiChartId)) },
+        where: { id: In(amiChartIds) },
       })
-      listing.unitsSummarized = summarizeUnits(listing.property.units, amiCharts)
+      listing.unitSummaries = summarizeUnits(listing.unitGroups, amiCharts)
     }
     return listing
+  }
+
+  /**
+   *
+   * @param user
+   * @param listing
+   * @param action
+   *
+   * authz gaurd should already be used at this point,
+   * so we know the user has general permissions to do this action.
+   * We also have to check what the previous status was.
+   * A partner can save a listing as any status as long as the previous status was active. Otherwise they can only save as pending
+   */
+  private userCanUpdateOrThrow(
+    user,
+    listing: ListingUpdateDto,
+    previousListingStatus: ListingStatus
+  ): boolean {
+    const { isAdmin } = user.roles
+    let canUpdate = false
+
+    if (isAdmin) {
+      canUpdate = true
+    } else if (previousListingStatus !== ListingStatus.pending) {
+      canUpdate = true
+    } else if (listing.status === ListingStatus.pending) {
+      canUpdate = true
+    }
+
+    if (!canUpdate) {
+      throw new HttpException("Forbidden", HttpStatus.FORBIDDEN)
+    }
+
+    return canUpdate
+  }
+
+  @Interval(1000 * 60 * 60)
+  public async changeOverdueListingsStatusCron() {
+    const listings = await this.listingRepository
+      .createQueryBuilder("listings")
+      .select(["listings.id", "listings.applicationDueDate", "listings.status"])
+      .where(`listings.status = '${ListingStatus.active}'`)
+      .andWhere(`listings.applicationDueDate IS NOT NULL`)
+      .andWhere(`listings.applicationDueDate < NOW()`)
+      .getMany()
+    for (const listing of listings) {
+      listing.status = ListingStatus.closed
+    }
+
+    await this.listingRepository.save(listings)
   }
 }

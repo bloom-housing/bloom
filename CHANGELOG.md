@@ -94,6 +94,25 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 
+## Frontend
+
+- Fixed:
+
+  - Language typo in the paper applications table ([#1965](https://github.com/bloom-housing/bloom/pull/1965)) (Jared White)
+  - Improved UX for the Building Selection Criteria drawer ([#1994](https://github.com/bloom-housing/bloom/pull/1994)) (Jared White)
+  - alternate contact email is validated ([#2035](https://github.com/bloom-housing/bloom/pull/2035)) (Yazeed)
+  - Incorrect last name ([#2107](https://github.com/bloom-housing/bloom/pull/2107)) (Dominik Barcikowski)
+
+## Backend
+
+- Fixed:
+
+  - Incorrect listing status ([#2015](https://github.com/bloom-housing/bloom/pull/2015)) (Dominik Barcikowski)
+
+## v2.0.0-pre-tailwind 09/16/2021
+
+## Frontend
+
 - Added:
 
   - Support PDF uploads or webpage links for building selection criteria ([#1893](https://github.com/bloom-housing/bloom/pull/1893)) (Jared White)
@@ -128,9 +147,12 @@ All notable changes to this project will be documented in this file. The format 
   - Listings management AMI charts populate after Save and New on units ([#1952](https://github.com/bloom-housing/bloom/pull/1952)) (Emily Jablonski)
   - Brings in updates from Alameda which fixes some issues with preference handling and lisitngs getStaticProps in production ([#1958](https://github.com/bloom-housing/bloom/pull/1958))
   - Preview can load without building address ([#1960](https://github.com/bloom-housing/bloom/pull/1960)) (Emily Jablonski)
+  - Page now scrolls after closing modal ([#1962](https://github.com/bloom-housing/bloom/pull/1962)) (Emily Jablonski)
+  - Copy & New and Save & New in LM will no longer create duplicate units ([#1963](https://github.com/bloom-housing/bloom/pull/1963)) (Emily Jablonski)
 
 - Changed:
 
+  - Update text for preferred unit types and terms ([#1934](https://github.com/bloom-housing/bloom/pull/1934)) (Jared White)
   - Upgrade the public and partners sites to Next v11 and React v17 ([#1793](https://github.com/bloom-housing/bloom/pull/1793)) (Jared White)
     - **Breaking Change**
   - The main changes are around removing the try catch blocks so errors prevent the build from finishing (should cover #1618) and the export script was removed, since it isn't valid with [fallback: true](https://nextjs.org/docs/advanced-features/static-html-export#caveats). So we'll have to change the build command to replace `export` with `start`. ([#1861](https://github.com/bloom-housing/bloom/pull/1861))
@@ -153,6 +175,8 @@ All notable changes to this project will be documented in this file. The format 
   - StandardTable styling bug ([#1632](https://github.com/bloom-housing/bloom/pull/1632)) (Emily Jablonski)
   - More robust Features section for public listing view ([#1688](https://github.com/bloom-housing/bloom/pull/1688))
   - A11Y issues with the image tint in ImageCard ([#1964](https://github.com/bloom-housing/bloom/pull/1964)) (Emily Jablonski)
+  - Visual bugs with SiteHeader ([#2010](https://github.com/bloom-housing/bloom/pull/2010)) (Emily Jablonski)
+  - HouseholdSizeField bug when householdSizeMax is 0 ([#1991](https://github.com/bloom-housing/bloom/pull/1991)) (Yazeed)
 
 - Changed:
 
@@ -183,6 +207,7 @@ All notable changes to this project will be documented in this file. The format 
     - **Breaking Change**: Moved tableHeader prop into new tableHeaderProps object
   - Re-wrote SiteHeader to remove Bulma dependency and bugs ([#1885](https://github.com/bloom-housing/bloom/pull/1885)) (Emily Jablonski)
     - **Breaking Change**: SiteHeader has a new prop set, including some props to toggle new visual features
+  - Set a max width for hero buttons when there are secondary buttons ([#2002](https://github.com/bloom-housing/bloom/pull/2002)) (Andrea Egan)
 
 ### Backend
 
@@ -206,6 +231,9 @@ All notable changes to this project will be documented in this file. The format 
   - Added the optional jurisdiction setting notificationsSignUpURL, which now appears on the home page if set ([#1802](https://github.com/bloom-housing/bloom/pull/1802)) (Emily Jablonski)
   - Adds Listings managment validations required for publishing a Listing [#1850](https://github.com/bloom-housing/bloom/pull/1850) (Michał Plebański & Emily Jablonski)
   - Add UnitCreateDto model changes to prevent form submission from creating UnitType, UnitRentType and AccessibilityType from creating a new DB row on each submission. ([#1956](https://github.com/bloom-housing/bloom/pull/1956))
+  - Adds Program entity to Listing (Many to Many) and to Jurisdiction (Many to many) and seed programs ([1968](https://github.com/bloom-housing/bloom/pull/1968))
+  - Add Language to Jurisidiction entity ([#1998](https://github.com/bloom-housing/bloom/pull/1998))
+  - Add `DELETE /user/:id` and `GET /user/:id` endpoints and add leasingAgentInListings to UserUpdateDto
 
 - Changed:
 
@@ -227,6 +255,9 @@ All notable changes to this project will be documented in this file. The format 
   - `amiPercentage` field on UnitsSummary is migrated to an integer instead of a string. ((#1797)[https://github.com/bloom-housing/bloom/pull/1797])
   - Change preferredUnit property to store unitType ids ([#1787](https://github.com/bloom-housing/bloom/pull/1787)) (Sean Albert)
   - Trying to confirm already confirmed user now throws account already confirmed error instead of tokenMissing ([#1971](https://github.com/bloom-housing/bloom/pull/1971))
+  - Updates CSV Builder service to work with any data set, predefined or not. ([#1955](https://github.com/bloom-housing/bloom/pull/1955))
+  - Remove field applicationAddress ([#2009](https://github.com/bloom-housing/bloom/pull/2009)) (Emily Jablonski)
+  - Introduce N-M Listing-Preference relation through a self managed (not TypeORM managed) intermediate entity ListingPreference, which now holds ordinal and page. Remove Preference entity entirely with an appropriate DB migration. ([1947](https://github.com/bloom-housing/bloom/pull/1947))
 
 - Fixed:
   - Added checks for property in listing.dto transforms

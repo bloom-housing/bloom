@@ -124,6 +124,7 @@ export async function getStaticProps() {
         limit: 5,
         orderBy: "mostRecentlyUpdated",
         availability: "hasAvailability",
+        view: "base",
       },
     })
     latestListings = response.data

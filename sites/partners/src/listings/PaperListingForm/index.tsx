@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useContext, useEffect } from "react"
+import axios from "axios"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 import {
   AuthContext,
   t,
@@ -10,7 +12,6 @@ import {
   StatusBar,
   AppearanceStyleType,
   Button,
-  TimeFieldPeriod,
   Modal,
   AppearanceBorderType,
   Tabs,
@@ -20,25 +21,16 @@ import {
   LatitudeLongitude,
 } from "@bloom-housing/ui-components"
 import { useForm, FormProvider } from "react-hook-form"
+import { ListingStatus, ListingEventType, Program } from "@bloom-housing/backend-core/types"
 import {
-  ListingStatus,
-  CSVFormattingType,
-  ListingApplicationAddressType,
-  Unit,
-  Listing,
-  ListingEvent,
-  ListingEventType,
-  ListingEventCreate,
-  Preference,
-  UnitsSummary,
-  PaperApplication,
-  PaperApplicationCreate,
-  ListingReviewOrder,
-  User,
-} from "@bloom-housing/backend-core/types"
-import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
-import moment from "moment"
-import { nanoid } from "nanoid"
+  AlertErrorType,
+  FormListing,
+  TempEvent,
+  TempUnit,
+  formDefaults,
+  TempUnitsSummary,
+} from "./formTypes"
+import ListingDataPipeline from "./ListingDataPipeline"
 
 import Aside from "../Aside"
 import AdditionalDetails from "./sections/AdditionalDetails"
@@ -46,14 +38,6 @@ import AdditionalEligibility from "./sections/AdditionalEligibility"
 import LeasingAgent from "./sections/LeasingAgent"
 import AdditionalFees from "./sections/AdditionalFees"
 import Units from "./sections/Units"
-import {
-  stringToBoolean,
-  stringToNumberOrOne,
-  createDate,
-  createTime,
-  toNumberOrNull,
-  removeEmptyObjects,
-} from "../../../lib/helpers"
 import BuildingDetails from "./sections/BuildingDetails"
 import ListingIntro from "./sections/ListingIntro"
 import ListingPhoto from "./sections/ListingPhoto"
@@ -62,393 +46,20 @@ import RankingsAndResults from "./sections/RankingsAndResults"
 import ApplicationAddress from "./sections/ApplicationAddress"
 import LotteryResults from "./sections/LotteryResults"
 import ApplicationTypes from "./sections/ApplicationTypes"
-import Preferences from "./sections/Preferences"
-import CommunityType from "./sections/CommunityType"
+import SelectAndOrder from "./sections/SelectAndOrder"
+import Verification from "./sections/Verification"
 import BuildingSelectionCriteria from "./sections/BuildingSelectionCriteria"
 import { getReadableErrorMessage } from "../PaperListingDetails/sections/helpers"
-
-export type FormListing = Omit<Listing, "countyCode"> & {
-  applicationDueDateField?: {
-    month: string
-    day: string
-    year: string
-  }
-  applicationDueTimeField?: {
-    hours: string
-    minutes: string
-    period: TimeFieldPeriod
-  }
-  arePaperAppsMailedToAnotherAddress?: YesNoAnswer
-  arePostmarksConsidered?: YesNoAnswer
-  canApplicationsBeDroppedOff?: YesNoAnswer
-  canPaperApplicationsBePickedUp?: YesNoAnswer
-  digitalApplicationChoice?: YesNoAnswer
-  displaySummaryData?: string
-  commonDigitalApplicationChoice?: YesNoAnswer
-  paperApplicationChoice?: YesNoAnswer
-  referralOpportunityChoice?: YesNoAnswer
-  dueDateQuestionChoice?: YesNoAnswer
-  criteriaAttachType?: string
-  lotteryDate?: {
-    month: string
-    day: string
-    year: string
-  }
-  lotteryStartTime?: {
-    hours: string
-    minutes: string
-    period: TimeFieldPeriod
-  }
-  lotteryEndTime?: {
-    hours: string
-    minutes: string
-    period: TimeFieldPeriod
-  }
-  lotteryDateNotes?: string
-  postMarkDate?: {
-    month: string
-    day: string
-    year: string
-  }
-  reviewOrderQuestion?: string
-  waitlistOpenQuestion?: YesNoAnswer
-  waitlistSizeQuestion?: YesNoAnswer
-  whereApplicationsDroppedOff?: ListingApplicationAddressType
-  whereApplicationsPickedUp?: ListingApplicationAddressType
-}
-
-export const addressTypes = {
-  ...ListingApplicationAddressType,
-  anotherAddress: "anotherAddress",
-}
+import { useJurisdictionalProgramList } from "../../../lib/hooks"
 
 type ListingFormProps = {
   listing?: FormListing
   editMode?: boolean
 }
 
-type AlertErrorType = "api" | "form"
-
-const defaults: FormListing = {
-  id: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
-  applicationAddress: null,
-  applicationDueDate: null,
-  applicationDueTime: null,
-  applicationFee: null,
-  applicationMethods: [],
-  applicationOpenDate: new Date(moment().subtract(10).format()),
-  applicationOrganization: "",
-  applicationPickUpAddress: null,
-  applicationPickUpAddressOfficeHours: "",
-  applicationMailingAddress: null,
-  applicationDropOffAddress: null,
-  applicationDropOffAddressOfficeHours: null,
-  assets: [],
-  buildingSelectionCriteria: "",
-  buildingSelectionCriteriaFile: null,
-  criteriaAttachType: "",
-  jurisdiction: undefined,
-  costsNotIncluded: "",
-  creditHistory: "",
-  criminalBackground: "",
-  CSVFormattingType: CSVFormattingType.basic,
-  depositMax: "0",
-  depositMin: "0",
-  disableUnitsAccordion: false,
-  displayWaitlistSize: false,
-  events: [],
-  image: null,
-  leasingAgentAddress: null,
-  leasingAgentEmail: null,
-  leasingAgentName: null,
-  leasingAgentOfficeHours: "",
-  leasingAgentPhone: null,
-  leasingAgentTitle: "",
-  name: null,
-  postMarkDate: null,
-  postmarkedApplicationsReceivedByDate: null,
-  preferences: [],
-  programRules: "",
-  rentalAssistance:
-    "The property is subsidized by the Section 8 Project-Based Voucher Program. As a result, Housing Choice Vouchers, Section 8 and other valid rental assistance programs are not accepted by this property.",
-  rentalHistory: "",
-  requiredDocuments: "",
-  status: ListingStatus.pending,
-  waitlistCurrentSize: null,
-  waitlistMaxSize: null,
-  isWaitlistOpen: null,
-  waitlistOpenSpots: null,
-  whatToExpect:
-    "Applicants will be contacted by the property agent in rank order until vacancies are filled. All of the information that you have provided will be verified and your eligibility confirmed. Your application will be removed from the waitlist if you have made any fraudulent statements. If we cannot verify a housing preference that you have claimed, you will not receive the preference but will not be otherwise penalized. Should your application be chosen, be prepared to fill out a more detailed application and provide required supporting documents.",
-  units: [],
-  accessibility: "",
-  amenities: "",
-  buildingAddress: null,
-  buildingTotalUnits: 0,
-  developer: null,
-  householdSizeMax: 0,
-  householdSizeMin: 0,
-  neighborhood: "",
-  petPolicy: "",
-  smokingPolicy: "",
-  unitsAvailable: 0,
-  unitAmenities: "",
-  servicesOffered: "",
-  yearBuilt: null,
-  urlSlug: undefined,
-  showWaitlist: false,
-  reviewOrderType: null,
-  unitsSummary: [],
-  unitsSummarized: {
-    unitTypes: [],
-    priorityTypes: [],
-    amiPercentages: [],
-    byUnitTypeAndRent: [],
-    byUnitType: [],
-    byAMI: [],
-    hmi: {
-      columns: [],
-      rows: [],
-    },
-  },
-}
-
-export type TempUnit = Unit & {
-  tempId?: number
-  maxIncomeHouseholdSize1?: string
-  maxIncomeHouseholdSize2?: string
-  maxIncomeHouseholdSize3?: string
-  maxIncomeHouseholdSize4?: string
-  maxIncomeHouseholdSize5?: string
-  maxIncomeHouseholdSize6?: string
-  maxIncomeHouseholdSize7?: string
-  maxIncomeHouseholdSize8?: string
-}
-
-export type TempUnitsSummary = UnitsSummary & {
-  tempId?: number
-}
-
-export type TempEvent = ListingEvent & {
-  tempId?: string
-}
-
-export type PaperApplicationHybrid = PaperApplication | PaperApplicationCreate
-
-const formatFormData = (
-  data: FormListing,
-  units: TempUnit[],
-  openHouseEvents: TempEvent[],
-  summaries: TempUnitsSummary[],
-  preferences: Preference[],
-  saveLatLong: LatitudeLongitude,
-  customPinPositionChosen: boolean,
-  profile: User
-) => {
-  const showWaitlistNumber =
-    data.waitlistOpenQuestion === YesNoAnswer.Yes && data.waitlistSizeQuestion === YesNoAnswer.Yes
-
-  units.forEach((unit) => {
-    switch (unit.unitType?.name) {
-      case "fourBdrm":
-        unit.numBedrooms = 4
-        break
-      case "threeBdrm":
-        unit.numBedrooms = 3
-        break
-      case "twoBdrm":
-        unit.numBedrooms = 2
-        break
-      case "oneBdrm":
-        unit.numBedrooms = 1
-        break
-      default:
-        unit.numBedrooms = null
-    }
-
-    Object.keys(unit).forEach((key) => {
-      if (key.indexOf("maxIncomeHouseholdSize") >= 0) {
-        if (parseInt(unit[key])) {
-          if (!unit.amiChartOverride) {
-            unit.amiChartOverride = {
-              id: undefined,
-              createdAt: undefined,
-              updatedAt: undefined,
-              items: [],
-            }
-          }
-          unit.amiChartOverride.items.push({
-            percentOfAmi: parseInt(unit.amiPercentage),
-            householdSize: parseInt(key[key.length - 1]),
-            income: parseInt(unit[key]),
-          })
-        }
-      }
-    })
-
-    unit.floor = stringToNumberOrOne(unit.floor)
-    unit.maxOccupancy = stringToNumberOrOne(unit.maxOccupancy)
-    unit.minOccupancy = stringToNumberOrOne(unit.minOccupancy)
-    unit.numBathrooms = stringToNumberOrOne(unit.numBathrooms)
-
-    if (!unit.sqFeet) {
-      delete unit.sqFeet
-    }
-
-    delete unit.tempId
-  })
-  summaries.forEach((summary) => {
-    summary.minOccupancy = toNumberOrNull(summary.minOccupancy)
-    summary.maxOccupancy = toNumberOrNull(summary.maxOccupancy)
-    summary.floorMin = toNumberOrNull(summary.floorMin)
-    summary.floorMax = toNumberOrNull(summary.floorMax)
-    summary.totalAvailable = toNumberOrNull(summary.totalAvailable)
-    summary.totalCount = toNumberOrNull(summary.totalCount)
-    summary.monthlyRentMin = toNumberOrNull(summary.monthlyRentMin)
-    summary.monthlyRentMax = toNumberOrNull(summary.monthlyRentMax)
-    summary.amiPercentage = toNumberOrNull(summary.amiPercentage)
-
-    if (!summary.sqFeetMin) {
-      delete summary.sqFeetMin
-    }
-    if (!summary.sqFeetMax) {
-      delete summary.sqFeetMax
-    }
-    if (!summary.minimumIncomeMin) {
-      delete summary.minimumIncomeMin
-    }
-    if (!summary.monthlyRentAsPercentOfIncome) {
-      delete summary.monthlyRentAsPercentOfIncome
-    }
-
-    if (summary.id === undefined) {
-      delete summary.id
-    }
-    delete summary.tempId
-  })
-
-  const events: ListingEventCreate[] = data.events?.filter(
-    (event) => !(event?.type === ListingEventType.publicLottery)
-  )
-  if (
-    data.lotteryDate &&
-    data.lotteryDate.day &&
-    data.lotteryDate.month &&
-    data.lotteryDate.year &&
-    data.reviewOrderQuestion === "reviewOrderLottery"
-  ) {
-    const startTime = createTime(createDate(data.lotteryDate), data.lotteryStartTime)
-    const endTime = createTime(createDate(data.lotteryDate), data.lotteryEndTime)
-
-    events.push({
-      type: ListingEventType.publicLottery,
-      startTime: startTime,
-      endTime: endTime,
-      note: data.lotteryDateNotes,
-    })
-  }
-
-  if (openHouseEvents) {
-    openHouseEvents.forEach((event) => {
-      events.push({
-        type: ListingEventType.openHouse,
-        ...event,
-      })
-    })
-  }
-
-  const jurisdiction =
-    !data.jurisdiction?.name && profile.jurisdictions.length === 1
-      ? profile.jurisdictions[0]
-      : data.jurisdiction
-
-  return {
-    ...data,
-    jurisdiction,
-    disableUnitsAccordion: stringToBoolean(data.displaySummaryData),
-    units: units,
-    preferences: preferences,
-    buildingAddress: {
-      ...data.buildingAddress,
-      latitude: saveLatLong.latitude ?? null,
-      longitude: saveLatLong.longitude ?? null,
-    },
-    customMapPin: customPinPositionChosen,
-    isWaitlistOpen:
-      data.waitlistOpenQuestion === YesNoAnswer.Yes
-        ? true
-        : data.waitlistOpenQuestion === YesNoAnswer.No
-        ? false
-        : null,
-    yearBuilt: data.yearBuilt ? Number(data.yearBuilt) : null,
-    waitlistCurrentSize:
-      data.waitlistCurrentSize && showWaitlistNumber ? Number(data.waitlistCurrentSize) : null,
-    waitlistMaxSize:
-      data.waitlistMaxSize && showWaitlistNumber ? Number(data.waitlistMaxSize) : null,
-    waitlistOpenSpots:
-      data.waitlistOpenSpots && showWaitlistNumber ? Number(data.waitlistOpenSpots) : null,
-    postmarkedApplicationsReceivedByDate:
-      data.postMarkDate && data.arePostmarksConsidered === YesNoAnswer.Yes
-        ? new Date(`${data.postMarkDate.year}-${data.postMarkDate.month}-${data.postMarkDate.day}`)
-        : null,
-    applicationDropOffAddressType:
-      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
-      addressTypes[data.whereApplicationsDroppedOff] !== addressTypes.anotherAddress
-        ? addressTypes[data.whereApplicationsDroppedOff]
-        : null,
-    applicationPickUpAddressType:
-      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
-      addressTypes[data.whereApplicationsPickedUp] !== addressTypes.anotherAddress
-        ? addressTypes[data.whereApplicationsPickedUp]
-        : null,
-    applicationDropOffAddress:
-      data.canApplicationsBeDroppedOff === YesNoAnswer.Yes &&
-      data.whereApplicationsPickedUp === addressTypes.anotherAddress
-        ? data.applicationDropOffAddress
-        : null,
-    applicationPickUpAddress:
-      data.canPaperApplicationsBePickedUp === YesNoAnswer.Yes &&
-      data.whereApplicationsPickedUp === addressTypes.anotherAddress
-        ? data.applicationPickUpAddress
-        : null,
-    applicationMailingAddress:
-      data.arePaperAppsMailedToAnotherAddress === YesNoAnswer.Yes
-        ? data.applicationMailingAddress
-        : null,
-    events,
-    reservedCommunityType: data.reservedCommunityType.id ? data.reservedCommunityType : null,
-    unitsSummary: summaries,
-    reviewOrderType:
-      data.reviewOrderQuestion === "reviewOrderLottery"
-        ? ListingReviewOrder.lottery
-        : ListingReviewOrder.firstComeFirstServe,
-    digitalApplication:
-      data.digitalApplicationChoice === YesNoAnswer.Yes
-        ? true
-        : data.digitalApplicationChoice === YesNoAnswer.No
-        ? false
-        : null,
-    commonDigitalApplication: data.commonDigitalApplicationChoice === YesNoAnswer.Yes,
-    paperApplication:
-      data.paperApplicationChoice === YesNoAnswer.Yes
-        ? true
-        : data.paperApplicationChoice === YesNoAnswer.No
-        ? false
-        : null,
-    referralOpportunity:
-      data.referralOpportunityChoice === YesNoAnswer.Yes
-        ? true
-        : data.referralOpportunityChoice === YesNoAnswer.No
-        ? false
-        : null,
-  }
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ListingForm = ({ listing, editMode }: ListingFormProps) => {
-  const defaultValues = editMode ? listing : defaults
+  const defaultValues = editMode ? listing : formDefaults
   const formMethods = useForm<FormListing>({
     defaultValues,
     shouldUnregister: false,
@@ -464,7 +75,14 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [units, setUnits] = useState<TempUnit[]>([])
   const [unitsSummaries, setUnitsSummaries] = useState<TempUnitsSummary[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
-  const [preferences, setPreferences] = useState<Preference[]>(listing?.preferences ?? [])
+  const [verifyAlert, setVerifyAlert] = useState<boolean>(false)
+
+  const [programs, setPrograms] = useState<Program[]>(
+    listing?.listingPrograms.map((program) => {
+      return program.program
+    }) ?? []
+  )
+
   const [latLong, setLatLong] = useState<LatitudeLongitude>({
     latitude: listing?.buildingAddress?.latitude ?? null,
     longitude: listing?.buildingAddress?.longitude ?? null,
@@ -494,49 +112,64 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
    */
   const [lotteryResultsDrawer, setLotteryResultsDrawer] = useState(false)
 
+  /**
+   * Save already-live modal
+   */
+  const [listingIsAlreadyLiveModal, setListingIsAlreadyLiveModal] = useState(false)
+
   useEffect(() => {
-    if (listing?.units) {
-      const tempUnits = listing.units.map((unit, i) => ({
-        ...unit,
-        tempId: i + 1,
-      }))
-      setUnits(tempUnits)
-    }
-
     if (listing?.events) {
-      const events = listing.events
-        .filter((event) => event.type === ListingEventType.openHouse)
-        .map((event) => ({
-          ...event,
-          startTime: event.startTime,
-          endTime: event.endTime,
-          url: event.url,
-          note: event.note,
-          tempId: nanoid(),
-        }))
-
-      setOpenHouseEvents(events)
+      setOpenHouseEvents(
+        listing.events
+          .filter((event) => event.type === ListingEventType.openHouse)
+          .map((event) => {
+            return {
+              ...event,
+              startTime: new Date(event.startTime),
+              endTime: new Date(event.endTime),
+            }
+          })
+          .sort((a, b) => (dayjs(a.startTime).isAfter(b.startTime) ? 1 : -1))
+      )
     }
 
-    // Use a temp id to track each summary within the form table (prior to submission).
-    if (listing?.unitsSummary) {
-      const tempSummaries = listing.unitsSummary.map((summary, i) => ({
+    if (listing?.isVerified === false) {
+      setVerifyAlert(true)
+    }
+  }, [listing?.events, listing?.isVerified])
+
+  useEffect(() => {
+    if (listing?.unitGroups && !unitsSummaries.length) {
+      const tempSummaries = listing.unitGroups.map((summary, i) => ({
         ...summary,
         tempId: i + 1,
+        amiLevels: summary?.amiLevels?.map((elem, index) => ({ ...elem, tempId: index + 1 })),
       }))
       setUnitsSummaries(tempSummaries)
     }
-  }, [listing, setUnits, setOpenHouseEvents])
+  }, [])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
 
-  const triggerSubmitWithStatus = (confirm?: boolean, status?: ListingStatus) => {
-    if (confirm) {
-      setPublishModal(true)
+  const triggerSubmitWithStatus = (
+    confirm?: boolean,
+    status?: ListingStatus,
+    newData?: Partial<FormListing>
+  ) => {
+    if (confirm && status === ListingStatus.active) {
+      if (listing?.status === ListingStatus.active) {
+        setListingIsAlreadyLiveModal(true)
+      } else {
+        setPublishModal(true)
+      }
       return
     }
-    let formData = { ...defaultValues, ...getValues() }
+    let formData = {
+      ...defaultValues,
+      ...getValues(),
+      ...(newData || {}),
+    }
     if (status) {
       formData = { ...formData, status }
     }
@@ -549,28 +182,51 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         try {
           setLoading(true)
           clearErrors()
-          const orderedPreferences = preferences.map((pref, index) => {
-            return { ...pref, ordinal: index + 1 }
-          })
-          const formattedData = formatFormData(
-            formData,
+
+          const dataPipeline = new ListingDataPipeline(formData, {
             units,
+            unitGroups: unitsSummaries,
             openHouseEvents,
-            unitsSummaries,
-            orderedPreferences,
+            profile,
             latLong,
             customMapPositionChosen,
-            profile
-          )
-          removeEmptyObjects(formattedData)
+            programs,
+          })
+          const formattedData = await dataPipeline.run()
+
           const result = editMode
-            ? await listingsService.update({
-                listingId: listing.id,
-                body: { id: listing.id, ...formattedData },
-              })
-            : await listingsService.create({ body: formattedData })
+            ? await listingsService.update(
+                {
+                  id: listing.id,
+                  body: { id: listing.id, ...formattedData },
+                },
+                { headers: { "x-purge-cache": true } }
+              )
+            : await listingsService.create(
+                { body: formattedData },
+                { headers: { "x-purge-cache": true } }
+              )
           reset(formData)
+
           if (result) {
+            /**
+             * Send purge request to Nginx.
+             * Wrapped in try catch, because it's possible that content may not be cached in between edits,
+             * and will return a 404, which is expected.
+             * listings* purges all /listings locations (with args, details), so if we decide to clear on certain locations,
+             * like all lists and only the edited listing, then we can do that here (with a corresponding update to nginx config)
+             */
+            if (process.env.backendProxyBase) {
+              try {
+                await axios.request({
+                  url: `${process.env.backendProxyBase}/listings*`,
+                  method: "purge",
+                })
+              } catch (e) {
+                console.log("purge error = ", e)
+              }
+            }
+
             setSiteAlertMessage(
               editMode ? t("listings.listingUpdated") : t("listings.listingSubmitted"),
               "success"
@@ -606,21 +262,21 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       }
     },
     [
+      loading,
+      clearErrors,
       units,
       unitsSummaries,
       openHouseEvents,
-      editMode,
-      listingsService,
-      listing,
-      router,
-      preferences,
+      profile,
       latLong,
       customMapPositionChosen,
-      clearErrors,
-      loading,
+      programs,
+      editMode,
+      listingsService,
+      listing?.id,
       reset,
+      router,
       setError,
-      profile,
     ]
   )
 
@@ -663,6 +319,30 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                     {alert === "form" ? t("listings.fieldError") : t("errors.alert.badRequest")}
                   </AlertBox>
                 )}
+                {verifyAlert && (
+                  <AlertBox
+                    className="mb-5 bg-blue-300"
+                    onClose={() => setVerifyAlert(false)}
+                    closeable
+                    type="alert"
+                  >
+                    <span className="text-sm font-normal">
+                      Let us know that the listing data is accurate and up to date.{" "}
+                      <a
+                        className="decoration-blue-700 underline"
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          document
+                            .getElementById("isVerifiedContainer")
+                            .scrollIntoView({ behavior: "smooth" })
+                        }}
+                      >
+                        Verify your listing data.
+                      </a>
+                    </span>
+                  </AlertBox>
+                )}
 
                 <Form id="listing-form">
                   <div className="flex flex-row flex-wrap">
@@ -694,7 +374,6 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             customMapPositionChosen={customMapPositionChosen}
                             setCustomMapPositionChosen={setCustomMapPositionChosen}
                           />
-                          <CommunityType listing={listing} />
                           <Units
                             units={units}
                             setUnits={setUnits}
@@ -702,12 +381,29 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                             setSummaries={setUnitsSummaries}
                             disableUnitsAccordion={listing?.disableUnitsAccordion}
                           />
-                          <Preferences preferences={preferences} setPreferences={setPreferences} />
+                          <SelectAndOrder
+                            addText={"Add programs"}
+                            drawerTitle={"Add programs"}
+                            editText={"Edit programs"}
+                            listingData={programs}
+                            setListingData={setPrograms}
+                            subtitle={
+                              "Tell us about any additional community programs related to this listing."
+                            }
+                            title={"Community Programs"}
+                            drawerButtonText={"Select programs"}
+                            dataFetcher={useJurisdictionalProgramList}
+                            formKey={"program"}
+                            subNote={
+                              "Please choose the populations your building serves, based on your building's financing and regulatory agreements."
+                            }
+                          />
                           <AdditionalFees />
-                          <BuildingFeatures />
+                          <BuildingFeatures existingFeatures={listing?.features} />
                           <AdditionalEligibility />
                           <BuildingSelectionCriteria />
                           <AdditionalDetails />
+                          <Verification setAlert={setVerifyAlert} />
 
                           <div className="text-right -mr-8 -mt-8 relative" style={{ top: "7rem" }}>
                             <Button
@@ -746,8 +442,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
 
                       {listing?.status === ListingStatus.closed && (
                         <LotteryResults
-                          submitCallback={() => {
-                            triggerSubmitWithStatus(false, ListingStatus.closed)
+                          submitCallback={(data) => {
+                            triggerSubmitWithStatus(false, ListingStatus.closed, data)
                           }}
                           drawerState={lotteryResultsDrawer}
                           showDrawer={(toggle: boolean) => setLotteryResultsDrawer(toggle)}
@@ -781,8 +477,8 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
             type="button"
             styleType={AppearanceStyleType.secondary}
             onClick={() => {
-              triggerSubmitWithStatus(false, ListingStatus.closed)
               setCloseModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.closed)
             }}
           >
             {t("listings.actions.close")}
@@ -809,12 +505,11 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         onClose={() => setPublishModal(false)}
         actions={[
           <Button
+            id="publishButtonConfirm"
             type="button"
             styleType={AppearanceStyleType.success}
-            onClick={async () => {
-              // If we don't await here, the scroll block stays in place on modal close
-              /* eslint-disable-next-line @typescript-eslint/await-thenable */
-              await setPublishModal(false)
+            onClick={() => {
+              setPublishModal(false)
               triggerSubmitWithStatus(false, ListingStatus.active)
             }}
           >
@@ -833,6 +528,39 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
         ]}
       >
         {t("listings.publishThisListing")}
+      </Modal>
+
+      <Modal
+        open={listingIsAlreadyLiveModal}
+        title={t("t.areYouSure")}
+        ariaDescription={t("listings.listingIsAlreadyLive")}
+        onClose={() => setListingIsAlreadyLiveModal(false)}
+        actions={[
+          <Button
+            id="saveAlreadyLiveListingButtonConfirm"
+            type="button"
+            styleType={AppearanceStyleType.success}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+              triggerSubmitWithStatus(false, ListingStatus.active)
+            }}
+            dataTestId={"listingIsAlreadyLiveButton"}
+          >
+            {t("t.save")}
+          </Button>,
+          <Button
+            type="button"
+            styleType={AppearanceStyleType.secondary}
+            border={AppearanceBorderType.borderless}
+            onClick={() => {
+              setListingIsAlreadyLiveModal(false)
+            }}
+          >
+            {t("t.cancel")}
+          </Button>,
+        ]}
+      >
+        {t("listings.listingIsAlreadyLive")}
       </Modal>
     </>
   )

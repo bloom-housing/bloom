@@ -1,16 +1,16 @@
-import * as React from "react"
+/* import * as React from "react"
 import { t } from "./translator"
-import { UnitSummary, UnitsSummary } from "@bloom-housing/backend-core/types"
+import { MinMax, UnitGroupSummary } from "@bloom-housing/backend-core/types"
 
 const getSummaryRow = (
   totalAvailable: number,
   rentRangeMin?: string,
   rentRangeMax?: string,
-  rentAsPercentIncomeRangeMin?: string,
+  rentAsPercentIncomeRangeMin?: string | MinMax,
   rentAsPercentIncomeRangeMax?: string,
   unitTypeName?: string
 ) => {
-  const getRent = (rentMin?: string, rentMax?: string, percent = false) => {
+  const getRent = (rentMin?: string | MinMax, rentMax?: string, percent = false) => {
     const unit = percent ? `% ${t("t.income")}` : ` ${t("t.perMonth")}`
     if (rentMin == undefined && rentMax == undefined) {
       //TODO(#345): figure out what to display when there's no data
@@ -61,13 +61,13 @@ const getSummaryRow = (
   }
 }
 
-export const getSummariesTableFromUnitSummary = (summaries: UnitSummary[]) => {
+export const getSummariesTableFromUnitSummary = (summaries: UnitGroupSummary[]) => {
   let unitSummaries = [] as Record<string, React.ReactNode>[]
 
   if (summaries?.length > 0) {
     unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
-        unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
+        unitSummary.unitVacancies ? unitSummary.unitVacancies : 0,
         unitSummary.rentRange.min,
         unitSummary.rentRange.max,
         unitSummary.rentAsPercentIncomeRange.min
@@ -76,27 +76,30 @@ export const getSummariesTableFromUnitSummary = (summaries: UnitSummary[]) => {
         unitSummary.rentAsPercentIncomeRange.max
           ? unitSummary.rentAsPercentIncomeRange.max.toString()
           : "",
-        unitSummary.unitType.name
+        ""
       )
     })
   }
   return unitSummaries
 }
 
-export const getSummariesTableFromUnitsSummary = (summaries: UnitsSummary[]) => {
+export const getSummariesTableFromUnitsSummary = (summaries: UnitGroupSummary[]) => {
   let unitSummaries = [] as Record<string, React.ReactNode>[]
 
   if (summaries?.length > 0) {
     unitSummaries = summaries.map((unitSummary) => {
       return getSummaryRow(
-        unitSummary.totalAvailable ? unitSummary.totalAvailable : 0,
-        unitSummary.monthlyRentMin?.toString(),
-        unitSummary.monthlyRentMax?.toString(),
-        unitSummary.monthlyRentAsPercentOfIncome,
-        unitSummary.monthlyRentAsPercentOfIncome,
-        unitSummary.unitType.name
+        unitSummary.unitVacancies ? unitSummary.unitVacancies : 0,
+        unitSummary.rentRange?.toString(),
+        "",
+        unitSummary.rentAsPercentIncomeRange,
+        "",
+        ""
       )
     })
   }
   return unitSummaries
 }
+ */
+
+export {}

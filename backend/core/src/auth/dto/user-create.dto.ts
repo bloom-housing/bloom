@@ -1,14 +1,6 @@
 import { OmitType } from "@nestjs/swagger"
 import { Expose, Type } from "class-transformer"
-import {
-  IsBoolean,
-  IsEmail,
-  IsOptional,
-  IsString,
-  Matches,
-  MaxLength,
-  ValidateNested,
-} from "class-validator"
+import { IsEmail, IsOptional, IsString, Matches, MaxLength, ValidateNested } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { passwordRegex } from "../../shared/password-regex"
 import { Match } from "../../shared/decorators/match.decorator"
@@ -24,6 +16,10 @@ export class UserCreateDto extends OmitType(UserDto, [
   "roles",
   "jurisdictions",
   "email",
+  "passwordUpdatedAt",
+  "passwordValidForDays",
+  "lastLoginAt",
+  "failedLoginAttemptsCount",
 ] as const) {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })

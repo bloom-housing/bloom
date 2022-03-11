@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { ErrorMessage } from "../notifications/ErrorMessage"
-import { UseFormMethods } from "react-hook-form"
+import { UseFormMethods, RegisterOptions } from "react-hook-form"
 
 export interface FieldProps {
   error?: boolean
@@ -17,12 +17,12 @@ export interface FieldProps {
   subNote?: string
   label?: string
   defaultValue?: string | number
-  onDrop?: (e: any) => boolean
-  onPaste?: (e: any) => boolean
+  onDrop?: (e: React.DragEvent<HTMLElement>) => boolean
+  onPaste?: (e: React.ClipboardEvent) => boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   register?: UseFormMethods["register"]
-  validation?: Record<string, any>
+  validation?: RegisterOptions
   disabled?: boolean
   prepend?: string
   inputProps?: Record<string, unknown>
@@ -30,6 +30,7 @@ export interface FieldProps {
   getValues?: UseFormMethods["getValues"]
   setValue?: UseFormMethods["setValue"]
   isLabelAfterField?: boolean
+  dataTestId?: string
 }
 
 const Field = (props: FieldProps) => {
@@ -111,6 +112,7 @@ const Field = (props: FieldProps) => {
           onPaste={props.onPaste}
           onDrop={props.onDrop}
           onChange={props.onChange}
+          data-test-id={props.dataTestId}
           {...inputProps}
         />
         {(isRadioOrCheckbox || props.isLabelAfterField) && label}

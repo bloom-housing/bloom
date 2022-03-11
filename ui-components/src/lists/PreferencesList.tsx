@@ -1,10 +1,22 @@
 import * as React from "react"
-import { Preference, PreferenceLink } from "@bloom-housing/backend-core/types"
 import "./PreferencesList.scss"
 import { locale } from "../helpers/translator"
 
+export interface ListPreferenceLink {
+  title: string
+  url: string
+}
+
+export interface ListPreference {
+  ordinal?: number
+  links?: ListPreferenceLink[]
+  title?: string
+  subtitle?: string
+  description?: string
+}
+
 export interface PreferencesListProps {
-  preferences: Preference[]
+  listingPreferences: ListPreference[]
 }
 
 const getOrdinal = (n: number) => {
@@ -18,10 +30,7 @@ const getOrdinal = (n: number) => {
 }
 
 const PreferencesList = (props: PreferencesListProps) => {
-  const filteredPreferences = props.preferences.filter(
-    (pref) => !pref.formMetadata?.hideFromListing
-  )
-  const preferences = filteredPreferences.map((preference: Preference, index: number) => {
+  const preferences = props.listingPreferences?.map((preference: ListPreference, index: number) => {
     const itemClasses = ["preferences-list__item", "info-card"]
 
     if (!preference.subtitle && !preference.description && !preference.links) {
@@ -43,7 +52,7 @@ const PreferencesList = (props: PreferencesListProps) => {
         )}
         {preference.links && (
           <div className="preferences-list__links">
-            {preference.links.map((link: PreferenceLink, linkIndex: number) => (
+            {preference.links.map((link: ListPreferenceLink, linkIndex: number) => (
               <span key={linkIndex}>
                 <a href={link.url}>{link.title}</a>
               </span>

@@ -1,18 +1,23 @@
 p, admin, application, true, .*
-p, user, application, !r.obj || (r.sub == r.obj.user_id), (read|submit)
+p, user, application, true, submit
+p, user, application, !r.obj || (r.sub == r.obj.userId), read
 p, anonymous, application, true, submit
 
 p, admin, user, true, .*
 p, admin, userProfile, true, .*
-p, user, user, !r.obj || (r.sub == r.obj.id), read
-p, user, userProfile, !r.obj || (r.sub == r.obj.id), (read|update)
+p, user, user, !!r.obj && (r.sub == r.obj.id), read
+p, user, userProfile, !!r.obj && (r.sub == r.obj.id), (read|update)
 p, anonymous, user, true, create
 
 p, admin, asset, true, .*
 p, partner, asset, true, .*
 
+p, admin, program, true, .*
+p, partner, program, true, .*
+p, anonymous, program, true, read
+
 p, admin, preference, true, .*
-p, partner, preference, true, read
+p, partner, preference, true, .*
 
 p, admin, applicationMethod, true, .*
 p, partner, applicationMethod, true, read
@@ -42,7 +47,6 @@ p, anonymous, jurisdiction, true, read
 
 p, admin, listing, true, .*
 p, anonymous, listing, true, read
-p, user, listing, true, create
 
 p, user, property, true, create
 p, anonymous, property, true, .*

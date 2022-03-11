@@ -69,6 +69,7 @@ const ListingIntro = (props: ListingIntroProps) => {
           register={register}
           error={fieldHasError(errors?.name)}
           errorMessage={fieldMessage(errors?.name)}
+          dataTestId={"nameField"}
         />
       </GridCell>
       <Field
@@ -76,7 +77,6 @@ const ListingIntro = (props: ListingIntroProps) => {
         name="developer"
         label={t("listings.developer")}
         placeholder={t("listings.developer")}
-        subNote={t("listings.requiredToPublish")}
         error={fieldHasError(errors?.developer)}
         errorMessage={fieldMessage(errors?.developer)}
         inputProps={{

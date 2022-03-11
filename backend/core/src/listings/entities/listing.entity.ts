@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -14,7 +15,6 @@ import {
 } from "typeorm"
 import { Application } from "../../applications/entities/application.entity"
 import { User } from "../../auth/entities/user.entity"
-import { Preference } from "../../preferences/entities/preference.entity"
 import { Expose, Type } from "class-transformer"
 import {
   IsBoolean,
@@ -32,7 +32,6 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 import { Property } from "../../property/entities/property.entity"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { ListingStatus } from "../types/listing-status-enum"
-import { CSVFormattingType } from "../../csv/types/csv-formatting-type-enum"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { ReservedCommunityType } from "../../reserved-community-type/entities/reserved-community-type.entity"
 import { Asset } from "../../assets/entities/asset.entity"
@@ -41,16 +40,19 @@ import { ListingApplicationAddressType } from "../types/listing-application-addr
 import { ListingEvent } from "./listing-event.entity"
 import { Address } from "../../shared/entities/address.entity"
 import { ApplicationMethod } from "../../application-methods/entities/application-method.entity"
-import { UnitsSummarized } from "../../units/types/units-summarized"
-import { UnitsSummary } from "../../units-summary/entities/units-summary.entity"
+import { UnitSummaries } from "../../units/types/unit-summaries"
+import { UnitGroup } from "../../units-summary/entities/unit-group.entity"
 import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
-import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingFeatures } from "./listing-features.entity"
 import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
+import { ListingProgram } from "../../program/entities/listing-program.entity"
+import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
+import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 
 @Entity({ name: "listings" })
+@Index(["jurisdiction"])
 class Listing extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Expose()
@@ -83,11 +85,14 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   additionalApplicationSubmissionNotes?: string | null
 
-  @OneToMany(() => Preference, (preference) => preference.listing, { cascade: true })
+  @OneToMany(() => ListingPreference, (listingPreference) => listingPreference.listing, {
+    cascade: true,
+    eager: true,
+  })
   @Expose()
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => Preference)
-  preferences: Preference[]
+  @Type(() => ListingPreference)
+  listingPreferences: ListingPreference[]
 
   @OneToMany(() => ApplicationMethod, (am) => am.listing, { cascade: true, eager: true })
   @Expose()
@@ -166,13 +171,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
-  applicationDueTime?: Date | null
-
-  @Column({ type: "timestamptz", nullable: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsDate({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Date)
   applicationOpenDate?: Date | null
 
   @Column({ type: "text", nullable: true })
@@ -186,13 +184,6 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   applicationOrganization?: string | null
-
-  @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
-  @Expose()
-  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @ValidateNested({ groups: [ValidationsGroupsEnum.default] })
-  @Type(() => Address)
-  applicationAddress?: Address | null
 
   @ManyToOne(() => Address, { eager: true, nullable: true, cascade: true })
   @Expose()
@@ -247,6 +238,16 @@ class Listing extends BaseEntity {
   @Type(() => Address)
   applicationMailingAddress?: Address | null
 
+  @Column({ type: "enum", enum: ListingApplicationAddressType, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingApplicationAddressType, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingApplicationAddressType,
+    enumName: "ListingApplicationAddressType",
+  })
+  applicationMailingAddressType?: ListingApplicationAddressType | null
+
   @Column({ type: "text", nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
@@ -289,6 +290,12 @@ class Listing extends BaseEntity {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   depositMax?: string | null
+
+  @Column({ type: "text", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  depositHelperText?: string | null
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
@@ -438,12 +445,6 @@ class Listing extends BaseEntity {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   displayWaitlistSize: boolean
 
-  @Column({ enum: CSVFormattingType, default: CSVFormattingType.basic })
-  @Expose()
-  @IsEnum(CSVFormattingType, { groups: [ValidationsGroupsEnum.default] })
-  @ApiProperty({ enum: CSVFormattingType, enumName: "CSVFormattingType" })
-  CSVFormattingType: CSVFormattingType
-
   @Expose()
   @ApiProperty()
   get showWaitlist(): boolean {
@@ -539,8 +540,8 @@ class Listing extends BaseEntity {
   amiPercentageMax?: number | null
 
   @Expose()
-  @ApiProperty({ type: UnitsSummarized })
-  unitsSummarized: UnitsSummarized | undefined
+  @ApiProperty({ type: UnitSummaries })
+  unitSummaries: UnitSummaries | undefined
 
   @Column({ type: "boolean", nullable: true })
   @Expose()
@@ -560,7 +561,7 @@ class Listing extends BaseEntity {
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   region?: string | null
 
-  @OneToMany(() => UnitsSummary, (summary) => summary.listing, {
+  @OneToMany(() => UnitGroup, (summary) => summary.listing, {
     nullable: true,
     eager: true,
     cascade: true,
@@ -568,8 +569,18 @@ class Listing extends BaseEntity {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
-  @Type(() => UnitsSummary)
-  unitsSummary: UnitsSummary[]
+  @Type(() => UnitGroup)
+  unitGroups: UnitGroup[]
+
+  @OneToMany(() => ListingProgram, (listingProgram) => listingProgram.listing, {
+    cascade: true,
+    eager: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default], each: true })
+  @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
+  @Type(() => ListingProgram)
+  listingPrograms?: ListingProgram[]
 
   @OneToOne(() => ListingFeatures, {
     nullable: true,
@@ -587,5 +598,18 @@ class Listing extends BaseEntity {
     nullable: true,
   })
   favoritedPreferences?: UserPreferences[] | null
+
+  @Column({ type: "boolean", default: false, nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
+  isVerified?: boolean
+
+  @Column({ type: "integer", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
+  temporaryListingId?: number | null
 }
+
 export { Listing as default, Listing }

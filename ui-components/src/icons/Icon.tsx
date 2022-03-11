@@ -8,6 +8,7 @@ import {
   ArrowForward,
   Assistance,
   Asterisk,
+  BadgeCheck,
   Bed,
   Browse,
   Building,
@@ -18,6 +19,7 @@ import {
   CloseRound,
   CloseSmall,
   Cross,
+  DoubleHouse,
   Down,
   Download,
   Draggable,
@@ -57,6 +59,7 @@ import {
   Star,
   Ticket,
   Trash,
+  UniversalAccess,
   Warning,
 } from "./Icons"
 
@@ -68,6 +71,7 @@ const IconMap = {
   arrowDown: ArrowDown,
   assistance: Assistance,
   asterisk: Asterisk,
+  badgeCheck: BadgeCheck,
   bed: Bed,
   browse: Browse,
   building: Building,
@@ -78,6 +82,7 @@ const IconMap = {
   closeRound: CloseRound,
   closeSmall: CloseSmall,
   cross: Cross,
+  doubleHouse: DoubleHouse,
   down: Down,
   download: Download,
   draggable: Draggable,
@@ -117,6 +122,7 @@ const IconMap = {
   star: Star,
   ticket: Ticket,
   trash: Trash,
+  universalAccess: UniversalAccess,
   warning: Warning,
 }
 

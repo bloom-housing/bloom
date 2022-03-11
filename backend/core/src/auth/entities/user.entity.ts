@@ -42,6 +42,15 @@ export class User {
   @Column("varchar", { select: false })
   passwordHash: string
 
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  passwordUpdatedAt: Date
+
+  @Column({ default: 180 })
+  @Expose()
+  passwordValidForDays: number
+
   @Column("varchar", { nullable: true })
   resetToken: string
 
@@ -89,7 +98,8 @@ export class User {
 
   @Column("varchar", { nullable: true })
   @Expose()
-  @IsPhoneNumber(null)
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber(null, { groups: [ValidationsGroupsEnum.default] })
   phoneNumber?: string
 
   @CreateDateColumn()
@@ -111,6 +121,8 @@ export class User {
     eager: true,
     cascade: true,
     nullable: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @Expose()
   roles?: UserRoles
@@ -133,4 +145,13 @@ export class User {
   })
   @Expose()
   preferences?: UserPreferences
+  @Column({ default: () => "NOW()" })
+  @Expose()
+  @Type(() => Date)
+  lastLoginAt?: Date
+
+  @Column({ default: 0 })
+  @Expose()
+  @Type(() => Date)
+  failedLoginAttemptsCount?: number
 }

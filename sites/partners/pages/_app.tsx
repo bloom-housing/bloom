@@ -44,7 +44,8 @@ function BloomApp({ Component, router, pageProps }: AppProps) {
     <SWRConfig
       value={{
         onError: (error) => {
-          if (error.response.status === 403) {
+          const { status } = error.response || {}
+          if (status === 403) {
             window.location.href = "/unauthorized"
           }
         },

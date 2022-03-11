@@ -11,6 +11,11 @@ import { ValidationsGroupsEnum } from "../../../shared/types/validations-groups-
 import { FormMetadataOptions } from "./form-metadata-options"
 import { ApiProperty } from "@nestjs/swagger"
 
+export enum FormMetaDataType {
+  radio = "radio",
+  checkbox = "checkbox",
+}
+
 export class FormMetadata {
   @Expose()
   @IsString({ groups: [ValidationsGroupsEnum.default] })
@@ -42,4 +47,9 @@ export class FormMetadata {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   @ApiProperty()
   hideFromListing?: boolean
+
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({ enum: FormMetaDataType, enumName: "FormMetaDataType" })
+  type?: FormMetaDataType
 }

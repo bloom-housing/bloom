@@ -3,14 +3,12 @@ import Head from "next/head"
 import {
   PageHeader,
   t,
-  lRoute,
   AuthContext,
   Button,
   LocalizedLink,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
 } from "@bloom-housing/ui-components"
-import { Listing } from "@bloom-housing/backend-core/types"
 import { AgGridReact } from "ag-grid-react"
 import { GridOptions } from "ag-grid-community"
 
@@ -24,7 +22,7 @@ class formatLinkCell {
   init(params) {
     this.link = document.createElement("a")
     this.link.classList.add("text-blue-700")
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/edit`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
     this.link.innerText = params.valueFormatted || params.value
   }
 
@@ -36,14 +34,14 @@ class formatLinkCell {
 class ApplicationsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}/applications`))
+    this.link.setAttribute("href", `/listings/${params.data.id}/applications`)
   }
 }
 
 class ListingsLink extends formatLinkCell {
   init(params) {
     super.init(params)
-    this.link.setAttribute("href", lRoute(`/listings/${params.data.id}`))
+    this.link.setAttribute("href", `/listings/${params.data.id}`)
   }
 }
 
@@ -110,13 +108,7 @@ export default function ListingsList() {
         filter: false,
         resizable: true,
         flex: 1,
-      },
-      {
-        headerName: t("listings.availableUnits"),
-        field: "unitsAvailable",
-        sortable: false,
-        filter: false,
-        resizable: true,
+        valueFormatter: ({ value }) => (value ? value : t("t.none")),
       },
       {
         headerName: t("listings.waitlist.open"),
@@ -149,7 +141,7 @@ export default function ListingsList() {
         image={metaImage}
         description={metaDescription}
       />
-      <PageHeader title={t("nav.listings")} />
+      <PageHeader title={t("nav.listings")} className={"md:pt-16"} />
       <section>
         <article className="flex-row flex-wrap relative max-w-screen-xl mx-auto py-8 px-4">
           <div className="ag-theme-alpine ag-theme-bloom">

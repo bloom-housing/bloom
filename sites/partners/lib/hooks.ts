@@ -7,6 +7,8 @@ import {
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
   EnumListingFilterParamsComparison,
+  EnumPreferencesFilterParamsComparison,
+  EnumProgramsFilterParamsComparison,
   EnumUserFilterParamsComparison,
 } from "@bloom-housing/backend-core/types"
 
@@ -27,7 +29,7 @@ type UseListingsDataProps = PaginationProps & {
 
 export function useSingleListingData(listingId: string) {
   const { listingsService } = useContext(AuthContext)
-  const fetcher = () => listingsService.retrieve({ listingId })
+  const fetcher = () => listingsService.retrieve({ id: listingId })
 
   const { data, error } = useSWR(`${process.env.backendApiBase}/listings/${listingId}`, fetcher)
 
@@ -124,7 +126,7 @@ export function useSingleApplicationData(applicationId: string) {
   const { applicationsService } = useContext(AuthContext)
   const backendSingleApplicationsEndpointUrl = `${process.env.backendApiBase}/applications/${applicationId}`
 
-  const fetcher = () => applicationsService.retrieve({ applicationId })
+  const fetcher = () => applicationsService.retrieve({ id: applicationId })
   const { data, error } = useSWR(backendSingleApplicationsEndpointUrl, fetcher)
 
   return {
@@ -199,11 +201,11 @@ export function useSingleAmiChartData(amiChartId: string) {
   }
 }
 
-export function useAmiChartList() {
+export function useAmiChartList(jurisdiction: string) {
   const { amiChartsService } = useContext(AuthContext)
-  const fetcher = () => amiChartsService.list()
+  const fetcher = () => amiChartsService.list({ jurisdictionId: jurisdiction })
 
-  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts`, fetcher)
+  const { data, error } = useSWR(`${process.env.backendApiBase}/amiCharts/${jurisdiction}`, fetcher)
 
   return {
     data,
@@ -267,6 +269,67 @@ export function usePreferenceList() {
   }
 }
 
+export function useJurisdictionalPreferenceList(jurisdictionId: string) {
+  const { preferencesService } = useContext(AuthContext)
+  const fetcher = () =>
+    preferencesService.list({
+      filter: [
+        {
+          $comparison: EnumPreferencesFilterParamsComparison["="],
+          jurisdiction: jurisdictionId,
+        },
+      ],
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/preferences/${jurisdictionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useProgramList() {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () => programsService.list()
+
+  const { data, error } = useSWR(`${process.env.backendApiBase}/programs`, fetcher)
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
+export function useJurisdictionalProgramList(jurisdictionId: string) {
+  const { programsService } = useContext(AuthContext)
+  const fetcher = () =>
+    programsService.list({
+      filter: [
+        {
+          $comparison: EnumProgramsFilterParamsComparison["="],
+          jurisdiction: jurisdictionId,
+        },
+      ],
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/programs/${jurisdictionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useReservedCommunityTypeList() {
   const { reservedCommunityTypeService } = useContext(AuthContext)
   const fetcher = () => reservedCommunityTypeService.list()
@@ -293,8 +356,8 @@ export function useUserList({ page, limit }: UseUserListProps) {
       limit,
       filter: [
         {
-          isPartner: true,
-          $comparison: EnumUserFilterParamsComparison["="],
+          isPortalUser: true,
+          $comparison: EnumUserFilterParamsComparison["NA"],
         },
       ],
     })

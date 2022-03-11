@@ -5,7 +5,6 @@ import {
   AppearanceBorderType,
   AppearanceStyleType,
   Button,
-  cloudinaryUrlFromId,
   Drawer,
   Dropzone,
   Field,
@@ -15,6 +14,7 @@ import {
   TableThumbnail,
   FieldGroup,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 import { cloudinaryFileUploader } from "../../../../lib/helpers"
 
 const LotteryResults = () => {
@@ -42,6 +42,7 @@ const LotteryResults = () => {
       id: "",
       url: "",
     })
+    setValue("criteriaAttachType", null)
     setDrawerState(false)
   }
 
@@ -141,7 +142,7 @@ const LotteryResults = () => {
     })
   } else if (listingCriteriaURL && listingCriteriaURL != "") {
     criteriaTableHeaders = {
-      fileName: t("t.url"),
+      fileName: "t.url",
       actions: criteriaTableHeaders.actions,
     }
     criteriaTableRows.push({
@@ -200,6 +201,7 @@ const LotteryResults = () => {
             <MinimalTable headers={criteriaTableHeaders} data={criteriaTableRows}></MinimalTable>
           ) : (
             <Button
+              id="addBuildingSelectionCriteriaButton"
               type="button"
               onClick={() => {
                 setDrawerState(true)
@@ -220,13 +222,16 @@ const LotteryResults = () => {
           <Button
             key={0}
             onClick={() => {
-              const value = getValues("buildingSelectionCriteriaURL")
-              if (value) {
-                deletePDF()
-                saveURL(value)
-              } else {
-                deleteURL()
-                savePDF()
+              // Only try to save values if an attachment type has been selected
+              if (criteriaAttachType) {
+                const value = getValues("buildingSelectionCriteriaURL")
+                if (value) {
+                  deletePDF()
+                  saveURL(value)
+                } else {
+                  deleteURL()
+                  savePDF()
+                }
               }
               resetDrawerState()
             }}

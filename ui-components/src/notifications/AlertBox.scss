@@ -1,7 +1,7 @@
 .alert-box {
   @apply relative;
-  @apply py-4;
-  @apply pr-10;
+  @apply py-3;
+  @apply px-4;
   @apply leading-snug;
   @apply flex;
   @apply items-center;
@@ -15,18 +15,17 @@
     @apply items-center;
   }
 
-  &.fullWidth {
-    @apply pl-4;
-    @apply pr-12;
-  }
-
   &.narrow {
-    @apply py-2;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
   }
 
   // Inverts color scheme of alert
   &.invert {
     @apply text-white;
+    svg {
+      fill: white;
+    }
 
     .close {
       @apply text-white;
@@ -66,6 +65,15 @@
   }
 }
 
+.alert-box__head {
+  @apply flex justify-between;
+  @apply w-full;
+}
+
+.alert-box__title {
+  @apply flex justify-between;
+}
+
 .alert-box__body {
   @apply ml-2;
   @apply font-semibold;
@@ -73,7 +81,9 @@
 }
 
 .alert-box__close {
-  @apply absolute;
-  @apply text-3xl;
+  @apply text-4xl;
   right: 1rem;
+  @apply ml-3;
+  @apply p-0;
+  line-height: 1rem;
 }

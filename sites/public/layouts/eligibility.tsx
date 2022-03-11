@@ -1,6 +1,3 @@
-import Layout from "./application"
-import styles from "./Eligibility.module.scss"
-import { ApplicationTimeout } from "../src/forms/applications/ApplicationTimeout"
 import React, { useContext } from "react"
 import {
   AppearanceStyleType,
@@ -10,6 +7,9 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import Layout from "./application"
+import styles from "./Eligibility.module.scss"
+import { ApplicationTimeout } from "../src/forms/applications/ApplicationTimeout"
 import { EligibilityContext } from "../lib/EligibilityContext"
 import { ELIGIBILITY_SECTIONS } from "../lib/constants"
 import { eligibilityRoute } from "../lib/helpers"

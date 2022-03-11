@@ -8,3 +8,8 @@ export const ELIGIBILITY_SECTIONS = [
   "income",
 ]
 export const ELIGIBILITY_ROUTE = "eligibility"
+
+export enum UserStatus {
+  LoggedIn = "logged in",
+  NotLoggedIn = "not logged in",
+}

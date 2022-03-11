@@ -25,7 +25,7 @@ const NewListing = () => {
           description={metaDescription}
         />
 
-        <PageHeader className="relative" title={t("listings.newListing")}>
+        <PageHeader className={"relative md:pt-16"} title={t("listings.newListing")}>
           <div className="flex top-4 right-4 absolute z-50 flex-col items-center">
             <SiteAlert type="success" timeout={5000} dismissable />
           </div>

@@ -1,13 +1,13 @@
 import { SelectQueryBuilder } from "typeorm"
-import { summarizeUnitsByTypeAndRent } from "../../shared/units-transformations"
+import { getUnitGroupSummary } from "../../shared/units-transformations"
 import { Listing } from "../entities/listing.entity"
 import { views } from "./config"
-import { View } from "./types"
+import { View, BaseView } from "../../views/base.view"
 
 export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   switch (views[view]) {
     case views.base:
-      return new BaseView(qb)
+      return new BaseListingView(qb)
     case views.detail:
       return new DetailView(qb)
     case views.full:
@@ -16,11 +16,11 @@ export function getView(qb: SelectQueryBuilder<Listing>, view?: string) {
   }
 }
 
-export class BaseView {
+export class BaseListingView extends BaseView {
   qb: SelectQueryBuilder<Listing>
   view: View
   constructor(qb: SelectQueryBuilder<Listing>) {
-    this.qb = qb
+    super(qb)
     this.view = views.base
   }
 
@@ -37,21 +37,21 @@ export class BaseView {
   mapUnitSummary(listings) {
     return listings.map((listing) => ({
       ...listing,
-      unitsSummarized: {
-        byUnitTypeAndRent: summarizeUnitsByTypeAndRent(listing.property.units),
+      unitSummaries: {
+        byUnitTypeAndRent: getUnitGroupSummary(listing.unitGroups),
       },
     }))
   }
 }
 
-export class DetailView extends BaseView {
+export class DetailView extends BaseListingView {
   constructor(qb: SelectQueryBuilder<Listing>) {
     super(qb)
     this.view = views.detail
   }
 }
 
-export class FullView extends BaseView {
+export class FullView extends BaseListingView {
   constructor(qb: SelectQueryBuilder<Listing>) {
     super(qb)
     this.view = views.full

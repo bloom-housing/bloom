@@ -28,7 +28,6 @@ const LeasingAgent = () => {
             label={t("leasingAgent.name")}
             name={"leasingAgentName"}
             id={"leasingAgentName"}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.leasingAgentName)}
             errorMessage={fieldMessage(errors?.leasingAgentName)}
             placeholder={t("leasingAgent.namePlaceholder")}
@@ -41,7 +40,6 @@ const LeasingAgent = () => {
             label={t("t.email")}
             name={"leasingAgentEmail"}
             id={"leasingAgentEmail"}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.leasingAgentEmail)}
             errorMessage={fieldMessage(errors?.leasingAgentEmail)}
             placeholder={t("t.emailAddressPlaceholder")}
@@ -54,7 +52,6 @@ const LeasingAgent = () => {
             label={t("t.phone")}
             name={"leasingAgentPhone"}
             id={"leasingAgentPhone"}
-            subNote={t("listings.requiredToPublish")}
             error={fieldHasError(errors?.leasingAgentPhone)}
             errorMessage={fieldMessage(errors?.leasingAgentPhone)}
             placeholder={t("t.phoneNumberPlaceholder")}
@@ -78,7 +75,6 @@ const LeasingAgent = () => {
             fullWidth={true}
             placeholder={t("leasingAgent.officeHoursPlaceholder")}
             register={register}
-            maxLength={150}
           />
         </GridSection>
       </GridSection>

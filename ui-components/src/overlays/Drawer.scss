@@ -61,6 +61,7 @@
 
 .drawer__header {
   @apply flex;
+  @apply items-center;
   @apply relative;
   @apply bg-white;
   @apply p-5;

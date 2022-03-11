@@ -25,6 +25,8 @@ const mockUser: User = {
   createdAt: new Date("2020-01-01"),
   updatedAt: new Date("2020-01-01"),
   jurisdictions: [],
+  passwordUpdatedAt: new Date("2020-01-01"),
+  passwordValidForDays: 180,
 }
 
 let initialStateLoaded = false

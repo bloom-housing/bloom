@@ -33,8 +33,8 @@ import DetailBuildingFeatures from "../../../src/listings/PaperListingDetails/se
 import DetailRankingsAndResults from "../../../src/listings/PaperListingDetails/sections/DetailRankingsAndResults"
 import DetailApplicationTypes from "../../../src/listings/PaperListingDetails/sections/DetailApplicationTypes"
 import DetailApplicationAddress from "../../../src/listings/PaperListingDetails/sections/DetailApplicationAddress"
-import DetailPreferences from "../../../src/listings/PaperListingDetails/sections/DetailPreferences"
-import DetailCommunityType from "../../../src/listings/PaperListingDetails/sections/DetailCommunityType"
+import DetailPrograms from "../../../src/listings/PaperListingDetails/sections/DetailPrograms"
+import DetailVerification from "../../../src/listings/PaperListingDetails/sections/DetailVerification"
 
 export default function ApplicationsList() {
   const router = useRouter()
@@ -120,13 +120,13 @@ export default function ApplicationsList() {
                     <DetailListingIntro />
                     <DetailListingPhoto />
                     <DetailBuildingDetails />
-                    <DetailCommunityType />
                     <DetailUnits setUnitDrawer={setUnitDrawer} />
-                    <DetailPreferences />
+                    <DetailPrograms />
                     <DetailAdditionalFees />
                     <DetailBuildingFeatures />
                     <DetailAdditionalEligibility />
                     <DetailAdditionalDetails />
+                    <DetailVerification />
                     <DetailRankingsAndResults />
                     <DetailLeasingAgent />
                     <DetailApplicationTypes />

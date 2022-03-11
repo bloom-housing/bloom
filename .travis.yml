@@ -35,33 +35,33 @@ jobs:
       name: "Backend e2e tests"
     - script: yarn test:public:unit-tests
       name: "Public site unit tests"
-    - stage: longer tests
-      script: yarn test:shared:ui:a11y
-      name: "Storybook a11y testing"
-    - stage: longer tests
-      name: "Public site Cypress tests"
-      script:
-        - yarn cypress install
-        - yarn db:reseed
-        - cd backend/core
-        - yarn nest start &
-        - cd ../../sites/public
-        - yarn build
-        - yarn start &
-        - yarn wait-on "http-get://localhost:3000" && yarn cypress run
-        - kill $(jobs -p) || true
-    - stage: longer tests
-      name: "Partners site Cypress tests"
-      script:
-        - yarn cypress install
-        - yarn db:reseed
-        - cd backend/core
-        - yarn nest start &
-        - cd ../../sites/partners
-        - yarn build
-        - yarn start -p 3001 &
-        - yarn wait-on "http-get://localhost:3001" && yarn cypress run
-        - kill $(jobs -p) || true
+    # - stage: longer tests
+    #   script: yarn test:shared:ui:a11y
+    #   name: "Storybook a11y testing"
+    # - stage: longer tests
+    #   name: "Public site Cypress tests"
+    #   script:
+    #     - yarn cypress install
+    #     - yarn db:reseed
+    #     - cd backend/core
+    #     - yarn nest start &
+    #     - cd ../../sites/public
+    #     - yarn build
+    #     - yarn start &
+    #     - yarn wait-on "http-get://localhost:3000" && yarn cypress run
+    #     - kill $(jobs -p) || true
+    # - stage: longer tests
+    #   name: "Partners site Cypress tests"
+    #   script:
+    #     - yarn cypress install
+    #     - yarn db:reseed
+    #     - cd backend/core
+    #     - yarn nest start &
+    #     - cd ../../sites/partners
+    #     - yarn build
+    #     - yarn start -p 3001 &
+    #     - yarn wait-on "http-get://localhost:3001" && yarn cypress run
+    #     - kill $(jobs -p) || true
 
 addons:
   postgresql: "11"

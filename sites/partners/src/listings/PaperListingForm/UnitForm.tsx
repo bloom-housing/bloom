@@ -14,8 +14,8 @@ import {
   numberOptions,
   AuthContext,
 } from "@bloom-housing/ui-components"
-import { useForm, useWatch } from "react-hook-form"
-import { TempUnit } from "."
+import { useForm, useWatch, useFormContext } from "react-hook-form"
+import { TempUnit } from "./formTypes"
 import {
   AmiChart,
   AmiChartItem,
@@ -28,13 +28,13 @@ import { arrayToFormOptions, getRentType, fieldHasError } from "../../../lib/hel
 
 type UnitFormProps = {
   onSubmit: (unit: TempUnit) => void
-  onClose: (reopen: boolean, defaultUnit?: TempUnit) => void
+  onClose: (openNextUnit: boolean, openCurrentUnit: boolean, defaultUnit: TempUnit) => void
   defaultUnit: TempUnit | undefined
-  existingId: number
   nextId: number
+  draft: boolean
 }
 
-const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFormProps) => {
+const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormProps) => {
   const { amiChartsService } = useContext(AuthContext)
 
   const [options, setOptions] = useState({
@@ -51,10 +51,14 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     value: status,
   }))
 
+  const formMethods = useFormContext()
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { watch } = formMethods
+  const jurisdiction: string = watch("jurisdiction.id")
   /**
    * fetch form options
    */
-  const { data: amiCharts = [] } = useAmiChartList()
+  const { data: amiCharts = [] } = useAmiChartList(jurisdiction)
   const { data: unitPriorities = [] } = useUnitPriorityList()
   const { data: unitTypes = [] } = useUnitTypeList()
 
@@ -155,14 +159,19 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
   const resetAmiTableValues = (defaultAmiChart?: AmiChartItem[], defaultAmiPercentage?: string) => {
     const chart = defaultAmiChart ?? currentAmiChart
     const percentage = defaultAmiPercentage ?? amiPercentage
-    const newPercentages = chart
-      .filter((item: AmiChartItem) => item.percentOfAmi === parseInt(percentage))
-      .sort(function (a: AmiChartItem, b: AmiChartItem) {
-        return a.householdSize - b.householdSize
-      })
-    newPercentages.forEach((amiValue: AmiChartItem, index: number) => {
-      setValue(`maxIncomeHouseholdSize${index + 1}`, amiValue.income.toString())
-    })
+    const newPercentagesByHouseHold = chart.reduce((acc, item: AmiChartItem) => {
+      if (item.percentOfAmi === parseInt(percentage)) {
+        acc[item.householdSize] = item
+      }
+      return acc
+    }, {})
+
+    for (let i = 1; i < 9; i++) {
+      setValue(
+        `maxIncomeHouseholdSize${i}`,
+        newPercentagesByHouseHold[i] ? newPercentagesByHouseHold[i].income.toString() : ""
+      )
+    }
   }
 
   useEffect(() => {
@@ -172,12 +181,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amiPercentage])
 
-  async function onFormSubmit(action?: string) {
-    setLoading(true)
-    const data = getValues()
-    const validation = await trigger()
-    if (!validation) return
+  type FormSubmitAction = "saveNew" | "saveExit" | "save"
 
+  const formatFormData = (data: { [x: string]: any }) => {
     if (data.amiChart?.id) {
       const chart = amiCharts.find((chart) => chart.id === data.amiChart.id)
       data.amiChart = chart
@@ -213,8 +219,10 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
           (item: AmiChartItem) =>
             item.householdSize === index + 1 && item.percentOfAmi === parseInt(amiPercentage)
         )[0]
+
         if (
           data[`maxIncomeHouseholdSize${index + 1}`] &&
+          existingChartValue &&
           parseInt(data[`maxIncomeHouseholdSize${index + 1}`]) === existingChartValue.income
         ) {
           delete data[`maxIncomeHouseholdSize${index + 1}`]
@@ -222,7 +230,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       })
     }
 
-    const formData: TempUnit = {
+    const formData = {
       createdAt: undefined,
       updatedAt: undefined,
       status: UnitStatus.available,
@@ -230,28 +238,59 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
       ...data,
     }
 
-    if (action === "copyNew") {
+    return formData
+  }
+
+  const copyAndNew = () => {
+    const data = getValues()
+    const formData = formatFormData(data)
+    onClose(true, false, formData)
+    void resetDefaultValues()
+  }
+
+  async function onFormSubmit(action?: FormSubmitAction) {
+    setLoading(true)
+    const data = getValues()
+    const validation = await trigger()
+    if (!validation) return
+
+    const formData = formatFormData(data)
+
+    // If we're looking at a draft unit in the drawer
+    // Save --> creates a new unit, drawer stays open on that unit
+    // Save and New --> creates a new unit, opens a draft empty drawer
+    // Save & Exit --> creates a new unit, closes the drawer
+    // If we're looking at a saved unit
+    // Make a Copy --> does not create a new unit, opens a draft drawer with same data
+    // Save & New --> does not create a new unit, submits changes with existing ID, opens a draft empty drawer
+    // Save & Exit --> does not create a new unit, submits changes with existing ID, closes the drawer
+
+    if (action === "saveNew") {
       onSubmit({
         ...formData,
-        tempId: nextId,
+        tempId: draft ? nextId : defaultUnit.tempId,
       })
-      onClose(true, { ...formData, tempId: nextId + 1 })
-      void resetDefaultValues()
-    } else if (action === "saveNew") {
-      onSubmit({
-        ...formData,
-        tempId: nextId,
-      })
-      onClose(true, null)
+      onClose(true, false, null)
       reset()
-      void resetDefaultValues()
       setValue("status", "available")
-    } else {
+      setLoading(false)
+    }
+    if (action === "saveExit") {
       onSubmit({
         ...formData,
-        tempId: existingId ?? nextId,
+        tempId: draft ? nextId : defaultUnit.tempId,
       })
-      onClose(false)
+      onClose(false, false, null)
+    }
+    if (action === "save") {
+      onSubmit({
+        ...formData,
+        tempId: nextId,
+      })
+      onClose(false, true, {
+        ...formData,
+        tempId: nextId,
+      })
     }
   }
 
@@ -313,7 +352,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
                 label={t("listings.unit.unitNumber")}
                 placeholder={t("listings.unit.unitNumber")}
                 register={register}
-                type="number"
+                type="text"
                 readerOnly
               />
             </ViewItem>
@@ -550,15 +589,25 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
         </GridSection>
       </div>
       <div className="mt-6">
-        <Button
-          type="button"
-          onClick={() => onFormSubmit("copyNew")}
-          styleType={AppearanceStyleType.secondary}
-          className="mr-4"
-        >
-          {t("t.copyNew")}
-        </Button>
-
+        {!draft ? (
+          <Button
+            type="button"
+            onClick={() => copyAndNew()}
+            styleType={AppearanceStyleType.secondary}
+            className="mr-4"
+          >
+            {t("t.copy")}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            onClick={() => onFormSubmit("save")}
+            styleType={AppearanceStyleType.secondary}
+            className="mr-4"
+          >
+            {t("t.save")}
+          </Button>
+        )}
         <Button
           type="button"
           onClick={() => onFormSubmit("saveNew")}
@@ -570,7 +619,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
         <Button
           type="button"
-          onClick={() => onFormSubmit()}
+          onClick={() => onFormSubmit("saveExit")}
           styleType={AppearanceStyleType.primary}
         >
           {t("t.saveExit")}
@@ -578,7 +627,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, existingId, nextId }: UnitFo
 
         <Button
           type="button"
-          onClick={() => onClose(false)}
+          onClick={() => onClose(false, false, null)}
           styleType={AppearanceStyleType.secondary}
           border={AppearanceBorderType.borderless}
         >

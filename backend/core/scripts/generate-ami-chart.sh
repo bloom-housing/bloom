@@ -28,7 +28,7 @@ OUTPUT_FILE="$DIRECTORY/$FILENAME.ts"
 echo "Generating $OUTPUT_FILE"
 
 cat << EOF > $OUTPUT_FILE
-import { AmiChartCreateDto } from "../../ami-charts/dto/ami-chart.dto"
+import { AmiChartCreateDto } from "../../../ami-charts/dto/ami-chart.dto"
 import { BaseEntity } from "typeorm"
 
 // THIS FILE WAS AUTOMATICALLY GENERATED FROM $FILE.

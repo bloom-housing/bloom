@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const withTM = require("next-transpile-modules")([
+  "@bloom-housing/shared-helpers",
   "@bloom-housing/ui-components",
   "@bloom-housing/backend-core",
 ])
@@ -17,6 +18,8 @@ let BACKEND_API_BASE = "http://localhost:3100"
 if (process.env.INCOMING_HOOK_BODY && process.env.INCOMING_HOOK_BODY.startsWith("http")) {
   // This is a value that can get set via a Netlify webhook for branch deploys
   BACKEND_API_BASE = decodeURIComponent(process.env.INCOMING_HOOK_BODY)
+} else if (process.env.BACKEND_PROXY_BASE) {
+  BACKEND_API_BASE = process.env.BACKEND_PROXY_BASE
 } else if (process.env.BACKEND_API_BASE) {
   BACKEND_API_BASE = process.env.BACKEND_API_BASE
 }

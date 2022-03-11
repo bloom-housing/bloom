@@ -97,17 +97,31 @@ export const altContactRelationshipKeys = [
 
 export const ethnicityKeys = ["hispanicLatino", "notHispanicLatino"]
 
-export const raceKeys = [
+export const rootRaceKeys = [
   "americanIndianAlaskanNative",
   "asian",
   "blackAfricanAmerican",
   "nativeHawaiianOtherPacificIslander",
   "white",
-  "americanIndianAlaskanNativeAndBlackAfricanAmerican",
-  "americanIndianAlaskanNativeAndWhite",
-  "asianAndWhite",
-  "blackAfricanAmericanAndWhite",
-  "otherMutliracial",
+  "otherMultiracial",
+  "declineToRespond",
+]
+
+export const asianKeys = [
+  "asianIndian",
+  "chinese",
+  "filipino",
+  "japanese",
+  "korean",
+  "vietnamese",
+  "otherAsian",
+]
+
+export const nativeHawaiianOtherPacificIslanderKeys = [
+  "nativeHawaiian",
+  "guamanianOrChamorro",
+  "samoan",
+  "otherPacificIslander",
 ]
 
 export const genderKeys = [
@@ -127,9 +141,54 @@ export const sexualOrientation = [
   "notListed",
 ]
 
+export const prependRoot = (root: string, subKeys: string[]) => {
+  return subKeys.map((key) => `${root}-${key}`)
+}
+
+interface subCheckboxes {
+  [key: string]: string[]
+}
+
+// Transform an object with keys that may be prepended with a string to an array of only the values with the string
+export const fieldGroupObjectToArray = (
+  formObject: { [key: string]: any },
+  rootKey: string
+): string[] => {
+  const modifiedArray: string[] = []
+  const getValue = (elem: string) => {
+    const formSubKey = elem.substring(elem.indexOf("-") + 1)
+    return formSubKey === formObject[elem] ? formSubKey : `${formSubKey}: ${formObject[elem]}`
+  }
+  Object.keys(formObject)
+    .filter((formValue) => formValue.split("-")[0] === rootKey && formObject[formValue])
+    .forEach((elem) => {
+      if (formObject[elem].isArray) {
+        formObject[elem].forEach(() => {
+          modifiedArray.push(getValue(elem))
+        })
+      } else {
+        modifiedArray.push(getValue(elem))
+      }
+    })
+  return modifiedArray
+}
+
+export const raceKeys: subCheckboxes = {
+  americanIndianAlaskanNative: [],
+  asian: prependRoot("asian", asianKeys),
+  blackAfricanAmerican: [],
+  nativeHawaiianOtherPacificIslander: prependRoot(
+    "nativeHawaiianOtherPacificIslander",
+    nativeHawaiianOtherPacificIslanderKeys
+  ),
+  white: [],
+  otherMultiracial: [],
+  declineToRespond: [],
+}
+
 export const howDidYouHear = [
   {
-    id: "alamedaCountyHCDWebsite",
+    id: "jurisdictionWebsite",
   },
   {
     id: "developerWebsite",
@@ -177,4 +236,22 @@ export const preferredUnit = [
   },
 ]
 
-export const bedroomKeys = ["studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+export const bedroomKeys = ["SRO", "studio", "oneBdrm", "twoBdrm", "threeBdrm"]
+
+export const listingFeatures = {
+  elevator: "Elevator",
+  wheelchairRamp: "Wheelchair Ramp",
+  serviceAnimalsAllowed: "Service Animals Allowed",
+  accessibleParking: "Accessible Parking",
+  parkingOnSite: "Parking on Site",
+  inUnitWasherDryer: "In Unit Washer Dryer",
+  laundryInBuilding: "Laundry in Building",
+  barrierFreeEntrance: "Barrier Free Entrance",
+  rollInShower: "Laundry in Building",
+  grabBars: "Grab Bars",
+  heatingInUnit: "Heating in Unit",
+  acInUnit: "AC in Unit",
+  hearing: "Hearing",
+  mobility: "Mobility",
+  visual: "Visual",
+}

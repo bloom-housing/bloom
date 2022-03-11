@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import {
-  cloudinaryUrlFromId,
   t,
   AppearanceStyleType,
   AppearanceBorderType,
@@ -13,6 +12,8 @@ import {
   MinimalTable,
   TableThumbnail,
 } from "@bloom-housing/ui-components"
+import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
+
 import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
 
 const ListingPhoto = () => {
@@ -157,6 +158,7 @@ const ListingPhoto = () => {
               <MinimalTable headers={photoTableHeaders} data={listingPhotoTableRows}></MinimalTable>
             ) : (
               <Button
+                id="addPhotoButton"
                 type="button"
                 styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
                 onClick={() => {
@@ -170,7 +172,7 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
-      <p className="field-sub-note">{t("listings.requiredToPublish")}</p>
+
       {fieldHasError(errors?.image) && (
         <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
       )}
@@ -188,6 +190,7 @@ const ListingPhoto = () => {
               resetDrawerState()
             }}
             styleType={AppearanceStyleType.primary}
+            data-test-id={!cloudinaryData.url ? "listing-photo-empty" : "listing-photo-uploaded"}
           >
             Save
           </Button>,

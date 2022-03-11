@@ -3,12 +3,12 @@ import { NotFoundException } from "@nestjs/common"
 import { ReservedCommunityType } from "./entities/reserved-community-type.entity"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
-import { assignDefined } from "../shared/assign-defined"
 import {
   ReservedCommunityTypeCreateDto,
   ReservedCommunityTypeUpdateDto,
 } from "./dto/reserved-community-type.dto"
 import { ReservedCommunityTypeListQueryParams } from "./dto/reserved-community-type-list-query-params"
+import { assignDefined } from "../shared/utils/assign-defined"
 
 export class ReservedCommunityTypesService {
   constructor(
