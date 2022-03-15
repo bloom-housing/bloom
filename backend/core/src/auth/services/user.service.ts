@@ -207,7 +207,12 @@ export class UserService {
   }
 
   public async confirm(dto: ConfirmDto) {
-    const token = decode(dto.token, process.env.APP_SECRET)
+    let token: Record<string, string> = {}
+    try {
+      token = decode(dto.token, process.env.APP_SECRET)
+    } catch (e) {
+      throw new HttpException(USER_ERRORS.TOKEN_EXPIRED.message, USER_ERRORS.TOKEN_EXPIRED.status)
+    }
 
     const user = await this.find({ id: token.id })
     if (!user) {
@@ -268,6 +273,37 @@ export class UserService {
       } catch (err) {
         throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
       }
+    }
+  }
+
+  public async resendPartnerConfirmation(dto: EmailDto) {
+    const user = await this.findByEmail(dto.email)
+    if (!user) {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+    if (user.confirmedAt) {
+      // if the user is already confirmed, we do nothing
+      // this is so on the front end people can't cheat to find out who has an email in the system
+      return {}
+    } else {
+      user.confirmationToken = UserService.createConfirmationToken(user.id, user.email)
+      try {
+        await this.userRepository.save(user)
+        const confirmationUrl = UserService.getPartnersConfirmationUrl(dto.appUrl, user)
+        await this.emailService.invite(user, dto.appUrl, confirmationUrl)
+        return user
+      } catch (err) {
+        throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
+      }
+    }
+  }
+
+  public async isUserConfirmationTokenValid(dto: ConfirmDto) {
+    try {
+      decode(dto.token, process.env.APP_SECRET)
+      return true
+    } catch (e) {
+      return false
     }
   }
 

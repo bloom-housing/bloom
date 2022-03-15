@@ -8,6 +8,9 @@ export class CatchAllFilter extends BaseExceptionFilter {
     if (exception.name === "EntityNotFound") {
       const response = host.switchToHttp().getResponse()
       response.status(404).json({ message: exception.message })
+    } else if (exception.message === "tokenExpired") {
+      const response = host.switchToHttp().getResponse()
+      response.status(404).json({ message: exception.message })
     } else {
       super.catch(exception, host)
     }

@@ -183,7 +183,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
 
     void resendConfirmation(() =>
       userService
-        .resendConfirmation({ body })
+        .resendPartnerConfirmation({ body })
         .then(() => {
           setSiteAlertMessage(t(`users.confirmationSent`), "success")
         })

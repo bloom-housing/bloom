@@ -13,9 +13,12 @@ import {
   useMutate,
   AuthContext,
   AlertBox,
+  Modal,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
+import { ReRequestConfirmation } from "./ReRequestConfirmation"
+import { useEffect } from "react"
 
 type FormUserConfirmFields = {
   password: string
@@ -40,6 +43,27 @@ const FormUserConfirm = () => {
   password.current = watch("password", "")
 
   const [isLoginLoading, setLoginLoading] = useState(false)
+  const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
+  const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
+
+  useEffect(() => {
+    const asyncEffect = async () => {
+      const body = {
+        token,
+      }
+      try {
+        const res = await userService.isUserConfirmationTokenValid({ body })
+        if (!res) {
+          setRerequestModalOpen(true)
+        }
+      } catch (e) {
+        setRerequestModalOpen(true)
+      }
+    }
+    if (token) {
+      asyncEffect()
+    }
+  }, [token, userService, setRerequestModalOpen])
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
@@ -65,6 +89,8 @@ const FormUserConfirm = () => {
 
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
         void router.push("/")
+      } else {
+        setRerequestModalOpen(true)
       }
     } catch (err) {
       console.error(err)
@@ -82,87 +108,108 @@ const FormUserConfirm = () => {
   }
 
   return (
-    <FormCard>
-      <div className="form-card__lead text-center border-b mx-0 px-5">
-        <Icon size="2xl" symbol="settings" />
-        <h2 className="form-card__title">{t("users.addPassword")}</h2>
-        <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
+    <>
+      <FormCard>
+        <div className="form-card__lead text-center border-b mx-0 px-5">
+          <Icon size="2xl" symbol="settings" />
+          <h2 className="form-card__title">{t("users.addPassword")}</h2>
+          <p className="mt-4 field-note">{t("users.needUniquePassword")}</p>
 
-        {isError && (
-          <AlertBox className="mt-5" type="alert" closeable>
-            {t(`errors.alert.badRequest`)}
-          </AlertBox>
-        )}
-      </div>
+          {isError && (
+            <AlertBox className="mt-5" type="alert" closeable>
+              {t(`errors.alert.badRequest`)}
+            </AlertBox>
+          )}
 
-      <Form id="update-password" onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-card__group is-borderless">
-          <fieldset>
-            <legend className="field-label--caps">
-              {t("authentication.createAccount.password")}
-            </legend>
-            <p className="field-note mb-4">{t("users.makeNote")}</p>
-
-            <div className="mt-5">
-              <Field
-                type="password"
-                name="password"
-                label={t("account.settings.newPassword")}
-                note={t("authentication.createAccount.passwordInfo")}
-                placeholder={t("authentication.createAccount.mustBe8Chars")}
-                validation={{
-                  required: true,
-                  minLength: MIN_PASSWORD_LENGTH,
-                  pattern: passwordRegex,
-                }}
-                error={!!errors?.password}
-                errorMessage={t("authentication.signIn.passwordError")}
-                register={register}
-                className={"mb-1"}
-                inputProps={{
-                  autoComplete: "off",
-                }}
-              />
-            </div>
-
-            <div className="mt-5">
-              <Field
-                type="password"
-                name="passwordConfirmation"
-                label={t("account.settings.confirmNewPassword")}
-                placeholder={t("authentication.createAccount.mustBe8Chars")}
-                validation={{
-                  required: true,
-                  validate: (value) =>
-                    value === password.current ||
-                    t("authentication.createAccount.errors.passwordMismatch"),
-                }}
-                error={!!errors?.passwordConfirmation}
-                errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
-                register={register}
-                className={"mb-1"}
-                inputProps={{
-                  autoComplete: "off",
-                }}
-              />
-            </div>
-          </fieldset>
+          {newConfirmationRequested && (
+            <AlertBox className="mt-5" type="success" closeable>
+              {t(`users.confirmationSent`)}
+            </AlertBox>
+          )}
         </div>
 
-        <div className="form-card__pager mt-8">
-          <div className="form-card__pager-row primary">
-            <Button
-              type="submit"
-              styleType={AppearanceStyleType.primary}
-              className={"items-center"}
-              loading={isConfirmLoading || isLoginLoading}
-            >
-              {t("users.confirmAccount")}
-            </Button>
+        <Form id="update-password" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-card__group is-borderless">
+            <fieldset>
+              <legend className="field-label--caps">
+                {t("authentication.createAccount.password")}
+              </legend>
+              <p className="field-note mb-4">{t("users.makeNote")}</p>
+
+              <div className="mt-5">
+                <Field
+                  type="password"
+                  name="password"
+                  label={t("account.settings.newPassword")}
+                  note={t("authentication.createAccount.passwordInfo")}
+                  placeholder={t("authentication.createAccount.mustBe8Chars")}
+                  validation={{
+                    required: true,
+                    minLength: MIN_PASSWORD_LENGTH,
+                    pattern: passwordRegex,
+                  }}
+                  error={!!errors?.password}
+                  errorMessage={t("authentication.signIn.passwordError")}
+                  register={register}
+                  className={"mb-1"}
+                  inputProps={{
+                    autoComplete: "off",
+                  }}
+                />
+              </div>
+
+              <div className="mt-5">
+                <Field
+                  type="password"
+                  name="passwordConfirmation"
+                  label={t("account.settings.confirmNewPassword")}
+                  placeholder={t("authentication.createAccount.mustBe8Chars")}
+                  validation={{
+                    required: true,
+                    validate: (value) =>
+                      value === password.current ||
+                      t("authentication.createAccount.errors.passwordMismatch"),
+                  }}
+                  error={!!errors?.passwordConfirmation}
+                  errorMessage={t("authentication.createAccount.errors.passwordMismatch")}
+                  register={register}
+                  className={"mb-1"}
+                  inputProps={{
+                    autoComplete: "off",
+                  }}
+                />
+              </div>
+            </fieldset>
           </div>
-        </div>
-      </Form>
-    </FormCard>
+
+          <div className="form-card__pager mt-8">
+            <div className="form-card__pager-row primary">
+              <Button
+                type="submit"
+                styleType={AppearanceStyleType.primary}
+                className={"items-center"}
+                loading={isConfirmLoading || isLoginLoading}
+              >
+                {t("users.confirmAccount")}
+              </Button>
+            </div>
+          </div>
+        </Form>
+      </FormCard>
+
+      <Modal
+        open={rerequestModalOpen}
+        title={t("authentication.createAccount.errors.tokenExpired")}
+        ariaDescription={t("users.requestResendDescription")}
+        onClose={() => setRerequestModalOpen(false)}
+      >
+        <ReRequestConfirmation
+          onClose={setRerequestModalOpen}
+          clearExistingErrors={resetMutation}
+          setAlert={setNewConfirmationRequested}
+        />
+      </Modal>
+    </>
   )
 }
 
