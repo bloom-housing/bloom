@@ -298,7 +298,7 @@ export class UserService {
     }
   }
 
-  public async isUserConfirmationTokenValid(dto: ConfirmDto) {
+  public isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
       decode(dto.token, process.env.APP_SECRET)
       return true

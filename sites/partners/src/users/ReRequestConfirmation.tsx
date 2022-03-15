@@ -26,6 +26,7 @@ const ReRequestConfirmation = ({
   clearExistingErrors,
   setAlert,
 }: ReRequestConfirmationProps) => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, errors, handleSubmit, clearErrors } = useForm<FormFields>()
   const { userService } = useContext(AuthContext)
 

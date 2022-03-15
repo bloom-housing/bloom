@@ -61,7 +61,7 @@ const FormUserConfirm = () => {
       }
     }
     if (token) {
-      asyncEffect()
+      void asyncEffect()
     }
   }, [token, userService, setRerequestModalOpen])
 
