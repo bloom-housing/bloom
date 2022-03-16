@@ -55,9 +55,10 @@ const ConfirmationModal = ({
 
     void mutate(
       () =>
-        userService.resendConfirmation({
+        userService.resendPartnerConfirmation({
           body: {
             email: emailResend,
+            appUrl: window.location.origin,
           },
         }),
       {

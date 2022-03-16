@@ -85,6 +85,14 @@ export class UserController {
     return mapTo(StatusDto, { status: "ok" })
   }
 
+  @Post("resend-partner-confirmation")
+  @UseGuards(OptionalAuthGuard, AuthzGuard)
+  @ApiOperation({ summary: "Resend confirmation", operationId: "resendPartnerConfirmation" })
+  async resendPartnerConfirmation(@Body() dto: EmailDto): Promise<StatusDto> {
+    await this.userService.resendPartnerConfirmation(dto)
+    return mapTo(StatusDto, { status: "ok" })
+  }
+
   @Put("confirm")
   @ApiOperation({ summary: "Confirm email", operationId: "confirm" })
   async confirm(@Body() dto: ConfirmDto): Promise<LoginResponseDto> {
