@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react"
 import axios from "axios"
-import dayjs from "dayjs"
 import qs from "qs"
 import { useRouter } from "next/router"
 import { ApplicationStatusProps, isInternalLink, t } from "@bloom-housing/ui-components"
@@ -10,13 +9,11 @@ import {
   Jurisdiction,
   Listing,
   ListingFilterParams,
-  ListingReviewOrder,
-  ListingStatus,
   OrderByFieldsEnum,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
-import { openInFuture } from "../lib/helpers"
+import { getListingApplicationStatus } from "../lib/helpers"
 
 export const useRedirectToPrevPage = (defaultPath = "/") => {
   const router = useRouter()
@@ -50,36 +47,8 @@ export const useGetApplicationStatusProps = (listing: Listing): ApplicationStatu
 
   useEffect(() => {
     if (!listing) return
-    let content = ""
-    let subContent = ""
-    let formattedDate = ""
-    if (openInFuture(listing)) {
-      const date = listing.applicationOpenDate
-      const openDate = dayjs(date)
-      formattedDate = openDate.format("MMM D, YYYY")
-      content = t("listings.applicationOpenPeriod")
-    } else {
-      if (listing.applicationDueDate) {
-        const dueDate = dayjs(listing.applicationDueDate)
-        formattedDate = dueDate.format("MMM DD, YYYY")
-        formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
 
-        // if due date is in future, listing is open
-        if (dayjs() < dueDate) {
-          content = t("listings.applicationDeadline")
-        } else {
-          content = t("listings.applicationsClosed")
-        }
-      }
-      if (listing.status === ListingStatus.closed) {
-        content = t("listings.applicationsClosed")
-      }
-    }
-    content = formattedDate !== "" ? `${content}: ${formattedDate}` : content
-    if (listing.reviewOrderType === ListingReviewOrder.firstComeFirstServe) {
-      subContent = content
-      content = t("listings.applicationFCFS")
-    }
+    const { content, subContent } = getListingApplicationStatus(listing)
 
     setProps({ content, subContent })
   }, [listing])
