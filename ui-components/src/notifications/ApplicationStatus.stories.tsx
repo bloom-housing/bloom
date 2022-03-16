@@ -79,6 +79,16 @@ export const pastDueAndVivid = () => (
   />
 )
 
+export const pastDueWithIconColor = () => (
+  <ApplicationStatus
+    content={
+      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
+    }
+    iconColor={"#ff0000"}
+    status={ApplicationStatusType.Closed}
+  />
+)
+
 const listing2 = Object.assign({}, Archer) as any
 days = 10
 listing2.applicationDueDate = dayjs().add(days, "days").format()
