@@ -220,7 +220,7 @@ const FormUserConfirm = () => {
         slim={true}
       >
         <div className="overflow-y-auto max-h-96">
-          <MarkdownSection>
+          <MarkdownSection padding={false}>
             <Markdown options={{ disableParsingRawHTML: false }}>{pageContent}</Markdown>
           </MarkdownSection>
         </div>
