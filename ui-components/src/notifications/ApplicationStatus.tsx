@@ -67,7 +67,7 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
         {subContent && (
           <>
             <br />
-            <span className={"application-status__sub-content"}>{subContent}</span>
+            {subContent}
           </>
         )}
       </span>
