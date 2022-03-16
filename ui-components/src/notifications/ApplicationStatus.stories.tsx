@@ -19,7 +19,7 @@ export default {
 function formatDateTime(date: Date, showTime?: boolean) {
   return (
     dayjs(date).format("MMMM D, YYYY") +
-    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mm A") : "")
+    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mmA") : "")
   )
 }
 
