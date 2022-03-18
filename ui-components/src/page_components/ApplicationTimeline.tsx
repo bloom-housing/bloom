@@ -5,8 +5,11 @@ import { t } from "../helpers/translator"
 import "./ApplicationTimeline.scss"
 
 const ApplicationTimeline = () => (
-  <ul className="progress-nav application-timeline">
-    <li className="progress-nav__item is-active">
+  <ul
+    className="progress-nav application-timeline"
+    aria-label="Steps of processing your application"
+  >
+    <li className="progress-nav__item is-active" aria-current="step">
       <span className="text-white absolute">
         <Icon symbol="check" size="base" />
       </span>
