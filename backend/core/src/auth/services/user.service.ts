@@ -102,8 +102,9 @@ export class UserService {
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
     const distinctIDQB = this._getQb(false)
-    distinctIDQB.addSelect("user.id")
+    distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
+    distinctIDQB.orderBy("user.id")
     const qb = this._getQb()
 
     if (params.filter) {
@@ -123,6 +124,7 @@ export class UserService {
     qb.andWhere("user.id IN (:...distinctIDs)", {
       distinctIDs: distinctIDResult.items.map((elem) => elem.id),
     })
+
     const result = await qb.getMany()
     /**
      * admin are the only ones that can access all users
