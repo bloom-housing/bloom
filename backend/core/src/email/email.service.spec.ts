@@ -104,9 +104,7 @@ describe("EmailService", () => {
             FCFS:
               "Applicants will be contacted by the property agent on a first come first serve basis until vacancies are filled.",
             lottery:
-              "The lottery will be held on %{lotteryDate}. Applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
-            noLottery:
-              "Applicants will be contacted by the agent in waitlist order until vacancies are filled.",
+              "Applicants will be contacted by the agent in lottery rank order until vacancies are filled.",
           },
         },
         footer: {
@@ -186,7 +184,7 @@ describe("EmailService", () => {
       expect(sendMock.mock.calls[0][0].to).toEqual(user.email)
       expect(sendMock.mock.calls[0][0].subject).toEqual("Your Application Confirmation")
       expect(sendMock.mock.calls[0][0].html).toMatch(
-        /Applicants will be contacted by the agent in waitlist order until vacancies are filled/
+        /Applicants will be contacted by the agent in lottery rank order until vacancies are filled/
       )
       expect(sendMock.mock.calls[0][0].html).toMatch(
         /http:\/\/localhost:3000\/listing\/Uvbk5qurpB2WI9V6WnNdH/
