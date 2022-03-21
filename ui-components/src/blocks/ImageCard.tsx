@@ -23,15 +23,23 @@ export interface ImageTag {
 }
 
 export interface ImageCardProps {
-  imageUrl?: string
-  subtitle?: string
-  title: string
-  href?: string
   description?: string
-  tags?: ImageTag[]
+  href?: string
+  imageUrl?: string
   statuses?: StatusBarType[]
+  tags?: ImageTag[]
 }
 
+/**
+ * @component ImageCard
+ *
+ * @prop description - A description of the image, used as alt text
+ * @prop href - A link, used to wrap the entire component
+ * @prop imageUrl - An image URL, used as a background image
+ * @prop statuses - A list of status indicators, an ApplicationStatus component is rendered for each item at the bottom of the card
+ * @prop tags - A list of image tags, a Tag component is rendered for each over the image
+ *
+ */
 const ImageCard = (props: ImageCardProps) => {
   const getStatuses = () => {
     return props.statuses?.map((status, index) => {
@@ -77,11 +85,6 @@ const ImageCard = (props: ImageCardProps) => {
         ) : (
           <div className={"image-card__placeholder"} />
         )}
-        <div className={"image-card__overlay"} />
-        <figcaption className="image-card__figcaption">
-          <h2 className="image-card__title">{props.title}</h2>
-          {props.subtitle && <p className="image-card__subtitle">{props.subtitle}</p>}
-        </figcaption>
       </figure>
       {getStatuses()}
     </div>
