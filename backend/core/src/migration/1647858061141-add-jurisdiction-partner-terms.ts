@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm"
 
 const sjTermsContent = `
 ### Privacy and Disclosure
@@ -52,14 +52,15 @@ Non-city web sites may be linked through the Doorway Affordable Housing Portal. 
 `
 
 export class addJurisdictionPartnerTerms1647858061141 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    const loremIpsum =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    await queryRunner.query("UPDATE jurisdictions SET partner_terms = $1", [loremIpsum])
+    await queryRunner.query("UPDATE jurisdictions SET partner_terms = $1 WHERE name = $2", [
+      sjTermsContent,
+      "San Jose",
+    ])
+  }
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        const loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-        await queryRunner.query('UPDATE jurisdictions SET partner_terms = $1', [loremIpsum])
-        await queryRunner.query('UPDATE jurisdictions SET partner_terms = $1 WHERE name = $2', [sjTermsContent, 'San Jose'])
-    }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }
