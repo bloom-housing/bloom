@@ -1,5 +1,5 @@
 import React from "react"
-import { render, cleanup } from "@testing-library/react"
+import { render, cleanup, getAllByText } from "@testing-library/react"
 import { ListingCard } from "../../src/page_components/listing/ListingCard"
 
 afterEach(cleanup)
@@ -36,11 +36,9 @@ describe("<ListingCard>", () => {
         <div>child content</div>
       </ListingCard>
     )
-    expect(getByText("subtitle")).toBeTruthy()
-    expect(getByText("title")).toBeTruthy()
+    expect(getAllByText("subtitle")).toBeTruthy()
+    expect(getAllByText("title")).toBeTruthy()
     expect(getByText("see details")).toBeTruthy()
-    expect(getByText("card tag 1")).toBeTruthy()
-    expect(getByText("card tag 2")).toBeTruthy()
     expect(getByText("child content")).toBeTruthy()
     expect(getAllByText("reserved community tag")).toBeTruthy()
     expect(getAllByText("status content")).toBeTruthy()
@@ -54,7 +52,7 @@ describe("<ListingCard>", () => {
     expect(getAllByText("optional table subheader")).toBeTruthy()
   })
   it("renders minimal props without error", () => {
-    const { getByText } = render(
+    const { getAllByText } = render(
       <ListingCard
         imageCardProps={{
           imageUrl: "imageURL",
@@ -67,7 +65,7 @@ describe("<ListingCard>", () => {
         }}
       />
     )
-    expect(getByText("title")).toBeTruthy()
-    expect(getByText("subtitle")).toBeTruthy()
+    expect(getAllByText("title")).toBeTruthy()
+    expect(getAllByText("subtitle")).toBeTruthy()
   })
 })

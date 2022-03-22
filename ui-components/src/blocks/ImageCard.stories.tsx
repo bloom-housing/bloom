@@ -13,7 +13,7 @@ export const image = () => <ImageCard imageUrl="/images/listing.jpg" />
 
 export const withLink = () => <ImageCard href="/listings" imageUrl="/images/listing.jpg" />
 
-export const withNoImage = () => <ImageCard href="/listings" />
+export const withNoImage = () => <ImageCard />
 
 export const withOneStatus = () => (
   <ImageCard
