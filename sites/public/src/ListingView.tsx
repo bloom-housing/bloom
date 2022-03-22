@@ -369,7 +369,7 @@ export const ListingView = (props: ListingProps) => {
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
-      <header className="image-card--leader">
+      <header className="image-card--leader mx-2">
         <ImageCard
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
           tags={
@@ -410,32 +410,36 @@ export const ListingView = (props: ListingProps) => {
             })}
           </Message>
         )}
-        {amiValues.length > 1 &&
-          amiValues.map((percent) => {
-            const byAMI = listing.unitsSummarized.byAMI.find((item) => {
-              return parseInt(item.percent, 10) == percent
-            })
+        <div className={"mx-2 md:mx-0"}>
+          {amiValues.length > 1 &&
+            amiValues.map((percent) => {
+              const byAMI = listing.unitsSummarized.byAMI.find((item) => {
+                return parseInt(item.percent, 10) == percent
+              })
 
-            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
+              groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
-            return (
-              <React.Fragment key={percent}>
-                <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
-                <GroupedTable
-                  headers={unitSummariesHeaders}
-                  data={[{ data: groupedUnits }]}
-                  responsiveCollapse={true}
-                />
-              </React.Fragment>
-            )
-          })}
-        {amiValues.length == 1 && (
-          <GroupedTable
-            headers={unitSummariesHeaders}
-            data={[{ data: groupedUnits }]}
-            responsiveCollapse={true}
-          />
-        )}
+              return (
+                <React.Fragment key={percent}>
+                  <h2 className="mt-4 mb-2">
+                    {t("listings.percentAMIUnit", { percent: percent })}
+                  </h2>
+                  <GroupedTable
+                    headers={unitSummariesHeaders}
+                    data={[{ data: groupedUnits }]}
+                    responsiveCollapse={true}
+                  />
+                </React.Fragment>
+              )
+            })}
+          {amiValues.length == 1 && (
+            <GroupedTable
+              headers={unitSummariesHeaders}
+              data={[{ data: groupedUnits }]}
+              responsiveCollapse={true}
+            />
+          )}
+        </div>
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
