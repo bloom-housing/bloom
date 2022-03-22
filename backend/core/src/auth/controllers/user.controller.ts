@@ -94,8 +94,8 @@ export class UserController {
     summary: "Verifies token is valid",
     operationId: "isUserConfirmationTokenValid",
   })
-  isUserConfirmationTokenValid(@Body() dto: ConfirmDto): boolean {
-    return this.userService.isUserConfirmationTokenValid(dto)
+  async isUserConfirmationTokenValid(@Body() dto: ConfirmDto): Promise<boolean> {
+    return await this.userService.isUserConfirmationTokenValid(dto)
   }
 
   @Post("resend-confirmation")

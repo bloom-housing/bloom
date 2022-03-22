@@ -105,8 +105,9 @@ export class UserService {
     }
     // https://www.npmjs.com/package/nestjs-typeorm-paginate
     const distinctIDQB = this._getQb(false)
-    distinctIDQB.addSelect("user.id")
+    distinctIDQB.select("user.id")
     distinctIDQB.groupBy("user.id")
+    distinctIDQB.orderBy("user.id")
     const qb = this._getQb()
 
     if (params.filter) {
@@ -252,11 +253,33 @@ export class UserService {
     }
   }
 
-  public isUserConfirmationTokenValid(dto: ConfirmDto) {
+  private async setHitConfirmationURl(user: User, token: string) {
+    if (!user) {
+      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
+    }
+
+    if (user.confirmationToken !== token) {
+      throw new HttpException(USER_ERRORS.TOKEN_MISSING.message, USER_ERRORS.TOKEN_MISSING.status)
+    }
+    user.hitConfirmationURL = new Date()
+    await this.userRepository.save({
+      ...user,
+    })
+  }
+
+  public async isUserConfirmationTokenValid(dto: ConfirmDto) {
     try {
-      decode(dto.token, process.env.APP_SECRET)
+      const token = decode(dto.token, process.env.APP_SECRET)
+      const user = await this.find({ id: token.id })
+      await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
+      try {
+        const user = await this.find({ confirmationToken: dto.token })
+        await this.setHitConfirmationURl(user, dto.token)
+      } catch (e) {
+        // do nothing
+      }
       return false
     }
   }
