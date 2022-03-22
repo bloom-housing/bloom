@@ -34,15 +34,40 @@
   }
 }
 
-.listings-row_title {
+.listings-row_table {
+  @apply mb-4;
+}
+
+.listings-row_footer {
+  a:not(:first-child) {
+    @apply ml-1;
+  }
+}
+
+.listings-content_header {
+  @apply font-alt-sans;
+  @apply font-semibold;
+  @apply text-blue-700;
+  @apply text-3xl;
+  @apply mb-1;
+}
+
+.listings-content_subheader {
+  @apply font-alt-sans;
+  @apply text-black;
+  @apply text-base;
+  @apply mb-3;
+}
+
+.listings-table_header {
   @apply font-alt-sans;
   @apply font-semibold;
   @apply text-gray-900;
   @apply text-base;
-  @apply mb-2;
+  @apply mb-1;
 }
 
-.listings-row_subtitle {
+.listings-table_subheader {
   @apply font-alt-sans;
   @apply text-gray-800;
   @apply text-sm;

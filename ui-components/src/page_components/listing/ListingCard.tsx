@@ -1,70 +1,111 @@
 import * as React from "react"
-import { ImageCard, ImageCardProps } from "../../blocks/ImageCard"
+import { ImageCard, ImageCardProps, ImageTag } from "../../blocks/ImageCard"
 import { LinkButton } from "../../actions/LinkButton"
 import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
-
-import { t } from "../../helpers/translator"
-import "./ListingCard.scss"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
+import Heading from "../../headers/Heading"
+import { Tag } from "../../text/Tag"
+
+import "./ListingCard.scss"
+import { AppearanceStyleType } from "../../global/AppearanceTypes"
+import { Icon, IconFillColors } from "../../icons/Icon"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
-export interface ListingCardHeaderProps {
-  tableHeader?: string
-  tableHeaderClass?: string
-  tableSubHeader?: string
-  tableSubHeaderClass?: string
-  stackedTable?: boolean
+export interface CardHeader {
+  text: string
+  customClass?: string
+}
+
+export interface FooterButton {
+  text: string
+  href: string
+}
+
+export interface ListingCardContentProps {
+  contentHeader?: CardHeader
+  contentSubheader?: CardHeader
+  tableHeader?: CardHeader
+  tableSubheader?: CardHeader
 }
 export interface ListingCardProps {
-  imageCardProps: ImageCardProps
   children?: React.ReactElement
-  seeDetailsLink?: string
-  tableHeaderProps?: ListingCardHeaderProps
+  footerButtons?: FooterButton[]
+  footerContent?: React.ReactNode
+  footerContainerClass?: string
+  imageCardProps: ImageCardProps
+  cardTags?: ImageTag[]
+  stackedTable?: boolean
+  contentProps?: ListingCardContentProps
   tableProps?: ListingCardTableProps
-  detailsLinkClass?: string
 }
 
+/**
+ * @component ListingCard
+ *
+ * A component that renders an image with optional status bars below it,
+ * and a content section associated with the image which can include titles, a table, and custom content
+ *
+ * @prop children - Custom content rendered in the content section above the table
+ * @prop footerButtons - A list of buttons to render in the footer of the content section
+ * @prop footerContainerClass - A class name applied to the footer container of the content section
+ * @prop imageCardProps - Prop interface for the ImageCard component
+ * @prop stackedTable - Toggles on the StackedTable component in place of the default StandardTable component - they are functionally equivalent with differing UIs
+ * @prop contentProps - An object containing fields that render optional headers above the content section's table
+ * @prop tableProps - Prop interface for the StandardTable and StackedTable components
+ *
+ */
 const ListingCard = (props: ListingCardProps) => {
-  const { imageCardProps, tableProps, detailsLinkClass, tableHeaderProps, children } = props
+  const { imageCardProps, tableProps, contentProps, children } = props
 
-  const tableHeader = () => {
+  const getHeader = (header: CardHeader | undefined, priority: number, defaultClass?: string) => {
+    if (header && header.text) {
+      return (
+        <Heading priority={priority} className={`${defaultClass} ${header.customClass}`}>
+          {header.text}
+        </Heading>
+      )
+    } else {
+      return <></>
+    }
+  }
+
+  const getContentHeader = () => {
     return (
-      <h3
-        className={`listings-row_title ${
-          tableHeaderProps?.tableHeaderClass && tableHeaderProps?.tableHeaderClass
-        }`}
-      >
-        {tableHeaderProps?.tableHeader}
-      </h3>
+      <>
+        {getHeader(contentProps?.contentHeader, 2, "listings-content_header")}
+        {getHeader(contentProps?.contentSubheader, 3, "listings-content_subheader")}
+        <div className={"inline-flex flex-wrap md:justify-start justify-center w-full"}>
+          {props.cardTags?.map((cardTag) => {
+            return (
+              <Tag styleType={AppearanceStyleType.warning} className={"mr-2 mb-2"}>
+                {cardTag.iconType && (
+                  <Icon
+                    size={"medium"}
+                    symbol={cardTag.iconType}
+                    fill={cardTag.iconColor ?? IconFillColors.primary}
+                    className={"mr-2"}
+                  />
+                )}
+                {cardTag.text}
+              </Tag>
+            )
+          })}
+        </div>
+      </>
     )
   }
 
-  const tableSubHeader = () => {
+  const getContent = () => {
     return (
-      <h4
-        className={`listings-row_subtitle ${
-          tableHeaderProps?.tableSubHeaderClass && tableHeaderProps?.tableSubHeaderClass
-        }`}
-      >
-        {tableHeaderProps?.tableSubHeader}
-      </h4>
-    )
-  }
-
-  return (
-    <article className="listings-row" data-test-id={"listing-card-component"}>
-      <div className="listings-row_figure">
-        <ImageCard {...imageCardProps} />
-      </div>
-      <div className="listings-row_content">
-        {tableHeaderProps?.tableHeader && tableHeader()}
-        {tableHeaderProps?.tableSubHeader && tableSubHeader()}
+      <>
         <div className="listings-row_table">
+          {getHeader(contentProps?.tableHeader, 4, "listings-table_header")}
+          {getHeader(contentProps?.tableHeader, 5, "listings-table_subheader")}
           {children && children}
           {tableProps && (tableProps.data || tableProps.stackedData) && (
             <>
-              {tableHeaderProps?.stackedTable ? (
+              {props.stackedTable ? (
                 <StackedTable {...(tableProps as StackedTableProps)} />
               ) : (
                 <StandardTable {...(tableProps as StandardTableProps)} />
@@ -72,11 +113,31 @@ const ListingCard = (props: ListingCardProps) => {
             </>
           )}
         </div>
-        {props.seeDetailsLink && (
-          <LinkButton className={detailsLinkClass} href={props.seeDetailsLink}>
-            {t("t.seeDetails")}
-          </LinkButton>
-        )}
+        <div className={"flex flex-col"}>
+          {props.footerContent && props.footerContent}
+          {props.footerButtons && props.footerButtons?.length > 0 && (
+            <div className={props.footerContainerClass ?? "listings-row_footer"}>
+              {props.footerButtons?.map((footerButton) => {
+                return <LinkButton href={footerButton.href}>{footerButton.text}</LinkButton>
+              })}
+            </div>
+          )}
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <article className="listings-row" data-test-id={"listing-card-component"}>
+      <div className={"block md:hidden w-full flex flex-col items-center"}>
+        {getContentHeader()}
+      </div>
+      <div className="listings-row_figure">
+        <ImageCard {...imageCardProps} />
+      </div>
+      <div className="listings-row_content">
+        <div className={"hidden md:block"}>{getContentHeader()}</div>
+        {getContent()}
       </div>
     </article>
   )

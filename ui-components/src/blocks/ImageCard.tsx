@@ -33,6 +33,8 @@ export interface ImageCardProps {
 /**
  * @component ImageCard
  *
+ * A component that renders an image with optional status bars below it
+ *
  * @prop description - A description of the image, used as alt text
  * @prop href - A link, used to wrap the entire component
  * @prop imageUrl - An image URL, used as a background image
