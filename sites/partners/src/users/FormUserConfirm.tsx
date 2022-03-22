@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from "react"
+import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import {
   t,
@@ -19,6 +19,7 @@ import {
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
 import Markdown from "markdown-to-jsx"
+import { ReRequestConfirmation } from "./ReRequestConfirmation"
 
 type FormUserConfirmFields = {
   password: string
@@ -45,6 +46,8 @@ const FormUserConfirm = () => {
 
   const [isLoginLoading, setLoginLoading] = useState(false)
   const [termsModal, setTermsModal] = useState(null)
+  const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
+  const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
 
   const agreeField = [
     {
@@ -52,6 +55,21 @@ const FormUserConfirm = () => {
       label: "I accept the Terms of Service",
     },
   ]
+
+  useEffect(() => {
+    if (token) {
+      userService
+        .isUserConfirmationTokenValid({ body: { token } })
+        .then((res) => {
+          if (!res) {
+            setRerequestModalOpen(true)
+          }
+        })
+        .catch(() => {
+          setRerequestModalOpen(true)
+        })
+    }
+  }, [token, userService, setRerequestModalOpen])
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
@@ -77,6 +95,8 @@ const FormUserConfirm = () => {
 
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
         void router.push("/")
+      } else {
+        setRerequestModalOpen(true)
       }
     } catch (err) {
       console.error(err)
@@ -104,6 +124,12 @@ const FormUserConfirm = () => {
           {isError && (
             <AlertBox className="mt-5" type="alert" closeable>
               {t(`errors.alert.badRequest`)}
+            </AlertBox>
+          )}
+
+          {newConfirmationRequested && (
+            <AlertBox className="mt-5" type="success" closeable>
+              {t(`users.confirmationSent`)}
             </AlertBox>
           )}
         </div>
@@ -200,6 +226,19 @@ const FormUserConfirm = () => {
           </div>
         </Form>
       </FormCard>
+
+      <Modal
+        open={rerequestModalOpen}
+        title={t("authentication.createAccount.errors.tokenExpired")}
+        ariaDescription={t("users.requestResendDescription")}
+        onClose={() => setRerequestModalOpen(false)}
+      >
+        <ReRequestConfirmation
+          onClose={setRerequestModalOpen}
+          clearExistingErrors={resetMutation}
+          setAlert={setNewConfirmationRequested}
+        />
+      </Modal>
 
       <Modal
         open={!!termsModal}
