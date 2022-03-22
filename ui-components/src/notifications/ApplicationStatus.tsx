@@ -30,14 +30,11 @@ const ApplicationStatus = (props: ApplicationStatusProps) => {
   const textSize = vivid ? "text-xs" : "text-sm"
 
   const icon = withIcon && (
-    <span>
-      <Icon
-        size="medium"
-        symbol={iconType}
-        fill={iconColor || (vivid ? IconFillColors.white : undefined)}
-      />{" "}
-      &nbsp;
-    </span>
+    <Icon
+      size="medium"
+      symbol={iconType}
+      fill={iconColor || (vivid ? IconFillColors.white : undefined)}
+    />
   )
 
   switch (status) {

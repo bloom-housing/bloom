@@ -2,18 +2,18 @@ import * as React from "react"
 
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-dayjs.extend(advancedFormat)
-
 import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
-import { IconCheck } from "../icons/Icon.stories"
+import { text, withKnobs } from "@storybook/addon-knobs"
+
+dayjs.extend(advancedFormat)
 
 export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
-  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
 }
 
 function formatDateTime(date: Date, showTime?: boolean) {
@@ -84,7 +84,7 @@ export const pastDueWithIconColor = () => (
     content={
       t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
     }
-    iconColor={"#ff0000"}
+    iconColor={text("Icon Color", "#ff0000")}
     status={ApplicationStatusType.Closed}
   />
 )
