@@ -10,8 +10,6 @@ describe("<ListingCard>", () => {
       <ListingCard
         imageCardProps={{
           imageUrl: "imageURL",
-          subtitle: "subtitle",
-          title: "title",
           href: "listing-link",
           tags: [{ text: "reserved community tag" }],
           statuses: [{ content: "status content" }],
@@ -26,18 +24,24 @@ describe("<ListingCard>", () => {
           responsiveCollapse: true,
           cellClassName: "px-5 py-3",
         }}
-        seeDetailsLink={`see-details-link`}
-        tableHeaderProps={{
-          tableHeader: "optional table header",
-          tableSubHeader: "optional table subheader",
+        cardTags={[{ text: "card tag 1" }, { text: "card tag 2" }]}
+        footerButtons={[{ text: "see details", href: `see-details-link` }]}
+        contentProps={{
+          contentHeader: { text: "title" },
+          contentSubheader: { text: "subtitle" },
+          tableHeader: { text: "optional table header" },
+          tableSubheader: { text: "optional table subheader" },
         }}
       >
-        <div>Child content</div>
+        <div>child content</div>
       </ListingCard>
     )
     expect(getByText("subtitle")).toBeTruthy()
     expect(getByText("title")).toBeTruthy()
-    expect(getByText("Child content")).toBeTruthy()
+    expect(getByText("see details")).toBeTruthy()
+    expect(getByText("card tag 1")).toBeTruthy()
+    expect(getByText("card tag 2")).toBeTruthy()
+    expect(getByText("child content")).toBeTruthy()
     expect(getAllByText("reserved community tag")).toBeTruthy()
     expect(getAllByText("status content")).toBeTruthy()
     expect(getAllByText("Unit Type")).toBeTruthy()
@@ -54,13 +58,16 @@ describe("<ListingCard>", () => {
       <ListingCard
         imageCardProps={{
           imageUrl: "imageURL",
-          subtitle: "subtitle",
-          title: "title",
+
           href: "listing-link",
+        }}
+        contentProps={{
+          contentHeader: { text: "title" },
+          contentSubheader: { text: "subtitle" },
         }}
       />
     )
-    expect(getByText("subtitle")).toBeTruthy()
     expect(getByText("title")).toBeTruthy()
+    expect(getByText("subtitle")).toBeTruthy()
   })
 })
