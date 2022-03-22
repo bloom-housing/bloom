@@ -60,7 +60,7 @@ Cypress.Commands.add("beginApplicationRejectAutofill", (listingName) => {
 
 Cypress.Commands.add("beginApplicationSignedIn", (listingName) => {
   cy.visit("/listings")
-  cy.contains(listingName).click()
+  cy.get(`[alt="${listingName}"]`).click()
   cy.getByTestId("listing-view-apply-button").eq(1).click()
   cy.getByTestId("app-choose-language-button").eq(0).click()
   cy.getByTestId("app-next-step-button").click()

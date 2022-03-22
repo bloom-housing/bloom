@@ -114,6 +114,7 @@ export const getListings = (listings) => {
               ]
             : undefined,
           statuses: [getListingApplicationStatus(listing)],
+          description: listing.name,
         }}
         tableProps={{
           headers: unitSummariesHeaders,
