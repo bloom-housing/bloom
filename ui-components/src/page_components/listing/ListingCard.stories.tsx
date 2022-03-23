@@ -250,7 +250,10 @@ const getCustomFooter = () => {
   return (
     <div className={"flex justify-between"}>
       <span className={"w-5"}>
-        <Button className="mx-2 p-3 mb-2 rounded-full bg-primary-dark border-primary-dark">
+        <Button
+          className="mx-2 p-3 mb-2 rounded-full bg-primary-dark border-primary-dark"
+          aria-label="favorite"
+        >
           <Icon
             symbol={"like"}
             size={"medium"}
