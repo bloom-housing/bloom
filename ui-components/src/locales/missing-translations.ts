@@ -14,7 +14,7 @@ function main() {
     { translationKeys: spanishTranslations, language: "es" },
     { translationKeys: chineseTranslations, language: "zh" },
     { translationKeys: vietnameseTranslations, language: "vi" },
-    { translationKeys: tagalogTranslations, language: "tl"}
+    { translationKeys: tagalogTranslations, language: "tl" },
   ]
 
   const addEntry = (
