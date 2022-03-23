@@ -27,7 +27,7 @@ export class UserProfileUpdateDto extends PickType(User, [
   "updatedAt",
   "language",
   "phoneNumber",
-  "agreedToTermsOfService"
+  "agreedToTermsOfService",
 ] as const) {
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
