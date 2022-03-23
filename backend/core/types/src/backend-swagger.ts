@@ -4020,6 +4020,9 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface UserCreate {
@@ -4126,6 +4129,9 @@ export interface UserBasic {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface Email {
@@ -4227,6 +4233,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface UserFilterParams {
@@ -4336,6 +4345,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
