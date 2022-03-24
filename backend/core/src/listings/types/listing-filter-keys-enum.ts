@@ -2,11 +2,11 @@
 export enum ListingFilterKeys {
   status = "status",
   name = "name",
+  isVerified = "isVerified",
   bedrooms = "bedrooms",
   zipcode = "zipcode",
   availability = "availability",
-  seniorHousing = "seniorHousing",
-  independentLivingHousing = "independentLivingHousing",
+  program = "program",
   minRent = "minRent",
   maxRent = "maxRent",
   minAmiPercentage = "minAmiPercentage",

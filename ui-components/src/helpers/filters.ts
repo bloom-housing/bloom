@@ -45,12 +45,12 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.zipcode:
     case ListingFilterKeys.neighborhood:
       return EnumListingFilterParamsComparison["IN"]
-    case ListingFilterKeys.seniorHousing:
-    case ListingFilterKeys.independentLivingHousing:
+    // case ListingFilterKeys.seniorHousing:
+    // case ListingFilterKeys.independentLivingHousing:
     case ListingFilterKeys.availability:
       return EnumListingFilterParamsComparison["NA"]
     default: {
-      const _exhaustiveCheck: never = filterKey
+      const _exhaustiveCheck: any = filterKey
       return _exhaustiveCheck
     }
   }
@@ -85,8 +85,8 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.zipcode]?: string
   [FrontendListingFilterStateKeys.minRent]?: string | number
   [FrontendListingFilterStateKeys.maxRent]?: string | number
-  [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
-  [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
+  // [FrontendListingFilterStateKeys.seniorHousing]?: string | boolean
+  // [FrontendListingFilterStateKeys.independentLivingHousing]?: string | boolean
   [FrontendListingFilterStateKeys.includeNulls]?: boolean
   [FrontendListingFilterStateKeys.minAmiPercentage]?: string | number
   [FrontendListingFilterStateKeys.studio]?: string | boolean

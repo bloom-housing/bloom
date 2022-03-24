@@ -306,7 +306,7 @@ const FilterForm = (props: FilterFormProps) => {
             defaultValue={props.filterState?.maxRent}
           />
         </div>
-        <Select
+        {/* <Select
           id="seniorHousing"
           name={FrontendListingFilterStateKeys.seniorHousing}
           label={t("listingFilters.senior")}
@@ -315,7 +315,7 @@ const FilterForm = (props: FilterFormProps) => {
           options={seniorHousingOptions}
           defaultValue={props.filterState?.seniorHousing?.toString()}
           labelClassName="filter-header"
-        />
+        /> */}
         {/* TODO(#515): Add more explanation and an ami percentage
         calculator to this filter */}
         <Select

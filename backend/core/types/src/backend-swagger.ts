@@ -5275,10 +5275,10 @@ export interface ListingFilterParams {
   availability?: EnumListingFilterParamsAvailability
 
   /**  */
-  seniorHousing?: boolean
+  program?: string
 
   /**  */
-  independentLivingHousing?: boolean
+  isVerified?: boolean
 
   /**  */
   minRent?: number

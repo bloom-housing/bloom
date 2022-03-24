@@ -14,11 +14,11 @@ type keysWithMappedField = Exclude<
 export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
   status: "listings.status",
   name: "listings.name",
+  isVerified: "listings.isVerified",
   bedrooms: "summaryUnitType.num_bedrooms",
   zipcode: "buildingAddress.zipCode",
   leasingAgents: "leasingAgents.id",
-  seniorHousing: "reservedCommunityType.name",
-  independentLivingHousing: "reservedCommunityType.name",
+  program: "listingsProgramsProgram.title",
   // This is the inverse of the explanation for maxRent below.
   minRent: "unitGroups.monthly_rent_max",
   /**

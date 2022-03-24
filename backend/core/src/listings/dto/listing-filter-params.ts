@@ -71,13 +71,13 @@ export class ListingFilterParams extends BaseFilter {
 
   @Expose()
   @ApiProperty({
-    type: Boolean,
-    example: "true",
+    type: String,
+    example: "senior62",
     required: false,
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.seniorHousing]?: boolean;
+  @IsString({ groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.program]?: string;
 
   @Expose()
   @ApiProperty({
@@ -87,7 +87,7 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsBooleanString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.independentLivingHousing]?: boolean;
+  [ListingFilterKeys.isVerified]?: boolean;
 
   @Expose()
   @ApiProperty({
