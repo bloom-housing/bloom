@@ -25,7 +25,9 @@ Other variants include appearances which aren't button-like such as `unstyled` a
 
 ## Theming Variables
 
-You can apply CSS variables to the `.button` selector to customize the appearance of the component. Generally these variables are part of the Bloom global design system, so if you've already overriden these global variables via `:root`, the button styles will update automatically.
+You can apply CSS variables to the `.button` selector to customize the appearance of the component. Some of these variables are part of the Bloom global design system, so if you've already overriden these global variables via `:root`, the button styles will update automatically.
+
+### Global Color Variables
 
 | Name                         | Color                                                            | Description                         |
 | ---------------------------- | ---------------------------------------------------------------- | ----------------------------------- |
@@ -33,3 +35,23 @@ You can apply CSS variables to the `.button` selector to customize the appearanc
 | `--bloom-color-primary-dark` | <span className="bg-primary-dark w-6 inline-block">&nbsp;</span> | Darker version of the primary color |
 | `--bloom-color-success`      | <span className="bg-success w-6 inline-block">&nbsp;</span>      | Success style type color            |
 | `--bloom-color-success-dark` | <span className="bg-success-dark w-6 inline-block">&nbsp;</span> | Darker version of the success color |
+
+(etc. more TBD)
+
+### Component Variables
+
+| Name                     | Type        | Description                                                             | Default                         |
+| ------------------------ | ----------- | ----------------------------------------------------------------------- | ------------------------------- |
+| `--label-font`           | Font        | Font family of the button label                                         | `--bloom-font-alt-sans`         |
+| `--label-transform`      | Case        | Text case of the button label                                           | `uppercase`                     |
+| `--label-letter-spacing` | Size        | The average gap between letters of the button label                     | `--bloom-letter-spacing-widest` |
+| `--label-weight`         | Font Weight | Typographic weight of the button label                                  | `bold`                          |
+| `--regular-rounded`      | Size        | Border radius of a regular-size button (defaults to `--bloom-rounded`)  |
+| `--regular-padding`      | Size        | Padding of the regular-size button interior                             |
+| `--regular-font-size`    | Size        | Font size of the regular-size button                                    |
+| `--small-rounded`        | Size        | Border radius of a small-size button (defaults to `--bloom-rounded`)    |
+| `--small-padding`        | Size        | Padding of the small-size button interior                               |
+| `--small-font-size`      | Size        | Font size of the small-size button (defaults to `--bloom-font-size-xs`) |
+| `--big-rounded`          | Size        | Border radius of a large-size button (defaults to `--bloom-rounded`)    |
+| `--big-padding`          | Size        | Padding of the large-size button interior                               |
+| `--big-font-size`        | Size        | Font size of the large-size button (defaults to `--bloom-font-size-sm`) |

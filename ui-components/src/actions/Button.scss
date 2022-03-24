@@ -2,15 +2,15 @@
 
 .button {
   position: relative;
-  border-radius: var(--bloom-rounded);
-  padding: var(--bloom-s4) var(--bloom-s6);
+  border-radius: var(--regular-rounded, var(--bloom-rounded));
+  padding: var(--regular-padding, var(--bloom-s4) var(--bloom-s6));
   text-align: center;
-  text-transform: uppercase;
-  font-family: var(--bloom-font-alt-sans);
+  text-transform: var(--label-transform, uppercase);
+  font-family: var(--label-font, var(--bloom-font-alt-sans));
   display: inline-block;
-  letter-spacing: var(--bloom-letter-spacing-widest);
-  font-size: var(--bloom-font-size-sm);
-  font-weight: bold;
+  letter-spacing: var(--label-letter-spacing, var(--bloom-letter-spacing-widest));
+  font-size: var(--regular-font-size, var(--bloom-font-size-sm));
+  font-weight: var(--label-weight, bold);
   line-height: var(--bloom-line-height-snug);
 
   &:focus {
@@ -40,12 +40,15 @@
   }
 
   &.is-small {
-    font-size: var(--bloom-font-size-xs);
-    padding: var(--bloom-s3) var(--bloom-s6);
+    border-radius: var(--small-rounded, var(--bloom-rounded));
+    padding: var(--small-padding, var(--bloom-s3) var(--bloom-s6));
+    font-size: var(--small-font-size, var(--bloom-font-size-xs));
   }
 
   &.is-big {
-    padding: var(--bloom-s6);
+    border-radius: var(--big-rounded, var(--bloom-rounded));
+    padding: var(--big-padding, var(--bloom-s6));
+    font-size: var(--big-font-size, var(--bloom-font-size-sm));
   }
 
   &.is-normal-case {
