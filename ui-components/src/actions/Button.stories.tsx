@@ -10,7 +10,8 @@ import {
 import ButtonDocumentation from "./Button.docs.mdx"
 
 export default {
-  title: "Actions/Button",
+  title: "Actions/Button 🚩",
+  id: "actions-button",
   decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
   parameters: {
     docs: {
@@ -122,21 +123,52 @@ export const inlineIcon = () => (
   </>
 )
 
-export const styleOverrides = () => {
+export const detroitStyle = () => {
   const cssVarsOverride = `
     .style-overrides {
-      --bloom-color-primary: maroon;
-      --bloom-color-primary-dark: darkorange;
+      --bloom-font-sans: Montserrat;
+      --bloom-font-alt-sans: var(--bloom-font-sans);
+      --bloom-color-primary: rgb(41,126,115);
+      --bloom-color-primary-dark: rgb(0,68,69);
+
+      --primary-appearance-hover-background-color: white;
+      --primary-appearance-hover-label-color: var(--bloom-color-primary-dark);
+
+      --outlined-appearance-hover-background-color: var(--bloom-color-primary);
+      --outlined-appearance-hover-border-color: var(--bloom-color-primary);
+    }
+
+    .style-overrides .button {
+      --normal-rounded: 60px;
+      --normal-padding: 0.5rem 1rem;
+      --normal-font-size: var(--bloom-font-size-base);
+      --label-letter-spacing: normal;
+      --label-transform: none;
     }
   `
 
   return (
-    <div className="style-overrides">
-      <Button styleType={AppearanceStyleType.primary} onClick={handleClick}>
-        Custom Styled Button
-      </Button>
-      <style>{cssVarsOverride}</style>
-    </div>
+    <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+        rel="stylesheet"
+      ></link>
+      <div className="style-overrides">
+        <Button styleType={AppearanceStyleType.primary} onClick={handleClick}>
+          "Detroit" Primary Button
+        </Button>{" "}
+        <Button onClick={handleClick}>"Detroit" Outlined Button</Button>
+        <style>{cssVarsOverride}</style>
+      </div>
+
+      <p style={{ marginTop: "3rem", fontWeight: "600" }}>
+        Customized using the following variable overrides:
+      </p>
+
+      <pre>{cssVarsOverride}</pre>
+    </>
   )
 }
 

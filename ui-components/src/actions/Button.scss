@@ -2,14 +2,14 @@
 
 .button {
   position: relative;
-  border-radius: var(--regular-rounded, var(--bloom-rounded));
-  padding: var(--regular-padding, var(--bloom-s4) var(--bloom-s6));
+  border-radius: var(--normal-rounded, var(--bloom-rounded));
+  padding: var(--normal-padding, var(--bloom-s4) var(--bloom-s6));
   text-align: center;
   text-transform: var(--label-transform, uppercase);
   font-family: var(--label-font, var(--bloom-font-alt-sans));
   display: inline-block;
   letter-spacing: var(--label-letter-spacing, var(--bloom-letter-spacing-widest));
-  font-size: var(--regular-font-size, var(--bloom-font-size-sm));
+  font-size: var(--normal-font-size, var(--bloom-font-size-sm));
   font-weight: var(--label-weight, bold);
   line-height: var(--bloom-line-height-snug);
 
