@@ -108,7 +108,7 @@ export class EmailService {
     await this.send(
       email,
       jurisdiction.emailFromAddress,
-      "Bloom account access token",
+      "Partners Portal account access token",
       this.template("mfa-code")({
         user: user,
         mfaCodeOptions: { mfaCode },
