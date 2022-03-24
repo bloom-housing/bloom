@@ -369,7 +369,7 @@ export const ListingView = (props: ListingProps) => {
 
   return (
     <article className="flex flex-wrap relative max-w-5xl m-auto">
-      <header className="image-card--leader mx-2">
+      <header className="image-card--leader">
         <ImageCard
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
           tags={
@@ -384,7 +384,7 @@ export const ListingView = (props: ListingProps) => {
               : undefined
           }
         />
-        <div className="py-3">
+        <div className="py-3 mx-3">
           <Heading priority={1} style={"cardHeader"}>
             {listing.name}
           </Heading>
@@ -410,7 +410,7 @@ export const ListingView = (props: ListingProps) => {
             })}
           </Message>
         )}
-        <div className={"mx-2 md:mx-0"}>
+        <div className={"mx-3 md:mx-0"}>
           {amiValues.length > 1 &&
             amiValues.map((percent) => {
               const byAMI = listing.unitsSummarized.byAMI.find((item) => {

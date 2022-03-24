@@ -249,18 +249,8 @@ export const MultipleSpreadFooterButtons = () => {
 const getCustomFooter = () => {
   return (
     <div className={"flex justify-between"}>
-      <span className={"w-5"}>
-        <Button
-          className="mx-2 p-3 mb-2 rounded-full bg-primary-dark border-primary-dark"
-          aria-label="favorite"
-        >
-          <Icon
-            symbol={"like"}
-            size={"medium"}
-            fill={IconFillColors.white}
-            aria-label={"favorite"}
-          />
-        </Button>
+      <span className={"w-5 flex items-center"}>
+        <Icon symbol={"like"} size={"large"} aria-label={"favorite"} />
       </span>
       <LinkButton href={"see-details-link"}>See Details</LinkButton>
     </div>
