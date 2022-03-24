@@ -1404,7 +1404,8 @@
     },
     "usingCommonDigitalApplication": "Are you using the common digital application?",
     "usingCommonPaperApplication": "Are you using the common paper application?",
-    "verified": "Verified listing",
+    "verifiedListing": "Verified listing",
+    "verified": "Verified",
     "waitlist": {
       "closed": "Closed waitlist",
       "currentSizeQuestion": "How many people are on the current list?",
@@ -1757,6 +1758,7 @@
     "preview": "Preview",
     "previous": "Previous",
     "propertyAmenities": "Property Amenities",
+    "public": "Public",
     "range": "%{from} to %{to}",
     "readLess": "read less",
     "readMore": "read more",

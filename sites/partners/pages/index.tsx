@@ -15,7 +15,7 @@ import { GridOptions } from "ag-grid-community"
 import { useListingsData } from "../lib/hooks"
 import Layout from "../layouts"
 import { MetaTags } from "../src/MetaTags"
-
+import { ListingStatus } from "@bloom-housing/backend-core/types"
 class formatLinkCell {
   link: HTMLAnchorElement
 
@@ -92,31 +92,42 @@ export default function ListingsList() {
         cellRenderer: "ListingsLink",
       },
       {
-        headerName: t("listings.listingStatusText"),
-        field: "status",
-        sortable: false,
-        filter: false,
-        resizable: true,
-        flex: 1,
-        valueFormatter: ({ value }) => t(`listings.${value}`),
-        cellRenderer: "ApplicationsLink",
-      },
-      {
         headerName: t("listings.buildingAddress"),
         field: "buildingAddress.street",
-        sortable: true,
+        sortable: false,
         filter: false,
         resizable: true,
         flex: 1,
         valueFormatter: ({ value }) => (value ? value : t("t.none")),
       },
       {
-        headerName: t("listings.waitlist.open"),
-        field: "waitlistCurrentSize",
-        sortable: false,
+        headerName: t("listings.listingStatusText"),
+        field: "status",
+        sortable: true,
         filter: false,
         resizable: true,
-        cellRenderer: "formatWaitlistStatus",
+        flex: 1,
+        valueFormatter: ({ value }) => {
+          switch (value) {
+            case ListingStatus.active:
+              return t("t.public")
+            case ListingStatus.pending:
+              return t("t.draft")
+            case ListingStatus.closed:
+              return t("t.closed")
+            default:
+              return ""
+          }
+        },
+        cellRenderer: "ApplicationsLink",
+      },
+      {
+        headerName: t("listings.verified"),
+        field: "isVerified",
+        sortable: true,
+        filter: false,
+        resizable: true,
+        valueFormatter: ({ value }) => (value ? t("t.yes") : t("t.no")),
       },
     ]
     return columns

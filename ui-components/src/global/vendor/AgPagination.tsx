@@ -24,8 +24,11 @@ const AgPagination = ({
   currentPage,
   sticky,
   quantityLabel,
+  itemsPerPage,
   setCurrentPage,
+  setItemsPerPage,
   onPageChange,
+  onPerPageChange,
   includeBorder,
   matchListingCardWidth,
 }: AgPaginationProps) => {
@@ -42,6 +45,11 @@ const AgPagination = ({
     }
     setCurrentPage(pageNumber)
     onPageChange && onPageChange(currentPage)
+  }
+
+  const onRowLimitChange = (size: string) => {
+    setItemsPerPage?.(parseInt(size))
+    onPerPageChange && onPerPageChange(itemsPerPage)
   }
 
   const dataPagerContainerClassName = ["data-pager-container"]
@@ -82,6 +90,24 @@ const AgPagination = ({
             <span className="field-label">
               ({totalItems} {quantityLabel})
             </span>
+          </div>
+
+          <div className="field data-pager__control md:mb-0">
+            <label className="field-label font-sans" htmlFor="page-size">
+              {t("t.show")}
+            </label>
+            <select
+              name="page-size"
+              id="page-size"
+              value={itemsPerPage}
+              onChange={({ target }) => onRowLimitChange(target.value)}
+            >
+              {AG_PER_PAGE_OPTIONS.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

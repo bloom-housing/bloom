@@ -54,7 +54,7 @@ export const accessibilityFeaturesExist = (listing: Listing) => {
 }
 
 export const getImageTagLabelFromListing = (listing: Listing) => {
-  return listing?.isVerified ? t("listings.verified") : undefined
+  return listing?.isVerified ? t("listings.verifiedListing") : undefined
 }
 
 export const getImageTagIconFromListing = (listing: Listing): IconProps | null => {
