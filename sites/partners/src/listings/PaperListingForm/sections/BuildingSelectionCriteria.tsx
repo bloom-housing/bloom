@@ -247,14 +247,14 @@ const LotteryResults = () => {
             styleType={AppearanceStyleType.secondary}
             border={AppearanceBorderType.borderless}
           >
-            Cancel
+            {t("t.cancel")}
           </Button>,
         ]}
       >
         <section className="border rounded-md p-8 bg-white">
           <div className={!criteriaAttachType ? "" : "hidden"}>
             <span className="grid-section__description">
-              How will you specify the building selection criteria?
+              {t("listings.addBuildingSelectionCriteriaSubtitle")}
             </span>
             <FieldGroup
               name="criteriaAttachType"
@@ -281,8 +281,8 @@ const LotteryResults = () => {
             <>
               <Dropzone
                 id="listing-building-selection-criteria-upload"
-                label="Upload File"
-                helptext="Select PDF file"
+                label={t("t.uploadFile")}
+                helptext={t("listings.pdfHelperText")}
                 uploader={pdfUploader}
                 accept="application/pdf"
                 progress={progressValue}
