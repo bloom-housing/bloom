@@ -1,10 +1,10 @@
 .alert-box {
   @apply relative;
-  @apply p-4;
+  @apply py-3;
+  @apply px-4;
   @apply leading-snug;
   @apply flex;
   @apply items-center;
-  max-height: 50px;
 
   .alert-box_inner {
     @apply m-auto;
@@ -13,7 +13,6 @@
     @apply flex-1;
     @apply flex;
     @apply items-center;
-    line-height: 1rem;
   }
 
   &.narrow {

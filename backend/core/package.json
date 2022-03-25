@@ -1,6 +1,6 @@
 {
   "name": "@bloom-housing/backend-core",
-  "version": "3.0.2-alpha.44",
+  "version": "4.1.1-alpha.1",
   "description": "Listings service reference implementation for the Bloom affordable housing system",
   "author": "Sean Albert <sean.albert@exygy.com>",
   "private": false,

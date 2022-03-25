@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import Head from "next/head"
 import axios from "axios"
 import { Listing } from "@bloom-housing/backend-core/types"
@@ -29,7 +29,7 @@ export default function ListingPage(props: ListingProps) {
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
       <AlertBox
-        className="pt-5 pb-8 bg-red-700 font-bold text-sm"
+        className="pt-6 pb-4 bg-red-700 font-bold text-sm"
         type="alert"
         boundToLayoutWidth
         inverted

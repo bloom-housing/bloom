@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing"
 import { getRepositoryToken, TypeOrmModule } from "@nestjs/typeorm"
-import { ListingsModule } from "../../src/listings/listings.module"
 import supertest from "supertest"
+import { ListingsModule } from "../../src/listings/listings.module"
 import { applicationSetup } from "../../src/app.module"
 import { ListingDto } from "../../src/listings/dto/listing.dto"
 import { getUserAccessToken } from "../utils/get-user-access-token"
@@ -70,7 +70,7 @@ describe("Listings", () => {
     // but the last listing.
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
-    const limit = 9
+    const limit = 12
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)

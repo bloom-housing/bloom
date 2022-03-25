@@ -4,7 +4,7 @@ import { AdditionalFees } from "../../src/page_components/listing/AdditionalFees
 
 afterEach(cleanup)
 
-describe("<Additional Fees>", () => {
+describe("<AdditionalFees>", () => {
   it("renders without error", () => {
     const { getByText } = render(
       <AdditionalFees

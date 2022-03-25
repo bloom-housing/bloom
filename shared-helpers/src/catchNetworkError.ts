@@ -17,6 +17,7 @@ export type NetworkErrorReset = () => void
 
 export enum NetworkErrorMessage {
   PasswordOutdated = "passwordOutdated",
+  MfaUnauthorized = "mfaUnauthorized",
 }
 
 /**
@@ -25,15 +26,18 @@ export enum NetworkErrorMessage {
 export const useCatchNetworkError = () => {
   const [networkError, setNetworkError] = useState<NetworkErrorValue>(null)
 
-  const check401Error = (message: string, mfaEnabled?: boolean) => {
+  const check401Error = (message: string) => {
     if (message === NetworkErrorMessage.PasswordOutdated) {
       setNetworkError({
-        title: mfaEnabled
-          ? t("authentication.signIn.enterValidEmailAndPasswordAndMFA")
-          : t("authentication.signIn.passwordOutdated"),
+        title: t("authentication.signIn.passwordOutdated"),
         content: `${t("authentication.signIn.changeYourPassword")} <a href="/forgot-password">${t(
           "t.here"
         )}</a>`,
+      })
+    } else if (message === NetworkErrorMessage.MfaUnauthorized) {
+      setNetworkError({
+        title: t("authentication.signIn.enterValidEmailAndPasswordAndMFA"),
+        content: t("authentication.signIn.afterFailedAttempts"),
       })
     } else {
       setNetworkError({

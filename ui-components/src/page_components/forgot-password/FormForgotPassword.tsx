@@ -93,17 +93,18 @@ const FormForgotPassword = ({
             errorMessage={errors.email ? t("authentication.signIn.loginError") : undefined}
             register={register}
           />
-
-          <div className="text-center mt-6">
-            <Button styleType={AppearanceStyleType.primary}>
-              {t("authentication.forgotPassword.sendEmail")}
-            </Button>
-          </div>
-          <div className="text-center mt-6">
-            <a href="#" onClick={() => router.back()}>
-              {t("t.cancel")}
-            </a>
-          </div>
+          <section className="bg-gray-300">
+            <div className="text-center mt-6">
+              <Button styleType={AppearanceStyleType.primary}>
+                {t("authentication.forgotPassword.sendEmail")}
+              </Button>
+            </div>
+            <div className="text-center mt-6">
+              <a href="#" onClick={() => router.back()}>
+                {t("t.cancel")}
+              </a>
+            </div>
+          </section>
         </Form>
       </div>
     </FormCard>

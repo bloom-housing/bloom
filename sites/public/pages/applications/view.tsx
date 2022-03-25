@@ -4,15 +4,25 @@ Optional application summary
 */
 import Link from "next/link"
 import dayjs from "dayjs"
-import { FormCard, t } from "@bloom-housing/ui-components"
+import { AuthContext, FormCard, t } from "@bloom-housing/ui-components"
 import FormsLayout from "../../layouts/forms"
 import { AppSubmissionContext } from "../../lib/AppSubmissionContext"
-import { useContext, useMemo } from "react"
+import { useContext, useEffect, useMemo } from "react"
 import FormSummaryDetails from "../../src/forms/applications/FormSummaryDetails"
-import { DATE_FORMAT } from "../../lib/constants"
+import { DATE_FORMAT, UserStatus } from "../../lib/constants"
+import { pushGtmEvent, PageView } from "@bloom-housing/shared-helpers"
 
 const ApplicationView = () => {
   const { application, listing } = useContext(AppSubmissionContext)
+  const { profile } = useContext(AuthContext)
+
+  useEffect(() => {
+    pushGtmEvent<PageView>({
+      event: "pageView",
+      pageTitle: "Application - Optional Summary",
+      status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
+    })
+  }, [profile])
 
   const confirmationDate = useMemo(() => {
     return dayjs().format(DATE_FORMAT)
@@ -23,7 +33,7 @@ const ApplicationView = () => {
       <FormCard header="Confirmation">
         <div className="py-2">
           {listing && (
-            <Link href={`listing/${listing.id}/${listing.urlSlug}`}>
+            <Link href={`/listing/${listing.id}/${listing.urlSlug}`}>
               <a className="lined text-tiny">{t("application.confirmation.viewOriginalListing")}</a>
             </Link>
           )}

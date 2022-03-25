@@ -11,7 +11,7 @@ export class SmsMfaService {
   ) {}
   public async sendMfaCode(user: User, phoneNumber: string, mfaCode: string) {
     return await this.client.messages.create({
-      body: `Your bloom account access token: ${mfaCode}`,
+      body: `Your Partners Portal account access token: ${mfaCode}`,
       from: this.configService.get("TWILIO_PHONE_NUMBER"),
       to: phoneNumber,
     })
