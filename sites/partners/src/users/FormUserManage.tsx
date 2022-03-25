@@ -76,9 +76,17 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       id: listing.id,
       label: listing.name,
       value: listing.id,
-      onChange: () => setValue("listings_all", false),
+      inputProps: {
+        onChange: () => {
+          if (getValues("user_listings").length === listings.length) {
+            setValue("listings_all", true)
+          } else {
+            setValue("listings_all", false)
+          }
+        },
+      },
     }))
-  }, [listings, setValue])
+  }, [getValues, listings, setValue])
 
   /**
    * Control listing checkboxes on select/deselect all listings option
