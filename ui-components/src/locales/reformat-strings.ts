@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// Reformats strings to flatten the object structure
 // example: `ts-node reformat-strings > flattened-keys.json`
 
 const englishTranslations = require("./general.json")

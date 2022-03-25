@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// Prints out keys/strings that exist in the english file but not in a foreign language translation file
-// example: `ts-node missing-translations > missing-foreign-keys.json`
+// Prints keys that are in a foreign language translations file that do not exist in the english file for cleanup
+// example: `ts-node unused-foreign-keys > unused-foreign-keys.json`
 const englishTranslations = require("./general.json")
 const spanishTranslations = require("./es.json")
 const chineseTranslations = require("./zh.json")
@@ -19,31 +19,29 @@ function main() {
     { translationKeys: tagalogTranslations, language: "Tagalog" },
   ]
 
-  const findMissingStrings = (
+  const getUnusedForeignKeys = (
     baseTranslations: TranslationsType,
     checkedTranslations: TranslationsType
   ) => {
-    const baseKeys = Object.keys(baseTranslations)
-    const checkedKeys = Object.keys(checkedTranslations)
-    const missingKeys: string[] = []
-    baseKeys.forEach((key) => {
-      if (checkedKeys.indexOf(key) < 0) {
-        missingKeys.push(key)
+    const baseTranslationsKeys = Object.keys(baseTranslations)
+    const checkedTranslationsKeys = Object.keys(checkedTranslations)
+    const unusedKeys: string[] = []
+    checkedTranslationsKeys.forEach((key) => {
+      if (!baseTranslationsKeys.find((item) => key === item)) {
+        unusedKeys.push(key)
       }
     })
-    return missingKeys
+    return unusedKeys
   }
 
   allTranslations.forEach((foreignKeys) => {
     console.log("--------------------")
-    console.log(`Missing Public Site ${foreignKeys.language} Translations:`)
-    const missingPublicSiteTranslations = findMissingStrings(
+    console.log(`Unused Public Site ${foreignKeys.language} Keys:`)
+    const unusedForeignKeys: string[] = getUnusedForeignKeys(
       englishTranslations,
       foreignKeys.translationKeys
     )
-    missingPublicSiteTranslations.forEach((missingKey) =>
-      console.log(`${missingKey}, ${JSON.stringify(englishTranslations[missingKey])}`)
-    )
+    unusedForeignKeys.forEach((unusedKey) => console.log(unusedKey))
   })
 }
 

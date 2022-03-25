@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// Prints duplicate translation strings for cleanup
 // example: `ts-node duplicate-translations > duplicated-keys.json`
 const englishTranslations = require("./general.json")
 const spanishTranslations = require("./es.json")
