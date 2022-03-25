@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// example: `ts-node reformat-strings > flattened-keys.json`
+
 const englishTranslations = require("./general.json")
 const spanishTranslations = require("./es.json")
 const chineseTranslations = require("./zh.json")
@@ -10,6 +12,14 @@ function main() {
     [key: string]: string | TranslationsType
   }
 
+  const allTranslations = [
+    { translationKeys: englishTranslations, language: "English" },
+    { translationKeys: spanishTranslations, language: "Spanish" },
+    { translationKeys: chineseTranslations, language: "Chinese" },
+    { translationKeys: vietnameseTranslations, language: "Vietnamese" },
+    { translationKeys: tagalogTranslations, language: "Tagalog" },
+  ]
+
   const addEntry = (
     translationKey: string,
     parentKey: string,
@@ -17,12 +27,12 @@ function main() {
     flattenedKeys: { [key: string]: string }[]
   ) => {
     flattenedKeys.push({
-      key: `${parentKey}.${translationKey}`,
+      key: parentKey ? `${parentKey}.${translationKey}` : translationKey,
       value: baseTranslations[translationKey],
     })
   }
 
-  const checkTranslations = (
+  const flattenKeys = (
     baseTranslations: TranslationsType | string,
     flattenedKeys: { [key: string]: string }[],
     parentKey?: string
@@ -32,7 +42,7 @@ function main() {
         addEntry(translationKey, parentKey || "", baseTranslations, flattenedKeys)
       }
       if (typeof baseTranslations[translationKey] !== "string") {
-        checkTranslations(
+        flattenKeys(
           baseTranslations[translationKey],
           flattenedKeys,
           parentKey ? `${parentKey}.${translationKey}` : translationKey
@@ -44,11 +54,12 @@ function main() {
 
   let flattenedKeys: { [key: string]: string }[] = []
 
-  // Update the base keys with any language file
-  flattenedKeys = checkTranslations(englishTranslations, flattenedKeys, "")
-  console.log(
+  allTranslations.forEach((foreignKeys) => {
+    console.log("--------------------")
+    console.log(`Flattened keys for ${foreignKeys.language} translations:`)
+    flattenedKeys = flattenKeys(foreignKeys.translationKeys, flattenedKeys, "")
     flattenedKeys.forEach((keys) => console.log(`"${keys.key}": ${JSON.stringify(keys.value)},`))
-  )
+  })
 }
 
 void main()
