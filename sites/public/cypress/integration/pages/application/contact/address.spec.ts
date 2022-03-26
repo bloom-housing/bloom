@@ -36,7 +36,7 @@ describe("applications/contact/address", function () {
     cy.getByTestId("app-primary-work-in-region-no").check()
 
     cy.goNext()
-    cy.getByTestId("app-found-address-choice").should("be.visible")
+    cy.getByTestId("app-found-address-label").should("be.visible")
     cy.getByTestId("app-found-address-label").should("include.text", "Montgomery St")
     cy.getByTestId("app-found-address-label").should("include.text", "94111")
     cy.reload()
