@@ -46,7 +46,7 @@ yarn test:a11y
 
 ## Tailwind
 
-- We are using the [Tailwind](https://v1.tailwindcss.com) framework to make use of their low-level utility library that styles components based on custom settings. We configure the settings in `tailwind.config`. Some styles live in a global folder, but for the most part our components are styled with isolated SCSS files.
+- We are using the [Tailwind](https://v2.tailwindcss.com) framework to make use of their low-level utility library that styles components based on custom settings. We configure the settings in `tailwind.config`. Some styles live in a global folder, but for the most part our components are styled with isolated SCSS files.
 
 - Use Tailwind where possible before creating custom style sheets or custom classes for consistency.
 

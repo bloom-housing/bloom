@@ -3,6 +3,9 @@
   --background-color: var(--bloom-color-primary-lighter);
   --border-color: var(--bloom-color-gray-450);
   --text-color: inherit;
+  --inverse-background-color: var(--bloom-color-primary-dark);
+  --inverse-border-color: var(--bloom-color-primary);
+  --inverse-text-color: var(--bloom-color-white);
   --title-font-size: var(--bloom-font-size-5xl);
 
   /* Base Styles */
@@ -17,9 +20,9 @@
 
   /* Variants */
   &.is-inverse {
-    --background-color: var(--bloom-color-primary-dark);
-    --border-color: var(--bloom-color-primary);
-    --text-color: var(--bloom-color-white);
+    --background-color: var(--inverse-background-color);
+    --border-color: var(--inverse-border-color);
+    --text-color: var(--inverse-text-color);
   }
 }
 

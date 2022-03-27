@@ -30,7 +30,7 @@ export const withContent = () => (
 
 export const styleOverrides = () => {
   const cssVarsOverride = `
-    .style-overrides .page-header {
+    .page-header-overrides .page-header {
       --background-color: darkgreen;
       --border-color: red;
       --text-color: yellow;
@@ -39,11 +39,17 @@ export const styleOverrides = () => {
   `
 
   return (
-    <div className="style-overrides">
-      <PageHeader title="Big Title" subtitle="Here is a subtitle">
-        Here is some content
-      </PageHeader>
-      <style>{cssVarsOverride}</style>
-    </div>
+    <>
+      <div className="page-header-overrides">
+        <PageHeader title="Big Title" subtitle="Here is a subtitle">
+          Here is some contenta
+        </PageHeader>
+        <style>{cssVarsOverride}</style>
+      </div>
+
+      <p className="mt-12 font-semibold">Customized using the following variable overrides:</p>
+
+      <pre>{cssVarsOverride.replace(".page-header-overrides ", "")}</pre>
+    </>
   )
 }

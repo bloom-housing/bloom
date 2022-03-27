@@ -32,11 +32,14 @@ Set the `inverse` property to `true`.
   <Story id="headers-page-header--style-overrides" />
 </Canvas>
 
-You can apply CSS variables to the `.page-header` selector to customize the appearance of the component. If you wish to customize the `inverse` variant specifically, you can apply CSS variables to the `.page-header.is-inverse` selector.
+You can apply CSS variables to the `.page-header` selector to customize the appearance of the component.
 
-| Name                 | Type  | Description                                               |
-| -------------------- | ----- | --------------------------------------------------------- |
-| `--background-color` | color | The background of the header                              |
-| `--border-color`     | color | The color of the top border                               |
-| `--text-color`       | color | The color of text inside the header                       |
-| `--title-font-size`  | size  | The font size of the title (only on medium+ size screens) |
+| Name                         | Type  | Description                                               | Default                         |
+| ---------------------------- | ----- | --------------------------------------------------------- | ------------------------------- |
+| `--background-color`         | Color | The background of the header                              | `--bloom-color-primary-lighter` |
+| `--border-color`             | Color | The color of the top border                               | `--bloom-color-gray-450`        |
+| `--text-color`               | Color | The color of text inside the header                       | `inherit`                       |
+| `--inverse-background-color` | Color | The `inverse` variant background                          | `--bloom-color-primary-dark`    |
+| `--inverse-border-color`     | Color | The `inverse` variant color of the top border             | `--bloom-color-primary`         |
+| `--inverse-text-color`       | Color | The `inverse` variant color of text                       | `--bloom-color-white`           |
+| `--title-font-size`          | Size  | The font size of the title (only on medium+ size screens) | `--bloom-font-size-5xl`         |

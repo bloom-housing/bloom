@@ -125,7 +125,7 @@ export const inlineIcon = () => (
 
 export const detroitStyle = () => {
   const cssVarsOverride = `
-    .style-overrides {
+    .button-overrides {
       --bloom-font-sans: Montserrat;
       --bloom-font-alt-sans: var(--bloom-font-sans);
       --bloom-color-primary: rgb(41,126,115);
@@ -138,7 +138,7 @@ export const detroitStyle = () => {
       --outlined-appearance-hover-border-color: var(--bloom-color-primary);
     }
 
-    .style-overrides .button {
+    .button-overrides .button {
       --normal-rounded: 60px;
       --normal-padding: 0.5rem 1rem;
       --normal-font-size: var(--bloom-font-size-base);
@@ -155,7 +155,7 @@ export const detroitStyle = () => {
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
         rel="stylesheet"
       ></link>
-      <div className="style-overrides">
+      <div className="button-overrides">
         <Button styleType={AppearanceStyleType.primary} onClick={handleClick}>
           "Detroit" Primary Button
         </Button>{" "}
@@ -163,11 +163,11 @@ export const detroitStyle = () => {
         <style>{cssVarsOverride}</style>
       </div>
 
-      <p style={{ marginTop: "3rem", fontWeight: "600" }}>
-        Customized using the following variable overrides:
-      </p>
+      <p className="mt-12 font-semibold">Customized using the following variable overrides:</p>
 
-      <pre>{cssVarsOverride}</pre>
+      <pre>
+        {cssVarsOverride.replace(".button-overrides ", ":root ").replace(".button-overrides ", "")}
+      </pre>
     </>
   )
 }
