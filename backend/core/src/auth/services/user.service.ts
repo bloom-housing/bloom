@@ -274,11 +274,12 @@ export class UserService {
       await this.setHitConfirmationURl(user, dto.token)
       return true
     } catch (e) {
+      console.error("isUserConfirmationTokenValid error = ", e)
       try {
         const user = await this.find({ confirmationToken: dto.token })
         await this.setHitConfirmationURl(user, dto.token)
       } catch (e) {
-        // do nothing
+        console.error("isUserConfirmationTokenValid error = ", e)
       }
       return false
     }
