@@ -694,6 +694,9 @@
         },
         "senior": {
           "label": "At least one member of my household is a senior, defined as age 62 and older (1 point)"
+        },
+        "veteran": {
+          "label": "Someone in my household has served in the U.S. military (1 point)"
         }
       },
       "terminationOfAffordability": {

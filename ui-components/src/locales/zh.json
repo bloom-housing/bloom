@@ -286,6 +286,9 @@
         },
         "senior": {
           "label": "我的家庭中至少一名成员是老年人, 定义为 62 岁及以上 (1 分)"
+        },
+        "veteran": {
+          "label": "我家有人曾在美国军队服役 (1 分）"
         }
       },
       "terminationOfAffordability": {

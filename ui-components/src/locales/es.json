@@ -289,6 +289,9 @@
         },
         "senior": {
           "label": "Al menos un miembro de mi hogar es una persona mayor, definida como de 62 años o más (1 punto)"
+        },
+        "veteran": {
+          "label": "Alguien en mi hogar ha servido en el ejército de los Estados Unidos (1 punto)"
         }
       },
       "terminationOfAffordability": {
