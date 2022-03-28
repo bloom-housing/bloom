@@ -5,7 +5,7 @@ export class addUserAgreedToTermsOfServiceColumn1648043352040 implements Migrati
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "user_accounts" ADD "agreed_to_terms_of_service" boolean NOT NULL DEFAULT true`
+      `ALTER TABLE "user_accounts" ADD "agreed_to_terms_of_service" boolean NOT NULL DEFAULT false`
     )
   }
 
