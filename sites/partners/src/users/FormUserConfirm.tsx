@@ -14,7 +14,6 @@ import {
   AuthContext,
   AlertBox,
   Modal,
-  FieldGroup,
   MarkdownSection,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
@@ -25,7 +24,6 @@ import pageContent from "../../page_content/sj_terms.md"
 type FormUserConfirmFields = {
   password: string
   passwordConfirmation: string
-  agree: boolean
 }
 
 const MIN_PASSWORD_LENGTH = 8
@@ -47,13 +45,6 @@ const FormUserConfirm = () => {
 
   const [isLoginLoading, setLoginLoading] = useState(false)
   const [termsModal, setTermsModal] = useState(null)
-
-  const agreeField = [
-    {
-      id: "agree",
-      label: "I accept the Terms of Service",
-    },
-  ]
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
@@ -161,30 +152,6 @@ const FormUserConfirm = () => {
                   }}
                 />
               </div>
-
-              <legend className="field-label--caps pt-8">Terms</legend>
-              <p className="field-note mb-4">
-                To continue you must accept the{" "}
-                <button
-                  onClick={() => setTermsModal(true)}
-                  className={"text-primary underline font-semibold"}
-                >
-                  Terms of Service
-                </button>
-                .
-              </p>
-
-              <FieldGroup
-                name="agree"
-                type="checkbox"
-                fields={agreeField}
-                register={register}
-                validation={{ required: true }}
-                error={!!errors.agree}
-                errorMessage={t("errors.agreeError")}
-                fieldLabelClassName={"text-primary"}
-                dataTestId={"account-terms-agree"}
-              />
             </fieldset>
           </div>
 
