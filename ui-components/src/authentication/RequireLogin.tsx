@@ -12,6 +12,7 @@ type XOR<T, U> = T | U extends Record<string, unknown>
 type RequireLoginProps = {
   signInPath: string
   signInMessage: string
+  termsPath?: string // partners portal required accepted terms after sign-in
 } & XOR<{ requireForRoutes?: string[] }, { skipForRoutes: string[] }>
 
 /**
@@ -24,6 +25,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
   children,
   signInPath,
   signInMessage,
+  termsPath,
   ...rest
 }) => {
   const { router } = useContext(NavigationContext)
@@ -52,12 +54,20 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       clearSiteAlertMessage("notice")
     }
 
-    if (profile && !profile?.agreedToTermsOfService) {
-      console.log("not agreed")
+    if (termsPath && profile && !profile?.agreedToTermsOfService) {
+      void router.push(termsPath)
     }
-  }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
+  }, [
+    loginRequiredForPath,
+    initialStateLoaded,
+    profile,
+    router,
+    signInPath,
+    signInMessage,
+    termsPath,
+  ])
 
-  if (loginRequiredForPath && (!profile || !profile.agreedToTermsOfService)) {
+  if (loginRequiredForPath && (!profile || (termsPath && !profile.agreedToTermsOfService))) {
     return null
   }
 

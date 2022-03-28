@@ -975,6 +975,12 @@
       "enterLoginEmail": "Please enter your login email",
       "changeYourPassword": "You can change your password"
     },
+    "terms": {
+      "termsOfService": "Terms of Service",
+      "reviewToc": "Review Terms of Service",
+      "youMustAcceptToc": "To continue you must accept the",
+      "acceptToc": "I accept the Terms of Service"
+    },
     "createAccount": {
       "accountConfirmed": "Your account was successfully confirmed.",
       "anEmailHasBeenSent": "An email has been sent to %{email}",
@@ -1668,7 +1674,7 @@
     "noneFound": "None found.",
     "notes": "Notes",
     "occupancy": "Occupancy",
-    "ok": "OK",
+    "ok": "Ok",
     "optional": "Optional",
     "or": "or",
     "order": "Order",
