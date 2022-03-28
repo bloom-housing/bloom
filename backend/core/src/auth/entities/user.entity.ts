@@ -172,7 +172,7 @@ export class User {
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   phoneNumberVerified?: boolean
 
-  @Column({ type: "bool", nullable: false, default: true })
+  @Column({ type: "bool", nullable: false, default: false })
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   agreedToTermsOfService: boolean
