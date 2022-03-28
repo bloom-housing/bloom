@@ -51,9 +51,13 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
     } else {
       clearSiteAlertMessage("notice")
     }
+
+    if (profile && !profile?.agreedToTermsOfService) {
+      console.log("not agreed")
+    }
   }, [loginRequiredForPath, initialStateLoaded, profile, router, signInPath, signInMessage])
 
-  if (loginRequiredForPath && !profile) {
+  if (loginRequiredForPath && (!profile || !profile.agreedToTermsOfService)) {
     return null
   }
 
