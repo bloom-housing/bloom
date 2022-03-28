@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.3...@bloom-housing/ui-components@4.1.1-alpha.4) (2022-03-25)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
+## [4.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.2...@bloom-housing/ui-components@4.1.1-alpha.3) (2022-03-22)
+
+
+### Features
+
+* allow application status bar to have custom icon color ([#2572](https://github.com/bloom-housing/bloom/issues/2572)) ([2d7c0c5](https://github.com/bloom-housing/bloom/commit/2d7c0c508b938bc58bb0efe1f5e407e7124738f4))
+
+
+
+
+
+## [4.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.1...@bloom-housing/ui-components@4.1.1-alpha.2) (2022-03-16)
+
+
+### Bug Fixes
+
+* remove space between minutes and AM/PM for ApplicationStatus ([#2566](https://github.com/bloom-housing/bloom/issues/2566)) ([5440b38](https://github.com/bloom-housing/bloom/commit/5440b38f3048d17e6e76b41f0aa81f5176368af2))
+
+
+
+
+
+## [4.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.0...@bloom-housing/ui-components@4.1.1-alpha.1) (2022-03-10)
+
+**Note:** Version bump only for package @bloom-housing/ui-components
+
+
+
+
+
 ## [4.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.0.1-alpha.79...@bloom-housing/ui-components@4.1.1-alpha.0) (2022-03-02)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
