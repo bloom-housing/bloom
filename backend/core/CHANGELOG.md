@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.1...@bloom-housing/backend-core@4.1.1-alpha.2) (2022-03-28)
+
+
+### Features
+
+* adds partners re-request confirmation ([#2574](https://github.com/bloom-housing/bloom/issues/2574)) ([235af78](https://github.com/bloom-housing/bloom/commit/235af781914e5c36104bb3862dd55152a16e6750)), closes [#2577](https://github.com/bloom-housing/bloom/issues/2577)
+
+
+
+
+
 ## [4.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.0...@bloom-housing/backend-core@4.1.1-alpha.1) (2022-03-25)
 
 
