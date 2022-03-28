@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.4...@bloom-housing/ui-components@4.1.1-alpha.5) (2022-03-28)
+
+
+### Features
+
+* veteran preference option translation strings ([6b25906](https://github.com/bloom-housing/bloom/commit/6b25906a9cc71532c67da3c546ba06f896bb3232))
+
+
+
+
+
 ## [4.1.1-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.1-alpha.3...@bloom-housing/ui-components@4.1.1-alpha.4) (2022-03-25)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
