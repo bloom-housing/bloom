@@ -4062,6 +4062,9 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserCreate {
@@ -4106,6 +4109,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserBasic {
@@ -4168,6 +4174,9 @@ export interface UserBasic {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface Email {
@@ -4269,6 +4278,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserFilterParams {
@@ -4334,6 +4346,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserProfileUpdate {
