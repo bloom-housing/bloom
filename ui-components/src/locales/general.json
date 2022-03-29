@@ -694,6 +694,9 @@
         },
         "senior": {
           "label": "At least one member of my household is a senior, defined as age 62 and older (1 point)"
+        },
+        "veteran": {
+          "label": "Someone in my household has served in the U.S. military (1 point)"
         }
       },
       "terminationOfAffordability": {
@@ -923,12 +926,16 @@
     "addPassword": "Add a Password",
     "needUniquePassword": "You'll need to add a unique password in order to confirm your account.",
     "makeNote": "When creating your password make sure you make note of it so you remember it in the future.",
-    "confirmAccount": "Confirm Acount",
+    "confirmAccount": "Confirm Account",
     "accountConfirmed": "Account confirmed",
     "resendInvite": "Resend Invite",
     "userUpdated": "User updated",
     "userDeleted": "User deleted",
-    "doYouWantDeleteUser": "Do you really want to delete this user?"
+    "doYouWantDeleteUser": "Do you really want to delete this user?",
+    "requestResend": "Request Resend",
+    "requestResendExplanation": "Please enter your email, and we'll send a new confirmation",
+    "requestResendEnterEmail": "Enter a valid email address",
+    "requestResendDescription": "Your token expired, and will need to have a new confirmation email sent to you"
   },
   "flags": {
     "flaggedSet": "Flagged Set",
