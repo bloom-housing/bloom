@@ -84,12 +84,17 @@
   }
 
   &.is-success {
-    background-color: var(--bloom-color-success);
-    border-color: var(--bloom-color-success);
-    color: var(--bloom-color-white);
+    background-color: var(--success-appearance-background-color, var(--bloom-color-success));
+    border-color: var(--success-appearance-border-color, var(--bloom-color-success));
+    color: var(--success-appearance-label-color, var(--bloom-color-white));
 
     &:hover {
-      background-color: var(--bloom-color-success-dark);
+      background-color: var(
+        --success-appearance-hover-background-color,
+        var(--bloom-color-success-dark)
+      );
+      border-color: var(--success-appearance-hover-border-color, var(--bloom-color-success));
+      color: var(--success-appearance-hover-label-color, var(--bloom-color-white));
     }
   }
 
@@ -123,6 +128,7 @@
 
     &:hover {
       background: transparent;
+      border-color: transparent;
       color: var(--bloom-color-primary-darker);
     }
   }

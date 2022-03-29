@@ -1,4 +1,5 @@
 import { Canvas, Story, Source, ArgsTable } from "@storybook/addon-docs"
+import { Swatch } from "../prototypes/Swatch"
 import { Button } from "./Button"
 
 # Button
@@ -25,33 +26,41 @@ Other variants include appearances which aren't button-like such as `unstyled` a
 
 ## Theming Variables
 
-You can apply CSS variables to the `.button` selector to customize the appearance of the component. Some of these variables are part of the Bloom global design system, so if you've already overriden these global variables via `:root`, the button styles will update automatically.
+You can apply CSS variables to the `.button` selector to customize the appearance of the component.
 
-### Global Color Variables
+### Color Variables
 
-| Name                         | Color                                                            | Description                         |
-| ---------------------------- | ---------------------------------------------------------------- | ----------------------------------- |
-| `--bloom-color-primary`      | <span className="bg-primary w-6 inline-block">&nbsp;</span>      | Primary style type color            |
-| `--bloom-color-primary-dark` | <span className="bg-primary-dark w-6 inline-block">&nbsp;</span> | Darker version of the primary color |
-| `--bloom-color-success`      | <span className="bg-success w-6 inline-block">&nbsp;</span>      | Success style type color            |
-| `--bloom-color-success-dark` | <span className="bg-success-dark w-6 inline-block">&nbsp;</span> | Darker version of the success color |
+| Name                                          | Color                                            | Description                          |
+| --------------------------------------------- | ------------------------------------------------ | ------------------------------------ |
+| `--primary-appearance-background-color`       | <Swatch colorVar="--bloom-color-primary" />      | Primary background color             |
+| `--primary-appearance-border-color`           | <Swatch colorVar="--bloom-color-primary" />      | Primary border color                 |
+| `--primary-appearance-label-color`            | <Swatch colorVar="--bloom-color-white" />        | Primary label color                  |
+| `--primary-appearance-hover-background-color` | <Swatch colorVar="--bloom-color-primary-dark" /> | Hover state primary background color |
+| `--primary-appearance-hover-border-color`     | <Swatch colorVar="--bloom-color-primary-dark" /> | Hover state primary border color     |
+| `--primary-appearance-hover-label-color`      | <Swatch colorVar="--bloom-color-white" />        | Hover state primary label color      |
+| `--success-appearance-background-color`       | <Swatch colorVar="--bloom-color-success" />      | Success background color             |
+| `--success-appearance-border-color`           | <Swatch colorVar="--bloom-color-success" />      | Success border color                 |
+| `--success-appearance-label-color`            | <Swatch colorVar="--bloom-color-white" />        | Success label color                  |
+| `--success-appearance-hover-background-color` | <Swatch colorVar="--bloom-color-success-dark" /> | Hover state success background color |
+| `--success-appearance-hover-border-color`     | <Swatch colorVar="--bloom-color-success" />      | Hover state success border color     |
+| `--success-appearance-hover-label-color`      | <Swatch colorVar="--bloom-color-white" />        | Hover state success label color      |
 
 (etc. more TBD)
 
-### Component Variables
+### Typographic & Spacing Variables
 
-| Name                     | Type        | Description                                                             | Default                         |
-| ------------------------ | ----------- | ----------------------------------------------------------------------- | ------------------------------- |
-| `--label-font`           | Font        | Font family of the button label                                         | `--bloom-font-alt-sans`         |
-| `--label-transform`      | Case        | Text case of the button label                                           | `uppercase`                     |
-| `--label-letter-spacing` | Size        | The average gap between letters of the button label                     | `--bloom-letter-spacing-widest` |
-| `--label-weight`         | Font Weight | Typographic weight of the button label                                  | `bold`                          |
-| `--normal-rounded`       | Size        | Border radius of a normal-size button (defaults to `--bloom-rounded`)   |
-| `--normal-padding`       | Size        | Padding of the normal-size button interior                              |
-| `--normal-font-size`     | Size        | Font size of the normal-size button                                     |
-| `--small-rounded`        | Size        | Border radius of a small-size button (defaults to `--bloom-rounded`)    |
-| `--small-padding`        | Size        | Padding of the small-size button interior                               |
-| `--small-font-size`      | Size        | Font size of the small-size button (defaults to `--bloom-font-size-xs`) |
-| `--big-rounded`          | Size        | Border radius of a large-size button (defaults to `--bloom-rounded`)    |
-| `--big-padding`          | Size        | Padding of the large-size button interior                               |
-| `--big-font-size`        | Size        | Font size of the large-size button (defaults to `--bloom-font-size-sm`) |
+| Name                     | Type        | Description                                         | Default                                             |
+| ------------------------ | ----------- | --------------------------------------------------- | --------------------------------------------------- |
+| `--label-font`           | Font        | Font family of the button label                     | `--bloom-font-alt-sans`                             |
+| `--label-transform`      | Case        | Text case of the button label                       | `uppercase`                                         |
+| `--label-letter-spacing` | Size        | The average gap between letters of the button label | `--bloom-letter-spacing-widest`                     |
+| `--label-weight`         | Font Weight | Typographic weight of the button label              | `bold`                                              |
+| `--normal-rounded`       | Size        | Border radius of a normal-size button               | `--bloom-rounded`                                   |
+| `--normal-padding`       | Size        | Padding of the normal-size button interior          | `--bloom-s4` (top/bottom) `--bloom-s6` (left/right) |
+| `--normal-font-size`     | Size        | Font size of the normal-size button                 | `--bloom-font-size-sm`                              |
+| `--small-rounded`        | Size        | Border radius of a small-size button                | `--bloom-rounded`                                   |
+| `--small-padding`        | Size        | Padding of the small-size button interior           | `--bloom-s3` (top/bottom) `--bloom-s6` (left/right) |
+| `--small-font-size`      | Size        | Font size of the small-size button                  | `--bloom-font-size-xs`                              |
+| `--big-rounded`          | Size        | Border radius of a large-size button                | `--bloom-rounded`                                   |
+| `--big-padding`          | Size        | Padding of the large-size button interior           | `--bloom-s6`                                        |
+| `--big-font-size`        | Size        | Font size of the large-size button                  | `--bloom-font-size-sm`                              |
