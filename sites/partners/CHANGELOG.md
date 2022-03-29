@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.2-alpha.1...@bloom-housing/partners@4.1.2-alpha.2) (2022-03-29)
+
+
+### Bug Fixes
+
+* partners user lisitngs all checkbox ([#2592](https://github.com/bloom-housing/bloom/issues/2592)) ([47fd4b3](https://github.com/bloom-housing/bloom/commit/47fd4b31dc710ef2ccc28473faefe5f047d614b4))
+* removed unused partner footer links ([#2590](https://github.com/bloom-housing/bloom/issues/2590)) ([318d42e](https://github.com/bloom-housing/bloom/commit/318d42e01f5374c7cd2d3e7b35a4bb44e3659c94))
+
+
+
+
+
 ## [4.1.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.2-alpha.0...@bloom-housing/partners@4.1.2-alpha.1) (2022-03-28)
 
 
