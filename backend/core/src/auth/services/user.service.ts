@@ -390,7 +390,8 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
-        mfaEnabled: true,
+        // TODO: set back to true when mfa has the all clear
+        mfaEnabled: false,
       },
       authContext
     )
