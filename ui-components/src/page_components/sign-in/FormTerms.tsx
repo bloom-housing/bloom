@@ -78,11 +78,11 @@ const FormTerms = () => {
               validation={{ required: true }}
               error={!!errors.agree}
               errorMessage={t("errors.agreeError")}
-              dataTestId="XXX"
+              dataTestId="agree"
             />
 
             <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary} data-test-id="XXX">
+              <Button styleType={AppearanceStyleType.primary} data-test-id="form-submit">
                 {t("t.submit")}
               </Button>
             </div>
