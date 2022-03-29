@@ -7,6 +7,7 @@ import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { UnitGroupAmiLevel } from "../../../units-summary/entities/unit-group-ami-level.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const propertySeed: PropertySeedType = {
   buildingAddress: {
@@ -62,6 +63,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10136Seed extends ListingDefaultSeed {

@@ -6,6 +6,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const treymoreProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/457-Brainard-Street-Detroit-MI-48201
@@ -65,6 +66,7 @@ const treymoreListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class ListingTreymoreSeed extends ListingDefaultSeed {

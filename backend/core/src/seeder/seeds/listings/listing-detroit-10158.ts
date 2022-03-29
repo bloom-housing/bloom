@@ -5,6 +5,7 @@ import { ListingDefaultSeed } from "./listing-default-seed"
 import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const ncpProperty: PropertySeedType = {
   amenities: "Parking, Elevator in Building",
@@ -62,6 +63,7 @@ const ncpListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10158Seed extends ListingDefaultSeed {

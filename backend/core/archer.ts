@@ -2,9 +2,10 @@ import {
   AmiChart,
   EnumJurisdictionLanguages,
   Listing,
+  ListingMarketingTypeEnum,
   ListingReviewOrder,
   ListingStatus,
-  UnitStatus,
+  UnitStatus
 } from "./types"
 
 import { CountyCode } from "./src/shared/types/county-code"
@@ -1528,6 +1529,5 @@ export const ArcherListing: Listing = {
       monthlyRentAsPercentOfIncome: null,
     },
   ],
-  // TODO confirm not used anywhere
-  // totalUnits: 2,
+  marketingType: ListingMarketingTypeEnum.marketing,
 }
