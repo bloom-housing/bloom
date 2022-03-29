@@ -30,8 +30,7 @@
 
   .footer-copyright {
     @screen lg {
-      @apply w-6/12;
-      @apply text-left;
+      @apply w-full;
     }
   }
 
