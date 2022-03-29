@@ -10,7 +10,7 @@ export class addMfaRelatedColumnsToUserEntity1639051722043 implements MigrationI
     await queryRunner.query(`ALTER TABLE "user_accounts" ADD "mfa_code" character varying`)
     await queryRunner.query(`
         UPDATE user_accounts
-        SET mfa_enabled = true
+        SET mfa_enabled = false
         WHERE id IN
             (SELECT id
              FROM user_accounts

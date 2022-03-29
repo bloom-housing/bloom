@@ -13,12 +13,9 @@ import {
   useMutate,
   AuthContext,
   AlertBox,
-  Modal,
-  FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
-import Markdown from "markdown-to-jsx"
 
 type FormUserConfirmFields = {
   password: string
@@ -44,14 +41,6 @@ const FormUserConfirm = () => {
   password.current = watch("password", "")
 
   const [isLoginLoading, setLoginLoading] = useState(false)
-  const [termsModal, setTermsModal] = useState(null)
-
-  const agreeField = [
-    {
-      id: "agree",
-      label: "I accept the Terms of Service",
-    },
-  ]
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
@@ -159,30 +148,6 @@ const FormUserConfirm = () => {
                   }}
                 />
               </div>
-
-              <legend className="field-label--caps pt-8">Terms</legend>
-              <p className="field-note mb-4">
-                To continue you must accept the{" "}
-                <button
-                  onClick={() => setTermsModal(true)}
-                  className={"text-primary underline font-semibold"}
-                >
-                  Terms of Service
-                </button>
-                .
-              </p>
-
-              <FieldGroup
-                name="agree"
-                type="checkbox"
-                fields={agreeField}
-                register={register}
-                validation={{ required: true }}
-                error={!!errors.agree}
-                errorMessage={t("errors.agreeError")}
-                fieldLabelClassName={"text-primary"}
-                dataTestId={"account-terms-agree"}
-              />
             </fieldset>
           </div>
 
@@ -200,34 +165,6 @@ const FormUserConfirm = () => {
           </div>
         </Form>
       </FormCard>
-
-      <Modal
-        open={!!termsModal}
-        title={"Terms"}
-        onClose={() => setTermsModal(null)}
-        actions={[
-          <Button
-            styleType={AppearanceStyleType.primary}
-            onClick={() => {
-              setTermsModal(null)
-            }}
-          >
-            Ok
-          </Button>,
-        ]}
-        slim={true}
-      >
-        <Markdown options={{ disableParsingRawHTML: false }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris commodo enim sed felis
-          iaculis, in mattis diam dictum. Quisque consequat tellus lorem, et pharetra nibh facilisis
-          a. Curabitur vel viverra felis, sed vulputate magna. Nunc ut orci iaculis, placerat nunc
-          non, dignissim purus. Vivamus tristique, sapien ac gravida cursus, augue ex fringilla leo,
-          in dignissim lacus quam nec mauris. Cras a lacus quis nisl eleifend ornare. Ut sagittis
-          eros libero, ac accumsan nibh lobortis ut. Mauris tempor mauris ac vulputate bibendum. Ut
-          placerat lacinia molestie. Aliquam diam sem, lobortis ac velit aliquam, feugiat venenatis
-          metus.
-        </Markdown>
-      </Modal>
     </>
   )
 }
