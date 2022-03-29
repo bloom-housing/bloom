@@ -344,6 +344,14 @@ This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
 
 
 
+## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.1-alpha.87...@bloom-housing/partners@4.0.1) (2022-03-02)
+
+**Note:** Version bump only for package @bloom-housing/partners
+
+
+
+
+
 # [4.1.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.3...@bloom-housing/partners@4.1.0) (2022-03-02)
 
 
