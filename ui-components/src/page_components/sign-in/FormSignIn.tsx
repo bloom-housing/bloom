@@ -12,20 +12,15 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NavigationContext } from "../../config/NavigationContext"
-import type { NetworkErrorReset, NetworkErrorValue } from "../forgot-password/FormForgotPassword"
+import { NetworkStatus } from "@bloom-housing/shared-helpers"
 
 export type NetworkErrorDetermineError = (status: number, error: Error) => void
 
 export type FormSignInProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInValues) => void
-  networkError: FormSignInNetworkError
+  networkStatus: NetworkStatus
   showRegisterBtn?: boolean
-}
-
-export type FormSignInNetworkError = {
-  error: NetworkErrorValue
-  reset: NetworkErrorReset
 }
 
 export type FormSignInControl = {
@@ -41,7 +36,7 @@ export type FormSignInValues = {
 
 const FormSignIn = ({
   onSubmit,
-  networkError,
+  networkStatus,
   showRegisterBtn,
   control: { errors, register, handleSubmit },
 }: FormSignInProps) => {
@@ -58,7 +53,7 @@ const FormSignIn = ({
       </div>
       <FormSignInErrorBox
         errors={errors}
-        networkError={networkError}
+        networkStatus={networkStatus}
         errorMessageId={"main-sign-in"}
       />
       <div className="form-card__group pt-0">
