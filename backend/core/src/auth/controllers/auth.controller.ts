@@ -20,7 +20,7 @@ import { RequestMfaCodeResponseDto } from "../dto/request-mfa-code-response.dto"
 import { UserService } from "../services/user.service"
 import { GetMfaInfoDto } from "../dto/get-mfa-info.dto"
 import { GetMfaInfoResponseDto } from "../dto/get-mfa-info-response.dto"
-import { USER_ERRORS, UserErrorExtraModel, UserErrorMessages } from "../user-errors"
+import { UserErrorExtraModel } from "../user-errors"
 
 @Controller("auth")
 @ApiTags("auth")

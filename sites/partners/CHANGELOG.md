@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.1.1...@bloom-housing/partners@4.1.2) (2022-03-29)
+
+
+
+
+
 ## [4.1.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.2-alpha.2...@bloom-housing/partners@4.1.2-alpha.3) (2022-03-29)
 
 **Note:** Version bump only for package @bloom-housing/partners
@@ -285,6 +291,11 @@ This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
 
 
 ## [4.1.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.1.0...@bloom-housing/partners@4.1.1) (2022-03-28)
+
+
+
+
+
 ## [4.1.1-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.1-alpha.4...@bloom-housing/partners@4.1.1-alpha.5) (2022-03-28)
 
 **Note:** Version bump only for package @bloom-housing/partners
@@ -333,9 +344,6 @@ This reverts commit d7aa38c777972a2e21d9f816441caa27f98d3f86.
 
 
 
-## [4.0.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.1-alpha.87...@bloom-housing/partners@4.0.1) (2022-03-02)
-
-**Note:** Version bump only for package @bloom-housing/partners
 # [4.1.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.0.3...@bloom-housing/partners@4.1.0) (2022-03-02)
 
 
