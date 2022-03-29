@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react"
+import React, { useState, useContext, useCallback, useMemo } from "react"
 import {
   AuthContext,
   NavigationContext,
@@ -14,7 +14,6 @@ import {
 } from "@bloom-housing/ui-components"
 import Markdown from "markdown-to-jsx"
 import { useForm } from "react-hook-form"
-// import pageContent from "../../../page_content/sj_terms.md"
 
 type FormTermsInValues = {
   agree: boolean
@@ -46,6 +45,10 @@ const FormTerms = () => {
       void router.push("/")
     }
   }, [profile, router, userProfileService, refetchProfile])
+
+  const jurisdictionTerms = useMemo(() => {
+    return profile?.jurisdictions[0].partnerTerms
+  }, [profile])
 
   return (
     <>
@@ -103,9 +106,11 @@ const FormTerms = () => {
         slim={true}
       >
         <div className="overflow-y-auto max-h-96">
-          <MarkdownSection padding={false}>
-            <Markdown options={{ disableParsingRawHTML: false }}>lorem ipsum</Markdown>
-          </MarkdownSection>
+          {jurisdictionTerms && (
+            <MarkdownSection padding={false} fullwidth={true}>
+              <Markdown options={{ disableParsingRawHTML: false }}>{jurisdictionTerms}</Markdown>
+            </MarkdownSection>
+          )}
         </div>
       </Modal>
     </>
