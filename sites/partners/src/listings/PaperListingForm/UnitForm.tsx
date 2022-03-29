@@ -603,7 +603,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
             type="button"
             onClick={() => onFormSubmit("save")}
             styleType={AppearanceStyleType.secondary}
-            className="mr-4"
+            className="mr-4 mb-4 sm:mb-0"
           >
             {t("t.save")}
           </Button>
