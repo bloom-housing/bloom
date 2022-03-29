@@ -7,7 +7,11 @@ import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
 import styles from "./index.module.scss"
-import { Listing } from "@bloom-housing/backend-core/types"
+import {
+  EnumListingFilterParamsComparison,
+  EnumListingFilterParamsStatus,
+  Listing,
+} from "@bloom-housing/backend-core/types"
 import { getListings } from "../lib/helpers"
 import moment from "moment"
 import {
@@ -125,6 +129,12 @@ export async function getStaticProps() {
         orderBy: "mostRecentlyUpdated",
         availability: "hasAvailability",
         view: "base",
+        filter: [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            status: EnumListingFilterParamsStatus.active,
+          },
+        ],
       },
     })
     latestListings = response.data

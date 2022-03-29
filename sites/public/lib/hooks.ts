@@ -16,6 +16,8 @@ import {
   ListingReviewOrder,
   OrderByFieldsEnum,
   ListingStatus,
+  EnumListingFilterParamsComparison,
+  EnumListingFilterParamsStatus,
 } from "@bloom-housing/backend-core/types"
 import { ParsedUrlQuery } from "querystring"
 import { AppSubmissionContext } from "./AppSubmissionContext"
@@ -142,6 +144,12 @@ export async function fetchBaseListingData() {
         limit: "10",
         page: "1",
         orderBy: OrderByFieldsEnum.mostRecentlyUpdated,
+        filter: [
+          {
+            $comparison: EnumListingFilterParamsComparison["="],
+            status: EnumListingFilterParamsStatus.active,
+          },
+        ],
       },
       paramsSerializer: (params) => {
         return qs.stringify(params)

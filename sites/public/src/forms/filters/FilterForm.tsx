@@ -1,4 +1,7 @@
-import { AvailabilityFilterEnum } from "@bloom-housing/backend-core/types"
+import {
+  AvailabilityFilterEnum,
+  EnumListingFilterParamsStatus,
+} from "@bloom-housing/backend-core/types"
 import {
   t,
   SelectOption,
@@ -85,6 +88,13 @@ const FilterForm = (props: FilterFormProps) => {
   return (
     <Form onSubmit={handleSubmit(props.onSubmit)}>
       <div className="form-card__group">
+        <Field
+          id="status"
+          name={FrontendListingFilterStateKeys.status}
+          type="hidden"
+          register={register}
+          defaultValue={EnumListingFilterParamsStatus.active}
+        />
         <Select
           id={"availability"}
           name={FrontendListingFilterStateKeys.availability}
