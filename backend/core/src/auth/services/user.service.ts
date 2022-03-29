@@ -317,29 +317,6 @@ export class UserService {
     }
   }
 
-  public async resendPartnerConfirmation(dto: EmailDto) {
-    const user = await this.findByEmail(dto.email)
-    if (!user) {
-      throw new HttpException(USER_ERRORS.NOT_FOUND.message, USER_ERRORS.NOT_FOUND.status)
-    }
-    if (user.confirmedAt) {
-      throw new HttpException(
-        USER_ERRORS.ACCOUNT_CONFIRMED.message,
-        USER_ERRORS.ACCOUNT_CONFIRMED.status
-      )
-    } else {
-      user.confirmationToken = UserService.createConfirmationToken(user.id, user.email)
-      try {
-        await this.userRepository.save(user)
-        const confirmationUrl = UserService.getPartnersConfirmationUrl(dto.appUrl, user)
-        await this.emailService.invite(user, dto.appUrl, confirmationUrl)
-        return user
-      } catch (err) {
-        throw new HttpException(USER_ERRORS.ERROR_SAVING.message, USER_ERRORS.ERROR_SAVING.status)
-      }
-    }
-  }
-
   private static getPublicConfirmationUrl(appUrl: string, user: User) {
     return `${appUrl}?token=${user.confirmationToken}`
   }
