@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.1.1...@bloom-housing/partners@4.1.2) (2022-03-29)
+
+
+### Features
+
+* temp disable terms and set mfa enabled to false ([#2595](https://github.com/seanmalbert/bloom/issues/2595)) ([6de2dcd](https://github.com/seanmalbert/bloom/commit/6de2dcd8baeb28166d7a6c383846a7ab9a84b0e2))
+
+
+
+
+
 ## [4.1.1](https://github.com/seanmalbert/bloom/compare/@bloom-housing/partners@4.1.0...@bloom-housing/partners@4.1.1) (2022-03-28)
 
 **Note:** Version bump only for package @bloom-housing/partners
