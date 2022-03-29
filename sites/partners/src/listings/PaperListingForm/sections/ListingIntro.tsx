@@ -20,25 +20,27 @@ const ListingIntro = (props: ListingIntroProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors } = formMethods
 
-  const hideSelect = props.jurisdictionOptions.length <= 2
+  const defaultJurisdiction =
+    props.jurisdictionOptions.length === 2 ? props.jurisdictionOptions[1].value : ""
   return (
     <GridSection
       columns={3}
       title={t("listings.sections.introTitle")}
       description={t("listings.sections.introSubtitle")}
     >
-      <GridCell span={2} className={`${hideSelect ? "hidden" : ""}`}>
+      <GridCell span={2} className={`${defaultJurisdiction ? "hidden" : ""}`}>
         <ViewItem
           label={t("t.jurisdiction")}
           error={fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])}
         >
           <Select
             id={"jurisdiction.id"}
+            defaultValue={defaultJurisdiction}
             name={"jurisdiction.id"}
             label={t("t.jurisdiction")}
             labelClassName="sr-only"
             register={register}
-            controlClassName={`control ${hideSelect ? "hidden" : ""}`}
+            controlClassName={`control ${defaultJurisdiction ? "hidden" : ""}`}
             error={
               fieldHasError(errors?.jurisdiction) || fieldHasError(errors?.["jurisdiction.id"])
             }
