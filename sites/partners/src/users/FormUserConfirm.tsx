@@ -13,13 +13,9 @@ import {
   useMutate,
   AuthContext,
   AlertBox,
-  Modal,
-  MarkdownSection,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
-import Markdown from "markdown-to-jsx"
-import pageContent from "../../page_content/sj_terms.md"
 
 type FormUserConfirmFields = {
   password: string
@@ -169,29 +165,6 @@ const FormUserConfirm = () => {
           </div>
         </Form>
       </FormCard>
-
-      <Modal
-        open={!!termsModal}
-        title={"Terms"}
-        onClose={() => setTermsModal(null)}
-        actions={[
-          <Button
-            styleType={AppearanceStyleType.primary}
-            onClick={() => {
-              setTermsModal(null)
-            }}
-          >
-            Ok
-          </Button>,
-        ]}
-        slim={true}
-      >
-        <div className="overflow-y-auto max-h-96">
-          <MarkdownSection padding={false}>
-            <Markdown options={{ disableParsingRawHTML: false }}>{pageContent}</Markdown>
-          </MarkdownSection>
-        </div>
-      </Modal>
     </>
   )
 }
