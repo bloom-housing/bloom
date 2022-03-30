@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.1.0...@bloom-housing/backend-core@4.1.2) (2022-03-29)
+
+### Features
+
+* temp disable terms and set mfa enabled to false ([#2595](https://github.com/seanmalbert/bloom/issues/2595)) ([6de2dcd](https://github.com/seanmalbert/bloom/commit/6de2dcd8baeb28166d7a6c383846a7ab9a84b0e2))
+
+
+
 ## [4.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.2...@bloom-housing/backend-core@4.1.1-alpha.3) (2022-03-29)
 
 **Note:** Version bump only for package @bloom-housing/backend-core

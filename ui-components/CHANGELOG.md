@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/ui-components@4.1.1...@bloom-housing/ui-components@4.1.2) (2022-03-29)
+
+### Features
+
+* add four new icons to the set ([#2562](https://github.com/seanmalbert/bloom/issues/2562)) ([8e961be](https://github.com/seanmalbert/bloom/commit/8e961be90a5ac88e36d6ce54982004456f64c617))
+
+
+
+
 ## [4.1.2-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.2-alpha.2...@bloom-housing/ui-components@4.1.2-alpha.3) (2022-03-29)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
