@@ -1,7 +1,6 @@
 import React, { useState, useContext, useCallback, useMemo } from "react"
 import {
   AuthContext,
-  NavigationContext,
   AppearanceStyleType,
   Button,
   Field,
@@ -21,8 +20,7 @@ type FormTermsInValues = {
 
 const FormTerms = () => {
   const [termsModalVisible, setTermsModalVisible] = useState(false)
-  const { profile, userProfileService, refetchProfile } = useContext(AuthContext)
-  const { router } = useContext(NavigationContext)
+  const { profile, userProfileService, loadProfile } = useContext(AuthContext)
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { handleSubmit, register, errors } = useForm<FormTermsInValues>()
@@ -39,12 +37,8 @@ const FormTerms = () => {
       body: { ...profile, jurisdictions: jurisdictionIds, agreedToTermsOfService: true },
     })
 
-    refetchProfile?.()
-
-    if (profile) {
-      void router.push("/")
-    }
-  }, [profile, router, userProfileService, refetchProfile])
+    loadProfile?.("/")
+  }, [loadProfile, profile, userProfileService])
 
   const jurisdictionTerms = useMemo(() => {
     return profile?.jurisdictions[0].partnerTerms

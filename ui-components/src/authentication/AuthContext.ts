@@ -52,7 +52,7 @@ type ContextProps = {
   reservedCommunityTypeService: ReservedCommunityTypesService
   unitPriorityService: UnitAccessibilityPriorityTypesService
   unitTypesService: UnitTypesService
-  refetchProfile: () => void
+  loadProfile: (redirect?: string) => void
   login: (
     email: string,
     password: string,
@@ -220,18 +220,23 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     }
   }, [apiUrl, storageType])
 
-  const loadProfile = useCallback(async () => {
-    dispatch(saveProfile(null))
+  const loadProfile = useCallback(
+    async (redirect?: string) => {
+      try {
+        const profile = await userService?.userControllerProfile()
+        if (profile) {
+          dispatch(saveProfile(profile))
+        }
+      } finally {
+        dispatch(stopLoading())
 
-    try {
-      const profile = await userService?.userControllerProfile()
-      if (profile) {
-        dispatch(saveProfile(profile))
+        if (redirect) {
+          router.push(redirect)
+        }
       }
-    } finally {
-      dispatch(stopLoading())
-    }
-  }, [userService])
+    },
+    [userService, router]
+  )
 
   // Load our profile as soon as we have an access token available
   useEffect(() => {
@@ -258,7 +263,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
-    refetchProfile: () => loadProfile(),
+    loadProfile,
     login: async (
       email,
       password,
