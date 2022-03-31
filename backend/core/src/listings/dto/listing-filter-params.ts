@@ -6,6 +6,7 @@ import { IsBooleanString, IsEnum, IsNumberString, IsOptional, IsString } from "c
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
+import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
 
 // add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
@@ -257,5 +258,15 @@ export class ListingFilterParams extends BaseFilter {
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
-  [ListingFilterKeys.jurisdiction]?: string
+  [ListingFilterKeys.jurisdiction]?: string;
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(ListingMarketingTypeEnum),
+    example: "marketing",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingMarketingTypeEnum, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.marketingType]?: ListingMarketingTypeEnum;
 }

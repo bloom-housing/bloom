@@ -11,6 +11,7 @@ import {
   PaperApplicationCreate,
   UnitGroup,
   UnitGroupAmiLevel,
+  ListingMarketingTypeEnum,
 } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../applications/PaperApplicationForm/FormTypes"
 
@@ -125,6 +126,7 @@ export const formDefaults: FormListing = {
   leasingAgentOfficeHours: "",
   leasingAgentPhone: null,
   leasingAgentTitle: "",
+  marketingType: ListingMarketingTypeEnum.marketing,
   name: null,
   postMarkDate: null,
   postmarkedApplicationsReceivedByDate: null,

@@ -7,6 +7,7 @@ import { Listing } from "../../../listings/entities/listing.entity"
 import { getDate } from "./shared"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const grandRivProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -71,6 +72,7 @@ const grandRivListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10157Seed extends ListingDefaultSeed {

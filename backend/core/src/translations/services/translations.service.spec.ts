@@ -10,6 +10,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { BaseEntity } from "typeorm"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
+import { ListingMarketingTypeEnum } from "../../listings/types/listing-marketing-type-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -87,6 +88,7 @@ const getMockListing = () => {
     waitlistMaxSize: undefined,
     waitlistOpenSpots: undefined,
     whatToExpect: undefined,
+    marketingType: ListingMarketingTypeEnum.Marketing,
     get referralApplication(): ApplicationMethodDto | undefined {
       return undefined
     },

@@ -6,6 +6,7 @@ import { BaseEntity, DeepPartial } from "typeorm"
 import { Listing } from "../../../listings/entities/listing.entity"
 import { UnitGroup } from "../../../units-summary/entities/unit-group.entity"
 import { MonthlyRentDeterminationType } from "../../../units-summary/types/monthly-rent-determination.enum"
+import { ListingMarketingTypeEnum } from "../../../listings/types/listing-marketing-type-enum"
 
 const nccProperty: PropertySeedType = {
   // See http://rentlinx.kmgprestige.com/640-Delaware-Street-Detroit-MI-48202
@@ -68,6 +69,7 @@ const nccListing: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
+  marketingType: ListingMarketingTypeEnum.Marketing,
 }
 
 export class Listing10157Seed extends ListingDefaultSeed {

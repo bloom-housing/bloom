@@ -4,6 +4,7 @@ import { Listing } from "../../listings/entities/listing.entity"
 import { UserService } from "../../auth/services/user.service"
 import { SmsService } from "./sms.service"
 import { TwilioService } from "./twilio.service"
+import { ListingMarketingTypeEnum } from "../../listings/types/listing-marketing-type-enum"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -33,6 +34,7 @@ const mockListing: Listing = {
   status: null,
   displayWaitlistSize: false,
   hasId: null,
+  marketingType: ListingMarketingTypeEnum.Marketing,
   listingPreferences: [],
   save: jest.fn(),
   remove: jest.fn(),

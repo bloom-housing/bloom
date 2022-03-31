@@ -1,7 +1,7 @@
 import { importListing, ListingImport, UnitImport } from "./import-helpers"
 import { createUnitsArray } from "./detroit-helpers"
 import axios from "axios"
-import { AddressCreate, ListingStatus } from "../types/src/backend-swagger"
+import { AddressCreate, ListingMarketingTypeEnum, ListingStatus } from "../types/src/backend-swagger"
 
 // Sample usage:
 // $ yarn ts-node scripts/import-listings-from-detroit-arcgis.ts http://localhost:3100 admin@example.com:abcdef https://services2.arcgis.com/qvkbeam7Wirps6zC/ArcGIS/rest/services/Affordable_Housing_Website_data_12_20/FeatureServer/0//query
@@ -91,6 +91,7 @@ async function main() {
       assets: [],
       displayWaitlistSize: false,
       listingPreferences: [],
+      marketingType: ListingMarketingTypeEnum.marketing,
     }
 
     try {

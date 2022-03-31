@@ -23,6 +23,7 @@ import { Program } from "../../src/program/entities/program.entity"
 import { Repository } from "typeorm"
 import { INestApplication } from "@nestjs/common"
 import { Jurisdiction } from "../../src/jurisdictions/entities/jurisdiction.entity"
+import { ListingMarketingTypeEnum } from "../../src/listings/types/listing-marketing-type-enum"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dbOptions = require("../../ormconfig.test")
@@ -732,6 +733,7 @@ describe("Listings", () => {
         reload: undefined,
         listingPreferences: [],
         listingPrograms: [],
+        marketingType: ListingMarketingTypeEnum.Marketing,
       }
 
       await supertest(app.getHttpServer())
