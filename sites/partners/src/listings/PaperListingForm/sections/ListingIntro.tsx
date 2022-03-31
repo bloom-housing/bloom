@@ -10,9 +10,10 @@ import {
   ViewItem,
 } from "@bloom-housing/ui-components"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { Jurisdiction } from "@bloom-housing/backend-core/types"
 
 interface ListingIntroProps {
-  jurisdictionOptions: SelectOption[]
+  jurisdictions: Jurisdiction[]
 }
 const ListingIntro = (props: ListingIntroProps) => {
   const formMethods = useFormContext()
@@ -20,8 +21,14 @@ const ListingIntro = (props: ListingIntroProps) => {
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, clearErrors, errors } = formMethods
 
-  const defaultJurisdiction =
-    props.jurisdictionOptions.length === 2 ? props.jurisdictionOptions[1].value : ""
+  const jurisdictionOptions: SelectOption[] = [
+    { label: "", value: "" },
+    ...props.jurisdictions.map((jurisdiction) => ({
+      label: jurisdiction.name,
+      value: jurisdiction.id,
+    })),
+  ]
+  const defaultJurisdiction = props.jurisdictions.length === 1 ? props.jurisdictions[0].id : ""
   return (
     <GridSection
       columns={3}
@@ -51,7 +58,7 @@ const ListingIntro = (props: ListingIntroProps) => {
               undefined
             }
             keyPrefix={"jurisdictions"}
-            options={props.jurisdictionOptions}
+            options={jurisdictionOptions}
             inputProps={{
               onChange: () => clearErrors("jurisdiction"),
             }}
