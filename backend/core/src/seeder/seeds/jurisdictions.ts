@@ -11,7 +11,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     programs: [],
     publicUrl: "",
     emailFromAddress: "Alameda: Housing Bay Area",
-    rentalAssistanceDefault: "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    rentalAssistanceDefault:
+      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   },
   {
     name: "San Jose",
@@ -20,7 +21,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     programs: [],
     publicUrl: "",
     emailFromAddress: "SJ: HousingBayArea.org",
-    rentalAssistanceDefault: "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    rentalAssistanceDefault:
+      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   },
   {
     name: "San Mateo",
@@ -29,7 +31,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     programs: [],
     publicUrl: "",
     emailFromAddress: "SMC: HousingBayArea.org",
-    rentalAssistanceDefault: "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    rentalAssistanceDefault:
+      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   },
   {
     name: "Detroit",
@@ -38,7 +41,8 @@ export const defaultJurisdictions: JurisdictionCreateDto[] = [
     programs: [],
     publicUrl: "",
     emailFromAddress: "Detroit Housing",
-    rentalAssistanceDefault: "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
+    rentalAssistanceDefault:
+      "Housing Choice Vouchers, Section 8 and other valid rental assistance programs will be considered for this property. In the case of a valid rental subsidy, the required minimum income will be based on the portion of the rent that the tenant pays after use of the subsidy.",
   },
 ]
 
