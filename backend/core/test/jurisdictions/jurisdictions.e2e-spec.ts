@@ -84,6 +84,7 @@ describe("Jurisdictions", () => {
         programs: [newProgram],
         publicUrl: "",
         emailFromAddress: "",
+        rentalAssistanceDefault: ""
       })
       .expect(201)
 
@@ -115,18 +116,12 @@ describe("Jurisdictions", () => {
       .set(...setAuthorization(adminAccesstoken))
       .send({
         name: "test2",
-        languages: [Language.en],
-        preferences: [],
-        publicUrl: "",
-        emailFromAddress: "",
-      })
-      .send({
-        name: "test2",
         programs: [],
         languages: [Language.en],
         preferences: [],
         publicUrl: "",
         emailFromAddress: "",
+        rentalAssistanceDefault: ""
       })
       .expect(201)
     expect(res.body).toHaveProperty("id")
