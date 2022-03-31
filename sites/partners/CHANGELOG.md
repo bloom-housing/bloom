@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.3-alpha.1...@bloom-housing/partners@4.1.3-alpha.2) (2022-03-31)
+
+
+### Bug Fixes
+
+* select programs working with single jurisdiction ([#2598](https://github.com/bloom-housing/bloom/issues/2598)) ([7fec414](https://github.com/bloom-housing/bloom/commit/7fec414c8ede55f16679f2e099f58965773cf5a3))
+
+
+
+
+
 ## [4.1.3-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/partners@4.1.3-alpha.0...@bloom-housing/partners@4.1.3-alpha.1) (2022-03-30)
 
 
