@@ -302,7 +302,7 @@ export class ListingsService {
     return canUpdate
   }
 
-  @Interval(1000 * 60 * 60)
+  /* @Interval(1000 * 60 * 60)
   public async changeOverdueListingsStatusCron() {
     const listings = await this.listingRepository
       .createQueryBuilder("listings")
@@ -316,5 +316,5 @@ export class ListingsService {
     }
 
     await this.listingRepository.save(listings)
-  }
+  } */
 }
