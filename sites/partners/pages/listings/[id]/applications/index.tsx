@@ -13,6 +13,8 @@ import {
   setSiteAlertMessage,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
+  LoadingOverlay,
+  AlertBox,
 } from "@bloom-housing/ui-components"
 import {
   useApplicationsData,
@@ -60,7 +62,7 @@ const ApplicationsList = () => {
   })
 
   const listingId = router.query.id as string
-  const { appsData } = useApplicationsData(
+  const { appsData, appsError, appsLoading } = useApplicationsData(
     currentPage,
     itemsPerPage,
     listingId,
@@ -207,6 +209,7 @@ const ApplicationsList = () => {
     components: {
       formatLinkCell: formatLinkCell,
     },
+    suppressNoRowsOverlay: appsLoading,
   }
 
   const defaultColDef = {
@@ -257,8 +260,10 @@ const ApplicationsList = () => {
             <div className="flex justify-between">
               <div className="w-56">
                 <Field name="filter-input" register={register} placeholder={t("t.filter")} />
+                {appsError && (
+                  <AlertBox type="notice">Enter at least 3 characters to search</AlertBox>
+                )}
               </div>
-
               <div className="flex-row">
                 <LocalizedLink href={`/listings/${listingId}/applications/add`}>
                   <Button
@@ -277,20 +282,21 @@ const ApplicationsList = () => {
             </div>
 
             <div className="applications-table mt-5">
-              <AgGridReact
-                onGridReady={onGridReady}
-                gridOptions={gridOptions}
-                defaultColDef={defaultColDef}
-                columnDefs={columnDefs}
-                rowData={applications}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
-
+              <LoadingOverlay isLoading={appsLoading}>
+                <AgGridReact
+                  onGridReady={onGridReady}
+                  gridOptions={gridOptions}
+                  defaultColDef={defaultColDef}
+                  columnDefs={columnDefs}
+                  rowData={applications}
+                  domLayout={"autoHeight"}
+                  headerHeight={83}
+                  rowHeight={58}
+                  suppressPaginationPanel={true}
+                  paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
+                  suppressScrollOnNewData={true}
+                ></AgGridReact>
+              </LoadingOverlay>
               <AgPagination
                 totalItems={appsMeta?.totalItems}
                 totalPages={appsMeta?.totalPages}
