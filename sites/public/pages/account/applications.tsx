@@ -65,7 +65,7 @@ const Applications = () => {
         </Head>
         <MetaTags title={t("nav.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
-          <LoadingOverlay isLoading={loading && !applications}>
+          <LoadingOverlay isLoading={loading && !applications?.items.length}>
             <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
               <DashBlocks>
                 <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
