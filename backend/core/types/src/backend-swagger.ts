@@ -800,6 +800,48 @@ export class UserService {
   /**
    * Resend confirmation
    */
+  resendPartnerConfirmation(
+    params: {
+      /** requestBody */
+      body?: Email
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/resend-partner-confirmation"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Verifies token is valid
+   */
+  isUserConfirmationTokenValid(
+    params: {
+      /** requestBody */
+      body?: Confirm
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/user/is-confirmation-token-valid"
+
+      const configs: IRequestConfig = getConfigs("post", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+  /**
+   * Resend confirmation
+   */
   resendConfirmation(
     params: {
       /** requestBody */
@@ -3875,6 +3917,11 @@ export interface PaginatedAssets {
   meta: PaginationMeta
 }
 
+export interface UserErrorExtraModel {
+  /**  */
+  userErrorMessages: EnumUserErrorExtraModelUserErrorMessages
+}
+
 export interface Login {
   /**  */
   email: string
@@ -4020,6 +4067,9 @@ export interface User {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserCreate {
@@ -4064,6 +4114,9 @@ export interface UserCreate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserBasic {
@@ -4126,6 +4179,9 @@ export interface UserBasic {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface Email {
@@ -4227,6 +4283,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserFilterParams {
@@ -4292,6 +4351,9 @@ export interface UserInvite {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  hitConfirmationURL?: Date
 }
 
 export interface UserProfileUpdate {
@@ -6452,6 +6514,16 @@ export enum EnumApplicationsApiExtraModelOrderBy {
 export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
+}
+export enum EnumUserErrorExtraModelUserErrorMessages {
+  "accountConfirmed" = "accountConfirmed",
+  "accountNotConfirmed" = "accountNotConfirmed",
+  "errorSaving" = "errorSaving",
+  "emailNotFound" = "emailNotFound",
+  "tokenExpired" = "tokenExpired",
+  "tokenMissing" = "tokenMissing",
+  "emailInUse" = "emailInUse",
+  "passwordOutdated" = "passwordOutdated",
 }
 export enum EnumLoginMfaType {
   "sms" = "sms",

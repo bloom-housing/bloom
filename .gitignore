@@ -81,7 +81,7 @@ yarn-error.log
 # IDE configs
 .idea
 .vscode
-.code-workspace
+*.code-workspace
 
 # VS code debugger config
 launch.json

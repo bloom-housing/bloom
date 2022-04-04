@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from "react"
+import React, { useRef, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import {
   t,
@@ -13,9 +13,13 @@ import {
   useMutate,
   AuthContext,
   AlertBox,
+  Modal,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
+import Markdown from "markdown-to-jsx"
+import { ReRequestConfirmation } from "./ReRequestConfirmation"
 
 type FormUserConfirmFields = {
   password: string
@@ -41,6 +45,31 @@ const FormUserConfirm = () => {
   password.current = watch("password", "")
 
   const [isLoginLoading, setLoginLoading] = useState(false)
+  const [termsModal, setTermsModal] = useState(null)
+  const [rerequestModalOpen, setRerequestModalOpen] = useState(false)
+  const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
+
+  const agreeField = [
+    {
+      id: "agree",
+      label: "I accept the Terms of Service",
+    },
+  ]
+
+  useEffect(() => {
+    if (token) {
+      userService
+        .isUserConfirmationTokenValid({ body: { token } })
+        .then((res) => {
+          if (!res) {
+            setRerequestModalOpen(true)
+          }
+        })
+        .catch(() => {
+          setRerequestModalOpen(true)
+        })
+    }
+  }, [token, userService, setRerequestModalOpen])
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()
@@ -66,6 +95,8 @@ const FormUserConfirm = () => {
 
         setSiteAlertMessage(t(`users.accountConfirmed`), "success")
         void router.push("/")
+      } else {
+        setRerequestModalOpen(true)
       }
     } catch (err) {
       console.error(err)
@@ -93,6 +124,12 @@ const FormUserConfirm = () => {
           {isError && (
             <AlertBox className="mt-5" type="alert" closeable>
               {t(`errors.alert.badRequest`)}
+            </AlertBox>
+          )}
+
+          {newConfirmationRequested && (
+            <AlertBox className="mt-5" type="success" closeable>
+              {t(`users.confirmationSent`)}
             </AlertBox>
           )}
         </div>
@@ -148,6 +185,30 @@ const FormUserConfirm = () => {
                   }}
                 />
               </div>
+
+              <legend className="field-label--caps pt-8">Terms</legend>
+              <p className="field-note mb-4">
+                To continue you must accept the{" "}
+                <button
+                  onClick={() => setTermsModal(true)}
+                  className={"text-primary underline font-semibold"}
+                >
+                  Terms of Service
+                </button>
+                .
+              </p>
+
+              <FieldGroup
+                name="agree"
+                type="checkbox"
+                fields={agreeField}
+                register={register}
+                validation={{ required: true }}
+                error={!!errors.agree}
+                errorMessage={t("errors.agreeError")}
+                fieldLabelClassName={"text-primary"}
+                dataTestId={"account-terms-agree"}
+              />
             </fieldset>
           </div>
 
@@ -165,6 +226,47 @@ const FormUserConfirm = () => {
           </div>
         </Form>
       </FormCard>
+
+      <Modal
+        open={rerequestModalOpen}
+        title={t("authentication.createAccount.errors.tokenExpired")}
+        ariaDescription={t("users.requestResendDescription")}
+        onClose={() => setRerequestModalOpen(false)}
+      >
+        <ReRequestConfirmation
+          onClose={setRerequestModalOpen}
+          clearExistingErrors={resetMutation}
+          setAlert={setNewConfirmationRequested}
+        />
+      </Modal>
+
+      <Modal
+        open={!!termsModal}
+        title={"Terms"}
+        onClose={() => setTermsModal(null)}
+        actions={[
+          <Button
+            styleType={AppearanceStyleType.primary}
+            onClick={() => {
+              setTermsModal(null)
+            }}
+          >
+            Ok
+          </Button>,
+        ]}
+        slim={true}
+      >
+        <Markdown options={{ disableParsingRawHTML: false }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris commodo enim sed felis
+          iaculis, in mattis diam dictum. Quisque consequat tellus lorem, et pharetra nibh facilisis
+          a. Curabitur vel viverra felis, sed vulputate magna. Nunc ut orci iaculis, placerat nunc
+          non, dignissim purus. Vivamus tristique, sapien ac gravida cursus, augue ex fringilla leo,
+          in dignissim lacus quam nec mauris. Cras a lacus quis nisl eleifend ornare. Ut sagittis
+          eros libero, ac accumsan nibh lobortis ut. Mauris tempor mauris ac vulputate bibendum. Ut
+          placerat lacinia molestie. Aliquam diam sem, lobortis ac velit aliquam, feugiat venenatis
+          metus.
+        </Markdown>
+      </Modal>
     </>
   )
 }

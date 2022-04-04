@@ -64,7 +64,10 @@ export class LocalMfaStrategy extends PassportStrategy(Strategy, "localMfa") {
       }
 
       if (!user.confirmedAt) {
-        throw new UnauthorizedException()
+        throw new HttpException(
+          USER_ERRORS.ACCOUNT_NOT_CONFIRMED.message,
+          USER_ERRORS.ACCOUNT_NOT_CONFIRMED.status
+        )
       }
 
       if (UserService.isPasswordOutdated(user)) {

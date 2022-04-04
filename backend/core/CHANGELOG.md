@@ -3,8 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.1.0...@bloom-housing/backend-core@4.1.2) (2022-03-29)
+## [4.1.3-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.3...@bloom-housing/backend-core@4.1.3-alpha.0) (2022-03-30)
 
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [4.1.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.1.0...@bloom-housing/backend-core@4.1.2) (2022-03-29)
 
 ### Features
 
@@ -12,8 +19,48 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [4.1.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.2...@bloom-housing/backend-core@4.1.1-alpha.3) (2022-03-29)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
 
 
+
+
+
+## [4.1.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.1...@bloom-housing/backend-core@4.1.1-alpha.2) (2022-03-28)
+
+
+### Features
+
+* adds partners re-request confirmation ([#2574](https://github.com/bloom-housing/bloom/issues/2574)) ([235af78](https://github.com/bloom-housing/bloom/commit/235af781914e5c36104bb3862dd55152a16e6750)), closes [#2577](https://github.com/bloom-housing/bloom/issues/2577)
+
+
+
+
+
+## [4.1.1-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.1.1-alpha.0...@bloom-housing/backend-core@4.1.1-alpha.1) (2022-03-25)
+
+
+### Bug Fixes
+
+* update for subject line ([#2578](https://github.com/bloom-housing/bloom/issues/2578)) ([dace763](https://github.com/bloom-housing/bloom/commit/dace76332bbdb3ad104638f32a07e71fd85edc0c))
+* update to mfa text's text ([#2579](https://github.com/bloom-housing/bloom/issues/2579)) ([ac5b812](https://github.com/bloom-housing/bloom/commit/ac5b81242f3177de09ed176a60f06be871906178))
+
+
+
+
+
+## [4.1.1-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@3.0.2...@bloom-housing/backend-core@4.1.1-alpha.0) (2022-03-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
+
+
+
+
+
+## [3.0.2](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@3.0.2-alpha.45...@bloom-housing/backend-core@3.0.2) (2022-03-02)
+
+**Note:** Version bump only for package @bloom-housing/backend-core
 # [4.1.0](https://github.com/seanmalbert/bloom/compare/@bloom-housing/backend-core@4.0.3...@bloom-housing/backend-core@4.1.0) (2022-03-02)
 
 
