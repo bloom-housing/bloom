@@ -328,11 +328,13 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
 
     const preferredUnit = applicationData?.preferredUnit?.map((unit) => unit.id)
 
-    const accessibility = Object.keys(applicationData?.accessibility).map((feature) => {
-      if (applicationData.accessibility === true) {
-        return feature
-      }
-    })
+    const accessibility: string[] = adaFeatureKeys
+      .map((feature) => {
+        if (applicationData?.accessibility[feature.id] === true) {
+          return feature.id
+        }
+      })
+      .filter((feature) => !!feature)
 
     const result = {
       applicant,
