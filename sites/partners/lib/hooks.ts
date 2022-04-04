@@ -269,6 +269,25 @@ export function usePreferenceList() {
   }
 }
 
+export function useJurisdiction(jurisdictionId: string) {
+  const { jurisdictionsService } = useContext(AuthContext)
+  const fetcher = () =>
+    jurisdictionsService.retrieve({
+      jurisdictionId,
+    })
+
+  const { data, error } = useSWR(
+    `${process.env.backendApiBase}/jurisdictions/${jurisdictionId}`,
+    fetcher
+  )
+
+  return {
+    data,
+    loading: !error && !data,
+    error,
+  }
+}
+
 export function useJurisdictionalPreferenceList(jurisdictionId: string) {
   const { preferencesService } = useContext(AuthContext)
   const fetcher = () =>
