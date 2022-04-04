@@ -286,6 +286,9 @@
         },
         "senior": {
           "label": "Ít nhất một thành viên trong gia đình tôi là người cao tuổi, được xác định là từ 62 tuổi trở lên (1 điểm)"
+        },
+        "veteran": {
+          "label": "Một người nào đó trong gia đình tôi đã phục vụ trong quân đội Hoa Kỳ (1 điểm)"
         }
       },
       "terminationOfAffordability": {

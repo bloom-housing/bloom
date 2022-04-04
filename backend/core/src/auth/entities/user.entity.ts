@@ -176,4 +176,11 @@ export class User {
   @Expose()
   @IsBoolean({ groups: [ValidationsGroupsEnum.default] })
   agreedToTermsOfService: boolean
+
+  @Column({ type: "timestamptz", nullable: true })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsDate({ groups: [ValidationsGroupsEnum.default] })
+  @Type(() => Date)
+  hitConfirmationURL?: Date | null
 }
