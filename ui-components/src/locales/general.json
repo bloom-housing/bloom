@@ -978,7 +978,7 @@
     "terms": {
       "termsOfService": "Terms of Service",
       "reviewToc": "Review Terms of Service",
-      "youMustAcceptToc": "To continue you must accept the",
+      "youMustAcceptToc": "To continue you must accept the Terms of Service",
       "acceptToc": "I accept the Terms of Service"
     },
     "createAccount": {

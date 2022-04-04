@@ -4,7 +4,7 @@ import { FormTerms } from "@bloom-housing/ui-components"
 
 const TermsPage = () => {
   return (
-    <FormsLayout>
+    <FormsLayout wide={true}>
       <FormTerms />
     </FormsLayout>
   )
