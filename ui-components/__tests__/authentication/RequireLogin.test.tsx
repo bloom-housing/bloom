@@ -29,7 +29,7 @@ const mockUser: User = {
   mfaEnabled: false,
   passwordUpdatedAt: new Date("2020-01-01"),
   passwordValidForDays: 180,
-  agreedToTermsOfService: true
+  agreedToTermsOfService: true,
 }
 
 let initialStateLoaded = false
