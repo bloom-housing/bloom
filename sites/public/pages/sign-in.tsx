@@ -42,7 +42,7 @@ const SignIn = () => {
       <FormSignIn
         onSubmit={onSubmit}
         control={{ register, errors, handleSubmit }}
-        networkError={{ error: networkError, reset: resetNetworkError }}
+        networkStatus={{ content: networkError, reset: resetNetworkError }}
         showRegisterBtn={true}
       />
     </FormsLayout>

@@ -46,11 +46,11 @@ const getListingTableData = (unitsSummarized: UnitsSummarized) => {
   return unitsSummarized !== undefined ? getSummariesTable(unitsSummarized.byUnitTypeAndRent) : []
 }
 
-const getListingImageCardStatus = (listing: Listing): StatusBarType => {
+export const getListingApplicationStatus = (listing: Listing): StatusBarType => {
   let content = ""
   let subContent = ""
   let formattedDate = ""
-  let appStatus = ApplicationStatusType.Open
+  let status = ApplicationStatusType.Open
 
   if (openInFuture(listing)) {
     const date = listing.applicationOpenDate
@@ -59,18 +59,18 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
     content = t("listings.applicationOpenPeriod")
   } else {
     if (listing.status === ListingStatus.closed) {
-      appStatus = ApplicationStatusType.Closed
+      status = ApplicationStatusType.Closed
       content = t("listings.applicationsClosed")
     } else if (listing.applicationDueDate) {
       const dueDate = dayjs(listing.applicationDueDate)
       formattedDate = dueDate.format("MMM DD, YYYY")
-      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mm A")
+      formattedDate = formattedDate + ` ${t("t.at")} ` + dueDate.format("h:mmA")
 
       // if due date is in future, listing is open
       if (dayjs() < dueDate) {
         content = t("listings.applicationDeadline")
       } else {
-        appStatus = ApplicationStatusType.Closed
+        status = ApplicationStatusType.Closed
         content = t("listings.applicationsClosed")
       }
     }
@@ -86,7 +86,7 @@ const getListingImageCardStatus = (listing: Listing): StatusBarType => {
   }
 
   return {
-    status: appStatus,
+    status,
     content,
     subContent,
   }
@@ -111,7 +111,7 @@ export const getListings = (listings) => {
           tagLabel: listing.reservedCommunityType
             ? t(`listings.reservedCommunityTypes.${listing.reservedCommunityType.name}`)
             : undefined,
-          statuses: [getListingImageCardStatus(listing)],
+          statuses: [getListingApplicationStatus(listing)],
         }}
         tableProps={{
           headers: unitSummariesHeaders,

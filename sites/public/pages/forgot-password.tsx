@@ -30,14 +30,6 @@ const ForgotPassword = () => {
     })
   }, [])
 
-  useEffect(() => {
-    pushGtmEvent<PageView>({
-      event: "pageView",
-      pageTitle: "Forgot Password",
-      status: UserStatus.NotLoggedIn,
-    })
-  }, [])
-
   const onSubmit = async (data: { email: string }) => {
     const { email } = data
 
