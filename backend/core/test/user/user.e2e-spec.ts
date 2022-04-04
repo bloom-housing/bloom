@@ -282,6 +282,7 @@ describe("Applications", () => {
       jurisdictions: user2Profile.jurisdictions.map((jurisdiction) => ({
         id: jurisdiction.id,
       })),
+      agreedToTermsOfService: false,
     }
     await supertest(app.getHttpServer())
       .put(`/user/${user2UpdateDto.id}`)
@@ -464,6 +465,7 @@ describe("Applications", () => {
       currentPassword: userCreateDto.password,
       firstName: "NewFirstName",
       phoneNumber: "+12025550194",
+      agreedToTermsOfService: false,
     }
 
     await supertest(app.getHttpServer())
@@ -533,6 +535,7 @@ describe("Applications", () => {
       ...userACreateDto,
       password: undefined,
       jurisdictions: [],
+      agreedToTermsOfService: false,
     }
 
     // Restrict user B editing user A's profile
