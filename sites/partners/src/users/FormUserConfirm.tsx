@@ -17,7 +17,6 @@ import {
 } from "@bloom-housing/ui-components"
 import { useForm } from "react-hook-form"
 import { LoginResponse } from "@bloom-housing/backend-core/types"
-import Markdown from "markdown-to-jsx"
 import { ReRequestConfirmation } from "./ReRequestConfirmation"
 
 type FormUserConfirmFields = {
