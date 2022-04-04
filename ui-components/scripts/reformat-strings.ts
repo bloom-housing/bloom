@@ -2,11 +2,11 @@
 // Reformats strings to flatten the object structure
 // example: `ts-node reformat-strings > flattened-keys.json`
 
-const englishTranslations = require("./general.json")
-const spanishTranslations = require("./es.json")
-const chineseTranslations = require("./zh.json")
-const vietnameseTranslations = require("./vi.json")
-const tagalogTranslations = require("./tl.json")
+const englishTranslations = require("../src/locales/general.json")
+const spanishTranslations = require("../src/locales/es.json")
+const chineseTranslations = require("../src/locales/zh.json")
+const vietnameseTranslations = require("../src/locales/vi.json")
+const tagalogTranslations = require("../src/locales/tl.json")
 
 function main() {
   type TranslationsType = {
