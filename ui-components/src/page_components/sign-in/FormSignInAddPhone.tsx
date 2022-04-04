@@ -11,12 +11,12 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { FormSignInNetworkError } from "./FormSignIn"
+import { NetworkStatus } from "@bloom-housing/shared-helpers"
 
 export type FormSignInAddPhoneProps = {
   control: FormSignInAddPhoneControl
   onSubmit: (data: FormSignInAddPhoneValues) => void
-  networkError: FormSignInNetworkError
+  networkError: NetworkStatus
   phoneNumber: string
 }
 
@@ -49,7 +49,7 @@ const FormSignInAddPhone = ({
       </div>
       <FormSignInErrorBox
         errors={errors}
-        networkError={networkError}
+        networkStatus={networkError}
         errorMessageId={"add-phone"}
       />
 

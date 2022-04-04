@@ -11,13 +11,13 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { FormSignInNetworkError } from "./FormSignIn"
+import { NetworkStatus } from "@bloom-housing/shared-helpers"
 import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFAProps = {
   control: FormSignInMFAControl
   onSubmit: (data: FormSignInMFAValues) => void
-  networkError: FormSignInNetworkError
+  networkError: NetworkStatus
 }
 
 export type FormSignInMFAControl = {
@@ -51,7 +51,11 @@ const FormSignInMFAType = ({
           {t("nav.signInMFA.verificationChoiceSecondaryTitle")}
         </p>
       </div>
-      <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-type"} />
+      <FormSignInErrorBox
+        errors={errors}
+        networkStatus={networkError}
+        errorMessageId={"mfa-type"}
+      />
 
       <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">

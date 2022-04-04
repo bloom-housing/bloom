@@ -10,13 +10,14 @@ import {
   SiteAlert,
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
-import { FormSignInNetworkError, FormSignInControl } from "./FormSignIn"
+import { NetworkStatus } from "@bloom-housing/shared-helpers"
+import { FormSignInControl } from "./FormSignIn"
 import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFACodeProps = {
   control: FormSignInControl
   onSubmit: (data: FormSignInMFACodeValues) => void
-  networkError: FormSignInNetworkError
+  networkError: NetworkStatus
   mfaType: EnumRequestMfaCodeMfaType
   allowPhoneNumberEdit: boolean
   phoneNumber: string
@@ -68,7 +69,11 @@ const FormSignInMFACode = ({
             : t("nav.signInMFA.haveSentCodeToEmail")}
         </p>
       </div>
-      <FormSignInErrorBox errors={errors} networkError={networkError} errorMessageId={"mfa-code"} />
+      <FormSignInErrorBox
+        errors={errors}
+        networkStatus={networkError}
+        errorMessageId={"mfa-code"}
+      />
 
       <SiteAlert type="notice" dismissable />
       <div className="form-card__group pt-0">
