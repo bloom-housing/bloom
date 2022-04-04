@@ -3,11 +3,12 @@ import { MigrationInterface, QueryRunner } from "typeorm"
 const sjTermsContent = `
 ### Privacy and Disclosure
 
-The purpose of this statement is to define the City of San Jose’s policy with regards to the collection and use of personally identifiable information (PII). PII is any information relating to an identified or identifiable individual who is the subject of the information.
+The purpose of this statement is to define the City of San Jose's policy with regards to the collection and use of personally identifiable information (PII). PII is any information relating to an identified or identifiable individual who is the subject of the information.
 
 The City of San Jose collects two kinds of customer information: (1) anonymous; (2) personally identifiable information (PII).
 
-**a. Anonymous information**: This type of information does not identify specific individuals and is automatically transmitted by your browser. This information consists of:
+<div class="text-left">
+**a. Anonymous information**:<br/> This type of information does not identify specific individuals and is automatically transmitted by your browser. This information consists of:
 
 <div class="pl-3">
   <ul>
@@ -28,6 +29,7 @@ This information is used to help improve the Doorway Affordable Housing Portal. 
     <li>Use of “Cookies”: Some City applications use “cookies”. A cookie is a small data file that certain web sites write to your hard drive when you visit them. A cookie file can contain information such as a user id that the portal uses to track the pages you have visited. But the only personal information a cookie can contain is information you supply yourself. A cookie is only a text file and cannot read data off your hard disk or read cookie files created by other sites. Cookies can track user traffic patterns, recognize your computer’s browser when you return, and could provide personalized content without requiring sign-in. You can refuse cookies by turning them off in your browser. However, they may be required to use some of the web applications on the Doorway Affordable Housing Portal.</li>
     <li>Security: The City of San Jose is committed to data security and the data quality of personally identifiable information that is either available from or collected by the Doorway Affordable Housing Portal and has taken reasonable precautions to protect such information from loss, misuse, or alteration.</li>
   </ul>
+</div>
 </div>
 
 ### Contractual Services for the Doorway Affordable Housing Portal and On-Line Services
