@@ -207,6 +207,7 @@ const ApplicationForm = ({ listingId, editMode, application }: ApplicationFormPr
                     <FormHouseholdDetails
                       listingUnits={units}
                       applicationUnitTypes={application?.preferredUnit}
+                      applicationAccessibilityFeatures={application?.accessibility}
                     />
 
                     <FormPreferences preferences={preferences} county={countyCode} />

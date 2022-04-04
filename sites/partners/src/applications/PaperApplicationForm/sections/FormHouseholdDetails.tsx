@@ -1,18 +1,20 @@
 import React from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, ViewItem, GridCell, Field, FieldGroup } from "@bloom-housing/ui-components"
-import { getUniqueUnitTypes } from "@bloom-housing/shared-helpers"
-import { Unit, UnitType } from "@bloom-housing/backend-core/types"
+import { getUniqueUnitTypes, adaFeatureKeys } from "@bloom-housing/shared-helpers"
+import { Accessibility, Unit, UnitType } from "@bloom-housing/backend-core/types"
 import { YesNoAnswer } from "../../PaperApplicationForm/FormTypes"
 
 type FormHouseholdDetailsProps = {
   listingUnits: Unit[]
   applicationUnitTypes: UnitType[]
+  applicationAccessibilityFeatures: Accessibility
 }
 
 const FormHouseholdDetails = ({
   listingUnits,
   applicationUnitTypes,
+  applicationAccessibilityFeatures,
 }: FormHouseholdDetailsProps) => {
   const formMethods = useFormContext()
 
@@ -33,6 +35,21 @@ const FormHouseholdDetails = ({
     }
   })
 
+  const adaFeaturesOptions = adaFeatureKeys.map((item) => {
+    const isChecked =
+      applicationAccessibilityFeatures &&
+      Object.keys(applicationAccessibilityFeatures).includes(item.id) &&
+      applicationAccessibilityFeatures[item.id] === true
+
+    return {
+      id: item.id,
+      label: t(`application.add.${item.id}`),
+      value: item.id,
+      defaultChecked: isChecked,
+      dataTestId: `adaFeature.${item.id}`,
+    }
+  })
+
   return (
     <GridSection title={t("application.review.householdDetails")} separator>
       <GridCell>
@@ -49,31 +66,14 @@ const FormHouseholdDetails = ({
       </GridCell>
       <GridCell>
         <ViewItem label={t("application.details.adaPriorities")}>
-          <fieldset className="mt-4">
-            <Field
-              id="application.accessibility.mobility"
-              name="application.accessibility.mobility"
-              type="checkbox"
-              label={t("application.add.mobility")}
-              register={register}
-            />
-
-            <Field
-              id="application.accessibility.vision"
-              name="application.accessibility.vision"
-              type="checkbox"
-              label={t("application.add.vision")}
-              register={register}
-            />
-
-            <Field
-              id="application.accessibility.hearing"
-              name="application.accessibility.hearing"
-              type="checkbox"
-              label={t("application.add.hearing")}
-              register={register}
-            />
-          </fieldset>
+          <FieldGroup
+            type="checkbox"
+            name="application.accessibility"
+            fields={adaFeaturesOptions}
+            register={register}
+            fieldGroupClassName="grid grid-cols-1 mt-4"
+            fieldClassName="ml-0"
+          />
         </ViewItem>
       </GridCell>
       <GridCell>

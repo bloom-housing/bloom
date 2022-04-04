@@ -27,11 +27,7 @@ export type ApplicationTypes = {
   preferredUnit?: string[]
   householdExpectingChanges?: YesNoAnswer
   householdStudent?: YesNoAnswer
-  accessibility: {
-    mobility?: boolean
-    vision?: boolean
-    hearing?: boolean
-  }
+  accessibility: string[]
   demographics: {
     ethnicity?: string
     race?: string[]

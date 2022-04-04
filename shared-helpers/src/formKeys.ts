@@ -68,6 +68,18 @@ export const contactPreferencesKeys = [
   },
 ]
 
+export const adaFeatureKeys = [
+  {
+    id: "mobility",
+  },
+  {
+    id: "vision",
+  },
+  {
+    id: "hearing",
+  },
+]
+
 export const relationshipKeys = [
   "",
   "spouse",

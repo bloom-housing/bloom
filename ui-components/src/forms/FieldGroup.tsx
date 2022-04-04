@@ -152,7 +152,7 @@ const FieldGroup = ({
     )
   }
   return (
-    <>
+    <fieldset>
       {groupLabel && <label className="field-label--caps">{groupLabel}</label>}
       {groupNote && <p className="field-note mb-4">{groupNote}</p>}
 
@@ -176,7 +176,7 @@ const FieldGroup = ({
           {errorMessage}
         </ErrorMessage>
       )}
-    </>
+    </fieldset>
   )
 }
 

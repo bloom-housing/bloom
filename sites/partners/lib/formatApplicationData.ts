@@ -8,6 +8,7 @@ import {
   AddressUpdate,
   HouseholdMember,
   Program,
+  Accessibility,
 } from "@bloom-housing/backend-core/types"
 
 import {
@@ -19,6 +20,7 @@ import {
   fieldGroupObjectToArray,
   mapProgramsToApi,
   mapApiToProgramsPaperForm,
+  adaFeatureKeys,
 } from "@bloom-housing/shared-helpers"
 import {
   FormTypes,
@@ -149,7 +151,6 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     additionalPhoneNumber,
     contactPreferences,
     sendMailToMailingAddress,
-    accessibility,
   } = data.application
 
   const additionalPhone = !additionalPhoneNumberData
@@ -200,6 +201,14 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
       preferredUnit = [{ id: data.application.preferredUnit }]
     }
   }
+
+  const accessibility: Omit<
+    Accessibility,
+    "id" | "createdAt" | "updatedAt"
+  > = adaFeatureKeys.reduce((acc, feature) => {
+    acc[feature.id] = data.application.accessibility.includes(feature.id)
+    return acc
+  }, {})
 
   const result: ApplicationUpdate = {
     submissionDate,
@@ -298,7 +307,6 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
       contactPreferences,
       sendMailToMailingAddress,
       mailingAddress,
-      accessibility,
       incomePeriod,
       demographics,
       additionalPhoneNumber,
@@ -319,6 +327,12 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
     }
 
     const preferredUnit = applicationData?.preferredUnit?.map((unit) => unit.id)
+
+    const accessibility = Object.keys(applicationData?.accessibility).map((feature) => {
+      if (applicationData.accessibility === true) {
+        return feature
+      }
+    })
 
     const result = {
       applicant,

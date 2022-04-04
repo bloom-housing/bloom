@@ -13,6 +13,7 @@ import {
   ProgressNav,
   t,
   AuthContext,
+  FieldGroup,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../../../layouts/forms"
 import { useForm } from "react-hook-form"
@@ -94,7 +95,29 @@ const ApplicationAda = () => {
         <div className="form-card__group">
           <fieldset>
             <p className="field-note mb-4">{t("errors.selectAllThatApply")}</p>
-
+            {/* <FieldGroup
+              fieldGroupClassName="grid grid-cols-1"
+              fieldClassName="ml-0"
+              type={"checkbox"}
+              name={"ada-features"}
+              error={errors["ada-features"]}
+              errorMessage={t("errors.selectAnOption")}
+              register={register}
+              validation={{ required: true }}
+              dataTestId={"app-ada-features"}
+              fields={pageProgram?.formMetadata?.options?.map((option) => {
+                return {
+                  id: option.key,
+                  label: t(getProgramOptionName(option.key, pageProgram.formMetadata.key)),
+                  value: option.key,
+                  description: option.description
+                    ? t(getProgramOptionDescription(option.key, pageProgram.formMetadata.key))
+                    : null,
+                  defaultChecked: programData?.options?.find((item) => item.key === option.key)
+                    ?.checked,
+                }
+              })}
+            /> */}
             <div className="field">
               <input
                 type="checkbox"
