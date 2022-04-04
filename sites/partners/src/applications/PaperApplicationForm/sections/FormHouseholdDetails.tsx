@@ -66,14 +66,17 @@ const FormHouseholdDetails = ({
       </GridCell>
       <GridCell>
         <ViewItem label={t("application.details.adaPriorities")}>
-          <FieldGroup
-            type="checkbox"
-            name="application.accessibility"
-            fields={adaFeaturesOptions}
-            register={register}
-            fieldGroupClassName="grid grid-cols-1 mt-4"
-            fieldClassName="ml-0"
-          />
+          <fieldset>
+            <legend className="sr-only">{t("application.details.adaPriorities")}</legend>
+            <FieldGroup
+              type="checkbox"
+              name="application.accessibility"
+              fields={adaFeaturesOptions}
+              register={register}
+              fieldGroupClassName="grid grid-cols-1 mt-4"
+              fieldClassName="ml-0"
+            />
+          </fieldset>
         </ViewItem>
       </GridCell>
       <GridCell>
