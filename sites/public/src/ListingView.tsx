@@ -659,7 +659,7 @@ export const ListingView = (props: ListingProps) => {
         <ListingDetailItem
           imageAlt={t("listings.neighborhoodBuildings")}
           imageSrc="/images/listing-neighborhood.svg"
-          title={t("listings.sections.neighborhoodTitle")}
+          title={t("t.neighborhood")}
           subtitle={t("listings.sections.neighborhoodSubtitle")}
           desktopClass="bg-primary-lighter"
         >
@@ -675,7 +675,7 @@ export const ListingView = (props: ListingProps) => {
           <ListingDetailItem
             imageAlt={t("listings.additionalInformationEnvelope")}
             imageSrc="/images/listing-legal.svg"
-            title={t("listings.sections.additionalInformationTitle")}
+            title={t("listings.additionalInformation")}
             subtitle={t("listings.sections.additionalInformationSubtitle")}
           >
             <div className="listing-detail-panel">
