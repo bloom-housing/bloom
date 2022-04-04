@@ -89,10 +89,10 @@ const ListingCard = (props: ListingCardProps) => {
   const getContentHeader = () => {
     return (
       <>
-        {getHeader(contentProps?.contentHeader, 2, "cardHeader")}
-        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "mb-0 md:mb-3")}
+        {getHeader(contentProps?.contentHeader, 2, "cardHeader", "order-1")}
+        {getHeader(contentProps?.contentSubheader, 3, "cardSubheader", "order-2")}
         {cardTags && cardTags?.length > 0 && (
-          <div className={"inline-flex flex-wrap md:justify-start justify-center w-full"}>
+          <div className={"inline-flex flex-wrap justify-start w-full"}>
             {cardTags?.map((cardTag, index) => {
               return (
                 <Tag styleType={AppearanceStyleType.warning} className={"mr-2 mb-2"} key={index}>
@@ -120,7 +120,7 @@ const ListingCard = (props: ListingCardProps) => {
         <div className="listings-row_table">
           {(contentProps?.tableHeader?.text || contentProps?.tableSubheader?.text) &&
             (contentProps.contentHeader?.text || contentProps?.contentSubheader?.text) && (
-              <hr className={"mb-2 hidden md:block"} />
+              <hr className={"mb-2"} />
             )}
           {getHeader(contentProps?.tableHeader, 4, "tableHeader")}
           {getHeader(contentProps?.tableSubheader, 5, "tableSubheader")}
@@ -155,14 +155,11 @@ const ListingCard = (props: ListingCardProps) => {
 
   return (
     <article className="listings-row" data-test-id={"listing-card-component"}>
-      <div className={"block md:hidden w-full flex flex-col items-center"}>
-        {getContentHeader()}
-      </div>
       <div className="listings-row_figure">
         <ImageCard {...imageCardProps} />
       </div>
       <div className="listings-row_content">
-        <div className={"hidden md:block"}>{getContentHeader()}</div>
+        <div>{getContentHeader()}</div>
         {getContent()}
       </div>
     </article>
