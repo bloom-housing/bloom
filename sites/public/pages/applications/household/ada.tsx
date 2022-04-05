@@ -88,7 +88,10 @@ const ApplicationAda = () => {
     id: "no-features",
     label: t(`t.no`),
     value: "no-features",
-    defaultChecked: false,
+    defaultChecked:
+      !application.accessibility["mobility"] &&
+      !application.accessibility["hearing"] &&
+      !application.accessibility["vision"],
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
