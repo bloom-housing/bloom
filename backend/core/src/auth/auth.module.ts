@@ -19,6 +19,9 @@ import { Application } from "../applications/entities/application.entity"
 import { UserProfileController } from "./controllers/user-profile.controller"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
 import { EmailModule } from "../email/email.module"
+import { UserPreferencesController } from "./controllers/user-preferences.controller"
+import { UserPreferencesService } from "./services/user-preferences.services"
+import { UserPreferences } from "./entities/user-preferences.entity"
 
 @Module({
   imports: [
@@ -33,14 +36,22 @@ import { EmailModule } from "../email/email.module"
         },
       }),
     }),
-    TypeOrmModule.forFeature([RevokedToken, User, Application]),
+    TypeOrmModule.forFeature([RevokedToken, User, Application, UserPreferences]),
     SharedModule,
     JurisdictionsModule,
     EmailModule,
     forwardRef(() => ActivityLogModule),
   ],
-  providers: [LocalStrategy, JwtStrategy, AuthService, AuthzService, UserService, PasswordService],
-  exports: [AuthzService, AuthService, UserService],
-  controllers: [AuthController, UserController, UserProfileController],
+  providers: [
+    LocalStrategy,
+    JwtStrategy,
+    AuthService,
+    AuthzService,
+    UserService,
+    PasswordService,
+    UserPreferencesService,
+  ],
+  exports: [AuthzService, AuthService, UserService, UserPreferencesService],
+  controllers: [AuthController, UserController, UserProfileController, UserPreferencesController],
 })
 export class AuthModule {}

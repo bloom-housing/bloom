@@ -17,6 +17,7 @@ import {
   PreferencesService,
   JurisdictionsService,
   ProgramsService,
+  UserPreferencesService,
 } from "@bloom-housing/backend-core/types"
 import {
   createContext,
@@ -64,6 +65,7 @@ type ContextProps = {
   initialStateLoaded: boolean
   loading: boolean
   profile?: User
+  userPreferencesService: UserPreferencesService
 }
 
 // Internal Provider State
@@ -240,6 +242,7 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
     accessToken: state.accessToken,
     initialStateLoaded: state.initialStateLoaded,
     profile: state.profile,
+    userPreferencesService: new UserPreferencesService(),
     login: async (email, password) => {
       dispatch(signOut())
       dispatch(startLoading())

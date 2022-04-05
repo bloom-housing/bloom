@@ -36,6 +36,7 @@ function getComparisonForFilter(filterKey: ListingFilterKeys) {
     case ListingFilterKeys.acInUnit:
     case ListingFilterKeys.minAmiPercentage:
     case ListingFilterKeys.jurisdiction:
+    case ListingFilterKeys.favorited:
       return EnumListingFilterParamsComparison["="]
     case ListingFilterKeys.minRent:
       return EnumListingFilterParamsComparison[">="]
@@ -73,6 +74,7 @@ export const FrontendListingFilterStateKeys = {
   ...BedroomFields,
   ...Region,
   includeNulls: "includeNulls" as const,
+  favorited: "favorited" as const,
 }
 
 // The types in this interface are `string | ...` because we don't currently parse
@@ -112,6 +114,7 @@ export interface ListingFilterState {
   [FrontendListingFilterStateKeys.southwest]?: string | boolean
   [FrontendListingFilterStateKeys.westside]?: string | boolean
   [FrontendListingFilterStateKeys.status]?: string
+  [FrontendListingFilterStateKeys.favorited]?: string | boolean
 }
 
 // Since it'd be tricky to OR a separate ">=" comparison with an "IN"

@@ -31,6 +31,7 @@ describe("<ListingCard>", () => {
           tableHeader: "optional table header",
           tableSubHeader: "optional table subheader",
         }}
+        listingId={""}
       >
         <div>Child content</div>
       </ListingCard>
@@ -58,6 +59,7 @@ describe("<ListingCard>", () => {
           title: "title",
           href: "listing-link",
         }}
+        listingId={""}
       />
     )
     expect(getByText("subtitle")).toBeTruthy()

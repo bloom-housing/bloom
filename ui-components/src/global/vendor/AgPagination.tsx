@@ -16,7 +16,7 @@ type AgPaginationProps = {
   matchListingCardWidth?: boolean
 }
 
-const AG_PER_PAGE_OPTIONS = [8, 100, 500, 1000]
+const AG_PER_PAGE_OPTIONS = [8, 25, 50]
 
 const AgPagination = ({
   totalItems,

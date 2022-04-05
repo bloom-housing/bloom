@@ -1018,6 +1018,33 @@ export class UserProfileService {
   }
 }
 
+export class UserPreferencesService {
+  /**
+   * Update user preferences
+   */
+  update(
+    params: {
+      /**  */
+      id: string
+      /** requestBody */
+      body?: UserPreferences
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<UserPreferences> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + "/userPreferences/{id}"
+      url = url.replace("{id}", params["id"] + "")
+
+      const configs: IRequestConfig = getConfigs("put", "application/json", url, options)
+
+      let data = params.body
+
+      configs.data = data
+      axios(configs, resolve, reject)
+    })
+  }
+}
+
 export class JurisdictionsService {
   /**
    * List jurisdictions
@@ -3928,6 +3955,550 @@ export interface UserRoles {
   isPartner?: boolean
 }
 
+export interface UserPreferences {
+  /**  */
+  sendEmailNotifications?: boolean
+
+  /**  */
+  sendSmsNotifications?: boolean
+
+  /**  */
+  favoriteIds?: string[]
+}
+
+export interface User {
+  /**  */
+  language?: Language
+
+  /**  */
+  leasingAgentInListings?: IdName[]
+
+  /**  */
+  roles?: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
+
+  /**  */
+  id: string
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+}
+
+export interface UserCreate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  emailConfirmation: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  jurisdictions?: Id[]
+
+  /**  */
+  email: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
+}
+
+export interface UserBasic {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: UserRoles
+
+  /**  */
+  jurisdictions: Jurisdiction[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
+
+  /**  */
+  id: string
+
+  /**  */
+  passwordUpdatedAt: Date
+
+  /**  */
+  passwordValidForDays: number
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  lastLoginAt?: Date
+
+  /**  */
+  failedLoginAttemptsCount?: number
+}
+
+export interface Email {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface Status {
+  /**  */
+  status: string
+}
+
+export interface Confirm {
+  /**  */
+  token: string
+
+  /**  */
+  password?: string
+}
+
+export interface ForgotPassword {
+  /**  */
+  email: string
+
+  /**  */
+  appUrl?: string
+}
+
+export interface ForgotPasswordResponse {
+  /**  */
+  message: string
+}
+
+export interface UpdatePassword {
+  /**  */
+  password: string
+
+  /**  */
+  passwordConfirmation: string
+
+  /**  */
+  token: string
+}
+
+export interface UserRolesUpdate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  id?: string
+
+  /**  */
+  email?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  roles?: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
+}
+
+export interface UserFilterParams {
+  /**  */
+  $comparison: EnumUserFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
+
+  /**  */
+  isPartner?: boolean
+
+  /**  */
+  isPortalUser?: boolean
+}
+
+export interface PaginatedUserList {
+  /**  */
+  items: User[]
+
+  /**  */
+  meta: PaginationMeta
+}
+
+export interface UserRolesCreate {
+  /**  */
+  isAdmin?: boolean
+
+  /**  */
+  isPartner?: boolean
+}
+
+export interface UserInvite {
+  /**  */
+  language?: Language
+
+  /**  */
+  roles: CombinedRolesTypes
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  leasingAgentInListings?: Id[]
+
+  /**  */
+  confirmedAt?: Date
+
+  /**  */
+  email: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  phoneNumber?: string
+
+  /**  */
+  preferences?: CombinedPreferencesTypes
+}
+
+export interface UserProfileUpdate {
+  /**  */
+  language?: Language
+
+  /**  */
+  password?: string
+
+  /**  */
+  currentPassword?: string
+
+  /**  */
+  jurisdictions: Id[]
+
+  /**  */
+  newEmail?: string
+
+  /**  */
+  appUrl?: string
+
+  /**  */
+  preferences?: UserPreferences
+
+  /**  */
+  id: string
+
+  /**  */
+  firstName: string
+
+  /**  */
+  middleName?: string
+
+  /**  */
+  lastName: string
+
+  /**  */
+  dob?: Date
+
+  /**  */
+  createdAt: Date
+
+  /**  */
+  updatedAt: Date
+
+  /**  */
+  phoneNumber?: string
+}
+
+export interface JurisdictionCreate {
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionCreateLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+}
+
+export interface JurisdictionUpdate {
+  /**  */
+  id?: string
+
+  /**  */
+  createdAt?: Date
+
+  /**  */
+  updatedAt?: Date
+
+  /**  */
+  name: string
+
+  /**  */
+  notificationsSignUpURL?: string
+
+  /**  */
+  languages: EnumJurisdictionUpdateLanguages[]
+
+  /**  */
+  partnerTerms?: string
+
+  /**  */
+  publicUrl: string
+
+  /**  */
+  programs: Id[]
+
+  /**  */
+  preferences: Id[]
+}
+
+export interface ListingFilterParams {
+  /**  */
+  $comparison: EnumListingFilterParamsComparison
+
+  /**  */
+  $include_nulls?: boolean
+
+  /**  */
+  name?: string
+
+  /**  */
+  status?: EnumListingFilterParamsStatus
+
+  /**  */
+  bedrooms?: string
+
+  /**  */
+  zipcode?: string
+
+  /**  */
+  leasingAgents?: string
+
+  /**  */
+  availability?: EnumListingFilterParamsAvailability
+
+  /**  */
+  program?: string
+
+  /**  */
+  isVerified?: boolean
+
+  /**  */
+  minRent?: number
+
+  /**  */
+  maxRent?: number
+
+  /**  */
+  minAmiPercentage?: number
+
+  /**  */
+  elevator?: boolean
+
+  /**  */
+  wheelchairRamp?: boolean
+
+  /**  */
+  serviceAnimalsAllowed?: boolean
+
+  /**  */
+  accessibleParking?: boolean
+
+  /**  */
+  parkingOnSite?: boolean
+
+  /**  */
+  inUnitWasherDryer?: boolean
+
+  /**  */
+  laundryInBuilding?: boolean
+
+  /**  */
+  barrierFreeEntrance?: boolean
+
+  /**  */
+  rollInShower?: boolean
+
+  /**  */
+  grabBars?: boolean
+
+  /**  */
+  heatingInUnit?: boolean
+
+  /**  */
+  acInUnit?: boolean
+
+  /**  */
+  neighborhood?: string
+
+  /**  */
+  jurisdiction?: string
+
+  /**  */
+  marketingType?: EnumListingFilterParamsMarketingType
+
+  /**  */
+  favorited?: string
+}
+
 export interface MinMax {
   /**  */
   min: number
@@ -4089,65 +4660,6 @@ export interface ListingEvent {
 
   /**  */
   file?: Asset
-}
-
-export interface UserBasic {
-  /**  */
-  language?: Language
-
-  /**  */
-  roles: UserRoles
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  preferences?: CombinedPreferencesTypes
-
-  /**  */
-  id: string
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
 }
 
 export interface FormMetadataExtraData {
@@ -4840,488 +5352,6 @@ export interface Listing {
 
   /**  */
   marketingDate?: Date
-}
-
-export interface UserPreferences {
-  /**  */
-  favorites?: Listing[]
-
-  /**  */
-  sendEmailNotifications?: boolean
-
-  /**  */
-  sendSmsNotifications?: boolean
-}
-
-export interface User {
-  /**  */
-  language?: Language
-
-  /**  */
-  leasingAgentInListings?: IdName[]
-
-  /**  */
-  roles?: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Jurisdiction[]
-
-  /**  */
-  preferences?: CombinedPreferencesTypes
-
-  /**  */
-  id: string
-
-  /**  */
-  passwordUpdatedAt: Date
-
-  /**  */
-  passwordValidForDays: number
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  lastLoginAt?: Date
-
-  /**  */
-  failedLoginAttemptsCount?: number
-}
-
-export interface UserCreate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  emailConfirmation: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  jurisdictions?: Id[]
-
-  /**  */
-  email: string
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  preferences?: CombinedPreferencesTypes
-}
-
-export interface Email {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface Status {
-  /**  */
-  status: string
-}
-
-export interface Confirm {
-  /**  */
-  token: string
-
-  /**  */
-  password?: string
-}
-
-export interface ForgotPassword {
-  /**  */
-  email: string
-
-  /**  */
-  appUrl?: string
-}
-
-export interface ForgotPasswordResponse {
-  /**  */
-  message: string
-}
-
-export interface UpdatePassword {
-  /**  */
-  password: string
-
-  /**  */
-  passwordConfirmation: string
-
-  /**  */
-  token: string
-}
-
-export interface UserRolesUpdate {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface UserUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  id?: string
-
-  /**  */
-  email?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  roles?: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  preferences?: CombinedPreferencesTypes
-}
-
-export interface UserFilterParams {
-  /**  */
-  $comparison: EnumUserFilterParamsComparison
-
-  /**  */
-  $include_nulls?: boolean
-
-  /**  */
-  isPartner?: boolean
-
-  /**  */
-  isPortalUser?: boolean
-}
-
-export interface PaginatedUserList {
-  /**  */
-  items: User[]
-
-  /**  */
-  meta: PaginationMeta
-}
-
-export interface UserRolesCreate {
-  /**  */
-  isAdmin?: boolean
-
-  /**  */
-  isPartner?: boolean
-}
-
-export interface UserInvite {
-  /**  */
-  language?: Language
-
-  /**  */
-  roles: CombinedRolesTypes
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  leasingAgentInListings?: Id[]
-
-  /**  */
-  confirmedAt?: Date
-
-  /**  */
-  email: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  phoneNumber?: string
-
-  /**  */
-  preferences?: CombinedPreferencesTypes
-}
-
-export interface UserProfileUpdate {
-  /**  */
-  language?: Language
-
-  /**  */
-  password?: string
-
-  /**  */
-  currentPassword?: string
-
-  /**  */
-  jurisdictions: Id[]
-
-  /**  */
-  newEmail?: string
-
-  /**  */
-  appUrl?: string
-
-  /**  */
-  preferences?: UserPreferences
-
-  /**  */
-  id: string
-
-  /**  */
-  firstName: string
-
-  /**  */
-  middleName?: string
-
-  /**  */
-  lastName: string
-
-  /**  */
-  dob?: Date
-
-  /**  */
-  createdAt: Date
-
-  /**  */
-  updatedAt: Date
-
-  /**  */
-  phoneNumber?: string
-}
-
-export interface JurisdictionCreate {
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionCreateLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-}
-
-export interface JurisdictionUpdate {
-  /**  */
-  id?: string
-
-  /**  */
-  createdAt?: Date
-
-  /**  */
-  updatedAt?: Date
-
-  /**  */
-  name: string
-
-  /**  */
-  notificationsSignUpURL?: string
-
-  /**  */
-  languages: EnumJurisdictionUpdateLanguages[]
-
-  /**  */
-  partnerTerms?: string
-
-  /**  */
-  publicUrl: string
-
-  /**  */
-  programs: Id[]
-
-  /**  */
-  preferences: Id[]
-}
-
-export interface ListingFilterParams {
-  /**  */
-  $comparison: EnumListingFilterParamsComparison
-
-  /**  */
-  $include_nulls?: boolean
-
-  /**  */
-  name?: string
-
-  /**  */
-  status?: EnumListingFilterParamsStatus
-
-  /**  */
-  bedrooms?: string
-
-  /**  */
-  zipcode?: string
-
-  /**  */
-  leasingAgents?: string
-
-  /**  */
-  availability?: EnumListingFilterParamsAvailability
-
-  /**  */
-  program?: string
-
-  /**  */
-  isVerified?: boolean
-
-  /**  */
-  minRent?: number
-
-  /**  */
-  maxRent?: number
-
-  /**  */
-  minAmiPercentage?: number
-
-  /**  */
-  elevator?: boolean
-
-  /**  */
-  wheelchairRamp?: boolean
-
-  /**  */
-  serviceAnimalsAllowed?: boolean
-
-  /**  */
-  accessibleParking?: boolean
-
-  /**  */
-  parkingOnSite?: boolean
-
-  /**  */
-  inUnitWasherDryer?: boolean
-
-  /**  */
-  laundryInBuilding?: boolean
-
-  /**  */
-  barrierFreeEntrance?: boolean
-
-  /**  */
-  rollInShower?: boolean
-
-  /**  */
-  grabBars?: boolean
-
-  /**  */
-  heatingInUnit?: boolean
-
-  /**  */
-  acInUnit?: boolean
-
-  /**  */
-  neighborhood?: string
-
-  /**  */
-  jurisdiction?: string
-
-  /**  */
-  marketingType?: EnumListingFilterParamsMarketingType
 }
 
 export interface PaginatedListing {
@@ -6725,57 +6755,8 @@ export enum EnumApplicationsApiExtraModelOrder {
   "ASC" = "ASC",
   "DESC" = "DESC",
 }
-export enum ListingApplicationAddressType {
-  "leasingAgent" = "leasingAgent",
-}
-
-export enum ListingStatus {
-  "active" = "active",
-  "pending" = "pending",
-  "closed" = "closed",
-}
-
-export enum ListingReviewOrder {
-  "lottery" = "lottery",
-  "firstComeFirstServe" = "firstComeFirstServe",
-}
-
-export enum ListingMarketingTypeEnum {
-  "marketing" = "marketing",
-  "comingSoon" = "comingSoon",
-}
-
-export enum ListingEventType {
-  "openHouse" = "openHouse",
-  "publicLottery" = "publicLottery",
-  "lotteryResults" = "lotteryResults",
-}
-export type CombinedPreferencesTypes = UserPreferences
-export enum FormMetaDataType {
-  "radio" = "radio",
-  "checkbox" = "checkbox",
-}
-
-export enum UnitStatus {
-  "unknown" = "unknown",
-  "available" = "available",
-  "occupied" = "occupied",
-  "unavailable" = "unavailable",
-}
-
-export enum MonthlyRentDeterminationType {
-  "flatRent" = "flatRent",
-  "percentageOfIncome" = "percentageOfIncome",
-}
-export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
-export type CombinedApplicationPickUpAddressTypes = AddressUpdate
-export type CombinedApplicationDropOffAddressTypes = AddressUpdate
-export type CombinedApplicationMailingAddressTypes = AddressUpdate
-export type CombinedBuildingSelectionCriteriaFileTypes = AssetCreate
-export type CombinedImageTypes = AssetUpdate
-export type CombinedLeasingAgentAddressTypes = AddressUpdate
-export type CombinedResultTypes = AssetCreate
 export type CombinedRolesTypes = UserRolesCreate
+export type CombinedPreferencesTypes = UserPreferences
 export enum EnumUserFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",
@@ -6824,6 +6805,57 @@ export enum OrderByFieldsEnum {
   "mostRecentlyUpdated" = "mostRecentlyUpdated",
   "applicationDates" = "applicationDates",
 }
+
+export enum ListingApplicationAddressType {
+  "leasingAgent" = "leasingAgent",
+}
+
+export enum ListingStatus {
+  "active" = "active",
+  "pending" = "pending",
+  "closed" = "closed",
+}
+
+export enum ListingReviewOrder {
+  "lottery" = "lottery",
+  "firstComeFirstServe" = "firstComeFirstServe",
+}
+
+export enum ListingMarketingTypeEnum {
+  "marketing" = "marketing",
+  "comingSoon" = "comingSoon",
+}
+
+export enum ListingEventType {
+  "openHouse" = "openHouse",
+  "publicLottery" = "publicLottery",
+  "lotteryResults" = "lotteryResults",
+}
+
+export enum FormMetaDataType {
+  "radio" = "radio",
+  "checkbox" = "checkbox",
+}
+
+export enum UnitStatus {
+  "unknown" = "unknown",
+  "available" = "available",
+  "occupied" = "occupied",
+  "unavailable" = "unavailable",
+}
+
+export enum MonthlyRentDeterminationType {
+  "flatRent" = "flatRent",
+  "percentageOfIncome" = "percentageOfIncome",
+}
+export type CombinedPriorityTypeTypes = UnitAccessibilityPriorityType
+export type CombinedApplicationPickUpAddressTypes = AddressUpdate
+export type CombinedApplicationDropOffAddressTypes = AddressUpdate
+export type CombinedApplicationMailingAddressTypes = AddressUpdate
+export type CombinedBuildingSelectionCriteriaFileTypes = AssetCreate
+export type CombinedImageTypes = AssetUpdate
+export type CombinedLeasingAgentAddressTypes = AddressUpdate
+export type CombinedResultTypes = AssetCreate
 export enum EnumPreferencesFilterParamsComparison {
   "=" = "=",
   "<>" = "<>",

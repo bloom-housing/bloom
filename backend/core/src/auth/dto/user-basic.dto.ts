@@ -6,7 +6,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { UserRolesDto } from "./user-roles.dto"
 import { JurisdictionDto } from "../../jurisdictions/dto/jurisdiction.dto"
 import { IdDto } from "../../shared/dto/id.dto"
-import { UserPreferencesDto } from "../../../src/user-preferences/dto/user-preferences.dto"
+import { UserPreferencesDto } from "./user-preferences.dto"
 
 export class UserBasicDto extends OmitType(User, [
   "leasingAgentInListings",

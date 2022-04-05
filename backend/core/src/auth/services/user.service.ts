@@ -34,7 +34,7 @@ import { userFilterTypeToFieldMap } from "../dto/user-filter-type-to-field-map"
 import { Application } from "../../applications/entities/application.entity"
 import { Listing } from "../../listings/entities/listing.entity"
 import { UserRoles } from "../entities/user-roles.entity"
-import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
+import { UserPreferences } from "../entities/user-preferences.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { assignDefined } from "../../shared/utils/assign-defined"
 import { EmailService } from "../../email/email.service"
@@ -368,7 +368,7 @@ export class UserService {
         jurisdictions: dto.jurisdictions
           ? (dto.jurisdictions as Jurisdiction[])
           : [await this.jurisdictionResolverService.getJurisdiction()],
-        preferences: (dto.preferences as unknown) as UserPreferences,
+        preferences: dto.preferences as UserPreferences,
       },
       authContext
     )

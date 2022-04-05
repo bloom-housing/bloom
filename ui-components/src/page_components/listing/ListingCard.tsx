@@ -6,6 +6,7 @@ import { StackedTable, StackedTableProps } from "../../tables/StackedTable"
 import { t } from "../../helpers/translator"
 import "./ListingCard.scss"
 import { StandardTable, StandardTableProps } from "../../tables/StandardTable"
+import { FavoriteButton } from "../../actions/FavoriteButton"
 
 interface ListingCardTableProps extends StandardTableProps, StackedTableProps {}
 
@@ -23,6 +24,8 @@ export interface ListingCardProps {
   tableHeaderProps?: ListingCardHeaderProps
   tableProps?: ListingCardTableProps
   detailsLinkClass?: string
+  listingId: string
+  allowFavoriting?: boolean
 }
 
 const ListingCard = (props: ListingCardProps) => {
@@ -72,11 +75,20 @@ const ListingCard = (props: ListingCardProps) => {
             </>
           )}
         </div>
-        {props.seeDetailsLink && (
-          <LinkButton className={detailsLinkClass} href={props.seeDetailsLink}>
-            {t("t.seeDetails")}
-          </LinkButton>
-        )}
+        <div className="flex justify-between items-center">
+          {props.allowFavoriting ? (
+            <FavoriteButton name={imageCardProps.title} id={props.listingId} />
+          ) : (
+            <span />
+          )}
+          {props.seeDetailsLink && (
+            <span>
+              <LinkButton className={detailsLinkClass} href={props.seeDetailsLink}>
+                {t("t.seeDetails")}
+              </LinkButton>
+            </span>
+          )}
+        </div>
       </div>
     </article>
   )

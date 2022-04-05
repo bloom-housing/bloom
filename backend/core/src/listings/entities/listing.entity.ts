@@ -47,7 +47,6 @@ import { ListingReviewOrder } from "../types/listing-review-order-enum"
 import { ApplicationMethodDto } from "../../application-methods/dto/application-method.dto"
 import { ApplicationMethodType } from "../../application-methods/types/application-method-type-enum"
 import { ListingFeatures } from "./listing-features.entity"
-import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
 import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
@@ -596,11 +595,6 @@ class Listing extends BaseEntity {
   @ValidateNested({ groups: [ValidationsGroupsEnum.default], each: true })
   @Type(() => ListingFeatures)
   features?: ListingFeatures
-
-  @ManyToMany(() => UserPreferences, (userPreference) => userPreference.favorites, {
-    nullable: true,
-  })
-  favoritedPreferences?: UserPreferences[] | null
 
   @Column({ type: "boolean", default: false, nullable: true })
   @Expose()

@@ -16,7 +16,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { passwordRegex } from "../../shared/password-regex"
 import { IdDto } from "../../shared/dto/id.dto"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
-import { UserPreferencesDto } from "../../../src/user-preferences/dto/user-preferences.dto"
+import { UserPreferencesDto } from "./user-preferences.dto"
 
 export class UserProfileUpdateDto extends PickType(User, [
   "id",

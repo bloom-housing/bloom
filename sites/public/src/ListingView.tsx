@@ -29,6 +29,7 @@ import {
   ListSection,
   StandardTable,
   t,
+  FavoriteButton,
   InfoCard,
 } from "@bloom-housing/ui-components"
 import {
@@ -51,6 +52,7 @@ import {
 interface ListingProps {
   listing: Listing
   preview?: boolean
+  allowFavoriting?: boolean
 }
 
 export const ListingView = (props: ListingProps) => {
@@ -282,6 +284,9 @@ export const ListingView = (props: ListingProps) => {
               {t("t.viewOnMap")}
             </a>
           </p>
+          <div className="text-right">
+            <FavoriteButton name={listing.name} id={listing.id} />
+          </div>
         </div>
       </header>
 

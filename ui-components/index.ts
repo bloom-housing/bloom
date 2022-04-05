@@ -4,6 +4,7 @@ export * from "./src/actions/ExpandableText"
 export * from "./src/actions/LinkButton"
 export * from "./src/actions/LocalizedLink"
 export * from "./src/actions/ExpandableContent"
+export * from "./src/actions/FavoriteButton"
 
 /* Blocks */
 export * from "./src/blocks/ActionBlock"

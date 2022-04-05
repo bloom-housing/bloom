@@ -86,6 +86,9 @@ p, anonymous, applicationMethod, true, read
 p, admin, paperApplication, true, .*
 p, anonymous, paperApplication, true, read
 
+p, admin, userPreference, true, .*
+p, user, userPreference, !!r.obj && (r.sub == r.obj.id), (read|update)
+
 g, admin, partner
 g, partner, user
 g, user, anonymous

@@ -28,7 +28,7 @@ import { Language } from "../../shared/types/language-enum"
 import { UserRoles } from "./user-roles.entity"
 import { Jurisdiction } from "../../jurisdictions/entities/jurisdiction.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
-import { UserPreferences } from "../../../src/user-preferences/entities/user-preferences.entity"
+import { UserPreferences } from "./user-preferences.entity"
 
 @Entity({ name: "user_accounts" })
 @Unique(["email"])

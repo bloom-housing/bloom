@@ -45,13 +45,10 @@ export function addAvailabilityQuery(
   }
 }
 
-export function addBedroomsQuery(
-  qb: WhereExpression,
-  filterValue: number[],
-) {
+export function addBedroomsQuery(qb: WhereExpression, filterValue: number[]) {
   const typeOrmMetadata = getMetadataArgsStorage()
-  const unitGroupEntityMetadata = typeOrmMetadata.tables.find(table => table.target === UnitGroup)
-  const unitTypeEntityMetadata = typeOrmMetadata.tables.find(table => table.target === UnitType)
+  const unitGroupEntityMetadata = typeOrmMetadata.tables.find((table) => table.target === UnitGroup)
+  const unitTypeEntityMetadata = typeOrmMetadata.tables.find((table) => table.target === UnitType)
   const whereParameterName = "unitGroups_numBedrooms"
 
   const unitGroupUnitTypeJoinTableName = `${unitGroupEntityMetadata.name}_unit_type_${unitTypeEntityMetadata.name}`
@@ -93,5 +90,15 @@ export function addMinAmiPercentageFilter(
       [whereParameterName2]: filterValue,
     }
   )
+  return
+}
+
+export function addFavoritedFilter(qb: WhereExpression, filterValue: string) {
+  const val = filterValue.split(",").filter((elem) => !!elem)
+  if (val.length) {
+    qb.andWhere("listings.id IN (:...favoritedListings) ", {
+      favoritedListings: val,
+    })
+  }
   return
 }

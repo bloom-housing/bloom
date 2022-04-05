@@ -46,6 +46,12 @@ function Dashboard(props: DashboardProps) {
     </span>
   )
 
+  const myFavoritesIcon = (
+    <span className="header-badge">
+      <Icon size="medium" symbol="likeFill" fill="#E94761" iconClass="ui-icon__filledRed" />
+    </span>
+  )
+
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -64,6 +70,13 @@ function Dashboard(props: DashboardProps) {
 
             <div className="flex flex-wrap relative">
               <DashBlocks>
+                <DashBlock
+                  href="/account/favorites"
+                  title={t("account.myFavorites")}
+                  subtitle={t("account.myFavoritesSubtitle")}
+                  icon={myFavoritesIcon}
+                  dataTestId={"account-my-favorites"}
+                ></DashBlock>
                 <DashBlock
                   href="/account/edit"
                   title={t("account.accountSettings")}

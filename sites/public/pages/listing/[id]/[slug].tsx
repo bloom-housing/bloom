@@ -19,7 +19,6 @@ export default function ListingPage(props: ListingProps) {
 
   const pageTitle = `${listing.name} - ${t("nav.siteTitle")}`
   const { profile } = useContext(AuthContext)
-
   useEffect(() => {
     if (!listing.id) return
     pushGtmEvent<ListingDetail>({
@@ -58,7 +57,7 @@ export default function ListingPage(props: ListingProps) {
         <title>{pageTitle}</title>
       </Head>
       <MetaTags title={listing.name} image={metaImage} description={metaDescription} />
-      <ListingView listing={listing} />
+      <ListingView listing={listing} allowFavoriting={true} />
     </Layout>
   )
 }

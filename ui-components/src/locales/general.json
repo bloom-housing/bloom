@@ -10,6 +10,8 @@
     "errorFetchingApplications": "Error fetching applications",
     "noApplications": "It looks like you haven't applied to any listings yet.",
     "accountSettingsSubtitle": "Account Settings, email and password",
+    "myFavorites": "My Favorites",
+    "myFavoritesSubtitle": "Save listings and check back for updates",
     "createAccount": "Create Account",
     "haveAnAccount": "Already have an account?",
     "myApplications": "My Applications",
@@ -1070,7 +1072,8 @@
     "rateLimitExceeded": "Rate limit exceeded, try again later.",
     "requiredFieldError": "This field is required.",
     "requiredFieldsError": "These fields are required",
-    "noData": "No data available."
+    "noData": "No data available.",
+    "noFavorites": "You have not favorited any listings"
   },
   "footer": {
     "srHeading": "Footer",
@@ -1588,7 +1591,8 @@
     "welcomeVietnamese": "Tiếng Việt",
     "about": "About",
     "feedback": "Share website feedback",
-    "resources": "Resources"
+    "resources": "Resources",
+    "favorites": "My Favorites"
   },
   "pageDescription": {
     "welcome": "Search and apply for affordable housing on %{regionName}'s Housing Portal",
@@ -1812,7 +1816,13 @@
     "website": "Website",
     "year": "Year",
     "yes": "Yes",
-    "you": "You"
+    "you": "You",
+    "favorite": "Favorite",
+    "favorited": "Favorited",
+    "unfavorite": "unfavorite",
+    "unfavorited": "unfavorited",
+    "addFavorite": "Added to favorites",
+    "removeFavorite": "Removed from favorites"
   },
   "welcome": {
     "allApplicationClosed": "All applications are currently closed, but you can view closed listings.",

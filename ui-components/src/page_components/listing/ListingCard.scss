@@ -52,3 +52,7 @@
 .listings-row_table {
   @apply mb-4;
 }
+
+.favorited-fill {
+  fill: $tailwind-white !important;
+}
