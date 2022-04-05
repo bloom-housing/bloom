@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.3-alpha.3...@bloom-housing/ui-components@4.1.3-alpha.4) (2022-04-05)
+
+
+### Features
+
+* open preference links in new tab/window ([#2618](https://github.com/bloom-housing/bloom/issues/2618)) ([ba07a7f](https://github.com/bloom-housing/bloom/commit/ba07a7ff2d01fadf1439671557ae44ce583426de))
+
+
+
+
+
 ## [4.1.3-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.1.3-alpha.2...@bloom-housing/ui-components@4.1.3-alpha.3) (2022-04-04)
 
 **Note:** Version bump only for package @bloom-housing/ui-components
