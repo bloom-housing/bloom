@@ -1,7 +1,7 @@
 import React from "react"
 import { t, AlertBox, SiteAlert, AlertNotice, ErrorMessage } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { NetworkStatus } from "@bloom-housing/shared-helpers"
+import { NetworkStatus } from "./FormSignIn"
 
 export type FormSignInErrorBoxProps = {
   errors: FormSignInErrorBoxControl["errors"]
