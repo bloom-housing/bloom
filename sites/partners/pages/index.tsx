@@ -8,6 +8,7 @@ import {
   LocalizedLink,
   AgPagination,
   AG_PER_PAGE_OPTIONS,
+  LoadingOverlay,
 } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { AgGridReact } from "ag-grid-react"
@@ -129,14 +130,11 @@ export default function ListingsList() {
     return columns
   }, [])
 
-  const { listingDtos, listingsLoading, listingsError } = useListingsData({
+  const { listingDtos, listingsLoading } = useListingsData({
     page: currentPage,
     limit: itemsPerPage,
     userId: !isAdmin ? profile?.id : undefined,
   })
-
-  if (listingsLoading) return "Loading..."
-  if (listingsError) return "An error has occurred."
 
   return (
     <Layout>
@@ -166,21 +164,23 @@ export default function ListingsList() {
             </div>
 
             <div className="applications-table mt-5">
-              <AgGridReact
-                gridOptions={gridOptions}
-                columnDefs={columnDefs}
-                rowData={listingDtos.items}
-                domLayout={"autoHeight"}
-                headerHeight={83}
-                rowHeight={58}
-                suppressPaginationPanel={true}
-                paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
-                suppressScrollOnNewData={true}
-              ></AgGridReact>
+              <LoadingOverlay isLoading={listingsLoading}>
+                <AgGridReact
+                  gridOptions={gridOptions}
+                  columnDefs={columnDefs}
+                  rowData={listingDtos?.items}
+                  domLayout={"autoHeight"}
+                  headerHeight={83}
+                  rowHeight={58}
+                  suppressPaginationPanel={true}
+                  paginationPageSize={AG_PER_PAGE_OPTIONS[0]}
+                  suppressScrollOnNewData={true}
+                ></AgGridReact>
+              </LoadingOverlay>
 
               <AgPagination
-                totalItems={listingDtos.meta.totalItems}
-                totalPages={listingDtos.meta.totalPages}
+                totalItems={listingDtos?.meta?.totalItems}
+                totalPages={listingDtos?.meta?.totalPages}
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
                 quantityLabel={t("listings.totalListings")}
