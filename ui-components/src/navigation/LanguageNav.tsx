@@ -1,5 +1,6 @@
 import React from "react"
 import "./LanguageNav.scss"
+import t from "../helpers/translator"
 
 export type LangItem = {
   label: string
@@ -8,14 +9,15 @@ export type LangItem = {
 }
 
 export interface LanguageNavProps {
+  ariaLabel?: string
   languages: LangItem[]
 }
 
-const LanguageNav = ({ languages }: LanguageNavProps) => {
+const LanguageNav = ({ ariaLabel = t("languages.choose"), languages }: LanguageNavProps) => {
   return (
     <div className="language-bar">
       <div className="language-bar__inner">
-        <nav className="language-nav">
+        <nav aria-label={ariaLabel} className="language-nav">
           <ul className="language-nav__list">
             {languages.map((item) => (
               <li key={item.label}>

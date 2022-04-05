@@ -422,7 +422,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
   }
 
   return (
-    <div className={"site-header"}>
+    <header className={"site-header"}>
       {props.languages && <LanguageNav languages={props.languages} />}
 
       <div className={`navbar-notice ${!props.noticeMobile && `navbar-notice-hide`}`}>
@@ -441,7 +441,7 @@ const SiteHeader = (props: SiteHeaderProps) => {
       </nav>
       {!isDesktop && mobileMenu && getMobileDropdown()}
       {getMobileDrawer()}
-    </div>
+    </header>
   )
 }
 
