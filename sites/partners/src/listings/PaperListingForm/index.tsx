@@ -72,6 +72,7 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
   const [tabIndex, setTabIndex] = useState(0)
   const [alert, setAlert] = useState<AlertErrorType | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [jumpToVerify, setJumpToVerify] = useState<boolean>(false)
   const [units, setUnits] = useState<TempUnit[]>([])
   const [unitsSummaries, setUnitsSummaries] = useState<TempUnitsSummary[]>([])
   const [openHouseEvents, setOpenHouseEvents] = useState<TempEvent[]>([])
@@ -148,6 +149,17 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
       setUnitsSummaries(tempSummaries)
     }
   }, [])
+
+  const scrollToVerify = () => {
+    document.getElementById("isVerifiedContainer").scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    if (jumpToVerify && tabIndex === 0) {
+      scrollToVerify()
+      setJumpToVerify(false)
+    }
+  }, [tabIndex, jumpToVerify])
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { getValues, setError, clearErrors, reset } = formMethods
@@ -333,9 +345,12 @@ const ListingForm = ({ listing, editMode }: ListingFormProps) => {
                         href="#"
                         onClick={(e) => {
                           e.preventDefault()
-                          document
-                            .getElementById("isVerifiedContainer")
-                            .scrollIntoView({ behavior: "smooth" })
+                          if (tabIndex === 1) {
+                            setJumpToVerify(true)
+                            setTabIndex(0)
+                          } else {
+                            scrollToVerify()
+                          }
                         }}
                       >
                         Verify your listing data.
