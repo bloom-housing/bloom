@@ -22,6 +22,7 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
+- [ ] I have added QA notes to the issue
 - [ ] I have performed a self-review of my own code
 - [ ] I have reviewed the changes in a desktop view
 - [ ] I have reviewed the changes in a mobile view
@@ -41,7 +42,7 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 
 Steps to review a PR:
 
-- Read and understand the issue
+- Read and understand the issue, and ensure the author has added QA notes
 - Review the code itself from a style point of view
 - Pull the changes down locally and test that the acceptance criteria is met
 - Also review the acceptance criteria on the Netlify deploy preview (noting that these do not yet include any backend changes made in the PR)
