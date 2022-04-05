@@ -540,6 +540,7 @@
   "housingCounselors.languageServices": "Language Services: ",
   "housingCounselors.subtitle": "Talk with a local housing counselor specific to your needs.",
   "housingCounselors.visitWebsite": "Visit %{name}",
+  "languages.choose": "Choose a language",
   "languages.en": "English",
   "languages.es": "Español",
   "languages.tl": "Filipino",

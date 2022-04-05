@@ -13,11 +13,11 @@ export interface LanguageNavProps {
   languages: LangItem[]
 }
 
-const LanguageNav = ({ ariaLabel = t("languages.choose"), languages }: LanguageNavProps) => {
+const LanguageNav = ({ ariaLabel, languages }: LanguageNavProps) => {
   return (
     <div className="language-bar">
       <div className="language-bar__inner">
-        <nav aria-label={ariaLabel} className="language-nav">
+        <nav aria-label={ariaLabel || t("languages.choose")} className="language-nav">
           <ul className="language-nav__list">
             {languages.map((item) => (
               <li key={item.label}>
