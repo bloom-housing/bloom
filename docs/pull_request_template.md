@@ -22,7 +22,7 @@ Describe the tests that you ran to verify your changes. Please also list any rel
 ## Checklist:
 
 - [ ] My code follows the style guidelines of this project
-- [ ] I have added QA notes to the issue
+- [ ] I have added QA notes to the issue with applicable URLs
 - [ ] I have performed a self-review of my own code
 - [ ] I have reviewed the changes in a desktop view
 - [ ] I have reviewed the changes in a mobile view
