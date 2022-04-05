@@ -31,7 +31,7 @@ const ApplicationAda = () => {
 
   /* Form Handler */
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, setValue, trigger, errors } = useForm<Record<string, any>>({
+  const { register, handleSubmit, setValue, errors, getValues } = useForm<Record<string, any>>({
     defaultValues: {
       none:
         application.accessibility.mobility === false &&
@@ -40,6 +40,7 @@ const ApplicationAda = () => {
     },
     shouldFocusError: false,
   })
+
   const onSubmit = (data) => {
     conductor.currentStep.save({
       accessibility: {
@@ -58,7 +59,7 @@ const ApplicationAda = () => {
   useEffect(() => {
     pushGtmEvent<PageView>({
       event: "pageView",
-      pageTitle: "Application - ADA Household Members", //TODO
+      pageTitle: "Application - ADA Household Members",
       status: profile ? UserStatus.LoggedIn : UserStatus.NotLoggedIn,
     })
   }, [profile])
@@ -68,7 +69,7 @@ const ApplicationAda = () => {
 
     return {
       id: item.id,
-      label: t(`application.add.${item.id}`),
+      label: t(`application.ada.${item.id}`),
       value: item.id,
       defaultChecked: isChecked,
       dataTestId: `app-ada-${item.id}`,
@@ -77,7 +78,6 @@ const ApplicationAda = () => {
         onChange: () => {
           setTimeout(() => {
             setValue("app-accessibility-no-features", false)
-            void trigger("app-accessibility-no-features")
           }, 1)
         },
       },
@@ -98,7 +98,6 @@ const ApplicationAda = () => {
           setValue("app-accessibility-mobility", false)
           setValue("app-accessibility-vision", false)
           setValue("app-accessibility-hearing", false)
-          void trigger("app-accessibility-no-features")
         }
       },
     },
@@ -143,7 +142,11 @@ const ApplicationAda = () => {
               register={register}
               fieldGroupClassName="grid grid-cols-1 mt-4"
               fieldClassName="ml-0"
-              validation={{ required: true }}
+              validation={{
+                validate: () => {
+                  return !!Object.values(getValues()).filter((value) => value).length
+                },
+              }}
               error={Object.keys(errors).length === 4}
             />
           </fieldset>
