@@ -11,7 +11,7 @@ import {
   FormSignInErrorBox,
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
-import { NetworkStatus } from "@bloom-housing/shared-helpers"
+import { NetworkStatus } from "./FormSignIn"
 import { EnumRequestMfaCodeMfaType } from "@bloom-housing/backend-core/types"
 
 export type FormSignInMFAProps = {
