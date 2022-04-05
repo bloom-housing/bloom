@@ -109,7 +109,7 @@ const TimeField = ({
           label={t("t.minutes")}
           defaultValue={defaultValues?.minutes ?? ""}
           readerOnly={true}
-          placeholder="MM"
+          placeholder={t("account.settings.placeholders.month")}
           error={error}
           validation={{
             required: required || innerRequiredRule,

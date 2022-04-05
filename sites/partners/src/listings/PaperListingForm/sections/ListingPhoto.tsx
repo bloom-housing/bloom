@@ -215,8 +215,8 @@ const ListingPhoto = () => {
         <section className="border rounded-md p-8 bg-white">
           <Dropzone
             id="listing-photo-upload"
-            label="Upload File"
-            helptext="Select JPEG or PNG files"
+            label={t("t.uploadFile")}
+            helptext={t("listings.sections.photoHelperText")}
             uploader={photoUploader}
             accept="image/*"
             progress={progressValue}
