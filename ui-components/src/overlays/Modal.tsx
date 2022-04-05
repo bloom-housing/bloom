@@ -31,13 +31,14 @@ export const Modal = (props: ModalProps) => {
   return (
     <Overlay
       ariaLabel={props.ariaLabel || props.title}
+      aria-labelledby={props.ariaLabel || props.title}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
     >
-      <div className="modal">
+      <div className="modal" role="alertdialog" id={props.title}>
         <ModalHeader title={props.title} />
 
         <section className="modal__inner">
