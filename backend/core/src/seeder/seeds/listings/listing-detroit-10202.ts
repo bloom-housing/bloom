@@ -74,12 +74,7 @@ export class Listing10202Seed extends ListingDefaultSeed {
       ...mcvProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId: "https://s3.amazonaws.com/photos.rentlinx.com/L800/85883803.jpg",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

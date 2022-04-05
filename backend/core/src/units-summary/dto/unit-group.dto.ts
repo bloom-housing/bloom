@@ -32,6 +32,7 @@ export class UnitGroupCreateDto extends OmitType(UnitGroupDto, [
   "id",
   "unitType",
   "amiLevels",
+  "listingId",
 ] as const) {
   @Expose()
   @IsDefined({ groups: [ValidationsGroupsEnum.default] })

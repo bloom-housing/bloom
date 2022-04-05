@@ -24,10 +24,9 @@ import {
   MonthlyRentDeterminationType,
   UnitAccessibilityPriorityType,
 } from "@bloom-housing/backend-core/types"
-import { useUnitPriorityList } from "../../../lib/hooks"
+import { useUnitPriorityList, useAmiChartList } from "../../../lib/hooks"
 import { arrayToFormOptions } from "../../../lib/helpers"
 import UnitsSummaryAmiForm from "./UnitsSummaryAmiForm"
-import { useAmiChartList } from "../../../lib/hooks"
 
 interface FieldSingle {
   id: string

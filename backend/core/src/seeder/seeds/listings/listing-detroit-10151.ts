@@ -75,13 +75,7 @@ export class Listing10151Seed extends ListingDefaultSeed {
 
     const reservedType = await this.reservedTypeRepository.findOneOrFail({ name: "specialNeeds" })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId:
-          "https://images1.apartments.com/i2/Lzldwt350ozz-zuJtBQf3-V7EB0-hqEaz5ssWS4sCAI/112/martin-luther-king-apartments-detroit-mi-primary-photo.jpg?p=1",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

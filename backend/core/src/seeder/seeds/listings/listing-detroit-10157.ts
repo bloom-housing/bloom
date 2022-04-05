@@ -82,12 +82,7 @@ export class Listing10157Seed extends ListingDefaultSeed {
       ...nccProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId: "https://ginosko.com/wp-content/uploads/2018/06/ncc-2.jpg",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

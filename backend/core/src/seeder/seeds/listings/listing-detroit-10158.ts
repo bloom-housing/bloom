@@ -75,12 +75,7 @@ export class Listing10158Seed extends ListingDefaultSeed {
       ...ncpProperty,
     })
 
-    const assets: Array<AssetDtoSeedType> = [
-      {
-        label: "building",
-        fileId: "/images/dev/New Center Pavilion.png",
-      },
-    ]
+    const assets: Array<AssetDtoSeedType> = []
 
     const listingCreateDto: Omit<
       DeepPartial<Listing>,

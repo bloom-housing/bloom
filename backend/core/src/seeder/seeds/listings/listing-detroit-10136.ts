@@ -97,7 +97,7 @@ export class Listing10136Seed extends ListingDefaultSeed {
       name: CountyCode.detroit,
     })
 
-    const unitGroups: Omit<UnitGroup, "id">[] = [
+    const unitGroups: Omit<UnitGroup, "id" | "listingId">[] = [
       {
         amiLevels: [],
         unitType: [unitTypeStudio, unitTypeOneBdrm],

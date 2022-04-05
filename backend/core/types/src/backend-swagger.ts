@@ -3973,23 +3973,6 @@ export interface UnitGroupSummary {
   bathroomRange?: MinMax
 }
 
-export interface UnitTypeSummary {
-  /**  */
-  unitTypes: string[]
-
-  /**  */
-  occupancyRange: MinMax
-
-  /**  */
-  areaRange: MinMax
-
-  /**  */
-  floorRange?: MinMax
-
-  /**  */
-  bathroomRange?: MinMax
-}
-
 export interface HMIColumns {
   /**  */
   "20"?: number
@@ -4054,9 +4037,6 @@ export interface HouseholdMaxIncomeSummary {
 export interface UnitSummaries {
   /**  */
   unitGroupSummary: UnitGroupSummary[]
-
-  /**  */
-  unitTypeSummary: UnitTypeSummary[]
 
   /**  */
   householdMaxIncomeSummary: HouseholdMaxIncomeSummary
@@ -4475,6 +4455,9 @@ export interface UnitGroup {
 
   /**  */
   id: string
+
+  /**  */
+  listingId: string
 
   /**  */
   maxOccupancy?: number

@@ -12,12 +12,6 @@ import { MonthlyRentDeterminationType } from "../units-summary/types/monthly-ren
 import { HUDMSHDA2021 } from "../seeder/seeds/ami-charts/HUD-MSHDA2021"
 import { setMinMax } from "./unit-transformation-helpers"
 
-// One row for every unit group with occupancy / sq ft / floor range averaged across all unit types
-// Used to display the occupancy table, unit type accordions
-export const getUnitTypeSummary = (unitGroups: UnitGroup[]): UnitTypeSummary[] => {
-  return []
-}
-
 // One row for every unit group, with rent and ami ranges across all ami levels
 // Used to display the main pricing table
 export const getUnitGroupSummary = (unitGroups: UnitGroup[] = []): UnitGroupSummary[] => {
@@ -163,7 +157,6 @@ export const summarizeUnits = (units: UnitGroup[], amiCharts: AmiChart[]): UnitS
     return data
   }
 
-  data.unitTypeSummary = getUnitTypeSummary(units)
   data.unitGroupSummary = getUnitGroupSummary(units)
   data.householdMaxIncomeSummary = getHouseholdMaxIncomeSummary(units, amiCharts)
   return data

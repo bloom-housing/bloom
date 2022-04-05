@@ -25,6 +25,7 @@ import { AmiChart } from "../ami-charts/entities/ami-chart.entity"
 import { SmsModule } from "../sms/sms.module"
 import { ListingFeatures } from "./entities/listing-features.entity"
 import { ActivityLogModule } from "../activity-log/activity-log.module"
+import { UnitGroup } from "../units-summary/entities/unit-group.entity"
 
 interface RedisCache extends Cache {
   store: RedisStore
@@ -61,6 +62,7 @@ if (process.env.REDIS_USE_TLS !== "0") {
       Property,
       AmiChart,
       ListingFeatures,
+      UnitGroup,
     ]),
     AuthModule,
     TranslationsModule,

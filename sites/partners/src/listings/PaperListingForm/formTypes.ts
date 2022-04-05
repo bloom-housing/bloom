@@ -19,7 +19,7 @@ export enum AnotherAddressEnum {
   anotherAddress = "anotherAddress",
 }
 
-export type FormListing = Omit<Listing, "countyCode" | "unitSummaries"> & {
+export type FormListing = Omit<Listing, "countyCode" | "unitSummaries" | "unitGroups"> & {
   applicationDueDateField?: {
     month: string
     day: string
@@ -182,7 +182,11 @@ export type TempAmiLevel = UnitGroupAmiLevel & {
   tempId?: number
 }
 
-export interface TempUnitsSummary extends UnitGroup {
+export type UnitGroupType = Omit<UnitGroup, "listingId"> & {
+  listingId?: string
+}
+
+export interface TempUnitsSummary extends UnitGroupType {
   tempId?: number
   amiLevels: TempAmiLevel[]
   openWaitListQuestion?: string
@@ -201,6 +205,6 @@ export type FormMetadata = {
   profile: User
   latLong: LatitudeLongitude
   customMapPositionChosen: boolean
-  unitGroups: UnitGroup[]
+  unitGroups: UnitGroupType[]
   programs: Program[]
 }

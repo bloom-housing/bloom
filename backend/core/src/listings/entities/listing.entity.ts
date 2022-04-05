@@ -614,7 +614,11 @@ class Listing extends BaseEntity {
   @IsNumber({}, { groups: [ValidationsGroupsEnum.default] })
   temporaryListingId?: number | null
 
-  @Column({ type: "enum", enum: ListingMarketingTypeEnum, default: ListingMarketingTypeEnum.Marketing })
+  @Column({
+    type: "enum",
+    enum: ListingMarketingTypeEnum,
+    default: ListingMarketingTypeEnum.Marketing,
+  })
   @Expose()
   @IsEnum(ListingMarketingTypeEnum, { groups: [ValidationsGroupsEnum.default] })
   @ApiProperty({

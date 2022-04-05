@@ -39,6 +39,7 @@ export class ListingsService {
     @Inject(REQUEST) private req: ExpressRequest,
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
     @InjectRepository(AmiChart) private readonly amiChartsRepository: Repository<AmiChart>,
+    @InjectRepository(UnitGroup) private readonly unitGroupRepository: Repository<UnitGroup>,
     private readonly translationService: TranslationsService,
     @InjectQueue("listings-notifications")
     private listingsNotificationsQueue: Queue<ListingNotificationInfo>
@@ -112,7 +113,7 @@ export class ListingsService {
     }
     const view = getView(this.listingRepository.createQueryBuilder("listings"), params.view)
 
-    const listings = await view
+    let listings = await view
       .getViewQb()
       .andWhere("listings.id IN (" + innerFilteredQuery.getQuery() + ")")
       // Set the inner WHERE params on the outer query, as noted in the TypeORM docs.
@@ -121,6 +122,8 @@ export class ListingsService {
       .setParameters(innerFilteredQuery.getParameters())
       .orderBy(getOrderByCondition(params))
       .getMany()
+
+    listings = await this.addUnitSummariesToListings(listings)
 
     // Set pagination info
     const itemsPerPage = paginate ? (params.limit as number) : listings.length
@@ -151,6 +154,40 @@ export class ListingsService {
       },
     }
     return paginatedListings
+  }
+
+  private async addUnitSummariesToListings(listings: Listing[]) {
+    const res = await this.unitGroupRepository.find({
+      cache: true,
+      where: {
+        listing: {
+          id: In(listings.map((listing) => listing.id)),
+        },
+      },
+    })
+
+    const unitGroupMap = res.reduce(
+      (
+        obj: Record<string, Array<UnitGroup>>,
+        current: UnitGroup
+      ): Record<string, Array<UnitGroup>> => {
+        if (obj[current.listingId] !== undefined) {
+          obj[current.listingId].push(current)
+        } else {
+          obj[current.listingId] = [current]
+        }
+
+        return obj
+      },
+      {}
+    )
+
+    // using map with {...listing, unitSummaries} throws a type error
+    listings.forEach((listing) => {
+      listing.unitSummaries = summarizeUnits(unitGroupMap[listing.id], [])
+    })
+
+    return listings
   }
 
   async create(listingDto: ListingCreateDto): Promise<Listing> {

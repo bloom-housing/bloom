@@ -6,6 +6,7 @@ import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
 import { HorizontalScrollSection } from "../lib/HorizontalScrollSection"
 import axios from "axios"
+import qs from "qs"
 import styles from "./index.module.scss"
 import {
   EnumListingFilterParamsComparison,
@@ -135,6 +136,9 @@ export async function getStaticProps() {
             status: EnumListingFilterParamsStatus.active,
           },
         ],
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params)
       },
     })
     latestListings = response.data
