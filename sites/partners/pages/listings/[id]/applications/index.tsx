@@ -28,6 +28,7 @@ import { AgGridReact } from "ag-grid-react"
 import { getColDefs } from "../../../../src/applications/ApplicationsColDefs"
 import { GridOptions, ColumnApi, ColumnState } from "ag-grid-community"
 import {
+  Application,
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
 } from "@bloom-housing/backend-core/types"
@@ -60,9 +61,13 @@ const ApplicationsList = () => {
     orderBy: null,
     order: null,
   })
+  /* Grid Data */
+  const [applications, setApplications] = useState<Application[]>()
+  const [unfilteredApplications, setUnfilteredApplications] = useState<Application[]>()
 
   const listingId = router.query.id as string
-  const { appsData, appsError, appsLoading } = useApplicationsData(
+
+  const { appsData, appsLoading } = useApplicationsData(
     currentPage,
     itemsPerPage,
     listingId,
@@ -125,7 +130,22 @@ const ApplicationsList = () => {
     debounceFilter.current(filterField)
   }, [filterField])
 
-  const applications = appsData?.items || []
+  //capture unfiltered data as results for invalid search
+  useEffect(() => {
+    if (delayedFilterValue.length === 0 && appsData) {
+      setUnfilteredApplications(appsData.items)
+    }
+  }, [appsData, delayedFilterValue.length])
+
+  //Update grid if valid search length
+  useEffect(() => {
+    if (filterField.length > 2) {
+      setApplications(appsData?.items || [])
+    } else {
+      setApplications(unfilteredApplications)
+    }
+  }, [appsData, filterField.length, unfilteredApplications])
+
   const appsMeta = appsData?.meta
 
   const onExport = async () => {
@@ -260,7 +280,9 @@ const ApplicationsList = () => {
             <div className="flex justify-between">
               <div className="w-56">
                 <Field name="filter-input" register={register} placeholder={t("t.filter")} />
-                {appsError && (
+              </div>
+              <div className="mt-2">
+                {[1, 2].includes(filterField.length) && (
                   <AlertBox type="notice">Enter at least 3 characters to search</AlertBox>
                 )}
               </div>
@@ -282,7 +304,7 @@ const ApplicationsList = () => {
             </div>
 
             <div className="applications-table mt-5">
-              <LoadingOverlay isLoading={appsLoading}>
+              <LoadingOverlay isLoading={appsLoading && filterField.length > 2}>
                 <AgGridReact
                   onGridReady={onGridReady}
                   gridOptions={gridOptions}
