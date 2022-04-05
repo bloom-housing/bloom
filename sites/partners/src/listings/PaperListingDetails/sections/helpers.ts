@@ -37,6 +37,9 @@ export const getReadableErrorMessage = (errorMessage: string | undefined) => {
       break
     case "must be a valid phone number":
       readableMessage = t("errors.phoneNumberError")
+      break
+    case "must be an URL address":
+      readableMessage = t("errors.urlError")
   }
   return readableMessage
 }

@@ -2,12 +2,13 @@ import React, { useEffect } from "react"
 import { useFormContext } from "react-hook-form"
 import { t, GridSection, Textarea, Field, PhoneField } from "@bloom-housing/ui-components"
 import { fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { isURL } from "class-validator"
 
 const LeasingAgent = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, control, errors, clearErrors, watch } = formMethods
+  const { register, control, errors, clearErrors, watch, trigger } = formMethods
 
   const leasingAgentPhoneField: string = watch("leasingAgentPhone")
 
@@ -61,13 +62,34 @@ const LeasingAgent = () => {
           />
         </GridSection>
         <GridSection columns={2}>
-          <Field
-            label={t("leasingAgent.title")}
-            name={"leasingAgentTitle"}
-            id={"leasingAgentTitle"}
-            placeholder={t("leasingAgent.title")}
-            register={register}
-          />
+          <GridSection columns={1}>
+            <Field
+              label={t("leasingAgent.title")}
+              name={"leasingAgentTitle"}
+              id={"leasingAgentTitle"}
+              placeholder={t("leasingAgent.title")}
+              register={register}
+            />
+            <Field
+              label={t("leasingAgent.managementWebsite")}
+              name={"managementWebsite"}
+              id={"managementWebsite"}
+              placeholder={t("leasingAgent.managementWebsite")}
+              register={register}
+              validation={{
+                validate: (value) =>
+                  isURL(value, { require_protocol: true }) || t("errors.urlError"),
+              }}
+              error={fieldHasError(errors?.managementWebsite)}
+              errorMessage={t("errors.urlError")}
+              type="url"
+              onChange={(e) =>
+                e.currentTarget.value
+                  ? trigger("managementWebsite")
+                  : clearErrors("managementWebsite")
+              }
+            />
+          </GridSection>
           <Textarea
             label={t("leasingAgent.officeHours")}
             name={"leasingAgentOfficeHours"}
