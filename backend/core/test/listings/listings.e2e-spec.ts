@@ -70,7 +70,7 @@ describe("Listings", () => {
     // but the last listing.
     const page = "1"
     // This is the number of listings in ../../src/seed.ts minus 1
-    const limit = 12
+    const limit = 15
     const params = "/?page=" + page + "&limit=" + limit.toString()
     const res = await supertest(app.getHttpServer())
       .get("/listings" + params)
@@ -82,13 +82,13 @@ describe("Listings", () => {
     // Make the limit 1 less than the full number of listings, so that the second page contains
     // only one listing.
     const queryParams = {
-      limit: 13,
+      limit: 15,
       page: 2,
       view: "base",
     }
     const query = qs.stringify(queryParams)
     const res = await supertest(app.getHttpServer()).get(`/listings?${query}`).expect(200)
-    expect(res.body.items.length).toEqual(3)
+    expect(res.body.items.length).toEqual(1)
   })
 
   it("should return listings with matching zipcodes", async () => {
@@ -288,7 +288,7 @@ describe("Listings", () => {
   })
 
   it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
-    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
+    const res = await supertest(app.getHttpServer()).get(`/listings?limit=all&order=ASC`).expect(200)
     const listings = res.body.items
 
     // The Coliseum seed has the soonest applicationDueDate (1 day in the future)

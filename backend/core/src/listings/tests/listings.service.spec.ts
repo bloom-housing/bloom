@@ -9,6 +9,7 @@ import { ListingsQueryParams } from "../dto/listings-query-params"
 import { Compare } from "../../shared/dto/filter.dto"
 import { ListingFilterParams } from "../dto/listing-filter-params"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
+import { OrderParam } from "../../applications/types/order-param"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -74,6 +75,7 @@ const mockInnerQueryBuilder = {
   orderBy: jest.fn().mockReturnThis(),
   addOrderBy: jest.fn().mockReturnThis(),
   groupBy: jest.fn().mockReturnThis(),
+  addGroupBy: jest.fn().mockReturnThis(),
   andWhere: jest.fn().mockReturnThis(),
   offset: jest.fn().mockReturnThis(),
   limit: jest.fn().mockReturnThis(),
@@ -322,12 +324,10 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      await service.list({})
+      await service.list({order: OrderParam.ASC})
 
       const expectedOrderByArgument = {
         "listings.applicationDueDate": "ASC",
-        "listings.applicationOpenDate": "DESC",
-        "listings.id": "ASC",
       }
 
       // The inner query must be ordered so that the ordering applies across all pages (if pagination is requested)
@@ -352,7 +352,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      await service.list({ orderBy: OrderByFieldsEnum.mostRecentlyUpdated })
+      await service.list({ orderBy: OrderByFieldsEnum.mostRecentlyUpdated, order: OrderParam.DESC })
 
       const expectedOrderByArgument = { "listings.updated_at": "DESC" }
 
