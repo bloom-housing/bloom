@@ -40,33 +40,34 @@ type ApplicationsListSortOptions = {
 
 const ApplicationsList = () => {
   const COLUMN_STATE_KEY = "column-state"
-
   const { applicationsService } = useContext(AuthContext)
   const router = useRouter()
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, watch } = useForm()
 
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
+  /* Grid Data */
+  const [applications, setApplications] = useState<Application[]>()
+  const [unfilteredApplications, setUnfilteredApplications] = useState<Application[]>()
+
   /* Filter input */
-  const filterField = watch("filter-input", "")
-  const [delayedFilterValue, setDelayedFilterValue] = useState(filterField)
+  const [delayedFilterValue, setDelayedFilterValue] = useState("")
 
   /* Pagination */
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
   const [currentPage, setCurrentPage] = useState<number>(1)
+
+  /* CSV export */
+  const [csvExportLoading, setCsvExportLoading] = useState(false)
+  const [csvExportError, setCsvExportError] = useState(false)
 
   /* OrderBy columns */
   const [sortOptions, setSortOptions] = useState<ApplicationsListSortOptions>({
     orderBy: null,
     order: null,
   })
-  /* Grid Data */
-  const [applications, setApplications] = useState<Application[]>()
-  const [unfilteredApplications, setUnfilteredApplications] = useState<Application[]>()
 
+  /* Data Fetching */
   const listingId = router.query.id as string
-
   const { appsData, appsLoading } = useApplicationsData(
     currentPage,
     itemsPerPage,
@@ -75,24 +76,50 @@ const ApplicationsList = () => {
     sortOptions.orderBy,
     sortOptions.order
   )
+  const appsMeta = appsData?.meta
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
-
   const { data: flaggedApps } = useFlaggedApplicationsList({
     listingId,
     page: 1,
     limit: 1,
   })
 
-  /* CSV export */
-  const [csvExportLoading, setCsvExportLoading] = useState(false)
-  const [csvExportError, setCsvExportError] = useState(false)
-
+  /* Data Filtering */
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { register, watch } = useForm()
+  const filterField = watch("filter-input", "")
   const fetchFilteredResults = (value: string) => {
     setDelayedFilterValue(value)
   }
+  useEffect(() => {
+    setCurrentPage(1)
+    debounceFilter.current(filterField)
+  }, [filterField])
+  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
+  useEffect(() => {
+    if (delayedFilterValue.length === 0 && appsData) {
+      setUnfilteredApplications(appsData.items)
+    }
+  }, [appsData, delayedFilterValue.length])
 
+  //Update grid if valid search length
+  useEffect(() => {
+    if (filterField.length > 2) {
+      setApplications(appsData?.items || [])
+    } else {
+      setApplications(unfilteredApplications)
+    }
+  }, [appsData, filterField.length, unfilteredApplications])
+
+  /* Pagination */
+  // reset page to 1 when user change limit
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [itemsPerPage])
+
+  /* Data Performance */
   // Load a table state on initial render & pagination change (because the new data comes from the API)
   useEffect(() => {
     const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
@@ -117,37 +144,7 @@ const ApplicationsList = () => {
     setGridColumnApi(params.columnApi)
   }
 
-  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
-
-  // reset page to 1 when user change limit
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [itemsPerPage])
-
-  // fetch filtered data
-  useEffect(() => {
-    setCurrentPage(1)
-    debounceFilter.current(filterField)
-  }, [filterField])
-
-  //capture unfiltered data as results for invalid search
-  useEffect(() => {
-    if (delayedFilterValue.length === 0 && appsData) {
-      setUnfilteredApplications(appsData.items)
-    }
-  }, [appsData, delayedFilterValue.length])
-
-  //Update grid if valid search length
-  useEffect(() => {
-    if (filterField.length > 2) {
-      setApplications(appsData?.items || [])
-    } else {
-      setApplications(unfilteredApplications)
-    }
-  }, [appsData, filterField.length, unfilteredApplications])
-
-  const appsMeta = appsData?.meta
-
+  /* CSV and Export */
   const onExport = async () => {
     setCsvExportError(false)
     setCsvExportLoading(true)
@@ -174,30 +171,10 @@ const ApplicationsList = () => {
     setCsvExportLoading(false)
   }
 
-  // ag grid settings
-  class formatLinkCell {
-    linkWithId: HTMLSpanElement
-
-    init(params) {
-      const applicationId = params.data.id
-
-      this.linkWithId = document.createElement("button")
-      this.linkWithId.classList.add("text-blue-700")
-      this.linkWithId.innerText = params.value
-
-      this.linkWithId.addEventListener("click", function () {
-        void saveColumnState(params.columnApi)
-        void router.push(`/application/${applicationId}`)
-      })
-    }
-
-    getGui() {
-      return this.linkWithId
-    }
-  }
-
+  /* Grid Functionality and Formatting */
   // update table items order on sort change
   const initialLoadOnSort = useRef<boolean>(false)
+
   const onSortChange = useCallback((columns: ColumnState[]) => {
     // prevent multiple fetch on initial render
     if (!initialLoadOnSort.current) {
@@ -220,23 +197,30 @@ const ApplicationsList = () => {
     }
   }, [])
 
-  const gridOptions: GridOptions = {
-    onSortChanged: (params) => {
-      saveColumnState(params.columnApi)
-      onSortChange(params.columnApi.getColumnState())
-    },
-    onColumnMoved: (params) => saveColumnState(params.columnApi),
-    components: {
-      formatLinkCell: formatLinkCell,
-    },
-    suppressNoRowsOverlay: appsLoading,
-  }
+  class formatLinkCell {
+    linkWithId: HTMLSpanElement
 
+    init(params) {
+      const applicationId = params.data.id
+
+      this.linkWithId = document.createElement("button")
+      this.linkWithId.classList.add("text-blue-700")
+      this.linkWithId.innerText = params.value
+
+      this.linkWithId.addEventListener("click", function () {
+        void saveColumnState(params.columnApi)
+        void router.push(`/application/${applicationId}`)
+      })
+    }
+
+    getGui() {
+      return this.linkWithId
+    }
+  }
   const defaultColDef = {
     resizable: true,
     maxWidth: 300,
   }
-
   // get the highest value from householdSize and limit to 6
   const maxHouseholdSize = useMemo(() => {
     let max = 1
@@ -254,6 +238,17 @@ const ApplicationsList = () => {
     return getColDefs(maxHouseholdSize, countyCode)
   }, [maxHouseholdSize, countyCode])
 
+  const gridOptions: GridOptions = {
+    onSortChanged: (params) => {
+      saveColumnState(params.columnApi)
+      onSortChange(params.columnApi.getColumnState())
+    },
+    onColumnMoved: (params) => saveColumnState(params.columnApi),
+    components: {
+      formatLinkCell: formatLinkCell,
+    },
+    suppressNoRowsOverlay: appsLoading,
+  }
   if (!applications) return null
 
   return (
