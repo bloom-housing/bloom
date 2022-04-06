@@ -49,6 +49,7 @@ const ApplicationAda = () => {
         hearing: !!data["app-accessibility-hearing"],
       },
     })
+    console.log(conductor)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
@@ -84,14 +85,16 @@ const ApplicationAda = () => {
     }
   })
 
+  console.log(application)
+
   adaFeaturesOptions.push({
     id: "no-features",
     label: t(`t.no`),
     value: "no-features",
     defaultChecked:
-      !application.accessibility["mobility"] &&
-      !application.accessibility["hearing"] &&
-      !application.accessibility["vision"],
+      application.accessibility["mobility"] === false &&
+      application.accessibility["hearing"] === false &&
+      application.accessibility["vision"] === false,
     dataTestId: `app-ada-none`,
     uniqueName: true,
     inputProps: {
@@ -128,11 +131,12 @@ const ApplicationAda = () => {
           <p className="field-note mt-5">{t("application.ada.subTitle")}</p>
         </div>
 
-        {Object.entries(errors).length === 4 && (
-          <AlertBox type="alert" inverted closeable>
-            {t("errors.errorsToResolve")}
-          </AlertBox>
-        )}
+        {Object.entries(errors).length === Object.keys(getValues()).length &&
+          Object.keys(getValues()).length > 0 && (
+            <AlertBox type="alert" inverted closeable>
+              {t("errors.errorsToResolve")}
+            </AlertBox>
+          )}
 
         <div className="form-card__group">
           <fieldset>
@@ -150,7 +154,10 @@ const ApplicationAda = () => {
                   return !!Object.values(getValues()).filter((value) => value).length
                 },
               }}
-              error={Object.keys(errors).length === 4}
+              error={
+                Object.keys(errors).length === Object.keys(getValues()).length &&
+                Object.keys(getValues()).length > 0
+              }
             />
           </fieldset>
 
