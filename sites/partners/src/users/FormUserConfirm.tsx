@@ -33,7 +33,7 @@ const FormUserConfirm = () => {
   const { mutate, isLoading: isConfirmLoading, isError, reset: resetMutation } = useMutate<
     LoginResponse
   >()
-  const { userService } = useContext(AuthContext)
+  const { profile, userService } = useContext(AuthContext)
   const { loginWithToken } = useContext(AuthContext)
 
   const token = router.query?.token as string
@@ -46,7 +46,7 @@ const FormUserConfirm = () => {
   const [newConfirmationRequested, setNewConfirmationRequested] = useState(false)
 
   useEffect(() => {
-    if (token) {
+    if (!profile && token) {
       userService
         .isUserConfirmationTokenValid({ body: { token } })
         .then((res) => {
@@ -58,7 +58,7 @@ const FormUserConfirm = () => {
           setRerequestModalOpen(true)
         })
     }
-  }, [token, userService, setRerequestModalOpen])
+  }, [profile, token, userService])
 
   const onSubmit = async (data: FormUserConfirmFields) => {
     resetMutation()

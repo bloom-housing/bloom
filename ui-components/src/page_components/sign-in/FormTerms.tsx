@@ -52,7 +52,7 @@ const FormTerms = () => {
             {t(`authentication.terms.youMustAcceptToc`)}
           </p>
 
-          <div className="overflow-y-auto max-h-96 mt-5 text-left">
+          <div className="overflow-y-auto max-h-96 mt-5 pr-4 text-left">
             {jurisdictionTerms && (
               <MarkdownSection padding={false} fullwidth={true}>
                 <Markdown options={{ disableParsingRawHTML: false }}>{jurisdictionTerms}</Markdown>
