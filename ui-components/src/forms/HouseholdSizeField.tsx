@@ -61,7 +61,7 @@ const HouseholdSizeField = (props: HouseholdSizeFieldProps) => {
         <AlertNotice title={error?.message} type="alert" inverted>
           <p className="mb-2">{t("application.household.dontQualifyInfo")}</p>
           <p>
-            <a href={assistanceUrl}>{t("nav.getAssistance")}</a>
+            <a href={assistanceUrl}>{t("pageTitle.getAssistance")}</a>
           </p>
         </AlertNotice>
       </ErrorMessage>

@@ -122,11 +122,7 @@ const ApplicationChooseLanguage = () => {
 
         {listing && (
           <div className="form-card__group p-0 m-0">
-            <ImageCard
-              title={listing.name}
-              imageUrl={imageUrl}
-              statuses={[{ content: appStatusContent }]}
-            />
+            <ImageCard imageUrl={imageUrl} statuses={[{ content: appStatusContent }]} />
           </div>
         )}
 

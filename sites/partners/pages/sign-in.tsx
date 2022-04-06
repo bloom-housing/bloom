@@ -99,7 +99,7 @@ const SignIn = () => {
         )}
         control={{ register, errors, handleSubmit }}
         networkStatus={{
-          content: networkStatusContent,
+          content: { ...networkStatusContent, error: !!networkStatusContent?.error },
           type: networkStatusType,
           reset: () => {
             reset()
@@ -124,7 +124,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ register, errors, handleSubmit, setValue }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
       />
     )
   } else if (renderStep === EnumRenderStep.phoneNumber) {
@@ -141,7 +144,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ errors, handleSubmit, control }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
         phoneNumber={phoneNumber}
       />
     )
@@ -158,7 +164,10 @@ const SignIn = () => {
           resetNetworkError
         )}
         control={{ register, errors, handleSubmit }}
-        networkError={{ content: networkError, reset: resetNetworkError }}
+        networkError={{
+          content: { ...networkError, error: !!networkError?.error },
+          reset: resetNetworkError,
+        }}
         mfaType={mfaType}
         allowPhoneNumberEdit={allowPhoneNumberEdit}
         phoneNumber={phoneNumber}

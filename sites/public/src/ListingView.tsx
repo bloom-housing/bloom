@@ -17,6 +17,7 @@ import {
   ExpandableText,
   GetApplication,
   GroupedTable,
+  Heading,
   ImageCard,
   InfoCard,
   LeasingAgent,
@@ -370,20 +371,28 @@ export const ListingView = (props: ListingProps) => {
     <article className="flex flex-wrap relative max-w-5xl m-auto">
       <header className="image-card--leader">
         <ImageCard
-          title={listing.name}
           imageUrl={imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize))}
-          tagLabel={
+          tags={
             listing.reservedCommunityType
-              ? t(`listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`)
+              ? [
+                  {
+                    text: t(
+                      `listings.reservedCommunityTypes.${props.listing.reservedCommunityType.name}`
+                    ),
+                  },
+                ]
               : undefined
           }
         />
-        <div className="p-3">
-          <p className="font-alt-sans uppercase tracking-widest text-sm font-semibold">
+        <div className="py-3 mx-3">
+          <Heading priority={1} style={"cardHeader"}>
+            {listing.name}
+          </Heading>
+          <Heading priority={2} style={"cardSubheader"} className={"mb-1"}>
             {oneLineAddress}
-          </p>
-          <p className="text-gray-700 text-base">{listing.developer}</p>
-          <p className="text-xs">
+          </Heading>
+          <p className="text-gray-750 text-base mb-1">{listing.developer}</p>
+          <p className="text-base">
             <a href={googleMapsHref} target="_blank" aria-label="Opens in new window">
               {t("t.viewOnMap")}
             </a>
@@ -401,32 +410,36 @@ export const ListingView = (props: ListingProps) => {
             })}
           </Message>
         )}
-        {amiValues.length > 1 &&
-          amiValues.map((percent) => {
-            const byAMI = listing.unitsSummarized.byAMI.find((item) => {
-              return parseInt(item.percent, 10) == percent
-            })
+        <div className={"mx-3 md:mx-0"}>
+          {amiValues.length > 1 &&
+            amiValues.map((percent) => {
+              const byAMI = listing.unitsSummarized.byAMI.find((item) => {
+                return parseInt(item.percent, 10) == percent
+              })
 
-            groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
+              groupedUnits = byAMI ? getSummariesTable(byAMI.byUnitType) : []
 
-            return (
-              <React.Fragment key={percent}>
-                <h2 className="mt-4 mb-2">{t("listings.percentAMIUnit", { percent: percent })}</h2>
-                <GroupedTable
-                  headers={unitSummariesHeaders}
-                  data={[{ data: groupedUnits }]}
-                  responsiveCollapse={true}
-                />
-              </React.Fragment>
-            )
-          })}
-        {amiValues.length == 1 && (
-          <GroupedTable
-            headers={unitSummariesHeaders}
-            data={[{ data: groupedUnits }]}
-            responsiveCollapse={true}
-          />
-        )}
+              return (
+                <React.Fragment key={percent}>
+                  <h2 className="mt-4 mb-2">
+                    {t("listings.percentAMIUnit", { percent: percent })}
+                  </h2>
+                  <GroupedTable
+                    headers={unitSummariesHeaders}
+                    data={[{ data: groupedUnits }]}
+                    responsiveCollapse={true}
+                  />
+                </React.Fragment>
+              )
+            })}
+          {amiValues.length == 1 && (
+            <GroupedTable
+              headers={unitSummariesHeaders}
+              data={[{ data: groupedUnits }]}
+              responsiveCollapse={true}
+            />
+          )}
+        </div>
       </div>
       <div className="w-full md:w-2/3 md:mt-3 md:hidden md:mx-3 border-gray-400 border-b">
         <ApplicationStatus content={appStatusContent} subContent={appStatusSubContent} />
@@ -659,7 +672,7 @@ export const ListingView = (props: ListingProps) => {
         <ListingDetailItem
           imageAlt={t("listings.neighborhoodBuildings")}
           imageSrc="/images/listing-neighborhood.svg"
-          title={t("listings.sections.neighborhoodTitle")}
+          title={t("t.neighborhood")}
           subtitle={t("listings.sections.neighborhoodSubtitle")}
           desktopClass="bg-primary-lighter"
         >
@@ -675,7 +688,7 @@ export const ListingView = (props: ListingProps) => {
           <ListingDetailItem
             imageAlt={t("listings.additionalInformationEnvelope")}
             imageSrc="/images/listing-legal.svg"
-            title={t("listings.sections.additionalInformationTitle")}
+            title={t("listings.additionalInformation")}
             subtitle={t("listings.sections.additionalInformationSubtitle")}
           >
             <div className="listing-detail-panel">
