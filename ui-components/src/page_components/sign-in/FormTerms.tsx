@@ -43,7 +43,7 @@ const FormTerms = () => {
   }, [profile])
 
   return (
-    <>
+    <Form id="terms" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
       <FormCard>
         <div className="form-card__lead text-center">
           <Icon size="2xl" symbol="settings" />
@@ -52,7 +52,7 @@ const FormTerms = () => {
             {t(`authentication.terms.youMustAcceptToc`)}
           </p>
 
-          <div className="overflow-y-auto max-h-96 mt-5">
+          <div className="overflow-y-auto max-h-96 mt-5 text-left">
             {jurisdictionTerms && (
               <MarkdownSection padding={false} fullwidth={true}>
                 <Markdown options={{ disableParsingRawHTML: false }}>{jurisdictionTerms}</Markdown>
@@ -61,32 +61,32 @@ const FormTerms = () => {
           </div>
         </div>
 
+        <div className="form-card__group pt-0">
+          <Field
+            id="agree"
+            name="agree"
+            type="checkbox"
+            className="flex flex-col justify-center items-center"
+            label={t(`authentication.terms.acceptToc`)}
+            register={register}
+            validation={{ required: true }}
+            error={!!errors.agree}
+            errorMessage={t("errors.agreeError")}
+            dataTestId="agree"
+          />
+        </div>
+
         <div className="border-b" />
 
-        <div className="form-card__group pt-0">
-          <Form id="terms" className="mt-10" onSubmit={handleSubmit(onSubmit)}>
-            <Field
-              id="agree"
-              name="agree"
-              type="checkbox"
-              className="flex flex-col justify-center items-center"
-              label={t(`authentication.terms.acceptToc`)}
-              register={register}
-              validation={{ required: true }}
-              error={!!errors.agree}
-              errorMessage={t("errors.agreeError")}
-              dataTestId="agree"
-            />
-
-            <div className="text-center mt-6">
-              <Button styleType={AppearanceStyleType.primary} data-test-id="form-submit">
-                {t("t.submit")}
-              </Button>
-            </div>
-          </Form>
+        <div className="form-card__pager">
+          <div className="form-card__pager-row primary">
+            <Button styleType={AppearanceStyleType.primary} data-test-id="form-submit">
+              {t("t.submit")}
+            </Button>
+          </div>
         </div>
       </FormCard>
-    </>
+    </Form>
   )
 }
 
