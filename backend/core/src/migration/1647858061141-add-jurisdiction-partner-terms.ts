@@ -2,12 +2,11 @@ import { MigrationInterface, QueryRunner } from "typeorm"
 
 const sjTermsContent = `
 ### Privacy and Disclosure
-
 The purpose of this statement is to define the City of San Jose's policy with regards to the collection and use of personally identifiable information (PII). PII is any information relating to an identified or identifiable individual who is the subject of the information.
 
 The City of San Jose collects two kinds of customer information: (1) anonymous; (2) personally identifiable information (PII).
 
-<div class="text-left">
+<div>
 **a. Anonymous information**:<br/> This type of information does not identify specific individuals and is automatically transmitted by your browser. This information consists of:
 
 <div class="pl-3">
@@ -31,25 +30,19 @@ This information is used to help improve the Doorway Affordable Housing Portal. 
   </ul>
 </div>
 </div>
-
 ### Contractual Services for the Doorway Affordable Housing Portal and On-Line Services
-
 To ensure that contractors who have access to or provide contractual services for the City’s On-Line (e-government) Services are not allowed to re-sell or in any way share or convey to another party or use it for another purpose any information that they may have access to in the course of doing business for the City; all city contracts regarding such services should contain a requirement that the contractor must comply with the Doorway Affordable Housing Portal and eGovernment policies.
 
 ### Electronic Signatures and Payments
-
 The City of San Jose is committed to data security and the data quality of personally identifiable information that is either available from or collected by our web site and has taken reasonable precautions to protect such information from loss, misuse, or alteration. When a City application accepts credit cards or any other particularly sensitive information for any of its services, it encrypts all ordering information, such as your name and credit card number, in order to protect its confidentiality.
 
 ### Disclaimer
-
 The City of San Jose is neither responsible nor liable for any delays, inaccuracies, errors or omissions arising out of your use of the portal or with respect to the material contained on the portal, including without limitation, any material posted on the portal nor for any viruses or other contamination of your system. The Doorway Affordable Housing Portal and all materials contained on it are distributed and transmitted “as is” without warranties of any kind, either express or implied, including without limitations, warranties of title or implied warranties of merchantability or fitness for a particular purpose. The City of San Jose is not responsible for any special, indirect, incidental or consequential damages that may arise from the use of, or the inability to use, the portal and/or the materials contained on the Site whether the materials contained on the portal are provided by the City of San Jose or a third party. The City of San Jose is neither responsible nor liable for any viruses or other contamination of your system.
 
 ### Access to Information
-
 Unless otherwise prohibited by state or federal law, rule or regulation, you will be granted the ability to access and correct any personally identifiable information. The City will take reasonable steps to verify your identity before granting such access. Each City service that collects personally identifiable information will allow or review and update of that information.
 
 ### Non-City Web Sites
-
 Non-city web sites may be linked through the Doorway Affordable Housing Portal. Many non-city sites may or may not be subject to the Public Records Act and may or may not be subject to other sections of the California Code or federal law. Visitors to such sites are advised to check the privacy statements of such sites and to be cautious about providing personally identifiable information without a clear understanding of how the information will be used. The City is not responsible for, and accepts no liability for, the availability of these outside resources. Linked Web sites are not under the control of, nor maintained by, the City and the City is not responsible for the content of these Web sites, which can and do change frequently; nor for any internal links the displayed Web sites may contain. In addition, inclusion of the linked Web sites does not constitute an endorsement or promotion by the City of any persons or organizations sponsoring the displayed Web sites.
 `
 
