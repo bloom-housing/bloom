@@ -71,46 +71,39 @@ export const getImageTagIconFromListing = (listing: Listing): IconProps | null =
   return null
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getListingTableData = (listing: Listing) => {
-  return []
-}
-
 export const getListings = (listings) => {
   const unitSummariesHeaders = {
     unitType: t("t.unitType"),
     rent: t("t.rent"),
     availability: t("t.availability"),
   }
-  return listings.map((listing: Listing, index) => {
-    return (
-      <ListingCard
-        key={index}
-        imageCardProps={{
-          imageUrl:
-            imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
-          subtitle: getListingCardSubtitle(listing.buildingAddress),
-          title: listing.name,
-          href: `/listing/${listing.id}/${listing.urlSlug}`,
-          tagLabel: getImageTagLabelFromListing(listing),
-          tagIcon: getImageTagIconFromListing(listing),
-        }}
-        tableProps={{
-          headers: unitSummariesHeaders,
-          data: getListingTableData(listing),
-          responsiveCollapse: true,
-          cellClassName: "px-5 py-3",
-        }}
-        seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
-        detailsLinkClass="float-right"
-        tableHeaderProps={{
-          tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
-        }}
-        listingId={listing.id}
-        allowFavoriting={true}
-      />
-    )
-  })
+  return listings.map((listing: Listing, index) => (
+    <ListingCard
+      key={index}
+      imageCardProps={{
+        imageUrl:
+          imageUrlFromListing(listing, parseInt(process.env.listingPhotoSize || "1302")) || "",
+        subtitle: getListingCardSubtitle(listing.buildingAddress),
+        title: listing.name,
+        href: `/listing/${listing.id}/${listing.urlSlug}`,
+        tagLabel: getImageTagLabelFromListing(listing),
+        tagIcon: getImageTagIconFromListing(listing),
+      }}
+      tableProps={{
+        headers: unitSummariesHeaders,
+        data: getUnitGroupSummary(listing).data,
+        responsiveCollapse: true,
+        cellClassName: "px-5 py-3",
+      }}
+      seeDetailsLink={`/listing/${listing.id}/${listing.urlSlug}`}
+      detailsLinkClass="float-right"
+      tableHeaderProps={{
+        tableHeader: listing.showWaitlist ? t("listings.waitlist.open") : null,
+      }}
+      listingId={listing.id}
+      allowFavoriting={true}
+    />
+  ))
 }
 
 export const usToIntlPhone = (usPhoneNumber: string): string => {
@@ -135,104 +128,99 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
   }
   let groupedUnitData: Record<string, React.ReactNode>[] = null
 
-  if (listing.unitGroups !== undefined && listing.unitGroups.length > 0) {
-    // unit group summary
-    groupedUnitData = listing.unitSummaries.unitGroupSummary.map((group) => {
-      let rentRange = null
-      let rentAsPercentIncomeRange = null
-      if (group.rentRange && group.rentRange.min === group.rentRange.max) {
-        rentRange = group.rentRange.min
-      } else if (group.rentRange) {
-        rentRange = `${group.rentRange.min} - ${group.rentRange.max}`
-      }
+  // unit group summary
+  groupedUnitData = listing.unitSummaries.unitGroupSummary?.map((group) => {
+    let rentRange = null
+    let rentAsPercentIncomeRange = null
+    if (group.rentRange && group.rentRange.min === group.rentRange.max) {
+      rentRange = group.rentRange.min
+    } else if (group.rentRange) {
+      rentRange = `${group.rentRange.min} - ${group.rentRange.max}`
+    }
 
-      if (rentRange) {
-        rentRange = (
-          <span>
-            <strong>{rentRange}</strong> {t("t.perMonth")}
-          </span>
-        )
-      }
+    if (rentRange) {
+      rentRange = (
+        <span>
+          <strong>{rentRange}</strong> {t("t.perMonth")}
+        </span>
+      )
+    }
 
-      if (
-        group.rentAsPercentIncomeRange &&
-        group.rentAsPercentIncomeRange.min === group.rentAsPercentIncomeRange.max
-      ) {
-        rentAsPercentIncomeRange = group.rentAsPercentIncomeRange.min
-      } else if (group.rentAsPercentIncomeRange) {
-        rentAsPercentIncomeRange = `${group.rentAsPercentIncomeRange.min} - ${group.rentAsPercentIncomeRange.max}`
-      }
+    if (
+      group.rentAsPercentIncomeRange &&
+      group.rentAsPercentIncomeRange.min === group.rentAsPercentIncomeRange.max
+    ) {
+      rentAsPercentIncomeRange = group.rentAsPercentIncomeRange.min
+    } else if (group.rentAsPercentIncomeRange) {
+      rentAsPercentIncomeRange = `${group.rentAsPercentIncomeRange.min} - ${group.rentAsPercentIncomeRange.max}`
+    }
 
-      if (rentAsPercentIncomeRange) {
-        rentAsPercentIncomeRange = (
-          <span>
-            <strong>{rentAsPercentIncomeRange}%</strong> {t("t.income")}
-          </span>
-        )
-      }
+    if (rentAsPercentIncomeRange) {
+      rentAsPercentIncomeRange = (
+        <span>
+          <strong>{rentAsPercentIncomeRange}%</strong> {t("t.income")}
+        </span>
+      )
+    }
 
-      let availability = null
+    let availability = null
 
-      if (group.unitVacancies > 0) {
-        availability = (
-          <div>
-            <strong>{group.unitVacancies} </strong>
-            {group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")}
-            {` ${t("t.&")}`}
-          </div>
-        )
-      }
-
+    if (group.unitVacancies > 0) {
       availability = (
+        <div>
+          <strong>{group.unitVacancies} </strong>
+          {group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")}
+          {` ${t("t.&")}`}
+        </div>
+      )
+    }
+
+    availability = (
+      <>
+        {availability}
+        <strong>
+          {group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed")}
+        </strong>
+      </>
+    )
+
+    let ami = null
+
+    if (group.amiPercentageRange && group.amiPercentageRange.min === group.amiPercentageRange.max) {
+      ami = `${group.amiPercentageRange.min}%`
+    } else if (group.amiPercentageRange) {
+      ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
+    }
+
+    let rent: React.ReactNode = null
+
+    if (rentRange && rentAsPercentIncomeRange) {
+      rent = (
         <>
-          {availability}
-          <strong>
-            {group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed")}
-          </strong>
+          {rentRange}, {rentAsPercentIncomeRange}
         </>
       )
+    } else if (rentRange) {
+      rent = rentRange
+    } else if (rentAsPercentIncomeRange) {
+      rent = rentAsPercentIncomeRange
+    }
 
-      let ami = null
-
-      if (
-        group.amiPercentageRange &&
-        group.amiPercentageRange.min === group.amiPercentageRange.max
-      ) {
-        ami = `${group.amiPercentageRange.min}%`
-      } else if (group.amiPercentageRange) {
-        ami = `${group.amiPercentageRange.min} - ${group.amiPercentageRange.max}%`
-      }
-
-      let rent: React.ReactNode = null
-
-      if (rentRange && rentAsPercentIncomeRange) {
-        rent = (
-          <>
-            {rentRange}, {rentAsPercentIncomeRange}
-          </>
-        )
-      } else if (rentRange) {
-        rent = rentRange
-      } else if (rentAsPercentIncomeRange) {
-        rent = rentAsPercentIncomeRange
-      }
-
-      return {
-        unitType: (
-          <>
-            {group.unitTypes
-              .map<React.ReactNode>((type) => (
-                <strong key={type}>{t(`listings.unitTypes.${type}`)}</strong>
-              ))
-              .reduce((acc, curr) => [acc, ", ", curr])}
-          </>
-        ),
-        rent,
-        availability,
-        ami: <strong>{ami}</strong>,
-      }
-    })
-  }
+    return {
+      unitType: (
+        <>
+          {group.unitTypes
+            .map<React.ReactNode>((type) => (
+              <strong key={type}>{t(`listings.unitTypes.${type}`)}</strong>
+            ))
+            .reduce((acc, curr) => [acc, ", ", curr])}
+        </>
+      ),
+      rent,
+      availability,
+      ami: <strong>{ami}</strong>,
+    }
+  })
 
   return {
     headers: groupedUnitHeaders,
