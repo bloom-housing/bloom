@@ -13,7 +13,7 @@ import {
   ErrorMessage,
   emailRegex,
 } from "@bloom-housing/ui-components"
-import { NetworkErrorReset, NetworkStatusContent } from "@bloom-housing/shared-helpers"
+import { NetworkErrorReset, NetworkStatusContent } from "../sign-in/FormSignIn"
 import { NavigationContext } from "../../config/NavigationContext"
 import type { UseFormMethods } from "react-hook-form"
 

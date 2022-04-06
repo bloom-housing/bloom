@@ -141,7 +141,7 @@ const BuildingDetails = ({
 
   const getAddressErrorMessage = (fieldKey: string, defaultMessage: string) => {
     return errors?.buildingAddress && !getValues("buildingAddress.street")
-      ? "Cannot enter a partial address"
+      ? t("errors.partialAddress")
       : defaultMessage
   }
 

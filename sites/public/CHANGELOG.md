@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3-alpha.6](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.5...@bloom-housing/public@4.1.3-alpha.6) (2022-04-05)
+
+
+### Bug Fixes
+
+* remove shared-helpers dependency from ui-components ([#2620](https://github.com/bloom-housing/bloom/issues/2620)) ([cd6ea54](https://github.com/bloom-housing/bloom/commit/cd6ea5450402a9b5d2a8681c403cbfcff6b6b1c9))
+
+
+
+
+
+## [4.1.3-alpha.5](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.4...@bloom-housing/public@4.1.3-alpha.5) (2022-04-05)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.1.3-alpha.4](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.3...@bloom-housing/public@4.1.3-alpha.4) (2022-04-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
+## [4.1.3-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.2...@bloom-housing/public@4.1.3-alpha.3) (2022-04-04)
+
+
+### Features
+
+* listing card title redesign, multiple tags possible ([#2531](https://github.com/bloom-housing/bloom/issues/2531)) ([2b795cb](https://github.com/bloom-housing/bloom/commit/2b795cb6c47c084937e996332d1583e9e5bcbc54))
+
+
+
+
+
+## [4.1.3-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.1...@bloom-housing/public@4.1.3-alpha.2) (2022-04-04)
+
+**Note:** Version bump only for package @bloom-housing/public
+
+
+
+
+
 ## [4.1.3-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/public@4.1.3-alpha.0...@bloom-housing/public@4.1.3-alpha.1) (2022-03-30)
 
 **Note:** Version bump only for package @bloom-housing/public
