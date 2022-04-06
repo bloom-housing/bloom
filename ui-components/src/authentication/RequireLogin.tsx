@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect } from "react"
+import React, { FunctionComponent, useContext, useEffect, useState } from "react"
 import { clearSiteAlertMessage, setSiteAlertMessage } from "../notifications/SiteAlert"
 import { NavigationContext } from "../config/NavigationContext"
 import { AuthContext } from "./AuthContext"
@@ -30,6 +30,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
 }) => {
   const { router } = useContext(NavigationContext)
   const { profile, initialStateLoaded } = useContext(AuthContext)
+  const [hasTerms, setHasTerms] = useState(false)
 
   // Parse just the pathname portion of the signInPath (in case we want to pass URL params)
   const [signInPathname] = signInPath.split("?")
@@ -47,6 +48,12 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       : true)
 
   useEffect(() => {
+    if (profile?.jurisdictions?.some((jurisdiction) => jurisdiction.partnerTerms)) {
+      setHasTerms(true)
+    }
+  }, [profile])
+
+  useEffect(() => {
     if (loginRequiredForPath && initialStateLoaded && !profile) {
       setSiteAlertMessage(signInMessage, "notice")
       void router.push(signInPath)
@@ -54,7 +61,7 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
       clearSiteAlertMessage("notice")
     }
 
-    if (termsPath && profile && !profile?.agreedToTermsOfService) {
+    if (termsPath && profile && !profile?.agreedToTermsOfService && hasTerms) {
       void router.push(termsPath)
     }
   }, [
@@ -65,9 +72,13 @@ const RequireLogin: FunctionComponent<RequireLoginProps> = ({
     signInPath,
     signInMessage,
     termsPath,
+    hasTerms,
   ])
 
-  if (loginRequiredForPath && (!profile || (termsPath && !profile.agreedToTermsOfService))) {
+  if (
+    loginRequiredForPath &&
+    (!profile || (hasTerms && termsPath && !profile.agreedToTermsOfService))
+  ) {
     return null
   }
 

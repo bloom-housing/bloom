@@ -157,11 +157,11 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       roles,
       leasingAgentInListings: leasingAgentInListings,
       jurisdictions: jurisdictions,
-      agreedToTermsOfService: true,
+      agreedToTermsOfService: user.agreedToTermsOfService,
     }
 
     return body
-  }, [getValues, listings, trigger])
+  }, [getValues, listings, trigger, user?.agreedToTermsOfService])
 
   const onInvite = async () => {
     const body = await createUserBody()

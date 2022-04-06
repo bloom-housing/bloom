@@ -39,7 +39,8 @@ const FormTerms = () => {
   }, [loadProfile, profile, userProfileService])
 
   const jurisdictionTerms = useMemo(() => {
-    return profile?.jurisdictions[0].partnerTerms
+    const jurisdiction = profile?.jurisdictions.find((jurisdiction) => jurisdiction.partnerTerms)
+    return jurisdiction ? jurisdiction.partnerTerms : ""
   }, [profile])
 
   return (
