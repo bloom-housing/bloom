@@ -324,7 +324,7 @@ describe("ListingsService", () => {
         .mockReturnValueOnce(mockInnerQueryBuilder)
         .mockReturnValueOnce(mockQueryBuilder)
 
-      await service.list({order: OrderParam.ASC})
+      await service.list({ order: OrderParam.ASC })
 
       const expectedOrderByArgument = {
         "listings.applicationDueDate": "ASC",

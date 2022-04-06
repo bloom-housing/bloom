@@ -5,10 +5,11 @@ import { ListingFilterParams } from "./listing-filter-params"
 import {
   ArrayMaxSize,
   IsArray,
-  IsEnum, IsIn,
+  IsEnum,
+  IsIn,
   IsOptional,
   IsString,
-  ValidateNested
+  ValidateNested,
 } from "class-validator"
 import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enum"
 import { OrderByFieldsEnum } from "../types/listing-orderby-enum"
