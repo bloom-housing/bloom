@@ -8,7 +8,7 @@ import { CSSTransition } from "react-transition-group"
 
 export type OverlayProps = {
   open?: boolean
-  ariaLabel?: string
+  ariaLabelledBy?: string
   ariaDescription?: string
   className?: string
   backdrop?: boolean
@@ -31,8 +31,8 @@ const OverlayInner = (props: OverlayProps) => {
   return (
     <div
       className={classNames.join(" ")}
-      role="dialog"
-      aria-labelledby={props.ariaLabel}
+      role="alertdialog"
+      aria-labelledby={props.ariaLabelledBy}
       aria-describedby={props.ariaDescription}
       onClick={(e) => {
         if (e.target === e.currentTarget) closeHandler()

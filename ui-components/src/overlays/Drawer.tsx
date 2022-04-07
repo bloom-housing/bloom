@@ -30,7 +30,7 @@ const Drawer = (props: DrawerProps) => {
 
   return (
     <Overlay
-      ariaLabel={props.ariaLabel || props.title}
+      ariaLabelledBy={props.ariaLabelledBy || props.title}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
@@ -39,7 +39,7 @@ const Drawer = (props: DrawerProps) => {
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
-          {props.title && <h1 className="drawer__title">{props.title}</h1>}
+          {props.title && <h1 className="drawer__title" id={props.ariaLabelledBy}>{props.title}</h1>}
           {props.headerTag && (
             <Tag
               pillStyle={true}

@@ -11,10 +11,13 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   slim?: boolean
 }
 
-const ModalHeader = (props: { title: string }) => (
+const ModalHeader = (props: { title: string, ariaLabelledBy?: string }) => (
+  <>
+  {console.log(props.title)}
   <header className="modal__inner">
-    <h1 className="modal__title">{props.title}</h1>
+    <h1 className="modal__title" id={props.ariaLabelledBy}>{props.title}</h1>
   </header>
+  </>
 )
 
 const ModalFooter = (props: { actions: React.ReactNode[] }) => (
@@ -30,16 +33,15 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
 export const Modal = (props: ModalProps) => {
   return (
     <Overlay
-      ariaLabel={props.ariaLabel || props.title}
-      aria-labelledby={props.ariaLabel || props.title}
+      ariaLabelledBy={props.ariaLabelledBy || props.title}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
     >
-      <div className="modal" role="alertdialog" id={props.title}>
-        <ModalHeader title={props.title} />
+      <div className="modal">
+        <ModalHeader title={props.title} ariaLabelledBy={props.ariaLabelledBy} />
 
         <section className="modal__inner">
           {typeof props.children === "string" ? (
