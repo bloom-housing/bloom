@@ -12,16 +12,17 @@ import {
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
-import { PaginatedApplication } from "@bloom-housing/backend-core/types"
+import { Listing, PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 import { UserStatus } from "../../lib/constants"
 
 const Applications = () => {
-  const { applicationsService, profile } = useContext(AuthContext)
+  const { applicationsService, listingsService, profile } = useContext(AuthContext)
   const [applications, setApplications] = useState<PaginatedApplication>()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState<Listing[]>([])
 
   useEffect(() => {
     if (profile) {
@@ -34,7 +35,6 @@ const Applications = () => {
         .list({ userId: profile.id })
         .then((apps) => {
           setApplications(apps)
-          setLoading(false)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
@@ -43,6 +43,29 @@ const Applications = () => {
         })
     }
   }, [profile, applicationsService])
+  let start = new Date().getTime()
+  useEffect(() => {
+    const listingsArr = async () => {
+      const listArr = []
+      for (const application of applications?.items) {
+        try {
+          const retrievedListing = await listingsService.retrieve({ id: application?.listing.id })
+          listArr.push(retrievedListing)
+        } catch (err) {
+          console.error(`Error fetching listing: ${err}`)
+        }
+      }
+      return listArr
+    }
+    if (applications?.items.length > 0) {
+      void listingsArr().then((results) => {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        start = new Date().getTime()
+        setListings(results)
+        setLoading(false)
+      })
+    }
+  }, [applications, listingsService])
 
   const noApplicationsSection = () => {
     return error ? (
@@ -65,22 +88,34 @@ const Applications = () => {
         </Head>
         <MetaTags title={t("nav.myApplications")} description="" />
         <section className="bg-gray-300 border-t border-gray-450">
-          <LoadingOverlay isLoading={loading && !applications?.items.length}>
-            <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
-              <DashBlocks>
-                <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+          <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
+            <DashBlocks>
+              <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
+                <LoadingOverlay
+                  isLoading={loading && !applications?.items?.length && !listings?.length}
+                >
                   <Fragment>
-                    {applications &&
-                      applications.items.length > 0 &&
-                      applications.items.map((application, index) => (
-                        <StatusItemWrapper key={index} application={application} />
-                      ))}
+                    test
+                    {applications?.items?.length > 0 &&
+                      listings?.length > 0 &&
+                      applications.items.map((application, index) => {
+                        console.log(new Date().getTime() - start)
+                        //temporary solution to test speed
+                        const currentListing = listings[index]
+                        return (
+                          <StatusItemWrapper
+                            key={index}
+                            application={application}
+                            listing={currentListing}
+                          />
+                        )
+                      })}
                   </Fragment>
-                  {applications?.items.length < 1 && !loading && noApplicationsSection()}
-                </DashBlock>
-              </DashBlocks>
-            </div>
-          </LoadingOverlay>
+                </LoadingOverlay>
+                {applications?.items.length < 1 && !loading && noApplicationsSection()}
+              </DashBlock>
+            </DashBlocks>
+          </div>
         </section>
       </Layout>
     </RequireLogin>
