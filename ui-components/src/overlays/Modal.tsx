@@ -30,6 +30,7 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
   </footer>
 )
 
+// NOTE: ModalProps does not have props.ariaLabelledyBy so why are we passing this?
 export const Modal = (props: ModalProps) => {
   return (
     <Overlay
