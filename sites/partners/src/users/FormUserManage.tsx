@@ -157,7 +157,7 @@ const FormUserManage = ({ mode, user, listings, onDrawerClose }: FormUserManageP
       roles,
       leasingAgentInListings: leasingAgentInListings,
       jurisdictions: jurisdictions,
-      agreedToTermsOfService: user.agreedToTermsOfService,
+      agreedToTermsOfService: user?.agreedToTermsOfService ?? false,
     }
 
     return body
