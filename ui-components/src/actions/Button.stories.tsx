@@ -53,7 +53,7 @@ export const standard = () => {
 
 export const small = () => (
   <Button size={AppearanceSizeType.small} onClick={handleClick}>
-    Purposeful Visual Test Failure
+    Small Button
   </Button>
 )
 
