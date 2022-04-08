@@ -29,7 +29,6 @@ const OverlayInner = (props: OverlayProps) => {
   if (typeof props.backdrop === "undefined" || props.backdrop) classNames.push("is-backdrop")
   if (props.className) classNames.push(props.className)
 
-  console.log(props)
   return (
     <div
       className={classNames.join(" ")}
