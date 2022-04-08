@@ -12,11 +12,13 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   slim?: boolean
 }
 
-const ModalHeader = (props: { title: string, uniqueId?: string }) => (
+const ModalHeader = (props: { title: string; uniqueId?: string }) => (
   <>
-  <header className="modal__inner">
-    <h1 className="modal__title" id={props.uniqueId}>{props.title}</h1>
-  </header>
+    <header className="modal__inner">
+      <h1 className="modal__title" id={props.uniqueId}>
+        {props.title}
+      </h1>
+    </header>
   </>
 )
 
