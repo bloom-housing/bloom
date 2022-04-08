@@ -7,6 +7,7 @@ import { ValidationsGroupsEnum } from "../../shared/types/validations-groups-enu
 import { AvailabilityFilterEnum, ListingFilterKeys } from "../types/listing-filter-keys-enum"
 import { ListingStatus } from "../types/listing-status-enum"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
+import { Region } from "../../property/types/region-enum"
 
 // add other listing filter params here
 export class ListingFilterParams extends BaseFilter {
@@ -249,6 +250,16 @@ export class ListingFilterParams extends BaseFilter {
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsString({ groups: [ValidationsGroupsEnum.default] })
   [ListingFilterKeys.neighborhood]?: string;
+
+  @Expose()
+  @ApiProperty({
+    enum: Object.keys(Region),
+    example: "eastside",
+    required: false,
+  })
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(Region, { groups: [ValidationsGroupsEnum.default] })
+  [ListingFilterKeys.region]?: Region;
 
   @Expose()
   @ApiProperty({

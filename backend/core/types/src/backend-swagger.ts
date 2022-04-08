@@ -4490,6 +4490,9 @@ export interface ListingFilterParams {
   neighborhood?: string
 
   /**  */
+  region?: EnumListingFilterParamsRegion
+
+  /**  */
   jurisdiction?: string
 
   /**  */
@@ -6373,6 +6376,9 @@ export interface ProgramUpdate {
 
 export interface Property {
   /**  */
+  region?: Region
+
+  /**  */
   units: Unit[]
 
   /**  */
@@ -6429,6 +6435,9 @@ export interface Property {
 
 export interface PropertyCreate {
   /**  */
+  region?: Region
+
+  /**  */
   buildingAddress: AddressUpdate
 
   /**  */
@@ -6475,6 +6484,9 @@ export interface PropertyCreate {
 }
 
 export interface PropertyUpdate {
+  /**  */
+  region?: Region
+
   /**  */
   id?: string
 
@@ -6797,6 +6809,13 @@ export enum EnumListingFilterParamsAvailability {
   "noAvailability" = "noAvailability",
   "waitlist" = "waitlist",
 }
+export enum EnumListingFilterParamsRegion {
+  "Downtown" = "Downtown",
+  "Eastside" = "Eastside",
+  "MidtownNewCenter" = "MidtownNewCenter",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
+}
 export enum EnumListingFilterParamsMarketingType {
   "Marketing" = "Marketing",
   "ComingSoon" = "ComingSoon",
@@ -6871,4 +6890,11 @@ export enum EnumProgramsFilterParamsComparison {
   ">=" = ">=",
   "<=" = "<=",
   "NA" = "NA",
+}
+export enum Region {
+  "Downtown" = "Downtown",
+  "Eastside" = "Eastside",
+  "Midtown - New Center" = "Midtown - New Center",
+  "Southwest" = "Southwest",
+  "Westside" = "Westside",
 }
