@@ -1,12 +1,14 @@
 # Styling 2nd Generation Components
 
-This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information is in the README for ui-components.)
+This covers preliminary documentation for the "2nd generation" UI components in the Bloom design system. (General styling information can be found in the README for ui-components.)
 
 First, we'll go over the what & why of the new component architecture, then we'll explain the process for converting a "1st gen" component to 2nd gen.
 
-## What is a 2nd-gen component?
+## What are Bloom Design Tokens?
 
-In this updated system, the Bloom design tokens are defined as [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (aka CSS Variables). These tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/global/tokens` folder.
+In this updated system, the Bloom design tokens are defined as [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (aka CSS Variables). They're values you can insert into (almost) every place you would put an actual property value in CSS.
+
+Bloom design tokens include colors, typography settings, sizes, borders, and so forth. They're located in the `ui-components/global/tokens` folder.
 
 For example, some colors in `tokens/colors.scss`:
 
@@ -24,7 +26,7 @@ and some font sizes in `tokens/fonts.scss`:
 --bloom-font-size-2xl: 1.5rem;
 ```
 
-Unlike Sass variables, Tailwind themes, or other methods of defining design tokens, CSS variables are resolved _at runtime_. In other words, they are evaluated and applied to the styling of the webpage by the browser itself. To use a CSS variable, use the `var` function within a property value:
+Unlike Sass variables, Tailwind theme configs, or other methods of defining design tokens, CSS variables are resolved _at runtime_. In other words, they are evaluated and applied to the styling of the webpage by the browser itself. To use a CSS variable, use the `var` function within a property value:
 
 ```css
 .my-selector {
@@ -34,6 +36,10 @@ Unlike Sass variables, Tailwind themes, or other methods of defining design toke
 ```
 
 You can even use `var` within the `style` attribute of an HTML tag as a sort of analog to utility classes (but proceed with caution!).
+
+Like many standard CSS properties, CSS Variables "cascade" through the tree where they're defined, so if you redefine a variable for one element, it will affect that element and its children…but not any siblings.
+
+### What is a 2nd-gen Component?
 
 In a 2nd-gen UI component, previous usage of Tailwind tokens/utility classes via the `@apply` directive is replaced by CSS variables—and in cases where tokens aren't required, "vanilla" CSS properties. We'll cover this process in the next section.
 
@@ -55,7 +61,7 @@ which would also utilize that same `--bloom-s3` design token (`0.75rem`).
 
 Like in many cases already through the UI component library, defining class names within the component's (S)CSS file is usually preferred over using numerous utility classes within the component's HTML/JSX.
 
-A 2nd-gen component may also define component-specific CSS variables which are "exported" if you will for easy customizabilty via a site-specific stylesheet. For example, the `PageHeader` component utilizes several component tokens like `--background-color` and `--title-font-size`. Customizing the component via these tokens is as simple as creating a new site-specific stylesheet:
+A 2nd-gen component will typically define component-specific CSS variables which are "exported" if you will for easy customizabilty via a site-specific stylesheet. For example, the `PageHeader` component utilizes several component tokens like `--background-color` and `--title-font-size`. Customizing the component via these tokens is as simple as creating a new site-specific stylesheet:
 
 ```css
 .page-header {
@@ -170,11 +176,11 @@ Other than the use of the Sass variable `$screen-sm` in a media query (unfortuna
 `@apply border-t; @apply border-gray-450` becomes `border-top: var(--bloom-border-1) solid var(--border-color)`  
 and so on.
 
-You'll notice `--border-color` is one of the new component-specific design tokens (which defaults to `--bloom-color-gray-450`).
+You'll notice `--border-color` is one of the new component-specific design tokens for `PageHeader` (which defaults to `--bloom-color-gray-450`).
 
 This conversion was also an opportunity to define a proper "inverse" variant style, which is triggered via a component prop, and inverse-specific design tokens are also used and can be redefined.
 
-### Updating component story
+### Updating Component Stories
 
 Take a look at `PageHeader.stories.tsx`, you'll see there's a few updates to the default export to reference the corresponding documentation MDX file, as well the badge to indicate it's a 2nd-gen component. We also add a little flag emoji to show up in the Storybook sidebar (while keeping the correct id):
 
@@ -193,3 +199,5 @@ export default {
   },
 }
 ```
+
+Corresponding `.docs.mdx` files can be added for components to explain component variants and the 2nd-gen styling API. We also have the ability to show React prop documentation through JSDoc comments on the TypeScript prop interfaces (not part of the 2nd-gen conversion process strictly speaking, but helpful nonetheless).
