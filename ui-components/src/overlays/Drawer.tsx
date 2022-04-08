@@ -43,7 +43,11 @@ const Drawer = (props: DrawerProps) => {
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
-          {props.title && <h1 className="drawer__title" id={uniqueId}>{props.title}</h1>}
+          {props.title && (
+            <h1 className="drawer__title" id={uniqueId}>
+              {props.title}
+            </h1>
+          )}
           {props.headerTag && (
             <Tag
               pillStyle={true}
