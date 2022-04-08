@@ -2,6 +2,7 @@ import React from "react"
 import "./Modal.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
+import { nanoid } from "nanoid"
 
 export interface ModalProps extends Omit<OverlayProps, "children"> {
   title: string
@@ -11,11 +12,11 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   slim?: boolean
 }
 
-const ModalHeader = (props: { title: string, ariaLabelledBy?: string }) => (
+const ModalHeader = (props: { title: string, uniqueId?: string }) => (
   <>
-  {console.log(props.title)}
+  {console.log(props.uniqueId)}
   <header className="modal__inner">
-    <h1 className="modal__title" id={props.ariaLabelledBy}>{props.title}</h1>
+    <h1 className="modal__title" id={props.uniqueId}>{props.title}</h1>
   </header>
   </>
 )
@@ -30,11 +31,12 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
   </footer>
 )
 
-// NOTE: ModalProps does not have props.ariaLabelledyBy so why are we passing this?
 export const Modal = (props: ModalProps) => {
+  const uniqueId = nanoid()
+  
   return (
     <Overlay
-      ariaLabelledBy={props.ariaLabelledBy || props.title}
+      ariaLabelledBy={uniqueId}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
@@ -42,7 +44,7 @@ export const Modal = (props: ModalProps) => {
       slim={props.slim}
     >
       <div className="modal">
-        <ModalHeader title={props.title} ariaLabelledBy={props.ariaLabelledBy} />
+        <ModalHeader title={props.title} uniqueId={uniqueId} />
 
         <section className="modal__inner">
           {typeof props.children === "string" ? (

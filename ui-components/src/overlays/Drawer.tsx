@@ -6,6 +6,7 @@ import { Tag } from "../text/Tag"
 import { AppearanceStyleType, AppearanceSizeType } from "../global/AppearanceTypes"
 import { AlertTypes } from "../notifications/alertTypes"
 import { AlertBox } from "../notifications"
+import { nanoid } from "nanoid"
 
 export enum DrawerSide {
   left = "left",
@@ -28,9 +29,11 @@ const Drawer = (props: DrawerProps) => {
   const drawerClasses = ["drawer"]
   if (props.className) drawerClasses.push(props.className)
 
+  const uniqueId = nanoid()
+
   return (
     <Overlay
-      ariaLabelledBy={props.ariaLabelledBy || props.title}
+      ariaLabelledBy={uniqueId}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
@@ -39,7 +42,7 @@ const Drawer = (props: DrawerProps) => {
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
-          {props.title && <h1 className="drawer__title" id={props.ariaLabelledBy}>{props.title}</h1>}
+          {props.title && <h1 className="drawer__title" id={uniqueId}>{props.title}</h1>}
           {props.headerTag && (
             <Tag
               pillStyle={true}
