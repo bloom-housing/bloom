@@ -75,7 +75,7 @@ These component-specific tokens are documented in new Markdown documentation fil
 
 By taking the time to analyze which global design tokens a component should employ, which component-specific tokens should be exported, and then documenting the styling API for each component, the ease of altering components or even the global design itself in a site-specific stylesheet is much cleaner and simpler.
 
-## Converting 1st-gen components to 2nd-gen
+## Converting 1st-gen Components to 2nd-gen
 
 Let's compare the `PageHeader` stylesheet before/after:
 
@@ -201,3 +201,11 @@ export default {
 ```
 
 Corresponding `.docs.mdx` files can be added for components to explain component variants and the 2nd-gen styling API. We also have the ability to show React prop documentation through JSDoc comments on the TypeScript prop interfaces (not part of the 2nd-gen conversion process strictly speaking, but helpful nonetheless).
+
+## The Future: a Possible Path to 3rd-gen?
+
+It's worth noting what we _didn't_ consider for this upgrade effort.
+
+As the [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) spec has matured and solidified in all evergreen browsers, many design systems are starting to migrate to using web component technology as the substrate, with "wrappers" generated for specific JS frameworks like React, Vue, Angular, etc. (plus they're completely usable directly within "vanilla" HTML). While web components can be authored completely vanilla without any framework or build process, lightweight libraries such as [Lit](https://lit.dev) have made web components DX rival "legacy" frameworks such as React. Component systems ranging from the open source [Shoelace](https://shoelace.style) to closed source [Nord Health](https://nordhealth.design/components/) show us the breadth of what's possible with this approach.
+
+However, porting Bloom components over to a pure web components toolchain (possibly using Lit) and then exporting React wrappers for use elsewhere seems like a bridge too far at this juncture, particularly since all `ui-components` consumers at present are only using React. The good news is: by migrating to our 2nd-gen styling API based on vanilla CSS techniques, it positions us to consider a web components-based solution farther down the road. While we don't have the ability to use [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM), [shadow parts](https://developer.mozilla.org/en-US/docs/Web/CSS/::part), and [slots](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots#adding_flexibility_with_slots) to aid in our component architecture, we are able to get pretty far simply by utilizing CSS variables and a close 1:1 convention between React props and CSS class-based variants.
