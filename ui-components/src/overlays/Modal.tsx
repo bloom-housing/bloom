@@ -41,6 +41,7 @@ export const Modal = (props: ModalProps) => {
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
+      role="alertdialog"
     >
       <div className="modal">
         <ModalHeader title={props.title} uniqueId={uniqueId} />

@@ -39,6 +39,7 @@ const Drawer = (props: DrawerProps) => {
       onClose={props.onClose}
       backdrop={props.backdrop}
       className={"has-drawer" + (props.direction == DrawerSide.left ? " is-direction-left" : "")}
+      role="dialog"
     >
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
