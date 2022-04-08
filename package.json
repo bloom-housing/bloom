@@ -42,6 +42,7 @@
     "dev:public": "concurrently \"yarn dev:backend\" \"yarn dev:app:public\"",
     "test:shared:helpers": "cd shared-helpers && yarn && yarn test",
     "test:shared:ui": "cd ui-components && yarn && yarn test",
+    "test:chromatic": "cd ui-components && yarn && chromatic",
     "test:shared:ui:a11y": "cd ui-components && yarn && yarn test:a11y",
     "test:backend:core:dbsetup": "cd backend/core && yarn db:migration:run && yarn db:seed",
     "test:backend:core": "cd backend/core && yarn test",

@@ -48,6 +48,7 @@
     "autoprefixer": "^10.3.4",
     "babel-loader": "^8.2.2",
     "babel-plugin-require-context-hook": "^1.0.0",
+    "chromatic": "^6.5.4",
     "dotenv": "^8.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.5.3",
