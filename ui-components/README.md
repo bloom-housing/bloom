@@ -44,6 +44,8 @@ To run our accessibility suite which leverages Storybook, from within `ui-compon
 yarn test:a11y
 ```
 
+Visual tests leveraging Storybook and Chromatic run on every PR. Clicking on the job links to the Chromatic dashboard where you can view the visual differences and accept changes.
+
 ## Tailwind
 
 - We are using the [Tailwind](https://v1.tailwindcss.com) framework to make use of their low-level utility library that styles components based on custom settings. We configure the settings in `tailwind.config`. Some styles live in a global folder, but for the most part our components are styled with isolated SCSS files.
