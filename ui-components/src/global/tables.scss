@@ -77,12 +77,94 @@ table {
 
     tbody td {
       @apply border-b;
-      @apply border-gray-450;
+      @apply border-gray-450; //HERE
     }
 
     td:last-child,
     th:last-child {
       text-align: right;
+    }
+  }
+
+  &.stacked-table {
+    .stacked-table-cell-container {
+      @screen md {
+        @apply flex;
+        @apply flex-col;
+      }
+      @apply w-full;
+
+      .stacked-table-cell {
+        @apply font-semibold;
+        @apply text-gray-750;
+        @apply text-base;
+      }
+
+      .stacked-table-subtext {
+        @apply text-sm;
+        @apply text-gray-700;
+        @apply pl-1;
+        @screen md {
+          @apply pl-0;
+        }
+      }
+
+      @apply pr-0;
+      @screen md {
+        @apply pr-3;
+      }
+    }
+
+    .stacked-table-header {
+      @apply px-0;
+      @apply text-base;
+      @apply text-gray-700;
+    }
+
+    thead {
+      @apply border-b;
+    }
+
+    td:last-child,
+    th:last-child {
+      text-align: right;
+      .stacked-table-cell-container {
+        @apply pr-0;
+      }
+    }
+  }
+
+  &.category-table {
+    thead {
+      height: 2rem;
+      @apply border-0;
+    }
+
+    .stacked-table-header {
+      @apply align-baseline;
+      @apply text-black;
+      @apply normal-case;
+      @apply px-0;
+      @apply pb-0;
+      @apply text-sm;
+    }
+
+    tbody td {
+      @apply border-0;
+    }
+
+    td:last-child,
+    th:last-child {
+      text-align: inherit;
+    }
+
+    .stacked-table-cell-container {
+      @apply w-auto;
+      .stacked-table-cell {
+        @apply text-base;
+        @apply text-black;
+        @apply font-normal;
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import { StackedTable } from "./StackedTable"
 export default {
   title: "Tables/StackedTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  excludeStories: ["responsiveTableRows", "responsiveTableHeaders"],
 }
 
 const basicTableHeaders = {
@@ -98,14 +99,14 @@ const basicTableRowsSubtext = [
   },
 ]
 
-const responsiveTableHeaders = {
+export const responsiveTableHeaders = {
   units: { name: "t.unitType" },
   availability: { name: "t.availability" },
   income: { name: "t.incomeRange" },
   rent: { name: "t.rent" },
 }
 
-const responsiveTableRows = [
+export const responsiveTableRows = [
   {
     units: { cellText: "Studio", cellSubText: "23 available", hideMobile: true },
     availability: { cellText: "23", cellSubText: "available" },
@@ -119,7 +120,9 @@ const responsiveTableRows = [
     rent: { cellText: "$1,295", cellSubText: "income" },
   },
 ]
+
 export const Basic = () => <StackedTable stackedData={basicTableRows} headers={basicTableHeaders} />
+
 export const BasicWithSubtext = () => (
   <StackedTable stackedData={basicTableRowsSubtext} headers={basicTableHeaders} />
 )
