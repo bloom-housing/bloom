@@ -46,7 +46,6 @@ const OverlayInner = (props: OverlayProps) => {
 }
 
 export const Overlay = (props: OverlayProps) => {
-  console.log('overlay props', props)
   const documentAvailable = typeof document !== "undefined"
   const overlayRoot = useState<Element | null>(
     documentAvailable ? document.querySelector("#__next") : null

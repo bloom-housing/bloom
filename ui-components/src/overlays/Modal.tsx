@@ -14,7 +14,6 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
 
 const ModalHeader = (props: { title: string, uniqueId?: string }) => (
   <>
-  {console.log(props.uniqueId)}
   <header className="modal__inner">
     <h1 className="modal__title" id={props.uniqueId}>{props.title}</h1>
   </header>
@@ -33,7 +32,7 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
 
 export const Modal = (props: ModalProps) => {
   const uniqueId = nanoid()
-  
+
   return (
     <Overlay
       ariaLabelledBy={uniqueId}
