@@ -7,6 +7,7 @@ import { t } from "../helpers/translator"
 
 export interface TableHeadersOptions {
   name: string
+  responsiveReplacement?: string
   className?: string
 }
 export interface TableHeaders {
@@ -28,9 +29,11 @@ export const Cell = (props: {
   className?: string
   colSpan?: number
   children: React.ReactNode
+  responsiveReplacement?: string | React.ReactNode
 }) => (
   <td
     data-label={props.headerLabel instanceof Object ? props.headerLabel?.name : props.headerLabel}
+    data-cell={props.responsiveReplacement}
     className={props.className || "p-5"}
     colSpan={props.colSpan}
   >
@@ -112,6 +115,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
       const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
+      console.log({ cell })
       return (
         <Cell
           key={uniqKey}
@@ -121,6 +125,9 @@ export const StandardTable = (props: StandardTableProps) => {
               : headers[colKey]
           }
           className={cellClass !== " " ? cellClass : undefined}
+          responsiveReplacement={
+            React.isValidElement(cell) && cell?.props.children[0].props.children // First child of first table cell
+          }
         >
           {props.translateData && typeof cell === "string" && cell !== ""
             ? getTranslationWithArguments(cell)

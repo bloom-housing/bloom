@@ -10,7 +10,7 @@ export default {
 
 const responsiveTableRows = [
   {
-    units: { cellText: "Studio", cellSubText: "23 available", hideMobile: true },
+    units: { cellText: "Studio", cellSubText: "23 available" },
     income: { cellText: "$0 to $6,854", cellSubText: "per month" },
     rent: { cellText: "30%", cellSubText: "income" },
   },
