@@ -73,18 +73,18 @@ jobs:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui
-  chromatic:
-    executor: standard-node
-    steps:
-      - restore_cache:
-          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
-      - run: yarn test:chromatic
   jest-ui-components-a11y:
     executor: puppeteer-node
     steps:
       - restore_cache:
           key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
       - run: yarn test:shared:ui:a11y
+  chromatic:
+    executor: standard-node
+    steps:
+      - restore_cache:
+          key: build-cache-{{ .Environment.CIRCLE_SHA1 }}
+      - run: yarn test:chromatic
   jest-backend:
     executor: standard-node
     steps:
@@ -146,6 +146,9 @@ workflows:
           requires:
             - setup
       - jest-ui-components-a11y:
+          requires:
+            - setup
+      - chromatic:
           requires:
             - setup
       - jest-backend:
