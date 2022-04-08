@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1-alpha.3](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.1-alpha.2...@bloom-housing/ui-components@4.2.1-alpha.3) (2022-04-08)
+
+
+### Features
+
+* new Envelope icon ([#2642](https://github.com/bloom-housing/bloom/issues/2642)) ([e2dbe06](https://github.com/bloom-housing/bloom/commit/e2dbe0688e389c8196665495cdde7edcada0cf9b))
+
+
+
+
+
 ## [4.2.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.1-alpha.1...@bloom-housing/ui-components@4.2.1-alpha.2) (2022-04-07)
 
 
