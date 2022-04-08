@@ -12,3 +12,8 @@ const listing = Object.assign({}, Archer) as any
 export const showMapWithPin = () => {
   return <ListingMap address={listing.buildingAddress} listingName={listing.name} />
 }
+
+// Wait on chromatic screenshot before map loads
+showMapWithPin.parameters = {
+  chromatic: { delay: 300 },
+}

@@ -26,7 +26,7 @@ function formatDateTime(date: Date, showTime?: boolean) {
 const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""
 let days = 10
-listing.applicationDueDate = dayjs().add(days, "days").format()
+listing.applicationDueDate = dayjs().year(2025).month(10).day(5).hour(10).minute(0)
 
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
