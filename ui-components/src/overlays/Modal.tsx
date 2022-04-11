@@ -10,6 +10,7 @@ export interface ModalProps extends Omit<OverlayProps, "children"> {
   hideCloseIcon?: boolean
   children?: React.ReactNode
   slim?: boolean
+  role?: string
 }
 
 const ModalHeader = (props: { title: string; uniqueId?: string }) => (
@@ -43,7 +44,7 @@ export const Modal = (props: ModalProps) => {
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
-      role="alertdialog"
+      role= {props.role ? props.role : "dialog"}
     >
       <div className="modal">
         <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
