@@ -148,6 +148,7 @@ describe("UserService", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         jurisdictions: [],
+        agreedToTermsOfService: true,
       }
       existingUser.roles = { user: existingUser }
 
@@ -184,6 +185,7 @@ describe("UserService", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         jurisdictions: [],
+        agreedToTermsOfService: true,
       }
 
       const user: UserInviteDto = {
@@ -219,6 +221,7 @@ describe("UserService", () => {
         createdAt: new Date(),
         updatedAt: new Date(),
         jurisdictions: [],
+        agreedToTermsOfService: true,
       }
       existingUser.roles = { user: existingUser }
 
