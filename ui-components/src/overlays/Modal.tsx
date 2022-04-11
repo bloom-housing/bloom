@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import "./Modal.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
@@ -33,11 +33,11 @@ const ModalFooter = (props: { actions: React.ReactNode[] }) => (
 )
 
 export const Modal = (props: ModalProps) => {
-  const uniqueId = nanoid()
+  const uniqueIdRef = useRef(nanoid())
 
   return (
     <Overlay
-      ariaLabelledBy={uniqueId}
+      ariaLabelledBy={uniqueIdRef.current}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
@@ -46,7 +46,7 @@ export const Modal = (props: ModalProps) => {
       role="alertdialog"
     >
       <div className="modal">
-        <ModalHeader title={props.title} uniqueId={uniqueId} />
+        <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
 
         <section className="modal__inner">
           {typeof props.children === "string" ? (

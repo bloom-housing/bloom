@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useRef } from "react"
 import "./Drawer.scss"
 import { Icon } from "../icons/Icon"
 import { Overlay, OverlayProps } from "./Overlay"
@@ -29,11 +29,11 @@ const Drawer = (props: DrawerProps) => {
   const drawerClasses = ["drawer"]
   if (props.className) drawerClasses.push(props.className)
 
-  const uniqueId = nanoid()
+  const uniqueIdRef = useRef(nanoid())
 
   return (
     <Overlay
-      ariaLabelledBy={uniqueId}
+      ariaLabelledBy={uniqueIdRef.current}
       ariaDescription={props.ariaDescription}
       open={props.open}
       onClose={props.onClose}
@@ -44,7 +44,7 @@ const Drawer = (props: DrawerProps) => {
       <div className={drawerClasses.join(" ")}>
         <header className="drawer__header">
           {props.title && (
-            <h1 className="drawer__title" id={uniqueId}>
+            <h1 className="drawer__title" id={uniqueIdRef.current}>
               {props.title}
             </h1>
           )}
