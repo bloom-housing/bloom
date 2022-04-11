@@ -44,7 +44,7 @@ export const Modal = (props: ModalProps) => {
       onClose={props.onClose}
       backdrop={props.backdrop}
       slim={props.slim}
-      role= {props.role ? props.role : "dialog"}
+      role={props.role ? props.role : "dialog"}
     >
       <div className="modal">
         <ModalHeader title={props.title} uniqueId={uniqueIdRef.current} />
