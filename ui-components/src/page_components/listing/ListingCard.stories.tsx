@@ -1,9 +1,7 @@
-import Button from "../../actions/Button"
 import LinkButton from "../../actions/LinkButton"
-import Icon, { IconFillColors } from "../../icons/Icon"
+import Icon from "../../icons/Icon"
 import * as React from "react"
 import { ListingCard } from "./ListingCard"
-import { Meta, ArgsTable } from "@storybook/addon-docs/blocks"
 
 export default {
   title: "Listing/ListingCard",
@@ -31,10 +29,6 @@ const standardTableProps = {
     },
   ],
   responsiveCollapse: true,
-}
-
-{
-  /* <ArgsTable of={ListingCard} /> */
 }
 
 export const WithStandardTable = () => {
