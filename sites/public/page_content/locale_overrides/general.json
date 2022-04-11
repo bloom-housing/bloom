@@ -4,7 +4,8 @@
     "heroText": "Detroit Home Connect is a place for you to find housing that you can afford based on your household needs."
   },
   "nav": {
-    "siteTitle": "Detroit Home Connect"
+    "siteTitle": "Detroit Home Connect",
+    "rentals": "Rentals"
   },
   "region": {
     "name": "Detroit"

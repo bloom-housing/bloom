@@ -1,6 +1,15 @@
 import React, { useState } from "react"
 import Head from "next/head"
-import { AlertBox, Hero, t, SiteAlert } from "@bloom-housing/ui-components"
+import Link from "next/link"
+import {
+  AlertBox,
+  Hero,
+  t,
+  SiteAlert,
+  ActionBlock,
+  LinkButton,
+  Icon,
+} from "@bloom-housing/ui-components"
 import Layout from "../layouts/application"
 import { ConfirmationModal } from "../src/ConfirmationModal"
 import { MetaTags } from "../src/MetaTags"
@@ -21,6 +30,8 @@ import {
 } from "@bloom-housing/ui-components/src/helpers/regionNeighborhoodMap"
 
 export default function Home({ latestListings }) {
+  const showLatestListings = false // Disabled for now
+
   const blankAlertInfo = {
     alertMessage: null,
     alertType: null,
@@ -32,12 +43,9 @@ export default function Home({ latestListings }) {
 
   const heroInset: React.ReactNode = (
     <>
-      <a href="/listings" className="hero__button__first hero__button">
-        {t("welcome.seeRentalListings")}
-      </a>
-      <a href="/eligibility/welcome" className="hero__button__second hero__button">
-        {t("welcome.findRentalsForMe")}
-      </a>
+      <Link href="/listings">
+        <a className="hero__button">{t("welcome.seeRentalListings")}</a>
+      </Link>
     </>
   )
 
@@ -92,8 +100,41 @@ export default function Home({ latestListings }) {
           {alertInfo.alertMessage}
         </AlertBox>
       )}
-      <Hero title={heroTitle} backgroundImage={"/images/hero.png"} heroInset={heroInset} />
-      {latestListings && latestListings.items && (
+      <Hero
+        title={heroTitle}
+        backgroundImage={"/images/hero.png"}
+        heroInset={heroInset}
+        innerClassName="bg-white bg-opacity-90 max-w-2xl mx-auto p-8 rounded-xl"
+      >
+        <p className="max-w-md mx-auto">
+          Your resource to find income-restricted multi-family housing and apartments.
+        </p>
+      </Hero>
+      <div className="homepage-extra">
+        <div className="action-blocks mt-4 mb-4 w-full">
+          <ActionBlock
+            className="flex-1 has-bold-header"
+            header={t("welcome.signUp")}
+            icon={<Icon size="3xl" symbol="mailThin" />}
+            actions={[
+              <LinkButton key={"sign-up"} href={"#"}>
+                {t("welcome.signUpToday")}
+              </LinkButton>,
+            ]}
+          />
+          <ActionBlock
+            className="flex-1 has-bold-header"
+            header={t("welcome.seeMoreOpportunitiesTruncated")}
+            icon={<Icon size="3xl" symbol="building" />}
+            actions={[
+              <LinkButton href="/additional-resources" key={"additional-resources"}>
+                {t("welcome.viewAdditionalHousingTruncated")}
+              </LinkButton>,
+            ]}
+          />
+        </div>
+      </div>
+      {showLatestListings && latestListings?.items && (
         <HorizontalScrollSection
           title={t("welcome.latestListings")}
           subtitle={getLastUpdatedString(latestListings.items)}
