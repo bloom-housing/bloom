@@ -23,8 +23,6 @@ const OverlayInner = (props: OverlayProps) => {
     if (props.onClose) props.onClose()
   }
 
-  console.log(props.role)
-
   useKeyPress("Escape", () => closeHandler())
 
   const classNames = ["fixed-overlay"]
