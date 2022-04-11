@@ -12,27 +12,25 @@ export interface StackedTableProps {
   headers: TableHeaders
   headersHiddenDesktop?: string[]
   stackedData?: Record<string, StackedTableRow>[]
+  categories?: boolean
   className?: string
 }
 
 const StackedTable = (props: StackedTableProps) => {
-  const tableClasses = ["base", props.className]
+  const tableClasses = ["base", "stacked-table", props.className]
   const modifiedData: Record<string, React.ReactNode>[] = []
-  const cellTextClass = "font-semibold text-gray-750"
-  const cellSubtextClass = "text-sm text-gray-700"
+
   props.stackedData?.forEach((dataRow) => {
     const dataCell = Object.keys(dataRow).reduce((acc, item) => {
       acc[item] = (
         <div
-          className={`md:flex md:flex-col w-1/2 md:w-full ${
+          className={`stacked-table-cell-container ${
             props.headersHiddenDesktop?.includes(item) && "md:hidden"
           }`}
         >
-          <span className={`${cellTextClass}`}>{dataRow[item].cellText}</span>
+          <span className={"stacked-table-cell"}>{dataRow[item].cellText}</span>
           <span
-            className={`pl-1 md:pl-0 ${
-              dataRow[item].hideMobile && "hidden md:block"
-            } ${cellSubtextClass}`}
+            className={`stacked-table-subtext  ${dataRow[item].hideMobile && "hidden md:block"} `}
           >
             {dataRow[item].cellSubText}
           </span>
@@ -53,9 +51,7 @@ const StackedTable = (props: StackedTableProps) => {
       acc[headerKey] = props.headers[headerKey]
       tempHeader = {
         name: tempHeader["name"] ?? tempHeader,
-        className: `${
-          tempHeader["className"] && tempHeader["className"]
-        } px-0 text-base text-gray-700 border-b`,
+        className: `${tempHeader["className"] && tempHeader["className"]} stacked-table-header`,
       }
     }
     acc[headerKey] = tempHeader
@@ -68,7 +64,6 @@ const StackedTable = (props: StackedTableProps) => {
       data={modifiedData}
       className={tableClasses.join(" ")}
       responsiveCollapse={true}
-      cellClassName={"py-3 px-0"}
     />
   )
 }

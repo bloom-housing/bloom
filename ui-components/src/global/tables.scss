@@ -1,3 +1,61 @@
+/* Hat tip to this CSS solution:
+https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
+
+//@screen md
+@media screen and (max-width: 767px) {
+  table.responsive-collapse {
+    thead {
+      @apply hidden;
+    }
+
+    tr {
+      @apply block;
+      @apply mb-6;
+    }
+
+    tr:nth-of-type(even) {
+      background: inherit;
+    }
+
+    td:nth-of-type(even) {
+      @apply bg-primary-lighter;
+    }
+
+    td {
+      @apply block;
+      @apply text-right;
+      border: 0px;
+      display: flex;
+    }
+
+    td:before {
+      @apply font-bold;
+      @apply uppercase;
+      content: attr(data-label);
+      text-align: left;
+      width: 50%;
+    }
+
+    td:last-child {
+      @apply border-b-0;
+    }
+  }
+  table.base {
+    td:nth-of-type(even) {
+      background: transparent;
+    }
+    tbody td {
+      @apply border-0;
+    }
+  }
+
+  tr.group-reserved td {
+    @apply border-l-8;
+    @apply border-solid;
+    @apply border-accent-warm;
+  }
+}
+
 table {
   @apply text-gray-750;
 
@@ -77,12 +135,158 @@ table {
 
     tbody td {
       @apply border-b;
-      @apply border-gray-450;
+      @apply border-gray-450; //HERE
     }
 
     td:last-child,
     th:last-child {
       text-align: right;
+    }
+  }
+
+  &.stacked-table {
+    .stacked-table-cell-container {
+      @screen md {
+        @apply flex;
+        @apply flex-col;
+      }
+      @apply w-full;
+      @apply py-3;
+      @apply px-0;
+
+      .stacked-table-cell {
+        @apply font-semibold;
+        @apply text-gray-750;
+        @apply text-base;
+      }
+
+      .stacked-table-subtext {
+        @apply text-sm;
+        @apply text-gray-700;
+        @apply pl-1;
+        @apply font-normal;
+        @screen md {
+          @apply pl-0;
+        }
+      }
+
+      @apply pr-0;
+      @screen md {
+        @apply pr-3;
+      }
+    }
+
+    .stacked-table-header {
+      @apply px-0;
+      @apply text-base;
+      @apply text-gray-700;
+    }
+
+    thead {
+      @apply border-b;
+    }
+
+    td:last-child,
+    th:last-child {
+      text-align: right;
+      .stacked-table-cell-container {
+        @apply pr-0;
+      }
+    }
+  }
+
+  &.category-table {
+    thead {
+      height: 2rem;
+      @apply border-0;
+    }
+
+    .stacked-table-header {
+      @apply align-baseline;
+      @apply text-black;
+      @apply normal-case;
+      @apply px-0;
+      @apply pb-0;
+      @apply text-sm;
+
+      @screen md {
+        @apply py-3;
+      }
+      @apply py-0;
+    }
+
+    td:before {
+      @apply align-baseline;
+      @apply text-black;
+      @apply normal-case;
+      @apply px-0;
+      @apply pb-0;
+      @apply text-sm;
+      @apply pl-2;
+      @apply font-normal;
+    }
+
+    tr {
+      td:first-child:before {
+        @apply pl-0;
+        @apply font-semibold;
+      }
+    }
+
+    td {
+      @md {
+        @apply py-3;
+      }
+      @apply py-0;
+    }
+
+    tbody td {
+      @apply border-0;
+    }
+
+    td:last-child,
+    th:last-child {
+      text-align: inherit;
+    }
+
+    .stacked-table-cell-container {
+      @apply w-auto;
+      @apply flex;
+      @apply flex-col;
+      @apply items-start;
+
+      @screen md {
+        @apply p-0;
+      }
+      @apply py-1;
+      .stacked-table-cell {
+        @screen md {
+          @apply text-base;
+        }
+        @apply text-sm;
+        @apply text-black;
+        @apply font-normal;
+      }
+      .stacked-table-subtext {
+        @apply pl-0;
+      }
+    }
+
+    tr {
+      td:first-child {
+        .stacked-table-cell:first-child {
+          @screen md {
+            display: block;
+          }
+          display: none;
+        }
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      td:first-child:before {
+        content: attr(data-cell);
+      }
     }
   }
 }
@@ -118,64 +322,6 @@ tr.group-reserved td:first-of-type {
   @apply border-l-8;
   @apply border-solid;
   @apply border-accent-warm;
-}
-
-/* Hat tip to this CSS solution:
-https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
-
-//@screen md
-@media screen and (max-width: 767px) {
-  table.responsive-collapse {
-    thead {
-      @apply hidden;
-    }
-
-    tr {
-      @apply block;
-      @apply mb-6;
-    }
-
-    tr:nth-of-type(even) {
-      background: inherit;
-    }
-
-    td:nth-of-type(even) {
-      @apply bg-primary-lighter;
-    }
-
-    td {
-      @apply block;
-      @apply text-right;
-      border: 0px;
-      display: flex;
-    }
-
-    td:before {
-      @apply font-bold;
-      @apply uppercase;
-      content: attr(data-label);
-      text-align: left;
-      width: 50%;
-    }
-
-    td:last-child {
-      @apply border-b-0;
-    }
-  }
-  table.base {
-    td:nth-of-type(even) {
-      background: transparent;
-    }
-    tbody td {
-      @apply border-0;
-    }
-  }
-
-  tr.group-reserved td {
-    @apply border-l-8;
-    @apply border-solid;
-    @apply border-accent-warm;
-  }
 }
 
 .table__thumbnail img {
