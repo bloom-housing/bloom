@@ -1,11 +1,12 @@
 import * as React from "react"
-import { TableHeaders } from "./StandardTable"
+import { StandardTableData, TableHeaders } from "./StandardTable"
 import { MinimalTable } from "./MinimalTable"
 
 export interface StackedTableRow {
   cellText: string
   cellSubText?: string
   hideMobile?: boolean
+  responsiveReplacement?: string
 }
 
 export interface StackedTableProps {
@@ -18,24 +19,27 @@ export interface StackedTableProps {
 
 const StackedTable = (props: StackedTableProps) => {
   const tableClasses = ["base", "stacked-table", props.className]
-  const modifiedData: Record<string, React.ReactNode>[] = []
+  const modifiedData: StandardTableData = []
 
   props.stackedData?.forEach((dataRow) => {
     const dataCell = Object.keys(dataRow).reduce((acc, item) => {
-      acc[item] = (
-        <div
-          className={`stacked-table-cell-container ${
-            props.headersHiddenDesktop?.includes(item) && "md:hidden"
-          }`}
-        >
-          <span className={"stacked-table-cell"}>{dataRow[item].cellText}</span>
-          <span
-            className={`stacked-table-subtext  ${dataRow[item].hideMobile && "hidden md:block"} `}
+      acc[item] = {
+        content: (
+          <div
+            className={`stacked-table-cell-container ${
+              props.headersHiddenDesktop?.includes(item) && "md:hidden"
+            }`}
           >
-            {dataRow[item].cellSubText}
-          </span>
-        </div>
-      )
+            <span className={"stacked-table-cell"}>{dataRow[item].cellText}</span>
+            <span
+              className={`stacked-table-subtext  ${dataRow[item].hideMobile && "hidden md:block"} `}
+            >
+              {dataRow[item].cellSubText}
+            </span>
+          </div>
+        ),
+        responsiveReplacement: dataRow[item].cellText,
+      }
       return acc
     }, {})
     modifiedData.push(dataCell)

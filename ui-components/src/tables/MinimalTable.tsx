@@ -1,11 +1,11 @@
 import * as React from "react"
-import { TableHeaders, StandardTable } from "./StandardTable"
+import { TableHeaders, StandardTable, StandardTableData } from "./StandardTable"
 
 export interface MinimalTableProps {
   draggable?: boolean
   setData?: (data: unknown[]) => void
   headers: TableHeaders
-  data?: Record<string, React.ReactNode>[]
+  data?: StandardTableData
   flushLeft?: boolean
   flushRight?: boolean
   responsiveCollapse?: boolean

@@ -17,14 +17,14 @@ const headers = {
 
 const data = [
   {
-    name: "Jim Halpert",
-    relationship: "Husband",
-    dob: "05/01/1985",
+    name: { content: "Jim Halpert" },
+    relationship: { content: "Husband" },
+    dob: { content: "05/01/1985" },
   },
   {
-    name: "Michael Scott",
-    relationship: "Friend",
-    dob: "05/01/1975",
+    name: { content: "Michael Scott" },
+    relationship: { content: "Friend" },
+    dob: { content: "05/01/1975" },
   },
 ]
 

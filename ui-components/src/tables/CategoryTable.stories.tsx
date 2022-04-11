@@ -11,7 +11,7 @@ export default {
 const responsiveTableRows = [
   {
     units: { cellText: "Studio", cellSubText: "23 available" },
-    income: { cellText: "$0 to $6,854", cellSubText: "per month" },
+    income: { cellText: "Up to $6,854", cellSubText: "per month" },
     rent: { cellText: "30%", cellSubText: "income" },
   },
   {
@@ -23,7 +23,7 @@ const responsiveTableRows = [
 
 const responsiveTableHeaders: TableHeaders = {
   units: { name: "t.unitType" },
-  income: { name: "t.incomeRange" },
+  income: { name: "t.income" },
   rent: { name: "t.rent" },
 }
 

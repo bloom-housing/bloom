@@ -45,6 +45,13 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
   return <span className="table__thumbnail">{props.children}</span>
 }
 
+export type StandardTableCell = {
+  content: React.ReactNode
+  responsiveReplacement?: string
+}
+
+export type StandardTableData = Record<string, StandardTableCell>[]
+
 export interface StandardTableProps {
   draggable?: boolean
   setData?: (data: unknown[]) => void
@@ -56,8 +63,6 @@ export interface StandardTableProps {
   translateData?: boolean
   id?: string
 }
-
-export type StandardTableData = Record<string, React.ReactNode>[] | undefined
 
 const headerName = (header: string | TableHeadersOptions) => {
   if (typeof header === "string") {
@@ -102,20 +107,19 @@ export const StandardTable = (props: StandardTableProps) => {
     )
   }
 
-  const body = tableData?.map((row: Record<string, React.ReactNode>, dataIndex) => {
+  const body = tableData?.map((row, dataIndex) => {
     const rowKey = row["id"]
-      ? `row-${row["id"] as string}`
+      ? `row-${row["id"].content as string}`
       : process.env.NODE_ENV === "test"
       ? `standardrow-${dataIndex}`
       : nanoid()
 
     const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
-      const cell = row[colKey]
+      const cell = row[colKey].content
 
       const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
-      console.log({ cell })
       return (
         <Cell
           key={uniqKey}
@@ -125,9 +129,7 @@ export const StandardTable = (props: StandardTableProps) => {
               : headers[colKey]
           }
           className={cellClass !== " " ? cellClass : undefined}
-          responsiveReplacement={
-            React.isValidElement(cell) && cell?.props.children[0].props.children // First child of first table cell
-          }
+          responsiveReplacement={row[colKey]?.responsiveReplacement}
         >
           {props.translateData && typeof cell === "string" && cell !== ""
             ? getTranslationWithArguments(cell)
@@ -183,11 +185,7 @@ export const StandardTable = (props: StandardTableProps) => {
     tableClasses.push(props.tableClassName)
   }
 
-  const reorder = (
-    list: Record<string, React.ReactNode>[] | undefined,
-    startIndex: number,
-    endIndex: number
-  ) => {
+  const reorder = (list: StandardTableData | undefined, startIndex: number, endIndex: number) => {
     if (!list) return
 
     const result = Array.from(list)
