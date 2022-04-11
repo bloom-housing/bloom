@@ -16,11 +16,7 @@ import {
   LoadingOverlay,
   AlertBox,
 } from "@bloom-housing/ui-components"
-import {
-  useApplicationsData,
-  useSingleListingData,
-  useFlaggedApplicationsList,
-} from "../../../../lib/hooks"
+import { useSingleListingData, useFlaggedApplicationsList } from "../../../../lib/hooks"
 import { ApplicationSecondaryNav } from "../../../../src/applications/ApplicationSecondaryNav"
 import Layout from "../../../../layouts"
 import { useForm } from "react-hook-form"
@@ -31,6 +27,7 @@ import {
   Application,
   EnumApplicationsApiExtraModelOrder,
   EnumApplicationsApiExtraModelOrderBy,
+  PaginationMeta,
 } from "@bloom-housing/backend-core/types"
 
 type ApplicationsListSortOptions = {
@@ -46,11 +43,14 @@ const ApplicationsList = () => {
   const [gridColumnApi, setGridColumnApi] = useState<ColumnApi | null>(null)
 
   /* Grid Data */
-  const [applications, setApplications] = useState<Application[]>()
-  const [unfilteredApplications, setUnfilteredApplications] = useState<Application[]>()
+  const [applications, setApplications] = useState<Application[] | null>()
+  const [appsError, setAppsError] = useState()
+  const [appsMeta, setAppsMeta] = useState<PaginationMeta | null>()
+  const [appsLoading, setAppsLoading] = useState<boolean>(true)
 
   /* Filter input */
   const [delayedFilterValue, setDelayedFilterValue] = useState("")
+  const [validSearch, setValidSearch] = useState<boolean>(true)
 
   /* Pagination */
   const [itemsPerPage, setItemsPerPage] = useState<number>(AG_PER_PAGE_OPTIONS[0])
@@ -68,15 +68,6 @@ const ApplicationsList = () => {
 
   /* Data Fetching */
   const listingId = router.query.id as string
-  const { appsData, appsLoading } = useApplicationsData(
-    currentPage,
-    itemsPerPage,
-    listingId,
-    delayedFilterValue,
-    sortOptions.orderBy,
-    sortOptions.order
-  )
-  const appsMeta = appsData?.meta
   const { listingDto } = useSingleListingData(listingId)
   const countyCode = listingDto?.countyCode
   const listingName = listingDto?.name
@@ -85,33 +76,70 @@ const ApplicationsList = () => {
     page: 1,
     limit: 1,
   })
+  useEffect(() => {
+    const queryParams = new URLSearchParams()
+    queryParams.append("listingId", listingId)
+    queryParams.append("page", currentPage.toString())
+    queryParams.append("limit", itemsPerPage.toString())
+    if (delayedFilterValue) {
+      queryParams.append("search", delayedFilterValue)
+    }
+    if (sortOptions.orderBy) {
+      queryParams.append("orderBy", delayedFilterValue)
+      queryParams.append("order", sortOptions.order ?? EnumApplicationsApiExtraModelOrder.ASC)
+    }
+    const params = {
+      listingId,
+      page: currentPage,
+      limit: itemsPerPage,
+    }
+    if (delayedFilterValue) {
+      Object.assign(params, { search: delayedFilterValue })
+    }
+    if (sortOptions.orderBy) {
+      Object.assign(params, { orderBy: sortOptions.orderBy, order: sortOptions.order ?? "ASC" })
+    }
+    const fetchData = async () => {
+      setAppsLoading(true)
+      const appData = await applicationsService.list(params)
+      if (appData) {
+        setApplications(appData?.items)
+        setAppsMeta(appData?.meta)
+        setAppsLoading(false)
+      }
+    }
+    fetchData().catch((e) => {
+      setAppsError(e.response.data.error)
+      setAppsLoading(false)
+    })
+  }, [
+    applicationsService,
+    currentPage,
+    delayedFilterValue,
+    itemsPerPage,
+    listingId,
+    sortOptions.order,
+    sortOptions.orderBy,
+  ])
 
   /* Data Filtering */
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, watch } = useForm()
   const filterField = watch("filter-input", "")
   const fetchFilteredResults = (value: string) => {
-    setDelayedFilterValue(value)
+    if (value.length === 0 || value.length > 2) {
+      setDelayedFilterValue(value)
+      setValidSearch(true)
+    } else {
+      setDelayedFilterValue("")
+      setValidSearch(false)
+    }
   }
+  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
   useEffect(() => {
     setCurrentPage(1)
     debounceFilter.current(filterField)
   }, [filterField])
-  const debounceFilter = useRef(debounce((value: string) => fetchFilteredResults(value), 1000))
-  useEffect(() => {
-    if (delayedFilterValue.length === 0 && appsData) {
-      setUnfilteredApplications(appsData.items)
-    }
-  }, [appsData, delayedFilterValue.length])
-
-  //Update grid if valid search length
-  useEffect(() => {
-    if (filterField.length > 2) {
-      setApplications(appsData?.items || [])
-    } else {
-      setApplications(unfilteredApplications)
-    }
-  }, [appsData, filterField.length, unfilteredApplications])
 
   /* Pagination */
   // reset page to 1 when user change limit
@@ -123,7 +151,6 @@ const ApplicationsList = () => {
   // Load a table state on initial render & pagination change (because the new data comes from the API)
   useEffect(() => {
     const savedColumnState = sessionStorage.getItem(COLUMN_STATE_KEY)
-
     if (gridColumnApi && savedColumnState) {
       const parsedState: ColumnState[] = JSON.parse(savedColumnState)
 
@@ -161,7 +188,6 @@ const ApplicationsList = () => {
       const fileLink = document.createElement("a")
       fileLink.setAttribute("download", `applications-${listingId}-${dateString}.csv`)
       fileLink.href = URL.createObjectURL(blob)
-
       fileLink.click()
     } catch (err) {
       setCsvExportError(true)
@@ -225,14 +251,14 @@ const ApplicationsList = () => {
   const maxHouseholdSize = useMemo(() => {
     let max = 1
 
-    appsData?.items.forEach((item) => {
+    applications?.forEach((item) => {
       if (item.householdSize > max) {
         max = item.householdSize
       }
     })
 
     return max < 6 ? max : 6
-  }, [appsData])
+  }, [applications])
 
   const columnDefs = useMemo(() => {
     return getColDefs(maxHouseholdSize, countyCode)
@@ -249,8 +275,7 @@ const ApplicationsList = () => {
     },
     suppressNoRowsOverlay: appsLoading,
   }
-  if (!applications) return null
-
+  if (!applications || appsError) return null
   return (
     <Layout>
       <Head>
@@ -277,7 +302,7 @@ const ApplicationsList = () => {
                 <Field name="filter-input" register={register} placeholder={t("t.filter")} />
               </div>
               <div className="mt-2">
-                {[1, 2].includes(filterField.length) && (
+                {!validSearch && (
                   <AlertBox type="notice">Enter at least 3 characters to search</AlertBox>
                 )}
               </div>
@@ -297,9 +322,8 @@ const ApplicationsList = () => {
                 </Button>
               </div>
             </div>
-
             <div className="applications-table mt-5">
-              <LoadingOverlay isLoading={appsLoading && filterField.length > 2}>
+              <LoadingOverlay isLoading={appsLoading}>
                 <AgGridReact
                   onGridReady={onGridReady}
                   gridOptions={gridOptions}
