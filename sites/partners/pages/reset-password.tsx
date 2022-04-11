@@ -41,7 +41,7 @@ const ResetPassword = () => {
         setRequestError(`${t(`authentication.forgotPassword.errors.${data.message}`)}`)
       } else {
         console.error(err)
-        setRequestError(`${t("authentication.forgotPassword.errors.generic")}`)
+        setRequestError(`${t("account.settings.alerts.genericError")}`)
       }
     }
   }

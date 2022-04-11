@@ -35,6 +35,18 @@ Cypress.Commands.add("getByTestId", (testId) => {
   return cy.get(`[data-test-id="${testId}"]`)
 })
 
+Cypress.Commands.add("loginAndAcceptTerms", () => {
+  cy.visit("/")
+  cy.fixture("user").then((user) => {
+    cy.get("input#email").type(user.email)
+    cy.get("input#password").type(user.password)
+    cy.get(".button").contains("Sign In").click()
+    cy.getByTestId("agree").check()
+    cy.getByTestId("form-submit").click()
+    cy.contains("Listings")
+  })
+})
+
 Cypress.Commands.add("login", () => {
   cy.visit("/")
   cy.fixture("user").then((user) => {

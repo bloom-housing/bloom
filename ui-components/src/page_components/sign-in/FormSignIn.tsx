@@ -12,9 +12,25 @@ import {
 } from "@bloom-housing/ui-components"
 import type { UseFormMethods } from "react-hook-form"
 import { NavigationContext } from "../../config/NavigationContext"
-import { NetworkStatus } from "@bloom-housing/shared-helpers"
+import { AlertTypes } from "../../notifications/alertTypes"
 
 export type NetworkErrorDetermineError = (status: number, error: Error) => void
+
+export type NetworkStatusType = AlertTypes
+
+export type NetworkErrorReset = () => void
+
+export type NetworkStatusContent = {
+  title: string
+  description: string
+  error?: boolean
+} | null
+
+export type NetworkStatus = {
+  content: NetworkStatusContent
+  type?: NetworkStatusType
+  reset: NetworkErrorReset
+}
 
 export type FormSignInProps = {
   control: FormSignInControl

@@ -577,8 +577,8 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
           )}
           <Dropzone
             id="listing-paper-application-upload"
-            label="Upload File"
-            helptext="Select PDF file"
+            label={t("t.uploadFile")}
+            helptext={t("listings.pdfHelperText")}
             uploader={pdfUploader}
             accept="application/pdf"
             progress={progressValue}

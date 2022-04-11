@@ -4069,6 +4069,9 @@ export interface User {
   phoneNumberVerified?: boolean
 
   /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
   hitConfirmationURL?: Date
 }
 
@@ -4181,6 +4184,9 @@ export interface UserBasic {
   phoneNumberVerified?: boolean
 
   /**  */
+  agreedToTermsOfService: boolean
+
+  /**  */
   hitConfirmationURL?: Date
 }
 
@@ -4283,6 +4289,9 @@ export interface UserUpdate {
 
   /**  */
   phoneNumberVerified?: boolean
+
+  /**  */
+  agreedToTermsOfService: boolean
 
   /**  */
   hitConfirmationURL?: Date
@@ -4398,6 +4407,9 @@ export interface UserProfileUpdate {
 
   /**  */
   phoneNumber?: string
+
+  /**  */
+  agreedToTermsOfService: boolean
 }
 
 export interface JurisdictionCreate {
