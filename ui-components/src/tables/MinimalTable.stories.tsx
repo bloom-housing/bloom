@@ -1,12 +1,13 @@
 import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
-import { TableThumbnail } from "./StandardTable"
+import { StandardTableData, TableThumbnail } from "./StandardTable"
 import { preferenceData, preferenceHeaders } from "./StandardTable.stories"
 
 export default {
   title: "Tables/MinimalTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  component: MinimalTable,
 }
 
 const headers = {
@@ -37,18 +38,26 @@ while (i > 0) {
 
 export const Default = () => <MinimalTable headers={headers} data={data} />
 
+export const Responsive = () => (
+  <MinimalTable headers={headers} data={data} responsiveCollapse={true} />
+)
+
 const headersWithImage = { image: "Image", ...headers }
-const dataWithImage = [...data] as any
-dataWithImage[0].image = (
-  <TableThumbnail>
-    <img src="/images/listing.jpg" alt="listing picture" />
-  </TableThumbnail>
-)
-dataWithImage[1].image = (
-  <TableThumbnail>
-    <img src="/images/logo_glyph.svg" alt="site logo" />
-  </TableThumbnail>
-)
+const dataWithImage = [...data] as StandardTableData
+dataWithImage[0].image = {
+  content: (
+    <TableThumbnail>
+      <img src="/images/listing.jpg" alt="listing picture" />
+    </TableThumbnail>
+  ),
+}
+dataWithImage[1].image = {
+  content: (
+    <TableThumbnail>
+      <img src="/images/logo_glyph.svg" alt="site logo" />
+    </TableThumbnail>
+  ),
+}
 
 export const ImageCells = () => (
   <MinimalTable

@@ -6,6 +6,7 @@ export default {
   title: "Tables/StandardTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   includeStories: ["Default", "ImageCells", "Draggable"],
+  component: StandardTable,
 }
 
 const headers = {

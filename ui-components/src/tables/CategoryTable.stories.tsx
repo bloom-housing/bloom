@@ -6,6 +6,7 @@ import { TableHeaders } from "./StandardTable"
 export default {
   title: "Tables/CategoryTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
+  component: CategoryTable,
 }
 
 const responsiveTableRows = [

@@ -3,17 +3,24 @@ import { StandardTableData, TableHeaders } from "./StandardTable"
 import { MinimalTable } from "./MinimalTable"
 
 export interface StackedTableRow {
+  /** The main text content of the cell */
   cellText: string
+  /** The subtext of the cell, displayed beneath the main text */
   cellSubText?: string
-  hideMobile?: boolean
-  responsiveReplacement?: string
+  /** Hides this cell's subtext on mobile views */
+  hideSubTextMobile?: boolean
+  /** Text content that will replace this cell's header on mobile views */
+  mobileReplacement?: string
 }
 
 export interface StackedTableProps {
+  /** The headers for the table passed as text content with optional settings */
   headers: TableHeaders
+  /** Headers hidden on desktop views */
   headersHiddenDesktop?: string[]
+  /** The table data passed as records of column name to cell data */
   stackedData?: Record<string, StackedTableRow>[]
-  categories?: boolean
+  /** A class name applied to the root of the table */
   className?: string
 }
 
@@ -32,13 +39,15 @@ const StackedTable = (props: StackedTableProps) => {
           >
             <span className={"stacked-table-cell"}>{dataRow[item].cellText}</span>
             <span
-              className={`stacked-table-subtext  ${dataRow[item].hideMobile && "hidden md:block"} `}
+              className={`stacked-table-subtext  ${
+                dataRow[item].hideSubTextMobile && "hidden md:block"
+              } `}
             >
               {dataRow[item].cellSubText}
             </span>
           </div>
         ),
-        responsiveReplacement: dataRow[item].cellText,
+        mobileReplacement: dataRow[item].cellText,
       }
       return acc
     }, {})

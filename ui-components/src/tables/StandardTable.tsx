@@ -7,7 +7,7 @@ import { t } from "../helpers/translator"
 
 export interface TableHeadersOptions {
   name: string
-  responsiveReplacement?: string
+  mobileReplacement?: string
   className?: string
 }
 export interface TableHeaders {
@@ -29,11 +29,11 @@ export const Cell = (props: {
   className?: string
   colSpan?: number
   children: React.ReactNode
-  responsiveReplacement?: string | React.ReactNode
+  mobileReplacement?: string | React.ReactNode
 }) => (
   <td
     data-label={props.headerLabel instanceof Object ? props.headerLabel?.name : props.headerLabel}
-    data-cell={props.responsiveReplacement}
+    data-cell={props.mobileReplacement}
     className={props.className || "p-5"}
     colSpan={props.colSpan}
   >
@@ -46,21 +46,32 @@ export const TableThumbnail = (props: { children: React.ReactNode }) => {
 }
 
 export type StandardTableCell = {
+  /** The main content of the cell */
   content: React.ReactNode
-  responsiveReplacement?: string
+  /** Text content that will replace this cell's header on mobile views */
+  mobileReplacement?: string
 }
 
 export type StandardTableData = Record<string, StandardTableCell>[]
 
 export interface StandardTableProps {
+  /** If the table should be sortable through dragging */
   draggable?: boolean
+  /** A set state function tied to the table's data, used if the table is draggable */
   setData?: (data: unknown[]) => void
+  /** The headers for the table passed as text content with optional settings */
   headers: TableHeaders
+  /** The table data passed as records of column name to cell data with optional settings */
   data?: StandardTableData
+  /** A class name applied to the root of the table */
   tableClassName?: string
+  /** A class name applied to each cell */
   cellClassName?: string
+  /** If the table should collapse on mobile views to show repeating columns on the left for every row */
   responsiveCollapse?: boolean
+  /** If cell text should be translated or left raw */
   translateData?: boolean
+  /** An id applied to the table */
   id?: string
 }
 
@@ -129,7 +140,7 @@ export const StandardTable = (props: StandardTableProps) => {
               : headers[colKey]
           }
           className={cellClass !== " " ? cellClass : undefined}
-          responsiveReplacement={row[colKey]?.responsiveReplacement}
+          mobileReplacement={row[colKey]?.mobileReplacement}
         >
           {props.translateData && typeof cell === "string" && cell !== ""
             ? getTranslationWithArguments(cell)

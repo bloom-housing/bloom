@@ -3,9 +3,11 @@ import LinkButton from "../../actions/LinkButton"
 import Icon, { IconFillColors } from "../../icons/Icon"
 import * as React from "react"
 import { ListingCard } from "./ListingCard"
+import { Meta, ArgsTable } from "@storybook/addon-docs/blocks"
 
 export default {
   title: "Listing/ListingCard",
+  component: ListingCard,
 }
 
 const standardImageCardProps = {
@@ -21,8 +23,18 @@ const standardTableProps = {
     minimumIncome: "t.incomeRange",
     rent: "t.rent",
   },
-  data: [{ unitType: "cellA", minimumIncome: "cellB", rent: "cellC" }],
+  data: [
+    {
+      unitType: { content: "cellA" },
+      minimumIncome: { content: "cellB" },
+      rent: { content: "cellC" },
+    },
+  ],
   responsiveCollapse: true,
+}
+
+{
+  /* <ArgsTable of={ListingCard} /> */
 }
 
 export const WithStandardTable = () => {
@@ -53,7 +65,7 @@ export const withStackedTable = () => {
         },
         stackedData: [
           {
-            units: { cellText: "Studio", cellSubText: "23 available", hideMobile: true },
+            units: { cellText: "Studio", cellSubText: "23 available", hideSubTextMobile: true },
             availability: { cellText: "23", cellSubText: "available" },
             income: { cellText: "$0 to $6,854", cellSubText: "per month" },
             rent: { cellText: "30%", cellSubText: "income" },

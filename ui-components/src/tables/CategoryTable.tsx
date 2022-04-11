@@ -3,13 +3,15 @@ import { StackedTable, StackedTableProps } from "./StackedTable"
 import { Heading } from "../headers/Heading"
 
 export interface CategoryTableSection {
+  /** The header text for a category */
   header: string
+  /** The table data for a category */
   tableData: StackedTableProps
 }
 
 export interface CategoryTableProps {
+  /** The table data passed as category section strings associated with a table data set */
   categoryData: CategoryTableSection[]
-  className?: string
 }
 
 const CategoryTable = (props: CategoryTableProps) => {
@@ -20,7 +22,7 @@ const CategoryTable = (props: CategoryTableProps) => {
           {category.header}
         </Heading>
         <hr className={"my-2"} />
-        <StackedTable {...category.tableData} categories={true} className={"category-table mb-8"} />
+        <StackedTable {...category.tableData} className={"category-table mb-8"} />
       </>
     )
   })
