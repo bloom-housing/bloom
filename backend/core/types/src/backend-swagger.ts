@@ -6578,6 +6578,7 @@ export enum OrderByFieldsEnum {
   "waitlistOpen" = "waitlistOpen",
   "status" = "status",
   "unitsAvailable" = "unitsAvailable",
+  "marketingType" = "marketingType",
 }
 
 export enum ListingApplicationAddressType {

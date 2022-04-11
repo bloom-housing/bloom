@@ -48,6 +48,8 @@ export class ListingsService {
         return {
           "listings.closedAt": { order: params.order, nulls: "NULLS LAST" },
         }
+      case OrderByFieldsEnum.marketingType:
+        return { "listings.marketingType": params.order }
       case OrderByFieldsEnum.applicationDates:
       case undefined:
         // Default to ordering by applicationDates (i.e. applicationDueDate
