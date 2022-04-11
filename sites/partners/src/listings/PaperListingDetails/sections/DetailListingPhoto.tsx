@@ -34,12 +34,14 @@ const DetailListingPhoto = () => {
   }
   const photoTableData = [
     {
-      preview: (
-        <TableThumbnail>
-          <img src={listingPhotoUrl} />
-        </TableThumbnail>
-      ),
-      fileName: listingFormPhoto?.image?.fileId.split("/").slice(-1).join(),
+      preview: {
+        content: (
+          <TableThumbnail>
+            <img src={listingPhotoUrl} />
+          </TableThumbnail>
+        ),
+      },
+      fileName: { content: listingFormPhoto?.image?.fileId.split("/").slice(-1).join() },
     },
   ]
 

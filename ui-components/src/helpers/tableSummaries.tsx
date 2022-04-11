@@ -1,8 +1,9 @@
 import * as React from "react"
 import { t } from "./translator"
 import { UnitSummary } from "@bloom-housing/backend-core/types"
+import { StandardTableData } from "../tables/StandardTable"
 
-export const unitSummariesTable = (summaries: UnitSummary[]) => {
+export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData => {
   const unitSummaries = summaries?.map((unitSummary) => {
     const unitPluralization = unitSummary.totalAvailable == 1 ? t("t.unit") : t("t.units")
     const minIncome =
@@ -40,32 +41,38 @@ export const unitSummariesTable = (summaries: UnitSummary[]) => {
       : getRent(unitSummary.rentRange.min, unitSummary.rentRange.max)
 
     return {
-      unitType: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
-      minimumIncome: (
-        <>
-          {minIncome} {t("t.perMonth")}
-        </>
-      ),
-      rent: <>{rent}</>,
-      availability: (
-        <>
-          {unitSummary.totalAvailable > 0 ? (
-            <>
-              <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
-            </>
-          ) : (
-            <span className="uppercase">{t("listings.waitlist.label")}</span>
-          )}
-        </>
-      ),
+      unitType: {
+        content: <strong>{t(`listings.unitTypes.${unitSummary.unitType?.name}`)}</strong>,
+      },
+      minimumIncome: {
+        content: (
+          <>
+            {minIncome} {t("t.perMonth")}
+          </>
+        ),
+      },
+      rent: { content: <>{rent}</> },
+      availability: {
+        content: (
+          <>
+            {unitSummary.totalAvailable > 0 ? (
+              <>
+                <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
+              </>
+            ) : (
+              <span className="uppercase">{t("listings.waitlist.label")}</span>
+            )}
+          </>
+        ),
+      },
     }
   })
 
   return unitSummaries
 }
 
-export const getSummariesTable = (summaries: UnitSummary[]) => {
-  let unitSummaries = [] as Record<string, React.ReactNode>[]
+export const getSummariesTable = (summaries: UnitSummary[]): StandardTableData => {
+  let unitSummaries: StandardTableData = []
 
   if (summaries?.length > 0) {
     unitSummaries = unitSummariesTable(summaries)

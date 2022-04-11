@@ -78,21 +78,23 @@ const SelectAndOrder = ({
   const draggableTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
-        name: item.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                deleteItem(item, false)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        name: { content: item.title },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => {
+                  deleteItem(item, false)
+                }}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [draftListingData, deleteItem]
   )
@@ -100,22 +102,24 @@ const SelectAndOrder = ({
   const formTableData = useMemo(
     () =>
       listingData.map((item, index) => ({
-        order: index + 1,
-        name: item.title,
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => {
-                deleteItem(item, true)
-              }}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        order: { content: index + 1 },
+        name: { content: item.title },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => {
+                  deleteItem(item, true)
+                }}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [listingData, deleteItem]
   )

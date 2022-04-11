@@ -104,11 +104,13 @@ export const ListingView = (props: ListingProps) => {
   const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
     return {
       ...row,
-      sizeColumn: (
-        <strong>
-          {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
-        </strong>
-      ),
+      sizeColumn: {
+        content: (
+          <strong>
+            {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+          </strong>
+        ),
+      },
     }
   })
   let groupedUnits: Record<string, React.ReactNode>[] = null

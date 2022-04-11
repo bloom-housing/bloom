@@ -96,33 +96,35 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
   const unitTableData = useMemo(
     () =>
       units.map((unit) => ({
-        number: unit.number,
-        unitType: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`),
-        amiPercentage: unit.amiPercentage,
-        monthlyRent: unit.monthlyRent,
-        sqFeet: unit.sqFeet,
-        priorityType: unit.priorityType?.name,
-        status: t(`listings.unit.statusOptions.${unit.status}`),
-        action: (
-          <div className="flex">
-            <Button
-              type="button"
-              className="front-semibold uppercase"
-              onClick={() => editUnit(unit.tempId)}
-              unstyled
-            >
-              {t("t.edit")}
-            </Button>
-            <Button
-              type="button"
-              className="front-semibold uppercase text-red-700"
-              onClick={() => setUnitDeleteModal(unit.tempId)}
-              unstyled
-            >
-              {t("t.delete")}
-            </Button>
-          </div>
-        ),
+        number: { content: unit.number },
+        unitType: { content: unit.unitType && t(`listings.unitTypes.${unit.unitType.name}`) },
+        amiPercentage: { content: unit.amiPercentage },
+        monthlyRent: { content: unit.monthlyRent },
+        sqFeet: { content: unit.sqFeet },
+        priorityType: { content: unit.priorityType?.name },
+        status: { content: t(`listings.unit.statusOptions.${unit.status}`) },
+        action: {
+          content: (
+            <div className="flex">
+              <Button
+                type="button"
+                className="front-semibold uppercase"
+                onClick={() => editUnit(unit.tempId)}
+                unstyled
+              >
+                {t("t.edit")}
+              </Button>
+              <Button
+                type="button"
+                className="front-semibold uppercase text-red-700"
+                onClick={() => setUnitDeleteModal(unit.tempId)}
+                unstyled
+              >
+                {t("t.delete")}
+              </Button>
+            </div>
+          ),
+        },
       })),
     [editUnit, units]
   )

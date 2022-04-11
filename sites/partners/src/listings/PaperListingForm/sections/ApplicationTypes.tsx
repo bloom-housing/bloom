@@ -374,32 +374,34 @@ const ApplicationTypes = ({ listing }: { listing: FormListing }) => {
                   className="mb-8"
                   headers={paperApplicationsTableHeaders}
                   data={methods.paper.paperApplications.map((item) => ({
-                    fileName: `${item.file.fileId.split("/").slice(-1).join()}.pdf`,
-                    language: t(`languages.${item.language}`),
-                    actions: (
-                      <div className="flex">
-                        <Button
-                          type="button"
-                          className="font-semibold uppercase text-red-700"
-                          onClick={() => {
-                            const items = methods.paper.paperApplications.filter(
-                              (paperApp) => item !== paperApp
-                            )
+                    fileName: { content: `${item.file.fileId.split("/").slice(-1).join()}.pdf` },
+                    language: { content: t(`languages.${item.language}`) },
+                    actions: {
+                      content: (
+                        <div className="flex">
+                          <Button
+                            type="button"
+                            className="font-semibold uppercase text-red-700"
+                            onClick={() => {
+                              const items = methods.paper.paperApplications.filter(
+                                (paperApp) => item !== paperApp
+                              )
 
-                            setMethods({
-                              ...methods,
-                              paper: {
-                                ...methods.paper,
-                                paperApplications: items,
-                              },
-                            })
-                          }}
-                          unstyled
-                        >
-                          {t("t.delete")}
-                        </Button>
-                      </div>
-                    ),
+                              setMethods({
+                                ...methods,
+                                paper: {
+                                  ...methods.paper,
+                                  paperApplications: items,
+                                },
+                              })
+                            }}
+                            unstyled
+                          >
+                            {t("t.delete")}
+                          </Button>
+                        </div>
+                      ),
+                    },
                   }))}
                 ></MinimalTable>
               )}
