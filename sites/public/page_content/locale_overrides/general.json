@@ -1,7 +1,7 @@
 {
   "welcome": {
     "title": "Find affordable rental housing in Detroit",
-    "heroText": "Detroit Home Connect is a place for you to find housing that you can afford based on your household needs."
+    "heroText": "Your resource to find income-restricted multi-family housing and apartments."
   },
   "nav": {
     "siteTitle": "Detroit Home Connect",
@@ -14,10 +14,12 @@
     "copyright": "City of Detroit © 2021 • All Rights Reserved",
     "header": "Detroit Home Connect",
     "headerLink": "City of Detroit",
+    "description": "Detroit Home Connect is a project of the City of Detroit Housing and Revitalization Department in partnership with Exygy and Google.org.",
     "forGeneralInquiries": "For general program inquiries:",
     "youMayCall": "You may call the City of Detroit HRD at:",
     "forListingQuestions": "For listing and application questions:",
-    "pleaseContact": "Please contact the Property Agent displayed on each listing."
+    "pleaseContact": "Please contact the Property Agent displayed on each listing.",
+    "contactInfo": "email the City of Detroit Housing and Revitalization Department at [detroithomeconnect@detroitmi.gov](mailto:detroithomeconnect@detroitmi.gov) or call [313-224-6380](tel:313-224-6380)."
   },
   "leasingAgent": {
     "contact": "Management Company",

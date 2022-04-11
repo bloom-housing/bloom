@@ -12,6 +12,7 @@ import {
   AuthContext,
   setSiteAlertMessage,
 } from "@bloom-housing/ui-components"
+import Markdown from "markdown-to-jsx"
 
 const Layout = (props) => {
   const { profile, signOut } = useContext(AuthContext)
@@ -117,7 +118,7 @@ const Layout = (props) => {
                 </div>
               </div>
 
-              <p className="text-left">Detroit Home Connect is a project of the City of Detroit Housing and Revitalization Department in partnership with Exygy and Google.org.</p>
+              <p className="text-left">{t("footer.description")}</p>
             </FooterSection>
           </div>
           <div className="footer-info text-white">
@@ -131,7 +132,21 @@ const Layout = (props) => {
                 {t("footer.forGeneralInquiries")}
               </h5>
               <p className="text-left">
-                email the City of Detroit Housing and Revitalization Department at <a className="font-bold" href="mailto:detroithomeconnect@detroitmi.gov">detroithomeconnect@detroitmi.gov</a> or call <a className="font-bold" href="tel:313-224-6380">313-224-6380</a>. 
+                <Markdown
+                  options={{
+                    overrides: {
+                      a: {
+                        component: ({ children, ...props }) => (
+                          <a {...props} className="font-bold">
+                            {children}
+                          </a>
+                        ),
+                      },
+                    },
+                  }}
+                >
+                  {t("footer.contactInfo")}
+                </Markdown>
               </p>
             </FooterSection>
           </div>

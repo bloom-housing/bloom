@@ -106,9 +106,7 @@ export default function Home({ latestListings }) {
         heroInset={heroInset}
         innerClassName="bg-white bg-opacity-90 max-w-2xl mx-auto p-8 rounded-xl"
       >
-        <p className="max-w-md mx-auto">
-          Your resource to find income-restricted multi-family housing and apartments.
-        </p>
+        <p className="max-w-md mx-auto">{t("welcome.heroText")}</p>
       </Hero>
       <div className="homepage-extra">
         <div className="action-blocks mt-4 mb-4 w-full">
