@@ -6,9 +6,9 @@ import { t } from "../../src/helpers/translator"
 afterEach(cleanup)
 
 export const headers = {
-  name: "t.name",
-  relationship: "t.relationship",
-  dob: "application.household.member.dateOfBirth",
+  name: t("t.name"),
+  relationship: t("t.relationship"),
+  dob: t("application.household.member.dateOfBirth"),
 }
 
 const data = [
@@ -47,9 +47,9 @@ const data = [
 describe("<GroupedTable>", () => {
   it("renders without error", () => {
     const { getByText } = render(<GroupedTable headers={headers} data={data} />)
-    expect(getByText(t(headers.name))).toBeTruthy()
-    expect(getByText(t(headers.relationship))).toBeTruthy()
-    expect(getByText(t(headers.dob))).toBeTruthy()
+    expect(getByText(headers.name)).toBeTruthy()
+    expect(getByText(headers.relationship)).toBeTruthy()
+    expect(getByText(headers.dob)).toBeTruthy()
 
     expect(getByText(data[0].data[0].name.content))
     expect(getByText(data[0].data[0].relationship.content))
