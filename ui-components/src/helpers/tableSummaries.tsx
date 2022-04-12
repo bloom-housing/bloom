@@ -58,7 +58,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
       rent: { content: <span>{rent}</span> },
       availability: {
         content: (
-          <>
+          <span>
             {unitSummary.totalAvailable > 0 ? (
               <>
                 <strong>{unitSummary.totalAvailable}</strong> {unitPluralization}
@@ -66,7 +66,7 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
             ) : (
               <span className="uppercase">{t("listings.waitlist.label")}</span>
             )}
-          </>
+          </span>
         ),
       },
     }

@@ -127,7 +127,7 @@ export const StandardTable = (props: StandardTableProps) => {
 
     const cols = Object.keys(headers)?.map((colKey, colIndex) => {
       const uniqKey = process.env.NODE_ENV === "test" ? `standardcol-${colIndex}` : nanoid()
-      const cell = row[colKey].content
+      const cell = row[colKey]?.content
 
       const cellClass = [headerClassName(headers[colKey]), cellClassName].join(" ")
 
