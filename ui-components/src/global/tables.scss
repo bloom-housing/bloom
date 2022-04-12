@@ -26,6 +26,7 @@ https://www.cssscript.com/pure-html5-css3-responsive-table-solution/ */
       @apply text-right;
       border: 0px;
       display: flex;
+      @apply py-2;
     }
 
     td:before {
@@ -135,7 +136,7 @@ table {
 
     tbody td {
       @apply border-b;
-      @apply border-gray-450; //HERE
+      @apply border-gray-450;
     }
 
     td:last-child,
@@ -146,13 +147,21 @@ table {
 
   &.stacked-table {
     .stacked-table-cell-container {
+      td:before {
+        @apply text-base;
+        @apply text-gray-700;
+      }
+
       @screen md {
         @apply flex;
         @apply flex-col;
+        @apply px-0;
+        @apply text-left;
+        @apply w-full;
       }
-      @apply w-full;
-      @apply py-3;
-      @apply px-0;
+      width: 50%;
+      @apply text-right;
+      @apply pl-2;
 
       .stacked-table-cell {
         @apply font-semibold;
@@ -180,6 +189,10 @@ table {
       @apply px-0;
       @apply text-base;
       @apply text-gray-700;
+      @screen md {
+        @apply py-3;
+      }
+      @apply py-2;
     }
 
     thead {
@@ -188,9 +201,13 @@ table {
 
     td:last-child,
     th:last-child {
-      text-align: right;
       .stacked-table-cell-container {
+        @apply text-right;
         @apply pr-0;
+        @screen md {
+          width: auto;
+        }
+        width: 100%;
       }
     }
   }
@@ -229,7 +246,9 @@ table {
     tr {
       td:first-child:before {
         @apply pl-0;
+        @apply pr-2;
         @apply font-semibold;
+        width: 50%;
       }
     }
 
@@ -250,13 +269,15 @@ table {
     }
 
     .stacked-table-cell-container {
-      @apply w-auto;
+      width: 50%;
       @apply flex;
       @apply flex-col;
       @apply items-start;
-
+      @apply pl-2;
+      @apply text-left;
       @screen md {
-        @apply p-0;
+        @apply pl-0;
+        @apply py-0;
       }
       @apply py-1;
       .stacked-table-cell {
@@ -269,6 +290,13 @@ table {
       }
       .stacked-table-subtext {
         @apply pl-0;
+      }
+    }
+
+    td:last-child,
+    th:last-child {
+      .stacked-table-cell-container {
+        width: 50%;
       }
     }
 

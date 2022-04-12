@@ -28,6 +28,25 @@ const responsiveTableHeaders: TableHeaders = {
   rent: { name: "t.rent" },
 }
 
+const longerRows = [
+  {
+    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghihintay)" },
+    income: { cellText: "$3,638 hanggang $6,216", cellSubText: "kada buwan" },
+    rent: { cellText: "$1,819", cellSubText: " kada buwan" },
+  },
+  {
+    units: { cellText: "Studio", cellSubText: "Waitlist (Listahan ng mga Naghihintay)" },
+    income: { cellText: "$3,638 hanggang $6,216", cellSubText: "kada buwan" },
+    rent: { cellText: "$1,819", cellSubText: " kada buwan" },
+  },
+]
+
+const longerHeaders: TableHeaders = {
+  units: { name: "MGA UNIT" },
+  income: { name: "HANAY NG KITA (INCOME RANGE)" },
+  rent: { name: "UPA" },
+}
+
 export const Basic = () => (
   <CategoryTable
     categoryData={[
@@ -38,6 +57,21 @@ export const Basic = () => (
       {
         header: "Header 2",
         tableData: { stackedData: responsiveTableRows, headers: responsiveTableHeaders },
+      },
+    ]}
+  />
+)
+
+export const LongerStrings = () => (
+  <CategoryTable
+    categoryData={[
+      {
+        header: "Header 1 but it's a long string",
+        tableData: { stackedData: longerRows, headers: longerHeaders },
+      },
+      {
+        header: "Header 2 but it's a long string",
+        tableData: { stackedData: longerRows, headers: longerHeaders },
       },
     ]}
   />

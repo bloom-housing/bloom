@@ -59,7 +59,10 @@ const StackedTable = (props: StackedTableProps) => {
     if (props.headersHiddenDesktop?.includes(headerKey)) {
       let headerClasses = "md:hidden"
       headerClasses = `${tempHeader["className"] && tempHeader["className"]} ${headerClasses}`
-      tempHeader = { name: tempHeader["name"] ?? tempHeader, className: headerClasses }
+      tempHeader = {
+        name: tempHeader["name"] ?? tempHeader,
+        className: `stacked-table-header ${headerClasses}`,
+      }
     } else {
       acc[headerKey] = props.headers[headerKey]
       tempHeader = {
