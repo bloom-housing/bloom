@@ -137,7 +137,6 @@ const SignIn = () => {
           onSubmit={onSubmit}
           control={{ register, errors, handleSubmit, watch }}
           networkStatus={{
-            // content: { ...networkError, error: !!networkError?.error },
             content: { ...networkStatusContent, error: !!networkStatusContent?.error },
             type: networkStatusType,
             reset: () => {
@@ -155,6 +154,7 @@ const SignIn = () => {
         onClose={() => {
           setConfirmationStatusModal(false)
           resetResendConfirmation()
+          resetNetworkError()
         }}
         initialEmailValue={emailValue.current as string}
         onSubmit={(email) => onResendConfirmationSubmit(email)}

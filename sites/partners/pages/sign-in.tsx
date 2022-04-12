@@ -228,6 +228,7 @@ const SignIn = () => {
         onClose={() => {
           setConfirmationStatusModal(false)
           resetResendConfirmation()
+          resetNetworkError()
         }}
         initialEmailValue={emailValue.current as string}
         onSubmit={(email) => onResendConfirmationSubmit(email)}
