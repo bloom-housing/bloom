@@ -1,20 +1,49 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useRef, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
-import { AuthContext, t, setSiteAlertMessage, FormSignIn } from "@bloom-housing/ui-components"
+import {
+  AuthContext,
+  t,
+  setSiteAlertMessage,
+  FormSignIn,
+  ResendConfirmationModal,
+  useMutate,
+} from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import { useRedirectToPrevPage } from "../lib/hooks"
-import { PageView, pushGtmEvent, useCatchNetworkError } from "@bloom-housing/shared-helpers"
+import {
+  PageView,
+  pushGtmEvent,
+  useCatchNetworkError,
+  NetworkStatusType,
+  NetworkStatusContent,
+} from "@bloom-housing/shared-helpers"
 import { UserStatus } from "../lib/constants"
+import { EnumUserErrorExtraModelUserErrorMessages } from "@bloom-housing/backend-core/types"
 
 const SignIn = () => {
-  const { login } = useContext(AuthContext)
+  const { login, userService } = useContext(AuthContext)
   /* Form Handler */
   // This is causing a linting issue with unbound-method, see open issue as of 10/21/2020:
   // https://github.com/react-hook-form/react-hook-form/issues/2887
   // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { register, handleSubmit, errors } = useForm()
+  const { register, handleSubmit, errors, watch, reset } = useForm()
   const redirectToPage = useRedirectToPrevPage("/account/dashboard")
   const { networkError, determineNetworkError, resetNetworkError } = useCatchNetworkError()
+
+  const emailValue = useRef({})
+  emailValue.current = watch("email", "")
+
+  const [confirmationStatusModal, setConfirmationStatusModal] = useState<boolean>(false)
+  const [confirmationStatusMessage, setConfirmationStatusMessage] = useState<{
+    message: NetworkStatusContent
+    type: NetworkStatusType
+  }>()
+
+  const {
+    mutate: mutateResendConfirmation,
+    reset: resetResendConfirmation,
+    isLoading: isResendConfirmationLoading,
+  } = useMutate<{ status: string }>()
 
   useEffect(() => {
     pushGtmEvent<PageView>({
@@ -37,18 +66,101 @@ const SignIn = () => {
     }
   }
 
+  const onResendConfirmationSubmit = useCallback(
+    (email: string) => {
+      void mutateResendConfirmation(
+        () =>
+          userService.resendConfirmation({
+            body: {
+              email: email,
+              appUrl: window.location.origin,
+            },
+          }),
+        {
+          onSuccess: () => {
+            setConfirmationStatusMessage({
+              message: {
+                title: "",
+                description: t("authentication.createAccount.emailSent"),
+              },
+              type: "success",
+            })
+            setConfirmationStatusModal(false)
+          },
+          onError: (err) => {
+            setConfirmationStatusMessage({
+              message: {
+                title: t("errors.somethingWentWrong"),
+                description: t("authentication.signIn.errorGenericMessage"),
+                error: err,
+              },
+              type: "alert",
+            })
+            setConfirmationStatusModal(false)
+          },
+        }
+      )
+    },
+    [mutateResendConfirmation, userService]
+  )
+
+  const networkStatusContent = (() => {
+    // the confirmation modal is active, do not show any alert
+    if (confirmationStatusModal) return undefined
+
+    // the confirmation form has been sent, show success or error
+    if (confirmationStatusMessage) return confirmationStatusMessage?.message
+
+    // show default sign-in form network status
+    return networkError
+  })()
+
+  const networkStatusType = (() => {
+    if (confirmationStatusModal) return undefined
+    if (confirmationStatusMessage) return confirmationStatusMessage?.type
+    return undefined
+  })()
+
+  useEffect(() => {
+    if (
+      networkError?.error.response.data?.message ===
+      EnumUserErrorExtraModelUserErrorMessages.accountNotConfirmed
+    ) {
+      setConfirmationStatusModal(true)
+    }
+  }, [networkError])
+
   return (
-    <FormsLayout>
-      <FormSignIn
-        onSubmit={onSubmit}
-        control={{ register, errors, handleSubmit }}
-        networkStatus={{
-          content: { ...networkError, error: !!networkError?.error },
-          reset: resetNetworkError,
+    <>
+      <FormsLayout>
+        <FormSignIn
+          onSubmit={onSubmit}
+          control={{ register, errors, handleSubmit, watch }}
+          networkStatus={{
+            // content: { ...networkError, error: !!networkError?.error },
+            content: { ...networkStatusContent, error: !!networkStatusContent?.error },
+            type: networkStatusType,
+            reset: () => {
+              reset()
+              resetNetworkError()
+              setConfirmationStatusMessage(undefined)
+            },
+          }}
+          showRegisterBtn={true}
+        />
+      </FormsLayout>
+
+      <ResendConfirmationModal
+        isOpen={confirmationStatusModal}
+        onClose={() => {
+          setConfirmationStatusModal(false)
+          resetResendConfirmation()
         }}
-        showRegisterBtn={true}
+        initialEmailValue={emailValue.current as string}
+        onSubmit={(email) => onResendConfirmationSubmit(email)}
+        loading={isResendConfirmationLoading}
       />
-    </FormsLayout>
+    </>
   )
 }
 

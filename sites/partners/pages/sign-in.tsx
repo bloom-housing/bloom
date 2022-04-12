@@ -14,6 +14,7 @@ import {
   FormSignInAddPhone,
   useMutate,
   t,
+  ResendConfirmationModal,
 } from "@bloom-housing/ui-components"
 import FormsLayout from "../layouts/forms"
 import {
@@ -27,7 +28,6 @@ import {
   onSubmitMfaCodeWithPhone,
   onSubmitMfaCode,
 } from "../lib/signInHelpers"
-import { ResendConfirmationModal } from "../src/ResendConfirmationModal"
 
 const SignIn = () => {
   const { login, requestMfaCode, userService } = useContext(AuthContext)
@@ -142,7 +142,7 @@ const SignIn = () => {
           router,
           resetNetworkError
         )}
-        control={{ register, errors, handleSubmit }}
+        control={{ register, errors, handleSubmit, watch }}
         networkStatus={{
           content: { ...networkStatusContent, error: !!networkStatusContent?.error },
           type: networkStatusType,
@@ -208,7 +208,7 @@ const SignIn = () => {
           mfaType,
           resetNetworkError
         )}
-        control={{ register, errors, handleSubmit }}
+        control={{ register, errors, handleSubmit, watch }}
         networkError={{
           content: { ...networkError, error: !!networkError?.error },
           reset: resetNetworkError,
