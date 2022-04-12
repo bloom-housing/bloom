@@ -56,7 +56,7 @@ export class EmailService {
     }
     await this.send(
       user.email,
-      "Welcome to Bloom",
+      "Welcome to Detroit Home Connect",
       this.template("register-email")({
         user: user,
         confirmationUrl: confirmationUrl,
