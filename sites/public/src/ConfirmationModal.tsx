@@ -103,7 +103,6 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
       ]}
     >
       <>
-        {console.log("confirmation modal")}
         {modalMessage && (
           <AlertBox className="" onClose={() => setModalMessage(null)} type="alert">
             {modalMessage}
