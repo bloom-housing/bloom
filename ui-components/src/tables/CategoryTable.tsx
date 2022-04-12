@@ -15,15 +15,15 @@ export interface CategoryTableProps {
 }
 
 const CategoryTable = (props: CategoryTableProps) => {
-  const tables = props.categoryData.map((category) => {
+  const tables = props.categoryData.map((category, index) => {
     return (
-      <>
+      <div key={index}>
         <Heading priority={3} style={"categoryHeader"}>
           {category.header}
         </Heading>
         <hr className={"my-2"} />
         <StackedTable {...category.tableData} className={"category-table mb-8"} />
-      </>
+      </div>
     )
   })
 
