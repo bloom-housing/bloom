@@ -1251,6 +1251,11 @@
     "mapPinPosition": "Map Pin Position",
     "mapPreview": "Map Preview",
     "mapPreviewNoAddress": "Enter an address to preview the map",
+    "marketing": "Marketing",
+    "marketingSection": {
+      "status": "Marketing Status",
+      "date": "Marketing Start Date"
+    },
     "maxAnnualIncome": "Maximum Annual Income",
     "maxIncomeMonth": "Maximum Income / Month",
     "maxIncomeYear": "Maximum Income / Year",
@@ -1606,6 +1611,12 @@
   "progressNav": {
     "srHeading": "Progress",
     "current": "Current step: "
+  },
+  "seasons": {
+    "spring": "Spring",
+    "summer": "Summer",
+    "fall":  "Fall",
+    "winter": "Winter"
   },
   "states": {
     "AL": "Alabama",

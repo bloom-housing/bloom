@@ -266,6 +266,13 @@ const BuildingDetails = ({
             placeholder={t("listings.yearBuilt")}
             type={"number"}
             register={register}
+            inputProps={{
+              onKeyPress: (e) => {
+                if (e.target.value && e.target.value.length > 3) {
+                  e.preventDefault()
+                }
+              },
+            }}
           />
         </GridCell>
       </GridSection>

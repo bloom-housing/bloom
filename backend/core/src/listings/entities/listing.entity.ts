@@ -51,6 +51,7 @@ import { ListingProgram } from "../../program/entities/listing-program.entity"
 import { EnforceLowerCase } from "../../shared/decorators/enforceLowerCase.decorator"
 import { ListingPreference } from "../../preferences/entities/listing-preference.entity"
 import { ListingMarketingTypeEnum } from "../types/listing-marketing-type-enum"
+import { ListingSeasonEnum } from "../types/listing-season-enum"
 
 @Entity({ name: "listings" })
 @Index(["jurisdiction"])
@@ -627,6 +628,19 @@ class Listing extends BaseEntity {
   @IsDate({ groups: [ValidationsGroupsEnum.default] })
   @Type(() => Date)
   marketingDate?: Date | null
+
+  @Column({
+    enum: ListingSeasonEnum,
+    nullable: true,
+  })
+  @Expose()
+  @IsOptional({ groups: [ValidationsGroupsEnum.default] })
+  @IsEnum(ListingSeasonEnum, { groups: [ValidationsGroupsEnum.default] })
+  @ApiProperty({
+    enum: ListingSeasonEnum,
+    enumName: "ListingSeasonEnum",
+  })
+  marketingSeason?: ListingSeasonEnum | null
 }
 
 export { Listing as default, Listing }

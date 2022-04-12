@@ -5087,6 +5087,9 @@ export interface Listing {
   marketingType: ListingMarketingTypeEnum
 
   /**  */
+  marketingSeason?: ListingSeasonEnum
+
+  /**  */
   applicationMethods: ApplicationMethod[]
 
   /**  */
@@ -5555,6 +5558,9 @@ export interface ListingCreate {
   marketingType: ListingMarketingTypeEnum
 
   /**  */
+  marketingSeason?: ListingSeasonEnum
+
+  /**  */
   applicationMethods: ApplicationMethodCreate[]
 
   /**  */
@@ -6018,6 +6024,9 @@ export interface ListingUpdate {
 
   /**  */
   marketingType: ListingMarketingTypeEnum
+
+  /**  */
+  marketingSeason?: ListingSeasonEnum
 
   /**  */
   id?: string
@@ -6843,6 +6852,13 @@ export enum ListingReviewOrder {
 export enum ListingMarketingTypeEnum {
   "marketing" = "marketing",
   "comingSoon" = "comingSoon",
+}
+
+export enum ListingSeasonEnum {
+  "spring" = "spring",
+  "summer" = "summer",
+  "fall" = "fall",
+  "winter" = "winter",
 }
 
 export enum ListingEventType {

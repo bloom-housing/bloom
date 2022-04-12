@@ -67,6 +67,7 @@ export type FormListing = Omit<Listing, "countyCode" | "unitSummaries" | "unitGr
     period: TimeFieldPeriod
   }
   lotteryDateNotes?: string
+  marketingStartDate?: number
   postMarkDate?: {
     month: string
     day: string
