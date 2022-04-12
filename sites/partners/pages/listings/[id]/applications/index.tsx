@@ -77,6 +77,7 @@ const ApplicationsList = () => {
     limit: 1,
   })
   useEffect(() => {
+    setAppsLoading(true)
     const queryParams = new URLSearchParams()
     queryParams.append("listingId", listingId)
     queryParams.append("page", currentPage.toString())
@@ -99,19 +100,17 @@ const ApplicationsList = () => {
     if (sortOptions.orderBy) {
       Object.assign(params, { orderBy: sortOptions.orderBy, order: sortOptions.order ?? "ASC" })
     }
-    const fetchData = async () => {
-      setAppsLoading(true)
-      const appData = await applicationsService.list(params)
-      if (appData) {
-        setApplications(appData?.items)
-        setAppsMeta(appData?.meta)
+    applicationsService
+      .list(params)
+      .then((res) => {
+        setApplications(res?.items)
+        setAppsMeta(res?.meta)
         setAppsLoading(false)
-      }
-    }
-    fetchData().catch((e) => {
-      setAppsError(e.response.data.error)
-      setAppsLoading(false)
-    })
+      })
+      .catch((e) => {
+        setAppsError(e.response.data.error)
+        setAppsLoading(false)
+      })
   }, [
     applicationsService,
     currentPage,
