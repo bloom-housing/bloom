@@ -11,7 +11,8 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
         <strong>{unitSummary.minIncomeRange.min}</strong>
       ) : (
         <>
-          <strong>{unitSummary.minIncomeRange.min}</strong> {t("t.to")}{" "}
+          <strong>{unitSummary.minIncomeRange.min}</strong>
+          {` ${t("t.to")} `}
           <strong>{unitSummary.minIncomeRange.max}</strong>
         </>
       )
@@ -25,7 +26,9 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
         </>
       ) : (
         <>
-          <strong>{rentMin}</strong> {t("t.to")} <strong>{rentMax}</strong>
+          <strong>{rentMin}</strong>
+          {` ${t("t.to")} `}
+          <strong>{rentMax}</strong>
           {unit}
         </>
       )
@@ -46,12 +49,13 @@ export const unitSummariesTable = (summaries: UnitSummary[]): StandardTableData 
       },
       minimumIncome: {
         content: (
-          <>
-            {minIncome} {t("t.perMonth")}
-          </>
+          <span>
+            {minIncome}
+            {` ${t("t.perMonth")}`}
+          </span>
         ),
       },
-      rent: { content: <>{rent}</> },
+      rent: { content: <span>{rent}</span> },
       availability: {
         content: (
           <>

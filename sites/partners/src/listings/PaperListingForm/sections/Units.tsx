@@ -12,6 +12,7 @@ import {
   ViewItem,
   GridCell,
   FieldGroup,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import UnitForm from "../UnitForm"
 import { useFormContext } from "react-hook-form"
@@ -93,7 +94,7 @@ const FormUnits = ({ units, setUnits, disableUnitsAccordion }: UnitProps) => {
     }
   }
 
-  const unitTableData = useMemo(
+  const unitTableData: StandardTableData = useMemo(
     () =>
       units.map((unit) => ({
         number: { content: unit.number },

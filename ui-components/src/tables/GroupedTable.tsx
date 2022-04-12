@@ -1,11 +1,12 @@
 import * as React from "react"
 import { nanoid } from "nanoid"
-import { Cell, StandardTableProps } from "./StandardTable"
+import { Cell, StandardTableData, StandardTableProps } from "./StandardTable"
+import t from "../helpers/translator"
 
 export interface GroupedTableGroup {
   header?: string | React.ReactNode
   className?: string
-  data: Record<string, React.ReactNode>[]
+  data: StandardTableData
 }
 
 export interface GroupedTableProps extends Omit<StandardTableProps, "data"> {
@@ -17,7 +18,7 @@ export const GroupedTable = (props: GroupedTableProps) => {
 
   const headerLabels = Object.values(headers).map((col, index) => {
     const uniqKey = process.env.NODE_ENV === "test" ? `header-${index}` : nanoid()
-    return <th key={uniqKey}>{col}</th>
+    return <th key={uniqKey}>{typeof col === "string" ? t(col) : col}</th>
   })
 
   const body: React.ReactNode[] = []
@@ -43,16 +44,16 @@ export const GroupedTable = (props: GroupedTableProps) => {
       )
     }
 
-    groupData.forEach((row: Record<string, React.ReactNode>, groupDataIndex) => {
+    groupData.forEach((row, groupDataIndex) => {
       const rowKey = row["id"]
-        ? `row-${row["id"] as string}`
+        ? `row-${row["id"].content as string}`
         : process.env.NODE_ENV === "test"
         ? `groupedrow-${dataIndex}-${groupDataIndex}`
         : nanoid()
       const cols = Object.keys(headers).map((colKey, colIndex) => {
         const uniqKey = process.env.NODE_ENV === "test" ? `col-${colIndex}` : nanoid()
         const header = headers[colKey]
-        const cell = row[colKey]
+        const cell = row[colKey].content
         return (
           <Cell key={uniqKey} headerLabel={header} className={cellClassName}>
             {cell}

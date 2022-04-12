@@ -8,6 +8,7 @@ import {
   Drawer,
   AppearanceStyleType,
   Field,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import { useFormContext } from "react-hook-form"
 import { Preference, Program } from "@bloom-housing/backend-core/types"
@@ -75,7 +76,7 @@ const SelectAndOrder = ({
     [draftListingData]
   )
 
-  const draggableTableData = useMemo(
+  const draggableTableData: StandardTableData = useMemo(
     () =>
       draftListingData.map((item) => ({
         name: { content: item.title },
@@ -99,7 +100,7 @@ const SelectAndOrder = ({
     [draftListingData, deleteItem]
   )
 
-  const formTableData = useMemo(
+  const formTableData: StandardTableData = useMemo(
     () =>
       listingData.map((item, index) => ({
         order: { content: index + 1 },

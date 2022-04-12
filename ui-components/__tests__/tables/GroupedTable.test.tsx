@@ -4,10 +4,10 @@ import { GroupedTable } from "../../src/tables/GroupedTable"
 
 afterEach(cleanup)
 
-const headers = {
-  name: "Name",
-  relationship: "Relationship",
-  dob: "Date of Birth",
+export const headers = {
+  name: "t.name",
+  relationship: "t.relationship",
+  dob: "application.household.member.dateOfBirth",
 }
 
 const data = [

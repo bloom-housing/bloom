@@ -39,6 +39,7 @@ import {
   getSummariesTable,
   t,
   EventType,
+  StandardTableData,
 } from "@bloom-housing/ui-components"
 import {
   cloudinaryPdfFromId,
@@ -82,10 +83,10 @@ export const ListingView = (props: ListingProps) => {
     "https://www.google.com/maps/place/" + ReactDOMServer.renderToStaticMarkup(oneLineAddress)
 
   const unitSummariesHeaders = {
-    unitType: t("t.unitType"),
-    minimumIncome: t("t.minimumIncome"),
-    rent: t("t.rent"),
-    availability: t("t.availability"),
+    unitType: "t.unitType",
+    minimumIncome: "t.minimumIncome",
+    rent: "t.rent",
+    availability: "t.availability",
   }
 
   const amiValues = listing?.unitsSummarized?.amiPercentages
@@ -101,19 +102,23 @@ export const ListingView = (props: ListingProps) => {
 
   const hmiHeaders = listing?.unitsSummarized?.hmi?.columns as TableHeaders
 
-  const hmiData = listing?.unitsSummarized?.hmi?.rows.map((row) => {
-    return {
-      ...row,
-      sizeColumn: {
-        content: (
-          <strong>
-            {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
-          </strong>
-        ),
-      },
+  const hmiData: StandardTableData = listing?.unitsSummarized?.hmi?.rows.map(
+    (row: Record<string, string>) => {
+      return {
+        maxIncomeMonth: { content: row.maxIncomeMonth },
+        maxIncomeYear: { content: row.maxIncomeYear },
+        sizeColumn: {
+          content: (
+            <strong>
+              {listing.units[0].bmrProgramChart ? t(row["sizeColumn"]) : row["sizeColumn"]}
+            </strong>
+          ),
+        },
+      }
     }
-  })
-  let groupedUnits: Record<string, React.ReactNode>[] = null
+  )
+
+  let groupedUnits: StandardTableData = []
 
   if (amiValues.length == 1) {
     groupedUnits = getSummariesTable(listing.unitsSummarized.byUnitTypeAndRent)

@@ -2,7 +2,7 @@ import React from "react"
 
 import { MinimalTable } from "./MinimalTable"
 import { StandardTableData, TableThumbnail } from "./StandardTable"
-import { preferenceData, preferenceHeaders } from "./StandardTable.stories"
+import { preferenceData, preferenceHeaders, mockData, mockHeaders } from "./StandardTable.stories"
 
 export default {
   title: "Tables/MinimalTable",
@@ -10,40 +10,14 @@ export default {
   component: MinimalTable,
 }
 
-const headers = {
-  name: "t.name",
-  relationship: "t.relationship",
-  dob: "application.household.member.dateOfBirth",
-}
-
-const data = [
-  {
-    name: { content: "Jim Halpert" },
-    relationship: { content: "Husband" },
-    dob: { content: "05/01/1985" },
-  },
-  {
-    name: { content: "Michael Scott" },
-    relationship: { content: "Friend" },
-    dob: { content: "05/01/1975" },
-  },
-]
-
-let i = 50
-while (i > 0) {
-  data.push(data[0])
-  data.push(data[1])
-  i--
-}
-
-export const Default = () => <MinimalTable headers={headers} data={data} />
+export const Default = () => <MinimalTable headers={mockHeaders} data={mockData} />
 
 export const Responsive = () => (
-  <MinimalTable headers={headers} data={data} responsiveCollapse={true} />
+  <MinimalTable headers={mockHeaders} data={mockData} responsiveCollapse={true} />
 )
 
-const headersWithImage = { image: "Image", ...headers }
-const dataWithImage = [...data] as StandardTableData
+const headersWithImage = { image: "Image", ...mockHeaders }
+const dataWithImage = [...mockData] as StandardTableData
 dataWithImage[0].image = {
   content: (
     <TableThumbnail>
@@ -59,13 +33,14 @@ dataWithImage[1].image = {
   ),
 }
 
-export const ImageCells = () => (
-  <MinimalTable
-    headers={headersWithImage}
-    data={dataWithImage}
-    flushLeft={true}
-    flushRight={true}
-  />
+export const ImageCells = () => <MinimalTable headers={headersWithImage} data={dataWithImage} />
+
+export const FlushLeft = () => (
+  <MinimalTable headers={headersWithImage} data={dataWithImage} flushLeft={true} />
+)
+
+export const FlushRight = () => (
+  <MinimalTable headers={headersWithImage} data={dataWithImage} flushRight={true} />
 )
 
 export const Draggable = () => (

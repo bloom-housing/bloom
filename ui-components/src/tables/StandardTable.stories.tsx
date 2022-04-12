@@ -1,21 +1,22 @@
 import React from "react"
 import { Button } from "../actions/Button"
-import { StandardTable, TableThumbnail } from "./StandardTable"
+import { StandardTable, StandardTableData, TableHeaders, TableThumbnail } from "./StandardTable"
 
 export default {
   title: "Tables/StandardTable",
   decorators: [(storyFn: any) => <div style={{ padding: "1rem" }}>{storyFn()}</div>],
   includeStories: ["Default", "ImageCells", "Draggable"],
+  excludeStories: ["mockHeaders", "mockData", "preferenceHeaders", "preferenceData"],
   component: StandardTable,
 }
 
-const headers = {
+export const mockHeaders: TableHeaders = {
   name: "t.name",
   relationship: "t.relationship",
   dob: "application.household.member.dateOfBirth",
 }
 
-const data = [
+export const mockData: StandardTableData = [
   {
     name: { content: "Jim Halpert" },
     relationship: { content: "Husband" },
@@ -28,17 +29,17 @@ const data = [
   },
 ]
 
-let i = 50
+let i = 5
 while (i > 0) {
-  data.push(data[0])
-  data.push(data[1])
+  mockData.push(mockData[0])
+  mockData.push(mockData[1])
   i--
 }
 
-export const Default = () => <StandardTable headers={headers} data={data} />
+export const Default = () => <StandardTable headers={mockHeaders} data={mockData} />
 
-const headersWithImage = { image: "Image", ...headers }
-const dataWithImage = [...data] as any
+const headersWithImage = { image: "Image", ...mockHeaders }
+const dataWithImage = [...mockData] as any
 dataWithImage[0].image = (
   <TableThumbnail>
     <a href="#">
