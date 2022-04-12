@@ -60,7 +60,6 @@ const ResendConfirmationModal = ({
       title={t("authentication.signIn.yourAccountIsNotConfirmed")}
       ariaDescription={t("authentication.createAccount.linkExpired")}
       onClose={() => {
-        void router.push("/")
         onClose()
         window.scrollTo(0, 0)
       }}
@@ -77,7 +76,6 @@ const ResendConfirmationModal = ({
           type="button"
           styleType={AppearanceStyleType.alert}
           onClick={() => {
-            void router.push("/")
             onClose()
             window.scrollTo(0, 0)
           }}
