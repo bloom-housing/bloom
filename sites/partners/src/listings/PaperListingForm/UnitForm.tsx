@@ -77,7 +77,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     control,
     name: "amiChart.id",
   })
-  
+
   const minOccupancy: number = useWatch({
     control,
     name: "minOccupancy",
@@ -452,7 +452,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 options={numberOptions(10)}
                 error={fieldHasError(errors?.minOccupancy)}
                 errorMessage={t("errors.minLargerThanMaxOccupancyError")}
-                validation={ maxOccupancy && { max: maxOccupancy }}
+                validation={maxOccupancy && { max: maxOccupancy }}
               />
             </ViewItem>
           </GridCell>
