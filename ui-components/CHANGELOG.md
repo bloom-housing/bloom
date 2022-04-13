@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.2-alpha.0...@bloom-housing/ui-components@4.2.2-alpha.1) (2022-04-13)
+
+
+### Features
+
+* swap h5 with h1 for screen reader compatibility ([#2653](https://github.com/bloom-housing/bloom/issues/2653)) ([09d1976](https://github.com/bloom-housing/bloom/commit/09d19762cac4ee4c700e01bc0962be737d8b1155))
+
+
+
+
+
 ## [4.2.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/ui-components@4.2.1-alpha.4...@bloom-housing/ui-components@4.2.2-alpha.0) (2022-04-13)
 
 
