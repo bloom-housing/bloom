@@ -99,7 +99,7 @@ export class User {
   @Column("varchar", { nullable: true })
   @Expose()
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
-  @IsPhoneNumber(null, { groups: [ValidationsGroupsEnum.default] })
+  @IsPhoneNumber("US", { groups: [ValidationsGroupsEnum.default] })
   phoneNumber?: string
 
   @CreateDateColumn()
