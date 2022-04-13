@@ -12,17 +12,21 @@ import {
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
-import { Listing, PaginatedApplication } from "@bloom-housing/backend-core/types"
 import { StatusItemWrapper } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 import { UserStatus } from "../../lib/constants"
+import { Application, Listing } from "@bloom-housing/backend-core"
+
+interface AppWithListing extends Application {
+  fullListing?: Listing
+}
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
-  const [applications, setApplications] = useState<PaginatedApplication>()
-  const [error, setError] = useState(null)
+  const [applications, setApplications] = useState<AppWithListing[]>()
   const [loading, setLoading] = useState(true)
-  const [listings, setListings] = useState<Listing[]>([])
+  const [listLoading, setListLoading] = useState(true)
+  const [error, setError] = useState()
 
   useEffect(() => {
     if (profile) {
@@ -34,38 +38,36 @@ const Applications = () => {
       applicationsService
         .list({ userId: profile.id })
         .then((apps) => {
-          setApplications(apps)
+          setApplications(apps?.items)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
-          setError(`${err}`)
+          setError(err)
           setLoading(false)
         })
     }
   }, [profile, applicationsService])
-  let start = new Date().getTime()
+
   useEffect(() => {
-    const listingsArr = async () => {
-      const listArr = []
-      for (const application of applications?.items) {
-        try {
-          const retrievedListing = await listingsService.retrieve({ id: application?.listing.id })
-          listArr.push(retrievedListing)
-        } catch (err) {
-          console.error(`Error fetching listing: ${err}`)
-        }
-      }
-      return listArr
-    }
-    if (applications?.items.length > 0) {
-      void listingsArr().then((results) => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        start = new Date().getTime()
-        setListings(results)
+    if (!applications || (applications && !listLoading)) return
+    void Promise.all(
+      applications?.map(async (app) => {
+        const retrievedListing = await listingsService.retrieve({ id: app?.listing.id })
+        app.fullListing = retrievedListing
+        return app
+      })
+    )
+      .then((res) => {
+        setListLoading(false)
+        setApplications(res)
         setLoading(false)
       })
-    }
-  }, [applications, listingsService])
+      .catch((err) => {
+        console.error(`Error fetching applications: ${err}`)
+        setError(err)
+        setLoading(false)
+      })
+  }, [applications, listLoading, listingsService])
 
   const noApplicationsSection = () => {
     return error ? (
@@ -79,7 +81,6 @@ const Applications = () => {
       </div>
     )
   }
-
   return (
     <RequireLogin signInPath="/sign-in" signInMessage={t("t.loginIsRequired")}>
       <Layout>
@@ -91,28 +92,14 @@ const Applications = () => {
           <div className="flex flex-wrap relative max-w-3xl mx-auto md:py-8">
             <DashBlocks>
               <DashBlock title={t("account.myApplications")} icon={<HeaderBadge />}>
-                <LoadingOverlay
-                  isLoading={loading && !applications?.items?.length && !listings?.length}
-                >
+                <LoadingOverlay isLoading={loading}>
                   <Fragment>
-                    test
-                    {applications?.items?.length > 0 &&
-                      listings?.length > 0 &&
-                      applications.items.map((application, index) => {
-                        console.log(new Date().getTime() - start)
-                        //temporary solution to test speed
-                        const currentListing = listings[index]
-                        return (
-                          <StatusItemWrapper
-                            key={index}
-                            application={application}
-                            listing={currentListing}
-                          />
-                        )
-                      })}
+                    {applications?.map((application, index) => {
+                      return <StatusItemWrapper key={index} application={application} />
+                    })}
                   </Fragment>
                 </LoadingOverlay>
-                {applications?.items.length < 1 && !loading && noApplicationsSection()}
+                {applications?.length < 1 && !loading && noApplicationsSection()}
               </DashBlock>
             </DashBlocks>
           </div>

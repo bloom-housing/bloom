@@ -1,34 +1,26 @@
 import React from "react"
-import { Application, Listing } from "@bloom-housing/backend-core/types"
 import { StatusItem } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
+import { Application, Listing } from "@bloom-housing/backend-core"
 
+interface AppWithListing extends Application {
+  fullListing?: Listing
+}
 interface StatusItemWrapperProps {
-  application: Application
-  listing: Listing
+  application: AppWithListing
 }
 
 const StatusItemWrapper = (props: StatusItemWrapperProps) => {
-  // const { listingsService } = useContext(AuthContext)
-  // const [listing, setListing] = useState<Listing>()
-
-  // useEffect(() => {
-  //   listingsService
-  //     ?.retrieve({ id: props.application.listing.id })
-  //     .then((retrievedListing) => {
-  //       setListing(retrievedListing)
-  //     })
-  //     .catch((err) => console.error(`Error fetching listing: ${err}`))
-  // }, [listingsService, props.application])
-
   return (
     <StatusItem
-      applicationDueDate={dayjs(props.listing?.applicationDueDate).format("MMMM D, YYYY")}
+      applicationDueDate={dayjs(props.application?.fullListing?.applicationDueDate).format(
+        "MMMM D, YYYY"
+      )}
       applicationURL={`application/${props.application?.id}`}
       applicationUpdatedAt={dayjs(props.application?.updatedAt).format("MMMM D, YYYY")}
       confirmationNumber={props.application?.confirmationCode || props.application?.id}
-      listingName={props.listing?.name}
-      listingURL={`/listing/${props.listing?.id}/${props.listing?.urlSlug}`}
+      listingName={props.application?.fullListing?.name}
+      listingURL={`/listing/${props.application?.fullListing?.id}/${props.application?.fullListing?.urlSlug}`}
       key={props.application?.id}
     />
   )
