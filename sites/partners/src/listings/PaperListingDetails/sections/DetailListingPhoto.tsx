@@ -37,7 +37,7 @@ const DetailListingPhoto = () => {
       preview: {
         content: (
           <TableThumbnail>
-            <img src={listingPhotoUrl} />
+            <img src={listingPhotoUrl} alt={t("listings.sections.photoTitle")} />
           </TableThumbnail>
         ),
       },
