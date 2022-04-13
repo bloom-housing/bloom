@@ -38,7 +38,7 @@ const Applications = () => {
       applicationsService
         .list({ userId: profile.id })
         .then((apps) => {
-          setApplications(apps?.items)
+          apps?.items?.length > 0 ? setApplications(apps.items) : setLoading(false)
         })
         .catch((err) => {
           console.error(`Error fetching applications: ${err}`)
@@ -99,7 +99,7 @@ const Applications = () => {
                     })}
                   </Fragment>
                 </LoadingOverlay>
-                {applications?.length < 1 && !loading && noApplicationsSection()}
+                {!applications && !loading && noApplicationsSection()}
               </DashBlock>
             </DashBlocks>
           </div>
