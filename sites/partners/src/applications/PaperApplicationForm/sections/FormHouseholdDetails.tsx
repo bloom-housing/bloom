@@ -38,15 +38,15 @@ const FormHouseholdDetails = ({
   const adaFeaturesOptions = adaFeatureKeys.map((item) => {
     const isChecked =
       applicationAccessibilityFeatures &&
-      Object.keys(applicationAccessibilityFeatures).includes(item.id) &&
-      applicationAccessibilityFeatures[item.id] === true
+      Object.keys(applicationAccessibilityFeatures).includes(item) &&
+      applicationAccessibilityFeatures[item] === true
 
     return {
-      id: item.id,
-      label: t(`application.add.${item.id}`),
-      value: item.id,
+      id: item,
+      label: t(`application.add.${item}`),
+      value: item,
       defaultChecked: isChecked,
-      dataTestId: `adaFeature.${item.id}`,
+      dataTestId: `adaFeature.${item}`,
     }
   })
 

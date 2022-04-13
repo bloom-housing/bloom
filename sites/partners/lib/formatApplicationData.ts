@@ -206,7 +206,7 @@ export const mapFormToApi = ({ data, listingId, editMode, programs }: mapFormToA
     Accessibility,
     "id" | "createdAt" | "updatedAt"
   > = adaFeatureKeys.reduce((acc, feature) => {
-    acc[feature.id] = data.application.accessibility.includes(feature.id)
+    acc[feature] = data.application.accessibility.includes(feature)
     return acc
   }, {})
 
@@ -329,12 +329,7 @@ export const mapApiToForm = (applicationData: ApplicationUpdate) => {
     const preferredUnit = applicationData?.preferredUnit?.map((unit) => unit.id)
 
     const accessibility: string[] = adaFeatureKeys
-      .map((feature) => {
-        if (applicationData?.accessibility[feature.id] === true) {
-          return feature.id
-        }
-      })
-      .filter((feature) => !!feature)
+      .filter((feature) => applicationData?.accessibility[feature] === true)
 
     const result = {
       applicant,

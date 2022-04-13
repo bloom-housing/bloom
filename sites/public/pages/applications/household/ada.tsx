@@ -49,7 +49,6 @@ const ApplicationAda = () => {
         hearing: !!data["app-accessibility-hearing"],
       },
     })
-    console.log(conductor)
     conductor.sync()
     conductor.routeToNextOrReturnUrl()
   }
@@ -66,14 +65,14 @@ const ApplicationAda = () => {
   }, [profile])
 
   const adaFeaturesOptions: FieldSingle[] = adaFeatureKeys.map((item) => {
-    const isChecked = application.accessibility[item.id]
+    const isChecked = application.accessibility[item]
 
     return {
-      id: item.id,
-      label: t(`application.ada.${item.id}`),
-      value: item.id,
+      id: item,
+      label: t(`application.ada.${item}`),
+      value: item,
       defaultChecked: isChecked,
-      dataTestId: `app-ada-${item.id}`,
+      dataTestId: `app-ada-${item}`,
       uniqueName: true,
       inputProps: {
         onChange: () => {
@@ -84,8 +83,6 @@ const ApplicationAda = () => {
       },
     }
   })
-
-  console.log(application)
 
   adaFeaturesOptions.push({
     id: "no-features",
