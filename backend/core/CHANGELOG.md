@@ -29,6 +29,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
  - @bloom-housing/partners@4.0.1-alpha.67
  - @bloom-housing/public@4.0.1-alpha.66
  - @bloom-housing/ui-components@4.0.1-alpha.62
+## [4.2.1-alpha.2](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.1-alpha.1...@bloom-housing/backend-core@4.2.1-alpha.2) (2022-04-13)
+
+
+### Bug Fixes
+
+* adds region to user phone # validation ([#2652](https://github.com/bloom-housing/bloom/issues/2652)) ([f4ab660](https://github.com/bloom-housing/bloom/commit/f4ab660912a4c675073558d407880c8a98687530))
 
 
 
