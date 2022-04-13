@@ -87,6 +87,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     control,
     name: "maxOccupancy",
   })
+
   const maxAmiHouseholdSize = 8
 
   const getAmiChartTableData = () => {
@@ -451,7 +452,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 controlClassName="control"
                 options={numberOptions(10)}
                 error={fieldHasError(errors?.minOccupancy)}
-                errorMessage={t("errors.minLargerThanMaxOccupancyError")}
+                errorMessage={t("errors.minGreaterThanMaxOccupancyError")}
                 validation={maxOccupancy && { max: maxOccupancy }}
               />
             </ViewItem>
@@ -468,7 +469,7 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 controlClassName="control"
                 options={numberOptions(10)}
                 error={fieldHasError(errors?.maxOccupancy)}
-                errorMessage={t("errors.maxLargerThanMinOccupancyError")}
+                errorMessage={t("errors.maxLessThanMinOccupancyError")}
                 validation={{ min: minOccupancy }}
               />
             </ViewItem>
