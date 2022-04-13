@@ -287,7 +287,7 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
-  it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
+  it("defaults to sorting listings by applicationDueDate", async () => {
     const res = await supertest(app.getHttpServer())
       .get(`/listings?limit=all&order=ASC`)
       .expect(200)
@@ -297,24 +297,17 @@ describe("Listings", () => {
     expect(listings[0].name).toBe("Test: Coliseum")
 
     // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
-    // (5 days in the future). Between the two, Triton 1 appears first because it has
-    // the closer applicationOpenDate.
+    // (5 days in the future). Between the two, Triton 2 appears first because it has
+    // the closer applicationOpenDate. (edit sort order between Triton 1 and Triton 2 is random now as
+    // we have removed the default applicationOpenDate sort order
     const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton 1")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Triton 2")
     const fourthListing = listings[3]
     expect(fourthListing.name).toBe("Test: Default, No Preferences")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
     expect(secondListingAppDueDate.getDate()).toEqual(thirdListingAppDueDate.getDate())
-
-    const secondListingAppOpenDate = new Date(secondListing.applicationOpenDate)
-    const thirdListingAppOpenDate = new Date(thirdListing.applicationOpenDate)
-    expect(secondListingAppOpenDate.getTime()).toBeGreaterThanOrEqual(
-      thirdListingAppOpenDate.getTime()
-    )
 
     // Verify that listings with null applicationDueDate's appear at the end.
     const lastListing = listings[listings.length - 1]
