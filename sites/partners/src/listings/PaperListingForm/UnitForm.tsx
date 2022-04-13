@@ -77,7 +77,16 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
     control,
     name: "amiChart.id",
   })
+  
+  const minOccupancy: number = useWatch({
+    control,
+    name: "minOccupancy",
+  })
 
+  const maxOccupancy: number = useWatch({
+    control,
+    name: "maxOccupancy",
+  })
   const maxAmiHouseholdSize = 8
 
   const getAmiChartTableData = () => {
@@ -441,6 +450,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 register={register}
                 controlClassName="control"
                 options={numberOptions(10)}
+                error={fieldHasError(errors?.minOccupancy)}
+                errorMessage={t("errors.minLargerThanMaxOccupancyError")}
+                validation={ maxOccupancy && { max: maxOccupancy }}
               />
             </ViewItem>
           </GridCell>
@@ -455,6 +467,9 @@ const UnitForm = ({ onSubmit, onClose, defaultUnit, nextId, draft }: UnitFormPro
                 register={register}
                 controlClassName="control"
                 options={numberOptions(10)}
+                error={fieldHasError(errors?.maxOccupancy)}
+                errorMessage={t("errors.maxLargerThanMinOccupancyError")}
+                validation={{ min: minOccupancy }}
               />
             </ViewItem>
           </GridCell>
