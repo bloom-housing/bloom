@@ -32,7 +32,7 @@ const mcvListing: ListingSeedType = {
   leasingAgentName: "Janelle Henderson",
   leasingAgentPhone: "313-831-1725",
   managementCompany: "Associated Management Co",
-  managementWebsite: "associated-management.rentlinx.com/listings",
+  managementWebsite: "https://associated-management.rentlinx.com/listings",
   name: "Medical Center Village",
   status: ListingStatus.active,
   images: [],

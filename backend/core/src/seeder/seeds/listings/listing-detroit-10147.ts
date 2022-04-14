@@ -30,7 +30,7 @@ const mshListing: ListingSeedType = {
   leasingAgentName: "Kim Hagood",
   leasingAgentPhone: "248-228-1340",
   managementCompany: "Elite Property Management LLC",
-  managementWebsite: "www.elitep-m.com",
+  managementWebsite: "https://www.elitep-m.com",
   name: "Melrose Square Homes",
   status: ListingStatus.active,
   images: [],

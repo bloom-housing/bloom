@@ -44,12 +44,14 @@ export class ListingsService {
             "listings.publishedAt": { order: "DESC", nulls: "NULLS LAST" },
           }
         case OrderByFieldsEnum.applicationDates:
+          return {
+            "listings.applicationDueDate": "ASC",
+          }
         case undefined:
           // Default to ordering by applicationDates (i.e. applicationDueDate
           // and applicationOpenDate) if no orderBy param is specified.
           return {
-            "listings.applicationDueDate": "ASC",
-            "listings.applicationOpenDate": "DESC",
+            "listings.name": "ASC",
           }
         default:
           throw new HttpException(
@@ -60,18 +62,18 @@ export class ListingsService {
       }
     }
 
+    const orderBy = getOrderByCondition(params)
     // Inner query to get the sorted listing ids of the listings to display
     // TODO(avaleske): Only join the tables we need for the filters that are applied
     const innerFilteredQuery = this.listingRepository
       .createQueryBuilder("listings")
       .select("listings.id", "listings_id")
       .leftJoin("listings.property", "property")
-      .leftJoin("listings.leasingAgents", "leasingAgents")
       .leftJoin("property.buildingAddress", "buildingAddress")
       .leftJoin("listings.reservedCommunityType", "reservedCommunityType")
       .leftJoin("listings.features", "listing_features")
       .groupBy("listings.id")
-      .orderBy(getOrderByCondition(params))
+      .orderBy(orderBy)
 
     if (params.filter) {
       addFilters<Array<ListingFilterParams>, typeof filterTypeToFieldMap>(
@@ -101,7 +103,7 @@ export class ListingsService {
       // (WHERE params are the values passed to andWhere() that TypeORM escapes
       // and substitues for the `:paramName` placeholders in the WHERE clause.)
       .setParameters(innerFilteredQuery.getParameters())
-      .orderBy(getOrderByCondition(params))
+      .orderBy(orderBy)
       .getMany()
 
     listings = await this.addUnitSummariesToListings(listings)

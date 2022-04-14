@@ -37,7 +37,7 @@ const listingSeed: ListingSeedType = {
   leasingAgentPhone: "313-934-0010",
   leasingAgentEmail: "OakVillageIndependenceHouse@voami.org",
   managementCompany: "Detroit Voa Elderly Nonprofit Housing Corporation",
-  managementWebsite: "www.voa.org/housing_properties/oak-village-independence-house",
+  managementWebsite: "https://www.voa.org/housing_properties/oak-village-independence-house",
   name: "Oak Village Independence",
   status: ListingStatus.active,
   images: [],

@@ -12,6 +12,7 @@ type keysWithMappedField = Exclude<
 >
 
 export const filterTypeToFieldMap: Record<keysWithMappedField, string> = {
+  id: "listings.id",
   status: "listings.status",
   name: "listings.name",
   isVerified: "listings.isVerified",

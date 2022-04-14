@@ -42,7 +42,7 @@ const grandRivListing: ListingSeedType = {
   hrdId: "HRD10157",
   leasingAgentPhone: "313-545-8720",
   managementCompany: "Rock Management Company",
-  managementWebsite: "www.28granddetroit.com",
+  managementWebsite: "https://www.28granddetroit.com",
   name: "Capitol Park Micro Units",
   status: ListingStatus.active,
   images: [],

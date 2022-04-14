@@ -35,7 +35,7 @@ const listingSeed: ListingSeedType = {
   leasingAgentName: "Kim Hagood",
   leasingAgentPhone: "313-656-4146",
   managementCompany: "Elite Property Management LLC",
-  managementWebsite: "www.elitep-m.com",
+  managementWebsite: "https://www.elitep-m.com",
   name: "New Center Square",
   status: ListingStatus.active,
   images: [],

@@ -125,7 +125,9 @@ describe("Listings", () => {
   })
 
   it("should modify property related fields of a listing and return a modified value", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingDto = { ...res.body.items[0] }
 
@@ -147,7 +149,9 @@ describe("Listings", () => {
   })
 
   it("should add/overwrite image in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
 
@@ -216,7 +220,9 @@ describe("Listings", () => {
   })
 
   it("should add/overwrite listing events in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
 
     const listing: ListingUpdateDto = { ...res.body.items[0] }
 
@@ -251,22 +257,251 @@ describe("Listings", () => {
     expect(modifiedListing.events[0].file.label).toBe(listingEvent.file.label)
   })
 
-  it("defaults to sorting listings by applicationDueDate, then applicationOpenDate", async () => {
+  it("should add/overwrite and remove listing programs in existing listing", async () => {
+    const res = await supertest(app.getHttpServer())
+      .get("/listings?orderBy=applicationDates")
+      .expect(200)
+    const listing: ListingUpdateDto = { ...res.body.items[0] }
+    const newProgram = await programsRepository.save({
+      title: "TestTitle",
+      subtitle: "TestSubtitle",
+      description: "TestDescription",
+    })
+    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
+
+    const putResponse = await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send(listing)
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+
+    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
+    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
+    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
+
+    await supertest(app.getHttpServer())
+      .put(`/listings/${listing.id}`)
+      .send({
+        ...putResponse.body,
+        listingPrograms: [],
+      })
+      .set(...setAuthorization(adminAccessToken))
+      .expect(200)
+
+    const listingResponse2 = await supertest(app.getHttpServer())
+      .get(`/listings/${putResponse.body.id}`)
+      .expect(200)
+    expect(listingResponse2.body.listingPrograms.length).toBe(0)
+  })
+
+  describe.skip("AMI Filter", () => {
+    it("should return listings with AMI >= the filter value", async () => {
+      const paramsWithEqualAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "60",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithEqualAmi))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+
+      const paramsWithLessAmi = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "59",
+          },
+        ],
+      }
+      const res2 = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(paramsWithLessAmi))
+        .expect(200)
+      expect(res2.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should not return listings with AMI < the filter value", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "61",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ name: "Test: Default, Summary With 30 and 60 Ami Percentage" }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in Units Summary, even if Listings.amiPercentageMax field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 30 Listing With 10 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should not return listings with matching AMI in Listings.amiPercentageMax field, if Unit Summary field does not match", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "30",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary With 10 Listing With 30 Ami Percentage",
+          }),
+        ])
+      )
+    })
+
+    it("should return listings with matching AMI in the Listings.amiPercentageMax field, if the Unit Summary field is empty", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "NA",
+            minAmiPercentage: "19",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+      expect(res.body.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: "Test: Default, Summary Without And Listing With 20 Ami Percentage",
+          }),
+        ])
+      )
+    })
+  })
+
+  describe.skip("Unit size filtering", () => {
+    it("should return listings with >= 1 bedroom", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: ">=",
+            bedrooms: "1",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+
+      const listings: Listing[] = res.body.items
+      expect(listings.length).toBeGreaterThan(0)
+      // expect that all listings have at least one unit with >= 1 bedroom
+      /* expect(
+        listings.map((listing) => {
+          listing.unitsSummary.find((unit) => {
+            unit.unitType.some((unitType) => unitType.numBedrooms >= 1)
+          }) !== undefined
+        })
+      ).not.toContain(false) */
+    })
+
+    it("should return listings with exactly 1 bedroom", async () => {
+      const params = {
+        view: "base",
+        limit: "all",
+        filter: [
+          {
+            $comparison: "=",
+            bedrooms: "1",
+          },
+        ],
+      }
+      const res = await supertest(app.getHttpServer())
+        .get("/listings?" + qs.stringify(params))
+        .expect(200)
+
+      const listings: Listing[] = res.body.items
+      expect(listings.length).toBeGreaterThan(0)
+      // expect that all listings have at least one unit with exactly 1 bedroom
+      /* expect(
+        listings.map((listing) => {
+          listing.unitsSummary.find((unit) => {
+            unit.unitType.some((unitType) => unitType.numBedrooms >= 1)
+          }) !== undefined
+        })
+      ).not.toContain(false) */
+    })
+  })
+
+  it("defaults to sorting listings by name", async () => {
     const res = await supertest(app.getHttpServer()).get(`/listings?limit=all`).expect(200)
     const listings = res.body.items
 
     // The Coliseum seed has the soonest applicationDueDate (1 day in the future)
-    expect(listings[0].name).toBe("Test: Coliseum")
+    expect(listings[0].name).toBe("Medical Center Village")
 
     // Triton and "Default, No Preferences" share the next-soonest applicationDueDate
     // (5 days in the future). Between the two, Triton 1 appears first because it has
     // the closer applicationOpenDate.
     const secondListing = listings[1]
-    expect(secondListing.name).toBe("Test: Triton 1")
+    expect(secondListing.name).toBe("Melrose Square Homes")
     const thirdListing = listings[2]
-    expect(thirdListing.name).toBe("Test: Triton 2")
+    expect(thirdListing.name).toBe("New Center Commons")
     const fourthListing = listings[3]
-    expect(fourthListing.name).toBe("Test: Default, No Preferences")
+    expect(fourthListing.name).toBe("New Center Pavilion")
 
     const secondListingAppDueDate = new Date(secondListing.applicationDueDate)
     const thirdListingAppDueDate = new Date(thirdListing.applicationDueDate)
@@ -330,45 +565,6 @@ describe("Listings", () => {
         secondPageListingUpdateTimestamp.getTime()
       )
     }
-  })
-
-  it("should add/overwrite and remove listing programs in existing listing", async () => {
-    const res = await supertest(app.getHttpServer()).get("/listings").expect(200)
-    const listing: ListingUpdateDto = { ...res.body.items[0] }
-    const newProgram = await programsRepository.save({
-      title: "TestTitle",
-      subtitle: "TestSubtitle",
-      description: "TestDescription",
-    })
-    listing.listingPrograms = [{ program: newProgram, ordinal: 1 }]
-
-    const putResponse = await supertest(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send(listing)
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
-
-    const listingResponse = await supertest(app.getHttpServer())
-      .get(`/listings/${putResponse.body.id}`)
-      .expect(200)
-
-    expect(listingResponse.body.listingPrograms[0].program.id).toBe(newProgram.id)
-    expect(listingResponse.body.listingPrograms[0].program.title).toBe(newProgram.title)
-    expect(listingResponse.body.listingPrograms[0].ordinal).toBe(1)
-
-    await supertest(app.getHttpServer())
-      .put(`/listings/${listing.id}`)
-      .send({
-        ...putResponse.body,
-        listingPrograms: [],
-      })
-      .set(...setAuthorization(adminAccessToken))
-      .expect(200)
-
-    const listingResponse2 = await supertest(app.getHttpServer())
-      .get(`/listings/${putResponse.body.id}`)
-      .expect(200)
-    expect(listingResponse2.body.listingPrograms.length).toBe(0)
   })
 
   afterEach(() => {
