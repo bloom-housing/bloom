@@ -125,11 +125,12 @@ const FieldGroup = ({
     []
   )
 
-  useEffect(() => {
-    const initialValues: string[] = []
-    checkSelected(fields, initialValues)
-    setCheckedInputs([...initialValues])
-  }, [checkSelected, setCheckedInputs, fields])
+  // This useEffect is causing a console warning with the new min-max occupancy validation and needs to be fixed in a separate PR
+  // useEffect(() => {
+  //   const initialValues: string[] = []
+  //   checkSelected(fields, initialValues)
+  //   setCheckedInputs([...initialValues])
+  // }, [checkSelected, setCheckedInputs, fields])
 
   const getInputSet = (item: FieldSingle): React.ReactNode => {
     return (
