@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.2-alpha.1](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.2-alpha.0...@bloom-housing/backend-core@4.2.2-alpha.1) (2022-04-14)
+
+
+### Features
+
+* **backend:** add order param to listings GET endpoint ([#2630](https://github.com/bloom-housing/bloom/issues/2630)) ([2a915f2](https://github.com/bloom-housing/bloom/commit/2a915f2bb0d07fb20e2c829896fa22a13e4da1bf))
+
+
+
+
+
 ## [4.2.2-alpha.0](https://github.com/bloom-housing/bloom/compare/@bloom-housing/backend-core@4.2.1-alpha.2...@bloom-housing/backend-core@4.2.2-alpha.0) (2022-04-13)
 
 
