@@ -3,7 +3,7 @@ import { StatusItem } from "@bloom-housing/ui-components"
 import dayjs from "dayjs"
 import { Application, Listing } from "@bloom-housing/backend-core"
 
-interface AppWithListing extends Application {
+export interface AppWithListing extends Application {
   fullListing?: Listing
 }
 interface StatusItemWrapperProps {

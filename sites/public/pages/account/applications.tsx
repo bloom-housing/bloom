@@ -12,14 +12,9 @@ import {
 } from "@bloom-housing/ui-components"
 import { PageView, pushGtmEvent } from "@bloom-housing/shared-helpers"
 import Layout from "../../layouts/application"
-import { StatusItemWrapper } from "./StatusItemWrapper"
+import { StatusItemWrapper, AppWithListing } from "./StatusItemWrapper"
 import { MetaTags } from "../../src/MetaTags"
 import { UserStatus } from "../../lib/constants"
-import { Application, Listing } from "@bloom-housing/backend-core"
-
-interface AppWithListing extends Application {
-  fullListing?: Listing
-}
 
 const Applications = () => {
   const { applicationsService, listingsService, profile } = useContext(AuthContext)
