@@ -4,7 +4,7 @@ import { ELIGIBILITY_ROUTE, ELIGIBILITY_SECTIONS } from "./constants"
 export const eligibilityRoute = (page: number) =>
   `/${ELIGIBILITY_ROUTE}/${ELIGIBILITY_SECTIONS[page]}`
 import dayjs from "dayjs"
-import { Address, Listing } from "@bloom-housing/backend-core/types"
+import { Address, Listing, ListingMarketingTypeEnum } from "@bloom-housing/backend-core/types"
 import {
   t,
   ListingCard,
@@ -53,7 +53,11 @@ export const accessibilityFeaturesExist = (listing: Listing) => {
 }
 
 export const getImageTagLabelFromListing = (listing: Listing) => {
-  return listing?.isVerified ? t("listings.verifiedListing") : undefined
+  return listing?.marketingType === ListingMarketingTypeEnum.comingSoon
+    ? t("listings.comingSoon")
+    : listing?.isVerified
+    ? t("listings.verifiedListing")
+    : undefined
 }
 
 export const getListings = (listings) => {
@@ -73,7 +77,11 @@ export const getListings = (listings) => {
           ? [
               {
                 text: getImageTagLabelFromListing(listing),
-                iconType: listing?.isVerified ? "badgeCheck" : null,
+                iconType:
+                  listing?.isVerified &&
+                  listing?.marketingType === ListingMarketingTypeEnum.comingSoon
+                    ? "badgeCheck"
+                    : null,
                 iconColor: "#193154",
               },
             ]
@@ -161,24 +169,28 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
 
     let availability = null
 
-    if (group.unitVacancies > 0) {
+    if (listing.marketingType && listing.marketingType === ListingMarketingTypeEnum.comingSoon) {
+      availability = <strong>{t("listings.comingSoon")}</strong>
+    } else {
+      if (group.unitVacancies > 0) {
+        availability = (
+          <div>
+            <strong>{group.unitVacancies} </strong>
+            {group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")}
+            {` ${t("t.&")}`}
+          </div>
+        )
+      }
+
       availability = (
-        <div>
-          <strong>{group.unitVacancies} </strong>
-          {group.unitVacancies === 1 ? t("listings.vacantUnit") : t("listings.vacantUnits")}
-          {` ${t("t.&")}`}
-        </div>
+        <>
+          {availability}
+          <strong>
+            {group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed")}
+          </strong>
+        </>
       )
     }
-
-    availability = (
-      <>
-        {availability}
-        <strong>
-          {group.openWaitlist ? t("listings.waitlist.open") : t("listings.waitlist.closed")}
-        </strong>
-      </>
-    )
 
     let ami = null
 
@@ -212,9 +224,9 @@ export const getUnitGroupSummary = (listing: Listing): UnitSummaryTable => {
             .reduce((acc, curr) => [acc, ", ", curr])}
         </>
       ),
-      rent,
-      availability,
-      ami: <strong>{ami}</strong>,
+      rent: rent ?? t("listings.unitsSummary.notAvailable"),
+      availability: <strong>{availability ?? t("listings.unitsSummary.notAvailable")}</strong>,
+      ami: ami ?? t("listings.unitsSummary.notAvailable"),
     }
   })
 

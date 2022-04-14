@@ -1091,6 +1091,7 @@
   "listings.unitsSummary.availability": "Availability",
   "listings.unitsSummary.count": "Afforable Unit Group Quantity",
   "listings.unitsSummary.available": "Total Available",
+  "listings.unitsSummary.notAvailable": "Not available",
   "listings.unitsSummary.delete": "Delete this Summary",
   "listings.unitsSummary.deleteConf": "Do you really want to delete this summary?",
   "listings.unitsSummary.bathroomsMin": "Min Number of Bathrooms",

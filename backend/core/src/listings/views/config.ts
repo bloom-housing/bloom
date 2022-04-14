@@ -8,6 +8,7 @@ const views: Views = {
       "listings.name",
       "listings.applicationDueDate",
       "listings.applicationOpenDate",
+      "listings.marketingType",
       "listings.reviewOrderType",
       "listings.status",
       "listings.assets",

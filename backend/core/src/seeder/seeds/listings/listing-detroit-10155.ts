@@ -60,7 +60,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
-  marketingType: ListingMarketingTypeEnum.Marketing,
+  marketingType: ListingMarketingTypeEnum.ComingSoon,
 }
 
 export class Listing10155Seed extends ListingDefaultSeed {
