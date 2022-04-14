@@ -48,26 +48,6 @@ p, anonymous, jurisdiction, true, read
 p, admin, listing, true, .*
 p, anonymous, listing, true, read
 
-p, user, property, true, create
-p, anonymous, property, true, .*
-
-p, anonymous, amiChart, true, .*
-
-p, admin, reservedCommunityType, true, .*
-p, anonymous, reservedCommunityType, true, read
-
-p, admin, reservedCommunityType, true, .*
-p, anonymous, reservedCommunityType, true, read
-
-p, admin, unitType, true, .*
-p, anonymous, unitType, true, read
-
-p, admin, unitRentType, true, .*
-p, anonymous, unitRentType, true, read
-
-p, admin, unitAccessibilityPriorityType, true, .*
-p, anonymous, unitAccessibilityPriorityType, true, read
-
 p, admin, reservedCommunityType, true, .*
 p, anonymous, reservedCommunityType, true, read
 

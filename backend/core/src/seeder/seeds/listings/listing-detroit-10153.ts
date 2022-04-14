@@ -33,7 +33,7 @@ const listingSeed: ListingSeedType = {
   managementCompany: "Smiley Management",
   name: "Morang Apartments",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

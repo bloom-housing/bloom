@@ -37,7 +37,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "www.imsproperties.net/michigan",
   name: "Martin Luther King II",
   status: ListingStatus.pending,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

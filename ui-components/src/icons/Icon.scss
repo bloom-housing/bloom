@@ -62,11 +62,6 @@
   @apply h-16;
 }
 
-.ui-extra-medium svg {
-  @apply w-6;
-  @apply h-6;
-}
-
 .ui-white svg use {
   fill: #fff !important;
 }
@@ -83,8 +78,4 @@ a svg use {
   &.is-primary svg use {
     fill: $tailwind-primary;
   }
-}
-
-.ui-icon__filledRed {
-  fill: #e94761 !important;
 }

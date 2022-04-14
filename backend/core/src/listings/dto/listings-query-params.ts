@@ -47,7 +47,7 @@ export class ListingsQueryParams extends PaginationAllowsAllQueryParams {
     required: false,
     enum: OrderByFieldsEnum,
     enumName: "OrderByFieldsEnum",
-    example: "mostRecentlyUpdated",
+    example: "updatedAt",
   })
   @IsOptional({ groups: [ValidationsGroupsEnum.default] })
   @IsEnum(OrderByFieldsEnum, { groups: [ValidationsGroupsEnum.default] })

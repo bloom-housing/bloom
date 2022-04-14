@@ -261,7 +261,11 @@ const ApplicationsList = () => {
 
               <div className="flex-row">
                 <LocalizedLink href={`/listings/${listingId}/applications/add`}>
-                  <Button className="mx-1" onClick={() => false}>
+                  <Button
+                    className="mx-1"
+                    onClick={() => false}
+                    dataTestId={"addApplicationButton"}
+                  >
                     {t("applications.addApplication")}
                   </Button>
                 </LocalizedLink>
@@ -295,7 +299,6 @@ const ApplicationsList = () => {
                 quantityLabel={t("applications.totalApplications")}
                 setCurrentPage={setCurrentPage}
                 setItemsPerPage={setItemsPerPage}
-                includeBorder={true}
               />
             </div>
           </div>

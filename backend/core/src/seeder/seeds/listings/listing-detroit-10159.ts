@@ -38,7 +38,7 @@ const listingSeed: ListingSeedType = {
   managementWebsite: "www.elitep-m.com",
   name: "New Center Square",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,

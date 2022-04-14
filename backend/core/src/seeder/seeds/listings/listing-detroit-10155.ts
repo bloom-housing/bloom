@@ -34,7 +34,7 @@ const listingSeed: ListingSeedType = {
   managementCompany: "Premier Property Management",
   name: "Morton Manor",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
@@ -60,7 +60,7 @@ const listingSeed: ListingSeedType = {
   },
   listingPreferences: [],
   jurisdictionName: "Detroit",
-  marketingType: ListingMarketingTypeEnum.Marketing,
+  marketingType: ListingMarketingTypeEnum.ComingSoon,
 }
 
 export class Listing10155Seed extends ListingDefaultSeed {

@@ -42,7 +42,7 @@ export class CronService {
           recipients.push(leasingAgent.email)
         }
       }
-      await this.emailService.updateListingReminder(listing, recipients)
+      // await this.emailService.updateListingReminder(listing, recipients)
     }
   }
 }

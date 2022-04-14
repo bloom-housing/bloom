@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Icon, IconProps } from "../icons/Icon"
 import { AppearanceProps, classNamesForAppearanceTypes } from "../global/AppearanceTypes"
 import "./Tag.scss"
 
@@ -8,7 +7,6 @@ export interface TagProps extends AppearanceProps {
   pillStyle?: boolean
   children: React.ReactNode
   fillContainer?: boolean
-  icon?: IconProps
 }
 
 export const Tag = (props: TagProps) => {
@@ -18,10 +16,5 @@ export const Tag = (props: TagProps) => {
   if (props.fillContainer) tagClasses.push("fill-container")
   if (props.className) tagClasses.push(props.className)
 
-  return (
-    <span className={tagClasses.join(" ")}>
-      {props.icon && <Icon {...props.icon} className="tag__icon" />}
-      {props.children}
-    </span>
-  )
+  return <span className={tagClasses.join(" ")}>{props.children}</span>
 }

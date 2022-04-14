@@ -1,35 +1,21 @@
 {
-  "welcome": {
-    "title": "Find affordable rental housing in Detroit",
-    "heroText": "Your resource to find income-restricted multi-family housing and apartments."
-  },
-  "nav": {
-    "siteTitle": "Detroit Home Connect",
-    "rentals": "Rentals"
-  },
-  "region": {
-    "name": "Detroit"
-  },
-  "footer": {
-    "copyright": "City of Detroit © 2021 • All Rights Reserved",
-    "header": "Detroit Home Connect",
-    "headerLink": "City of Detroit",
-    "description": "Detroit Home Connect is a project of the City of Detroit Housing and Revitalization Department in partnership with Exygy and Google.org.",
-    "forGeneralInquiries": "For general program inquiries:",
-    "youMayCall": "You may call the City of Detroit HRD at:",
-    "forListingQuestions": "For listing and application questions:",
-    "pleaseContact": "Please contact the Property Agent displayed on each listing.",
-    "contactInfo": "email the City of Detroit Housing and Revitalization Department at [detroithomeconnect@detroitmi.gov](mailto:detroithomeconnect@detroitmi.gov) or call [313-224-6380](tel:313-224-6380)."
-  },
-  "leasingAgent": {
-    "contact": "Management Company",
-    "dueToHighCallVolume": ""
-  },
-  "listingFilters": {
-    "resetButton": "See All Listings"
-  },
-  "listings": {
-    "communityPrograms": "Community Programs",
-    "communityProgramsDescription": "This program includes opportunities for members of specific communities"
-  }
+  "welcome.title": "Find affordable rental housing in Detroit",
+  "welcome.heroText": "Your resource to find income-restricted multi-family housing and apartments.",
+  "nav.siteTitle": "Detroit Home Connect",
+  "nav.rentals": "Rentals",
+  "region.name": "Detroit",
+  "footer.copyright": "City of Detroit © 2021 • All Rights Reserved",
+  "footer.header": "Detroit Home Connect",
+  "footer.headerLink": "City of Detroit",
+  "footer.description": "Detroit Home Connect is a project of the City of Detroit Housing and Revitalization Department in partnership with Exygy and Google.org.",
+  "footer.forGeneralInquiries": "For general program inquiries:",
+  "footer.youMayCall": "You may call the City of Detroit HRD at:",
+  "footer.forListingQuestions": "For listing and application questions:",
+  "footer.pleaseContact": "Please contact the Property Agent displayed on each listing.",
+  "footer.contactInfo": "email the City of Detroit Housing and Revitalization Department at [detroithomeconnect@detroitmi.gov](mailto:detroithomeconnect@detroitmi.gov) or call [313-224-6380](tel:313-224-6380).",
+  "leasingAgent.contact": "Management Company",
+  "leasingAgent.dueToHighCallVolume": "",
+  "listingFilters.resetButton": "See All Listings",
+  "listings.communityPrograms": "Community Programs",
+  "listings.communityProgramsDescription": "This program includes opportunities for members of specific communities"
 }

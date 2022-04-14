@@ -7,7 +7,7 @@ export class addJurisdictionRelationToReservedCommunityType1632850106492
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "reserved_community_types" ADD "jurisdiction_id" uuid`)
     const [{ id: jurisdictionId }] = await queryRunner.query(
-      `SELECT id FROM jurisdictions WHERE name = 'Detroit' LIMIT 1`
+      `SELECT id FROM jurisdictions WHERE name = 'Alameda' LIMIT 1`
     )
     await queryRunner.query(`UPDATE reserved_community_types SET jurisdiction_id = $1`, [
       jurisdictionId,

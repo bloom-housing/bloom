@@ -1,10 +1,9 @@
 import { Program } from "./entities/program.entity"
-import { QueryOneOptions } from "../shared/services/abstract-service"
 import { ProgramCreateDto } from "./dto/program-create.dto"
 import { ProgramUpdateDto } from "./dto/program-update.dto"
 import { NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { FindOneOptions, Repository } from "typeorm"
 import { addFilters } from "../shared/query-filter"
 import { ProgramsListQueryParams } from "./dto/programs-list-query-params"
 import { ProgramsFilterParams } from "./dto/programs-filter-params"
@@ -34,8 +33,8 @@ export class ProgramsService {
     return await this.repository.save(dto)
   }
 
-  async findOne(queryOneOptions: QueryOneOptions<Program>): Promise<Program> {
-    const obj = await this.repository.findOne(queryOneOptions)
+  async findOne(findOneOptions: FindOneOptions<Program>): Promise<Program> {
+    const obj = await this.repository.findOne(findOneOptions)
     if (!obj) {
       throw new NotFoundException()
     }

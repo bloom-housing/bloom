@@ -14,16 +14,19 @@ import {
 } from "@bloom-housing/ui-components"
 import { cloudinaryUrlFromId } from "@bloom-housing/shared-helpers"
 
-import { cloudinaryFileUploader, fieldMessage, fieldHasError } from "../../../../lib/helpers"
+import { cloudinaryFileUploader, fieldHasError } from "../../../../lib/helpers"
 
+/**
+ *
+ * TODO: update this to use useFieldArray when adding multiple images https://react-hook-form.com/api/usefieldarray/
+ */
 const ListingPhoto = () => {
   const formMethods = useFormContext()
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   const { register, setValue, watch, errors, clearErrors } = formMethods
 
-  const listingFormPhoto = watch("image")
-
+  const listingFormPhoto = watch("images")[0]
   /*
     Set state for the drawer, upload progress, and more
   */
@@ -43,10 +46,13 @@ const ListingPhoto = () => {
   }
 
   const savePhoto = () => {
-    setValue("image", { fileId: cloudinaryData.id, label: "cloudinaryBuilding" })
+    setValue("images.0", {
+      ordinal: 0,
+      image: { fileId: cloudinaryData.id, label: "cloudinaryBuilding" },
+    })
   }
   const deletePhoto = () => {
-    setValue("image", { fileId: "", label: "" })
+    setValue("images.0", { ordinal: 0, image: { fileId: "", label: "" } })
   }
 
   const photoTableHeaders = {
@@ -90,10 +96,10 @@ const ListingPhoto = () => {
     Show the selected photo in the listing form if its present
   */
   const listingPhotoTableRows = []
-  if (listingFormPhoto?.fileId && listingFormPhoto.fileId != "") {
-    const listingPhotoUrl = listingFormPhoto.fileId.match(/https?:\/\//)
-      ? listingFormPhoto.fileId
-      : cloudinaryUrlFromId(listingFormPhoto.fileId)
+  if (listingFormPhoto?.image?.fileId && listingFormPhoto.image.fileId != "") {
+    const listingPhotoUrl = listingFormPhoto.image.fileId.match(/https?:\/\//)
+      ? listingFormPhoto.image.fileId
+      : cloudinaryUrlFromId(listingFormPhoto.image.fileId)
 
     listingPhotoTableRows.push({
       preview: (
@@ -101,7 +107,7 @@ const ListingPhoto = () => {
           <img src={listingPhotoUrl} />
         </TableThumbnail>
       ),
-      fileName: listingFormPhoto.fileId.split("/").slice(-1).join(),
+      fileName: listingFormPhoto.image.fileId.split("/").slice(-1).join(),
       actions: (
         <div className="flex">
           <Button
@@ -139,8 +145,8 @@ const ListingPhoto = () => {
 
   return (
     <>
-      <input type="hidden" {...register("image.fileId")} />
-      <input type="hidden" {...register("image.label")} />
+      <input type="hidden" {...register("images.0.image.fileId")} />
+      <input type="hidden" {...register("images.0.image.label")} />
       <GridSection
         grid={false}
         separator
@@ -154,16 +160,16 @@ const ListingPhoto = () => {
         }
         <GridSection columns={1} tinted inset>
           <GridCell>
-            {listingFormPhoto?.fileId && listingFormPhoto.fileId != "" ? (
+            {listingFormPhoto?.image?.fileId && listingFormPhoto.image.fileId != "" ? (
               <MinimalTable headers={photoTableHeaders} data={listingPhotoTableRows}></MinimalTable>
             ) : (
               <Button
                 id="addPhotoButton"
                 type="button"
-                styleType={fieldHasError(errors?.image) ? AppearanceStyleType.alert : null}
+                styleType={fieldHasError(errors?.images) ? AppearanceStyleType.alert : null}
                 onClick={() => {
                   setDrawerState(true)
-                  clearErrors("image")
+                  clearErrors("images")
                 }}
               >
                 {t("listings.addPhoto")}
@@ -172,9 +178,8 @@ const ListingPhoto = () => {
           </GridCell>
         </GridSection>
       </GridSection>
-
-      {fieldHasError(errors?.image) && (
-        <span className={"text-sm text-alert"}>{fieldMessage(errors?.image)}</span>
+      {fieldHasError(errors?.images) && (
+        <span className={"text-sm text-alert"}>{errors?.images?.nested?.message}</span>
       )}
 
       <Drawer
@@ -209,8 +214,8 @@ const ListingPhoto = () => {
         <section className="border rounded-md p-8 bg-white">
           <Dropzone
             id="listing-photo-upload"
-            label="Upload File"
-            helptext="Select JPEG or PNG files"
+            label={t("t.uploadFile")}
+            helptext={t("listings.sections.photoHelperText")}
             uploader={photoUploader}
             accept="image/*"
             progress={progressValue}

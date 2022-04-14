@@ -7,6 +7,7 @@ import {
   ProgressNav,
   t,
 } from "@bloom-housing/ui-components"
+import { OnClientSide } from "@bloom-housing/shared-helpers"
 import Layout from "./application"
 import styles from "./Eligibility.module.scss"
 import { ApplicationTimeout } from "../src/forms/applications/ApplicationTimeout"
@@ -28,7 +29,7 @@ export interface EligibilityLayoutProps {
 const EligibilityLayout = (props: EligibilityLayoutProps) => {
   const router = useRouter()
   const { eligibilityRequirements } = useContext(EligibilityContext)
-
+  const clientLoaded = OnClientSide()
   const handleSubmit = props.formMethods.handleSubmit
 
   const onBack = async (data) => {
@@ -64,6 +65,7 @@ const EligibilityLayout = (props: EligibilityLayoutProps) => {
                 labels={ELIGIBILITY_SECTIONS.map((label) =>
                   t(`eligibility.progress.sections.${label}`)
                 )}
+                mounted={OnClientSide()}
                 routes={ELIGIBILITY_SECTIONS.map((_label, i) => eligibilityRoute(i))}
               />
             </div>

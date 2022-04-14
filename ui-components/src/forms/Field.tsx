@@ -13,7 +13,7 @@ export interface FieldProps {
   type?: string
   id?: string
   name: string
-  note?: string
+  note?: string | JSX.Element
   subNote?: string
   label?: string
   defaultValue?: string | number
@@ -29,8 +29,8 @@ export interface FieldProps {
   describedBy?: string
   getValues?: UseFormMethods["getValues"]
   setValue?: UseFormMethods["setValue"]
-  isLabelAfterField?: boolean
   dataTestId?: string
+  hidden?: boolean
 }
 
 const Field = (props: FieldProps) => {
@@ -74,9 +74,6 @@ const Field = (props: FieldProps) => {
     if (props.caps) labelClasses.push("field-label--caps")
     if (props.primary) labelClasses.push("text-primary")
     if (props.readerOnly) labelClasses.push("sr-only")
-    if (props.isLabelAfterField && !isRadioOrCheckbox) {
-      labelClasses.push("field-label-extra-space")
-    }
 
     return (
       <label className={labelClasses.join(" ")} htmlFor={props.id || props.name}>
@@ -94,7 +91,7 @@ const Field = (props: FieldProps) => {
 
   return (
     <div className={classes.join(" ")}>
-      {!isRadioOrCheckbox && !props.isLabelAfterField && label}
+      {!isRadioOrCheckbox && !props.hidden && label}
       {note}
       <div className={controlClasses.join(" ")}>
         {props.prepend && <span className="prepend">{props.prepend}</span>}
@@ -114,8 +111,9 @@ const Field = (props: FieldProps) => {
           onChange={props.onChange}
           data-test-id={props.dataTestId}
           {...inputProps}
+          hidden={props.hidden}
         />
-        {(isRadioOrCheckbox || props.isLabelAfterField) && label}
+        {isRadioOrCheckbox && label}
       </div>
       {props.subNote && <p className="field-sub-note">{props.subNote}</p>}
       {props.errorMessage && (

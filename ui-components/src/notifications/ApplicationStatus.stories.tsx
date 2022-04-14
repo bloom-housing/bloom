@@ -2,24 +2,24 @@ import * as React from "react"
 
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-dayjs.extend(advancedFormat)
-
 import { ApplicationStatus } from "./ApplicationStatus"
 import { ApplicationStatusType } from "../global/ApplicationStatusType"
 import { t } from "../helpers/translator"
 import Archer from "../../__tests__/fixtures/archer.json"
-import { IconCheck } from "../icons/Icon.stories"
+import { text, withKnobs } from "@storybook/addon-knobs"
+
+dayjs.extend(advancedFormat)
 
 export default {
   component: ApplicationStatus,
   title: "Notifications/Application Status",
-  decorators: [(storyFn: any) => <div>{storyFn()}</div>],
+  decorators: [(storyFn: any) => <div>{storyFn()}</div>, withKnobs],
 }
 
 function formatDateTime(date: Date, showTime?: boolean) {
   return (
     dayjs(date).format("MMMM D, YYYY") +
-    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mm A") : "")
+    (showTime ? ` ${t("t.at")} ` + dayjs(date).format("h:mmA") : "")
   )
 }
 
@@ -27,9 +27,19 @@ const listing = Object.assign({}, Archer) as any
 listing.applicationOpenDate = ""
 let days = 10
 listing.applicationDueDate = dayjs().add(days, "days").format()
+
 export const dueSoonAndVivid = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing.applicationDueDate)}
+    status={ApplicationStatusType.Open}
+    vivid
+  />
+)
+
+export const withSubContent = () => (
+  <ApplicationStatus
+    content="First Come First Served (and a really long string to test wrapping on smaller sizes)"
+    subContent="Application Due Date: July 10th"
     status={ApplicationStatusType.Open}
     vivid
   />
@@ -47,6 +57,7 @@ export const dueSoonWithTime = () => (
 const listingPast = Object.assign({}, Archer) as any
 listingPast.applicationOpenDate = ""
 days = 10
+
 export const pastDue = () => (
   <ApplicationStatus
     content={
@@ -57,6 +68,7 @@ export const pastDue = () => (
 )
 
 listingPast.applicationDueDate = dayjs().subtract(days, "days").format()
+
 export const pastDueAndVivid = () => (
   <ApplicationStatus
     content={
@@ -67,9 +79,20 @@ export const pastDueAndVivid = () => (
   />
 )
 
+export const pastDueWithIconColor = () => (
+  <ApplicationStatus
+    content={
+      t("listings.applicationsClosed") + ": " + formatDateTime(listingPast.applicationDueDate)
+    }
+    iconColor={text("Icon Color", "#ff0000")}
+    status={ApplicationStatusType.Closed}
+  />
+)
+
 const listing2 = Object.assign({}, Archer) as any
 days = 10
 listing2.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openSoon = () => (
   <ApplicationStatus
     content={
@@ -82,6 +105,7 @@ export const openSoon = () => (
 const listing3 = Object.assign({}, Archer) as any
 days = 10
 listing3.applicationDueDate = dayjs().add(days, "days").format()
+
 export const openedAlready = () => (
   <ApplicationStatus
     content={t("listings.applicationDeadline") + ": " + formatDateTime(listing3.applicationDueDate)}

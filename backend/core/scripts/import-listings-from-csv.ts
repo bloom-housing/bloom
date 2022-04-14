@@ -3,7 +3,12 @@ import fs from "fs"
 import axios from "axios"
 import { importListing, ListingImport, UnitsSummaryImport } from "./import-helpers"
 import * as client from "../types/src/backend-swagger"
-import { AddressCreate, ListingMarketingTypeEnum, ListingStatus, serviceOptions } from "../types/src/backend-swagger"
+import {
+  AddressCreate,
+  ListingMarketingTypeEnum,
+  ListingStatus,
+  serviceOptions,
+} from "../types/src/backend-swagger"
 import { ListingReviewOrder } from "../src/listings/types/listing-review-order-enum"
 
 // This script reads in listing data from a CSV file and sends requests to the backend to create
@@ -200,10 +205,7 @@ async function main() {
       depositMax: "",
       developer: "",
       digitalApplication: false,
-      image: {
-        fileId: "",
-        label: "",
-      },
+      images: [],
       isWaitlistOpen: true,
       paperApplication: false,
       referralOpportunity: false,

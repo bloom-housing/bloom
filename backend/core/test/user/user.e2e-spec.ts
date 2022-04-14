@@ -27,6 +27,7 @@ import { getTestAppBody } from "../lib/get-test-app-body"
 import { Application } from "../../src/applications/entities/application.entity"
 import { UserRoles } from "../../src/auth/entities/user-roles.entity"
 import { EmailService } from "../../src/email/email.service"
+import { MfaType } from "../../src/auth/types/mfa-type"
 
 // Cypress brings in Chai types for the global expect, but we want to use jest
 // expect here so we need to re-declare it.
@@ -54,11 +55,12 @@ describe("Users", () => {
     invite: async () => {},
     changeEmail: async () => {},
     forgotPassword: async () => {},
+    sendMfaCode: jest.fn(),
     /* eslint-enable @typescript-eslint/no-empty-function */
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.resetAllMocks()
   })
 
   beforeAll(async () => {
@@ -123,14 +125,14 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(403)
 
     delete userCreateDto.confirmedAt
     const userCreateResponse = await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
 
@@ -182,7 +184,7 @@ describe("Users", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
     expect(mockWelcome.mock.calls.length).toBe(1)
     expect(res.body).toHaveProperty("id")
@@ -205,7 +207,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -241,7 +243,7 @@ describe("Users", () => {
     userCreateDto.emailConfirmation = "a2@b.com"
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
   })
@@ -259,7 +261,7 @@ describe("Users", () => {
     }
     const res = await supertest(app.getHttpServer())
       .post(`/user`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     expect(res.body).toHaveProperty("id")
@@ -305,7 +307,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     await supertest(app.getHttpServer())
@@ -327,7 +329,7 @@ describe("Users", () => {
     }
     await supertest(app.getHttpServer())
       .post(`/user/`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     const userService = await app.resolve<UserService>(UserService)
@@ -364,7 +366,7 @@ describe("Users", () => {
     const mockWelcome = jest.spyOn(testEmailService, "welcome")
     await supertest(app.getHttpServer())
       .post(`/user?noWelcomeEmail=true`)
-      .set("jurisdictionName", "Detroit")
+      .set("jurisdictionName", "Alameda")
       .send(userCreateDto)
       .expect(201)
     expect(mockWelcome.mock.calls.length).toBe(0)
@@ -408,6 +410,8 @@ describe("Users", () => {
 
     const userService = await app.resolve<UserService>(UserService)
     const user = await userService.findByEmail(newUser.email)
+    user.mfaEnabled = false
+    await usersRepository.save(user)
 
     const password = "Abcdef1!"
     await supertest(app.getHttpServer())
@@ -559,6 +563,7 @@ describe("Users", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -597,6 +602,7 @@ describe("Users", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -633,6 +639,7 @@ describe("Users", () => {
         roles: { isPartner: true, isAdmin: false },
         updatedAt: undefined,
         passwordHash: "abcd",
+        mfaEnabled: false,
       },
       null
     )
@@ -787,6 +794,82 @@ describe("Users", () => {
       )
     )
     expect(nonPortalUsersListRes.body.meta.totalItems).toBeLessThan(totalUsersCount)
+  })
+
+  it("should require mfa code for users with mfa enabled", async () => {
+    const userCreateDto: UserCreateDto = {
+      password: "Abcdef1!",
+      passwordConfirmation: "Abcdef1!",
+      email: "mfa@b.com",
+      emailConfirmation: "mfa@b.com",
+      firstName: "First",
+      middleName: "Mid",
+      lastName: "Last",
+      dob: new Date(),
+    }
+
+    await supertest(app.getHttpServer())
+      .post(`/user/`)
+      .set("jurisdictionName", "Alameda")
+      .send(userCreateDto)
+      .expect(201)
+
+    let user = await usersRepository.findOne({ email: userCreateDto.email })
+    user.mfaEnabled = true
+    user = await usersRepository.save(user)
+
+    await supertest(app.getHttpServer())
+      .put(`/user/confirm/`)
+      .send({ token: user.confirmationToken })
+      .expect(200)
+
+    testEmailService.sendMfaCode = jest.fn()
+
+    let getMfaInfoResponse = await supertest(app.getHttpServer())
+      .post(`/auth/mfa-info`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+      })
+      .expect(201)
+
+    expect(getMfaInfoResponse.body.maskedPhoneNumber).toBeUndefined()
+    expect(getMfaInfoResponse.body.email).toBe(userCreateDto.email)
+    expect(getMfaInfoResponse.body.isMfaEnabled).toBe(true)
+    expect(getMfaInfoResponse.body.mfaUsedInThePast).toBe(false)
+
+    await supertest(app.getHttpServer())
+      .post(`/auth/request-mfa-code`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+        mfaType: MfaType.email,
+      })
+      .expect(201)
+
+    user = await usersRepository.findOne({ email: userCreateDto.email })
+    expect(typeof user.mfaCode).toBe("string")
+    expect(user.mfaCodeUpdatedAt).toBeDefined()
+    expect(testEmailService.sendMfaCode).toBeCalled()
+    expect(testEmailService.sendMfaCode.mock.calls[0][2]).toBe(user.mfaCode)
+
+    await supertest(app.getHttpServer())
+      .post(`/auth/login`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+        mfaCode: user.mfaCode,
+      })
+      .expect(201)
+
+    getMfaInfoResponse = await supertest(app.getHttpServer())
+      .post(`/auth/mfa-info`)
+      .send({
+        email: userCreateDto.email,
+        password: userCreateDto.password,
+      })
+      .expect(201)
+    expect(getMfaInfoResponse.body.mfaUsedInThePast).toBe(true)
   })
 
   it("should prevent user access if password is outdated", async () => {

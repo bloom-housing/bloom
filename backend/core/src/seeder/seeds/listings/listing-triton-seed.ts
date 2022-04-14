@@ -57,10 +57,7 @@ const tritonListing: ListingSeedType = {
     latitude: 37.5658152,
     longitude: -122.2704286,
   },
-  image: {
-    label: "test_label",
-    fileId: "fileid",
-  },
+  images: [],
   applicationPickUpAddressOfficeHours: null,
   buildingSelectionCriteria:
     "https://regional-dahlia-staging.s3-us-west-1.amazonaws.com/listings/triton/The_Triton_BMR_rental_information.pdf",
@@ -91,7 +88,7 @@ const tritonListing: ListingSeedType = {
   name: "Test: Triton",
   postmarkedApplicationsReceivedByDate: null,
   programRules: null,
-  rentalAssistance: "",
+  rentalAssistance: "Rental assistance",
   rentalHistory: "No evictions",
   requiredDocuments:
     "Due at interview - Paystubs, 3 months’ bank statements, recent tax returns or non-tax affidavit, recent retirement statement, application to lease, application qualifying criteria, social security card, state or nation ID. For self-employed, copy of IRS Tax Return including schedule C and current or most recent clients. Unemployment if applicable. Child support/Alimony; current notice from DA office, a court order or a letter from the provider with copies of last two checks. Any other income etc",

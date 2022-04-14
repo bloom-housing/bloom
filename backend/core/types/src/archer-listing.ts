@@ -12,10 +12,11 @@ const amiChart: AmiChart = {
   updatedAt: new Date(),
   name: "San Jose TCAC 2019",
   jurisdiction: {
-    id: "jurisdictiion_id",
+    id: "jurisdiction_id",
     createdAt: new Date(),
     updatedAt: new Date(),
     name: "Alameda",
+    emailFromAddress: "Alameda Housing Email",
     programs: [],
     languages: [EnumJurisdictionLanguages.en],
     preferences: [],

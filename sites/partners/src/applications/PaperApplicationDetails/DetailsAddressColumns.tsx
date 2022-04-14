@@ -11,6 +11,7 @@ type DetailsAddressColumnsProps = {
   application?: Application
   addressObject?: AddressCreate
   householdMember?: HouseholdMemberUpdate
+  dataTestId?: string
 }
 
 export enum AddressColsType {
@@ -28,6 +29,7 @@ const DetailsAddressColumns = ({
   application,
   addressObject,
   householdMember,
+  dataTestId,
 }: DetailsAddressColumnsProps) => {
   const address = {
     city: "",
@@ -88,23 +90,36 @@ const DetailsAddressColumns = ({
   return (
     <>
       <GridCell>
-        <ViewItem label={t("application.contact.streetAddress")}>{address.street}</ViewItem>
+        <ViewItem
+          label={t("application.contact.streetAddress")}
+          dataTestId={`${dataTestId}.streetAddress`}
+        >
+          {address.street}
+        </ViewItem>
       </GridCell>
 
       <GridCell span={2}>
-        <ViewItem label={t("application.contact.apt")}>{address.street2}</ViewItem>
+        <ViewItem label={t("application.contact.apt")} dataTestId={`${dataTestId}.street2`}>
+          {address.street2}
+        </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.city")}>{address.city}</ViewItem>
+        <ViewItem label={t("application.contact.city")} dataTestId={`${dataTestId}.city`}>
+          {address.city}
+        </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.state")}>{address.state}</ViewItem>
+        <ViewItem label={t("application.contact.state")} dataTestId={`${dataTestId}.state`}>
+          {address.state}
+        </ViewItem>
       </GridCell>
 
       <GridCell>
-        <ViewItem label={t("application.contact.zip")}>{address.zipCode}</ViewItem>
+        <ViewItem label={t("application.contact.zip")} dataTestId={`${dataTestId}.zipCode`}>
+          {address.zipCode}
+        </ViewItem>
       </GridCell>
     </>
   )

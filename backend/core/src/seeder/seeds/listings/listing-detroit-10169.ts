@@ -45,7 +45,7 @@ const grandRivListing: ListingSeedType = {
   managementWebsite: "www.28granddetroit.com",
   name: "Capitol Park Micro Units",
   status: ListingStatus.active,
-  image: undefined,
+  images: [],
   digitalApplication: undefined,
   paperApplication: undefined,
   referralOpportunity: undefined,
